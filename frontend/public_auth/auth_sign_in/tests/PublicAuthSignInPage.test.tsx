@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import PublicAuthSignInPage from '../components/PublicAuthSignInPage';
-import { PublicAuthApiError } from '../api/PublicAuthSignInApi';
-import { requirePublicAuthEndpointPath } from '../utils/PublicAuthSignInUrlGuard';
+import PublicAuthSignInPage from '@/app/frontend_public/public_auth/auth_sign_in/components/PublicAuthSignInPage';
+import { PublicAuthApiError } from '@/app/frontend_public/public_auth/auth_sign_in/api/PublicAuthSignInApi';
+import { requirePublicAuthEndpointPath } from '@/app/frontend_public/public_auth/auth_sign_in/utils/PublicAuthSignInUrlGuard';
 const mocks = vi.hoisted(() => ({
   replace: vi.fn(),
   mutateAsync: vi.fn(),
@@ -12,10 +12,10 @@ const mocks = vi.hoisted(() => ({
 }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ replace: mocks.replace }) }));
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
-vi.mock('@/app/frontend_public/public_auth/auth_sign_in/hooks/usePublicAuthSignInMutation', () => ({ usePublicAuthLoginMutation: () => ({ mutateAsync: mocks.mutateAsync, isPending: false }) }));
-vi.mock('@/app/frontend_public/public_auth/auth_sign_in/hooks/usePublicAuthSignInIdempotencyKey', () => ({ usePublicAuthIdempotencyKey: () => ({ getKey: mocks.getKey, clearKey: mocks.clearKey }) }));
+vi.mock('../hooks/usePublicAuthSignInMutation', () => ({ usePublicAuthLoginMutation: () => ({ mutateAsync: mocks.mutateAsync, isPending: false }) }));
+vi.mock('../hooks/usePublicAuthSignInIdempotencyKey', () => ({ usePublicAuthIdempotencyKey: () => ({ getKey: mocks.getKey, clearKey: mocks.clearKey }) }));
 // Prevent network/API implementation details from being exercised in this component interaction test.
-vi.mock('@/app/frontend_public/public_auth/auth_sign_in/api/PublicAuthSignInApi', () => ({
+vi.mock('../api/PublicAuthSignInApi', () => ({
   PublicAuthApiError: class extends Error { constructor(message: string, readonly code: string, readonly validationErrors = []) { super(message); } },
   getPublicAuthApiErrorMessage: () => 'Request could not be completed',
 }));

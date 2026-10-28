@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { apiFetch } from '@/lib/api';
-import { PUBLIC_AUTH_PASSWORD_RECOVERY_API_PATH } from '../config/public_auth_password_recovery_url_config';
-import { requirePublicAuthPasswordRecoveryEndpointPath } from '../utils/PublicAuthPasswordRecoveryUrlGuard';
-import type { PublicAuthPasswordRecoveryApiEnvelope, PublicAuthPasswordRecoveryRequest, PublicAuthPasswordRecoveryValidationError } from '../types/PublicAuthPasswordRecoveryApiTypes';
+import { PUBLIC_AUTH_PASSWORD_RECOVERY_API_PATH } from '@/app/frontend_public/public_auth/auth_password_recovery/config/public_auth_password_recovery_url_config';
+import { requirePublicAuthPasswordRecoveryEndpointPath } from '@/app/frontend_public/public_auth/auth_password_recovery/utils/PublicAuthPasswordRecoveryUrlGuard';
+import type { PublicAuthPasswordRecoveryApiEnvelope, PublicAuthPasswordRecoveryRequest, PublicAuthPasswordRecoveryValidationError } from '@/app/frontend_public/public_auth/auth_password_recovery/types/PublicAuthPasswordRecoveryApiTypes';
 
 const authApiEnvelopeSchema = z.object({
   success: z.boolean(),

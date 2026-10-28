@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { apiFetch } from '@/lib/api';
-import { PUBLIC_AUTH_REGISTRATION_API_PATH } from '../config/public_auth_registration_url_config';
-import { requirePublicAuthRegistrationEndpointPath } from '../utils/PublicAuthRegistrationUrlGuard';
-import type { PublicAuthRegistrationApiEnvelope, PublicAuthRegistrationRequest, PublicAuthRegistrationValidationError } from '../types/PublicAuthRegistrationApiTypes';
+import { PUBLIC_AUTH_REGISTRATION_API_PATH } from '@/app/frontend_public/public_auth/auth_account_registration/config/public_auth_registration_url_config';
+import { requirePublicAuthRegistrationEndpointPath } from '@/app/frontend_public/public_auth/auth_account_registration/utils/PublicAuthRegistrationUrlGuard';
+import type { PublicAuthRegistrationApiEnvelope, PublicAuthRegistrationRequest, PublicAuthRegistrationValidationError } from '@/app/frontend_public/public_auth/auth_account_registration/types/PublicAuthRegistrationApiTypes';
 
 const authApiEnvelopeSchema = z.object({
   success: z.boolean(),

@@ -163,7 +163,7 @@ export default function PublicAuthRegistrationPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-secondary">{t('SIGNUP.alreadyAccount')}{' '}<Link data-testid="auth-signup-back-to-login-link" href={PUBLIC_AUTH_INTERNAL_URLS.LOGIN} className="font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">{t('SIGNUP.login')}</Link></p>
+          <p className="mt-6 text-center text-sm text-secondary">{t('SIGNUP.alreadyAccount')}{' '}<Link data-testid="auth-signup-back-to-login-link" href={PUBLIC_AUTH_REGISTRATION_URLS.LOGIN} className="font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">{t('SIGNUP.login')}</Link></p>
         </section>
       </div>
     </main>

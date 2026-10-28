@@ -2,13 +2,13 @@ import '@testing-library/jest-dom/vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PublicAuthResetPasswordPage from '@/app/frontend_public/public_auth/auth_password_reset/components/PublicAuthResetPasswordPage';
-import { requirePublicAuthPasswordResetEndpointPath } from '../utils/PublicAuthPasswordResetUrlGuard';
+import { requirePublicAuthPasswordResetEndpointPath } from '@/app/frontend_public/public_auth/auth_password_reset/utils/PublicAuthPasswordResetUrlGuard';
 
 const mocks = vi.hoisted(() => ({ mutateAsync: vi.fn(), getKey: vi.fn(async () => 'synthetic-idempotency-key'), clearKey: vi.fn() }));
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
-vi.mock('@/app/frontend_public/public_auth/auth_password_reset/hooks/usePublicAuthPasswordResetMutation', () => ({ usePublicAuthPasswordResetMutation: () => ({ mutateAsync: mocks.mutateAsync, isPending: false }) }));
-vi.mock('@/app/frontend_public/public_auth/auth_password_reset/hooks/usePublicAuthPasswordResetIdempotencyKey', () => ({ usePublicAuthPasswordResetIdempotencyKey: () => ({ getKey: mocks.getKey, clearKey: mocks.clearKey }) }));
-vi.mock('@/app/frontend_public/public_auth/auth_password_reset/api/PublicAuthPasswordResetApi', () => ({ PublicAuthPasswordResetApiError: class extends Error { constructor(message: string, readonly code: string, readonly validationErrors = []) { super(message); } }, getPublicAuthPasswordResetApiErrorMessage: () => 'Request could not be completed' }));
+vi.mock('../hooks/usePublicAuthPasswordResetMutation', () => ({ usePublicAuthPasswordResetMutation: () => ({ mutateAsync: mocks.mutateAsync, isPending: false }) }));
+vi.mock('../hooks/usePublicAuthPasswordResetIdempotencyKey', () => ({ usePublicAuthPasswordResetIdempotencyKey: () => ({ getKey: mocks.getKey, clearKey: mocks.clearKey }) }));
+vi.mock('../api/PublicAuthPasswordResetApi', () => ({ PublicAuthPasswordResetApiError: class extends Error { constructor(message: string, readonly code: string, readonly validationErrors = []) { super(message); } }, getPublicAuthPasswordResetApiErrorMessage: () => 'Request could not be completed' }));
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -27,9 +27,9 @@ describe('PublicAuthResetPasswordPage critical controls', () => {
   it('fills all six OTP digits and both password fields without submitting', () => {
     vi.stubEnv('NODE_ENV', 'test');
     vi.stubEnv('NEXT_PUBLIC_AUTH_DEMO_FILL_ENABLED', 'true');
-    render(<PublicAuthPasswordResetPage />);
+    render(<PublicAuthResetPasswordPage />);
     fireEvent.click(screen.getByTestId('auth-reset-demo-fill'));
-    for (const [index, digit] of '123456'.split('').entries()) expect(screen.getByTestId(`auth-reset-otp-digit-${index + 1}-input`)).toHaveValue(digit);
+    for (const [index, digit] of Array.from('123456'.split('').entries())) expect(screen.getByTestId(`auth-reset-otp-digit-${index + 1}-input`)).toHaveValue(digit);
     expect(screen.getByTestId('auth-reset-otp-value')).toHaveValue('123456');
     expect(screen.getByTestId('auth-reset-password-input')).toHaveValue('SyntheticPassword1');
     expect(screen.getByTestId('auth-reset-confirm-password-input')).toHaveValue('SyntheticPassword1');
@@ -50,7 +50,7 @@ describe('PublicAuthResetPasswordPage critical controls', () => {
   it('hides demo fill in production', () => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.stubEnv('NEXT_PUBLIC_AUTH_DEMO_FILL_ENABLED', 'true');
-    render(<PublicAuthPasswordResetPage />);
+    render(<PublicAuthResetPasswordPage />);
     expect(screen.queryByTestId('auth-reset-demo-fill')).not.toBeInTheDocument();
   });
 
@@ -74,7 +74,7 @@ describe('PublicAuthResetPasswordPage critical controls', () => {
     render(<PublicAuthResetPasswordPage />);
     fireEvent.paste(screen.getByTestId('auth-reset-otp-group'), { clipboardData: { getData: () => '12 34-56' } });
     expect(screen.getByTestId('auth-reset-otp-value')).toHaveValue('123456');
-    for (const [index, digit] of '123456'.split('').entries()) {
+    for (const [index, digit] of Array.from('123456'.split('').entries())) {
       expect(screen.getByTestId(`auth-reset-otp-digit-${index + 1}-input`)).toHaveValue(digit);
     }
   });
@@ -108,7 +108,7 @@ describe('PublicAuthResetPasswordPage critical controls', () => {
     mocks.mutateAsync.mockImplementationOnce(() => new Promise((_resolve, reject) => { rejectReset = reject; }));
     render(<PublicAuthResetPasswordPage />);
     const digits = screen.getAllByRole('textbox', { name: /digit/i });
-    for (const [index, digit] of '123456'.split('').entries()) fireEvent.change(digits[index], { target: { value: digit } });
+    for (const [index, digit] of Array.from('123456'.split('').entries())) fireEvent.change(digits[index], { target: { value: digit } });
     const password = screen.getByTestId('auth-reset-password-input');
     const confirm = screen.getByTestId('auth-reset-confirm-password-input');
     fireEvent.change(password, { target: { value: 'SyntheticPassword1' } });

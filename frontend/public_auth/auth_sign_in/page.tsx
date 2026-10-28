@@ -1,4 +1,4 @@
-import PublicAuthSignInPage from './components/PublicAuthSignInPage';
+import PublicAuthSignInPage from '@/app/frontend_public/public_auth/auth_sign_in/components/PublicAuthSignInPage';
 
 /** Autonomous sign-in route; the existing public URL rewrite remains host-owned. */
 export default function PublicAuthSignInRoute() {

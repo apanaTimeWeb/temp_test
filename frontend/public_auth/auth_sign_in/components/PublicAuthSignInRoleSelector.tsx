@@ -1,6 +1,6 @@
 'use client';
 
-import { PUBLIC_AUTH_ROLE_IDS, type PublicAuthRole } from '../utils/PublicAuthSignInConstants';
+import { PUBLIC_AUTH_ROLE_IDS, type PublicAuthRole } from '@/app/frontend_public/public_auth/auth_sign_in/utils/PublicAuthSignInConstants';
 import type { ReactNode } from 'react';
 
 interface PublicAuthSignInRoleSelectorProps {

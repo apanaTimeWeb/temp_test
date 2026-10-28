@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { publicAuthPasswordRecoveryAcceptedFixture, publicAuthPasswordRecoveryRejectedFixture, publicAuthPasswordRecoveryInvalidEnvelopeFixture } from '../fixtures/PublicAuthPasswordRecoveryFixtures';
+import { publicAuthPasswordRecoveryAcceptedFixture, publicAuthPasswordRecoveryRejectedFixture, publicAuthPasswordRecoveryInvalidEnvelopeFixture } from '@/app/frontend_public/public_auth/auth_password_recovery/mocks/fixtures/PublicAuthPasswordRecoveryFixtures';
 
 /** Synthetic handler for a caller-supplied configured URL; scenario is test-only, not a server contract. */
 export function createPublicAuthPasswordRecoveryHandler(endpoint: string, scenario: 'accepted' | 'rejected' | 'connection-failure' | 'invalid-envelope' = 'accepted') {

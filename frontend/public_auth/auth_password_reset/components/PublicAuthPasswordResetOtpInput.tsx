@@ -43,7 +43,7 @@ export default function PublicAuthPasswordResetOtpInput({ value, disabled, inval
   const onOtpPaste = (event: ClipboardEvent<HTMLDivElement>) => {
     const pastedOtp = event.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
     if (pastedOtp.length > 0) {
-      update([...pastedOtp.padEnd(6, ' ').slice(0, 6)].map((digit) => digit.trim()));
+      update(pastedOtp.padEnd(6, ' ').slice(0, 6).split('').map((digit) => digit.trim()));
       refs.current[Math.min(pastedOtp.length - 1, 5)]?.focus();
     }
     event.preventDefault();

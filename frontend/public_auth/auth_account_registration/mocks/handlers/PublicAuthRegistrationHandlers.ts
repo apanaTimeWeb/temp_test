@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { PUBLIC_AUTH_REGISTRATION_ACCEPTED, PUBLIC_AUTH_REGISTRATION_REJECTED, PUBLIC_AUTH_REGISTRATION_INVALID_ENVELOPE } from '../fixtures/PublicAuthRegistrationFixtures';
+import { PUBLIC_AUTH_REGISTRATION_ACCEPTED, PUBLIC_AUTH_REGISTRATION_REJECTED, PUBLIC_AUTH_REGISTRATION_INVALID_ENVELOPE } from '@/app/frontend_public/public_auth/auth_account_registration/mocks/fixtures/PublicAuthRegistrationFixtures';
 
 /** Synthetic response scenario for local tests only; this is not a backend contract. */
 export type PublicAuthRegistrationMockScenario = 'accepted' | 'rejected' | 'connection-failure' | 'invalid-envelope';

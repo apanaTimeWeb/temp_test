@@ -1,4 +1,4 @@
-import type { PublicAuthRole } from '../utils/PublicAuthSignInConstants';
+import type { PublicAuthRole } from '@/app/frontend_public/public_auth/auth_sign_in/utils/PublicAuthSignInConstants';
 
 /** Host-owned login endpoint. Empty means the host has not configured it. */
 export const PUBLIC_AUTH_LOGIN_URL = process.env.NEXT_PUBLIC_AUTH_LOGIN_PATH ?? '';

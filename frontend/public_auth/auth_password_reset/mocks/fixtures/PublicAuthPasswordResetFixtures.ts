@@ -1,4 +1,4 @@
-import type { PublicAuthPasswordResetApiEnvelope, PublicAuthPasswordResetRequest } from '../../types/PublicAuthPasswordResetApiTypes';
+import type { PublicAuthPasswordResetApiEnvelope, PublicAuthPasswordResetRequest } from '@/app/frontend_public/public_auth/auth_password_reset/types/PublicAuthPasswordResetApiTypes';
 
 /** Synthetic response fixtures only; no server contract is inferred from these test fixtures. */
 export const acceptedResetFixture: PublicAuthPasswordResetApiEnvelope = { success: true, message: 'Accepted', data: null };

@@ -2,14 +2,14 @@ import '@testing-library/jest-dom/vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PublicAuthRegistrationPage from '@/app/frontend_public/public_auth/auth_account_registration/components/PublicAuthRegistrationPage';
-import { requirePublicAuthRegistrationEndpointPath } from '../utils/PublicAuthRegistrationUrlGuard';
+import { requirePublicAuthRegistrationEndpointPath } from '@/app/frontend_public/public_auth/auth_account_registration/utils/PublicAuthRegistrationUrlGuard';
 
 const mocks = vi.hoisted(() => ({ mutateAsync: vi.fn(), getKey: vi.fn(async () => 'synthetic-idempotency-key'), clearKey: vi.fn(), replace: vi.fn() }));
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ replace: mocks.replace, push: vi.fn() }) }));
-vi.mock('@/app/frontend_public/public_auth/auth_account_registration/hooks/usePublicAuthRegistrationMutation', () => ({ usePublicAuthRegistrationMutation: () => ({ mutateAsync: mocks.mutateAsync, isPending: false }) }));
-vi.mock('@/app/frontend_public/public_auth/auth_account_registration/hooks/usePublicAuthRegistrationIdempotencyKey', () => ({ usePublicAuthRegistrationIdempotencyKey: () => ({ getKey: mocks.getKey, clearKey: mocks.clearKey }) }));
-vi.mock('@/app/frontend_public/public_auth/auth_account_registration/api/PublicAuthRegistrationApi', () => ({ PublicAuthRegistrationApiError: class extends Error { constructor(message: string, readonly code: string, readonly validationErrors = []) { super(message); } }, getPublicAuthRegistrationApiErrorMessage: () => 'Request could not be completed' }));
+vi.mock('../hooks/usePublicAuthRegistrationMutation', () => ({ usePublicAuthRegistrationMutation: () => ({ mutateAsync: mocks.mutateAsync, isPending: false }) }));
+vi.mock('../hooks/usePublicAuthRegistrationIdempotencyKey', () => ({ usePublicAuthRegistrationIdempotencyKey: () => ({ getKey: mocks.getKey, clearKey: mocks.clearKey }) }));
+vi.mock('../api/PublicAuthRegistrationApi', () => ({ PublicAuthRegistrationApiError: class extends Error { constructor(message: string, readonly code: string, readonly validationErrors = []) { super(message); } }, getPublicAuthRegistrationApiErrorMessage: () => 'Request could not be completed' }));
 
 beforeEach(() => {
   vi.clearAllMocks();

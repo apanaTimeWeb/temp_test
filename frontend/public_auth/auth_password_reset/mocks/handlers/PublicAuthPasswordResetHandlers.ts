@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { acceptedResetFixture, rejectedResetFixture, invalidResetEnvelopeFixture } from '../fixtures/PublicAuthPasswordResetFixtures';
+import { acceptedResetFixture, rejectedResetFixture, invalidResetEnvelopeFixture } from '@/app/frontend_public/public_auth/auth_password_reset/mocks/fixtures/PublicAuthPasswordResetFixtures';
 
 /** Synthetic response scenario for local tests only; this is not a backend contract. */
 export type PublicAuthPasswordResetMockScenario = 'accepted' | 'rejected' | 'connection-failure' | 'invalid-envelope';

@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { PUBLIC_AUTH_SIGN_IN_ACCEPTED, PUBLIC_AUTH_SIGN_IN_REJECTED, PUBLIC_AUTH_SIGN_IN_INVALID_ENVELOPE } from '../fixtures/PublicAuthSignInFixtures';
+import { PUBLIC_AUTH_SIGN_IN_ACCEPTED, PUBLIC_AUTH_SIGN_IN_REJECTED, PUBLIC_AUTH_SIGN_IN_INVALID_ENVELOPE } from '@/app/frontend_public/public_auth/auth_sign_in/mocks/fixtures/PublicAuthSignInFixtures';
 
 /** Synthetic response scenario for local tests only; this is not a backend contract. */
 export type PublicAuthSignInMockScenario = 'accepted' | 'rejected' | 'connection-failure' | 'invalid-envelope';

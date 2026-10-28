@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PUBLIC_AUTH_ROLE_IDS } from '../utils/PublicAuthSignInConstants';
+import { PUBLIC_AUTH_ROLE_IDS } from '@/app/frontend_public/public_auth/auth_sign_in/utils/PublicAuthSignInConstants';
 
 /** Localized validation copy supplied to the module-owned Zod schema factory. */
 export interface PublicAuthSignInSchemaMessages {

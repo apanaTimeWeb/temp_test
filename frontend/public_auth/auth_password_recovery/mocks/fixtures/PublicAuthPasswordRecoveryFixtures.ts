@@ -1,4 +1,4 @@
-import type { PublicAuthPasswordRecoveryApiEnvelope, PublicAuthPasswordRecoveryRequest } from '../../types/PublicAuthPasswordRecoveryApiTypes';
+import type { PublicAuthPasswordRecoveryApiEnvelope, PublicAuthPasswordRecoveryRequest } from '@/app/frontend_public/public_auth/auth_password_recovery/types/PublicAuthPasswordRecoveryApiTypes';
 
 /** Synthetic-only fixtures for local tests; never used as proof of real delivery or account existence. */
 export const publicAuthPasswordRecoveryAcceptedFixture: PublicAuthPasswordRecoveryApiEnvelope = {

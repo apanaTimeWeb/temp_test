@@ -1,14 +1,14 @@
 import '@testing-library/jest-dom/vitest';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import PublicAuthPasswordRecoveryPage from '../components/PublicAuthPasswordRecoveryPage';
-import { requirePublicAuthPasswordRecoveryEndpointPath } from '../utils/PublicAuthPasswordRecoveryUrlGuard';
+import PublicAuthPasswordRecoveryPage from '@/app/frontend_public/public_auth/auth_password_recovery/components/PublicAuthPasswordRecoveryPage';
+import { requirePublicAuthPasswordRecoveryEndpointPath } from '@/app/frontend_public/public_auth/auth_password_recovery/utils/PublicAuthPasswordRecoveryUrlGuard';
 
 const mocks = vi.hoisted(() => ({ mutateAsync: vi.fn(), getKey: vi.fn(async () => 'synthetic-idempotency-key'), clearKey: vi.fn() }));
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
-vi.mock('@/app/frontend_public/public_auth/auth_password_recovery/hooks/usePublicAuthPasswordRecoveryMutation', () => ({ usePublicAuthPasswordRecoveryMutation: () => ({ mutateAsync: mocks.mutateAsync, isPending: false }) }));
-vi.mock('@/app/frontend_public/public_auth/auth_password_recovery/hooks/usePublicAuthPasswordRecoveryIdempotencyKey', () => ({ usePublicAuthPasswordRecoveryIdempotencyKey: () => ({ getKey: mocks.getKey, clearKey: mocks.clearKey }) }));
-vi.mock('@/app/frontend_public/public_auth/auth_password_recovery/api/PublicAuthPasswordRecoveryApi', () => ({ PublicAuthPasswordRecoveryApiError: class extends Error { constructor(message: string, readonly code: string, readonly validationErrors = []) { super(message); } }, getPublicAuthPasswordRecoveryApiErrorMessage: () => 'Request could not be completed' }));
+vi.mock('../hooks/usePublicAuthPasswordRecoveryMutation', () => ({ usePublicAuthPasswordRecoveryMutation: () => ({ mutateAsync: mocks.mutateAsync, isPending: false }) }));
+vi.mock('../hooks/usePublicAuthPasswordRecoveryIdempotencyKey', () => ({ usePublicAuthPasswordRecoveryIdempotencyKey: () => ({ getKey: mocks.getKey, clearKey: mocks.clearKey }) }));
+vi.mock('../api/PublicAuthPasswordRecoveryApi', () => ({ PublicAuthPasswordRecoveryApiError: class extends Error { constructor(message: string, readonly code: string, readonly validationErrors = []) { super(message); } }, getPublicAuthPasswordRecoveryApiErrorMessage: () => 'Request could not be completed' }));
 
 beforeEach(() => { vi.clearAllMocks(); mocks.mutateAsync.mockReset(); mocks.mutateAsync.mockResolvedValue({ success: true, message: 'Accepted', data: null }); });
 
