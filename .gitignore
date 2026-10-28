@@ -43,6 +43,7 @@ cypress/screenshots/
 
 # TypeScript
 *.tsbuildinfo
+next-env.d.ts
 
 # Debug logs
 npm-debug.log*
