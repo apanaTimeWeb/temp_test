@@ -1,0 +1,72 @@
+{
+  "AUTH": {
+    "BRAND": "Library OS",
+    "COMMON": {
+      "backToLogin": "Back to login",
+      "optional": "optional",
+      "required": "required",
+      "demoFill": "Fill demo data"
+    },
+    "VALIDATION": {
+      "passwordMin": "Password must contain at least 8 characters.",
+      "passwordUppercase": "Password must include an uppercase letter.",
+      "passwordNumber": "Password must include a number.",
+      "confirmPasswordRequired": "Please confirm your password.",
+      "passwordMismatch": "Passwords do not match.",
+      "otpLength": "Enter all 6 digits of the code.",
+      "otpDigits": "The code must contain 6 digits."
+    },
+    "RESET": {
+      "title": "Reset password",
+      "description": "Enter the code you received and choose a new password. The authentication service will verify the code.",
+      "otpLabel": "Verification code",
+      "otpDigit": "Verification code digit",
+      "otpHelp": "Enter all six digits. The code is not prefilled by this page.",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm new password",
+      "submit": "Update password",
+      "submitting": "Updating password…",
+      "requestNewCode": "Request a new code",
+      "successTitle": "Password update accepted",
+      "successDescription": "The authentication service confirmed the password update. You can now try signing in.",
+      "backToLogin": "Back to login"
+    },
+    "PASSWORD": {
+      "show": "Show password",
+      "hide": "Hide password",
+      "strength": {
+        "label": "Password strength",
+        "prefix": "Strength:",
+        "empty": "Not entered",
+        "weak": "Weak",
+        "fair": "Fair",
+        "good": "Good",
+        "strong": "Strong"
+      }
+    },
+    "errors": {
+      "unexpected": "Something went wrong. Please try again.",
+      "configuration": "Authentication is not configured for this application. Contact support.",
+      "connection": "Could not reach the authentication service. Check your connection and try again.",
+      "requestFailed": "The request could not be completed. Please try again.",
+      "boundary": {
+        "title": "Authentication is temporarily unavailable",
+        "description": "Something went wrong while opening this page. Please try again.",
+        "retry": "Retry"
+      },
+      "viewNotFound": {
+        "title": "Authentication page not found",
+        "description": "The requested authentication page is not available.",
+        "backToLogin": "Return to sign in"
+      }
+    },
+    "loading": {
+      "label": "Loading authentication page"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The requested authentication page is unavailable. Return to sign in to continue.",
+      "backToLogin": "Back to sign in"
+    }
+  }
+}

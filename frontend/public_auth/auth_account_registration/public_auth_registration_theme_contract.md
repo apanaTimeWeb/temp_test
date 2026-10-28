@@ -1,0 +1,2 @@
+# Public Auth Account Registration — Theme Contract
+Global design system is the source of truth. This submodule consumes semantic tokens: `bg-page`, `bg-card`, `bg-input`, `bg-primary`, `bg-primary-hover`, `bg-surface-highlight`, `bg-surface-hover`, `text-primary`, `text-secondary`, `text-on-primary`, `text-disabled`, `text-danger`, `bg-danger-bg`, `text-success`, `border-border`, `border-success`, `border-danger`, `ring-primary`, and `shadow-card`. Radius/spacing/focus/motion use approved semantic Tailwind utilities. No hardcoded hex colors or arbitrary CSS variables.

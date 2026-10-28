@@ -1,0 +1,63 @@
+{
+  "AUTH": {
+    "BRAND": "Library OS",
+    "COMMON": {
+      "backToLogin": "Back to login",
+      "optional": "optional",
+      "required": "required",
+      "demoFill": "Fill demo data"
+    },
+    "VALIDATION": {
+      "identityRequired": "Enter your registered email or phone."
+    },
+    "FORGOT": {
+      "title": "Forgot password?",
+      "description": "Enter your registered email or phone to request recovery instructions.",
+      "identityLabel": "Registered email or phone",
+      "helper": "For your privacy, the response may not reveal whether an account exists.",
+      "submit": "Request recovery instructions",
+      "submitting": "Submitting request…",
+      "acceptedTitle": "Recovery request accepted",
+      "accepted": "Your recovery request was accepted. Follow the instructions from your authentication provider if an account matches.",
+      "securityNote": "If you do not receive instructions, check your details or contact your administrator.",
+      "continueToReset": "Continue to password reset"
+    },
+    "PASSWORD": {
+      "show": "Show password",
+      "hide": "Hide password",
+      "strength": {
+        "label": "Password strength",
+        "prefix": "Strength:",
+        "empty": "Not entered",
+        "weak": "Weak",
+        "fair": "Fair",
+        "good": "Good",
+        "strong": "Strong"
+      }
+    },
+    "errors": {
+      "unexpected": "Something went wrong. Please try again.",
+      "configuration": "Authentication is not configured for this application. Contact support.",
+      "connection": "Could not reach the authentication service. Check your connection and try again.",
+      "requestFailed": "The request could not be completed. Please try again.",
+      "boundary": {
+        "title": "Authentication is temporarily unavailable",
+        "description": "Something went wrong while opening this page. Please try again.",
+        "retry": "Retry"
+      },
+      "viewNotFound": {
+        "title": "Authentication page not found",
+        "description": "The requested authentication page is not available.",
+        "backToLogin": "Return to sign in"
+      }
+    },
+    "loading": {
+      "label": "Loading authentication page"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The requested authentication page is unavailable. Return to sign in to continue.",
+      "backToLogin": "Back to sign in"
+    }
+  }
+}
