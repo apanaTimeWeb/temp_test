@@ -4,7 +4,7 @@
 import { ManagerSeatsManagementNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_management/components/manager_seats_management_table_parts/ManagerSeatsManagementNativeTable';
 import { useLocale, useTranslations } from 'next-intl';
 
-import { useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useManagerSeatsDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_management/hooks/ManagerSeatsManagementDialogFocus';
@@ -36,12 +36,12 @@ const STATUS_CLASS: Record<SeatData['status'], string> = {
 
 const EMPTY_FORM: SeatDraft = { seatNo: '', branch: '', status: 'Working' };
 
-function SeatNoCell(props: { value: string }) {
-  return <span className="ss-table__seat-no">{props.value}</span>;
+function SeatNoCell(props: { value?: any }) {
+  return <span className="ss-table__seat-no">{String(props.value ?? '')}</span>;
 }
 
-function BranchCell(props: { data: SeatManagementRow }) {
-  return <span className="ss-cell-primary">{displayValue(props.data.branch)}</span>;
+function BranchCell(props: { data?: any }) {
+  return <span className="ss-cell-primary">{displayValue(props.data?.branch)}</span>;
 }
 
 function seatStatusTranslationKey(status: SeatData['status']): SeatStatusTranslationKey {
@@ -49,9 +49,10 @@ function seatStatusTranslationKey(status: SeatData['status']): SeatStatusTransla
   return key[status];
 }
 
-function SeatStatusCell(props: { value: string }) {
+function SeatStatusCell(props: { value?: any }) {
   const tManagerUi = useTranslations('manager.manager_seats.ui');
-  const status = (['free', 'occupied', 'expiring', 'maintenance', 'unknown'].includes(props.value) ? props.value : 'unknown') as SeatData['status'];
+  const val = String(props.value ?? '');
+  const status = (['free', 'occupied', 'expiring', 'maintenance', 'unknown'].includes(val) ? val : 'unknown') as SeatData['status'];
   return (
     <span className={STATUS_CLASS[status]}>
       <span className="ss-badge__dot" />{tManagerUi(seatStatusTranslationKey(status))}

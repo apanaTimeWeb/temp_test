@@ -19,7 +19,11 @@ export function ManagerNavigationRoute({ children }: ManagerNavigationRouteProps
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
-  const isManagerNavigationRoute = pathname === MANAGER_NAVIGATION_NAVIGATION_ROUTES.ROOT || pathname.startsWith(`${MANAGER_NAVIGATION_NAVIGATION_ROUTES.ROOT}/`);
+  const isManagerNavigationRoute =
+    pathname === MANAGER_NAVIGATION_NAVIGATION_ROUTES.ROOT ||
+    pathname.startsWith(`${MANAGER_NAVIGATION_NAVIGATION_ROUTES.ROOT}/`) ||
+    pathname === '/manager' ||
+    pathname.startsWith('/manager/');
   if (!isManagerNavigationRoute) return <>{children}</>;
 
   return (

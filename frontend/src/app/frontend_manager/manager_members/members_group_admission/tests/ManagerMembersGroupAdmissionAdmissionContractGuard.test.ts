@@ -3,7 +3,7 @@ import { apiFetch } from '@/lib/api';
 import { fetchManagerGroupAdmission, fetchManagerStudentById } from '@/app/frontend_manager/manager_members/members_group_admission/api/manager_members_group_admission.api';
 
 vi.mock('@/lib/api', () => ({ apiFetch: vi.fn() }));
-const apiFetchMock = vi.mocked(apiFetch);
+const apiFetchMock: any = vi.mocked(apiFetch);
 const studentEnvelopeData = {"id": "student-1", "smartId": "SMART-001", "name": "Test Student", "phone": "9876543210", "shift": "Morning", "seat": "S-01", "status": "Active", "plan": "Monthly", "dueMinor": 0, "currency": "INR", "joined": "2026-10-01"} as const;
 
 import { existsSync, readFileSync } from 'node:fs';

@@ -1,7 +1,6 @@
+'use client';
 // RESPONSIBILITY: Render the canonical add-enquiry view and preserve incoming route query context.
 // DATA FLOW: Enquiries Main -> AddPage -> enquiry form UI.
-
-'use client';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { useManagerEnquiriesDialogFocus } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/ManagerMembersEnquiriesDialogFocus';
@@ -10,6 +9,7 @@ import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager
 
 import { useRouter } from 'next/navigation';
 import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm.tsx';
+import { useManagerMembersEnquiriesUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesUnsavedChangesGuard';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PhoneCall, Save, X } from 'lucide-react';

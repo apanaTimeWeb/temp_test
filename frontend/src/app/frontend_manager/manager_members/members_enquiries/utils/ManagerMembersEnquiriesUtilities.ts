@@ -62,8 +62,6 @@ export function getManagerEnquiriesInitials(name: string): string {
 }
 
 /** Normalizes either an API-shaped enquiry or an already-normalized feature record into one UI contract. */
-export function normalizeManagerEnquiriesEnquiry(raw: ManagerMembersEnquiriesApiEnquiry): ManagerMembersEnquiriesEnquiry;
-export function normalizeManagerEnquiriesEnquiry(raw: ManagerMembersEnquiriesEnquiry): ManagerMembersEnquiriesEnquiry;
 export function normalizeManagerEnquiriesEnquiry(raw: ManagerMembersEnquiriesApiEnquiry | ManagerMembersEnquiriesEnquiry): ManagerMembersEnquiriesEnquiry {
   const isApiRecord = 'createdAt' in raw;
   const createdAt = isApiRecord ? raw.createdAt : raw.enquiryDate;

@@ -26,14 +26,14 @@ const STATUS_CLASS: Record<LockerStatus, string> = {
   Maintenance: 'ss-badge ss-badge--warning',
 };
 
-function LockerIdCell(props: { value: string }) {
-  return <span className="ss-table__seat-no">{props.value}</span>;
+function LockerIdCell(props: { value?: any }) {
+  return <span className="ss-table__seat-no">{String(props.value ?? '')}</span>;
 }
 
-function LockerStatusCell(props: { value: string }) {
+function LockerStatusCell(props: { value?: any }) {
   const tManagerUi = useTranslations('manager.manager_lockers.ui');
   const status = props.value as LockerStatus;
-  const label = status === 'Free' ? tManagerUi('free') : status === 'Occupied' ? tManagerUi('occupied') : status === 'Maintenance' ? tManagerUi('maintenance') : props.value;
+  const label = status === 'Free' ? tManagerUi('free') : status === 'Occupied' ? tManagerUi('occupied') : status === 'Maintenance' ? tManagerUi('maintenance') : String(props.value ?? '');
   return (
     <span className={STATUS_CLASS[status] ?? 'ss-badge ss-badge--inactive'}>
       <span className="ss-badge__dot" />{label}
@@ -41,9 +41,9 @@ function LockerStatusCell(props: { value: string }) {
   );
 }
 
-function AssignedToCell(props: { data: Locker }) {
+function AssignedToCell(props: { data?: any }) {
   const tManagerUi = useTranslations('manager.manager_lockers.ui');
-  if (props.data.assignedTo === '—') return <span className="ss-table__cell-muted">{tManagerUi('unassigned')}</span>;
+  if (!props.data || props.data.assignedTo === '—') return <span className="ss-table__cell-muted">{tManagerUi('unassigned')}</span>;
   return (
     <div className="ss-cell-stack">
       <p className="ss-cell-name">{props.data.assignedTo}</p>
@@ -52,11 +52,12 @@ function AssignedToCell(props: { data: Locker }) {
   );
 }
 
-function AssignedSinceCell(props: { value: string }) {
+function AssignedSinceCell(props: { value?: any }) {
   const locale = useLocale();
-  if (props.value === '—' || !/^\d{4}-\d{2}-\d{2}$/.test(props.value)) return <span className="ss-table__cell-muted">{props.value}</span>;
-  const date = parseISO(props.value);
-  if (!isValid(date)) return <span className="ss-table__cell-muted">{props.value}</span>;
+  const raw = String(props.value ?? '');
+  if (raw === '—' || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) return <span className="ss-table__cell-muted">{raw}</span>;
+  const date = parseISO(raw);
+  if (!isValid(date)) return <span className="ss-table__cell-muted">{raw}</span>;
   return <span>{format(date, 'dd MMM yyyy', { locale: locale === 'hi' ? hi : enUS })}</span>;
 }
 

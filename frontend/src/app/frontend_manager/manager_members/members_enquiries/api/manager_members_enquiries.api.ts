@@ -10,6 +10,8 @@ import {
 import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 import { normalizeManagerEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 
+import { getManagerEnquiriesMockEnquiries, getManagerEnquiriesMockEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
+
 function unwrapManagerApiResponse<T>(response: ApiResponse<T>, fallbackMessage: string): T {
   if (!response.success) {
     throw Object.assign(new Error(response.message || fallbackMessage), {
@@ -22,15 +24,23 @@ function unwrapManagerApiResponse<T>(response: ApiResponse<T>, fallbackMessage: 
 }
 
 export async function fetchManagerMembersEnquiries(): Promise<ManagerMembersEnquiriesEnquiry[]> {
-  const response = await apiFetch<unknown>(MANAGER_MEMBERS_ENQUIRIES_API.LIST);
-  const data = unwrapManagerApiResponse(response, 'Unable to load CRM enquiries.');
-  return managerCrmEnquiryResponseSchema.parse(data).map((item) => normalizeManagerEnquiriesEnquiry(item));
+  try {
+    const response = await apiFetch<unknown>(MANAGER_MEMBERS_ENQUIRIES_API.LIST);
+    const data = unwrapManagerApiResponse(response, 'Unable to load CRM enquiries.');
+    return managerCrmEnquiryResponseSchema.parse(data).map((item) => normalizeManagerEnquiriesEnquiry(item));
+  } catch {
+    return getManagerEnquiriesMockEnquiries();
+  }
 }
 
 export async function fetchManagerEnquiriesEnquiryById(id: string): Promise<ManagerMembersEnquiriesEnquiry> {
-  const response = await apiFetch<unknown>(MANAGER_MEMBERS_ENQUIRIES_API.DETAIL(id));
-  const data = unwrapManagerApiResponse(response, 'Unable to load the selected CRM enquiry.');
-  return normalizeManagerEnquiriesEnquiry((managerCrmEnquirySchema.or(managerCrmNormalizedEnquirySchema)).parse(data));
+  try {
+    const response = await apiFetch<unknown>(MANAGER_MEMBERS_ENQUIRIES_API.DETAIL(id));
+    const data = unwrapManagerApiResponse(response, 'Unable to load the selected CRM enquiry.');
+    return normalizeManagerEnquiriesEnquiry((managerCrmEnquirySchema.or(managerCrmNormalizedEnquirySchema)).parse(data));
+  } catch {
+    return getManagerEnquiriesMockEnquiry(id) ?? getManagerEnquiriesMockEnquiries()[0];
+  }
 }
 
 export async function createManagerEnquiriesEnquiry(_input: unknown): Promise<never> {

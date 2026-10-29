@@ -768,7 +768,9 @@
 .mgr-skeleton-value { width: 35%; height: 28px; }
 
 /* Manager shell semantic overrides and accessibility contract */
-.mgr-main-offset { flex: 1; min-height: 100vh; }
+.mgr-main-offset { flex: 1; min-height: 100vh; margin-left: calc(theme(--spacing) * 60); transition: margin-left theme(--animate-duration-slow); }
+.mgr-main-offset.mgr-main-offset-collapsed,
+.mgr-main-offset-collapsed { margin-left: calc(theme(--spacing) * 16); }
 .mgr-header { left: calc(theme(--spacing) * 60); }
 .mgr-header-collapsed { left: calc(theme(--spacing) * 16); }
 

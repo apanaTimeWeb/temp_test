@@ -6,7 +6,7 @@ import { MANAGER_MEMBERS_ENQUIRIES_API } from '@/app/frontend_manager/manager_me
 import { getManagerEnquiriesMockEnquiries, getManagerEnquiriesMockEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/mocks/manager_members_enquiries_fixtures/ManagerMembersEnquiriesFixtures';
 
 vi.mock('@/lib/api', () => ({ apiFetch: vi.fn() }));
-const managerCrmApiFetchMock = vi.mocked(apiFetch);
+const managerCrmApiFetchMock: any = vi.mocked(apiFetch);
 
 describe('CRM mock read contract', () => {
   it('keeps the mock list response compatible with the read API parser', () => {

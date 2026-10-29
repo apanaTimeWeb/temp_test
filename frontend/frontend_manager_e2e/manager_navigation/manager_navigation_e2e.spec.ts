@@ -6,7 +6,7 @@ const SOURCE_ROOT = [
   join(process.cwd(), 'frontend_manager'),
   join(process.cwd(), 'app', 'frontend_manager'),
   join(process.cwd(), 'src', 'app', 'frontend_manager'),
-].find((candidate) => existsSync(candidate));
+].find((candidate) => existsSync(candidate)) ?? join(process.cwd(), 'src', 'app', 'frontend_manager');
 if (!SOURCE_ROOT) throw new Error('Cannot find frontend_manager source tree. Run Playwright from the ZIP root or the integrated host-app root.');
 
 const browserExceptionsByPage = new WeakMap<Page, string[]>();

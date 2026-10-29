@@ -21,7 +21,7 @@ export interface NativeColumn<T = object> {
 
 export interface ManagerDashboardReportsNativeTableProps<T extends object> { rows: T[]; columns: NativeColumn<T>[]; getRowKey: (row: T) => string; labels?: { previous: string; next: string; range?: (start: number, end: number, total: number) => string }; label: string; }
 
-export interface ManagerDashboardReportsTableCardProps<T extends object>{title:string;rows:T[];columns:NativeColumn<T>[];height:228|260|280;emptyMessage:string}
+export interface ManagerDashboardReportsTableCardProps<T extends object>{title:string;rows:T[];columns:NativeColumn<T>[];height:228|260|280;emptyMessage:string;getRowKey:(row: T) => string}
 
 export type ManagerDashboardReportsSortDirection = 'asc' | 'desc';
 

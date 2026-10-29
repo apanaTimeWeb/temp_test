@@ -1,6 +1,6 @@
+'use client';
 import { format, parseISO, isValid } from 'date-fns';
 import { enUS, hi } from 'date-fns/locale';
-'use client';
 import { ManagerSeatsHistoryNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_table_parts/ManagerSeatsHistoryNativeTable';
 import { useLocale, useTranslations } from 'next-intl';
 

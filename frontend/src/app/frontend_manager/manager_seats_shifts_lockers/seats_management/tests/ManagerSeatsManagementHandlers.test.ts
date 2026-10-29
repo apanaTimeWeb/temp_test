@@ -57,9 +57,11 @@ describe('Manager Seats/Shifts/Lockers read-only MSW fixtures', () => {
       })),
     );
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-    render(createElement(NextIntlClientProvider, { locale: 'en', messages: enMessages },
-      createElement(QueryClientProvider, { client: queryClient }, createElement(ManagerSeatsManagementSeatManagementClient)),
-    ));
+    render(createElement(NextIntlClientProvider, {
+      locale: 'en',
+      messages: enMessages,
+      children: createElement(QueryClientProvider, { client: queryClient }, createElement(ManagerSeatsManagementSeatManagementClient)),
+    }));
     expect(await screen.findByText('Verified API Student')).toBeTruthy();
     expect(screen.getByText('API-017')).toBeTruthy();
     expect(screen.getAllByText('—').length).toBeGreaterThan(0);

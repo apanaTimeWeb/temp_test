@@ -1,7 +1,6 @@
+'use client';
 // RESPONSIBILITY: Render the canonical group-admission feature view with incoming route context.
 // DATA FLOW: Next.js route page -> Main -> GroupPage.
-
-'use client';
 import { useTranslations } from 'next-intl';
 import { Users2, Plus, Download, Upload } from 'lucide-react';
 import Link from 'next/link';

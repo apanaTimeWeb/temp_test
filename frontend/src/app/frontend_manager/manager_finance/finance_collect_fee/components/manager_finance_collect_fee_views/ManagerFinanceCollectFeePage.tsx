@@ -81,7 +81,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     setSearch(student.name);
     setShowDropdown(false);
     setActiveStudentIndex(-1);
-    setValue('member', student.id, { shouldDirty: true, shouldValidate: true });
+    setValue('member', String(student.id), { shouldDirty: true, shouldValidate: true });
     // Sample fixtures may identify a preview record, but must never supply a real charge or fee.
     setLateFee('');
     setAmount('');

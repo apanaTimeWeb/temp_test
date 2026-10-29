@@ -88,7 +88,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
       sortable: false,
       cellStyle: { textAlign: 'right' },
       cellRenderer: (params: NativeCellParams<Entry>) => {
-        if (params.data.status === 'pending') {
+        if (params.data?.status === 'pending') {
           return (
             <div className="h-full flex justify-end items-center">
               <button

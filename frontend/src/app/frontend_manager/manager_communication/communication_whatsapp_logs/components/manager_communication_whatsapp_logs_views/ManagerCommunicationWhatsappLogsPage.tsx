@@ -91,14 +91,14 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
         </span>
       )
     },
-    { field: 'error', headerName: tManagerUi('error_7f2f6a'), width: 180, cellRenderer: (p: NativeCellParams) => <span className="mc-td-danger text-xs truncate max-w-xs inline-block" title={p.value}>{p.value || '—'}</span> },
+    { field: 'error', headerName: tManagerUi('error_7f2f6a'), width: 180, cellRenderer: (p: NativeCellParams) => <span className="mc-td-danger text-xs truncate max-w-xs inline-block" title={p.value ? String(p.value) : undefined}>{p.value || '—'}</span> },
     {
       headerName: tManagerUi('actions'),
       width: 100,
       sortable: false,
       cellRenderer: (params: NativeCellParams) => (
         <div className="h-full flex items-center">
-          <button type="button" onClick={() => setViewLog(params.data)} className="mc-btn-icon hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base" title={tManagerUi('view_message')} aria-label={tManagerUi('view_message')}>
+          <button type="button" onClick={() => setViewLog((params.data as WaLog) ?? null)} className="mc-btn-icon hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base" title={tManagerUi('view_message')} aria-label={tManagerUi('view_message')}>
             <Eye size={16} />
           </button>
         </div>

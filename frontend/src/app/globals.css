@@ -46,6 +46,26 @@
   --color-info: #1D4ED8;
   --color-info-text: #60A5FA;
   --color-info-bg: #172554;
+
+  /* Manager Navigation & Domain Theme Tokens */
+  --color-page: #050505;
+  --color-card: #111111;
+  --color-sidebar: #050505;
+  --color-header: #111111;
+  --color-input: #1A1A1A;
+  --color-overlay: #242424;
+  --color-on-primary: #111111;
+  --color-on-danger: #FFFFFF;
+  --color-purple-bg: #3B0764;
+  --color-purple-text: #C084FC;
+
+  /* Motion, shape, spacing, and shadow tokens */
+  --animate-duration-fast: 150ms;
+  --animate-duration-slow: 300ms;
+  --radius-full: 9999px;
+  --radius-md: 8px;
+  --shadow-dialog: 0 20px 60px rgba(0, 0, 0, 0.6);
+  --spacing: 4px;
 }
 
 body {

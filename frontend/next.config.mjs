@@ -56,6 +56,18 @@ const nextConfig = {
         source: '/frontend_public/public_auth/auth_password_reset',
         destination: '/public_auth/auth_password_reset',
       },
+      {
+        source: '/manager',
+        destination: '/frontend_manager/manager_dashboard/dashboard_overview',
+      },
+      {
+        source: '/manager/dashboard',
+        destination: '/frontend_manager/manager_dashboard/dashboard_overview',
+      },
+      {
+        source: '/manager/:path*',
+        destination: '/frontend_manager/:path*',
+      },
     ];
   },
   async redirects() {

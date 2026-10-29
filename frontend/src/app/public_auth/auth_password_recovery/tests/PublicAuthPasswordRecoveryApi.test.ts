@@ -8,13 +8,13 @@ function makeResponse(body: unknown, ok = true): Response {
 
 describe('auth_password_recovery API contract safety', () => {
   let api: typeof import('@/app/public_auth/auth_password_recovery/api/PublicAuthPasswordRecoveryApi');
-  let apiFetch: typeof import('@/lib/api')['apiFetch'];
+  let apiFetch: any;
 
   beforeEach(async () => {
     vi.resetModules();
     vi.stubEnv('NEXT_PUBLIC_AUTH_FORGOT_PASSWORD_PATH', '/api/auth/recovery');
     const transport = await import('@/lib/api');
-    apiFetch = vi.mocked(transport.apiFetch);
+    apiFetch = transport.apiFetch;
     vi.mocked(apiFetch).mockReset();
     api = await import('@/app/public_auth/auth_password_recovery/api/PublicAuthPasswordRecoveryApi');
   });

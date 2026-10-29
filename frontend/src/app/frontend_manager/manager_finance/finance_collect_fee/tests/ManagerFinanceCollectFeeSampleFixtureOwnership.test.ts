@@ -15,6 +15,7 @@ const moduleRoot = moduleRootCandidates.find((candidate) =>
   existsSync(join(candidate, 'components/manager_finance_collect_fee_views/ManagerFinanceCollectFeePage.tsx'))
 );
 if (!moduleRoot) throw new Error('Could not locate the canonical manager_finance module for finance_collect_fee.');
+const frontendManagerRoot = join(moduleRoot, '..', '..');
 const readSource = (relativePath: string) => readFileSync(join(moduleRoot, relativePath), 'utf8');
 
 describe('Finance sample-fixture ownership and disabled actions — finance_collect_fee', () => {

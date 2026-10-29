@@ -8,13 +8,13 @@ function makeResponse(body: unknown, ok = true): Response {
 
 describe('auth_sign_in API contract safety', () => {
   let api: typeof import('@/app/public_auth/auth_sign_in/api/PublicAuthSignInApi');
-  let apiFetch: typeof import('@/lib/api')['apiFetch'];
+  let apiFetch: any;
 
   beforeEach(async () => {
     vi.resetModules();
     vi.stubEnv('NEXT_PUBLIC_AUTH_LOGIN_PATH', '/api/auth/sign-in');
     const transport = await import('@/lib/api');
-    apiFetch = vi.mocked(transport.apiFetch);
+    apiFetch = transport.apiFetch;
     vi.mocked(apiFetch).mockReset();
     api = await import('@/app/public_auth/auth_sign_in/api/PublicAuthSignInApi');
   });
