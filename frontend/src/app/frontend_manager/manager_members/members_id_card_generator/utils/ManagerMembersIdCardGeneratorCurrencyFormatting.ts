@@ -1,6 +1,11 @@
+const supportedCurrencies = typeof Intl !== 'undefined' && typeof (Intl as any).supportedValuesOf === 'function'
+  ? new Set<string>((Intl as any).supportedValuesOf('currency'))
+  : null;
+
 /** Formats a minor-unit integer from an API/fixture using the active locale. */
 export function formatManagerIdCardGeneratorCurrency(amountMinor: number, currency: string, locale: string): string {
   if (!Number.isFinite(amountMinor)) return '—';
+  if (supportedCurrencies && !supportedCurrencies.has(currency.toUpperCase())) return '—';
   try {
     const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency });
     const divisor = 10 ** (formatter.resolvedOptions().maximumFractionDigits ?? 2);

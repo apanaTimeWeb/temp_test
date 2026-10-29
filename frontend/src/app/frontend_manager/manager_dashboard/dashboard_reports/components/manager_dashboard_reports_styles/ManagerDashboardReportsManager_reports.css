@@ -76,6 +76,13 @@
   .mgr-reports-theme .mgr-trend-up { color: theme(--color-success-text); }
   .mgr-reports-theme .mgr-trend-down { color: theme(--color-danger-text); }
   .mgr-reports-theme .mgr-trend-neutral { color: theme(--color-text-secondary); }
+  .mgr-reports-theme .mgr-table-id { color: theme(--color-primary); font-weight: 600; font-family: monospace; }
+  .mgr-reports-theme .mgr-cell-primary { color: theme(--color-primary); font-weight: 500; }
+  .mgr-reports-theme .mgr-cell-success { color: theme(--color-success-text); font-weight: 500; }
+  .mgr-reports-theme .mgr-cell-warning { color: theme(--color-warning-text); font-weight: 500; }
+  .mgr-reports-theme .mgr-cell-danger { color: theme(--color-danger-text); font-weight: 500; }
+  .mgr-reports-theme .mgr-cell-info { color: theme(--color-info-text); font-weight: 500; }
+  .mgr-reports-theme .mgr-cell-secondary { color: theme(--color-text-secondary); }
 }
 @keyframes mgr-reports-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
 @media (max-width: 1024px) { .mgr-reports-theme .mgr-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, CheckCircle2, IdCard, MessageSquare, Printer, Search } from 'lucide-react';
-import StudentIdCard, { type IdCardData } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCard.tsx';
+import StudentIdCard, { type IdCardData } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCard';
 import { useManagerIdCardGeneratorFormatting } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGeneratorFormatting';
 import { useManagerIdCardGenerator } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGenerator';
 import type { ManagerStudent } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorTypes';
@@ -24,7 +24,13 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   const requestedId = searchParams.get('id')?.trim() ?? '';
   const [selectedId, setSelectedId] = useState(requestedId);
   // Dependency rationale: the URL id is canonical, so external URL changes must refresh the selected card.
-  useEffect(() => { setSelectedId(requestedId); }, [requestedId]);
+  useEffect(() => {
+    if (requestedId) {
+      setSelectedId(requestedId);
+    } else if (students.length > 0 && !selectedId) {
+      setSelectedId(students[0].smartId);
+    }
+  }, [requestedId, students, selectedId]);
   const selectStudent = (smartId: string) => {
     setSelectedId(smartId);
     const params = new URLSearchParams(searchParams.toString());
@@ -33,9 +39,9 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   };
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
-  // Dependency rationale: debounce the member lookup text and cancel stale timers before recalculating the filtered card candidates.
+  // Dependency rationale: debounce the member lookup text (300ms) and cancel stale timers before recalculating the filtered card candidates.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearch(search), MANAGER_MEMBERS_ID_CARD_GENERATOR_SEARCH_DEBOUNCE_MS);
+    const timeout = window.setTimeout(() => setDebouncedSearch(search), 300);
     return () => window.clearTimeout(timeout);
   }, [search]);
   const filtered = useMemo(() => {

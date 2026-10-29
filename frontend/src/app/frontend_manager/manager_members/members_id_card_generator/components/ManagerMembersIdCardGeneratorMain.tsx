@@ -1,6 +1,6 @@
 'use client';
-import { ManagerMembersIdCardGeneratorIdCardClient } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorIdCardClient.tsx';
-import { ManagerMembersIdCardGeneratorErrorBoundary } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_states/ManagerMembersIdCardGeneratorErrorBoundary.tsx';
+import { ManagerMembersIdCardGeneratorIdCardClient } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorIdCardClient';
+import { ManagerMembersIdCardGeneratorErrorBoundary } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_states/ManagerMembersIdCardGeneratorErrorBoundary';
 import type { ManagerMembersIdCardGeneratorMainProps } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorMainTypes';
 
 // RESPONSIBILITY: Preserve route query context for the manager members id card generator feature.
