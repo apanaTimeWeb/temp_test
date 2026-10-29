@@ -33,18 +33,18 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
     Delivered: tManagerUi('delivered'),
     Failed: tManagerUi('failed'),
   };
-  const [typeFilter,   setTypeFilter]   = useState('All');
+  const [typeFilter, setTypeFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
-  const [search,       setSearch]       = useState('');
+  const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   // Dependency rationale: debounce log search input (300ms) and clear the timer when the query changes or the component unmounts.
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedSearch(search), 300);
     return () => clearTimeout(timeout);
   }, [search]);
-  const [dateFrom,     setDateFrom]     = useState('');
-  const [dateTo,       setDateTo]       = useState('');
-  const [viewLog,      setViewLog]      = useState<WaLog | null>(null);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const [viewLog, setViewLog] = useState<WaLog | null>(null);
   const getTypeLabel = (type: WaLog['type']) => {
     switch (type) {
       case 'welcome': return tManagerUi('welcome');
@@ -71,9 +71,9 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
     { field: 'dateTime', headerName: tManagerUi('date_time'), width: 160, cellRenderer: (p: NativeCellParams) => <span className="mc-td-muted text-sm">{p.value}</span> },
     { field: 'phone', headerName: tManagerUi('phone'), width: 130, cellRenderer: (p: NativeCellParams) => <span className="mc-td-mono font-medium">{maskManagerWhatsappLogsPhone(String(p.value ?? ''))}</span> },
     { field: 'student', headerName: tManagerUi('student'), flex: 1, minWidth: 150, cellRenderer: (p: NativeCellParams) => <span className="mc-td-bold">{p.value}</span> },
-    { 
-      field: 'type', 
-      headerName: tManagerUi('type'), 
+    {
+      field: 'type',
+      headerName: tManagerUi('type'),
       width: 130,
       cellRenderer: (p: NativeCellParams) => (
         <span className={`mc-badge ${TYPE_BADGE[p.value as WaLog['type']]} inline-block mt-2 text-xs`}>
@@ -81,9 +81,9 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
         </span>
       )
     },
-    { 
-      field: 'status', 
-      headerName: tManagerUi('status'), 
+    {
+      field: 'status',
+      headerName: tManagerUi('status'),
       width: 120,
       cellRenderer: (p: NativeCellParams) => (
         <span className={`mc-badge ${STATUS_BADGE[p.value as WaLog['status']]} inline-block mt-2 text-xs`}>

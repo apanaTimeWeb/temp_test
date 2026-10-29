@@ -118,7 +118,7 @@ export function ManagerSeatsManagementSeatManagementClient() {
     setShowModal(true);
   }
 
-  
+
 
   const colDefs: ColDef<SeatManagementRow>[] = useMemo(() => [
     { field: 'seatNo', headerName: tManagerUi('seat'), flex: 1, cellRenderer: SeatNoCell },

@@ -22,7 +22,7 @@ export default function ManagerSettingsHelpSupportPage() {
   const { activeTab, setActiveTab, ticketTab, setTicketTab, documentationQuery, setDocumentationQuery, debouncedDocumentationQuery, documentationCategory, setDocumentationCategory, myTickets, documentationArticles, announcements } = useManagerHelpSupportPageState();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  
+
   const visibleDocumentationArticles = documentationArticles.filter((article) => {
     const matchesCategory = documentationCategory === 'All' || article.category === documentationCategory;
     const searchableText = `${tManagerUi(article.titleKey)} ${tManagerUi(article.descriptionKey)} ${tManagerUi(article.categoryLabelKey)}`.toLowerCase();
@@ -103,16 +103,16 @@ export default function ManagerSettingsHelpSupportPage() {
         <div className="motion-safe:transition-all motion-safe:duration-base">
           {/* Sub Tabs */}
           <div className="flex items-center gap-4 mb-6">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => { setTicketTab('My Tickets'); setPage(0); }}
               aria-pressed={ticketTab === 'My Tickets'}
               className={`pb-2 text-sm font-bold border-b-2 motion-safe:transition-colors ${ticketTab === 'My Tickets' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'}`}
             >
               {tManagerUi('my_tickets')}
             </button>
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => setTicketTab('Create Ticket')}
               aria-pressed={ticketTab === 'Create Ticket'}
               className={`pb-2 text-sm font-bold border-b-2 motion-safe:transition-colors ${ticketTab === 'Create Ticket' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'}`}
@@ -148,14 +148,13 @@ export default function ManagerSettingsHelpSupportPage() {
                           <td className="p-4 text-sm text-primary">{t.subject}</td>
                           <td className="p-4 text-sm text-secondary">{t.category === 'Finance' ? tManagerUi('ticket_category_finance') : t.category === 'General' ? tManagerUi('ticket_category_general') : t.category}</td>
                           <td className="p-4">
-                            <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
-                              t.priority === 'High' ? 'bg-danger-bg text-danger' :
+                            <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${t.priority === 'High' ? 'bg-danger-bg text-danger' :
                               t.priority === 'Medium' ? 'bg-warning-bg text-warning' : 'bg-success-bg text-success'
-                            }`}>{t.priority === 'High' ? tManagerUi('high') : t.priority === 'Medium' ? tManagerUi('medium') : t.priority === 'Low' ? tManagerUi('low') : t.priority}</span>
+                              }`}>{t.priority === 'High' ? tManagerUi('high') : t.priority === 'Medium' ? tManagerUi('medium') : t.priority === 'Low' ? tManagerUi('low') : t.priority}</span>
                           </td>
                           <td className="p-4">
                             <div className="flex items-center gap-1.5 text-sm">
-                              {t.status === 'Open' ? <Clock size={14} className="text-warning"/> : <CheckCircle size={14} className="text-success"/>}
+                              {t.status === 'Open' ? <Clock size={14} className="text-warning" /> : <CheckCircle size={14} className="text-success" />}
                               <span className={t.status === 'Open' ? 'text-warning' : 'text-success'}>{t.status === 'Open' ? tManagerUi('ticket_status_open') : t.status === 'Closed' ? tManagerUi('ticket_status_closed') : t.status}</span>
                             </div>
                           </td>
@@ -223,7 +222,7 @@ export default function ManagerSettingsHelpSupportPage() {
               <p className="mb-4 text-sm text-warning" data-testid="manager-support-ticket-contract-warning" role="status">{tManagerUi('ticket_creation_is_unavailable_no_authoritative_support_0ec10c')}</p>
               <h2 className="text-xl font-bold text-primary mb-2">{tManagerUi('raise_a_support_ticket')}</h2>
               <p className="text-sm text-secondary mb-8">{tManagerUi('draft_the_issue_details_below_submission_is_disabled_unt_ab6ecc')}</p>
-              
+
               <ManagerSettingsHelpSupportTicketForm onCancel={() => setTicketTab('My Tickets')} />
             </div>
           )}
