@@ -1,5 +1,5 @@
 'use client';
-import { ManagerShiftsMigrationClient } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/components/manager_shifts_migration_views/ManagerShiftsMigrationClient.tsx';
+import { ManagerShiftsMigrationClient } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/components/manager_shifts_migration_views/ManagerShiftsMigrationClient';
 import type { ManagerShiftsMigrationMainProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/types/ManagerShiftsMigrationMainTypes';
 
 // RESPONSIBILITY: Preserve route query context for the shifts migration feature.

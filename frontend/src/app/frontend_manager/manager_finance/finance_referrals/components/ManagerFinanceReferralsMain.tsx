@@ -1,5 +1,5 @@
 'use client';
-import ManagerFinanceReferralsPage from '@/app/frontend_manager/manager_finance/finance_referrals/components/manager_finance_referrals_views/ManagerFinanceReferralsPage.tsx';
+import ManagerFinanceReferralsPage from '@/app/frontend_manager/manager_finance/finance_referrals/components/manager_finance_referrals_views/ManagerFinanceReferralsPage';
 import type { ManagerFinanceReferralsMainProps } from '@/app/frontend_manager/manager_finance/finance_referrals/types/ManagerFinanceReferralsMainTypes';
 
 // RESPONSIBILITY: Route query state into the finance referrals feature view.

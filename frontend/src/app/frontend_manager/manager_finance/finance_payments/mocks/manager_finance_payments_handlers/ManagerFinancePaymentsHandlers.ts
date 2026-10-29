@@ -19,15 +19,10 @@ export function managerPaymentsTestResponse<T>(request: Request, populated: T, e
     }, { status: 503 });
   }
 
-  return HttpResponse.json({
-    success: true,
-    message: 'Payments loaded.',
-    data: mode === 'empty' ? empty : populated,
-    requestId: TEST_REQUEST_ID,
-  });
+  return HttpResponse.json((mode === 'empty' ? empty : populated) as any);
 }
 
 const validPayments = managerFinancePaymentResponseSchema.parse(MANAGER_FINANCE_API_PAYMENT_FIXTURES);
 const emptyPayments = managerFinancePaymentResponseSchema.parse(MANAGER_FINANCE_EMPTY_PAYMENT_FIXTURE);
-export const managerPaymentsHandlers = [http.get(MANAGER_FINANCE_PAYMENTS_TEST_ONLY_PATH, ({ request }) => managerPaymentsTestResponse(request, validPayments, emptyPayments))];
+export const managerPaymentsHandlers = [http.get(`*${MANAGER_FINANCE_PAYMENTS_TEST_ONLY_PATH}`, ({ request }) => managerPaymentsTestResponse(request, validPayments, emptyPayments))];
 export function validateManagerPaymentsApiFixtures() { managerFinancePaymentResponseSchema.parse(validPayments); managerFinancePaymentResponseSchema.parse(emptyPayments); }

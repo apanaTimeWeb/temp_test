@@ -31,5 +31,5 @@ const populated = managerComplaintsComplaintResponseListSchema.parse(MANAGER_COM
 const empty = managerComplaintsComplaintResponseListSchema.parse(MANAGER_COMPLAINTS_EMPTY_FIXTURE);
 
 export const managerComplaintsHandlers = [
-  http.get(MANAGER_COMMUNICATION_COMPLAINTS_URL, ({ request }) => managerComplaintsTestResponse(request, populated, empty)),
+  http.get(`*${MANAGER_COMMUNICATION_COMPLAINTS_URL}`, ({ request }) => managerComplaintsTestResponse(request, populated, empty)),
 ];

@@ -1,6 +1,6 @@
 'use client';
-import ManagerMembersGroupAdmissionGroupPage from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_views/ManagerMembersGroupAdmissionGroupPage.tsx';
-import { ManagerMembersGroupAdmissionErrorBoundary } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_states/ManagerMembersGroupAdmissionErrorBoundary.tsx';
+import ManagerMembersGroupAdmissionGroupPage from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_views/ManagerMembersGroupAdmissionGroupPage';
+import { ManagerMembersGroupAdmissionErrorBoundary } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_states/ManagerMembersGroupAdmissionErrorBoundary';
 import type { ManagerMembersGroupAdmissionMainProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionMainTypes';
 
 // RESPONSIBILITY: Preserve route query context for the manager members group admission feature.

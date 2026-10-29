@@ -1,5 +1,5 @@
 'use client';
-import ManagerFinanceLateFeesPage from '@/app/frontend_manager/manager_finance/finance_late_fees/components/manager_finance_late_fees_views/ManagerFinanceLateFeesPage.tsx';
+import ManagerFinanceLateFeesPage from '@/app/frontend_manager/manager_finance/finance_late_fees/components/manager_finance_late_fees_views/ManagerFinanceLateFeesPage';
 import type { ManagerFinanceLateFeesMainProps } from '@/app/frontend_manager/manager_finance/finance_late_fees/types/ManagerFinanceLateFeesMainTypes';
 
 // RESPONSIBILITY: Route query state into the finance late fees feature view.

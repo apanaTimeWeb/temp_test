@@ -8,22 +8,17 @@ import { useManagerSubscriptionsFormatting } from '@/app/frontend_manager/manage
 // RESPONSIBILITY: Entry page for the manager_subscriptions module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-// RESPONSIBILITY: Entry page for the manager_subscriptions module.
-// DATA FLOW: Next.js Router -> Page -> Components
 import { useState, useEffect } from 'react';
 
 import { Download, Upload, Printer, MessageSquare, Send, Mail, RefreshCw, Eye } from 'lucide-react';
 import { ManagerFinanceSubscriptionsEmptyState } from '@/app/frontend_manager/manager_finance/finance_subscriptions/components/manager_finance_subscriptions_empty_states/ManagerFinanceSubscriptionsEmptyState';
 import type { ManagerFinanceSubscriptionsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsComponentTypes';
 
-
 const URL_FILTERS = {
   status: { defaultValue: 'all', allowedValues: ['all', 'active', 'expired', 'suspended', 'cancelled'] },
   plan: { defaultValue: 'all', allowedValues: ['all', 'Basic Plan', 'Premium Plan'] },
   shift: { defaultValue: 'all', allowedValues: ['all', 'Morning', 'Evening', 'Full Day'] },
 } as const;
-
-
 
 const STATUS_BADGE: Record<string, string> = {
   active:    'fin-badge fin-badge--success',
@@ -39,7 +34,6 @@ function daysLeftBadgeClass(days: number) {
   return 'fin-badge fin-badge--success';
 }
 
-
 export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFinanceSubscriptionsRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_subscriptions.ui');
   const displayPlan = (value: string) => ({ 'Basic Plan': tManagerUi('basic_plan'), 'Premium Plan': tManagerUi('premium_plan') } as Record<string, string>)[value] ?? value;
@@ -49,6 +43,8 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
   const planFilter = urlFilters.plan;
   const shiftFilter = urlFilters.shift;
   const [rows, setRows] = useState(MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   // Dependency rationale: derive visible subscription rows from the three active filter values.
   useEffect(() => {
@@ -60,7 +56,15 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         return st && pl && sh;
       })
     );
+    setPage(0);
   }, [statusFilter, planFilter, shiftFilter]);
+
+  const totalRows = rows.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginated = rows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   return (
     <div className="space-y-6"
@@ -121,7 +125,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
       <div className="fin-card overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="fin-table-header-row">
+            <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
               <th className="text-left py-3 px-4">{tManagerUi('student')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('smart_id')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('plan')}</th>
@@ -148,8 +152,8 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
                 </td>
               </tr>
             ) : (
-              rows.map((s) => (
-                <tr key={s.id} className="fin-table-hover-row fin-table-row">
+              paginated.map((s) => (
+                <tr key={s.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
                   <td className="py-3 px-4 fin-cell-name">{s.studentName}</td>
                   <td className="py-3 px-4 fin-mono">{s.smartId}</td>
                   <td className="py-3 px-4 fin-text-body">{displayPlan(s.plan)}</td>
@@ -195,6 +199,55 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
             )}
           </tbody>
         </table>
+
+        {totalRows > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
+            <span>
+              Showing {startItem}–{endItem} of {totalRows} results
+            </span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="rows-per-page-finance-subscriptions" className="text-xs text-secondary whitespace-nowrap">
+                  Rows per page:
+                </label>
+                <select
+                  id="rows-per-page-finance-subscriptions"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage <= 0}
+                  onClick={() => setPage((current) => Math.max(0, current - 1))}
+                >
+                  Previous
+                </button>
+                <span className="text-xs text-secondary px-1">
+                  Page {effectivePage + 1} of {pageCount}
+                </span>
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage >= pageCount - 1}
+                  onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,10 +3,10 @@
 import { useTranslations } from 'next-intl';
 
 import type { ManagerMembersEnquiriesMainProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesMainTypes';
-import { ManagerMembersEnquiriesClient } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_views/ManagerMembersEnquiriesClient.tsx';
-import ManagerMembersEnquiriesAddPage from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_views/ManagerMembersEnquiriesAddPage.tsx';
-import ManagerMembersEnquiriesDetailPage from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_views/ManagerMembersEnquiriesDetailPage.tsx';
-import { ManagerMembersEnquiriesErrorBoundary } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_states/ManagerMembersEnquiriesErrorBoundary.tsx';
+import { ManagerMembersEnquiriesClient } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_views/ManagerMembersEnquiriesClient';
+import ManagerMembersEnquiriesAddPage from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_views/ManagerMembersEnquiriesAddPage';
+import ManagerMembersEnquiriesDetailPage from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_views/ManagerMembersEnquiriesDetailPage';
+import { ManagerMembersEnquiriesErrorBoundary } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_states/ManagerMembersEnquiriesErrorBoundary';
 
 // RESPONSIBILITY: Preserve route query context for the manager members enquiries feature.
 // DATA FLOW: Next.js route page -> typed Main props -> feature client/view.

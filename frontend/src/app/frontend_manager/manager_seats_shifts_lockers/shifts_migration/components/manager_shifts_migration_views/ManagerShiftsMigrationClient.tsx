@@ -13,9 +13,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerSeatsShiftMigrationDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/schemas/ManagerShiftsMigrationDraftSchemas';
 import { ArrowLeft, Search, ChevronDown, Clock } from 'lucide-react';
-import { ManagerShiftsMigrationStepper } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/components/manager_shifts_migration_views/ManagerShiftsMigrationStepper.tsx';
-import { ManagerShiftsMigrationSummary } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/components/manager_shifts_migration_sections/ManagerShiftsMigrationSummary.tsx';
-import { ManagerShiftsMigrationReview } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/components/manager_shifts_migration_views/ManagerShiftsMigrationReview.tsx';
+import { ManagerShiftsMigrationStepper } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/components/manager_shifts_migration_views/ManagerShiftsMigrationStepper';
+import { ManagerShiftsMigrationSummary } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/components/manager_shifts_migration_sections/ManagerShiftsMigrationSummary';
+import { ManagerShiftsMigrationReview } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/components/manager_shifts_migration_views/ManagerShiftsMigrationReview';
 import { MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_MIGRATION_STUDENTS, MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_MIGRATION_SHIFTS, type ManagerShiftsMigrationSampleMigrationStudent as Student } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/mocks/manager_shifts_migration_fixtures/ManagerShiftsMigrationSampleFixtures';
 import type { PayMode } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/types/ManagerShiftsMigrationComponentTypes';
 import { MANAGER_SHIFTS_MIGRATION_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/constants/ManagerShiftsMigrationConstants';
@@ -36,10 +36,10 @@ export function ManagerShiftsMigrationClient() {
   const [step, setStep]                         = useState(1);
   const [search, setSearch]                     = useState('');
   const [debouncedSearch, setDebouncedSearch]   = useState(search);
-  // Dependency rationale: debounce student lookup text and cancel stale timers before filtering the migration candidates.
+  // Dependency rationale: debounce student lookup text (300ms) and cancel stale timers before filtering the migration candidates.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearch(search), MANAGER_SHIFTS_MIGRATION_SEARCH_DEBOUNCE_MS);
-    return () => window.clearTimeout(timeout);
+    const timeout = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timeout);
   }, [search]);
   const [selectedStudent, setSelectedStudent]   = useState<Student | null>(null);
   const [showCustomSlot, setShowCustomSlot]     = useState(false);

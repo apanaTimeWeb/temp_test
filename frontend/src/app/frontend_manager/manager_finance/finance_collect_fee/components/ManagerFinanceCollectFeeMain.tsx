@@ -1,5 +1,5 @@
 'use client';
-import ManagerFinanceCollectFeePage from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeePage.tsx';
+import ManagerFinanceCollectFeePage from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeePage';
 import type { ManagerFinanceCollectFeeMainProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeMainTypes';
 
 export function ManagerFinanceCollectFeeMain(props: ManagerFinanceCollectFeeMainProps) {

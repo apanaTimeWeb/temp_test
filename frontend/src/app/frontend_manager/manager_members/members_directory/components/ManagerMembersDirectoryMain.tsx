@@ -1,6 +1,6 @@
 'use client';
 
-import ManagerMembersDirectoryPage from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_views/ManagerMembersDirectoryPage.tsx';
+import ManagerMembersDirectoryPage from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_views/ManagerMembersDirectoryPage';
 import type { ManagerMembersDirectoryMainProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
 
 

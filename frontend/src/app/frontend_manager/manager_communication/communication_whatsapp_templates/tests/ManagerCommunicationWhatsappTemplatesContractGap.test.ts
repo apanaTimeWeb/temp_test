@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import * as api from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/api/manager_communication_whatsapp_templates.api.ts';
-import { MANAGERWHATSAPPTEMPLATESWHATSAPPTEMPLATES_CONTRACT_GAP_MOCK } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/mocks/ManagerCommunicationWhatsappTemplatesContractGapMock.ts';
+import * as api from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/api/manager_communication_whatsapp_templates.api';
+import { MANAGERWHATSAPPTEMPLATESWHATSAPPTEMPLATES_CONTRACT_GAP_MOCK } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/mocks/ManagerCommunicationWhatsappTemplatesContractGapMock';
 
 describe('manager_whatsapp_templates fail-closed API contract', () => {
   it('does not make an undocumented network request and exposes a machine-readable gap', async () => {

@@ -1,4 +1,10 @@
-import '@/app/frontend_manager/manager_communication/communication_notices/components/manager_communication_notices_styles/ManagerCommunicationNoticesManager_notices.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Notice Board | Library OS',
+  description: 'Library announcements, circulars, exam schedule notices, and administrative alerts',
+};
+
 export default function CommunicationModuleLayout({ children }: { children: React.ReactNode }) {
-  return <div className="communication-theme">{children}</div>;
+  return <>{children}</>;
 }

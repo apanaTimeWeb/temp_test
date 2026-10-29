@@ -6,7 +6,7 @@ import { CalendarDays, Clock, MapPin, Phone, Tag, User } from 'lucide-react';
 import { MANAGER_CRM_STATUS_BADGE } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 
 import { formatManagerEnquiriesDisplayDate, getManagerEnquiriesInitials, maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
-import { ManagerMembersEnquiriesInfoItem } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesInfoItem.tsx';
+import { ManagerMembersEnquiriesInfoItem } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesInfoItem';
 import type { ManagerMembersEnquiriesEnquiryProfileCardProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 
 

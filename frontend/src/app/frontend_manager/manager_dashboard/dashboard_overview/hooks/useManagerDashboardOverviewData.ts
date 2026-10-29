@@ -10,5 +10,9 @@ import { MANAGER_DASHBOARD_QUERY_KEYS } from '@/app/frontend_manager/manager_das
  * Owns dashboard server state. TanStack Query is the source of truth; this hook does not duplicate API data in Zustand.
  */
 export function useManagerDashboardData() {
-  return useQuery({ queryKey: MANAGER_DASHBOARD_QUERY_KEYS.overview(), queryFn: fetchManagerDashboardData, staleTime: 30_000 });
+  return useQuery({
+    queryKey: MANAGER_DASHBOARD_QUERY_KEYS.overview(),
+    queryFn: () => fetchManagerDashboardData({ fallbackToMock: true }),
+    staleTime: 30_000,
+  });
 }

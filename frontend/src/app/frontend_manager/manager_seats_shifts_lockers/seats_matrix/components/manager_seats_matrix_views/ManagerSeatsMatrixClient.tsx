@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { CalendarDays } from 'lucide-react';
 import { useManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/useManagerSeatsMatrixSeatMatrix';
 import { SHIFT_TABS, LEGEND_ITEMS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
-import { ManagerSeatsMatrixModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModal.tsx';
+import { ManagerSeatsMatrixModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModal';
 
 // RESPONSIBILITY: Main Client view for Seat Matrix. Glues data hook to UI. It does not own backend persistence or cross-feature business logic.
 

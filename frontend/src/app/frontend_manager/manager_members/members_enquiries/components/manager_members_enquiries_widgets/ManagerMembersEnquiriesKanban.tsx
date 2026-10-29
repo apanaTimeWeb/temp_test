@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { PhoneCall, Plus } from 'lucide-react';
 import { MANAGER_CRM_KANBAN_COLUMNS, MANAGER_CRM_DOT_CLASS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 
-import { ManagerMembersEnquiriesKanbanCard } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesKanbanCard.tsx';
+import { ManagerMembersEnquiriesKanbanCard } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesKanbanCard';
 import type { ManagerMembersEnquiriesKanbanProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 
 

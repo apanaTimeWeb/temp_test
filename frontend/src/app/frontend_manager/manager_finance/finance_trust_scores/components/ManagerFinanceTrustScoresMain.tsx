@@ -1,5 +1,5 @@
 'use client';
-import ManagerFinanceTrustScoresTrustScorePage from '@/app/frontend_manager/manager_finance/finance_trust_scores/components/manager_finance_trust_scores_views/ManagerFinanceTrustScoresTrustScorePage.tsx';
+import ManagerFinanceTrustScoresTrustScorePage from '@/app/frontend_manager/manager_finance/finance_trust_scores/components/manager_finance_trust_scores_views/ManagerFinanceTrustScoresTrustScorePage';
 import type { ManagerFinanceTrustScoresMainProps } from '@/app/frontend_manager/manager_finance/finance_trust_scores/types/ManagerFinanceTrustScoresMainTypes';
 
 // RESPONSIBILITY: Route query state into the manager finance finance trust scores feature view.

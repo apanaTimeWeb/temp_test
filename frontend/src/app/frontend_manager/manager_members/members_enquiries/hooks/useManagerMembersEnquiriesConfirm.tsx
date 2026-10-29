@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useId, useRef, useState } from 'react';
-import { useManagerEnquiriesDialogFocus } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/ManagerMembersEnquiriesDialogFocus.ts';
+import { useManagerEnquiriesDialogFocus } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/ManagerMembersEnquiriesDialogFocus';
 import type { PendingConfirmation } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 
 

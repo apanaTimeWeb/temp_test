@@ -1,4 +1,10 @@
-import '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_styles/ManagerCommunicationComplaintsManager_complaints.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Complaints & Feedback | Library OS',
+  description: 'Student grievances, facility tickets, noise reports, and resolution tracking',
+};
+
 export default function CommunicationModuleLayout({ children }: { children: React.ReactNode }) {
-  return <div className="communication-theme">{children}</div>;
+  return <>{children}</>;
 }

@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const formSource = readFileSync(new URL('../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionAdmissionForm.tsx', import.meta.url), 'utf8');
-const summarySource = readFileSync(new URL('../components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionSummary.tsx', import.meta.url), 'utf8');
-const confirmSource = readFileSync(new URL('../hooks/useManagerMembersGroupAdmissionConfirm.tsx', import.meta.url), 'utf8');
+const formSource = readFileSync(join(__dirname, '../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionAdmissionForm.tsx'), 'utf8');
+const summarySource = readFileSync(join(__dirname, '../components/manager_members_group_admission_sections/ManagerMembersGroupAdmissionAdmissionSummary.tsx'), 'utf8');
+const confirmSource = readFileSync(join(__dirname, '../hooks/useManagerMembersGroupAdmissionConfirm.tsx'), 'utf8');
 
 describe('group admission unsaved-changes confirmation', () => {
   it('uses the feature-local asynchronous dialog rather than the blocking browser confirm', () => {

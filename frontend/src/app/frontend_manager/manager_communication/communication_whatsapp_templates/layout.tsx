@@ -1,4 +1,10 @@
-import '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/components/manager_communication_whatsapp_templates_styles/ManagerCommunicationWhatsappTemplatesManager_whatsapp_templates.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'WhatsApp Templates | Library OS',
+  description: 'Pre-approved WhatsApp HSM message templates, variable placeholders, and category presets',
+};
+
 export default function CommunicationModuleLayout({ children }: { children: React.ReactNode }) {
-  return <div className="communication-theme">{children}</div>;
+  return <>{children}</>;
 }

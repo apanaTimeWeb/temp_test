@@ -78,10 +78,10 @@ export function ManagerSeatsManagementSeatManagementClient() {
   })), [seatMatrixQuery.data]);
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
-  // Dependency rationale: debounce seat search input and clear the timer when the query changes or the component unmounts.
+  // Dependency rationale: debounce seat search input (300ms) and clear the timer when the query changes or the component unmounts.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearch(search), MANAGER_SEATS_MANAGEMENT_SEARCH_DEBOUNCE_MS);
-    return () => window.clearTimeout(timeout);
+    const timeout = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timeout);
   }, [search]);
   const [statusFilter, setStatusFilter] = useState('all');
   const [showModal, setShowModal] = useState(false);

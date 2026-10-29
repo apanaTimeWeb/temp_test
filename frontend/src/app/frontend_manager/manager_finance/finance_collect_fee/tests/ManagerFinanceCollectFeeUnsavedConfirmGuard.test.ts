@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const pageSource = readFileSync(new URL('../components/manager_finance_collect_fee_views/ManagerFinanceCollectFeePage.tsx', import.meta.url), 'utf8');
-const confirmSource = readFileSync(new URL('../hooks/useManagerFinanceCollectFeeConfirm.tsx', import.meta.url), 'utf8');
+const pageSource = readFileSync(join(__dirname, '../components/manager_finance_collect_fee_views/ManagerFinanceCollectFeePage.tsx'), 'utf8');
+const confirmSource = readFileSync(join(__dirname, '../hooks/useManagerFinanceCollectFeeConfirm.tsx'), 'utf8');
 
 describe('collect fee unsaved-changes confirmation', () => {
   it('waits for the accessible module-local dialog before routing away', () => {

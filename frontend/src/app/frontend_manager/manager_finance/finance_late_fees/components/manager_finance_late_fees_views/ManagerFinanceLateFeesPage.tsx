@@ -1,5 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { useManagerLateFeesFormatting } from '@/app/frontend_manager/manager_finance/finance_late_fees/hooks/ManagerFinanceLateFeesFormattingHook';
 
@@ -15,13 +16,21 @@ import type { ManagerFinanceLateFeesLateFeeConfig, ManagerFinanceLateFeesOverdue
 import { ManagerFinanceLateFeesEmptyState } from '@/app/frontend_manager/manager_finance/finance_late_fees/components/manager_finance_late_fees_empty_states/ManagerFinanceLateFeesEmptyState';
 import type { ManagerFinanceLateFeesRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_late_fees/types/ManagerFinanceLateFeesComponentTypes';
 
-
-
 export default function ManagerFinanceLateFeesPage(_routeQuery: ManagerFinanceLateFeesRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_late_fees.ui');
   const { formatCurrency } = useManagerLateFeesFormatting();
   const config: ManagerFinanceLateFeesLateFeeConfig = MANAGER_FINANCE_SAMPLE_LATE_FEE_CONFIG;
   const overdue: ManagerFinanceLateFeesOverdueStudent[] = MANAGER_FINANCE_SAMPLE_OVERDUE_STUDENTS;
+
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const totalRows = overdue.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginated = overdue.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   return (
     <div className="space-y-6"
@@ -68,7 +77,7 @@ export default function ManagerFinanceLateFeesPage(_routeQuery: ManagerFinanceLa
         </div>
         <table className="w-full">
           <thead>
-            <tr className="fin-table-header-row">
+            <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
               <th className="text-left py-3 px-4">{tManagerUi('student')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('subscription_due_date')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('days_overdue')}</th>
@@ -88,8 +97,8 @@ export default function ManagerFinanceLateFeesPage(_routeQuery: ManagerFinanceLa
                 </td>
               </tr>
             ) : (
-              overdue.map((s) => (
-                <tr key={s.studentId} className="fin-table-hover-row fin-table-row">
+              paginated.map((s) => (
+                <tr key={s.studentId} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
                   <td className="py-3 px-4">
                     <div className="fin-cell-name">{s.studentName}</div>
                     <div className="fin-cell-subtext">{s.smartId}</div>
@@ -104,19 +113,19 @@ export default function ManagerFinanceLateFeesPage(_routeQuery: ManagerFinanceLa
                     <div className="flex items-center justify-end gap-2">
                       <button
                         type="button"
+                        data-testid="manager-finance-late-fee-sample-preview-disabled"
                         disabled
                         className="fin-badge fin-badge--neutral cursor-not-allowed"
-                        data-testid="manager-finance-late-fee-sample-preview-disabled"
                         title={tManagerUi('sample_fee_preview_unavailable_until_authoritative_student_and_finance_contracts_are_supplied')}
                       >
                         {tManagerUi('fee_preview_unavailable')}
                       </button>
                       <button
                         type="button"
-                        className="fin-badge fin-badge--neutral cursor-not-allowed"
-                        disabled
-                        title={tManagerUi('reminder_unavailable_sample_contact_data_and_a_verified_467462')}
                         data-testid="manager-finance-late-fee-sample-reminder-disabled"
+                        disabled
+                        className="fin-badge fin-badge--neutral cursor-not-allowed"
+                        title={tManagerUi('reminder_unavailable_sample_contact_data_and_a_verified_467462')}
                       >
                         <MessageSquare size={13} /> {tManagerUi('reminder_unavailable')}
                       </button>
@@ -127,6 +136,55 @@ export default function ManagerFinanceLateFeesPage(_routeQuery: ManagerFinanceLa
             )}
           </tbody>
         </table>
+
+        {overdue.length > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
+            <span>
+              Showing {startItem}–{endItem} of {totalRows} results
+            </span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="rows-per-page-finance-late-fees" className="text-xs text-secondary whitespace-nowrap">
+                  Rows per page:
+                </label>
+                <select
+                  id="rows-per-page-finance-late-fees"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage <= 0}
+                  onClick={() => setPage((current) => Math.max(0, current - 1))}
+                >
+                  Previous
+                </button>
+                <span className="text-xs text-secondary px-1">
+                  Page {effectivePage + 1} of {pageCount}
+                </span>
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage >= pageCount - 1}
+                  onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

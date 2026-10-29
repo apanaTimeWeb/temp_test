@@ -17,9 +17,6 @@ import { ManagerFinanceReceiptsEmptyState } from '@/app/frontend_manager/manager
 import type { FilterMode, ManagerFinanceReceiptsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_receipts/types/ManagerFinanceReceiptsComponentTypes';
 import { MANAGER_FINANCE_RECEIPTS_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_finance/finance_receipts/constants/ManagerFinanceReceiptsConstants';
 
-
-
-
 const URL_FILTERS = {
   search: { defaultValue: '' },
   mode: { defaultValue: 'all', allowedValues: ['all', 'upi', 'cash', 'card', 'bank transfer'] },
@@ -30,21 +27,25 @@ const MODE_BADGE: Record<string, string> = {
   card: 'fin-badge fin-badge--card', 'bank transfer': 'fin-badge fin-badge--bank',
 };
 
-
-
 export default function ManagerFinanceReceiptsPage(_routeQuery: ManagerFinanceReceiptsRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_receipt.ui');
   const { formatCurrency, formatDate } = useManagerReceiptFormatting();
   const { values: urlFilters, setValue: setUrlFilter } = useManagerReceiptUrlFilters(URL_FILTERS);
   const search = urlFilters.search;
   const [searchInput, setSearchInput] = useState(search);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
   // Dependency rationale: keep the editable search input synchronized when the URL-backed search value changes.
   useEffect(() => { setSearchInput(search); }, [search]);
-  // Dependency rationale: debounce search changes before writing them to URL state; clear the timer when inputs change or the component unmounts.
+  // Dependency rationale: debounce search changes (300ms) before writing them to URL state; clear the timer when inputs change or the component unmounts.
   useEffect(() => {
     if (searchInput === search) return;
-    const timeout = window.setTimeout(() => setUrlFilter('search', searchInput), MANAGER_FINANCE_RECEIPTS_SEARCH_DEBOUNCE_MS);
-    return () => window.clearTimeout(timeout);
+    const timeout = setTimeout(() => {
+      setUrlFilter('search', searchInput);
+      setPage(0);
+    }, MANAGER_FINANCE_RECEIPTS_SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timeout);
   }, [searchInput, search, setUrlFilter]);
   const modeFilter = urlFilters.mode as FilterMode;
 
@@ -57,6 +58,13 @@ export default function ManagerFinanceReceiptsPage(_routeQuery: ManagerFinanceRe
   });
 
   const totalCollected = MANAGER_FINANCE_SAMPLE_RECEIPTS.reduce((s, r) => s + r.amount, 0);
+
+  const totalRows = filtered.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   return (
     <div className="space-y-6"
@@ -89,7 +97,7 @@ export default function ManagerFinanceReceiptsPage(_routeQuery: ManagerFinanceRe
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 fin-icon-muted" />
           <input className="fin-input fin-input--pl9" placeholder={tManagerUi('search_by_receipt_no_student_name_or_id')} value={searchInput} onChange={e => setSearchInput(e.target.value)} />
         </div>
-        <select className="fin-select w-40" value={modeFilter} onChange={e => setUrlFilter('mode', e.target.value)} aria-label={tManagerUi('all_modes')}>
+        <select className="fin-select w-40" value={modeFilter} onChange={e => { setUrlFilter('mode', e.target.value); setPage(0); }} aria-label={tManagerUi('all_modes')}>
           <option value="all">{tManagerUi('all_modes')}</option>
           <option value="upi">{tManagerUi('upi')}</option>
           <option value="cash">{tManagerUi('cash')}</option>
@@ -101,7 +109,7 @@ export default function ManagerFinanceReceiptsPage(_routeQuery: ManagerFinanceRe
       <div className="fin-card overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="fin-table-header-row">
+            <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
               <th className="text-left py-3 px-4">{tManagerUi('receipt_no')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('student')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('plan')}</th>
@@ -114,8 +122,8 @@ export default function ManagerFinanceReceiptsPage(_routeQuery: ManagerFinanceRe
           <tbody>
             {filtered.length === 0 ? (
               <tr><td colSpan={7}><ManagerFinanceReceiptsEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🧾</div><p className="fin-empty-state__title">{tManagerUi('no_receipts_found')}</p></ManagerFinanceReceiptsEmptyState></td></tr>
-            ) : filtered.map(r => (
-              <tr key={r.id} className="fin-table-hover-row fin-table-row">
+            ) : paginated.map(r => (
+              <tr key={r.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
                 <td className="py-3 px-4"><span className="fin-mono">{r.receiptNumber}</span></td>
                 <td className="py-3 px-4">
                   <p className="fin-cell-name">{r.studentName}</p>
@@ -138,6 +146,55 @@ export default function ManagerFinanceReceiptsPage(_routeQuery: ManagerFinanceRe
             ))}
           </tbody>
         </table>
+
+        {filtered.length > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
+            <span>
+              Showing {startItem}–{endItem} of {totalRows} results
+            </span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="rows-per-page-finance-receipts" className="text-xs text-secondary whitespace-nowrap">
+                  Rows per page:
+                </label>
+                <select
+                  id="rows-per-page-finance-receipts"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage <= 0}
+                  onClick={() => setPage((current) => Math.max(0, current - 1))}
+                >
+                  Previous
+                </button>
+                <span className="text-xs text-secondary px-1">
+                  Page {effectivePage + 1} of {pageCount}
+                </span>
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage >= pageCount - 1}
+                  onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

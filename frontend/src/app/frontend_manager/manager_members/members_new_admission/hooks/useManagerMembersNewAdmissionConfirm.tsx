@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useId, useRef, useState } from 'react';
-import { useManagerNewAdmissionDialogFocus } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/ManagerMembersNewAdmissionDialogFocus.ts';
+import { useManagerNewAdmissionDialogFocus } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/ManagerMembersNewAdmissionDialogFocus';
 import type { PendingConfirmation } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 
 

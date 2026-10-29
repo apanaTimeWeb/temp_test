@@ -12,10 +12,10 @@ export function useManagerHelpSupportPageState() {
   const [ticketTab, setTicketTab] = useState<ManagerSettingsHelpSupportTicketTab>('My Tickets');
   const [documentationQuery, setDocumentationQuery] = useState('');
   const [debouncedDocumentationQuery, setDebouncedDocumentationQuery] = useState(documentationQuery);
-  // Dependency rationale: debounce documentation search so category and result filtering updates only after the user pauses typing.
+  // Dependency rationale: debounce documentation search (300ms) so category and result filtering updates only after the user pauses typing.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedDocumentationQuery(documentationQuery), MANAGER_SETTINGS_HELP_SUPPORT_SEARCH_DEBOUNCE_MS);
-    return () => window.clearTimeout(timeout);
+    const timeout = setTimeout(() => setDebouncedDocumentationQuery(documentationQuery), 300);
+    return () => clearTimeout(timeout);
   }, [documentationQuery]);
   const [documentationCategory, setDocumentationCategory] = useState<ManagerSettingsHelpSupportDocumentationCategory>('All');
 

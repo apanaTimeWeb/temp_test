@@ -6,7 +6,6 @@ import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manage
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/mocks/manager_assets_register_fixtures/ManagerAssetsRegisterAssetSampleFixtures';
 
-
 // RESPONSIBILITY: Entry page for the manager_assets module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
@@ -26,6 +25,8 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
   const formatManagerAssetsCurrency = useManagerAssetsCurrencyFormatter();
   const assets = MANAGER_ACCOUNTING_SAMPLE_ASSETS;
   const [catFilter, setCatFilter] = useState('all');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const categories = [...new Set(MANAGER_ACCOUNTING_SAMPLE_ASSETS.map(a => a.category))];
   const categoryLabel = (category: string) => {
@@ -40,6 +41,13 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
   const statusLabel = (status: ManagerAssetsRegisterAsset['status']) => ({ active: tManagerUi('asset_status_active'), maintenance: tManagerUi('asset_status_maintenance'), disposed: tManagerUi('asset_status_disposed') } as const)[status];
   const visible = catFilter === 'all' ? assets : assets.filter(a => a.category === catFilter);
   const totalValue = assets.filter(a => a.status !== 'disposed').reduce((s, a) => s + a.currentValue, 0);
+
+  const totalRows = visible.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginated = visible.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
@@ -59,7 +67,7 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
       </div>
 
       <div className="fin-filter-bar">
-        <select className="fin-select w-44" value={catFilter} onChange={e => setCatFilter(e.target.value)} aria-label={tManagerUi('all_categories')}>
+        <select className="fin-select w-44" value={catFilter} onChange={e => { setCatFilter(e.target.value); setPage(0); }} aria-label={tManagerUi('all_categories')}>
           <option value="all">{tManagerUi('all_categories')}</option>
           {categories.map(c => <option key={c} value={c}>{categoryLabel(c)}</option>)}
         </select>
@@ -68,7 +76,7 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
       <div className="fin-card overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="fin-table-header-row">
+            <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
               <th className="text-left py-3 px-4">{tManagerUi('asset_name')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('category')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('purchase_date')}</th>
@@ -81,8 +89,8 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
           <tbody>
             {visible.length === 0 ? (
               <tr><td colSpan={7}><ManagerAssetsRegisterEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🏷️</div><p className="fin-empty-state__title">{tManagerUi('no_assets_found')}</p></ManagerAssetsRegisterEmptyState></td></tr>
-            ) : visible.map(a => (
-              <tr key={a.id} className={`fin-table-hover-row fin-table-row ${a.status === 'disposed' ? 'opacity-50' : ''}`}>
+            ) : paginated.map(a => (
+              <tr key={a.id} className={`fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 ${a.status === 'disposed' ? 'opacity-50' : ''}`}>
                 <td className="py-3 px-4 fin-cell-name">{a.name}</td>
                 <td className="py-3 px-4"><span className="fin-badge fin-badge--neutral">{categoryLabel(a.category)}</span></td>
                 <td className="py-3 px-4 fin-cell-subtext">{a.purchaseDate}</td>
@@ -94,6 +102,55 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
             ))}
           </tbody>
         </table>
+
+        {totalRows > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
+            <span>
+              Showing {startItem}–{endItem} of {totalRows} results
+            </span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="rows-per-page-assets-register" className="text-xs text-secondary whitespace-nowrap">
+                  Rows per page:
+                </label>
+                <select
+                  id="rows-per-page-assets-register"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage <= 0}
+                  onClick={() => setPage((current) => Math.max(0, current - 1))}
+                >
+                  Previous
+                </button>
+                <span className="text-xs text-secondary px-1">
+                  Page {effectivePage + 1} of {pageCount}
+                </span>
+                <button
+                  type="button"
+                  className="mgr-btn-ghost mgr-btn-sm"
+                  disabled={effectivePage >= pageCount - 1}
+                  onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <p className="fin-input-hint fin-text-warning" role="status" data-testid="manager-accounting-assets-contract-warning">{tManagerUi('sample_data_only_asset_values_and_rows_are_not_persisted_80ac83')}</p>

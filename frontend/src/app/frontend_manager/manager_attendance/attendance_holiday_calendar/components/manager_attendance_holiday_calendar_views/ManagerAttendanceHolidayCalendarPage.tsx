@@ -1,8 +1,8 @@
 'use client';
 import type { ManagerAttendanceHolidayCalendarMainProps } from '@/app/frontend_manager/manager_attendance/attendance_holiday_calendar/types/ManagerAttendanceHolidayCalendarMainTypes';
 import { MANAGER_ENGAGEMENT_SAMPLE_HOLIDAYS, type Holiday } from '@/app/frontend_manager/manager_attendance/attendance_holiday_calendar/mocks/manager_attendance_holiday_calendar_fixtures/ManagerAttendanceHolidayCalendarHolidaySampleFixtures';
-import { ManagerAttendanceHolidayCalendarStats } from '@/app/frontend_manager/manager_attendance/attendance_holiday_calendar/components/manager_attendance_holiday_calendar_sections/ManagerAttendanceHolidayCalendarStats.tsx';
-import { ManagerAttendanceHolidayCalendarHolidayLists } from '@/app/frontend_manager/manager_attendance/attendance_holiday_calendar/components/manager_attendance_holiday_calendar_views/ManagerAttendanceHolidayCalendarHolidayLists.tsx';
+import { ManagerAttendanceHolidayCalendarStats } from '@/app/frontend_manager/manager_attendance/attendance_holiday_calendar/components/manager_attendance_holiday_calendar_sections/ManagerAttendanceHolidayCalendarStats';
+import { ManagerAttendanceHolidayCalendarHolidayLists } from '@/app/frontend_manager/manager_attendance/attendance_holiday_calendar/components/manager_attendance_holiday_calendar_views/ManagerAttendanceHolidayCalendarHolidayLists';
 import { useLocale, useTranslations } from 'next-intl';
 import { ManagerAttendanceHolidayCalendarAddModal } from '@/app/frontend_manager/manager_attendance/attendance_holiday_calendar/components/manager_attendance_holiday_calendar_dialogs/ManagerAttendanceHolidayCalendarAddModal';
 

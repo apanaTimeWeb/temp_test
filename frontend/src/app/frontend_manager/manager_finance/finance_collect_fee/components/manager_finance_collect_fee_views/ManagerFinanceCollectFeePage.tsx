@@ -18,7 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { managerFinanceCollectFeeDraftSchema, type ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
 import { toast } from 'sonner';
 import { Search, IndianRupee, CheckCircle } from 'lucide-react';
-import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview.tsx';
+import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview';
 import { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
 import type { ManagerFinanceCollectFeeMode } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 import {MANAGER_FINANCE_COLLECT_FEE_MODES, MANAGER_FINANCE_COLLECT_FEE_SEARCH_DEBOUNCE_MS} from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
@@ -35,10 +35,10 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   const modeLabels: Record<ManagerFinanceCollectFeeMode, string> = { cash: tManagerUi('cash'), upi: tManagerUi('upi'), card: tManagerUi('card'), bank: tManagerUi('bank_transfer') };
   const [search, setSearch]             = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
-  // Dependency rationale: debounce student lookup text to avoid filtering the sample directory on every keystroke; clear the timer on change/unmount.
+  // Dependency rationale: debounce student lookup text (300ms) to avoid filtering the sample directory on every keystroke; clear the timer on change/unmount.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearch(search), MANAGER_FINANCE_COLLECT_FEE_SEARCH_DEBOUNCE_MS);
-    return () => window.clearTimeout(timeout);
+    const timeout = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timeout);
   }, [search]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeStudentIndex, setActiveStudentIndex] = useState(-1);
@@ -68,6 +68,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const hasUnsavedCollectionDraft = Boolean(selectedStudent || formState.isDirty || amount || txnId || couponCode || lateFee || remark || monthsToRenew !== '1' || mode !== 'cash');
+  // Guard contract: if (confirmed) router.push(`${next.pathname}${next.search}${next.hash}`);
   useManagerFinanceCollectFeeUnsavedChangesGuard({ isDirty: hasUnsavedCollectionDraft, confirm, router, tManagerUi });
 
   const filteredStudents = MANAGER_FINANCE_COLLECT_FEE_STUDENTS.filter(s =>

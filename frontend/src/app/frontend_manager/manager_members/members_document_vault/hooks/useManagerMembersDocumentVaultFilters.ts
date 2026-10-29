@@ -9,9 +9,9 @@ import type { ManagerMembersDocumentVaultCategoryKey } from '@/app/frontend_mana
 export function useManagerDocumentVaultFilters() {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
-  // Dependency rationale: debounce document search before deriving the visible rows and cancel stale timers on change/unmount.
+  // Dependency rationale: debounce document search before deriving the visible rows and cancel stale timers on change/unmount (300ms contract).
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearchQuery(searchQuery), MANAGER_MEMBERS_DOCUMENT_VAULT_SEARCH_DEBOUNCE_MS);
+    const timeout = window.setTimeout(() => setDebouncedSearchQuery(searchQuery), 300);
     return () => window.clearTimeout(timeout);
   }, [searchQuery]);
   const [selectedCategory, setSelectedCategory] = useState<ManagerMembersDocumentVaultCategoryKey | null>(null);

@@ -34,6 +34,12 @@ import {
 async function fetchValidatedRecords(endpoint: string): Promise<Record<string, unknown>[]> {
   try {
     const response = await apiFetch<unknown>(endpoint);
+    if (Array.isArray(response)) {
+      return recordArraySchema.parse(response);
+    }
+    if (response && typeof response === 'object' && 'data' in response && Array.isArray((response as any).data)) {
+      return recordArraySchema.parse((response as any).data);
+    }
     if (!response.success) {
       throw new Error(response.message || 'Unable to load seats/shifts/lockers data.');
     }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import * as api from '@/app/frontend_manager/manager_finance/finance_renewals/api/manager_finance_renewals.api.ts';
-import { MANAGERRENEWALSRENEWALS_CONTRACT_GAP_MOCK } from '@/app/frontend_manager/manager_finance/finance_renewals/mocks/ManagerFinanceRenewalsContractGapMock.ts';
+import * as api from '@/app/frontend_manager/manager_finance/finance_renewals/api/manager_finance_renewals.api';
+import { MANAGERRENEWALSRENEWALS_CONTRACT_GAP_MOCK } from '@/app/frontend_manager/manager_finance/finance_renewals/mocks/ManagerFinanceRenewalsContractGapMock';
 
 describe('manager_renewals fail-closed API contract', () => {
   it('does not make an undocumented network request and exposes a machine-readable gap', async () => {

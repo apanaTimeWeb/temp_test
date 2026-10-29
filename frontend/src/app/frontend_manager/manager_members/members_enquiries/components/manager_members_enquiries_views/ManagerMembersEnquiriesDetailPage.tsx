@@ -6,7 +6,7 @@ import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm.tsx';
+import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesConfirm';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, XCircle } from 'lucide-react';
@@ -15,10 +15,10 @@ import { MANAGER_CRM_QUERY_KEYS } from '@/app/frontend_manager/manager_members/m
 import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 import { managerCrmFollowUpDraftSchema, type ManagerMembersEnquiriesFollowUpFormData } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
 import { getManagerEnquiriesLocalDateInputMinimum } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
-import { ManagerMembersEnquiriesFollowUpFormPanel } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_forms/ManagerMembersEnquiriesFollowUpFormPanel.tsx';
-import { ManagerMembersEnquiriesActivityTimeline } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesActivityTimeline.tsx';
-import { ManagerMembersEnquiriesEnquiryProfileCard } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesEnquiryProfileCard.tsx';
-import { ManagerMembersEnquiriesEnquiryActionsPanel } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesEnquiryActionsPanel.tsx';
+import { ManagerMembersEnquiriesFollowUpFormPanel } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_forms/ManagerMembersEnquiriesFollowUpFormPanel';
+import { ManagerMembersEnquiriesActivityTimeline } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesActivityTimeline';
+import { ManagerMembersEnquiriesEnquiryProfileCard } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesEnquiryProfileCard';
+import { ManagerMembersEnquiriesEnquiryActionsPanel } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesEnquiryActionsPanel';
 import type { ManagerMembersEnquiriesDetailPageProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 export type { ManagerMembersEnquiriesDetailPageProps };
 

@@ -1,5 +1,5 @@
 'use client';
-import ManagerAttendanceDailyPage from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyPage.tsx';
+import ManagerAttendanceDailyPage from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_views/ManagerAttendanceDailyPage';
 import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyMainTypes';
 
 // RESPONSIBILITY: Preserve route query state at the module boundary and pass it to the feature view.

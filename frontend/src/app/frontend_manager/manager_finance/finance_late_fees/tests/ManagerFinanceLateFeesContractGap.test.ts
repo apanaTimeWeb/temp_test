@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import * as api from '@/app/frontend_manager/manager_finance/finance_late_fees/api/manager_finance_late_fees.api.ts';
-import { MANAGERLATEFEESLATEFEES_CONTRACT_GAP_MOCK } from '@/app/frontend_manager/manager_finance/finance_late_fees/mocks/ManagerFinanceLateFeesContractGapMock.ts';
+import * as api from '@/app/frontend_manager/manager_finance/finance_late_fees/api/manager_finance_late_fees.api';
+import { MANAGERLATEFEESLATEFEES_CONTRACT_GAP_MOCK } from '@/app/frontend_manager/manager_finance/finance_late_fees/mocks/ManagerFinanceLateFeesContractGapMock';
 
 describe('manager_late_fees fail-closed API contract', () => {
   it('does not make an undocumented network request and exposes a machine-readable gap', async () => {

@@ -1,5 +1,5 @@
 'use client';
-import { ManagerSeatsManagementSeatManagementClient } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_management/components/manager_seats_management_views/ManagerSeatsManagementSeatManagementClient.tsx';
+import { ManagerSeatsManagementSeatManagementClient } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_management/components/manager_seats_management_views/ManagerSeatsManagementSeatManagementClient';
 import { ManagerSeatsManagementSeatMaintenanceView } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_management/components/manager_seats_management_views/ManagerSeatsManagementSeatMaintenanceView';
 import type { ManagerSeatsManagementMainProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_management/types/ManagerSeatsManagementMainTypes';
 

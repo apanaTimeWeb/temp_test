@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const english = JSON.parse(readFileSync(new URL('../locales/manager_finance_collect_fee_domain_en.json', import.meta.url), 'utf8')) as unknown;
-const hindi = JSON.parse(readFileSync(new URL('../locales/manager_finance_collect_fee_domain_hi.json', import.meta.url), 'utf8')) as unknown;
+const english = JSON.parse(readFileSync(join(__dirname, '../locales/manager_finance_collect_fee_domain_en.json'), 'utf8')) as unknown;
+const hindi = JSON.parse(readFileSync(join(__dirname, '../locales/manager_finance_collect_fee_domain_hi.json'), 'utf8')) as unknown;
 function findKey(value: unknown, key: string): unknown {
   if (!value || typeof value !== 'object') return undefined;
   const record = value as Record<string, unknown>;

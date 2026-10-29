@@ -1,8 +1,8 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { Suspense } from 'react';
-import ManagerMembersNewAdmissionAdmissionForm from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_forms/ManagerMembersNewAdmissionAdmissionForm.tsx';
-import { ManagerMembersNewAdmissionErrorBoundary } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_states/ManagerMembersNewAdmissionErrorBoundary.tsx';
+import ManagerMembersNewAdmissionAdmissionForm from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_forms/ManagerMembersNewAdmissionAdmissionForm';
+import { ManagerMembersNewAdmissionErrorBoundary } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_states/ManagerMembersNewAdmissionErrorBoundary';
 import type { ManagerMembersNewAdmissionMainProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionMainTypes';
 
 // RESPONSIBILITY: Preserve route query context for the manager members new admission feature.

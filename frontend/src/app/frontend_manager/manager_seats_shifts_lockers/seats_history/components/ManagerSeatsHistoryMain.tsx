@@ -1,5 +1,5 @@
 'use client';
-import { ManagerSeatsHistoryClient } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_views/ManagerSeatsHistoryClient.tsx';
+import { ManagerSeatsHistoryClient } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_views/ManagerSeatsHistoryClient';
 import type { ManagerSeatsHistoryMainProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryMainTypes';
 
 // RESPONSIBILITY: Preserve route query context for the manager seats history feature.

@@ -9,7 +9,7 @@ import { useManagerAbsenteeReportDemoData } from '@/app/frontend_manager/manager
 import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight, Send } from 'lucide-react';
-import { createManagerAbsenteeReportAbsenteeColumns } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns.tsx';
+import { createManagerAbsenteeReportAbsenteeColumns } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns';
 
 
 

@@ -1,5 +1,5 @@
 'use client';
-import ManagerFinanceReceiptsPage from '@/app/frontend_manager/manager_finance/finance_receipts/components/manager_finance_receipts_views/ManagerFinanceReceiptsPage.tsx';
+import ManagerFinanceReceiptsPage from '@/app/frontend_manager/manager_finance/finance_receipts/components/manager_finance_receipts_views/ManagerFinanceReceiptsPage';
 import type { ManagerFinanceReceiptsMainProps } from '@/app/frontend_manager/manager_finance/finance_receipts/types/ManagerFinanceReceiptsMainTypes';
 
 // RESPONSIBILITY: Route query state into the finance receipts feature view.

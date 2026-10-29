@@ -43,6 +43,9 @@ export const HARDCODED_DASHBOARD_DATA: ManagerDashboardOverviewData = ManagerDas
   ],
 });
 
-export async function fetchManagerDashboardData(): Promise<ManagerDashboardOverviewData> {
-  return HARDCODED_DASHBOARD_DATA;
+export async function fetchManagerDashboardData(options?: { fallbackToMock?: boolean }): Promise<ManagerDashboardOverviewData> {
+  if (options?.fallbackToMock || process.env.NEXT_PUBLIC_USE_MOCKS === 'true') {
+    return HARDCODED_DASHBOARD_DATA;
+  }
+  throw new ManagerDashboardOverviewContractBlockedError();
 }

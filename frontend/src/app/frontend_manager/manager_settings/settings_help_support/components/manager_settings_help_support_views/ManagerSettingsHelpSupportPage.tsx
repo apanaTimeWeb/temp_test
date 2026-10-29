@@ -2,30 +2,39 @@
 // RESPONSIBILITY: Provide the page/orchestration entry component for the components feature. It does not own backend persistence or cross-feature business logic.
 import { ManagerSettingsHelpSupportEmptyState } from '@/app/frontend_manager/manager_settings/settings_help_support/components/ManagerSettingsHelpSupportEmptyState';
 import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { useManagerHelpSupportPageState } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/useManagerSettingsHelpSupportPageState';
-import { ManagerSettingsHelpSupportTicketForm } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_forms/ManagerSettingsHelpSupportTicketForm.tsx';
+import { ManagerSettingsHelpSupportTicketForm } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_forms/ManagerSettingsHelpSupportTicketForm';
 import { MANAGER_HELP_SUPPORT_TABS, MANAGER_HELP_SUPPORT_DOCUMENTATION_CATEGORIES } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
-import { ManagerSettingsHelpSupportSystemStatusSection } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportSystemStatusSection.tsx';
-import { ManagerSettingsHelpSupportHelpCenterSection } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportHelpCenterSection.tsx';
-import { ManagerSettingsHelpSupportTabs } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportTabs.tsx';
+import { ManagerSettingsHelpSupportSystemStatusSection } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportSystemStatusSection';
+import { ManagerSettingsHelpSupportHelpCenterSection } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportHelpCenterSection';
+import { ManagerSettingsHelpSupportTabs } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportTabs';
 import { formatManagerHelpSupportCalendarDate } from '@/app/frontend_manager/manager_settings/settings_help_support/utils/ManagerSettingsHelpSupportDateFormatting';
 import {
   Megaphone, Plus, Search, FileText, CheckCircle, Clock
 } from 'lucide-react';
-
 
 export default function ManagerSettingsHelpSupportPage() {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');
   const locale = useLocale();
 
   const { activeTab, setActiveTab, ticketTab, setTicketTab, documentationQuery, setDocumentationQuery, debouncedDocumentationQuery, documentationCategory, setDocumentationCategory, myTickets, documentationArticles, announcements } = useManagerHelpSupportPageState();
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   
   const visibleDocumentationArticles = documentationArticles.filter((article) => {
     const matchesCategory = documentationCategory === 'All' || article.category === documentationCategory;
     const searchableText = `${tManagerUi(article.titleKey)} ${tManagerUi(article.descriptionKey)} ${tManagerUi(article.categoryLabelKey)}`.toLowerCase();
     return matchesCategory && searchableText.includes(debouncedDocumentationQuery.trim().toLowerCase());
   });
+
+  const totalRows = myTickets.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginatedTickets = myTickets.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   return (
     <div className="mgr-page-animate relative">
@@ -96,7 +105,7 @@ export default function ManagerSettingsHelpSupportPage() {
           <div className="flex items-center gap-4 mb-6">
             <button 
               type="button" 
-              onClick={() => setTicketTab('My Tickets')}
+              onClick={() => { setTicketTab('My Tickets'); setPage(0); }}
               aria-pressed={ticketTab === 'My Tickets'}
               className={`pb-2 text-sm font-bold border-b-2 motion-safe:transition-colors ${ticketTab === 'My Tickets' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'}`}
             >
@@ -118,7 +127,7 @@ export default function ManagerSettingsHelpSupportPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-card border-b border-border text-secondary text-xs uppercase tracking-wider">
+                    <tr className="bg-surface-highlight border-b border-border text-secondary text-xs uppercase font-semibold">
                       <th className="p-4 font-semibold">{tManagerUi('ticket_id')}</th>
                       <th className="p-4 font-semibold">{tManagerUi('subject')}</th>
                       <th className="p-4 font-semibold">{tManagerUi('category')}</th>
@@ -133,8 +142,8 @@ export default function ManagerSettingsHelpSupportPage() {
                         <td colSpan={6}><ManagerSettingsHelpSupportEmptyState className="p-8 text-center text-secondary" testId="manager-help-support-tickets-empty">{tManagerUi('no_tickets_found')}</ManagerSettingsHelpSupportEmptyState></td>
                       </tr>
                     ) : (
-                      myTickets.map(t => (
-                        <tr key={t.id} className="border-b border-border hover:bg-surface-hover motion-safe:transition-colors">
+                      paginatedTickets.map(t => (
+                        <tr key={t.id} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 motion-safe:transition-colors">
                           <td className="p-4 text-sm font-medium text-primary">{t.id}</td>
                           <td className="p-4 text-sm text-primary">{t.subject}</td>
                           <td className="p-4 text-sm text-secondary">{t.category === 'Finance' ? tManagerUi('ticket_category_finance') : t.category === 'General' ? tManagerUi('ticket_category_general') : t.category}</td>
@@ -156,6 +165,55 @@ export default function ManagerSettingsHelpSupportPage() {
                     )}
                   </tbody>
                 </table>
+
+                {totalRows > 0 && (
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
+                    <span>
+                      Showing {startItem}–{endItem} of {totalRows} results
+                    </span>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1.5">
+                        <label htmlFor="rows-per-page-settings-help-support" className="text-xs text-secondary whitespace-nowrap">
+                          Rows per page:
+                        </label>
+                        <select
+                          id="rows-per-page-settings-help-support"
+                          value={pageSize}
+                          onChange={(e) => {
+                            setPageSize(Number(e.target.value));
+                            setPage(0);
+                          }}
+                          className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+                        >
+                          <option value={10}>10</option>
+                          <option value={25}>25</option>
+                          <option value={50}>50</option>
+                        </select>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          className="mgr-btn-ghost mgr-btn-sm"
+                          disabled={effectivePage <= 0}
+                          onClick={() => setPage((current) => Math.max(0, current - 1))}
+                        >
+                          Previous
+                        </button>
+                        <span className="text-xs text-secondary px-1">
+                          Page {effectivePage + 1} of {pageCount}
+                        </span>
+                        <button
+                          type="button"
+                          className="mgr-btn-ghost mgr-btn-sm"
+                          disabled={effectivePage >= pageCount - 1}
+                          onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+                        >
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

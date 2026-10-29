@@ -1,5 +1,5 @@
 'use client';
-import ManagerFinanceInvoicesPage from '@/app/frontend_manager/manager_finance/finance_invoices/components/manager_finance_invoices_views/ManagerFinanceInvoicesPage.tsx';
+import ManagerFinanceInvoicesPage from '@/app/frontend_manager/manager_finance/finance_invoices/components/manager_finance_invoices_views/ManagerFinanceInvoicesPage';
 import type { ManagerFinanceInvoicesMainProps } from '@/app/frontend_manager/manager_finance/finance_invoices/types/ManagerFinanceInvoicesMainTypes';
 
 // RESPONSIBILITY: Route query state into the finance invoices feature view.

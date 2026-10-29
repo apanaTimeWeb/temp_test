@@ -19,15 +19,10 @@ export function managerRefundsTestResponse<T>(request: Request, populated: T, em
     }, { status: 503 });
   }
 
-  return HttpResponse.json({
-    success: true,
-    message: 'Refunds loaded.',
-    data: mode === 'empty' ? empty : populated,
-    requestId: TEST_REQUEST_ID,
-  });
+  return HttpResponse.json((mode === 'empty' ? empty : populated) as any);
 }
 
 const validRefunds = managerFinanceRefundResponseSchema.parse(MANAGER_FINANCE_API_REFUND_FIXTURES);
 const emptyRefunds = managerFinanceRefundResponseSchema.parse(MANAGER_FINANCE_EMPTY_REFUND_FIXTURE);
-export const managerRefundsHandlers = [http.get(MANAGER_FINANCE_REFUNDS_TEST_ONLY_PATH, ({ request }) => managerRefundsTestResponse(request, validRefunds, emptyRefunds))];
+export const managerRefundsHandlers = [http.get(`*${MANAGER_FINANCE_REFUNDS_TEST_ONLY_PATH}`, ({ request }) => managerRefundsTestResponse(request, validRefunds, emptyRefunds))];
 export function validateManagerRefundsApiFixtures() { managerFinanceRefundResponseSchema.parse(validRefunds); managerFinanceRefundResponseSchema.parse(emptyRefunds); }

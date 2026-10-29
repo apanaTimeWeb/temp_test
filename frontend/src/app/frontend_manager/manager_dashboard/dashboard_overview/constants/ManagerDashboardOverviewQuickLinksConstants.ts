@@ -1,5 +1,5 @@
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
-import type { ManagerDashboardOverviewQuickLink } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_sections/ManagerDashboardOverviewQuickLinks.tsx';
+import type { ManagerDashboardOverviewQuickLink } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_sections/ManagerDashboardOverviewQuickLinks';
 
 /** Stable, feature-owned navigation options for the manager dashboard. */
 export const MANAGER_DASHBOARD_QUICK_LINKS: ManagerDashboardOverviewQuickLink[] = [

@@ -15,11 +15,20 @@ export function ManagerDashboardOverviewKpiGrid({ kpiData }: ManagerDashboardOve
   const tManagerUi = useTranslations('manager.manager_dashboard.ui');
   const localizeKnownTitle = (title: string) => {
     switch (title) {
-      case 'Total Students': return tManagerUi('dashboard_kpi_total_students');
-      case 'Attendance Today': return tManagerUi('dashboard_kpi_attendance_today');
-      case 'New Enquiries': return tManagerUi('dashboard_kpi_new_enquiries');
-      case 'Occupied Seats': return tManagerUi('dashboard_kpi_occupied_seats');
-      default: return title;
+      case 'Total Students':
+      case 'Total Members':
+        return tManagerUi('dashboard_kpi_total_students');
+      case 'Attendance Today':
+      case 'Today Attendance':
+        return tManagerUi('dashboard_kpi_attendance_today');
+      case 'New Enquiries':
+      case 'New Inquiries':
+        return tManagerUi('dashboard_kpi_new_enquiries');
+      case 'Occupied Seats':
+      case 'Seats Occupied':
+        return tManagerUi('dashboard_kpi_occupied_seats');
+      default:
+        return title;
     }
   };
   if (!kpiData || kpiData.length === 0) return <ManagerDashboardOverviewEmptyState className="mgr-card p-6 text-sm text-secondary" testId="manager-dashboard-kpi-empty">{tManagerUi('no_dashboard_kpis_available')}</ManagerDashboardOverviewEmptyState>;

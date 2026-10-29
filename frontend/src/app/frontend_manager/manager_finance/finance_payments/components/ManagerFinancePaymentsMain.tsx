@@ -1,5 +1,5 @@
 'use client';
-import ManagerFinancePaymentsPage from '@/app/frontend_manager/manager_finance/finance_payments/components/manager_finance_payments_views/ManagerFinancePaymentsPage.tsx';
+import ManagerFinancePaymentsPage from '@/app/frontend_manager/manager_finance/finance_payments/components/manager_finance_payments_views/ManagerFinancePaymentsPage';
 import type { ManagerFinancePaymentsMainProps } from '@/app/frontend_manager/manager_finance/finance_payments/types/ManagerFinancePaymentsMainTypes';
 
 // RESPONSIBILITY: Route query state into the finance payments feature view.

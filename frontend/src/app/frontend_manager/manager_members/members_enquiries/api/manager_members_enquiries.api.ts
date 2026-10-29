@@ -26,9 +26,20 @@ function unwrapManagerApiResponse<T>(response: ApiResponse<T>, fallbackMessage: 
 export async function fetchManagerMembersEnquiries(): Promise<ManagerMembersEnquiriesEnquiry[]> {
   try {
     const response = await apiFetch<unknown>(MANAGER_MEMBERS_ENQUIRIES_API.LIST);
-    const data = unwrapManagerApiResponse(response, 'Unable to load CRM enquiries.');
-    return managerCrmEnquiryResponseSchema.parse(data).map((item) => normalizeManagerEnquiriesEnquiry(item));
-  } catch {
+    if (response && typeof response === 'object' && 'success' in response) {
+      if (!response.success) {
+        if (response.statusCode === 503 || response.errorCode === 'CRM_UNAVAILABLE' || response.message?.includes('CRM service unavailable')) {
+          unwrapManagerApiResponse(response, 'Unable to load CRM enquiries.');
+        }
+        return getManagerEnquiriesMockEnquiries();
+      }
+      return managerCrmEnquiryResponseSchema.parse(response.data).map((item) => normalizeManagerEnquiriesEnquiry(item));
+    }
+    return getManagerEnquiriesMockEnquiries();
+  } catch (err: any) {
+    if (err?.code === 'CRM_UNAVAILABLE' || err?.message?.includes('CRM service unavailable')) {
+      throw err;
+    }
     return getManagerEnquiriesMockEnquiries();
   }
 }
@@ -36,9 +47,20 @@ export async function fetchManagerMembersEnquiries(): Promise<ManagerMembersEnqu
 export async function fetchManagerEnquiriesEnquiryById(id: string): Promise<ManagerMembersEnquiriesEnquiry> {
   try {
     const response = await apiFetch<unknown>(MANAGER_MEMBERS_ENQUIRIES_API.DETAIL(id));
-    const data = unwrapManagerApiResponse(response, 'Unable to load the selected CRM enquiry.');
-    return normalizeManagerEnquiriesEnquiry((managerCrmEnquirySchema.or(managerCrmNormalizedEnquirySchema)).parse(data));
-  } catch {
+    if (response && typeof response === 'object' && 'success' in response) {
+      if (!response.success) {
+        if (response.statusCode === 503 || response.errorCode === 'CRM_UNAVAILABLE' || response.message?.includes('CRM service unavailable')) {
+          unwrapManagerApiResponse(response, 'Unable to load the selected CRM enquiry.');
+        }
+        return getManagerEnquiriesMockEnquiry(id) ?? getManagerEnquiriesMockEnquiries()[0];
+      }
+      return normalizeManagerEnquiriesEnquiry((managerCrmEnquirySchema.or(managerCrmNormalizedEnquirySchema)).parse(response.data));
+    }
+    return getManagerEnquiriesMockEnquiry(id) ?? getManagerEnquiriesMockEnquiries()[0];
+  } catch (err: any) {
+    if (err?.code === 'CRM_UNAVAILABLE' || err?.message?.includes('CRM service unavailable')) {
+      throw err;
+    }
     return getManagerEnquiriesMockEnquiry(id) ?? getManagerEnquiriesMockEnquiries()[0];
   }
 }

@@ -31,5 +31,5 @@ const populated = managerNoticesNoticeResponseListSchema.parse(MANAGER_NOTICES_A
 const empty = managerNoticesNoticeResponseListSchema.parse(MANAGER_NOTICES_EMPTY_FIXTURE);
 
 export const managerNoticesHandlers = [
-  http.get(MANAGER_COMMUNICATION_NOTICES_URL, ({ request }) => managerNoticesTestResponse(request, populated, empty)),
+  http.get(`*${MANAGER_COMMUNICATION_NOTICES_URL}`, ({ request }) => managerNoticesTestResponse(request, populated, empty)),
 ];

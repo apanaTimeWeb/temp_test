@@ -6,7 +6,7 @@ import ManagerCommunicationWhatsappLogsNativeTable, { type NativeCellParams } fr
 
 import { useEffect, useState } from 'react';
 import { ChevronRight, Eye } from 'lucide-react';
-import { ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_dialogs/ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog.tsx';
+import { ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/components/manager_communication_whatsapp_logs_dialogs/ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog';
 import type { ManagerCommunicationWhatsappLogsRouteQueryProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsComponentTypes';
 import { MANAGER_COMMUNICATION_WHATSAPP_LOGS_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/constants/ManagerCommunicationWhatsappLogsConstants';
 
@@ -37,10 +37,10 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
   const [statusFilter, setStatusFilter] = useState('All');
   const [search,       setSearch]       = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
-  // Dependency rationale: debounce log search input and clear the timer when the query changes or the component unmounts.
+  // Dependency rationale: debounce log search input (300ms) and clear the timer when the query changes or the component unmounts.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearch(search), MANAGER_COMMUNICATION_WHATSAPP_LOGS_SEARCH_DEBOUNCE_MS);
-    return () => window.clearTimeout(timeout);
+    const timeout = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timeout);
   }, [search]);
   const [dateFrom,     setDateFrom]     = useState('');
   const [dateTo,       setDateTo]       = useState('');

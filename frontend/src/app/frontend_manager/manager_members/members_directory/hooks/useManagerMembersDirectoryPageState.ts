@@ -19,14 +19,14 @@ export function useManagerMemberDirectoryPageState(routeIntent: ManagerMembersDi
   const [profileSearch, setProfileSearch] = useState(hasProfileIntent ? resolveProfileQuery(routeIntent) : 'LIB-001');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
   const [debouncedProfileSearch, setDebouncedProfileSearch] = useState(profileSearch);
-  // Dependency rationale: debounce the general directory search independently so rapid edits do not trigger repeated filtering.
+  // Dependency rationale: debounce the general directory search independently (300ms) so rapid edits do not trigger repeated filtering.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearchQuery(searchQuery), MANAGER_MEMBERS_DIRECTORY_SEARCH_DEBOUNCE_MS);
+    const timeout = window.setTimeout(() => setDebouncedSearchQuery(searchQuery), 300);
     return () => window.clearTimeout(timeout);
   }, [searchQuery]);
-  // Dependency rationale: debounce profile search independently because it has a separate field and result intent.
+  // Dependency rationale: debounce profile search independently (300ms) because it has a separate field and result intent.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedProfileSearch(profileSearch), MANAGER_MEMBERS_DIRECTORY_SEARCH_DEBOUNCE_MS);
+    const timeout = window.setTimeout(() => setDebouncedProfileSearch(profileSearch), 300);
     return () => window.clearTimeout(timeout);
   }, [profileSearch]);
 

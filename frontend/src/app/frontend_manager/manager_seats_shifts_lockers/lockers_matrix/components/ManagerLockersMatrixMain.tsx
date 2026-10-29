@@ -1,5 +1,5 @@
 'use client';
-import { ManagerLockersMatrixClient } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/components/manager_lockers_matrix_views/ManagerLockersMatrixClient.tsx';
+import { ManagerLockersMatrixClient } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/components/manager_lockers_matrix_views/ManagerLockersMatrixClient';
 import type { ManagerLockersMatrixMainProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/types/ManagerLockersMatrixMainTypes';
 
 // RESPONSIBILITY: Preserve route query context for the manager lockers matrix feature.
