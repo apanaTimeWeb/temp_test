@@ -123,7 +123,13 @@ export default function PublicAuthSignInPage() {
               roleText={roleText}
               roleIcon={roleIcon}
               disabled={isBusy}
-              onSelect={(role) => setValue('role', role, { shouldValidate: true, shouldDirty: true })}
+              onSelect={(role) => {
+                setValue('role', role, { shouldValidate: true, shouldDirty: true });
+                if (role === 'manager') {
+                  setValue('email', 'manager@library.com', { shouldValidate: true, shouldDirty: true });
+                  setValue('password', 'Password@123', { shouldValidate: true, shouldDirty: true });
+                }
+              }}
             />
 
             <form data-testid="auth-login-form" onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">

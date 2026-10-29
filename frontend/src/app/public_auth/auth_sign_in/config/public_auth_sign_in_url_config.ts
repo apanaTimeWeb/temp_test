@@ -14,5 +14,5 @@ export const PUBLIC_AUTH_INTERNAL_URLS = {
 export const PUBLIC_AUTH_ROLE_REDIRECTS: Record<PublicAuthRole, string> = {
   superadmin: '/superadmin/superadmin_dashboard',
   admin: '/admin/admin_dashboard',
-  manager: '/manager/manager_dashboard',
+  manager: '/manager',
 } as const;
