@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -14,6 +14,7 @@ const nextConfig = {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
       '@tanstack/react-query': path.resolve(__dirname, 'node_modules/@tanstack/react-query'),
+      '@': path.resolve(__dirname, 'src'),
     };
     return config;
   },
@@ -21,19 +22,39 @@ const nextConfig = {
     return [
       {
         source: '/auth/login',
-        destination: '/frontend_public/public_auth/auth_sign_in',
+        destination: '/public_auth/auth_sign_in',
       },
       {
         source: '/auth/signup',
-        destination: '/frontend_public/public_auth/auth_account_registration',
+        destination: '/public_auth/auth_account_registration',
       },
       {
         source: '/auth/forgot-password',
-        destination: '/frontend_public/public_auth/auth_password_recovery',
+        destination: '/public_auth/auth_password_recovery',
       },
       {
         source: '/auth/reset-password',
-        destination: '/frontend_public/public_auth/auth_password_reset',
+        destination: '/public_auth/auth_password_reset',
+      },
+      {
+        source: '/frontend_public/public_auth',
+        destination: '/public_auth',
+      },
+      {
+        source: '/frontend_public/public_auth/auth_sign_in',
+        destination: '/public_auth/auth_sign_in',
+      },
+      {
+        source: '/frontend_public/public_auth/auth_account_registration',
+        destination: '/public_auth/auth_account_registration',
+      },
+      {
+        source: '/frontend_public/public_auth/auth_password_recovery',
+        destination: '/public_auth/auth_password_recovery',
+      },
+      {
+        source: '/frontend_public/public_auth/auth_password_reset',
+        destination: '/public_auth/auth_password_reset',
       },
     ];
   },
