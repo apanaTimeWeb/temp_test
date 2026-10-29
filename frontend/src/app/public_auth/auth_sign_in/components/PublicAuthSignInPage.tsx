@@ -11,6 +11,7 @@ import { PublicAuthApiError, getPublicAuthApiErrorMessage } from '@/app/public_a
 import { PUBLIC_AUTH_INTERNAL_URLS, PUBLIC_AUTH_ROLE_REDIRECTS } from '@/app/public_auth/auth_sign_in/config/public_auth_sign_in_url_config';
 import PublicAuthSignInHero from '@/app/public_auth/auth_sign_in/components/PublicAuthSignInHero';
 import PublicAuthSignInRoleSelector from '@/app/public_auth/auth_sign_in/components/PublicAuthSignInRoleSelector';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { usePublicAuthLoginMutation } from '@/app/public_auth/auth_sign_in/hooks/usePublicAuthSignInMutation';
 import { usePublicAuthIdempotencyKey } from '@/app/public_auth/auth_sign_in/hooks/usePublicAuthSignInIdempotencyKey';
 import { PUBLIC_AUTH_SIGN_IN_DEMO } from '@/app/public_auth/auth_sign_in/mocks/fixtures/PublicAuthSignInFixtures';
@@ -101,7 +102,10 @@ export default function PublicAuthSignInPage() {
   return (
     <main className="grid min-h-screen bg-page text-primary lg:grid-cols-[1fr_0.85fr]">
       <PublicAuthSignInHero brand={t('BRAND')} eyebrow={t('LOGIN.eyebrow')} heading={t('LOGIN.heading')} description={t('LOGIN.description')} footer={t('LOGIN.footer')} />
-      <section className="flex min-h-screen items-center justify-center p-4 sm:p-8 lg:p-10">
+      <section className="relative flex min-h-screen items-center justify-center p-4 sm:p-8 lg:p-10">
+        <div className="absolute right-4 top-4 z-10">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-md space-y-6">
           <div className="flex items-center justify-center gap-3 lg:hidden">
             <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-on-primary">

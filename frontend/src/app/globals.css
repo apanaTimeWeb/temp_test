@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Dark mode by default as mandated by SMART GYM 360 luxury gold theme */
+:root,
+html.dark,
+:root.dark {
+  /* Dark mode (Default) as mandated by SMART GYM 360 luxury gold theme */
   --color-primary: #FACC15;
   --color-primary-hover: #EAB308;
   --color-primary-subtle: rgba(250, 204, 21, 0.15);
@@ -68,9 +70,73 @@
   --spacing: 4px;
 }
 
+html.light,
+:root.light,
+html:not(.dark) {
+  /* Light mode as mandated by WEB_FRONTEND_UI_UX_DESIGN.md */
+  --color-primary: #EAB308;
+  --color-primary-hover: #CA8A04;
+  --color-primary-subtle: #FEF9C3;
+  --color-bg-page: #F4F4F5;
+  --color-bg-card: #FFFFFF;
+  --color-bg-sidebar: #FAFAFA;
+  --color-bg-header: #FFFFFF;
+  --color-bg-input: #FFFFFF;
+  --color-bg-floating: #FFFFFF;
+  --color-bg-overlay: #FAFAFA;
+  --color-bg-popover: #F4F4F5;
+  --color-surface-hover: rgba(234, 179, 8, 0.08);
+  --color-surface-highlight: rgba(234, 179, 8, 0.05);
+  --color-surface-zebra: #FAFAFA;
+  --color-overlay-backdrop: rgba(0, 0, 0, 0.4);
+  --color-focus-ring: #A16207;
+  --color-border: #E4E4E7;
+  --color-border-focus: #A16207;
+  --color-text-primary: #000000;
+  --color-text-secondary: #52525B;
+  --color-text-disabled: #A1A1AA;
+  --color-text-on-primary: #111111;
+  --color-text-on-danger: #FFFFFF;
+  --color-text-on-warning: #111111;
+  --color-text-on-success: #FFFFFF;
+  --color-text-on-info: #FFFFFF;
+  --color-skeleton-base: #E4E4E7;
+  --color-skeleton-highlight: #F4F4F5;
+
+  /* Status Tokens */
+  --color-success: #047857;
+  --color-success-text: #065F46;
+  --color-success-bg: #D1FAE5;
+  --color-warning: #F59E0B;
+  --color-warning-text: #92400E;
+  --color-warning-bg: #FEF3C7;
+  --color-danger: #B91C1C;
+  --color-danger-text: #991B1B;
+  --color-danger-bg: #FEE2E2;
+  --color-info: #1D4ED8;
+  --color-info-text: #1E40AF;
+  --color-info-bg: #DBEAFE;
+
+  /* Manager Navigation & Domain Theme Tokens */
+  --color-page: #F4F4F5;
+  --color-card: #FFFFFF;
+  --color-sidebar: #FAFAFA;
+  --color-header: #FFFFFF;
+  --color-input: #FFFFFF;
+  --color-overlay: #FAFAFA;
+  --color-on-primary: #111111;
+  --color-on-danger: #FFFFFF;
+  --color-purple-bg: #EDE9FE;
+  --color-purple-text: #7E22CE;
+
+  /* Shadow */
+  --shadow-dialog: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
 body {
   background-color: var(--color-bg-page);
   color: var(--color-text-primary);
   font-family: Inter, system-ui, -apple-system, sans-serif;
   min-height: 100vh;
+  transition: background-color 200ms ease, color 200ms ease;
 }
