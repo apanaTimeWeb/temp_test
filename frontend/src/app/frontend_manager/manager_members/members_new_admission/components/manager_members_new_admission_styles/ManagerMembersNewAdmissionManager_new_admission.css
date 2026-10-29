@@ -1,0 +1,316 @@
+/* Students-owned ID-card presentation styles. */
+@layer components {
+
+  .mgr-students-theme .mgr-idcard-wrap {
+    perspective: 1200px; width: 380px; flex-shrink: 0;
+    filter: drop-shadow(0 20px 60px color-mix(in srgb, theme(--color-primary) 25%, transparent));
+  }
+
+  .mgr-students-theme .mgr-idcard-holo-lines {
+    position: absolute; inset: 0;
+    background: theme(--color-surface-highlight);
+    pointer-events: none; z-index: 1; border-radius: 18px;
+  }
+  .mgr-students-theme .mgr-idcard-header {
+    background: theme(--color-primary);
+    padding: 14px 18px 12px; display: flex; align-items: center;
+    justify-content: space-between; position: relative; z-index: 2;
+    border-bottom: 2px solid color-mix(in srgb, theme(--color-text-primary) 15%, transparent);
+  }
+  .mgr-students-theme .mgr-idcard-header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: theme(--color-border);
+  }
+  .mgr-students-theme .mgr-idcard-header-left  { display: flex; align-items: center; gap: 10px; }
+  .mgr-students-theme .mgr-idcard-header-right { display: flex; align-items: center; gap: 8px; }
+  .mgr-students-theme .mgr-idcard-logo-icon    { font-size: 22px; filter: drop-shadow(0 2px 4px color-mix(in srgb, theme(--color-page) 40%, transparent)); }
+  .mgr-students-theme .mgr-idcard-logo-text    { font-size: 12px; font-weight: 800; color: theme(--color-on-primary); letter-spacing: 0.1em; line-height: 1.2; text-shadow: 0 1px 3px color-mix(in srgb, theme(--color-page) 30%, transparent); }
+  .mgr-students-theme .mgr-idcard-branch-text  { font-size: 9px; color: color-mix(in srgb, theme(--color-text-primary) 70%, transparent); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1px; }
+  .mgr-students-theme .mgr-idcard-header-chip  {
+    background: color-mix(in srgb, theme(--color-text-primary) 25%, transparent); border: 1px solid color-mix(in srgb, theme(--color-text-primary) 40%, transparent);
+    border-radius: 5px; padding: 3px 9px; font-size: 8px; font-weight: 800;
+    color: theme(--color-on-primary); letter-spacing: 0.12em; text-transform: uppercase; backdrop-filter: blur(4px);
+  }
+  .mgr-students-theme .mgr-idcard-body         { padding: 18px 18px 14px; position: relative; z-index: 2; }
+  .mgr-students-theme .mgr-idcard-profile-row  { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 14px; }
+  .mgr-students-theme .mgr-idcard-photo {
+    width: 76px; height: 76px; border-radius: 14px;
+    border: 2.5px solid color-mix(in srgb, theme(--color-primary) 60%, transparent);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; position: relative; overflow: hidden;
+    box-shadow: 0 4px 16px color-mix(in srgb, theme(--color-page) 40%, transparent), inset 0 1px 0 color-mix(in srgb, theme(--color-text-primary) 10%, transparent);
+  }
+  .mgr-students-theme .mgr-idcard-photo-initials { font-size: 26px; font-weight: 800; position: relative; z-index: 1; letter-spacing: -0.02em; }
+  .mgr-students-theme .mgr-idcard-chip {
+    position: absolute; bottom: 5px; right: 5px; width: 18px; height: 13px;
+    background: theme(--color-primary);
+    border-radius: 2px; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; gap: 2px; padding: 2px;
+  }
+  .mgr-students-theme .mgr-idcard-chip-line    { width: 100%; height: 1.5px; background: color-mix(in srgb, theme(--color-page) 40%, transparent); border-radius: 1px; }
+  .mgr-students-theme .mgr-idcard-identity     { flex: 1; min-width: 0; }
+  .mgr-students-theme .mgr-idcard-name         { font-size: 18px; font-weight: 800; color: theme(--color-on-primary); line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; text-shadow: 0 1px 6px color-mix(in srgb, theme(--color-page) 30%, transparent); }
+  .mgr-students-theme .mgr-idcard-smartid      { font-size: 11px; font-weight: 700; color: theme(--color-info-text); font-family: 'Courier New', monospace; letter-spacing: 0.1em; background: theme(--color-primary-subtle); border: 1px solid theme(--color-border); border-radius: 5px; padding: 2px 8px; display: inline-block; margin-bottom: 5px; }
+  .mgr-students-theme .mgr-idcard-college-name { font-size: 10px; color: theme(--color-text-secondary); margin: 0 0 4px; }
+  .mgr-students-theme .mgr-idcard-phone-row    { font-size: 11px; color: theme(--color-text-secondary); display: flex; align-items: center; gap: 4px; margin: 0; }
+  .mgr-students-theme .mgr-idcard-color-bar    { display: flex; height: 3px; border-radius: 2px; overflow: hidden; margin-bottom: 14px; gap: 2px; }
+  .mgr-students-theme .mgr-idcard-color-seg    { flex: 1; border-radius: 2px; opacity: 0.85; }
+  .mgr-students-theme .mgr-idcard-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .mgr-students-theme .mgr-idcard-detail-item  { background: color-mix(in srgb, theme(--color-text-primary) 4%, transparent); border: 1px solid color-mix(in srgb, theme(--color-text-primary) 8%, transparent); border-top-width: 2px; border-radius: 10px; padding: 8px 10px; backdrop-filter: blur(4px); }
+  .mgr-students-theme .mgr-idcard-detail-label { font-size: 8px; font-weight: 700; color: theme(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .mgr-students-theme .mgr-idcard-detail-value { font-size: 13px; font-weight: 700; color: theme(--color-on-primary); letter-spacing: 0.02em; }
+  .mgr-students-theme .mgr-idcard-validity-row { display: flex; align-items: center; justify-content: space-between; background: color-mix(in srgb, theme(--color-primary) 10%, transparent); border: 1px solid color-mix(in srgb, theme(--color-primary) 25%, transparent); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; }
+  .mgr-students-theme .mgr-idcard-validity-label { font-size: 8px; color: theme(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 3px; }
+  .mgr-students-theme .mgr-idcard-validity-value { font-size: 12px; font-weight: 700; color: theme(--color-primary); }
+  .mgr-students-theme .mgr-idcard-validity-value--expiry { color: theme(--color-warning-text); }
+  .mgr-students-theme .mgr-idcard-validity-sep   { font-size: 12px; color: theme(--color-text-disabled); }
+  .mgr-students-theme .mgr-idcard-validity-right { text-align: right; }
+  .mgr-students-theme .mgr-idcard-bottom-row     { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+  .mgr-students-theme .mgr-idcard-qr-wrap        { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .mgr-students-theme .mgr-idcard-qr-label       { font-size: 7px; color: color-mix(in srgb, theme(--color-text-primary) 40%, transparent); text-transform: uppercase; letter-spacing: 0.08em; }
+  .mgr-students-theme .mgr-idcard-qr             { width: 52px; height: 52px; background: theme(--color-text-primary); border-radius: 7px; padding: 4px; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); gap: 1.5px; box-shadow: 0 2px 8px color-mix(in srgb, theme(--color-page) 40%, transparent); }
+  .mgr-students-theme .mgr-idcard-qr--unavailable { display: flex; align-items: center; justify-content: center; color: theme(--color-text-secondary); background: theme(--color-card); border: 1px dashed theme(--color-border); box-shadow: none; }
+  .mgr-students-theme .mgr-idcard-verification-note { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; max-width: 110px; min-height: 52px; padding: 6px; border: 1px dashed theme(--color-border); border-radius: 8px; background: theme(--color-card); text-align: center; }
+  .mgr-students-theme .mgr-idcard-verification-title { font-size: 8px; font-weight: 800; color: theme(--color-text-secondary); letter-spacing: 0.06em; text-transform: uppercase; }
+  .mgr-students-theme .mgr-idcard-verification-sub { font-size: 7px; color: theme(--color-text-secondary); }
+  .mgr-students-theme .mgr-idcard-qr-cell        { border-radius: 1px; }
+  .mgr-students-theme .mgr-idcard-qr-cell.on     { background: theme(--color-page); }
+  .mgr-students-theme .mgr-idcard-qr-cell.off    { background: transparent; }
+  .mgr-students-theme .mgr-idcard-barcode-wrap   { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .mgr-students-theme .mgr-idcard-barcode-id     { font-size: 11px; font-weight: 900; font-family: 'Courier New', monospace; color: theme(--color-info-text); letter-spacing: 0.06em; }
+  .mgr-students-theme .mgr-idcard-barcode-sub    { font-size: 8px; color: color-mix(in srgb, theme(--color-text-primary) 35%, transparent); text-transform: uppercase; letter-spacing: 0.08em; }
+  .mgr-students-theme .mgr-idcard-tamper-seal    { display: flex; flex-direction: column; align-items: center; gap: 2px; background: theme(--color-success-bg); border: 1px solid theme(--color-success); border-radius: 8px; padding: 6px 8px; }
+  .mgr-students-theme .mgr-idcard-tamper-text    { font-size: 8px; font-weight: 800; color: theme(--color-success-text); letter-spacing: 0.1em; text-transform: uppercase; }
+  .mgr-students-theme .mgr-idcard-tamper-sub     { font-size: 7px; color: theme(--color-success-text); letter-spacing: 0.04em; white-space: nowrap; }
+  .mgr-students-theme .mgr-idcard-stripe {
+    height: 8px;
+    background: theme(--color-primary);
+    background-size: 200% 100%;
+    animation: mgr-stripe-scroll 3s linear infinite;
+    position: relative; z-index: 2;
+  }
+  .mgr-students-theme .mgr-idcard-arrow   { color: theme(--color-text-disabled); font-size: 14px; }
+  .mgr-students-theme .mgr-idcard-college { margin-top: 3px; }
+  .mgr-students-theme .mgr-idcard-phone   { font-size: 11px; color: theme(--color-text-secondary); display: flex; align-items: center; gap: 4px; }
+
+  .mgr-students-theme .mgr-idcard-page-layout { display: grid; grid-template-columns: 1fr 400px; gap: 24px; align-items: start; }
+
+  @media (max-width: 1024px) { .mgr-students-theme .mgr-idcard-page-layout { grid-template-columns: 1fr; }
+  }
+  .mgr-students-theme .mgr-idcard-preview-panel  { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .mgr-students-theme .mgr-idcard-preview-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .mgr-students-theme .mgr-idcard-student-list   { display: flex; flex-direction: column; gap: 8px; }
+  .mgr-students-theme .mgr-idcard-student-row    { background: transparent; border: 1px solid theme(--color-border); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; text-align: left; width: 100%; transition: background-color theme(--animate-duration-fast), border-color theme(--animate-duration-fast); font-family: inherit; }
+  .mgr-students-theme .mgr-idcard-student-row:hover { background-color: theme(--color-primary-subtle); border-color: color-mix(in srgb, theme(--color-primary) 30%, transparent); }
+  .mgr-students-theme .mgr-idcard-student-row--active { background-color: theme(--color-primary-subtle); border-color: color-mix(in srgb, theme(--color-primary) 40%, transparent); }
+  .mgr-students-theme .mgr-idcard-student-info   { flex: 1; min-width: 0; }
+  .mgr-students-theme .mgr-idcard-actions-card   { margin-top: 16px; }
+  .mgr-students-theme .mgr-idcard-actions-body   { display: flex; flex-direction: column; gap: 10px; }
+  .mgr-students-theme .mgr-idcard-preview-label  { margin-bottom: 8px; text-align: center; }
+  .mgr-students-theme .mgr-idcard-preview-hint   { text-align: center; margin-top: 8px; }
+  .mgr-students-theme .mgr-idcard-empty-card     { width: 100%; }
+  @media print {
+  .mgr-students-theme .mgr-idcard-stripe { animation: none !important; background-position: 0% 50% !important; }
+  }
+  @media print {
+
+  .mgr-students-theme .mgr-idcard-body::before {
+    content: 'Library OS • VERIFIED • Library OS • VERIFIED';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: 9px; font-weight: 700; color: color-mix(in srgb, theme(--color-primary) 7%, transparent);
+    white-space: nowrap; pointer-events: none; letter-spacing: 0.15em;
+    z-index: 0; width: 200%; text-align: center;
+  }
+  }
+  @media print {
+
+  .mgr-students-theme .mgr-idcard-preview-label,
+.mgr-students-theme .mgr-idcard-preview-hint,
+.mgr-students-theme .mgr-idcard-actions-card,
+.mgr-students-theme .mgr-idcard-student-list { display: none !important; }
+  }
+.mgr-students-theme .mgr-idcard-photo--primary { background: theme(--color-primary-subtle); border-color: theme(--color-primary); }
+.mgr-students-theme .mgr-idcard-photo-initials { color: theme(--color-primary); }
+.mgr-students-theme .mgr-idcard-color-seg--primary { background: theme(--color-primary); }
+.mgr-students-theme .mgr-idcard-color-seg--secondary { background: theme(--color-purple-text); }
+.mgr-students-theme .mgr-idcard-color-seg--info { background: theme(--color-info); }
+.mgr-students-theme .mgr-idcard-color-seg--success { background: theme(--color-success); }
+.mgr-students-theme .mgr-idcard-detail-item--primary { border-top-color: theme(--color-primary); }
+.mgr-students-theme .mgr-idcard-detail-item--secondary { border-top-color: theme(--color-purple-text); }
+.mgr-students-theme .mgr-idcard-detail-item--info { border-top-color: theme(--color-info); }
+.mgr-students-theme .mgr-idcard-detail-item--success { border-top-color: theme(--color-success); }
+.mgr-students-theme .mgr-idcard-muted-icon { color: theme(--color-text-secondary); }
+.mgr-students-theme .mgr-idcard-success-icon { color: theme(--color-success-text); }
+  .mgr-students-theme .mgr-idcard {
+    width: 380px; border-radius: 18px; overflow: hidden;
+    background: theme(--color-card);
+    border: 1px solid color-mix(in srgb, theme(--color-primary) 40%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, theme(--color-primary) 15%, transparent), 0 25px 70px color-mix(in srgb, theme(--color-page) 70%, transparent),
+      0 0 100px color-mix(in srgb, theme(--color-primary) 10%, transparent) inset, inset 0 1px 0 color-mix(in srgb, theme(--color-text-primary) 8%, transparent);
+    position: relative; font-family: 'Inter', sans-serif; transition: transform theme(--animate-duration-slow) ease;
+  }
+  .mgr-students-theme .mgr-idcard:hover { transform: perspective(1000px) rotateY(-2deg) rotateX(1deg); }
+  @keyframes mgr-stripe-scroll {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  @media print {
+
+  .mgr-students-theme .mgr-idcard:hover { transform: none !important; }
+  }
+}
+
+
+/* Official WhatsApp brand treatment for the disabled dues-reminder control. */
+@layer components {
+  .mgr-students-theme .mgr-btn-icon--wa {
+    color: theme(--color-success) !important;
+    border-color: theme(--color-success) !important;
+    background-color: transparent !important;
+  }
+  .mgr-students-theme .mgr-btn-icon--wa:hover {
+    background-color: color-mix(in srgb, theme(--color-success) 18%, transparent) !important;
+    border-color: color-mix(in srgb, theme(--color-success) 60%, transparent) !important;
+  }
+}
+
+@layer components {
+  .mgr-students-theme .mgr-btn-whatsapp {
+    background: theme(--color-success);
+    color: theme(--color-on-primary);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+    transition: opacity theme(--animate-duration-fast), transform theme(--animate-duration-fast);
+    box-shadow: 0 4px 14px color-mix(in srgb, theme(--color-success) 30%, transparent);
+  }
+  .mgr-students-theme .mgr-btn-whatsapp:hover { opacity: 0.9; transform: translateY(-1px); }
+  .mgr-students-theme .mgr-btn-whatsapp:active { transform: translateY(0); }
+}
+
+/* Filter row primitives used by student-owned pages. */
+@layer components {
+  .mgr-students-theme .mgr-filter-item { display: flex; flex-direction: column; gap: 4px; min-width: 160px; }
+}
+
+
+/* Feature-owned rules migrated from the role shell during RBG 1. */
+@layer components {.mgr-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: theme(--color-text-secondary);
+    text-decoration: none;
+    margin-bottom: 6px;
+    transition: color theme(--animate-duration-fast);
+  } .mgr-back-link:hover { color: theme(--color-text-primary); } .mgr-section-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background-color: theme(--color-primary-subtle);
+    color: theme(--color-primary);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  } .mgr-smartid-badge {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px; background-color: theme(--color-card);
+    border: 1px solid theme(--color-border); border-radius: 10px; flex-shrink: 0;
+  } .mgr-smartid-label { font-size: 11px; color: theme(--color-text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; } .mgr-smartid-value { font-size: 16px; font-weight: 700; color: theme(--color-primary); font-family: monospace; } .mgr-smartid-chip { font-size: 13px; font-weight: 600; color: theme(--color-primary); font-family: monospace; } .mgr-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; } @media (max-width: 640px) {.mgr-form-grid { grid-template-columns: 1fr; }} .mgr-form-field { display: flex; flex-direction: column; gap: 4px; } .mgr-form-field-full { grid-column: 1 / -1; } .mgr-admission-layout {
+    display: grid; grid-template-columns: 1fr 320px;
+    gap: 20px; align-items: start;
+  } @media (max-width: 1024px) {.mgr-admission-layout { grid-template-columns: 1fr; }} .mgr-admission-main { display: flex; flex-direction: column; gap: 16px; } .mgr-admission-summary { position: sticky; top: 80px; align-self: start; } .mgr-summary-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; } .mgr-summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; } .mgr-summary-label { color: theme(--color-text-secondary); } .mgr-summary-value { color: theme(--color-text-primary); font-weight: 500; } .mgr-summary-divider { height: 1px; background-color: theme(--color-border); margin: 4px 0; } .mgr-summary-total-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-top: 1px solid theme(--color-border);
+    border-bottom: 1px solid theme(--color-border); margin: 4px 0;
+  } .mgr-summary-total-label { font-size: 13px; font-weight: 600; color: theme(--color-text-primary); } .mgr-summary-total-value { font-size: 20px; font-weight: 700; color: theme(--color-primary); } .mgr-summary-actions {
+    display: flex; flex-direction: column; gap: 8px;
+    padding-top: 8px; border-top: 1px solid theme(--color-border);
+  } .mgr-payment-mode-group {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 6px; padding: 4px; background-color: theme(--color-input); border-radius: 10px;
+  } .mgr-payment-mode-btn {
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    padding: 8px; border-radius: 8px; border: none; background: transparent;
+    color: theme(--color-text-secondary); font-size: 12px; font-weight: 600;
+    font-family: inherit; cursor: pointer; transition: background-color theme(--animate-duration-fast), color theme(--animate-duration-fast);
+  } .mgr-payment-mode-btn:hover { background-color: theme(--color-card); color: theme(--color-text-primary); } .mgr-payment-mode-btn.active {
+    background-color: theme(--color-primary); color: theme(--color-on-primary);
+    box-shadow: 0 2px 8px color-mix(in srgb, theme(--color-primary) 30%, transparent);
+  } .mgr-success-overlay {
+    position: fixed; inset: 0; background: theme(--color-overlay);
+    z-index: 2000; display: flex; align-items: center; justify-content: center;
+    padding: 20px; backdrop-filter: blur(6px); animation: mgr-overlay-in theme(--animate-duration-base) ease;
+  } .mgr-success-modal {
+    background-color: theme(--color-card); border: 1px solid theme(--color-border);
+    border-radius: 24px; width: 100%; max-width: 820px; max-height: 92vh;
+    overflow-y: auto; animation: mgr-modal-in theme(--animate-duration-slow) cubic-bezier(0.34, 1.56, 0.64, 1); position: relative;
+  } .mgr-success-header { padding: 28px 28px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid theme(--color-border); } .mgr-success-title { font-size: 20px; font-weight: 800; color: theme(--color-text-primary); margin: 0; display: flex; align-items: center; gap: 10px; } .mgr-success-close { background: transparent; border: 1px solid theme(--color-border); border-radius: 8px; color: theme(--color-text-secondary); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color theme(--animate-duration-fast), color theme(--animate-duration-fast); flex-shrink: 0; } .mgr-success-close:hover { background-color: theme(--color-danger-bg); color: theme(--color-danger); border-color: theme(--color-danger); } .mgr-success-body { padding: 28px; display: flex; gap: 28px; align-items: flex-start; } .mgr-success-actions-panel { flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 12px; } .mgr-success-actions-title { font-size: 13px; font-weight: 600; color: theme(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; } .mgr-success-divider { height: 1px; background-color: theme(--color-border); margin: 4px 0; } .mgr-success-info-box { background: color-mix(in srgb, theme(--color-primary) 6%, transparent); border: 1px solid color-mix(in srgb, theme(--color-primary) 15%, transparent); border-radius: 10px; padding: 12px; margin-top: 4px; } .mgr-success-info-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; } .mgr-success-info-label { color: theme(--color-text-secondary); } .mgr-success-info-value { color: theme(--color-text-primary); font-weight: 600; } @media (max-width: 768px) {.mgr-success-body { flex-direction: column; align-items: center; } .mgr-success-actions-panel { width: 100% !important; }}}
+.mgr-admission-summary-card { position: sticky; top: 80px; }
+.mgr-success-heading-group { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.mgr-success-info-value--mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+.mgr-barcode-primary { fill: theme(--color-primary); }
+.mgr-barcode-secondary { fill: theme(--color-purple-text); }
+.mgr-barcode-muted { fill: theme(--color-text-secondary); }
+@media (max-width: 767px) {.mgr-admission-layout { grid-template-columns: 1fr; } .mgr-admission-summary-card { position: static; }}
+.mgr-success-close { min-width: 44px; min-height: 44px; }
+
+
+/* Feature-owned rules migrated from the role shell during RBG 1. */
+@layer components {.mgr-page-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }}
+@media (max-width: 767px) {.mgr-page-actions { flex-direction: column; } .mgr-page-actions .mgr-btn-primary, .mgr-page-actions .mgr-btn-ghost { width: 100%; justify-content: center; }}
+.mgr-table-cell-row { height: 100%; display: flex; align-items: center; gap: 10px; }
+.mgr-table-cell-stack { height: 100%; display: flex; flex-direction: column; justify-content: center; }
+.mgr-table-actions { height: 100%; display: flex; align-items: center; gap: 6px; }
+.mgr-text-emphasis { font-weight: 600; }
+.mgr-page-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.mgr-filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 16px; }
+.mgr-select-auto { width: auto; min-width: 150px; }
+.mgr-table-shell { border: 1px solid theme(--color-border); border-radius: theme(--radius-lg); overflow: hidden; background: theme(--color-card); }
+.mgr-grid-container { min-height: 480px; }
+.mgr-empty-state-panel { min-height: 260px; }
+@media (max-width: 767px) {.mgr-page-actions { width: 100%; } .mgr-page-actions > * { flex: 1 1 180px; justify-content: center; } .mgr-filter-row > * { width: 100%; } .mgr-select-auto { width: 100%; }}
+
+
+/* Student admission animation owned by manager_new_admission. */
+@keyframes mgr-overlay-in { from { opacity: 0; } to { opacity: 1; } }
+
+
+/* Student admission animation owned by manager_new_admission. */
+@keyframes mgr-modal-in { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+/* RBG3 accessibility baseline: visible keyboard focus within the owning feature. */
+.mgr-students-theme :where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid theme(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* RBG3: honor reduced-motion preferences within this feature. */
+@media (prefers-reduced-motion: reduce) {
+  .mgr-students-theme *,
+  .mgr-students-theme *::before,
+  .mgr-students-theme *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

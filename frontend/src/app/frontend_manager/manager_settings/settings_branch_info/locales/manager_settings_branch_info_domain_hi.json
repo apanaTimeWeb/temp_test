@@ -1,0 +1,42 @@
+{
+  "manager": {
+    "manager_branch_info": {
+      "ui": {
+        "loading_branch_info": "शाखा जानकारी लोड हो रही है",
+        "settings": "सेटिंग्स",
+        "branch_information": "शाखा की जानकारी",
+        "branch_profile": "शाखा प्रोफ़ाइल",
+        "review_and_edit_a_local_draft_of_branch_details_saving_i_75e9ef": "शाखा विवरण के स्थानीय प्रारूप की समीक्षा और संपादन करें। होस्ट शाखा-अपडेट कॉन्ट्रैक्ट मिलने तक सहेजना उपलब्ध नहीं है।",
+        "branch_name_address_contact_details_and_manager_identity_e91222": "शाखा का नाम, पता, संपर्क विवरण और प्रबंधक की पहचान नमूना प्लेसहोल्डर हैं, सत्यापित होस्ट डेटा नहीं। बदलाव केवल इस असहेजे स्थानीय प्रारूप में रहेंगे।",
+        "code": "कोड:",
+        "local_preview_only_changes_are_not_saved_or_propagated_f_a3bb60": "केवल स्थानीय पूर्वावलोकन। इस स्क्रीन से बदलाव सहेजे या अन्यत्र लागू नहीं किए जाते।",
+        "edit_details": "संपादित करें विवरण",
+        "save_unavailable_no_authoritative_branch_update_api_cont_9dbd80": "सहेजना उपलब्ध नहीं है: शाखा अपडेट करने का प्रमाणित API कॉन्ट्रैक्ट उपलब्ध नहीं कराया गया।",
+        "branch_name": "शाखा नाम",
+        "branch_code": "शाखा कोड",
+        "branch_code_is_assigned_by_superadmin_and_cannot_be_chan_f5fde2": "शाखा कोड SuperAdmin द्वारा दिया जाता है और इसे यहाँ बदला नहीं जा सकता।",
+        "address": "पता",
+        "phone_number": "फ़ोन नंबर",
+        "email_address": "ईमेल पता",
+        "manager_name": "प्रबंधक नाम",
+        "working_hours": "कार्य समय",
+        "e_g_08_00_am_10_00_pm_mon_sat": "उदाहरण: सुबह 08:00 - रात 10:00 (सोम-शनि)",
+        "save_unavailable_host_branch_update_contract_not_supplie_f87f15": "सहेजना उपलब्ध नहीं है: होस्ट शाखा-अपडेट कॉन्ट्रैक्ट उपलब्ध नहीं है।",
+        "save_unavailable": "सहेजना उपलब्ध नहीं है",
+        "draft_changes_not_saved": "ड्राफ़्ट में बदलाव स्थानीय रूप से अपडेट हुए हैं। होस्ट सिस्टम में कुछ भी सहेजा नहीं गया है।",
+        "address_not_set": "पता उपलब्ध नहीं",
+        "phone_not_set": "फ़ोन नंबर उपलब्ध नहीं",
+        "email_not_set": "ईमेल पता उपलब्ध नहीं",
+        "manager_not_set": "प्रबंधक का नाम उपलब्ध नहीं",
+        "hours_not_set": "कार्य समय उपलब्ध नहीं",
+        "validation_field_invalid": "कृपया इस फ़ील्ड की जाँच करें।"
+      },
+      "errors": {
+        "GENERIC_TITLE": "कुछ गलत हुआ",
+        "GENERIC_BODY": "अप्रत्याशित त्रुटि आई। कृपया फिर से प्रयास करें।",
+        "RETRY": "पुनः प्रयास करें",
+        "MODULE_ERROR": "मॉड्यूल में अप्रत्याशित समस्या आई।"
+      }
+    }
+  }
+}

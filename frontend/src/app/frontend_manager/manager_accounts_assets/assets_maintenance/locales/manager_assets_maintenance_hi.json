@@ -1,0 +1,36 @@
+{
+  "manager": {
+    "manager_assets_maintenance": {
+      "ui": {
+        "action": "कार्रवाई",
+        "all_status": "सभी स्थितियाँ",
+        "asset": "संपत्ति",
+        "asset_maintenance": "संपत्ति रखरखाव",
+        "completed": "पूर्ण",
+        "cost_inr": "लागत (INR)",
+        "in_progress": "प्रगति पर",
+        "issue": "समस्या",
+        "log_request_unavailable": "लॉग अनुरोध उपलब्ध नहीं है",
+        "logging_maintenance_unavailable_host_mutation_contract_n_40db9f": "रखरखाव लॉग करना उपलब्ध नहीं: होस्ट बदलाव कॉन्ट्रैक्ट नहीं दिया गया है।",
+        "no_maintenance_records_found": "रखरखाव का कोई रिकॉर्ड नहीं मिला।",
+        "pending": "लंबित",
+        "reported": "रिपोर्ट किया गया",
+        "review_the_sample_maintenance_register_updates_are_unava_163c7f": "नमूना रखरखाव रजिस्टर देखें। होस्ट रखरखाव API कॉन्ट्रैक्ट मिलने तक अपडेट उपलब्ध नहीं हैं।",
+        "sample_data_only_creating_maintenance_logs_or_completing_cfeb24": "केवल नमूना डेटा। रखरखाव लॉग बनाना या काम पूरा करना अक्षम है; कोई रिकॉर्ड नहीं लिखा जाता।",
+        "scheduled": "निर्धारित",
+        "status": "स्थिति",
+        "status_update_unavailable_host_mutation_contract_not_sup_953486": "स्थिति अपडेट उपलब्ध नहीं है: होस्ट म्यूटेशन कॉन्ट्रैक्ट उपलब्ध नहीं है",
+        "total_cost": "कुल लागत",
+        "update_unavailable": "अपडेट उपलब्ध नहीं है",
+        "vendor": "विक्रेता"
+      },
+      "errors": {
+        "GENERIC_TITLE": "कुछ गलत हुआ",
+        "GENERIC_BODY": "अप्रत्याशित त्रुटि आई। कृपया फिर से प्रयास करें।",
+        "RETRY": "पुनः प्रयास करें",
+        "MODULE_ERROR": "मॉड्यूल में अप्रत्याशित समस्या आई।",
+        "MODULE_ERROR_TITLE": "लेखांकन मॉड्यूल में त्रुटि"
+      }
+    }
+  }
+}

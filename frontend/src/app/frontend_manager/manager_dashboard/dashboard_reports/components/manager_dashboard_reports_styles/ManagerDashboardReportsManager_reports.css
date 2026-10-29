@@ -1,0 +1,82 @@
+/* Reports-owned chart, table and filter layout. */
+@layer components {
+  .mgr-reports-theme .mgr-chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .mgr-reports-theme .mgr-chart-full { grid-column: 1 / -1; }
+  .mgr-reports-theme .mgr-reports-table-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .mgr-reports-theme .mgr-reports-table-full { grid-column: 1 / -1; }
+  .mgr-reports-theme .mgr-report-filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; margin-bottom: 24px; }
+  .mgr-reports-theme .mgr-filter-item { display: flex; flex-direction: column; gap: 4px; min-width: 160px; }
+  .mgr-reports-theme .mgr-chart-data-details { margin-top: 12px; border-top: 1px solid theme(--color-border); padding-top: 10px; color: theme(--color-text-secondary); }
+  .mgr-reports-theme .mgr-chart-data-details summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; color: theme(--color-text-primary); }
+  .mgr-reports-theme .mgr-chart-data-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+  .mgr-reports-theme .mgr-chart-data-table th, .mgr-reports-theme .mgr-chart-data-table td { padding: 8px; border-bottom: 1px solid theme(--color-border); text-align: left; }
+  .mgr-reports-theme .mgr-chart-data-table th { color: theme(--color-text-primary); }
+  @media (max-width: 1024px) {
+    .mgr-reports-theme .mgr-chart-grid, .mgr-reports-theme .mgr-reports-table-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 767px) {
+    .mgr-reports-theme .mgr-report-filters { flex-direction: column; align-items: stretch; }
+    .mgr-reports-theme .mgr-filter-item { min-width: unset; width: 100%; }
+  }
+}
+/* RBG3 accessibility baseline: visible keyboard focus within the owning feature. */
+.mgr-reports-theme :where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid theme(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* RBG3: honor reduced-motion preferences within this feature. */
+@media (prefers-reduced-motion: reduce) {
+  .mgr-reports-theme *,
+  .mgr-reports-theme *::before,
+  .mgr-reports-theme *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Supported table-card heights (the public prop is an exhaustive union). */
+.mgr-grid-height-228 { max-height: 228px; overflow: auto; }
+.mgr-grid-height-260 { max-height: 260px; overflow: auto; }
+.mgr-grid-height-280 { max-height: 280px; overflow: auto; }
+
+
+/* Module-owned page primitives: the reports route remains styled when the shell stylesheet is absent. */
+@layer components {
+  .mgr-reports-theme.mgr-page, .mgr-reports-theme .mgr-page { min-width: 0; padding: clamp(12px, 2vw, 24px); color: theme(--color-text-primary); }
+  .mgr-reports-theme.mgr-page-state { padding: 24px; border: 1px solid theme(--color-border); border-radius: theme(--radius-lg); background: theme(--color-card); color: theme(--color-text-secondary); }
+  .mgr-reports-theme .mgr-page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+  .mgr-reports-theme .mgr-breadcrumb { margin-bottom: 8px; color: theme(--color-text-secondary); font-size: .875rem; }
+  .mgr-reports-theme .mgr-page-title { margin: 0; color: theme(--color-text-primary); font-size: clamp(1.5rem, 2.2vw, 2rem); line-height: 1.2; font-weight: 700; }
+  .mgr-reports-theme .mgr-page-subtitle { margin-top: 8px; color: theme(--color-text-secondary); font-size: .9375rem; line-height: 1.5; }
+  .mgr-reports-theme .mgr-card { min-width: 0; overflow: hidden; border: 1px solid theme(--color-border); border-radius: theme(--radius-lg); background: theme(--color-card); box-shadow: theme(--shadow-card); }
+  .mgr-reports-theme .mgr-card-header { padding: 16px 18px; border-bottom: 1px solid theme(--color-border); }
+  .mgr-reports-theme .mgr-section-title { margin: 0; font-size: 1rem; line-height: 1.4; font-weight: 650; color: theme(--color-text-primary); }
+  .mgr-reports-theme .mgr-section-gap { margin-bottom: 20px; }
+  .mgr-reports-theme .mgr-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .mgr-reports-theme .mgr-kpi-card { min-width: 0; padding: 16px; border: 1px solid theme(--color-border); border-radius: theme(--radius-lg); background: theme(--color-card); }
+  .mgr-reports-theme .mgr-kpi-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .mgr-reports-theme .mgr-kpi-icon { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: theme(--radius-md); background: theme(--color-primary-subtle); color: theme(--color-primary); }
+  .mgr-reports-theme .mgr-kpi-label { margin-top: 12px; color: theme(--color-text-secondary); font-size: .8125rem; }
+  .mgr-reports-theme .mgr-kpi-value { margin-top: 4px; color: theme(--color-text-primary); font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight: 700; overflow-wrap: anywhere; }
+  .mgr-reports-theme .mgr-chart-card { min-width: 0; padding: 16px; border: 1px solid theme(--color-border); border-radius: theme(--radius-lg); background: theme(--color-card); }
+  .mgr-reports-theme .mgr-chart-title { margin: 0 0 12px; font-size: 1rem; font-weight: 650; color: theme(--color-text-primary); }
+  .mgr-reports-theme .mgr-label { color: theme(--color-text-secondary); font-size: .875rem; font-weight: 600; }
+  .mgr-reports-theme .mgr-select { min-height: 44px; width: 100%; padding: 8px 12px; border: 1px solid theme(--color-border); border-radius: theme(--radius-md); background: theme(--color-input); color: theme(--color-text-primary); }
+  .mgr-reports-theme .mgr-btn, .mgr-reports-theme .mgr-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 8px 14px; border: 1px solid theme(--color-border); border-radius: theme(--radius-md); color: theme(--color-text-primary); background: theme(--color-card); font-weight: 600; cursor: pointer; }
+  .mgr-reports-theme .mgr-btn--secondary { background: theme(--color-surface-hover); }
+  .mgr-reports-theme .mgr-btn:disabled, .mgr-reports-theme .mgr-btn-ghost:disabled { cursor: not-allowed; opacity: .6; }
+  .mgr-reports-theme .mgr-skeleton { border-radius: theme(--radius-md); background: theme(--color-skeleton-base); animation: mgr-reports-pulse 1.4s ease-in-out infinite; }
+  .mgr-reports-theme .mgr-skeleton-title { width: min(280px, 60vw); height: 28px; }
+  .mgr-reports-theme .mgr-skeleton-line { width: min(420px, 80vw); height: 12px; margin-top: 10px; }
+  .mgr-reports-theme .mgr-skeleton-action { width: 120px; height: 40px; }
+  .mgr-reports-theme .mgr-skeleton-value { width: 96px; height: 28px; margin-top: 12px; }
+  .mgr-reports-theme .mgr-trend-up { color: theme(--color-success-text); }
+  .mgr-reports-theme .mgr-trend-down { color: theme(--color-danger-text); }
+  .mgr-reports-theme .mgr-trend-neutral { color: theme(--color-text-secondary); }
+}
+@keyframes mgr-reports-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+@media (max-width: 1024px) { .mgr-reports-theme .mgr-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 480px) { .mgr-reports-theme .mgr-kpi-grid { grid-template-columns: minmax(0, 1fr); } .mgr-reports-theme .mgr-page-header { flex-direction: column; } }

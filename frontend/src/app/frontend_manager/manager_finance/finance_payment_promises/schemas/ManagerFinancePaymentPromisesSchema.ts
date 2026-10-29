@@ -1,0 +1,9 @@
+import { z } from 'zod';
+export const managerFinancePaymentApiSchema = z.object({ id: z.union([z.string(), z.number()]), date: z.string(), studentName: z.string(), amount: z.number().int().nonnegative(), status: z.string(), mode: z.string().optional(), txnId: z.string().optional(), lateFee: z.number().int().nonnegative().optional(), receivedBy: z.string().optional(), remark: z.string().optional(), smartId: z.string().optional(), currency: z.string().regex(/^[A-Z]{3}$/).optional() });
+export const managerFinancePaymentResponseSchema = z.array(managerFinancePaymentApiSchema);
+export const managerFinanceRefundApiSchema = z.object({ id: z.union([z.string(), z.number()]), name: z.string(), amount: z.number().int().nonnegative(), status: z.string(), date: z.string(), smartId: z.string().optional(), depositHeld: z.number().int().nonnegative().optional(), deductionAmount: z.number().int().nonnegative().optional(), exitDate: z.string().optional(), requestedDate: z.string().optional(), processedDate: z.string().optional(), paymentMethod: z.string().optional(), rejectionReason: z.string().optional(), currency: z.string().regex(/^[A-Z]{3}$/).optional() });
+export const managerFinanceRefundResponseSchema = z.array(managerFinanceRefundApiSchema);
+export const managerFinanceRefundProcessSchema = z.object({ paymentMethod: z.enum(['upi', 'bank', 'cash', 'cheque']) });
+export type ManagerFinancePaymentPromisesRefundProcessForm = z.infer<typeof managerFinanceRefundProcessSchema>;
+export const managerFinanceRefundDeductionSchema = z.object({ deductionAmount: z.string().regex(/^\d+(\.\d{1,2})?$/, 'enter_valid_deduction_amount'), reason: z.string().trim().min(3, 'refund_reason_minimum_chars') });
+export type ManagerFinancePaymentPromisesRefundDeductionForm = z.infer<typeof managerFinanceRefundDeductionSchema>;

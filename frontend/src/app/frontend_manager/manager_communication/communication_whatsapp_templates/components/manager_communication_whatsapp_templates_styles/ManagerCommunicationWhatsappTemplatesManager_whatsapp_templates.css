@@ -1,0 +1,521 @@
+/* Font loading is owned by the host Next.js root via next/font/google. Theme wrapper is mounted by manager_whatsapp_templates/layout.tsx. */
+@layer base {
+  .communication-theme {
+    /* ── Color Tokens (global_design_system.md) ── */
+
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: theme(--color-text-primary);
+    background-color: theme(--color-page);
+    box-sizing: border-box;
+    min-height: 100vh;
+  }
+
+  .communication-theme *,
+  .communication-theme *::before,
+  .communication-theme *::after {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+
+  /* ════════════════════════════════════════════
+     PAGE LAYOUT
+  ════════════════════════════════════════════ */
+
+  .mc-page        { padding: 32px; min-height: 100vh; background-color: theme(--color-page); }
+  .mc-breadcrumb  { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: theme(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .mc-page-title  { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: theme(--color-text-primary); display: flex; align-items: center; gap: 12px; margin: 0; }
+  .mc-page-subtitle { font-size: 13px; color: theme(--color-text-secondary); margin-top: 4px; }
+
+  /* ════════════════════════════════════════════
+     CARDS
+  ════════════════════════════════════════════ */
+
+  .mc-card         { background-color: theme(--color-card); border: 1px solid theme(--color-border); border-radius: 16px; padding: 24px; }
+  .mc-card-header  { margin-bottom: 20px; display: flex; flex-direction: column; gap: 4px; }
+  .mc-card-title   { font-size: 16px; font-weight: 600; color: theme(--color-text-primary); }
+  .mc-card-desc    { font-size: 13px; color: theme(--color-text-secondary); }
+  .mc-card-footer  { margin-top: 20px; display: flex; align-items: center; gap: 12px; }
+
+  /* ════════════════════════════════════════════
+     BUTTONS
+  ════════════════════════════════════════════ */
+
+  .mc-btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    color: theme(--color-on-primary); border: none; cursor: pointer;
+    background: theme(--color-primary);
+    box-shadow: 0 4px 20px color-mix(in srgb, theme(--color-primary) 30%, transparent);
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .mc-btn-primary:hover:not(:disabled) { opacity: 0.92; }
+  .mc-btn-primary:active:not(:disabled) { transform: scale(0.98); }
+  .mc-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+  .mc-btn-success {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    color: theme(--color-on-success); border: none; cursor: pointer;
+    background-color: theme(--color-success);
+    transition: opacity 0.2s;
+  }
+  .mc-btn-success:hover:not(:disabled) { opacity: 0.88; }
+  .mc-btn-success:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .mc-btn-danger-solid {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    color: theme(--color-on-danger); border: none; cursor: pointer;
+    background-color: theme(--color-danger);
+    transition: opacity 0.2s;
+  }
+  .mc-btn-danger-solid:hover:not(:disabled) { opacity: 0.88; }
+
+  .mc-btn-ghost {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 500;
+    color: theme(--color-text-primary); background: transparent;
+    border: 1px solid theme(--color-border); cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+  .mc-btn-ghost:hover { border-color: color-mix(in srgb, theme(--color-primary) 40%, transparent); background-color: color-mix(in srgb, theme(--color-primary) 5%, transparent); }
+  .mc-btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .mc-btn-ghost--danger {
+    color: theme(--color-danger-text);
+    border-color: color-mix(in srgb, theme(--color-danger) 35%, transparent);
+  }
+  .mc-btn-ghost--danger:hover { background-color: color-mix(in srgb, theme(--color-danger) 10%, transparent); }
+
+  .mc-btn-ghost--sm { padding: 6px 12px; font-size: 12px; }
+
+  .mc-btn-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent; border: none; cursor: pointer;
+    color: theme(--color-text-secondary); transition: color 0.15s, background-color 0.15s;
+  }
+  .mc-btn-icon:hover { color: theme(--color-primary); background-color: color-mix(in srgb, theme(--color-primary) 10%, transparent); }
+  .mc-btn-icon--danger:hover { color: theme(--color-danger-text); background-color: color-mix(in srgb, theme(--color-danger) 10%, transparent); }
+
+  /* ════════════════════════════════════════════
+     FORM ELEMENTS
+  ════════════════════════════════════════════ */
+
+  .mc-input {
+    width: 100%; padding: 10px 14px; border-radius: 8px; font-size: 14px;
+    outline: none; background-color: theme(--color-input); color: theme(--color-text-primary);
+    border: 1px solid theme(--color-border); font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .mc-input::placeholder { color: theme(--color-text-secondary); }
+  .mc-input:focus { border-color: theme(--color-border-focus); box-shadow: 0 0 0 3px color-mix(in srgb, theme(--color-primary) 15%, transparent); }
+  .mc-input:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .mc-label { display: block; font-size: 11px; font-weight: 600; color: theme(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+
+  .mc-select {
+    width: 100%; padding: 10px 14px; border-radius: 8px; font-size: 14px;
+    outline: none; background-color: theme(--color-input); color: theme(--color-text-primary);
+    border: 1px solid theme(--color-border); cursor: pointer; font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  .mc-select:focus { border-color: theme(--color-border-focus); }
+
+  .mc-textarea {
+    width: 100%; padding: 10px 14px; border-radius: 8px; font-size: 14px;
+    outline: none; resize: vertical; background-color: theme(--color-input);
+    color: theme(--color-text-primary); border: 1px solid theme(--color-border);
+    font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .mc-textarea:focus { border-color: theme(--color-border-focus); box-shadow: 0 0 0 3px color-mix(in srgb, theme(--color-primary) 15%, transparent); }
+
+  /* ════════════════════════════════════════════
+     BADGES
+  ════════════════════════════════════════════ */
+
+  .mc-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; border: 1px solid transparent; }
+  .mc-badge--success { background-color: theme(--color-success-bg); color: theme(--color-success-text); border-color: color-mix(in srgb, theme(--color-success) 30%, transparent); }
+  .mc-badge--warning { background-color: theme(--color-warning-bg); color: theme(--color-warning-text); border-color: color-mix(in srgb, theme(--color-warning) 30%, transparent); }
+  .mc-badge--danger  { background-color: theme(--color-danger-bg);  color: theme(--color-danger-text);  border-color: color-mix(in srgb, theme(--color-danger)  30%, transparent); }
+  .mc-badge--info    { background-color: theme(--color-info-bg);    color: theme(--color-info-text);    border-color: color-mix(in srgb, theme(--color-info)    30%, transparent); }
+  .mc-badge--primary { background-color: color-mix(in srgb, theme(--color-primary) 12%, transparent); color: theme(--color-primary); border-color: color-mix(in srgb, theme(--color-primary) 30%, transparent); }
+  .mc-badge--purple  { background-color: theme(--color-purple-bg);  color: theme(--color-purple-text);  border-color: color-mix(in srgb, theme(--color-purple-text)  30%, transparent); }
+  .mc-badge--outline { background-color: transparent; color: theme(--color-text-secondary); border-color: theme(--color-border); }
+
+  /* ════════════════════════════════════════════
+     TABLE
+  ════════════════════════════════════════════ */
+
+  .mc-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .mc-table th { font-size: 11px; font-weight: 600; color: theme(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; padding: 12px 16px; border-bottom: 1px solid theme(--color-border); background-color: color-mix(in srgb, theme(--color-primary) 8%, transparent); text-align: left; white-space: nowrap; }
+  .mc-table td { padding: 14px 16px; border-bottom: 1px solid color-mix(in srgb, theme(--color-border) 40%, transparent); color: theme(--color-text-primary); vertical-align: middle; }
+  .mc-table tr:hover td { background-color: color-mix(in srgb, theme(--color-primary) 5%, transparent); }
+  .mc-table tr.mc-row--warning td { background-color: color-mix(in srgb, theme(--color-warning) 8%, transparent); }
+  .mc-table tr.mc-row--danger  td { background-color: color-mix(in srgb, theme(--color-danger)  8%, transparent); }
+
+  /* ════════════════════════════════════════════
+     FILTER BAR
+  ════════════════════════════════════════════ */
+
+  .mc-filter-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px; background-color: color-mix(in srgb, theme(--color-card) 80%, transparent); border-bottom: 1px solid theme(--color-border); }
+
+  /* ════════════════════════════════════════════
+     TABS (filter tabs)
+  ════════════════════════════════════════════ */
+
+  .mc-tabs { display: flex; gap: 4px; padding: 4px; background-color: theme(--color-input); border-radius: 10px; border: 1px solid theme(--color-border); }
+  .mc-tab  { padding: 7px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; color: theme(--color-text-secondary); background: transparent; border: none; cursor: pointer; transition: color 0.15s, background-color 0.15s; white-space: nowrap; }
+  .mc-tab:hover { color: theme(--color-text-primary); }
+  .mc-tab--active { background-color: theme(--color-card); color: theme(--color-text-primary); box-shadow: theme(--shadow-card); }
+
+  /* ════════════════════════════════════════════
+     MODAL / OVERLAY
+  ════════════════════════════════════════════ */
+
+  .mc-overlay { position: fixed; inset: 0; z-index: 50; background-color: theme(--color-overlay); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .mc-modal   { background-color: theme(--color-card); border: 1px solid theme(--color-border); border-radius: 16px; padding: 28px; width: 100%; box-shadow: theme(--shadow-dialog); position: relative; }
+  .mc-modal--sm  { max-width: 400px; }
+  .mc-modal--md  { max-width: 480px; }
+  .mc-modal--lg  { max-width: 560px; }
+  .mc-modal-title { font-size: 18px; font-weight: 700; color: theme(--color-text-primary); margin-bottom: 6px; }
+  .mc-modal-desc  { font-size: 13px; color: theme(--color-text-secondary); margin-bottom: 20px; }
+  .mc-modal-close { position: absolute; right: 16px; top: 16px; background: transparent; border: none; cursor: pointer; color: theme(--color-text-secondary); border-radius: 8px; padding: 4px; transition: color 0.15s, background-color 0.15s; }
+  .mc-modal-close:hover { color: theme(--color-text-primary); background-color: theme(--color-input); }
+  .mc-modal-footer { margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px; }
+
+  /* ════════════════════════════════════════════
+     ATTENDANCE ROW
+  ════════════════════════════════════════════ */
+
+  .mc-att-row { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-bottom: 1px solid color-mix(in srgb, theme(--color-border) 40%, transparent); transition: background-color 0.15s; }
+  .mc-att-row:hover { background-color: color-mix(in srgb, theme(--color-primary) 4%, transparent); }
+  .mc-att-row--absent-alert { background-color: color-mix(in srgb, theme(--color-warning) 8%, transparent); }
+
+  .mc-att-avatar { width: 36px; height: 36px; border-radius: 9999px; background-color: color-mix(in srgb, theme(--color-primary) 20%, transparent); color: theme(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+
+  .mc-seg-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid theme(--color-border); background: transparent; color: theme(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
+  .mc-seg-btn--present { background-color: theme(--color-success-bg); color: theme(--color-success-text); border-color: color-mix(in srgb, theme(--color-success) 40%, transparent); }
+  .mc-seg-btn--absent  { background-color: theme(--color-danger-bg);  color: theme(--color-danger-text);  border-color: color-mix(in srgb, theme(--color-danger)  40%, transparent); }
+  .mc-seg-btn--late    { background-color: theme(--color-warning-bg); color: theme(--color-warning-text); border-color: color-mix(in srgb, theme(--color-warning) 40%, transparent); }
+
+  .mc-time-input { padding: 6px 10px; border-radius: 8px; font-size: 13px; background-color: theme(--color-input); color: theme(--color-text-primary); border: 1px solid theme(--color-border); outline: none; font-family: inherit; width: 110px; }
+  .mc-time-input:focus { border-color: theme(--color-border-focus); }
+
+  /* sticky save bar */
+  .mc-sticky-bar { position: sticky; bottom: 0; background-color: theme(--color-header); border-top: 1px solid theme(--color-border); padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; z-index: 10; }
+
+  /* ════════════════════════════════════════════
+     QR SCANNER
+  ════════════════════════════════════════════ */
+
+  .mc-qr-viewport { width: 100%; max-width: 400px; aspect-ratio: 1; border-radius: 16px; overflow: hidden; background-color: theme(--color-input); border: 2px solid theme(--color-border); position: relative; margin: 0 auto; }
+  .mc-qr-corner { position: absolute; width: 28px; height: 28px; border-color: theme(--color-primary); border-style: solid; border-width: 0; }
+  .mc-qr-corner--tl { top: 12px; left: 12px; border-top-width: 3px; border-left-width: 3px; border-radius: 4px 0 0 0; }
+  .mc-qr-corner--tr { top: 12px; right: 12px; border-top-width: 3px; border-right-width: 3px; border-radius: 0 4px 0 0; }
+  .mc-qr-corner--bl { bottom: 12px; left: 12px; border-bottom-width: 3px; border-left-width: 3px; border-radius: 0 0 0 4px; }
+  .mc-qr-corner--br { bottom: 12px; right: 12px; border-bottom-width: 3px; border-right-width: 3px; border-radius: 0 0 4px 0; }
+  .mc-qr-scan-line { position: absolute; left: 12px; right: 12px; height: 2px; background: theme(--color-primary); animation: mc-scan 2s linear infinite; }
+  @keyframes mc-scan { 0% { top: 12px; } 100% { top: calc(100% - 12px); } }
+
+  .mc-qr-result { background-color: theme(--color-card); border: 1px solid theme(--color-border); border-radius: 16px; padding: 20px; margin-top: 20px; }
+
+  /* ════════════════════════════════════════════
+     NOTICE CARD
+  ════════════════════════════════════════════ */
+
+  .mc-notice-card { background-color: theme(--color-card); border: 1px solid theme(--color-border); border-radius: 14px; padding: 20px; transition: border-color 0.2s; }
+  .mc-notice-card:hover { border-color: color-mix(in srgb, theme(--color-primary) 30%, transparent); }
+  .mc-notice-title { font-size: 16px; font-weight: 600; color: theme(--color-text-primary); margin-bottom: 8px; }
+  .mc-notice-body  { font-size: 14px; color: theme(--color-text-secondary); line-height: 1.6; }
+  .mc-notice-meta  { font-size: 12px; color: theme(--color-text-disabled); margin-top: 10px; }
+
+  /* ════════════════════════════════════════════
+     NOTIFICATION CENTER
+  ════════════════════════════════════════════ */
+
+  .mc-notif-sidebar { width: 200px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px; }
+  .mc-notif-cat { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 10px; font-size: 14px; font-weight: 500; color: theme(--color-text-secondary); background: transparent; border: none; cursor: pointer; width: 100%; text-align: left; transition: color 0.15s, background-color 0.15s; }
+  .mc-notif-cat:hover { background-color: theme(--color-card); color: theme(--color-text-primary); }
+  .mc-notif-cat--active { background-color: color-mix(in srgb, theme(--color-primary) 12%, transparent); color: theme(--color-primary); }
+
+  .mc-notif-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px; border-bottom: 1px solid color-mix(in srgb, theme(--color-border) 40%, transparent); transition: background-color 0.15s; }
+  .mc-notif-item:hover { background-color: color-mix(in srgb, theme(--color-primary) 4%, transparent); }
+  .mc-notif-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .mc-notif-icon--finance  { background-color: color-mix(in srgb, theme(--color-success) 15%, transparent); }
+  .mc-notif-icon--crm      { background-color: color-mix(in srgb, theme(--color-info)    15%, transparent); }
+  .mc-notif-icon--ops      { background-color: color-mix(in srgb, theme(--color-warning) 15%, transparent); }
+  .mc-notif-icon--attend   { background-color: color-mix(in srgb, theme(--color-primary) 15%, transparent); }
+
+  /* ════════════════════════════════════════════
+     HOLIDAY CALENDAR
+  ════════════════════════════════════════════ */
+
+  .mc-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .mc-cal-day-header { font-size: 11px; font-weight: 600; color: theme(--color-text-secondary); text-align: center; padding: 8px 0; text-transform: uppercase; letter-spacing: 0.06em; }
+  .mc-cal-day { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: theme(--color-text-primary); cursor: pointer; transition: background-color 0.15s; border: 1px solid transparent; }
+  .mc-cal-day:hover { background-color: color-mix(in srgb, theme(--color-primary) 10%, transparent); }
+  .mc-cal-day--today { border-color: theme(--color-primary); color: theme(--color-primary); font-weight: 700; }
+  .mc-cal-day--holiday { background-color: theme(--color-warning-bg); color: theme(--color-warning-text); border-color: color-mix(in srgb, theme(--color-warning) 30%, transparent); }
+  .mc-cal-day--other-month { color: theme(--color-text-disabled); }
+  .mc-cal-day--empty { cursor: default; }
+
+  /* ════════════════════════════════════════════
+     WHATSAPP TEMPLATES
+  ════════════════════════════════════════════ */
+
+  .mc-tpl-sidebar { width: 260px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2px; }
+  .mc-tpl-item { padding: 12px 16px; border-radius: 10px; font-size: 14px; font-weight: 500; color: theme(--color-text-secondary); cursor: pointer; border-left: 3px solid transparent; transition: color 0.15s, background-color 0.15s, border-color 0.15s; }
+  .mc-tpl-item:hover { background-color: theme(--color-card); color: theme(--color-text-primary); }
+  .mc-tpl-item--active { background-color: color-mix(in srgb, theme(--color-primary) 10%, transparent); color: theme(--color-primary); border-left-color: theme(--color-primary); }
+
+  .mc-var-chip { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; font-family: monospace; background-color: color-mix(in srgb, theme(--color-primary) 12%, transparent); color: theme(--color-primary); border: 1px solid color-mix(in srgb, theme(--color-primary) 25%, transparent); cursor: pointer; transition: background-color 0.15s; }
+  .mc-var-chip:hover { background-color: color-mix(in srgb, theme(--color-primary) 22%, transparent); }
+
+  .mc-char-count { font-size: 12px; color: theme(--color-text-secondary); text-align: right; margin-top: 4px; }
+  .mc-char-count--warn { color: theme(--color-warning-text); }
+
+  /* ════════════════════════════════════════════
+     SPINNER / EMPTY STATE
+  ════════════════════════════════════════════ */
+
+  .mc-spinner { width: 16px; height: 16px; border-radius: 9999px; border: 2px solid color-mix(in srgb, theme(--color-text-primary) 30%, transparent); border-top-color: theme(--color-text-primary); animation: mc-spin 0.7s linear infinite; flex-shrink: 0; }
+  @keyframes mc-spin { to { transform: rotate(360deg); } }
+
+  .mc-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 64px 24px; gap: 12px; text-align: center; }
+  .mc-empty__icon { font-size: 48px; }
+  .mc-empty__title { font-size: 16px; font-weight: 600; color: theme(--color-text-secondary); }
+  .mc-empty__sub   { font-size: 13px; color: theme(--color-text-disabled); }
+
+  /* ════════════════════════════════════════════
+     INFO / WARN BOXES
+  ════════════════════════════════════════════ */
+
+  .mc-info-box { padding: 12px 16px; border-radius: 10px; font-size: 13px; background-color: color-mix(in srgb, theme(--color-primary) 8%, transparent); border: 1px solid color-mix(in srgb, theme(--color-primary) 20%, transparent); color: theme(--color-text-secondary); }
+  .mc-warn-box { padding: 12px 16px; border-radius: 10px; font-size: 13px; background-color: color-mix(in srgb, theme(--color-warning) 10%, transparent); border: 1px solid color-mix(in srgb, theme(--color-warning) 20%, transparent); color: theme(--color-warning-text); }
+
+  /* ════════════════════════════════════════════
+     TOAST NOTIFICATION
+  ════════════════════════════════════════════ */
+
+  .mc-toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 100;
+    padding: 12px 20px; border-radius: 12px;
+    background-color: theme(--color-card);
+    border: 1px solid theme(--color-success);
+    color: theme(--color-text-primary);
+    font-size: 13px; font-weight: 600;
+    box-shadow: theme(--shadow-dialog);
+    pointer-events: none;
+  }
+
+  /* ════════════════════════════════════════════
+     LAYOUT UTILITIES
+  ════════════════════════════════════════════ */
+
+  /* card with no padding — for tables flush to edge */
+  .mc-card--flush   { padding: 0; overflow: hidden; }
+  /* centered container for QR scanner */
+  .mc-center-600    { max-width: 600px; margin: 0 auto; }
+  /* flex column with gap for modal form fields */
+  .mc-form-stack    { display: flex; flex-direction: column; gap: 14px; }
+  /* flex row for inline filter controls */
+  .mc-filter-row    { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; }
+  /* inline-flex tabs wrapper */
+  .mc-tabs-inline   { display: inline-flex; }
+  /* notice cards list */
+  .mc-notice-list   { display: flex; flex-direction: column; gap: 16px; }
+  /* holiday right panel */
+  .mc-panel-300     { width: 300px; flex-shrink: 0; }
+  /* flex-1 fill */
+  .mc-flex-1        { flex: 1; }
+  /* overflow-x scroll wrapper */
+  .mc-scroll-x      { overflow-x: auto; }
+
+  /* ════════════════════════════════════════════
+     TABLE CELL HELPERS (replaces inline td styles)
+  ════════════════════════════════════════════ */
+
+  .mc-td-bold       { font-weight: 600; }
+  .mc-td-mono       { font-family: monospace; font-size: 13px; color: theme(--color-text-secondary); }
+  .mc-td-muted      { color: theme(--color-text-secondary); }
+  .mc-td-danger     { color: theme(--color-danger-text); font-size: 12px; }
+  .mc-td-italic-muted { color: theme(--color-text-disabled); font-style: italic; }
+  .mc-td-truncate   { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ════════════════════════════════════════════
+     TEXT HELPERS (replaces inline p styles)
+  ════════════════════════════════════════════ */
+
+  .mc-text-name     { font-weight: 600; font-size: 14px; color: theme(--color-text-primary); }
+  .mc-text-sub      { font-size: 12px; color: theme(--color-text-secondary); }
+  .mc-text-muted    { font-size: 13px; color: theme(--color-text-secondary); }
+  .mc-text-center   { text-align: center; }
+  .mc-text-status   { font-size: 13px; color: theme(--color-text-secondary); margin-top: 12px; text-align: center; }
+
+  /* ════════════════════════════════════════════
+     QR SCANNER INNER FEED
+  ════════════════════════════════════════════ */
+
+  .mc-qr-feed {
+    width: 100%; height: 100%;
+    background: theme(--color-card);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+  }
+  .mc-qr-feed__icon  { font-size: 48px; }
+  .mc-qr-feed__label { font-size: 13px; color: theme(--color-text-secondary); text-align: center; padding: 0 24px; }
+  .mc-qr-success-icon { color: theme(--color-success-text); }
+
+  /* QR result student info */
+  .mc-qr-student-name { font-weight: 700; font-size: 18px; color: theme(--color-text-primary); }
+  .mc-qr-student-id   { font-family: monospace; font-size: 13px; color: theme(--color-text-secondary); }
+  .mc-qr-valid-till   { font-size: 12px; color: theme(--color-text-secondary); }
+  .mc-qr-avatar-lg    { width: 56px; height: 56px; font-size: 20px; }
+
+  /* QR action buttons full-width */
+  .mc-qr-action-btn   { flex: 1; padding: 14px 20px; font-size: 15px; }
+
+  /* Manual fallback link */
+  .mc-link-btn {
+    background: none; border: none; cursor: pointer;
+    color: theme(--color-primary); font-size: 13px; text-decoration: underline;
+    font-family: inherit;
+  }
+  .mc-link-btn:hover { opacity: 0.8; }
+
+  /* ════════════════════════════════════════════
+     ATTENDANCE HELPERS
+  ════════════════════════════════════════════ */
+
+  .mc-att-name-col  { min-width: 160px; }
+  .mc-att-count     { font-size: 13px; color: theme(--color-text-secondary); }
+  .mc-att-save-info { font-size: 13px; color: theme(--color-text-secondary); }
+  .mc-label--tight  { margin-bottom: 2px; }
+
+  /* ════════════════════════════════════════════
+     NOTICE HELPERS
+  ════════════════════════════════════════════ */
+
+  .mc-notice-title--inline { margin: 0; }
+  .mc-read-more {
+    background: none; border: none; cursor: pointer;
+    color: theme(--color-primary); font-size: 13px; margin-left: 6px;
+    font-family: inherit;
+  }
+
+  /* ════════════════════════════════════════════
+     NOTIFICATION CENTER HELPERS
+  ════════════════════════════════════════════ */
+
+  .mc-notif-title   { font-weight: 600; font-size: 14px; color: theme(--color-text-primary); }
+  .mc-notif-desc    { font-size: 13px; color: theme(--color-text-secondary); }
+  .mc-notif-time    { font-size: 12px; color: theme(--color-text-disabled); }
+  .mc-notif-link    { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: theme(--color-primary); text-decoration: none; }
+  .mc-notif-link:hover { text-decoration: underline; }
+  .mc-notif-meta    { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+  .mc-notif-read    { opacity: 0.6; }
+
+  /* ════════════════════════════════════════════
+     HOLIDAY CALENDAR HELPERS
+  ════════════════════════════════════════════ */
+
+  .mc-cal-month-nav  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .mc-cal-month-title { font-size: 16px; font-weight: 700; color: theme(--color-text-primary); }
+  .mc-cal-legend     { display: flex; align-items: center; gap: 16px; margin-top: 16px; font-size: 12px; color: theme(--color-text-secondary); }
+  .mc-cal-legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+  .mc-cal-legend-dot--holiday { background-color: theme(--color-warning-bg); border: 1px solid theme(--color-warning); }
+  .mc-cal-legend-dot--today   { border: 1px solid theme(--color-primary); }
+
+  .mc-holiday-list   { display: flex; flex-direction: column; gap: 10px; }
+  .mc-holiday-item   { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background-color: theme(--color-input); border: 1px solid theme(--color-border); }
+  .mc-holiday-name   { font-weight: 600; font-size: 13px; color: theme(--color-text-primary); }
+  .mc-holiday-date   { font-size: 12px; color: theme(--color-text-secondary); margin-top: 2px; }
+  .mc-holiday-empty  { font-size: 13px; color: theme(--color-text-secondary); text-align: center; padding: 20px 0; }
+  .mc-holiday-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .mc-holiday-panel-title  { font-size: 15px; font-weight: 600; color: theme(--color-text-primary); }
+  .mc-btn-primary--sm { padding: 6px 12px; font-size: 12px; }
+
+  /* ════════════════════════════════════════════
+     WHATSAPP LOGS HELPERS
+  ════════════════════════════════════════════ */
+
+  .mc-msg-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .mc-msg-detail-item { padding: 10px 14px; border-radius: 10px; background-color: theme(--color-input); border: 1px solid theme(--color-border); }
+  .mc-msg-detail-key  { font-size: 11px; color: theme(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .mc-msg-detail-val  { font-size: 13px; font-weight: 600; color: theme(--color-text-primary); }
+  .mc-msg-body-box    { padding: 14px 16px; border-radius: 10px; background-color: theme(--color-input); border: 1px solid theme(--color-border); font-size: 14px; color: theme(--color-text-primary); line-height: 1.6; }
+  .mc-modal-badge-row { display: flex; gap: 8px; margin-bottom: 16px; }
+
+  /* ════════════════════════════════════════════
+     WHATSAPP TEMPLATES HELPERS
+  ════════════════════════════════════════════ */
+
+  .mc-tpl-var-row    { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .mc-tpl-preview    { padding: 14px 16px; border-radius: 10px; background-color: theme(--color-input); border: 1px solid theme(--color-border); font-size: 14px; color: theme(--color-text-primary); line-height: 1.6; }
+  .mc-tpl-section    { margin-top: 16px; }
+  .mc-card-footer--end { justify-content: flex-end; }
+
+  /* ════════════════════════════════════════════
+     COMPLAINTS HELPERS
+  ════════════════════════════════════════════ */
+
+  .mc-complaint-by   { font-size: 13px; color: theme(--color-text-secondary); margin-bottom: 8px; }
+  .mc-complaint-desc { font-size: 14px; color: theme(--color-text-primary); line-height: 1.6; }
+  .mc-complaint-anon { color: theme(--color-text-disabled); font-style: italic; }
+  .mc-complaint-named { color: theme(--color-text-primary); }
+  .mc-checkbox-row   { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: theme(--color-text-primary); }
+  .mc-required       { color: theme(--color-danger-text); }
+}
+
+/* ── PREMIUM UI OVERRIDES ────────────────────────────────────────────── */
+
+.mc-notif-sidebar { width: 260px !important; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+.mc-notif-cat { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: transparent; border: 1px solid transparent; cursor: pointer; color: theme(--color-text-secondary); font-size: 14px; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; text-align: left; }
+.mc-notif-cat:hover { background-color: theme(--color-card); color: theme(--color-text-primary); border-color: theme(--color-border); box-shadow: theme(--shadow-card); }
+.mc-notif-cat--active { background-color: theme(--color-primary) !important; color: theme(--color-on-primary) !important; border-color: theme(--color-primary) !important; box-shadow: theme(--shadow-card) !important; }
+.mc-notif-cat--active:hover { opacity: 0.95; }
+
+.mc-notif-item { display: flex; gap: 20px !important; padding: 24px !important; border-bottom: 1px solid theme(--color-border); transition: background-color 0.2s; position: relative; }
+.mc-notif-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: transparent; transition: background-color 0.2s; border-radius: 0 4px 4px 0; }
+.mc-notif-item:not(.mc-notif-read)::before { background-color: theme(--color-primary); }
+.mc-notif-item:hover { background-color: theme(--color-surface-hover) !important; }
+.mc-notif-icon { width: 48px !important; height: 48px !important; border-radius: 14px !important; display: flex; align-items: center; justify-content: center; font-size: 22px !important; flex-shrink: 0; box-shadow: theme(--shadow-card); }
+.mc-notif-title { font-weight: 600; font-size: 15px !important; color: theme(--color-text-primary); margin-bottom: 4px; }
+.mc-notif-desc { font-size: 14px !important; color: theme(--color-text-secondary); line-height: 1.5; margin-bottom: 8px; }
+.mc-notif-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px !important; font-weight: 500; color: theme(--color-primary); text-decoration: none; padding: 6px 12px; border-radius: 6px; background-color: color-mix(in srgb, theme(--color-primary) 8%, transparent); transition: all 0.2s; }
+.mc-notif-link:hover { background-color: color-mix(in srgb, theme(--color-primary) 15%, transparent); transform: translateX(2px); }
+
+.mc-tpl-sidebar { width: 280px !important; flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; }
+.mc-tpl-item { padding: 14px 18px !important; border-radius: 12px !important; font-size: 14px; font-weight: 500; color: theme(--color-text-secondary); cursor: pointer; border: 1px solid transparent !important; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 10px; }
+.mc-tpl-item:hover { background-color: theme(--color-card) !important; color: theme(--color-text-primary) !important; border-color: theme(--color-border) !important; box-shadow: theme(--shadow-card); }
+.mc-tpl-item--active { background-color: color-mix(in srgb, theme(--color-primary) 8%, transparent) !important; color: theme(--color-primary) !important; border-color: color-mix(in srgb, theme(--color-primary) 20%, transparent) !important; box-shadow: 0 2px 8px color-mix(in srgb, theme(--color-primary) 10%, transparent); }
+
+.mc-var-chip { display: inline-flex; align-items: center; padding: 6px 12px !important; border-radius: 20px !important; font-size: 13px !important; font-weight: 600; font-family: monospace; background-color: color-mix(in srgb, theme(--color-primary) 10%, transparent) !important; color: theme(--color-primary) !important; border: 1px solid color-mix(in srgb, theme(--color-primary) 20%, transparent) !important; cursor: pointer; transition: all 0.2s; }
+.mc-var-chip:hover { background-color: color-mix(in srgb, theme(--color-primary) 18%, transparent) !important; transform: translateY(-1px); box-shadow: 0 2px 6px color-mix(in srgb, theme(--color-primary) 15%, transparent); }
+
+.mc-tpl-preview { padding: 12px 16px !important; border-radius: 0 12px 12px 12px !important; background-color: theme(--color-success-bg) !important; box-shadow: theme(--shadow-card); font-size: 14.5px !important; color: theme(--color-text-primary) !important; line-height: 1.5; position: relative; max-width: 85%; margin-top: 8px; border: none !important; }
+.mc-tpl-preview::before { content: ''; position: absolute; top: 0; left: -8px; width: 0; height: 0; border-style: solid; border-width: 0 8px 10px 0; border-color: transparent theme(--color-success-bg) transparent transparent; }
+
+/* RBG-4: modal close and row action controls meet the 44px target baseline. */
+.mc-modal-close, .mc-btn-icon { min-width: 44px; min-height: 44px; }
+@media (prefers-reduced-motion: reduce) { .mc-overlay *, .mc-overlay *::before, .mc-overlay *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+
+.mc-modal:focus { outline: 2px solid theme(--color-primary); outline-offset: 3px; }
+
+.mc-tpl-item { min-height: 44px; font: inherit; text-align: left; background: transparent; }
+.mc-tpl-item:focus-visible { outline: 2px solid theme(--color-primary); outline-offset: 2px; }
+
+/* RBG2 accessibility: honor reduced-motion preferences across the Communication page, not only overlays. */
+@media (prefers-reduced-motion: reduce) {
+  .mc-page *, .mc-page *::before, .mc-page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}

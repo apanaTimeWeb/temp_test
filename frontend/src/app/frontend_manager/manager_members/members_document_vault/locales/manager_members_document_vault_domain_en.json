@@ -1,0 +1,44 @@
+{
+  "manager": {
+    "manager_document_vault": {
+      "ui": {
+        "loading_this_section": "Loading this section…",
+        "file_name": "File Name",
+        "category": "Category",
+        "size": "Size",
+        "uploaded_by": "Uploaded By",
+        "date": "Date",
+        "actions": "Actions",
+        "download_unavailable_the_source_files_download_contract_2a0e5a": "Download unavailable: the source files/download contract were not supplied",
+        "download_unavailable": "Download unavailable",
+        "delete_unavailable_no_verified_host_document_deletion_co_5d72da": "Delete unavailable: no verified host document-deletion contract was supplied",
+        "delete_unavailable": "Delete unavailable",
+        "home_documents": "Home / Documents",
+        "document_vault": "Document Vault",
+        "upload_unavailable_no_verified_host_document_storage_con_afc538": "Upload unavailable: no verified host document-storage contract was supplied",
+        "upload_unavailable": "Upload unavailable",
+        "this_list_contains_sample_metadata_only_upload_download_eac538": "This list contains sample metadata only. Upload, download, and delete are unavailable because authoritative document-storage contracts were not supplied; no file is persisted or fabricated.",
+        "id_proofs": "ID Proofs",
+        "finance": "Finance",
+        "study_material": "Study Material",
+        "other": "Other",
+        "search_documents": "Search documents...",
+        "download_unavailable_for_document": "Download is unavailable for this document",
+        "delete_unavailable_for_document": "Deletion is unavailable for this document",
+        "document_categories": "Sample document categories",
+        "sample_records_count": "{count, plural, =0 {0 sample records} one {# sample record} other {# sample records}}",
+        "no_sample_documents_match": "No sample document metadata matches your filters.",
+        "sample_document_metadata": "Sample document metadata",
+        "previous_page": "Previous page",
+        "next_page": "Next page",
+        "pagination_range": "Showing {start}–{end} of {total}"
+      },
+      "errors": {
+        "GENERIC_TITLE": "Something went wrong",
+        "GENERIC_BODY": "An unexpected error occurred. Please try again.",
+        "RETRY": "Retry",
+        "MODULE_ERROR": "The module encountered an unexpected problem."
+      }
+    }
+  }
+}

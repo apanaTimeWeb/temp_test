@@ -1,0 +1,44 @@
+{
+  "manager": {
+    "manager_document_vault": {
+      "ui": {
+        "loading_this_section": "यह अनुभाग लोड हो रहा है…",
+        "file_name": "फ़ाइल का नाम",
+        "category": "श्रेणी",
+        "size": "आकार",
+        "uploaded_by": "अपलोडकर्ता",
+        "date": "तारीख",
+        "actions": "कार्रवाई",
+        "download_unavailable_the_source_files_download_contract_2a0e5a": "डाउनलोड उपलब्ध नहीं है: स्रोत फ़ाइलें/डाउनलोड कॉन्ट्रैक्ट उपलब्ध नहीं कराया गया।",
+        "download_unavailable": "डाउनलोड उपलब्ध नहीं",
+        "delete_unavailable_no_verified_host_document_deletion_co_5d72da": "हटाना उपलब्ध नहीं है: होस्ट दस्तावेज़-हटाने का सत्यापित कॉन्ट्रैक्ट उपलब्ध नहीं कराया गया।",
+        "delete_unavailable": "हटाना उपलब्ध नहीं है",
+        "home_documents": "होम / दस्तावेज़",
+        "document_vault": "दस्तावेज़ भंडार",
+        "upload_unavailable_no_verified_host_document_storage_con_afc538": "अपलोड उपलब्ध नहीं है: होस्ट दस्तावेज़-स्टोरेज का सत्यापित कॉन्ट्रैक्ट उपलब्ध नहीं कराया गया।",
+        "upload_unavailable": "अपलोड उपलब्ध नहीं",
+        "this_list_contains_sample_metadata_only_upload_download_eac538": "इस सूची में केवल नमूना मेटाडेटा है। प्रमाणित दस्तावेज़-स्टोरेज कॉन्ट्रैक्ट उपलब्ध न होने के कारण अपलोड, डाउनलोड और हटाना उपलब्ध नहीं है; कोई फ़ाइल सहेजी या मनगढ़ंत नहीं बनाई जाती।",
+        "id_proofs": "पहचान प्रमाण",
+        "finance": "वित्त",
+        "study_material": "अध्ययन सामग्री",
+        "other": "अन्य",
+        "search_documents": "खोजें दस्तावेज़...",
+        "download_unavailable_for_document": "इस दस्तावेज़ को डाउनलोड करना उपलब्ध नहीं है",
+        "delete_unavailable_for_document": "इस दस्तावेज़ को हटाना उपलब्ध नहीं है",
+        "document_categories": "नमूना दस्तावेज़ श्रेणियाँ",
+        "sample_records_count": "{count} नमूना रिकॉर्ड",
+        "no_sample_documents_match": "आपके फ़िल्टर से मेल खाने वाला कोई नमूना दस्तावेज़ मेटाडेटा नहीं है।",
+        "sample_document_metadata": "नमूना दस्तावेज़ मेटाडेटा",
+        "previous_page": "पिछला पृष्ठ",
+        "next_page": "अगला पृष्ठ",
+        "pagination_range": "{total} में से {start}–{end} दिखाए जा रहे हैं"
+      },
+      "errors": {
+        "GENERIC_TITLE": "कुछ गलत हुआ",
+        "GENERIC_BODY": "अप्रत्याशित त्रुटि आई। कृपया फिर से प्रयास करें।",
+        "RETRY": "पुनः प्रयास करें",
+        "MODULE_ERROR": "मॉड्यूल में अप्रत्याशित समस्या आई।"
+      }
+    }
+  }
+}

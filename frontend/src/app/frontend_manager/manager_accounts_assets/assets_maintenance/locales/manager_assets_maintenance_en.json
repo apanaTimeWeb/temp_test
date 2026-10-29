@@ -1,0 +1,36 @@
+{
+  "manager": {
+    "manager_assets_maintenance": {
+      "ui": {
+        "action": "Action",
+        "all_status": "All Status",
+        "asset": "Asset",
+        "asset_maintenance": "Asset Maintenance",
+        "completed": "Completed",
+        "cost_inr": "Cost (INR)",
+        "in_progress": "In Progress",
+        "issue": "Issue",
+        "log_request_unavailable": "Log Request unavailable",
+        "logging_maintenance_unavailable_host_mutation_contract_n_40db9f": "Logging maintenance unavailable: host mutation contract not supplied",
+        "no_maintenance_records_found": "No maintenance records found.",
+        "pending": "Pending",
+        "reported": "Reported",
+        "review_the_sample_maintenance_register_updates_are_unava_163c7f": "Review the sample maintenance register. Updates are unavailable until the host maintenance API contract is supplied.",
+        "sample_data_only_creating_maintenance_logs_or_completing_cfeb24": "Sample data only. Creating maintenance logs or completing work is disabled; no records are written.",
+        "scheduled": "Scheduled",
+        "status": "Status",
+        "status_update_unavailable_host_mutation_contract_not_sup_953486": "Status update unavailable: host mutation contract not supplied",
+        "total_cost": "Total Cost",
+        "update_unavailable": "Update unavailable",
+        "vendor": "Vendor"
+      },
+      "errors": {
+        "GENERIC_TITLE": "Something went wrong",
+        "GENERIC_BODY": "An unexpected error occurred. Please try again.",
+        "RETRY": "Retry",
+        "MODULE_ERROR": "The module encountered an unexpected problem.",
+        "MODULE_ERROR_TITLE": "Accounting module error"
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+/* Dashboard-owned seat matrix and dashboard layout styles. */
+@layer components {
+
+  .mgr-dashboard-theme .mgr-seat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+    gap: 10px;
+  }
+  .mgr-dashboard-theme .mgr-seat-cell {
+    width: 56px; height: 56px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: transform theme(--animate-duration-fast); border: 2px solid transparent;
+  }
+  .mgr-dashboard-theme .mgr-seat-cell:hover  { transform: scale(1.07); }
+  .mgr-dashboard-theme .mgr-seat-available   { background-color: color-mix(in srgb, theme(--color-success) 15%, transparent); border-color: color-mix(in srgb, theme(--color-success) 40%, transparent); color: theme(--color-success-text); }
+  .mgr-dashboard-theme .mgr-seat-occupied    { background-color: color-mix(in srgb, theme(--color-danger) 15%, transparent); border-color: color-mix(in srgb, theme(--color-danger) 40%, transparent); color: theme(--color-danger-text);  }
+  .mgr-dashboard-theme .mgr-seat-expiring    { background-color: color-mix(in srgb, theme(--color-warning) 15%, transparent); border-color: color-mix(in srgb, theme(--color-warning) 40%, transparent); color: theme(--color-warning-text); }
+
+  .mgr-dashboard-theme .mgr-seat-legend      { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+  .mgr-dashboard-theme .mgr-seat-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: theme(--color-text-secondary); }
+  .mgr-dashboard-theme .mgr-seat-legend-dot  { width: 10px; height: 10px; border-radius: 3px; }
+  .mgr-dashboard-theme .mgr-seat-legend-dot--available { background-color: theme(--color-success); }
+  .mgr-dashboard-theme .mgr-seat-legend-dot--occupied  { background-color: theme(--color-danger);  }
+  .mgr-dashboard-theme .mgr-seat-legend-dot--expiring  { background-color: theme(--color-warning); }
+.mgr-dashboard-theme .mgr-dashboard-grid-panel { height: 280px; min-width: 0; }
+.mgr-dashboard-theme .mgr-seat-cell-button { border: 0; font: inherit; cursor: pointer; }
+}
+
+
+/* Feature-owned rules migrated from the role shell during RBG 1. */
+@layer components {.mgr-action-right { display: flex; align-items: center; gap: 8px; } .mgr-action-link {
+    color: theme(--color-primary); text-decoration: none;
+    font-size: 12px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 4px;
+  } .mgr-action-link:hover { text-decoration: underline; }}
+
+
+/* Feature-owned rules migrated from the role shell during RBG 1. */
+/* RBG3 accessibility baseline: visible keyboard focus within the owning feature. */
+.mgr-dashboard-theme :where(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid theme(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* RBG3: honor reduced-motion preferences without changing feature state. */
+@media (prefers-reduced-motion: reduce) {
+  .mgr-dashboard-theme *,
+  .mgr-dashboard-theme *::before,
+  .mgr-dashboard-theme *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

@@ -1,0 +1,42 @@
+{
+  "manager": {
+    "manager_branch_info": {
+      "ui": {
+        "loading_branch_info": "Loading Branch Info",
+        "settings": "Settings",
+        "branch_information": "Branch Information",
+        "branch_profile": "Branch Profile",
+        "review_and_edit_a_local_draft_of_branch_details_saving_i_75e9ef": "Review and edit a local draft of branch details. Saving is unavailable until the host branch-update contract is supplied.",
+        "branch_name_address_contact_details_and_manager_identity_e91222": "Branch name, address, contact details and manager identity are sample placeholders, not verified host branch data. Changes remain only in this unsaved local draft.",
+        "code": "Code:",
+        "local_preview_only_changes_are_not_saved_or_propagated_f_a3bb60": "Local preview only. Changes are not saved or propagated from this screen.",
+        "edit_details": "Edit Details",
+        "save_unavailable_no_authoritative_branch_update_api_cont_9dbd80": "Save unavailable: no authoritative branch-update API contract was supplied.",
+        "branch_name": "Branch Name",
+        "branch_code": "Branch Code",
+        "branch_code_is_assigned_by_superadmin_and_cannot_be_chan_f5fde2": "Branch Code is assigned by SuperAdmin and cannot be changed here.",
+        "address": "Address",
+        "phone_number": "Phone Number",
+        "email_address": "Email Address",
+        "manager_name": "Manager Name",
+        "working_hours": "Working Hours",
+        "e_g_08_00_am_10_00_pm_mon_sat": "e.g. 08:00 AM - 10:00 PM (Mon-Sat)",
+        "save_unavailable_host_branch_update_contract_not_supplie_f87f15": "Save unavailable: host branch-update contract not supplied",
+        "save_unavailable": "Save unavailable",
+        "draft_changes_not_saved": "Draft changes updated locally. Nothing has been saved to the host system.",
+        "address_not_set": "Address not set",
+        "phone_not_set": "Phone not set",
+        "email_not_set": "Email not set",
+        "manager_not_set": "Manager not set",
+        "hours_not_set": "Hours not set",
+        "validation_field_invalid": "Please check this field."
+      },
+      "errors": {
+        "GENERIC_TITLE": "Something went wrong",
+        "GENERIC_BODY": "An unexpected error occurred. Please try again.",
+        "RETRY": "Retry",
+        "MODULE_ERROR": "The module encountered an unexpected problem."
+      }
+    }
+  }
+}

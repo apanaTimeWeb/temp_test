@@ -1,0 +1,4 @@
+import {describe,expect,it} from 'vitest';
+import {managerNoticesNoticeResponseListSchema,managerNoticesNoticeResponseSchema} from '@/app/frontend_manager/manager_communication/communication_notices/schemas/ManagerCommunicationNoticesSchema';
+import {MANAGER_NOTICES_API_FIXTURES} from '@/app/frontend_manager/manager_communication/communication_notices/mocks/manager_communication_notices_fixtures/ManagerCommunicationNoticesApiFixtures';
+describe('manager_notices response schema',()=>{it('validates the module-owned notice fixture',()=>{expect(managerNoticesNoticeResponseListSchema.parse(MANAGER_NOTICES_API_FIXTURES)).toHaveLength(4)});it('rejects invalid calendar dates and incomplete notices',()=>{expect(managerNoticesNoticeResponseSchema.safeParse({id:'n1',title:'Notice',message:'Body',createdAt:'2026-02-30',validTill:'2026-03-01'}).success).toBe(false);expect(managerNoticesNoticeResponseSchema.safeParse({title:'Notice'}).success).toBe(false)});});
