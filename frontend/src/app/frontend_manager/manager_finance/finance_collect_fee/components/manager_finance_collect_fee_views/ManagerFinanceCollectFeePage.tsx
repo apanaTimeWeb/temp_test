@@ -21,7 +21,7 @@ import { Search, IndianRupee, CheckCircle } from 'lucide-react';
 import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview';
 import { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
 import type { ManagerFinanceCollectFeeMode } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
-import {MANAGER_FINANCE_COLLECT_FEE_MODES, MANAGER_FINANCE_COLLECT_FEE_SEARCH_DEBOUNCE_MS} from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
+import { MANAGER_FINANCE_COLLECT_FEE_MODES, MANAGER_FINANCE_COLLECT_FEE_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
 import { ManagerFinanceCollectFeeEmptyState } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_empty_states/ManagerFinanceCollectFeeEmptyState';
 import type { ManagerFinanceCollectFeeRouteQueryProps, ManagerFinanceCollectFeeContractStatus } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeComponentTypes';
 
@@ -33,7 +33,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   const { confirm, dialog: unsavedConfirmDialog } = useManagerFinanceCollectFeeConfirm();
   const { formatCurrency } = useManagerCollectFeeFormatting();
   const modeLabels: Record<ManagerFinanceCollectFeeMode, string> = { cash: tManagerUi('cash'), upi: tManagerUi('upi'), card: tManagerUi('card'), bank: tManagerUi('bank_transfer') };
-  const [search, setSearch]             = useState('');
+  const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   // Dependency rationale: debounce student lookup text (300ms) to avoid filtering the sample directory on every keystroke; clear the timer on change/unmount.
   useEffect(() => {
@@ -112,9 +112,9 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     }
   }
 
-  const baseAmount  = Number.isFinite(Number(amount)) && amount.trim() !== '' ? Number(amount) : 0;
-  const lateFeeAmt  = Number.isFinite(Number(lateFee)) && lateFee.trim() !== '' ? Number(lateFee) : 0;
-  const total       = Math.max(0, baseAmount + lateFeeAmt - couponDiscount);
+  const baseAmount = Number.isFinite(Number(amount)) && amount.trim() !== '' ? Number(amount) : 0;
+  const lateFeeAmt = Number.isFinite(Number(lateFee)) && lateFee.trim() !== '' ? Number(lateFee) : 0;
+  const total = Math.max(0, baseAmount + lateFeeAmt - couponDiscount);
 
   function resetForm() {
     setSelectedStudent(null); setSearch(''); reset();
@@ -140,11 +140,11 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     <>
       {unsavedConfirmDialog}
       <div className="space-y-6"
-      data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
+        data-route-view={_routeQuery.view}
+        data-route-id={_routeQuery.id}
+        data-route-name={_routeQuery.name}
+        data-route-phone={_routeQuery.phone}
+        data-route-smart-id={_routeQuery.smartId}>
         <div>
           <h1 className="fin-page-title">{tManagerUi('collect_fee')}</h1>
           <p className="fin-page-subtitle">{tManagerUi('preview_fee_collection_details_recording_a_payment_is_cu_5bded1')}</p>

@@ -21,8 +21,8 @@ const URL_FILTERS = {
 } as const;
 
 const STATUS_BADGE: Record<string, string> = {
-  active:    'fin-badge fin-badge--success',
-  expired:   'fin-badge fin-badge--danger',
+  active: 'fin-badge fin-badge--success',
+  expired: 'fin-badge fin-badge--danger',
   suspended: 'fin-badge fin-badge--warning',
   cancelled: 'fin-badge fin-badge--neutral',
 };

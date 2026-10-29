@@ -13,8 +13,8 @@ import { Undo2, Minus } from 'lucide-react';
 const URL_FILTERS = { status: { defaultValue: 'all', allowedValues: ['all', 'held', 'refunded', 'forfeited'] } as const };
 
 const STATUS_BADGE: Record<string, string> = {
-  held:      'fin-badge fin-badge--info',
-  refunded:  'fin-badge fin-badge--success',
+  held: 'fin-badge fin-badge--info',
+  refunded: 'fin-badge fin-badge--success',
   forfeited: 'fin-badge fin-badge--danger',
 };
 
