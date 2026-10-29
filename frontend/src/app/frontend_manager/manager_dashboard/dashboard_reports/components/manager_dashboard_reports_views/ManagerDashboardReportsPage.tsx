@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ManagerDashboardReportsKpiGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_sections/ManagerDashboardReportsKpiGrid.tsx';
-import { ManagerDashboardReportsChartsGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_charts/ManagerDashboardReportsChartsGrid.tsx';
-import { ManagerDashboardReportsTablesGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsTablesGrid.tsx';
+import { ManagerDashboardReportsKpiGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_sections/ManagerDashboardReportsKpiGrid';
+import { ManagerDashboardReportsChartsGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_charts/ManagerDashboardReportsChartsGrid';
+import { ManagerDashboardReportsTablesGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsTablesGrid';
 import { MANAGER_REPORTS_DATE_RANGES } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/constants/ManagerDashboardReportsConstants';
 import { useManagerReports } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/hooks/useManagerDashboardReports';
 import { ManagerDashboardReportsContractBlockedError } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/api/manager_dashboard_reports.api';

@@ -8,7 +8,10 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./vitest.setup.ts'],
-    include: ['src/app/public_auth/**/*.{test,spec}.{ts,tsx}'],
+    include: [
+      'src/app/public_auth/**/*.{test,spec}.{ts,tsx}',
+      'src/app/frontend_manager/manager_members/members_id_card_generator/**/*.{test,spec}.{ts,tsx}',
+    ],
   },
   resolve: {
     alias: {

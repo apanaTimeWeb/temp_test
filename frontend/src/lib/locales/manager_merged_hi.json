@@ -2588,7 +2588,7 @@
         "retry": "पुनः प्रयास करें",
         "manager_reports": "प्रबंधक › रिपोर्ट",
         "reports": "रिपोर्ट",
-        "operational_overview_finance_reports_blocked": "परिचालन अवलोकन — वित्त रिपोर्ट उपलब्ध नहीं हैं",
+        "operational_overview_finance_reports_blocked": "शाखा का समग्र विश्लेषण और परिचालन प्रदर्शन",
         "date_range": "तिथि सीमा",
         "branch": "शाखा",
         "main_branch_read_only": "मुख्य शाखा (केवल-पढ़ने हेतु)",

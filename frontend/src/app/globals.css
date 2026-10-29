@@ -61,6 +61,18 @@ html.dark,
   --color-purple-bg: #3B0764;
   --color-purple-text: #C084FC;
 
+  /* Chart Semantic Tokens (WEB_FRONTEND_UI_UX_DESIGN.md Section 10) */
+  --chart-primary: #FACC15;
+  --chart-success: #4ADE80;
+  --chart-warning: #F97316;
+  --chart-info: #38BDF8;
+  --chart-secondary: #94A3B8;
+  --chart-danger: #F87171;
+  --chart-grid: #334155;
+  --chart-tooltip-bg: #1E293B;
+  --chart-surface: #111111;
+  --text-secondary: #A1A1AA;
+
   /* Motion, shape, spacing, and shadow tokens */
   --animate-duration-fast: 150ms;
   --animate-duration-slow: 300ms;
@@ -128,6 +140,18 @@ html:not(.dark) {
   --color-on-danger: #FFFFFF;
   --color-purple-bg: #EDE9FE;
   --color-purple-text: #7E22CE;
+
+  /* Chart Semantic Tokens (WEB_FRONTEND_UI_UX_DESIGN.md Section 10) */
+  --chart-primary: #EAB308;
+  --chart-success: #16A34A;
+  --chart-warning: #D97706;
+  --chart-info: #0284C7;
+  --chart-secondary: #64748B;
+  --chart-danger: #DC2626;
+  --chart-grid: #E2E8F0;
+  --chart-tooltip-bg: #FFFFFF;
+  --chart-surface: #FFFFFF;
+  --text-secondary: #52525B;
 
   /* Shadow */
   --shadow-dialog: 0 20px 60px rgba(0, 0, 0, 0.15);

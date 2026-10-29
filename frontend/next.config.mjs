@@ -69,6 +69,14 @@ const nextConfig = {
         destination: '/frontend_manager/manager_dashboard/dashboard_overview',
       },
       {
+        source: '/manager/reports',
+        destination: '/frontend_manager/manager_dashboard/dashboard_reports',
+      },
+      {
+        source: '/manager/dashboard_reports',
+        destination: '/frontend_manager/manager_dashboard/dashboard_reports',
+      },
+      {
         source: '/manager/:path*',
         destination: '/frontend_manager/:path*',
       },
