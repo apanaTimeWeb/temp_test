@@ -1,18 +1,15 @@
 'use client';
 // RESPONSIBILITY: Render the navigation navigation sidebar navigation UI for navigation. It does not own backend persistence or cross-feature business logic.
-// RESPONSIBILITY: Render the navigation navigation sidebar navigation UI for navigation. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { BookOpen, ChevronDown, LogOut, Menu, X } from 'lucide-react';
+import { BookOpen, ChevronDown, LogOut, Menu, Search, X } from 'lucide-react';
 import { MANAGER_NAVIGATION_HREFS, MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
 import type { ManagerNavigationSidebarProps } from '@/app/frontend_manager/manager_navigation/navigation/types/ManagerNavigationNavigationComponentTypes';
 export type { ManagerNavigationSidebarProps };
-
-
 
 export default function ManagerNavigationSidebar({
   collapsed,
@@ -25,11 +22,13 @@ export default function ManagerNavigationSidebar({
   const searchParams = useSearchParams();
   const [showLogout, setShowLogout] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const mobileTriggerRef = useRef<HTMLButtonElement>(null);
   const mobileDrawerRef = useRef<HTMLElement>(null);
   const logoutDialogRef = useRef<HTMLDivElement>(null);
 
-// Dependency rationale: mobileOpen controls the body lock, focus hand-off, and Escape listener lifetime.
+  // Dependency rationale: mobileOpen controls the body lock, focus hand-off, and Escape listener lifetime.
   useEffect(() => {
     if (!mobileOpen) return;
 
@@ -103,12 +102,23 @@ export default function ManagerNavigationSidebar({
     return null;
   })();
 
-  // Dependency rationale: expand the group containing the active route whenever the active group or pathname changes.
+  // Expand the active group on route transition or initial mount without wiping manual toggles
   useEffect(() => {
-    setExpandedGroups(activeGroupKey ? [activeGroupKey] : []);
+    if (activeGroupKey) {
+      setExpandedGroups((prev) => (prev.includes(activeGroupKey) ? prev : [...prev, activeGroupKey]));
+    }
   }, [activeGroupKey, pathname]);
 
-  const navigationSections = MANAGER_NAVIGATION_ITEMS.reduce<Array<{ key: string; labelKey?: string; items: Array<Extract<(typeof MANAGER_NAVIGATION_ITEMS)[number], { kind: 'link' }>> }>>((sections, item) => {
+  const isSearching = searchQuery.trim().length > 0;
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+
+  const navigationSections = MANAGER_NAVIGATION_ITEMS.reduce<
+    Array<{
+      key: string;
+      labelKey?: string;
+      items: Array<Extract<(typeof MANAGER_NAVIGATION_ITEMS)[number], { kind: 'link' }>>;
+    }>
+  >((sections, item) => {
     if (item.kind === 'group') {
       sections.push({ key: item.labelKey, labelKey: item.labelKey, items: [] });
     } else {
@@ -118,6 +128,37 @@ export default function ManagerNavigationSidebar({
     }
     return sections;
   }, []);
+
+  const filteredSections = isSearching
+    ? navigationSections
+        .map((section) => {
+          const sectionLabel = section.labelKey ? (tManagerUi(section.labelKey) ?? '').toLowerCase() : '';
+          const groupMatches = sectionLabel.includes(normalizedQuery);
+          const matchingItems = section.items.filter((item) => {
+            const itemLabel = (tManagerUi(item.labelKey) ?? '').toLowerCase();
+            const href = item.href.toLowerCase();
+            return groupMatches || itemLabel.includes(normalizedQuery) || href.includes(normalizedQuery);
+          });
+          return {
+            ...section,
+            items: matchingItems,
+          };
+        })
+        .filter((section) => section.items.length > 0)
+    : navigationSections;
+
+  const toggleGroup = (groupKey: string) => {
+    setExpandedGroups((current) =>
+      current.includes(groupKey)
+        ? current.filter((key) => key !== groupKey)
+        : [...current, groupKey]
+    );
+  };
+
+  const handleLinkClick = () => {
+    if (mobileOpen) onMobileClose();
+    if (isSearching) setSearchQuery('');
+  };
 
   return (
     <>
@@ -161,25 +202,161 @@ export default function ManagerNavigationSidebar({
           )}
         </div>
 
+        {(!collapsed || mobileOpen) ? (
+          <div className="mgr-sidebar-search">
+            <div className="mgr-sidebar-search-wrap">
+              <Search size={14} className="mgr-sidebar-search-icon" aria-hidden="true" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    e.preventDefault();
+                    setSearchQuery('');
+                  }
+                }}
+                placeholder={tManagerUi('search_navigation') ?? 'Search modules...'}
+                aria-label={tManagerUi('search_navigation') ?? 'Search modules'}
+                data-testid="manager-sidebar-search-input"
+                className="mgr-sidebar-search-input"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    searchInputRef.current?.focus();
+                  }}
+                  className="mgr-sidebar-search-clear"
+                  data-testid="manager-sidebar-search-clear"
+                  aria-label={tManagerUi('clear_search') ?? 'Clear search'}
+                >
+                  <X size={13} strokeWidth={2.5} />
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="mgr-sidebar-search-collapsed">
+            <button
+              type="button"
+              onClick={() => {
+                onToggle();
+                setTimeout(() => searchInputRef.current?.focus(), 150);
+              }}
+              className="mgr-sidebar-search-collapsed-btn"
+              title={tManagerUi('search_navigation') ?? 'Search modules'}
+              aria-label={tManagerUi('search_navigation') ?? 'Search modules'}
+              data-testid="manager-sidebar-search-collapsed-toggle"
+            >
+              <Search size={16} strokeWidth={2} />
+            </button>
+          </div>
+        )}
+
         <nav className="mgr-sidebar-nav" data-testid="manager-navigation" aria-label={tManagerUi('manager_navigation')}>
-          {navigationSections.map((section) => {
-            const expanded = section.key === 'primary' || expandedGroups.includes(section.key);
-            if (section.key === 'primary') {
-              return <div key={section.key} className="mgr-nav-section">{section.items.map((item) => {
-                const active = isActive(item.href);
-                const Icon = item.icon;
-                return <Link key={item.href} href={item.href} className={`mgr-nav-item${active ? ' active' : ''}`} data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`} aria-current={active ? 'page' : undefined} title={collapsed && !mobileOpen ? tManagerUi(item.labelKey) : undefined} onClick={mobileOpen ? onMobileClose : undefined}><Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />{(!collapsed || mobileOpen) && <span className="mgr-nav-label">{tManagerUi(item.labelKey)}</span>}</Link>;
-              })}</div>;
-            }
-            return <section key={section.key} className="mgr-nav-section">
-              {(!collapsed || mobileOpen) && <button type="button" className="mgr-nav-group-label" aria-expanded={expanded} aria-controls={`manager-nav-group-${section.key}`} data-testid={`manager-nav-group-toggle-${section.key}`} onClick={() => setExpandedGroups((current) => current.includes(section.key) ? current.filter((key) => key !== section.key) : [...current, section.key])}><span>{tManagerUi(section.labelKey!)}</span><ChevronDown size={14} aria-hidden="true" className={`mgr-nav-group-chevron${expanded ? ' is-expanded' : ''}`} /></button>}
-              <div id={`manager-nav-group-${section.key}`} hidden={!expanded} className="mgr-nav-group-items">{section.items.map((item) => {
-                const active = isActive(item.href);
-                const Icon = item.icon;
-                return <Link key={item.href} href={item.href} className={`mgr-nav-item${active ? ' active' : ''}`} data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`} aria-current={active ? 'page' : undefined} title={collapsed && !mobileOpen ? tManagerUi(item.labelKey) : undefined} onClick={mobileOpen ? onMobileClose : undefined}><Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />{(!collapsed || mobileOpen) && <span className="mgr-nav-label">{tManagerUi(item.labelKey)}</span>}</Link>;
-              })}</div>
-            </section>;
-          })}
+          {filteredSections.length === 0 ? (
+            <div className="mgr-nav-search-empty" role="status" data-testid="manager-nav-search-empty">
+              <Search size={24} className="mgr-nav-search-empty-icon" aria-hidden="true" />
+              <p className="mgr-nav-search-empty-title">{tManagerUi('no_matching_modules') ?? 'No matching modules'}</p>
+              <p className="mgr-nav-search-empty-sub">
+                {tManagerUi('no_results_for') ?? 'No results for'} &ldquo;{searchQuery}&rdquo;
+              </p>
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="mgr-nav-search-empty-btn"
+                data-testid="manager-nav-search-empty-clear"
+              >
+                {tManagerUi('clear_search') ?? 'Clear search'}
+              </button>
+            </div>
+          ) : (
+            filteredSections.map((section) => {
+              const expanded = isSearching
+                ? true
+                : (collapsed && !mobileOpen)
+                  ? true
+                  : section.key === 'primary' || expandedGroups.includes(section.key);
+
+              if (section.key === 'primary') {
+                return (
+                  <div key={section.key} className="mgr-nav-section">
+                    {section.items.map((item) => {
+                      const active = isActive(item.href);
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className={`mgr-nav-item${active ? ' active' : ''}`}
+                          data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`}
+                          aria-current={active ? 'page' : undefined}
+                          title={collapsed && !mobileOpen ? tManagerUi(item.labelKey) : undefined}
+                          onClick={handleLinkClick}
+                        >
+                          <Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />
+                          {(!collapsed || mobileOpen) && (
+                            <span className="mgr-nav-label">{tManagerUi(item.labelKey)}</span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                );
+              }
+
+              return (
+                <section key={section.key} className="mgr-nav-section">
+                  {(!collapsed || mobileOpen) && (
+                    <button
+                      type="button"
+                      className="mgr-nav-group-label"
+                      aria-expanded={expanded}
+                      aria-controls={`manager-nav-group-${section.key}`}
+                      data-testid={`manager-nav-group-toggle-${section.key}`}
+                      onClick={() => toggleGroup(section.key)}
+                    >
+                      <span>{tManagerUi(section.labelKey!)}</span>
+                      <ChevronDown
+                        size={14}
+                        aria-hidden="true"
+                        className={`mgr-nav-group-chevron${expanded ? ' is-expanded' : ''}`}
+                      />
+                    </button>
+                  )}
+                  <div
+                    id={`manager-nav-group-${section.key}`}
+                    hidden={!expanded}
+                    className={`mgr-nav-group-items${!expanded ? ' mgr-nav-group-items-collapsed' : ''}`}
+                  >
+                    {section.items.map((item) => {
+                      const active = isActive(item.href);
+                      const Icon = item.icon;
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className={`mgr-nav-item${active ? ' active' : ''}`}
+                          data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`}
+                          aria-current={active ? 'page' : undefined}
+                          title={collapsed && !mobileOpen ? tManagerUi(item.labelKey) : undefined}
+                          onClick={handleLinkClick}
+                        >
+                          <Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />
+                          {(!collapsed || mobileOpen) && (
+                            <span className="mgr-nav-label">{tManagerUi(item.labelKey)}</span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            })
+          )}
         </nav>
 
         {(!collapsed || mobileOpen) && (

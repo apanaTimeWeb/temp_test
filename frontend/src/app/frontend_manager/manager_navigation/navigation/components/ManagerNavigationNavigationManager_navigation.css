@@ -591,12 +591,88 @@
     width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px;
     border: 0; background: transparent; text-align: left; cursor: pointer;
     font: inherit; font-size: 10px; font-weight: 700; color: theme(--color-primary);
-    text-transform: uppercase; letter-spacing: 0.1em; padding: 16px 14px 8px;
+    text-transform: uppercase; letter-spacing: 0.1em; padding: 12px 14px 6px;
+    border-radius: 6px; transition: background-color theme(--animate-duration-fast), color theme(--animate-duration-fast);
   }
+  .mgr-nav-group-label:hover { background-color: theme(--color-surface-hover); color: theme(--color-text-primary); }
   .mgr-nav-group-label:focus-visible { outline: 2px solid theme(--color-focus-ring); outline-offset: -2px; border-radius: 6px; }
   .mgr-nav-group-chevron { flex-shrink: 0; transition: transform theme(--animate-duration-fast); }
   .mgr-nav-group-chevron.is-expanded { transform: rotate(180deg); }
   .mgr-nav-group-items { display: flex; flex-direction: column; }
+  .mgr-nav-group-items[hidden],
+  .mgr-nav-group-items-collapsed { display: none !important; }
+
+  /* ═══════════════ SIDEBAR SEARCH ═══════════════ */
+
+  .mgr-sidebar-search {
+    padding: 10px 12px; border-bottom: 1px solid theme(--color-border);
+    flex-shrink: 0;
+  }
+  .mgr-sidebar-search-wrap {
+    position: relative; display: flex; align-items: center; width: 100%;
+  }
+  .mgr-sidebar-search-icon {
+    position: absolute; left: 10px; color: theme(--color-text-secondary);
+    pointer-events: none; flex-shrink: 0;
+  }
+  .mgr-sidebar-search-input {
+    width: 100%; height: 34px; padding: 6px 28px 6px 32px;
+    font-size: 13px; line-height: 1.4;
+    background-color: theme(--color-input); color: theme(--color-text-primary);
+    border: 1px solid theme(--color-border); border-radius: 8px; outline: none;
+    transition: border-color theme(--animate-duration-fast), box-shadow theme(--animate-duration-fast);
+  }
+  .mgr-sidebar-search-input:focus {
+    border-color: theme(--color-border-focus);
+    box-shadow: 0 0 0 2px color-mix(in srgb, theme(--color-primary) 15%, transparent);
+  }
+  .mgr-sidebar-search-input::placeholder {
+    color: theme(--color-text-disabled); font-size: 12px;
+  }
+  .mgr-sidebar-search-clear {
+    position: absolute; right: 6px; display: inline-flex; align-items: center;
+    justify-content: center; padding: 4px; background: transparent; border: 0;
+    color: theme(--color-text-secondary); cursor: pointer; border-radius: 4px;
+    transition: color theme(--animate-duration-fast), background-color theme(--animate-duration-fast);
+  }
+  .mgr-sidebar-search-clear:hover {
+    color: theme(--color-text-primary); background-color: theme(--color-surface-hover);
+  }
+  .mgr-sidebar-search-collapsed {
+    padding: 10px 0; display: flex; justify-content: center;
+    border-bottom: 1px solid theme(--color-border); flex-shrink: 0;
+  }
+  .mgr-sidebar-search-collapsed-btn {
+    width: 36px; height: 36px; display: inline-flex; align-items: center;
+    justify-content: center; background: transparent; border: 1px solid transparent;
+    border-radius: 8px; color: theme(--color-text-secondary); cursor: pointer;
+    transition: background-color theme(--animate-duration-fast), color theme(--animate-duration-fast);
+  }
+  .mgr-sidebar-search-collapsed-btn:hover {
+    background-color: theme(--color-primary-subtle); color: theme(--color-primary);
+  }
+  .mgr-nav-search-empty {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 28px 12px; text-align: center; gap: 6px;
+  }
+  .mgr-nav-search-empty-icon {
+    color: theme(--color-text-secondary); opacity: 0.6; margin-bottom: 4px;
+  }
+  .mgr-nav-search-empty-title {
+    font-size: 13px; font-weight: 600; color: theme(--color-text-primary); margin: 0;
+  }
+  .mgr-nav-search-empty-sub {
+    font-size: 11px; color: theme(--color-text-secondary); margin: 0; word-break: break-word;
+  }
+  .mgr-nav-search-empty-btn {
+    margin-top: 8px; font-size: 12px; padding: 4px 10px; border-radius: 6px;
+    background: transparent; border: 1px solid theme(--color-border);
+    color: theme(--color-primary); cursor: pointer;
+    transition: background-color theme(--animate-duration-fast), border-color theme(--animate-duration-fast);
+  }
+  .mgr-nav-search-empty-btn:hover {
+    background-color: theme(--color-primary-subtle); border-color: theme(--color-primary);
+  }
 
 
   /* ═══════════════ AVATAR ═══════════════ */

@@ -10829,7 +10829,11 @@
         "greeting_good_morning": "सुप्रभात",
         "greeting_good_afternoon": "नमस्कार",
         "greeting_good_evening": "शुभ संध्या",
-        "greeting_good_night": "शुभ रात्रि"
+        "greeting_good_night": "शुभ रात्रि",
+        "search_navigation": "मॉड्यूल खोजें...",
+        "clear_search": "खोज साफ़ करें",
+        "no_matching_modules": "कोई मिलान मॉड्यूल नहीं",
+        "no_results_for": "के लिए कोई परिणाम नहीं"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",

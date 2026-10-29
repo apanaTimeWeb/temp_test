@@ -81,7 +81,11 @@
         "greeting_good_morning": "Good Morning",
         "greeting_good_afternoon": "Good Afternoon",
         "greeting_good_evening": "Good Evening",
-        "greeting_good_night": "Good Night"
+        "greeting_good_night": "Good Night",
+        "search_navigation": "Search modules...",
+        "clear_search": "Clear search",
+        "no_matching_modules": "No matching modules",
+        "no_results_for": "No results for"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",
