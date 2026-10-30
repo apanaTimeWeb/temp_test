@@ -72,7 +72,7 @@ globals.css :root (light values) + .dark (dark values)
 | `--info-text` | Status colors | `#1E40AF` | `#60A5FA` |
 | `--layout-content-padding` | Layout | `24px` | `24px` |
 | `--layout-header-height` | Layout | `64px` | `64px` |
-| `--layout-sidebar-width` | Layout | `240px` | `240px` |
+| `--layout-sidebar-width` | Layout | `260px` | `260px` |
 | `--layout-sidebar-width-collapsed` | Layout | `60px` | `60px` |
 | `--modal-width` | Overlays | `480px` | `480px` |
 | `--overlay-backdrop` | Overlays | `rgba(0,0,0,.6)` | `rgba(0,0,0,.6)` |
