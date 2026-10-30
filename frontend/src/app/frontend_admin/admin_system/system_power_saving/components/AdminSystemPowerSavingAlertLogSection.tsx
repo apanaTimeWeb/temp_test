@@ -1,4 +1,5 @@
 // RESPONSIBILITY: AdminSystemPowerSavingAlertLogSection component owned by admin_system; responsibility folder: admin_system_power_saving_page_sections.
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import Card from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCard';
 import CardHeader from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCardHeader';
@@ -7,9 +8,17 @@ import CardDescription from '@/app/frontend_admin/components/ui/admin-primitives
 import CardContent from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCardContent';
 import { AdminSystemBadge } from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveBadge';
 import { ADMIN_SYSTEM_POWER_SAVING_ALERT_FIXTURES as ALERT_LOG } from '@/app/frontend_admin/admin_system/system_power_saving/mocks/AdminSystemPowerSavingFixtures';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 export default function AdminSystemPowerSavingAlertLogSection() {
   const t = useTranslations('ADMIN_SYSTEM_POWER_SAVING');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const paginatedLog = useMemo(
+    () => ALERT_LOG.slice(page * pageSize, (page + 1) * pageSize),
+    [page, pageSize]
+  );
+
   return (
     <Card>
       <CardHeader><CardTitle>{t('ALERT_LOG')}</CardTitle><CardDescription>{t('ALERT_LOG_DESCRIPTION')}</CardDescription></CardHeader>
@@ -25,10 +34,40 @@ export default function AdminSystemPowerSavingAlertLogSection() {
           </article>)}
         </div>
         <div className="hidden overflow-x-auto md:block">
-          <table className="w-full min-w-max text-sm">
-            <thead><tr className="border-b border-border text-xs uppercase tracking-wide text-text-secondary"><th scope="col" className="sticky left-0 z-10 bg-surface-highlight py-3 pr-4 text-left">{t('DATE')}</th><th scope="col" className="py-3 pr-4 text-left">{t('SHIFT')}</th><th scope="col" className="py-3 pr-4 text-left">{t('ZONE')}</th><th scope="col" className="py-3 pr-4 text-left">{t('THRESHOLD_BREACHED')}</th><th scope="col" className="py-3 text-left">{t('ACTION_TAKEN')}</th></tr></thead>
-            <tbody className="divide-y divide-border">{ALERT_LOG.map((log) => <tr key={`${log.date}-${log.zone}-${log.shift}`} className="group hover:bg-surface-hover motion-safe:transition-colors motion-safe:duration-base"><td className="sticky left-0 z-[1] bg-card py-3 pr-4 text-text-secondary group-hover:bg-surface-hover">{log.date}</td><td className="py-3 pr-4 text-text-primary">{log.shift}</td><td className="py-3 pr-4 text-text-primary">{log.zone}</td><td className="py-3 pr-4"><AdminSystemBadge variant="warning">{t('LESS_THAN')} {log.threshold}</AdminSystemBadge></td><td className="py-3 text-text-secondary">{log.action}</td></tr>)}</tbody>
+          <table className="w-full min-w-max text-sm text-left">
+            <thead>
+              <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                <th scope="col" className="sticky left-0 z-10 bg-surface-highlight py-3 px-4 text-left">{t('DATE')}</th>
+                <th scope="col" className="py-3 px-4 text-left">{t('SHIFT')}</th>
+                <th scope="col" className="py-3 px-4 text-left">{t('ZONE')}</th>
+                <th scope="col" className="py-3 px-4 text-left">{t('THRESHOLD_BREACHED')}</th>
+                <th scope="col" className="py-3 px-4 text-left">{t('ACTION_TAKEN')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedLog.map((log) => (
+                <tr key={`${log.date}-${log.zone}-${log.shift}`} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                  <td className="sticky left-0 z-[1] bg-inherit py-3 px-4 text-text-secondary">{log.date}</td>
+                  <td className="py-3 px-4 text-text-primary">{log.shift}</td>
+                  <td className="py-3 px-4 text-text-primary">{log.zone}</td>
+                  <td className="py-3 px-4"><AdminSystemBadge variant="warning">{t('LESS_THAN')} {log.threshold}</AdminSystemBadge></td>
+                  <td className="py-3 px-4 text-text-secondary">{log.action}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
+          {ALERT_LOG.length > 0 && (
+            <AdminTablePagination
+              page={page}
+              pageSize={pageSize}
+              totalCount={ALERT_LOG.length}
+              onPageChange={setPage}
+              onPageSizeChange={(newSize) => {
+                setPageSize(newSize);
+                setPage(0);
+              }}
+            />
+          )}
         </div>
       </CardContent>
     </Card>

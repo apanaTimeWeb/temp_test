@@ -19,9 +19,9 @@ export default function AdminStaffRolesPermissionsMatrixTable({ modules, demoMod
 
   return (
     <div className="overflow-x-auto rounded-lg border border-border bg-card">
-      <table className="w-full">
+      <table className="w-full text-left">
         <thead>
-          <tr className="bg-surface-highlight">
+          <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
             <th scope="col" className="p-3 text-left text-text-secondary">{t('COLUMN_PERMISSION_ACTION')}</th>
             {ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.map((role) => (
               <th key={role} scope="col" className="p-3 text-left text-text-secondary">{roleLabels[role]}</th>
@@ -31,14 +31,14 @@ export default function AdminStaffRolesPermissionsMatrixTable({ modules, demoMod
         <tbody>
           {modules.map((module, moduleIndex) => (
             <Fragment key={module.module}>
-              <tr>
-                <th scope="rowgroup" colSpan={ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.length + 1} className="border-t border-border bg-surface-highlight p-3 text-left text-text-primary">
+              <tr className="h-12 border-t border-border bg-surface-highlight">
+                <th scope="rowgroup" colSpan={ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.length + 1} className="p-3 text-left font-semibold text-text-primary">
                   <Shield size={18} strokeWidth={2} className="mr-2 inline text-primary" />
                   {getModuleLabel(module.module)}
                 </th>
               </tr>
               {module.actions.map((action, actionIndex) => (
-                <tr key={action.key} className="border-t border-border">
+                <tr key={action.key} className="h-12 border-t border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
                   <th scope="row" className="p-3 text-left font-normal text-text-primary">{action.label}</th>
                   {ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.map((role) => {
                     const entry = resolveAdminStaffRolesPermissionsRoleEntry(action.roles, role);

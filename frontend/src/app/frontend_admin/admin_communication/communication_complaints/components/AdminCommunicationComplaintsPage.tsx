@@ -22,6 +22,7 @@ import AdminCommunicationEmptyState from '@/app/frontend_admin/components/ui/adm
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_COMMUNICATION_COMPLAINT_API_FIXTURE } from '@/app/frontend_admin/admin_communication/communication_complaints/mocks/AdminCommunicationComplaintsMSWHandlers';
 import type { CStatus, Complaint } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 
 const TABS: (CStatus | 'All')[] = ['All', ADMIN_COMMUNICATION_COMPLAINT_STATUS.OPEN, ADMIN_COMMUNICATION_COMPLAINT_STATUS.IN_PROGRESS, ADMIN_COMMUNICATION_COMPLAINT_STATUS.RESOLVED];
@@ -45,6 +46,8 @@ export function AdminCommunicationComplaintsPage() {
   const [viewItem, setViewItem]         = useState<Complaint | null>(null);
   const [resolveItem, setResolveItem]   = useState<Complaint | null>(null);
   const [resolveNote, setResolveNote]   = useState('');
+  const [page, setPage]                 = useState(0);
+  const [pageSize, setPageSize]         = useState(10);
 
   const isLoading = !isDemoMode && complaintsQuery.isPending;
   const errorMessage = !isDemoMode && complaintsQuery.isError ? t('COMPLAINT_UNKNOWN_ERROR') : null;
@@ -72,6 +75,7 @@ export function AdminCommunicationComplaintsPage() {
   };
 
   const filtered = tab === 'All' ? complaints : complaints.filter(c => c.status === tab);
+  const paginated = useMemo(() => filtered.slice(page * pageSize, (page + 1) * pageSize), [filtered, page, pageSize]);
 
   const handleAdd = (values: AdminCommunicationComplaintFormValues) => {
     if (!isDemoMode) { showToast(t('COMPLAINT_SUBMISSION_BLOCKED')); return; }
@@ -185,7 +189,7 @@ export function AdminCommunicationComplaintsPage() {
       {/* Filter Tabs */}
       <div className="gap-1 rounded-lg border border-border bg-input p-1 inline-flex mb-6">
         {TABS.map((status) => (
-          <button type="button" data-testid={`admin_communication-complaints-tab-${String(status).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={status} onClick={() => setTab(status)} aria-pressed={tab === status} className={`inline-flex min-h-11 items-center rounded-md px-3 py-2 text-ui font-medium text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary${tab === status ? ' bg-card text-text-primary shadow-card' : ''}`}>
+          <button type="button" data-testid={`admin_communication-complaints-tab-${String(status).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} key={status} onClick={() => { setTab(status); setPage(0); }} aria-pressed={tab === status} className={`inline-flex min-h-11 items-center rounded-md px-3 py-2 text-ui font-medium text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary${tab === status ? ' bg-card text-text-primary shadow-card' : ''}`}>
             {status === 'All' ? t('FILTER_ALL') : status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.OPEN ? t('COMPLAINT_STATUS_OPEN') : status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.IN_PROGRESS ? t('COMPLAINT_STATUS_IN_PROGRESS') : t('COMPLAINT_STATUS_RESOLVED')}
           </button>
         ))}
@@ -211,23 +215,31 @@ export function AdminCommunicationComplaintsPage() {
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-body">
+            <table className="w-full border-collapse text-body text-left">
               <thead>
-                <tr>
-                  <th>{t('TABLE_NUMBER')}</th><th>{t('TABLE_TITLE')}</th><th>{t('TABLE_STUDENT')}</th><th>{t('TABLE_DESCRIPTION')}</th>
-                  <th>{t('TABLE_STATUS')}</th><th>{t('TABLE_DATE')}</th><th>{t('TABLE_RESOLVED_BY')}</th><th>{t('TABLE_RESOLVED_DATE')}</th><th>{t('TABLE_ACTIONS')}</th>
+                <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                  <th className="py-3 px-4 text-left">{t('TABLE_NUMBER')}</th>
+                  <th className="py-3 px-4 text-left">{t('TABLE_TITLE')}</th>
+                  <th className="py-3 px-4 text-left">{t('TABLE_STUDENT')}</th>
+                  <th className="py-3 px-4 text-left">{t('TABLE_DESCRIPTION')}</th>
+                  <th className="py-3 px-4 text-left">{t('TABLE_STATUS')}</th>
+                  <th className="py-3 px-4 text-left">{t('TABLE_DATE')}</th>
+                  <th className="py-3 px-4 text-left">{t('TABLE_RESOLVED_BY')}</th>
+                  <th className="py-3 px-4 text-left">{t('TABLE_RESOLVED_DATE')}</th>
+                  <th className="py-3 px-4 text-right">{t('TABLE_ACTIONS')}</th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((c, i) => {
+                {paginated.map((c, i) => {
                   const isExpanded = expandedDesc.includes(c.id);
                   const isLong = c.description.length > 60;
+                  const globalIndex = page * pageSize + i;
                   return (
-                    <tr key={c.id}>
-                      <td className="font-mono text-ui text-text-secondary">{i + 1}</td>
-                      <td className="font-semibold">{c.title}</td>
-                      <td className="text-text-secondary">{c.student}</td>
-                      <td>
+                    <tr key={c.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                      <td className="py-3 px-4 font-mono text-ui text-text-secondary">{globalIndex + 1}</td>
+                      <td className="py-3 px-4 font-semibold">{c.title}</td>
+                      <td className="py-3 px-4 text-text-secondary">{c.student}</td>
+                      <td className="py-3 px-4">
                         <span id={`admin-communication-complaint-description-${c.id}`}>{isLong && !isExpanded ? c.description.slice(0, 60) + '…' : c.description}</span>
                         {isLong && (
                           <button type="button" aria-expanded={isExpanded} aria-controls={`admin-communication-complaint-description-${c.id}`} data-testid="admin_communication-page-control-019" onClick={() => toggleDesc(c.id)} className="inline-flex min-h-11 items-center rounded-md px-1.5 text-ui text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ml-1">
@@ -235,12 +247,12 @@ export function AdminCommunicationComplaintsPage() {
                           </button>
                         )}
                       </td>
-                      <td>{statusBadge(c.status)}</td>
-                      <td className="text-text-secondary">{formatComplaintDate(c.date)}</td>
-                      <td className="text-text-secondary">{c.resolvedBy}</td>
-                      <td className="text-text-secondary">{formatComplaintDate(c.resolvedDate)}</td>
-                      <td>
-                        <div className="flex items-center gap-1">
+                      <td className="py-3 px-4">{statusBadge(c.status)}</td>
+                      <td className="py-3 px-4 text-text-secondary">{formatComplaintDate(c.date)}</td>
+                      <td className="py-3 px-4 text-text-secondary">{c.resolvedBy}</td>
+                      <td className="py-3 px-4 text-text-secondary">{formatComplaintDate(c.resolvedDate)}</td>
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1">
                           <button data-testid={`admin_communication-complaint-view-${c.id}`} onClick={() => setViewItem(c)} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base" title={t('COMPLAINT_VIEW_ACTION')} aria-label={t('COMPLAINT_VIEW_ARIA', { title: c.title })}>
                             <Eye size={18}  strokeWidth={2}/>
                           </button>
@@ -261,6 +273,18 @@ export function AdminCommunicationComplaintsPage() {
                 })}
               </tbody>
             </table>
+            {filtered.length > 0 && (
+              <AdminTablePagination
+                page={page}
+                pageSize={pageSize}
+                totalCount={filtered.length}
+                onPageChange={setPage}
+                onPageSizeChange={(newSize) => {
+                  setPageSize(newSize);
+                  setPage(0);
+                }}
+              />
+            )}
           </div>
         )}
       </div>

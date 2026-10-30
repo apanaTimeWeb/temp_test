@@ -15,6 +15,7 @@ import { AdminFinanceThermalPrint } from '@/app/frontend_admin/admin_finance/fin
 import { ADMIN_FINANCE_RECEIPTS_ROUTES } from '@/app/frontend_admin/admin_finance/finance_receipts/config/admin_finance_receipts.url_config';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import AdminFinanceEmptyState from '@/app/frontend_admin/admin_finance/finance_receipts/components/AdminFinanceReceiptsEmptyState';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { ADMIN_FINANCE_DEMO_RECEIPTS } from '@/app/frontend_admin/admin_finance/finance_receipts/mocks/scenarios/admin_finance_receipts.scenarios';
 import type { AdminFinanceDemoReceipt } from '@/app/frontend_admin/admin_finance/finance_receipts/types/AdminFinanceReceiptsTypes';
 import type { FilterMode } from '@/app/frontend_admin/admin_finance/finance_receipts/types/AdminFinanceReceiptsTypes';
@@ -33,6 +34,8 @@ export function AdminFinanceReceiptsPage() {
   useEffect(() => { const timer = window.setTimeout(() => setSearch(searchDraft), 300); return () => window.clearTimeout(timer); }, [searchDraft]);
 
   const [modeFilter, setModeFilter]   = useState<FilterMode>('all');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const receiptRecords = isDemoMode ? ADMIN_FINANCE_DEMO_RECEIPTS : [];
   const filtered = receiptRecords.filter(r => {
@@ -42,6 +45,11 @@ export function AdminFinanceReceiptsPage() {
     const mm = modeFilter === 'all' || r.paymentMode.toLowerCase() === modeFilter;
     return ms && mm;
   });
+
+  const totalRows = filtered.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
 
   const totalCollected = receiptRecords.reduce((s, r) => s + r.amount, 0);
 
@@ -125,7 +133,7 @@ export function AdminFinanceReceiptsPage() {
       <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-surface-highlight text-caption text-text-secondary">
+            <tr className="bg-surface-highlight uppercase text-xs text-text-secondary font-semibold h-12">
               <th className="text-left py-3 px-4">{t('TH_RECEIPT_NO')}</th>
               <th className="text-left py-3 px-4">{t('TH_STUDENT')}</th>
               <th className="text-left py-3 px-4">{t('PLAN')}</th>
@@ -138,8 +146,8 @@ export function AdminFinanceReceiptsPage() {
           <tbody>
             {filtered.length === 0 ? (
               <tr><td colSpan={7}><AdminFinanceEmptyState title={t('EMPTY')} description={t('EMPTY_DESCRIPTION')} /></td></tr>
-            ) : filtered.map(r => (
-              <tr key={r.id} className="motion-safe:transition-colors hover:bg-primary-subtle border-b border-border text-text-primary">
+            ) : paginated.map(r => (
+              <tr key={r.id} className="border-b border-border hover:bg-surface-hover even:bg-surface-zebra/30 h-12 text-text-primary motion-safe:transition-colors">
                 <td className="py-3 px-4 font-mono text-caption text-text-secondary"><span className="font-mono text-caption text-text-secondary">{r.receiptNumber}</span></td>
                 <td className="py-3 px-4">
                   <p className="text-body font-semibold text-text-primary">{r.studentName}</p>
@@ -168,6 +176,16 @@ export function AdminFinanceReceiptsPage() {
             ))}
           </tbody>
         </table>
+        {filtered.length > 0 && (
+          <AdminTablePagination
+            page={effectivePage}
+            pageSize={pageSize}
+            totalRows={totalRows}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+            id="rows-per-page-finance-receipts"
+          />
+        )}
       </div>
     </div>
   );

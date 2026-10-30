@@ -4,9 +4,10 @@
 // RESPONSIBILITY: Entry page for the admin_finance module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 import { toast } from 'sonner';
 import { formatAdminFinanceCurrency, majorToMinor, minorToMajor } from '@/app/frontend_admin/admin_finance/finance_late_fees/utils/AdminFinanceLateFeesFormat';
@@ -23,11 +24,15 @@ export function AdminFinanceLateFeesPage() {
   const router = useRouter();
   const [config, setConfig] = useState<AdminFinanceLateFeeConfig | null>(null);
   const [overdue, setOverdue] = useState<AdminFinanceDemoOverdueStudent[]>([]);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [graceDays, setGraceDays] = useState('');
   const [penaltyRate, setPenaltyRate] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  const paginatedOverdue = useMemo(() => overdue.slice(page * pageSize, (page + 1) * pageSize), [overdue, page, pageSize]);
 
   useEffect(() => {
     setConfig(isFrontendDemoModeEnabled() ? ADMIN_FINANCE_DEMO_LATE_FEE_CONFIG : null);
@@ -151,9 +156,9 @@ export function AdminFinanceLateFeesPage() {
           <AlertTriangle size={18} className="text-warning-text"  strokeWidth={2}/>
           <span className="text-body text-text-primary font-semibold">{t('OVERDUE_STUDENTS')}</span>
         </div>
-        <table className="w-full">
+        <table className="w-full text-left">
           <thead>
-            <tr className="bg-surface-highlight text-caption text-text-secondary">
+            <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
               <th className="text-left py-3 px-4">{t('STUDENT')}</th>
               <th className="text-left py-3 px-4">{t('DUE_DATE')}</th>
               <th className="text-left py-3 px-4">{t('DAYS_OVERDUE')}</th>
@@ -165,7 +170,7 @@ export function AdminFinanceLateFeesPage() {
           <tbody>
             {isLoading ? (
               Array.from({ length: 3 }).map((_, i) => (
-                <tr key={`skeleton-${i + 1}`} className="border-b border-border text-text-primary">
+                <tr key={`skeleton-${i + 1}`} className="h-12 border-b border-border text-text-primary">
                   {Array.from({ length: 6 }).map((_, j) => (
                     <td key={`skeleton-cell-${j + 1}`} className="py-3 px-4">
                       <div className="motion-safe:animate-pulse rounded-sm bg-skeleton-base h-4 w-16" />
@@ -183,8 +188,8 @@ export function AdminFinanceLateFeesPage() {
                 </td>
               </tr>
             ) : (
-              overdue.map((s) => (
-                <tr key={s.studentId} className="motion-safe:transition-colors hover:bg-primary-subtle border-b border-border text-text-primary">
+              paginatedOverdue.map((s) => (
+                <tr key={s.studentId} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
                   <td className="py-3 px-4">
                     <div className="text-body font-semibold text-text-primary">{s.studentName}</div>
                     <div className="text-caption text-text-secondary">{s.smartId}</div>
@@ -216,6 +221,18 @@ export function AdminFinanceLateFeesPage() {
             )}
           </tbody>
         </table>
+        {overdue.length > 0 && (
+          <AdminTablePagination
+            page={page}
+            pageSize={pageSize}
+            totalCount={overdue.length}
+            onPageChange={setPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setPage(0);
+            }}
+          />
+        )}
       </div>
     </div>
   );

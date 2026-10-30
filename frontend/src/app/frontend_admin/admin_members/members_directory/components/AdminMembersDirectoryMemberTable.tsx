@@ -24,7 +24,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
   const locale = useLocale();
   const [page, setPage] = useAdminApplicationInfrastructureUrlQueryState<number>('page', 0);
   const [openActionsFor, setOpenActionsFor] = useState<string | null>(null);
-  const pageSize = 10;
+  const [pageSize, setPageSize] = useState(10);
   const filteredMembers = useMemo(
     () => members.filter((member) => !filterStatus || member.status === filterStatus),
     [filterStatus, members],
@@ -43,7 +43,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
     <div>
       <div className="hidden overflow-x-auto md:block">
         <table className="w-full text-left text-sm">
-          <thead className="bg-surface-highlight text-text-secondary">
+          <thead className="bg-surface-highlight uppercase text-xs text-text-secondary font-semibold">
             <tr>
               <th scope="col" className="px-4 py-3">{t('TABLE_MEMBER')}</th>
               <th scope="col" className="px-4 py-3">{t('TABLE_CONTACT')}</th>
@@ -55,7 +55,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
           </thead>
           <tbody>
             {visibleMembers.map((member) => (
-              <tr key={member.id} className="border-b border-border hover:bg-surface-hover">
+              <tr key={member.id} className="border-b border-border hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
                 <th scope="row" className="px-4 py-3 font-medium text-text-primary">
                   <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
                   <span className="block text-xs font-normal text-text-secondary">{displayValue(member.id)}</span>
@@ -112,7 +112,52 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
           </article>
         ))}
       </div>
-      {pageCount > 1 && <div className="flex min-h-11 items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-text-secondary"><span>{t('PAGINATION_SHOWING_RANGE', { start: currentPage * pageSize + 1, end: Math.min((currentPage + 1) * pageSize, filteredMembers.length), total: filteredMembers.length })}</span><div className="flex gap-2"><button type="button" className="min-h-11 rounded-md border border-border px-3 disabled:text-text-disabled" disabled={currentPage === 0} onClick={() => setPage((current) => Math.max(0, current - 1))}>{t('PAGINATION_PREVIOUS')}</button><button type="button" className="min-h-11 rounded-md border border-border px-3 disabled:text-text-disabled" disabled={currentPage >= pageCount - 1} onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}>{t('PAGINATION_NEXT')}</button></div></div>}
+      {filteredMembers.length > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-text-secondary">
+          <span>{t('PAGINATION_SHOWING_RANGE', { start: currentPage * pageSize + 1, end: Math.min((currentPage + 1) * pageSize, filteredMembers.length), total: filteredMembers.length })}</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="rows-per-page-members-directory" className="text-xs text-text-secondary whitespace-nowrap">
+                Rows per page:
+              </label>
+              <select
+                id="rows-per-page-members-directory"
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                  setPage(0);
+                }}
+                className="rounded border border-border bg-input px-2 py-1 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="min-h-9 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-text-disabled"
+                disabled={currentPage === 0}
+                onClick={() => setPage((current) => Math.max(0, current - 1))}
+              >
+                {t('PAGINATION_PREVIOUS')}
+              </button>
+              <span className="text-xs text-text-secondary">
+                Page {currentPage + 1} of {pageCount}
+              </span>
+              <button
+                type="button"
+                className="min-h-9 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-text-disabled"
+                disabled={currentPage >= pageCount - 1}
+                onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
+              >
+                {t('PAGINATION_NEXT')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

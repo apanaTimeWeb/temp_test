@@ -15,6 +15,7 @@ import { openAdminFinanceWhatsApp } from '@/app/frontend_admin/admin_finance/fin
 import { AdminFinanceThermalPrint } from '@/app/frontend_admin/admin_finance/finance_invoices/utils/AdminFinanceInvoicesThermalPrint';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import AdminFinanceEmptyState from '@/app/frontend_admin/admin_finance/finance_invoices/components/AdminFinanceInvoicesEmptyState';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { ADMIN_FINANCE_INVOICES_ROUTES } from '@/app/frontend_admin/admin_finance/finance_invoices/config/admin_finance_invoices.url_config';
 import { ADMIN_FINANCE_DEMO_INVOICES } from '@/app/frontend_admin/admin_finance/finance_invoices/mocks/scenarios/admin_finance_invoices.scenarios';
 import type { AdminFinanceDemoInvoice } from '@/app/frontend_admin/admin_finance/finance_invoices/types/AdminFinanceInvoicesTypes';
@@ -34,6 +35,8 @@ export function AdminFinanceInvoicesPage() {
   useEffect(() => { const timer = window.setTimeout(() => setSearch(searchDraft), 300); return () => window.clearTimeout(timer); }, [searchDraft, setSearch]);
 
   const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<FilterStatus>('statusFilter', 'all', { validValues: ['all', 'paid', 'pending', 'overdue'] });
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const invoiceRecords = isDemoMode ? ADMIN_FINANCE_DEMO_INVOICES : [];
   const filtered = invoiceRecords.filter(inv => {
@@ -43,6 +46,11 @@ export function AdminFinanceInvoicesPage() {
     const mst = statusFilter === 'all' || inv.paymentStatus === statusFilter;
     return ms && mst;
   });
+
+  const totalRows = filtered.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
 
   function handleWhatsApp(inv: AdminFinanceDemoInvoice) {
     const W = 42;
@@ -126,7 +134,7 @@ export function AdminFinanceInvoicesPage() {
       <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-surface-highlight text-caption text-text-secondary">
+            <tr className="bg-surface-highlight uppercase text-xs text-text-secondary font-semibold h-12">
               <th className="text-left py-3 px-4">{t('TH_INVOICE_NO')}</th>
               <th className="text-left py-3 px-4">{t('TH_STUDENT')}</th>
               <th className="text-left py-3 px-4">{t('TH_DATE')}</th>
@@ -139,8 +147,8 @@ export function AdminFinanceInvoicesPage() {
           <tbody>
             {filtered.length === 0 ? (
               <tr><td colSpan={7}><AdminFinanceEmptyState title={t('EMPTY')} description={t('EMPTY_DESCRIPTION')} /></td></tr>
-            ) : filtered.map(inv => (
-              <tr key={inv.id} className="motion-safe:transition-colors hover:bg-primary-subtle border-b border-border text-text-primary">
+            ) : paginated.map(inv => (
+              <tr key={inv.id} className="border-b border-border hover:bg-surface-hover even:bg-surface-zebra/30 h-12 text-text-primary motion-safe:transition-colors">
                 <td className="py-3 px-4 font-mono text-caption text-text-secondary"><span className="font-mono text-caption text-text-secondary">{inv.invoiceNumber}</span></td>
                 <td className="py-3 px-4">
                   <p className="text-body font-semibold text-text-primary">{inv.studentName}</p>
@@ -173,6 +181,16 @@ export function AdminFinanceInvoicesPage() {
             ))}
           </tbody>
         </table>
+        {filtered.length > 0 && (
+          <AdminTablePagination
+            page={effectivePage}
+            pageSize={pageSize}
+            totalRows={totalRows}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+            id="rows-per-page-finance-invoices"
+          />
+        )}
       </div>
     </div>
   );

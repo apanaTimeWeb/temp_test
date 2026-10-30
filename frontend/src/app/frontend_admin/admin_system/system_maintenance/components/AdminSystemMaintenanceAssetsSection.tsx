@@ -1,4 +1,5 @@
 // RESPONSIBILITY: AdminSystemMaintenanceAssetsSection component owned by admin_system; responsibility folder: admin_system_maintenance_page_sections.
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import Card from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCard';
 import CardHeader from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCardHeader';
@@ -10,10 +11,17 @@ import { Button } from '@/app/frontend_admin/components/ui/admin-primitives/Admi
 import { Package } from 'lucide-react';
 import type { AdminSystemMaintenanceAssetFixture } from '@/app/frontend_admin/admin_system/system_maintenance/mocks/AdminSystemMaintenanceFixtures';
 import type { AdminSystemMaintenanceAssetsSectionProps } from '@/app/frontend_admin/admin_system/system_maintenance/types/AdminSystemMaintenanceComponentTypes';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 
 export default function AdminSystemMaintenanceAssetsSection({ assets }: AdminSystemMaintenanceAssetsSectionProps) {
   const t = useTranslations('ADMIN_SYSTEM_MAINTENANCE');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const paginatedAssets = useMemo(
+    () => assets.slice(page * pageSize, (page + 1) * pageSize),
+    [assets, page, pageSize]
+  );
   const statusLabel = (status: AdminSystemMaintenanceAssetFixture['status']) => status === 'OK' ? 'STATUS_OK' : status === 'Due Soon' ? 'STATUS_DUE_SOON' : 'STATUS_OVERDUE';
   const statusVariant = (status: AdminSystemMaintenanceAssetFixture['status']) => status === 'OK' ? 'success' : status === 'Due Soon' ? 'warning' : 'danger';
   return (
@@ -36,31 +44,48 @@ export default function AdminSystemMaintenanceAssetsSection({ assets }: AdminSys
           </article>)}
         </div>
         <div className="hidden overflow-x-auto md:block">
-          <table className="w-full min-w-max text-sm">
-            <thead><tr className="border-b border-border text-text-secondary text-xs uppercase tracking-wide">
-              <th scope="col" className="sticky left-0 z-10 bg-surface-highlight py-3 pr-4 text-left">{t('ASSET')}</th>
-              <th scope="col" className="py-3 pr-4 text-center">{t('QUANTITY')}</th>
-              <th scope="col" className="py-3 pr-4 text-left">{t('STATUS')}</th>
-              <th scope="col" className="py-3 pr-4 text-left">{t('LAST_SERVICED')}</th>
-              <th scope="col" className="py-3 pr-4 text-left">{t('NEXT_DUE')}</th>
-              <th scope="col" className="py-3 pr-4 text-left">{t('DAYS_OVERDUE')}</th>
-              <th scope="col" className="py-3 text-left">{t('ACTION')}</th>
-            </tr></thead>
+          <table className="w-full min-w-max text-sm text-left">
+            <thead>
+              <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                <th scope="col" className="sticky left-0 z-10 bg-surface-highlight py-3 px-4 text-left">{t('ASSET')}</th>
+                <th scope="col" className="py-3 px-4 text-center">{t('QUANTITY')}</th>
+                <th scope="col" className="py-3 px-4 text-left">{t('STATUS')}</th>
+                <th scope="col" className="py-3 px-4 text-left">{t('LAST_SERVICED')}</th>
+                <th scope="col" className="py-3 px-4 text-left">{t('NEXT_DUE')}</th>
+                <th scope="col" className="py-3 px-4 text-left">{t('DAYS_OVERDUE')}</th>
+                <th scope="col" className="py-3 px-4 text-left">{t('ACTION')}</th>
+              </tr>
+            </thead>
             <tbody className="divide-y divide-border">
-              {assets.map((asset) => <tr key={asset.nameKey} className="hover:bg-surface-hover motion-safe:transition-colors motion-safe:duration-fast">
-                <td className="sticky left-0 z-[1] bg-card py-3 pr-4 font-medium text-text-primary">{t(asset.nameKey)}</td>
-                <td className="py-3 pr-4 text-center text-text-secondary">{asset.qty}</td>
-                <td className="py-3 pr-4"><AdminSystemBadge variant={statusVariant(asset.status)}>{t(statusLabel(asset.status))}</AdminSystemBadge></td>
-                <td className="py-3 pr-4 text-text-secondary">{asset.lastServiced}</td><td className="py-3 pr-4 text-text-secondary">{asset.nextDue}</td>
-                <td className="py-3 pr-4">{asset.daysOverdue > 0 ? <AdminSystemBadge variant="danger">+{asset.daysOverdue}{t('DAYS_OVERDUE_SUFFIX')}</AdminSystemBadge> : <span className="text-text-secondary text-xs">{Math.abs(asset.daysOverdue)}{t('DAYS_LEFT_SUFFIX')}</span>}</td>
-                <td className="py-3"><Button id={`log-asset-service-table-${asset.nameKey}`} variant="ghost" size="sm" disabled title={t('ACTION_BLOCKED')}>{t('LOG_SERVICE_DEMO')}</Button></td>
-              </tr>)}
+              {paginatedAssets.map((asset) => (
+                <tr key={asset.nameKey} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                  <td className="sticky left-0 z-[1] bg-inherit py-3 px-4 font-medium text-text-primary">{t(asset.nameKey)}</td>
+                  <td className="py-3 px-4 text-center text-text-secondary">{asset.qty}</td>
+                  <td className="py-3 px-4"><AdminSystemBadge variant={statusVariant(asset.status)}>{t(statusLabel(asset.status))}</AdminSystemBadge></td>
+                  <td className="py-3 px-4 text-text-secondary">{asset.lastServiced}</td><td className="py-3 px-4 text-text-secondary">{asset.nextDue}</td>
+                  <td className="py-3 px-4">{asset.daysOverdue > 0 ? <AdminSystemBadge variant="danger">+{asset.daysOverdue}{t('DAYS_OVERDUE_SUFFIX')}</AdminSystemBadge> : <span className="text-text-secondary text-xs">{Math.abs(asset.daysOverdue)}{t('DAYS_LEFT_SUFFIX')}</span>}</td>
+                  <td className="py-3 px-4"><Button id={`log-asset-service-table-${asset.nameKey}`} variant="ghost" size="sm" disabled title={t('ACTION_BLOCKED')}>{t('LOG_SERVICE_DEMO')}</Button></td>
+                </tr>
+              ))}
             </tbody>
           </table>
+          {assets.length > 0 && (
+            <AdminTablePagination
+              page={page}
+              pageSize={pageSize}
+              totalCount={assets.length}
+              onPageChange={setPage}
+              onPageSizeChange={(newSize) => {
+                setPageSize(newSize);
+                setPage(0);
+              }}
+            />
+          )}
         </div>
       </CardContent>
     </Card>
   );
+}
 }
 
 

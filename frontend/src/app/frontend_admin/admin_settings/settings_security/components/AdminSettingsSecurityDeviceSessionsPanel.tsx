@@ -1,12 +1,21 @@
 'use client';
 // RESPONSIBILITY: AdminSecurityDeviceSessionsPanel component owned by admin_security; responsibility folder: admin_security_device_sessions_panel.
 
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { ADMIN_SECURITY_DEVICE_SESSION_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 /** Renders synthetic device sessions; each revocation action explicitly reports the missing live contract. */
 export default function AdminSecurityDeviceSessionsPanel() {
   const t = useTranslations('ADMIN_SECURITY');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const paginatedDevices = useMemo(
+    () => ADMIN_SECURITY_DEVICE_SESSION_FIXTURES.slice(page * pageSize, (page + 1) * pageSize),
+    [page, pageSize]
+  );
+
   return (
     <section className="admin-card p-6" aria-labelledby="admin-security-device-sessions-title">
       <h2 id="admin-security-device-sessions-title" className="text-section-title font-semibold text-text-primary">{t('DEVICE_SESSIONS_TITLE')}</h2>
@@ -25,9 +34,42 @@ export default function AdminSecurityDeviceSessionsPanel() {
         ))}
       </div>
       <div className="mt-4 hidden overflow-x-auto md:block">
-        <table className="w-full min-w-190 text-left text-sm"><thead className="bg-surface-highlight text-text-secondary"><tr><th scope="col" className="p-3">{t('COLUMN_MANAGER')}</th><th scope="col" className="p-3">{t('COLUMN_DEVICE')}</th><th scope="col" className="p-3">{t('COLUMN_LOCATION_IP')}</th><th scope="col" className="p-3">{t('COLUMN_FIRST_SEEN')}</th><th scope="col" className="p-3">{t('COLUMN_ACTION')}</th></tr></thead><tbody>
-          {ADMIN_SECURITY_DEVICE_SESSION_FIXTURES.map((device) => <tr key={device.id} className="border-b border-border last:border-b-0"><td className="p-3 text-text-primary">{t(device.managerKey)}</td><td className="p-3 text-text-primary">{t(device.deviceKey)}</td><td className="p-3 text-text-secondary">{t(device.locationKey)} ({device.ip})</td><td className="p-3 text-text-secondary">{t(device.dateKey)}</td><td className="p-3"><button type="button" data-testid={`admin_security-AdminSettingsSecurityMain-control-revoke-${device.id}`} className="admin-btn-ghost-danger min-h-11" disabled aria-describedby="admin-security-session-revoke-help" title={t('SESSION_REVOKE_BLOCKED')}>{t('REVOKE')}</button></td></tr>)}
-        </tbody></table>
+        <table className="w-full min-w-190 text-left text-sm">
+          <thead>
+            <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+              <th scope="col" className="p-3">{t('COLUMN_MANAGER')}</th>
+              <th scope="col" className="p-3">{t('COLUMN_DEVICE')}</th>
+              <th scope="col" className="p-3">{t('COLUMN_LOCATION_IP')}</th>
+              <th scope="col" className="p-3">{t('COLUMN_FIRST_SEEN')}</th>
+              <th scope="col" className="p-3">{t('COLUMN_ACTION')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedDevices.map((device) => (
+              <tr key={device.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                <td className="p-3 text-text-primary">{t(device.managerKey)}</td>
+                <td className="p-3 text-text-primary">{t(device.deviceKey)}</td>
+                <td className="p-3 text-text-secondary">{t(device.locationKey)} ({device.ip})</td>
+                <td className="p-3 text-text-secondary">{t(device.dateKey)}</td>
+                <td className="p-3">
+                  <button type="button" data-testid={`admin_security-AdminSettingsSecurityMain-control-revoke-${device.id}`} className="admin-btn-ghost-danger min-h-11" disabled aria-describedby="admin-security-session-revoke-help" title={t('SESSION_REVOKE_BLOCKED')}>{t('REVOKE')}</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {ADMIN_SECURITY_DEVICE_SESSION_FIXTURES.length > 0 && (
+          <AdminTablePagination
+            page={page}
+            pageSize={pageSize}
+            totalCount={ADMIN_SECURITY_DEVICE_SESSION_FIXTURES.length}
+            onPageChange={setPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setPage(0);
+            }}
+          />
+        )}
         <p id="admin-security-session-revoke-help" className="mt-3 text-sm text-text-secondary" role="note">{t('SESSION_REVOKE_BLOCKED')}</p>
       </div>
     </section>

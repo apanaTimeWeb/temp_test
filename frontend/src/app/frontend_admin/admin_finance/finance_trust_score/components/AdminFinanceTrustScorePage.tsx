@@ -5,13 +5,14 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 // RESPONSIBILITY: Entry page for the admin_finance module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { ShieldCheck, ShieldAlert, ShieldX, Users } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_FINANCE_DEMO_TRUST_SCORE_STUDENTS } from '@/app/frontend_admin/admin_finance/finance_trust_score/mocks/AdminFinanceTrustScoreDemoFixtures';
 import type { AdminFinanceTrustScoreStudent } from '@/app/frontend_admin/admin_finance/finance_trust_score/types/AdminFinanceTrustScoreTypes';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 const BADGE_CLASS: Record<string, string> = {
   reliable: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-success-bg text-success-text border-success-bg',
@@ -41,6 +42,8 @@ export function AdminFinanceTrustScorePage() {
   const t = useTranslations('ADMIN_FINANCE_TRUST_SCORE');
   const [levelFilter, setLevelFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('levelFilter', 'all', { validValues: ['all', 'low', 'moderate', 'reliable'] });
   const [shiftFilter, setShiftFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('shiftFilter', 'all', { validValues: ['all', 'Morning', 'Evening', 'Full Day'] });
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -50,11 +53,12 @@ export function AdminFinanceTrustScorePage() {
 
   const isDemoMode = isFrontendDemoModeEnabled();
   const visibleStudents: readonly AdminFinanceTrustScoreStudent[] = isDemoMode ? ADMIN_FINANCE_DEMO_TRUST_SCORE_STUDENTS : [];
-  const filtered = visibleStudents.filter((s) => {
+  const filtered = useMemo(() => visibleStudents.filter((s) => {
     const lm = levelFilter === 'all' || s.badge === levelFilter;
     const sm = shiftFilter === 'all' || s.shift === shiftFilter;
     return lm && sm;
-  });
+  }), [visibleStudents, levelFilter, shiftFilter]);
+  const paginated = useMemo(() => filtered.slice(page * pageSize, (page + 1) * pageSize), [filtered, page, pageSize]);
 
   const lowTrust = visibleStudents.filter((s) => s.trustScore < 40).length;
   const avg = visibleStudents.length ? Math.round(visibleStudents.reduce((a, s) => a + s.trustScore, 0) / visibleStudents.length) : 0;
@@ -96,13 +100,13 @@ export function AdminFinanceTrustScorePage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <select data-testid="admin_finance-page-control-001" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_LEVEL')} value={levelFilter} onChange={(e) => setLevelFilter(e.target.value)}>
+        <select data-testid="admin_finance-page-control-001" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_LEVEL')} value={levelFilter} onChange={(e) => { setLevelFilter(e.target.value); setPage(0); }}>
           <option value="all">{t('ALL_LEVELS')}</option>
           <option value="reliable">{t('RELIABLE')}</option>
           <option value="moderate">{t('MODERATE')}</option>
           <option value="low">{t('LOW_TRUST_LABEL')}</option>
         </select>
-        <select data-testid="admin_finance-page-control-002" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_SHIFT')} value={shiftFilter} onChange={(e) => setShiftFilter(e.target.value)}>
+        <select data-testid="admin_finance-page-control-002" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_SHIFT')} value={shiftFilter} onChange={(e) => { setShiftFilter(e.target.value); setPage(0); }}>
           <option value="all">{t('ALL_SHIFTS')}</option>
           <option value="Morning">{t('MORNING')}</option>
           <option value="Evening">{t('EVENING')}</option>
@@ -111,9 +115,9 @@ export function AdminFinanceTrustScorePage() {
       </div>
 
       <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full text-left">
           <thead>
-            <tr className="bg-surface-highlight text-caption text-text-secondary">
+            <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
               <th className="text-left py-3 px-4">{t('RANK')}</th>
               <th className="text-left py-3 px-4">{t('STUDENT')}</th>
               <th className="text-left py-3 px-4">{t('SHIFT')}</th>
@@ -127,7 +131,7 @@ export function AdminFinanceTrustScorePage() {
           <tbody>
             {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
-                <tr key={`skeleton-${i + 1}`} className="border-b border-border text-text-primary">
+                <tr key={`skeleton-${i + 1}`} className="h-12 border-b border-border text-text-primary">
                   {Array.from({ length: 8 }).map((_, j) => (
                     <td key={`skeleton-cell-${j + 1}`} className="py-3 px-4">
                       <div className="motion-safe:animate-pulse rounded-sm bg-skeleton-base h-4 w-16" />
@@ -145,10 +149,10 @@ export function AdminFinanceTrustScorePage() {
                 </td>
               </tr>
             ) : (
-              filtered.map((s) => {
+              paginated.map((s) => {
                 const Icon = BADGE_ICON[s.badge] || ShieldCheck;
                 return (
-                  <tr key={s.smartId} className="motion-safe:transition-colors hover:bg-primary-subtle border-b border-border text-text-primary">
+                  <tr key={s.smartId} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
                     <td className="py-3 px-4 font-mono text-caption text-text-secondary">#{s.rank}</td>
                     <td className="py-3 px-4">
                       <div className="text-body font-semibold text-text-primary">{s.studentName}</div>
@@ -181,6 +185,18 @@ export function AdminFinanceTrustScorePage() {
             )}
           </tbody>
         </table>
+        {filtered.length > 0 && (
+          <AdminTablePagination
+            page={page}
+            pageSize={pageSize}
+            totalCount={filtered.length}
+            onPageChange={setPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setPage(0);
+            }}
+          />
+        )}
       </div>
     </div>
   );

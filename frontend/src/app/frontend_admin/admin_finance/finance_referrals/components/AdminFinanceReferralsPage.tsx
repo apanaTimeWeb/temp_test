@@ -4,12 +4,13 @@
 // RESPONSIBILITY: Entry page for the admin_finance module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
 import { Users, Trophy, IndianRupee } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_FINANCE_DEMO_REFERRERS } from '@/app/frontend_admin/admin_finance/finance_referrals/mocks/AdminFinanceReferralsDemoFixtures';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 
 const totalReferrals = ADMIN_FINANCE_DEMO_REFERRERS.reduce((a, referrer) => a + referrer.referredNames.length, 0);
@@ -20,6 +21,13 @@ export function AdminFinanceReferralsPage() {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
   const [isLoading, setIsLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedReferrers = useMemo(
+    () => ADMIN_FINANCE_DEMO_REFERRERS.slice(page * pageSize, (page + 1) * pageSize),
+    [page, pageSize]
+  );
 
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 700);
@@ -64,9 +72,9 @@ export function AdminFinanceReferralsPage() {
       </div>
 
       <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full text-left">
           <thead>
-            <tr className="bg-surface-highlight text-caption text-text-secondary">
+            <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
               <th className="text-left py-3 px-4">{t('RANK')}</th>
               <th className="text-left py-3 px-4">{t('REFERRER')}</th>
               <th className="text-left py-3 px-4">{t('REFERRED_STUDENTS')}</th>
@@ -79,7 +87,7 @@ export function AdminFinanceReferralsPage() {
           <tbody>
             {isLoading ? (
               Array.from({ length: 4 }).map((_, i) => (
-                <tr key={`skeleton-${i + 1}`} className="border-b border-border text-text-primary">
+                <tr key={`skeleton-${i + 1}`} className="h-12 border-b border-border text-text-primary">
                   {Array.from({ length: 7 }).map((_, j) => (
                     <td key={`skeleton-cell-${j + 1}`} className="py-3 px-4">
                       <div className="motion-safe:animate-pulse rounded-sm bg-skeleton-base h-4 w-16" />
@@ -97,10 +105,12 @@ export function AdminFinanceReferralsPage() {
                 </td>
               </tr>
             ) : (
-              ADMIN_FINANCE_DEMO_REFERRERS.map((r, idx) => (
-                <tr key={r.id} className="motion-safe:transition-colors hover:bg-primary-subtle border-b border-border text-text-primary">
+              paginatedReferrers.map((r, idx) => {
+                const globalIndex = page * pageSize + idx;
+                return (
+                  <tr key={r.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
                     <td className="py-3 px-4">
-                      <span className={idx === 0 ? 'text-warning-text font-bold' : 'text-text-secondary'}>#{idx + 1}</span>
+                      <span className={globalIndex === 0 ? 'text-warning-text font-bold' : 'text-text-secondary'}>#{globalIndex + 1}</span>
                     </td>
                     <td className="py-3 px-4">
                       <div className="text-body font-semibold text-text-primary">{r.name}</div>
@@ -127,10 +137,23 @@ export function AdminFinanceReferralsPage() {
                     <td className="py-3 px-4 text-right text-body text-text-primary">{formatAdminFinanceCurrency(r.redeemed)}</td>
                     <td className="py-3 px-4 text-right font-semibold text-body text-text-primary">{formatAdminFinanceCurrency(r.balance)}</td>
                   </tr>
-              ))
+                );
+              })
             )}
           </tbody>
         </table>
+        {ADMIN_FINANCE_DEMO_REFERRERS.length > 0 && (
+          <AdminTablePagination
+            page={page}
+            pageSize={pageSize}
+            totalCount={ADMIN_FINANCE_DEMO_REFERRERS.length}
+            onPageChange={setPage}
+            onPageSizeChange={(newSize) => {
+              setPageSize(newSize);
+              setPage(0);
+            }}
+          />
+        )}
       </div>
     </div>
   );

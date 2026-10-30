@@ -98,16 +98,18 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
       </div>
       <div className="hidden overflow-x-auto md:block">
       <table className="w-full text-left text-sm">
-        <thead className="bg-surface-highlight text-text-secondary"><tr>
-          <th scope="col" className="px-4 py-3">{t('TABLE_MANAGER')}</th>
-          <th scope="col" className="px-4 py-3">{t('TABLE_CONTACT')}</th>
-          <th scope="col" className="px-4 py-3">{t('TABLE_BRANCH')}</th>
-          <th scope="col" className="px-4 py-3">{t('TABLE_LAST_ACTIVE')}</th>
-          <th scope="col" className="px-4 py-3">{t('TABLE_STATUS')}</th>
-          <th scope="col" className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
-        </tr></thead>
+        <thead>
+          <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+            <th scope="col" className="px-4 py-3">{t('TABLE_MANAGER')}</th>
+            <th scope="col" className="px-4 py-3">{t('TABLE_CONTACT')}</th>
+            <th scope="col" className="px-4 py-3">{t('TABLE_BRANCH')}</th>
+            <th scope="col" className="px-4 py-3">{t('TABLE_LAST_ACTIVE')}</th>
+            <th scope="col" className="px-4 py-3">{t('TABLE_STATUS')}</th>
+            <th scope="col" className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
+          </tr>
+        </thead>
         <tbody>{visibleManagers.map((manager) => (
-          <tr key={manager.id} className="border-b border-border hover:bg-surface-hover">
+          <tr key={manager.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
             <th scope="row" className="px-4 py-3 font-medium text-text-primary">
               <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectManager(manager)}>{manager.name}</button>
               <span className="block text-xs font-normal text-text-secondary">@{manager.username}</span>
@@ -125,11 +127,14 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
       </table>
       </div>
       <p id="admin-staff-users-row-actions-help" className="sr-only">{t('ROW_ACTIONS_BLOCKED')}</p>
-      {pageCount > 1 && <div className="flex min-h-11 items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-text-secondary">
+      {filteredManagers.length > 0 && <div className="flex min-h-11 items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-text-secondary">
         <span>{t('SHOWING_RANGE', { start: currentPage * pageSize + 1, end: Math.min((currentPage + 1) * pageSize, filteredManagers.length), count: filteredManagers.length })}</span>
-        <div className="flex gap-2">
-          <button type="button" className="min-h-11 rounded-md border border-border px-3 disabled:text-text-disabled" disabled={currentPage === 0} onClick={() => setPage((current) => Math.max(0, current - 1))}>{t('PREVIOUS')}</button>
-          <button type="button" className="min-h-11 rounded-md border border-border px-3 disabled:text-text-disabled" disabled={currentPage >= pageCount - 1} onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}>{t('NEXT')}</button>
+        <div className="flex items-center gap-3">
+          <span>Page {currentPage + 1} of {pageCount}</span>
+          <div className="flex gap-2">
+            <button type="button" className="min-h-11 rounded-md border border-border px-3 disabled:text-text-disabled" disabled={currentPage === 0} onClick={() => setPage((current) => Math.max(0, current - 1))}>{t('PREVIOUS')}</button>
+            <button type="button" className="min-h-11 rounded-md border border-border px-3 disabled:text-text-disabled" disabled={currentPage >= pageCount - 1} onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}>{t('NEXT')}</button>
+          </div>
         </div>
       </div>}
     </div>
