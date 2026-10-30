@@ -106,9 +106,8 @@ export function ManagerSeatsMatrixClient() {
               type="button"
               onClick={() => setViewMode('grid')}
               aria-pressed={viewMode === 'grid'}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'grid' ? 'bg-card text-primary shadow-sm' : 'text-secondary hover:text-primary'
-              }`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'grid' ? 'bg-card text-primary shadow-sm' : 'text-secondary hover:text-primary'
+                }`}
             >
               <LayoutGrid size={15} /> ⊞ Grid View
             </button>
@@ -116,9 +115,8 @@ export function ManagerSeatsMatrixClient() {
               type="button"
               onClick={() => setViewMode('table')}
               aria-pressed={viewMode === 'table'}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'table' ? 'bg-card text-primary shadow-sm' : 'text-secondary hover:text-primary'
-              }`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'table' ? 'bg-card text-primary shadow-sm' : 'text-secondary hover:text-primary'
+                }`}
             >
               <List size={15} /> ☰ Table View
             </button>
@@ -167,7 +165,7 @@ export function ManagerSeatsMatrixClient() {
             <h2 className="text-xl font-bold text-primary">{tManagerUi('a_wing_floor_plan')}</h2>
             <span className="text-sm text-success font-medium">{isPending ? '…' : freeCount} {tManagerUi('seats_free_41c53c')}</span>
           </div>
-          
+
           {isPending ? (
             <div className="flex items-center justify-center py-24 text-secondary">{tManagerUi('loading_seat_matrix')}</div>
           ) : (
@@ -175,12 +173,11 @@ export function ManagerSeatsMatrixClient() {
               {visible.map((seat) => (
                 <button type="button"
                   key={seat.uuid || seat.id}
-                  className={`h-12 rounded-lg text-sm font-semibold flex items-center justify-center motion-safe:transition-transform hover:scale-105 active:scale-95 ${
-                    seat.status === 'free' ? 'bg-floating border border-success text-success hover:bg-success hover:text-primary' :
+                  className={`h-12 rounded-lg text-sm font-semibold flex items-center justify-center motion-safe:transition-transform hover:scale-105 active:scale-95 ${seat.status === 'free' ? 'bg-floating border border-success text-success hover:bg-success hover:text-primary' :
                     seat.status === 'occupied' ? 'bg-danger text-on-danger border-transparent opacity-90' :
-                    seat.status === 'expiring' ? 'bg-warning text-on-warning border-transparent' :
-                    'bg-floating text-secondary border-transparent opacity-50 cursor-not-allowed'
-                  }`}
+                      seat.status === 'expiring' ? 'bg-warning text-on-warning border-transparent' :
+                        'bg-floating text-secondary border-transparent opacity-50 cursor-not-allowed'
+                    }`}
                   disabled={seat.status === 'unknown'}
                   onClick={() => setSelectedSeat(seat)}
                   title={
@@ -254,17 +251,16 @@ export function ManagerSeatsMatrixClient() {
                       <td className="py-3 px-4 text-secondary text-xs">{seat.wing || 'North Reading Hall (AC)'}</td>
                       <td className="py-3 px-4 text-xs">{shiftLabel(seat.shift)}</td>
                       <td className="py-3 px-4">
-                        <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
-                          seat.status === 'free' ? 'bg-success-bg text-success border border-success/30' :
+                        <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${seat.status === 'free' ? 'bg-success-bg text-success border border-success/30' :
                           seat.status === 'occupied' ? 'bg-danger-bg text-danger border border-danger/30' :
-                          seat.status === 'expiring' ? 'bg-warning-bg text-warning border border-warning/30' :
-                          seat.status === 'maintenance' ? 'bg-warning-bg text-warning border border-warning/30' :
-                          'bg-floating text-secondary'
-                        }`}>
+                            seat.status === 'expiring' ? 'bg-warning-bg text-warning border border-warning/30' :
+                              seat.status === 'maintenance' ? 'bg-warning-bg text-warning border border-warning/30' :
+                                'bg-floating text-secondary'
+                          }`}>
                           {seat.status === 'free' ? tManagerUi('available') :
-                           seat.status === 'occupied' ? tManagerUi('occupied') :
-                           seat.status === 'expiring' ? tManagerUi('expiring_soon') :
-                           seat.status === 'maintenance' ? tManagerUi('maintenance') : 'Unknown'}
+                            seat.status === 'occupied' ? tManagerUi('occupied') :
+                              seat.status === 'expiring' ? tManagerUi('expiring_soon') :
+                                seat.status === 'maintenance' ? tManagerUi('maintenance') : 'Unknown'}
                         </span>
                       </td>
                       <td className="py-3 px-4">
