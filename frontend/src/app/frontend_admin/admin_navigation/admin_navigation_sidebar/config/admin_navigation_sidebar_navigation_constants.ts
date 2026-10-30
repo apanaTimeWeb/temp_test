@@ -96,7 +96,6 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     icon: Users,
     submodules: [
       { href: ADMIN_ROUTES.MEMBERS_DIRECTORY, icon: Users, label: 'Members Directory', labelKey: 'SUBMODULE_MEMBERS_DIRECTORY' },
-      { href: ADMIN_ROUTES.MEMBERS_STUDENTS, icon: UserCheck, label: 'Students', labelKey: 'SUBMODULE_MEMBERS_STUDENTS' },
       { href: ADMIN_ROUTES.MEMBERS_ENQUIRIES, icon: Phone, label: 'Enquiries', labelKey: 'SUBMODULE_MEMBERS_ENQUIRIES' },
       { href: ADMIN_ROUTES.MEMBERS_PLANS, icon: CreditCard, label: 'Plans & Packages', labelKey: 'SUBMODULE_MEMBERS_PLANS' },
       { href: ADMIN_ROUTES.MEMBERS_COUPONS, icon: Award, label: 'Coupons & Discounts', labelKey: 'SUBMODULE_MEMBERS_COUPONS' },
@@ -118,7 +117,6 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
       { href: ADMIN_ROUTES.SEATS_HISTORY, icon: History, label: 'Seat History', labelKey: 'SUBMODULE_SEATS_HISTORY' },
       { href: ADMIN_ROUTES.LOCKERS_MANAGEMENT, icon: Lock, label: 'Lockers Management', labelKey: 'SUBMODULE_LOCKERS_MANAGEMENT' },
       { href: ADMIN_ROUTES.LOCKERS_MATRIX, icon: LayoutGrid, label: 'Locker Matrix', labelKey: 'SUBMODULE_LOCKERS_MATRIX' },
-      { href: ADMIN_ROUTES.SEATS_MAINTENANCE, icon: AlertCircle, label: 'Seats Maintenance', labelKey: 'SUBMODULE_SEATS_MAINTENANCE' },
       { href: ADMIN_ROUTES.SHIFTS_GAP, icon: TrendingUp, label: 'Shifts Gap', labelKey: 'SUBMODULE_SHIFTS_GAP' },
     ],
   },
@@ -130,7 +128,6 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     icon: WalletCards,
     submodules: [
       { href: ADMIN_ROUTES.FINANCE_DASHBOARD, icon: LayoutDashboard, label: 'Finance Dashboard', labelKey: 'SUBMODULE_FINANCE_DASHBOARD' },
-      { href: ADMIN_ROUTES.FINANCE_COLLECT_FEE, icon: CreditCard, label: 'Collect Fee', labelKey: 'SUBMODULE_FINANCE_COLLECT_FEE' },
       { href: ADMIN_ROUTES.FINANCE_SUBSCRIPTIONS, icon: CalendarCheck, label: 'Subscriptions', labelKey: 'SUBMODULE_FINANCE_SUBSCRIPTIONS' },
       { href: ADMIN_ROUTES.FINANCE_RENEWALS, icon: RefreshCw, label: 'Renewals', labelKey: 'SUBMODULE_FINANCE_RENEWALS' },
       { href: ADMIN_ROUTES.FINANCE_PAYMENTS, icon: DollarSign, label: 'Payments', labelKey: 'SUBMODULE_FINANCE_PAYMENTS' },
@@ -194,7 +191,6 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
       { href: ADMIN_ROUTES.SYSTEM_GAP_FILLING, icon: TrendingUp, label: 'Gap Filling', labelKey: 'SUBMODULE_SYSTEM_GAP_FILLING' },
       { href: ADMIN_ROUTES.SYSTEM_AUTO_SCALE, icon: SlidersHorizontal, label: 'Auto Scale', labelKey: 'SUBMODULE_SYSTEM_AUTO_SCALE' },
       { href: ADMIN_ROUTES.SYSTEM_WHATSAPP_INTEGRATION, icon: MessageSquare, label: 'WhatsApp Integration', labelKey: 'SUBMODULE_SYSTEM_WHATSAPP_INTEGRATION' },
-      { href: ADMIN_ROUTES.SYSTEM_PROFILE, icon: UserCheck, label: 'System Profile', labelKey: 'SUBMODULE_SYSTEM_PROFILE' },
     ],
   },
   {

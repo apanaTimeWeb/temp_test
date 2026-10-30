@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
 const SUBMODULE_NAVIGATION = [
-  { href: ADMIN_ROUTES.FINANCE_COLLECT_FEE, labelKey: 'SUBMODULE_FINANCE_COLLECT_FEE' },
+  { href: ADMIN_ROUTES.FINANCE_DASHBOARD, labelKey: 'SUBMODULE_FINANCE_DASHBOARD' },
   { href: ADMIN_ROUTES.FINANCE_SUBSCRIPTIONS, labelKey: 'SUBMODULE_FINANCE_SUBSCRIPTIONS' },
   { href: ADMIN_ROUTES.FINANCE_RENEWALS, labelKey: 'SUBMODULE_FINANCE_RENEWALS' },
   { href: ADMIN_ROUTES.FINANCE_PAYMENTS, labelKey: 'SUBMODULE_FINANCE_PAYMENTS' },
@@ -19,7 +19,6 @@ const SUBMODULE_NAVIGATION = [
   { href: ADMIN_ROUTES.FINANCE_REFUNDS, labelKey: 'SUBMODULE_FINANCE_REFUNDS' },
   { href: ADMIN_ROUTES.FINANCE_TRUST_SCORE, labelKey: 'SUBMODULE_FINANCE_TRUST_SCORE' },
   { href: ADMIN_ROUTES.FINANCE_REFERRALS, labelKey: 'SUBMODULE_FINANCE_REFERRALS' },
-  { href: ADMIN_ROUTES.FINANCE_DASHBOARD, labelKey: 'SUBMODULE_FINANCE_DASHBOARD' }
 ] as const;
 
 export default function AdminFinanceLayout({ children }: { children: ReactNode }) {
