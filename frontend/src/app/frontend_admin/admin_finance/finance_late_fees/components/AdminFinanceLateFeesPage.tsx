@@ -131,7 +131,7 @@ export function AdminFinanceLateFeesPage() {
             </div>
             <div className="flex gap-2">
               <button data-testid="admin_finance-page-control-002" className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md border border-border px-3 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-success-bg text-success-text border-success-bg cursor-pointer" onClick={handleSave} disabled={isSaving}>
-                <Save size={18}  strokeWidth={2}/> {isSaving ? t('SAVING') : `💾 ${t('SAVE_RULES')}`}
+                <Save size={18} strokeWidth={2} /> {isSaving ? t('SAVING') : `💾 ${t('SAVE_RULES')}`}
               </button>
               <button data-testid="admin_finance-page-control-003" className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md border border-border px-3 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-secondary cursor-pointer" onClick={() => setEditing(false)}>{t('CANCEL')}</button>
             </div>
@@ -153,7 +153,7 @@ export function AdminFinanceLateFeesPage() {
       {/* Overdue Table */}
       <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card overflow-x-auto">
         <div className="flex items-center gap-2 p-4 border-b border-border pb-4">
-          <AlertTriangle size={18} className="text-warning-text"  strokeWidth={2}/>
+          <AlertTriangle size={18} className="text-warning-text" strokeWidth={2} />
           <span className="text-body text-text-primary font-semibold">{t('OVERDUE_STUDENTS')}</span>
         </div>
         <table className="w-full text-left">
@@ -212,7 +212,7 @@ export function AdminFinanceLateFeesPage() {
                         className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md border border-border px-3 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-success-bg text-success-text border-success-bg cursor-pointer"
                         onClick={() => sendWhatsAppReminder(s)} disabled={!isFrontendDemoModeEnabled()} title={!isFrontendDemoModeEnabled() ? t('REMINDER_BLOCKED') : t('SEND_WHATSAPP')} aria-label={t('SEND_WHATSAPP')}
                       >
-                        <MessageSquare size={18}  strokeWidth={2}/> WA
+                        <MessageSquare size={18} strokeWidth={2} /> WA
                       </button>
                     </div>
                   </td>

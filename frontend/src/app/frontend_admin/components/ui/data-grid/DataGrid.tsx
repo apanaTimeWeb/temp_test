@@ -200,71 +200,71 @@ export function DataGrid<TRow extends object>({
   return (
     <div ref={scrollContainerRef} className={`admin-data-grid rounded-lg border border-border bg-card ${shouldVirtualize ? 'max-h-[70vh] overflow-auto' : ''} ${className}`}>
       <div className="hidden overflow-x-auto md:block">
-      <table className="w-full min-w-180 border-collapse" aria-label={effectiveTableLabel} aria-rowcount={sortedRows.length + 1}>
-        <thead className="bg-surface-highlight">
-          <tr>
-            {columnDefs.map((column, columnIndex) => (
-              <th
-                key={column.field ?? column.headerName}
-                scope="col"
-                aria-sort={column.field && sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-                data-column-width={column.width ? `${column.width}px` : undefined}
-                data-column-min-width={column.minWidth ? `${column.minWidth}px` : undefined}
-                className={`h-12 whitespace-nowrap px-4 text-left text-table-header font-semibold uppercase tracking-wide text-text-secondary ${columnIndex === 0 ? 'sticky left-0 z-20 bg-surface-highlight' : ''} ${getFlexWidthClass(column)}`}
-              >
-                {column.field && column.sortable ? (
-                  <button
-                    type="button"
-                    className="min-h-11 text-left text-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                    onClick={() => handleHeaderSort(column.field!)}
-                    aria-label={`${effectivePaginationLabels.sortBy} ${column.headerName ?? column.field}${sortField === column.field ? `, ${effectivePaginationLabels.currently} ${sortDirection === 'asc' ? effectivePaginationLabels.ascending : effectivePaginationLabels.descending}` : ''}`}
-                  >
-                    {column.headerName ?? column.field} {sortField === column.field ? (sortDirection === 'asc' ? '↑' : '↓') : '↕'}
-                  </button>
-                ) : column.headerName ?? column.field}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {topSpacerHeight > 0 && <tr aria-hidden="true" data-virtual-spacer="top"><td colSpan={Math.max(1, columnDefs.length)} height={topSpacerHeight} className="border-0 p-0" /></tr>}
-          {renderedRows.length === 0 ? (
-            <tr><td colSpan={Math.max(1, columnDefs.length)} className="px-4 py-10 text-center text-body text-text-secondary"><div className="flex flex-col items-center gap-2"><Inbox aria-hidden="true" size={28} strokeWidth={1.5} className="text-text-secondary"/><p>{effectiveEmptyMessage}</p></div></td></tr>
-          ) : renderedRows.map((row, index) => {
-            const rowId = renderedRowIds[index];
-            const rowClickable = Boolean(onRowClicked);
-            return (
-              <tr
-                key={rowId}
-                ref={shouldVirtualize ? virtualizer.measureElement : undefined}
-                data-index={shouldVirtualize ? renderedRowIndexes[index] : undefined}
-                aria-rowindex={shouldVirtualize ? (renderedRowIndexes[index] ?? index) + 2 : undefined}
-                data-row-identity={rowId}
-                data-row-height={`${safeRowHeight}px`}
-                className={`border-t border-border bg-card even:bg-surface-zebra/30 motion-safe:transition-colors hover:bg-surface-hover focus-within:bg-surface-hover ${rowHeightClass} ${rowClickable ? 'cursor-pointer' : ''}`}
-                tabIndex={rowClickable ? 0 : undefined}
-                onClick={rowClickable ? (event) => handleRowClick(event, row) : undefined}
-                onKeyDown={rowClickable ? (event) => handleRowKeyDown(event, row) : undefined}
-              >
-                {columnDefs.map((column, columnIndex) => {
-                  const content = renderCellContent(row, column);
-                  return (
-                    <td
-                      key={column.field ?? column.headerName}
-                      data-column-width={column.width ? `${column.width}px` : undefined}
-                      data-column-min-width={column.minWidth ? `${column.minWidth}px` : undefined}
-                      className={`px-4 text-body text-text-primary ${columnIndex === 0 ? 'sticky left-0 z-10 bg-card' : ''} ${getFlexWidthClass(column)}`}
+        <table className="w-full min-w-180 border-collapse" aria-label={effectiveTableLabel} aria-rowcount={sortedRows.length + 1}>
+          <thead className="bg-surface-highlight">
+            <tr>
+              {columnDefs.map((column, columnIndex) => (
+                <th
+                  key={column.field ?? column.headerName}
+                  scope="col"
+                  aria-sort={column.field && sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+                  data-column-width={column.width ? `${column.width}px` : undefined}
+                  data-column-min-width={column.minWidth ? `${column.minWidth}px` : undefined}
+                  className={`h-12 whitespace-nowrap px-4 text-left text-table-header font-semibold uppercase tracking-wide text-text-secondary ${columnIndex === 0 ? 'sticky left-0 z-20 bg-surface-highlight' : ''} ${getFlexWidthClass(column)}`}
+                >
+                  {column.field && column.sortable ? (
+                    <button
+                      type="button"
+                      className="min-h-11 text-left text-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                      onClick={() => handleHeaderSort(column.field!)}
+                      aria-label={`${effectivePaginationLabels.sortBy} ${column.headerName ?? column.field}${sortField === column.field ? `, ${effectivePaginationLabels.currently} ${sortDirection === 'asc' ? effectivePaginationLabels.ascending : effectivePaginationLabels.descending}` : ''}`}
                     >
-                      {content}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-          {bottomSpacerHeight > 0 && <tr aria-hidden="true" data-virtual-spacer="bottom"><td colSpan={Math.max(1, columnDefs.length)} height={bottomSpacerHeight} className="border-0 p-0" /></tr>}
-        </tbody>
-      </table>
+                      {column.headerName ?? column.field} {sortField === column.field ? (sortDirection === 'asc' ? '↑' : '↓') : '↕'}
+                    </button>
+                  ) : column.headerName ?? column.field}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {topSpacerHeight > 0 && <tr aria-hidden="true" data-virtual-spacer="top"><td colSpan={Math.max(1, columnDefs.length)} height={topSpacerHeight} className="border-0 p-0" /></tr>}
+            {renderedRows.length === 0 ? (
+              <tr><td colSpan={Math.max(1, columnDefs.length)} className="px-4 py-10 text-center text-body text-text-secondary"><div className="flex flex-col items-center gap-2"><Inbox aria-hidden="true" size={28} strokeWidth={1.5} className="text-text-secondary" /><p>{effectiveEmptyMessage}</p></div></td></tr>
+            ) : renderedRows.map((row, index) => {
+              const rowId = renderedRowIds[index];
+              const rowClickable = Boolean(onRowClicked);
+              return (
+                <tr
+                  key={rowId}
+                  ref={shouldVirtualize ? virtualizer.measureElement : undefined}
+                  data-index={shouldVirtualize ? renderedRowIndexes[index] : undefined}
+                  aria-rowindex={shouldVirtualize ? (renderedRowIndexes[index] ?? index) + 2 : undefined}
+                  data-row-identity={rowId}
+                  data-row-height={`${safeRowHeight}px`}
+                  className={`border-t border-border bg-card even:bg-surface-zebra/30 motion-safe:transition-colors hover:bg-surface-hover focus-within:bg-surface-hover ${rowHeightClass} ${rowClickable ? 'cursor-pointer' : ''}`}
+                  tabIndex={rowClickable ? 0 : undefined}
+                  onClick={rowClickable ? (event) => handleRowClick(event, row) : undefined}
+                  onKeyDown={rowClickable ? (event) => handleRowKeyDown(event, row) : undefined}
+                >
+                  {columnDefs.map((column, columnIndex) => {
+                    const content = renderCellContent(row, column);
+                    return (
+                      <td
+                        key={column.field ?? column.headerName}
+                        data-column-width={column.width ? `${column.width}px` : undefined}
+                        data-column-min-width={column.minWidth ? `${column.minWidth}px` : undefined}
+                        className={`px-4 text-body text-text-primary ${columnIndex === 0 ? 'sticky left-0 z-10 bg-card' : ''} ${getFlexWidthClass(column)}`}
+                      >
+                        {content}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+            {bottomSpacerHeight > 0 && <tr aria-hidden="true" data-virtual-spacer="bottom"><td colSpan={Math.max(1, columnDefs.length)} height={bottomSpacerHeight} className="border-0 p-0" /></tr>}
+          </tbody>
+        </table>
       </div>
       <DataGridMobileCards
         visibleRows={renderedRows}

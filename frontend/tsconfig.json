@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ES2022",
     "downlevelIteration": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -15,19 +19,40 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["vitest/globals", "node"],
+    "types": [
+      "vitest/globals",
+      "node"
+    ],
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./src/*", "./*"],
-      "@/components/ui/*": ["./src/components/ui/*"],
-      "@/app/frontend_admin/components/ui/*": ["./src/app/frontend_admin/components/ui/*", "./src/components/ui/*"],
-      "@/test/*": ["./src/app/frontend_admin/test/*"]
+      "@/*": [
+        "./src/*",
+        "./*"
+      ],
+      "@/components/ui/*": [
+        "./src/components/ui/*"
+      ],
+      "@/app/frontend_admin/components/ui/*": [
+        "./src/app/frontend_admin/components/ui/*",
+        "./src/components/ui/*"
+      ],
+      "@/test/*": [
+        "./src/app/frontend_admin/test/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "**/*_e2e/**"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*_e2e/**"
+  ]
 }

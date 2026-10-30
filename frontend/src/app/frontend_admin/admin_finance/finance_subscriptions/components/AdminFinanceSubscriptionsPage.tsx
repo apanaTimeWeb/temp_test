@@ -16,8 +16,8 @@ import { RefreshCw, Eye, Download, Upload, Printer, MessageSquare, Send, Mail } 
 import { serializeAdminSubscriptionsCsv } from '@/app/frontend_admin/admin_finance/finance_subscriptions/utils/AdminFinanceSubscriptionsCsvUtils';
 
 const STATUS_BADGE: Record<string, string> = {
-  active:    'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-success-bg text-success-text border-success-bg',
-  expired:   'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-danger-bg text-danger-text border-danger-bg',
+  active: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-success-bg text-success-text border-success-bg',
+  expired: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-danger-bg text-danger-text border-danger-bg',
   suspended: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-warning-bg text-warning-text border-warning-bg',
   cancelled: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-card text-text-secondary border-border',
 };
@@ -59,22 +59,22 @@ export function AdminSubscriptionsPage() {
         </div>
         <div className="admin-shared-action-row" >
           <button type="button" data-testid="admin_subscriptions-page-control-001" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover" disabled title={t('IMPORT_UNAVAILABLE')}>
-            <Upload size={18} strokeWidth={2}/> {t('IMPORT')}
+            <Upload size={18} strokeWidth={2} /> {t('IMPORT')}
           </button>
           <button type="button" data-testid="admin_subscriptions-page-control-002" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover" disabled={!isDemoMode} title={!isDemoMode ? t('EXPORT_UNAVAILABLE') : undefined} onClick={exportCsv}>
-            <Download size={18} strokeWidth={2}/> {t('CSV')}
+            <Download size={18} strokeWidth={2} /> {t('CSV')}
           </button>
           <button type="button" data-testid="admin_subscriptions-page-control-003" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover" disabled={!isDemoMode} title={!isDemoMode ? t('PRINT_UNAVAILABLE') : undefined} onClick={() => window.print()}>
-            <Printer size={18} strokeWidth={2}/> {t('PRINT')}
+            <Printer size={18} strokeWidth={2} /> {t('PRINT')}
           </button>
-          <button type="button" data-testid="admin_subscriptions-page-control-004" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-success"  disabled title={t('WHATSAPP_UNAVAILABLE')}>
-            <MessageSquare size={18} strokeWidth={2}/> {t('WHATSAPP')}
+          <button type="button" data-testid="admin_subscriptions-page-control-004" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-success" disabled title={t('WHATSAPP_UNAVAILABLE')}>
+            <MessageSquare size={18} strokeWidth={2} /> {t('WHATSAPP')}
           </button>
-          <button type="button" data-testid="admin_subscriptions-page-control-005" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-info"  disabled title={t('TELEGRAM_UNAVAILABLE')}>
-            <Send size={18} strokeWidth={2}/> {t('TELEGRAM')}
+          <button type="button" data-testid="admin_subscriptions-page-control-005" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-info" disabled title={t('TELEGRAM_UNAVAILABLE')}>
+            <Send size={18} strokeWidth={2} /> {t('TELEGRAM')}
           </button>
-          <button type="button" data-testid="admin_subscriptions-page-control-006" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-primary"  disabled title={t('EMAIL_UNAVAILABLE')}>
-            <Mail size={18} strokeWidth={2}/> {t('EMAIL')}
+          <button type="button" data-testid="admin_subscriptions-page-control-006" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover admin-shared-text-primary" disabled title={t('EMAIL_UNAVAILABLE')}>
+            <Mail size={18} strokeWidth={2} /> {t('EMAIL')}
           </button>
         </div>
       </div>
@@ -193,7 +193,7 @@ export function AdminSubscriptionsPage() {
                         disabled
                         title={t('DETAIL_UNAVAILABLE', { name: s.studentName })}
                       >
-                        <Eye size={18} strokeWidth={2}/> {t('VIEW')}
+                        <Eye size={18} strokeWidth={2} /> {t('VIEW')}
                       </button>
                     </div>
                   </td>
