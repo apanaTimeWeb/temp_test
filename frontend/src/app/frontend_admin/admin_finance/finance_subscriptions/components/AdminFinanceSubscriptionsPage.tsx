@@ -208,7 +208,7 @@ export function AdminSubscriptionsPage() {
             pageSize={pageSize}
             totalCount={rows.length}
             onPageChange={setPage}
-            onPageSizeChange={(newSize) => {
+            onPageSizeChange={(newSize: number) => {
               setPageSize(newSize);
               setPage(0);
             }}

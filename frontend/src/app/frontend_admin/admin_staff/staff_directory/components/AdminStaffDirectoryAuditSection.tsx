@@ -65,7 +65,7 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
           pageSize={sessionsPageSize}
           totalCount={ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES.length}
           onPageChange={setSessionsPage}
-          onPageSizeChange={(newSize) => {
+          onPageSizeChange={(newSize: number) => {
             setSessionsPageSize(newSize);
             setSessionsPage(0);
           }}
@@ -107,7 +107,7 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
           pageSize={historyPageSize}
           totalCount={ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES.length}
           onPageChange={setHistoryPage}
-          onPageSizeChange={(newSize) => {
+          onPageSizeChange={(newSize: number) => {
             setHistoryPageSize(newSize);
             setHistoryPage(0);
           }}

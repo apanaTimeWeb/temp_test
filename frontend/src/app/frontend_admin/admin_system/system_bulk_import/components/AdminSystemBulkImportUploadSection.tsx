@@ -81,24 +81,24 @@ export default function AdminSystemBulkImportUploadSection({ model }: AdminSyste
                   </CardHeader>
                   <CardContent>
                     <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
+                      <table className="w-full text-left text-sm">
                         <thead>
-                          <tr className="border-b border-border text-text-secondary text-xs uppercase tracking-wide">
-                            <th className="text-left py-2 pr-4">{t('COLUMN')}</th>
-                            <th className="text-left py-2 pr-4">{t('REQUIRED')}</th>
-                            <th className="text-left py-2">{t('EXAMPLE')}</th>
+                          <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                            <th className="p-3">{t('COLUMN')}</th>
+                            <th className="p-3">{t('REQUIRED')}</th>
+                            <th className="p-3">{t('EXAMPLE')}</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-border">
+                        <tbody>
                           {ADMIN_SYSTEM_BULK_IMPORT_INSTRUCTION_ROWS.map((row) => (
-                            <tr key={row.labelKey} className="hover:bg-surface-hover motion-safe:transition-colors motion-safe:duration-base">
-                              <td className="py-2.5 pr-4 font-medium text-text-primary">{t(row.labelKey)}</td>
-                              <td className="py-2.5 pr-4">
+                            <tr key={row.labelKey} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                              <td className="p-3 font-medium text-text-primary">{t(row.labelKey)}</td>
+                              <td className="p-3">
                                 {row.required
                                   ? <AdminSystemBadge variant="danger">{t('REQUIRED')}</AdminSystemBadge>
                                   : <AdminSystemBadge variant="outline">{t('OPTIONAL_PLAIN')}</AdminSystemBadge>}
                               </td>
-                              <td className="py-2.5 text-text-secondary text-xs">{'exampleKey' in row ? t(row.exampleKey) : row.example}</td>
+                              <td className="p-3 text-text-secondary text-xs">{'exampleKey' in row ? t(row.exampleKey) : row.example}</td>
                             </tr>
                           ))}
                         </tbody>

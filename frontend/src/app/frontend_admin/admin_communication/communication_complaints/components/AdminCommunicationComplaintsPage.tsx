@@ -279,7 +279,7 @@ export function AdminCommunicationComplaintsPage() {
                 pageSize={pageSize}
                 totalCount={filtered.length}
                 onPageChange={setPage}
-                onPageSizeChange={(newSize) => {
+                onPageSizeChange={(newSize: number) => {
                   setPageSize(newSize);
                   setPage(0);
                 }}

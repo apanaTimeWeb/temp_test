@@ -63,7 +63,7 @@ export default function AdminSystemMaintenanceLockersSection({ lockers }: AdminS
               pageSize={pageSize}
               totalCount={lockers.length}
               onPageChange={setPage}
-              onPageSizeChange={(newSize) => {
+              onPageSizeChange={(newSize: number) => {
                 setPageSize(newSize);
                 setPage(0);
               }}
@@ -73,7 +73,6 @@ export default function AdminSystemMaintenanceLockersSection({ lockers }: AdminS
       </CardContent>
     </Card>
   );
-}
 }
 
 

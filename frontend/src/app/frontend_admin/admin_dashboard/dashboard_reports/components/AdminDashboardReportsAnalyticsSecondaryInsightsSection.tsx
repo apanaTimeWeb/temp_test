@@ -80,16 +80,25 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
               </article>)}
             </div>
             <div className="hidden overflow-x-auto md:block">
-              <table className="w-full">
-                <thead><tr><th scope="col">{t('TABLE_BRANCH')}</th><th scope="col">{t('TABLE_REVENUE')}</th><th scope="col">{t('TABLE_EXPENSES')}</th><th scope="col">{t('TABLE_NET_PROFIT')}</th><th scope="col">{t('TABLE_STUDENTS')}</th><th scope="col">{t('TABLE_OCCUPANCY')}</th></tr></thead>
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                    <th scope="col" className="p-3">{t('TABLE_BRANCH')}</th>
+                    <th scope="col" className="p-3">{t('TABLE_REVENUE')}</th>
+                    <th scope="col" className="p-3">{t('TABLE_EXPENSES')}</th>
+                    <th scope="col" className="p-3">{t('TABLE_NET_PROFIT')}</th>
+                    <th scope="col" className="p-3">{t('TABLE_STUDENTS')}</th>
+                    <th scope="col" className="p-3">{t('TABLE_OCCUPANCY')}</th>
+                  </tr>
+                </thead>
                 <tbody>{branches.map((row: AdminDashboardReportsAnalyticsBranchSummaryRow) => { const profit = row.revenueMinor - row.expenseMinor; return (
-                  <tr key={row.branch}>
-                    <th scope="row" className="text-left">{row.branch}</th>
-                    <td>{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor, data.currencyCode, locale)}</td>
-                    <td>{adminDashboardReportsAnalyticsFormatCurrency(row.expenseMinor, data.currencyCode, locale)}</td>
-                    <td>{adminDashboardReportsAnalyticsFormatCurrency(profit, data.currencyCode, locale)}</td>
-                    <td>{adminDashboardReportsAnalyticsFormatNumber(row.students, locale)}</td>
-                    <td><div className="flex items-center gap-2"><div className="h-2 min-w-20 flex-1 overflow-hidden rounded-full bg-surface-highlight"><div className={`h-full rounded-full bg-chart-primary admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(row.occupancy)))}`} /></div><span className="text-caption text-text-secondary">{adminDashboardReportsAnalyticsFormatNumber(row.occupancy, locale)}%</span></div></td>
+                  <tr key={row.branch} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                    <th scope="row" className="p-3 font-medium text-text-primary">{row.branch}</th>
+                    <td className="p-3">{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor, data.currencyCode, locale)}</td>
+                    <td className="p-3">{adminDashboardReportsAnalyticsFormatCurrency(row.expenseMinor, data.currencyCode, locale)}</td>
+                    <td className="p-3">{adminDashboardReportsAnalyticsFormatCurrency(profit, data.currencyCode, locale)}</td>
+                    <td className="p-3">{adminDashboardReportsAnalyticsFormatNumber(row.students, locale)}</td>
+                    <td className="p-3"><div className="flex items-center gap-2"><div className="h-2 min-w-20 flex-1 overflow-hidden rounded-full bg-surface-highlight"><div className={`h-full rounded-full bg-chart-primary admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(row.occupancy)))}`} /></div><span className="text-caption text-text-secondary">{adminDashboardReportsAnalyticsFormatNumber(row.occupancy, locale)}%</span></div></td>
                   </tr>
                 ); })}</tbody>
               </table>

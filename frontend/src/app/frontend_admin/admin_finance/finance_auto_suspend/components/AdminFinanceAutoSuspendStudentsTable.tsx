@@ -92,7 +92,7 @@ export default function AdminFinanceAutoSuspendStudentsTable({ students, isLoadi
           pageSize={pageSize}
           totalCount={students.length}
           onPageChange={setPage}
-          onPageSizeChange={(newSize) => {
+          onPageSizeChange={(newSize: number) => {
             setPageSize(newSize);
             setPage(0);
           }}
@@ -100,7 +100,6 @@ export default function AdminFinanceAutoSuspendStudentsTable({ students, isLoadi
       )}
     </section>
   );
-}
 }
 
 

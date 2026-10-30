@@ -62,7 +62,7 @@ export default function AdminSystemPowerSavingAlertLogSection() {
               pageSize={pageSize}
               totalCount={ALERT_LOG.length}
               onPageChange={setPage}
-              onPageSizeChange={(newSize) => {
+              onPageSizeChange={(newSize: number) => {
                 setPageSize(newSize);
                 setPage(0);
               }}

@@ -114,7 +114,7 @@ export default function AdminFinancePaymentPromisesTable({ promises, isLoading, 
           pageSize={pageSize}
           totalCount={promises.length}
           onPageChange={setPage}
-          onPageSizeChange={(newSize) => {
+          onPageSizeChange={(newSize: number) => {
             setPageSize(newSize);
             setPage(0);
           }}
@@ -122,7 +122,6 @@ export default function AdminFinancePaymentPromisesTable({ promises, isLoading, 
       )}
     </section>
   );
-}
 }
 
 

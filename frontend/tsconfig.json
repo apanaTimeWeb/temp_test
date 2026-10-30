@@ -24,7 +24,7 @@
     "paths": {
       "@/*": ["./src/*", "./*"],
       "@/components/ui/*": ["./src/components/ui/*"],
-      "@/app/frontend_admin/components/ui/*": ["./src/components/ui/*"],
+      "@/app/frontend_admin/components/ui/*": ["./src/app/frontend_admin/components/ui/*", "./src/components/ui/*"],
       "@/test/*": ["./src/app/frontend_admin/test/*"]
     }
   },

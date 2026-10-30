@@ -227,7 +227,7 @@ export function AdminFinanceLateFeesPage() {
             pageSize={pageSize}
             totalCount={overdue.length}
             onPageChange={setPage}
-            onPageSizeChange={(newSize) => {
+            onPageSizeChange={(newSize: number) => {
               setPageSize(newSize);
               setPage(0);
             }}

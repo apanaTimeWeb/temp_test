@@ -73,7 +73,7 @@ export default function AdminSystemMaintenanceSeatsSection({ seats }: AdminSyste
               pageSize={pageSize}
               totalCount={seats.length}
               onPageChange={setPage}
-              onPageSizeChange={(newSize) => {
+              onPageSizeChange={(newSize: number) => {
                 setPageSize(newSize);
                 setPage(0);
               }}
@@ -83,7 +83,6 @@ export default function AdminSystemMaintenanceSeatsSection({ seats }: AdminSyste
       </CardContent>
     </Card>
   );
-}
 }
 
 

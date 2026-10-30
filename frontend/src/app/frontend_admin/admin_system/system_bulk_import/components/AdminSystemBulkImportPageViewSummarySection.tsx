@@ -118,40 +118,40 @@ export default function AdminSystemBulkImportPageViewSummarySection({ model }: A
                 })}
               </div>
               <div className="hidden overflow-x-auto md:block">
-                <table className="w-full text-sm">
+                <table className="w-full text-left text-sm">
                   <thead>
-                    <tr className="border-b border-border text-text-secondary text-xs uppercase tracking-wide">
-                      <th className="text-left py-3 pr-3">{t('ROW')}</th>
-                      <th className="text-left py-3 pr-3">{t('NAME')}</th>
-                      <th className="text-left py-3 pr-3">{t('PHONE')}</th>
-                      <th className="text-left py-3 pr-3">{t('EMAIL')}</th>
-                      <th className="text-left py-3 pr-3">{t('SHIFT')}</th>
-                      <th className="text-left py-3 pr-3">{t('SEAT')}</th>
-                      <th className="text-left py-3 pr-3">{t('STATUS')}</th>
-                      <th className="text-left py-3">{t('ISSUE')}</th>
+                    <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                      <th className="p-3">{t('ROW')}</th>
+                      <th className="p-3">{t('NAME')}</th>
+                      <th className="p-3">{t('PHONE')}</th>
+                      <th className="p-3">{t('EMAIL')}</th>
+                      <th className="p-3">{t('SHIFT')}</th>
+                      <th className="p-3">{t('SEAT')}</th>
+                      <th className="p-3">{t('STATUS')}</th>
+                      <th className="p-3">{t('ISSUE')}</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border">
+                  <tbody>
                     {filteredRows.map(row => {
                       const cfg = STATUS_CONFIG[row.status];
                       const Icon = cfg.icon;
                       return (
-                        <tr key={row.row} className={`hover:bg-surface-hover motion-safe:transition-colors motion-safe:duration-base ${
-                          row.status === 'error' ? 'bg-danger-bg' :
+                        <tr key={row.row} className={`h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30 ${
+                          row.status === 'error' ? 'bg-danger-bg/40' :
                           row.status === 'warning' ? 'bg-surface-highlight' : ''
                         }`}>
-                          <td className="py-3 pr-3 font-mono text-xs text-text-secondary">#{row.row}</td>
-                          <td className="py-3 pr-3 font-medium text-text-primary text-xs">{row.name || <span className="text-danger-text text-xs italic">{t('MISSING')}</span>}</td>
-                          <td className="py-3 pr-3 text-text-secondary text-xs">{row.phone ? maskAdminSystemPhone(row.phone) : <span className="text-danger-text text-xs italic">{t('MISSING')}</span>}</td>
-                          <td className="py-3 pr-3 text-text-secondary text-xs">{row.email ? maskAdminSystemEmail(row.email) : <span className="text-text-secondary text-xs">—</span>}</td>
-                          <td className="py-3 pr-3 text-text-primary">{row.shift}</td>
-                          <td className="py-3 pr-3 font-mono text-xs text-text-primary">{row.seat || <span className="text-text-secondary text-xs">{t('IMPORT_AUTO')}</span>}</td>
-                          <td className="py-3 pr-3">
+                          <td className="p-3 font-mono text-xs text-text-secondary">#{row.row}</td>
+                          <td className="p-3 font-medium text-text-primary text-xs">{row.name || <span className="text-danger-text text-xs italic">{t('MISSING')}</span>}</td>
+                          <td className="p-3 text-text-secondary text-xs">{row.phone ? maskAdminSystemPhone(row.phone) : <span className="text-danger-text text-xs italic">{t('MISSING')}</span>}</td>
+                          <td className="p-3 text-text-secondary text-xs">{row.email ? maskAdminSystemEmail(row.email) : <span className="text-text-secondary text-xs">—</span>}</td>
+                          <td className="p-3 text-text-primary">{row.shift}</td>
+                          <td className="p-3 font-mono text-xs text-text-primary">{row.seat || <span className="text-text-secondary text-xs">{t('IMPORT_AUTO')}</span>}</td>
+                          <td className="p-3">
                             <AdminSystemBadge variant={cfg.variant}>
                               <Icon size={18} strokeWidth={2} /> {t(row.status === 'ok' ? 'IMPORT_STATUS_OK' : row.status === 'warning' ? 'IMPORT_STATUS_WARNING' : 'IMPORT_STATUS_ERROR')}
                             </AdminSystemBadge>
                           </td>
-                          <td className="py-3 text-xs text-text-secondary">{issueLabel(row.issue)}</td>
+                          <td className="p-3 text-xs text-text-secondary">{issueLabel(row.issue)}</td>
                         </tr>
                       );
                     })}

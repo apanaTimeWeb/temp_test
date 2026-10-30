@@ -64,7 +64,7 @@ export default function AdminSecurityDeviceSessionsPanel() {
             pageSize={pageSize}
             totalCount={ADMIN_SECURITY_DEVICE_SESSION_FIXTURES.length}
             onPageChange={setPage}
-            onPageSizeChange={(newSize) => {
+            onPageSizeChange={(newSize: number) => {
               setPageSize(newSize);
               setPage(0);
             }}

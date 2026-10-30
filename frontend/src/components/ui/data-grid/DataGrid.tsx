@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Inbox } from 'lucide-react';
@@ -92,6 +91,8 @@ export function DataGrid<TRow extends object>({
   const [sortField, setSortField] = useState<Extract<keyof TRow, string> | null>(null);
   const [sortDirection, setSortDirection] = useState<AdminUiDataGridSortDirection>('asc');
   const [internalPage, setInternalPage] = useState(0);
+  const [internalPageSize, setInternalPageSize] = useState(pageSize);
+  const effectivePageSize = internalPageSize;
   const page = controlledPage ?? internalPage;
   const setPage = (nextPage: number | ((currentPage: number) => number)) => {
     const resolvedPage = typeof nextPage === 'function' ? nextPage(page) : nextPage;
@@ -130,10 +131,10 @@ export function DataGrid<TRow extends object>({
   const virtualItems = shouldVirtualize ? virtualizer.getVirtualItems() : [];
   // During SSR/first paint a scroll element may not yet exist; render a bounded initial window.
   const renderedRowIndexes = shouldVirtualize
-    ? (virtualItems.length > 0 ? virtualItems.map((item: any) => item.index) : Array.from({ length: Math.min(10, sortedRows.length) }, (_, index: number) => index))
+    ? (virtualItems.length > 0 ? virtualItems.map((item) => item.index) : Array.from({ length: Math.min(10, sortedRows.length) }, (_, index) => index))
     : [];
 
-  const totalPages = pagination ? Math.max(1, Math.ceil(sortedRows.length / pageSize)) : 1;
+  const totalPages = pagination ? Math.max(1, Math.ceil(sortedRows.length / effectivePageSize)) : 1;
   const totalFlex = columnDefs.reduce((sum, column) => sum + (typeof column.flex === 'number' && column.flex > 0 ? column.flex : 0), 0);
   const getFlexWidthClass = (column: DataGridColumn<TRow>) => {
     if (!column.flex || column.flex <= 0 || totalFlex <= 0 || column.width) return '';
@@ -148,14 +149,14 @@ export function DataGrid<TRow extends object>({
   }, [onPageChange, page, totalPages]);
 
   const currentPage = Math.min(page, totalPages - 1);
-  const visibleRows = pagination ? sortedRows.slice(currentPage * pageSize, (currentPage + 1) * pageSize) : sortedRows;
+  const visibleRows = pagination ? sortedRows.slice(currentPage * effectivePageSize, (currentPage + 1) * effectivePageSize) : sortedRows;
   const sortedRowIds = useMemo(() => uniqueRowIdentities(sortedRows, getRowId), [sortedRows, getRowId]);
-  const visibleRowIds = pagination ? sortedRowIds.slice(currentPage * pageSize, (currentPage + 1) * pageSize) : sortedRowIds;
+  const visibleRowIds = pagination ? sortedRowIds.slice(currentPage * effectivePageSize, (currentPage + 1) * effectivePageSize) : sortedRowIds;
   const renderedRows = shouldVirtualize
-    ? renderedRowIndexes.map((index: number) => sortedRows[index]).filter((row: TRow | undefined): row is TRow => row !== undefined)
+    ? renderedRowIndexes.map((index) => sortedRows[index]).filter((row): row is TRow => row !== undefined)
     : visibleRows;
   const renderedRowIds = shouldVirtualize
-    ? renderedRowIndexes.map((index: number) => sortedRowIds[index] ?? `row:${index + 1}`)
+    ? renderedRowIndexes.map((index) => sortedRowIds[index] ?? `row:${index + 1}`)
     : visibleRowIds;
   const topSpacerHeight = shouldVirtualize && virtualItems.length > 0 ? (virtualItems[0]?.start ?? 0) : 0;
   const lastVirtualItem = virtualItems[virtualItems.length - 1];
@@ -229,7 +230,7 @@ export function DataGrid<TRow extends object>({
           {topSpacerHeight > 0 && <tr aria-hidden="true" data-virtual-spacer="top"><td colSpan={Math.max(1, columnDefs.length)} height={topSpacerHeight} className="border-0 p-0" /></tr>}
           {renderedRows.length === 0 ? (
             <tr><td colSpan={Math.max(1, columnDefs.length)} className="px-4 py-10 text-center text-body text-text-secondary"><div className="flex flex-col items-center gap-2"><Inbox aria-hidden="true" size={28} strokeWidth={1.5} className="text-text-secondary"/><p>{effectiveEmptyMessage}</p></div></td></tr>
-          ) : renderedRows.map((row: TRow, index: number) => {
+          ) : renderedRows.map((row, index) => {
             const rowId = renderedRowIds[index];
             const rowClickable = Boolean(onRowClicked);
             return (
@@ -240,7 +241,7 @@ export function DataGrid<TRow extends object>({
                 aria-rowindex={shouldVirtualize ? (renderedRowIndexes[index] ?? index) + 2 : undefined}
                 data-row-identity={rowId}
                 data-row-height={`${safeRowHeight}px`}
-                className={`border-t border-border bg-card motion-safe:transition-colors hover:bg-surface-hover focus-within:bg-surface-hover ${rowHeightClass} ${rowClickable ? 'cursor-pointer' : ''}`}
+                className={`border-t border-border bg-card even:bg-surface-zebra/30 motion-safe:transition-colors hover:bg-surface-hover focus-within:bg-surface-hover ${rowHeightClass} ${rowClickable ? 'cursor-pointer' : ''}`}
                 tabIndex={rowClickable ? 0 : undefined}
                 onClick={rowClickable ? (event) => handleRowClick(event, row) : undefined}
                 onKeyDown={rowClickable ? (event) => handleRowKeyDown(event, row) : undefined}
@@ -281,11 +282,32 @@ export function DataGrid<TRow extends object>({
         renderCellContent={renderCellContent}
       />
       {pagination && sortedRows.length > 0 && (
-        <div className="flex min-h-11 flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 text-caption text-text-secondary">
-          <span>{effectivePaginationLabels.showing} {currentPage * pageSize + 1}–{Math.min((currentPage + 1) * pageSize, sortedRows.length)} {effectivePaginationLabels.of} {sortedRows.length}</span>
-          <div className="flex items-center gap-2">
-            <button type="button" className="min-h-11 rounded-md border border-border px-3 py-2 text-primary disabled:cursor-not-allowed disabled:text-text-disabled" disabled={currentPage === 0} onClick={() => setPage((current) => Math.max(0, current - 1))}>{effectivePaginationLabels.previous}</button>
-            <button type="button" className="min-h-11 rounded-md border border-border px-3 py-2 text-primary disabled:cursor-not-allowed disabled:text-text-disabled" disabled={currentPage >= totalPages - 1} onClick={() => setPage((current) => Math.min(totalPages - 1, current + 1))}>{effectivePaginationLabels.next}</button>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-caption text-text-secondary">
+          <span>{effectivePaginationLabels.showing} {currentPage * effectivePageSize + 1}–{Math.min((currentPage + 1) * effectivePageSize, sortedRows.length)} {effectivePaginationLabels.of} {sortedRows.length}</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <label htmlFor="admin-data-grid-page-size" className="text-xs text-text-secondary whitespace-nowrap">
+                Rows per page:
+              </label>
+              <select
+                id="admin-data-grid-page-size"
+                value={effectivePageSize}
+                onChange={(e) => {
+                  setInternalPageSize(Number(e.target.value) as 10 | 25 | 50);
+                  setPage(0);
+                }}
+                className="rounded border border-border bg-input px-2 py-1 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+            <div className="flex items-center gap-2">
+              <button type="button" className="min-h-9 rounded-md border border-border px-3 py-1.5 text-xs text-text-primary hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-text-disabled" disabled={currentPage === 0} onClick={() => setPage((current) => Math.max(0, current - 1))}>{effectivePaginationLabels.previous}</button>
+              <span className="text-xs text-text-secondary">Page {currentPage + 1} of {totalPages}</span>
+              <button type="button" className="min-h-9 rounded-md border border-border px-3 py-1.5 text-xs text-text-primary hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-text-disabled" disabled={currentPage >= totalPages - 1} onClick={() => setPage((current) => Math.min(totalPages - 1, current + 1))}>{effectivePaginationLabels.next}</button>
+            </div>
           </div>
         </div>
       )}

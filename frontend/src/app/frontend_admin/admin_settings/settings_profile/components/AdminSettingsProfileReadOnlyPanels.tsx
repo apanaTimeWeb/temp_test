@@ -48,9 +48,29 @@ export default function AdminSettingsProfileReadOnlyPanels({ view }: AdminSettin
           </article>)}
         </div>
         <div className="mt-4 hidden overflow-x-auto md:block">
-          <table className="w-full text-sm">
-            <thead className="bg-surface-highlight text-left text-text-secondary"><tr><th scope="col" className="px-3 py-3">{t('HISTORY_DATE')}</th><th scope="col" className="px-3 py-3">{t('HISTORY_IP')}</th><th scope="col" className="px-3 py-3">{t('HISTORY_DEVICE')}</th><th scope="col" className="px-3 py-3">{t('HISTORY_STATUS')}</th></tr></thead>
-            <tbody>{ADMIN_PROFILE_DEMO_LOGIN_HISTORY.map((entry) => <tr key={entry.id} className="border-b border-border last:border-b-0"><td className="px-3 py-3">{t(entry.dateKey)}</td><td className="px-3 py-3">{entry.ip}</td><td className="px-3 py-3">{t(entry.deviceKey)}</td><td className="px-3 py-3"><span data-testid={`admin_profile-AdminSettingsProfileMain-state-login-status-${entry.id}`} className={`admin-badge ${entry.status === 'success' ? 'admin-badge-success' : 'admin-badge-danger'}`}>{t(entry.status === 'success' ? 'STATUS_SUCCESS' : 'STATUS_FAILED')}</span></td></tr>)}</tbody>
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                <th scope="col" className="p-3">{t('HISTORY_DATE')}</th>
+                <th scope="col" className="p-3">{t('HISTORY_IP')}</th>
+                <th scope="col" className="p-3">{t('HISTORY_DEVICE')}</th>
+                <th scope="col" className="p-3">{t('HISTORY_STATUS')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ADMIN_PROFILE_DEMO_LOGIN_HISTORY.map((entry) => (
+                <tr key={entry.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                  <td className="p-3">{t(entry.dateKey)}</td>
+                  <td className="p-3">{entry.ip}</td>
+                  <td className="p-3">{t(entry.deviceKey)}</td>
+                  <td className="p-3">
+                    <span data-testid={`admin_profile-AdminSettingsProfileMain-state-login-status-${entry.id}`} className={`admin-badge ${entry.status === 'success' ? 'admin-badge-success' : 'admin-badge-danger'}`}>
+                      {t(entry.status === 'success' ? 'STATUS_SUCCESS' : 'STATUS_FAILED')}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </section>

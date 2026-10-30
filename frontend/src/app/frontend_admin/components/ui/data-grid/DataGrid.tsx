@@ -293,7 +293,7 @@ export function DataGrid<TRow extends object>({
                 id="admin-data-grid-page-size"
                 value={effectivePageSize}
                 onChange={(e) => {
-                  setInternalPageSize(Number(e.target.value));
+                  setInternalPageSize(Number(e.target.value) as 10 | 25 | 50);
                   setPage(0);
                 }}
                 className="rounded border border-border bg-input px-2 py-1 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"

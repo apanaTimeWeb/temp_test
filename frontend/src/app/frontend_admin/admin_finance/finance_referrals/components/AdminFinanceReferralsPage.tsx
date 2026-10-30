@@ -148,7 +148,7 @@ export function AdminFinanceReferralsPage() {
             pageSize={pageSize}
             totalCount={ADMIN_FINANCE_DEMO_REFERRERS.length}
             onPageChange={setPage}
-            onPageSizeChange={(newSize) => {
+            onPageSizeChange={(newSize: number) => {
               setPageSize(newSize);
               setPage(0);
             }}

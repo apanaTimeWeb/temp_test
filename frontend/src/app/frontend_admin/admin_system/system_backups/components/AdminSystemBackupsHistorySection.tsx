@@ -153,7 +153,7 @@ export default function AdminSystemBackupsHistorySection({ model }: AdminSystemB
                     pageSize={pageSize}
                     totalCount={backups.length}
                     onPageChange={setPage}
-                    onPageSizeChange={(newSize) => {
+                    onPageSizeChange={(newSize: number) => {
                       setPageSize(newSize);
                       setPage(0);
                     }}

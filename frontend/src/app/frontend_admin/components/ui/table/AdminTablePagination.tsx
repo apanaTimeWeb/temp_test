@@ -4,7 +4,8 @@
 export interface AdminTablePaginationProps {
   page: number; // 0-indexed
   pageSize: number;
-  totalRows: number;
+  totalRows?: number;
+  totalCount?: number;
   onPageChange: (newPage: number) => void;
   onPageSizeChange?: (newPageSize: number) => void;
   pageSizeOptions?: readonly number[];
@@ -24,16 +25,18 @@ export function AdminTablePagination({
   page,
   pageSize,
   totalRows,
+  totalCount,
   onPageChange,
   onPageSizeChange,
   pageSizeOptions = [10, 25, 50],
   id = 'admin-table-page-size',
   labels,
 }: AdminTablePaginationProps) {
-  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const total = totalRows ?? totalCount ?? 0;
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const effectivePage = Math.min(Math.max(0, page), pageCount - 1);
-  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
-  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+  const startItem = total === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, total);
 
   const txtShowing = labels?.showing ?? 'Showing';
   const txtOf = labels?.of ?? 'of';
@@ -46,7 +49,7 @@ export function AdminTablePagination({
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-text-secondary">
       <span>
-        {txtShowing} {startItem}–{endItem} {txtOf} {totalRows} {txtResults}
+        {txtShowing} {startItem}–{endItem} {txtOf} {total} {txtResults}
       </span>
       <div className="flex items-center gap-4">
         {onPageSizeChange && (

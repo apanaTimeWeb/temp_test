@@ -163,28 +163,28 @@ export function AdminFinanceInvoicesIdPage({ routeId: requestedRouteId }: { rout
 
         <div className="my-4 h-px bg-border" />
 
-        <table className="w-full text-sm mb-4">
+        <table className="w-full text-left text-sm mb-4">
           <thead>
-            <tr className="bg-surface-highlight text-caption text-text-secondary">
-              <th className="text-left py-2 px-3">{t('DESCRIPTION')}</th>
-              <th className="text-left py-2 px-3">{t('HSN')}</th>
-              <th className="text-left py-2 px-3">{t('DURATION')}</th>
-              <th className="text-right py-2 px-3">{t('AMOUNT')}</th>
-              <th className="text-right py-2 px-3">{t('GST_PERCENT')}</th>
-              <th className="text-right py-2 px-3">{t('GST')}</th>
-              <th className="text-right py-2 px-3">{t('TOTAL')}</th>
+            <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+              <th className="p-3">{t('DESCRIPTION')}</th>
+              <th className="p-3">{t('HSN')}</th>
+              <th className="p-3">{t('DURATION')}</th>
+              <th className="text-right p-3">{t('AMOUNT')}</th>
+              <th className="text-right p-3">{t('GST_PERCENT')}</th>
+              <th className="text-right p-3">{t('GST')}</th>
+              <th className="text-right p-3">{t('TOTAL')}</th>
             </tr>
           </thead>
           <tbody>
             {INV.items.map((item) => (
-              <tr key={`${item.description}-${item.hsnCode}`} className="border-b border-border text-text-primary">
-                <td className="py-2 px-3 text-body text-text-primary">{item.description}</td>
-                <td className="py-2 px-3 font-mono text-caption text-text-secondary">{item.hsnCode}</td>
-                <td className="py-2 px-3 text-caption text-text-secondary">{item.duration}</td>
-                <td className="py-2 px-3 text-right text-body text-text-primary">{formatAdminFinanceCurrency(item.amount)}</td>
-                <td className="py-2 px-3 text-right text-body text-text-primary">{item.gstPercent}%</td>
-                <td className="py-2 px-3 text-right text-body text-text-primary">{formatAdminFinanceCurrency(item.gstAmount)}</td>
-                <td className="py-2 px-3 text-right font-semibold text-body text-text-primary">{formatAdminFinanceCurrency(item.amount + item.gstAmount)}</td>
+              <tr key={`${item.description}-${item.hsnCode}`} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                <td className="p-3 text-body text-text-primary">{item.description}</td>
+                <td className="p-3 font-mono text-caption text-text-secondary">{item.hsnCode}</td>
+                <td className="p-3 text-caption text-text-secondary">{item.duration}</td>
+                <td className="p-3 text-right text-body text-text-primary">{formatAdminFinanceCurrency(item.amount)}</td>
+                <td className="p-3 text-right text-body text-text-primary">{item.gstPercent}%</td>
+                <td className="p-3 text-right text-body text-text-primary">{formatAdminFinanceCurrency(item.gstAmount)}</td>
+                <td className="p-3 text-right font-semibold text-body text-text-primary">{formatAdminFinanceCurrency(item.amount + item.gstAmount)}</td>
               </tr>
             ))}
           </tbody>

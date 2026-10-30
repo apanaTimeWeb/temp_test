@@ -75,7 +75,7 @@ export default function AdminSystemMaintenanceAssetsSection({ assets }: AdminSys
               pageSize={pageSize}
               totalCount={assets.length}
               onPageChange={setPage}
-              onPageSizeChange={(newSize) => {
+              onPageSizeChange={(newSize: number) => {
                 setPageSize(newSize);
                 setPage(0);
               }}
@@ -85,7 +85,6 @@ export default function AdminSystemMaintenanceAssetsSection({ assets }: AdminSys
       </CardContent>
     </Card>
   );
-}
 }
 
 

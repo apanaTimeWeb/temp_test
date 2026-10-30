@@ -110,7 +110,7 @@ export default function AdminFinanceSecurityDepositsTable({ deposits, isLoading,
           pageSize={pageSize}
           totalCount={deposits.length}
           onPageChange={setPage}
-          onPageSizeChange={(newSize) => {
+          onPageSizeChange={(newSize: number) => {
             setPageSize(newSize);
             setPage(0);
           }}
@@ -118,7 +118,6 @@ export default function AdminFinanceSecurityDepositsTable({ deposits, isLoading,
       )}
     </section>
   );
-}
 }
 
 

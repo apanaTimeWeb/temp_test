@@ -59,7 +59,7 @@ export default function AdminSecurityFailedLoginsPanel() {
             pageSize={pageSize}
             totalCount={ADMIN_SECURITY_FAILED_LOGIN_FIXTURES.length}
             onPageChange={setPage}
-            onPageSizeChange={(newSize) => {
+            onPageSizeChange={(newSize: number) => {
               setPageSize(newSize);
               setPage(0);
             }}
