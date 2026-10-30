@@ -76,8 +76,12 @@ export function AdminNavigationSidebar({
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   const [internalMobileOpen, setInternalMobileOpen] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
-  // Default all sidebar submodule accordion groups to expanded
-  const [expandedGroups, setExpandedGroups] = useState<string[]>(() => ADMIN_NAVIGATION_GROUPS.map((g) => g.id));
+  // Default only the active domain accordion group to expanded
+  const [expandedGroups, setExpandedGroups] = useState<string[]>(() => {
+    if (!pathname) return [];
+    const matched = ADMIN_NAVIGATION_GROUPS.find((g) => isGroupActive(pathname, g));
+    return matched ? [matched.id] : [];
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
 

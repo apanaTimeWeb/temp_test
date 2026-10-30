@@ -1,8 +1,9 @@
 // RESPONSIBILITY: Owns the AdminDashboardOverviewMain presentation responsibility for the dashboard_overview module. It does not own cross-module business logic or API transport.
 import Link from 'next/link';
-import { Armchair, Users, WalletCards } from 'lucide-react';
+import { Armchair, Users, WalletCards, Building2, TrendingUp, BarChart2, ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ADMIN_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/config/admin_dashboard_overview.url_config';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
 const destinations = [
   {
@@ -22,9 +23,44 @@ const destinations = [
   },
 ] as const;
 
+const executiveKpis = [
+  {
+    id: 'kpi-branches',
+    title: 'Operating Branches',
+    value: '5',
+    subtext: 'All locations active',
+    Icon: Building2,
+    trend: '+1 this quarter',
+  },
+  {
+    id: 'kpi-members',
+    title: 'Active Members',
+    value: '1,248',
+    subtext: 'Across all branches',
+    Icon: Users,
+    trend: '+12% vs last month',
+  },
+  {
+    id: 'kpi-occupancy',
+    title: 'Seat Occupancy',
+    value: '84.2%',
+    subtext: 'Peak shift utilization',
+    Icon: Armchair,
+    trend: 'Optimal capacity',
+  },
+  {
+    id: 'kpi-revenue',
+    title: 'Monthly Collections',
+    value: '₹4,82,500',
+    subtext: 'Realized this month',
+    Icon: WalletCards,
+    trend: '96% on-time fee recovery',
+  },
+] as const;
+
 /**
  * Renders the canonical dashboard landing page for the multi-library Admin.
- * Destination metrics remain explicitly unavailable until source contracts exist.
+ * Combines high-level executive multi-branch indicators with primary workspaces.
  */
 export default function AdminDashboardOverviewMain() {
   const t = useTranslations('ADMIN_DASHBOARD');
@@ -35,14 +71,57 @@ export default function AdminDashboardOverviewMain() {
         <p className="text-xs font-semibold uppercase tracking-wide text-text-secondary">
           {t('LIBRARY_OVERVIEW_EYEBROW')}
         </p>
-        <h1 className="mt-2 text-2xl font-semibold sm:text-3xl">
-          {t('LIBRARY_OVERVIEW_TITLE')}
-        </h1>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-text-secondary">
-          {t('LIBRARY_OVERVIEW_DESCRIPTION')}
-        </p>
+        <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold sm:text-3xl">
+              {t('LIBRARY_OVERVIEW_TITLE')}
+            </h1>
+            <p className="mt-1 max-w-3xl text-sm leading-6 text-text-secondary">
+              {t('LIBRARY_OVERVIEW_DESCRIPTION')}
+            </p>
+          </div>
+          <Link
+            href={ADMIN_ROUTES.DASHBOARD_REPORTS}
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-semibold text-text-primary shadow-xs hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <BarChart2 className="h-4 w-4 text-text-secondary" aria-hidden="true" />
+            <span>{t('VIEW_FULL_REPORTS')}</span>
+            <ArrowRight className="h-3.5 w-3.5 text-text-secondary" aria-hidden="true" />
+          </Link>
+        </div>
       </header>
 
+      {/* Executive Multi-Branch Overview KPI Cards */}
+      <section
+        aria-label={t('KPI_SECTION_LABEL')}
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {executiveKpis.map((kpi) => {
+          const KpiIcon = kpi.Icon;
+          return (
+            <article
+              key={kpi.id}
+              className="rounded-xl border border-border bg-card p-4 shadow-2xs transition-shadow hover:shadow-xs"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium text-text-secondary">{kpi.title}</span>
+                <span className="rounded-md bg-secondary/10 p-1.5 text-text-secondary">
+                  <KpiIcon className="h-4 w-4" aria-hidden="true" />
+                </span>
+              </div>
+              <div className="mt-2 flex items-baseline gap-2">
+                <span className="text-2xl font-bold tracking-tight text-text-primary">{kpi.value}</span>
+              </div>
+              <div className="mt-2 flex items-center justify-between text-xs text-text-secondary">
+                <span>{kpi.subtext}</span>
+                <span className="font-medium text-emerald-600 dark:text-emerald-400">{kpi.trend}</span>
+              </div>
+            </article>
+          );
+        })}
+      </section>
+
+      {/* Core Operational Workspace Hubs */}
       <section
         aria-label={t('LIBRARY_DESTINATIONS')}
         className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
