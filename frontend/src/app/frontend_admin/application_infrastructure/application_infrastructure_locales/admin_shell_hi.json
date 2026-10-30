@@ -2,6 +2,7 @@
   "ADMIN_SHELL": {
     "OPEN_MENU": "मेन्यू खोलें",
     "SELECT_BRANCH": "शाखा चुनें",
+    "ALL_BRANCHES": "सभी शाखाएँ",
     "BRANCH_SELECTION_UNAVAILABLE": "शाखा चयन उपलब्ध नहीं है",
     "GOOD_MORNING": "सुप्रभात",
     "GOOD_AFTERNOON": "नमस्कार",

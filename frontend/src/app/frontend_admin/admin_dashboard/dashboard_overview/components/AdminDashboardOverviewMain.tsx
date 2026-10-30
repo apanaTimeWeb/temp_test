@@ -4,6 +4,7 @@ import { Armchair, Users, WalletCards, Building2, TrendingUp, BarChart2, ArrowRi
 import { useTranslations } from 'next-intl';
 import { ADMIN_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/config/admin_dashboard_overview.url_config';
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 
 const destinations = [
   {
@@ -23,40 +24,48 @@ const destinations = [
   },
 ] as const;
 
-const executiveKpis = [
-  {
-    id: 'kpi-branches',
-    title: 'Operating Branches',
-    value: '5',
-    subtext: 'All locations active',
-    Icon: Building2,
-    trend: '+1 this quarter',
+const BRANCH_METRICS: Record<string, { branches: string; branchesSub: string; members: string; membersSub: string; occupancy: string; occupancySub: string; revenue: string; revenueSub: string; }> = {
+  all: {
+    branches: '3',
+    branchesSub: 'All network branches active',
+    members: '1,248',
+    membersSub: 'Across all 3 branches',
+    occupancy: '84.2%',
+    occupancySub: 'Peak shift utilization',
+    revenue: '₹4,82,500',
+    revenueSub: 'Realized this month (Network)',
   },
-  {
-    id: 'kpi-members',
-    title: 'Active Members',
-    value: '1,248',
-    subtext: 'Across all branches',
-    Icon: Users,
-    trend: '+12% vs last month',
+  'BR-001': {
+    branches: '1',
+    branchesSub: 'Downtown Central (Main Campus)',
+    members: '520',
+    membersSub: 'Downtown active members',
+    occupancy: '89.4%',
+    occupancySub: 'Near full capacity',
+    revenue: '₹2,10,000',
+    revenueSub: 'Downtown branch collections',
   },
-  {
-    id: 'kpi-occupancy',
-    title: 'Seat Occupancy',
-    value: '84.2%',
-    subtext: 'Peak shift utilization',
-    Icon: Armchair,
-    trend: 'Optimal capacity',
+  'BR-002': {
+    branches: '1',
+    branchesSub: 'Westside Branch (Suspended)',
+    members: '280',
+    membersSub: 'Westside registered members',
+    occupancy: '64.0%',
+    occupancySub: 'Reduced occupancy window',
+    revenue: '₹92,500',
+    revenueSub: 'Westside branch collections',
   },
-  {
-    id: 'kpi-revenue',
-    title: 'Monthly Collections',
-    value: '₹4,82,500',
-    subtext: 'Realized this month',
-    Icon: WalletCards,
-    trend: '96% on-time fee recovery',
+  'BR-003': {
+    branches: '1',
+    branchesSub: 'North Hub (Active)',
+    members: '448',
+    membersSub: 'North Hub active members',
+    occupancy: '86.1%',
+    occupancySub: 'Optimal shift distribution',
+    revenue: '₹1,80,000',
+    revenueSub: 'North Hub collections',
   },
-] as const;
+};
 
 /**
  * Renders the canonical dashboard landing page for the multi-library Admin.
@@ -64,6 +73,43 @@ const executiveKpis = [
  */
 export default function AdminDashboardOverviewMain() {
   const t = useTranslations('ADMIN_DASHBOARD');
+  const { selectedBranchId, selectedBranch } = useAdminBranch();
+  const metrics = BRANCH_METRICS[selectedBranchId] ?? BRANCH_METRICS.all;
+
+  const executiveKpis = [
+    {
+      id: 'kpi-branches',
+      title: 'Operating Branches',
+      value: metrics.branches,
+      subtext: metrics.branchesSub,
+      Icon: Building2,
+      trend: selectedBranchId === 'all' ? '+1 this quarter' : 'Branch Active',
+    },
+    {
+      id: 'kpi-members',
+      title: 'Active Members',
+      value: metrics.members,
+      subtext: metrics.membersSub,
+      Icon: Users,
+      trend: '+12% vs last month',
+    },
+    {
+      id: 'kpi-occupancy',
+      title: 'Seat Occupancy',
+      value: metrics.occupancy,
+      subtext: metrics.occupancySub,
+      Icon: Armchair,
+      trend: 'Optimal capacity',
+    },
+    {
+      id: 'kpi-revenue',
+      title: 'Monthly Collections',
+      value: metrics.revenue,
+      subtext: metrics.revenueSub,
+      Icon: WalletCards,
+      trend: '96% on-time fee recovery',
+    },
+  ];
 
   return (
     <main className="mx-auto w-full max-w-7xl space-y-6 p-4 text-text-primary sm:p-6 lg:p-8">
@@ -79,6 +125,12 @@ export default function AdminDashboardOverviewMain() {
             <p className="mt-1 max-w-3xl text-sm leading-6 text-text-secondary">
               {t('LIBRARY_OVERVIEW_DESCRIPTION')}
             </p>
+            <div className="mt-2.5 flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md bg-secondary/10 text-text-secondary border border-border">
+                <Building2 className="h-3.5 w-3.5" aria-hidden="true" />
+                Branch Scope: <strong className="text-text-primary font-semibold">{selectedBranch ? `${selectedBranch.name} (${selectedBranch.code})` : 'All Branches (Network View)'}</strong>
+              </span>
+            </div>
           </div>
           <Link
             href={ADMIN_ROUTES.DASHBOARD_REPORTS}

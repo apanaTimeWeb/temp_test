@@ -9,8 +9,10 @@ import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Building2, Bell, Menu } from 'lucide-react';
 import { AdminShellThemeToggle } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellThemeToggle';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import Select from '@/components/ui/select/Select';
 import SelectContent from '@/components/ui/select/SelectContent';
+import { SelectItem } from '@/components/ui/select/SelectItem';
 import SelectTrigger from '@/components/ui/select/SelectTrigger';
 import SelectValue from '@/components/ui/select/SelectValue';
 import Button from '@/components/ui/button/Button';
@@ -20,6 +22,7 @@ import type { AdminShellHeaderProps } from '@/app/frontend_admin/application_inf
 export function AdminShellHeader({ onMobileOpen }: AdminShellHeaderProps) {
   const t = useTranslations('ADMIN_SHELL');
   const locale = useLocale();
+  const { branches, selectedBranchId, setSelectedBranchId } = useAdminBranch();
   const [greeting, setGreeting] = useState('');
   const [dateStr, setDateStr] = useState('');
 
@@ -50,14 +53,21 @@ export function AdminShellHeader({ onMobileOpen }: AdminShellHeaderProps) {
 
         <div className="flex items-center gap-2">
           <Building2 size={18} strokeWidth={2} className="text-text-secondary hidden sm:block" />
-          <Select value="" disabled>
+          <Select value={selectedBranchId} onValueChange={setSelectedBranchId}>
             <SelectTrigger 
-              className="w-32 sm:w-45 h-9 text-sm font-medium border-none shadow-none focus:ring-0 admin-application-infrastructure-style-05c66736e4"
-              
+              className="w-36 sm:w-48 h-9 text-sm font-medium border border-border/50 rounded-lg shadow-2xs focus:ring-1 focus:ring-primary admin-application-infrastructure-style-05c66736e4"
+              aria-label={t('SELECT_BRANCH')}
             >
-              <SelectValue placeholder={t('BRANCH_SELECTION_UNAVAILABLE')} />
+              <SelectValue placeholder={t('SELECT_BRANCH')} />
             </SelectTrigger>
-            <SelectContent />
+            <SelectContent>
+              <SelectItem value="all">{t('ALL_BRANCHES')}</SelectItem>
+              {branches.map((branch) => (
+                <SelectItem key={branch.id} value={branch.id}>
+                  {branch.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         </div>
       </div>

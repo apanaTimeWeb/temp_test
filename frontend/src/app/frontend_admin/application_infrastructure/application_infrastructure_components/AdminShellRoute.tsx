@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from 'sonner';
 import { AdminQueryProvider } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminQueryProvider';
+import { AdminBranchProvider } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { AdminNavigationSidebar } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/components/AdminNavigationSidebar';
 import { AdminShellHeader } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellHeader';
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
@@ -32,16 +33,18 @@ export function AdminShellRoute({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
       <AdminQueryProvider>
-        <div className="admin-theme admin-shell-flex">
-          <AdminNavigationSidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed((current) => !current)} mobileOpen={mobileNavigationOpen} onMobileClose={closeMobileNavigation} />
-          <div className={`admin-main-offset ${sidebarCollapsed ? 'admin-main-offset-collapsed' : 'admin-main-offset-expanded'}`}>
-            <AdminShellHeader onMobileOpen={() => setMobileNavigationOpen(true)} />
-            <main className="admin-shell-content">
-              <div className="motion-safe:transition-opacity motion-safe:duration-base">{children}</div>
-            </main>
+        <AdminBranchProvider>
+          <div className="admin-theme admin-shell-flex">
+            <AdminNavigationSidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed((current) => !current)} mobileOpen={mobileNavigationOpen} onMobileClose={closeMobileNavigation} />
+            <div className={`admin-main-offset ${sidebarCollapsed ? 'admin-main-offset-collapsed' : 'admin-main-offset-expanded'}`}>
+              <AdminShellHeader onMobileOpen={() => setMobileNavigationOpen(true)} />
+              <main className="admin-shell-content">
+                <div className="motion-safe:transition-opacity motion-safe:duration-base">{children}</div>
+              </main>
+            </div>
+            <Toaster position="bottom-right" richColors closeButton toastOptions={{ className: 'bg-overlay text-text-primary border border-border text-body' }} />
           </div>
-          <Toaster position="bottom-right" richColors closeButton toastOptions={{ className: 'bg-overlay text-text-primary border border-border text-body' }} />
-        </div>
+        </AdminBranchProvider>
       </AdminQueryProvider>
     </ThemeProvider>
   );

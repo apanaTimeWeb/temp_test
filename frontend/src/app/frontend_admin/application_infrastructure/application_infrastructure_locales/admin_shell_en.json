@@ -2,6 +2,7 @@
   "ADMIN_SHELL": {
     "OPEN_MENU": "Open menu",
     "SELECT_BRANCH": "Select branch",
+    "ALL_BRANCHES": "All Branches",
     "BRANCH_SELECTION_UNAVAILABLE": "Branch selection unavailable",
     "GOOD_MORNING": "Good morning",
     "GOOD_AFTERNOON": "Good afternoon",
