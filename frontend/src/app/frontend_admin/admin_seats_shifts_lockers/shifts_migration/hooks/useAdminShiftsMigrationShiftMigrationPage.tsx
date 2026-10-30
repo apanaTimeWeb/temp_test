@@ -1,12 +1,12 @@
-// DATA FLOW: shifts_migration route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: shifts_migration route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AdminShiftsMigrationSchema, type AdminShiftsMigrationFormValues } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_migration/schemas/AdminShiftsMigrationSchema';
 import { ADMIN_SHIFTS_MIGRATION_DEMO_SEATS, ADMIN_SHIFTS_MIGRATION_DEMO_SHIFTS, ADMIN_SHIFTS_MIGRATION_DEMO_STUDENTS, type AdminShiftsMigrationStudent } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_migration/mocks/scenarios/admin_shifts_migration.scenarios';
 import { useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import type { Student, PayMode } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_migration/types/AdminShiftsMigrationComponentTypes';
 

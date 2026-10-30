@@ -1,5 +1,5 @@
-// DATA FLOW: finance_refunds route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: finance_refunds route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchAdminFinanceRefunds } from '@/app/frontend_admin/admin_finance/finance_refunds/api/admin_finance_refunds_api';

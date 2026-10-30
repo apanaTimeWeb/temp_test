@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect } from 'react';
 
 /** Warns before leaving a dirty expense form; internal links are handed to the owning confirmation dialog. */

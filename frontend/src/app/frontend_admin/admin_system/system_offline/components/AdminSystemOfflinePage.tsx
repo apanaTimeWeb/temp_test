@@ -1,5 +1,5 @@
-// Responsibility: AdminSystemOfflinePage component owned by admin_system; responsibility folder: admin_system_components_views.
 'use client';
+// Responsibility: AdminSystemOfflinePage component owned by admin_system; responsibility folder: admin_system_components_views.
 
 import { useTranslations } from 'next-intl';
 // RESPONSIBILITY: Entry page for the admin_system module.

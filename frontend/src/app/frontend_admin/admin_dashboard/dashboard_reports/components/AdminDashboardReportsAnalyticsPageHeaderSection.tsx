@@ -1,5 +1,5 @@
-// RESPONSIBILITY: Owns the analytics page header, data-mode notice, date-range tabs, branch filter, and safe export controls.
 'use client';
+// RESPONSIBILITY: Owns the analytics page header, data-mode notice, date-range tabs, branch filter, and safe export controls.
 
 import { useTranslations } from 'next-intl';
 import { Download, FileText, Mail, Printer } from 'lucide-react';

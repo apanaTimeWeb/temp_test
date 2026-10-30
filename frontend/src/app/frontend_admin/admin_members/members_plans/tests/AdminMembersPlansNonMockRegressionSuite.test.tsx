@@ -25,6 +25,10 @@ import useUnsavedChangesGuard from '@/app/frontend_admin/admin_members/members_p
 
 
 describe("Consolidated: AdminMembersPlansHarness", () => {
+    it('renders children when scenario is active', () => {
+        render(<HarnessScenarioComponent scenario="ACTIVE"><span>Harness Content</span></HarnessScenarioComponent>);
+        expect(screen.getByText('Harness Content')).toBeTruthy();
+    });
 });
 
 describe("Consolidated: AdminMembersPlansRegressionSuite", () => {
@@ -88,7 +92,7 @@ describe("Consolidated: AdminMembersPlansRegressionSuite", () => {
             it('localizes the class error-boundary fallback', () => {
                 vi.spyOn(console, 'error').mockImplementation(() => undefined);
                 renderLocalized('en', <AdminPlansErrorBoundary><ThrowDuringRender /></AdminPlansErrorBoundary>);
-                expect(screen.getByRole('alert').textContent).toBe('The Plans module could not display this view.');
+                expect(screen.getByRole('alert')).toHaveTextContent(englishMessages.ADMIN_PLANS.ERROR_BOUNDARY_FALLBACK);
             });
         });
     });

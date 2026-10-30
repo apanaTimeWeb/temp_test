@@ -1,5 +1,5 @@
-// DATA FLOW: finance_security_deposits route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: finance_security_deposits route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useEffect, useRef } from 'react';
 

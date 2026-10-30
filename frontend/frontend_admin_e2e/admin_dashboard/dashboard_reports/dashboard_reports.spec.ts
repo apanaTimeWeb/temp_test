@@ -1,8 +1,4 @@
-import { createRequire } from 'node:module';
-
-const require = createRequire(new URL('../../../../frontend_admin/package.json', import.meta.url));
-const { expect, test } = require('@playwright/test');
-
+import { expect, test } from '@playwright/test';
 test('loads the canonical dashboard reports route', async ({ page }: { page: import('@playwright/test').Page }) => {
   await page.goto('/admin/admin_dashboard/dashboard_reports');
   await expect(page).toHaveURL(/\/admin\/admin_dashboard\/dashboard_reports(?:[?#]|$)/);

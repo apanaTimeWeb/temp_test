@@ -1,5 +1,5 @@
-// Responsibility: AdminCommunicationComplaintAddModal component owned by admin_communication; responsibility folder: admin_communication_complaint_add_modal.
 'use client';
+// Responsibility: AdminCommunicationComplaintAddModal component owned by admin_communication; responsibility folder: admin_communication_complaint_add_modal.
 
 // RESPONSIBILITY: Renders the validated complaint-entry form inside the shared focus-managed dialog.
 

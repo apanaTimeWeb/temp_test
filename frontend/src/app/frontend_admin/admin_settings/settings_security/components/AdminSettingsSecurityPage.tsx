@@ -1,3 +1,4 @@
+'use client';
 import useAdminSecurityTabState from '@/app/frontend_admin/admin_settings/settings_security/hooks/useAdminSettingsSecurityTabState';
 import { useTranslations } from 'next-intl';
 import { LogOut, MonitorSmartphone, Lock, Unlock, UserRoundCheck, UserRoundX } from 'lucide-react';
@@ -12,7 +13,6 @@ import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/
 import AdminSecurityDeviceSessionsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDeviceSessionsPanel';
 
 // Responsibility: AdminSecurityPage presentation component owned by admin_security; responsibility folder: admin_security_components_views.
-"use client";
 
 // RESPONSIBILITY: Owns security-tab selection and delegates each major screen to a feature-local panel.
 // DATA FLOW: route -> local selected tab -> module-owned demo panel, or a single contract-blocked terminal state.
@@ -70,7 +70,6 @@ export default function AdminSecurityPage() {
 }
 
 // RESPONSIBILITY: AdminSecurityBlockedUsersPanel component owned by admin_security; responsibility folder: admin_security_blocked_users_panel.
-"use client";
 
 /** Shows sample account states; lock/unlock is blocked until an approved account-management contract exists. */
 export function AdminSecurityBlockedUsersPanel() {

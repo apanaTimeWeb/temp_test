@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountsFinancialReportsCategoryBreakdown component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 'use client';
+// RESPONSIBILITY: AdminAccountsFinancialReportsCategoryBreakdown component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 
 import { ADMIN_ACCOUNTS_FINANCIAL_REPORTS_CATEGORY_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/mocks/AdminAccountsFinancialReportsFixtures';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/utils/AdminAccountsFinancialReportsFormatCurrency';

@@ -1,5 +1,5 @@
-// DATA FLOW: seats_matrix route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: seats_matrix route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useEffect, useRef, type RefObject } from 'react';
 

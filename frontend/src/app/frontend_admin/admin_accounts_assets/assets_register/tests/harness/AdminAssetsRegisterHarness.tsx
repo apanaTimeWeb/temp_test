@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, type ReactNode } from 'react';
 
 import { type AdminAssetsRegisterScenario } from '@/app/frontend_admin/admin_accounts_assets/assets_register/tests/harness/bootstrap';

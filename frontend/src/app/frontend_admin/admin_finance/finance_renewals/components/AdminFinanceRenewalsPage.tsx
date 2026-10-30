@@ -1,5 +1,5 @@
-// RESPONSIBILITY: render the renewal integration state until a verified API/DTO contract is supplied.
 'use client';
+// RESPONSIBILITY: render the renewal integration state until a verified API/DTO contract is supplied.
 import { useTranslations } from 'next-intl';
 import { ADMIN_RENEWALS_INTEGRATION_STATUS } from '@/app/frontend_admin/admin_finance/finance_renewals/types/AdminFinanceRenewalsTypes';
 import { ADMIN_RENEWALS_DEMO_RECORDS } from '@/app/frontend_admin/admin_finance/finance_renewals/mocks/AdminFinanceRenewalsDemoFixtures';

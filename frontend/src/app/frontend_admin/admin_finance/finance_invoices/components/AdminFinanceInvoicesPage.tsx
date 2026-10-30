@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceInvoicesPage component owned by admin_finance; responsibility folder: components.
 'use client';
+// Responsibility: AdminFinanceInvoicesPage component owned by admin_finance; responsibility folder: components.
 import { useEffect, useState } from 'react';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 // RESPONSIBILITY: Entry page for the admin_finance module.
@@ -7,7 +7,7 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import { useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import Link from 'next/link';
 import { formatAdminFinanceCurrency, formatDate } from '@/app/frontend_admin/admin_finance/finance_invoices/utils/AdminFinanceInvoicesFormat';
 import { Search, FileText, Printer, Download, Eye, Send } from 'lucide-react';

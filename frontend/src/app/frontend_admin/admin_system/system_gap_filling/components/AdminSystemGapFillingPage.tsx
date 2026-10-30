@@ -1,5 +1,5 @@
-// Responsibility: AdminSystemGapFillingPage component owned by admin_system; responsibility folder: admin_system_components_views.
 'use client';
+// Responsibility: AdminSystemGapFillingPage component owned by admin_system; responsibility folder: admin_system_components_views.
 
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';

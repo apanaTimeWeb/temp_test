@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAuditLogsRecordsPanel component owned by admin_audit_logs; responsibility folder: admin_audit_logs_records_panel.
 'use client';
+// RESPONSIBILITY: AdminAuditLogsRecordsPanel component owned by admin_audit_logs; responsibility folder: admin_audit_logs_records_panel.
 
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useMemo } from 'react';

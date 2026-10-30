@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountingMaintenanceFilterSection component owned by admin_accounting; responsibility folder: admin_accounting_components_forms.
 'use client';
+// RESPONSIBILITY: AdminAccountingMaintenanceFilterSection component owned by admin_accounting; responsibility folder: admin_accounting_components_forms.
 import type { AdminAccountingMaintenanceStatusFilter } from '@/app/frontend_admin/admin_accounts_assets/assets_maintenance/types/AdminAssetsMaintenanceTypes';
 
 

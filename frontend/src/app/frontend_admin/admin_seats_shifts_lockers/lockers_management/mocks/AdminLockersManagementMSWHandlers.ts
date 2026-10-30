@@ -9,29 +9,6 @@ import {
   ADMIN_LOCKERS_LOCKER_STATUS_BADGE_CLASS,
 } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_management/config/admin_lockers_management.url_config';
 
-/** Test-only contract handlers; fixtures are synthetic and never indicate persisted state. */
-export const ADMIN_LOCKERS_MSW_HANDLERS = [
-  http.get(ADMIN_LOCKERS_URLS.LOCKERS, () => HttpResponse.json({ success: true, message: 'Synthetic locker fixture loaded.', data: ADMIN_LOCKERS_API_LOCKERS_FIXTURE, requestId: 'mock-lockers-management-lockers' })),
-  http.get(ADMIN_LOCKERS_URLS.SEAT_MATRIX, () => HttpResponse.json({ success: true, message: 'Synthetic seat matrix fixture loaded.', data: ADMIN_LOCKERS_API_SEAT_MATRIX_FIXTURE, requestId: 'mock-lockers-management-seat-matrix' })),
-];
-
-/** Synthetic API response fixtures for tests/MSW only; not production or persisted records. */
-
-
-export const ADMIN_LOCKERS_API_LOCKERS_FIXTURE = ADMIN_LOCKERS_DEMO_LOCKERS.map((locker) => ({
-  id: locker.id,
-  lockerNumber: locker.lockerId,
-  isActive: locker.status !== 'Maintenance',
-}));
-
-export const ADMIN_LOCKERS_API_SEAT_MATRIX_FIXTURE = ADMIN_LOCKERS_DEMO_SEATS.map((seat) => ({
-  id: seat.id,
-  seatNumber: seat.seatNo,
-  isActive: seat.status === 'Working',
-  status: seat.status,
-  student: seat.assignedTo,
-}));
-
 /**
  * Demo-only records used by the local seat/locker/allocations preview.
  * These records are intentionally not treated as persisted backend data.
@@ -72,6 +49,27 @@ export const ADMIN_LOCKERS_DEMO_LOCKERS: AdminLockersDemoLocker[] = [
   { id: '4', lockerId: 'B04', status: 'Occupied', assignedTo: 'Maria Vargas', studentId: 'LIB-055', assignedSince: '15 Sep 2024' },
   { id: '5', lockerId: 'B06', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
   { id: '6', lockerId: 'C10', status: 'Occupied', assignedTo: 'Ravi Kumar', studentId: 'LIB-099', assignedSince: '10 Oct 2024' },
+];
+
+/** Synthetic API response fixtures for tests/MSW only; not production or persisted records. */
+export const ADMIN_LOCKERS_API_LOCKERS_FIXTURE = ADMIN_LOCKERS_DEMO_LOCKERS.map((locker) => ({
+  id: locker.id,
+  lockerNumber: locker.lockerId,
+  isActive: locker.status !== 'Maintenance',
+}));
+
+export const ADMIN_LOCKERS_API_SEAT_MATRIX_FIXTURE = ADMIN_LOCKERS_DEMO_SEATS.map((seat) => ({
+  id: seat.id,
+  seatNumber: seat.seatNo,
+  isActive: seat.status === 'Working',
+  status: seat.status,
+  student: seat.assignedTo,
+}));
+
+/** Test-only contract handlers; fixtures are synthetic and never indicate persisted state. */
+export const ADMIN_LOCKERS_MSW_HANDLERS = [
+  http.get(ADMIN_LOCKERS_URLS.LOCKERS, () => HttpResponse.json({ success: true, message: 'Synthetic locker fixture loaded.', data: ADMIN_LOCKERS_API_LOCKERS_FIXTURE, requestId: 'mock-lockers-management-lockers' })),
+  http.get(ADMIN_LOCKERS_URLS.SEAT_MATRIX, () => HttpResponse.json({ success: true, message: 'Synthetic seat matrix fixture loaded.', data: ADMIN_LOCKERS_API_SEAT_MATRIX_FIXTURE, requestId: 'mock-lockers-management-seat-matrix' })),
 ];
 
 export type AdminLockersDemoAllocationStatus = keyof typeof ADMIN_LOCKERS_ALLOCATION_STATUS_BADGE_CLASS;

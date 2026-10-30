@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountingDeleteConfirmationDialog component owned by admin_accounting; responsibility folder: admin_accounting_delete_confirmation_dialog.
 'use client';
+// RESPONSIBILITY: AdminAccountingDeleteConfirmationDialog component owned by admin_accounting; responsibility folder: admin_accounting_delete_confirmation_dialog.
 
 import { useCallback } from 'react';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';

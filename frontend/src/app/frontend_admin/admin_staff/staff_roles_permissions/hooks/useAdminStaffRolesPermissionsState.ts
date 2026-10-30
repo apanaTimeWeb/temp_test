@@ -1,5 +1,5 @@
-// DATA FLOW: staff_roles_permissions route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: staff_roles_permissions route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';

@@ -1,10 +1,10 @@
-// DATA FLOW: system_whatsapp_integration route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: system_whatsapp_integration route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { ADMIN_SYSTEM_WHATSAPP_PROVIDER_EXAMPLES, ADMIN_SYSTEM_WHATSAPP_MESSAGE_LOGS } from '@/app/frontend_admin/admin_system/system_whatsapp_integration/mocks/AdminSystemWhatsappIntegrationWhatsAppFixtures';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 export default function useAdminSystemWhatsAppIntegrationPage() {
   const t = useTranslations('ADMIN_SYSTEM_EXTRA');

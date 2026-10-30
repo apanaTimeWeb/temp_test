@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminPlansErrorBoundary contains rendering failures for the admin_plans feature and exposes a localized retry action.
 'use client';
+// RESPONSIBILITY: AdminPlansErrorBoundary contains rendering failures for the admin_plans feature and exposes a localized retry action.
 
 import React from 'react';
 import { useTranslations } from 'next-intl';

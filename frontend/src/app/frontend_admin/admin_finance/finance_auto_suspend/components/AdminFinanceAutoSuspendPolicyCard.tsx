@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceAutoSuspendPolicyCard component owned by admin_finance; responsibility folder: admin_finance_auto_suspend_sections.
 'use client';
+// Responsibility: AdminFinanceAutoSuspendPolicyCard component owned by admin_finance; responsibility folder: admin_finance_auto_suspend_sections.
 
 // RESPONSIBILITY: Renders and edits the auto-suspend policy configuration.
 

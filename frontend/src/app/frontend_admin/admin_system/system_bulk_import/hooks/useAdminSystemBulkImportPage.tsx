@@ -1,10 +1,10 @@
-// DATA FLOW: system_bulk_import route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: system_bulk_import route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 import { useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import type { AdminSystemBulkImportRowStatus, AdminSystemBulkImportStep } from '@/app/frontend_admin/admin_system/system_bulk_import/types/AdminSystemBulkImportTypes';
 import { ADMIN_SYSTEM_BULK_IMPORT_PREVIEW_ROWS } from '@/app/frontend_admin/admin_system/system_bulk_import/mocks/scenarios/admin_system_bulk_import.scenarios';

@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountsFinancialReportsMonthlyChart component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 'use client';
+// RESPONSIBILITY: AdminAccountsFinancialReportsMonthlyChart component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 
 import dynamic from 'next/dynamic';
 import { useTranslations, useLocale } from 'next-intl';
@@ -29,7 +29,7 @@ export function AdminAccountsFinancialReportsMonthlyChart({ rows }: AdminAccount
     yaxis: { labels: { formatter: (value) => formatAdminAccountingCurrency(value, locale), style: { colors: 'var(--text-secondary)' } } },
     grid: { borderColor: 'var(--chart-grid)' },
     legend: { labels: { colors: 'var(--text-secondary)' } },
-    tooltip: { y: { formatter: (value) => formatAdminAccountingCurrency(value, locale) } },
+    tooltip: { y: { formatter: (value) => formatAdminAccountingCurrency(value ?? 0, locale) } },
     noData: { text: t('CHART_NO_DATA'), style: { color: 'var(--text-secondary)' } },
   };
   const series = [

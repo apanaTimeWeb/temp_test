@@ -1,5 +1,5 @@
-// RESPONSIBILITY: Owns the validated member-create and member-edit form lifecycle for the directory page.
 'use client';
+// RESPONSIBILITY: Owns the validated member-create and member-edit form lifecycle for the directory page.
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';

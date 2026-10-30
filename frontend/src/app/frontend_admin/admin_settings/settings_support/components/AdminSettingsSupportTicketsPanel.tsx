@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminSupportTicketsPanel component owned by admin_support; responsibility folder: admin_support_components_sections.
 'use client';
+// RESPONSIBILITY: AdminSupportTicketsPanel component owned by admin_support; responsibility folder: admin_support_components_sections.
 
 import { useState } from 'react';
 import { MessageSquare, Plus, Ticket } from 'lucide-react';

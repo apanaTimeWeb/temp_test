@@ -1,5 +1,5 @@
-// Responsibility: AdminSystemProgress component owned by admin_system; responsibility folder: admin_system_progress.
 'use client';
+// Responsibility: AdminSystemProgress component owned by admin_system; responsibility folder: admin_system_progress.
 
 // RESPONSIBILITY: Renders the AdminSystemProgress component for the admin_system module.
 // DATA FLOW: Parent -> AdminSystemProgress -> DOM

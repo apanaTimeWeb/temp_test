@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountsFinancialReportsChartLoadingState component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 'use client';
+// RESPONSIBILITY: AdminAccountsFinancialReportsChartLoadingState component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 
 import { useTranslations } from 'next-intl';
 

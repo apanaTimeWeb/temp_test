@@ -1,6 +1,5 @@
 'use client';
 // RESPONSIBILITY: AdminMembersStudentsHeaderSection component owned by admin_members_students; responsibility folder: admin_members_students_components_views.
-'use client';
 import { useTranslations } from 'next-intl';
 import { Download, Mail, MessageSquare, Printer, Send, Upload } from 'lucide-react';
 import { serializeAdminStudentsCsv } from '@/app/frontend_admin/admin_members/members_students/utils/AdminMembersStudentsCsvUtils';

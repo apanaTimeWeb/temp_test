@@ -1,5 +1,5 @@
-// Responsibility: AdminCommunicationComplaintsPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 'use client';
+// Responsibility: AdminCommunicationComplaintsPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 import useAdminCommunicationComplaintsQuery from '@/app/frontend_admin/admin_communication/communication_complaints/hooks/useAdminCommunicationComplaintsQuery';
 // RESPONSIBILITY: Entry page for the admin_communication module.
 // DATA FLOW: Next.js Router -> Page -> Components
@@ -38,8 +38,8 @@ export function AdminCommunicationComplaintsPage() {
   const isDemoMode = isFrontendDemoModeEnabled();
   const [tab, setTab]                   = useState<CStatus | 'All'>('All');
   const complaintsQuery = useAdminCommunicationComplaintsQuery(!isDemoMode);
-  const apiComplaints = useMemo<Complaint[]>(() => (complaintsQuery.data ?? []).map((c) => ({ id: c.id, title: c.subject, student: '—', description: c.description, status: getAdminCommunicationComplaintStatus(c.status), date: c.createdAt.slice(0, 10), resolvedBy: '—', resolvedDate: '—', resolvedNote: '' })), [complaintsQuery.data]);
-  const [demoComplaints, setDemoComplaints] = useState<Complaint[]>(() => isDemoMode ? ADMIN_COMMUNICATION_COMPLAINT_API_FIXTURE.map((complaint) => ({ id: complaint.id, title: complaint.subject, student: '—', description: complaint.description, status: getAdminCommunicationComplaintStatus(complaint.status), date: complaint.createdAt.slice(0, 10), resolvedBy: '—', resolvedDate: '—', resolvedNote: '' })) : []);
+  const apiComplaints = useMemo<Complaint[]>(() => (complaintsQuery.data ?? []).map((c) => ({ id: String(c.id), title: c.subject, student: '—', description: c.description, status: getAdminCommunicationComplaintStatus(c.status), date: c.createdAt.slice(0, 10), resolvedBy: '—', resolvedDate: '—', resolvedNote: '' })), [complaintsQuery.data]);
+  const [demoComplaints, setDemoComplaints] = useState<Complaint[]>(() => isDemoMode ? ADMIN_COMMUNICATION_COMPLAINT_API_FIXTURE.map((complaint) => ({ id: String(complaint.id), title: complaint.subject, student: '—', description: complaint.description, status: getAdminCommunicationComplaintStatus(complaint.status), date: complaint.createdAt.slice(0, 10), resolvedBy: '—', resolvedDate: '—', resolvedNote: '' })) : []);
   const complaints = isDemoMode ? demoComplaints : apiComplaints;
   const [showAdd, setShowAdd]           = useState(false);
   const [viewItem, setViewItem]         = useState<Complaint | null>(null);

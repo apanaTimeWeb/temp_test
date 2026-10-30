@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountsShiftGapAnalyzerPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 'use client';
+// RESPONSIBILITY: AdminAccountsShiftGapAnalyzerPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 
 import { useEffect, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';

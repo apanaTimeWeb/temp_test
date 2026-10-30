@@ -1,5 +1,5 @@
-// Responsibility: AdminSeatsSeatManagementMaintenancePage component owned by admin_seats; responsibility folder: admin_seats_components_views.
 'use client';
+// Responsibility: AdminSeatsSeatManagementMaintenancePage component owned by admin_seats; responsibility folder: admin_seats_components_views.
 
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useLocale, useTranslations } from 'next-intl';
@@ -14,7 +14,7 @@ import { AdminSeatsMaintenanceFormSchema, type AdminSeatsMaintenanceFormValues }
 import { ChevronDown, AlertTriangle, Plus } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { ColDef, DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_SEATS_SEAT_STATUS_BADGE_CLASS, ADMIN_SEATS_SEAT_MANAGEMENT_STATUS_OPTIONS } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_maintenance/config/admin_seats_maintenance_constants';
 import type { AdminSeatsSeatStatus } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_maintenance/config/admin_seats_maintenance_constants';

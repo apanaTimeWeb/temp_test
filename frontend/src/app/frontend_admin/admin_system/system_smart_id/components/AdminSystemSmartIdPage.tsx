@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminSystemSmartIdPage component owned by admin_system; responsibility folder: admin_system_components_views.
 'use client';
+// RESPONSIBILITY: AdminSystemSmartIdPage component owned by admin_system; responsibility folder: admin_system_components_views.
 
 import { useTranslations } from 'next-intl';
 import { Hash, ChevronRight } from 'lucide-react';

@@ -1,27 +1,23 @@
-// RESPONSIBILITY: Canonical single route for dashboard reports, its analytics tab, and its metadata-only report library.
 'use client';
+// RESPONSIBILITY: Canonical single route for dashboard reports, its analytics tab, and its metadata-only report library (AdminDashboardReportsLibrary).
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import AdminDashboardReportsAnalyticsPanel from '@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPanel';
 import { ADMIN_DASHBOARD_REPORTS_FIXTURES } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures';
 import { serializeReportsLibraryCatalogCsv } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters';
 import type { AdminDashboardReportsView } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
 
+export type AdminDashboardReportsLibraryView = 'analytics' | 'library';
 
 export default function AdminDashboardReportsRoute() {
   const t = useTranslations('ADMIN_SHELL');
-  const [activeView, setActiveView] = useState<AdminDashboardReportsView>('analytics');
+  const [activeView, setActiveView] = useState<'analytics' | 'library'>('analytics');
   const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
-  useEffect(() => {
-    const debounceId = window.setTimeout(() => setDebouncedQuery(query), 300);
-    return () => window.clearTimeout(debounceId);
-  }, [query]);
   const reports = useMemo(
-    () => ADMIN_DASHBOARD_REPORTS_FIXTURES.filter((report) => `${t(report.titleKey)} ${t(report.descriptionKey)} ${report.category}`.toLocaleLowerCase().includes(debouncedQuery.trim().toLocaleLowerCase())),
-    [debouncedQuery, t],
+    () => ADMIN_DASHBOARD_REPORTS_FIXTURES.filter((report) => `${t(report.titleKey)} ${t(report.descriptionKey)} ${report.category}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())),
+    [query, t],
   );
   const exportCatalog = () => {
     let objectUrl: string | null = null;

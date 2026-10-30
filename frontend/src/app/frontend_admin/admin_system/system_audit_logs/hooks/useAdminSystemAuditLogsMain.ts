@@ -1,5 +1,5 @@
-// DATA FLOW: system_audit_logs route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: system_audit_logs route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useEffect, useMemo, useState } from 'react';
 import { useLocale } from 'next-intl';

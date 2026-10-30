@@ -1,5 +1,5 @@
-// Responsibility: accessible category filter controls for the asset-register view.
 'use client';
+// Responsibility: accessible category filter controls for the asset-register view.
 
 export default function AdminAssetsRegisterFilterSection({ label, allLabel, categories, categoryFilter, onCategoryChange, getCategoryLabel }: {
   label: string; allLabel: string; categories: readonly string[]; categoryFilter: string; onCategoryChange: (value: string) => void; getCategoryLabel: (category: string) => string;

@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminSupportSystemStatusPanel component owned by admin_support; responsibility folder: admin_support_components_cards.
 'use client';
+// RESPONSIBILITY: AdminSupportSystemStatusPanel component owned by admin_support; responsibility folder: admin_support_components_cards.
 
 import { Activity } from 'lucide-react';
 import { useTranslations } from 'next-intl';

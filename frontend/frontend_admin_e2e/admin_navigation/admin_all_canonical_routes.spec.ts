@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-const require = createRequire(new URL('../../../frontend_admin/package.json', import.meta.url));
-const { expect, test } = require('@playwright/test');
-
+import { expect, test } from '@playwright/test';
 /** Route-level regression sweep for every user-approved Admin leaf; deeper behavior specs remain co-located by capability. */
 const canonicalRoutes = [
   {

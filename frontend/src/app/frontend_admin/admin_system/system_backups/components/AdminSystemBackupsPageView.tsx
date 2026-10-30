@@ -1,7 +1,8 @@
+'use client';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveButton';
 import { Database, ChevronRight } from 'lucide-react';
@@ -15,7 +16,6 @@ import { AdminSystemKpiCard } from '@/app/frontend_admin/components/ui/admin-pri
 import { displayValue } from '@/lib/display_value';
 
 // RESPONSIBILITY: AdminSystemBackupsPageView component owned by admin_system; responsibility folder: admin_system_components_views.
-'use client';
 
 export default function AdminSystemBackupsPageView({ model }: AdminSystemBackupsPageViewProps) {
   const t = useTranslations('ADMIN_SYSTEM_EXTRA');

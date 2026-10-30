@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminSystemWhatsAppIntegrationPageView component owned by admin_system; responsibility folder: admin_system_components_views.
 'use client';
+// RESPONSIBILITY: AdminSystemWhatsAppIntegrationPageView component owned by admin_system; responsibility folder: admin_system_components_views.
 
 import { useTranslations } from 'next-intl';
 import { MessageSquare, ChevronRight, BarChart3 } from 'lucide-react';

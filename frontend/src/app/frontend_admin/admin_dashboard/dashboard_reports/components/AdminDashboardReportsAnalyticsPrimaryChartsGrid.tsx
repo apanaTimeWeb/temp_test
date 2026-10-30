@@ -1,5 +1,5 @@
-// RESPONSIBILITY: Owns the primary income/expense and occupancy charts for the selected report dataset.
 'use client';
+// RESPONSIBILITY: Owns the primary income/expense and occupancy charts for the selected report dataset.
 
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
@@ -39,7 +39,7 @@ export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, 
     yaxis: { labels: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value), data.currencyCode, locale), style: { colors: 'var(--text-secondary)' } } },
     grid: { borderColor: 'var(--chart-grid)' },
     legend: { labels: { colors: 'var(--text-secondary)' } },
-    tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value), data.currencyCode, locale) } },
+    tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value ?? 0), data.currencyCode, locale) } },
     noData: { text: t('CHART_NO_DATA'), style: { color: 'var(--text-secondary)' } },
   };
   const incomeExpenseSeries = [

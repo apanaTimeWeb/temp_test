@@ -1,5 +1,5 @@
-// Responsibility: AdminSeatsSeatHistoryPage component owned by admin_seats; responsibility folder: admin_seats_components_views.
 'use client';
+// Responsibility: AdminSeatsSeatHistoryPage component owned by admin_seats; responsibility folder: admin_seats_components_views.
 
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useLocale, useTranslations } from 'next-intl';

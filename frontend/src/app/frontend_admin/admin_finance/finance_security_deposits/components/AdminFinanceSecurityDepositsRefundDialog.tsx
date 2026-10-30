@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceSecurityDepositsRefundDialog component owned by admin_finance; responsibility folder: admin_finance_security_deposits_sections.
 'use client';
+// Responsibility: AdminFinanceSecurityDepositsRefundDialog component owned by admin_finance; responsibility folder: admin_finance_security_deposits_sections.
 
 // RESPONSIBILITY: Presents refund/deduction inputs for one selected deposit; persistence remains owned by the parent.
 

@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountsFinancialReportsKpiCards component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 'use client';
+// RESPONSIBILITY: AdminAccountsFinancialReportsKpiCards component owned by admin_accounting; responsibility folder: admin_accounts_financial_reports.
 
 import { BarChart2, TrendingDown, TrendingUp } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';

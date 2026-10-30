@@ -19,7 +19,7 @@ export type AdminFinanceDepositStatus = 'held' | 'refunded' | 'forfeited';
 
 export interface AdminFinanceSecurityDepositsDeductionDialogProps {
   target: { id: number; name: string } | null;
-  dialogRef: RefObject<HTMLDivElement | null>;
+  dialogRef: React.Ref<HTMLDivElement>;
   amount: string;
   reason: string;
   onAmountChange: (value: string) => void;
@@ -38,7 +38,7 @@ export interface AdminFinanceSecurityDepositsRefundTarget {
 
 export interface AdminFinanceSecurityDepositsRefundDialogProps {
   target: AdminFinanceSecurityDepositsRefundTarget | null;
-  dialogRef: RefObject<HTMLDivElement | null>;
+  dialogRef: React.Ref<HTMLDivElement>;
   refundAmount: string;
   deductionAmount: string;
   deductionReason: string;

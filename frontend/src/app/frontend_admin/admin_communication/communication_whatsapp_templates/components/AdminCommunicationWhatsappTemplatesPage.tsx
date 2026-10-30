@@ -1,5 +1,5 @@
-// Responsibility: AdminCommunicationWhatsappTemplatesPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 'use client';
+// Responsibility: AdminCommunicationWhatsappTemplatesPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 // RESPONSIBILITY: Entry page for the admin_communication module.
 // DATA FLOW: Next.js Router -> Page -> Components
 

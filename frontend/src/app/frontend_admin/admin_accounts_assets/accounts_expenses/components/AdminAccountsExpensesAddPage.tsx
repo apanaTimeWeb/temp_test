@@ -1,12 +1,12 @@
-// RESPONSIBILITY: Owns the add-expense form and protects unsubmitted changes.
 'use client';
+// RESPONSIBILITY: Owns the add-expense form and protects unsubmitted changes.
 
 import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';

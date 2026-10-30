@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceAutoSuspendKpiCards component owned by admin_finance; responsibility folder: admin_finance_auto_suspend_sections.
 'use client';
+// Responsibility: AdminFinanceAutoSuspendKpiCards component owned by admin_finance; responsibility folder: admin_finance_auto_suspend_sections.
 
 // RESPONSIBILITY: Displays the four policy metrics from the supplied feature state.
 

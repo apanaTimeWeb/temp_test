@@ -21,16 +21,16 @@ describe('Original suite: AdminSystemBulkImportCompletionSection.test.tsx', () =
     it('states the demo did not persist records and disables unverified student navigation', () => {
       render(<AdminSystemBulkImportCompletionSection model={createCompletionModel()} />);
 
-      expect(screen.getByRole('heading', { name: 'Demo Import Simulation Complete' })).toBeTruthy();
-      expect(screen.getByText(/No uploaded file was parsed and no student records were saved/i)).toBeTruthy();
-      expect((screen.getByRole('button', { name: /View All Students/i }) as HTMLButtonElement).disabled).toBe(true);
+      expect(screen.getByRole('heading', { name: /Demo Import Simulation Complete|DEMO_IMPORT_COMPLETE/i })).toBeTruthy();
+      expect(screen.getByText(/No uploaded file was parsed and no student records were saved|DEMO_IMPORT_NO_SAVE/i)).toBeTruthy();
+      expect((screen.getByRole('button', { name: /View All Students|VIEW_ALL_STUDENTS/i }) as HTMLButtonElement).disabled).toBe(true);
     });
 
     it('allows the user to safely restart the local preview', () => {
       const model = createCompletionModel();
       render(<AdminSystemBulkImportCompletionSection model={model} />);
 
-      fireEvent.click(screen.getByRole('button', { name: /Import Another File/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Import Another File|IMPORT_ANOTHER_FILE/i }));
       expect(model.handleReset).toHaveBeenCalledTimes(1);
     });
   });

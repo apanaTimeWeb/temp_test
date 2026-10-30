@@ -1,5 +1,4 @@
 'use client';
-
 // RESPONSIBILITY: Renders the Next.js native loading skeleton for the admin_dashboard module.
 // DATA FLOW: Next.js Router -> loading.tsx
 import { useTranslations } from 'next-intl';

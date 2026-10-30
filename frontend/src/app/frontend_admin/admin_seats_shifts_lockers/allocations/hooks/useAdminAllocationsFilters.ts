@@ -1,5 +1,5 @@
-// DATA FLOW: allocations route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: allocations route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useCallback } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';

@@ -1,5 +1,5 @@
-// Responsibility: AdminEnquiriesAddPage component owned by admin_enquiries; responsibility folder: admin_enquiries_components_views.
 'use client';
+// Responsibility: AdminEnquiriesAddPage component owned by admin_enquiries; responsibility folder: admin_enquiries_components_views.
 
 import useAdminMembersEnquiriesUnsavedChangesGuard from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesUnsavedChangesGuard';
 import { ADMIN_ENQUIRIES_URLS } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
@@ -13,7 +13,7 @@ import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PhoneCall, Save, X } from 'lucide-react';
-import toast, { Toaster } from 'sonner';
+import { toast, Toaster } from 'sonner';
 import { createAdminEnquiriesAddEnquirySchema, type AddEnquiryFormData } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import { ADMIN_ENQUIRIES_ENQUIRY_SOURCE_OPTIONS } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
 import { addEnquiry } from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
@@ -39,12 +39,12 @@ export function AdminEnquiriesAddPage() {
     handleSubmit,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<AddEnquiryFormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as any,
     defaultValues: {
       name: '',
       phone: '',
       preferredShift: '',
-      source: '',
+      source: undefined,
       handledBy: '',
       notes: '',
     },
@@ -67,7 +67,7 @@ export function AdminEnquiriesAddPage() {
         shift: formData.preferredShift || 'Morning',
         status: 'New',
         source: formData.source || undefined,
-        notes: formData.notes.trim() || undefined,
+        notes: formData.notes?.trim() || undefined,
         handledBy: formData.handledBy || 'Admin'
       });
     } catch {

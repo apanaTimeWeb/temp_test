@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminCommunicationNotificationCenterPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 'use client';
+// RESPONSIBILITY: AdminCommunicationNotificationCenterPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';

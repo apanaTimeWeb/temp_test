@@ -1,3 +1,4 @@
+'use client';
 import type { AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionProps, AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionMAINDASHBOARDVIEWSSectionProps, AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionMAINDASHBOARDVIEWSSectionCreateNewBranchSectionProps } from '@/app/frontend_admin/admin_settings/settings_branches/types/AdminSettingsBranchesComponentTypes';
 import { useTranslations } from 'next-intl';
 import useAdminSettingsBranchesMain from '@/app/frontend_admin/admin_settings/settings_branches/hooks/useAdminSettingsBranchesMain';
@@ -14,13 +15,11 @@ import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogD
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import useAdminSettingsBranchesUnsavedChangesGuard from '@/app/frontend_admin/admin_settings/settings_branches/hooks/useAdminSettingsBranchesUnsavedChangesGuard';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { createAdminBranchesCreateFormSchema, type AdminBranchesCreateFormValues } from '@/app/frontend_admin/admin_settings/settings_branches/schemas/AdminSettingsBranchesSchema';
 
-'use client';
 
 // Responsibility: AdminSettingsBranchesViewSIDEBARNAVIGATIONSection component owned by admin_branches; responsibility folder: admin_settings_branches_view_sections.
-'use client';
 
 // RESPONSIBILITY: Renders the feature-owned branch navigation and composes the selected branch view.
 
@@ -56,10 +55,8 @@ export default function AdminSettingsBranchesViewSIDEBARNAVIGATIONSection({ mode
 
 export type { AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionProps };
 
-'use client';
 
 // Responsibility: AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionMAINDASHBOARDVIEWSSection component owned by admin_branches; responsibility folder: admin_settings_branches_view_sidebarnavigationsection_sections.
-'use client';
 
 // RESPONSIBILITY: Routes the selected branch navigation state to focused feature-owned view sections.
 
@@ -87,7 +84,6 @@ export function AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionMAINDASHBOARDVI
 export type { AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionMAINDASHBOARDVIEWSSectionProps };
 
 // RESPONSIBILITY: AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionMAINDASHBOARDVIEWSSectionCreateNewBranchSection component owned by admin_branches; responsibility folder: admin_settings_branches_view_sidebarnavigationsection_maindashboardviewssection_sections.
-'use client';
 
 const EMPTY_VALUES: AdminBranchesCreateFormValues = { name: '', code: '', address: '', phone: '', email: '' };
 

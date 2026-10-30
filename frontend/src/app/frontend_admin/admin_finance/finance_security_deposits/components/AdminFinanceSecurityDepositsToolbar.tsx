@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceSecurityDepositsToolbar component owned by admin_finance; responsibility folder: admin_finance_security_deposits_sections.
 'use client';
+// Responsibility: AdminFinanceSecurityDepositsToolbar component owned by admin_finance; responsibility folder: admin_finance_security_deposits_sections.
 
 // RESPONSIBILITY: Presents the security-deposit page context and its status filter.
 

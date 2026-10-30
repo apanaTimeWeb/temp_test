@@ -1,10 +1,10 @@
-// DATA FLOW: finance_collect_fee route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: finance_collect_fee route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ADMIN_COLLECT_FEE_MOCK_STUDENTS, ADMIN_COLLECT_FEE_PAYMENT_COUPONS } from '@/app/frontend_admin/admin_finance/finance_collect_fee/mocks/scenarios/admin_finance_collect_fee.scenarios';
@@ -133,7 +133,7 @@ export default function useAdminCollectFeePage() {
   const confirmResetForm = () => { const destination = pendingNavigationHref; resetForm(); if (destination) router.push(destination); };
   const cancelDiscard = () => { setPendingNavigationHref(null); setIsDiscardDialogOpen(false); };
   const updateSearch = (value: string) => { setSearch(value); setShowDropdown(true); if (selectedStudent && value !== selectedStudent.name) { setSelectedStudent(null); form.setValue('selectedStudentId', '', { shouldDirty: true, shouldValidate: true }); form.setValue('amountMajor', 0, { shouldValidate: true }); form.setValue('lateFeeMajor', 0, { shouldValidate: true }); resetCouponPreview(); } };
-  const selectStudent = (student: AdminCollectFeeMockStudent) => { setSelectedStudent(student); setSearch(student.name); setShowDropdown(false); resetCouponPreview(); form.setValue('selectedStudentId', student.id, { shouldValidate: true, shouldDirty: true }); form.setValue('amountMajor', student.dueAmountMinor > 0 ? adminCollectFeeMinorToMajor(student.dueAmountMinor) : 0, { shouldValidate: true, shouldDirty: true }); form.setValue('lateFeeMajor', student.dueAmountMinor > 0 ? 50 : 0, { shouldValidate: true, shouldDirty: true }); };
+  const selectStudent = (student: AdminCollectFeeMockStudent) => { setSelectedStudent(student); setSearch(student.name); setShowDropdown(false); resetCouponPreview(); form.setValue('selectedStudentId', String(student.id), { shouldValidate: true, shouldDirty: true }); form.setValue('amountMajor', student.dueAmountMinor > 0 ? adminCollectFeeMinorToMajor(student.dueAmountMinor) : 0, { shouldValidate: true, shouldDirty: true }); form.setValue('lateFeeMajor', student.dueAmountMinor > 0 ? 50 : 0, { shouldValidate: true, shouldDirty: true }); };
   const updateCouponCode = (value: string) => { form.setValue('couponCode', value, { shouldDirty: true, shouldValidate: true }); resetCouponPreview(); };
   const updateAmountMajor = (value: number) => { form.setValue('amountMajor', value, { shouldDirty: true, shouldValidate: true }); resetCouponPreview(); };
   const updateLateFeeMajor = (value: number) => { form.setValue('lateFeeMajor', value, { shouldDirty: true, shouldValidate: true }); resetCouponPreview(); };

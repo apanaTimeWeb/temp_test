@@ -2,15 +2,18 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import useAdminSystemBackupsPage from '@/app/frontend_admin/admin_system/system_backups/hooks/useAdminSystemBackupsPage';
 import { createAdminSystemBackupConfigSchema } from '@/app/frontend_admin/admin_system/system_backups/schemas/AdminSystemBackupsBackupConfigSchema';
 import { ADMIN_SYSTEM_BACKUP_STATUS_CONFIG } from '@/app/frontend_admin/admin_system/system_backups/config/admin_system_backups.url_config';
 import { ADMIN_SYSTEM_BACKUP_HISTORY } from '@/app/frontend_admin/admin_system/system_backups/mocks/scenarios/admin_system_backups.scenarios';
 
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string, values?: Record<string, unknown>) => values ? `${key}:${String(values.id ?? '')}` : key }));
-vi.mock('@/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: vi.fn() }));
-vi.mock('sonner', () => ({ default: { info: vi.fn(), error: vi.fn(), success: vi.fn() } }));
+vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: vi.fn() }));
+vi.mock('sonner', () => {
+  const toast = { info: vi.fn(), error: vi.fn(), success: vi.fn() };
+  return { default: toast, toast, Toaster: () => null };
+});
 
 describe('Original suite: AdminSystemBackupsBackupConfigSchema.test.ts', () => {
   describe('Admin System backup config schema', () => { it('validates retention and 24-hour time with localized messages', () => { const schema=createAdminSystemBackupConfigSchema({backupTimeInvalid:'time-invalid',retentionMinimum:'retention-min',retentionMaximum:'retention-max',cloudProviderInvalid:'provider-invalid'}); const result=schema.safeParse({backupTime:'25:99',retention:1,cloudProvider:'Google Drive'}); expect(result.success).toBe(false); if(!result.success) expect(result.error.issues.map((issue)=>issue.message)).toEqual(expect.arrayContaining(['time-invalid','retention-min'])); }); });

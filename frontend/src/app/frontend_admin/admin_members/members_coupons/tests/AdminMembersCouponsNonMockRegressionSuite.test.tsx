@@ -23,6 +23,10 @@ import englishMessages from '@/app/frontend_admin/admin_members/members_coupons/
 import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 
 describe("Consolidated: AdminMembersCouponsHarness", () => {
+    it('renders children when scenario is active', () => {
+        render(<HarnessScenarioComponent scenario="ACTIVE"><span>Harness Content</span></HarnessScenarioComponent>);
+        expect(screen.getByText('Harness Content')).toBeTruthy();
+    });
 });
 
 describe("Consolidated: AdminMembersCouponsRegressionSuite", () => {

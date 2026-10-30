@@ -2,7 +2,6 @@
 import type { AdminSettingsBranchesViewProps } from '@/app/frontend_admin/admin_settings/settings_branches/types/AdminSettingsBranchesComponentTypes';
 
 // RESPONSIBILITY: AdminSettingsBranchesView component owned by admin_branches; responsibility folder: admin_branches_components_views.
-'use client';
 import { useTranslations } from 'next-intl';
 import { ArrowLeft } from 'lucide-react';
 import useAdminSettingsBranchesMain from '@/app/frontend_admin/admin_settings/settings_branches/hooks/useAdminSettingsBranchesMain';

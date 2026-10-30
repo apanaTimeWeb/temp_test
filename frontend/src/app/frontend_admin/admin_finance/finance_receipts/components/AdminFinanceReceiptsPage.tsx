@@ -1,12 +1,12 @@
-// Responsibility: AdminFinanceReceiptsPage component owned by admin_finance; responsibility folder: components.
 'use client';
+// Responsibility: AdminFinanceReceiptsPage component owned by admin_finance; responsibility folder: components.
 // RESPONSIBILITY: Entry page for the admin_finance module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
 import { useEffect, useState } from 'react';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import { useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import Link from 'next/link';
 import { formatAdminFinanceCurrency, formatDate, getAdminFinanceLocalMonthString } from '@/app/frontend_admin/admin_finance/finance_receipts/utils/AdminFinanceReceiptsFormat';
 import { Search, Receipt, Eye, Printer, Send } from 'lucide-react';

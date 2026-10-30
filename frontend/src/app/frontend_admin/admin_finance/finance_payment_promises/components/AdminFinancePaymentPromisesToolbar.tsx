@@ -1,5 +1,5 @@
-// Responsibility: AdminFinancePaymentPromisesToolbar component owned by admin_finance; responsibility folder: admin_finance_payment_promises_sections.
 'use client';
+// Responsibility: AdminFinancePaymentPromisesToolbar component owned by admin_finance; responsibility folder: admin_finance_payment_promises_sections.
 
 // RESPONSIBILITY: Renders page context and the promise-status filter.
 

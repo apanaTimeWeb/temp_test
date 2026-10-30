@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceReceiptsIdPage component owned by admin_finance; responsibility folder: components.
 'use client';
+// Responsibility: AdminFinanceReceiptsIdPage component owned by admin_finance; responsibility folder: components.
 import { ADMIN_FINANCE_RECEIPTS_ROUTES } from '@/app/frontend_admin/admin_finance/finance_receipts/config/admin_finance_receipts.url_config';
 import { formatAdminFinanceCurrency, formatDate } from '@/app/frontend_admin/admin_finance/finance_receipts/utils/AdminFinanceReceiptsFormat';
 // RESPONSIBILITY: Entry page for the admin_finance module.
@@ -9,7 +9,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import { ArrowLeft, BookOpen, CheckCircle, Printer, Send } from 'lucide-react';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { openAdminFinanceWhatsApp } from '@/app/frontend_admin/admin_finance/finance_receipts/utils/AdminFinanceReceiptsWhatsApp';
 import { AdminFinanceThermalPrint } from '@/app/frontend_admin/admin_finance/finance_receipts/utils/AdminFinanceReceiptsThermalPrint';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';

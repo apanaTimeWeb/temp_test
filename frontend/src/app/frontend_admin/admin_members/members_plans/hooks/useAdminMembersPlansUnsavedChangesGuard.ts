@@ -1,5 +1,5 @@
-// Responsibility: useAdminMembersPlansUnsavedChangesGuard; module-local guard for dirty plan drafts.
 'use client';
+// Responsibility: useAdminMembersPlansUnsavedChangesGuard; module-local guard for dirty plan drafts.
 
 import { useEffect } from 'react';
 

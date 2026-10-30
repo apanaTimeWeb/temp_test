@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceSecurityDepositsPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 'use client';
+// Responsibility: AdminFinanceSecurityDepositsPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 // RESPONSIBILITY: Owns deposit demo state and coordinates the toolbar, ledger and modal intents.
@@ -10,7 +10,7 @@ import { useTranslations } from 'next-intl';
 import { useAdminFinanceAccessibleDialog } from '@/app/frontend_admin/admin_finance/finance_security_deposits/hooks/useAdminFinanceSecurityDepositsAccessibleDialog';
 import { ADMIN_FINANCE_DEMO_SECURITY_DEPOSITS } from '@/app/frontend_admin/admin_finance/finance_security_deposits/mocks/scenarios/admin_finance_security_deposits.scenarios';
 import type { AdminFinanceDeposit } from '@/app/frontend_admin/admin_finance/finance_security_deposits/types/AdminFinanceSecurityDepositsTypes';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { getAdminFinanceLocalDateString, majorToMinor, minorToMajor } from '@/app/frontend_admin/admin_finance/finance_security_deposits/utils/AdminFinanceSecurityDepositsFormat';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import AdminFinanceSecurityDepositsToolbar from '@/app/frontend_admin/admin_finance/finance_security_deposits/components/AdminFinanceSecurityDepositsToolbar';

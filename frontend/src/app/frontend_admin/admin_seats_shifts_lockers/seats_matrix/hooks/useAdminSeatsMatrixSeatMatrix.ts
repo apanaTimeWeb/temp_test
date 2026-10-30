@@ -14,7 +14,7 @@ export function useAdminSeatMatrixSeatMatrix() {
     queryFn: async (): Promise<AdminSeatMatrixSeatMatrixViewModel[]> => {
       const records = await fetchAdminSeatMatrixSeatMatrix();
       return records.map((item) => {
-        const normalizedStatus = item.status?.trim().toLowerCase();
+        const normalizedStatus = typeof item.status === 'string' ? item.status.trim().toLowerCase() : '';
         const canonicalStatus = normalizedStatus === 'working' ? 'free' : normalizedStatus === 'assigned' ? 'occupied' : normalizedStatus;
         const status = !item.isActive || canonicalStatus === 'maintenance'
           ? ADMIN_SEAT_MATRIX_STATUS.MAINTENANCE
@@ -23,7 +23,7 @@ export function useAdminSeatMatrixSeatMatrix() {
             : 'unknown';
 
         return {
-          uuid: item.id,
+          uuid: item.id !== undefined ? String(item.id) : undefined,
           id: item.seatNumber.replace(/^S-/, ''),
           status,
           student: item.student,

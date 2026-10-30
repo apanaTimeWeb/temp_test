@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceAutoSuspendPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 'use client';
+// Responsibility: AdminFinanceAutoSuspendPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 
 // RESPONSIBILITY: Coordinates auto-suspend demo state and composes bounded page sections.
 // DATA FLOW: feature fixture -> local demo state -> metrics/table -> blocked live actions without an approved API contract.
@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl';
 import { useAdminFinanceAccessibleDialog } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/hooks/useAdminFinanceAutoSuspendAccessibleDialog';
 import { ADMIN_FINANCE_DEMO_AUTO_SUSPEND_CONFIG, ADMIN_FINANCE_DEMO_SUSPENDED_STUDENTS } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/mocks/AdminFinanceAutoSuspendDemoFixtures';
 import type { AdminFinanceAutoSuspendConfig, AdminFinanceSuspendedStudent } from '@/app/frontend_admin/admin_finance/finance_auto_suspend/types/AdminFinanceAutoSuspendTypes';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import AdminFinanceAutoSuspendKpiCards from '@/app/frontend_admin/admin_finance/finance_auto_suspend/components/AdminFinanceAutoSuspendKpiCards';
 import AdminFinanceAutoSuspendPolicyCard from '@/app/frontend_admin/admin_finance/finance_auto_suspend/components/AdminFinanceAutoSuspendPolicyCard';

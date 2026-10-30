@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAuditLogsPage presentation component owned by admin_audit_logs; responsibility folder: admin_audit_logs_components_views.
 'use client';
+// RESPONSIBILITY: AdminAuditLogsPage presentation component owned by admin_audit_logs; responsibility folder: admin_audit_logs_components_views.
 
 import useAdminSystemAuditLogsMain from '@/app/frontend_admin/admin_system/system_audit_logs/hooks/useAdminSystemAuditLogsMain';
 import AdminAuditLogsFilters from '@/app/frontend_admin/admin_system/system_audit_logs/components/AdminSystemAuditLogsFilters';

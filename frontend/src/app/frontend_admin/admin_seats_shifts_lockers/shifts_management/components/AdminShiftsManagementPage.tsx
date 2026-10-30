@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminShiftsManagementPage component owned by admin_shifts; responsibility folder: admin_shifts_components_views.
 'use client';
+// RESPONSIBILITY: AdminShiftsManagementPage component owned by admin_shifts; responsibility folder: admin_shifts_components_views.
 
 import { useTranslations } from 'next-intl';
 import { Download, Printer, Upload } from 'lucide-react';

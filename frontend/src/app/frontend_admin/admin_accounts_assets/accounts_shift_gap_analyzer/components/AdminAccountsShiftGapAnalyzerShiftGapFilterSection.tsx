@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountingShiftGapFilterSection component owned by admin_accounting; responsibility folder: admin_accounting_components_forms.
 'use client';
+// RESPONSIBILITY: AdminAccountingShiftGapFilterSection component owned by admin_accounting; responsibility folder: admin_accounting_components_forms.
 import { ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS } from '@/app/frontend_admin/admin_accounts_assets/accounts_shift_gap_analyzer/config/admin_accounts_shift_gap_analyzer.url_config';
 
 export default function AdminAccountingShiftGapFilterSection({ value, onChange, labels }: {

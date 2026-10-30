@@ -1,10 +1,10 @@
-// RESPONSIBILITY: AdminAccountsSeatGapReportPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 'use client';
+// RESPONSIBILITY: AdminAccountsSeatGapReportPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import type { DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import AdminAccountingSeatGapSummarySection from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/components/AdminAccountsSeatGapReportSeatGapSummarySection';

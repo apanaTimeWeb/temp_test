@@ -1,5 +1,5 @@
-// DATA FLOW: seats_history route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: seats_history route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import type { AdminSeatsHistoryFilterValue } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_history/types/AdminSeatsHistoryTypes';
 const SEAT_FILTERS: readonly AdminSeatsHistoryFilterValue[] = ['all'];

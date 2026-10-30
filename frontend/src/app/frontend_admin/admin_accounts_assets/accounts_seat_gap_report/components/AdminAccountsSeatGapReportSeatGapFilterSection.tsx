@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountingSeatGapFilterSection component owned by admin_accounting; responsibility folder: admin_accounting_components_forms.
 'use client';
+// RESPONSIBILITY: AdminAccountingSeatGapFilterSection component owned by admin_accounting; responsibility folder: admin_accounting_components_forms.
 import { ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS, ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/config/admin_accounts_seat_gap_report.url_config';
 
 export default function AdminAccountingSeatGapFilterSection({

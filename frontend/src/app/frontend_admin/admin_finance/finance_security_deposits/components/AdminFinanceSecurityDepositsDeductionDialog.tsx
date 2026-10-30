@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceSecurityDepositsDeductionDialog component owned by admin_finance; responsibility folder: admin_finance_security_deposits_sections.
 'use client';
+// Responsibility: AdminFinanceSecurityDepositsDeductionDialog component owned by admin_finance; responsibility folder: admin_finance_security_deposits_sections.
 
 // RESPONSIBILITY: Presents a deduction form for one selected deposit.
 

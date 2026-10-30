@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Renders the selected branch-list tab with its module-owned responsive table, pagination, and actions.
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import type { KeyboardEvent, MouseEvent } from 'react';
@@ -19,7 +19,13 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
   const [page, setPage] = useAdminApplicationInfrastructureUrlQueryState<number>('page', 0);
   const [pageSize, setPageSize] = useAdminApplicationInfrastructureUrlQueryState<number>('pageSize', ADMIN_BRANCHES_DEFAULT_PAGE_SIZE, { validValues: [10, 25, 50] });
   const [openActionsFor, setOpenActionsFor] = useState<string | null>(null);
-  useEffect(() => { setPage(0); }, [filterStatus, setPage]);
+  const prevFilterRef = useRef(filterStatus);
+  useEffect(() => {
+    if (prevFilterRef.current !== filterStatus) {
+      prevFilterRef.current = filterStatus;
+      setPage(0);
+    }
+  }, [filterStatus, setPage]);
   const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));
   const safePage = Math.min(page, pageCount - 1);
   const visibleRows = useMemo(() => rows.slice(safePage * pageSize, (safePage + 1) * pageSize), [safePage, pageSize, rows]);
@@ -50,7 +56,7 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
           <button type="button" aria-label={t('OPEN_ACTIONS', { name: branch.name })} aria-haspopup="menu" aria-expanded={openActionsFor === branch.id} aria-controls={`admin-branch-actions-${branch.id}`} className="min-h-11 min-w-11 rounded-md text-text-secondary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => setOpenActionsFor((current) => current === branch.id ? null : branch.id)}><MoreVertical size={18} strokeWidth={2}/></button></div>
           {openActionsFor === branch.id && <div id={`admin-branch-actions-${branch.id}`} role="menu" aria-label={t('OPEN_ACTIONS', { name: branch.name })} onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }} className="absolute right-4 top-14 z-10 min-w-48 rounded-md border border-border bg-popover p-1 shadow-popover"><button type="button" role="menuitem" className="block min-h-11 w-full rounded px-3 py-2 text-left text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => { setOpenActionsFor(null); setViewingBranch(branch); }}>{t('VIEW_DETAILS')}</button><button type="button" role="menuitem" disabled title={t('EDIT_BRANCH_TITLE')} className="block min-h-11 w-full cursor-not-allowed rounded px-3 py-2 text-left text-text-disabled disabled:opacity-60">{t('EDIT_BRANCH_UNAVAILABLE')}</button><button type="button" role="menuitem" className="block min-h-11 w-full rounded px-3 py-2 text-left text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => setOpenActionsFor(null)}>{t('CLOSE_MENU')}</button></div>}</td>
       </tr>)}</tbody></table></div>
-    {pageCount > 1 && <div className="flex min-h-11 flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 text-caption text-text-secondary"><span>{t('SHOWING_RANGE', { from: rows.length ? safePage * pageSize + 1 : 0, to: Math.min((safePage + 1) * pageSize, rows.length), count: rows.length })}</span><div className="flex flex-wrap items-center gap-2"><label htmlFor="admin-branches-page-size">{t('ROWS_PER_PAGE')}</label><select id="admin-branches-page-size" className="min-h-11 rounded-md border border-border bg-input px-2 text-text-primary" value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(0); }}>{ADMIN_BRANCHES_PAGE_SIZE_OPTIONS.map((size) => <option key={size} value={size}>{size}</option>)}</select><button type="button" className="min-h-11 rounded-md border border-border px-3 py-2 text-primary disabled:text-text-disabled" disabled={safePage === 0} onClick={() => setPage((current) => Math.max(0, Math.min(pageCount - 1, current - 1)))}>{t('PREVIOUS')}</button><button type="button" className="min-h-11 rounded-md border border-border px-3 py-2 text-primary disabled:text-text-disabled" disabled={safePage >= pageCount - 1} onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}>{t('NEXT')}</button></div></div>}
+    {rows.length > 0 && <div className="flex min-h-11 flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3 text-caption text-text-secondary"><span>{t('SHOWING_RANGE', { from: rows.length ? safePage * pageSize + 1 : 0, to: Math.min((safePage + 1) * pageSize, rows.length), count: rows.length })}</span><div className="flex flex-wrap items-center gap-2"><label htmlFor="admin-branches-page-size">{t('ROWS_PER_PAGE')}</label><select id="admin-branches-page-size" className="min-h-11 rounded-md border border-border bg-input px-2 text-text-primary" value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setPage(0); }}>{ADMIN_BRANCHES_PAGE_SIZE_OPTIONS.map((size) => <option key={size} value={size}>{size}</option>)}</select><button type="button" className="min-h-11 rounded-md border border-border px-3 py-2 text-primary disabled:text-text-disabled" disabled={safePage === 0} onClick={() => setPage((current) => Math.max(0, Math.min(pageCount - 1, current - 1)))}>{t('PREVIOUS')}</button><button type="button" className="min-h-11 rounded-md border border-border px-3 py-2 text-primary disabled:text-text-disabled" disabled={safePage >= pageCount - 1} onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}>{t('NEXT')}</button></div></div>}
   </div>;
 
   if (activeTab === 'all') return <section className="admin-card"><div className="flex items-center justify-between gap-4 p-4"><h2>{t('ALL_BRANCHES')}</h2><button type="button" className="admin-btn-primary" onClick={() => setActiveTab('create')}>{t('NEW_BRANCH')}</button></div>{table}</section>;

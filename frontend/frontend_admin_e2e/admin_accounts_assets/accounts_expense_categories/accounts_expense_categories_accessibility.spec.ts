@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-const require = createRequire(new URL('../../../../frontend_admin/package.json', import.meta.url));
-const { expect, test } = require('@playwright/test');
-
+import { expect, test } from '@playwright/test';
 test('category dialog backdrop is decorative and close restores keyboard focus', async ({ page }) => {
   await page.goto('/admin/admin_accounts_assets/accounts_expense_categories');
   await expect(page.getByRole('heading').first()).toBeVisible();

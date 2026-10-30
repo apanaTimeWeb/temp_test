@@ -1,5 +1,5 @@
-// RESPONSIBILITY: Owns the selected manager overview and its demo-only history/activity panels.
 'use client';
+// RESPONSIBILITY: Owns the selected manager overview and its demo-only history/activity panels.
 
 import { Building2, Clock3, Mail, Phone, UserRound } from 'lucide-react';
 import { useTranslations } from 'next-intl';

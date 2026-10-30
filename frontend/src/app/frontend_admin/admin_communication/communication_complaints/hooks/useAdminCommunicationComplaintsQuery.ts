@@ -1,5 +1,5 @@
-// DATA FLOW: communication_complaints route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: communication_complaints route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchAdminCommunicationComplaints } from '@/app/frontend_admin/admin_communication/communication_complaints/api/admin_communication_complaints_api';

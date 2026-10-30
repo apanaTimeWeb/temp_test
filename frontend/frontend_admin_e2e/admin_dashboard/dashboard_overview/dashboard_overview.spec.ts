@@ -1,9 +1,5 @@
-import { createRequire } from 'node:module';
-
-const require = createRequire(
-  new URL('../../../../frontend_admin/package.json', import.meta.url),
+import { expect, test } from '@playwright/test';
 );
-const { expect, test } = require('@playwright/test');
 
 test('redirects the admin dashboard root to the canonical overview leaf', async ({ page }) => {
   await page.goto('/admin/admin_dashboard');

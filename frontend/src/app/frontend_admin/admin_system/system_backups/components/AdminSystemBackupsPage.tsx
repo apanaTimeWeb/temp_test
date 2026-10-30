@@ -1,5 +1,5 @@
-// Responsibility: AdminSystemBackupsPage component owned by admin_system; responsibility folder: admin_system_components_views.
 'use client';
+// Responsibility: AdminSystemBackupsPage component owned by admin_system; responsibility folder: admin_system_components_views.
 
 import useBackupsPage from '@/app/frontend_admin/admin_system/system_backups/hooks/useAdminSystemBackupsPage';
 import AdminSystemBackupsPageView from '@/app/frontend_admin/admin_system/system_backups/components/AdminSystemBackupsPageView';

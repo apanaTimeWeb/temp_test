@@ -53,6 +53,10 @@ import AdminMembersStudentsView from '@/app/frontend_admin/admin_members/members
 
 
 describe("Consolidated: AdminMembersStudentsHarness", () => {
+    it('renders children when scenario is active', () => {
+        render(<HarnessScenarioComponent scenario="ACTIVE"><span>Harness Content</span></HarnessScenarioComponent>);
+        expect(screen.getByText('Harness Content')).toBeTruthy();
+    });
 });
 
 describe("Consolidated: AdminMembersStudentsRegressionSuite", () => {

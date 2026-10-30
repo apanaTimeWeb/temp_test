@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminCollectFeePageView component owned by admin_collect_fee; responsibility folder: components.
 'use client';
+// RESPONSIBILITY: AdminCollectFeePageView component owned by admin_collect_fee; responsibility folder: components.
 import { useEffect, useRef } from 'react';
 import { adminCollectFeeMajorToMinor, formatAdminCollectFeeCurrency, formatDate, getAdminCollectFeeLocalDateString } from '@/app/frontend_admin/admin_finance/finance_collect_fee/utils/AdminFinanceCollectFeeFormat';
 import { Search, CheckCircle, IndianRupee, BookOpen, X } from 'lucide-react';

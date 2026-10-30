@@ -1,7 +1,7 @@
 import { describe as suite0_describe, expect as suite0_expect, it as suite0_it } from "vitest";
 import { render as suite0_render, screen as suite0_screen } from "@testing-library/react";
 import { AdminAccountingExpenseRecordSchema as suite0_AdminAccountingExpenseRecordSchema, createAdminAccountingExpenseCategoryFormSchema as suite0_createAdminAccountingExpenseCategoryFormSchema, createAdminAccountingExpenseFormSchema as suite0_createAdminAccountingExpenseFormSchema } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas";
-import { AdminAccountsExpensesHarness as suite0_AdminAccountsExpensesHarness } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/tests/harness/AdminAccountsExpensesHarness";
+import { AdminAccountsExpensesHarness as Suite0_AdminAccountsExpensesHarness } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/tests/harness/AdminAccountsExpensesHarness";
 import { AdminAccountsExpensesScenarios as suite0_AdminAccountsExpensesScenarios } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/tests/harness/bootstrap";
 import suite0_englishMessages from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/locales/admin_accounts_expenses_en.json";
 import suite0_hindiMessages from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/locales/admin_accounts_expenses_hi.json";
@@ -89,7 +89,7 @@ suite0_describe('expense record storage boundary and monetary invariants', () =>
 
 suite0_describe('scenario harness exercises each declared UI state', () => {
   suite0_it.each(suite0_AdminAccountsExpensesScenarios)('renders the %s scenario', (scenario) => {
-    suite0_render(<suite0_AdminAccountsExpensesHarness scenario={scenario}><p>Active expenses content</p></suite0_AdminAccountsExpensesHarness>);
+    suite0_render(<Suite0_AdminAccountsExpensesHarness scenario={scenario}><p>Active expenses content</p></Suite0_AdminAccountsExpensesHarness>);
     const harness = suite0_screen.getByTestId('admin_accounts_expenses-harness');
     const expected = ({ ACTIVE: 'active', EMPTY: 'empty', SERVER_500: 'server-error', TIMEOUT: 'timeout', UNAUTHORIZED: 'unauthorized' } as const)[scenario];
     suite0_expect(harness.getAttribute('data-scenario')).toBe(expected);

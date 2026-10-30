@@ -1,14 +1,17 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import useAdminSystemWhatsAppIntegrationPage from '@/app/frontend_admin/admin_system/system_whatsapp_integration/hooks/useAdminSystemWhatsappIntegrationWhatsAppIntegrationPage';
 import { ADMIN_SYSTEM_WHATSAPP_STATUS_CONFIG } from '@/app/frontend_admin/admin_system/system_whatsapp_integration/config/admin_system_whatsapp_integration.url_config';
 import { ADMIN_SYSTEM_WHATSAPP_MESSAGE_LOGS, ADMIN_SYSTEM_WHATSAPP_PROVIDER_EXAMPLES } from '@/app/frontend_admin/admin_system/system_whatsapp_integration/mocks/AdminSystemWhatsappIntegrationWhatsAppFixtures';
 
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string, values?: Record<string, unknown>) => values ? `${key}:${String(values.id ?? '')}` : key }));
-vi.mock('@/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: vi.fn() }));
-vi.mock('sonner', () => ({ default: { info: vi.fn(), error: vi.fn(), success: vi.fn() } }));
+vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: vi.fn() }));
+vi.mock('sonner', () => {
+  const toast = { info: vi.fn(), error: vi.fn(), success: vi.fn() };
+  return { default: toast, toast, Toaster: () => null };
+});
 
 describe('Admin System WhatsApp registry', () => {
   it('keeps fixture statuses valid and provider example IDs unique', () => {

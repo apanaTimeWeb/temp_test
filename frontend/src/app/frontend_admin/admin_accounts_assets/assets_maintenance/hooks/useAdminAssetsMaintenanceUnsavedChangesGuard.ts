@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect } from 'react';
 
 /** Intercepts browser exits and same-origin links while a module-owned form draft is dirty. */

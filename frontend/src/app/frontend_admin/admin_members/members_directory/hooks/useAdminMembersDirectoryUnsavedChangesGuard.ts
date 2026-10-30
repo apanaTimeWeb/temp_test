@@ -1,5 +1,5 @@
-// Responsibility: useAdminMembersDirectoryUnsavedChangesGuard; module-local guard for dirty directory drafts.
 'use client';
+// Responsibility: useAdminMembersDirectoryUnsavedChangesGuard; module-local guard for dirty directory drafts.
 
 import { useEffect } from 'react';
 

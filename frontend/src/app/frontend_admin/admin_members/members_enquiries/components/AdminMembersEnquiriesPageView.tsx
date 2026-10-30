@@ -1,7 +1,8 @@
+'use client';
 import { useTranslations } from 'next-intl';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { Search, LayoutGrid, List, MoreHorizontal, PhoneCall, Upload, Download, Printer, MessageSquare, Send, Mail, CalendarDays, CheckCircle, Clock, Phone, User } from 'lucide-react';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { ADMIN_ENQUIRIES_ENQUIRY_KANBAN_COLUMNS, ADMIN_ENQUIRIES_ENQUIRY_STATUS_FILTERS, ADMIN_ENQUIRIES_URLS, ADMIN_ENQUIRIES_ENQUIRY_DOT_CLASSES } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
 import useEnquiriesPage from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
 import AdminEnquiriesTable from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesTable';
@@ -15,7 +16,6 @@ import type { Enquiry } from '@/app/frontend_admin/admin_members/members_enquiri
 import type { AdminEnquiriesEnquiryKanbanCardProps } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
 
 // RESPONSIBILITY: AdminEnquiriesPageView component owned by admin_enquiries; responsibility folder: admin_enquiries_components_views.
-'use client';
 
 export default function AdminEnquiriesPageView() {
   const t = useTranslations('ADMIN_ENQUIRIES');
@@ -210,7 +210,6 @@ export default function AdminEnquiriesPageView() {
 }
 
 // RESPONSIBILITY: AdminEnquiriesEnquiryKanbanCard component owned by admin_enquiries; responsibility folder: admin_enquiries_helpers.
-'use client';
 
 export function AdminEnquiriesEnquiryKanbanCard({ enq, colClass, onClick }: AdminEnquiriesEnquiryKanbanCardProps) {
   const t = useTranslations('ADMIN_ENQUIRIES');

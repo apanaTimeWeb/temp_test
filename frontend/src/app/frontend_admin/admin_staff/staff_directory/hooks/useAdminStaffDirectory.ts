@@ -1,5 +1,5 @@
-// DATA FLOW: staff_directory route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: staff_directory route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 import { useCallback, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';

@@ -80,6 +80,22 @@ const nextConfig = {
         source: '/manager/:path*',
         destination: '/frontend_manager/:path*',
       },
+      {
+        source: '/admin',
+        destination: '/frontend_admin/admin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/admin/dashboard',
+        destination: '/frontend_admin/admin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/admin/admin_dashboard',
+        destination: '/frontend_admin/admin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/admin/:path*',
+        destination: '/frontend_admin/:path*',
+      },
     ];
   },
   async redirects() {

@@ -25,6 +25,10 @@ import { getAdminStaffRolesPermissionsDemoState, resetAdminStaffRolesPermissions
 import { resolveAdminStaffRolesPermissionsRoleEntry } from '@/app/frontend_admin/admin_staff/staff_roles_permissions/utils/AdminStaffRolesPermissionsRoleUtils';
 
 describe("Consolidated: AdminStaffRolesPermissionsHarness", () => {
+    it('renders children when scenario is active', () => {
+        render(<AdminStaffRolesPermissionsHarness scenario="ACTIVE"><span>Harness Content</span></AdminStaffRolesPermissionsHarness>);
+        expect(screen.getByText('Harness Content')).toBeTruthy();
+    });
 });
 
 describe("Consolidated: AdminStaffRolesPermissionsRegressionSuite", () => {
@@ -46,7 +50,7 @@ describe("Consolidated: AdminStaffRolesPermissionsRegressionSuite", () => {
     });
     describe('Original suite: AdminStaffRolesPermissionsContract.test.ts', () => {
         const here = path.dirname(fileURLToPath(import.meta.url));
-        describe('access roles boundary', () => { it('keeps authorization server-side and avoids treating the canonical UI route as an API', () => { const source = readFileSync(path.join(here, '../components/AdminStaffRolesPermissionsPage'), 'utf8'); expect(source).toContain('ACCESS_ROLES_NOTICE'); expect(source).toContain('isFrontendDemoModeEnabled'); expect(source).toContain('SAVE_HELP_BLOCKED'); }); });
+        describe('access roles boundary', () => { it('keeps authorization server-side and avoids treating the canonical UI route as an API', () => { const source = readFileSync(path.join(here, '../components/AdminStaffRolesPermissionsPage.tsx'), 'utf8'); expect(source).toContain('ACCESS_ROLES_NOTICE'); expect(source).toContain('isFrontendDemoModeEnabled'); expect(source).toContain('SAVE_HELP_BLOCKED'); }); });
     });
     describe('Original suite: AdminStaffRolesPermissionsDemoState.test.ts', () => {
         afterEach(() => resetAdminStaffRolesPermissionsDemoState());

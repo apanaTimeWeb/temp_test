@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminSystemDataExportPage component owned by admin_system; responsibility folder: admin_system_components_views.
 'use client';
+// RESPONSIBILITY: AdminSystemDataExportPage component owned by admin_system; responsibility folder: admin_system_components_views.
 
 import { useMemo, useState } from 'react';
 import { ChevronRight, Download, FileSpreadsheet } from 'lucide-react';
@@ -23,8 +23,8 @@ export function AdminSystemDataExportPage() {
   const locale = useLocale();
   const demoMode = isFrontendDemoModeEnabled();
   const [selected, setSelected] = useState<Set<AdminSystemDataExportModuleId>>(new Set());
-  const [dateFrom, setDateFrom] = useState(ADMIN_SYSTEM_DATA_EXPORT_DEFAULT_DATE_FROM);
-  const [dateTo, setDateTo] = useState(ADMIN_SYSTEM_DATA_EXPORT_DEFAULT_DATE_TO);
+  const [dateFrom, setDateFrom] = useState<string>(ADMIN_SYSTEM_DATA_EXPORT_DEFAULT_DATE_FROM);
+  const [dateTo, setDateTo] = useState<string>(ADMIN_SYSTEM_DATA_EXPORT_DEFAULT_DATE_TO);
   const hasValidDateRange = Boolean(dateFrom && dateTo && dateFrom <= dateTo);
   const estimatedTotal = useMemo(
     () => ADMIN_SYSTEM_DATA_EXPORT_MODULES.filter((module) => selected.has(module.id)).reduce((sum, module) => sum + module.estimatedRows, 0),

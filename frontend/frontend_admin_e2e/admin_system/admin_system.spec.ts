@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-const require = createRequire(new URL('../../../frontend_admin/package.json', import.meta.url));
-const { expect, test } = require('@playwright/test');
-
+import { expect, test } from '@playwright/test';
 test('redirects admin_system to its canonical default submodule', async ({ page }) => {
   await page.goto('/admin/admin_system');
   await expect(page).toHaveURL(/\/admin\/admin_system\/system_settings(?:[?#]|$)/);

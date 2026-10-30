@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { NextIntlClientProvider } from 'next-intl';
+import messages from '@/app/frontend_admin/admin_staff/staff_roles_permissions/locales/admin_staff_roles_permissions_en.json';
 import AdminStaffRolesPermissions from '@/app/frontend_admin/admin_staff/staff_roles_permissions/components/AdminStaffRolesPermissionsPage';
 import { fetchAdminStaffRolesPermissions } from '@/app/frontend_admin/admin_staff/staff_roles_permissions/api/admin_staff_roles_permissions.api';
 
@@ -12,9 +14,11 @@ vi.mock('@/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: () => false
 function renderAdminStaffRolesPermissions() {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <QueryClientProvider client={queryClient}>
-      <AdminStaffRolesPermissions />
-    </QueryClientProvider>,
+    <NextIntlClientProvider locale="en" messages={messages}>
+      <QueryClientProvider client={queryClient}>
+        <AdminStaffRolesPermissions />
+      </QueryClientProvider>
+    </NextIntlClientProvider>,
   );
 }
 

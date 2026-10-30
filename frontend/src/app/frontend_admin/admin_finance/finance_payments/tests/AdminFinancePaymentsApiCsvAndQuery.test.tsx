@@ -20,7 +20,8 @@ describe('admin_finance_payments API contract', () => {
   it('accepts synthetic payment records matching the local response schema', async () => {
     vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'http://localhost');
     mswTestServer.use(...ADMIN_FINANCE_PAYMENTS_MSW_HANDLERS);
-    const payments = await fetchAdminFinancePayments();
+    const { fetchAdminFinancePayments: realFetch } = await vi.importActual<typeof import('@/app/frontend_admin/admin_finance/finance_payments/api/admin_finance_payments_api')>('@/app/frontend_admin/admin_finance/finance_payments/api/admin_finance_payments_api');
+    const payments = await realFetch();
     expect(payments).toHaveLength(4);
     expect(new Set(payments.map((payment) => payment.mode))).toEqual(new Set(['cash', 'upi', 'card', 'bank']));
     expect(payments.every((payment) => String(payment.id).startsWith('synthetic-'))).toBe(true);
@@ -28,8 +29,9 @@ describe('admin_finance_payments API contract', () => {
 
   it('rejects a malformed payment response', async () => {
     vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'http://localhost');
-     mswTestServer.use(http.get(ADMIN_FINANCE_PAYMENTS_API.LIST, () => HttpResponse.json({ success: true, message: 'Malformed test response.', data: { records: [] }, requestId: 'test-finance-payments-malformed' })));
-    await expect(fetchAdminFinancePayments()).rejects.toThrow();
+    mswTestServer.use(http.get(`*${ADMIN_FINANCE_PAYMENTS_API.LIST}`, () => HttpResponse.json({ success: true, message: 'Malformed test response.', data: { records: [] }, requestId: 'test-finance-payments-malformed' })));
+    const { fetchAdminFinancePayments: realFetch } = await vi.importActual<typeof import('@/app/frontend_admin/admin_finance/finance_payments/api/admin_finance_payments_api')>('@/app/frontend_admin/admin_finance/finance_payments/api/admin_finance_payments_api');
+    await expect(realFetch()).rejects.toThrow();
   });
 });
 });

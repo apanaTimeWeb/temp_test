@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountingExpenseCategoryGridSection component owned by admin_accounting; responsibility folder: admin_accounting_components_tables.
 'use client';
+// RESPONSIBILITY: AdminAccountingExpenseCategoryGridSection component owned by admin_accounting; responsibility folder: admin_accounting_components_tables.
 import { Trash2 } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import type { AdminAccountingExpenseCategory } from '@/app/frontend_admin/admin_accounts_assets/accounts_expense_categories/types/AdminAccountsExpenseCategoriesTypes';

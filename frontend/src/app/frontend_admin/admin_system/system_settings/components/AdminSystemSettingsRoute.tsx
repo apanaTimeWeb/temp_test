@@ -1,5 +1,5 @@
-// RESPONSIBILITY: Feature-local visibility guard for the admin system settings route.
 'use client';
+// RESPONSIBILITY: Feature-local visibility guard for the admin system settings route.
 
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';

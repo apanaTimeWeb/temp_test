@@ -1,5 +1,5 @@
-// Responsibility: AdminFinancePaymentPromisesExtendDialog component owned by admin_finance; responsibility folder: admin_finance_payment_promises_sections.
 'use client';
+// Responsibility: AdminFinancePaymentPromisesExtendDialog component owned by admin_finance; responsibility folder: admin_finance_payment_promises_sections.
 
 // RESPONSIBILITY: Presents an extension form for one selected payment promise.
 

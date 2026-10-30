@@ -1,5 +1,5 @@
-// DATA FLOW: lockers_matrix route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: lockers_matrix route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchAdminLockersLockers } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/api/admin_lockers_matrix_api';
@@ -19,7 +19,7 @@ export function useAdminLockersLockerMatrix() {
           : 'unknown';
 
         return {
-          uuid: item.id,
+          uuid: item.id !== undefined ? String(item.id) : undefined,
           id: item.lockerNumber.replace(/^L-/, ''),
           status,
         };

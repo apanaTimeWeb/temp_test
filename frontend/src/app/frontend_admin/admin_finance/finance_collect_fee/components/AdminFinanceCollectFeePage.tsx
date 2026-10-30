@@ -1,5 +1,5 @@
-// Responsibility: AdminCollectFeePage component owned by admin_collect_fee; responsibility folder: components.
 'use client';
+// Responsibility: AdminCollectFeePage component owned by admin_collect_fee; responsibility folder: components.
 import useCollectFee from '@/app/frontend_admin/admin_finance/finance_collect_fee/hooks/useAdminFinanceCollectFeePage';
 import AdminCollectFeePageView from '@/app/frontend_admin/admin_finance/finance_collect_fee/components/AdminFinanceCollectFeePageView';
 

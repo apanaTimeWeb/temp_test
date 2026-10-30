@@ -1,5 +1,5 @@
-// Responsibility: AdminCommunicationWhatsappLogsPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 'use client';
+// Responsibility: AdminCommunicationWhatsappLogsPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 // RESPONSIBILITY: Entry page for the admin_communication module.
 // DATA FLOW: Next.js Router -> Page -> Components

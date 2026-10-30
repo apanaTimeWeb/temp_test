@@ -1,5 +1,5 @@
-// Responsibility: AdminFinancePaymentPromisesTable component owned by admin_finance; responsibility folder: admin_finance_payment_promises_sections.
 'use client';
+// Responsibility: AdminFinancePaymentPromisesTable component owned by admin_finance; responsibility folder: admin_finance_payment_promises_sections.
 
 // RESPONSIBILITY: Renders payment-promise records and reports row-action intent to the parent.
 

@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-const require = createRequire(new URL('../../../frontend_admin/package.json', import.meta.url));
-const { expect, test } = require('@playwright/test');
-
+import { expect, test } from '@playwright/test';
 test('redirects admin_accounts_assets to its canonical default submodule', async ({ page }) => {
   await page.goto('/admin/admin_accounts_assets');
   await expect(page).toHaveURL(/\/admin\/admin_accounts_assets\/accounts_expenses(?:[?#]|$)/);

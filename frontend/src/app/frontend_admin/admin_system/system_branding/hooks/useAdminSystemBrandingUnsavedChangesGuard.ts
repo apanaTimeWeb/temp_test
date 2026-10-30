@@ -1,5 +1,5 @@
-// Responsibility: useAdminSystemBrandingUnsavedChangesGuard; protects local branding preview drafts.
 'use client';
+// Responsibility: useAdminSystemBrandingUnsavedChangesGuard; protects local branding preview drafts.
 
 import { useEffect } from 'react';
 

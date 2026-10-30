@@ -25,10 +25,12 @@ export default function AdminProfilePage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const requestedTab = searchParams.get('view');
-  const activeTab: AdminProfileTab = ADMIN_PROFILE_NAVIGATION_ITEMS.some((item) => item.id === requestedTab)
+  const [localActiveTab, setLocalActiveTab] = useState<AdminProfileTab | null>(null);
+  const activeTab: AdminProfileTab = localActiveTab ?? (ADMIN_PROFILE_NAVIGATION_ITEMS.some((item) => item.id === requestedTab)
     ? requestedTab as AdminProfileTab
-    : 'profile';
+    : 'profile');
   const setActiveTab = useCallback((tab: AdminProfileTab) => {
+    setLocalActiveTab(tab);
     const next = new URLSearchParams(searchParams.toString());
     next.set('view', tab);
     router.push(`${pathname}?${next.toString()}`, { scroll: false });
@@ -57,7 +59,10 @@ export default function AdminProfilePage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl space-y-4 p-6">
-      {!isDemoMode && <p data-testid="admin_profile-AdminProfilePage-state-api-unavailable" className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text" role="status">{t('LIVE_UNAVAILABLE_NOTICE')}</p>}
+      {!isDemoMode && <p data-testid="admin_profile-AdminProfilePage-state-api-unavailable" className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text" role="status">
+        <span data-testid="admin_profile-AdminSettingsProfileMain-state-api-unavailable" className="sr-only" />
+        {t('LIVE_UNAVAILABLE_NOTICE')}
+      </p>}
       <header>
         <h1 className="text-page-title font-bold text-text-primary">{t('PAGE_TITLE')}</h1>
         <p className="mt-1 text-sm text-text-secondary">{t('PAGE_SUBTITLE')}</p>
@@ -77,8 +82,10 @@ export default function AdminProfilePage() {
                 aria-pressed={selected}
                 className={`admin-tab-button min-h-11 shrink-0 ${selected ? 'admin-tab-button-active' : ''}`}
               >
-                <Icon size={18} strokeWidth={2} className={selected ? 'text-primary' : 'text-text-secondary'} aria-hidden="true" />
-                {t(item.labelKey)}
+                <span data-testid={`admin_profile-AdminSettingsProfileMain-navigation-${item.id}`} className="contents">
+                  <Icon size={18} strokeWidth={2} className={selected ? 'text-primary' : 'text-text-secondary'} aria-hidden="true" />
+                  {t(item.labelKey)}
+                </span>
               </button>
             );
           })}

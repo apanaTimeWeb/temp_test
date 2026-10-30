@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, type ReactNode } from 'react';
 
 import { type AdminCommunicationNotificationCenterScenario } from '@/app/frontend_admin/admin_communication/communication_notification_center/tests/harness/bootstrap';

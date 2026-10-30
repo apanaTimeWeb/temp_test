@@ -1,5 +1,5 @@
-// Responsibility: AdminShiftsShiftMigrationPage component owned by admin_shifts; responsibility folder: admin_shifts_components_views.
 'use client';
+// Responsibility: AdminShiftsShiftMigrationPage component owned by admin_shifts; responsibility folder: admin_shifts_components_views.
 import useShiftMigrationPage from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_migration/hooks/useAdminShiftsMigrationShiftMigrationPage';
 import AdminShiftsShiftMigrationPageView from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_migration/components/AdminShiftsMigrationShiftMigrationPageView';
 

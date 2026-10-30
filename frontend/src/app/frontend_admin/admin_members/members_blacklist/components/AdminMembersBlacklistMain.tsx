@@ -1,3 +1,4 @@
+'use client';
 import { useMemo, useCallback, useEffect, useState } from 'react';
 import { format, isValid, parseISO } from 'date-fns';
 import { enIN, hi } from 'date-fns/locale';
@@ -9,7 +10,6 @@ import type { AdminBlacklistRecord, AdminBlacklistFormDialogProps } from '@/app/
 import AdminBlacklistRecordsSection from '@/app/frontend_admin/admin_members/members_blacklist/components/AdminMembersBlacklistRecordsSection';
 import { Toaster } from 'sonner';
 import useAdminMembersBlacklistState from '@/app/frontend_admin/admin_members/members_blacklist/hooks/useAdminMembersBlacklistState';
-import type { AdminBlacklistFormSchemaType } from '@/app/frontend_admin/admin_members/members_blacklist/schemas/AdminMembersBlacklistSchema';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -26,7 +26,6 @@ import { createAdminBlacklistFormSchema, type AdminBlacklistFormSchemaType, type
 
 
 // RESPONSIBILITY: AdminMembersBlacklistMain component owned by admin_blacklist; responsibility folder: admin_blacklist_components_tables.
-'use client';
 
 
 
@@ -136,7 +135,6 @@ export default function AdminMembersBlacklistMain() {
 }
 
 // RESPONSIBILITY: AdminBlacklistFormDialog component owned by admin_blacklist; responsibility folder: admin_blacklist_form_dialog.
-'use client';
 
 
 

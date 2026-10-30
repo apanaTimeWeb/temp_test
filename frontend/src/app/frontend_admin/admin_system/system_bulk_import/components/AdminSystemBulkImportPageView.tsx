@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminSystemBulkImportPageView component owned by admin_system; responsibility folder: admin_system_components_views.
 'use client';
+// RESPONSIBILITY: AdminSystemBulkImportPageView component owned by admin_system; responsibility folder: admin_system_components_views.
 
 import { useTranslations } from 'next-intl';
 import { Button } from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveButton';

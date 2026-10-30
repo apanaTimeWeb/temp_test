@@ -10,16 +10,22 @@ import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/memb
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 
 const { toastInfoMock, toastSuccessMock } = vi.hoisted(() => ({ toastInfoMock: vi.fn(), toastSuccessMock: vi.fn() }));
-vi.mock('sonner', () => ({
-  default: { info: toastInfoMock, success: toastSuccessMock, error: vi.fn() },
-  Toaster: () => null,
-}));
+vi.mock('sonner', () => {
+  const toast = { info: toastInfoMock, success: toastSuccessMock, error: vi.fn() };
+  return {
+    default: toast,
+    toast,
+    Toaster: () => null,
+  };
+});
 
 vi.mock('@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsOverviewSection', () => ({
-  default: ({ coupons, columns }: { coupons: AdminCouponsCoupon[]; columns: readonly DataGridColumn<AdminCouponsCoupon>[] }) => {
+  default: ({ coupons, columns, onCreateCoupon, onValidateDraft, isDemoMode }: { coupons: AdminCouponsCoupon[]; columns: readonly DataGridColumn<AdminCouponsCoupon>[]; onCreateCoupon?: () => void; onValidateDraft?: () => void; isDemoMode?: boolean }) => {
     const actionColumn = columns.find((column) => column.headerName === 'ACTIONS');
     return (
       <section aria-label="Coupon list">
+        <button type="button" disabled={!isDemoMode} onClick={onCreateCoupon}>Create Coupon</button>
+        <button type="button" onClick={onValidateDraft}>Validate Draft</button>
         <ul>
           {coupons.map((coupon) => (
             <li key={coupon.id}>

@@ -1,5 +1,5 @@
+'use client';
 // RESPONSIBILITY: AdminSecurityDashboardPanel component owned by admin_security; responsibility folder: admin_security_dashboard_panel.
-"use client";
 
 import { Shield } from 'lucide-react';
 import { useTranslations } from 'next-intl';

@@ -1,6 +1,5 @@
 'use client';
 // DATA FLOW: members_students route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
-'use client';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';

@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect } from 'react';
 import { reportAdminError } from '@/app/frontend_admin/lib/errorMonitoring';
 import { useTranslations } from 'next-intl';

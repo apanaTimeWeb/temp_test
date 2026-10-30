@@ -1,12 +1,12 @@
-// Responsibility: AdminAccountsDailySettlementPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 'use client';
+// Responsibility: AdminAccountsDailySettlementPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 
 // RESPONSIBILITY: Entry page for the admin_accounting module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
 import { useTranslations, useLocale } from 'next-intl';
 import { CheckCircle } from 'lucide-react';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import type { AdminAccountsDailySettlementEntry } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
 import useAdminAccountsDailySettlementState from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/hooks/useAdminAccountsDailySettlementState';

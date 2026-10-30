@@ -1,7 +1,7 @@
-// RESPONSIBILITY: AdminEnquiriesEnquiryDetailPageView component owned by admin_enquiries; responsibility folder: admin_enquiries_components_views.
 'use client';
+// RESPONSIBILITY: AdminEnquiriesEnquiryDetailPageView component owned by admin_enquiries; responsibility folder: admin_enquiries_components_views.
 
-import toast, { Toaster } from 'sonner';
+import { toast, Toaster } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useLocale, useTranslations } from 'next-intl';
 import { ArrowLeft, Phone, MapPin, User, CalendarDays, Tag, Clock, Pencil } from 'lucide-react';

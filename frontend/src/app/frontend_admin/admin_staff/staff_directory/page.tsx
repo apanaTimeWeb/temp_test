@@ -4,7 +4,9 @@ import { ArrowLeft } from 'lucide-react';
 import useAdminStaffDirectory from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectory';
 import AdminStaffDirectoryViewSIDEBARNAVIGATIONSection from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryViewSIDEBARNAVIGATIONSection';
 
-/** Canonical staff directory route and shell; API-backed state remains in its feature hook. */
+/** Canonical staff directory route and shell; API-backed state remains in its feature hook.
+ * STAFF_DIRECTORY_NOTICE: Permissions and access are managed under /admin/admin_staff/staff_roles_permissions.
+ */
 export default function AdminStaffDirectoryRoute() {
   const model = useAdminStaffDirectory();
   const t = useTranslations('ADMIN_STAFF_DIRECTORY');

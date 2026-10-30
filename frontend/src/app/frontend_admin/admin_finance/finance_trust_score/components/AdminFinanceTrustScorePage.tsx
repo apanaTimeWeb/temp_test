@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceTrustScorePage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 'use client';
+// Responsibility: AdminFinanceTrustScorePage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 // RESPONSIBILITY: Entry page for the admin_finance module.

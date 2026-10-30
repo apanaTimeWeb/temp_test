@@ -1,5 +1,5 @@
-// DATA FLOW: shifts_migration route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: shifts_migration route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useEffect, useRef, type RefObject } from 'react';
 

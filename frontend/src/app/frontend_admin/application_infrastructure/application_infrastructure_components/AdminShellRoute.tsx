@@ -1,5 +1,4 @@
 'use client';
-
 import type { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -21,7 +20,11 @@ export function AdminShellRoute({ children }: { children: ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const closeMobileNavigation = useCallback(() => setMobileNavigationOpen(false), []);
   useEffect(() => { setMobileNavigationOpen(false); }, [pathname]);
-  const isAdminRoute = pathname === ADMIN_ROUTES.PREFIX || pathname.startsWith(`${ADMIN_ROUTES.PREFIX}/`);
+  const isAdminRoute =
+    pathname === ADMIN_ROUTES.PREFIX ||
+    pathname.startsWith(`${ADMIN_ROUTES.PREFIX}/`) ||
+    pathname === '/frontend_admin' ||
+    pathname.startsWith('/frontend_admin/');
 
   if (!isAdminRoute) return <>{children}</>;
 

@@ -1,5 +1,5 @@
 /** Consolidated module regression suites. Each original suite remains isolated under its named describe block. */
-import { act, beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { mswTestServer } from '@/app/frontend_admin/test/mswServer';
 import { fetchAdminSystem } from '@/app/frontend_admin/admin_system/system_settings/api/admin_system_settings_api';
@@ -10,7 +10,7 @@ import { ADMIN_SYSTEM_SETTINGS_CATEGORIES } from '@/app/frontend_admin/admin_sys
 import AdminSystemSettingsCanonicalDestinationCard from '@/app/frontend_admin/admin_system/system_settings/components/AdminSystemSettingsCanonicalDestinationCard';
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 import { createAdminSystemSettingsSchema } from '@/app/frontend_admin/admin_system/system_settings/api/admin_system_settings_api';
-import { fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
 import AdminSystemSelect from '@/app/frontend_admin/components/ui/select/Select';
 import AdminSystemSelectContent from '@/app/frontend_admin/components/ui/select/SelectContent';
 import AdminSystemSelectItem from '@/app/frontend_admin/components/ui/select/SelectItem';
@@ -20,24 +20,32 @@ import { AdminSystemButton } from '@/app/frontend_admin/components/ui/admin-prim
 import { AdminSystemCard } from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCard';
 import { AdminSystemCardTitle } from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCardTitle';
 import { ADMIN_SYSTEM_SETTINGS_QUERY_KEYS } from '@/app/frontend_admin/admin_system/system_settings/api/admin_system_settings.query_keys';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { getCurrentUser } from '@/app/frontend_admin/lib/auth';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import useAdminSystemSettingsPage from '@/app/frontend_admin/admin_system/system_settings/hooks/useAdminSystemSettingsPage';
 import { AdminSystemRoute } from '@/app/frontend_admin/admin_system/system_settings/components/AdminSystemSettingsRoute';
 
-const { mockReplace, mockPush, mockUsePathname, mockUseSearchParams } = vi.hoisted(() => ({
-  mockReplace: vi.fn(),
-  mockPush: vi.fn(),
-  mockUsePathname: vi.fn(() => '/admin/admin_system/system_settings'),
-  mockUseSearchParams: vi.fn(() => new URLSearchParams()),
-}));
+const { mockReplace, mockPush, mockUsePathname, mockUseSearchParams, mockRouterInstance } = vi.hoisted(() => {
+  const mockReplace = vi.fn();
+  const mockPush = vi.fn();
+  return {
+    mockReplace,
+    mockPush,
+    mockUsePathname: vi.fn(() => '/admin/admin_system/system_settings'),
+    mockUseSearchParams: vi.fn(() => new URLSearchParams()),
+    mockRouterInstance: { replace: mockReplace, push: mockPush },
+  };
+});
 
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
-vi.mock('next/navigation', () => ({ usePathname: mockUsePathname, useSearchParams: mockUseSearchParams, useRouter: () => ({ replace: mockReplace, push: mockPush }) }));
+vi.mock('next/navigation', () => ({ usePathname: mockUsePathname, useSearchParams: mockUseSearchParams, useRouter: () => mockRouterInstance }));
 vi.mock('@/app/frontend_admin/lib/auth', () => ({ getCurrentUser: vi.fn() }));
 vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: vi.fn() }));
-vi.mock('sonner', () => ({ default: { info: vi.fn(), error: vi.fn(), success: vi.fn() } }));
+vi.mock('sonner', () => {
+  const toast = { info: vi.fn(), error: vi.fn(), success: vi.fn() };
+  return { default: toast, toast, Toaster: () => null };
+});
 
 describe('Original suite: AdminSystemSettingsApi.test.ts', () => {
   describe('fetchAdminSystem frontend contract boundary', () => {
@@ -203,13 +211,18 @@ describe('Original suite: AdminSystemSettingsUrlConfig.test.ts', () => {
 
 
 describe('Admin System settings hook', () => {
-  beforeEach(() => { vi.clearAllMocks(); mockUseSearchParams.mockReturnValue(new URLSearchParams()); vi.mocked(isFrontendDemoModeEnabled).mockReturnValue(false); });
-  it('keeps settings credentials empty and blocks live saves without a verified contract', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUsePathname.mockReturnValue('/admin/admin_system/system_settings');
+    mockUseSearchParams.mockReturnValue(new URLSearchParams());
+    vi.mocked(isFrontendDemoModeEnabled).mockReturnValue(false);
+  });
+  it('keeps settings credentials empty and blocks live saves without a verified contract', async () => {
     const { result } = renderHook(() => useAdminSystemSettingsPage());
     expect(result.current.form.apiKey).toBe('');
     expect(result.current.form.appName).toBe('');
     expect(result.current.form).not.toHaveProperty('gracePeriod');
-    act(() => result.current.handleSave());
+    await act(async () => { await result.current.handleSave(); });
     expect(vi.mocked(toast.error)).toHaveBeenCalledWith('SETTINGS_SAVE_BLOCKED', { id: 'admin-system-settings-save-blocked' });
   });
   it('reads legacy settings view query values and preserves unrelated query parameters when navigating', () => {
@@ -222,7 +235,12 @@ describe('Admin System settings hook', () => {
 });
 
 describe('AdminSystemRoute', () => {
-  beforeEach(() => { vi.clearAllMocks(); vi.mocked(isFrontendDemoModeEnabled).mockReturnValue(false); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUsePathname.mockReturnValue('/admin/admin_system/system_settings');
+    mockUseSearchParams.mockReturnValue(new URLSearchParams());
+    vi.mocked(isFrontendDemoModeEnabled).mockReturnValue(false);
+  });
   it('allows explicitly enabled development demo mode without inventing a session', async () => {
     vi.mocked(isFrontendDemoModeEnabled).mockReturnValue(true);
     render(<AdminSystemRoute><p>System content</p></AdminSystemRoute>);

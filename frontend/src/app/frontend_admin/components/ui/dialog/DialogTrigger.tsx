@@ -1,5 +1,4 @@
 'use client';
-
 import React, { type MouseEvent, type ReactElement, type ReactNode } from 'react';
 import { useDialog } from '@/components/ui/dialog/Dialog';
 import type { DialogTriggerProps } from '@/app/frontend_admin/components/ui/dialog/types/AdminUiDialogComponentTypes';

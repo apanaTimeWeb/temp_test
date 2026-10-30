@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminMembersMemberTable component owned by admin_members; responsibility folder: admin_members_components_tables.
 'use client';
+// RESPONSIBILITY: AdminMembersMemberTable component owned by admin_members; responsibility folder: admin_members_components_tables.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 import { useMemo, useState } from 'react';
@@ -96,7 +96,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
               <span className="shrink-0 rounded-full bg-surface-highlight px-2.5 py-1 text-xs font-semibold">{statusLabel(member.status)}</span>
             </div>
             <dl className="mt-3 grid grid-cols-1 gap-2 text-sm">
-              <div><dt className="text-xs text-text-secondary">{t('TABLE_CONTACT')}</dt><dd className="break-words text-text-primary">{displayValue(member.email)} · {displayValue(member.phone)}</dd></div>
+              <div><dt className="text-xs text-text-secondary">{t('TABLE_CONTACT')}</dt><dd className="break-words text-text-primary"><span className="block">{displayValue(member.email)}</span><span className="text-text-secondary">{displayValue(member.phone)}</span></dd></div>
               <div><dt className="text-xs text-text-secondary">{t('TABLE_PLAN')}</dt><dd className="text-text-primary">{displayValue(member.plan)}</dd></div>
               <div><dt className="text-xs text-text-secondary">{t('TABLE_EXPIRY')}</dt><dd className="text-text-primary">{expiryLabel(member.expiryDate)}</dd></div>
             </dl>

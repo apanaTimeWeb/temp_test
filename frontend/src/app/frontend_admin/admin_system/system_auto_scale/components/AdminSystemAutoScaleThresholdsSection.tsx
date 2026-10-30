@@ -1,5 +1,4 @@
 'use client';
-
 // RESPONSIBILITY: AdminSystemAutoScaleThresholdsSection owns the guarded auto-scale threshold draft.
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';

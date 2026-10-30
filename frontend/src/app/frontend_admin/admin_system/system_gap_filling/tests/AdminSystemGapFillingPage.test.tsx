@@ -4,7 +4,7 @@ import { AdminSystemGapFillingPage } from '@/app/frontend_admin/admin_system/sys
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
-vi.mock('@/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: vi.fn() }));
+vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: vi.fn() }));
 vi.mock('sonner', () => ({ toast: { info: vi.fn() } }));
 
 describe('AdminSystemGapFillingPage control selectors', () => {

@@ -1,12 +1,12 @@
-// DATA FLOW: system_settings route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: system_settings route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useForm, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { createAdminSystemSettingsSchema } from '@/app/frontend_admin/admin_system/system_settings/api/admin_system_settings_api';
 import type { AdminSystemSettingsFormValues } from '@/app/frontend_admin/admin_system/system_settings/api/admin_system_settings_api';
@@ -34,7 +34,7 @@ export default function useAdminSystemSettingsPage() {
   const isDemoMode = isFrontendDemoModeEnabled();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams() ?? new URLSearchParams();
   const requestedView = searchParams.get('view');
   const [active, setActiveState] = useState<AdminSystemSettingsCategoryId>(() => isSettingsCategory(requestedView) ? requestedView : 'branding');
   const [showApiKey, setShowApiKey] = useState(false);

@@ -1,5 +1,5 @@
+'use client';
 // RESPONSIBILITY: AdminSecurityFailedLoginsPanel component owned by admin_security; responsibility folder: admin_security_failed_logins_panel.
-"use client";
 
 import { useTranslations } from 'next-intl';
 import { ADMIN_SECURITY_FAILED_LOGIN_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';

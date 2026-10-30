@@ -1,8 +1,8 @@
-// DATA FLOW: members_directory route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
-import { useCallback, useState } from 'react';
+// DATA FLOW: members_directory route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
+import { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { ADMIN_MEMBERS_DETAIL_NAVIGATION, ADMIN_MEMBERS_DIRECTORY_NAVIGATION, resolveAdminMembersDirectoryView } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.url_config';
 import { ADMIN_MEMBERS_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures';
@@ -19,8 +19,19 @@ export default function useAdminMembersDirectoryMain() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const requestedTab = searchParams.get('view');
-  const activeTab: AdminMembersDirectoryTab = resolveAdminMembersDirectoryView(requestedTab);
-  const setActiveTab = useCallback((tab: AdminMembersDirectoryTab) => { const next = new URLSearchParams(searchParams.toString()); next.set('view', tab); router.push(`${pathname}?${next.toString()}`, { scroll: false }); }, [pathname, router, searchParams]);
+  const [localActiveTab, setLocalActiveTab] = useState<AdminMembersDirectoryTab>(() => resolveAdminMembersDirectoryView(requestedTab));
+  const activeTab: AdminMembersDirectoryTab = localActiveTab;
+  useEffect(() => {
+    if (requestedTab) {
+      setLocalActiveTab(resolveAdminMembersDirectoryView(requestedTab));
+    }
+  }, [requestedTab]);
+  const setActiveTab = useCallback((tab: AdminMembersDirectoryTab) => {
+    setLocalActiveTab(tab);
+    const next = new URLSearchParams(searchParams.toString());
+    next.set('view', tab);
+    router.push(`${pathname}?${next.toString()}`, { scroll: false });
+  }, [pathname, router, searchParams]);
   const [viewingMember, setViewingMember] = useState<AdminMembersMember | null>(null);
   const [editingMember, setEditingMember] = useState<AdminMembersMember | null>(null);
   const [detailTab, setDetailTab] = useState<AdminMembersDetailTab>('profile');

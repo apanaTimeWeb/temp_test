@@ -121,7 +121,7 @@ export function createAdminDashboardReportsAnalyticsHandlers(
     }
 
     if (scenario === 'NETWORK_TIMEOUT') {
-      await delay(options.timeoutDelayMs ?? 15_000);
+      await delay(options.timeoutDelayMs ?? 50);
       return HttpResponse.json({
         success: false,
         errorCode: 'ERR_TIMEOUT',

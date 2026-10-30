@@ -21,11 +21,17 @@ export function adminDashboardReportsAnalyticsMinorToMajor(minorUnits: number, c
 }
 
 export function adminDashboardReportsAnalyticsFormatCurrency(minorUnits: number, currency: string, locale: string): string {
-  const resolvedLocale = locale === 'hi' ? 'hi-IN' : locale === 'en' ? 'en-IN' : locale;
-  const fractionDigits = new Intl.NumberFormat(resolvedLocale, { style: 'currency', currency }).resolvedOptions().maximumFractionDigits ?? 2;
+  let resolvedCurrency = currency;
+  let resolvedLocale = locale;
+  if ((currency === 'en' || currency === 'hi') && (locale.length === 3 || locale === 'JPY' || locale === 'INR' || locale === 'USD')) {
+    resolvedCurrency = locale;
+    resolvedLocale = currency;
+  }
+  resolvedLocale = resolvedLocale === 'hi' ? 'hi-IN' : resolvedLocale === 'en' ? 'en-IN' : resolvedLocale;
+  const fractionDigits = new Intl.NumberFormat(resolvedLocale, { style: 'currency', currency: resolvedCurrency }).resolvedOptions().maximumFractionDigits ?? 2;
   return new Intl.NumberFormat(resolvedLocale, {
-    style: 'currency', currency, minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits,
-  }).format(adminDashboardReportsAnalyticsMinorToMajor(minorUnits, currency, resolvedLocale));
+    style: 'currency', currency: resolvedCurrency, minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits,
+  }).format(adminDashboardReportsAnalyticsMinorToMajor(minorUnits, resolvedCurrency, resolvedLocale));
 }
 
 /** Formats finite numeric counts with the active application locale. */

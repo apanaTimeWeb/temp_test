@@ -58,7 +58,7 @@ export function createAdminCouponsFormSchema(messages: AdminCouponsValidationMes
     code: z.string().trim().min(1, messages.codeRequired),
     discount: z.coerce.number().finite().positive(messages.discountPositive),
     type: z.enum(['Flat', 'Percent'], { message: messages.typeRequired }),
-    maxUses: z.coerce.number().int().positive(messages.maxUsesPositive),
+    maxUses: z.coerce.number().int(messages.maxUsesPositive).positive(messages.maxUsesPositive),
     expiry: z.string().min(1, messages.expiryRequired).refine(isValidAdminCouponsCalendarDate, messages.expiryInvalid),
   }).superRefine((draft, context) => {
     if (draft.type === 'Percent' && draft.discount > 100) context.addIssue({ code: z.ZodIssueCode.custom, path: ['discount'], message: messages.discountPercentMax });

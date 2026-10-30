@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAuditLogsFilters component owned by admin_audit_logs; responsibility folder: admin_audit_logs_filters.
 'use client';
+// RESPONSIBILITY: AdminAuditLogsFilters component owned by admin_audit_logs; responsibility folder: admin_audit_logs_filters.
 
 import { useTranslations } from 'next-intl';
 import { Search } from 'lucide-react';

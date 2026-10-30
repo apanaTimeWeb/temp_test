@@ -158,7 +158,7 @@ export const ADMIN_SUPPORT_DOCUMENTATION_FIXTURES = [
  * Never fabricate a successful response. Tests receive an explicit 501 until the host contract is supplied.
  */
 export const ADMIN_SUPPORT_MSW_HANDLERS = [
-  http.get(ADMIN_SUPPORT_URLS.LIST, () => HttpResponse.json({
+  http.get(`*${ADMIN_SUPPORT_URLS.LIST}`, () => HttpResponse.json({
     code: 'API_CONTRACT_UNAVAILABLE',
     message: 'Support API contract is unavailable in the supplied source scope.',
   }, { status: 501 })),

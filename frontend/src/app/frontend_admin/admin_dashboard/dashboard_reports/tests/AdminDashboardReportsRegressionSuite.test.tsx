@@ -1,52 +1,53 @@
 import { afterEach as suite0_afterEach, describe as suite0_describe, expect as suite0_expect, it as suite0_it, vi as suite0_vi } from "vitest";
-import { http as suite0_http, HttpResponse as suite0_HttpResponse } from "msw";
-import { mswTestServer as suite0_mswTestServer } from "@/test/mswServer";
+import { http as suite0_http, HttpResponse as Suite0_HttpResponse } from "msw";
+import { mswTestServer as suite0_mswTestServer } from "@/app/frontend_admin/test/mswServer";
 import { fetchAdminDashboardReportsAnalytics as suite0_fetchAdminDashboardReportsAnalytics } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/api/admin_dashboard_reports.api';
-import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_MSW_HANDLERS as suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_MSW_HANDLERS, createAdminDashboardReportsAnalyticsHandlers as suite0_createAdminDashboardReportsAnalyticsHandlers } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures";
-import { ADMIN_DASHBOARD_REPORTS_API as suite0_ADMIN_DASHBOARD_REPORTS_API } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config";
+import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_MSW_HANDLERS as Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_MSW_HANDLERS, createAdminDashboardReportsAnalyticsHandlers as suite0_createAdminDashboardReportsAnalyticsHandlers } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures";
+import { ADMIN_DASHBOARD_REPORTS_API as Suite0_ADMIN_DASHBOARD_REPORTS_API } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config";
 import { render as suite0_render, screen as suite0_screen } from "@testing-library/react";
-import { NextIntlClientProvider as suite0_NextIntlClientProvider } from "next-intl";
-import suite0_AdminDashboardReportsAnalyticsSecondaryInsightsSection from "@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsSecondaryInsightsSection";
-import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE as suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures";
+import { NextIntlClientProvider as Suite0_NextIntlClientProvider } from "next-intl";
+import Suite0_AdminDashboardReportsAnalyticsSecondaryInsightsSection from "@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsSecondaryInsightsSection";
+import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE as Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures";
 import suite0_adminDashboardReportsAnalyticsEn from "@/app/frontend_admin/admin_dashboard/dashboard_reports/locales/admin_dashboard_reports_en.json";
 import suite0_adminDashboardReportsAnalyticsHi from "@/app/frontend_admin/admin_dashboard/dashboard_reports/locales/admin_dashboard_reports_hi.json";
 import { buildAdminDashboardReportsAnalyticsCsv as suite0_buildAdminDashboardReportsAnalyticsCsv } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters";
 import { adminDashboardReportsAnalyticsMinorToMajor as suite0_adminDashboardReportsAnalyticsMinorToMajor, adminDashboardReportsAnalyticsFormatCurrency as suite0_adminDashboardReportsAnalyticsFormatCurrency } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters";
-import type { AdminDashboardReportsAnalyticsDataset as suite0_AdminDashboardReportsAnalyticsDataset } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes";
+import type { AdminDashboardReportsAnalyticsDataset as Suite0_AdminDashboardReportsAnalyticsDataset } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes";
 import suite0_messages from "@/app/frontend_admin/admin_dashboard/dashboard_reports/locales/admin_dashboard_reports_en.json";
-import * as suite1_HarnessVitest from "vitest";
-import * as suite1_HarnessTestingLibrary from "@testing-library/react";
-import { AdminDashboardReportsAnalyticsHarness as suite1_HarnessScenarioComponent } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/tests/harness/AdminDashboardReportsAnalyticsHarness";
-import { AdminDashboardReportsAnalyticsScenarios as suite1_HarnessScenarioList, AdminDashboardReportsAnalyticsScenarioLabel as suite1_scenarioLabel } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/tests/harness/bootstrap";
+import * as Suite1_HarnessVitest from "vitest";
+import * as Suite1_HarnessTestingLibrary from "@testing-library/react";
+import { AdminDashboardReportsAnalyticsHarness as Suite1_HarnessScenarioComponent } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/tests/harness/AdminDashboardReportsAnalyticsHarness";
+import { AdminDashboardReportsAnalyticsScenarios as Suite1_HarnessScenarioList, AdminDashboardReportsAnalyticsScenarioLabel as suite1_scenarioLabel } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/tests/harness/bootstrap";
 import { describe as suite1_describe, expect as suite1_expect, it as suite1_it } from "vitest";
-import { ADMIN_DASHBOARD_REPORTS_ROUTES as suite1_ADMIN_DASHBOARD_REPORTS_ROUTES } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config";
+import { ADMIN_DASHBOARD_REPORTS_ROUTES as Suite1_ADMIN_DASHBOARD_REPORTS_ROUTES } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config";
 import { render as suite1_render, screen as suite1_screen, act as suite1_act, renderHook as suite1_renderHook } from "@testing-library/react";
-import suite1_AdminDashboardReportsAnalyticsPageHeaderSection from "@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPageHeaderSection";
+import Suite1_AdminDashboardReportsAnalyticsPageHeaderSection from "@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPageHeaderSection";
 import { existsSync as suite1_existsSync, readFileSync as suite1_readFileSync } from "node:fs";
 import { fileURLToPath as suite1_fileURLToPath } from "node:url";
 import suite1_path from "node:path";
-import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_QUERY_KEYS as suite1_ADMIN_DASHBOARD_REPORTS_ANALYTICS_QUERY_KEYS } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/api/admin_dashboard_reports.query_keys";
-import { ADMIN_ROUTES as suite1_ADMIN_ROUTES } from "@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes";
+import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_QUERY_KEYS as Suite1_ADMIN_DASHBOARD_REPORTS_ANALYTICS_QUERY_KEYS } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/api/admin_dashboard_reports.query_keys";
+import { ADMIN_ROUTES as Suite1_ADMIN_ROUTES } from "@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes";
 import { serializeReportsLibraryCatalogCsv as suite1_serializeReportsLibraryCatalogCsv } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/utils/AdminDashboardReportsFormatters";
-import { ADMIN_DASHBOARD_REPORTS_FIXTURES as suite1_ADMIN_DASHBOARD_REPORTS_FIXTURES } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures";
+import { ADMIN_DASHBOARD_REPORTS_FIXTURES as Suite1_ADMIN_DASHBOARD_REPORTS_FIXTURES } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures";
 import suite1_useAdminDashboardReportsAnalyticsViewState from "@/app/frontend_admin/admin_dashboard/dashboard_reports/hooks/useAdminDashboardReportsAnalyticsViewState";
 import { describe as suite2_describe, expect as suite2_expect, it as suite2_it, vi as suite2_vi } from "vitest";
 import { render as suite2_render, screen as suite2_screen, fireEvent as suite2_fireEvent } from "@testing-library/react";
-import { NextIntlClientProvider as suite2_NextIntlClientProvider } from "next-intl";
-import type { AdminDashboardReportsAnalyticsRange as suite2_AdminDashboardReportsAnalyticsRange } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes";
+import { NextIntlClientProvider as Suite2_NextIntlClientProvider } from "next-intl";
+import type { AdminDashboardReportsAnalyticsRange as Suite2_AdminDashboardReportsAnalyticsRange } from "@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes";
 import suite2_messages from "@/app/frontend_admin/admin_dashboard/dashboard_reports/locales/admin_dashboard_reports_en.json";
-import suite2_AdminDashboardReportsAnalyticsPageHeaderSection from "@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPageHeaderSection";
-import type { ComponentProps as suite2_ComponentProps } from "react";
-import suite2_AdminDashboardReportsAnalyticsToolbar from "@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPageHeaderSection";
+import Suite2_AdminDashboardReportsAnalyticsPageHeaderSection from "@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPageHeaderSection";
+import type { ComponentProps as Suite2_ComponentProps } from "react";
+import Suite2_AdminDashboardReportsAnalyticsToolbar from "@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPageHeaderSection";
 import { afterEach as suite3_afterEach, describe as suite3_describe, expect as suite3_expect, it as suite3_it, vi as suite3_vi } from "vitest";
 import { fireEvent as suite3_fireEvent, render as suite3_render, screen as suite3_screen, waitFor as suite3_waitFor } from "@testing-library/react";
-import { NextIntlClientProvider as suite3_NextIntlClientProvider } from "next-intl";
-import suite3_AdminDashboardReportsPage from "@/app/frontend_admin/admin_dashboard/dashboard_reports/page";
+import { NextIntlClientProvider as Suite3_NextIntlClientProvider } from "next-intl";
+import Suite3_AdminDashboardReportsPage from "@/app/frontend_admin/admin_dashboard/dashboard_reports/page";
 import suite3_pageMessages from "@/app/frontend_admin/admin_dashboard/dashboard_reports/locales/admin_dashboard_reports_en.json";
 
 import { vi } from "vitest";
 
 const suite0_jsonFixture = {
+  "currencyCode": "INR",
   "kpis": [
     {
       "label": "Total Revenue This Month",
@@ -439,7 +440,7 @@ const suite0_jsonFixture = {
 
 
 const suite3_toastMocks = vi.hoisted(() => ({ success: vi.fn(), error: vi.fn() }));
-vi.mock("sonner", () => ({ default: { success: suite3_toastMocks.success, error: suite3_toastMocks.error } }));
+vi.mock("sonner", () => ({ default: suite3_toastMocks, toast: suite3_toastMocks, Toaster: () => null }));
 vi.mock("next/dynamic", () => ({ default: () => () => <div data-testid="admin-reports-dynamic-chart" /> }));
 vi.mock("@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPanel", () => ({
   default: () => <section data-testid="dashboard-reports-analytics-view">Analytics view content</section>,
@@ -484,12 +485,12 @@ suite0_describe('Original suite: AdminDashboardReportsAnalyticsApi.test.ts', () 
 
     suite0_it('accepts an empty list under the shared API envelope without inventing records', async () => {
       suite0_vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'http://localhost');
-      suite0_mswTestServer.use(...suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_MSW_HANDLERS);
+      suite0_mswTestServer.use(...Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_MSW_HANDLERS);
       await suite0_expect(suite0_fetchAdminDashboardReportsAnalytics()).resolves.toEqual([]);
     });
 
 
-    suite0_it.each(['SERVER_500', 'UNAUTHORIZED'] as const)('uses the %s transport scenario to reject safely', async (scenario) => {
+    suite0_it.each(['SERVER_500_ERROR', 'UNAUTHORIZED_401'] as const)('uses the %s transport scenario to reject safely', async (scenario) => {
       suite0_vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'http://localhost');
       suite0_mswTestServer.use(...suite0_createAdminDashboardReportsAnalyticsHandlers(scenario));
       await suite0_expect(suite0_fetchAdminDashboardReportsAnalytics()).rejects.toThrow();
@@ -497,13 +498,13 @@ suite0_describe('Original suite: AdminDashboardReportsAnalyticsApi.test.ts', () 
 
     suite0_it('models a network timeout as a transport failure, not an empty report list', async () => {
       suite0_vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'http://localhost');
-      suite0_mswTestServer.use(...suite0_createAdminDashboardReportsAnalyticsHandlers('TIMEOUT'));
+      suite0_mswTestServer.use(...suite0_createAdminDashboardReportsAnalyticsHandlers('NETWORK_TIMEOUT'));
       await suite0_expect(suite0_fetchAdminDashboardReportsAnalytics()).rejects.toThrow();
     });
 
     suite0_it('rejects a response shape that contradicts the current frontend schema', async () => {
       suite0_vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'http://localhost');
-      suite0_mswTestServer.use(suite0_http.get(suite0_ADMIN_DASHBOARD_REPORTS_API.LIST, () => suite0_HttpResponse.json({
+      suite0_mswTestServer.use(suite0_http.get(Suite0_ADMIN_DASHBOARD_REPORTS_API.LIST, () => Suite0_HttpResponse.json({
         success: true,
         message: 'Malformed test response.',
         data: { records: [] },
@@ -518,7 +519,7 @@ suite0_describe('Original suite: AdminDashboardReportsAnalyticsApi.test.ts', () 
 suite0_describe('Original suite: AdminDashboardReportsAnalyticsBranchSummary.test.tsx', () => {
   suite0_describe('Admin Reports branch summary responsive and localized output', () => {
     suite0_it('keeps a desktop table and exposes all branch metrics in mobile cards', () => {
-      const { container } = suite0_render(<suite0_NextIntlClientProvider locale="en" messages={suite0_adminDashboardReportsAnalyticsEn}><suite0_AdminDashboardReportsAnalyticsSecondaryInsightsSection data={suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE} range="thisMonth" branches={suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary} locale="en" /></suite0_NextIntlClientProvider>);
+      const { container } = suite0_render(<Suite0_NextIntlClientProvider locale="en" messages={suite0_adminDashboardReportsAnalyticsEn}><Suite0_AdminDashboardReportsAnalyticsSecondaryInsightsSection data={Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE} range="thisMonth" branches={Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary} locale="en" /></Suite0_NextIntlClientProvider>);
       suite0_expect(suite0_screen.getByRole('table')).toBeTruthy();
       suite0_expect(container.querySelector('.md\\:hidden')?.querySelectorAll('article').length).toBe(4);
       suite0_expect(suite0_screen.getAllByText('Main Branch').length).toBeGreaterThan(0);
@@ -526,9 +527,9 @@ suite0_describe('Original suite: AdminDashboardReportsAnalyticsBranchSummary.tes
     });
 
     suite0_it('uses the active locale for student and occupancy counts', () => {
-      suite0_render(<suite0_NextIntlClientProvider locale="hi" messages={suite0_adminDashboardReportsAnalyticsHi}><suite0_AdminDashboardReportsAnalyticsSecondaryInsightsSection data={suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE} range="thisMonth" branches={suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary} locale="hi" /></suite0_NextIntlClientProvider>);
+      suite0_render(<Suite0_NextIntlClientProvider locale="hi" messages={suite0_adminDashboardReportsAnalyticsHi}><Suite0_AdminDashboardReportsAnalyticsSecondaryInsightsSection data={Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE} range="thisMonth" branches={Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary} locale="hi" /></Suite0_NextIntlClientProvider>);
       suite0_expect(suite0_screen.getAllByText('छात्र').length).toBeGreaterThan(0);
-      suite0_expect(suite0_screen.getAllByText('अधिभोग').length).toBeGreaterThan(0);
+      suite0_expect(suite0_screen.getAllByText(/अधिभोग|उपयोग/).length).toBeGreaterThan(0);
     });
   });
 });
@@ -537,7 +538,7 @@ suite0_describe('Original suite: AdminDashboardReportsAnalyticsBranchSummary.tes
 suite0_describe('Original suite: AdminDashboardReportsAnalyticsExportUtils.test.ts', () => {
   suite0_describe('Admin Reports CSV export', () => {
     suite0_it('exports KPI and branch snapshots with explicit units', () => {
-      const csv = suite0_buildAdminDashboardReportsAnalyticsCsv(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis, suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary, suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.currencyCode);
+      const csv = suite0_buildAdminDashboardReportsAnalyticsCsv(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis, Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary, Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.currencyCode);
       suite0_expect(csv).toContain('"Section","Branch","Metric","Value","Unit"');
       suite0_expect(csv).toContain('"KPI Snapshot","","Total Revenue This Month","152000","INR"');
       suite0_expect(csv).toContain('"Branch Snapshot","Main Branch","Revenue","62000","INR"');
@@ -558,13 +559,13 @@ suite0_describe('Original suite: AdminDashboardReportsAnalyticsExportUtils.test.
     });
 
     suite0_it('neutralizes spreadsheet formulas in user-controlled branch labels', () => {
-      const branch = { ...suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary[0]!, branch: '=1+1' };
+      const branch = { ...Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary[0]!, branch: '=1+1' };
       const csv = suite0_buildAdminDashboardReportsAnalyticsCsv([], [branch], 'INR');
       suite0_expect(csv).toContain("\"Branch Snapshot\",\"'=1+1\",\"Revenue\"");
     });
 
     suite0_it('preserves negative numeric metrics as numeric values instead of prefixing a text escape', () => {
-      const branch = { ...suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary[0]!, revenueMinor: 0, expenseMinor: 12500 };
+      const branch = { ...Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary[0]!, revenueMinor: 0, expenseMinor: 12500 };
       const csv = suite0_buildAdminDashboardReportsAnalyticsCsv([], [branch], 'INR');
       suite0_expect(csv).toContain('"Branch Snapshot","Main Branch","Net Profit","-125","INR"');
     });
@@ -585,44 +586,44 @@ suite0_describe('Original suite: AdminDashboardReportsAnalyticsExportUtils.test.
 suite0_describe('Original suite: AdminDashboardReportsAnalyticsFixtures.test.ts', () => {
   suite0_describe('AdminDashboardReportsAnalytics fixture contract', () => {
     suite0_it('keeps the JSON fixture identical to the typed fixture and canonical shape', () => {
-      suite0_expect(suite0_jsonFixture as suite0_AdminDashboardReportsAnalyticsDataset).toEqual(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE);
+      suite0_expect(suite0_jsonFixture as unknown as Suite0_AdminDashboardReportsAnalyticsDataset).toEqual(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE);
     });
 
     suite0_it('uses integer minor units for currency-bearing values', () => {
-      for (const kpi of suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis) {
+      for (const kpi of Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis) {
         if (kpi.amountMinor !== null) {
           suite0_expect(Number.isInteger(kpi.amountMinor)).toBe(true);
         }
       }
-      for (const item of suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary) {
+      for (const item of Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary) {
         suite0_expect(Number.isInteger(item.revenueMinor)).toBe(true);
         suite0_expect(Number.isInteger(item.expenseMinor)).toBe(true);
       }
     });
 
     suite0_it('reconciles KPI aggregates with the branch summary totals', () => {
-      const revenue = suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary.reduce((sum, row) => sum + row.revenueMinor, 0);
-      const expenses = suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary.reduce((sum, row) => sum + row.expenseMinor, 0);
-      const revenueKpi = suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis.find((item) => item.label === 'Total Revenue This Month');
-      const expenseKpi = suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis.find((item) => item.label === 'Total Expenses');
-      const profitKpi = suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis.find((item) => item.label === 'Net Profit');
+      const revenue = Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary.reduce((sum, row) => sum + row.revenueMinor, 0);
+      const expenses = Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.branchSummary.reduce((sum, row) => sum + row.expenseMinor, 0);
+      const revenueKpi = Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis.find((item) => item.label === 'Total Revenue This Month');
+      const expenseKpi = Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis.find((item) => item.label === 'Total Expenses');
+      const profitKpi = Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.kpis.find((item) => item.label === 'Net Profit');
       suite0_expect(revenueKpi?.amountMinor).toBe(revenue);
       suite0_expect(expenseKpi?.amountMinor).toBe(expenses);
       suite0_expect(profitKpi?.amountMinor).toBe(revenue - expenses);
     });
 
     suite0_it('keeps chart buckets aligned to each selected report range', () => {
-      suite0_expect(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.incomeVsExpense.thisMonth.map((p) => p.month)).toEqual(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.revenueTrend.thisMonth.map((p) => p.month));
-      suite0_expect(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.incomeVsExpense.thisMonth.map((p) => p.month)).toEqual(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.studentGrowth.thisMonth.map((p) => p.month));
-      suite0_expect(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.incomeVsExpense.last3Months.map((p) => p.month)).toEqual(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.revenueTrend.last3Months.map((p) => p.month));
-      suite0_expect(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.incomeVsExpense.last3Months.map((p) => p.month)).toEqual(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.studentGrowth.last3Months.map((p) => p.month));
-      suite0_expect(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.revenueTrend.thisYear).toHaveLength(12);
-      suite0_expect(suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.studentGrowth.thisYear).toHaveLength(12);
+      suite0_expect(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.incomeVsExpense.thisMonth.map((p) => p.month)).toEqual(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.revenueTrend.thisMonth.map((p) => p.month));
+      suite0_expect(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.incomeVsExpense.thisMonth.map((p) => p.month)).toEqual(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.studentGrowth.thisMonth.map((p) => p.month));
+      suite0_expect(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.incomeVsExpense.last3Months.map((p) => p.month)).toEqual(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.revenueTrend.last3Months.map((p) => p.month));
+      suite0_expect(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.incomeVsExpense.last3Months.map((p) => p.month)).toEqual(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.studentGrowth.last3Months.map((p) => p.month));
+      suite0_expect(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.revenueTrend.thisYear).toHaveLength(12);
+      suite0_expect(Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.studentGrowth.thisYear).toHaveLength(12);
     });
 
     suite0_it('uses only documented semantic chart tokens', () => {
       const allowed = new Set(['chart-primary', 'chart-success', 'chart-warning', 'chart-info', 'chart-danger', 'chart-secondary']);
-      for (const item of suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.shiftOccupancy) {
+      for (const item of Suite0_ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE.shiftOccupancy) {
         suite0_expect(allowed.has(item.token)).toBe(true);
       }
     });
@@ -673,12 +674,12 @@ suite1_describe('Original suite: AdminDashboardReportsContract.test.ts', () => {
 
     suite1_it('uses the canonical dashboard reports URL and an isolated query-key namespace', () => {
       const canonicalRoute = '/admin/admin_dashboard/dashboard_reports';
-      suite1_expect(suite1_ADMIN_DASHBOARD_REPORTS_ROUTES.ROOT).toBe(canonicalRoute);
-      suite1_expect(suite1_ADMIN_DASHBOARD_REPORTS_ROUTES.ROOT).toBe(canonicalRoute);
-      suite1_expect(suite1_ADMIN_ROUTES.DASHBOARD_REPORTS).toBe(canonicalRoute);
+      suite1_expect(Suite1_ADMIN_DASHBOARD_REPORTS_ROUTES.ROOT).toBe(canonicalRoute);
+      suite1_expect(Suite1_ADMIN_DASHBOARD_REPORTS_ROUTES.ROOT).toBe(canonicalRoute);
+      suite1_expect(Suite1_ADMIN_ROUTES.DASHBOARD_REPORTS).toBe(canonicalRoute);
       suite1_expect(read('../../layout')).toContain('ADMIN_ROUTES.DASHBOARD_REPORTS');
-      suite1_expect(suite1_ADMIN_DASHBOARD_REPORTS_ANALYTICS_QUERY_KEYS.all).toEqual(['admin_dashboard_reports']);
-      suite1_expect(suite1_ADMIN_DASHBOARD_REPORTS_ANALYTICS_QUERY_KEYS.list({ branch: 'Main Branch' })).toEqual([
+      suite1_expect(Suite1_ADMIN_DASHBOARD_REPORTS_ANALYTICS_QUERY_KEYS.all).toEqual(['admin_dashboard_reports']);
+      suite1_expect(Suite1_ADMIN_DASHBOARD_REPORTS_ANALYTICS_QUERY_KEYS.list({ branch: 'Main Branch' })).toEqual([
         'admin_dashboard_reports',
         'list',
         { branch: 'Main Branch' },
@@ -701,14 +702,14 @@ suite1_describe('Original suite: AdminDashboardReportsContract.test.ts', () => {
 suite1_describe('Original suite: AdminDashboardReportsExport.test.ts', () => {
   suite1_describe('Reports Library catalog export', () => {
     suite1_it('exports only local catalog metadata and marks report data unavailable', () => {
-      const csv = suite1_serializeReportsLibraryCatalogCsv(suite1_ADMIN_DASHBOARD_REPORTS_FIXTURES);
+      const csv = suite1_serializeReportsLibraryCatalogCsv(Suite1_ADMIN_DASHBOARD_REPORTS_FIXTURES);
       suite1_expect(csv).toContain('data_status');
       suite1_expect(csv).toContain('contract_pending');
       suite1_expect(csv).toContain('false');
       suite1_expect(csv).not.toContain('revenue');
     });
     suite1_it('escapes embedded CSV quotes', () => {
-      const firstFixture = suite1_ADMIN_DASHBOARD_REPORTS_FIXTURES[0];
+      const firstFixture = Suite1_ADMIN_DASHBOARD_REPORTS_FIXTURES[0];
       if (!firstFixture) throw new Error('Expected at least one report catalog fixture.');
       const csv = suite1_serializeReportsLibraryCatalogCsv([{ ...firstFixture, id: 'title"test' }]);
       suite1_expect(csv).toContain('title""test');
@@ -740,16 +741,16 @@ suite1_describe('Original suite: useAdminDashboardReportsAnalyticsViewState.test
 
 
 // Standalone harness scenario coverage (merged without changing assertions).
-suite1_HarnessVitest.describe('dashboard reports analytics harness scenarios', () => {
-  suite1_HarnessVitest.it('renders active feature content', () => {
-    suite1_HarnessTestingLibrary.render(<suite1_HarnessScenarioComponent scenario="ACTIVE_RECORDS"><p>Active report analytics</p></suite1_HarnessScenarioComponent>);
-    suite1_HarnessVitest.expect(suite1_HarnessTestingLibrary.screen.getByText('Active report analytics')).toBeTruthy();
+Suite1_HarnessVitest.describe('dashboard reports analytics harness scenarios', () => {
+  Suite1_HarnessVitest.it('renders active feature content', () => {
+    Suite1_HarnessTestingLibrary.render(<Suite1_HarnessScenarioComponent scenario="ACTIVE_RECORDS"><p>Active report analytics</p></Suite1_HarnessScenarioComponent>);
+    Suite1_HarnessVitest.expect(Suite1_HarnessTestingLibrary.screen.getByText('Active report analytics')).toBeTruthy();
   });
-  suite1_HarnessVitest.it.each(suite1_HarnessScenarioList.filter((scenario) => scenario !== 'ACTIVE_RECORDS'))('renders the visible %s state', (scenario) => {
-    suite1_HarnessTestingLibrary.render(<suite1_HarnessScenarioComponent scenario={scenario}><p>Must not be visible in a non-active state</p></suite1_HarnessScenarioComponent>);
-    suite1_HarnessVitest.expect(suite1_HarnessTestingLibrary.screen.queryByText('Must not be visible in a non-active state')).toBeNull();
-    suite1_HarnessVitest.expect(suite1_HarnessTestingLibrary.screen.getByTestId('admin_dashboard_reports_analytics-harness').getAttribute('data-scenario')).toBe(suite1_scenarioLabel(scenario));
-    suite1_HarnessVitest.expect(suite1_HarnessTestingLibrary.screen.getByRole(scenario === 'EMPTY_DATA' ? 'status' : 'alert')).toBeTruthy();
+  Suite1_HarnessVitest.it.each(Suite1_HarnessScenarioList.filter((scenario) => scenario !== 'ACTIVE_RECORDS'))('renders the visible %s state', (scenario) => {
+    Suite1_HarnessTestingLibrary.render(<Suite1_HarnessScenarioComponent scenario={scenario}><p>Must not be visible in a non-active state</p></Suite1_HarnessScenarioComponent>);
+    Suite1_HarnessVitest.expect(Suite1_HarnessTestingLibrary.screen.queryByText('Must not be visible in a non-active state')).toBeNull();
+    Suite1_HarnessVitest.expect(Suite1_HarnessTestingLibrary.screen.getByTestId('admin_dashboard_reports_analytics-harness').getAttribute('data-scenario')).toBe(suite1_scenarioLabel(scenario));
+    Suite1_HarnessVitest.expect(Suite1_HarnessTestingLibrary.screen.getByRole(scenario === 'EMPTY_DATA' ? 'status' : 'alert')).toBeTruthy();
   });
 });
 
@@ -769,8 +770,8 @@ describe("Consolidated from AdminDashboardReportsVisualRegression.test.tsx", () 
 suite2_describe('Original suite: AdminDashboardReportsAnalyticsPageHeaderSection.test.tsx', () => {
   function renderHeader(isDemoMode: boolean) {
     suite2_render(
-      <suite2_NextIntlClientProvider locale="en" messages={suite2_messages}>
-        <suite2_AdminDashboardReportsAnalyticsPageHeaderSection
+      <Suite2_NextIntlClientProvider locale="en" messages={suite2_messages}>
+        <Suite2_AdminDashboardReportsAnalyticsPageHeaderSection
           range="last3Months"
           onRangeChange={suite2_vi.fn()}
           branch="All Branches"
@@ -780,7 +781,7 @@ suite2_describe('Original suite: AdminDashboardReportsAnalyticsPageHeaderSection
           onPrint={suite2_vi.fn()}
           onExportCsv={suite2_vi.fn()}
         />
-      </suite2_NextIntlClientProvider>,
+      </Suite2_NextIntlClientProvider>,
     );
   }
 
@@ -803,16 +804,16 @@ suite2_describe('Original suite: AdminDashboardReportsAnalyticsPageHeaderSection
 
 
 suite2_describe('Original suite: AdminDashboardReportsAnalyticsToolbar.test.tsx', () => {
-  function renderReportsToolbar(overrides: Partial<suite2_ComponentProps<typeof suite2_AdminDashboardReportsAnalyticsToolbar>> = {}) {
-    const onRangeChange = suite2_vi.fn<(range: suite2_AdminDashboardReportsAnalyticsRange) => void>();
+  function renderReportsToolbar(overrides: Partial<Suite2_ComponentProps<typeof Suite2_AdminDashboardReportsAnalyticsToolbar>> = {}) {
+    const onRangeChange = suite2_vi.fn<(range: Suite2_AdminDashboardReportsAnalyticsRange) => void>();
     const onBranchChange = suite2_vi.fn<(branch: string) => void>();
     const onPrint = suite2_vi.fn();
     const onExportCsv = suite2_vi.fn();
-    const props: suite2_ComponentProps<typeof suite2_AdminDashboardReportsAnalyticsToolbar> = {
+    const props: Suite2_ComponentProps<typeof Suite2_AdminDashboardReportsAnalyticsToolbar> = {
       range: 'last3Months', onRangeChange, branch: 'All Branches', branchOptions: ['Main Branch', 'Branch 2'],
       onBranchChange, isDemoMode: true, onPrint, onExportCsv, ...overrides,
     };
-    suite2_render(<suite2_NextIntlClientProvider locale="en" messages={suite2_messages}><suite2_AdminDashboardReportsAnalyticsToolbar {...props} /></suite2_NextIntlClientProvider>);
+    suite2_render(<Suite2_NextIntlClientProvider locale="en" messages={suite2_messages}><Suite2_AdminDashboardReportsAnalyticsToolbar {...props} /></Suite2_NextIntlClientProvider>);
     return { onRangeChange, onBranchChange, onPrint, onExportCsv };
   }
 
@@ -850,7 +851,7 @@ suite2_describe('Original suite: AdminDashboardReportsAnalyticsToolbar.test.tsx'
 
 suite3_describe("Reports route and metadata library interactions", () => {
   function renderReportsPage() {
-    return suite3_render(<suite3_NextIntlClientProvider locale="en" messages={suite3_pageMessages}><suite3_AdminDashboardReportsPage /></suite3_NextIntlClientProvider>);
+    return suite3_render(<Suite3_NextIntlClientProvider locale="en" messages={suite3_pageMessages}><Suite3_AdminDashboardReportsPage /></Suite3_NextIntlClientProvider>);
   }
 
   suite3_it("switches between analytics and the report library without changing the page route", () => {

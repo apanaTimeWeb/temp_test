@@ -3,7 +3,7 @@ import type { AdminSettingsProfileHarnessProps } from '@/app/frontend_admin/admi
 
 
 /** Test-only wrapper for exercising this submodule under named states. It does not mock or claim a live API contract. */
-export function AdminSettingsProfileHarness({ children, scenario = 'ACTIVE' }: AdminSettingsProfileHarnessProps) {
+export function AdminSettingsProfileHarness({ children, scenario = 'ACTIVE_RECORDS' }: AdminSettingsProfileHarnessProps) {
   return (
     <div data-testid="admin_settings_profile-harness" data-scenario={AdminSettingsProfileScenarioLabel(scenario)}>
       {children}

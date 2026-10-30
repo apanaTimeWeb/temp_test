@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-const require = createRequire(new URL('../../../../frontend_admin/package.json', import.meta.url));
-const { expect, test } = require('@playwright/test');
-
+import { expect, test } from '@playwright/test';
 const demoOnly = () => test.skip(
   process.env.PLAYWRIGHT_APP_MODE !== 'demo',
   'Requires PLAYWRIGHT_APP_MODE=demo and a server built with NEXT_PUBLIC_FRONTEND_DEMO_MODE=true.',

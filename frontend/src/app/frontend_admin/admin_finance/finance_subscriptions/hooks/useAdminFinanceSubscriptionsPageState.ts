@@ -1,5 +1,5 @@
-// DATA FLOW: finance_subscriptions route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: finance_subscriptions route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 import { useMemo } from 'react';
 import { ADMIN_SUBSCRIPTIONS_DEMO_SUBSCRIPTIONS } from '@/app/frontend_admin/admin_finance/finance_subscriptions/mocks/AdminFinanceSubscriptionsDemoFixtures';
 import type { AdminSubscriptionsDemoSubscription, AdminSubscriptionsPlanFilter, AdminSubscriptionsShiftFilter, AdminSubscriptionsStatusFilter } from '@/app/frontend_admin/admin_finance/finance_subscriptions/types/AdminFinanceSubscriptionsTypes';

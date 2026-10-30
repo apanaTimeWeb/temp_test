@@ -1,19 +1,20 @@
 import type { ReactNode } from 'react';
 
-export interface DataGridCellParams<TRow extends object> {
-  value: TRow[keyof TRow] | undefined;
+export interface DataGridCellParams<TRow extends object = any> {
+  value: any;
   data: TRow;
 }
 
-export interface DataGridColumn<TRow extends object> {
+export interface DataGridColumn<TRow extends object = any> {
   field?: Extract<keyof TRow, string>;
   headerName?: string;
   width?: number;
   flex?: number;
   minWidth?: number;
   sortable?: boolean;
-  valueFormatter?: (params: DataGridCellParams<TRow>) => ReactNode;
-  cellRenderer?: (params: DataGridCellParams<TRow>) => ReactNode;
+  cellClass?: string;
+  valueFormatter?: (params: any) => ReactNode;
+  cellRenderer?: (params: any) => ReactNode;
 }
 
 export type AdminUiDataGridLocale = 'en' | 'hi';

@@ -1,10 +1,10 @@
-// RESPONSIBILITY: Owns the secondary member-directory tab views and their demo-only local forms.
 'use client';
+// RESPONSIBILITY: Owns the secondary member-directory tab views and their demo-only local forms.
 
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { Tags, Building, DownloadCloud, UploadCloud, ArrowRight } from 'lucide-react';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import type { AdminMembersCategory, AdminMembersDepartment, AdminMembersRenewal, AdminMembersDemoMutationResult } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import useAdminMembersDirectoryMain from '@/app/frontend_admin/admin_members/members_directory/hooks/useAdminMembersDirectoryMain';
 import Link from 'next/link';

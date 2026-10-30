@@ -1,5 +1,4 @@
 'use client';
-
 // RESPONSIBILITY: AdminSystemSettingsNotificationsSection component owned by admin_system; responsibility folder: admin_system_settings_page_view_sections.
 import { useTranslations } from 'next-intl';
 import Card from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCard';

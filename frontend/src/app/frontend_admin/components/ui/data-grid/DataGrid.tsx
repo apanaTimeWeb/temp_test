@@ -1,5 +1,4 @@
 'use client';
-
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { Inbox } from 'lucide-react';

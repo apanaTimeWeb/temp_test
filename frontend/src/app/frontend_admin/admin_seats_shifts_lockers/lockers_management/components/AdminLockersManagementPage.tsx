@@ -1,5 +1,5 @@
-// Responsibility: AdminLockersManagementPage component owned by admin_lockers; responsibility folder: admin_lockers_components_views.
 'use client';
+// Responsibility: AdminLockersManagementPage component owned by admin_lockers; responsibility folder: admin_lockers_components_views.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 // RESPONSIBILITY: Read-only locker inventory with canonical status filtering.

@@ -1,5 +1,5 @@
-// DATA FLOW: settings_security route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: settings_security route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 import { useCallback } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { AdminSecurityTab } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';

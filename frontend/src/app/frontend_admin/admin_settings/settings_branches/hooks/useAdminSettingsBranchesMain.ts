@@ -1,5 +1,5 @@
-// DATA FLOW: settings_branches route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: settings_branches route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';

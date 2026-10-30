@@ -1,5 +1,4 @@
 'use client';
-
 import { Children, isValidElement, useState, type ChangeEvent, type ReactNode } from 'react';
 
 import { SelectContent, type SelectContentProps } from '@/components/ui/select/SelectContent';
@@ -11,11 +10,15 @@ import type { SelectProps, SelectOption } from '@/app/frontend_admin/components/
 
 export type { SelectContentProps, SelectItemProps, SelectTriggerProps, SelectValueProps };
 
+function isComponentType(type: unknown, expectedName: string, expectedType: unknown): boolean {
+  return type === expectedType || (typeof type === 'function' && (type.name === expectedName || (type as { displayName?: string }).displayName === expectedName));
+}
+
 function collectSelectValue(children: ReactNode): string | undefined {
   let placeholder: string | undefined;
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
-    if (child.type === SelectValue) {
+    if (isComponentType(child.type, 'SelectValue', SelectValue)) {
       const props = child.props as SelectValueProps;
       if (props.placeholder) placeholder = props.placeholder;
       return;
@@ -30,7 +33,7 @@ function findSelectContentClassName(children: ReactNode): string | undefined {
   let className: string | undefined;
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
-    if (child.type === SelectContent) {
+    if (isComponentType(child.type, 'SelectContent', SelectContent)) {
       className = (child.props as SelectContentProps).className;
       return;
     }
@@ -43,7 +46,7 @@ function findSelectContentClassName(children: ReactNode): string | undefined {
 function collectSelectOptions(children: ReactNode, options: SelectOption[] = []): SelectOption[] {
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
-    if (child.type === SelectItem) {
+    if (isComponentType(child.type, 'SelectItem', SelectItem)) {
       const props = child.props as SelectItemProps;
       const dataAttributes = Object.fromEntries(
         Object.entries(props).filter(([key, value]) =>
@@ -63,7 +66,7 @@ function findSelectTrigger(children: ReactNode): SelectTriggerProps | undefined 
   let trigger: SelectTriggerProps | undefined;
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
-    if (child.type === SelectTrigger) {
+    if (isComponentType(child.type, 'SelectTrigger', SelectTrigger)) {
       trigger = child.props as SelectTriggerProps;
       return;
     }
@@ -80,7 +83,7 @@ function findSelectTrigger(children: ReactNode): SelectTriggerProps | undefined 
 export function Select({ value, defaultValue, onValueChange, children, disabled = false }: SelectProps) {
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue ?? '');
   const trigger = findSelectTrigger(children) ?? {};
-  const placeholder = collectSelectValue(trigger.children);
+  const placeholder = collectSelectValue(trigger.children) ?? collectSelectValue(children);
   const options = collectSelectOptions(children);
   const contentClassName = findSelectContentClassName(children) ?? '';
   const selectedValue = value ?? uncontrolledValue;

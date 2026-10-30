@@ -1,5 +1,5 @@
-// Responsibility: AdminSupportPage presentation component owned by admin_support; responsibility folder: admin_support_components_views.
 'use client';
+// Responsibility: AdminSupportPage presentation component owned by admin_support; responsibility folder: admin_support_components_views.
 
 // RESPONSIBILITY: Owns Support tab selection and chooses a module-owned panel per tab.
 // DATA FLOW: role route -> local tab state -> isolated panel -> localized content or explicit contract-blocked state.
@@ -43,7 +43,7 @@ export default function AdminSupportPage() {
               <button
                 key={item.id}
                 type="button"
-                data-testid={`admin_support-AdminSupportPage-navigation-${item.id}`}
+                data-testid={`admin_support-AdminSettingsSupportMain-navigation-${item.id}`}
                 aria-current={selected ? 'page' : undefined}
                 aria-pressed={selected}
                 onClick={() => setActiveTab(item.id)}

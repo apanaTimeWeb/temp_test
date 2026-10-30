@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountsExpenseCategoriesPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 'use client';
+// RESPONSIBILITY: AdminAccountsExpenseCategoriesPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 
 import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -14,7 +14,7 @@ import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogD
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import AdminAccountingDeleteConfirmationDialog from '@/app/frontend_admin/admin_accounts_assets/accounts_expense_categories/components/AdminAccountsExpenseCategoriesDeleteConfirmationDialog';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_ACCOUNTING_EXPENSE_CATEGORY_COLORS } from '@/app/frontend_admin/admin_accounts_assets/accounts_expense_categories/config/admin_accounts_expense_categories.url_config';
 import { createAdminAccountingExpenseCategoryFormSchema, type AdminAccountingExpenseCategoryFormValues, type AdminAccountingExpenseCategoryValidationKey } from '@/app/frontend_admin/admin_accounts_assets/accounts_expense_categories/schemas/AdminAccountsExpenseCategoriesFormSchemas';

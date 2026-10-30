@@ -1,5 +1,5 @@
-// RESPONSIBILITY: Owns the profile overview, login-history, and sessions read-only presentation states.
 'use client';
+// RESPONSIBILITY: Owns the profile overview, login-history, and sessions read-only presentation states.
 
 import { Camera, LogOut, Mail, MonitorSmartphone, Phone } from 'lucide-react';
 import { useTranslations } from 'next-intl';

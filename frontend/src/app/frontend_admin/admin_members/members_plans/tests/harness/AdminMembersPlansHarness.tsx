@@ -1,5 +1,5 @@
-/** Standalone scenario harness for the members-plans module; this is not the production page. */
 'use client';
+/** Standalone scenario harness for the members-plans module; this is not the production page. */
 
 import type { ReactNode } from 'react';
 import { useState } from 'react';

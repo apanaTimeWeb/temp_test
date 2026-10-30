@@ -1,3 +1,4 @@
+'use client';
 import { useTranslations } from 'next-intl';
 import useAdminStaffDirectory from '@/app/frontend_admin/admin_staff/staff_directory/hooks/useAdminStaffDirectory';
 import type { AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionProps, AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSectionProps, AdminStaffDirectoryManagerTableProps } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
@@ -12,7 +13,6 @@ import { ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES } from '@/app/frontend_admin
 import { maskAdminStaffDirectoryEmail, maskAdminStaffDirectoryPhone, getAdminStaffDirectoryLastActiveLabel } from '@/app/frontend_admin/admin_staff/staff_directory/utils/AdminStaffDirectoryDisplayUtils';
 
 // RESPONSIBILITY: AdminStaffDirectoryViewSIDEBARNAVIGATIONSection component owned by admin_staff_directory; responsibility folder: admin_staff_directory_view_sections.
-'use client';
 
 /** Owns primary navigation buttons; the selected view is delegated to the feature's section orchestrator. */
 export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model }: AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionProps) {
@@ -39,7 +39,6 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
 export type { AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionProps };
 
 // RESPONSIBILITY: AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSection component owned by admin_staff_directory; responsibility folder: admin_staff_directory_view_sidebarnavigationsection_sections.
-'use client';
 
 /** Route-level composition only; list, audit, form and selected-manager detail visual sections are independently owned. */
 export function AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSection({ model }: AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSectionProps) {
@@ -73,7 +72,6 @@ export function AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSect
 export type { AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSectionProps };
 
 // RESPONSIBILITY: AdminStaffDirectoryManagerTable component owned by admin_staff_directory; responsibility folder: admin_staff_directory_components_tables.
-'use client';
 
 /** Renders one manager status table; unsupported row actions remain disabled until their API behavior is verified. */
 export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, onSelectManager }: AdminStaffDirectoryManagerTableProps) {

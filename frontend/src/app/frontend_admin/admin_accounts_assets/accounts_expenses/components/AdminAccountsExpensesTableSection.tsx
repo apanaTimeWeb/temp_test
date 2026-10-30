@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountsExpensesTableSection component owned by admin_accounting; responsibility folder: admin_accounts_expenses_sections.
 'use client';
+// RESPONSIBILITY: AdminAccountsExpensesTableSection component owned by admin_accounting; responsibility folder: admin_accounts_expenses_sections.
 
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useMemo } from 'react';

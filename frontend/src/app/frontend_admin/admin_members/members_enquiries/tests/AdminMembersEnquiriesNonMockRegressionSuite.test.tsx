@@ -25,6 +25,10 @@ describe("Consolidated: AdminMembersEnquiriesFormatDate", () => {
 });
 
 describe("Consolidated: AdminMembersEnquiriesHarness", () => {
+    it('renders children when scenario is active', () => {
+        render(<HarnessScenarioComponent scenario="ACTIVE"><span>Harness Content</span></HarnessScenarioComponent>);
+        expect(screen.getByText('Harness Content')).toBeTruthy();
+    });
 });
 
 describe("Consolidated: AdminMembersEnquiriesMainEnquiriesUrlContract", () => {

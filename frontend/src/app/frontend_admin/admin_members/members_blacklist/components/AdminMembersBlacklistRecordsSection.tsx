@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminBlacklistRecordsSection component owned by admin_blacklist; responsibility folder: admin_blacklist_records_section.
 'use client';
+// RESPONSIBILITY: AdminBlacklistRecordsSection component owned by admin_blacklist; responsibility folder: admin_blacklist_records_section.
 
 import { useTranslations } from 'next-intl';
 import { type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';

@@ -1,5 +1,5 @@
-// Responsibility: AdminSystemBrandingPage component owned by admin_system; responsibility folder: admin_system_components_views.
 'use client';
+// Responsibility: AdminSystemBrandingPage component owned by admin_system; responsibility folder: admin_system_components_views.
 
 import { useTranslations } from 'next-intl';
 // RESPONSIBILITY: Entry page for the admin_system module.
@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { createAdminSystemBrandingPreviewSchema, type AdminSystemBrandingPreviewFormValues } from '@/app/frontend_admin/admin_system/system_branding/schemas/AdminSystemBrandingPreviewSchema';
 import { ADMIN_SYSTEM_BRANDING_PREVIEW_DEFAULTS as BRANDING_DEFAULTS } from '@/app/frontend_admin/admin_system/system_branding/config/admin_system_branding_preview_constants';
 import Card from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCard';

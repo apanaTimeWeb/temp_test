@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceSecurityDepositsTable component owned by admin_finance; responsibility folder: admin_finance_security_deposits_sections.
 'use client';
+// Responsibility: AdminFinanceSecurityDepositsTable component owned by admin_finance; responsibility folder: admin_finance_security_deposits_sections.
 
 // RESPONSIBILITY: Renders the security-deposit ledger and exposes intent callbacks for row actions.
 

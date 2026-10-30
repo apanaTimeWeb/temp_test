@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceAutoSuspendRestoreDialog component owned by admin_finance; responsibility folder: admin_finance_auto_suspend_sections.
 'use client';
+// Responsibility: AdminFinanceAutoSuspendRestoreDialog component owned by admin_finance; responsibility folder: admin_finance_auto_suspend_sections.
 
 // RESPONSIBILITY: Renders confirmation and override-reason inputs for a selected student restore.
 

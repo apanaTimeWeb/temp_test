@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminLockersLockerMatrixPage component owned by admin_lockers; responsibility folder: admin_lockers_components_views.
 'use client';
+// RESPONSIBILITY: AdminLockersLockerMatrixPage component owned by admin_lockers; responsibility folder: admin_lockers_components_views.
 
 import { useTranslations } from 'next-intl';
 

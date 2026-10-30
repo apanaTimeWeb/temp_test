@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import AdminAuditLogsRecordsPanel from '@/app/frontend_admin/admin_system/system_audit_logs/components/AdminSystemAuditLogsRecordsPanel';
 import type { AdminAuditLogsRecord } from '@/app/frontend_admin/admin_system/system_audit_logs/types/AdminSystemAuditLogsTypes';
 
-vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
+vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key, useLocale: () => 'en' }));
 
 const record: AdminAuditLogsRecord = {
   id: 'audit-1',

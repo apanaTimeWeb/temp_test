@@ -1,5 +1,5 @@
-// Responsibility: AdminFinancePaymentPromisesPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 'use client';
+// Responsibility: AdminFinancePaymentPromisesPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 // RESPONSIBILITY: Owns payment-promise demo state and composes filter, ledger and extension dialog.
@@ -11,7 +11,7 @@ import { differenceInCalendarDays, parseISO, startOfToday } from 'date-fns';
 import { useAdminFinanceAccessibleDialog } from '@/app/frontend_admin/admin_finance/finance_payment_promises/hooks/useAdminFinancePaymentPromisesAccessibleDialog';
 import { ADMIN_FINANCE_DEMO_PAYMENT_PROMISES } from '@/app/frontend_admin/admin_finance/finance_payment_promises/mocks/AdminFinancePaymentPromisesDemoFixtures';
 import type { AdminFinancePromiseItem } from '@/app/frontend_admin/admin_finance/finance_payment_promises/types/AdminFinancePaymentPromisesTypes';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { getAdminFinanceLocalDateString } from '@/app/frontend_admin/admin_finance/finance_payment_promises/utils/AdminFinancePaymentPromisesFormat';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import AdminFinancePaymentPromisesToolbar from '@/app/frontend_admin/admin_finance/finance_payment_promises/components/AdminFinancePaymentPromisesToolbar';

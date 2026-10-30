@@ -1,16 +1,18 @@
-// RESPONSIBILITY: AdminStaffRolesPermissionsPage presentation component owned by admin_staff_roles_permissions; responsibility folder: admin_staff_roles_permissions_components_views.
 'use client';
+// RESPONSIBILITY: AdminStaffRolesPermissionsPage presentation component owned by admin_staff_roles_permissions; responsibility folder: admin_staff_roles_permissions_components_views.
 
 import { useTranslations } from 'next-intl';
 import { CheckCircle } from 'lucide-react';
-import toast, { Toaster } from 'sonner';
+import { toast, Toaster } from 'sonner';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import AdminStaffRolesPermissionsMatrixTable from '@/app/frontend_admin/admin_staff/staff_roles_permissions/components/AdminStaffRolesPermissionsMatrixTable';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import useAdminStaffRolesPermissionsState from '@/app/frontend_admin/admin_staff/staff_roles_permissions/hooks/useAdminStaffRolesPermissionsState';
 import { saveAdminStaffRolesPermissionsDemoState } from '@/app/frontend_admin/admin_staff/staff_roles_permissions/mocks/AdminStaffRolesPermissionsDemoState';
 
-/** Shows permission definitions and an explicitly local demo preview; live permission edits require an approved host contract. */
+/** Shows permission definitions and an explicitly local demo preview; live permission edits require an approved host contract.
+ * ACCESS_ROLES_NOTICE: Authorization remains a host/backend responsibility.
+ */
 export default function AdminStaffRolesPermissionsPage() {
   const t = useTranslations('ADMIN_STAFF_ROLES_PERMISSIONS');
   const demoMode = isFrontendDemoModeEnabled();
@@ -65,9 +67,9 @@ export default function AdminStaffRolesPermissionsPage() {
         {permsQuery.isError ? (
           <div role="alert" className="rounded-lg border border-border bg-card p-6 text-danger-text">
             <p>{demoMode ? t('LOAD_ERROR') : t('LIVE_UNAVAILABLE')}</p>
-            {demoMode && <button type="button" className="mt-3 min-h-11 rounded border border-border px-3 py-2 text-primary" onClick={() => { void permsQuery.refetch(); }}>
+            <button type="button" className="mt-3 min-h-11 rounded border border-border px-3 py-2 text-primary" onClick={() => { void permsQuery.refetch(); }}>
               {t('RETRY')}
-            </button>}
+            </button>
           </div>
         ) : permsQuery.isPending ? (
           <div role="status" aria-live="polite" className="rounded-lg border border-border bg-card p-8 text-center text-text-secondary">

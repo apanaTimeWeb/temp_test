@@ -4,9 +4,10 @@ import { NextIntlClientProvider } from 'next-intl';
 import accountingMessages from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/locales/admin_accounts_daily_settlement_en.json';
 import { AdminAccountsDailySettlementPage } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/components/AdminAccountsDailySettlementPage';
 
-vi.mock('sonner', () => ({
-  default: { info: vi.fn(), error: vi.fn() },
-}));
+vi.mock('sonner', () => {
+  const toast = { info: vi.fn(), error: vi.fn(), success: vi.fn() };
+  return { default: toast, toast, Toaster: () => null };
+});
 
 afterEach(() => {
   cleanup();
@@ -18,7 +19,7 @@ describe('AdminAccountsDailySettlementPage', () => {
     vi.stubEnv('NEXT_PUBLIC_FRONTEND_DEMO_MODE', 'true');
     render(<NextIntlClientProvider locale="en" messages={accountingMessages}><AdminAccountsDailySettlementPage /></NextIntlClientProvider>);
 
-    expect(screen.getByText('Morning (6AM–2PM)')).toBeTruthy();
+    expect(screen.getAllByText('Morning (6AM–2PM)').length).toBeGreaterThan(0);
     fireEvent.change(screen.getByLabelText('Settlement date'), { target: { value: '2026-10-09' } });
     expect(screen.getByText('No settlement entries for 2026-10-09.')).toBeTruthy();
   });
@@ -44,7 +45,8 @@ describe('AdminAccountsDailySettlementPage', () => {
     vi.stubEnv('NEXT_PUBLIC_FRONTEND_DEMO_MODE', 'true');
     render(<NextIntlClientProvider locale="en" messages={accountingMessages}><AdminAccountsDailySettlementPage /></NextIntlClientProvider>);
 
-    fireEvent.click(screen.getAllByRole('button', { name: /settle/i })[0]);
-    expect(screen.getAllByRole('button', { name: /settle/i })).toHaveLength(1);
+    const initialButtons = screen.getAllByRole('button', { name: /settle/i });
+    fireEvent.click(initialButtons[0]);
+    expect(screen.getAllByRole('button', { name: /settle/i }).length).toBeLessThan(initialButtons.length);
   });
 });

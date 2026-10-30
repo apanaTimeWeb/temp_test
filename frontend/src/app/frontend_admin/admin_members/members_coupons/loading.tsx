@@ -7,7 +7,7 @@ export default function AdminMembersLoading() {
   const t = useTranslations('ADMIN_COUPONS');
 
   return (
-    <div className="space-y-6 p-4 md:p-6" role="status" aria-live="polite" aria-busy="true">
+    <div className="space-y-6 p-4 md:p-6" role="status" aria-label={t('ROUTE_LOADING.ARIA_LABEL')} aria-live="polite" aria-busy="true">
       <span className="sr-only">{t('ROUTE_LOADING.SCREEN_READER_TEXT')}</span>
       <div className="motion-safe:animate-pulse space-y-4">
         <div className="h-8 w-1/3 rounded bg-surface-highlight" />

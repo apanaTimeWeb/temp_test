@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceLateFeesPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 'use client';
+// Responsibility: AdminFinanceLateFeesPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 
 // RESPONSIBILITY: Entry page for the admin_finance module.
 // DATA FLOW: Next.js Router -> Page -> Components
@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { formatAdminFinanceCurrency, majorToMinor, minorToMajor } from '@/app/frontend_admin/admin_finance/finance_late_fees/utils/AdminFinanceLateFeesFormat';
 import { Settings, AlertTriangle, Save, MessageSquare } from 'lucide-react';
 import { openAdminFinanceWhatsApp } from '@/app/frontend_admin/admin_finance/finance_late_fees/utils/AdminFinanceLateFeesWhatsApp';

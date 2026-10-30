@@ -1,5 +1,5 @@
-// Responsibility: AdminAllocationsPage component owned by admin_allocations; responsibility folder: admin_allocations_components_views.
 'use client';
+// Responsibility: AdminAllocationsPage component owned by admin_allocations; responsibility folder: admin_allocations_components_views.
 
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useLocale, useTranslations } from 'next-intl';
@@ -11,7 +11,7 @@ import { useAdminAllocationsFilters } from '@/app/frontend_admin/admin_seats_shi
 import { ChevronDown, Download, Eye, Printer, Upload, MessageSquare, Send, Mail } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { ColDef, DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_ALLOCATIONS_ALLOCATION_FEE_STATUS_BADGE_CLASS, ADMIN_ALLOCATIONS_ALLOCATION_STATUS_BADGE_CLASS, ADMIN_ALLOCATIONS_ALLOCATION_STATUS_OPTIONS } from '@/app/frontend_admin/admin_seats_shifts_lockers/allocations/config/admin_allocations.url_config';
 import { matchesAdminAllocationsFilter, toIsoAdminAllocationsDisplayDate } from '@/app/frontend_admin/admin_seats_shifts_lockers/allocations/utils/AdminAllocationsFilterUtils';

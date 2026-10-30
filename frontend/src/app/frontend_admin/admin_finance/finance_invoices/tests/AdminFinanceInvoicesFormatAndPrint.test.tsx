@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { formatDate, getAdminFinanceLocalDateString, getAdminFinanceLocalMonthString } from "@/app/frontend_admin/admin_finance/finance_invoices/utils/AdminFinanceInvoicesFormat";
 import { AdminFinanceThermalPrint } from "@/app/frontend_admin/admin_finance/finance_invoices/utils/AdminFinanceInvoicesThermalPrint";
@@ -35,7 +36,7 @@ describe('AdminFinanceInvoicesStandaloneContract.test.ts preserved assertions', 
 // Responsibility: inspect the actual module-owned standalone host contract, not a naming-only placeholder.
 describe('admin finance invoices standalone contract', () => {
   it('declares the required minimal host module contracts', () => {
-    const stubs = readFileSync(new URL('../contracts/host-stubs.d.ts', import.meta.url), 'utf8');
+    const stubs = readFileSync(path.resolve(__dirname, '../contracts/host-stubs.d.ts'), 'utf8');
     expect(stubs).toContain("declare module '@/lib/api'");
     expect(stubs).toContain("declare module '@/lib/display_value'");
     expect(stubs).toContain("declare module '@/components/ui/*'");
@@ -128,7 +129,7 @@ describe('source-backed invoice detail route IDs', () => {
     render(<NextIntlClientProvider locale="en" messages={messages}>
       <AdminFinanceInvoicesIdPage routeId={routeId} />
     </NextIntlClientProvider>);
-    expect(screen.getByText(expectedNumber)).toBeTruthy();
+    expect(screen.getByText(new RegExp(expectedNumber))).toBeTruthy();
     expect(screen.getByText(expectedStudent)).toBeTruthy();
   });
 

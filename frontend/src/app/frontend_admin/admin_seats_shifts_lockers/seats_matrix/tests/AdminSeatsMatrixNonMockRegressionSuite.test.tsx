@@ -33,6 +33,10 @@ describe("Consolidated: AdminSeatsMatrixApiFixtures", () => {
 });
 
 describe("Consolidated: AdminSeatsMatrixHarness", () => {
+    it('renders children when scenario is active', () => {
+        render(<AdminSeatsMatrixHarness scenario="ACTIVE"><span>Harness Content</span></AdminSeatsMatrixHarness>);
+        expect(screen.getByText('Harness Content')).toBeTruthy();
+    });
 });
 
 describe("Consolidated: AdminSeatsMatrixMainSeatMatrixUrlContract", () => {

@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminSupportCreateTicketForm component owned by admin_support; responsibility folder: admin_support_components_forms.
 'use client';
+// RESPONSIBILITY: AdminSupportCreateTicketForm component owned by admin_support; responsibility folder: admin_support_components_forms.
 
 import { format } from 'date-fns';
 import { enIN, hi } from 'date-fns/locale';
@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Paperclip, Send } from 'lucide-react';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { useLocale, useTranslations } from 'next-intl';
 import { AdminSupportTicketSchema, type AdminSupportTicketFormValues } from '@/app/frontend_admin/admin_settings/settings_support/schemas/AdminSettingsSupportTicketSchema';
 import { ADMIN_SUPPORT_TICKET_CATEGORY_OPTIONS, ADMIN_SUPPORT_TICKET_PRIORITY_OPTIONS } from '@/app/frontend_admin/admin_settings/settings_support/config/admin_settings_support.url_config';

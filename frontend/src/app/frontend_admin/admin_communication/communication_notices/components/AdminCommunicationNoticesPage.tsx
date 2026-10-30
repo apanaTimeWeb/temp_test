@@ -1,3 +1,4 @@
+'use client';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import useAdminCommunicationNoticesQuery from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesQuery';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -21,7 +22,6 @@ import { ADMIN_COMMUNICATION_NOTICE_API_FIXTURE } from '@/app/frontend_admin/adm
 import type { Notice, AdminCommunicationEmptyStateProps } from '@/app/frontend_admin/admin_communication/communication_notices/types/AdminCommunicationNoticesComponentTypes';
 
 // Responsibility: AdminCommunicationNoticesPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
-'use client';
 
 // RESPONSIBILITY: Entry page for the admin_communication module.
 // DATA FLOW: Next.js Router -> Page -> Components
@@ -33,8 +33,8 @@ export function AdminCommunicationNoticesPage() {
   const router = useRouter();
   const isDemoMode = isFrontendDemoModeEnabled();
   const noticesQuery = useAdminCommunicationNoticesQuery(!isDemoMode);
-  const apiNotices = useMemo<Notice[]>(() => (noticesQuery.data ?? []).map((n) => ({ id: n.id, title: n.title, message: n.message, postedBy: '—', postedDate: n.createdAt.slice(0, 10), validTill: n.validTill.slice(0, 10), status: getAdminCommunicationNoticeStatus(n.validTill) })), [noticesQuery.data]);
-  const [demoNotices, setDemoNotices] = useState<Notice[]>(() => isDemoMode ? ADMIN_COMMUNICATION_NOTICE_API_FIXTURE.map((notice) => ({ id: notice.id, title: notice.title, message: notice.message, postedBy: 'Demo session', postedDate: notice.createdAt.slice(0, 10), validTill: notice.validTill.slice(0, 10), status: getAdminCommunicationNoticeStatus(notice.validTill) })) : []);
+  const apiNotices = useMemo<Notice[]>(() => (noticesQuery.data ?? []).map((n) => ({ id: String(n.id), title: n.title, message: n.message, postedBy: '—', postedDate: n.createdAt.slice(0, 10), validTill: n.validTill.slice(0, 10), status: getAdminCommunicationNoticeStatus(n.validTill) })), [noticesQuery.data]);
+  const [demoNotices, setDemoNotices] = useState<Notice[]>(() => isDemoMode ? ADMIN_COMMUNICATION_NOTICE_API_FIXTURE.map((notice) => ({ id: String(notice.id), title: notice.title, message: notice.message, postedBy: 'Demo session', postedDate: notice.createdAt.slice(0, 10), validTill: notice.validTill.slice(0, 10), status: getAdminCommunicationNoticeStatus(notice.validTill) })) : []);
   const notices = isDemoMode ? demoNotices : apiNotices;
   const [showAdd, setShowAdd]             = useState(false);
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
@@ -273,7 +273,6 @@ export function AdminCommunicationNoticesPage() {
 }
 
 // Responsibility: AdminCommunicationEmptyState component owned by admin_communication; responsibility folder: admin_communication_empty_state.
-'use client';
 
 // RESPONSIBILITY: Standardized accessible empty state component for lists/tables in the admin_communication module.
 // DATA FLOW: Parent -> AdminCommunicationEmptyState -> DOM

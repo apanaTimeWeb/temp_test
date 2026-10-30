@@ -1,5 +1,5 @@
-// Responsibility: accessible, responsive asset grid and URL-backed pagination.
 'use client';
+// Responsibility: accessible, responsive asset grid and URL-backed pagination.
 
 import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';

@@ -1,12 +1,12 @@
-// Responsibility: AdminFinanceInvoicesIdPage component owned by admin_finance; responsibility folder: components.
 'use client';
+// Responsibility: AdminFinanceInvoicesIdPage component owned by admin_finance; responsibility folder: components.
 import { ADMIN_FINANCE_INVOICES_ROUTES } from '@/app/frontend_admin/admin_finance/finance_invoices/config/admin_finance_invoices.url_config';
 // RESPONSIBILITY: Entry page for the admin_finance module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import { formatAdminFinanceCurrency, formatDate } from '@/app/frontend_admin/admin_finance/finance_invoices/utils/AdminFinanceInvoicesFormat';
 import { Printer, ArrowLeft, Send } from 'lucide-react';

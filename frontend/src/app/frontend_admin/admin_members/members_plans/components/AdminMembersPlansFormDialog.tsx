@@ -1,5 +1,5 @@
+'use client';
 // RESPONSIBILITY: AdminPlansFormDialog component owned by admin_plans; responsibility folder: admin_plans_form_dialog.
-"use client";
 
 import useAdminMembersPlansUnsavedChangesGuard from '@/app/frontend_admin/admin_members/members_plans/hooks/useAdminMembersPlansUnsavedChangesGuard';
 

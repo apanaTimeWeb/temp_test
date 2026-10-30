@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountingShiftGapTableSection component owned by admin_accounting; responsibility folder: admin_accounting_components_tables.
 'use client';
+// RESPONSIBILITY: AdminAccountingShiftGapTableSection component owned by admin_accounting; responsibility folder: admin_accounting_components_tables.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { AdminAccountingDayGap } from '@/app/frontend_admin/admin_accounts_assets/accounts_shift_gap_analyzer/types/AdminAccountsShiftGapAnalyzerTypes';

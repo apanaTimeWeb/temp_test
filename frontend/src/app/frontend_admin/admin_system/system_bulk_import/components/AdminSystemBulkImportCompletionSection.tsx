@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminSystemBulkImportCompletionSection component owned by admin_system; responsibility folder: admin_system_bulk_import_page_view_sections.
 'use client';
+// RESPONSIBILITY: AdminSystemBulkImportCompletionSection component owned by admin_system; responsibility folder: admin_system_bulk_import_page_view_sections.
 
 import { useTranslations } from 'next-intl';
 import Card from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveCard';

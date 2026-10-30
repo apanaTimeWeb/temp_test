@@ -1,5 +1,4 @@
 'use client';
-
 import type { SelectHTMLAttributes } from 'react';
 import type { SelectTriggerProps } from '@/app/frontend_admin/components/ui/select/types/AdminUiSelectComponentTypes';
 

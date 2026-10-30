@@ -1,5 +1,5 @@
-// Responsibility: useAdminMembersEnquiriesUnsavedChangesGuard; module-local guard for dirty enquiry drafts.
 'use client';
+// Responsibility: useAdminMembersEnquiriesUnsavedChangesGuard; module-local guard for dirty enquiry drafts.
 
 import { useEffect } from 'react';
 

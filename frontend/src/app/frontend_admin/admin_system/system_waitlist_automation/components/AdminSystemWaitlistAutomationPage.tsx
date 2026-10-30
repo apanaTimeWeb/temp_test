@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminSystemWaitlistAutomationPage component owned by admin_system; responsibility folder: admin_system_components_tables.
 'use client';
+// RESPONSIBILITY: AdminSystemWaitlistAutomationPage component owned by admin_system; responsibility folder: admin_system_components_tables.
 
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';

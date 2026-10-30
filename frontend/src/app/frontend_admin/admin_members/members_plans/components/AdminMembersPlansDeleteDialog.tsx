@@ -1,5 +1,5 @@
+'use client';
 // RESPONSIBILITY: AdminPlansDeleteDialog component owned by admin_plans; responsibility folder: admin_plans_delete_dialog.
-"use client";
 
 import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';

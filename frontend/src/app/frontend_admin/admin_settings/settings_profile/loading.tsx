@@ -1,5 +1,4 @@
 'use client';
-
 import { useTranslations } from 'next-intl';
 
 // RESPONSIBILITY: Renders the Next.js native loading skeleton for the admin_settings module.

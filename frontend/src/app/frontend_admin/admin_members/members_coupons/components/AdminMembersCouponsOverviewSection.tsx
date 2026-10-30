@@ -1,5 +1,5 @@
-// RESPONSIBILITY: Owns the coupons page summary, KPI indicators, and explicit query result states.
 'use client';
+// RESPONSIBILITY: Owns the coupons page summary, KPI indicators, and explicit query result states.
 
 import { useTranslations } from 'next-intl';
 import { Tag, Plus } from 'lucide-react';

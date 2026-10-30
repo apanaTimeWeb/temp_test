@@ -1,5 +1,5 @@
-// Responsibility: AdminSubscriptionsPage component owned by admin_subscriptions; responsibility folder: admin_subscriptions_components_views.
 'use client';
+// Responsibility: AdminSubscriptionsPage component owned by admin_subscriptions; responsibility folder: admin_subscriptions_components_views.
 
 // RESPONSIBILITY: Entry page for the admin_subscriptions module.
 // DATA FLOW: Next.js Router -> Page -> Components
@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 
 import { formatAdminSubscriptionsCurrency, formatDate } from '@/app/frontend_admin/admin_finance/finance_subscriptions/utils/AdminFinanceSubscriptionsFormat';
-import type { AdminSubscriptionsDemoSubscription } from '@/app/frontend_admin/admin_finance/finance_subscriptions/types/AdminFinanceSubscriptionsTypes';
+import type { AdminSubscriptionsDemoSubscription, AdminSubscriptionsStatusFilter } from '@/app/frontend_admin/admin_finance/finance_subscriptions/types/AdminFinanceSubscriptionsTypes';
 import { RefreshCw, Eye, Download, Upload, Printer, MessageSquare, Send, Mail } from 'lucide-react';
 import { serializeAdminSubscriptionsCsv } from '@/app/frontend_admin/admin_finance/finance_subscriptions/utils/AdminFinanceSubscriptionsCsvUtils';
 
@@ -75,7 +75,7 @@ export function AdminSubscriptionsPage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
-        <select data-testid="admin_subscriptions-page-control-007" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_STATUS')} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+        <select data-testid="admin_subscriptions-page-control-007" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" aria-label={t('FILTER_STATUS')} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as AdminSubscriptionsStatusFilter)}>
           <option value="all">{t('ALL_STATUS')}</option>
           <option value="active">{t('STATUS_ACTIVE')}</option>
           <option value="expired">{t('STATUS_EXPIRED')}</option>

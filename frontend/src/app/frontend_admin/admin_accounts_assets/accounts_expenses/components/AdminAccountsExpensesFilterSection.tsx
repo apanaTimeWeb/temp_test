@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountsExpensesFilterSection component owned by admin_accounting; responsibility folder: admin_accounts_expenses_sections.
 'use client';
+// RESPONSIBILITY: AdminAccountsExpensesFilterSection component owned by admin_accounting; responsibility folder: admin_accounts_expenses_sections.
 
 import { useTranslations } from 'next-intl';
 import { TrendingUp } from 'lucide-react';

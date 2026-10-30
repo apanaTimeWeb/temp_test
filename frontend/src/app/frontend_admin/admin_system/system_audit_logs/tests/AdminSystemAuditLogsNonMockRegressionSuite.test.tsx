@@ -23,6 +23,10 @@ import { formatAdminAuditLogsTimestamp } from '@/app/frontend_admin/admin_system
 import { AdminAuditLogsApiRecordSchema } from '@/app/frontend_admin/admin_system/system_audit_logs/schemas/AdminSystemAuditLogsSchema';
 
 describe("Consolidated: AdminSystemAuditLogsHarness", () => {
+    it('renders children when scenario is active', () => {
+        render(<AdminSystemAuditLogsHarness scenario="ACTIVE"><span>Harness Content</span></AdminSystemAuditLogsHarness>);
+        expect(screen.getByText('Harness Content')).toBeTruthy();
+    });
 });
 
 describe("Consolidated: AdminSystemAuditLogsRegressionSuite", () => {

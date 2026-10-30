@@ -1,17 +1,22 @@
-import suite0_AdminProfilePage from "@/app/frontend_admin/admin_settings/settings_profile/page";
-import suite0_AdminProfilePasswordForm from "@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfilePasswordForm";
-import { ADMIN_SETTINGS_PROFILE_API as suite0_ADMIN_SETTINGS_PROFILE_API } from "@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config";
+import Suite0_AdminProfilePage from "@/app/frontend_admin/admin_settings/settings_profile/page";
+import Suite0_AdminProfilePasswordForm from "@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfilePasswordForm";
+import { ADMIN_SETTINGS_PROFILE_API as Suite0_ADMIN_SETTINGS_PROFILE_API } from "@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config";
 import suite0_adminProfileEn from "@/app/frontend_admin/admin_settings/settings_profile/locales/admin_settings_profile_en.json";
 import suite0_adminProfileHi from "@/app/frontend_admin/admin_settings/settings_profile/locales/admin_settings_profile_hi.json";
-import { ADMIN_PROFILE_DEMO_ACCOUNT as suite0_ADMIN_PROFILE_DEMO_ACCOUNT, ADMIN_PROFILE_DEMO_SESSIONS as suite0_ADMIN_PROFILE_DEMO_SESSIONS, ADMIN_PROFILE_DEMO_LOGIN_HISTORY as suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY, ADMIN_PROFILE_MSW_HANDLERS as suite0_ADMIN_PROFILE_MSW_HANDLERS } from "@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures";
-import { AdminProfileEditSchema as suite0_AdminProfileEditSchema, AdminProfilePasswordSchema as suite0_AdminProfilePasswordSchema } from "@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema";
-import { AdminSettingsProfileHarness as suite0_HarnessScenarioComponent } from "@/app/frontend_admin/admin_settings/settings_profile/tests/harness/AdminSettingsProfileHarness";
-import { AdminSettingsProfileScenarios as suite0_HarnessScenarioList } from "@/app/frontend_admin/admin_settings/settings_profile/tests/harness/bootstrap";
+import adminShellEn from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_en.json';
+import adminShellHi from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_hi.json';
+import { vi } from 'vitest';
+
+vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: () => true }));
+import { ADMIN_PROFILE_DEMO_ACCOUNT as Suite0_ADMIN_PROFILE_DEMO_ACCOUNT, ADMIN_PROFILE_DEMO_SESSIONS as Suite0_ADMIN_PROFILE_DEMO_SESSIONS, ADMIN_PROFILE_DEMO_LOGIN_HISTORY as Suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY, ADMIN_PROFILE_MSW_HANDLERS as Suite0_ADMIN_PROFILE_MSW_HANDLERS } from "@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures";
+import { AdminProfileEditSchema as Suite0_AdminProfileEditSchema, AdminProfilePasswordSchema as Suite0_AdminProfilePasswordSchema } from "@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema";
+import { AdminSettingsProfileHarness as Suite0_HarnessScenarioComponent } from "@/app/frontend_admin/admin_settings/settings_profile/tests/harness/AdminSettingsProfileHarness";
+import { AdminSettingsProfileScenarios as Suite0_HarnessScenarioList, AdminSettingsProfileScenarioLabel as Suite0_AdminSettingsProfileScenarioLabel } from "@/app/frontend_admin/admin_settings/settings_profile/tests/harness/bootstrap";
 import { getAdminProfileValidationMessageKey as suite0_getAdminProfileValidationMessageKey } from "@/app/frontend_admin/admin_settings/settings_profile/schemas/AdminSettingsProfileSchema";
-import * as suite0_HarnessTestingLibrary from "@testing-library/react";
+import * as Suite0_HarnessTestingLibrary from "@testing-library/react";
 import { fireEvent as suite0_fireEvent, render as suite0_render, screen as suite0_screen } from "@testing-library/react";
-import { NextIntlClientProvider as suite0_NextIntlClientProvider } from "next-intl";
-import * as suite0_HarnessVitest from "vitest";
+import { NextIntlClientProvider as Suite0_NextIntlClientProvider } from "next-intl";
+import * as Suite0_HarnessVitest from "vitest";
 import { describe as suite0_describe, expect as suite0_expect, it as suite0_it } from "vitest";
 import { act as suite1_act, fireEvent as suite1_fireEvent, renderHook as suite1_renderHook } from "@testing-library/react";
 import { afterEach as suite1_afterEach, describe as suite1_describe, expect as suite1_expect, it as suite1_it, vi as suite1_vi } from "vitest";
@@ -36,35 +41,41 @@ describe("Consolidated from AdminSettingsProfileNonMockRegressionSuite.test.tsx"
 
 
 suite0_describe("Consolidated: AdminSettingsProfileHarness", () => {
+    suite0_it('renders children when scenario is active', () => {
+        suite0_render(<Suite0_HarnessScenarioComponent scenario="ACTIVE_RECORDS"><span>Harness Content</span></Suite0_HarnessScenarioComponent>);
+        suite0_expect(suite0_screen.getByText('Harness Content')).toBeTruthy();
+    });
 });
 
 suite0_describe("Consolidated: AdminSettingsProfileRegressionSuite", () => {
     suite0_describe('Original suite: AdminSettingsProfileFixtures.test.ts', () => {
         suite0_describe('AdminProfileFixtures', () => {
             suite0_it('uses a clearly synthetic account and reserved example email domain', () => {
-                suite0_expect(suite0_ADMIN_PROFILE_DEMO_ACCOUNT.email.endsWith('.example')).toBe(true);
-                suite0_expect(suite0_ADMIN_PROFILE_DEMO_ACCOUNT.nameKey).toBe('DEMO_ACCOUNT_NAME');
-                suite0_expect(suite0_ADMIN_PROFILE_DEMO_ACCOUNT.bio).toBe('DEMO_ACCOUNT_BIO');
+                suite0_expect(Suite0_ADMIN_PROFILE_DEMO_ACCOUNT.email.endsWith('.example')).toBe(true);
+                suite0_expect(Suite0_ADMIN_PROFILE_DEMO_ACCOUNT.nameKey).toBe('DEMO_ACCOUNT_NAME');
+                suite0_expect(Suite0_ADMIN_PROFILE_DEMO_ACCOUNT.bio).toBe('DEMO_ACCOUNT_BIO');
             });
             suite0_it('keeps sample session and login-history IDs unique and IPs within documentation ranges', () => {
-                suite0_expect(new Set(suite0_ADMIN_PROFILE_DEMO_SESSIONS.map((item) => item.id)).size).toBe(suite0_ADMIN_PROFILE_DEMO_SESSIONS.length);
-                suite0_expect(new Set(suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY.map((item) => item.id)).size).toBe(suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY.length);
-                suite0_expect([...suite0_ADMIN_PROFILE_DEMO_SESSIONS, ...suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY].every((item) => item.ip.startsWith('192.0.2.'))).toBe(true);
-                suite0_expect(suite0_ADMIN_PROFILE_DEMO_SESSIONS.filter((item) => item.current)).toHaveLength(1);
+                suite0_expect(new Set(Suite0_ADMIN_PROFILE_DEMO_SESSIONS.map((item) => item.id)).size).toBe(Suite0_ADMIN_PROFILE_DEMO_SESSIONS.length);
+                suite0_expect(new Set(Suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY.map((item) => item.id)).size).toBe(Suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY.length);
+                suite0_expect([...Suite0_ADMIN_PROFILE_DEMO_SESSIONS, ...Suite0_ADMIN_PROFILE_DEMO_LOGIN_HISTORY].every((item) => item.ip.startsWith('192.0.2.'))).toBe(true);
+                suite0_expect(Suite0_ADMIN_PROFILE_DEMO_SESSIONS.filter((item) => item.current)).toHaveLength(1);
             });
         });
     });
     suite0_describe('Original suite: AdminSettingsProfileMSWContractBoundary.test.ts', () => {
         suite0_describe('Profile API contract boundary', () => {
             suite0_it('keeps profile API operations unavailable until the host contract is supplied', () => {
-                suite0_expect(suite0_ADMIN_SETTINGS_PROFILE_API.CONTRACT_MISSING).toBeNull();
-                suite0_expect(suite0_ADMIN_PROFILE_MSW_HANDLERS).toHaveLength(0);
+                suite0_expect(Suite0_ADMIN_SETTINGS_PROFILE_API.CONTRACT_MISSING).toBeNull();
+                suite0_expect(Suite0_ADMIN_PROFILE_MSW_HANDLERS).toHaveLength(0);
             });
         });
     });
     suite0_describe('Original suite: AdminSettingsProfileResponsivePanels.test.tsx', () => {
+        const enMessages = { ...suite0_adminProfileEn, ...adminShellEn };
+        const hiMessages = { ...suite0_adminProfileHi, ...adminShellHi };
         function renderProfile(locale: 'en' | 'hi' = 'en') {
-            return suite0_render(<suite0_NextIntlClientProvider locale={locale} messages={locale === 'en' ? suite0_adminProfileEn : suite0_adminProfileHi}><suite0_AdminProfilePage /></suite0_NextIntlClientProvider>);
+            return suite0_render(<Suite0_NextIntlClientProvider locale={locale} messages={locale === 'en' ? enMessages : hiMessages}><Suite0_AdminProfilePage /></Suite0_NextIntlClientProvider>);
         }
         suite0_describe('Admin Profile responsive and truthful security panels', () => {
             suite0_it('renders all history fields in mobile cards and preserves a desktop semantic table', () => {
@@ -87,7 +98,7 @@ suite0_describe("Consolidated: AdminSettingsProfileRegressionSuite", () => {
                 const { rerender } = renderProfile('en');
                 suite0_fireEvent.click(suite0_screen.getByTestId('admin_profile-AdminProfilePage-navigation-security'));
                 suite0_expect(suite0_screen.getByText('Illustrative only — not verified live status')).toBeTruthy();
-                rerender(<suite0_NextIntlClientProvider locale="hi" messages={suite0_adminProfileHi}><suite0_AdminProfilePage /></suite0_NextIntlClientProvider>);
+                rerender(<Suite0_NextIntlClientProvider locale="hi" messages={hiMessages}><Suite0_AdminProfilePage /></Suite0_NextIntlClientProvider>);
                 suite0_fireEvent.click(suite0_screen.getByTestId('admin_profile-AdminProfilePage-navigation-security'));
                 suite0_expect(suite0_screen.getByText('केवल उदाहरण — वास्तविक स्थिति सत्यापित नहीं है')).toBeTruthy();
             });
@@ -96,19 +107,19 @@ suite0_describe("Consolidated: AdminSettingsProfileRegressionSuite", () => {
     suite0_describe('Original suite: AdminSettingsProfileSchema.test.ts', () => {
         suite0_describe('AdminProfile form schemas', () => {
             suite0_it('rejects invalid profile email and oversized values', () => {
-                suite0_expect(suite0_AdminProfileEditSchema.safeParse({ fullName: 'Lee', phone: '123', email: 'not-an-email', bio: '' }).success).toBe(false);
-                suite0_expect(suite0_AdminProfileEditSchema.safeParse({ fullName: 'Lee Admin', phone: '123', email: 'admin@example.com', bio: 'x'.repeat(501) }).success).toBe(false);
+                suite0_expect(Suite0_AdminProfileEditSchema.safeParse({ fullName: 'Lee', phone: '123', email: 'not-an-email', bio: '' }).success).toBe(false);
+                suite0_expect(Suite0_AdminProfileEditSchema.safeParse({ fullName: 'Lee Admin', phone: '123', email: 'admin@example.com', bio: 'x'.repeat(501) }).success).toBe(false);
             });
             suite0_it('accepts formatted phone numbers with 8–15 digits and rejects arbitrary text', () => {
                 const base = { fullName: 'Lee Admin', email: 'admin@example.com', bio: '' };
-                suite0_expect(suite0_AdminProfileEditSchema.safeParse({ ...base, phone: '+91 (98765) 43210' }).success).toBe(true);
-                suite0_expect(suite0_AdminProfileEditSchema.safeParse({ ...base, phone: 'call me maybe' }).success).toBe(false);
-                suite0_expect(suite0_AdminProfileEditSchema.safeParse({ ...base, phone: '1234567' }).success).toBe(false);
+                suite0_expect(Suite0_AdminProfileEditSchema.safeParse({ ...base, phone: '+91 (98765) 43210' }).success).toBe(true);
+                suite0_expect(Suite0_AdminProfileEditSchema.safeParse({ ...base, phone: 'call me maybe' }).success).toBe(false);
+                suite0_expect(Suite0_AdminProfileEditSchema.safeParse({ ...base, phone: '1234567' }).success).toBe(false);
             });
             suite0_it('requires matching password confirmation', () => {
                 const base = { currentPassword: 'old', newPassword: 'new', confirmPassword: 'other' };
-                suite0_expect(suite0_AdminProfilePasswordSchema.safeParse(base).success).toBe(false);
-                suite0_expect(suite0_AdminProfilePasswordSchema.safeParse({ ...base, confirmPassword: 'new' }).success).toBe(true);
+                suite0_expect(Suite0_AdminProfilePasswordSchema.safeParse(base).success).toBe(false);
+                suite0_expect(Suite0_AdminProfilePasswordSchema.safeParse({ ...base, confirmPassword: 'new' }).success).toBe(true);
             });
         });
     });
@@ -116,13 +127,13 @@ suite0_describe("Consolidated: AdminSettingsProfileRegressionSuite", () => {
 
 
 // Standalone harness scenario coverage (merged without changing assertions).
-suite0_HarnessVitest.describe('admin_profile_main local scenario harness', () => {
-  suite0_HarnessVitest.it.each(suite0_HarnessScenarioList)('exposes the %s scenario without assuming a backend DTO', (scenario) => {
-    suite0_HarnessTestingLibrary.render(<suite0_HarnessScenarioComponent scenario={scenario}>Feature content</suite0_HarnessScenarioComponent>);
-    suite0_HarnessVitest.expect(suite0_HarnessTestingLibrary.screen.getByTestId('admin_settings_profile-harness').getAttribute('data-scenario')).toBe(
-      scenario === 'SERVER_500' ? 'server-error' : scenario.toLowerCase(),
+Suite0_HarnessVitest.describe('admin_profile_main local scenario harness', () => {
+  Suite0_HarnessVitest.it.each(Suite0_HarnessScenarioList)('exposes the %s scenario without assuming a backend DTO', (scenario) => {
+    Suite0_HarnessTestingLibrary.render(<Suite0_HarnessScenarioComponent scenario={scenario}>Feature content</Suite0_HarnessScenarioComponent>);
+    Suite0_HarnessVitest.expect(Suite0_HarnessTestingLibrary.screen.getByTestId('admin_settings_profile-harness').getAttribute('data-scenario')).toBe(
+      Suite0_AdminSettingsProfileScenarioLabel(scenario),
     );
-    suite0_HarnessVitest.expect(suite0_HarnessTestingLibrary.screen.getByText('Feature content')).toBeTruthy();
+    Suite0_HarnessVitest.expect(Suite0_HarnessTestingLibrary.screen.getByText('Feature content')).toBeTruthy();
   });
 });
 
@@ -164,7 +175,7 @@ suite0_describe('Profile locale namespace integrity', () => {
 
 suite0_describe('AdminProfilePasswordForm password visibility', () => {
   suite0_it('toggles each password field independently and uses localized accessible labels', () => {
-    suite0_render(<suite0_NextIntlClientProvider locale="en" messages={suite0_adminProfileEn}><suite0_AdminProfilePasswordForm onDirtyChange={() => undefined} /></suite0_NextIntlClientProvider>);
+    suite0_render(<Suite0_NextIntlClientProvider locale="en" messages={suite0_adminProfileEn}><Suite0_AdminProfilePasswordForm onDirtyChange={() => undefined} /></Suite0_NextIntlClientProvider>);
     const current = suite0_screen.getByLabelText('Current password') as HTMLInputElement;
     const next = suite0_screen.getByLabelText('New password') as HTMLInputElement;
     const confirm = suite0_screen.getByLabelText('Confirm new password') as HTMLInputElement;
@@ -188,8 +199,8 @@ suite0_describe('AdminProfilePasswordForm password visibility', () => {
 
   suite0_it('keeps the profile password visibility control labels in English and Hindi locale files', () => {
     for (const key of ['ARIA_SHOW_CURRENT_PASSWORD', 'ARIA_HIDE_CURRENT_PASSWORD', 'ARIA_SHOW_NEW_PASSWORD', 'ARIA_HIDE_NEW_PASSWORD', 'ARIA_SHOW_CONFIRM_PASSWORD', 'ARIA_HIDE_CONFIRM_PASSWORD']) {
-      suite0_expect(suite0_adminProfileEn).toHaveProperty(key);
-      suite0_expect(suite0_adminProfileHi).toHaveProperty(key);
+      suite0_expect(suite0_adminProfileEn.ADMIN_PROFILE).toHaveProperty(key);
+      suite0_expect(suite0_adminProfileHi.ADMIN_PROFILE).toHaveProperty(key);
     }
   });
 });

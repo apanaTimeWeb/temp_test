@@ -1,11 +1,11 @@
-// DATA FLOW: members_blacklist route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: members_blacklist route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { format } from 'date-fns';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import type { AdminBlacklistFormSchemaType } from '@/app/frontend_admin/admin_members/members_blacklist/schemas/AdminMembersBlacklistSchema';
 import type { AdminBlacklistRecord } from '@/app/frontend_admin/admin_members/members_blacklist/types/AdminMembersBlacklistTypes';
 import { fetchAdminBlacklist } from '@/app/frontend_admin/admin_members/members_blacklist/api/admin_members_blacklist_api';

@@ -1,5 +1,4 @@
 'use client';
-
 // RESPONSIBILITY: Provides localized route-segment recovery for Admin Members.
 // DATA FLOW: Next.js error boundary -> reportAdminError -> user-triggered reset().
 

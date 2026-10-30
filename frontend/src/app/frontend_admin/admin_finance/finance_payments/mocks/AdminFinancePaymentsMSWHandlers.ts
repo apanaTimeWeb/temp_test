@@ -4,7 +4,7 @@ import type { AdminFinancePaymentApiRecord } from '@/app/frontend_admin/admin_fi
 
 /** Test-only handler for the payments endpoint using source-declared URL/envelope contracts. */
 export const ADMIN_FINANCE_PAYMENTS_MSW_HANDLERS = [
-  http.get(ADMIN_FINANCE_PAYMENTS_API.LIST, () => HttpResponse.json({ success: true, message: 'Synthetic payment fixtures returned.', data: ADMIN_FINANCE_PAYMENTS_API_FIXTURE, requestId: 'mock-finance-payments-list' })),
+  http.get(`*${ADMIN_FINANCE_PAYMENTS_API.LIST}`, () => HttpResponse.json({ success: true, message: 'Synthetic payment fixtures returned.', data: ADMIN_FINANCE_PAYMENTS_API_FIXTURE, requestId: 'mock-finance-payments-list' })),
 ];
 
 /** Synthetic payment fixtures for isolated tests only. */

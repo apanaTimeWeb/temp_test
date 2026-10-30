@@ -1,6 +1,6 @@
 import { afterEach as suite0_afterEach, describe as suite0_describe, expect as suite0_expect, it as suite0_it, vi as suite0_vi } from "vitest";
 import { cleanup as suite0_cleanup, fireEvent as suite0_fireEvent, render as suite0_render, screen as suite0_screen } from "@testing-library/react";
-import suite0_AdminAccountingExpenseCategoryGridSection from "@/app/frontend_admin/admin_accounts_assets/accounts_expense_categories/components/AdminAccountsExpenseCategoriesExpenseCategoryGridSection";
+import Suite0_AdminAccountingExpenseCategoryGridSection from "@/app/frontend_admin/admin_accounts_assets/accounts_expense_categories/components/AdminAccountsExpenseCategoriesExpenseCategoryGridSection";
 import { ADMIN_ACCOUNTING_EXPENSE_CATEGORY_FIXTURES as suite0_ADMIN_ACCOUNTING_EXPENSE_CATEGORY_FIXTURES } from "@/app/frontend_admin/admin_accounts_assets/accounts_expense_categories/mocks/AdminAccountsExpenseCategoriesExpenseCategoryFixtures";
 import { describe as suite1_describe, expect as suite1_expect, it as suite1_it } from "vitest";
 import { act as suite2_act, renderHook as suite2_renderHook } from "@testing-library/react";
@@ -18,7 +18,7 @@ suite0_afterEach(() => suite0_cleanup());
 suite0_describe('AdminAccountingExpenseCategoryGridSection', () => {
   suite0_it('renders expense category cards and forwards a delete request', () => {
     const onDelete = suite0_vi.fn();
-        suite0_render(<suite0_AdminAccountingExpenseCategoryGridSection categories={suite0_ADMIN_ACCOUNTING_EXPENSE_CATEGORY_FIXTURES} onDelete={onDelete} canMutate={true} labels={{ spent: 'Spent', budget: 'Budget', percentUsed: (pct) => `${pct}% used`, overBudget: (amount) => `Over budget ${amount}`, deleteCategory: (name) => `Delete ${name}` }} />);
+        suite0_render(<Suite0_AdminAccountingExpenseCategoryGridSection categories={suite0_ADMIN_ACCOUNTING_EXPENSE_CATEGORY_FIXTURES} onDelete={onDelete} canMutate={true} labels={{ spent: 'Spent', budget: 'Budget', percentUsed: (pct: number) => `${pct}% used`, overBudget: (amount: string | number) => `Over budget ${amount}`, deleteCategory: (name: string) => `Delete ${name}` }} />);
         const first = suite0_ADMIN_ACCOUNTING_EXPENSE_CATEGORY_FIXTURES[0];
         suite0_expect(first).toBeDefined();
         if (!first) throw new Error('Expected at least one synthetic expense category fixture.');

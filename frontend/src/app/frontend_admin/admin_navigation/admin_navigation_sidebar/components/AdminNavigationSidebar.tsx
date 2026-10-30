@@ -1,5 +1,5 @@
-// Responsibility: responsive admin sidebar presentation and navigation interactions.
 'use client';
+// Responsibility: responsive admin sidebar presentation and navigation interactions.
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

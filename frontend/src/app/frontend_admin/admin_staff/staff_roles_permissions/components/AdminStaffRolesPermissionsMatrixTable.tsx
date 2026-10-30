@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminStaffRolesPermissionsMatrixTable component owned by admin_staff_roles_permissions; responsibility folder: admin_staff_roles_permissions_matrix_table.
 'use client';
+// RESPONSIBILITY: AdminStaffRolesPermissionsMatrixTable component owned by admin_staff_roles_permissions; responsibility folder: admin_staff_roles_permissions_matrix_table.
 
 import { Fragment } from 'react';
 import { useTranslations } from 'next-intl';

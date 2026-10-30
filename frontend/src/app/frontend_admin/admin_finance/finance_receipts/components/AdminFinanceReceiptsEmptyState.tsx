@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceEmptyState component owned by admin_finance; responsibility folder: components.
 'use client';
+// Responsibility: AdminFinanceEmptyState component owned by admin_finance; responsibility folder: components.
 import type { AdminFinanceEmptyStateProps } from '@/app/frontend_admin/admin_finance/finance_receipts/types/AdminFinanceReceiptsTypes';
 
 

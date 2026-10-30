@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminShiftsShiftMigrationPageViewStepperSectionSTEP1Section component owned by admin_shifts; responsibility folder: admin_shifts_shift_migration_page_view_stepper_section_sections.
 'use client';
+// RESPONSIBILITY: AdminShiftsShiftMigrationPageViewStepperSectionSTEP1Section component owned by admin_shifts; responsibility folder: admin_shifts_shift_migration_page_view_stepper_section_sections.
 
 import { useTranslations } from 'next-intl';
 import { Banknote, CheckCircle, ChevronDown, Clock, CreditCard, QrCode, Search } from 'lucide-react';

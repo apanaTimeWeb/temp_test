@@ -1,5 +1,5 @@
-// DATA FLOW: accounts_daily_settlement route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: accounts_daily_settlement route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useState } from 'react';
 import { format, startOfToday } from 'date-fns';

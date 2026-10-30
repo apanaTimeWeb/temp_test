@@ -1,5 +1,5 @@
-// Responsibility: AdminShiftsShiftGapPage component owned by admin_shifts; responsibility folder: admin_shifts_components_views.
 'use client';
+// Responsibility: AdminShiftsShiftGapPage component owned by admin_shifts; responsibility folder: admin_shifts_components_views.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 import { useTranslations } from 'next-intl';

@@ -1,5 +1,5 @@
-// Responsibility: useAdminMembersBlacklistUnsavedChangesGuard; module-local guard for dirty blacklist drafts.
 'use client';
+// Responsibility: useAdminMembersBlacklistUnsavedChangesGuard; module-local guard for dirty blacklist drafts.
 
 import { useEffect } from 'react';
 

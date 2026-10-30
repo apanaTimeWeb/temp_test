@@ -1,6 +1,5 @@
 'use client';
 // RESPONSIBILITY: AdminSeatMatrixSeatMatrixPage component owned by admin_seat_matrix; responsibility folder: admin_seat_matrix_components_views.
-'use client';
 
 import { useTranslations } from 'next-intl';
 

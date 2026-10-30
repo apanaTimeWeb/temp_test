@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminFinancePaymentsPage component owned by admin_finance; responsibility folder: components.
 'use client';
+// RESPONSIBILITY: AdminFinancePaymentsPage component owned by admin_finance; responsibility folder: components.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import useAdminFinancePaymentsQuery from '@/app/frontend_admin/admin_finance/finance_payments/hooks/useAdminFinancePaymentsQuery';
 

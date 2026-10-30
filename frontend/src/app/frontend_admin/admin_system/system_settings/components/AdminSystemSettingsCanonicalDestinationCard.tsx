@@ -1,5 +1,5 @@
-// RESPONSIBILITY: Preserves a legacy system-settings view while linking to its canonical owning module.
 'use client';
+// RESPONSIBILITY: Preserves a legacy system-settings view while linking to its canonical owning module.
 
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';

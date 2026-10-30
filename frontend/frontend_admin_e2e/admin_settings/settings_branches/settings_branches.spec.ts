@@ -1,7 +1,4 @@
-import { createRequire } from 'node:module';
-const require = createRequire(new URL('../../../../frontend_admin/package.json', import.meta.url));
-const { expect, test } = require('@playwright/test');
-
+import { expect, test } from '@playwright/test';
 test('loads the canonical settings_branches submodule route', async ({ page }) => {
   await page.goto('/admin/admin_settings/settings_branches');
   await expect(page).toHaveURL(new RegExp('\\/admin\\/admin_settings\\/settings_branches(?:[?#]|$)'));

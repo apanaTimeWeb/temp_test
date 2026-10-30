@@ -1,7 +1,8 @@
+'use client';
 import { useCallback, useState } from 'react';
 import { CheckCircle, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminPlans } from '@/app/frontend_admin/admin_members/members_plans/hooks/useAdminMembersPlansMain';
 import type { AdminPlansPlan, AdminPlansFormValues } from '@/app/frontend_admin/admin_members/members_plans/schemas/AdminMembersPlansSchema';
@@ -12,7 +13,6 @@ import AdminPlansDeleteDialog from '@/app/frontend_admin/admin_members/members_p
 import type { AdminPlansEmptyStateProps } from '@/app/frontend_admin/admin_members/members_plans/types/AdminMembersPlansComponentTypes';
 
 // RESPONSIBILITY: Owns the admin membership-plans page composition and local demo-only actions.
-'use client';
 
 
 
@@ -159,7 +159,6 @@ export default function AdminPlansPage() {
 }
 
 // Responsibility: AdminPlansEmptyState component owned by admin_plans; responsibility folder: admin_plans_empty_state.
-'use client';
 
 
 

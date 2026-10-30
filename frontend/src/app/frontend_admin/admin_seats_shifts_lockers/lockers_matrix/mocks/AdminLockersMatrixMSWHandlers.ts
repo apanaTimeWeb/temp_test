@@ -3,7 +3,7 @@ import { ADMIN_LOCKERS_URLS } from '@/app/frontend_admin/admin_seats_shifts_lock
 
 /** Returns the source-supported empty list for the matrix contract; no synthetic live entities are invented. */
 export const ADMIN_LOCKERS_MATRIX_MSW_HANDLERS = [
-  http.get(ADMIN_LOCKERS_URLS.SEAT_MATRIX, () => HttpResponse.json({
+  http.get(`*${ADMIN_LOCKERS_URLS.SEAT_MATRIX}`, () => HttpResponse.json({
     success: true,
     message: 'Synthetic empty seat-matrix fixture loaded.',
     data: [],

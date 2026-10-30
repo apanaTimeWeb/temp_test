@@ -1,5 +1,5 @@
+'use client';
 // RESPONSIBILITY: AdminStaffDirectoryCreateManagerForm component owned by admin_staff_directory; responsibility folder: admin_staff_directory_create_manager_form.
-"use client";
 
 import { Camera, UserPlus } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createAdminStaffDirectoryCreateManagerSchema, type AdminStaffDirectoryCreateManagerFormValues } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import { ADMIN_STAFF_DIRECTORY_INITIAL_STATUS_OPTIONS, ADMIN_STAFF_DIRECTORY_DEMO_BRANCH_OPTIONS } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -38,8 +38,8 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
     branchRequired: t('VALIDATION_BRANCH'),
   }), [t]);
   const form = useForm<AdminStaffDirectoryCreateManagerFormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: { fullName: '', username: '', email: '', phone: '', passwordSetup: 'auto', branchId: '', initialStatus: 'Active' },
+    resolver: zodResolver(schema) as any,
+    defaultValues: { fullName: '', username: '', email: '', phone: '', passwordSetup: 'auto', branchId: '' as unknown as 'b1', initialStatus: 'Active' },
     mode: 'onBlur',
   });
   const errors = form.formState.errors;

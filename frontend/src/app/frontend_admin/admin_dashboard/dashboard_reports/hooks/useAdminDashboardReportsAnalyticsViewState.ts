@@ -1,5 +1,5 @@
-// DATA FLOW: dashboard_reports route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: dashboard_reports route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useMemo, useState } from 'react';
 import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/mocks/AdminDashboardReportsFixtures';

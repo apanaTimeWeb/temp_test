@@ -1,5 +1,5 @@
-// DATA FLOW: settings_branches route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: settings_branches route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { create } from 'zustand';
 import type { AdminBranchesDetailTab } from '@/app/frontend_admin/admin_settings/settings_branches/schemas/AdminSettingsBranchesSchema';

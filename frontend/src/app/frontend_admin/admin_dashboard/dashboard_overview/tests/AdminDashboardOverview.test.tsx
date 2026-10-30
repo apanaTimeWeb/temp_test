@@ -36,10 +36,10 @@ describe('Admin dashboard overview canonical route and behavior', () => {
 
   it('uses the canonical leaf route config and the domain redirect', () => {
     const routeConfig = readFileSync(
-      path.join(here, '../config/admin_dashboard_overview.url_config'),
+      path.join(here, '../config/admin_dashboard_overview.url_config.ts'),
       'utf8',
     );
-    const domainRoute = readFileSync(path.join(here, '../../page'), 'utf8');
+    const domainRoute = readFileSync(path.join(here, '../../page.tsx'), 'utf8');
     expect(routeConfig).toContain("route: '/admin/admin_dashboard/dashboard_overview'");
     expect(domainRoute).toContain('redirect(ADMIN_DASHBOARD_OVERVIEW_CANONICAL_ROUTE)');
   });

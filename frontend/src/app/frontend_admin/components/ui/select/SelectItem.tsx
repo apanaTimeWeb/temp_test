@@ -1,5 +1,4 @@
 'use client';
-
 import type { ReactNode } from 'react';
 import type { SelectItemProps } from '@/app/frontend_admin/components/ui/select/types/AdminUiSelectComponentTypes';
 

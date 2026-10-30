@@ -1,5 +1,5 @@
-// Responsibility: AdminFinanceDashboardPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 'use client';
+// Responsibility: AdminFinanceDashboardPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 
 // RESPONSIBILITY: Entry page for the admin_finance module.
 // DATA FLOW: Next.js Router -> Page -> Components

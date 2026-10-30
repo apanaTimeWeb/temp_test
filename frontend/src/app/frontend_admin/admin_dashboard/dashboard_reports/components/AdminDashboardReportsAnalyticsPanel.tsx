@@ -1,8 +1,8 @@
-// Responsibility: Owns report-page filter state, demo/live visibility, export dispatch, and page composition.
 'use client';
+// Responsibility: Owns report-page filter state, demo/live visibility, export dispatch, and page composition.
 
 import { useLocale, useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import AdminDashboardReportsAnalyticsPageHeaderSection from '@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPageHeaderSection';
 import AdminDashboardReportsAnalyticsPrimaryChartsGrid from '@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsPrimaryChartsGrid';
 import AdminDashboardReportsAnalyticsSecondaryInsightsSection from '@/app/frontend_admin/admin_dashboard/dashboard_reports/components/AdminDashboardReportsAnalyticsSecondaryInsightsSection';

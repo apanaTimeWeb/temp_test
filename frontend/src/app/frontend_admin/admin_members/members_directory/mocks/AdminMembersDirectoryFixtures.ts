@@ -33,7 +33,7 @@ export const ADMIN_MEMBERS_RENEWAL_FIXTURES = [
  * Never fabricate a successful response. Tests receive an explicit 501 until the host contract is supplied.
  */
 export const ADMIN_MEMBERS_MSW_HANDLERS = [
-  http.get(ADMIN_MEMBERS_URLS.LIST, () => HttpResponse.json({
+  http.get(`*${ADMIN_MEMBERS_URLS.LIST}`, () => HttpResponse.json({
     code: 'API_CONTRACT_UNAVAILABLE',
     message: 'Members API contract is unavailable in the supplied source scope.',
   }, { status: 501 })),

@@ -25,7 +25,7 @@ export interface AdminFinanceAutoSuspendPolicyCardProps {
 
 export interface AdminFinanceAutoSuspendRestoreDialogProps {
   target: { id: number; name: string } | null;
-  dialogRef: RefObject<HTMLDivElement | null>;
+  dialogRef: React.Ref<HTMLDivElement>;
   reason: string;
   isPending: boolean;
   onReasonChange: (value: string) => void;

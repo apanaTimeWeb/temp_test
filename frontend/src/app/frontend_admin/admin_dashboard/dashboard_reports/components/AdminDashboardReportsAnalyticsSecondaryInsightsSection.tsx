@@ -1,5 +1,5 @@
-// RESPONSIBILITY: Owns secondary report insights: revenue trend, student growth, and responsive branch summary.
 'use client';
+// RESPONSIBILITY: Owns secondary report insights: revenue trend, student growth, and responsive branch summary.
 
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
@@ -33,7 +33,7 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
     colors: ['var(--chart-success)'], stroke: { curve: 'smooth', width: 3 }, markers: { size: 4 }, dataLabels: { enabled: false },
     xaxis: { categories: revenue.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS[point.month as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS]; return key ? t(key) : point.month; }), labels: { style: { colors: 'var(--text-secondary)' } } },
     yaxis: { labels: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value), data.currencyCode, locale), style: { colors: 'var(--text-secondary)' } }, min: 0 },
-    grid: { borderColor: 'var(--chart-grid)' }, tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value), data.currencyCode, locale) } },
+    grid: { borderColor: 'var(--chart-grid)' }, tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatCurrency(Math.round(value ?? 0), data.currencyCode, locale) } },
     noData: { text: t('CHART_REVENUE_NO_DATA'), style: { color: 'var(--text-secondary)' } },
   };
   const revenueSeries = [{ name: t('SERIES_REVENUE'), data: revenue.map((point) => point.revenueMinor) }];
@@ -44,7 +44,7 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
     xaxis: { categories: growth.map((point) => { const key = ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS[point.month as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS]; return key ? t(key) : point.month; }), labels: { style: { colors: 'var(--text-secondary)' } } },
     yaxis: { min: 0, labels: { formatter: (value) => adminDashboardReportsAnalyticsFormatNumber(Math.round(value), locale), style: { colors: 'var(--text-secondary)' } } },
     grid: { borderColor: 'var(--chart-grid)' }, legend: { labels: { colors: 'var(--text-secondary)' } },
-    tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatNumber(Math.round(value), locale) } },
+    tooltip: { y: { formatter: (value) => adminDashboardReportsAnalyticsFormatNumber(Math.round(value ?? 0), locale) } },
     noData: { text: t('CHART_STUDENT_GROWTH_NO_DATA'), style: { color: 'var(--text-secondary)' } },
   };
   const growthSeries = [

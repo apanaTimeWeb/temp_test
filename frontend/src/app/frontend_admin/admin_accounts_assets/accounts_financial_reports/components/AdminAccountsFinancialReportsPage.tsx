@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminAccountsFinancialReportsPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 'use client';
+// RESPONSIBILITY: AdminAccountsFinancialReportsPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';

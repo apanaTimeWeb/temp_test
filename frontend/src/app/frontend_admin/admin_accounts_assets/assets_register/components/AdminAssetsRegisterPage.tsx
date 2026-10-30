@@ -1,10 +1,11 @@
+'use client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Download, Plus, Trash2, X } from 'lucide-react';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -25,7 +26,6 @@ import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter
 import type { AdminAssetsRegisterDeleteConfirmationDialogProps } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterComponentTypes';
 
 // Responsibility: owns transient asset-register demo state, form flows, filters, and confirmations.
-'use client';
 
 function resolveAdminAssetsRegisterCategoryFilter(value: string | null): string {
   return value && (ADMIN_ASSETS_REGISTER_CATEGORY_OPTIONS as readonly string[]).includes(value) ? value : 'all';
@@ -204,7 +204,6 @@ export function AdminAssetsRegisterPage() {
 export default AdminAssetsRegisterPage;
 
 // Responsibility: explicit confirmation for removing an asset from transient demo state.
-'use client';
 
 export function AdminAssetsRegisterDeleteConfirmationDialog({ open, title, description, confirmLabel, cancelLabel, onConfirm, onCancel }: AdminAssetsRegisterDeleteConfirmationDialogProps) {
   const handleOpenChange = useCallback((nextOpen: boolean) => { if (!nextOpen) onCancel(); }, [onCancel]);

@@ -19,7 +19,7 @@ export type AdminFinancePromiseItemStatus = 'pending' | 'fulfilled' | 'overdue';
 
 export interface AdminFinancePaymentPromisesExtendDialogProps {
   target: { id: number; name: string } | null;
-  dialogRef: RefObject<HTMLDivElement | null>;
+  dialogRef: React.Ref<HTMLDivElement>;
   newDate: string;
   reason: string;
   onDateChange: (value: string) => void;

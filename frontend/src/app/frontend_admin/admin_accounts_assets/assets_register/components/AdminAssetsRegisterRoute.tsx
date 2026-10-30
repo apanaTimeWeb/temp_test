@@ -1,3 +1,4 @@
+'use client';
 import { useTranslations } from 'next-intl';
 import { Toaster } from 'sonner';
 import AdminAssetsRegisterPage from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterPage';
@@ -5,7 +6,6 @@ import React from 'react';
 import type { AdminAssetsRegisterErrorBoundaryProps, AdminAssetsRegisterErrorBoundaryState } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterComponentTypes';
 
 // Responsibility: asset-register route composition, localized recovery, and its single toast viewport.
-'use client';
 
 export default function AdminAssetsRegisterRoute() {
   const t = useTranslations('ADMIN_ACCOUNTING.ERROR_BOUNDARY');
@@ -13,7 +13,6 @@ export default function AdminAssetsRegisterRoute() {
 }
 
 // Responsibility: contains render failures in the asset-register view and offers localized recovery.
-'use client';
 
 export class AdminAssetsRegisterErrorBoundary extends React.Component<AdminAssetsRegisterErrorBoundaryProps, AdminAssetsRegisterErrorBoundaryState> {
   constructor(props: AdminAssetsRegisterErrorBoundaryProps) {

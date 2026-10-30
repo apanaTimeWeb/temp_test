@@ -17,8 +17,8 @@ describe("Consolidated: AdminSettingsSecurityFixtures", () => {
                 ...ADMIN_SECURITY_DEVICE_SESSION_FIXTURES.map((item) => item.ip),
             ];
             expect(allIps.every((ip) => ip.startsWith('192.0.2.'))).toBe(true);
-            expect(ADMIN_SECURITY_FAILED_LOGIN_FIXTURES.every((item) => item.account.endsWith('.example.invalid') || item.account === 'unknown-demo-account')).toBe(true);
-            expect(ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES.every((item) => item.email.endsWith('.example.invalid'))).toBe(true);
+            expect(ADMIN_SECURITY_FAILED_LOGIN_FIXTURES.every((item) => item.account.endsWith('example.invalid') || item.account === 'unknown-demo-account')).toBe(true);
+            expect(ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES.every((item) => item.email.endsWith('example.invalid'))).toBe(true);
         });
         it('keeps each session/account/device record identifiable and has exactly one current session', () => {
             expect(new Set(ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES.map((item) => item.id)).size).toBe(ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES.length);
@@ -30,6 +30,10 @@ describe("Consolidated: AdminSettingsSecurityFixtures", () => {
 });
 
 describe("Consolidated: AdminSettingsSecurityHarness", () => {
+    it('renders children when scenario is active', () => {
+        render(<HarnessScenarioComponent scenario="ACTIVE"><span>Harness Content</span></HarnessScenarioComponent>);
+        expect(screen.getByText('Harness Content')).toBeTruthy();
+    });
 });
 
 describe("Consolidated: AdminSettingsSecurityMSWContractBoundary", () => {

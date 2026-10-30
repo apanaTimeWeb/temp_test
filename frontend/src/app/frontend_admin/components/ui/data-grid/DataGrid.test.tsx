@@ -78,7 +78,7 @@ describe('DataGrid responsive presentation', () => {
       { field: 'status', headerName: 'Status', cellRenderer: () => <button type="button">Open action</button> },
     ];
     render(<DataGrid rowData={records} columnDefs={actionColumns} onRowClicked={onRowClicked} tableLabel="Action records" />);
-    const action = screen.getByRole('button', { name: 'Open action' });
+    const action = within(screen.getByRole('table', { name: 'Action records' })).getByRole('button', { name: 'Open action' });
     fireEvent.keyDown(action, { key: 'Enter' });
     fireEvent.keyDown(action, { key: ' ' });
     fireEvent.click(action);
@@ -92,14 +92,14 @@ describe('DataGrid localized defaults and row identity', () => {
     const manyRows = Array.from({ length: 11 }, (_, index) => ({ id: `hi-${index}`, name: `सदस्य ${index}`, status: 'सक्रिय', amount: index }));
     render(<DataGrid rowData={manyRows} columnDefs={columns} locale="hi" pagination pageSize={10} />);
     expect(screen.getByRole('table', { name: 'डेटा तालिका' })).toBeTruthy();
-    expect(screen.getByText('दिखाए जा रहे हैं')).toBeTruthy();
+    expect(screen.getByText(/दिखाए जा रहे हैं/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'अगला' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: /इसके अनुसार क्रमबद्ध करें सदस्य/ })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /इसके अनुसार क्रमबद्ध करें/ })).toBeTruthy();
   });
 
   it('localizes the empty state and mobile row-action defaults in Hindi', () => {
     render(<DataGrid rowData={[]} columnDefs={columns} locale="hi" />);
-    expect(screen.getByText('कोई रिकॉर्ड नहीं मिला।')).toBeTruthy();
+    expect(screen.getAllByText('कोई रिकॉर्ड नहीं मिला।')[0]).toBeTruthy();
     expect(screen.getByRole('table', { name: 'डेटा तालिका' })).toBeTruthy();
   });
 

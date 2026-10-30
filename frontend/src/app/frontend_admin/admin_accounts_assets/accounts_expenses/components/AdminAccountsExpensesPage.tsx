@@ -1,7 +1,8 @@
+'use client';
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import toast from 'sonner';
+import { toast } from 'sonner';
 import { ADMIN_ACCOUNTING_EXPENSE_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/mocks/scenarios/admin_accounts_expenses.scenarios';
 import { ADMIN_ACCOUNTS_EXPENSES_ROUTES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
 import type { AdminAccountingExpense } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas';
@@ -20,7 +21,6 @@ import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 
 // RESPONSIBILITY: Owns the expense ledger route state and list/add view orchestration.
-'use client';
 
 /** Owns transient demo ledger state. Live mutations remain blocked without a verified API contract. */
 export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccountsExpensesRouteView }) {
@@ -77,7 +77,6 @@ export default AdminAccountsExpensesPage;
 export type { AdminAccountsExpensesRouteView };
 
 // RESPONSIBILITY: AdminAccountingDeleteConfirmationDialog component owned by admin_accounting; responsibility folder: admin_accounting_delete_confirmation_dialog.
-'use client';
 
 /**
  * Confirmation surface for destructive actions within the Accounting feature.

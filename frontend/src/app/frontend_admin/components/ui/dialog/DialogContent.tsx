@@ -1,5 +1,4 @@
 'use client';
-
 import { Children, isValidElement, useEffect, useRef, type HTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import { useDialog } from '@/components/ui/dialog/Dialog';
 import { DialogTitle } from '@/components/ui/dialog/DialogTitle';
@@ -10,9 +9,11 @@ import type { DialogContentProps } from '@/app/frontend_admin/components/ui/dial
 
 function containsDialogSlot(children: ReactNode, slot: typeof DialogTitle | typeof DialogDescription): boolean {
   let found = false;
+  const targetName = (slot as any)?.name ?? (slot as any)?.displayName;
   Children.forEach(children, (child) => {
     if (!isValidElement(child) || found) return;
-    if (child.type === slot) {
+    const type = child.type as any;
+    if (type === slot || (targetName && (type?.name === targetName || type?.displayName === targetName))) {
       found = true;
       return;
     }
@@ -20,6 +21,13 @@ function containsDialogSlot(children: ReactNode, slot: typeof DialogTitle | type
     if (nestedChildren !== undefined) found = containsDialogSlot(nestedChildren, slot);
   });
   return found;
+}
+
+let lastInteractedElement: HTMLElement | null = null;
+if (typeof document !== 'undefined') {
+  document.addEventListener('click', (e) => {
+    if (e.target instanceof HTMLElement) lastInteractedElement = e.target;
+  }, true);
 }
 
 const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -38,7 +46,9 @@ export function DialogContent({ className = '', children, ...surfaceProps }: Dia
 
   useEffect(() => {
     if (!open) return;
-    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previouslyFocused = (document.activeElement instanceof HTMLElement && document.activeElement !== document.body)
+      ? document.activeElement
+      : lastInteractedElement;
     const content = contentRef.current;
     const focusable = content?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
     (focusable?.[0] ?? content)?.focus();
