@@ -1,0 +1,7 @@
+{
+  "module": "admin_lockers",
+  "source_module": "admin_lockers",
+  "entry_source": "admin_lockers_components/admin_lockers_components_views/AdminLockersManagementPage.tsx",
+  "copied_source_files": 4,
+  "note": "screen/dependency closure copied; identifiers preserved; all module path references localized"
+}

@@ -1,0 +1,7 @@
+{
+  "module": "admin_shifts",
+  "source_module": "admin_shifts",
+  "entry_source": "admin_shifts_components/admin_shifts_components_views/AdminShiftsManagementPage.tsx",
+  "copied_source_files": 3,
+  "note": "screen/dependency closure copied; identifiers preserved; all module path references localized"
+}

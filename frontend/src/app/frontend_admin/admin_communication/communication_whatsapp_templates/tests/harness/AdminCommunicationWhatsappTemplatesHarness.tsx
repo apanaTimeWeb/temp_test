@@ -1,0 +1,24 @@
+import type { ReactNode } from 'react';
+import { AdminCommunicationWhatsappTemplatesScenarioLabel, type AdminCommunicationWhatsappTemplatesScenario } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/tests/harness/bootstrap';
+import type { AdminCommunicationWhatsappTemplatesHarnessProps } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/types/AdminCommunicationWhatsappTemplatesComponentTypes';
+
+
+/** Test-only deterministic state harness. It renders observable active, empty, server-error, timeout, and unauthorized states without assuming a backend DTO or live API contract. */
+export function AdminCommunicationWhatsappTemplatesHarness({ children, scenario = 'ACTIVE' }: AdminCommunicationWhatsappTemplatesHarnessProps) {
+  return (
+    <div data-testid="admin_communication_whatsapp_templates-harness" data-scenario={AdminCommunicationWhatsappTemplatesScenarioLabel(scenario)} data-scenario-state={scenario}>
+      {scenario === 'ACTIVE' ? children : scenario === 'EMPTY' ? (
+        <div role="status" data-testid="admin_communication_whatsapp_templates-harness-state-empty">No records available in this isolated scenario.</div>
+      ) : scenario === 'SERVER_500' ? (
+        <div role="alert" data-testid="admin_communication_whatsapp_templates-harness-state-server-error">Simulated server error response (HTTP 500).</div>
+      ) : scenario === 'TIMEOUT' ? (
+        <div role="alert" data-testid="admin_communication_whatsapp_templates-harness-state-timeout">Simulated request timeout.</div>
+      ) : (
+        <div role="alert" data-testid="admin_communication_whatsapp_templates-harness-state-unauthorized">Simulated unauthorized response (HTTP 401).</div>
+      )}
+    </div>
+  );
+}
+
+
+export type { AdminCommunicationWhatsappTemplatesHarnessProps };

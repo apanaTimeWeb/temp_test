@@ -1,0 +1,7 @@
+{
+  "module": "admin_collect_fee",
+  "source_module": "admin_collect_fee",
+  "entry_source": "admin_collect_fee_components/admin_collect_fee_components_views/AdminCollectFeePage.tsx",
+  "copied_source_files": 9,
+  "note": "screen/dependency closure copied; identifiers preserved; all module path references localized"
+}

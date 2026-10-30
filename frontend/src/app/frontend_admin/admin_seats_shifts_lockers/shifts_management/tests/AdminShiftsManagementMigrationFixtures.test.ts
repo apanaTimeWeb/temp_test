@@ -1,0 +1,3 @@
+import { describe, expect, it } from 'vitest';
+import { ADMIN_SHIFTS_MIGRATION_DEMO_SEATS, ADMIN_SHIFTS_MIGRATION_DEMO_SHIFTS, ADMIN_SHIFTS_MIGRATION_DEMO_STUDENTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/mocks/scenarios/admin_shifts_management.scenarios';
+describe('shift migration preview fixtures', () => { it('keeps demo students, shifts and seats in the fixture boundary', () => { expect(ADMIN_SHIFTS_MIGRATION_DEMO_STUDENTS.length).toBeGreaterThan(0); expect(ADMIN_SHIFTS_MIGRATION_DEMO_SHIFTS.every((shift) => (ADMIN_SHIFTS_MIGRATION_DEMO_SEATS[shift.name]?.length ?? 0) > 0)).toBe(true); }); });

@@ -1,0 +1,7 @@
+{
+  "module": "admin_allocations",
+  "source_module": "admin_allocations",
+  "entry_source": "admin_allocations_components/admin_allocations_components_views/AdminAllocationsPage.tsx",
+  "copied_source_files": 5,
+  "note": "screen/dependency closure copied; identifiers preserved; all module path references localized"
+}

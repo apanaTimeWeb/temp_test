@@ -1,0 +1,4 @@
+import { describe, expect, it } from 'vitest';
+import { createAdminSystemBrandingPreviewSchema } from '@/app/frontend_admin/admin_system/system_branding/schemas/AdminSystemBrandingPreviewSchema';
+const messages={libraryNameRequired:'name-required',libraryNameTooLong:'name-too-long',taglineTooLong:'tagline-too-long',colorInvalid:'color-invalid'};
+describe('Admin System branding preview schema', () => { it('accepts valid preview values and rejects invalid colors', () => { const schema=createAdminSystemBrandingPreviewSchema(messages); expect(schema.safeParse({libraryName:'Smart Gym',tagline:'Training',primaryColor:'#FACC15',accentColor:'#EAB308'}).success).toBe(true); const invalid=schema.safeParse({libraryName:'Smart Gym',tagline:'',primaryColor:'#xyz',accentColor:'#EAB308'}); expect(invalid.success).toBe(false); if(!invalid.success) expect(invalid.error.issues[0]?.message).toBe('color-invalid'); }); });

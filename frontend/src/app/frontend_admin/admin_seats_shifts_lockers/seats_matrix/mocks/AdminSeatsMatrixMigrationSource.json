@@ -1,0 +1,7 @@
+{
+  "module": "admin_seat_matrix",
+  "source_module": "admin_seat_matrix",
+  "entry_source": "admin_seat_matrix_components/admin_seat_matrix_components_views/AdminSeatMatrixSeatMatrixPage.tsx",
+  "copied_source_files": 11,
+  "note": "screen/dependency closure copied; identifiers preserved; all module path references localized"
+}

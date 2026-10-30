@@ -1,0 +1,7 @@
+{
+  "module": "admin_subscriptions",
+  "source_module": "admin_subscriptions",
+  "entry_source": "admin_subscriptions_components/admin_subscriptions_components_views/AdminSubscriptionsPage.tsx",
+  "copied_source_files": 5,
+  "note": "screen/dependency closure copied; identifiers preserved; all module path references localized"
+}

@@ -1,0 +1,7 @@
+{
+  "module": "admin_seats",
+  "source_module": "admin_seats",
+  "entry_source": "admin_seats_components/admin_seats_components_views/AdminSeatsSeatManagementPage.tsx",
+  "copied_source_files": 4,
+  "note": "screen/dependency closure copied; identifiers preserved; all module path references localized"
+}
