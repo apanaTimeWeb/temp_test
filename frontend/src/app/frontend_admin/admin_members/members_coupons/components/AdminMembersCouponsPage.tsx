@@ -1,5 +1,4 @@
-'use client';
-import { useCallback, useMemo, useState, useEffect, useRef } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Trash2, CheckCircle } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -29,6 +28,7 @@ import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { createAdminCouponsFormSchema, type AdminCouponsFormOutput } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 
 // Responsibility: AdminCouponsPage presentation component owned by admin_coupons; responsibility folder: admin_coupons_components_views.
+'use client';
 
 // RESPONSIBILITY: Orchestrates the Coupons read query, table, KPI summary and draft validation dialog.
 
@@ -67,13 +67,13 @@ export default function AdminCouponsPage() {
       status: 'Active',
     };
     queryClient.setQueryData<AdminCouponsCoupon[]>(queryKey, (current) => [nextCoupon, ...(current ?? [])]);
-    toast.success(t('DEMO_COUPON_CREATED', { code: nextCoupon.code }));
+    toast.success(t('DEMO_COUPON_CREATED', { code: nextCoupon.code }), { id: 'admin_members-members_coupons-components-AdminMembersCouponsPage-toast-64-2' });
   }, [coupons.length, isDemoMode, queryClient, queryKey, t]);
 
   const confirmDeleteCoupon = useCallback(() => {
     if (!isDemoMode || !couponToDelete) return;
     queryClient.setQueryData<AdminCouponsCoupon[]>(queryKey, (current) => (current ?? []).filter((item) => item.id !== couponToDelete.id));
-    toast.success(t('DEMO_COUPON_DELETED', { code: couponToDelete.code }));
+    toast.success(t('DEMO_COUPON_DELETED', { code: couponToDelete.code }), { id: 'admin_members-members_coupons-components-AdminMembersCouponsPage-toast-70-3' });
     setCouponToDelete(null);
   }, [couponToDelete, isDemoMode, queryClient, queryKey, t]);
 
@@ -91,17 +91,19 @@ export default function AdminCouponsPage() {
     },
     { field: 'usedCount', headerName: t('COLUMN_USAGE'), flex: 1, minWidth: 120, valueFormatter: ({ data }) => `${displayValue(data.usedCount)}/${displayValue(data.maxUses)}` },
     { field: 'expiry', headerName: t('COLUMN_EXPIRY'), flex: 1, minWidth: 120, valueFormatter: ({ data }) => formatAdminCouponsDate(data.expiry, locale) },
-    { field: 'status', headerName: t('COLUMN_STATUS'), flex: 1, minWidth: 120, cellRenderer: (params: DataGridCellParams<AdminCouponsCoupon>) => {
-      const status = ADMIN_COUPONS_STATUS_VALUES.find((candidate) => candidate === params.value) ?? ADMIN_COUPONS_UNKNOWN_STATUS;
-      const className = status === 'Active'
-        ? 'bg-success-bg text-success-text'
-        : status === 'Expired'
-          ? 'bg-danger-bg text-danger-text'
-          : status === 'Exhausted'
-            ? 'bg-warning-bg text-warning-text'
-            : 'bg-surface-highlight text-text-secondary';
-      return <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${className}`}>{t(`STATUS_${status.toUpperCase()}`)}</span>;
-    } },
+    {
+      field: 'status', headerName: t('COLUMN_STATUS'), flex: 1, minWidth: 120, cellRenderer: (params: DataGridCellParams<AdminCouponsCoupon>) => {
+        const status = ADMIN_COUPONS_STATUS_VALUES.find((candidate) => candidate === params.value) ?? ADMIN_COUPONS_UNKNOWN_STATUS;
+        const className = status === 'Active'
+          ? 'bg-success-bg text-success-text'
+          : status === 'Expired'
+            ? 'bg-danger-bg text-danger-text'
+            : status === 'Exhausted'
+              ? 'bg-warning-bg text-warning-text'
+              : 'bg-surface-highlight text-text-secondary';
+        return <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${className}`}>{t(`STATUS_${status.toUpperCase()}`)}</span>;
+      }
+    },
     {
       headerName: t('COLUMN_ACTIONS'),
       minWidth: 115,
@@ -143,6 +145,7 @@ export default function AdminCouponsPage() {
 }
 
 // Responsibility: AdminCouponsCreateDialog component owned by admin_coupons; responsibility folder: admin_coupons_create_dialog.
+'use client';
 
 // RESPONSIBILITY: Validates a coupon draft in a shared focus-managed dialog without persisting a record.
 
@@ -179,14 +182,8 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
   const discardDraft = () => { setConfirmDiscard(false); reset(ADMIN_COUPONS_EMPTY_FORM); onOpenChange(false); };
   const codeRegistration = form.register('code');
 
-  const hasResetRef = useRef(false);
   useEffect(() => {
-    if (open && !hasResetRef.current) {
-      reset(ADMIN_COUPONS_EMPTY_FORM);
-      hasResetRef.current = true;
-    } else if (!open) {
-      hasResetRef.current = false;
-    }
+    if (open) reset(ADMIN_COUPONS_EMPTY_FORM);
   }, [open, reset]);
 
   const submit = form.handleSubmit((values) => {
@@ -195,63 +192,63 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
       onOpenChange(false);
       return;
     }
-    toast.info(t('DRAFT_VALIDATED_NO_PERSISTENCE'));
+    toast.info(t('DRAFT_VALIDATED_NO_PERSISTENCE'), { id: 'admin_members-members_coupons-components-AdminMembersCouponsCreateDialog-toast-62-1' });
   });
 
   return (
     <>
-    <Dialog open={open} onOpenChange={(nextOpen) => { if (nextOpen) onOpenChange(true); else requestClose(); }}>
-      <DialogContent className="space-y-5">
-        <div className="space-y-2">
-          <DialogTitle>{isDemoMode && intent === 'create' ? t('CREATE_DEMO_DIALOG_TITLE') : t('CREATE_DIALOG_TITLE')}</DialogTitle>
-          <DialogDescription>{isDemoMode && intent === 'create' ? t('CREATE_DEMO_DIALOG_DESCRIPTION') : t('CREATE_DIALOG_DESCRIPTION')}</DialogDescription>
-        </div>
-        <form onSubmit={submit} noValidate className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-code">{t('FIELD_CODE')}</label>
-            <input id="admin-coupon-code" {...codeRegistration} ref={codeRegistration.ref} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.code)} aria-describedby={form.formState.errors.code ? 'admin-coupon-code-error' : undefined} autoComplete="off" />
-            {form.formState.errors.code?.message && <p id="admin-coupon-code-error" role="alert" className="text-caption text-danger-text">{String(form.formState.errors.code.message)}</p>}
+      <Dialog open={open} onOpenChange={(nextOpen) => { if (nextOpen) onOpenChange(true); else requestClose(); }}>
+        <DialogContent className="space-y-5">
+          <div className="space-y-2">
+            <DialogTitle>{isDemoMode && intent === 'create' ? t('CREATE_DEMO_DIALOG_TITLE') : t('CREATE_DIALOG_TITLE')}</DialogTitle>
+            <DialogDescription>{isDemoMode && intent === 'create' ? t('CREATE_DEMO_DIALOG_DESCRIPTION') : t('CREATE_DIALOG_DESCRIPTION')}</DialogDescription>
           </div>
-          <div className="space-y-1.5">
-            <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-type">{t('FIELD_DISCOUNT_TYPE')}</label>
-            <select id="admin-coupon-type" {...form.register('type')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-              <option value="Flat">{t('TYPE_FLAT')}</option>
-              <option value="Percent">{t('TYPE_PERCENT')}</option>
-            </select>
-            {form.formState.errors.type?.message && <p id="admin-coupon-type-error" role="alert" className="text-caption text-danger-text">{String(form.formState.errors.type.message)}</p>}
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <form onSubmit={submit} noValidate className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-discount">{t('FIELD_DISCOUNT_VALUE')}</label>
-              <input id="admin-coupon-discount" type="number" min="0.01" step="any" {...form.register('discount')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.discount)} aria-describedby={form.formState.errors.discount ? 'admin-coupon-discount-error' : undefined} />
-              {form.formState.errors.discount?.message && <p id="admin-coupon-discount-error" role="alert" className="text-caption text-danger-text">{String(form.formState.errors.discount.message)}</p>}
+              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-code">{t('FIELD_CODE')}</label>
+              <input id="admin-coupon-code" {...codeRegistration} ref={codeRegistration.ref} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.code)} aria-describedby={form.formState.errors.code ? 'admin-coupon-code-error' : undefined} autoComplete="off" />
+              {form.formState.errors.code && <p id="admin-coupon-code-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.code.message}</p>}
             </div>
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-max-uses">{t('FIELD_MAX_USES')}</label>
-              <input id="admin-coupon-max-uses" type="number" min="1" step="1" {...form.register('maxUses')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.maxUses)} aria-describedby={form.formState.errors.maxUses ? 'admin-coupon-max-uses-error' : undefined} />
-              {form.formState.errors.maxUses?.message && <p id="admin-coupon-max-uses-error" role="alert" className="text-caption text-danger-text">{String(form.formState.errors.maxUses.message)}</p>}
+              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-type">{t('FIELD_DISCOUNT_TYPE')}</label>
+              <select id="admin-coupon-type" {...form.register('type')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                <option value="Flat">{t('TYPE_FLAT')}</option>
+                <option value="Percent">{t('TYPE_PERCENT')}</option>
+              </select>
+              {form.formState.errors.type && <p id="admin-coupon-type-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.type.message}</p>}
             </div>
-          </div>
-          <div className="space-y-1.5">
-            <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-expiry">{t('FIELD_EXPIRY')}</label>
-            <input id="admin-coupon-expiry" type="date" {...form.register('expiry')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.expiry)} aria-describedby={form.formState.errors.expiry ? 'admin-coupon-expiry-error' : undefined} />
-            {form.formState.errors.expiry?.message && <p id="admin-coupon-expiry-error" role="alert" className="text-caption text-danger-text">{String(form.formState.errors.expiry.message)}</p>}
-          </div>
-          <DialogFooter className="border-t border-border pt-4">
-            <button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={requestClose}>{t('CANCEL')}</button>
-            <button type="submit" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-              <CheckCircle size={18} strokeWidth={2}/>{isDemoMode && intent === 'create' ? t('CREATE_DEMO_COUPON') : t('VALIDATE_DRAFT')}
-            </button>
-          </DialogFooter>
-        </form>
-        {confirmDiscard && <div role="alertdialog" aria-modal="true" aria-labelledby="admin-coupon-discard-title" className="rounded-lg border border-warning-bg bg-card p-4"><h3 id="admin-coupon-discard-title" className="font-semibold text-text-primary">{t('UNSAVED_CHANGES_TITLE')}</h3><p className="mt-2 text-text-secondary">{t('UNSAVED_CHANGES_DESCRIPTION')}</p><div className="mt-4 flex justify-end gap-2"><button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary" onClick={() => setConfirmDiscard(false)}>{t('KEEP_EDITING')}</button><button type="button" className="min-h-11 rounded-md bg-danger px-4 py-2 text-on-danger" onClick={discardDraft}>{t('DISCARD_CHANGES')}</button></div></div>}
-      </DialogContent>
-    </Dialog>
-    <Dialog open={deleteOpen} onOpenChange={onDeleteOpenChange}>
-      <DialogContent className="space-y-5"><div className="space-y-2"><DialogTitle>{t('DELETE_DIALOG_TITLE')}</DialogTitle><DialogDescription>{t('DELETE_DIALOG_DESCRIPTION', { code: couponCode })}</DialogDescription></div>
-        <DialogFooter className="border-t border-border pt-4"><button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onDeleteOpenChange(false)}>{t('CANCEL')}</button><button type="button" className="min-h-11 rounded-md bg-danger px-4 py-2 font-medium text-on-danger hover:bg-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={onConfirmDelete}>{t('CONFIRM_DEMO_DELETE')}</button></DialogFooter>
-      </DialogContent>
-    </Dialog>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-discount">{t('FIELD_DISCOUNT_VALUE')}</label>
+                <input id="admin-coupon-discount" type="number" min="0.01" step="any" {...form.register('discount')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.discount)} aria-describedby={form.formState.errors.discount ? 'admin-coupon-discount-error' : undefined} />
+                {form.formState.errors.discount && <p id="admin-coupon-discount-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.discount.message}</p>}
+              </div>
+              <div className="space-y-1.5">
+                <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-max-uses">{t('FIELD_MAX_USES')}</label>
+                <input id="admin-coupon-max-uses" type="number" min="1" step="1" {...form.register('maxUses')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.maxUses)} aria-describedby={form.formState.errors.maxUses ? 'admin-coupon-max-uses-error' : undefined} />
+                {form.formState.errors.maxUses && <p id="admin-coupon-max-uses-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.maxUses.message}</p>}
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-expiry">{t('FIELD_EXPIRY')}</label>
+              <input id="admin-coupon-expiry" type="date" {...form.register('expiry')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.expiry)} aria-describedby={form.formState.errors.expiry ? 'admin-coupon-expiry-error' : undefined} />
+              {form.formState.errors.expiry && <p id="admin-coupon-expiry-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.expiry.message}</p>}
+            </div>
+            <DialogFooter className="border-t border-border pt-4">
+              <button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={requestClose}>{t('CANCEL')}</button>
+              <button type="submit" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                <CheckCircle size={18} strokeWidth={2} />{isDemoMode && intent === 'create' ? t('CREATE_DEMO_COUPON') : t('VALIDATE_DRAFT')}
+              </button>
+            </DialogFooter>
+          </form>
+          {confirmDiscard && <div role="alertdialog" aria-modal="true" aria-labelledby="admin-coupon-discard-title" className="rounded-lg border border-warning-bg bg-card p-4"><h3 id="admin-coupon-discard-title" className="font-semibold text-text-primary">{t('UNSAVED_CHANGES_TITLE')}</h3><p className="mt-2 text-text-secondary">{t('UNSAVED_CHANGES_DESCRIPTION')}</p><div className="mt-4 flex justify-end gap-2"><button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary" onClick={() => setConfirmDiscard(false)}>{t('KEEP_EDITING')}</button><button type="button" className="min-h-11 rounded-md bg-danger px-4 py-2 text-on-danger" onClick={discardDraft}>{t('DISCARD_CHANGES')}</button></div></div>}
+        </DialogContent>
+      </Dialog>
+      <Dialog open={deleteOpen} onOpenChange={onDeleteOpenChange}>
+        <DialogContent className="space-y-5"><div className="space-y-2"><DialogTitle>{t('DELETE_DIALOG_TITLE')}</DialogTitle><DialogDescription>{t('DELETE_DIALOG_DESCRIPTION', { code: couponCode })}</DialogDescription></div>
+          <DialogFooter className="border-t border-border pt-4"><button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onDeleteOpenChange(false)}>{t('CANCEL')}</button><button type="button" className="min-h-11 rounded-md bg-danger px-4 py-2 font-medium text-on-danger hover:bg-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={onConfirmDelete}>{t('CONFIRM_DEMO_DELETE')}</button></DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

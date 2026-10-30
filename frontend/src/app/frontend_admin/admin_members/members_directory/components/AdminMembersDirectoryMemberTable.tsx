@@ -1,5 +1,5 @@
-'use client';
 // RESPONSIBILITY: AdminMembersMemberTable component owned by admin_members; responsibility folder: admin_members_components_tables.
+'use client';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 import { useMemo, useState } from 'react';
@@ -65,7 +65,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
                 <td className="px-4 py-3">{expiryLabel(member.expiryDate)}</td>
                 <td className="px-4 py-3"><span className="rounded-full bg-surface-highlight px-2.5 py-1 text-xs font-semibold">{statusLabel(member.status)}</span></td>
                 <td className="px-4 py-3"><div className="relative flex justify-end gap-1">
-                  <button type="button" className="min-h-11 min-w-11 rounded-md hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={t('ACTION_VIEW_MEMBER', { name: member.name })} onClick={() => onSelectMember(member)}><Eye size={18} strokeWidth={2} aria-hidden="true"/></button>
+                  <button type="button" className="min-h-11 min-w-11 rounded-md hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={t('ACTION_VIEW_MEMBER', { name: member.name })} onClick={() => onSelectMember(member)}><Eye size={18} strokeWidth={2} aria-hidden="true" /></button>
                   <button
                     type="button"
                     className="min-h-11 min-w-11 rounded-md hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -73,7 +73,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
                     aria-expanded={openActionsFor === member.id}
                     aria-controls={`admin-member-actions-${member.id}`}
                     onClick={() => setOpenActionsFor((current) => current === member.id ? null : member.id)}
-                  ><MoreVertical size={18} strokeWidth={2} aria-hidden="true"/></button>
+                  ><MoreVertical size={18} strokeWidth={2} aria-hidden="true" /></button>
                   {openActionsFor === member.id && <div id={`admin-member-actions-${member.id}`} aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })} onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }} className="absolute right-4 z-10 mt-12 min-w-48 rounded-md border border-border bg-popover p-1 shadow-popover">
                     <button type="button" className="block min-h-11 w-full rounded px-3 py-2 text-left text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => { setOpenActionsFor(null); onSelectMember(member); }}>{t('ACTION_VIEW_DETAILS')}</button>
                     <button type="button" disabled={!canMutate} title={!canMutate ? t('MEMBER_EDIT_UNAVAILABLE') : undefined} className="block min-h-11 w-full rounded px-3 py-2 text-left text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" onClick={() => { setOpenActionsFor(null); onAction('EDIT', member); }}>{t('ACTION_EDIT_MEMBER')}</button>
@@ -102,7 +102,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
             </dl>
             <div className="relative mt-3 flex gap-2 border-t border-border pt-3">
               <button type="button" className="min-h-11 flex-1 rounded-md border border-border px-3 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectMember(member)}>{t('ACTION_VIEW_DETAILS')}</button>
-              <button type="button" className="min-h-11 min-w-11 rounded-md border border-border px-3 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })} aria-expanded={openActionsFor === member.id} aria-controls={`admin-member-actions-mobile-${member.id}`} onClick={() => setOpenActionsFor((current) => current === member.id ? null : member.id)}><MoreVertical size={18} strokeWidth={2} aria-hidden="true"/></button>
+              <button type="button" className="min-h-11 min-w-11 rounded-md border border-border px-3 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })} aria-expanded={openActionsFor === member.id} aria-controls={`admin-member-actions-mobile-${member.id}`} onClick={() => setOpenActionsFor((current) => current === member.id ? null : member.id)}><MoreVertical size={18} strokeWidth={2} aria-hidden="true" /></button>
               {openActionsFor === member.id && <div id={`admin-member-actions-mobile-${member.id}`} aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })} onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }} className="absolute right-0 top-12 z-10 min-w-48 rounded-md border border-border bg-popover p-1 shadow-popover">
                 <button type="button" className="block min-h-11 w-full rounded px-3 py-2 text-left text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => { setOpenActionsFor(null); onSelectMember(member); }}>{t('ACTION_VIEW_DETAILS')}</button>
                 <button type="button" disabled={!canMutate} title={!canMutate ? t('MEMBER_EDIT_UNAVAILABLE') : undefined} className="block min-h-11 w-full rounded px-3 py-2 text-left text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" onClick={() => { setOpenActionsFor(null); onAction('EDIT', member); }}>{t('ACTION_EDIT_MEMBER')}</button>
