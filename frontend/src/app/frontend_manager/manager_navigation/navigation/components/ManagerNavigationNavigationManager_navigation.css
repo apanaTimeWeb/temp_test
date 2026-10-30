@@ -401,19 +401,25 @@
 
   /* ═══════════════ ACTIVITY TABLE ═══════════════ */
 
-  .mgr-activity-table { width: 100%; border-collapse: collapse; }
-  .mgr-activity-table thead tr { background: color-mix(in srgb, theme(--color-primary) 8%, transparent); }
-  .mgr-activity-table th {
+  .mgr-activity-table,
+  .mgr-table { width: 100%; border-collapse: collapse; }
+  .mgr-activity-table thead tr,
+  .mgr-table thead tr { background: color-mix(in srgb, theme(--color-primary) 8%, transparent); }
+  .mgr-activity-table th,
+  .mgr-table th {
     font-size: 11px; font-weight: 600; color: theme(--color-text-secondary);
     text-transform: uppercase; letter-spacing: 0.07em;
     padding: 10px 14px; text-align: left; border-bottom: 1px solid theme(--color-border);
   }
-  .mgr-activity-table td {
+  .mgr-activity-table td,
+  .mgr-table td {
     font-size: 13px; color: theme(--color-text-primary);
     padding: 12px 14px; border-bottom: 1px solid theme(--color-border); vertical-align: middle;
   }
-  .mgr-activity-table tbody tr:last-child td { border-bottom: none; }
-  .mgr-activity-table tbody tr:hover td { background-color: color-mix(in srgb, theme(--color-primary) 4%, transparent); }
+  .mgr-activity-table tbody tr:last-child td,
+  .mgr-table tbody tr:last-child td { border-bottom: none; }
+  .mgr-activity-table tbody tr:hover td,
+  .mgr-table tbody tr:hover td { background-color: color-mix(in srgb, theme(--color-primary) 4%, transparent); }
   .mgr-table-id { color: theme(--color-primary); font-weight: 500; }
 
   .mgr-table-wrapper {

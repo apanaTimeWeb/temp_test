@@ -118,6 +118,7 @@ export type ManagerNavigationLabelKey =
   | 'nav_expenses'
   | 'nav_fines_payments'
   | 'nav_group_admission'
+  | 'nav_help_support'
   | 'nav_holiday_calendar'
   | 'nav_id_card_generator'
   | 'nav_invoice'
@@ -184,18 +185,14 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_FINANCE_PAYMENT_PROMISES_ROUTES.root, icon: Handshake, labelKey: 'nav_payment_promises' },
   { kind: 'link', href: MANAGER_FINANCE_TRUST_SCORES_ROUTES.root, icon: Shield, labelKey: 'nav_trust_scores' },
   { kind: 'link', href: MANAGER_FINANCE_SECURITY_DEPOSITS_ROUTES.root, icon: Wallet, labelKey: 'nav_security_deposits' },
-  { kind: 'link', href: MANAGER_FINANCE_LATE_FEES_ROUTES.root, icon: Clock, labelKey: 'nav_late_fees' },
   { kind: 'link', href: MANAGER_FINES_PAYMENTS_ROUTES.root, icon: AlertCircle, labelKey: 'nav_fines_payments' },
   { kind: 'link', href: MANAGER_FINANCE_AUTO_SUSPEND_ROUTES.root, icon: Ban, labelKey: 'nav_auto_suspend' },
-  { kind: 'link', href: MANAGER_INVOICE_ROUTES.root, icon: Receipt, labelKey: 'nav_invoice' },
   { kind: 'link', href: MANAGER_RECEIPT_ROUTES.root, icon: BookOpen, labelKey: 'nav_receipt' },
-  { kind: 'link', href: MANAGER_FINANCE_REFERRALS_ROUTES.root, icon: Award, labelKey: 'nav_referrals' },
   { kind: 'link', href: MANAGER_REFUNDS_ROUTES.root, icon: DollarSign, labelKey: 'nav_refunds' },
   { kind: 'group', labelKey: 'group_operations' },
   { kind: 'link', href: MANAGER_ATTENDANCE_ROUTES.root, icon: CalendarCheck, labelKey: 'nav_attendance' },
   { kind: 'link', href: MANAGER_ABSENTEE_REPORT_ROUTES.root, icon: ClipboardCheck, labelKey: 'nav_absentee_report' },
   { kind: 'link', href: MANAGER_QR_SCANNER_ROUTES.root, icon: QrCode, labelKey: 'nav_qr_scanner' },
-  { kind: 'link', href: MANAGER_HOLIDAY_CALENDAR_ROUTES.root, icon: Calendar, labelKey: 'nav_holiday_calendar' },
   { kind: 'group', labelKey: 'group_accounts_assets' },
   { kind: 'link', href: MANAGER_ACCOUNTS_EXPENSES_ROUTES.root, icon: TrendingUp, labelKey: 'nav_expenses' },
   { kind: 'link', href: MANAGER_ACCOUNTS_DAILY_SETTLEMENT_ROUTES.root, icon: Receipt, labelKey: 'nav_daily_settlement' },
@@ -203,13 +200,12 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_ASSETS_REGISTER_ROUTES.root, icon: BarChart, labelKey: 'nav_assets' },
   { kind: 'link', href: MANAGER_ASSETS_MAINTENANCE_ROUTES.root, icon: BarChart, labelKey: 'nav_asset_maintenance' },
   { kind: 'group', labelKey: 'group_communication' },
-  { kind: 'link', href: MANAGER_NOTICES_ROUTES.root, icon: Bell, labelKey: 'nav_notices' },
   { kind: 'link', href: MANAGER_COMPLAINTS_ROUTES.root, icon: MessageSquare, labelKey: 'nav_complaints' },
   { kind: 'link', href: MANAGER_NOTIFICATION_CENTER_ROUTES.root, icon: BellRing, labelKey: 'nav_notification_center' },
   { kind: 'link', href: MANAGER_WHATSAPP_LOGS_ROUTES.root, icon: Smartphone, labelKey: 'nav_whatsapp_logs' },
   { kind: 'link', href: MANAGER_WHATSAPP_TEMPLATES_ROUTES.root, icon: Smartphone, labelKey: 'nav_whatsapp_templates' },
   { kind: 'group', labelKey: 'group_help_support' },
-  { kind: 'link', href: MANAGER_HELP_SUPPORT_ROUTES.root, icon: LifeBuoy, labelKey: 'group_help_support' },
+  { kind: 'link', href: MANAGER_HELP_SUPPORT_ROUTES.root, icon: LifeBuoy, labelKey: 'nav_help_support' },
   { kind: 'group', labelKey: 'group_settings' },
   { kind: 'link', href: MANAGER_BRANCH_INFO_ROUTES.root, icon: Building, labelKey: 'nav_branch_info' },
 ];

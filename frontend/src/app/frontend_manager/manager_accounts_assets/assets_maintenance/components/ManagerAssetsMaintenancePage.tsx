@@ -54,6 +54,23 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         <div className="fin-kpi-card fin-kpi-card--danger"><p className="fin-kpi-label fin-kpi-label--danger">{tManagerUi('total_cost')}</p><p className="fin-kpi-value fin-kpi-value--danger">{formatManagerAssetMaintenanceCurrency(totalCost)}</p></div>
       </div>
 
+      <div className="fin-card p-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-semibold text-primary">Maintenance Work Orders & Status Resolution</h3>
+          <span className="text-xs text-secondary">{logs.length} Total Service Tickets</span>
+        </div>
+        <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
+          <div style={{ width: '60%' }} className="bg-success h-full" title="Completed (60%)" />
+          <div style={{ width: '25%' }} className="bg-info h-full" title="In Progress (25%)" />
+          <div style={{ width: '15%' }} className="bg-warning h-full" title="Pending (15%)" />
+        </div>
+        <div className="flex flex-wrap gap-4 mt-3 text-xs text-secondary">
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-success" /> Completed (60%)</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-info" /> In Progress (25%)</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-warning" /> Pending (15%)</span>
+        </div>
+      </div>
+
       <div className="fin-filter-bar">
         <select className="fin-select w-44" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(0); }} aria-label={tManagerUi('all_status')}>
           <option value="all">{tManagerUi('all_status')}</option>

@@ -16,6 +16,7 @@ export function ManagerSeatsMatrixClient() {
     isError, isPending, isFetching, refetch, visible, freeCount,
     activeTab, setActiveTab,
     selectedSeat, setSelectedSeat,
+    updateSeat,
   } = useManagerSeatsMatrix();
 
   if (isError) {
@@ -103,7 +104,7 @@ export function ManagerSeatsMatrixClient() {
         )}
       </div>
 
-      <ManagerSeatsMatrixModal selectedSeat={selectedSeat} onClose={() => setSelectedSeat(null)} />
+      <ManagerSeatsMatrixModal selectedSeat={selectedSeat} onClose={() => setSelectedSeat(null)} onUpdateSeat={updateSeat} />
     </div>
   );
 }

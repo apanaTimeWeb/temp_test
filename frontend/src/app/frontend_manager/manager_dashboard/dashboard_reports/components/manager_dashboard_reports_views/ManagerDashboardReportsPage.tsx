@@ -47,7 +47,6 @@ export default function ManagerDashboardReportsPage() {
       </div>
       <div className="mgr-report-filters">
         <div className="mgr-filter-item"><label className="mgr-label" htmlFor="manager-reports-date-range">{tManagerUi('date_range')}</label><select id="manager-reports-date-range" className="mgr-select" value={dateRange} onChange={(event) => setDateRange(event.target.value as ManagerDashboardReportsDateRange)}>{MANAGER_REPORTS_DATE_RANGES.map((range) => <option key={range} value={range}>{range === 'This Week' ? tManagerUi('range_this_week') : range === 'This Month' ? tManagerUi('range_this_month') : tManagerUi('range_last_30_days')}</option>)}</select></div>
-        <div className="mgr-filter-item"><label className="mgr-label" htmlFor="manager-reports-branch">{tManagerUi('branch')}</label><select id="manager-reports-branch" className="mgr-select" disabled><option>{tManagerUi('main_branch_read_only')}</option></select></div>
       </div>
       {!hasReportData ? <p className="mgr-card p-6 text-sm text-secondary" role="status">{tManagerUi('no_report_data_available')}</p> : <><ManagerDashboardReportsKpiGrid cards={data.kpiCards} /><ManagerDashboardReportsChartsGrid data={data} /><ManagerDashboardReportsTablesGrid data={data} /></>}
     </div>

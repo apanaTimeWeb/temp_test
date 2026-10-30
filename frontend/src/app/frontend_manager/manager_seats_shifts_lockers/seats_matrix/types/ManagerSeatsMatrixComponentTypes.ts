@@ -6,6 +6,7 @@ import type { ErrorInfo, ReactNode } from 'react';
 export interface ManagerSeatsMatrixModalProps {
   selectedSeat: SeatData | null;
   onClose: () => void;
+  onUpdateSeat?: (seatId: string, updates: Partial<SeatData>) => void;
 }
 
 export interface ManagerSeatsMatrixErrorFallbackProps {

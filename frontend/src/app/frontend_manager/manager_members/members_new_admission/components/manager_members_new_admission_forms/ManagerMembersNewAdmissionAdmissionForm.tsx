@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { ManagerMembersNewAdmissionAdmissionEnrollmentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionEnrollmentSection';
+import { ManagerMembersNewAdmissionAdmissionDocumentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionDocumentSection';
 import { ManagerMembersNewAdmissionAdmissionPaymentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection';
 import { ManagerMembersNewAdmissionAdmissionPersonalSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPersonalSection';
 import { ManagerMembersNewAdmissionAdmissionSummary } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionSummary';
@@ -49,6 +50,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
             <div className="mgr-admission-main">
               <ManagerMembersNewAdmissionAdmissionPersonalSection register={register} errors={errors} />
               <ManagerMembersNewAdmissionAdmissionEnrollmentSection register={register} errors={errors} />
+              <ManagerMembersNewAdmissionAdmissionDocumentSection />
               <ManagerMembersNewAdmissionAdmissionPaymentSection register={register} errors={errors} />
             </div>
             <ManagerMembersNewAdmissionAdmissionSummary

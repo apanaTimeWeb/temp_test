@@ -66,6 +66,25 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
         <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-muted">{tManagerUi('disposed')}</p><p className="fin-kpi-value fin-text-muted">{assets.filter(a=>a.status==='disposed').length}</p></div>
       </div>
 
+      <div className="fin-card p-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-semibold text-primary">Asset Distribution by Category</h3>
+          <span className="text-xs text-secondary">{assets.length} Total Inventory Units</span>
+        </div>
+        <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
+          <div style={{ width: '35%' }} className="bg-primary h-full" title="Furniture (35%)" />
+          <div style={{ width: '25%' }} className="bg-info h-full" title="Electronics (25%)" />
+          <div style={{ width: '25%' }} className="bg-warning h-full" title="Appliance (25%)" />
+          <div style={{ width: '15%' }} className="bg-success h-full" title="Security (15%)" />
+        </div>
+        <div className="flex flex-wrap gap-4 mt-3 text-xs text-secondary">
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-primary" /> Furniture (35%)</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-info" /> Electronics (25%)</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-warning" /> Appliance (25%)</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-success" /> Security (15%)</span>
+        </div>
+      </div>
+
       <div className="fin-filter-bar">
         <select className="fin-select w-44" value={catFilter} onChange={e => { setCatFilter(e.target.value); setPage(0); }} aria-label={tManagerUi('all_categories')}>
           <option value="all">{tManagerUi('all_categories')}</option>
