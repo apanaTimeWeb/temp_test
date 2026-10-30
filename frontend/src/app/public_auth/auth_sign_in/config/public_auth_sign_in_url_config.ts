@@ -13,6 +13,6 @@ export const PUBLIC_AUTH_INTERNAL_URLS = {
 /** Existing post-login destinations are navigation context only, never authorization evidence. */
 export const PUBLIC_AUTH_ROLE_REDIRECTS: Record<PublicAuthRole, string> = {
   superadmin: '/superadmin/superadmin_dashboard',
-  admin: '/admin/admin_dashboard',
+  admin: '/admin',
   manager: '/manager',
 } as const;

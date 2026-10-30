@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Trash2, CheckCircle } from 'lucide-react';
@@ -28,7 +30,6 @@ import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { createAdminCouponsFormSchema, type AdminCouponsFormOutput } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 
 // Responsibility: AdminCouponsPage presentation component owned by admin_coupons; responsibility folder: admin_coupons_components_views.
-'use client';
 
 // RESPONSIBILITY: Orchestrates the Coupons read query, table, KPI summary and draft validation dialog.
 
@@ -53,7 +54,7 @@ export default function AdminCouponsPage() {
 
   const handleCreateDemoCoupon = useCallback((values: AdminCouponsFormOutput) => {
     if (!isDemoMode) {
-      toast.info(t('MUTATIONS_UNAVAILABLE'), { id: 'admin_members-members_coupons-components-AdminMembersCouponsPage-toast-50-1' });
+      toast.info(t('MUTATIONS_UNAVAILABLE'));
       return;
     }
     const nextCoupon: AdminCouponsCoupon = {
@@ -67,13 +68,13 @@ export default function AdminCouponsPage() {
       status: 'Active',
     };
     queryClient.setQueryData<AdminCouponsCoupon[]>(queryKey, (current) => [nextCoupon, ...(current ?? [])]);
-    toast.success(t('DEMO_COUPON_CREATED', { code: nextCoupon.code }), { id: 'admin_members-members_coupons-components-AdminMembersCouponsPage-toast-64-2' });
+    toast.success(t('DEMO_COUPON_CREATED', { code: nextCoupon.code }));
   }, [coupons.length, isDemoMode, queryClient, queryKey, t]);
 
   const confirmDeleteCoupon = useCallback(() => {
     if (!isDemoMode || !couponToDelete) return;
     queryClient.setQueryData<AdminCouponsCoupon[]>(queryKey, (current) => (current ?? []).filter((item) => item.id !== couponToDelete.id));
-    toast.success(t('DEMO_COUPON_DELETED', { code: couponToDelete.code }), { id: 'admin_members-members_coupons-components-AdminMembersCouponsPage-toast-70-3' });
+    toast.success(t('DEMO_COUPON_DELETED', { code: couponToDelete.code }));
     setCouponToDelete(null);
   }, [couponToDelete, isDemoMode, queryClient, queryKey, t]);
 
@@ -145,7 +146,6 @@ export default function AdminCouponsPage() {
 }
 
 // Responsibility: AdminCouponsCreateDialog component owned by admin_coupons; responsibility folder: admin_coupons_create_dialog.
-'use client';
 
 // RESPONSIBILITY: Validates a coupon draft in a shared focus-managed dialog without persisting a record.
 
@@ -192,7 +192,7 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
       onOpenChange(false);
       return;
     }
-    toast.info(t('DRAFT_VALIDATED_NO_PERSISTENCE'), { id: 'admin_members-members_coupons-components-AdminMembersCouponsCreateDialog-toast-62-1' });
+    toast.info(t('DRAFT_VALIDATED_NO_PERSISTENCE'));
   });
 
   return (
@@ -207,7 +207,7 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
             <div className="space-y-1.5">
               <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-code">{t('FIELD_CODE')}</label>
               <input id="admin-coupon-code" {...codeRegistration} ref={codeRegistration.ref} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.code)} aria-describedby={form.formState.errors.code ? 'admin-coupon-code-error' : undefined} autoComplete="off" />
-              {form.formState.errors.code && <p id="admin-coupon-code-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.code.message}</p>}
+              {typeof form.formState.errors.code?.message === 'string' && <p id="admin-coupon-code-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.code.message}</p>}
             </div>
             <div className="space-y-1.5">
               <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-type">{t('FIELD_DISCOUNT_TYPE')}</label>
@@ -215,24 +215,24 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
                 <option value="Flat">{t('TYPE_FLAT')}</option>
                 <option value="Percent">{t('TYPE_PERCENT')}</option>
               </select>
-              {form.formState.errors.type && <p id="admin-coupon-type-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.type.message}</p>}
+              {typeof form.formState.errors.type?.message === 'string' && <p id="admin-coupon-type-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.type.message}</p>}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-discount">{t('FIELD_DISCOUNT_VALUE')}</label>
                 <input id="admin-coupon-discount" type="number" min="0.01" step="any" {...form.register('discount')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.discount)} aria-describedby={form.formState.errors.discount ? 'admin-coupon-discount-error' : undefined} />
-                {form.formState.errors.discount && <p id="admin-coupon-discount-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.discount.message}</p>}
+                {typeof form.formState.errors.discount?.message === 'string' && <p id="admin-coupon-discount-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.discount.message}</p>}
               </div>
               <div className="space-y-1.5">
                 <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-max-uses">{t('FIELD_MAX_USES')}</label>
                 <input id="admin-coupon-max-uses" type="number" min="1" step="1" {...form.register('maxUses')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.maxUses)} aria-describedby={form.formState.errors.maxUses ? 'admin-coupon-max-uses-error' : undefined} />
-                {form.formState.errors.maxUses && <p id="admin-coupon-max-uses-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.maxUses.message}</p>}
+                {typeof form.formState.errors.maxUses?.message === 'string' && <p id="admin-coupon-max-uses-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.maxUses.message}</p>}
               </div>
             </div>
             <div className="space-y-1.5">
               <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-expiry">{t('FIELD_EXPIRY')}</label>
               <input id="admin-coupon-expiry" type="date" {...form.register('expiry')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.expiry)} aria-describedby={form.formState.errors.expiry ? 'admin-coupon-expiry-error' : undefined} />
-              {form.formState.errors.expiry && <p id="admin-coupon-expiry-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.expiry.message}</p>}
+              {typeof form.formState.errors.expiry?.message === 'string' && <p id="admin-coupon-expiry-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.expiry.message}</p>}
             </div>
             <DialogFooter className="border-t border-border pt-4">
               <button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={requestClose}>{t('CANCEL')}</button>

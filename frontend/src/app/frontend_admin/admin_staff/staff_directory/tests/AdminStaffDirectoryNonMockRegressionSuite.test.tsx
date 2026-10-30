@@ -171,9 +171,6 @@ describe("Consolidated from AdminStaffDirectoryNonMockRegressionSuite.test.tsx",
 
 
 
-        suite0_suite0_describe("Consolidated: AdminStaffDirectoryHarness", () => {
-        });
-
         suite0_suite0_describe("Consolidated: AdminStaffDirectoryRegressionSuite", () => {
             suite0_suite0_describe('Original suite: AdminStaffDirectoryApi.test.ts', () => {
                 suite0_suite0_describe('fetchAdminStaffDirectory API contract', () => {
@@ -194,7 +191,7 @@ describe("Consolidated from AdminStaffDirectoryNonMockRegressionSuite.test.tsx",
             });
             suite0_suite0_describe('Original suite: AdminStaffDirectoryContract.test.ts', () => {
                 const here = suite0_suite0_path.dirname(suite0_suite0_fileURLToPath(import.meta.url));
-                suite0_suite0_describe('staff directory boundary', () => { suite0_suite0_it('does not claim client-side authorization', () => { const source = suite0_suite0_readFileSync(suite0_suite0_path.join(here, '../page'), 'utf8'); suite0_suite0_expect(source).toContain('STAFF_DIRECTORY_NOTICE'); suite0_suite0_expect(source).toContain('/admin/admin_staff/staff_roles_permissions'); }); });
+                suite0_suite0_describe('staff directory boundary', () => { suite0_suite0_it('does not claim client-side authorization', () => { const source = suite0_suite0_readFileSync(suite0_suite0_path.join(here, '../page.tsx'), 'utf8'); suite0_suite0_expect(source).toContain('STAFF_DIRECTORY_NOTICE'); suite0_suite0_expect(source).toContain('/admin/admin_staff/staff_roles_permissions'); }); });
             });
             suite0_suite0_describe('Original suite: AdminStaffDirectoryCreateManagerSchema.test.ts', () => {
                 suite0_suite0_describe('AdminStaffDirectoryCreateManagerSchema', () => {
@@ -402,9 +399,6 @@ describe("Consolidated from AdminStaffDirectoryNonMockRegressionSuite.test.tsx",
 
 
 
-        suite0_suite1_describe("Consolidated: AdminStaffDirectoryHarness", () => {
-        });
-
         suite0_suite1_describe("Consolidated: AdminStaffDirectoryRegressionSuite", () => {
             suite0_suite1_describe('Original suite: AdminStaffDirectoryApi.test.ts', () => {
                 suite0_suite1_describe('fetchAdminStaffDirectory API contract', () => {
@@ -425,7 +419,7 @@ describe("Consolidated from AdminStaffDirectoryNonMockRegressionSuite.test.tsx",
             });
             suite0_suite1_describe('Original suite: AdminStaffDirectoryContract.test.ts', () => {
                 const here = suite0_suite1_path.dirname(suite0_suite1_fileURLToPath(import.meta.url));
-                suite0_suite1_describe('staff directory boundary', () => { suite0_suite1_it('does not claim client-side authorization', () => { const source = suite0_suite1_readFileSync(suite0_suite1_path.join(here, '../page'), 'utf8'); suite0_suite1_expect(source).toContain('STAFF_DIRECTORY_NOTICE'); suite0_suite1_expect(source).toContain('/admin/admin_staff/staff_roles_permissions'); }); });
+                suite0_suite1_describe('staff directory boundary', () => { suite0_suite1_it('does not claim client-side authorization', () => { const source = suite0_suite1_readFileSync(suite0_suite1_path.join(here, '../page.tsx'), 'utf8'); suite0_suite1_expect(source).toContain('STAFF_DIRECTORY_NOTICE'); suite0_suite1_expect(source).toContain('/admin/admin_staff/staff_roles_permissions'); }); });
             });
             suite0_suite1_describe('Original suite: AdminStaffDirectoryCreateManagerSchema.test.ts', () => {
                 suite0_suite1_describe('AdminStaffDirectoryCreateManagerSchema', () => {
@@ -581,7 +575,7 @@ describe("Consolidated from AdminStaffDirectoryNonMockRegressionSuite.test.tsx",
         // Regression assertions retained from AdminStaffDirectoryCreateManagerForm.test.tsx.
         suite0_suite1_describe('AdminStaffDirectoryCreateManagerForm regression', () => {
             suite0_suite1_it('renders a required branch assignment with a non-selectable placeholder option', () => {
-                suite0_suite1_render(<Suite0_Suite1_NextIntlClientProvider locale="en" messages={suite0_suite1_staffMessages}><Suite0_Suite1_AdminStaffDirectoryCreateManagerForm onCreate={suite0_suite1_vi.fn(() => 'created')} canCreate={true} /></Suite0_Suite1_NextIntlClientProvider>);
+                suite0_suite1_render(<Suite0_Suite1_NextIntlClientProvider locale="en" messages={suite0_suite1_staffMessages}><Suite0_Suite1_AdminStaffDirectoryCreateManagerForm onCreate={suite0_suite1_vi.fn(() => 'created' as const)} canCreate={true} /></Suite0_Suite1_NextIntlClientProvider>);
                 const branchSelect = suite0_suite1_screen.getByRole('combobox', { name: suite0_suite1_staffMessages.ADMIN_STAFF_DIRECTORY.BRANCH_ASSIGNMENT }) as HTMLSelectElement;
                 suite0_suite1_expect(branchSelect.required).toBe(true);
                 suite0_suite1_expect(Array.from(branchSelect.options).map((option) => option.value)).toEqual(['', 'b1', 'b2']);
@@ -652,7 +646,7 @@ describe("Consolidated from AdminStaffDirectoryCreateManagerForm.test.tsx", () =
     suite1_describe('AdminStaffDirectoryCreateManagerForm', () => {
         suite1_it('renders the required branch assignment control with a non-selectable placeholder value', () => {
             suite1_render(<Suite1_NextIntlClientProvider locale="en" messages={suite1_staffMessages}><Suite1_AdminStaffDirectoryCreateManagerForm onCreate={() => 'created'} canCreate={true} /></Suite1_NextIntlClientProvider>);
-            const branchSelect = suite1_screen.getByRole('combobox', { name: 'BRANCH_ASSIGNMENT' }) as HTMLSelectElement;
+            const branchSelect = suite1_screen.getByRole('combobox', { name: suite1_staffMessages.ADMIN_STAFF_DIRECTORY.BRANCH_ASSIGNMENT }) as HTMLSelectElement;
 
             suite1_expect(branchSelect.required).toBe(true);
             suite1_expect(Array.from(branchSelect.options).map((option) => option.value)).toEqual(['', 'b1', 'b2']);

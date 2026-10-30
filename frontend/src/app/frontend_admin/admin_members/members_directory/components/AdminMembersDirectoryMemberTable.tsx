@@ -1,5 +1,5 @@
-// RESPONSIBILITY: AdminMembersMemberTable component owned by admin_members; responsibility folder: admin_members_components_tables.
 'use client';
+// RESPONSIBILITY: AdminMembersMemberTable component owned by admin_members; responsibility folder: admin_members_components_tables.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 
 import { useMemo, useState } from 'react';

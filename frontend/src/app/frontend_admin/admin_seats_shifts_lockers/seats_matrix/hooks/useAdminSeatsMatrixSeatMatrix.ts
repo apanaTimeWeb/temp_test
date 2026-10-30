@@ -1,5 +1,5 @@
-// DATA FLOW: seats_matrix route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 'use client';
+// DATA FLOW: seats_matrix route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchAdminSeatMatrixSeatMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/api/admin_seats_matrix_api';
@@ -26,14 +26,14 @@ export function useAdminSeatMatrixSeatMatrix() {
           uuid: item.id !== undefined ? String(item.id) : undefined,
           id: item.seatNumber.replace(/^S-/, ''),
           status,
-          student: item.student,
-          smartId: item.smartId,
-          phone: item.phone,
-          shift: item.shift,
-          plan: item.plan,
-          locker: item.locker,
-          validFrom: item.validFrom,
-          expiry: item.expiry,
+          student: typeof item.student === 'string' ? item.student : undefined,
+          smartId: typeof item.smartId === 'string' ? item.smartId : undefined,
+          phone: typeof item.phone === 'string' ? item.phone : undefined,
+          shift: typeof item.shift === 'string' ? item.shift : undefined,
+          plan: typeof item.plan === 'string' ? item.plan : undefined,
+          locker: typeof item.locker === 'string' ? item.locker : undefined,
+          validFrom: typeof item.validFrom === 'string' ? item.validFrom : undefined,
+          expiry: typeof item.expiry === 'string' ? item.expiry : undefined,
         };
       });
     },

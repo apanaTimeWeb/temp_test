@@ -87,10 +87,22 @@ export async function apiFetch<T = any>(input: string | URL | Request, init?: Ap
       // Backend not running, fall through to synthetic mock response
     }
 
+    let role = 'manager';
+    let email = 'manager@library.com';
+    try {
+      if (init?.body && typeof init.body === 'string') {
+        const bodyObj = JSON.parse(init.body);
+        if (bodyObj.role) role = bodyObj.role;
+        if (bodyObj.email) email = bodyObj.email;
+      }
+    } catch {
+      // Ignore parse failure and keep defaults
+    }
+
     const mockData = {
       success: true,
       message: 'Accepted',
-      data: { role: 'manager', email: 'manager@library.com' },
+      data: { role, email },
       requestId: 'mock-auth-req-1',
     };
     const syntheticRes = new Response(JSON.stringify(mockData), {

@@ -129,8 +129,14 @@ export default function PublicAuthSignInPage() {
               disabled={isBusy}
               onSelect={(role) => {
                 setValue('role', role, { shouldValidate: true, shouldDirty: true });
-                if (role === 'manager') {
+                if (role === 'admin') {
+                  setValue('email', 'admin@library.com', { shouldValidate: true, shouldDirty: true });
+                  setValue('password', 'Password@123', { shouldValidate: true, shouldDirty: true });
+                } else if (role === 'manager') {
                   setValue('email', 'manager@library.com', { shouldValidate: true, shouldDirty: true });
+                  setValue('password', 'Password@123', { shouldValidate: true, shouldDirty: true });
+                } else if (role === 'superadmin') {
+                  setValue('email', 'superadmin@library.com', { shouldValidate: true, shouldDirty: true });
                   setValue('password', 'Password@123', { shouldValidate: true, shouldDirty: true });
                 }
               }}
