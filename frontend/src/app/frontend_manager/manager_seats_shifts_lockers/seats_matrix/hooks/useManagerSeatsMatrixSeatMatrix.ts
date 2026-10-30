@@ -13,11 +13,17 @@ export function useManagerSeatsMatrix() {
   const [activeTab, setActiveTab] = useState('All');
   const [selectedSeat, setSelectedSeat] = useState<SeatData | null>(null);
   const [overrides, setOverrides] = useState<Record<string, Partial<SeatData>>>({});
+  const [addedSeats, setAddedSeats] = useState<SeatData[]>([]);
   const query = useQuery({ queryKey: MANAGER_SEATS_MATRIX_QUERY_KEYS.seatMatrix, queryFn: fetchManagerSeatsMatrix });
   const rawSeats = query.data ?? [];
-  const seats = useMemo(() => rawSeats.map((s) => ({ ...s, ...(overrides[s.id] ?? {}) })), [rawSeats, overrides]);
+  const allSeats = useMemo(() => [...rawSeats, ...addedSeats], [rawSeats, addedSeats]);
+  const seats = useMemo(() => allSeats.map((s) => ({ ...s, ...(overrides[s.id] ?? {}) })), [allSeats, overrides]);
   const visible = useMemo(() => activeTab === 'All' ? seats : seats.filter((seat) => seat.shift === activeTab || seat.status === 'free' || seat.status === 'maintenance' || seat.status === 'unknown'), [activeTab, seats]);
   const freeCount = useMemo(() => visible.filter((seat) => seat.status === 'free').length, [visible]);
+
+  const addSeat = (newSeat: SeatData) => {
+    setAddedSeats((prev) => [...prev, newSeat]);
+  };
 
   const updateSeat = (seatId: string, updates: Partial<SeatData>) => {
     setOverrides((prev) => ({ ...prev, [seatId]: { ...(prev[seatId] ?? {}), ...updates } }));
@@ -26,5 +32,5 @@ export function useManagerSeatsMatrix() {
     }
   };
 
-  return { ...query, visible, freeCount, activeTab, setActiveTab, selectedSeat, setSelectedSeat, updateSeat };
+  return { ...query, visible, freeCount, activeTab, setActiveTab, selectedSeat, setSelectedSeat, updateSeat, addSeat };
 }

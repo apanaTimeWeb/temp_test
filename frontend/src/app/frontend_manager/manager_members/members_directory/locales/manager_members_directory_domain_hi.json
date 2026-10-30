@@ -85,7 +85,17 @@
         "validation_enter_phone_number": "कृपया फ़ोन नंबर दर्ज करें।",
         "validation_enter_valid_email": "कृपया मान्य ईमेल पता दर्ज करें।",
         "validation_expiry_after_join": "समाप्ति तिथि, शामिल होने की तिथि के बाद होनी चाहिए।",
-        "profile_edit_unavailable_host_contract_not_supplied": "सत्यापित होस्ट update API कॉन्ट्रैक्ट उपलब्ध नहीं है, इसलिए प्रोफ़ाइल संपादन उपलब्ध नहीं है। यह रूट केवल-पठन प्रोफ़ाइल दिखाता है; कोई बदलाव सहेजा नहीं जाता।"
+        "profile_edit_unavailable_host_contract_not_supplied": "सत्यापित होस्ट update API कॉन्ट्रैक्ट उपलब्ध नहीं है, इसलिए प्रोफ़ाइल संपादन उपलब्ध नहीं है। यह रूट केवल-पठन प्रोफ़ाइल दिखाता है; कोई बदलाव सहेजा नहीं जाता।",
+        "kyc_documents": "केवाईसी और सत्यापन दस्तावेज़",
+        "referral_rewards": "रेफ़रल रिवार्ड्स और बोनस",
+        "referral_points": "रेफ़रल अंक",
+        "referred_by": "द्वारा अनुशंसित",
+        "direct_walkin": "प्रत्यक्ष वॉक-इन",
+        "verified": "सत्यापित",
+        "pending": "लंबित",
+        "preview": "पूर्वावलोकन",
+        "download": "डाउनलोड",
+        "points": "अंक"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",

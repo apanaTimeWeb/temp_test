@@ -85,7 +85,17 @@
         "validation_enter_phone_number": "Enter a phone number.",
         "validation_enter_valid_email": "Enter a valid email address.",
         "validation_expiry_after_join": "Expiry date must be after the join date.",
-        "profile_edit_unavailable_host_contract_not_supplied": "Profile editing is unavailable because no verified host update API contract was supplied. This route shows a read-only profile; no changes are saved."
+        "profile_edit_unavailable_host_contract_not_supplied": "Profile editing is unavailable because no verified host update API contract was supplied. This route shows a read-only profile; no changes are saved.",
+        "kyc_documents": "KYC & Verification Documents",
+        "referral_rewards": "Referral Rewards & Bonus",
+        "referral_points": "Referral Points",
+        "referred_by": "Referred By",
+        "direct_walkin": "Direct Walk-in",
+        "verified": "Verified",
+        "pending": "Pending",
+        "preview": "Preview",
+        "download": "Download",
+        "points": "Points"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

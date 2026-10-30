@@ -6,10 +6,8 @@ import { MANAGER_MEMBERS_NEW_ADMISSION_ROUTES as MANAGER_NEW_ADMISSION_ROUTES } 
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES as MANAGER_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
 import { MANAGER_MEMBERS_ALUMNI_ROUTES as MANAGER_ALUMNI_ROUTES } from '@/app/frontend_manager/manager_members/members_alumni/config/manager_members_alumni.url_config';
 import { MANAGER_MEMBERS_DOCUMENT_VAULT_ROUTES as MANAGER_DOCUMENT_VAULT_ROUTES } from '@/app/frontend_manager/manager_members/members_document_vault/config/manager_members_document_vault.url_config';
-import { MANAGER_MEMBERS_REFERRAL_BONUS_ROUTES as MANAGER_REFERRAL_BONUS_ROUTES } from '@/app/frontend_manager/manager_members/members_referral_bonus/config/manager_members_referral_bonus.url_config';
 import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES as MANAGER_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import { MANAGER_SEATS_MATRIX_ROUTES as MANAGER_SEAT_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
-import { MANAGER_SEATS_MANAGEMENT_ROUTES as MANAGER_SEATS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_management/config/manager_seats_management.url_config';
 import { MANAGER_SHIFTS_MANAGEMENT_ROUTES as MANAGER_SHIFTS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_management/config/manager_shifts_management.url_config';
 import { MANAGER_SHIFTS_MIGRATION_ROUTES as MANAGER_SHIFT_MIGRATION_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/config/manager_shifts_migration.url_config';
 import { MANAGER_SEATS_ALLOCATIONS_ROUTES as MANAGER_ALLOCATIONS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_allocations/config/manager_seats_allocations.url_config';
@@ -48,9 +46,7 @@ import { MANAGER_SETTINGS_HELP_SUPPORT_ROUTES as MANAGER_HELP_SUPPORT_ROUTES } f
 import { MANAGER_SETTINGS_BRANCH_INFO_ROUTES as MANAGER_BRANCH_INFO_ROUTES } from '@/app/frontend_manager/manager_settings/settings_branch_info/config/manager_settings_branch_info.url_config';
 import {
   AlertCircle,
-  Armchair,
   ArrowLeftRight,
-  Award,
   BarChart,
   BarChart2,
   Bell,
@@ -166,11 +162,9 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_GROUP_ADMISSION_ROUTES.root, icon: Users2, labelKey: 'nav_group_admission' },
   { kind: 'link', href: MANAGER_ALUMNI_ROUTES.root, icon: UserCheck, labelKey: 'nav_alumni' },
   { kind: 'link', href: MANAGER_DOCUMENT_VAULT_ROUTES.root, icon: FolderOpen, labelKey: 'nav_document_vault' },
-  { kind: 'link', href: MANAGER_REFERRAL_BONUS_ROUTES.root, icon: Award, labelKey: 'nav_referral_bonus' },
   { kind: 'link', href: MANAGER_ID_CARD_GENERATOR_ROUTES.root, icon: CreditCard, labelKey: 'nav_id_card_generator' },
   { kind: 'group', labelKey: 'group_seats_shifts' },
   { kind: 'link', href: MANAGER_SEAT_MATRIX_ROUTES.root, icon: LayoutGrid, labelKey: 'nav_seat_matrix' },
-  { kind: 'link', href: MANAGER_SEATS_ROUTES.root, icon: Armchair, labelKey: 'nav_seats' },
   { kind: 'link', href: MANAGER_SHIFTS_ROUTES.root, icon: RefreshCw, labelKey: 'nav_shifts' },
   { kind: 'link', href: MANAGER_SHIFT_MIGRATION_ROUTES.root, icon: ArrowLeftRight, labelKey: 'nav_shift_migration' },
   { kind: 'link', href: MANAGER_ALLOCATIONS_ROUTES.root, icon: ClipboardList, labelKey: 'nav_allocations' },

@@ -27,11 +27,61 @@ export function ManagerDashboardOverviewRecentActivity({ admissions, enquiries, 
     <section className="mgr-dashboard-row3 mgr-section-gap" aria-label={tManagerUi('recent_activity')}>
       <div className="mgr-card">
         <div className="mgr-card-header"><h2 className="mgr-section-title">{tManagerUi('recent_new_admissions')}</h2><Link href={studentsHref} className="mgr-action-link">{tManagerUi('view_all')}</Link></div>
-        {admissions.length === 0 ? <ManagerDashboardOverviewEmptyState className="mgr-dashboard-grid-panel p-6 text-sm text-secondary" testId="manager-dashboard-recent-admissions-empty">{tManagerUi('no_recent_admissions_available')}</ManagerDashboardOverviewEmptyState> : <div className="mgr-table-wrapper"><table className="mgr-activity-table mgr-table w-full"><thead><tr><th scope="col">{tManagerUi('name')}</th><th scope="col">{tManagerUi('smart_id')}</th><th scope="col">{tManagerUi('shift')}</th></tr></thead><tbody>{admissions.map((row) => <tr key={row.smartId}><td>{row.name}</td><td><span className="mgr-table-id">{row.smartId || '—'}</span></td><td>{localizeShift(row.shift)}</td></tr>)}</tbody></table></div>}
+        {admissions.length === 0 ? (
+          <ManagerDashboardOverviewEmptyState className="mgr-dashboard-grid-panel p-6 text-sm text-secondary" testId="manager-dashboard-recent-admissions-empty">
+            {tManagerUi('no_recent_admissions_available')}
+          </ManagerDashboardOverviewEmptyState>
+        ) : (
+          <div className="mgr-table-wrapper">
+            <table className="mgr-activity-table mgr-table w-full table-fixed">
+              <thead>
+                <tr>
+                  <th scope="col" className="w-5/12 text-left">{tManagerUi('name')}</th>
+                  <th scope="col" className="w-4/12 text-left">{tManagerUi('smart_id')}</th>
+                  <th scope="col" className="w-3/12 text-left">{tManagerUi('shift')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {admissions.map((row) => (
+                  <tr key={row.smartId}>
+                    <td className="w-5/12 truncate">{row.name}</td>
+                    <td className="w-4/12"><span className="mgr-table-id">{row.smartId || '—'}</span></td>
+                    <td className="w-3/12">{localizeShift(row.shift)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
       <div className="mgr-card">
         <div className="mgr-card-header"><h2 className="mgr-section-title">{tManagerUi('recent_enquiries')}</h2><Link href={enquiriesHref} className="mgr-action-link">{tManagerUi('view_all')}</Link></div>
-        {enquiries.length === 0 ? <ManagerDashboardOverviewEmptyState className="mgr-dashboard-grid-panel p-6 text-sm text-secondary" testId="manager-dashboard-recent-enquiries-empty">{tManagerUi('no_recent_enquiries_available')}</ManagerDashboardOverviewEmptyState> : <div className="mgr-table-wrapper"><table className="mgr-activity-table mgr-table w-full"><thead><tr><th scope="col">{tManagerUi('name')}</th><th scope="col">{tManagerUi('phone')}</th><th scope="col">{tManagerUi('status')}</th></tr></thead><tbody>{enquiries.map((row, index) => <tr key={enquiryKeys[index]}><td>{row.name}</td><td>{maskManagerDashboardPhone(row.phone)}</td><td>{localizeStatus(row.status)}</td></tr>)}</tbody></table></div>}
+        {enquiries.length === 0 ? (
+          <ManagerDashboardOverviewEmptyState className="mgr-dashboard-grid-panel p-6 text-sm text-secondary" testId="manager-dashboard-recent-enquiries-empty">
+            {tManagerUi('no_recent_enquiries_available')}
+          </ManagerDashboardOverviewEmptyState>
+        ) : (
+          <div className="mgr-table-wrapper">
+            <table className="mgr-activity-table mgr-table w-full table-fixed">
+              <thead>
+                <tr>
+                  <th scope="col" className="w-5/12 text-left">{tManagerUi('name')}</th>
+                  <th scope="col" className="w-4/12 text-left">{tManagerUi('phone')}</th>
+                  <th scope="col" className="w-3/12 text-left">{tManagerUi('status')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {enquiries.map((row, index) => (
+                  <tr key={enquiryKeys[index]}>
+                    <td className="w-5/12 truncate">{row.name}</td>
+                    <td className="w-4/12 font-mono">{maskManagerDashboardPhone(row.phone)}</td>
+                    <td className="w-3/12">{localizeStatus(row.status)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </section>
   );

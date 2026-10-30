@@ -13,6 +13,16 @@ export interface ManagerMembersDirectoryRecord {
   department?: string;
   guardian?: string;
   emergencyContact?: string;
+  referralPoints?: number;
+  referredBy?: string;
+  documents?: {
+    id: string;
+    type: string;
+    number?: string;
+    status: 'Verified' | 'Pending' | 'Rejected';
+    fileName: string;
+    uploadDate: string;
+  }[];
 }
 
 export type ManagerMembersDirectoryStatusLabelKey = 'member_status_active' | 'member_status_expired' | 'member_status_suspended';
