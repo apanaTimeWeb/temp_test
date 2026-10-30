@@ -60,11 +60,11 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         sanitizeManagerSubscriptionsCsvCell(row.startDate),
         sanitizeManagerSubscriptionsCsvCell(row.endDate),
         sanitizeManagerSubscriptionsCsvCell(String(row.daysLeft)),
-        sanitizeManagerSubscriptionsCsvCell(String(row.baseAmount)),
-        sanitizeManagerSubscriptionsCsvCell(String(row.discountAmount)),
-        sanitizeManagerSubscriptionsCsvCell(String(row.totalAmount)),
-        sanitizeManagerSubscriptionsCsvCell(String(row.paidAmount)),
-        sanitizeManagerSubscriptionsCsvCell(String(row.dueAmount)),
+        sanitizeManagerSubscriptionsCsvCell(String(row.base)),
+        sanitizeManagerSubscriptionsCsvCell(String(row.discount)),
+        sanitizeManagerSubscriptionsCsvCell(String(row.total)),
+        sanitizeManagerSubscriptionsCsvCell(String(row.paid)),
+        sanitizeManagerSubscriptionsCsvCell(String(row.due)),
         sanitizeManagerSubscriptionsCsvCell(row.status),
       ].join(','));
     }

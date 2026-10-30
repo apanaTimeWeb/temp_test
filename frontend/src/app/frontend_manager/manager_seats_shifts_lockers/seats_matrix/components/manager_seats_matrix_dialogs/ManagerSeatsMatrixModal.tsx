@@ -385,7 +385,3 @@ export function ManagerSeatsMatrixModal({ selectedSeat, onClose, onUpdateSeat }:
     </div>
   );
 }
-      </div>
-    </div>
-  );
-}
