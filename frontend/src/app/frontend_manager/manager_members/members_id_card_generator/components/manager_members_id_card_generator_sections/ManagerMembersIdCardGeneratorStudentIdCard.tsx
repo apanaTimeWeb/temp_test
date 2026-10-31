@@ -51,7 +51,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({ data }: Man
       <div className="mgr-idcard" id="student-id-card-print">
         <div className="mgr-idcard-holo-lines" aria-hidden="true" />
         <div className="mgr-idcard-header">
-          <div className="mgr-idcard-header-left"><div className="mgr-idcard-logo-icon">📚</div><div><div className="mgr-idcard-logo-text">{tManagerUi('library_os')}</div><div className="mgr-idcard-branch-text">{data.branch ?? tManagerUi('not_provided')}</div></div></div>
+          <div className="mgr-idcard-header-left"><div className="mgr-idcard-logo-icon">📚</div><div><div className="mgr-idcard-logo-text">{tManagerUi('library_os')}</div><div className="mgr-idcard-branch-text font-semibold text-primary">📍 {data.branch || 'Central Library (Main Branch)'}</div></div></div>
           <div className="mgr-idcard-header-right"><Wifi size={18} strokeWidth={2} className="mgr-idcard-muted-icon" /><div className="mgr-idcard-header-chip">{tManagerUi('student_id')}</div></div>
         </div>
         <div className="mgr-idcard-body">

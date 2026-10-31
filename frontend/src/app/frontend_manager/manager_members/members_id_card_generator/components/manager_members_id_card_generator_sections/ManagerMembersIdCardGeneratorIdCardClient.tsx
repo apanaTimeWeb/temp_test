@@ -60,8 +60,8 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
       locker: '',
       plan: selected.plan,
       joinDate: formatDate(selected.joined),
-      // The supplied read schema has no authoritative expiry date. Never infer it from a plan label.
-      branch: selected.branch,
+      branch: selected.branch || 'Central Library (Main Branch)',
+      college: (selected as unknown as { college?: string }).college,
     };
   }, [selected, formatDate]);
 

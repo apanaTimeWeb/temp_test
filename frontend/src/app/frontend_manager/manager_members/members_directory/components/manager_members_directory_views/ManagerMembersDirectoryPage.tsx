@@ -25,7 +25,6 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
   const tabDestinations: Partial<Record<(typeof MANAGER_MEMBERS_TABS)[number]['name'], string>> = {
     'Add Member': MANAGER_MEMBERS_DIRECTORY_ROUTES.newAdmission,
     'Membership Renewal': MANAGER_MEMBERS_DIRECTORY_ROUTES.membershipRenewal,
-    'Member Documents': MANAGER_MEMBERS_DIRECTORY_ROUTES.memberDocuments,
   };
 
   const [page, setPage] = useState(0);
@@ -120,9 +119,17 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
                         {paginatedMembers.map((member) => {
                           const badge = MANAGER_MEMBERS_STATUS_BADGES[member.status];
                           return (
-                            <tr key={member.id} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
-                              <td className="px-3 py-3 align-middle"><span className="font-mono text-primary">{member.id}</span></td>
-                              <td className="px-3 py-3 align-middle font-bold text-primary">{member.name}</td>
+                            <tr
+                              key={member.id}
+                              onClick={() => {
+                                setProfileSearch(member.id);
+                                setActiveTab('Member Profile');
+                              }}
+                              className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 cursor-pointer transition-colors group"
+                              title={`Click to view profile of ${member.name} (${member.id})`}
+                            >
+                              <td className="px-3 py-3 align-middle"><span className="font-mono text-primary font-semibold group-hover:underline">{member.id}</span></td>
+                              <td className="px-3 py-3 align-middle font-bold text-primary group-hover:text-primary-hover">{member.name}</td>
                               <td className="px-3 py-3 align-middle">{maskManagerMemberPhone(member.phone)}</td>
                               <td className="px-3 py-3 align-middle"><span className="mgr-badge mgr-badge--info">{member.type}</span></td>
                               <td className="px-3 py-3 align-middle"><span className={`mgr-badge ${badge?.className ?? 'mgr-badge--neutral'}`}>{badge ? tManagerUi(badge.labelKey) : tManagerUi('status_unknown')}</span></td>

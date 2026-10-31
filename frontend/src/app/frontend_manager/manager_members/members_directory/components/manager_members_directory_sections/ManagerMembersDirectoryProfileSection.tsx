@@ -162,20 +162,12 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
               </h4>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between items-center">
-                  <span className="text-secondary">College / Institute:</span>
-                  <span className="font-semibold text-primary">{member.college || member.department || 'Delhi University'}</span>
-                </div>
-                <div className="flex justify-between items-center">
                   <span className="text-secondary">Target Preparation:</span>
                   <span className="font-bold text-success bg-success-bg px-2 py-0.5 rounded">{member.preparationFor || 'UPSC Civil Services'}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-secondary">Payment Mode:</span>
-                  <span className="font-medium text-primary">{member.paymentMode || 'UPI / Online'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary">Admission Remarks:</span>
-                  <span className="font-medium text-primary truncate max-w-[130px]">{member.remarks || 'Regular Student, Verified ID'}</span>
+                  <span className="text-secondary">Study Stream:</span>
+                  <span className="font-medium text-primary">General Studies & Research</span>
                 </div>
               </div>
             </div>

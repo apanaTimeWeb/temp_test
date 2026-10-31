@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerFinanceCollectFeeDraftSchema, type ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
 import { toast } from 'sonner';
-import { Search, IndianRupee, CheckCircle } from 'lucide-react';
+import { Search, IndianRupee, CheckCircle, UserCheck } from 'lucide-react';
 import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview';
 import { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
 import type { ManagerFinanceCollectFeeMode } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
@@ -66,6 +66,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   const [couponStatus, setCouponStatus] = useState<ManagerFinanceCollectFeeContractStatus>('idle');
   const [lateFeeOverride, setLateFeeOverride] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [collectedBy, setCollectedBy] = useState('Branch Manager Satyam');
 
   const hasUnsavedCollectionDraft = Boolean(selectedStudent || formState.isDirty || amount || txnId || couponCode || lateFee || remark || monthsToRenew !== '1' || mode !== 'cash');
   // Guard contract: if (confirmed) router.push(`${next.pathname}${next.search}${next.hash}`);
@@ -234,6 +235,22 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                 </div>
               )}
               <div>
+                <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-collected-by">
+                  {tManagerUi('collected_by_898bb0') || 'Collected By'}
+                </label>
+                <div className="relative mt-1">
+                  <UserCheck size={14} className="absolute left-3 top-1/2 -translate-y-1/2 fin-icon-muted" />
+                  <input
+                    id="rbg4-managerfinancecollectfeepage-collected-by"
+                    type="text"
+                    className="fin-input fin-input--pl8"
+                    placeholder="Collector Name"
+                    value={collectedBy}
+                    onChange={(e) => setCollectedBy(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div>
                 <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-160">{tManagerUi('coupon_code')}</label>
                 <div className="flex gap-2 mt-1">
                   <input id="rbg4-managerfinancecollectfeepage-160" className="fin-input flex-1" placeholder={tManagerUi('enter_coupon_code')} value={couponCode}
@@ -264,6 +281,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
             modeLabels={modeLabels}
             amount={amount}
             total={total}
+            collectedBy={collectedBy}
             isSubmitting={isSubmitting}
             isCollectAvailable={true}
             receiptNumber={`REC-${Date.now().toString().slice(-6)}`}

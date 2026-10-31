@@ -26,6 +26,7 @@ export interface ManagerFinanceCollectFeeReceiptPreviewProps {
   isSubmitting: boolean;
   isCollectAvailable: boolean;
   receiptNumber: string;
+  collectedBy?: string;
   onCollect: () => void;
   onCancel: () => void;
 }

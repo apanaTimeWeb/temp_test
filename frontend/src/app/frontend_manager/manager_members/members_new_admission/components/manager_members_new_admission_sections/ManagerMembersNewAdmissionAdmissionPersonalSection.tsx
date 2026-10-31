@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Render the members new admission admission personal section section of the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { Award, BookOpen, Calendar, Camera, GraduationCap, Mail, MapPin, Phone, ShieldAlert, User } from 'lucide-react';
+import { Award, BookOpen, Calendar, Camera, GraduationCap, Mail, MapPin, Phone, ShieldAlert, User, Building, HeartPulse, Activity, Accessibility } from 'lucide-react';
 import type { ManagerMembersNewAdmissionAdmissionPersonalSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 
 export type { ManagerMembersNewAdmissionAdmissionPersonalSectionProps };
@@ -152,6 +152,56 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({ register, e
                 <option value="College Semester Studies">College Semester Studies</option>
                 <option value="Other Competitive Exams">Other Competitive Exams</option>
               </select>
+            </div>
+          </div>
+
+          {/* Library Branch */}
+          <div className="mgr-form-field">
+            <label className="mgr-label" htmlFor="admission-branch">Library Branch</label>
+            <div className="mgr-input-icon-wrap">
+              <Building size={18} strokeWidth={2} className="mgr-input-icon" />
+              <select id="admission-branch" {...register('branch')} className="mgr-select mgr-input-with-icon">
+                <option value="Main Central Branch">Main Central Branch (Sector 14)</option>
+                <option value="North Campus Branch">North Campus Branch (GTB Nagar)</option>
+                <option value="South Extension Branch">South Extension Branch</option>
+                <option value="East Hub Branch">East Hub Branch (Laxmi Nagar)</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Blood Group */}
+          <div className="mgr-form-field">
+            <label className="mgr-label" htmlFor="admission-blood-group">Blood Group</label>
+            <div className="mgr-input-icon-wrap">
+              <HeartPulse size={18} strokeWidth={2} className="mgr-input-icon text-danger" />
+              <select id="admission-blood-group" {...register('bloodGroup')} className="mgr-select mgr-input-with-icon">
+                <option value="B+">B+ (Positive)</option>
+                <option value="A+">A+ (Positive)</option>
+                <option value="O+">O+ (Positive)</option>
+                <option value="AB+">AB+ (Positive)</option>
+                <option value="B-">B- (Negative)</option>
+                <option value="A-">A- (Negative)</option>
+                <option value="O-">O- (Negative)</option>
+                <option value="AB-">AB- (Negative)</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Medical Issues (Optional) */}
+          <div className="mgr-form-field">
+            <label className="mgr-label" htmlFor="admission-medical-issues">Medical Issues / Allergies (Optional)</label>
+            <div className="mgr-input-icon-wrap">
+              <Activity size={18} strokeWidth={2} className="mgr-input-icon text-warning" />
+              <input id="admission-medical-issues" {...register('medicalIssues')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Asthma, Dust Allergy, None" />
+            </div>
+          </div>
+
+          {/* Disability / Special Needs (Optional) */}
+          <div className="mgr-form-field">
+            <label className="mgr-label" htmlFor="admission-disability">Disability / Special Needs (Optional)</label>
+            <div className="mgr-input-icon-wrap">
+              <Accessibility size={18} strokeWidth={2} className="mgr-input-icon" />
+              <input id="admission-disability" {...register('disability')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Wheelchair access, None" />
             </div>
           </div>
 

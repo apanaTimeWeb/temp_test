@@ -1,4 +1,4 @@
-import { FolderOpen, History, RefreshCw, Search, UserCheck, UserMinus, UserPlus, UserX, Users, type LucideIcon } from 'lucide-react';
+import { RefreshCw, Search, UserCheck, UserMinus, UserPlus, UserX, Users, type LucideIcon } from 'lucide-react';
 import type { ManagerMembersDirectoryRecord, ManagerMembersDirectoryStatusLabelKey, ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 
 export const MANAGER_MEMBERS_TABS: readonly { name: ManagerMembersDirectoryTab; labelKey: string; icon: LucideIcon }[] = [
@@ -9,8 +9,6 @@ export const MANAGER_MEMBERS_TABS: readonly { name: ManagerMembersDirectoryTab; 
   { name: 'Add Member', labelKey: 'tab_add_member', icon: UserPlus },
   { name: 'Member Profile', labelKey: 'tab_member_profile', icon: Search },
   { name: 'Membership Renewal', labelKey: 'tab_membership_renewal', icon: RefreshCw },
-  { name: 'Member Documents', labelKey: 'tab_member_documents', icon: FolderOpen },
-  { name: 'Member History', labelKey: 'tab_member_history', icon: History },
 ];
 
 

@@ -10,7 +10,7 @@ import { MANAGER_FINANCE_FINES_PAYMENTS_ROUTES } from '@/app/frontend_manager/ma
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerFinanceFineCollectionDraftSchema, type ManagerFinanceFinesPaymentsFineCollectionDraft } from '@/app/frontend_manager/manager_finance/finance_fines_payments/schemas/ManagerFinanceFinesPaymentsFineCollectionDraftSchema';
-import { AlertCircle, DollarSign, FileText, CheckCircle, RotateCcw, Receipt, History, AlertTriangle, Search, IndianRupee, HandCoins, Clock, Eye, Printer, MessageSquare, Mail, Smartphone, X } from 'lucide-react';
+import { AlertCircle, DollarSign, FileText, CheckCircle, RotateCcw, Receipt, History, AlertTriangle, Search, IndianRupee, HandCoins, Clock, Eye, Printer, MessageSquare, Mail, Smartphone, X, UserCheck } from 'lucide-react';
 import type { ManagerFinanceFinesPaymentsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsComponentTypes';
 import { toast } from 'sonner';
 
@@ -27,6 +27,7 @@ export interface ManagerReceiptRecord {
   status: string;
   phone: string;
   email: string;
+  collectedBy: string;
 }
 
 export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQuery: ManagerFinanceFinesPaymentsRouteQueryProps) {
@@ -78,10 +79,8 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
   const TABS = [
     { id: 'dashboard', labelKey: 'fines_dashboard_tab', icon: DollarSign },
     { id: 'pending', labelKey: 'pending_fines_tab', icon: AlertCircle },
-    { id: 'collect', labelKey: 'collect_fine_tab', icon: HandCoins },
     { id: 'paid', labelKey: 'paid_fines_tab', icon: CheckCircle },
     { id: 'partiallyPaid', labelKey: 'partially_paid_tab', icon: RotateCcw },
-    { id: 'history', labelKey: 'payment_history_tab', icon: History },
     { id: 'receipts', labelKey: 'receipts_tab', icon: Receipt },
     { id: 'refundRequests', labelKey: 'refund_requests_tab', icon: RotateCcw },
   ] as const;
@@ -120,6 +119,7 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     status: r.status ?? 'Completed',
     phone: r.phone,
     email: `${r.studentName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
+    collectedBy: (r as unknown as { collectedBy?: string }).collectedBy ?? 'Branch Manager Satyam',
   })), []);
 
   // Native semantic table column definitions
@@ -151,6 +151,7 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     { field: 'amount', headerName: tManagerUi('amount_43dc85'), width: 120, cellClass: 'text-success font-bold', cellRenderer: (p: NativeCellParams) => <span className="text-success font-bold text-xs">{formatCurrency(Number(p.value ?? 0))}</span> },
     { field: 'mode', headerName: tManagerUi('mode'), width: 100, cellRenderer: (p: NativeCellParams) => <span className="mgr-badge mgr-badge--info text-xs">{translatePaymentMode(p.value)}</span> },
     { field: 'date', headerName: tManagerUi('date_time_853aab'), width: 140, cellRenderer: (p: NativeCellParams) => <span className="text-xs text-secondary">{String(p.value ?? '—')}</span> },
+    { field: 'collectedBy', headerName: 'Collected By', width: 150, cellRenderer: (p: NativeCellParams) => <span className="text-xs font-medium text-primary flex items-center gap-1.5"><UserCheck size={13} className="text-secondary" />{String(p.value ?? 'Branch Manager Satyam')}</span> },
     { field: 'status', headerName: tManagerUi('status'), width: 110, cellRenderer: (p: NativeCellParams) => <span className="mgr-badge mgr-badge--success text-xs font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60">{String(p.value ?? 'Completed')}</span> },
     {
       headerName: tManagerUi('actions'),
@@ -284,78 +285,6 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
             </div>
           )}
 
-          {/* COLLECT FINE */}
-          {activeTab === 'collect' && (
-            <div className="motion-safe:transition-all motion-safe:duration-base max-w-2xl relative">
-              <h2 className="text-xl font-bold text-primary mb-2">{tManagerUi('collect_payment')}</h2>
-              <p className="text-sm text-secondary mb-6 border-b border-border pb-4">
-                {tManagerUi('record_a_payment_for_an_outstanding_fine_or_charge')}
-              </p>
-              
-              {collectionDraftFeedback && <p className="mb-4 rounded-lg border border-warning bg-warning-bg p-3 text-sm text-warning" role="status" aria-live="polite" data-testid="manager-finance-collection-draft-feedback">{collectionDraftFeedback}</p>}
-              <form onSubmit={onValidateCollectionDraft} noValidate className="space-y-5">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm font-semibold text-primary" htmlFor="rbg4-managerfinancefinesandpaymentspage-170">{tManagerUi('select_member')}</label>
-                    <div className="relative">
-                      <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                      <input id="rbg4-managerfinancefinesandpaymentspage-170" required type="text" className="mgr-input pl-9" placeholder={tManagerUi('search_by_name_or_lib_id')} 
-                        {...registerCollection('member')} aria-invalid={Boolean(collectionErrors.member)} aria-describedby={collectionErrors.member ? 'fine-collection-member-error' : undefined}
-                      />
-                      {collectionFieldError('member')}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-sm font-semibold text-primary" htmlFor="rbg4-managerfinancefinesandpaymentspage-181">{tManagerUi('select_outstanding_fine')}</label>
-                      <select id="rbg4-managerfinancefinesandpaymentspage-181" className="mgr-input" {...registerCollection('fineId')} aria-invalid={Boolean(collectionErrors.fineId)} aria-describedby={collectionErrors.fineId ? 'fine-collection-fineId-error' : undefined}>
-                        <option value="">{tManagerUi('select_or_enter_custom')}</option>
-                        {MANAGER_FINANCE_SAMPLE_PENDING_FINES.map(f => (
-                          <option key={f.id} value={f.type}>{f.id} - {translateFineType(f.type)} ({formatCurrency(f.amount)})</option>
-                        ))}
-                      </select>
-                      {collectionFieldError('fineId')}
-                    </div>
-                    
-                    <div className="flex flex-col gap-2">
-                      <label className="text-sm font-semibold text-primary" htmlFor="rbg4-managerfinancefinesandpaymentspage-191">{tManagerUi('amount_inr')}</label>
-                      <input id="rbg4-managerfinancefinesandpaymentspage-191" required type="number" min="1" className="mgr-input" placeholder={tManagerUi('e_g_150')}
-                        {...registerCollection('amount')} aria-invalid={Boolean(collectionErrors.amount)} aria-describedby={collectionErrors.amount ? 'fine-collection-amount-error' : undefined}
-                      />
-                      {collectionFieldError('amount')}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-sm font-semibold text-primary" htmlFor="rbg4-managerfinancefinesandpaymentspage-200">{tManagerUi('payment_mode_23b35c')}</label>
-                      <select id="rbg4-managerfinancefinesandpaymentspage-200" className="mgr-input" {...registerCollection('mode')} aria-invalid={Boolean(collectionErrors.mode)} aria-describedby={collectionErrors.mode ? 'fine-collection-mode-error' : undefined}>
-                        <option value="cash">{tManagerUi('cash')}</option>
-                        <option value="upi">{tManagerUi('upi')}</option>
-                        <option value="card">{tManagerUi('card')}</option>
-                        <option value="bank">{tManagerUi('bank')}</option>
-                        <option value="other">{tManagerUi('other')}</option>
-                      </select>
-                    </div>
-                    
-                    <div className="flex flex-col gap-2">
-                      <label className="text-sm font-semibold text-primary" htmlFor="rbg4-managerfinancefinesandpaymentspage-211">{tManagerUi('transaction_id_optional')}</label>
-                      <input id="rbg4-managerfinancefinesandpaymentspage-211" type="text" className="mgr-input" placeholder={tManagerUi('required_for_upi_card_bank')}
-                        {...registerCollection('txnId')} aria-invalid={Boolean(collectionErrors.txnId)} aria-describedby={collectionErrors.txnId ? 'fine-collection-txnId-error' : undefined}
-                      />
-                      {collectionFieldError('txnId')}
-                    </div>
-                  </div>
-
-                  <div className="pt-4 flex justify-end">
-                    <button type="submit" disabled className="mgr-btn-primary px-8 text-primary shadow-card cursor-not-allowed" title={tManagerUi('collection_unavailable_verified_api_contract_not_supplie_cbded7')}>
-                      <AlertCircle size={16} className="mr-2 inline" /> {tManagerUi('collection_unavailable')}
-                    </button>
-                  </div>
-              </form>
-            </div>
-          )}
-
           {/* PENDING FINES (AG GRID) */}
           {(activeTab === 'pending' || activeTab === 'partiallyPaid') && (
             <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
@@ -366,8 +295,8 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
             </div>
           )}
 
-          {/* PAYMENT HISTORY (AG GRID) */}
-          {(activeTab === 'history' || activeTab === 'paid') && (
+          {/* PAID FINES (AG GRID) */}
+          {activeTab === 'paid' && (
             <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
               <h2 className="text-xl font-bold text-primary mb-6 border-b border-border pb-4">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
               <div className="flex-1 w-full h-96">
@@ -444,6 +373,10 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                 <div>
                   <span className="text-secondary block">Date & Time</span>
                   <span className="text-primary">{selectedReceipt.date}</span>
+                </div>
+                <div>
+                  <span className="text-secondary block">Collected By</span>
+                  <span className="font-semibold text-primary">{selectedReceipt.collectedBy}</span>
                 </div>
                 <div>
                   <span className="text-secondary block">Payment Status</span>

@@ -6,6 +6,7 @@ import { TrendingUp } from 'lucide-react';
 import { ManagerDashboardOverviewKpiGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_sections/ManagerDashboardOverviewKpiGrid';
 import { ManagerDashboardOverviewSeatMatrix } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_widgets/ManagerDashboardOverviewSeatMatrix';
 import { ManagerDashboardOverviewActionItems } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_widgets/ManagerDashboardOverviewActionItems';
+import { ManagerDashboardOverviewBirthdayWidget } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_widgets/ManagerDashboardOverviewBirthdayWidget';
 import { ManagerDashboardOverviewRecentActivity } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_sections/ManagerDashboardOverviewRecentActivity';
 import { ManagerDashboardOverviewQuickLinks, type ManagerDashboardOverviewQuickLink } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_sections/ManagerDashboardOverviewQuickLinks';
 import { ManagerDashboardOverviewLoadingState } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_states/ManagerDashboardOverviewLoadingState';
@@ -40,6 +41,9 @@ export function ManagerDashboardOverviewClient() {
         <Link href={MANAGER_DASHBOARD_OVERVIEW_ROUTES.REPORTS} className="mgr-btn-ghost mgr-btn-sm"><TrendingUp size={18} /> {tManagerUi('view_reports')}</Link>
       </div>
       <ManagerDashboardOverviewKpiGrid kpiData={data.kpiData} />
+      <div className="mgr-section-gap">
+        <ManagerDashboardOverviewBirthdayWidget />
+      </div>
       <div className="mgr-dashboard-row2 mgr-section-gap">
         <ManagerDashboardOverviewSeatMatrix seatData={data.seatData} />
         <ManagerDashboardOverviewActionItems items={data.actionItems} />

@@ -8,7 +8,7 @@ import { AlertCircle, BookOpen, CheckCircle, X } from 'lucide-react';
 import type { ManagerFinanceCollectFeeReceiptPreviewProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 
 
-export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, modeLabels, amount, total, isSubmitting, isCollectAvailable, receiptNumber, onCollect, onCancel }: ManagerFinanceCollectFeeReceiptPreviewProps) {
+export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, modeLabels, amount, total, isSubmitting, isCollectAvailable, receiptNumber, collectedBy = 'Branch Manager Satyam', onCollect, onCancel }: ManagerFinanceCollectFeeReceiptPreviewProps) {
   const tManagerUi = useTranslations('manager.manager_collect_fee.ui');
   const { formatCurrency, toMinorUnits, formatDate } = useManagerCollectFeeFormatting();
   return (
@@ -34,6 +34,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
                       { label: tManagerUi('smart_id'), value: selectedStudent?.smartId || '—' },
                       { label: tManagerUi('phone_label'), value: selectedStudent ? `+91-${maskManagerCollectFeePhone(selectedStudent.phone)}` : '—' },
                       { label: tManagerUi('payment_mode_23b35c'), value: modeLabels[mode] },
+                      { label: tManagerUi('collected_by_898bb0') || 'Collected By', value: collectedBy || 'Branch Manager Satyam' },
                     ].map((row) => (
                       <div key={row.label} className="flex justify-between">
                         <span className="fin-receipt-row-label">{row.label}</span>

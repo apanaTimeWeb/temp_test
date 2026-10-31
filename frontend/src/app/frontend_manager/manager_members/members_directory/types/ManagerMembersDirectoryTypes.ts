@@ -42,4 +42,4 @@ export interface ManagerMembersDirectoryKpiSectionProps {
   suspendedMembers: number;
 }
 
-export type ManagerMembersDirectoryTab = 'All Members' | 'Active Members' | 'Expired Members' | 'Suspended Members' | 'Add Member' | 'Member Profile' | 'Membership Renewal' | 'Member Documents' | 'Member History';
+export type ManagerMembersDirectoryTab = 'All Members' | 'Active Members' | 'Expired Members' | 'Suspended Members' | 'Add Member' | 'Member Profile' | 'Membership Renewal';
