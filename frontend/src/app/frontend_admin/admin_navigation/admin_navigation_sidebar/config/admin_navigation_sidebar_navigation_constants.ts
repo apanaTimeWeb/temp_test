@@ -33,7 +33,6 @@ import {
   Receipt,
   Users2,
   RotateCcw,
-  ClipboardList,
   Building,
   DownloadCloud,
   FolderOpen,
