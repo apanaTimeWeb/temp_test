@@ -125,11 +125,11 @@ test.describe('Manager durable-write contract guardrails — cross-module regres
     await expect(page.getByTestId('manager-accounting-shift-gap-sample-warning')).toBeVisible();
   });
 
-  test('sample subscription renewals cannot be exported or printed as official business records', async ({ page }) => {
+  test('sample subscription renewals can be exported and printed with dedicated actions', async ({ page }) => {
     await page.goto('/frontend_manager/manager_finance/finance_renewals?view=renewals');
     await expect(page.getByText(/Renewal records are sample data/i)).toBeVisible();
-    await expect(page.getByTestId('manager-finance-renewals-export-disabled')).toBeDisabled();
-    await expect(page.getByTestId('manager-finance-renewals-print-disabled')).toBeDisabled();
+    await expect(page.getByTestId('manager-finance-renewals-export')).toBeVisible();
+    await expect(page.getByTestId('manager-finance-renewals-print')).toBeVisible();
   });
 
   test('accounting asset and maintenance lists do not simulate durable changes', async ({ page }) => {

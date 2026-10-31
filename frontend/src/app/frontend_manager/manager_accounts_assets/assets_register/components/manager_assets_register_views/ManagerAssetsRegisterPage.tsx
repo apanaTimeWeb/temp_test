@@ -40,7 +40,6 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
   };
   const statusLabel = (status: ManagerAssetsRegisterAsset['status']) => ({ active: tManagerUi('asset_status_active'), maintenance: tManagerUi('asset_status_maintenance'), disposed: tManagerUi('asset_status_disposed') } as const)[status];
   const visible = catFilter === 'all' ? assets : assets.filter(a => a.category === catFilter);
-  const totalValue = assets.filter(a => a.status !== 'disposed').reduce((s, a) => s + a.currentValue, 0);
 
   const totalRows = visible.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
@@ -59,9 +58,8 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
         <button type="button" disabled title={tManagerUi('asset_creation_unavailable_host_mutation_contract_not_su_ca30d9')} className="fin-badge fin-badge--info cursor-not-allowed">{tManagerUi('add_asset_unavailable')}</button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div className="fin-kpi-card"><p className="fin-kpi-label">{tManagerUi('total_assets')}</p><p className="fin-kpi-value">{assets.length}</p></div>
-        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-success">{tManagerUi('current_value')}</p><p className="fin-kpi-value fin-text-success">{formatManagerAssetsCurrency(totalValue)}</p></div>
         <div className="fin-kpi-card fin-kpi-card--warning"><p className="fin-kpi-label fin-kpi-label--warning">{tManagerUi('under_maintenance')}</p><p className="fin-kpi-value fin-kpi-value--warning">{assets.filter(a=>a.status==='maintenance').length}</p></div>
         <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-muted">{tManagerUi('disposed')}</p><p className="fin-kpi-value fin-text-muted">{assets.filter(a=>a.status==='disposed').length}</p></div>
       </div>
@@ -100,21 +98,19 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
               <th className="text-left py-3 px-4">{tManagerUi('category')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('purchase_date')}</th>
               <th className="text-right py-3 px-4">{tManagerUi('purchase_value_inr')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('current_value_inr')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('location')}</th>
               <th className="text-left py-3 px-4">{tManagerUi('status')}</th>
             </tr>
           </thead>
           <tbody>
             {visible.length === 0 ? (
-              <tr><td colSpan={7}><ManagerAssetsRegisterEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🏷️</div><p className="fin-empty-state__title">{tManagerUi('no_assets_found')}</p></ManagerAssetsRegisterEmptyState></td></tr>
+              <tr><td colSpan={6}><ManagerAssetsRegisterEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🏷️</div><p className="fin-empty-state__title">{tManagerUi('no_assets_found')}</p></ManagerAssetsRegisterEmptyState></td></tr>
             ) : paginated.map(a => (
               <tr key={a.id} className={`fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 ${a.status === 'disposed' ? 'opacity-50' : ''}`}>
                 <td className="py-3 px-4 fin-cell-name">{a.name}</td>
                 <td className="py-3 px-4"><span className="fin-badge fin-badge--neutral">{categoryLabel(a.category)}</span></td>
                 <td className="py-3 px-4 fin-cell-subtext">{a.purchaseDate}</td>
                 <td className="py-3 px-4 text-right fin-cell-subtext">{formatManagerAssetsCurrency(a.purchaseValue)}</td>
-                <td className="py-3 px-4 text-right font-semibold fin-text-body">{formatManagerAssetsCurrency(a.currentValue)}</td>
                 <td className="py-3 px-4 fin-cell-subtext">{a.location}</td>
                 <td className="py-3 px-4"><span className={`fin-badge ${STATUS_BADGE[a.status]}`}>{statusLabel(a.status)}</span></td>
               </tr>

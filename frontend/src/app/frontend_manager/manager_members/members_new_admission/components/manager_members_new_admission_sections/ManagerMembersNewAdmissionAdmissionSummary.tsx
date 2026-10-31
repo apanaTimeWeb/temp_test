@@ -39,7 +39,7 @@ export function ManagerMembersNewAdmissionAdmissionSummary({ smartIdPreview, pla
           </div>
           <div className="mgr-summary-actions">
             {/* Guard against raw window.confirm; cancel uses structured route navigation */}
-            <button type="submit" disabled={!canSubmit || isSubmitting} title={!canSubmit ? tManagerUi('admission_unavailable_host_contract_not_supplied') : undefined} className="mgr-btn-primary mgr-btn-full cursor-not-allowed"><CheckCircle size={18} strokeWidth={2} />{canSubmit ? (isSubmitting ? tManagerUi('confirming') : tManagerUi('confirm_admission')) : tManagerUi('admission_unavailable')}</button>
+            <button type="submit" disabled={!canSubmit || isSubmitting} title={!canSubmit ? tManagerUi('admission_unavailable_host_contract_not_supplied') : undefined} className={`mgr-btn-primary mgr-btn-full${!canSubmit || isSubmitting ? ' cursor-not-allowed opacity-50' : ''}`}><CheckCircle size={18} strokeWidth={2} />{canSubmit ? (isSubmitting ? tManagerUi('confirming') : tManagerUi('confirm_admission')) : tManagerUi('admission_unavailable')}</button>
             <Link href={MANAGER_MEMBERS_NEW_ADMISSION_ROUTES.LIST} className="mgr-btn-ghost mgr-btn-full">{tManagerUi('cancel')}</Link>
           </div>
         </div>

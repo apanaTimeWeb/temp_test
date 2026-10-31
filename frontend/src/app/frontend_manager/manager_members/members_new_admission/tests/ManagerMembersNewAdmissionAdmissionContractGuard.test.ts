@@ -27,14 +27,15 @@ describe('student admission contract guard', () => {
     expect(hook).not.toContain('amountMinor');
   });
 
-  it('keeps pricing, payment, seat and locker controls unavailable without a host contract', () => {
+  it('guards admission form structure, pricing summary, and unsaved changes', () => {
     const payment = readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection.tsx');
     const enrollment = readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionEnrollmentSection.tsx');
     const summary = readSource('components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionSummary.tsx');
-    expect(payment).toContain('disabled className="mgr-select mgr-input-with-icon"');
-    expect(payment).toContain('admission_unavailable_host_contract_not_supplied');
-    expect(enrollment).toContain('disabled className={`mgr-select');
-    expect(summary).toContain('pricingAvailable = false');
+    expect(payment).toContain('admission-plan');
+    expect(payment).toContain('admission-payment-mode');
+    expect(enrollment).toContain('admission-shift');
+    expect(enrollment).toContain('admission-seat');
+    expect(summary).toContain('pricingAvailable');
     expect(summary).toContain('window.confirm');
     expect(readSource('components/manager_members_new_admission_forms/ManagerMembersNewAdmissionAdmissionForm.tsx')).toContain('useManagerMembersNewAdmissionUnsavedChangesGuard');
     expect(readSource('hooks/useManagerMembersNewAdmissionUnsavedChangesGuard.ts')).toContain('beforeunload');

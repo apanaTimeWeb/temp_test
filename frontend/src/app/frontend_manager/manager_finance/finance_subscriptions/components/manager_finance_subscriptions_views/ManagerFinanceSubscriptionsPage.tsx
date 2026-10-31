@@ -44,6 +44,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
   const planFilter = urlFilters.plan;
   const shiftFilter = urlFilters.shift;
   const [rows, setRows] = useState(MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS);
+  const [selectedSub, setSelectedSub] = useState<(typeof rows)[0] | null>(null);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
@@ -253,9 +254,9 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
                       </button>
                       <button
                         type="button"
-                        className="fin-badge fin-badge--neutral"
-                        disabled
-                        title={tManagerUi('subscription_detail_cannot_be_opened_until_a_canonical_s_b2e389')}
+                        className="fin-badge fin-badge--info cursor-pointer flex items-center gap-1 hover:opacity-90"
+                        onClick={() => setSelectedSub(s)}
+                        title="View Subscription Details"
                       >
                         <Eye size={11} /> {tManagerUi('view')}
                       </button>
@@ -316,6 +317,61 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
           </div>
         )}
       </div>
+
+      {selectedSub && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" onClick={() => setSelectedSub(null)}>
+          <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4" onClick={e => e.stopPropagation()}>
+            <div className="flex justify-between items-center border-b border-border pb-3">
+              <div>
+                <h3 className="text-xl font-bold text-primary">{selectedSub.studentName}</h3>
+                <p className="text-xs font-mono text-secondary">{selectedSub.smartId} • {selectedSub.plan}</p>
+              </div>
+              <button type="button" onClick={() => setSelectedSub(null)} className="text-secondary hover:text-primary p-1">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="p-3 rounded-xl bg-floating border border-border">
+                <span className="text-secondary block">Shift & Timing</span>
+                <span className="font-bold text-primary text-sm mt-0.5 block">{selectedSub.shift}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-floating border border-border">
+                <span className="text-secondary block">Subscription Status</span>
+                <span className={`inline-block mt-1 ${STATUS_BADGE[selectedSub.status] || 'fin-badge'}`}>{selectedSub.status.toUpperCase()}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-floating border border-border">
+                <span className="text-secondary block">Start Date</span>
+                <span className="font-semibold text-primary">{formatDate(selectedSub.startDate)}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-floating border border-border">
+                <span className="text-secondary block">End Date</span>
+                <span className="font-semibold text-primary">{formatDate(selectedSub.endDate)} ({selectedSub.daysLeft} days left)</span>
+              </div>
+              <div className="p-3 rounded-xl bg-floating border border-border">
+                <span className="text-secondary block">Base / Plan Fee</span>
+                <span className="font-semibold text-primary">{formatCurrency(selectedSub.base)}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-floating border border-border">
+                <span className="text-secondary block">Discount Applied</span>
+                <span className="font-semibold text-warning">− {formatCurrency(selectedSub.discount)}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-floating border border-border">
+                <span className="text-secondary block">Total Paid</span>
+                <span className="font-bold text-success text-sm">{formatCurrency(selectedSub.paid)}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-floating border border-border">
+                <span className="text-secondary block">Balance Due</span>
+                <span className={`font-bold text-sm ${selectedSub.due > 0 ? 'text-danger' : 'text-primary'}`}>{formatCurrency(selectedSub.due)}</span>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-3 border-t border-border">
+              <button type="button" onClick={() => setSelectedSub(null)} className="mgr-btn-ghost mgr-btn-sm">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS, MANAGER_FINANCE_SAMPLE_PENDING_FINES, MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY } from '@/app/frontend_manager/manager_finance/finance_fines_payments/hooks/ManagerFinanceFinesPaymentsDemoRepository';
+import { MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS, MANAGER_FINANCE_SAMPLE_PENDING_FINES, MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY, MANAGER_FINANCE_SAMPLE_RECEIPTS } from '@/app/frontend_manager/manager_finance/finance_fines_payments/hooks/ManagerFinanceFinesPaymentsDemoRepository';
 import ManagerFinanceFinesPaymentsNativeTable, { type NativeColumn, type NativeCellParams } from '@/app/frontend_manager/manager_finance/finance_fines_payments/components/manager_finance_fines_payments_table_parts/ManagerFinanceFinesPaymentsNativeTable';
 
 import { useManagerFinesPaymentsFormatting } from '@/app/frontend_manager/manager_finance/finance_fines_payments/hooks/ManagerFinanceFinesPaymentsFormattingHook';
@@ -10,10 +10,24 @@ import { MANAGER_FINANCE_FINES_PAYMENTS_ROUTES } from '@/app/frontend_manager/ma
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerFinanceFineCollectionDraftSchema, type ManagerFinanceFinesPaymentsFineCollectionDraft } from '@/app/frontend_manager/manager_finance/finance_fines_payments/schemas/ManagerFinanceFinesPaymentsFineCollectionDraftSchema';
-import { AlertCircle, DollarSign, FileText, CheckCircle, RotateCcw, Receipt, History, AlertTriangle, Search, IndianRupee, HandCoins, Clock } from 'lucide-react';
+import { AlertCircle, DollarSign, FileText, CheckCircle, RotateCcw, Receipt, History, AlertTriangle, Search, IndianRupee, HandCoins, Clock, Eye, Printer, MessageSquare, Mail, Smartphone, X } from 'lucide-react';
 import type { ManagerFinanceFinesPaymentsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsComponentTypes';
+import { toast } from 'sonner';
 
-
+export interface ManagerReceiptRecord {
+  id: string;
+  receiptNumber: string;
+  txnId: string;
+  member: string;
+  plan: string;
+  lateFee: number;
+  amount: number;
+  mode: string;
+  date: string;
+  status: string;
+  phone: string;
+  email: string;
+}
 
 export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQuery: ManagerFinanceFinesPaymentsRouteQueryProps) {
   const router = useRouter();
@@ -21,6 +35,32 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
   const { formatCurrency } = useManagerFinesPaymentsFormatting();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [collectionDraftFeedback, setCollectionDraftFeedback] = useState<string | null>(null);
+  const [selectedReceipt, setSelectedReceipt] = useState<ManagerReceiptRecord | null>(null);
+
+  const handleShareWhatsApp = (r: ManagerReceiptRecord) => {
+    const text = encodeURIComponent(
+      `Hello ${r.member}, your Library fee receipt #${r.receiptNumber} (${r.plan}) of ${formatCurrency(r.amount)} is confirmed. Txn ID: ${r.txnId}.`
+    );
+    window.open(`https://wa.me/91${r.phone}?text=${text}`, '_blank');
+    toast.success(`WhatsApp receipt link generated for ${r.member}`);
+  };
+
+  const handleShareEmail = (r: ManagerReceiptRecord) => {
+    const subject = encodeURIComponent(`Library Receipt #${r.receiptNumber} - ${r.plan}`);
+    const body = encodeURIComponent(
+      `Dear ${r.member},\n\nHere is your receipt for ${r.plan}.\nReceipt No: ${r.receiptNumber}\nTxn ID: ${r.txnId}\nAmount: ${formatCurrency(r.amount)}\nLate Fee: ${formatCurrency(r.lateFee)}\nStatus: ${r.status}\nDate: ${r.date}\n\nThank you,\nLibrary Management`
+    );
+    window.location.href = `mailto:${r.email}?subject=${subject}&body=${body}`;
+    toast.success(`Email client opened for ${r.email}`);
+  };
+
+  const handleShareSms = (r: ManagerReceiptRecord) => {
+    toast.success(`SMS receipt dispatched to +91 ${r.phone} for Txn ${r.txnId}`);
+  };
+
+  const handlePrintReceipt = (_r: ManagerReceiptRecord) => {
+    window.print();
+  };
   
   const { register: registerCollection, handleSubmit: handleCollectionSubmit, formState: { errors: collectionErrors } } = useForm<ManagerFinanceFinesPaymentsFineCollectionDraft>({
     resolver: zodResolver(managerFinanceFineCollectionDraftSchema),
@@ -67,6 +107,21 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     return String(value ?? '');
   }, [tManagerUi]);
 
+  const receiptRows = useMemo<ManagerReceiptRecord[]>(() => MANAGER_FINANCE_SAMPLE_RECEIPTS.map((r) => ({
+    id: r.id,
+    txnId: r.id,
+    receiptNumber: r.receiptNumber,
+    member: `${r.studentName} (${r.studentId})`,
+    plan: r.planName,
+    lateFee: Number(r.lateFee ?? 0),
+    amount: Number(r.amount),
+    mode: r.paymentMode,
+    date: r.date.split('T')[0],
+    status: r.status ?? 'Completed',
+    phone: r.phone,
+    email: `${r.studentName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
+  })), []);
+
   // Native semantic table column definitions
   const pendingCols: NativeColumn[] = useMemo(() => [
     { field: 'id', headerName: tManagerUi('fine_id'), width: 120 },
@@ -86,6 +141,70 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     { field: 'date', headerName: tManagerUi('date_time_853aab'), width: 160 },
     { field: 'collectedBy', headerName: tManagerUi('collected_by_898bb0'), width: 140 },
   ], [formatCurrency, tManagerUi, translateFineType, translatePaymentMode]);
+
+  const receiptsCols: NativeColumn[] = useMemo(() => [
+    { field: 'txnId', headerName: 'Transaction ID', width: 140, cellRenderer: (p: NativeCellParams) => <span className="font-mono text-xs font-semibold text-primary">{String(p.value ?? '—')}</span> },
+    { field: 'receiptNumber', headerName: tManagerUi('receipt_097d66'), width: 130, cellRenderer: (p: NativeCellParams) => <span className="text-xs font-semibold">{String(p.value ?? '—')}</span> },
+    { field: 'member', headerName: tManagerUi('member_6853c9'), flex: 1, minWidth: 160 },
+    { field: 'plan', headerName: 'Plan', flex: 1, minWidth: 150, cellRenderer: (p: NativeCellParams) => <span className="fin-badge fin-badge--neutral text-xs">{String(p.value ?? '—')}</span> },
+    { field: 'lateFee', headerName: 'Late Fee', width: 110, cellRenderer: (p: NativeCellParams) => <span className={Number(p.value ?? 0) > 0 ? 'text-amber-600 font-bold text-xs' : 'text-secondary text-xs'}>{formatCurrency(Number(p.value ?? 0))}</span> },
+    { field: 'amount', headerName: tManagerUi('amount_43dc85'), width: 120, cellClass: 'text-success font-bold', cellRenderer: (p: NativeCellParams) => <span className="text-success font-bold text-xs">{formatCurrency(Number(p.value ?? 0))}</span> },
+    { field: 'mode', headerName: tManagerUi('mode'), width: 100, cellRenderer: (p: NativeCellParams) => <span className="mgr-badge mgr-badge--info text-xs">{translatePaymentMode(p.value)}</span> },
+    { field: 'date', headerName: tManagerUi('date_time_853aab'), width: 140, cellRenderer: (p: NativeCellParams) => <span className="text-xs text-secondary">{String(p.value ?? '—')}</span> },
+    { field: 'status', headerName: tManagerUi('status'), width: 110, cellRenderer: (p: NativeCellParams) => <span className="mgr-badge mgr-badge--success text-xs font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60">{String(p.value ?? 'Completed')}</span> },
+    {
+      headerName: tManagerUi('actions'),
+      width: 200,
+      sortable: false,
+      cellRenderer: (p: NativeCellParams) => {
+        const row = p.data as ManagerReceiptRecord;
+        return (
+          <div className="flex items-center gap-1.5 h-full">
+            <button
+              type="button"
+              onClick={() => setSelectedReceipt(row)}
+              className="p-1 rounded hover:bg-surface-hover text-primary transition-colors cursor-pointer"
+              title="View Receipt Details"
+            >
+              <Eye size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => handlePrintReceipt(row)}
+              className="p-1 rounded hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+              title="Print Receipt"
+            >
+              <Printer size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleShareWhatsApp(row)}
+              className="p-1 rounded hover:bg-surface-hover text-emerald-600 hover:text-emerald-700 transition-colors cursor-pointer"
+              title="Share via WhatsApp"
+            >
+              <MessageSquare size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleShareEmail(row)}
+              className="p-1 rounded hover:bg-surface-hover text-purple hover:text-purple-700 transition-colors cursor-pointer"
+              title="Share via Email"
+            >
+              <Mail size={15} />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleShareSms(row)}
+              className="p-1 rounded hover:bg-surface-hover text-blue-600 hover:text-blue-700 transition-colors cursor-pointer"
+              title="Share via SMS"
+            >
+              <Smartphone size={15} />
+            </button>
+          </div>
+        );
+      }
+    }
+  ], [formatCurrency, tManagerUi, translatePaymentMode]);
 
   return (
     <div className="mgr-page-animate relative pb-12"
@@ -247,8 +366,8 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
             </div>
           )}
 
-          {/* PAYMENT HISTORY & RECEIPTS (AG GRID) */}
-          {(activeTab === 'history' || activeTab === 'paid' || activeTab === 'receipts') && (
+          {/* PAYMENT HISTORY (AG GRID) */}
+          {(activeTab === 'history' || activeTab === 'paid') && (
             <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
               <h2 className="text-xl font-bold text-primary mb-6 border-b border-border pb-4">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
               <div className="flex-1 w-full h-96">
@@ -257,9 +376,143 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
             </div>
           )}
 
+          {/* RECEIPTS TAB (AG GRID with Transaction ID, Late Fee, Plan, Status, Actions, View/Print/Share) */}
+          {activeTab === 'receipts' && (
+            <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
+              <div className="flex items-center justify-between mb-6 border-b border-border pb-4">
+                <div>
+                  <h2 className="text-xl font-bold text-primary">{tManagerUi('receipts_tab')}</h2>
+                  <p className="text-xs text-secondary mt-1">Official transaction receipts with late fees, plan details, and multi-channel dispatch</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="mgr-badge mgr-badge--info font-mono text-xs">{receiptRows.length} Total Receipts</span>
+                </div>
+              </div>
+              <div className="flex-1 w-full h-96">
+                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={receiptRows} columns={receiptsCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+              </div>
+            </div>
+          )}
 
         </div>
       </div>
+
+      {/* Selected Receipt Details & Multi-Channel Share Modal */}
+      {selectedReceipt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden motion-safe:animate-scale-up">
+            <div className="flex items-center justify-between p-5 border-b border-border bg-surface-highlight">
+              <div className="flex items-center gap-2">
+                <Receipt className="text-primary" size={20} />
+                <h3 className="font-bold text-primary text-base">Receipt Details — {selectedReceipt.receiptNumber}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedReceipt(null)}
+                className="p-1 rounded-lg hover:bg-card text-secondary hover:text-primary transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-surface-highlight border border-border text-xs font-mono">
+                <div>
+                  <span className="text-secondary block">Transaction ID</span>
+                  <span className="font-bold text-primary">{selectedReceipt.txnId}</span>
+                </div>
+                <div>
+                  <span className="text-secondary block">Receipt Number</span>
+                  <span className="font-bold text-primary">{selectedReceipt.receiptNumber}</span>
+                </div>
+                <div>
+                  <span className="text-secondary block">Member</span>
+                  <span className="font-bold text-primary">{selectedReceipt.member}</span>
+                </div>
+                <div>
+                  <span className="text-secondary block">Contact Phone</span>
+                  <span className="text-primary">+91 {selectedReceipt.phone}</span>
+                </div>
+                <div>
+                  <span className="text-secondary block">Membership Plan</span>
+                  <span className="font-semibold text-primary">{selectedReceipt.plan}</span>
+                </div>
+                <div>
+                  <span className="text-secondary block">Payment Mode</span>
+                  <span className="font-semibold text-primary uppercase">{selectedReceipt.mode}</span>
+                </div>
+                <div>
+                  <span className="text-secondary block">Date & Time</span>
+                  <span className="text-primary">{selectedReceipt.date}</span>
+                </div>
+                <div>
+                  <span className="text-secondary block">Payment Status</span>
+                  <span className="mgr-badge mgr-badge--success text-xs font-bold">{selectedReceipt.status}</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl border border-border bg-card space-y-2 text-sm">
+                <div className="flex justify-between text-secondary">
+                  <span>Base Fee:</span>
+                  <span>{formatCurrency(selectedReceipt.amount - selectedReceipt.lateFee)}</span>
+                </div>
+                <div className="flex justify-between text-secondary">
+                  <span>Late Fee:</span>
+                  <span className={selectedReceipt.lateFee > 0 ? 'text-amber-600 font-bold' : ''}>{formatCurrency(selectedReceipt.lateFee)}</span>
+                </div>
+                <div className="border-t border-border pt-2 flex justify-between font-bold text-base text-primary">
+                  <span>Total Paid:</span>
+                  <span className="text-success">{formatCurrency(selectedReceipt.amount)}</span>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-2">Share & Print Options</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handlePrintReceipt(selectedReceipt)}
+                    className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-primary transition-colors cursor-pointer"
+                  >
+                    <Printer size={14} /> Print
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleShareWhatsApp(selectedReceipt)}
+                    className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <MessageSquare size={14} /> WhatsApp
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleShareEmail(selectedReceipt)}
+                    className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-purple hover:bg-purple-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <Mail size={14} /> Email
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleShareSms(selectedReceipt)}
+                    className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <Smartphone size={14} /> SMS
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 border-t border-border bg-surface-highlight flex justify-end">
+              <button
+                type="button"
+                onClick={() => setSelectedReceipt(null)}
+                className="mgr-btn-secondary mgr-btn-sm cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

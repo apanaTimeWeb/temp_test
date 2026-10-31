@@ -8,10 +8,17 @@ export interface ManagerMembersDirectoryRecord {
   joinDate: string;
   expiryDate: string;
   seat?: string;
+  shift?: string;
+  floor?: string;
+  locker?: string;
   address?: string;
   dob?: string;
   gender?: string;
   department?: string;
+  college?: string;
+  preparationFor?: string;
+  paymentMode?: string;
+  remarks?: string;
   guardian?: string;
   emergencyContact?: string;
   referralPoints?: number;

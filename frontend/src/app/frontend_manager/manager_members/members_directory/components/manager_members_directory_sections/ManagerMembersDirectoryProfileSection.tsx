@@ -1,9 +1,30 @@
 'use client';
 // RESPONSIBILITY: Render the members directory profile section section of the components feature. It does not own backend persistence or cross-feature business logic.
-// RESPONSIBILITY: Render the members directory profile section section of the components feature. It does not own backend persistence or cross-feature business logic.
 import { useLocale, useTranslations } from 'next-intl';
 
-import { Award, CheckCircle, Clock, Download, ExternalLink, FileText, Mail, MapPin, Phone, Search, ShieldCheck, Users } from 'lucide-react';
+import {
+  Armchair,
+  Award,
+  BookOpen,
+  Calendar,
+  CheckCircle,
+  Clock,
+  CreditCard,
+  ExternalLink,
+  FileText,
+  GraduationCap,
+  Layers,
+  Lock,
+  Mail,
+  MapPin,
+  MessageSquare,
+  Phone,
+  Search,
+  ShieldAlert,
+  ShieldCheck,
+  User,
+  Users,
+} from 'lucide-react';
 
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
 import type { ManagerMembersDirectoryProfileSectionProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
@@ -48,9 +69,11 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
       </div>
       {!member ? <div className="mgr-empty-state"><p className="mgr-empty-title">{tManagerUi('no_matching_member')}</p><p className="mgr-empty-sub">{tManagerUi('try_a_member_id_or_name_from_the_directory')}</p></div> : (
         <div className="space-y-6">
-          {/* Main Profile Info Card */}
+          {/* Main Profile Header Card */}
           <div className="p-6 rounded-2xl bg-floating border border-border flex flex-col md:flex-row gap-8">
-            <div className="w-32 h-32 rounded-2xl bg-info-bg flex items-center justify-center shrink-0 border border-info"><Users size={48} className="text-info" /></div>
+            <div className="w-32 h-32 rounded-2xl bg-info-bg flex items-center justify-center shrink-0 border border-info">
+              <Users size={48} className="text-info" />
+            </div>
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <h3 className="text-2xl font-black text-primary mb-1">{member.name}</h3>
@@ -75,6 +98,84 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                     <span className="text-xs text-secondary block">{tManagerUi('expires')}</span>
                     <span className="text-primary font-semibold">{formatKnownIsoCalendarDate(member.expiryDate, locale)}</span>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* New Admission Extended Details Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Seat & Shift Details */}
+            <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
+              <h4 className="font-bold text-primary flex items-center gap-2 text-sm border-b border-border pb-2">
+                <Armchair size={16} className="text-primary" /> Seat & Shift Allotment
+              </h4>
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary flex items-center gap-1.5"><Armchair size={14} /> Assigned Seat:</span>
+                  <span className="font-bold text-primary bg-primary-subtle px-2 py-0.5 rounded">{member.seat || 'S-01'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary flex items-center gap-1.5"><Clock size={14} /> Shift Timing:</span>
+                  <span className="font-semibold text-primary">{member.shift || 'Morning (06:00 AM – 02:00 PM)'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary flex items-center gap-1.5"><Layers size={14} /> Floor:</span>
+                  <span className="font-medium text-primary">{member.floor || '1st Floor (General Study)'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary flex items-center gap-1.5"><Lock size={14} /> Locker:</span>
+                  <span className="font-medium text-primary">{member.locker || 'L-04 (Assigned)'}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Parent & Guardian Information */}
+            <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
+              <h4 className="font-bold text-primary flex items-center gap-2 text-sm border-b border-border pb-2">
+                <User size={16} className="text-info" /> Guardian & Family Info
+              </h4>
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary">Parent / Guardian:</span>
+                  <span className="font-bold text-primary">{member.guardian || 'Ramesh Sharma (Father)'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary">Guardian Contact:</span>
+                  <span className="font-mono text-primary">{member.emergencyContact || '9811223344'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary">Gender:</span>
+                  <span className="font-medium text-primary">{member.gender || 'Male'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary">Date of Birth:</span>
+                  <span className="font-medium text-primary">{member.dob || '1998-04-12'}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Academic & Goal Preparation */}
+            <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
+              <h4 className="font-bold text-primary flex items-center gap-2 text-sm border-b border-border pb-2">
+                <GraduationCap size={16} className="text-success" /> Academic & Target Goal
+              </h4>
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary">College / Institute:</span>
+                  <span className="font-semibold text-primary">{member.college || member.department || 'Delhi University'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary">Target Preparation:</span>
+                  <span className="font-bold text-success bg-success-bg px-2 py-0.5 rounded">{member.preparationFor || 'UPSC Civil Services'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary">Payment Mode:</span>
+                  <span className="font-medium text-primary">{member.paymentMode || 'UPI / Online'}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-secondary">Admission Remarks:</span>
+                  <span className="font-medium text-primary truncate max-w-[130px]">{member.remarks || 'Regular Student, Verified ID'}</span>
                 </div>
               </div>
             </div>

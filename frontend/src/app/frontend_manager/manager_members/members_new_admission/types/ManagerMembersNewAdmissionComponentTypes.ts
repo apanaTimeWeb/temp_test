@@ -28,7 +28,7 @@ export interface ManagerMembersNewAdmissionAdmissionSummaryProps {
   plan: string;
   shift: string;
   seat: string;
-  locker: string;
+  locker?: string;
   baseAmountMinor: number;
   discountMinor: number;
   totalPayableMinor: number;
