@@ -1,2 +1,13 @@
-import Main from '@/app/frontend_admin/admin_finance/finance_renewals/components/AdminFinanceRenewalsMain';
-export default function AdminFinanceRenewalsRoute() { return <Main />; }
+'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
+
+/** Student plan renewals belong to manager desk; redirecting admin to canonical finance dashboard. */
+export default function AdminFinanceRenewalsRoute() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace(ADMIN_ROUTES.FINANCE_DASHBOARD);
+  }, [router]);
+  return null;
+}

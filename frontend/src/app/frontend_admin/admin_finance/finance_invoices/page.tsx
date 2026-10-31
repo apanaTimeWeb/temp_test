@@ -1,13 +1,13 @@
-import { AdminFinanceInvoicesPage } from '@/app/frontend_admin/admin_finance/finance_invoices/components/AdminFinanceInvoicesPage';
-import { AdminFinanceInvoicesIdPage } from '@/app/frontend_admin/admin_finance/finance_invoices/components/AdminFinanceInvoicesIdPage';
-import type { RouteSearchParams } from '@/app/frontend_admin/admin_finance/finance_invoices/types/AdminFinanceInvoicesTypes';
+'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
-
-const first = (value: string | string[] | undefined): string | undefined => Array.isArray(value) ? value[0] : value;
-export default async function AdminFinanceInvoicesRoute({ searchParams }: { searchParams?: Promise<RouteSearchParams> }) {
-  const query = searchParams ? await searchParams : {};
-  const view = first(query.view);
-  const id = first(query.id) ?? '';
-  if (view === 'detail' || view === 'invoice/detail' || view === 'receipt/detail') return <AdminFinanceInvoicesIdPage routeId={id} />;
-  return <AdminFinanceInvoicesPage />;
+/** Student invoicing belongs to manager counter operations; redirecting admin to canonical payments ledger. */
+export default function AdminFinanceInvoicesRoute() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace(ADMIN_ROUTES.FINANCE_PAYMENTS);
+  }, [router]);
+  return null;
 }

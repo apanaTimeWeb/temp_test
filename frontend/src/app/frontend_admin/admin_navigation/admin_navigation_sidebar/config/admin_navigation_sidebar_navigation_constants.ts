@@ -123,17 +123,11 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     icon: WalletCards,
     submodules: [
       { href: ADMIN_ROUTES.FINANCE_DASHBOARD, icon: LayoutDashboard, label: 'Finance Dashboard', labelKey: 'SUBMODULE_FINANCE_DASHBOARD' },
-      { href: ADMIN_ROUTES.FINANCE_SUBSCRIPTIONS, icon: CalendarCheck, label: 'Subscriptions', labelKey: 'SUBMODULE_FINANCE_SUBSCRIPTIONS' },
-      { href: ADMIN_ROUTES.FINANCE_RENEWALS, icon: RefreshCw, label: 'Renewals', labelKey: 'SUBMODULE_FINANCE_RENEWALS' },
       { href: ADMIN_ROUTES.FINANCE_PAYMENTS, icon: DollarSign, label: 'Payments', labelKey: 'SUBMODULE_FINANCE_PAYMENTS' },
-      { href: ADMIN_ROUTES.FINANCE_TRUST_SCORE, icon: Shield, label: 'Trust Scores', labelKey: 'SUBMODULE_FINANCE_TRUST_SCORE' },
-      { href: ADMIN_ROUTES.FINANCE_SECURITY_DEPOSITS, icon: Wallet, label: 'Security Deposits', labelKey: 'SUBMODULE_FINANCE_SECURITY_DEPOSITS' },
       { href: ADMIN_ROUTES.FINANCE_LATE_FEES, icon: Clock, label: 'Late Fees', labelKey: 'SUBMODULE_FINANCE_LATE_FEES' },
       { href: ADMIN_ROUTES.FINANCE_AUTO_SUSPEND, icon: Ban, label: 'Auto Suspend', labelKey: 'SUBMODULE_FINANCE_AUTO_SUSPEND' },
-      { href: ADMIN_ROUTES.FINANCE_INVOICES, icon: FileText, label: 'Invoices', labelKey: 'SUBMODULE_FINANCE_INVOICES' },
-      { href: ADMIN_ROUTES.FINANCE_RECEIPTS, icon: Receipt, label: 'Receipts', labelKey: 'SUBMODULE_FINANCE_RECEIPTS' },
       { href: ADMIN_ROUTES.FINANCE_REFERRALS, icon: Users2, label: 'Referrals', labelKey: 'SUBMODULE_FINANCE_REFERRALS' },
-      { href: ADMIN_ROUTES.FINANCE_REFUNDS, icon: RotateCcw, label: 'Refunds', labelKey: 'SUBMODULE_FINANCE_REFUNDS' },
+      { href: ADMIN_ROUTES.FINANCE_TRUST_SCORE, icon: Shield, label: 'Trust Scores', labelKey: 'SUBMODULE_FINANCE_TRUST_SCORE' },
     ],
   },
   {
