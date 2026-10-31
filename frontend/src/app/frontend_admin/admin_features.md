@@ -50,7 +50,6 @@ The active Admin role exposes exactly nine primary business domains. Each domain
 
 - `accounts_expenses` → `/admin/admin_accounts_assets/accounts_expenses`
 - `accounts_expense_categories` → `/admin/admin_accounts_assets/accounts_expense_categories`
-- `accounts_daily_settlement` → `/admin/admin_accounts_assets/accounts_daily_settlement`
 - `accounts_financial_reports` → `/admin/admin_accounts_assets/accounts_financial_reports`
 - `accounts_seat_gap_report` → `/admin/admin_accounts_assets/accounts_seat_gap_report`
 - `accounts_shift_gap_analyzer` → `/admin/admin_accounts_assets/accounts_shift_gap_analyzer`

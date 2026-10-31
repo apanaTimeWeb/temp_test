@@ -41,7 +41,6 @@ export const ADMIN_ROUTES = {
   FINANCE_REFERRALS: '/admin/admin_finance/finance_referrals',
   FINANCE_DASHBOARD: '/admin/admin_finance/finance_dashboard',
   ACCOUNTS_EXPENSES: '/admin/admin_accounts_assets/accounts_expenses',
-  ACCOUNTS_DAILY_SETTLEMENT: '/admin/admin_accounts_assets/accounts_daily_settlement',
   ACCOUNTS_FINANCIAL_REPORTS: '/admin/admin_accounts_assets/accounts_financial_reports',
   ACCOUNTS_SEAT_GAP_REPORT: '/admin/admin_accounts_assets/accounts_seat_gap_report',
   STAFF_DIRECTORY: '/admin/admin_staff/staff_directory',

@@ -17,12 +17,6 @@ test('direct route loads accounts_expense_categories', async ({ page }) => {
   await expect(page.getByRole('heading').first()).toBeVisible();
 });
 
-test('direct route loads accounts_daily_settlement', async ({ page }) => {
-  await page.goto('/admin/admin_accounts_assets/accounts_daily_settlement');
-  await expect(page).toHaveURL(/\/admin\/admin_accounts_assets\/accounts_daily_settlement(?:[?#]|$)/);
-  await expect(page.getByRole('heading').first()).toBeVisible();
-});
-
 test('direct route loads accounts_financial_reports', async ({ page }) => {
   await page.goto('/admin/admin_accounts_assets/accounts_financial_reports');
   await expect(page).toHaveURL(/\/admin\/admin_accounts_assets\/accounts_financial_reports(?:[?#]|$)/);

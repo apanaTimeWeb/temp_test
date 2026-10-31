@@ -3,7 +3,7 @@
 ## Purpose and ownership boundary
 
 - Canonical domain container: `frontend_admin/admin_accounts_assets/`.
-- User-frozen target submodules (8): `accounts_expenses`, `accounts_expense_categories`, `accounts_daily_settlement`, `accounts_financial_reports`, `accounts_seat_gap_report`, `accounts_shift_gap_analyzer`, `assets_register`, `assets_maintenance`.
+- User-frozen target submodules (7): `accounts_expenses`, `accounts_expense_categories`, `accounts_financial_reports`, `accounts_seat_gap_report`, `accounts_shift_gap_analyzer`, `assets_register`, `assets_maintenance`.
 - Only these listed directories are active business submodules in this domain. No pseudo-module such as `admin_accounts_assets_compatibility` or `admin_accounts_assets_main` is part of the frozen target.
 - Root files are limited to the domain navigation shell/redirect, applicable loading/error boundaries, the documentation trio and canonical domain URL configuration. Feature implementation remains inside the listed autonomous submodules.
 - Sibling submodules must not import or runtime-couple to one another; source-local WET duplication is intentional under the governing architecture contract.
@@ -22,7 +22,6 @@
 |---|---|---|---:|---:|
 | `accounts_expenses` | `/admin/admin_accounts_assets/accounts_expenses` | `components/AdminAccountsExpensesAddPage.tsx` | 0 | 1 |
 | `accounts_expense_categories` | `/admin/admin_accounts_assets/accounts_expense_categories` | `components/AdminAccountsExpenseCategoriesPage.tsx` | 0 | 2 |
-| `accounts_daily_settlement` | `/admin/admin_accounts_assets/accounts_daily_settlement` | `components/AdminAccountsDailySettlementPage.tsx` | 0 | 3 |
 | `accounts_financial_reports` | `/admin/admin_accounts_assets/accounts_financial_reports` | `components/AdminAccountsFinancialReportsPage.tsx` | 0 | 2 |
 | `accounts_seat_gap_report` | `/admin/admin_accounts_assets/accounts_seat_gap_report` | `components/AdminAccountsSeatGapReportPage.tsx` | 0 | 2 |
 | `accounts_shift_gap_analyzer` | `/admin/admin_accounts_assets/accounts_shift_gap_analyzer` | `components/AdminAccountsShiftGapAnalyzerPage.tsx` | 0 | 2 |

@@ -172,11 +172,6 @@ const canonicalRoutes = [
     "route": "/admin/admin_accounts_assets/accounts_expense_categories"
   },
   {
-    "submodule": "accounts_daily_settlement",
-    "domain": "admin_accounts_assets",
-    "route": "/admin/admin_accounts_assets/accounts_daily_settlement"
-  },
-  {
     "submodule": "accounts_financial_reports",
     "domain": "admin_accounts_assets",
     "route": "/admin/admin_accounts_assets/accounts_financial_reports"
