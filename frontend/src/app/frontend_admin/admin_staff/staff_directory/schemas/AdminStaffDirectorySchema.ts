@@ -54,8 +54,8 @@ export type AdminStaffDirectoryCreateManagerFormValues = z.infer<typeof AdminSta
 
 // Canonical feature types live beside the Zod schemas that validate their API/form boundaries.
 
-export type AdminStaffDirectoryTab = 'all' | 'add' | 'active' | 'suspended' | 'deactivated' | 'sessions' | 'history' | 'activity';
+export type AdminStaffDirectoryTab = 'all' | 'staff' | 'add' | 'active' | 'suspended' | 'deactivated' | 'sessions' | 'history' | 'activity';
 export type AdminStaffDirectoryManagerStatus = (typeof ADMIN_STAFF_DIRECTORY_MANAGER_STATUS_OPTIONS)[number];
 export interface AdminStaffDirectoryManager {
-  id: string; name: string; username: string; email: string; phone: string; branch: string; status: AdminStaffDirectoryManagerStatus; lastActive: string;
+  id: string; name: string; username: string; email: string; phone: string; branch: string; status: AdminStaffDirectoryManagerStatus; lastActive: string; role?: string;
 }

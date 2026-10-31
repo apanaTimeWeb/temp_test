@@ -95,10 +95,16 @@ export const createAdminStaffDirectoryScenarioCatalog = (activeRecords: unknown)
 } as const);
 
 export const ADMIN_STAFF_DIRECTORY_FIXTURE_DATA: readonly AdminStaffDirectoryManager[] = [
-  { id: 'MGR-001', name: 'Vikram Singh', username: 'vikram.s', email: 'vikram@smartlibrary.com', phone: '+91 9876543210', branch: 'Downtown Central', status: 'Active', lastActive: '2 mins ago' },
-  { id: 'MGR-002', name: 'Anita Desai', username: 'anita.d', email: 'anita@smartlibrary.com', phone: '+91 9876543211', branch: 'Westside Branch', status: 'Active', lastActive: '1 hr ago' },
-  { id: 'MGR-003', name: 'Rahul Sharma', username: 'rahul.s', email: 'rahul@smartlibrary.com', phone: '+91 9876543212', branch: 'North Hub', status: 'Suspended', lastActive: '3 days ago' },
-  { id: 'MGR-004', name: 'Sneha Verma', username: 'sneha.v', email: 'sneha@smartlibrary.com', phone: '+91 9876543213', branch: 'Unassigned', status: 'Deactivated', lastActive: '1 month ago' },
+  { id: 'MGR-001', name: 'Vikram Singh', username: 'vikram.s', email: 'vikram@smartlibrary.com', phone: '+91 9876543210', branch: 'Downtown Central', status: 'Active', lastActive: '2 mins ago', role: 'Branch Manager' },
+  { id: 'MGR-002', name: 'Anita Desai', username: 'anita.d', email: 'anita@smartlibrary.com', phone: '+91 9876543211', branch: 'Westside Branch', status: 'Active', lastActive: '1 hr ago', role: 'Branch Manager' },
+  { id: 'MGR-003', name: 'Rahul Sharma', username: 'rahul.s', email: 'rahul@smartlibrary.com', phone: '+91 9876543212', branch: 'North Hub', status: 'Suspended', lastActive: '3 days ago', role: 'Branch Manager' },
+  { id: 'MGR-004', name: 'Sneha Verma', username: 'sneha.v', email: 'sneha@smartlibrary.com', phone: '+91 9876543213', branch: 'Unassigned', status: 'Deactivated', lastActive: '1 month ago', role: 'Branch Manager' },
+  { id: 'STF-001', name: 'Rohan Mehta', username: 'rohan.m', email: 'rohan@smartlibrary.com', phone: '+91 9876543220', branch: 'Downtown Central', status: 'Active', lastActive: '5 mins ago', role: 'Librarian' },
+  { id: 'STF-002', name: 'Priya Nair', username: 'priya.n', email: 'priya@smartlibrary.com', phone: '+91 9876543221', branch: 'Downtown Central', status: 'Active', lastActive: '20 mins ago', role: 'Front Desk Executive' },
+  { id: 'STF-003', name: 'Amit Patel', username: 'amit.p', email: 'amit@smartlibrary.com', phone: '+91 9876543222', branch: 'Westside Branch', status: 'Active', lastActive: '2 hrs ago', role: 'Operations Assistant' },
+  { id: 'STF-004', name: 'Kavita Joshi', username: 'kavita.j', email: 'kavita@smartlibrary.com', phone: '+91 9876543223', branch: 'Westside Branch', status: 'Active', lastActive: '1 day ago', role: 'Front Desk Executive' },
+  { id: 'STF-005', name: 'Suresh Kumar', username: 'suresh.k', email: 'suresh@smartlibrary.com', phone: '+91 9876543224', branch: 'North Hub', status: 'Suspended', lastActive: '4 days ago', role: 'Support Executive' },
+  { id: 'STF-006', name: 'Meera Reddy', username: 'meera.r', email: 'meera@smartlibrary.com', phone: '+91 9876543225', branch: 'Downtown Central', status: 'Deactivated', lastActive: '2 weeks ago', role: 'Assistant Librarian' },
 ];
 
 /** Synthetic staff contract fixture; not a real identity or account. */

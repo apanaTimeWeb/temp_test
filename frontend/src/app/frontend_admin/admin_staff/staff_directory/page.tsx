@@ -26,10 +26,10 @@ export default function AdminStaffDirectoryRoute() {
         )}
         <div>
           <h1 className="admin-shared-page-title" >
-            {viewingManager ? t('MANAGER_TITLE', { name: viewingManager.name }) : t('PAGE_TITLE')}
+            {viewingManager ? (viewingManager.id.startsWith('STF') ? t('STAFF_TITLE', { name: viewingManager.name }) : t('MANAGER_TITLE', { name: viewingManager.name })) : t('PAGE_TITLE')}
           </h1>
           <p className="admin-shared-page-subtitle" >
-            {viewingManager ? t('MANAGER_DETAIL_SUMMARY', { id: viewingManager.id, branch: viewingManager.branch }) : t('PAGE_SUBTITLE')}
+            {viewingManager ? `${viewingManager.role ? `${viewingManager.role} · ` : ''}ID: ${viewingManager.id} | ${viewingManager.branch}` : t('PAGE_SUBTITLE')}
           </p>
         </div>
       </div>

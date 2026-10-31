@@ -22,6 +22,7 @@ export default function AdminStaffDirectoryDetailLogsSection({ model, onBack }: 
       <div className="mb-5 flex flex-wrap items-start justify-between gap-4"><div><h2 className="text-lg font-semibold">{manager.name}</h2><p className="text-sm text-text-secondary">{t('PROFILE_TITLE', { id: manager.id })}</p></div><span className="rounded-full bg-surface-highlight px-3 py-1 text-sm">{({ Active: t('STATUS_ACTIVE'), Suspended: t('STATUS_SUSPENDED'), Deactivated: t('STATUS_DEACTIVATED') } as const)[manager.status]}</span></div>
       <dl className="grid gap-4 sm:grid-cols-2">
         <div className="flex items-start gap-3"><UserRound size={18}/><div><dt className="text-sm text-text-secondary">{t('PROFILE_USERNAME')}</dt><dd>@{manager.username}</dd></div></div>
+        {manager.role && <div className="flex items-start gap-3"><UserRound size={18}/><div><dt className="text-sm text-text-secondary">{t('PROFILE_ROLE')}</dt><dd className="font-medium text-text-primary">{manager.role}</dd></div></div>}
         <div className="flex items-start gap-3"><Building2 size={18}/><div><dt className="text-sm text-text-secondary">{t('PROFILE_BRANCH')}</dt><dd>{manager.branch}</dd></div></div>
         <div className="flex items-start gap-3"><Mail size={18}/><div><dt className="text-sm text-text-secondary">{t('PROFILE_EMAIL')}</dt><dd>{manager.email}</dd></div></div>
         <div className="flex items-start gap-3"><Phone size={18}/><div><dt className="text-sm text-text-secondary">{t('PROFILE_PHONE')}</dt><dd>{manager.phone}</dd></div></div>

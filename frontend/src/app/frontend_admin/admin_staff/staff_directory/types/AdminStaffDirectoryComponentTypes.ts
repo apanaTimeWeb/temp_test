@@ -34,9 +34,9 @@ export interface AdminStaffDirectoryHarnessProps {
   scenario?: AdminStaffDirectoryScenario;
 }
 
-export type AdminStaffDirectoryNavigationItemLabelKey = 'NAV_ALL' | 'NAV_ADD' | 'NAV_ACTIVE' | 'NAV_SUSPENDED' | 'NAV_DEACTIVATED' | 'NAV_SESSIONS' | 'NAV_HISTORY' | 'NAV_ACTIVITY';
+export type AdminStaffDirectoryNavigationItemLabelKey = 'NAV_ALL' | 'NAV_STAFF' | 'NAV_ADD' | 'NAV_ACTIVE' | 'NAV_SUSPENDED' | 'NAV_DEACTIVATED' | 'NAV_SESSIONS' | 'NAV_HISTORY' | 'NAV_ACTIVITY';
 export type AdminStaffDirectoryManagerDetailTab = 'overview' | 'history' | 'activity';
 
 export type AdminStaffDirectoryAuditSectionTabSubset = 'sessions' | 'history' | 'activity';
 export type AdminStaffDirectoryCreateManagerFormOnCreateSubset = 'created' | 'duplicate' | 'blocked';
-export type AdminStaffDirectoryManagerTableTabSubset = 'all' | 'active' | 'suspended' | 'deactivated';
+export type AdminStaffDirectoryManagerTableTabSubset = 'all' | 'staff' | 'active' | 'suspended' | 'deactivated';

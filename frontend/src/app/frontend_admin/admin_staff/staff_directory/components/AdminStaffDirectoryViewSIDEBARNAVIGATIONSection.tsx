@@ -44,7 +44,7 @@ export type { AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionProps };
 export function AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSection({ model }: AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSectionProps) {
   const t = useTranslations('ADMIN_STAFF_DIRECTORY');
   const { activeTab, viewingManager, managerDetailTab, setManagerDetailTab, dummyManagers, isDemoMode, handleAddManager, openManagerDetails } = model;
-  const listTab = activeTab === 'all' || activeTab === 'active' || activeTab === 'suspended' || activeTab === 'deactivated' ? activeTab : null;
+  const listTab = activeTab === 'all' || activeTab === 'staff' || activeTab === 'active' || activeTab === 'suspended' || activeTab === 'deactivated' ? activeTab : null;
   const auditTab = activeTab === 'sessions' || activeTab === 'history' || activeTab === 'activity' ? activeTab : null;
 
   return (
@@ -78,10 +78,21 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
   const t = useTranslations('ADMIN_STAFF_DIRECTORY');
   const [page, setPage] = useAdminApplicationInfrastructureUrlQueryState<number>('page', 0);
   const pageSize = 10;
-  const tabTitleKey = { all: 'PANEL_ALL', active: 'PANEL_ACTIVE', suspended: 'PANEL_SUSPENDED', deactivated: 'PANEL_DEACTIVATED' } as const;
+  const tabTitleKey = { all: 'PANEL_ALL', staff: 'PANEL_STAFF', active: 'PANEL_ACTIVE', suspended: 'PANEL_SUSPENDED', deactivated: 'PANEL_DEACTIVATED' } as const;
   const tabFilterStatus: Partial<Record<NonNullable<typeof tab>, AdminStaffDirectoryManager['status']>> = { active: 'Active', suspended: 'Suspended', deactivated: 'Deactivated' };
   const effectiveFilterStatus = filterStatus ?? (tab ? tabFilterStatus[tab] : undefined);
-  const filteredManagers = useMemo(() => managers.filter((manager) => !effectiveFilterStatus || manager.status === effectiveFilterStatus), [effectiveFilterStatus, managers]);
+  const filteredManagers = useMemo(() => {
+    let result = managers;
+    if (tab === 'all') {
+      result = result.filter((m) => !m.id.startsWith('STF'));
+    } else if (tab === 'staff') {
+      result = result.filter((m) => m.id.startsWith('STF') || (m.role && m.role !== 'Branch Manager'));
+    }
+    if (effectiveFilterStatus) {
+      result = result.filter((m) => m.status === effectiveFilterStatus);
+    }
+    return result;
+  }, [effectiveFilterStatus, managers, tab]);
   const pageCount = Math.max(1, Math.ceil(filteredManagers.length / pageSize));
   const currentPage = Math.min(page, pageCount - 1);
   const visibleManagers = filteredManagers.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
@@ -90,7 +101,7 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
       <div className="space-y-3 p-3 md:hidden">
         {visibleManagers.map((manager) => (
           <article key={manager.id} className="rounded-lg border border-border p-4">
-            <div className="flex items-start justify-between gap-3"><div className="min-w-0"><button type="button" className="break-words font-semibold text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectManager(manager)}>{manager.name}</button><p className="text-xs text-text-secondary">@{manager.username}</p></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES[manager.status]}`}>{({ Active: t('STATUS_ACTIVE'), Suspended: t('STATUS_SUSPENDED'), Deactivated: t('STATUS_DEACTIVATED') } as const)[manager.status]}</span></div>
+            <div className="flex items-start justify-between gap-3"><div className="min-w-0"><button type="button" className="break-words font-semibold text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectManager(manager)}>{manager.name}</button><p className="text-xs text-text-secondary">@{manager.username}{manager.role ? ` · ${manager.role}` : ''}</p></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES[manager.status]}`}>{({ Active: t('STATUS_ACTIVE'), Suspended: t('STATUS_SUSPENDED'), Deactivated: t('STATUS_DEACTIVATED') } as const)[manager.status]}</span></div>
             <dl className="mt-3 grid grid-cols-1 gap-2 text-sm"><div><dt className="text-text-secondary">{t('TABLE_CONTACT')}</dt><dd className="break-words">{maskAdminStaffDirectoryEmail(manager.email)} · {maskAdminStaffDirectoryPhone(manager.phone)}</dd></div><div><dt className="text-text-secondary">{t('TABLE_BRANCH')}</dt><dd>{manager.branch}</dd></div><div><dt className="text-text-secondary">{t('TABLE_LAST_ACTIVE')}</dt><dd>{getAdminStaffDirectoryLastActiveLabel(manager.lastActive, t)}</dd></div></dl>
             <div className="mt-3 flex gap-2"><button type="button" className="min-h-11 rounded-md border border-border px-3" onClick={() => onSelectManager(manager)}>{t('VIEW_MANAGER', { name: manager.name })}</button><button type="button" disabled aria-describedby={`admin-staff-users-row-actions-help-mobile-${manager.id}`} className="min-h-11 rounded-md px-3 text-text-disabled">{t('TABLE_ACTIONS')}</button></div><p id={`admin-staff-users-row-actions-help-mobile-${manager.id}`} className="mt-1 text-xs text-text-secondary">{t('ROW_ACTIONS_BLOCKED')}</p>
           </article>
@@ -112,7 +123,7 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
           <tr key={manager.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
             <th scope="row" className="px-4 py-3 font-medium text-text-primary">
               <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectManager(manager)}>{manager.name}</button>
-              <span className="block text-xs font-normal text-text-secondary">@{manager.username}</span>
+              <span className="block text-xs font-normal text-text-secondary">@{manager.username}{manager.role ? ` · ${manager.role}` : ''}</span>
             </th>
             <td className="px-4 py-3"><span className="block">{maskAdminStaffDirectoryEmail(manager.email)}</span><span className="text-text-secondary">{maskAdminStaffDirectoryPhone(manager.phone)}</span></td>
             <td className="px-4 py-3">{manager.branch}</td>

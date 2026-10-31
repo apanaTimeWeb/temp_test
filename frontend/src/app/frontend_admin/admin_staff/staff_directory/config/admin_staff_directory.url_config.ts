@@ -1,6 +1,6 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
 import {
-  Activity, Ban, CheckCircle2, Clock3, History, UserRound, UserRoundPlus, Users,
+  Activity, Ban, CheckCircle2, Clock3, History, UserCheck, UserRound, UserRoundPlus, Users,
 } from 'lucide-react';
 import type { AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import type { AdminStaffDirectoryNavigationItemLabelKey } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
@@ -64,6 +64,7 @@ export interface AdminStaffDirectoryNavigationItem {
 
 export const ADMIN_STAFF_DIRECTORY_NAVIGATION: readonly AdminStaffDirectoryNavigationItem[] = [
   { id: 'all', labelKey: 'NAV_ALL', icon: Users },
+  { id: 'staff', labelKey: 'NAV_STAFF', icon: UserCheck },
   { id: 'add', labelKey: 'NAV_ADD', icon: UserRoundPlus },
   { id: 'active', labelKey: 'NAV_ACTIVE', icon: CheckCircle2 },
   { id: 'suspended', labelKey: 'NAV_SUSPENDED', icon: Ban },
