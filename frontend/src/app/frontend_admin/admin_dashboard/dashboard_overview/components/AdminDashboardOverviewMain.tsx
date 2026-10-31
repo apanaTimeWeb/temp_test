@@ -1,9 +1,8 @@
 // RESPONSIBILITY: Owns the AdminDashboardOverviewMain presentation responsibility for the dashboard_overview module. It does not own cross-module business logic or API transport.
 import Link from 'next/link';
-import { Armchair, Users, WalletCards, Building2, TrendingUp, BarChart2, ArrowRight } from 'lucide-react';
+import { Armchair, Users, WalletCards, Building2, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ADMIN_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/config/admin_dashboard_overview.url_config';
-import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 
 const destinations = [
@@ -132,14 +131,6 @@ export default function AdminDashboardOverviewMain() {
               </span>
             </div>
           </div>
-          <Link
-            href={ADMIN_ROUTES.DASHBOARD_REPORTS}
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-semibold text-text-primary shadow-xs hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <BarChart2 className="h-4 w-4 text-text-secondary" aria-hidden="true" />
-            <span>{t('VIEW_FULL_REPORTS')}</span>
-            <ArrowRight className="h-3.5 w-3.5 text-text-secondary" aria-hidden="true" />
-          </Link>
         </div>
       </header>
 

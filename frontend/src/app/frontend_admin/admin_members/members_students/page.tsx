@@ -1,9 +1,15 @@
 'use client';
-import useAdminMembersStudentsMain from '@/app/frontend_admin/admin_members/members_students/hooks/useAdminMembersStudentsMain';
-import AdminMembersStudentsView from '@/app/frontend_admin/admin_members/members_students/components/AdminMembersStudentsView';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
-/** Canonical route entry; server state and user interactions remain in module-owned hooks. */
+/** Merged into members_directory; redirecting to the canonical directory route. */
 export default function AdminMembersStudentsRoute() {
-  const model = useAdminMembersStudentsMain();
-  return <AdminMembersStudentsView model={model} />;
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace(ADMIN_ROUTES.MEMBERS_DIRECTORY);
+  }, [router]);
+
+  return null;
 }

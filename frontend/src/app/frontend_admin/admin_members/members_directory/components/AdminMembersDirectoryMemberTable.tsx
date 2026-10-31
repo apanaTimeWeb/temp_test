@@ -48,6 +48,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
               <th scope="col" className="px-4 py-3">{t('TABLE_MEMBER')}</th>
               <th scope="col" className="px-4 py-3">{t('TABLE_CONTACT')}</th>
               <th scope="col" className="px-4 py-3">{t('TABLE_PLAN')}</th>
+              <th scope="col" className="px-4 py-3">Seat / Shift</th>
               <th scope="col" className="px-4 py-3">{t('TABLE_EXPIRY')}</th>
               <th scope="col" className="px-4 py-3">{t('TABLE_STATUS')}</th>
               <th scope="col" className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
@@ -62,6 +63,10 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
                 </th>
                 <td className="px-4 py-3"><span className="block">{displayValue(member.email)}</span><span className="text-text-secondary">{displayValue(member.phone)}</span></td>
                 <td className="px-4 py-3">{displayValue(member.plan)}</td>
+                <td className="px-4 py-3">
+                  <span className="block font-medium text-text-primary">{member.seat || '—'}</span>
+                  <span className="text-xs text-text-secondary">{member.shift || '—'}</span>
+                </td>
                 <td className="px-4 py-3">{expiryLabel(member.expiryDate)}</td>
                 <td className="px-4 py-3"><span className="rounded-full bg-surface-highlight px-2.5 py-1 text-xs font-semibold">{statusLabel(member.status)}</span></td>
                 <td className="px-4 py-3"><div className="relative flex justify-end gap-1">
@@ -98,6 +103,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
             <dl className="mt-3 grid grid-cols-1 gap-2 text-sm">
               <div><dt className="text-xs text-text-secondary">{t('TABLE_CONTACT')}</dt><dd className="break-words text-text-primary"><span className="block">{displayValue(member.email)}</span><span className="text-text-secondary">{displayValue(member.phone)}</span></dd></div>
               <div><dt className="text-xs text-text-secondary">{t('TABLE_PLAN')}</dt><dd className="text-text-primary">{displayValue(member.plan)}</dd></div>
+              <div><dt className="text-xs text-text-secondary">Seat / Shift</dt><dd className="text-text-primary">{member.seat ? `${member.seat} (${member.shift || '—'})` : '—'}</dd></div>
               <div><dt className="text-xs text-text-secondary">{t('TABLE_EXPIRY')}</dt><dd className="text-text-primary">{expiryLabel(member.expiryDate)}</dd></div>
             </dl>
             <div className="relative mt-3 flex gap-2 border-t border-border pt-3">

@@ -4,10 +4,10 @@ import { http, HttpResponse } from 'msw';
 import { ADMIN_MEMBERS_URLS } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.url_config';
 
 export const ADMIN_MEMBERS_FIXTURES: readonly AdminMembersMember[] = [
-  { id: 'MEM-001', name: 'John Doe', email: 'john@example.com', phone: '+91 9876543210', plan: 'Premium (Monthly)', status: ADMIN_MEMBERS_STATUS_VALUES[0], expiryDate: '2026-10-30' },
-  { id: 'MEM-002', name: 'Jane Smith', email: 'jane@example.com', phone: '+91 9876543211', plan: 'Standard (Quarterly)', status: ADMIN_MEMBERS_STATUS_VALUES[1], expiryDate: '2026-09-01' },
-  { id: 'MEM-003', name: 'Rahul Sharma', email: 'rahul@example.com', phone: '+91 9876543212', plan: 'Premium (Yearly)', status: ADMIN_MEMBERS_STATUS_VALUES[2], expiryDate: '2027-01-15' },
-  { id: 'MEM-004', name: 'Sneha Verma', email: 'sneha@example.com', phone: '+91 9876543213', plan: 'Standard (Monthly)', status: ADMIN_MEMBERS_STATUS_VALUES[3], expiryDate: '2026-12-01' },
+  { id: 'MEM-001', name: 'John Doe', email: 'john@example.com', phone: '+91 9876543210', plan: 'Premium (Monthly)', status: ADMIN_MEMBERS_STATUS_VALUES[0], expiryDate: '2026-10-30', branch: 'Downtown Central (Main Campus)', shift: 'Morning', seat: 'A-01', locker: 'L-02', feeStatus: 'Paid', totalPaidMinor: 1200000, dueFeeMinor: 0, currencyCode: 'INR', joinDate: '2024-01-01', consecutiveAbsent: 0 },
+  { id: 'MEM-002', name: 'Jane Smith', email: 'jane@example.com', phone: '+91 9876543211', plan: 'Standard (Quarterly)', status: ADMIN_MEMBERS_STATUS_VALUES[1], expiryDate: '2026-09-01', branch: 'Downtown Central (Main Campus)', shift: 'Evening', seat: 'B-05', locker: '—', feeStatus: 'Paid', totalPaidMinor: 480000, dueFeeMinor: 0, currencyCode: 'INR', joinDate: '2024-02-15', consecutiveAbsent: 1 },
+  { id: 'MEM-003', name: 'Rahul Sharma', email: 'rahul@example.com', phone: '+91 9876543212', plan: 'Premium (Yearly)', status: ADMIN_MEMBERS_STATUS_VALUES[2], expiryDate: '2027-01-15', branch: 'Westside Branch', shift: 'Morning', seat: 'C-12', locker: 'L-07', feeStatus: 'Due', totalPaidMinor: 600000, dueFeeMinor: 300000, currencyCode: 'INR', joinDate: '2024-03-10', consecutiveAbsent: 4 },
+  { id: 'MEM-004', name: 'Sneha Verma', email: 'sneha@example.com', phone: '+91 9876543213', plan: 'Standard (Monthly)', status: ADMIN_MEMBERS_STATUS_VALUES[3], expiryDate: '2026-12-01', branch: 'North Hub', shift: 'Full Day', seat: 'D-03', locker: 'L-11', feeStatus: 'Due', totalPaidMinor: 240000, dueFeeMinor: 180000, currencyCode: 'INR', joinDate: '2024-04-01', consecutiveAbsent: 14 },
 ];
 
 /** Demo-only fixtures for the Members module's secondary management views. */

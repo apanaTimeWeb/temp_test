@@ -25,6 +25,16 @@ export interface AdminMembersMember {
   plan: string;
   status: AdminMembersStatus;
   expiryDate: string;
+  branch?: string;
+  shift?: string;
+  seat?: string;
+  locker?: string;
+  joinDate?: string;
+  feeStatus?: 'Paid' | 'Due';
+  totalPaidMinor?: number;
+  dueFeeMinor?: number;
+  currencyCode?: string;
+  consecutiveAbsent?: number;
 }
 
 /** Demo-only mutable records used by the Members secondary management views. */

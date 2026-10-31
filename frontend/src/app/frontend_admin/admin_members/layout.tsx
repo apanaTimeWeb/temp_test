@@ -7,7 +7,6 @@ import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/ap
 
 const SUBMODULE_NAVIGATION = [
   { href: ADMIN_ROUTES.MEMBERS_DIRECTORY, labelKey: 'SUBMODULE_MEMBERS_DIRECTORY' },
-  { href: ADMIN_ROUTES.MEMBERS_STUDENTS, labelKey: 'SUBMODULE_MEMBERS_STUDENTS' },
   { href: ADMIN_ROUTES.MEMBERS_ENQUIRIES, labelKey: 'SUBMODULE_MEMBERS_ENQUIRIES' },
   { href: ADMIN_ROUTES.MEMBERS_BLACKLIST, labelKey: 'SUBMODULE_MEMBERS_BLACKLIST' },
   { href: ADMIN_ROUTES.MEMBERS_PLANS, labelKey: 'SUBMODULE_MEMBERS_PLANS' },
@@ -19,7 +18,7 @@ export default function AdminMembersLayout({ children }: { children: ReactNode }
   const t = useTranslations('ADMIN_NAVIGATION');
   return (
     <div className="min-w-0 space-y-4">
-      <nav aria-label={t('DOMAIN_MEMBERS_SECTIONS')} className="border-b border-border bg-card">
+      <nav aria-label={t('DOMAIN_MEMBERS_SECTIONS')} className="border-b border-border bg-card block md:hidden">
         <div className="flex min-w-0 gap-1 overflow-x-auto px-3 py-2">
           {SUBMODULE_NAVIGATION.map((item) => {
             const active = pathname === item.href || pathname.startsWith(item.href + '/');
