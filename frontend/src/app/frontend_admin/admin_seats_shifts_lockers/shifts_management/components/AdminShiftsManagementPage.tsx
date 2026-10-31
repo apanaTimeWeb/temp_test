@@ -1,17 +1,52 @@
 'use client';
 // RESPONSIBILITY: AdminShiftsManagementPage component owned by admin_shifts; responsibility folder: admin_shifts_components_views.
 
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Download, Printer, Upload } from 'lucide-react';
+import { Download, Plus, Printer, Upload, X } from 'lucide-react';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_SHIFTS_DEMO_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/mocks/scenarios/admin_shifts_management.scenarios';
+import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
 import { serializeAdminShiftsCsv } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/utils/AdminShiftsManagementCsvUtils';
 
-/** Read-only shift overview. Mutations stay unavailable until an authoritative API contract exists. */
+/** Admin Shift overview and shift configuration. */
 export function AdminShiftsManagementPage() {
   const t = useTranslations('ADMIN_SHIFTS');
   const isDemoMode = isFrontendDemoModeEnabled();
-  const shifts = isDemoMode ? ADMIN_SHIFTS_DEMO_SHIFTS : [];
+  const [shifts, setShifts] = useState<AdminShiftsShift[]>(() => isDemoMode ? [...ADMIN_SHIFTS_DEMO_SHIFTS] : []);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [startTime, setStartTime] = useState('06:00');
+  const [endTime, setEndTime] = useState('12:00');
+  const [capacity, setCapacity] = useState(40);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const handleAddShift = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      setFormError('Please enter a shift name.');
+      return;
+    }
+    const newShift: AdminShiftsShift = {
+      id: String(Date.now()),
+      name: name.trim(),
+      startTime,
+      endTime,
+      occupancy: 0,
+      capacity: Number(capacity) || 40,
+      active: true,
+    };
+    setShifts((prev) => [...prev, newShift]);
+    toast.success(`Shift "${newShift.name}" added successfully.`);
+    setIsAddModalOpen(false);
+    setName('');
+    setStartTime('06:00');
+    setEndTime('12:00');
+    setCapacity(40);
+    setFormError(null);
+  };
+
   const exportCsv = () => {
     if (!isDemoMode) return;
     const blob = new Blob([serializeAdminShiftsCsv(shifts)], { type: 'text/csv;charset=utf-8;' });
@@ -38,6 +73,14 @@ export function AdminShiftsManagementPage() {
           <p className="text-sm text-text-secondary">{t('shiftsSubtitle')}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2 admin-shared-action-row" >
+          <button
+            type="button"
+            data-testid="admin_shifts-page-control-add-shift"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground motion-safe:transition-colors motion-safe:duration-base hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-sm"
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            <Plus size={18} strokeWidth={2} /> Add Shift
+          </button>
           <button
             type="button"
             data-testid="admin_shifts-page-control-001"
@@ -110,6 +153,93 @@ export function AdminShiftsManagementPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-overlay-backdrop p-4" role="dialog" aria-modal="true" aria-labelledby="add-shift-dialog-title">
+          <div className="admin-card w-full max-w-lg bg-card p-6 shadow-xl">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <h2 id="add-shift-dialog-title" className="text-lg font-semibold text-text-primary">Add New Shift</h2>
+              <button
+                type="button"
+                className="rounded-md p-1.5 text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                onClick={() => { setIsAddModalOpen(false); setFormError(null); }}
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <form onSubmit={handleAddShift} className="mt-4 space-y-4">
+              {formError && (
+                <p role="alert" className="text-sm text-danger-text">{formError}</p>
+              )}
+              <div className="space-y-1">
+                <label htmlFor="shift-name-input" className="text-sm font-medium text-text-primary">Shift Name</label>
+                <input
+                  id="shift-name-input"
+                  type="text"
+                  required
+                  placeholder="e.g. Night Shift / Early Morning"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="admin-input w-full"
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-1">
+                  <label htmlFor="shift-start-time" className="text-sm font-medium text-text-primary">Start Time</label>
+                  <input
+                    id="shift-start-time"
+                    type="time"
+                    required
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="admin-input w-full"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label htmlFor="shift-end-time" className="text-sm font-medium text-text-primary">End Time</label>
+                  <input
+                    id="shift-end-time"
+                    type="time"
+                    required
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="admin-input w-full"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="shift-capacity" className="text-sm font-medium text-text-primary">Total Capacity (Seats)</label>
+                <input
+                  id="shift-capacity"
+                  type="number"
+                  min="1"
+                  max="1000"
+                  required
+                  value={capacity}
+                  onChange={(e) => setCapacity(Number(e.target.value))}
+                  className="admin-input w-full"
+                />
+              </div>
+              <div className="flex justify-end gap-2 border-t border-border pt-4">
+                <button
+                  type="button"
+                  className="admin-btn-ghost min-h-11"
+                  onClick={() => { setIsAddModalOpen(false); setFormError(null); }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="admin-btn-primary min-h-11"
+                >
+                  Save Shift
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

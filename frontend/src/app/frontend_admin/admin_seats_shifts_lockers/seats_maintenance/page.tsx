@@ -1,2 +1,13 @@
-import { AdminSeatsSeatManagementMaintenancePage } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_maintenance/components/AdminSeatsMaintenanceSeatManagementMaintenancePage';
-export default function AdminSeatsMaintenanceRoute() { return <AdminSeatsSeatManagementMaintenancePage />; }
+'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
+
+/** Seat maintenance operations redirect to canonical seats management. */
+export default function AdminSeatsMaintenanceRoute() {
+  const router = useRouter();
+  useEffect(() => {
+    router.replace(ADMIN_ROUTES.SEATS_MANAGEMENT);
+  }, [router]);
+  return null;
+}

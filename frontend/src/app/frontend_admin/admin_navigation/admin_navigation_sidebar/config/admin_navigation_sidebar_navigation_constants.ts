@@ -112,9 +112,7 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
       { href: ADMIN_ROUTES.SEATS_MATRIX, icon: LayoutGrid, label: 'Seat Matrix', labelKey: 'SUBMODULE_SEATS_MATRIX' },
       { href: ADMIN_ROUTES.SEATS_MANAGEMENT, icon: Armchair, label: 'Seats Management', labelKey: 'SUBMODULE_SEATS_MANAGEMENT' },
       { href: ADMIN_ROUTES.SHIFTS_MANAGEMENT, icon: Clock, label: 'Shifts Management', labelKey: 'SUBMODULE_SHIFTS_MANAGEMENT' },
-      { href: ADMIN_ROUTES.SEATS_HISTORY, icon: History, label: 'Seat History', labelKey: 'SUBMODULE_SEATS_HISTORY' },
       { href: ADMIN_ROUTES.LOCKERS_MATRIX, icon: LayoutGrid, label: 'Locker Matrix', labelKey: 'SUBMODULE_LOCKERS_MATRIX' },
-      { href: ADMIN_ROUTES.SHIFTS_GAP, icon: TrendingUp, label: 'Shifts Gap', labelKey: 'SUBMODULE_SHIFTS_GAP' },
     ],
   },
   {
