@@ -59,16 +59,25 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
               <tr key={member.id} className="border-b border-border hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
                 <th scope="row" className="px-4 py-3 font-medium text-text-primary">
                   <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
-                  <span className="block text-xs font-normal text-text-secondary">{displayValue(member.id)}</span>
+                  <span className="block text-xs font-normal text-text-secondary">{displayValue(member.id)}{member.branch ? ` · ${member.branch}` : ''}</span>
                 </th>
                 <td className="px-4 py-3"><span className="block">{displayValue(member.email)}</span><span className="text-text-secondary">{displayValue(member.phone)}</span></td>
                 <td className="px-4 py-3">{displayValue(member.plan)}</td>
                 <td className="px-4 py-3">
-                  <span className="block font-medium text-text-primary">{member.seat || '—'}</span>
-                  <span className="text-xs text-text-secondary">{member.shift || '—'}</span>
+                  <span className="block font-medium text-text-primary">{member.seat ? `Seat ${member.seat}` : '—'}</span>
+                  <span className="text-xs text-text-secondary">{member.shift || '—'}{member.locker ? ` · Locker ${member.locker}` : ''}</span>
                 </td>
                 <td className="px-4 py-3">{expiryLabel(member.expiryDate)}</td>
-                <td className="px-4 py-3"><span className="rounded-full bg-surface-highlight px-2.5 py-1 text-xs font-semibold">{statusLabel(member.status)}</span></td>
+                <td className="px-4 py-3">
+                  <div className="flex flex-col gap-1 items-start">
+                    <span className="rounded-full bg-surface-highlight px-2.5 py-0.5 text-xs font-semibold">{statusLabel(member.status)}</span>
+                    {member.feeStatus && (
+                      <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${member.feeStatus === 'Paid' ? 'bg-success-bg text-success-text' : 'bg-danger-bg text-danger-text'}`}>
+                        {member.feeStatus === 'Due' && member.dueFeeMinor ? `Due: ₹${(member.dueFeeMinor / 100).toLocaleString('en-IN')}` : `Fee: ${member.feeStatus}`}
+                      </span>
+                    )}
+                  </div>
+                </td>
                 <td className="px-4 py-3"><div className="relative flex justify-end gap-1">
                   <button type="button" className="min-h-11 min-w-11 rounded-md hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={t('ACTION_VIEW_MEMBER', { name: member.name })} onClick={() => onSelectMember(member)}><Eye size={18} strokeWidth={2} aria-hidden="true" /></button>
                   <button
@@ -96,14 +105,21 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <button type="button" className="text-left font-semibold text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
-                <p className="mt-1 text-xs text-text-secondary">{member.id}</p>
+                <p className="mt-1 text-xs text-text-secondary">{member.id}{member.branch ? ` · ${member.branch}` : ''}</p>
               </div>
-              <span className="shrink-0 rounded-full bg-surface-highlight px-2.5 py-1 text-xs font-semibold">{statusLabel(member.status)}</span>
+              <div className="flex flex-col items-end gap-1 shrink-0">
+                <span className="rounded-full bg-surface-highlight px-2.5 py-1 text-xs font-semibold">{statusLabel(member.status)}</span>
+                {member.feeStatus && (
+                  <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${member.feeStatus === 'Paid' ? 'bg-success-bg text-success-text' : 'bg-danger-bg text-danger-text'}`}>
+                    {member.feeStatus === 'Due' && member.dueFeeMinor ? `Due: ₹${(member.dueFeeMinor / 100).toLocaleString('en-IN')}` : `Fee: ${member.feeStatus}`}
+                  </span>
+                )}
+              </div>
             </div>
             <dl className="mt-3 grid grid-cols-1 gap-2 text-sm">
               <div><dt className="text-xs text-text-secondary">{t('TABLE_CONTACT')}</dt><dd className="break-words text-text-primary"><span className="block">{displayValue(member.email)}</span><span className="text-text-secondary">{displayValue(member.phone)}</span></dd></div>
               <div><dt className="text-xs text-text-secondary">{t('TABLE_PLAN')}</dt><dd className="text-text-primary">{displayValue(member.plan)}</dd></div>
-              <div><dt className="text-xs text-text-secondary">Seat / Shift</dt><dd className="text-text-primary">{member.seat ? `${member.seat} (${member.shift || '—'})` : '—'}</dd></div>
+              <div><dt className="text-xs text-text-secondary">Seat / Shift / Locker</dt><dd className="text-text-primary">{member.seat ? `Seat ${member.seat}` : '—'} · {member.shift || '—'}{member.locker ? ` · Locker ${member.locker}` : ''}</dd></div>
               <div><dt className="text-xs text-text-secondary">{t('TABLE_EXPIRY')}</dt><dd className="text-text-primary">{expiryLabel(member.expiryDate)}</dd></div>
             </dl>
             <div className="relative mt-3 flex gap-2 border-t border-border pt-3">

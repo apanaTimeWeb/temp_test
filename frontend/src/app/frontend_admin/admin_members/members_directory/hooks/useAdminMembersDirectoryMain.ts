@@ -95,6 +95,11 @@ export default function useAdminMembersDirectoryMain() {
       email: values.email.trim(),
       phone: values.phone.trim(),
       plan: values.plan.trim(),
+      branch: values.branch?.trim() || undefined,
+      shift: values.shift?.trim() || undefined,
+      seat: values.seat?.trim() || undefined,
+      locker: values.locker?.trim() || undefined,
+      feeStatus: 'Paid',
       status: 'Active',
       expiryDate: '',
     };

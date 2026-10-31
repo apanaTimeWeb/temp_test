@@ -9,6 +9,10 @@ export const AdminMembersCreateSchema = z.object({
   email: z.string().trim().email('VALIDATION.MEMBER_EMAIL_INVALID').max(254, 'VALIDATION.MEMBER_EMAIL_TOO_LONG'),
   phone: z.string().trim().min(7, 'VALIDATION.MEMBER_PHONE_TOO_SHORT').max(32, 'VALIDATION.MEMBER_PHONE_TOO_LONG'),
   plan: z.string().trim().min(1, 'VALIDATION.MEMBER_PLAN_REQUIRED').max(120, 'VALIDATION.MEMBER_PLAN_TOO_LONG'),
+  branch: z.string().trim().max(100).optional(),
+  shift: z.string().trim().max(100).optional(),
+  seat: z.string().trim().max(50).optional(),
+  locker: z.string().trim().max(50).optional(),
 });
 
 export type AdminMembersCreateFormValues = z.infer<typeof AdminMembersCreateSchema>;
