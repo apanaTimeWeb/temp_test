@@ -6,6 +6,7 @@ import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/A
 
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import { getAdminFinanceRefundStatusLabelKey } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsRefundStatus';
@@ -40,10 +41,12 @@ function mapAdminFinanceRefund(record: AdminFinanceRefundApiRecord): AdminFinanc
 export function AdminFinanceRefundsPage() {
   const t = useTranslations('ADMIN_FINANCE_LEDGER_PAGES');
   const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | AdminFinanceRefund['status']>('statusFilter', 'all', { validValues: ['all', 'pending', 'approved', 'rejected', 'processed'] });
+  const [statusOverrides, setStatusOverrides] = useState<Record<string, AdminFinanceRefund['status']>>({});
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const refundsQuery = useAdminFinanceRefundsQuery();
-  const allRefunds = useMemo(() => (refundsQuery.data ?? []).map(mapAdminFinanceRefund), [refundsQuery.data]);
+  const rawRefunds = useMemo(() => (refundsQuery.data ?? []).map(mapAdminFinanceRefund), [refundsQuery.data]);
+  const allRefunds = useMemo(() => rawRefunds.map((refund) => statusOverrides[refund.id] ? { ...refund, status: statusOverrides[refund.id] } : refund), [rawRefunds, statusOverrides]);
   const isPending = refundsQuery.isPending;
   const loadError = refundsQuery.isError ? t('REFUND_LOAD_ERROR') : null;
 
@@ -83,7 +86,40 @@ export function AdminFinanceRefundsPage() {
               <td className={`py-3 px-4 text-right ${refund.deductionAmount > 0 ? 'text-danger-text' : 'text-text-secondary'}`}>{refund.deductionAmount > 0 ? `-${formatAdminFinanceApiAmount(refund.deductionAmount, refund.currencyCode, refund.amountUnit)}` : t('NONE')}</td>
               <td className="py-3 px-4 text-right font-semibold text-success-text">{formatAdminFinanceApiAmount(refund.netRefund, refund.currencyCode, refund.amountUnit)}</td>
               <td className="py-3 px-4"><span className={ADMIN_FINANCE_REFUND_STATUS_BADGE[refund.status]}>{t(getAdminFinanceRefundStatusLabelKey(refund.status))}</span>{refund.status === 'rejected' && refund.rejectionReason ? <div className="text-caption text-text-secondary mt-1 max-w-48 truncate">{refund.rejectionReason}</div> : null}</td>
-              <td className="py-3 px-4 text-caption text-text-secondary">{refund.status === 'processed' ? `${refund.processedDate ? formatDate(refund.processedDate) : t('PROCESSED_FALLBACK')}${refund.paymentMethod ? ` · ${refund.paymentMethod}` : ''}` : t('REFUND_VIEW_ONLY')}</td>
+              <td className="py-3 px-4 text-caption text-text-secondary">
+                {refund.status === 'pending' ? (
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      className="rounded px-2.5 py-1 text-xs font-semibold bg-success-bg text-success-text hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+                      onClick={() => {
+                        setStatusOverrides((prev) => ({ ...prev, [refund.id]: 'approved' as const }));
+                        toast.success(`Refund approved for ${refund.studentName}`);
+                      }}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded px-2.5 py-1 text-xs font-semibold bg-danger-bg text-danger-text hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+                      onClick={() => {
+                        setStatusOverrides((prev) => ({ ...prev, [refund.id]: 'rejected' as const }));
+                        toast.info(`Refund request rejected for ${refund.studentName}`);
+                      }}
+                    >
+                      Reject
+                    </button>
+                  </div>
+                ) : refund.status === 'approved' ? (
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-success-text">
+                    ✓ Approved
+                  </span>
+                ) : refund.status === 'processed' ? (
+                  `${refund.processedDate ? formatDate(refund.processedDate) : t('PROCESSED_FALLBACK')}${refund.paymentMethod ? ` · ${refund.paymentMethod}` : ''}`
+                ) : (
+                  t('REFUND_VIEW_ONLY')
+                )}
+              </td>
             </tr>)}
           </tbody>
         </table>
