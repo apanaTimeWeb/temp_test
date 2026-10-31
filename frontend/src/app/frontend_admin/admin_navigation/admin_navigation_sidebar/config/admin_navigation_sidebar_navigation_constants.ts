@@ -124,10 +124,7 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     submodules: [
       { href: ADMIN_ROUTES.FINANCE_DASHBOARD, icon: LayoutDashboard, label: 'Finance Dashboard', labelKey: 'SUBMODULE_FINANCE_DASHBOARD' },
       { href: ADMIN_ROUTES.FINANCE_PAYMENTS, icon: DollarSign, label: 'Payments', labelKey: 'SUBMODULE_FINANCE_PAYMENTS' },
-      { href: ADMIN_ROUTES.FINANCE_LATE_FEES, icon: Clock, label: 'Late Fees', labelKey: 'SUBMODULE_FINANCE_LATE_FEES' },
-      { href: ADMIN_ROUTES.FINANCE_AUTO_SUSPEND, icon: Ban, label: 'Auto Suspend', labelKey: 'SUBMODULE_FINANCE_AUTO_SUSPEND' },
       { href: ADMIN_ROUTES.FINANCE_REFERRALS, icon: Users2, label: 'Referrals', labelKey: 'SUBMODULE_FINANCE_REFERRALS' },
-      { href: ADMIN_ROUTES.FINANCE_TRUST_SCORE, icon: Shield, label: 'Trust Scores', labelKey: 'SUBMODULE_FINANCE_TRUST_SCORE' },
     ],
   },
   {

@@ -8,10 +8,7 @@ import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/ap
 const SUBMODULE_NAVIGATION = [
   { href: ADMIN_ROUTES.FINANCE_DASHBOARD, labelKey: 'SUBMODULE_FINANCE_DASHBOARD' },
   { href: ADMIN_ROUTES.FINANCE_PAYMENTS, labelKey: 'SUBMODULE_FINANCE_PAYMENTS' },
-  { href: ADMIN_ROUTES.FINANCE_LATE_FEES, labelKey: 'SUBMODULE_FINANCE_LATE_FEES' },
-  { href: ADMIN_ROUTES.FINANCE_AUTO_SUSPEND, labelKey: 'SUBMODULE_FINANCE_AUTO_SUSPEND' },
   { href: ADMIN_ROUTES.FINANCE_REFERRALS, labelKey: 'SUBMODULE_FINANCE_REFERRALS' },
-  { href: ADMIN_ROUTES.FINANCE_TRUST_SCORE, labelKey: 'SUBMODULE_FINANCE_TRUST_SCORE' },
 ] as const;
 
 export default function AdminFinanceLayout({ children }: { children: ReactNode }) {
