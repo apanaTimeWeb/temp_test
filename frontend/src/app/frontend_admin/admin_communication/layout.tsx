@@ -18,7 +18,7 @@ export default function AdminCommunicationLayout({ children }: { children: React
   const t = useTranslations('ADMIN_NAVIGATION');
   return (
     <div className="min-w-0 space-y-4">
-      <nav aria-label={t('DOMAIN_COMMUNICATION_SECTIONS')} className="border-b border-border bg-card">
+      <nav aria-label={t('DOMAIN_COMMUNICATION_SECTIONS')} className="border-b border-border bg-card block md:hidden">
         <div className="flex min-w-0 gap-1 overflow-x-auto px-3 py-2">
           {SUBMODULE_NAVIGATION.map((item) => {
             const active = pathname === item.href || pathname.startsWith(item.href + '/');

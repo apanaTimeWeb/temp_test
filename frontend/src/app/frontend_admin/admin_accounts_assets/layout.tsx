@@ -8,7 +8,6 @@ import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/ap
 const SUBMODULE_NAVIGATION = [
   { href: ADMIN_ROUTES.ACCOUNTS_EXPENSES, labelKey: 'SUBMODULE_ACCOUNTS_EXPENSES' },
   { href: ADMIN_ROUTES.ACCOUNTS_EXPENSE_CATEGORIES, labelKey: 'SUBMODULE_ACCOUNTS_EXPENSE_CATEGORIES' },
-  { href: ADMIN_ROUTES.ACCOUNTS_DAILY_SETTLEMENT, labelKey: 'SUBMODULE_ACCOUNTS_DAILY_SETTLEMENT' },
   { href: ADMIN_ROUTES.ACCOUNTS_FINANCIAL_REPORTS, labelKey: 'SUBMODULE_ACCOUNTS_FINANCIAL_REPORTS' },
   { href: ADMIN_ROUTES.ACCOUNTS_SEAT_GAP_REPORT, labelKey: 'SUBMODULE_ACCOUNTS_SEAT_GAP_REPORT' },
   { href: ADMIN_ROUTES.ACCOUNTS_SHIFT_GAP_ANALYZER, labelKey: 'SUBMODULE_ACCOUNTS_SHIFT_GAP_ANALYZER' },
@@ -21,7 +20,7 @@ export default function AdminAccountsAssetsLayout({ children }: { children: Reac
   const t = useTranslations('ADMIN_NAVIGATION');
   return (
     <div className="min-w-0 space-y-4">
-      <nav aria-label={t('DOMAIN_ACCOUNTS_ASSETS_SECTIONS')} className="border-b border-border bg-card">
+      <nav aria-label={t('DOMAIN_ACCOUNTS_ASSETS_SECTIONS')} className="border-b border-border bg-card block md:hidden">
         <div className="flex min-w-0 gap-1 overflow-x-auto px-3 py-2">
           {SUBMODULE_NAVIGATION.map((item) => {
             const active = pathname === item.href || pathname.startsWith(item.href + '/');
