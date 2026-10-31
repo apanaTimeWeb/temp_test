@@ -155,7 +155,7 @@ export default function AdminCollectFeePageView({ model }: AdminCollectFeePageVi
 <span className="text-body font-bold text-text-primary">{MODE_LABELS[selectedMode]}</span>
 </div>
 </div>
-<div className="mb-8 border-t-2 border-dashed border-border pt-6">
+<div className="mb-8 border-t-2 border-dashed border-border pt-6" aria-live="polite">
 <p className="text-badge font-bold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_AMOUNT')}</p>
 <p className="text-[40px] font-black tracking-tight text-text-primary">{formatAdminCollectFeeCurrency(totalMinor)}</p>
 </div>

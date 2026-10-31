@@ -47,31 +47,36 @@ export function AdminAccountsDailySettlementPage() {
       field: 'openingBalance',
       headerName: t('OPENING_BALANCE'),
       width: 130,
-      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="text-caption text-text-secondary text-sm">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
+      cellClass: 'text-right',
+      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="block w-full text-right font-mono text-caption text-text-secondary text-sm">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
     },
     {
       field: 'cashCollected',
       headerName: t('CASH'),
       width: 120,
-      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="text-success-text font-medium">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
+      cellClass: 'text-right',
+      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="block w-full text-right font-mono text-success-text font-medium">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
     },
     {
       field: 'upiCollected',
       headerName: t('UPI'),
       width: 120,
-      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="text-info-text font-medium">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
+      cellClass: 'text-right',
+      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="block w-full text-right font-mono text-info-text font-medium">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
     },
     {
       field: 'expenses',
       headerName: t('EXPENSES'),
       width: 130,
-      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="text-danger-text font-medium">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
+      cellClass: 'text-right',
+      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="block w-full text-right font-mono text-danger-text font-medium">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
     },
     {
       field: 'closingBalance',
       headerName: t('CLOSING_BALANCE'),
       width: 130,
-      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="text-body text-text-primary">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
+      cellClass: 'text-right',
+      cellRenderer: (p: DataGridCellParams<Entry>) => <span className="block w-full text-right font-mono text-body text-text-primary font-medium">{formatAdminAccountingCurrency(Number(p.value ?? 0), locale)}</span>
     },
     { field: 'settledBy', headerName: t('SETTLED_BY'), width: 140, cellRenderer: (p: DataGridCellParams<Entry>) => <span className="text-caption text-text-secondary">{p.value}</span> },
     {

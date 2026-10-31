@@ -17,6 +17,13 @@ const LEGEND_ITEMS: Array<{ label: string; cls: string }> = [
   { cls: 'min-w-0 rounded-lg border border-border bg-card p-3', label: 'statusUnknown' },
 ];
 
+const ADMIN_LOCKER_MATRIX_STATUS_CLASS = {
+  free: 'border-success-text bg-success-bg text-success-text',
+  occupied: 'border-danger-text bg-danger-bg text-danger-text',
+  maintenance: 'border-warning-text bg-warning-bg text-warning-text',
+  unknown: 'border-border bg-card text-text-secondary',
+} as const;
+
 export function AdminLockersLockerMatrixPage() {
   const t = useTranslations('ADMIN_LOCKERS');
   const lockerMatrixQuery = useAdminLockersLockerMatrix();
@@ -81,7 +88,7 @@ export function AdminLockersLockerMatrixPage() {
                 key={locker.uuid ?? locker.id}
                 type="button"
                 data-testid={`admin_lockers-locker-${locker.id}`}
-                className={`text-sm text-primary${locker.status}`}
+                className={`inline-flex min-h-11 items-center justify-center rounded-lg border p-2 text-sm font-semibold motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${ADMIN_LOCKER_MATRIX_STATUS_CLASS[locker.status] ?? 'border-border bg-card text-text-secondary'}`}
                 onClick={() => handleCellClick(locker)}
                 title={locker.status === 'free' ? t('lockerFreeTitle') : locker.status === 'occupied' ? t('lockerOccupiedTitle') : locker.status === 'maintenance' ? t('underMaintenance') : t('lockerUnknownTitle')}
                 aria-label={`${t('locker')} ${locker.id}, ${t(locker.status === 'free' ? 'statusFree' : locker.status === 'occupied' ? 'statusOccupied' : locker.status === 'maintenance' ? 'statusMaintenance' : 'statusUnknown')}`}

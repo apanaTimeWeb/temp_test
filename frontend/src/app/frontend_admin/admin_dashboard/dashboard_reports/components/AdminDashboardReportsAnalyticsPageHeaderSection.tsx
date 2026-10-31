@@ -48,7 +48,7 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
           </select>
           <button type="button" data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-004" onClick={props.onPrint} className="admin-btn-ghost admin-btn-sm"><Printer size={18} strokeWidth={2} aria-hidden="true" />{t('PRINT_SAVE_PDF')}</button>
           <button type="button" data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-005" disabled title={t('EMAIL_UNAVAILABLE_TITLE')} className="admin-btn-ghost admin-btn-sm"><Mail size={18} strokeWidth={2} aria-hidden="true" />{t('EMAIL')}</button>
-          <button type="button" data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-006" disabled title={t('PDF_UNAVAILABLE_TITLE')} className="admin-btn-ghost admin-btn-sm"><FileText size={18} strokeWidth={2} aria-hidden="true" />{t('PDF_EXPORT')}</button>
+          <button type="button" data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-006" onClick={props.onPrint} className="admin-btn-ghost admin-btn-sm"><FileText size={18} strokeWidth={2} aria-hidden="true" />{t('PDF_EXPORT')}</button>
           <button type="button" data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-007" disabled={!props.isDemoMode} title={props.isDemoMode ? t('CSV_DEMO_TITLE') : t('CSV_LIVE_UNAVAILABLE_TITLE')} onClick={props.onExportCsv} className="admin-btn-primary admin-btn-sm"><Download size={18} strokeWidth={2} aria-hidden="true" />{t('CSV_EXPORT')}</button>
         </div>
       </div>

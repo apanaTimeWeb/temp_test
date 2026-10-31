@@ -30,7 +30,14 @@ function renderTrustGauge(score: number) {
   const color = score >= 70 ? 'success' : score >= 40 ? 'warning' : 'danger';
   return (
     <div className="flex items-center gap-2">
-      <div className="h-1.5 w-16 shrink-0 overflow-hidden rounded-full bg-border max-sm:w-12">
+      <div
+        className="h-1.5 w-16 shrink-0 overflow-hidden rounded-full bg-border max-sm:w-12"
+        role="progressbar"
+        aria-valuenow={score}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`Trust Score: ${score}/100`}
+      >
         <div className={`block h-full rounded-full admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(score)))}`} data-admin-bg={color} />
       </div>
       <span className="text-sm font-semibold" data-admin-color={color}>{score}</span>
