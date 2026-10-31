@@ -185,7 +185,7 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
             <p className="mc-empty__title text-lg font-semibold text-primary">{tManagerUi('no_whatsapp_messages_found')}</p>
           </div>
         ) : (
-          <div className="mgr-table-wrapper h-112">
+          <div className="mgr-table-wrapper max-h-[28rem] overflow-y-auto">
             <ManagerCommunicationWhatsappLogsNativeTable getRowKey={(row) => row.id} rows={filtered} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
           </div>
         )}

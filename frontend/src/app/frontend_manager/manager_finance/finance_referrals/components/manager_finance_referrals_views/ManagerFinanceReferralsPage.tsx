@@ -16,7 +16,7 @@ import type { ManagerFinanceReferralsRouteQueryProps } from '@/app/frontend_mana
 
 const totalReferrals = MANAGER_FINANCE_SAMPLE_REFERRERS.reduce((a, r) => a + r.referredCount, 0);
 const totalBonus = MANAGER_FINANCE_SAMPLE_REFERRERS.reduce((a, r) => a + r.bonusEarned, 0);
-const topReferrer = MANAGER_FINANCE_SAMPLE_REFERRERS[0];
+const topReferrer = MANAGER_FINANCE_SAMPLE_REFERRERS[0] as (typeof MANAGER_FINANCE_SAMPLE_REFERRERS)[number] | undefined;
 
 export default function ManagerFinanceReferralsPage(_routeQuery: ManagerFinanceReferralsRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_referrals.ui');
@@ -66,8 +66,8 @@ export default function ManagerFinanceReferralsPage(_routeQuery: ManagerFinanceR
             <span className="fin-kpi-label">{tManagerUi('top_referrer')}</span>
             <Trophy size={16} className="fin-text-warning" />
           </div>
-          <p className="fin-kpi-value">{topReferrer.name}</p>
-          <p className="fin-cell-subtext">{topReferrer.referredCount} {tManagerUi('referrals')}</p>
+          <p className="fin-kpi-value">{topReferrer?.name ?? '—'}</p>
+          <p className="fin-cell-subtext">{topReferrer?.referredCount ?? 0} {tManagerUi('referrals')}</p>
         </div>
       </div>
 

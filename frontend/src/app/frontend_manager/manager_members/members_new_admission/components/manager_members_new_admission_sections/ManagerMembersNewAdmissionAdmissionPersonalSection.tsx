@@ -30,7 +30,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({ register, e
           </div>
           <div className="mgr-form-field">
             <label className="mgr-label" htmlFor="admission-referred-by">Referred By (Student ID / Name)</label>
-            <div className="mgr-input-icon-wrap"><Award size={18} strokeWidth={2} className="mgr-input-icon text-secondary" /><input id="admission-referred-by" type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. LIB-001 (Rahul Sharma)" /></div>
+            <div className="mgr-input-icon-wrap"><Award size={18} strokeWidth={2} className="mgr-input-icon text-secondary" /><input id="admission-referred-by" {...register('referredBy')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. LIB-001 (Rahul Sharma)" /></div>
           </div>
         </div>
       </div>

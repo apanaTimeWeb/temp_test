@@ -10,6 +10,8 @@ export const ManagerMembersNewAdmissionAdmissionSchema = z.object({
   manualDiscount: z.string().trim().regex(/^\d+(?:\.\d{1,2})?$/, 'Discount must be a valid INR amount').refine((value) => Number.isFinite(Number(value)) && Number(value) >= 0, 'Discount cannot be negative'),
   amountPaid: z.string().trim().regex(/^\d+(?:\.\d{1,2})?$/, 'Amount paid must be a valid INR amount').refine((value) => Number.isFinite(Number(value)) && Number(value) > 0, 'Amount paid is required'),
   paymentMode: z.string().min(1, 'Payment mode is unavailable until the host contract is supplied'),
+  floor: z.string().optional(),
+  referredBy: z.string().optional(),
 });
 
 export type ManagerMembersNewAdmissionAdmissionFormValues = z.infer<typeof ManagerMembersNewAdmissionAdmissionSchema>;

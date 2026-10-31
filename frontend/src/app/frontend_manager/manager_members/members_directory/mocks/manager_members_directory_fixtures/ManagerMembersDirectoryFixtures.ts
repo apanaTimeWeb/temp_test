@@ -10,6 +10,7 @@ export const MANAGER_MEMBERS_DEMO_RECORDS: ManagerMembersDirectoryRecord[] = [
     status: 'Active',
     joinDate: '2026-01-10',
     expiryDate: '2026-12-31',
+    seat: 'S-01',
     address: '123 Main St, New Delhi',
     dob: '1998-04-12',
     gender: 'Male',

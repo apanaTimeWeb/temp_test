@@ -20,7 +20,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({ register,
         <div className="mgr-form-grid">
           <div className="mgr-form-field">
             <label className="mgr-label" htmlFor="admission-floor">Floor Allotment</label>
-            <div className="mgr-input-icon-wrap"><Layers size={18} strokeWidth={2} className="mgr-input-icon" /><select id="admission-floor" className="mgr-select mgr-input-with-icon"><option value="1">1st Floor (General Study)</option><option value="2">2nd Floor (Silent Zone)</option><option value="3">3rd Floor (Reserved/Cabin)</option></select></div>
+            <div className="mgr-input-icon-wrap"><Layers size={18} strokeWidth={2} className="mgr-input-icon" /><select id="admission-floor" {...register('floor')} className="mgr-select mgr-input-with-icon"><option value="1">1st Floor (General Study)</option><option value="2">2nd Floor (Silent Zone)</option><option value="3">3rd Floor (Reserved/Cabin)</option></select></div>
           </div>
           <div className="mgr-form-field">
             <label className="mgr-label mgr-label-required" htmlFor="admission-shift">{tManagerUi('shift')}</label>

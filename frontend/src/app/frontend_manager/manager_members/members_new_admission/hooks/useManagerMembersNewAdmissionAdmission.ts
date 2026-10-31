@@ -24,6 +24,8 @@ export function useManagerNewAdmissionAdmission() {
       manualDiscount: '',
       amountPaid: '',
       paymentMode: '',
+      floor: '1',
+      referredBy: '',
     },
   });
 

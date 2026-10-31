@@ -16,7 +16,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({ register, er
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
   return (
     <section className="mgr-card" aria-labelledby="manager-students-admission-payment">
-      <div className="mgr-card-header"><div className="mgr-section-number">03</div><h2 id="manager-students-admission-payment" className="mgr-section-title">{tManagerUi('fee_payment')}</h2></div>
+      <div className="mgr-card-header"><div className="mgr-section-number">04</div><h2 id="manager-students-admission-payment" className="mgr-section-title">{tManagerUi('fee_payment')}</h2></div>
       <div className="mgr-card-body">
         <div className="mgr-form-grid">
           <div className="mgr-form-field">

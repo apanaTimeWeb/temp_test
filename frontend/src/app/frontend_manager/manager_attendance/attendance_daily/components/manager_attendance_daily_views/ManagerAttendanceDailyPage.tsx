@@ -28,7 +28,7 @@ function toLocalDateInputValue(date: Date): string {
 // DATA FLOW: Route searchParams -> Main props -> this view's route context.
 export default function ManagerAttendanceDailyPage({ view, id, name, phone, smartId }: ManagerAttendanceDailyMainProps) {
   const tManagerUi = useTranslations('manager.manager_attendance.ui');
-  const date = toLocalDateInputValue(new Date());
+  const [date, setDate] = useState(() => toLocalDateInputValue(new Date()));
   const [shift, setShift]       = useState('All');
   const [students, setStudents] = useState<Student[]>(INIT_STUDENTS);
   const shiftLabels: Record<string, string> = {
@@ -105,8 +105,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
         <div className="eng-filter-row">
           <div className="eng-filter-field">
             <label className="eng-label" htmlFor="rbg4-managerengagementattendancepage-103">{tManagerUi('date')}</label>
-            <input id="rbg4-managerengagementattendancepage-103" type="date" className="eng-input" value={date} readOnly disabled aria-label={tManagerUi('sample_date_date_filtering_unavailable')} title={tManagerUi('date_filtering_is_unavailable_until_an_authoritative_dat_50c52e')} />
-            <span className="eng-input-hint">{tManagerUi('date_filter_unavailable')}</span>
+            <input id="rbg4-managerengagementattendancepage-103" type="date" className="eng-input" value={date} onChange={(e) => setDate(e.target.value)} aria-label={tManagerUi('date')} />
           </div>
           <div className="eng-filter-field">
             <label className="eng-label" htmlFor="rbg4-managerengagementattendancepage-108">{tManagerUi('shift')}</label>

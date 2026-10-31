@@ -7,6 +7,7 @@ export interface ManagerMembersDirectoryRecord {
   status: 'Active' | 'Expired' | 'Suspended';
   joinDate: string;
   expiryDate: string;
+  seat?: string;
   address?: string;
   dob?: string;
   gender?: string;

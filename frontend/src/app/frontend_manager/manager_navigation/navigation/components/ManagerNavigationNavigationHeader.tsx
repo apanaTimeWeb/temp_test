@@ -71,7 +71,7 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
           <Bell size={18} strokeWidth={2} />
           <span className="mgr-bell-dot" aria-hidden="true" />
         </Link>
-        <div className="mgr-avatar-wrapper" aria-label={tManagerUi('manager_account_menu')}>
+        <div className="mgr-avatar-wrapper">
           <div className="mgr-avatar mgr-avatar-header" aria-hidden="true">
             <User size={18} strokeWidth={2} />
           </div>

@@ -6,6 +6,6 @@ import type { ManagerMembersDirectoryMainProps } from '@/app/frontend_manager/ma
 
 export function ManagerMembersDirectoryMain(props: ManagerMembersDirectoryMainProps) {
   return <ManagerMembersDirectoryPage
-    view={props.view} id={props.id} name={props.name} phone={props.phone} smartId={props.smartId}
+    view={props.view} id={props.id} name={props.name} phone={props.phone} smartId={props.smartId} seat={props.seat}
   />;
 }

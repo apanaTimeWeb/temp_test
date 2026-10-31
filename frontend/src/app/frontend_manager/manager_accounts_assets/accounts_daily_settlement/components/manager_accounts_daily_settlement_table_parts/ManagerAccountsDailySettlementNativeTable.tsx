@@ -43,11 +43,30 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
     <div className="overflow-x-auto">
       <table className="w-full border-collapse text-left" aria-rowcount={rows.length + 1}>
         <thead><tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-          {columns.map((column, index) => <th key={column.field ?? column.headerName ?? JSON.stringify(column)} scope="col" aria-sort={sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-3 py-3 font-semibold whitespace-nowrap">
-            {column.field && column.sortable !== false ? <button type="button" className="inline-flex items-center gap-1 text-left" onClick={() => changeSort(String(column.field))} aria-label={`Sort by ${column.headerName ?? column.field}`}>
-              {column.headerName ?? column.field} {sortField === column.field ? (sortDirection === 'asc' ? '↑' : '↓') : null}
-            </button> : (column.headerName ?? column.field ?? '—')}
-          </th>)}
+          {columns.map((column, index) => {
+            const isRightAligned = column.cellStyle?.textAlign === 'right';
+            return (
+              <th
+                key={column.field ?? column.headerName ?? JSON.stringify(column)}
+                scope="col"
+                aria-sort={sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+                className={`px-3 py-3 font-semibold whitespace-nowrap ${isRightAligned ? 'text-right' : 'text-left'}`}
+              >
+                {column.field && column.sortable !== false ? (
+                  <button
+                    type="button"
+                    className={`inline-flex items-center gap-1 ${isRightAligned ? 'justify-end w-full' : 'text-left'}`}
+                    onClick={() => changeSort(String(column.field))}
+                    aria-label={`Sort by ${column.headerName ?? column.field}`}
+                  >
+                    {column.headerName ?? column.field} {sortField === column.field ? (sortDirection === 'asc' ? '↑' : '↓') : null}
+                  </button>
+                ) : (
+                  column.headerName ?? column.field ?? '—'
+                )}
+              </th>
+            );
+          })}
         </tr></thead>
         <tbody>{visibleRows.map((row, rowIndex) => <tr key={getRowKey(row)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
           {columns.map((column, columnIndex) => {
@@ -55,7 +74,16 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
             const value: NativeCellParams<T>['value'] = typeof rawValue === 'string' || typeof rawValue === 'number' || typeof rawValue === 'boolean' ? rawValue : rawValue == null ? null : String(rawValue);
             const params: NativeCellParams<T> = { data: row, value };
             const content = column.cellRenderer ? column.cellRenderer(params) : column.valueFormatter ? column.valueFormatter(params) : displayValue(rawValue);
-            return <td key={column.field ?? column.headerName ?? JSON.stringify(column)} className={`px-3 py-3 align-middle text-sm ${typeof column.cellClass === 'function' ? column.cellClass(params) : column.cellClass ?? ''}`}>{content}</td>;
+            const isRightAligned = column.cellStyle?.textAlign === 'right';
+            return (
+              <td
+                key={column.field ?? column.headerName ?? JSON.stringify(column)}
+                style={column.cellStyle}
+                className={`px-3 py-3 align-middle text-sm ${isRightAligned ? 'text-right' : ''} ${typeof column.cellClass === 'function' ? column.cellClass(params) : column.cellClass ?? ''}`}
+              >
+                {content}
+              </td>
+            );
           })}
         </tr>)}</tbody>
       </table>

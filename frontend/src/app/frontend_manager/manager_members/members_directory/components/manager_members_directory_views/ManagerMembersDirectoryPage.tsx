@@ -44,7 +44,8 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
       data-route-id={_routeQuery.id}
       data-route-name={_routeQuery.name}
       data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
+      data-route-smart-id={_routeQuery.smartId}
+      data-route-seat={_routeQuery.seat}>
       <ManagerMembersDirectoryHeader />
       <p role="status" data-testid="manager-members-demo-mode-banner" className="mb-5 rounded-xl border border-warning bg-warning-bg px-4 py-3 text-sm text-warning">
         {tManagerUi('demo_mode_existing_members_are_sample_records_new_member_014d0f')}
