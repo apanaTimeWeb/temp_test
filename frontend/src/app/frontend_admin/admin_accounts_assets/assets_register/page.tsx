@@ -1,5 +1,6 @@
-import AdminAssetsRegisterRoute from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterRoute';
+import { redirect } from 'next/navigation';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
 export default function AdminAssetsRegisterPageEntry() {
-  return <AdminAssetsRegisterRoute />;
+  redirect(ADMIN_ROUTES.ACCOUNTS_FINANCIAL_REPORTS);
 }

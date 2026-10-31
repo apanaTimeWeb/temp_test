@@ -136,12 +136,8 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     icon: Building2,
     submodules: [
       { href: ADMIN_ROUTES.ACCOUNTS_EXPENSES, icon: CreditCard, label: 'Expenses', labelKey: 'SUBMODULE_ACCOUNTS_EXPENSES' },
-      { href: ADMIN_ROUTES.ACCOUNTS_EXPENSE_CATEGORIES, icon: ClipboardList, label: 'Expense Categories', labelKey: 'SUBMODULE_ACCOUNTS_EXPENSE_CATEGORIES' },
       { href: ADMIN_ROUTES.ACCOUNTS_FINANCIAL_REPORTS, icon: BarChart, label: 'Financial Reports', labelKey: 'SUBMODULE_ACCOUNTS_FINANCIAL_REPORTS' },
       { href: ADMIN_ROUTES.ACCOUNTS_SEAT_GAP_REPORT, icon: TrendingUp, label: 'Seat Gap Report', labelKey: 'SUBMODULE_ACCOUNTS_SEAT_GAP_REPORT' },
-      { href: ADMIN_ROUTES.ACCOUNTS_SHIFT_GAP_ANALYZER, icon: BarChart2, label: 'Shift Gap Analyzer', labelKey: 'SUBMODULE_ACCOUNTS_SHIFT_GAP_ANALYZER' },
-      { href: ADMIN_ROUTES.ASSETS_REGISTER, icon: Building2, label: 'Asset Register', labelKey: 'SUBMODULE_ASSETS_REGISTER' },
-      { href: ADMIN_ROUTES.ASSETS_MAINTENANCE, icon: AlertCircle, label: 'Asset Maintenance', labelKey: 'SUBMODULE_ASSETS_MAINTENANCE' },
     ],
   },
   {
