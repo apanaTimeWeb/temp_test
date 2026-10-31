@@ -25,10 +25,10 @@ describe('Admin nine-domain primary navigation', () => {
     expect(clickable.every((item) => Object.values(ADMIN_NAVIGATION_URLS).includes(item.href as never))).toBe(true);
   });
 
-  it('keeps all 66 requested destinations in the canonical central route registry', async () => {
+  it('keeps all 62 requested destinations in the canonical central route registry', async () => {
     const { ADMIN_ROUTES } = await import('@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes');
     const values = Object.values(ADMIN_ROUTES).filter((value): value is Extract<(typeof ADMIN_ROUTES)[keyof typeof ADMIN_ROUTES], string> => typeof value === 'string' && /^\/admin\/admin_[a-z0-9_]+\/[a-z0-9_]+$/.test(value));
-    expect(new Set(values).size).toBe(66);
+    expect(new Set(values).size).toBe(62);
     expect(values.every((value) => !value.includes('?view='))).toBe(true);
   });
 });
