@@ -18,6 +18,13 @@ export default function ManagerNavigationSidebar({
   onMobileClose,
 }: ManagerNavigationSidebarProps) {
   const tManagerUi = useTranslations('manager.manager_navigation.ui');
+  const getNavLabel = (key: string) => {
+    const text = tManagerUi(key);
+    if (!text || text.startsWith('manager.manager_nav')) {
+      if (key === 'nav_help_support' || key === 'group_help_support') return 'Help & Support';
+    }
+    return text;
+  };
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [showLogout, setShowLogout] = useState(false);
@@ -132,10 +139,10 @@ export default function ManagerNavigationSidebar({
   const filteredSections = isSearching
     ? navigationSections
         .map((section) => {
-          const sectionLabel = section.labelKey ? (tManagerUi(section.labelKey) ?? '').toLowerCase() : '';
+          const sectionLabel = section.labelKey ? (getNavLabel(section.labelKey) ?? '').toLowerCase() : '';
           const groupMatches = sectionLabel.includes(normalizedQuery);
           const matchingItems = section.items.filter((item) => {
-            const itemLabel = (tManagerUi(item.labelKey) ?? '').toLowerCase();
+            const itemLabel = (getNavLabel(item.labelKey) ?? '').toLowerCase();
             const href = item.href.toLowerCase();
             return groupMatches || itemLabel.includes(normalizedQuery) || href.includes(normalizedQuery);
           });
@@ -294,12 +301,12 @@ export default function ManagerNavigationSidebar({
                           className={`mgr-nav-item${active ? ' active' : ''}`}
                           data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`}
                           aria-current={active ? 'page' : undefined}
-                          title={collapsed && !mobileOpen ? tManagerUi(item.labelKey) : undefined}
+                          title={collapsed && !mobileOpen ? getNavLabel(item.labelKey) : undefined}
                           onClick={handleLinkClick}
                         >
                           <Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />
                           {(!collapsed || mobileOpen) && (
-                            <span className="mgr-nav-label">{tManagerUi(item.labelKey)}</span>
+                            <span className="mgr-nav-label">{getNavLabel(item.labelKey)}</span>
                           )}
                         </Link>
                       );
@@ -319,7 +326,7 @@ export default function ManagerNavigationSidebar({
                       data-testid={`manager-nav-group-toggle-${section.key}`}
                       onClick={() => toggleGroup(section.key)}
                     >
-                      <span>{tManagerUi(section.labelKey!)}</span>
+                      <span>{getNavLabel(section.labelKey!)}</span>
                       <ChevronDown
                         size={14}
                         aria-hidden="true"
@@ -342,12 +349,12 @@ export default function ManagerNavigationSidebar({
                           className={`mgr-nav-item${active ? ' active' : ''}`}
                           data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`}
                           aria-current={active ? 'page' : undefined}
-                          title={collapsed && !mobileOpen ? tManagerUi(item.labelKey) : undefined}
+                          title={collapsed && !mobileOpen ? getNavLabel(item.labelKey) : undefined}
                           onClick={handleLinkClick}
                         >
                           <Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />
                           {(!collapsed || mobileOpen) && (
-                            <span className="mgr-nav-label">{tManagerUi(item.labelKey)}</span>
+                            <span className="mgr-nav-label">{getNavLabel(item.labelKey)}</span>
                           )}
                         </Link>
                       );
