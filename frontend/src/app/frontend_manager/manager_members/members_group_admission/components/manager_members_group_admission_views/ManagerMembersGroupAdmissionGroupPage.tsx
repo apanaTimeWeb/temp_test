@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Users2, Plus, Download, Upload, Trash2, CheckCircle2, X, FileSpreadsheet, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { ManagerMembersGroupAdmissionManualModal } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal';
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
 import type { ManagerMembersGroupAdmissionGroupPageRouteProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
 
@@ -44,11 +45,8 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
   const [parsedRows, setParsedRows] = useState<GroupStudentEntry[]>([]);
   const [batchName, setBatchName] = useState('');
 
-  // Manual Entry state
-  const [manualRows, setManualRows] = useState<GroupStudentEntry[]>([
-    { id: '1', name: '', phone: '', email: '', plan: 'Pro Monthly', shift: 'Morning' },
-    { id: '2', name: '', phone: '', email: '', plan: 'Pro Monthly', shift: 'Morning' },
-  ]);
+  // Manual Entry modal state
+  // handled by ManagerMembersGroupAdmissionManualModal
 
   const showNotification = (msg: string) => {
     setToastMessage(msg);
@@ -116,51 +114,6 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
     setParsedRows([]);
     setBatchName('');
     showNotification(`Bulk admission successful! Enrolled ${newBatch.count} members in batch ${newBatch.batchId}.`);
-  };
-
-  const addManualRow = () => {
-    setManualRows([
-      ...manualRows,
-      { id: String(Date.now()), name: '', phone: '', email: '', plan: 'Pro Monthly', shift: 'Morning' },
-    ]);
-  };
-
-  const removeManualRow = (index: number) => {
-    if (manualRows.length <= 1) return;
-    setManualRows(manualRows.filter((_, i) => i !== index));
-  };
-
-  const updateManualRow = (index: number, field: keyof GroupStudentEntry, value: string) => {
-    const updated = [...manualRows];
-    const target = updated[index];
-    if (target) {
-      target[field] = value;
-      setManualRows(updated);
-    }
-  };
-
-  const confirmManualGroup = () => {
-    const validRows = manualRows.filter(r => r.name.trim().length > 0 && r.phone.trim().length >= 10);
-    if (validRows.length === 0) {
-      alert('Please fill out at least one student with a valid Name and 10-digit Phone.');
-      return;
-    }
-    const newBatch: RecentGroupAdmission = {
-      batchId: `GRP-2026-${String(recentGroups.length + 1).padStart(3, '0')}`,
-      batchName: batchName || 'Manual Group Admission',
-      date: new Date().toISOString().slice(0, 10),
-      count: validRows.length,
-      shift: validRows[0]?.shift || 'Morning',
-      status: 'Active',
-    };
-    setRecentGroups([newBatch, ...recentGroups]);
-    setShowManualModal(false);
-    setBatchName('');
-    setManualRows([
-      { id: '1', name: '', phone: '', email: '', plan: 'Pro Monthly', shift: 'Morning' },
-      { id: '2', name: '', phone: '', email: '', plan: 'Pro Monthly', shift: 'Morning' },
-    ]);
-    showNotification(`Group created successfully! Enrolled ${validRows.length} members under batch ${newBatch.batchId}.`);
   };
 
   return (
@@ -336,85 +289,23 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
       )}
 
       {/* Manual Group Entry Modal */}
-      {showManualModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4">
-          <div className="w-full max-w-4xl rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-5 max-h-[90vh] flex flex-col">
-            <div className="flex items-center justify-between border-b border-border pb-3 shrink-0">
-              <h2 className="text-xl font-bold text-primary flex items-center gap-2">
-                <Users2 size={20} className="text-success" /> Manual Group Entry
-              </h2>
-              <button type="button" onClick={() => setShowManualModal(false)} className="text-secondary hover:text-primary">
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="shrink-0">
-              <label className="mgr-label" htmlFor="manual-batch-name">Batch / Group Name</label>
-              <input id="manual-batch-name" type="text" className="mgr-input" placeholder="e.g. Combined SSC Study Group" value={batchName} onChange={(e) => setBatchName(e.target.value)} />
-            </div>
-
-            <div className="flex-1 overflow-y-auto border border-border rounded-xl">
-              <table className="w-full text-xs">
-                <thead className="bg-surface-highlight border-b border-border text-left font-bold text-secondary uppercase sticky top-0">
-                  <tr>
-                    <th className="p-3">#</th>
-                    <th className="p-3">Student Name</th>
-                    <th className="p-3">Phone (10 digits)</th>
-                    <th className="p-3">Shift</th>
-                    <th className="p-3">Plan</th>
-                    <th className="p-3 text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {manualRows.map((row, index) => (
-                    <tr key={row.id} className="border-b border-border last:border-0 hover:bg-surface-hover">
-                      <td className="p-3 font-bold text-secondary">{index + 1}</td>
-                      <td className="p-2">
-                        <input type="text" className="mgr-input py-1.5 text-xs" placeholder="Full Name" value={row.name} onChange={(e) => updateManualRow(index, 'name', e.target.value)} />
-                      </td>
-                      <td className="p-2">
-                        <input type="tel" className="mgr-input py-1.5 text-xs font-mono" placeholder="9876543210" value={row.phone} onChange={(e) => updateManualRow(index, 'phone', e.target.value)} />
-                      </td>
-                      <td className="p-2">
-                        <select className="mgr-select py-1.5 text-xs" value={row.shift} onChange={(e) => updateManualRow(index, 'shift', e.target.value)}>
-                          <option value="Morning">Morning</option>
-                          <option value="Evening">Evening</option>
-                          <option value="Full Day">Full Day</option>
-                          <option value="Night">Night</option>
-                        </select>
-                      </td>
-                      <td className="p-2">
-                        <select className="mgr-select py-1.5 text-xs" value={row.plan} onChange={(e) => updateManualRow(index, 'plan', e.target.value)}>
-                          <option value="Basic Monthly">Basic Monthly</option>
-                          <option value="Pro Monthly">Pro Monthly</option>
-                          <option value="Quarterly Standard">Quarterly Standard</option>
-                        </select>
-                      </td>
-                      <td className="p-2 text-center">
-                        <button type="button" onClick={() => removeManualRow(index)} disabled={manualRows.length <= 1} className="text-danger hover:text-danger-text disabled:opacity-30">
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="flex justify-between items-center shrink-0 pt-3 border-t border-border">
-              <button type="button" onClick={addManualRow} className="mgr-btn-ghost flex items-center gap-2 text-xs">
-                <Plus size={14} /> Add Another Student Row
-              </button>
-              <div className="flex gap-3">
-                <button type="button" onClick={() => setShowManualModal(false)} className="mgr-btn-ghost">Cancel</button>
-                <button type="button" onClick={confirmManualGroup} className="mgr-btn-primary flex items-center gap-2">
-                  <CheckCircle2 size={16} /> Enroll Group
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ManagerMembersGroupAdmissionManualModal
+        isOpen={showManualModal}
+        onClose={() => setShowManualModal(false)}
+        onConfirm={(confirmedBatchName, students) => {
+          const newBatch: RecentGroupAdmission = {
+            batchId: `GRP-2026-${String(recentGroups.length + 1).padStart(3, '0')}`,
+            batchName: confirmedBatchName,
+            date: new Date().toISOString().slice(0, 10),
+            count: students.length,
+            shift: students[0]?.shift || 'Morning',
+            status: 'Active',
+          };
+          setRecentGroups([newBatch, ...recentGroups]);
+          setShowManualModal(false);
+          showNotification(`Group admission registered successfully! Enrolled ${students.length} members in batch ${newBatch.batchId}.`);
+        }}
+      />
     </div>
   );
 }

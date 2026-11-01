@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { MANAGER_FINANCE_SAMPLE_RENEWALS } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsDemoRepository';
 import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
@@ -10,7 +10,7 @@ import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_fin
 
 // RESPONSIBILITY: Entry page for the manager_renewals module.
 // DATA FLOW: Next.js Router -> Page -> Components
-import { Send, MessageSquare, Upload, Mail, Download, Printer, RotateCcw, CheckCircle } from 'lucide-react';
+import { Send, MessageSquare, Upload, Mail, Download, Printer, RotateCcw, CheckCircle, BellRing, AlertTriangle } from 'lucide-react';
 import { MANAGER_FINANCE_RENEWAL_FILTERS } from '@/app/frontend_manager/manager_finance/finance_renewals/constants/ManagerFinanceRenewalsRenewalConstants';
 import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
 
@@ -25,6 +25,9 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   const [renewalsList, setRenewalsList] = useState(MANAGER_FINANCE_SAMPLE_RENEWALS);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const expiringCritical = useMemo(() => renewalsList.filter((r) => r.daysLeft <= 3 && r.daysLeft >= 0), [renewalsList]);
+  const expiredCount = useMemo(() => renewalsList.filter((r) => r.daysLeft < 0).length, [renewalsList]);
 
   const visible = renewalsList.filter((r) => {
     if (filter === 'expired')     return r.daysLeft < 0;
@@ -218,6 +221,36 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
           </button>
           <button type="button" onClick={handleRemindAll} disabled={visible.length === 0} className="fin-btn fin-btn-secondary cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={tManagerUi('remind_all')}>
             <Send size={14} className="mr-1 text-amber-500" /> {tManagerUi('remind_all')}
+          </button>
+        </div>
+      </div>
+
+      {/* Active Remaining Days Alert Notification Banner */}
+      <div className="p-4 rounded-xl bg-card border border-warning/40 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-warning/15 text-warning flex items-center justify-center shrink-0">
+            <BellRing size={20} className="motion-safe:animate-bounce" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-primary flex items-center gap-2">
+              <span>Subscription Expiry Notification</span>
+              <span className="px-2 py-0.5 rounded-full text-[11px] bg-danger text-on-danger font-bold">
+                {expiringCritical.length + expiredCount} Urgently Pending
+              </span>
+            </h3>
+            <p className="text-xs text-secondary mt-0.5">
+              <strong className="text-danger">{expiredCount} subscriptions already expired</strong> ·{' '}
+              <strong className="text-warning">{expiringCritical.length} members have ≤ 3 days remaining</strong>. Send reminders to safeguard seat renewals.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={handleWhatsAppAll}
+            className="mgr-btn-primary text-xs flex items-center gap-1.5"
+          >
+            <MessageSquare size={14} /> Send Due Reminders ({expiringCritical.length + expiredCount})
           </button>
         </div>
       </div>

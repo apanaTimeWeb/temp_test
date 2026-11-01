@@ -24,6 +24,7 @@ export function ManagerSeatsMatrixClient() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [genderFilter, setGenderFilter] = useState<'all' | 'Male' | 'Female'>('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newSeatLabel, setNewSeatLabel] = useState('');
   const [newSeatWing, setNewSeatWing] = useState('North Reading Hall (AC)');
@@ -41,9 +42,19 @@ export function ManagerSeatsMatrixClient() {
         (seat.smartId && seat.smartId.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const matchesStatus = statusFilter === 'all' || seat.status === statusFilter;
-      return matchesSearch && matchesStatus;
+      const matchesGender = genderFilter === 'all' || (seat.student ? seat.studentGender === genderFilter : true);
+      return matchesSearch && matchesStatus && matchesGender;
     });
-  }, [visible, searchQuery, statusFilter]);
+  }, [visible, searchQuery, statusFilter, genderFilter]);
+
+  // Filtered seats for Grid View
+  const visibleGridSeats = useMemo(() => {
+    if (genderFilter === 'all') return visible;
+    return visible.filter((seat) => {
+      if (seat.status === 'free') return true;
+      return seat.studentGender === genderFilter;
+    });
+  }, [visible, genderFilter]);
 
   const totalTablePages = Math.max(1, Math.ceil(filteredTableSeats.length / pageSize));
   const paginatedTableSeats = useMemo(() => {
@@ -98,6 +109,20 @@ export function ManagerSeatsMatrixClient() {
                 {tManagerUi(labelKey)}
               </button>
             ))}
+          </div>
+
+          {/* Gender filter tabs */}
+          <div className="flex items-center gap-1.5 bg-floating p-1 rounded-lg border border-border">
+            <select
+              aria-label="Filter seats by gender"
+              value={genderFilter}
+              onChange={(e) => { setGenderFilter(e.target.value as 'all' | 'Male' | 'Female'); setPage(0); }}
+              className="bg-card text-primary text-xs font-semibold px-2.5 py-1.5 rounded-md border-0 focus:ring-1 focus:ring-primary shadow-xs"
+            >
+              <option value="all">👥 All Genders</option>
+              <option value="Male">👨 Male Students</option>
+              <option value="Female">👩 Female Students</option>
+            </select>
           </div>
 
           {/* View mode toggle: [ ⊞ Grid View | ☰ Table View ] */}
@@ -170,7 +195,7 @@ export function ManagerSeatsMatrixClient() {
             <div className="flex items-center justify-center py-24 text-secondary">{tManagerUi('loading_seat_matrix')}</div>
           ) : (
             <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
-              {visible.map((seat) => (
+              {visibleGridSeats.map((seat) => (
                 <button type="button"
                   key={seat.uuid || seat.id}
                   className={`h-12 rounded-lg text-sm font-semibold flex items-center justify-center motion-safe:transition-transform hover:scale-105 active:scale-95 ${seat.status === 'free' ? 'bg-floating border border-success text-success hover:bg-success hover:text-primary' :
@@ -222,6 +247,16 @@ export function ManagerSeatsMatrixClient() {
                 <option value="expiring">Expiring Soon</option>
                 <option value="maintenance">Maintenance</option>
               </select>
+              <select
+                aria-label="Table gender filter"
+                value={genderFilter}
+                onChange={(e) => { setGenderFilter(e.target.value as 'all' | 'Male' | 'Female'); setPage(0); }}
+                className="mgr-select text-xs"
+              >
+                <option value="all">All Genders</option>
+                <option value="Male">👨 Male</option>
+                <option value="Female">👩 Female</option>
+              </select>
             </div>
           </div>
 
@@ -266,7 +301,16 @@ export function ManagerSeatsMatrixClient() {
                       <td className="py-3 px-4">
                         {seat.student ? (
                           <div>
-                            <span className="font-semibold text-primary block leading-tight">{seat.student}</span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-semibold text-primary block leading-tight">{seat.student}</span>
+                              {seat.studentGender && (
+                                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                                  seat.studentGender === 'Female' ? 'bg-pink-100 text-pink-700 dark:bg-pink-950/40 dark:text-pink-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'
+                                }`}>
+                                  {seat.studentGender === 'Female' ? '👩 F' : '👨 M'}
+                                </span>
+                              )}
+                            </div>
                             <span className="text-xs text-secondary font-mono">{seat.smartId || '—'}</span>
                           </div>
                         ) : (

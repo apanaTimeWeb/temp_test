@@ -12,6 +12,7 @@ export type ManagerFinancePaymentPromisesPaymentPromiseSample = {
   timesChanged: number;
   status: 'pending' | 'fulfilled' | 'overdue';
   fulfilledDate?: string;
+  remarks?: string;
 };
 
 export const MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES: ManagerFinancePaymentPromisesPaymentPromiseSample[] = [

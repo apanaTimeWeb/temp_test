@@ -31,7 +31,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   const tManagerUi = useTranslations('manager.manager_collect_fee.ui');
   const router = useRouter();
   const { confirm, dialog: unsavedConfirmDialog } = useManagerFinanceCollectFeeConfirm();
-  const { formatCurrency } = useManagerCollectFeeFormatting();
+  const { formatCurrency, toMinorUnits } = useManagerCollectFeeFormatting();
   const modeLabels: Record<ManagerFinanceCollectFeeMode, string> = { cash: tManagerUi('cash'), upi: tManagerUi('upi'), card: tManagerUi('card'), bank: tManagerUi('bank_transfer') };
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
@@ -66,6 +66,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   const [couponStatus, setCouponStatus] = useState<ManagerFinanceCollectFeeContractStatus>('idle');
   const [lateFeeOverride, setLateFeeOverride] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCustomDuration, setIsCustomDuration] = useState(false);
   const [collectedBy, setCollectedBy] = useState('Branch Manager Satyam');
 
   const hasUnsavedCollectionDraft = Boolean(selectedStudent || formState.isDirty || amount || txnId || couponCode || lateFee || remark || monthsToRenew !== '1' || mode !== 'cash');
@@ -201,13 +202,66 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
             <div className="fin-card p-6 space-y-4">
               <p className="fin-section-label">{tManagerUi('payment_details')}</p>
               <div>
-                <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-128">{tManagerUi('months_paying_for_cycle')}</label>
-                <select id="rbg4-managerfinancecollectfeepage-128" className="fin-select w-full mt-1" value={monthsToRenew} onChange={e => setMonthsToRenew(e.target.value as ManagerFinanceCollectFeeDraft['monthsToRenew'])}>
-                  <option value="1">{tManagerUi('label_1_month')}</option>
-                  <option value="3">{tManagerUi('label_3_months_quarterly')}</option>
-                  <option value="6">{tManagerUi('label_6_months_half_yearly')}</option>
-                  <option value="12">{tManagerUi('label_12_months_annual')}</option>
-                </select>
+                <div className="flex items-center justify-between">
+                  <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-128">{tManagerUi('months_paying_for_cycle')}</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (isCustomDuration) {
+                        setIsCustomDuration(false);
+                        setMonthsToRenew('1');
+                      } else {
+                        setIsCustomDuration(true);
+                      }
+                    }}
+                    className="text-xs text-primary font-medium hover:underline cursor-pointer"
+                  >
+                    {isCustomDuration ? 'Standard Cycle' : '+ Custom Duration'}
+                  </button>
+                </div>
+                {!isCustomDuration ? (
+                  <select
+                    id="rbg4-managerfinancecollectfeepage-128"
+                    className="fin-select w-full mt-1"
+                    value={monthsToRenew}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === 'custom') {
+                        setIsCustomDuration(true);
+                      } else {
+                        setMonthsToRenew(val as ManagerFinanceCollectFeeDraft['monthsToRenew']);
+                        if (Number(val) > 0) {
+                          setAmount(String(Number(val) * 1200));
+                        }
+                      }
+                    }}
+                  >
+                    <option value="1">{tManagerUi('label_1_month')} (₹1,200)</option>
+                    <option value="3">{tManagerUi('label_3_months_quarterly')} (₹3,400)</option>
+                    <option value="6">{tManagerUi('label_6_months_half_yearly')} (₹6,500)</option>
+                    <option value="12">{tManagerUi('label_12_months_annual')} (₹12,000)</option>
+                    <option value="custom">Custom Duration / Months...</option>
+                  </select>
+                ) : (
+                  <div className="flex gap-2 mt-1 items-center">
+                    <input
+                      type="number"
+                      min="1"
+                      max="36"
+                      className="fin-input flex-1"
+                      placeholder="Enter custom months (e.g. 2, 4, 8, 18)"
+                      value={monthsToRenew}
+                      onChange={(e) => {
+                        const m = e.target.value;
+                        setMonthsToRenew(m);
+                        if (Number(m) > 0) {
+                          setAmount(String(Number(m) * 1200));
+                        }
+                      }}
+                    />
+                    <span className="text-xs text-secondary font-medium px-2 shrink-0">Months</span>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-137">{tManagerUi('amount_43dc85')} <span className="fin-text-danger">*</span></label>
@@ -271,6 +325,22 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
               <div>
                 <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-178">{tManagerUi('remark_optional')}</label>
                 <textarea id="rbg4-managerfinancecollectfeepage-178" className="fin-textarea mt-1" rows={2} placeholder={tManagerUi('any_notes')} value={remark} onChange={e => setRemark(e.target.value)} />
+              </div>
+
+              <div className="pt-3 border-t border-border mt-4">
+                <button
+                  type="button"
+                  onClick={handleCollect}
+                  disabled={isSubmitting || !selectedStudent || !amount || parseFloat(amount) <= 0}
+                  className="fin-btn fin-btn-primary w-full py-3 text-sm font-bold flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <IndianRupee size={16} />
+                  <span>
+                    {isSubmitting
+                      ? 'Recording Fee Collection...'
+                      : `Collect Fee (${formatCurrency(toMinorUnits(total))}) & Print Receipt`}
+                  </span>
+                </button>
               </div>
             </div>
           </div>

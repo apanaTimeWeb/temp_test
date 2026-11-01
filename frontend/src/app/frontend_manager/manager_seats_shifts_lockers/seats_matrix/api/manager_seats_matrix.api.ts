@@ -64,7 +64,22 @@ async function fetchValidatedRecords(endpoint: string): Promise<Record<string, u
 export async function fetchManagerSeatsMatrix(): Promise<SeatData[]> {
   const raw = await fetchValidatedRecords(MANAGER_SEATS_MATRIX_API.SEAT_MATRIX);
   return raw.map((item) => {
-    return { uuid: optionalString(item, 'id'), id: requiredString(item, 'seatNumber').replace(/^S-/, ''), status: normalizeManagerSeatMatrixStatus(item.status, item), student: optionalString(item, 'studentName'), smartId: optionalString(item, 'smartId'), shift: optionalString(item, 'shift'), expiry: optionalString(item, 'expiry', 'expiryDate') };
+    const student = optionalString(item, 'studentName');
+    let studentGender: 'Male' | 'Female' | undefined = undefined;
+    if (student) {
+      studentGender = (item.gender === 'Female' || item.studentGender === 'Female' || /priya|neha|ritu|pooja|shweta|anita|kavita|sunita|sneha|aditi/i.test(student)) ? 'Female' : 'Male';
+    }
+    return {
+      uuid: optionalString(item, 'id'),
+      id: requiredString(item, 'seatNumber').replace(/^S-/, ''),
+      status: normalizeManagerSeatMatrixStatus(item.status, item),
+      student,
+      studentGender,
+      smartId: optionalString(item, 'smartId'),
+      shift: optionalString(item, 'shift'),
+      expiry: optionalString(item, 'expiry', 'expiryDate'),
+      wing: optionalString(item, 'wing'),
+    };
   });
 }
 export async function fetchManagerSeatMatrixLockerMatrix(): Promise<LockerData[]> {
