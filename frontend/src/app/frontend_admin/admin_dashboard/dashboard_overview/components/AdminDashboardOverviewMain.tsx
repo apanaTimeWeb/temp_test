@@ -5,6 +5,7 @@ import { Armchair, Users, WalletCards, Building2, TrendingUp } from 'lucide-reac
 import { useTranslations } from 'next-intl';
 import { ADMIN_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/config/admin_dashboard_overview.url_config';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import AdminDashboardBranchLeaderboard from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardBranchLeaderboard';
 
 const destinations = [
   {
@@ -164,6 +165,9 @@ export default function AdminDashboardOverviewMain() {
           );
         })}
       </section>
+
+      {/* Multi-Branch Comparative Analytics & Benchmarking Leaderboard */}
+      <AdminDashboardBranchLeaderboard />
 
       {/* Core Operational Workspace Hubs */}
       <section

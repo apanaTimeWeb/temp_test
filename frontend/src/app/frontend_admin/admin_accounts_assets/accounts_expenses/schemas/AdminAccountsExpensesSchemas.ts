@@ -61,6 +61,9 @@ export function createAdminAccountingExpenseFormSchema(t: AdminAccountingExpense
 export const AdminAccountingExpenseFormSchema = createAdminAccountingExpenseFormSchema((key) => ADMIN_ACCOUNTING_EXPENSE_VALIDATION_ENGLISH[key]);
 export type AdminAccountingExpenseFormValues = z.infer<typeof AdminAccountingExpenseFormSchema>;
 
+export const ExpenseApprovalStatusSchema = z.enum(['PENDING_APPROVAL', 'APPROVED', 'REJECTED']);
+export type ExpenseApprovalStatus = z.infer<typeof ExpenseApprovalStatusSchema>;
+
 /** Runtime validation for transient demo-state records; domain records are never persisted in browser storage. */
 export const AdminAccountingExpenseRecordSchema = z.object({
   id: z.number().int().positive(),
@@ -71,6 +74,14 @@ export const AdminAccountingExpenseRecordSchema = z.object({
   paidBy: z.string().trim().min(1),
   mode: z.enum(['cash', 'upi', 'card', 'bank']),
   notes: z.string(),
+  status: ExpenseApprovalStatusSchema.optional().default('APPROVED'),
+  branchName: z.string().optional().default('Karol Bagh Central'),
+  requestedBy: z.string().optional(),
+  receiptUrl: z.string().nullable().optional(),
+  isPettyCashRequest: z.boolean().optional().default(false),
+  rejectionReason: z.string().nullable().optional(),
+  approvedBy: z.string().nullable().optional(),
+  approvedAt: z.string().nullable().optional(),
 });
 export const AdminAccountingExpenseRecordsSchema = z.array(AdminAccountingExpenseRecordSchema);
 export type AdminAccountingExpense = z.infer<typeof AdminAccountingExpenseRecordSchema>;

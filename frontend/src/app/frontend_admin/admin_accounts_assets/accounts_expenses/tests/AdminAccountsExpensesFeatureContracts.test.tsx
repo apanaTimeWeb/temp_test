@@ -85,6 +85,25 @@ suite0_describe('expense record storage boundary and monetary invariants', () =>
   suite0_it('rejects impossible dates in transient expense records', () => {
     suite0_expect(suite0_AdminAccountingExpenseRecordSchema.safeParse({ ...record, date: '2026-02-30' }).success).toBe(false);
   });
+
+  suite0_it('supports expense approval workflow states and petty cash requests', () => {
+    const pendingPettyCash = {
+      ...record,
+      status: 'PENDING_APPROVAL' as const,
+      isPettyCashRequest: true,
+      branchName: 'Karol Bagh Central',
+      requestedBy: 'Rahul Sharma (Manager)',
+      receiptUrl: 'https://example.com/quotation.png',
+    };
+    suite0_expect(suite0_AdminAccountingExpenseRecordSchema.safeParse(pendingPettyCash).success).toBe(true);
+
+    const rejectedExpense = {
+      ...record,
+      status: 'REJECTED' as const,
+      rejectionReason: 'Quotation too high; please obtain competitive bids.',
+    };
+    suite0_expect(suite0_AdminAccountingExpenseRecordSchema.safeParse(rejectedExpense).success).toBe(true);
+  });
 });
 
 suite0_describe('scenario harness exercises each declared UI state', () => {

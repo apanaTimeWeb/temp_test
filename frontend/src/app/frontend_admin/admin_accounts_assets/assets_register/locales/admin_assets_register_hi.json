@@ -1,0 +1,113 @@
+{
+  "ADMIN_ASSETS_REGISTER": {
+    "TITLE": "संपत्ति रजिस्टर एवं एएमसी रखरखाव जीवनचक्र",
+    "SUBTITLE": "उच्च-मूल्य वाले पुस्तकालय भौतिक बुनियादी ढांचे, वारंटी कवरेज, विक्रेता एएमसी अनुबंध और निवारक सर्विसिंग कार्यक्रम का प्रबंधन करें।",
+    "LIVE_UNAVAILABLE": "डेमोंस्ट्रेशन मोड सक्रिय है। लाइव बैकएंड समन्वय सिम्युलेटेड है।",
+    "KPIS": {
+      "TOTAL_ASSETS": "कुल भौतिक संपत्तियां",
+      "TOTAL_CAPEX": "कुल पूंजीगत व्यय (CapEx)",
+      "ACTIVE_AMC": "एएमसी के तहत सुरक्षित",
+      "WARRANTY_ALERTS": "वारंटी शीघ्र समाप्त होने वाली",
+      "SUB_ASSETS": "सभी सक्रिय शाखाओं में पंजीकृत संपत्तियां",
+      "SUB_CAPEX": "मूल खरीद लागत का कुल मूल्यांकन",
+      "SUB_AMC": "सक्रिय विक्रेता सेवा अनुबंध",
+      "SUB_WARRANTY": "अगले 30 दिनों में समाप्त होने वाली"
+    },
+    "TABS": {
+      "ALL": "सभी संपत्तियां",
+      "WARRANTY_ALERT": "वारंटी अलर्ट (30 दिन)",
+      "ACTIVE_AMC": "सक्रिय एएमसी",
+      "NEEDS_SERVICE": "सर्विसिंग की आवश्यकता"
+    },
+    "FILTERS": {
+      "ALL_BRANCHES": "सभी शाखाएं",
+      "ALL_CATEGORIES": "सभी श्रेणियां",
+      "SEARCH_PLACEHOLDER": "संपत्ति का नाम, कोड, सीरियल # या विक्रेता खोजें...",
+      "CLEAR_FILTERS": "रीसेट"
+    },
+    "CATEGORIES": {
+      "AC_HVAC": "एयर कंडीशनर (AC / HVAC)",
+      "INVERTER_POWER": "इन्वर्टर एवं हेवी पावर बैकअप",
+      "FURNITURE": "स्टडी डेस्क एवं एर्गोनोमिक कुर्सियां",
+      "WATER_PURIFIER": "व्यावसायिक आरओ प्लांट एवं कूलर",
+      "CCTV_SECURITY": "सीसीटीवी निगरानी एवं एनवीआर",
+      "NETWORK_HARDWARE": "राउटर, स्विच एवं वाई-फाई",
+      "ELECTRONICS": "बायोमेट्रिक, डिस्प्ले एवं कंप्यूटर",
+      "OTHER": "सामान्य बुनियादी ढांचा"
+    },
+    "STATUS": {
+      "OPERATIONAL": "कार्यरत (सक्रिय)",
+      "MAINTENANCE_REQUIRED": "सर्विसिंग लंबित",
+      "UNDER_REPAIR": "मरम्मत के अधीन",
+      "DISPOSED": "निपटान / निष्क्रिय"
+    },
+    "AMC_STATUS": {
+      "ACTIVE_AMC": "सक्रिय एएमसी",
+      "UNDER_WARRANTY": "निर्माता वारंटी",
+      "EXPIRED_NO_AMC": "समाप्त / कोई एएमसी नहीं",
+      "NOT_APPLICABLE": "लागू नहीं (गैर-यांत्रिक)"
+    },
+    "TABLE": {
+      "ASSET": "संपत्ति एवं कोड",
+      "BRANCH": "शाखा एवं स्थान",
+      "CATEGORY": "श्रेणी",
+      "PURCHASE": "खरीद तिथि एवं मूल्य",
+      "WARRANTY_EXPIRY": "वारंटी समाप्ति",
+      "AMC_STATUS": "सुरक्षा स्थिति",
+      "VENDOR": "प्राथमिक विक्रेता",
+      "STATUS": "परिचालन स्थिति",
+      "ACTIONS": "कार्रवाई"
+    },
+    "ACTIONS": {
+      "ADD_ASSET": "पूंजीगत संपत्ति जोड़ें",
+      "MANAGE_AMC": "एएमसी एवं सर्विस",
+      "VIEW_DETAILS": "जीवनचक्र देखें"
+    },
+    "MODAL_ADD": {
+      "TITLE": "नई पूंजीगत संपत्ति पंजीकृत करें",
+      "DESCRIPTION": "वारंटी और विक्रेता विवरण के साथ केंद्रीय इन्वेंट्री में उच्च-पूंजी भौतिक बुनियादी ढांचा जोड़ें।",
+      "ASSET_CODE_LABEL": "संपत्ति टैग / इन्वेंट्री कोड",
+      "ASSET_CODE_PLACEHOLDER": "उदा. KB-AC-02",
+      "NAME_LABEL": "संपत्ति का नाम एवं मॉडल",
+      "NAME_PLACEHOLDER": "उदा. Daikin 1.5T Inverter Split AC",
+      "CATEGORY_LABEL": "श्रेणी",
+      "BRANCH_LABEL": "शाखा",
+      "LOCATION_LABEL": "शाखा के भीतर स्थान",
+      "LOCATION_PLACEHOLDER": "उदा. प्रथम तल - शांत अध्ययन कक्ष A",
+      "PURCHASE_DATE_LABEL": "खरीद तिथि",
+      "PURCHASE_COST_LABEL": "खरीद लागत (₹)",
+      "VENDOR_NAME_LABEL": "विक्रेता / आपूर्तिकर्ता का नाम",
+      "VENDOR_NAME_PLACEHOLDER": "उदा. Daikin Direct India",
+      "VENDOR_CONTACT_LABEL": "विक्रेता फोन / हेल्पलाइन संपर्क",
+      "VENDOR_CONTACT_PLACEHOLDER": "उदा. 1800-102-4455 / +91 98110 22334",
+      "WARRANTY_EXPIRY_LABEL": "वारंटी समाप्ति तिथि",
+      "AMC_STATUS_LABEL": "प्रारंभिक रखरखाव कवरेज",
+      "SERIAL_LABEL": "सीरियल नंबर (वैकल्पिक)",
+      "NOTES_LABEL": "एडमिन नोट्स (वैकल्पिक)",
+      "SUBMIT": "संपत्ति पंजीकृत करें",
+      "CANCEL": "रद्द करें",
+      "SUCCESS_TOAST": "संपत्ति {code} सफलतापूर्वक पंजीकृत की गई।"
+    },
+    "MODAL_AMC": {
+      "TITLE": "एएमसी एवं निवारक सर्विस अनुबंध अपडेट करें",
+      "DESCRIPTION": "वार्षिक रखरखाव अनुबंध (AMC), विक्रेता SLA और अगली निर्धारित सर्विस तिथि कॉन्फ़िगर करें।",
+      "AMC_STATUS_LABEL": "कवरेज स्थिति",
+      "AMC_VENDOR_NAME_LABEL": "एएमसी सेवा प्रदाता",
+      "AMC_VENDOR_NAME_PLACEHOLDER": "उदा. UrbanCompany Enterprise / Daikin Direct Care",
+      "AMC_VENDOR_CONTACT_LABEL": "तकनीशियन / हेल्पलाइन संपर्क",
+      "AMC_VENDOR_CONTACT_PLACEHOLDER": "उदा. +91 98991 44552",
+      "AMC_EXPIRY_LABEL": "अनुबंध नवीनीकरण तिथि",
+      "NEXT_SERVICE_LABEL": "अगली निर्धारित सर्विस तिथि (वैकल्पिक)",
+      "NOTES_LABEL": "अनुबंध शर्तें / सर्विस नोट्स",
+      "NOTES_PLACEHOLDER": "उदा. इसमें 4 त्रैमासिक निवारक दौरे और केमिकल जेट सफाई शामिल है।",
+      "SUBMIT": "एएमसी अनुबंध अपडेट करें",
+      "CANCEL": "खारिज करें",
+      "SUCCESS_TOAST": "{name} के लिए एएमसी कवरेज अपडेट कर दिया गया।"
+    },
+    "EMPTY": {
+      "TITLE": "कोई संपत्ति पंजीकृत नहीं मिली",
+      "DESCRIPTION": "आपकी सक्रिय श्रेणी या फ़िल्टर मानदंडों से मेल खाती कोई भौतिक संपत्ति नहीं है।"
+    }
+  }
+}
+

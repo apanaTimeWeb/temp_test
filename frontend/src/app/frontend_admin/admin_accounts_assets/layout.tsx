@@ -6,9 +6,11 @@ import { useTranslations } from 'next-intl';
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
 const SUBMODULE_NAVIGATION = [
+  { href: ADMIN_ROUTES.ACCOUNTS_DAILY_SETTLEMENT, labelKey: 'SUBMODULE_ACCOUNTS_DAILY_SETTLEMENT' },
   { href: ADMIN_ROUTES.ACCOUNTS_EXPENSES, labelKey: 'SUBMODULE_ACCOUNTS_EXPENSES' },
   { href: ADMIN_ROUTES.ACCOUNTS_FINANCIAL_REPORTS, labelKey: 'SUBMODULE_ACCOUNTS_FINANCIAL_REPORTS' },
   { href: ADMIN_ROUTES.ACCOUNTS_SEAT_GAP_REPORT, labelKey: 'SUBMODULE_ACCOUNTS_SEAT_GAP_REPORT' },
+  { href: ADMIN_ROUTES.ASSETS_REGISTER, labelKey: 'SUBMODULE_ASSETS_REGISTER' },
 ] as const;
 
 export default function AdminAccountsAssetsLayout({ children }: { children: ReactNode }) {

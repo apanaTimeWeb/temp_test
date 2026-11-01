@@ -48,7 +48,7 @@ export type AdminBranchesApiRecord = z.infer<typeof AdminBranchesApiRecordSchema
 
 
 // Domain types co-located with their Zod validation/API schemas for this isolated module.
-export type AdminSettingsBranchesTab = 'all' | 'create' | 'active' | 'suspended' | 'archived' | 'managers' | 'settings' | 'usage' | 'reports';
+export type AdminSettingsBranchesTab = 'all' | 'create' | 'active' | 'suspended' | 'archived' | 'managers' | 'settings' | 'usage' | 'reports' | 'holidays';
 export type AdminBranchesDetailTab = 'overview' | 'users' | 'members' | 'reservations' | 'reports' | 'audit' | 'settings';
 export interface AdminBranchesBranch {
   id: string; name: string; code: string; address: string; phone: string; email: string; manager: string; status: AdminBranchesStatus;

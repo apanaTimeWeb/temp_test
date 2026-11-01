@@ -84,6 +84,19 @@
     "LIBRARY_SEATS_TITLE": "सीट और शिफ्ट",
     "LIBRARY_SEATS_UNAVAILABLE": "सीट की उपलब्धता, शिफ्ट और रखरखाव के लिए सीट कार्यक्षेत्र खोलें।",
     "LIBRARY_FINANCE_TITLE": "वित्त",
-    "LIBRARY_FINANCE_UNAVAILABLE": "शुल्क संग्रह, भुगतान और वित्तीय सारांश के लिए वित्त कार्यक्षेत्र खोलें।"
+    "LIBRARY_FINANCE_UNAVAILABLE": "शुल्क संग्रह, भुगतान और वित्तीय सारांश के लिए वित्त कार्यक्षेत्र खोलें।",
+    "LEADERBOARD_TITLE": "शाखा तुलनात्मक विश्लेषण एवं बेंचमार्किंग",
+    "LEADERBOARD_SUBTITLE": "सभी स्थानों पर अधिभोग (occupancy), शुद्ध लाभ, नवीनीकरण दर और परिचालन बाधाओं की तुलना करने वाला शाखा लीडरबोर्ड।",
+    "LEADERBOARD_SORT_PROFIT": "शुद्ध लाभ अनुसार",
+    "LEADERBOARD_SORT_OCCUPANCY": "अधिभोग अनुसार",
+    "LEADERBOARD_SORT_RENEWAL": "नवीनीकरण दर अनुसार",
+    "COL_RANK": "रैंक",
+    "COL_BRANCH": "शाखा एवं प्रबंधक",
+    "COL_CAPACITY": "सीट एवं अधिभोग",
+    "COL_REVENUE": "मासिक वसूली (MTD)",
+    "COL_EXPENSES": "खर्च",
+    "COL_NET_PROFIT": "शुद्ध लाभ",
+    "COL_RENEWAL": "नवीनीकरण दर",
+    "COL_BOTTLENECK": "प्राथमिक विकास बाधा"
   }
 }

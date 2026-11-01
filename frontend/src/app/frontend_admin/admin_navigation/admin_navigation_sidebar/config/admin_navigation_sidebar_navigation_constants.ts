@@ -125,9 +125,11 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     label: 'Accounts & Assets',
     icon: Building2,
     submodules: [
+      { href: ADMIN_ROUTES.ACCOUNTS_DAILY_SETTLEMENT, icon: Receipt, label: 'Daily Settlement', labelKey: 'SUBMODULE_ACCOUNTS_DAILY_SETTLEMENT' },
       { href: ADMIN_ROUTES.ACCOUNTS_EXPENSES, icon: CreditCard, label: 'Expenses', labelKey: 'SUBMODULE_ACCOUNTS_EXPENSES' },
       { href: ADMIN_ROUTES.ACCOUNTS_FINANCIAL_REPORTS, icon: BarChart, label: 'Financial Reports', labelKey: 'SUBMODULE_ACCOUNTS_FINANCIAL_REPORTS' },
       { href: ADMIN_ROUTES.ACCOUNTS_SEAT_GAP_REPORT, icon: TrendingUp, label: 'Seat Gap Report', labelKey: 'SUBMODULE_ACCOUNTS_SEAT_GAP_REPORT' },
+      { href: ADMIN_ROUTES.ASSETS_REGISTER, icon: Building, label: 'Assets Register', labelKey: 'SUBMODULE_ASSETS_REGISTER' },
     ],
   },
   {

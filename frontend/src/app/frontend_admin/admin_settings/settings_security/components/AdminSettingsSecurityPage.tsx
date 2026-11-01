@@ -11,6 +11,7 @@ import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatu
 import AdminSecurityDashboardPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDashboardPanel';
 import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityFailedLoginsPanel';
 import AdminSecurityDeviceSessionsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDeviceSessionsPanel';
+import AdminSettingsSecurityAuditTrailPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityAuditTrailPanel';
 
 // Responsibility: AdminSecurityPage presentation component owned by admin_security; responsibility folder: admin_security_components_views.
 
@@ -63,6 +64,7 @@ export default function AdminSecurityPage() {
               <div className="flex flex-wrap items-center gap-2"><label htmlFor="security-event-filter" className="text-sm text-text-secondary">{t('FILTER_EVENTS_LABEL')}</label><select id="security-event-filter" data-testid="admin_security-AdminSecurityEventsAuditPanel-control-001" className="admin-input min-h-11" value={eventFilter} onChange={(event) => setEventFilter(event.target.value as AdminSecurityEventFilter)}>{ADMIN_SECURITY_EVENT_FILTERS.map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}</select></div>
             </div><div className="mt-4 space-y-3">{visibleSecurityEvents.length === 0 ? <p role="status" className="p-4 text-text-secondary">{t('EVENTS_EMPTY')}</p> : visibleSecurityEvents.map((event) => <article key={event.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card p-4"><div className="min-w-0"><p className={`font-semibold ${event.tone === 'info' ? 'text-info-text' : event.tone === 'danger' ? 'text-danger-text' : event.tone === 'success' ? 'text-success-text' : 'text-warning-text'}`}>{t(event.actionKey)}</p><p className="mt-1 text-sm text-text-primary">{t(event.userKey)}</p></div><p className="text-sm text-text-secondary">{t(event.timeKey)}</p></article>)}</div>
           </section>}
+          {activeTab === 'audit-trail' && <AdminSettingsSecurityAuditTrailPanel />}
         </>}</div>
       </div>
     </div>
