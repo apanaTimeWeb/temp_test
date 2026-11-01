@@ -12,6 +12,7 @@ import {
   Clock,
   Building2,
   Trash2,
+  CheckCircle2,
 } from 'lucide-react';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';

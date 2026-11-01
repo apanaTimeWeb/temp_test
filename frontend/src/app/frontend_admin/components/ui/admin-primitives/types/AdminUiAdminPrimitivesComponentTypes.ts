@@ -36,7 +36,7 @@ export interface AdminSystemKpiCardProps {
   title: string;
   value: string | number;
   subtitle?: string;
-  icon?: string;
+  icon?: ReactNode;
   trend?: AdminSystemKpiCardTrend;
   trendLabel?: string;
   className?: string;

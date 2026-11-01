@@ -53,25 +53,25 @@ export function AdminAccountsDailySettlementKpis({ records }: Props) {
         title={t('EXPECTED_CASH')}
         value={formatPaiseToRupees(expectedCash)}
         subtitle={t('SUB_EXPECTED')}
-        icon={Wallet}
+        icon={<Wallet className="h-5 w-5" />}
       />
       <AdminPrimitiveKpiCard
         title={t('CLEARED_CASH')}
         value={formatPaiseToRupees(clearedCash)}
         subtitle={t('SUB_CLEARED')}
-        icon={CheckCircle2}
+        icon={<CheckCircle2 className="h-5 w-5" />}
       />
       <AdminPrimitiveKpiCard
         title={t('PENDING_HANDOVER')}
         value={formatPaiseToRupees(pendingCash)}
         subtitle={`${pendingCount} shifts · ${t('SUB_PENDING')}`}
-        icon={Clock}
+        icon={<Clock className="h-5 w-5" />}
       />
       <AdminPrimitiveKpiCard
         title={t('DISCREPANCY_SHORTAGE')}
         value={formatPaiseToRupees(discrepancyCash)}
         subtitle={`${flaggedCount} shifts · ${t('SUB_DISCREPANCY')}`}
-        icon={AlertTriangle}
+        icon={<AlertTriangle className="h-5 w-5" />}
       />
     </div>
   );

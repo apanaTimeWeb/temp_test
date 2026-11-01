@@ -46,25 +46,25 @@ export function AdminAssetsRegisterKpis({ records }: Props) {
         title={t('TOTAL_ASSETS')}
         value={String(totalCount)}
         subtitle={t('SUB_ASSETS')}
-        icon={Building2}
+        icon={<Building2 className="h-5 w-5" />}
       />
       <AdminPrimitiveKpiCard
         title={t('TOTAL_CAPEX')}
         value={formatPaiseToRupees(totalCapEx)}
         subtitle={t('SUB_CAPEX')}
-        icon={IndianRupee}
+        icon={<IndianRupee className="h-5 w-5" />}
       />
       <AdminPrimitiveKpiCard
         title={t('ACTIVE_AMC')}
         value={String(amcCount)}
         subtitle={t('SUB_AMC')}
-        icon={ShieldCheck}
+        icon={<ShieldCheck className="h-5 w-5" />}
       />
       <AdminPrimitiveKpiCard
         title={t('WARRANTY_ALERTS')}
         value={String(expiringCount)}
         subtitle={t('SUB_WARRANTY')}
-        icon={AlertCircle}
+        icon={<AlertCircle className="h-5 w-5" />}
       />
     </div>
   );
