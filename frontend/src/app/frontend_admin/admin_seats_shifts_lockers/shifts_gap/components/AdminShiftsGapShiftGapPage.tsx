@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ChevronDown, Zap } from 'lucide-react';
 import { ADMIN_SHIFTS_DEMO_SHIFT_GAPS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/mocks/AdminShiftsGapShiftGapFixtures';
+import AdminShiftsGapOverstayAuditTable from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/components/AdminShiftsGapOverstayAuditTable';
 
 const DAY_START_H = 6;
 const DAY_END_H   = 23;
@@ -130,6 +131,8 @@ export function AdminShiftsShiftGapPage() {
             </div>
           );
         })}
+        {/* ── Multi-Branch Overstay & Ghost Attendance Audit Table ── */}
+        <AdminShiftsGapOverstayAuditTable />
       </div>
     </>
   );

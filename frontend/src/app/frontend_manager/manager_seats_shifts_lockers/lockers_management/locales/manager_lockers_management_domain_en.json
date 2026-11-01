@@ -330,7 +330,18 @@
         "both_custom_times_required": "Enter both custom start and end times.",
         "custom_end_must_follow_start": "Custom end time must be after custom start time.",
         "new_status": "New status",
-        "active_status": "Active status"
+        "active_status": "Active status",
+        "vacate_and_clear_title": "Vacate Locker & Key Handover Clearance",
+        "security_deposit_held": "Security Deposit Escrow Held:",
+        "key_status_label": "Physical Key Inspection & Return",
+        "key_returned_option": "Physical Key Returned in Good Condition (₹0 Deduction)",
+        "key_lost_option": "Key Lost / Damaged Lock (Deduct ₹150 Replacement Fee)",
+        "deduction_amount": "Deduction Amount:",
+        "net_refund_payable": "Net Refund Payable to Student:",
+        "clearance_remarks": "Handover Remarks (Optional)",
+        "clearance_remarks_placeholder": "E.g., Locker checked clean, original key returned",
+        "submit_vacate_and_refund": "Confirm Handover & Queue Refund",
+        "vacate_success_toast": "Locker {id} vacated. Net refund of ₹{amount} queued for Admin approval."
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

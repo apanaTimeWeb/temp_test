@@ -120,7 +120,22 @@
         "preview_add_holiday_draft": "Preview holiday draft",
         "holiday_draft_preview_only": "Draft preview only; saving is unavailable without the host mutation contract.",
         "previous_month": "Previous month",
-        "next_month": "Next month"
+        "next_month": "Next month",
+        "turnover_queue_tab": "Floor Turnover & Overstay",
+        "roster_tab": "Daily Roster",
+        "turnover_title": "Live Shift Turnover & Overstay Queue",
+        "turnover_subtitle": "Verify physical seat vacancy on student mobile checkout & inspect unauthorized shift overstays.",
+        "stat_pending_verification": "Pending Desk Inspection",
+        "stat_active_overstays": "Active Overstays",
+        "stat_recovered_fines": "Overstay Fines",
+        "confirm_vacated": "Confirm Vacated & Ready",
+        "report_fake_checkout": "Still Occupied (Fake Checkout)",
+        "flag_overstay_fine": "Flag Overstay (+₹50 Fine)",
+        "manual_clear": "Student Vacated (Manual Clear)",
+        "vacated_success": "Seat confirmed vacated and marked ready for incoming shift.",
+        "overstay_fined_success": "Overstay recorded (+₹50 fine added to student dues).",
+        "fake_checkout_flagged": "Desk marked occupied. Student alerted for false checkout.",
+        "no_turnover_alerts": "All shift changeovers are clean! Zero pending turnover alerts."
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

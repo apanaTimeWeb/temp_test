@@ -1,4 +1,4 @@
-import type { AdminShiftsShiftGapFixture } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapTypes';
+import type { AdminShiftsShiftGapFixture, AdminShiftOverstayIncident } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapTypes';
 
 /** Illustrative single-day gap data. The page hides these records outside explicit demo mode. */
 export const ADMIN_SHIFTS_DEMO_SHIFT_GAPS: readonly AdminShiftsShiftGapFixture[] = [
@@ -34,5 +34,68 @@ export const ADMIN_SHIFTS_DEMO_SHIFT_GAPS: readonly AdminShiftsShiftGapFixture[]
       { startH: 20, endH: 22, label: 'Batch F (10 students)' },
     ],
     gaps: [{ startH: 19, endH: 21, seats: 8, revLoss: 800 }],
+  },
+];
+
+export const ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS: readonly AdminShiftOverstayIncident[] = [
+  {
+    id: 'inc-101',
+    date: '2026-11-01',
+    branchName: 'Karol Bagh Central',
+    seatNumber: 'Seat A-14',
+    studentName: 'Rahul Sharma',
+    smartId: 'SL-001',
+    bookedShift: 'Morning (06:00 - 14:00)',
+    scheduledEndTime: '02:00 PM',
+    actualDepartureTime: '02:45 PM',
+    overstayMinutes: 45,
+    managerAction: 'FINED',
+    fineAmount: 50,
+    status: 'RECOVERED',
+  },
+  {
+    id: 'inc-102',
+    date: '2026-11-01',
+    branchName: 'Laxmi Nagar Hub',
+    seatNumber: 'Seat B-08',
+    studentName: 'Amit Kumar',
+    smartId: 'SL-003',
+    bookedShift: 'Morning (06:00 - 14:00)',
+    scheduledEndTime: '02:00 PM',
+    actualDepartureTime: '02:35 PM',
+    overstayMinutes: 35,
+    managerAction: 'FINED',
+    fineAmount: 50,
+    status: 'PENDING_CLEARANCE',
+  },
+  {
+    id: 'inc-103',
+    date: '2026-10-31',
+    branchName: 'Mukherjee Nagar',
+    seatNumber: 'Seat C-02',
+    studentName: 'Priya Verma',
+    smartId: 'SL-002',
+    bookedShift: 'Afternoon (12:00 - 18:00)',
+    scheduledEndTime: '06:00 PM',
+    actualDepartureTime: '07:20 PM',
+    overstayMinutes: 80,
+    managerAction: 'SHIFT_UPGRADED',
+    fineAmount: 120,
+    status: 'RECOVERED',
+  },
+  {
+    id: 'inc-104',
+    date: '2026-10-31',
+    branchName: 'Karol Bagh Central',
+    seatNumber: 'Seat A-22',
+    studentName: 'Sneha Patel',
+    smartId: 'SL-004',
+    bookedShift: 'Evening (18:00 - 22:00)',
+    scheduledEndTime: '10:00 PM',
+    actualDepartureTime: '10:20 PM',
+    overstayMinutes: 20,
+    managerAction: 'WARNED',
+    fineAmount: 0,
+    status: 'WAIVED',
   },
 ];
