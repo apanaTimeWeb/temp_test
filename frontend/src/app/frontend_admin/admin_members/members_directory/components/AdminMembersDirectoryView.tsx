@@ -17,6 +17,34 @@ import type { AdminMembersDirectoryDataToolsViewProps, AdminMembersDirectoryView
 export default function AdminMembersDirectoryView({ model }: AdminMembersDirectoryViewProps) {
   const t = useTranslations('ADMIN_MEMBERS');
   const { activeTab, setActiveTab, viewingMember, setViewingMember, detailTab, setDetailTab, mainNav, detailNav, isDemoMode, dummyMembers, demoRenewals } = model;
+  const tabsRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(false);
+
+  const checkScroll = React.useCallback(() => {
+    const el = tabsRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 5);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 5);
+  }, []);
+
+  React.useEffect(() => {
+    checkScroll();
+    const el = tabsRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', checkScroll, { passive: true });
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      el.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, [checkScroll, viewingMember, activeTab]);
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    if (!tabsRef.current) return;
+    const distance = 260;
+    tabsRef.current.scrollBy({ left: direction === 'left' ? -distance : distance, behavior: 'smooth' });
+  };
   return (
     <div className="motion-safe:transition-opacity motion-safe:duration-base admin-shared-page-container" >
       {!isDemoMode && <p role="status" className="mb-4 rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('LIVE_RECORDS_UNAVAILABLE')}</p>}
@@ -64,33 +92,64 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
       )}
 
       {/* TOP SCROLLABLE NAVIGATION TABS */}
-      <div className="admin-card mb-6 flex gap-2 overflow-x-auto whitespace-nowrap p-2" >
-        {!viewingMember ? (
-          mainNav.map((item) => (
-            <button type="button" data-testid={`admin_members-AdminMembersDirectoryView-main-tab-${item.id}`}
-              key={item.id}
-              aria-current={activeTab === item.id ? 'page' : undefined}
-              aria-pressed={activeTab === item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`admin-tab-button ${activeTab === item.id ? "admin-tab-button-active" : ""}`}
-            >
-              <item.icon size={18} aria-hidden="true" className={activeTab === item.id ? "text-primary" : "text-text-secondary"} />
-              {t(item.labelKey)}
-            </button>
-          ))
-        ) : (
-          detailNav.map((item) => (
-            <button type="button" data-testid={`admin_members-AdminMembersDirectoryView-detail-tab-${item.id}`}
-              key={item.id}
-              aria-current={detailTab === item.id ? 'page' : undefined}
-              aria-pressed={detailTab === item.id}
-              onClick={() => setDetailTab(item.id)}
-              className={`admin-tab-button ${detailTab === item.id ? "admin-tab-button-active" : ""}`}
-            >
-              <item.icon size={18} aria-hidden="true" className={detailTab === item.id ? "text-primary" : "text-text-secondary"} />
-              {t(item.labelKey)}
-            </button>
-          ))
+      <div className="relative mb-6 flex items-center">
+        {canScrollLeft && (
+          <button
+            type="button"
+            aria-label="Scroll tabs left"
+            onClick={() => scrollTabs('left')}
+            className="absolute left-1 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-card/95 border border-border shadow-md hover:bg-surface-hover text-text-primary transition-all backdrop-blur-sm cursor-pointer"
+          >
+            <ChevronLeft size={16} />
+          </button>
+        )}
+        <div
+          ref={tabsRef}
+          onWheel={(e) => {
+            if (e.deltaY !== 0) {
+              e.currentTarget.scrollLeft += e.deltaY;
+            }
+          }}
+          className="admin-card admin-tab-scroll-container flex w-full gap-2 overflow-x-auto whitespace-nowrap p-2 scroll-smooth"
+          style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}
+        >
+          {!viewingMember ? (
+            mainNav.map((item) => (
+              <button type="button" data-testid={`admin_members-AdminMembersDirectoryView-main-tab-${item.id}`}
+                key={item.id}
+                aria-current={activeTab === item.id ? 'page' : undefined}
+                aria-pressed={activeTab === item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`admin-tab-button shrink-0 ${activeTab === item.id ? "admin-tab-button-active" : ""}`}
+              >
+                <item.icon size={18} aria-hidden="true" className={activeTab === item.id ? "text-primary" : "text-text-secondary"} />
+                {t(item.labelKey)}
+              </button>
+            ))
+          ) : (
+            detailNav.map((item) => (
+              <button type="button" data-testid={`admin_members-AdminMembersDirectoryView-detail-tab-${item.id}`}
+                key={item.id}
+                aria-current={detailTab === item.id ? 'page' : undefined}
+                aria-pressed={detailTab === item.id}
+                onClick={() => setDetailTab(item.id)}
+                className={`admin-tab-button shrink-0 ${detailTab === item.id ? "admin-tab-button-active" : ""}`}
+              >
+                <item.icon size={18} aria-hidden="true" className={detailTab === item.id ? "text-primary" : "text-text-secondary"} />
+                {t(item.labelKey)}
+              </button>
+            ))
+          )}
+        </div>
+        {canScrollRight && (
+          <button
+            type="button"
+            aria-label="Scroll tabs right"
+            onClick={() => scrollTabs('right')}
+            className="absolute right-1 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-card/95 border border-border shadow-md hover:bg-surface-hover text-text-primary transition-all backdrop-blur-sm cursor-pointer"
+          >
+            <ChevronRight size={16} />
+          </button>
         )}
       </div>
 

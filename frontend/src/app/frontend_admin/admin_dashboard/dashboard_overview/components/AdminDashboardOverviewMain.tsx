@@ -1,3 +1,4 @@
+﻿'use client';
 // RESPONSIBILITY: Owns the AdminDashboardOverviewMain presentation responsibility for the dashboard_overview module. It does not own cross-module business logic or API transport.
 import Link from 'next/link';
 import { Armchair, Users, WalletCards, Building2, TrendingUp } from 'lucide-react';
@@ -31,7 +32,7 @@ const BRANCH_METRICS: Record<string, { branches: string; branchesSub: string; me
     membersSub: 'Across all 3 branches',
     occupancy: '84.2%',
     occupancySub: 'Peak shift utilization',
-    revenue: '₹4,82,500',
+    revenue: 'â‚¹4,82,500',
     revenueSub: 'Realized this month (Network)',
   },
   'BR-001': {
@@ -41,7 +42,7 @@ const BRANCH_METRICS: Record<string, { branches: string; branchesSub: string; me
     membersSub: 'Downtown active members',
     occupancy: '89.4%',
     occupancySub: 'Near full capacity',
-    revenue: '₹2,10,000',
+    revenue: 'â‚¹2,10,000',
     revenueSub: 'Downtown branch collections',
   },
   'BR-002': {
@@ -51,7 +52,7 @@ const BRANCH_METRICS: Record<string, { branches: string; branchesSub: string; me
     membersSub: 'Westside registered members',
     occupancy: '64.0%',
     occupancySub: 'Reduced occupancy window',
-    revenue: '₹92,500',
+    revenue: 'â‚¹92,500',
     revenueSub: 'Westside branch collections',
   },
   'BR-003': {
@@ -61,7 +62,7 @@ const BRANCH_METRICS: Record<string, { branches: string; branchesSub: string; me
     membersSub: 'North Hub active members',
     occupancy: '86.1%',
     occupancySub: 'Optimal shift distribution',
-    revenue: '₹1,80,000',
+    revenue: 'â‚¹1,80,000',
     revenueSub: 'North Hub collections',
   },
 };

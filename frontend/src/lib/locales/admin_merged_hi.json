@@ -775,7 +775,8 @@
     "ACCESS_ROLES_TITLE": "पहुँच भूमिकाएँ और अनुमतियाँ",
     "ACCESS_ROLES_DESCRIPTION": "यह लाइब्रेरी प्रविष्टि मौजूदा अनुमति-प्रबंधन मार्ग को सुरक्षित रखती है। यह दावा नहीं करती कि भूमिका परिवर्तन सर्वर पर सहेजे या लागू किए जाते हैं।",
     "ACCESS_ROLES_NOTICE": "प्राधिकरण होस्ट/बैकएंड की जिम्मेदारी है। फ्रंटएंड में दृश्यता पहुँच-नियंत्रण का विकल्प नहीं है।",
-    "ACCESS_ROLES_OPEN_LEGACY": "मौजूदा अनुमति प्रबंधन खोलें"
+    "ACCESS_ROLES_OPEN_LEGACY": "मौजूदा अनुमति प्रबंधन खोलें",
+    "ALL_BRANCHES": "सभी शाखाएँ"
   },
   "ADMIN_REPORTS": {
     "ALL_BRANCHES": "सभी शाखाएँ",
@@ -2527,8 +2528,8 @@
     "LOADING_PAGE": "अनुभाग लोड हो रहा है",
     "SEARCH_NAVIGATION": "मॉड्यूल खोजें...",
     "CLEAR_SEARCH": "खोज साफ़ करें",
-    "NO_MATCHING_MODULES": "कोई मिलान मॉड्यूल नहीं",
-    "NO_RESULTS_FOR": "इसके लिए कोई परिणाम नहीं",
+    "NO_MATCHING_MODULES": "कोई मेल खाता मॉड्यूल नहीं मिला",
+    "NO_RESULTS_FOR": "इसके लिए कोई परिणाम नहीं:",
     "SUBMODULE_DASHBOARD_OVERVIEW": "डैशबोर्ड अवलोकन",
     "SUBMODULE_DASHBOARD_REPORTS": "डैशबोर्ड रिपोर्ट",
     "SUBMODULE_MEMBERS_DIRECTORY": "सदस्य निर्देशिका",
@@ -4634,7 +4635,7 @@
     "PANEL_ACTIVE": "सक्रिय मैनेजर",
     "PANEL_SUSPENDED": "निलंबित मैनेजर",
     "PANEL_DEACTIVATED": "निष्क्रिय मैनेजर",
-    "TABLE_MANAGER": "मैनेजर",
+    "TABLE_MANAGER": "मैनेजर / स्टाफ",
     "TABLE_CONTACT": "संपर्क",
     "TABLE_BRANCH": "शाखा",
     "TABLE_LAST_ACTIVE": "अंतिम सक्रियता",
@@ -4753,7 +4754,12 @@
     "UNSAVED_CHANGES_TITLE": "बिना सहेजे बदलाव छोड़ें?",
     "UNSAVED_CHANGES_DESCRIPTION": "आपके बदलाव अभी सहेजे नहीं गए हैं। क्या आप वाकई जाना चाहते हैं? आपके बदलाव खो जाएँगे।",
     "UNSAVED_CHANGES_STAY": "इसी पेज पर रहें",
-    "UNSAVED_CHANGES_LEAVE": "बदलाव छोड़ें"
+    "UNSAVED_CHANGES_LEAVE": "बदलाव छोड़ें",
+    "STAFF_TITLE": "स्टाफ: {name}",
+    "PROFILE_ROLE": "पद / रोल",
+    "NAV_STAFF": "सभी स्टाफ",
+    "PANEL_STAFF": "सभी स्टाफ सदस्य",
+    "TABLE_ROLE": "रोल"
   },
   "ADMIN_STAFF_ROLES_PERMISSIONS": {
     "BREADCRUMB": "स्मार्ट जिम 360 › एडमिन › अनुमतियाँ",

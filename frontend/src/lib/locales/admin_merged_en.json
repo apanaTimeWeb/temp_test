@@ -775,7 +775,8 @@
     "ACCESS_ROLES_TITLE": "Access roles and permissions",
     "ACCESS_ROLES_DESCRIPTION": "This Library entry preserves the existing permission-management route. It does not assert that role changes are persisted or enforced by the server.",
     "ACCESS_ROLES_NOTICE": "Authorization remains a host/backend responsibility. Frontend visibility is not an access-control boundary.",
-    "ACCESS_ROLES_OPEN_LEGACY": "Open existing permissions management"
+    "ACCESS_ROLES_OPEN_LEGACY": "Open existing permissions management",
+    "ALL_BRANCHES": "All Branches"
   },
   "ADMIN_REPORTS": {
     "ALL_BRANCHES": "All branches",
@@ -4634,7 +4635,7 @@
     "PANEL_ACTIVE": "Active Managers",
     "PANEL_SUSPENDED": "Suspended Managers",
     "PANEL_DEACTIVATED": "Deactivated Managers",
-    "TABLE_MANAGER": "Manager",
+    "TABLE_MANAGER": "Manager / Staff",
     "TABLE_CONTACT": "Contact",
     "TABLE_BRANCH": "Branch",
     "TABLE_LAST_ACTIVE": "Last active",
@@ -4753,7 +4754,12 @@
     "UNSAVED_CHANGES_TITLE": "Discard unsaved changes?",
     "UNSAVED_CHANGES_DESCRIPTION": "You have unsaved changes. Are you sure you want to leave? Your changes will be lost.",
     "UNSAVED_CHANGES_STAY": "Stay and continue editing",
-    "UNSAVED_CHANGES_LEAVE": "Discard changes"
+    "UNSAVED_CHANGES_LEAVE": "Discard changes",
+    "STAFF_TITLE": "Staff: {name}",
+    "PROFILE_ROLE": "Role / Designation",
+    "NAV_STAFF": "All staff",
+    "PANEL_STAFF": "All Staff Members",
+    "TABLE_ROLE": "Role"
   },
   "ADMIN_STAFF_ROLES_PERMISSIONS": {
     "BREADCRUMB": "Smart Gym 360 › Admin › Permissions",

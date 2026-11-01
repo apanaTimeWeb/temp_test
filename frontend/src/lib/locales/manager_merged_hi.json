@@ -2435,8 +2435,8 @@
         "cancel": "रद्द करें",
         "sending_unavailable_host_messaging_contract_not_supplied": "भेजना उपलब्ध नहीं: होस्ट मैसेजिंग कॉन्ट्रैक्ट नहीं दिया गया है।",
         "send_test": "परीक्षण भेजें",
-        "whatsapp_templates_e0bade": "WhatsApp टेम्पलेट",
-        "whatsapp_templates": "📱 WhatsApp टेम्पलेट",
+        "whatsapp_templates_e0bade": "टेम्पलेट",
+        "whatsapp_templates": "टेम्पलेट",
         "customize_automated_message_templates_sent_to_students": "छात्रों को भेजे जाने वाले स्वचालित संदेश टेम्पलेट अनुकूलित करें।",
         "edit_the_message_body_use_variable_chips_to_personalize": "संदेश का पाठ संपादित करें। व्यक्तिगत जानकारी जोड़ने के लिए वेरिएबल चिप का उपयोग करें।",
         "message_body": "संदेश का पाठ",
@@ -9442,7 +9442,17 @@
         "validation_enter_phone_number": "कृपया फ़ोन नंबर दर्ज करें।",
         "validation_enter_valid_email": "कृपया मान्य ईमेल पता दर्ज करें।",
         "validation_expiry_after_join": "समाप्ति तिथि, शामिल होने की तिथि के बाद होनी चाहिए।",
-        "profile_edit_unavailable_host_contract_not_supplied": "सत्यापित होस्ट update API कॉन्ट्रैक्ट उपलब्ध नहीं है, इसलिए प्रोफ़ाइल संपादन उपलब्ध नहीं है। यह रूट केवल-पठन प्रोफ़ाइल दिखाता है; कोई बदलाव सहेजा नहीं जाता।"
+        "profile_edit_unavailable_host_contract_not_supplied": "सत्यापित होस्ट update API कॉन्ट्रैक्ट उपलब्ध नहीं है, इसलिए प्रोफ़ाइल संपादन उपलब्ध नहीं है। यह रूट केवल-पठन प्रोफ़ाइल दिखाता है; कोई बदलाव सहेजा नहीं जाता।",
+        "kyc_documents": "केवाईसी और सत्यापन दस्तावेज़",
+        "referral_rewards": "रेफ़रल रिवार्ड्स और बोनस",
+        "referral_points": "रेफ़रल अंक",
+        "referred_by": "द्वारा अनुशंसित",
+        "direct_walkin": "प्रत्यक्ष वॉक-इन",
+        "verified": "सत्यापित",
+        "pending": "लंबित",
+        "preview": "पूर्वावलोकन",
+        "download": "डाउनलोड",
+        "points": "अंक"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",
@@ -10821,7 +10831,7 @@
         "nav_complaints": "शिकायतें",
         "nav_notification_center": "सूचना केंद्र",
         "nav_whatsapp_logs": "व्हाट्सऐप लॉग",
-        "nav_whatsapp_templates": "व्हाट्सऐप टेम्पलेट",
+        "nav_whatsapp_templates": "टेम्पलेट्स",
         "group_help_support": "सहायता और समर्थन",
         "group_settings": "सेटिंग्स",
         "nav_branch_info": "शाखा की जानकारी",
@@ -10833,7 +10843,8 @@
         "search_navigation": "मॉड्यूल खोजें...",
         "clear_search": "खोज साफ़ करें",
         "no_matching_modules": "कोई मिलान मॉड्यूल नहीं",
-        "no_results_for": "के लिए कोई परिणाम नहीं"
+        "no_results_for": "के लिए कोई परिणाम नहीं",
+        "nav_help_support": "सहायता एवं समर्थन"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",
@@ -13664,7 +13675,7 @@
         "tab_help_center": "सहायता केंद्र",
         "tab_documentation": "दस्तावेज़",
         "tab_support_tickets": "सहायता टिकट",
-        "tab_announcements": "घोषणाएँ",
+        "tab_announcements": "सॉफ्टवेयर घोषणाएं",
         "tab_system_status": "सिस्टम स्थिति",
         "ticket_category_finance": "वित्त",
         "ticket_category_general": "सामान्य",

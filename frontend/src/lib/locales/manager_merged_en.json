@@ -2435,8 +2435,8 @@
         "cancel": "Cancel",
         "sending_unavailable_host_messaging_contract_not_supplied": "Sending unavailable: host messaging contract not supplied",
         "send_test": "Send Test",
-        "whatsapp_templates_e0bade": "WhatsApp Templates",
-        "whatsapp_templates": "📱 WhatsApp Templates",
+        "whatsapp_templates_e0bade": "Templates",
+        "whatsapp_templates": "Templates",
         "customize_automated_message_templates_sent_to_students": "Customize automated message templates sent to students.",
         "edit_the_message_body_use_variable_chips_to_personalize": "Edit the message body. Use variable chips to personalize.",
         "message_body": "Message Body",
@@ -9442,7 +9442,17 @@
         "validation_enter_phone_number": "Enter a phone number.",
         "validation_enter_valid_email": "Enter a valid email address.",
         "validation_expiry_after_join": "Expiry date must be after the join date.",
-        "profile_edit_unavailable_host_contract_not_supplied": "Profile editing is unavailable because no verified host update API contract was supplied. This route shows a read-only profile; no changes are saved."
+        "profile_edit_unavailable_host_contract_not_supplied": "Profile editing is unavailable because no verified host update API contract was supplied. This route shows a read-only profile; no changes are saved.",
+        "kyc_documents": "KYC & Verification Documents",
+        "referral_rewards": "Referral Rewards & Bonus",
+        "referral_points": "Referral Points",
+        "referred_by": "Referred By",
+        "direct_walkin": "Direct Walk-in",
+        "verified": "Verified",
+        "pending": "Pending",
+        "preview": "Preview",
+        "download": "Download",
+        "points": "Points"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",
@@ -10821,7 +10831,7 @@
         "nav_complaints": "Complaints",
         "nav_notification_center": "Notification Center",
         "nav_whatsapp_logs": "WhatsApp Logs",
-        "nav_whatsapp_templates": "WhatsApp Templates",
+        "nav_whatsapp_templates": "Templates",
         "group_help_support": "Help & Support",
         "group_settings": "Settings",
         "nav_branch_info": "Branch Info",
@@ -10833,7 +10843,8 @@
         "search_navigation": "Search modules...",
         "clear_search": "Clear search",
         "no_matching_modules": "No matching modules",
-        "no_results_for": "No results for"
+        "no_results_for": "No results for",
+        "nav_help_support": "Help & Support"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",
@@ -13664,7 +13675,7 @@
         "tab_help_center": "Help Center",
         "tab_documentation": "Documentation",
         "tab_support_tickets": "Support Tickets",
-        "tab_announcements": "Announcements",
+        "tab_announcements": "Software Announcements",
         "tab_system_status": "System Status",
         "ticket_category_finance": "Finance",
         "ticket_category_general": "General",
