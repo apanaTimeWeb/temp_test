@@ -1,3 +1,4 @@
+'use client';
 // RESPONSIBILITY: Owns the AdminDashboardOverviewMain presentation responsibility for the dashboard_overview module. It does not own cross-module business logic or API transport.
 import Link from 'next/link';
 import { Armchair, Users, WalletCards, Building2, TrendingUp } from 'lucide-react';
