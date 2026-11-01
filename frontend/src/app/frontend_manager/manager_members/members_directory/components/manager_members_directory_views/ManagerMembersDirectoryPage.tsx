@@ -20,7 +20,7 @@ import type { ManagerMembersDirectoryRouteQueryProps } from '@/app/frontend_mana
 export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersDirectoryRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
   const locale = useLocale();
-  const { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember } = useManagerMemberDirectoryPageState(_routeQuery);
+  const { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember, updateMember } = useManagerMemberDirectoryPageState(_routeQuery);
   const editIntent = _routeQuery.view === 'edit';
   const tabDestinations: Partial<Record<(typeof MANAGER_MEMBERS_TABS)[number]['name'], string>> = {
     'Add Member': MANAGER_MEMBERS_DIRECTORY_ROUTES.newAdmission,
@@ -210,14 +210,13 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
 
           {/* MEMBER PROFILE */}
           {activeTab === 'Member Profile' && (
-            <>
-            {editIntent && <p className="mb-4 rounded-xl border border-warning bg-warning-bg px-4 py-3 text-sm text-warning" role="status" data-testid="manager-members-edit-contract-notice">{tManagerUi('profile_edit_unavailable_host_contract_not_supplied')}</p>}
             <ManagerMembersDirectoryProfileSection
               searchValue={profileSearch}
               onSearchChange={setProfileSearch}
               member={profileMember}
+              onUpdateMember={updateMember}
+              initialEdit={editIntent}
             />
-            </>
           )}
 
           <ManagerMembersDirectorySupportingSections activeTab={activeTab} />
