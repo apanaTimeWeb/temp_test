@@ -15,6 +15,7 @@ export interface Notice {
   id: string; title: string; message: string;
   validTill: string; postedBy: string; postedDate: string;
   status: AdminCommunicationNoticesStatus;
+  targetBranch?: string;
 }
 
 export interface AdminCommunicationNoticesHarnessProps {

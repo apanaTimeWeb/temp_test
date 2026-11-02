@@ -60,6 +60,7 @@ export function createAdminCouponsFormSchema(messages: AdminCouponsValidationMes
     type: z.enum(['Flat', 'Percent'], { message: messages.typeRequired }),
     maxUses: z.coerce.number().int(messages.maxUsesPositive).positive(messages.maxUsesPositive),
     expiry: z.string().min(1, messages.expiryRequired).refine(isValidAdminCouponsCalendarDate, messages.expiryInvalid),
+    branchApplicability: z.string().optional(),
   }).superRefine((draft, context) => {
     if (draft.type === 'Percent' && draft.discount > 100) context.addIssue({ code: z.ZodIssueCode.custom, path: ['discount'], message: messages.discountPercentMax });
   });
@@ -75,5 +76,5 @@ export type AdminCouponsFormOutput = z.infer<ReturnType<typeof createAdminCoupon
 
 export type AdminCouponsDiscountType = 'Flat' | 'Percent' | 'Unknown';
 export type AdminCouponsStatus = (typeof ADMIN_COUPONS_STATUS_VALUES)[number] | typeof ADMIN_COUPONS_UNKNOWN_STATUS;
-export interface AdminCouponsCoupon { id: string; code: string; discount: number; type: AdminCouponsDiscountType; currencyCode?: string; amountUnit?: AdminCouponsCouponAmountUnit; usedCount?: number; maxUses?: number; expiry?: string; status: AdminCouponsStatus; }
-export interface AdminCouponsFormValues { code: string; discount: string; type: AdminCouponsFormValuesType; maxUses: string; expiry: string; }
+export interface AdminCouponsCoupon { id: string; code: string; discount: number; type: AdminCouponsDiscountType; currencyCode?: string; amountUnit?: AdminCouponsCouponAmountUnit; usedCount?: number; maxUses?: number; expiry?: string; status: AdminCouponsStatus; branchApplicability?: string; }
+export interface AdminCouponsFormValues { code: string; discount: string; type: AdminCouponsFormValuesType; maxUses: string; expiry: string; branchApplicability?: string; }

@@ -17,6 +17,8 @@ export interface Complaint {
   id: string; title: string; student: string;
   description: string; status: CStatus; date: string;
   resolvedBy: string; resolvedDate: string; resolvedNote: string;
+  branchName?: string;
+  isEscalatedToHq?: boolean;
 }
 
 export interface AdminCommunicationComplaintsHarnessProps {

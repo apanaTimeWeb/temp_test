@@ -18,10 +18,20 @@ export function useAdminLockersLockerMatrix() {
           ? declaredStatus
           : 'unknown';
 
+        const rec = item as Record<string, unknown>;
         return {
           uuid: item.id !== undefined ? String(item.id) : undefined,
           id: item.lockerNumber.replace(/^L-/, ''),
           status,
+          student: typeof rec.student === 'string' ? rec.student : undefined,
+          smartId: typeof rec.smartId === 'string' ? rec.smartId : undefined,
+          phone: typeof rec.phone === 'string' ? rec.phone : undefined,
+          shift: typeof rec.shift === 'string' ? rec.shift : undefined,
+          expiry: typeof rec.expiry === 'string' ? rec.expiry : undefined,
+          branchId: typeof rec.branchId === 'string' ? rec.branchId : undefined,
+          branchName: typeof rec.branchName === 'string' ? rec.branchName : undefined,
+          allottedByManager: typeof rec.allottedByManager === 'string' ? rec.allottedByManager : undefined,
+          allottedDate: typeof rec.allottedDate === 'string' ? rec.allottedDate : undefined,
         };
       });
     },

@@ -34,6 +34,8 @@ export function useAdminSeatMatrixSeatMatrix() {
           locker: typeof item.locker === 'string' ? item.locker : undefined,
           validFrom: typeof item.validFrom === 'string' ? item.validFrom : undefined,
           expiry: typeof item.expiry === 'string' ? item.expiry : undefined,
+          branchId: typeof (item as Record<string, unknown>).branchId === 'string' ? (item as Record<string, unknown>).branchId as string : undefined,
+          branchName: typeof (item as Record<string, unknown>).branchName === 'string' ? (item as Record<string, unknown>).branchName as string : undefined,
         };
       });
     },

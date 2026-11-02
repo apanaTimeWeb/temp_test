@@ -35,6 +35,6 @@ export const ADMIN_COUPONS_STATUS_VALUES = ['Active', 'Expired', 'Exhausted'] as
 
 export const ADMIN_COUPONS_UNKNOWN_STATUS = 'Unknown' as const;
 
-export const ADMIN_COUPONS_EMPTY_FORM = { code: '', discount: '', type: 'Flat' as const, maxUses: '', expiry: '' };
+export const ADMIN_COUPONS_EMPTY_FORM = { code: '', discount: '', type: 'Flat' as const, maxUses: '', expiry: '', branchApplicability: 'All Branches' };
 
 export const ADMIN_COUPONS_MESSAGES = { loadError: 'Unable to load coupons. Please retry.', mutationBlocked: 'Coupon mutations require a verified API contract; no local success was fabricated.' } as const;

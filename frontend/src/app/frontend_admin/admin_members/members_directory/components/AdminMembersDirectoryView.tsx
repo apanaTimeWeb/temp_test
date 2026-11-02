@@ -3,7 +3,9 @@
 
 import React, { useMemo, useState, type FormEvent } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Activity, AlertTriangle, Armchair, ArrowLeft, CalendarClock, CheckCircle, CreditCard, DownloadCloud, FileText, IndianRupee, MessageSquare, RotateCcw, ShieldAlert, UserPlus, UserRound, Users } from 'lucide-react';
+import { Activity, AlertTriangle, Armchair, ArrowLeft, CalendarClock, CheckCircle, CreditCard, DownloadCloud, FileText, IndianRupee, MessageSquare, RotateCcw, ShieldAlert, UserPlus, UserRound, Users, Building2 } from 'lucide-react';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { ALL_BRANCHES_ID } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
 import { toast } from 'sonner';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
@@ -104,6 +106,15 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
   const t = useTranslations('ADMIN_MEMBERS');
   const locale = useLocale();
   const { activeTab, setActiveTab, viewingMember, dummyMembers, isDemoMode, handleAction, openMemberDetails } = model;
+  const { branches, selectedBranchId, selectedBranch, setSelectedBranchId, isAllBranches } = useAdminBranch();
+
+  const branchFilteredMembers = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return dummyMembers;
+    return dummyMembers.filter((m) =>
+      m.branch ? m.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) : true
+    );
+  }, [isAllBranches, selectedBranch, dummyMembers]);
+
   const memberListConfig = {
     all: { titleKey: 'NAV_ALL_MEMBERS', filterStatus: undefined },
     active: { titleKey: 'NAV_ACTIVE', filterStatus: ADMIN_MEMBERS_STATUS_VALUES[0] },
@@ -122,7 +133,47 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
                   <RotateCcw size={18} aria-hidden="true" />{t('NAV_RENEWAL')}
                 </button>
               </div>
-              <AdminMembersMemberTable members={dummyMembers} filterStatus={memberListConfig.filterStatus} onSelectMember={openMemberDetails} onAction={handleAction} canMutate={isDemoMode}/>
+
+              {/* Multi-Branch Filter Pills */}
+              <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-lg border border-border bg-surface-highlight/40 p-2.5 my-3">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-text-secondary mr-1">
+                    <Building2 size={13} className="text-primary shrink-0" />
+                    Branch:
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
+                    className={`min-h-7 rounded-full px-2.5 py-0.5 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                      isAllBranches
+                        ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                        : 'bg-card text-text-secondary hover:text-text-primary'
+                    }`}
+                  >
+                    All Branches ({dummyMembers.length})
+                  </button>
+                  {branches.map((b) => {
+                    const count = dummyMembers.filter((m) => m.branch?.toLowerCase().includes(b.name.toLowerCase())).length;
+                    const isSelected = selectedBranchId === b.id;
+                    return (
+                      <button
+                        key={b.id}
+                        type="button"
+                        onClick={() => setSelectedBranchId(b.id)}
+                        className={`min-h-7 rounded-full px-2.5 py-0.5 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                          isSelected
+                            ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                            : 'bg-card text-text-secondary hover:text-text-primary'
+                        }`}
+                      >
+                        {b.name} ({count})
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <AdminMembersMemberTable members={branchFilteredMembers} filterStatus={memberListConfig.filterStatus} onSelectMember={openMemberDetails} onAction={handleAction} canMutate={isDemoMode}/>
             </section>
           )}
 

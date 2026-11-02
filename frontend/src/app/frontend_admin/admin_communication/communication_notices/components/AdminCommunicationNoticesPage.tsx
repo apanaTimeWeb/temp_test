@@ -8,11 +8,10 @@ import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import useAdminCommunicationNoticesUnsavedChangesGuard from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesUnsavedChangesGuard';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight, Plus, X, Edit2, Trash2, Send, SearchX } from 'lucide-react';
+import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2 } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { getAdminCommunicationNoticeStatus } from '@/app/frontend_admin/admin_communication/communication_notices/utils/AdminCommunicationNoticesDateUtils';
@@ -20,51 +19,58 @@ import { createAdminCommunicationNoticeSchema, type AdminCommunicationNoticeForm
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_COMMUNICATION_NOTICE_API_FIXTURE } from '@/app/frontend_admin/admin_communication/communication_notices/mocks/scenarios/admin_communication_notices.scenarios';
 import type { Notice, AdminCommunicationEmptyStateProps } from '@/app/frontend_admin/admin_communication/communication_notices/types/AdminCommunicationNoticesComponentTypes';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { ALL_BRANCHES_ID } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
+import AdminCommunicationNoticeModal from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticeModal';
 
 // Responsibility: AdminCommunicationNoticesPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 
-// RESPONSIBILITY: Entry page for the admin_communication module.
-// DATA FLOW: Next.js Router -> Page -> Components
-
 export function AdminCommunicationNoticesPage() {
   const [urlTablePage0, setUrlTablePage0] = useAdminApplicationInfrastructureUrlQueryState<number>('admin-communication-admin-communication-notices-page-1-page', 0);
-
   const t = useTranslations('ADMIN_COMMUNICATION');
   const router = useRouter();
   const isDemoMode = isFrontendDemoModeEnabled();
+  const { branches, selectedBranchId, selectedBranch, setSelectedBranchId, isAllBranches } = useAdminBranch();
+
   const noticesQuery = useAdminCommunicationNoticesQuery(!isDemoMode);
-  const apiNotices = useMemo<Notice[]>(() => (noticesQuery.data ?? []).map((n) => ({ id: String(n.id), title: n.title, message: n.message, postedBy: '—', postedDate: n.createdAt.slice(0, 10), validTill: n.validTill.slice(0, 10), status: getAdminCommunicationNoticeStatus(n.validTill) })), [noticesQuery.data]);
-  const [demoNotices, setDemoNotices] = useState<Notice[]>(() => isDemoMode ? ADMIN_COMMUNICATION_NOTICE_API_FIXTURE.map((notice) => ({ id: String(notice.id), title: notice.title, message: notice.message, postedBy: 'Demo session', postedDate: notice.createdAt.slice(0, 10), validTill: notice.validTill.slice(0, 10), status: getAdminCommunicationNoticeStatus(notice.validTill) })) : []);
+  const apiNotices = useMemo<Notice[]>(() => (noticesQuery.data ?? []).map((n) => ({ id: String(n.id), title: n.title, message: n.message, postedBy: '—', postedDate: n.createdAt.slice(0, 10), validTill: n.validTill.slice(0, 10), targetBranch: 'All Branches', status: getAdminCommunicationNoticeStatus(n.validTill) })), [noticesQuery.data]);
+  const [demoNotices, setDemoNotices] = useState<Notice[]>(() => isDemoMode ? ADMIN_COMMUNICATION_NOTICE_API_FIXTURE.map((notice) => ({ id: String(notice.id), title: notice.title, message: notice.message, postedBy: 'Demo session', postedDate: notice.createdAt.slice(0, 10), validTill: notice.validTill.slice(0, 10), targetBranch: 'All Branches', status: getAdminCommunicationNoticeStatus(notice.validTill) })) : []);
   const notices = isDemoMode ? demoNotices : apiNotices;
-  const [showAdd, setShowAdd]             = useState(false);
+
+  const [showAdd, setShowAdd] = useState(false);
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
-  const [editItem, setEditItem]           = useState<Notice | null>(null);
-  const [deleteItem, setDeleteItem]       = useState<Notice | null>(null);
+  const [editItem, setEditItem] = useState<Notice | null>(null);
+  const [deleteItem, setDeleteItem] = useState<Notice | null>(null);
   const [broadcastItem, setBroadcastItem] = useState<Notice | null>(null);
-  const [toast, setToast]                 = useState('');
+  const [toast, setToast] = useState('');
   const toastTimeoutRef = useRef<number | null>(null);
+
   useEffect(() => () => { if (toastTimeoutRef.current !== null) window.clearTimeout(toastTimeoutRef.current); }, []);
+
   const noticeSchema = useMemo(() => createAdminCommunicationNoticeSchema({
     noticeTitleRequired: t('VALIDATION_NOTICE_TITLE_REQUIRED'),
     noticeMessageRequired: t('VALIDATION_NOTICE_MESSAGE_REQUIRED'),
     noticeDateInvalid: t('VALIDATION_NOTICE_DATE_INVALID'),
   }), [t]);
+
   const noticeForm = useForm<AdminCommunicationNoticeFormValues>({
     resolver: zodResolver(noticeSchema),
-    defaultValues: { title: '', message: '', validTill: '' },
+    defaultValues: { title: '', message: '', validTill: '', targetBranch: 'All Branches' },
     mode: 'onBlur',
   });
 
   const handleBlockedNavigation = useCallback((href: string) => { setPendingHref(href); setShowDiscardDialog(true); }, []);
   useAdminCommunicationNoticesUnsavedChangesGuard(showAdd && noticeForm.formState.isDirty, handleBlockedNavigation, noticeForm.formState.isSubmitting);
+
   const requestCloseForm = () => {
     if (noticeForm.formState.isDirty) { setPendingHref(null); setShowDiscardDialog(true); return; }
-    setShowAdd(false); setEditItem(null); noticeForm.reset({ title: '', message: '', validTill: '' });
+    setShowAdd(false); setEditItem(null); noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches' });
   };
+
   const discardFormDraft = () => {
     const destination = pendingHref;
-    noticeForm.reset({ title: '', message: '', validTill: '' });
+    noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches' });
     setEditItem(null); setShowAdd(false); setPendingHref(null); setShowDiscardDialog(false);
     if (destination) router.push(destination);
   };
@@ -78,25 +84,27 @@ export function AdminCommunicationNoticesPage() {
     toastTimeoutRef.current = window.setTimeout(() => { setToast(''); toastTimeoutRef.current = null; }, 3000);
   };
 
-  const openAdd = () => { noticeForm.reset({ title: '', message: '', validTill: '' }); setEditItem(null); setShowAdd(true); };
-  const openEdit = (n: Notice) => { noticeForm.reset({ title: n.title, message: n.message, validTill: n.validTill }); setEditItem(n); setShowAdd(true); };
+  const openAdd = () => { noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches' }); setEditItem(null); setShowAdd(true); };
+  const openEdit = (n: Notice) => { noticeForm.reset({ title: n.title, message: n.message, validTill: n.validTill, targetBranch: n.targetBranch || 'All Branches' }); setEditItem(n); setShowAdd(true); };
 
   const handleSave = (values: AdminCommunicationNoticeFormValues) => {
     if (!isDemoMode) { showToast(t('NOTICE_CREATE_BLOCKED_TOAST')); return; }
     const now = new Date();
     const postedDate = now.toISOString().slice(0, 10);
     const validTill = values.validTill;
+    const targetBranch = values.targetBranch?.trim() || 'All Branches';
+
     if (editItem) {
-      setDemoNotices((current) => current.map((notice) => notice.id === editItem.id ? { ...notice, title: values.title.trim(), message: values.message.trim(), validTill, status: getAdminCommunicationNoticeStatus(validTill) } : notice));
+      setDemoNotices((current) => current.map((notice) => notice.id === editItem.id ? { ...notice, title: values.title.trim(), message: values.message.trim(), validTill, targetBranch, status: getAdminCommunicationNoticeStatus(validTill) } : notice));
       showToast(t('NOTICE_DEMO_UPDATED', { title: values.title.trim() }));
     } else {
-      const nextNotice: Notice = { id: `NOTICE-DEMO-${Date.now()}`, title: values.title.trim(), message: values.message.trim(), validTill, postedBy: t('DEMO_AUTHOR'), postedDate, status: getAdminCommunicationNoticeStatus(validTill) };
+      const nextNotice: Notice = { id: `NOTICE-DEMO-${Date.now()}`, title: values.title.trim(), message: values.message.trim(), validTill, targetBranch, postedBy: t('DEMO_AUTHOR'), postedDate, status: getAdminCommunicationNoticeStatus(validTill) };
       setDemoNotices((current) => [nextNotice, ...current]);
       showToast(t('NOTICE_DEMO_CREATED', { title: nextNotice.title }));
     }
     setShowAdd(false);
     setEditItem(null);
-    noticeForm.reset({ title: '', message: '', validTill: '' });
+    noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches' });
   };
 
   const handleDelete = () => {
@@ -111,9 +119,28 @@ export function AdminCommunicationNoticesPage() {
     showToast(t('NOTICE_BROADCAST_BLOCKED_TOAST'));
   };
 
+  const filteredNotices = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return notices;
+    return notices.filter((n) => {
+      if (!n.targetBranch || n.targetBranch === 'All Branches') return true;
+      return n.targetBranch.toLowerCase().includes(selectedBranch.name.toLowerCase());
+    });
+  }, [isAllBranches, selectedBranch, notices]);
+
   const colDefs: readonly DataGridColumn<Notice>[] = [
-    { field: 'title', headerName: t('NOTICE_COLUMN_TITLE'), width: 220, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-semibold text-primary">{p.value}</span> },
-    { field: 'message', headerName: t('NOTICE_COLUMN_MESSAGE'), flex: 1, minWidth: 250, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm truncate block w-full pt-1" title={p.value}>{p.value}</span> },
+    { field: 'title', headerName: t('NOTICE_COLUMN_TITLE'), width: 200, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-semibold text-primary">{p.value}</span> },
+    {
+      field: 'targetBranch',
+      headerName: 'Target Branch',
+      width: 160,
+      cellRenderer: (p: DataGridCellParams<Notice>) => (
+        <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary mt-2 whitespace-nowrap">
+          <Building2 size={12} className="text-primary shrink-0" />
+          <span>{p.data.targetBranch ?? 'All Branches'}</span>
+        </span>
+      ),
+    },
+    { field: 'message', headerName: t('NOTICE_COLUMN_MESSAGE'), flex: 1, minWidth: 230, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm truncate block w-full pt-1" title={p.value}>{p.value}</span> },
     { 
       field: 'status', 
       headerName: t('NOTICE_COLUMN_STATUS'),
@@ -133,9 +160,9 @@ export function AdminCommunicationNoticesPage() {
       sortable: false,
       cellRenderer: (params: DataGridCellParams<Notice>) => (
         <div className="h-full flex items-center gap-2">
-          <button data-testid={`admin_communication-notice-edit-${params.data.id}`} type="button" disabled={!isDemoMode} title={!isDemoMode ? t('NOTICE_PERSISTENCE_BLOCKED') : t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })} onClick={() => openEdit(params.data)} aria-label={t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"><Edit2 size={18}  strokeWidth={2}/></button>
-          <button data-testid={`admin_communication-notice-broadcast-${params.data.id}`} type="button" onClick={() => setBroadcastItem(params.data)} aria-label={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base" title={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })}><Send size={18}  strokeWidth={2}/></button>
-          <button data-testid={`admin_communication-notice-delete-${params.data.id}`} type="button" disabled={!isDemoMode} title={!isDemoMode ? t('NOTICE_DELETE_BLOCKED_TOAST') : t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })} onClick={() => setDeleteItem(params.data)} aria-label={t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary text-danger-text hover:bg-danger-bg hover:text-danger-text motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"><Trash2 size={18}  strokeWidth={2}/></button>
+          <button data-testid={`admin_communication-notice-edit-${params.data.id}`} type="button" disabled={!isDemoMode} title={!isDemoMode ? t('NOTICE_PERSISTENCE_BLOCKED') : t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })} onClick={() => openEdit(params.data)} aria-label={t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"><Edit2 size={18} strokeWidth={2}/></button>
+          <button data-testid={`admin_communication-notice-broadcast-${params.data.id}`} type="button" onClick={() => setBroadcastItem(params.data)} aria-label={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base" title={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })}><Send size={18} strokeWidth={2}/></button>
+          <button data-testid={`admin_communication-notice-delete-${params.data.id}`} type="button" disabled={!isDemoMode} title={!isDemoMode ? t('NOTICE_DELETE_BLOCKED_TOAST') : t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })} onClick={() => setDeleteItem(params.data)} aria-label={t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary text-danger-text hover:bg-danger-bg hover:text-danger-text motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"><Trash2 size={18} strokeWidth={2}/></button>
         </div>
       )
     }
@@ -149,50 +176,19 @@ export function AdminCommunicationNoticesPage() {
         </div>
       )}
 
-      {/* Add/Edit Modal */}
-      {showAdd && (
-        <Dialog open onOpenChange={(nextOpen) => { if (!nextOpen) { if (showDiscardDialog) { setShowDiscardDialog(false); setPendingHref(null); } else requestCloseForm(); } }}>
-          <DialogContent className="relative w-full overflow-y-auto rounded-xl border border-border bg-overlay p-6 shadow-dialog max-w-[560px] space-y-4">
-            {showDiscardDialog ? (<>
-              <DialogTitle>{t('UNSAVED_CHANGES_TITLE')}</DialogTitle>
-              <DialogDescription>{t('UNSAVED_CHANGES_DESCRIPTION')}</DialogDescription>
-              <DialogFooter>
-                <button type="button" className="min-h-11 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => { setShowDiscardDialog(false); setPendingHref(null); }}>{t('UNSAVED_CHANGES_STAY')}</button>
-                <button type="button" className="min-h-11 rounded-md bg-danger px-4 py-2 text-sm font-semibold text-on-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={discardFormDraft}>{t('UNSAVED_CHANGES_LEAVE')}</button>
-              </DialogFooter>
-            </>) : <>
-            <button type="button" aria-label={t('NOTICE_ROW_CLOSE_FORM_ARIA')} data-testid="admin_communication-page-control-005" onClick={requestCloseForm} className="absolute right-4 top-4 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 text-text-secondary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:text-danger-text"><X size={18} strokeWidth={2}/></button>
-            <DialogTitle className="text-lg mb-4 font-bold text-text-primary">{editItem ? t('NOTICE_EDIT_DIALOG_TITLE') : t('NOTICE_CREATE_DIALOG_TITLE')}</DialogTitle>
-            <DialogDescription className="sr-only">{t('NOTICE_FORM_DESCRIPTION')}</DialogDescription>
-            <form onSubmit={noticeForm.handleSubmit(handleSave)} noValidate className="flex flex-col gap-3.5 space-y-4">
-              <div>
-                <label htmlFor="admin-communication-notice-title" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-danger-text">{t('NOTICE_TITLE_LABEL')} <span className="text-danger-text">*</span></label>
-                <input id="admin-communication-notice-title" className="min-h-11 border-border bg-input text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 py-2 px-3 border rounded w-full" placeholder={t('NOTICE_TITLE_PLACEHOLDER')} aria-invalid={Boolean(noticeForm.formState.errors.title)} aria-describedby={noticeForm.formState.errors.title ? 'admin-communication-notice-title-error' : undefined}
-                  {...noticeForm.register('title')} />
-                {noticeForm.formState.errors.title && <p id="admin-communication-notice-title-error" className="text-sm text-danger-text" role="alert">{noticeForm.formState.errors.title.message}</p>}
-              </div>
-              <div>
-                <label htmlFor="admin-communication-notice-message" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-danger-text">{t('NOTICE_MESSAGE_LABEL')} <span className="text-danger-text">*</span></label>
-                <textarea id="admin-communication-notice-message" className="min-h-24 resize-y border-border bg-input text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 py-2 px-3 border rounded w-full" rows={6} placeholder={t('NOTICE_MESSAGE_PLACEHOLDER')} aria-invalid={Boolean(noticeForm.formState.errors.message)} aria-describedby={noticeForm.formState.errors.message ? 'admin-communication-notice-message-error' : undefined}
-                  {...noticeForm.register('message')} />
-                {noticeForm.formState.errors.message && <p id="admin-communication-notice-message-error" className="text-sm text-danger-text" role="alert">{noticeForm.formState.errors.message.message}</p>}
-              </div>
-              <div>
-                <label htmlFor="admin-communication-notice-valid-till" className="uppercase tracking-[0.07em] text-sm font-semibold mb-1 block text-danger-text">{t('NOTICE_VALID_TILL_LABEL')} <span className="text-danger-text">*</span></label>
-                <input id="admin-communication-notice-valid-till" type="date" className="min-h-11 border-border bg-input text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 py-2 px-3 border rounded w-full" aria-invalid={Boolean(noticeForm.formState.errors.validTill)} aria-describedby={noticeForm.formState.errors.validTill ? 'admin-communication-notice-valid-till-error' : undefined}
-                  {...noticeForm.register('validTill')} />
-                {noticeForm.formState.errors.validTill && <p id="admin-communication-notice-valid-till-error" className="text-sm text-danger-text" role="alert">{noticeForm.formState.errors.validTill.message}</p>}
-              </div>
-              <p className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text" role="status">{t('NOTICE_PERSISTENCE_BLOCKED')}</p>
-              <div className="flex-wrap border-border pt-3 mt-6 flex justify-end gap-3">
-                <button type="button" data-testid="admin_communication-page-control-006" onClick={requestCloseForm} className="min-h-11 px-4 py-2 border border-border text-primary rounded hover:bg-surface-hover motion-safe:transition-colors">{t('NOTICE_CANCEL')}</button>
-                <button type="submit" data-testid="admin_communication-page-control-007" disabled={!isDemoMode} title={!isDemoMode ? t('NOTICE_PERSISTENCE_BLOCKED') : undefined} className="min-h-11 px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary-hover motion-safe:transition-colors disabled:cursor-not-allowed disabled:opacity-50">{editItem ? t('NOTICE_EDIT_UNAVAILABLE') : t('NOTICE_CREATE_UNAVAILABLE')}</button>
-              </div>
-            </form>
-            </>}
-          </DialogContent>
-        </Dialog>
-      )}
+      {/* Add / Edit Modal Subcomponent */}
+      <AdminCommunicationNoticeModal
+        showAdd={showAdd}
+        showDiscardDialog={showDiscardDialog}
+        editItem={editItem}
+        noticeForm={noticeForm}
+        isDemoMode={isDemoMode}
+        branches={branches}
+        onRequestClose={requestCloseForm}
+        onDiscard={discardFormDraft}
+        onStay={() => { setShowDiscardDialog(false); setPendingHref(null); }}
+        onSave={handleSave}
+      />
 
       {/* Delete Confirmation */}
       {deleteItem && (
@@ -222,7 +218,7 @@ export function AdminCommunicationNoticesPage() {
         </Dialog>
       )}
 
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-1.5 text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary mb-2">
             <span>{t('BREADCRUMB_COMMUNICATION')}</span><ChevronRight size={18} strokeWidth={2} /><span>{t('NOTICE_PAGE_TITLE')}</span>
@@ -235,6 +231,50 @@ export function AdminCommunicationNoticesPage() {
         </button>
       </div>
 
+      {/* Multi-Branch Notice Filter Pills */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+            <Building2 size={14} className="text-primary shrink-0" />
+            Branch Filter:
+          </span>
+          <button
+            type="button"
+            onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
+            className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+              isAllBranches
+                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
+            }`}
+          >
+            All Notices ({notices.length})
+          </button>
+          {branches.map((b) => {
+            const isSelected = selectedBranchId === b.id;
+            return (
+              <button
+                key={b.id}
+                type="button"
+                onClick={() => setSelectedBranchId(b.id)}
+                className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                  isSelected
+                    ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                    : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
+                }`}
+              >
+                {b.name}
+              </button>
+            );
+          })}
+        </div>
+        {selectedBranch && (
+          <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2.5 py-1 text-xs text-text-secondary">
+            <span className="font-medium text-text-primary">{selectedBranch.name}</span>
+            <span>({selectedBranch.code})</span>
+          </span>
+        )}
+      </div>
+
       <div className="rounded-xl border border-border bg-card overflow-hidden p-4">
         {isLoading ? (
           <div className="py-12 text-center text-text-secondary" role="status">{t('NOTICE_LOADING')}</div>
@@ -243,7 +283,7 @@ export function AdminCommunicationNoticesPage() {
             <p className="text-danger-text mb-3">{errorMessage}</p>
             <button type="button" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-ui font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base" onClick={() => { void noticesQuery.refetch(); }}>{t('NOTICE_RETRY')}</button>
           </div>
-        ) : notices.length === 0 ? (
+        ) : filteredNotices.length === 0 ? (
           <div className="py-8 text-center">
             <AdminCommunicationEmptyState
               testId="admin_communication-page-state-013"
@@ -259,23 +299,20 @@ export function AdminCommunicationNoticesPage() {
         ) : (
           <div className="min-w-0 overflow-x-auto rounded-lg border border-border bg-card h-96">
             <DataGrid
-                rowData={notices}
+              rowData={filteredNotices}
               columnDefs={colDefs}
               rowHeight={56}
               pagination={true}
               pageSize={10}
-             page={urlTablePage0} onPageChange={setUrlTablePage0}/>
+              page={urlTablePage0}
+              onPageChange={setUrlTablePage0}
+            />
           </div>
         )}
       </div>
     </div>
   );
 }
-
-// Responsibility: AdminCommunicationEmptyState component owned by admin_communication; responsibility folder: admin_communication_empty_state.
-
-// RESPONSIBILITY: Standardized accessible empty state component for lists/tables in the admin_communication module.
-// DATA FLOW: Parent -> AdminCommunicationEmptyState -> DOM
 
 export function AdminCommunicationEmptyState({ title = 'No data found', description = 'Try adjusting your filters.', testId, iconTestId, titleTestId }: AdminCommunicationEmptyStateProps) {
   return (
@@ -286,3 +323,4 @@ export function AdminCommunicationEmptyState({ title = 'No data found', descript
     </div>
   );
 }
+export default AdminCommunicationNoticesPage;

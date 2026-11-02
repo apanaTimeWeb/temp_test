@@ -34,6 +34,7 @@ export function createAdminCommunicationNoticeSchema(messages: Pick<AdminCommuni
     title: z.string().trim().min(1, messages.noticeTitleRequired),
     message: z.string().trim().min(1, messages.noticeMessageRequired),
     validTill: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, messages.noticeDateInvalid),
+    targetBranch: z.string().optional(),
   });
 }
 export const AdminCommunicationNoticeSchema = createAdminCommunicationNoticeSchema(DEFAULT_MESSAGES);
