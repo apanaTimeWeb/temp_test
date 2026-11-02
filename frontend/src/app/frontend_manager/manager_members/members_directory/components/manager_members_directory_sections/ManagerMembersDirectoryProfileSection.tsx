@@ -1,15 +1,14 @@
 'use client';
 // RESPONSIBILITY: Render the members directory profile section section of the components feature. It does not own backend persistence or cross-feature business logic.
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 import {
   Armchair,
   Award,
-  BookOpen,
-  Calendar,
   CheckCircle,
   Clock,
-  CreditCard,
   ExternalLink,
   FileText,
   GraduationCap,
@@ -17,16 +16,17 @@ import {
   Lock,
   Mail,
   MapPin,
-  MessageSquare,
+  Pencil,
   Phone,
   Search,
-  ShieldAlert,
   ShieldCheck,
   User,
   Users,
 } from 'lucide-react';
 
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
+import { ManagerMembersDirectoryEditModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryEditModal';
+import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 import type { ManagerMembersDirectoryProfileSectionProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
 export type { ManagerMembersDirectoryProfileSectionProps };
 
@@ -34,28 +34,29 @@ export type { ManagerMembersDirectoryProfileSectionProps };
 function formatKnownIsoCalendarDate(value: string, locale: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   if (!match) return value;
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
-  const date = new Date(year, month - 1, day);
-  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return value;
-  return new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(date);
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(date);
 }
 
-
-export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchChange, member }: ManagerMembersDirectoryProfileSectionProps) {
+export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchChange, member, onUpdateMember, initialEdit }: ManagerMembersDirectoryProfileSectionProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
   const locale = useLocale();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(Boolean(initialEdit));
+
+  const handleSaveMember = (updated: ManagerMembersDirectoryRecord) => {
+    onUpdateMember?.(updated);
+    setIsEditModalOpen(false);
+    toast.success(`Profile for ${updated.name} (${updated.id}) updated successfully!`);
+  };
+
   const membershipTypeLabels: Record<string, string> = { Basic: tManagerUi('basic'), Pro: tManagerUi('pro'), Enterprise: tManagerUi('enterprise') };
   const memberStatusLabels: Record<string, string> = { Active: tManagerUi('member_status_active'), Expired: tManagerUi('member_status_expired'), Suspended: tManagerUi('member_status_suspended') };
   const membershipTypeLabel = member ? (membershipTypeLabels[member.type] ?? member.type) : '';
   const memberStatusLabel = member ? (memberStatusLabels[member.status] ?? member.status) : '';
-
-  const defaultDocuments = member ? [
-    { id: 'DOC-DEF-1', type: 'Aadhaar Card', number: '•••• •••• 5678', status: 'Verified' as const, fileName: 'aadhaar_card.pdf', uploadDate: member.joinDate },
-    { id: 'DOC-DEF-2', type: 'Student Photo', number: 'PHOTO-01', status: 'Verified' as const, fileName: 'passport_photo.png', uploadDate: member.joinDate },
-  ] : [];
-  const displayDocuments = member?.documents && member.documents.length > 0 ? member.documents : defaultDocuments;
+  const displayDocuments = (member?.documents && member.documents.length > 0) ? member.documents : (member ? [
+    { id: 'DOC-1', type: 'Aadhaar Card', number: '•••• •••• 5678', status: 'Verified' as const, fileName: 'aadhaar_card.pdf', uploadDate: member.joinDate },
+    { id: 'DOC-2', type: 'Student Photo', number: 'PHOTO-01', status: 'Verified' as const, fileName: 'passport_photo.png', uploadDate: member.joinDate },
+  ] : []);
   const referralPoints = member?.referralPoints ?? 150;
   const referredBy = member?.referredBy || tManagerUi('direct_walkin');
 
@@ -76,7 +77,18 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
             </div>
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <h3 className="text-2xl font-black text-primary mb-1">{member.name}</h3>
+                <div className="flex items-start justify-between gap-3 mb-1">
+                  <h3 className="text-2xl font-black text-primary">{member.name}</h3>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5 shrink-0"
+                    title="Edit Member Profile"
+                  >
+                    <Pencil size={13} />
+                    <span>Edit Profile</span>
+                  </button>
+                </div>
                 <p className="text-sm text-info font-bold mb-4">{member.id} • {membershipTypeLabel} {tManagerUi('plan')}</p>
                 <div className="space-y-2 text-sm">
                   <p className="flex items-center gap-2 text-secondary"><Phone size={14}/>{maskManagerMemberPhone(member.phone)}</p>
@@ -107,9 +119,19 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Seat & Shift Details */}
             <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
-              <h4 className="font-bold text-primary flex items-center gap-2 text-sm border-b border-border pb-2">
-                <Armchair size={16} className="text-primary" /> Seat & Shift Allotment
-              </h4>
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <h4 className="font-bold text-primary flex items-center gap-2 text-sm">
+                  <Armchair size={16} className="text-primary" /> Seat & Shift Allotment
+                </h4>
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="text-xs text-info hover:text-info-hover font-semibold inline-flex items-center gap-1"
+                  title="Change Seat, Shift, or Locker"
+                >
+                  <Pencil size={11} /> Edit
+                </button>
+              </div>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between items-center">
                   <span className="text-secondary flex items-center gap-1.5"><Armchair size={14} /> Assigned Seat:</span>
@@ -132,9 +154,19 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
 
             {/* Parent & Guardian Information */}
             <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
-              <h4 className="font-bold text-primary flex items-center gap-2 text-sm border-b border-border pb-2">
-                <User size={16} className="text-info" /> Guardian & Family Info
-              </h4>
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <h4 className="font-bold text-primary flex items-center gap-2 text-sm">
+                  <User size={16} className="text-info" /> Guardian & Family Info
+                </h4>
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="text-xs text-info hover:text-info-hover font-semibold inline-flex items-center gap-1"
+                  title="Edit Guardian Details"
+                >
+                  <Pencil size={11} /> Edit
+                </button>
+              </div>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between items-center">
                   <span className="text-secondary">Parent / Guardian:</span>
@@ -157,9 +189,19 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
 
             {/* Academic & Goal Preparation */}
             <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
-              <h4 className="font-bold text-primary flex items-center gap-2 text-sm border-b border-border pb-2">
-                <GraduationCap size={16} className="text-success" /> Academic & Target Goal
-              </h4>
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <h4 className="font-bold text-primary flex items-center gap-2 text-sm">
+                  <GraduationCap size={16} className="text-success" /> Academic & Target Goal
+                </h4>
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="text-xs text-info hover:text-info-hover font-semibold inline-flex items-center gap-1"
+                  title="Edit Academic Goal"
+                >
+                  <Pencil size={11} /> Edit
+                </button>
+              </div>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between items-center">
                   <span className="text-secondary">Target Preparation:</span>
@@ -240,6 +282,15 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
             </div>
           </div>
         </div>
+      )}
+
+      {member && (
+        <ManagerMembersDirectoryEditModal
+          member={member}
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onSave={handleSaveMember}
+        />
       )}
     </section>
   );

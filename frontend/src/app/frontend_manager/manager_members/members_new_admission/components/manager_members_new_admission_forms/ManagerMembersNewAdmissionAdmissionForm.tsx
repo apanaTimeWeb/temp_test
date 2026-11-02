@@ -22,7 +22,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const { form } = useManagerNewAdmissionAdmission();
   const [draftFeedback, setDraftFeedback] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { register, watch, formState: { errors, isDirty } } = form;
+  const { register, watch, setValue, formState: { errors, isDirty } } = form;
   const router = useRouter();
   useManagerMembersNewAdmissionUnsavedChangesGuard({ isDirty, confirm, router, tManagerUi, replayAnchorOnConfirm: true });
   const watchedPlan = watch('plan');
@@ -71,7 +71,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
           <div className="mgr-admission-layout">
             <div className="mgr-admission-main">
               <ManagerMembersNewAdmissionAdmissionPersonalSection register={register} errors={errors} />
-              <ManagerMembersNewAdmissionAdmissionEnrollmentSection register={register} errors={errors} />
+              <ManagerMembersNewAdmissionAdmissionEnrollmentSection register={register} errors={errors} setValue={setValue} watch={watch} />
               <ManagerMembersNewAdmissionAdmissionDocumentSection />
               <ManagerMembersNewAdmissionAdmissionPaymentSection register={register} errors={errors} />
             </div>

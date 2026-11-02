@@ -43,7 +43,11 @@ export function useManagerMemberDirectoryPageState(routeIntent: ManagerMembersDi
       setProfileSearch('LIB-001');
     }
   }, [routeIntent.view, routeIntent.id, routeIntent.name, routeIntent.phone, routeIntent.smartId, routeIntent.seat]);
-  const members: ManagerMembersDirectoryRecord[] = useMemo(() => getManagerMemberDirectoryDemoRecords(), []);
+  const [members, setMembers] = useState<ManagerMembersDirectoryRecord[]>(() => getManagerMemberDirectoryDemoRecords());
+
+  const updateMember = (updatedMember: ManagerMembersDirectoryRecord) => {
+    setMembers((prev) => prev.map((m) => (m.id === updatedMember.id ? updatedMember : m)));
+  };
 
   const filteredMembers = useMemo(() => {
     let filtered = members;
@@ -66,5 +70,5 @@ export function useManagerMemberDirectoryPageState(routeIntent: ManagerMembersDi
     [members, debouncedProfileSearch],
   );
 
-  return { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember };
+  return { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember, updateMember };
 }

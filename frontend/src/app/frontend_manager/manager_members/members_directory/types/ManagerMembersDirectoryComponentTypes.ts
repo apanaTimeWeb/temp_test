@@ -7,6 +7,8 @@ export interface ManagerMembersDirectoryProfileSectionProps {
   searchValue: string;
   onSearchChange: (value: string) => void;
   member: ManagerMembersDirectoryRecord | null;
+  onUpdateMember?: (updatedMember: ManagerMembersDirectoryRecord) => void;
+  initialEdit?: boolean;
 }
 
 export interface ManagerMembersDirectorySupportingSectionsProps {
