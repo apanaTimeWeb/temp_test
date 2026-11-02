@@ -1,5 +1,5 @@
 import { ADMIN_SETTINGS_SECURITY_API } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.url_config';
-import { ADMIN_SECURITY_MSW_HANDLERS, ADMIN_SECURITY_EVENT_FIXTURES, ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES, ADMIN_SECURITY_FAILED_LOGIN_FIXTURES, ADMIN_SECURITY_DEVICE_SESSION_FIXTURES, ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
+import { ADMIN_SECURITY_MSW_HANDLERS, ADMIN_SECURITY_EVENT_FIXTURES, ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES, ADMIN_SECURITY_FAILED_LOGIN_FIXTURES, ADMIN_SECURITY_DEVICE_SESSION_FIXTURES, ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES, ADMIN_SECURITY_ANTI_FRAUD_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
 import { AdminSettingsSecurityHarness as HarnessScenarioComponent } from '@/app/frontend_admin/admin_settings/settings_security/tests/harness/AdminSettingsSecurityHarness';
 import { AdminSettingsSecurityScenarios as HarnessScenarioList } from '@/app/frontend_admin/admin_settings/settings_security/tests/harness/bootstrap';
 import { filterAdminSecurityEvents } from '@/app/frontend_admin/admin_settings/settings_security/utils/AdminSettingsSecurityEventUtils';
@@ -70,5 +70,16 @@ describe('filterAdminSecurityEvents', () => {
     expect(filterAdminSecurityEvents(ADMIN_SECURITY_EVENT_FIXTURES, 'account').map((event) => event.id)).toEqual(['event-demo-2']);
     expect(filterAdminSecurityEvents(ADMIN_SECURITY_EVENT_FIXTURES, '2fa').map((event) => event.id)).toEqual(['event-demo-3']);
     expect(filterAdminSecurityEvents(ADMIN_SECURITY_EVENT_FIXTURES, 'session').map((event) => event.id)).toEqual(['event-demo-4']);
+  });
+
+  it('provides comprehensive anti-fraud audit records with risk severity breakdown', () => {
+    expect(ADMIN_SECURITY_ANTI_FRAUD_FIXTURES.length).toBeGreaterThanOrEqual(5);
+
+    const highRisk = ADMIN_SECURITY_ANTI_FRAUD_FIXTURES.filter((i) => i.severity === 'HIGH_RISK');
+    expect(highRisk.length).toBe(3);
+
+    const feeOverride = ADMIN_SECURITY_ANTI_FRAUD_FIXTURES.find((i) => i.entityType === 'FEE_DISCOUNT');
+    expect(feeOverride).toBeDefined();
+    expect(feeOverride?.actionTitle).toContain('Fee');
   });
 });

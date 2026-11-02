@@ -16,7 +16,7 @@ Current working-tree physical inventory (2026-10-30): 25 files total, 20 TS/TSX/
 
 ## 1. Scope and Non-Scope
 
-This autonomous sub-module owns the admin expense ledger screen, its add form, demo fixtures, filtering, KPI display, delete confirmation, schema validation, and local tests. It does not own assets, asset maintenance, shifts, seats, seat-gap analysis, or the live accounting API. Existing visible actions are retained; mutation remains demo-only until an approved backend API contract is supplied. No financial entity is persisted in browser storage.
+This autonomous sub-module owns the admin expense ledger screen, its add form, petty cash request and quotation approval workflow, demo fixtures, filtering, KPI display, delete confirmation, schema validation, and local tests. It does not own assets, asset maintenance, shifts, seats, seat-gap analysis, or the live accounting API. Existing visible actions are retained; mutation remains demo-only until an approved backend API contract is supplied. No financial entity is persisted in browser storage.
 
 ## 2. Screen Inventory
 
@@ -30,8 +30,9 @@ Component files:
 - `components/AdminAccountsExpensesFilterSection.tsx`
 - `components/AdminAccountsExpensesHeaderSection.tsx`
 - `components/AdminAccountsExpensesKpiSection.tsx`
-- `components/AdminAccountsExpensesPage.tsx`
 - `components/AdminAccountsExpensesTableSection.tsx`
+- `components/AdminAccountsExpensesApprovalModal.tsx`
+- `components/AdminAccountsExpensesRejectionModal.tsx`
 
 Other owned files:
 - `config/admin_accounts_expenses.url_config.ts`

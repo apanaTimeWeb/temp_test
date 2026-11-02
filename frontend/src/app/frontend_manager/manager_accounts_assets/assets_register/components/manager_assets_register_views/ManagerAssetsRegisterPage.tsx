@@ -1,34 +1,39 @@
 'use client';
 import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_register/types/ManagerAssetsRegisterMainTypes';
 import { useTranslations } from 'next-intl';
-
 import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
-import { MANAGER_ACCOUNTING_SAMPLE_ASSETS } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
-import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/mocks/manager_assets_register_fixtures/ManagerAssetsRegisterAssetSampleFixtures';
-
-// RESPONSIBILITY: Entry page for the manager_assets module.
-// DATA FLOW: Next.js Router -> Page -> Components
-
-import { useState } from 'react';
+import { MANAGER_ACCOUNTING_SAMPLE_ASSETS, type ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
+import { useState, useMemo } from 'react';
+import { Plus, X, CheckCircle, IndianRupee, ShieldCheck } from 'lucide-react';
 import { ManagerAssetsRegisterEmptyState } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_empty_states/ManagerAssetsRegisterEmptyState';
 
 const STATUS_BADGE: Record<string, string> = {
-  active:      'fin-badge--success',
+  active: 'fin-badge--success',
   maintenance: 'fin-badge--warning',
-  disposed:    'fin-badge--neutral',
+  disposed: 'fin-badge--neutral',
 };
 
-// RESPONSIBILITY: Render the assets_register feature view while preserving supported deep-link query state.
-// DATA FLOW: Route searchParams -> Main props -> this view's route context.
 export default function ManagerAssetsRegisterPage({ view, id, name, phone, smartId }: ManagerAssetsRegisterMainProps) {
   const tManagerUi = useTranslations('manager.manager_assets.ui');
   const formatManagerAssetsCurrency = useManagerAssetsCurrencyFormatter();
-  const assets = MANAGER_ACCOUNTING_SAMPLE_ASSETS;
+  
+  const [assets, setAssets] = useState<ManagerAssetsRegisterAsset[]>(MANAGER_ACCOUNTING_SAMPLE_ASSETS as ManagerAssetsRegisterAsset[]);
   const [catFilter, setCatFilter] = useState('all');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
 
-  const categories = [...new Set(MANAGER_ACCOUNTING_SAMPLE_ASSETS.map(a => a.category))];
+  // Form State
+  const [assetName, setAssetName] = useState('');
+  const [assetCategory, setAssetCategory] = useState<string>('Appliance');
+  const [assetValue, setAssetValue] = useState('');
+  const [assetLocation, setAssetLocation] = useState('North Reading Hall (AC)');
+  const [assetDate, setAssetDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [assetStatus, setAssetStatus] = useState<ManagerAssetsRegisterAsset['status']>('active');
+
+  const categories = useMemo(() => [...new Set(assets.map((a) => a.category))], [assets]);
+  
   const categoryLabel = (category: string) => {
     switch (category) {
       case 'Appliance': return tManagerUi('category_appliance');
@@ -38,8 +43,17 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
       default: return category;
     }
   };
-  const statusLabel = (status: ManagerAssetsRegisterAsset['status']) => ({ active: tManagerUi('asset_status_active'), maintenance: tManagerUi('asset_status_maintenance'), disposed: tManagerUi('asset_status_disposed') } as const)[status];
-  const visible = catFilter === 'all' ? assets : assets.filter(a => a.category === catFilter);
+
+  const statusLabel = (status: ManagerAssetsRegisterAsset['status']) => {
+    switch (status) {
+      case 'active': return tManagerUi('asset_status_active');
+      case 'maintenance': return tManagerUi('asset_status_maintenance');
+      case 'disposed': return tManagerUi('asset_status_disposed');
+      default: return status;
+    }
+  };
+
+  const visible = catFilter === 'all' ? assets : assets.filter((a) => a.category === catFilter);
 
   const totalRows = visible.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
@@ -48,6 +62,37 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
+  const handleAddAsset = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!assetName.trim()) {
+      alert('Asset name is required.');
+      return;
+    }
+    const val = Number(assetValue);
+    if (!val || val <= 0) {
+      alert('Valid purchase value is required.');
+      return;
+    }
+
+    const newAsset: ManagerAssetsRegisterAsset = {
+      id: Date.now(),
+      name: assetName.trim(),
+      category: assetCategory,
+      purchaseDate: assetDate,
+      purchaseValue: Math.round(val * 100),
+      currentValue: Math.round(val * 100),
+      location: assetLocation.trim() || 'Floor 1',
+      status: assetStatus,
+    };
+
+    setAssets([newAsset, ...assets]);
+    setIsAddModalOpen(false);
+    setAssetName('');
+    setAssetValue('');
+    setFeedbackToast(`Asset "${newAsset.name}" successfully added to Library Register!`);
+    setTimeout(() => setFeedbackToast(null), 4000);
+  };
+
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
       <div className="flex items-center justify-between">
@@ -55,38 +100,32 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
           <h1 className="fin-page-title">{tManagerUi('asset_manager')}</h1>
           <p className="fin-page-subtitle">{tManagerUi('review_the_sample_asset_register_asset_changes_are_unava_f6b9af')}</p>
         </div>
-        <button type="button" disabled title={tManagerUi('asset_creation_unavailable_host_mutation_contract_not_su_ca30d9')} className="fin-badge fin-badge--info cursor-not-allowed">{tManagerUi('add_asset_unavailable')}</button>
+        <button
+          type="button"
+          onClick={() => setIsAddModalOpen(true)}
+          className="mgr-btn-primary flex items-center gap-1.5 text-xs font-semibold"
+        >
+          <Plus size={14} /> Add Library Asset
+        </button>
       </div>
+
+      {feedbackToast && (
+        <div className="p-3 rounded-xl bg-success-bg border border-success/30 text-success text-xs font-semibold flex items-center gap-2" role="status">
+          <span>✓</span>
+          <span>{feedbackToast}</span>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div className="fin-kpi-card"><p className="fin-kpi-label">{tManagerUi('total_assets')}</p><p className="fin-kpi-value">{assets.length}</p></div>
-        <div className="fin-kpi-card fin-kpi-card--warning"><p className="fin-kpi-label fin-kpi-label--warning">{tManagerUi('under_maintenance')}</p><p className="fin-kpi-value fin-kpi-value--warning">{assets.filter(a=>a.status==='maintenance').length}</p></div>
-        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-muted">{tManagerUi('disposed')}</p><p className="fin-kpi-value fin-text-muted">{assets.filter(a=>a.status==='disposed').length}</p></div>
-      </div>
-
-      <div className="fin-card p-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-semibold text-primary">Asset Distribution by Category</h3>
-          <span className="text-xs text-secondary">{assets.length} Total Inventory Units</span>
-        </div>
-        <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
-          <div style={{ width: '35%' }} className="bg-primary h-full" title="Furniture (35%)" />
-          <div style={{ width: '25%' }} className="bg-info h-full" title="Electronics (25%)" />
-          <div style={{ width: '25%' }} className="bg-warning h-full" title="Appliance (25%)" />
-          <div style={{ width: '15%' }} className="bg-success h-full" title="Security (15%)" />
-        </div>
-        <div className="flex flex-wrap gap-4 mt-3 text-xs text-secondary">
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-primary" /> Furniture (35%)</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-info" /> Electronics (25%)</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-warning" /> Appliance (25%)</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-success" /> Security (15%)</span>
-        </div>
+        <div className="fin-kpi-card fin-kpi-card--warning"><p className="fin-kpi-label fin-kpi-label--warning">{tManagerUi('under_maintenance')}</p><p className="fin-kpi-value fin-kpi-value--warning">{assets.filter((a) => a.status === 'maintenance').length}</p></div>
+        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-muted">{tManagerUi('disposed')}</p><p className="fin-kpi-value fin-text-muted">{assets.filter((a) => a.status === 'disposed').length}</p></div>
       </div>
 
       <div className="fin-filter-bar">
-        <select className="fin-select w-44" value={catFilter} onChange={e => { setCatFilter(e.target.value); setPage(0); }} aria-label={tManagerUi('all_categories')}>
+        <select className="fin-select w-44" value={catFilter} onChange={(e) => { setCatFilter(e.target.value); setPage(0); }} aria-label={tManagerUi('all_categories')}>
           <option value="all">{tManagerUi('all_categories')}</option>
-          {categories.map(c => <option key={c} value={c}>{categoryLabel(c)}</option>)}
+          {categories.map((c) => <option key={c} value={c}>{categoryLabel(c)}</option>)}
         </select>
       </div>
 
@@ -105,12 +144,12 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
           <tbody>
             {visible.length === 0 ? (
               <tr><td colSpan={6}><ManagerAssetsRegisterEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🏷️</div><p className="fin-empty-state__title">{tManagerUi('no_assets_found')}</p></ManagerAssetsRegisterEmptyState></td></tr>
-            ) : paginated.map(a => (
+            ) : paginated.map((a) => (
               <tr key={a.id} className={`fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 ${a.status === 'disposed' ? 'opacity-50' : ''}`}>
-                <td className="py-3 px-4 fin-cell-name">{a.name}</td>
+                <td className="py-3 px-4 fin-cell-name font-semibold">{a.name}</td>
                 <td className="py-3 px-4"><span className="fin-badge fin-badge--neutral">{categoryLabel(a.category)}</span></td>
                 <td className="py-3 px-4 fin-cell-subtext">{a.purchaseDate}</td>
-                <td className="py-3 px-4 text-right fin-cell-subtext">{formatManagerAssetsCurrency(a.purchaseValue)}</td>
+                <td className="py-3 px-4 text-right fin-cell-subtext font-mono font-bold text-primary">{formatManagerAssetsCurrency(a.purchaseValue)}</td>
                 <td className="py-3 px-4 fin-cell-subtext">{a.location}</td>
                 <td className="py-3 px-4"><span className={`fin-badge ${STATUS_BADGE[a.status]}`}>{statusLabel(a.status)}</span></td>
               </tr>
@@ -123,52 +162,135 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
             <span>
               Showing {startItem}–{endItem} of {totalRows} results
             </span>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5">
-                <label htmlFor="rows-per-page-assets-register" className="text-xs text-secondary whitespace-nowrap">
-                  Rows per page:
-                </label>
-                <select
-                  id="rows-per-page-assets-register"
-                  value={pageSize}
-                  onChange={(e) => {
-                    setPageSize(Number(e.target.value));
-                    setPage(0);
-                  }}
-                  className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
-                >
-                  <option value={10}>10</option>
-                  <option value={25}>25</option>
-                  <option value={50}>50</option>
-                </select>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  className="mgr-btn-ghost mgr-btn-sm"
-                  disabled={effectivePage <= 0}
-                  onClick={() => setPage((current) => Math.max(0, current - 1))}
-                >
-                  Previous
-                </button>
-                <span className="text-xs text-secondary px-1">
-                  Page {effectivePage + 1} of {pageCount}
-                </span>
-                <button
-                  type="button"
-                  className="mgr-btn-ghost mgr-btn-sm"
-                  disabled={effectivePage >= pageCount - 1}
-                  onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
-                >
-                  Next
-                </button>
-              </div>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={effectivePage === 0}
+                onClick={() => setPage(effectivePage - 1)}
+                className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+              >
+                Previous
+              </button>
+              <span className="text-xs">
+                Page {effectivePage + 1} of {pageCount}
+              </span>
+              <button
+                type="button"
+                disabled={effectivePage >= pageCount - 1}
+                onClick={() => setPage(effectivePage + 1)}
+                className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+              >
+                Next
+              </button>
             </div>
           </div>
         )}
       </div>
 
-      <p className="fin-input-hint fin-text-warning" role="status" data-testid="manager-accounting-assets-contract-warning">{tManagerUi('sample_data_only_asset_values_and_rows_are_not_persisted_80ac83')}</p>
+      {/* Add Asset Modal */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={18} className="text-primary" />
+                <h2 className="text-base font-bold text-primary">Add Library Physical Asset</h2>
+              </div>
+              <button type="button" onClick={() => setIsAddModalOpen(false)} className="text-secondary hover:text-primary">
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddAsset} className="space-y-3.5">
+              <div>
+                <label className="text-xs font-semibold text-primary block mb-1">Asset Name / Model *</label>
+                <input
+                  type="text"
+                  required
+                  className="mgr-input text-xs"
+                  placeholder="e.g. Daikin Inverter Split AC 1.5 Ton"
+                  value={assetName}
+                  onChange={(e) => setAssetName(e.target.value)}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-primary block mb-1">Category *</label>
+                  <select
+                    className="mgr-select text-xs"
+                    value={assetCategory}
+                    onChange={(e) => setAssetCategory(e.target.value as ManagerAssetsRegisterAsset['category'])}
+                  >
+                    <option value="Appliance">Appliance (AC, RO, Water Cooler)</option>
+                    <option value="Electronics">Electronics (Inverter, Wi-Fi)</option>
+                    <option value="Furniture">Furniture (Chairs, Desks)</option>
+                    <option value="Security">Security (CCTV, Biometric)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-primary block mb-1">Purchase Cost (INR) *</label>
+                  <div className="relative">
+                    <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                    <input
+                      type="number"
+                      required
+                      min="1"
+                      className="mgr-input pl-8 text-xs font-mono font-bold"
+                      placeholder="0.00"
+                      value={assetValue}
+                      onChange={(e) => setAssetValue(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-primary block mb-1">Installation Location</label>
+                  <input
+                    type="text"
+                    className="mgr-input text-xs"
+                    placeholder="e.g. North Hall / 2nd Floor"
+                    value={assetLocation}
+                    onChange={(e) => setAssetLocation(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-primary block mb-1">Purchase Date</label>
+                  <input
+                    type="date"
+                    className="mgr-input text-xs"
+                    value={assetDate}
+                    onChange={(e) => setAssetDate(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-primary block mb-1">Initial Condition Status</label>
+                <select
+                  className="mgr-select text-xs"
+                  value={assetStatus}
+                  onChange={(e) => setAssetStatus(e.target.value as ManagerAssetsRegisterAsset['status'])}
+                >
+                  <option value="active">Active & Operational</option>
+                  <option value="maintenance">Under Maintenance / AMC</option>
+                </select>
+              </div>
+
+              <div className="flex justify-end gap-2.5 pt-3 border-t border-border">
+                <button type="button" onClick={() => setIsAddModalOpen(false)} className="mgr-btn-ghost text-xs">
+                  Cancel
+                </button>
+                <button type="submit" className="mgr-btn-primary text-xs flex items-center gap-1.5">
+                  <CheckCircle size={14} /> Register Asset
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import useAdminSettingsBranchesMain from '@/app/frontend_admin/admin_settings/se
 
 import { Users, Building2, MapPin, Mail, Phone } from 'lucide-react';
 import AdminBranchesListViews from '@/app/frontend_admin/admin_settings/settings_branches/components/AdminSettingsBranchesListViews';
+import AdminSettingsBranchesHolidaysSection from '@/app/frontend_admin/admin_settings/settings_branches/components/AdminSettingsBranchesHolidaysSection';
 import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -76,6 +77,7 @@ export function AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionMAINDASHBOARDVI
       {!viewingBranch && activeTab === 'settings' && contractNotice('GLOBAL_SETTINGS', 'GLOBAL_SETTINGS_REQUIRED')}
       {!viewingBranch && activeTab === 'usage' && contractNotice('GLOBAL_USAGE', 'GLOBAL_USAGE_REQUIRED')}
       {!viewingBranch && activeTab === 'reports' && contractNotice('COMPARISON_REPORTS', 'REPORTS_REQUIRED')}
+      {!viewingBranch && activeTab === 'holidays' && <AdminSettingsBranchesHolidaysSection isDemoMode={model.isDemoMode} />}
       {viewingBranch && <button type="button" className="mb-4 admin-btn-ghost" onClick={() => setViewingBranch(null)}>{t('BACK_TO_BRANCHES')}</button>}
     </div>
   );

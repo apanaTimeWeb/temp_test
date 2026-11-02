@@ -120,7 +120,22 @@
         "preview_add_holiday_draft": "छुट्टी का ड्राफ़्ट देखें",
         "holiday_draft_preview_only": "यह केवल ड्राफ़्ट पूर्वावलोकन है; होस्ट अनुबंध के बिना सहेजना उपलब्ध नहीं है।",
         "previous_month": "पिछला महीना",
-        "next_month": "अगला महीना"
+        "next_month": "अगला महीना",
+        "turnover_queue_tab": "फ्लोर टर्नओवर एवं ओवरस्टे",
+        "roster_tab": "दैनिक रोस्टर",
+        "turnover_title": "लाइव शिफ्ट टर्नओवर एवं ओवरस्टे कतार",
+        "turnover_subtitle": "छात्र मोबाइल चेकआउट पर डेस्क की भौतिक जांच करें और अनधिकृत ओवरस्टे पकड़ें।",
+        "stat_pending_verification": "लंबित डेस्क निरीक्षण",
+        "stat_active_overstays": "सक्रिय ओवरस्टे",
+        "stat_recovered_fines": "ओवरस्टे जुर्माना",
+        "confirm_vacated": "सीट खाली सत्यापित करें",
+        "report_fake_checkout": "अभी भी बैठा है (फर्जी चेकआउट)",
+        "flag_overstay_fine": "ओवरस्टे फ्लैग (+₹50 जुर्माना)",
+        "manual_clear": "छात्र चला गया (मैनुअल क्लियर)",
+        "vacated_success": "सीट खाली सत्यापित हो गई और अगली शिफ्ट के लिए तैयार है।",
+        "overstay_fined_success": "ओवरस्टे दर्ज (+₹50 जुर्माना छात्र खाते में जोड़ा गया)।",
+        "fake_checkout_flagged": "सीट भरी हुई मार्क की गई। छात्र को फर्जी चेकआउट चेतावनी भेजी गई।",
+        "no_turnover_alerts": "सभी शिफ्ट बदलाव सुचारू हैं! कोई लंबित ओवरस्टे अलर्ट नहीं है।"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",

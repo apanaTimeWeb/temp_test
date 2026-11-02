@@ -16,7 +16,7 @@ import { fetchAdminBranches } from '@/app/frontend_admin/admin_settings/settings
 import { ADMIN_BRANCHES_QUERY_KEYS } from '@/app/frontend_admin/admin_settings/settings_branches/api/admin_settings_branches.query_keys';
 
 
-const ADMIN_SETTINGS_BRANCHES_TABS: readonly AdminSettingsBranchesTab[] = ['all', 'create', 'active', 'suspended', 'archived', 'managers', 'settings', 'usage', 'reports'];
+const ADMIN_SETTINGS_BRANCHES_TABS: readonly AdminSettingsBranchesTab[] = ['all', 'create', 'active', 'suspended', 'archived', 'managers', 'settings', 'usage', 'reports', 'holidays'];
 function readMainTab(value: string | null): AdminSettingsBranchesTab { return ADMIN_SETTINGS_BRANCHES_TABS.includes(value as AdminSettingsBranchesTab) ? value as AdminSettingsBranchesTab : 'all'; }
 export default function useAdminSettingsBranchesMain() {
   const t = useTranslations('ADMIN_BRANCHES');

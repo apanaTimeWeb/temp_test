@@ -5,13 +5,14 @@ import { format, parseISO, isValid } from 'date-fns';
 import { enUS, hi } from 'date-fns/locale';
 import { ManagerLockersManagementNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
 import { useLocale, useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 
 import { useRef, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerSeatsLockerDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/schemas/ManagerLockersManagementDraftSchemas';
 import { useManagerLockersDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/hooks/ManagerLockersManagementDialogFocus';
-import { Plus, ChevronDown, Search, UserPlus, Unlock, Wrench } from 'lucide-react';
+import { Plus, ChevronDown, Search, UserPlus, Unlock, Wrench, Key } from 'lucide-react';
 import type { ManagerLockersManagementNativeColumn as ColDef, ManagerLockersManagementNativeCellParams as ICellRendererParams } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
 import { MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_LOCKERS, type ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 import type { LockerStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementComponentTypes';
@@ -63,11 +64,13 @@ function AssignedSinceCell(props: { value?: any }) {
 
 export function ManagerLockersManagementClient() {
   const tManagerUi = useTranslations('manager.manager_lockers.ui');
-  const lockers = MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_LOCKERS;
+  const [lockers, setLockers] = useState<Locker[]>([...MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_LOCKERS]);
   const [statusFilter, setStatusFilter] = useState('all');
   const [showAssign, setShowAssign] = useState<Locker | null>(null);
   const [assignSearch, setAssignSearch] = useState('');
   const [freeTarget, setFreeTarget] = useState<Locker | null>(null);
+  const [keyStatus, setKeyStatus] = useState<'returned' | 'lost'>('returned');
+  const [remarks, setRemarks] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const activeDialog = showAddModal ? 'add-locker' : showAssign ? 'assign-locker' : freeTarget ? 'free-locker' : false;
@@ -75,6 +78,22 @@ export function ManagerLockersManagementClient() {
   const { watch, setValue, reset, clearErrors, formState } = useForm({ resolver: zodResolver(managerSeatsLockerDraftSchema), defaultValues: { lockerId: '' }, mode: 'onChange' });
   const newLockerId = watch('lockerId');
   const addError = formState.errors.lockerId?.message;
+
+  const handleConfirmVacateLocker = () => {
+    if (!freeTarget) return;
+    const netRefund = keyStatus === 'lost' ? 350 : 500;
+    setLockers((prev) =>
+      prev.map((l) =>
+        l.lockerId === freeTarget.lockerId
+          ? { ...l, status: 'Free' as const, assignedTo: '-', assignedSince: '-' }
+          : l
+      )
+    );
+    toast.success(tManagerUi('vacate_success_toast', { id: freeTarget.lockerId, amount: netRefund }));
+    setFreeTarget(null);
+    setKeyStatus('returned');
+    setRemarks('');
+  };
 
   const filtered = lockers.filter(l => statusFilter === 'all' || l.status === statusFilter);
 
@@ -196,14 +215,125 @@ export function ManagerLockersManagementClient() {
 
       {freeTarget && (
         <div className="ss-modal-overlay" onClick={() => setFreeTarget(null)}>
-          <div ref={dialogRef} tabIndex={-1} className="ss-modal" role="dialog" aria-modal="true" aria-labelledby="ss-locker-free-title" onClick={e => e.stopPropagation()}>
-            <h2 id="ss-locker-free-title" className="ss-modal-title">{tManagerUi('free_locker_2ef279')} {freeTarget.lockerId}</h2>
+          <div
+            ref={dialogRef}
+            tabIndex={-1}
+            className="ss-modal max-w-lg"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="ss-locker-free-title"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-2.5 text-primary mb-1">
+              <Key size={20} />
+              <h2 id="ss-locker-free-title" className="ss-modal-title">
+                {tManagerUi('vacate_and_clear_title')}
+              </h2>
+            </div>
             <p className="ss-modal-desc">
-              {tManagerUi('free_locker')} <strong>{freeTarget.lockerId}</strong> {tManagerUi('from')} <strong>{freeTarget.assignedTo}</strong>{tManagerUi('locker_becomes_available_immediately')}
+              Locker <strong>{freeTarget.lockerId}</strong> · Currently assigned to <strong>{freeTarget.assignedTo}</strong>
             </p>
+
+            <div className="space-y-4 my-4">
+              {/* Escrow deposit card */}
+              <div className="flex items-center justify-between rounded-lg border border-border bg-card p-3 text-sm">
+                <span className="text-text-secondary">{tManagerUi('security_deposit_held')}</span>
+                <span className="font-bold text-text-primary">₹500.00</span>
+              </div>
+
+              {/* Physical Key inspection options */}
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                  {tManagerUi('key_status_label')}
+                </label>
+
+                <label className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
+                  keyStatus === 'returned'
+                    ? 'border-primary bg-primary-subtle/10'
+                    : 'border-border bg-card'
+                }`}>
+                  <input
+                    type="radio"
+                    name="keyStatus"
+                    value="returned"
+                    checked={keyStatus === 'returned'}
+                    onChange={() => setKeyStatus('returned')}
+                    className="mt-0.5 text-primary"
+                  />
+                  <div>
+                    <p className="text-sm font-semibold text-text-primary">
+                      {tManagerUi('key_returned_option')}
+                    </p>
+                    <p className="text-xs text-text-secondary">
+                      Original physical locker key returned undamaged. Full deposit refundable.
+                    </p>
+                  </div>
+                </label>
+
+                <label className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
+                  keyStatus === 'lost'
+                    ? 'border-danger-border bg-danger-subtle/10'
+                    : 'border-border bg-card'
+                }`}>
+                  <input
+                    type="radio"
+                    name="keyStatus"
+                    value="lost"
+                    checked={keyStatus === 'lost'}
+                    onChange={() => setKeyStatus('lost')}
+                    className="mt-0.5 text-danger-text"
+                  />
+                  <div>
+                    <p className="text-sm font-semibold text-danger-text">
+                      {tManagerUi('key_lost_option')}
+                    </p>
+                    <p className="text-xs text-text-secondary">
+                      Lock must be re-keyed. ₹150 penalty deducted from deposit.
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              {/* Financial Calculation Box */}
+              <div className="rounded-lg border border-border bg-surface-highlight p-3 space-y-1.5 text-xs">
+                <div className="flex justify-between text-text-secondary">
+                  <span>{tManagerUi('deduction_amount')}</span>
+                  <span className={keyStatus === 'lost' ? 'font-bold text-danger-text' : 'font-medium'}>
+                    - ₹{keyStatus === 'lost' ? '150.00' : '0.00'}
+                  </span>
+                </div>
+                <div className="flex justify-between font-bold text-sm text-text-primary pt-1.5 border-t border-border">
+                  <span>{tManagerUi('net_refund_payable')}</span>
+                  <span className="text-success-text">₹{keyStatus === 'lost' ? '350.00' : '500.00'}</span>
+                </div>
+              </div>
+
+              {/* Remarks */}
+              <div>
+                <label className="ss-label" htmlFor="clearance-remarks">
+                  {tManagerUi('clearance_remarks')}
+                </label>
+                <input
+                  id="clearance-remarks"
+                  className="ss-input"
+                  placeholder={tManagerUi('clearance_remarks_placeholder')}
+                  value={remarks}
+                  onChange={(e) => setRemarks(e.target.value)}
+                />
+              </div>
+            </div>
+
             <div className="ss-modal-footer">
-              <button type="button" className="ss-btn-ghost" onClick={() => setFreeTarget(null)}>{tManagerUi('cancel')}</button>
-              <button type="button" className="ss-btn-danger cursor-not-allowed" disabled title={tManagerUi('free_locker_unavailable_host_mutation_contract_not_suppl_f342cd')}>{tManagerUi('free_locker_unavailable')}</button>
+              <button type="button" className="ss-btn-ghost" onClick={() => setFreeTarget(null)}>
+                {tManagerUi('cancel')}
+              </button>
+              <button
+                type="button"
+                className="ss-btn-primary"
+                onClick={handleConfirmVacateLocker}
+              >
+                {tManagerUi('submit_vacate_and_refund')}
+              </button>
             </div>
           </div>
         </div>

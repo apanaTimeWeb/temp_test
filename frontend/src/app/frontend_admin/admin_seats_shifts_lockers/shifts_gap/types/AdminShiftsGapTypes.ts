@@ -56,3 +56,22 @@ export interface AdminShiftsShiftGapFixture {
   gaps: AdminShiftsGapBlock[];
 }
 
+export type AdminShiftOverstayAction = 'FINED' | 'WARNED' | 'SHIFT_UPGRADED';
+export type AdminShiftOverstayStatus = 'RECOVERED' | 'WAIVED' | 'PENDING_CLEARANCE';
+
+export interface AdminShiftOverstayIncident {
+  id: string;
+  date: string;
+  branchName: string;
+  seatNumber: string;
+  studentName: string;
+  smartId: string;
+  bookedShift: string;
+  scheduledEndTime: string;
+  actualDepartureTime: string;
+  overstayMinutes: number;
+  managerAction: AdminShiftOverstayAction;
+  fineAmount: number;
+  status: AdminShiftOverstayStatus;
+}
+

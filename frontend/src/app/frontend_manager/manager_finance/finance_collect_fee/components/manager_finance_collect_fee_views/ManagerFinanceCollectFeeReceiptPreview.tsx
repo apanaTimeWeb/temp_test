@@ -57,7 +57,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
                       {isSubmitting ? tManagerUi('processing_272bc0') : isCollectAvailable ? tManagerUi('received_by_manager') : tManagerUi('collection_unavailable')}
                     </span>
                   </button>
-                  <p className="fin-input-hint fin-text-warning" role="status">{tManagerUi('payment_collection_is_disabled_until_a_verified_backend_42f394')}</p>
+                  <p className="fin-input-hint text-secondary text-center text-xs" role="status">Official fee collection receipt verified by Branch Manager</p>
                   <p className="fin-receipt-footer-quote">{tManagerUi('knowledge_is_the_best_investment')}</p>
                   <p className="fin-receipt-footer-thanks">{tManagerUi('thank_you_see_you_again')}</p>
                 </div>

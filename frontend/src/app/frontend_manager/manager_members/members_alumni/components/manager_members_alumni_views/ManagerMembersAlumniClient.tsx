@@ -2,7 +2,8 @@
 // RESPONSIBILITY: Orchestrate the client-side view and local interactions for components. It does not own backend persistence or cross-feature business logic.
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Award, Briefcase, Download, Filter, GraduationCap, Search, Users } from 'lucide-react';
+import { Award, Briefcase, Download, Filter, GraduationCap, Plus, Search, Users } from 'lucide-react';
+import { ManagerMembersAlumniAddModal } from '@/app/frontend_manager/manager_members/members_alumni/components/manager_members_alumni_dialogs/ManagerMembersAlumniAddModal';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
 
 const ALUMNI_RECORDS: MembersAlumniRow[] = [
@@ -19,13 +20,17 @@ const ALUMNI_RECORDS: MembersAlumniRow[] = [
 export function ManagerMembersAlumniClient() {
   const tManagerUi = useTranslations('manager.manager_alumni.ui');
 
+  const [records, setRecords] = useState<MembersAlumniRow[]>(ALUMNI_RECORDS);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [yearFilter, setYearFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [examFilter, setExamFilter] = useState('All');
 
   const filteredAlumni = useMemo(() => {
-    return ALUMNI_RECORDS.filter((record) => {
+    return records.filter((record) => {
       const matchesSearch =
         record.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         record.exam.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -67,19 +72,30 @@ export function ManagerMembersAlumniClient() {
           <h1 className="mgr-page-title">{tManagerUi('alumni_directory')}</h1>
           <p className="mgr-page-subtitle">Track and celebrate library alumni who have successfully qualified competitive examinations or transitioned to professional careers.</p>
         </div>
-        <div className="mgr-page-actions">
-          <button type="button" onClick={handleExportCsv} className="mgr-btn-ghost flex items-center gap-2">
-            <Download size={16} />
-            <span>Export Alumni CSV</span>
+        <div className="mgr-page-actions flex items-center gap-2">
+          <button type="button" onClick={() => setIsAddModalOpen(true)} className="mgr-btn-primary flex items-center gap-1.5 text-xs">
+            <Plus size={15} />
+            <span>Add Alumni Record</span>
+          </button>
+          <button type="button" onClick={handleExportCsv} className="mgr-btn-ghost flex items-center gap-2 text-xs">
+            <Download size={15} />
+            <span>Export CSV</span>
           </button>
         </div>
       </div>
+
+      {toastMsg && (
+        <div className="mb-4 p-3 rounded-xl bg-success-bg border border-success/30 text-success text-xs font-semibold flex items-center gap-2" role="status">
+          <span>✓</span>
+          <span>{toastMsg}</span>
+        </div>
+      )}
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="mgr-card p-4">
           <span className="text-xs text-secondary font-medium">Total Alumni Network</span>
-          <p className="text-2xl font-bold text-primary mt-1">{ALUMNI_RECORDS.length}</p>
+          <p className="text-2xl font-bold text-primary mt-1">{records.length}</p>
         </div>
         <div className="mgr-card p-4">
           <span className="text-xs text-secondary font-medium">Exam Success Rate</span>
@@ -212,9 +228,19 @@ export function ManagerMembersAlumniClient() {
           </table>
         </div>
         <div className="border-t border-border px-4 py-3 flex justify-between items-center text-xs text-secondary">
-          <span>Showing {filteredAlumni.length} of {ALUMNI_RECORDS.length} alumni records</span>
+          <span>Showing {filteredAlumni.length} of {records.length} alumni records</span>
         </div>
       </div>
+
+      <ManagerMembersAlumniAddModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onAdd={(newAlumni) => {
+          setRecords([newAlumni, ...records]);
+          setToastMsg(`Alumni record for "${newAlumni.name}" added successfully!`);
+          setTimeout(() => setToastMsg(null), 4000);
+        }}
+      />
     </div>
   );
 }

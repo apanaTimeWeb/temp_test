@@ -10,6 +10,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight, Save, FileBarChart2 } from 'lucide-react';
 import { ManagerAttendanceDailyEmptyState } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_empty_states/ManagerAttendanceDailyEmptyState';
+import { ManagerAttendanceDailyFloorTurnoverQueue } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyFloorTurnoverQueue';
 import type { AttStatus, Student, ManagerAttendanceDailyTimeField } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
 
 
@@ -28,6 +29,7 @@ function toLocalDateInputValue(date: Date): string {
 // DATA FLOW: Route searchParams -> Main props -> this view's route context.
 export default function ManagerAttendanceDailyPage({ view, id, name, phone, smartId }: ManagerAttendanceDailyMainProps) {
   const tManagerUi = useTranslations('manager.manager_attendance.ui');
+  const [activeTab, setActiveTab] = useState<'roster' | 'turnover'>('roster');
   const [date, setDate] = useState(() => toLocalDateInputValue(new Date()));
   const [shift, setShift]       = useState('All');
   const [students, setStudents] = useState<Student[]>(INIT_STUDENTS);
@@ -100,60 +102,95 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
         </div>
       </div>
 
-      {/* ── Filters ── */}
-      <div className="eng-card eng-card--flush eng-mb-6">
-        <div className="eng-filter-row">
-          <div className="eng-filter-field">
-            <label className="eng-label" htmlFor="rbg4-managerengagementattendancepage-103">{tManagerUi('date')}</label>
-            <input id="rbg4-managerengagementattendancepage-103" type="date" className="eng-input" value={date} onChange={(e) => setDate(e.target.value)} aria-label={tManagerUi('date')} />
-          </div>
-          <div className="eng-filter-field">
-            <label className="eng-label" htmlFor="rbg4-managerengagementattendancepage-108">{tManagerUi('shift')}</label>
-            <select id="rbg4-managerengagementattendancepage-108" className="eng-select eng-filter-select" value={shift}
-              onChange={e => setShift(e.target.value)}>
-              <option value="All">{tManagerUi('all')}</option>
-              <option value="Morning">{tManagerUi('morning')}</option>
-              <option value="Afternoon">{tManagerUi('afternoon')}</option>
-              <option value="Evening">{tManagerUi('evening')}</option>
-            </select>
-          </div>
-          <div className="eng-filter-badges">
-            <span className="eng-badge eng-badge--success">{present} {tManagerUi('present')}</span>
-            <span className="eng-badge eng-badge--danger">{absent} {tManagerUi('absent')}</span>
-            <span className="eng-badge eng-badge--warning">{late} {tManagerUi('late')}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Student List ── */}
-      <div className="eng-card eng-card--flush">
-        <div className="eng-att-list">
-          {filtered.length === 0 ? (
-            <ManagerAttendanceDailyEmptyState className="eng-empty">
-              <div className="eng-empty-icon">📅</div>
-              <p className="eng-empty-title">{tManagerUi('no_students_in_this_shift')}</p>
-              <p className="eng-empty-sub">{tManagerUi('try_selecting_a_different_shift_or_date')}</p>
-            </ManagerAttendanceDailyEmptyState>
-          ) : filtered.map((student) => (
-            <ManagerAttendanceDailyStudentRow
-              key={student.id}
-              student={student}
-              onStatusChange={setStatus}
-              onFieldChange={setField}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* ── Sticky Save Bar ── */}
-      <div className="eng-save-bar">
-        <p className="eng-save-bar-info">
-          <strong>{marked}</strong> {tManagerUi('of')} <strong>{filtered.length}</strong> {tManagerUi('in_the_local_preview_for')} <strong>{date}</strong>
-        </p>
-        <button type="button" disabled title={tManagerUi('attendance_save_unavailable_verified_host_attendance_mut_d8dff8')} className="eng-btn eng-btn--primary cursor-not-allowed" data-testid="manager-engagement-attendance-save-disabled">
-          <Save size={15}/> {tManagerUi('save_unavailable')}
+      {/* ── View Mode Tabs ── */}
+      <div className="flex items-center gap-3 border-b border-border mb-5">
+        <button
+          type="button"
+          onClick={() => setActiveTab('roster')}
+          className={`pb-2.5 text-sm font-medium border-b-2 transition-colors cursor-pointer ${
+            activeTab === 'roster'
+              ? 'border-primary text-primary font-semibold'
+              : 'border-transparent text-text-secondary hover:text-text-primary'
+          }`}
+        >
+          {tManagerUi('roster_tab')}
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('turnover')}
+          className={`flex items-center gap-1.5 pb-2.5 text-sm font-medium border-b-2 transition-colors cursor-pointer ${
+            activeTab === 'turnover'
+              ? 'border-primary text-primary font-semibold'
+              : 'border-transparent text-text-secondary hover:text-text-primary'
+          }`}
+        >
+          <span>{tManagerUi('turnover_queue_tab')}</span>
+          <span className="rounded-full bg-danger-bg text-danger-text px-2 py-0.5 text-xs font-bold">
+            3
+          </span>
         </button>
       </div>
+
+      {activeTab === 'turnover' ? (
+        <ManagerAttendanceDailyFloorTurnoverQueue />
+      ) : (
+        <>
+          {/* ── Filters ── */}
+          <div className="eng-card eng-card--flush eng-mb-6">
+            <div className="eng-filter-row">
+              <div className="eng-filter-field">
+                <label className="eng-label" htmlFor="rbg4-managerengagementattendancepage-103">{tManagerUi('date')}</label>
+                <input id="rbg4-managerengagementattendancepage-103" type="date" className="eng-input" value={date} onChange={(e) => setDate(e.target.value)} aria-label={tManagerUi('date')} />
+              </div>
+              <div className="eng-filter-field">
+                <label className="eng-label" htmlFor="rbg4-managerengagementattendancepage-108">{tManagerUi('shift')}</label>
+                <select id="rbg4-managerengagementattendancepage-108" className="eng-select eng-filter-select" value={shift}
+                  onChange={e => setShift(e.target.value)}>
+                  <option value="All">{tManagerUi('all')}</option>
+                  <option value="Morning">{tManagerUi('morning')}</option>
+                  <option value="Afternoon">{tManagerUi('afternoon')}</option>
+                  <option value="Evening">{tManagerUi('evening')}</option>
+                </select>
+              </div>
+              <div className="eng-filter-badges">
+                <span className="eng-badge eng-badge--success">{present} {tManagerUi('present')}</span>
+                <span className="eng-badge eng-badge--danger">{absent} {tManagerUi('absent')}</span>
+                <span className="eng-badge eng-badge--warning">{late} {tManagerUi('late')}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Student List ── */}
+          <div className="eng-card eng-card--flush">
+            <div className="eng-att-list">
+              {filtered.length === 0 ? (
+                <ManagerAttendanceDailyEmptyState className="eng-empty">
+                  <div className="eng-empty-icon">📅</div>
+                  <p className="eng-empty-title">{tManagerUi('no_students_in_this_shift')}</p>
+                  <p className="eng-empty-sub">{tManagerUi('try_selecting_a_different_shift_or_date')}</p>
+                </ManagerAttendanceDailyEmptyState>
+              ) : filtered.map((student) => (
+                <ManagerAttendanceDailyStudentRow
+                  key={student.id}
+                  student={student}
+                  onStatusChange={setStatus}
+                  onFieldChange={setField}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* ── Sticky Save Bar ── */}
+          <div className="eng-save-bar">
+            <p className="eng-save-bar-info">
+              <strong>{marked}</strong> {tManagerUi('of')} <strong>{filtered.length}</strong> {tManagerUi('in_the_local_preview_for')} <strong>{date}</strong>
+            </p>
+            <button type="button" disabled title={tManagerUi('attendance_save_unavailable_verified_host_attendance_mut_d8dff8')} className="eng-btn eng-btn--primary cursor-not-allowed" data-testid="manager-engagement-attendance-save-disabled">
+              <Save size={15}/> {tManagerUi('save_unavailable')}
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

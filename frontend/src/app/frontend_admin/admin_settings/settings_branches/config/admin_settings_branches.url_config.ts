@@ -1,7 +1,7 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
 import {
   Activity, Archive, BarChart3, Building2, CheckCircle2, ClipboardList,
-  PauseCircle, Plus, Settings, Users,
+  PauseCircle, Plus, Settings, Users, CalendarCheck,
 } from 'lucide-react';
 import type { AdminBranchesDetailTab, AdminSettingsBranchesTab } from '@/app/frontend_admin/admin_settings/settings_branches/schemas/AdminSettingsBranchesSchema';
 
@@ -52,6 +52,7 @@ export const ADMIN_SETTINGS_BRANCHES_NAVIGATION: readonly AdminBranchesNavigatio
   { id: 'settings', label: 'Global settings', icon: Settings },
   { id: 'usage', label: 'Usage', icon: Activity },
   { id: 'reports', label: 'Comparison reports', icon: BarChart3 },
+  { id: 'holidays', label: 'Notice Board & Holidays', icon: CalendarCheck },
 ];
 
 export const ADMIN_BRANCHES_DETAIL_NAVIGATION: readonly AdminBranchesDetailNavigationItem[] = [

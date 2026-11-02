@@ -1,6 +1,6 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
 import type { AdminSecurityEventFilter } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
-import { Activity, Ban, BellRing, KeyRound, Laptop, MonitorSmartphone, Shield, XOctagon } from 'lucide-react';
+import { Activity, Ban, BellRing, KeyRound, Laptop, MonitorSmartphone, Shield, XOctagon, ShieldAlert } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { AdminSecurityTab } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
 import type { AdminSecurityEventFilterOptionLabelKey, AdminSecurityNavigationItemLabelKey } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
@@ -53,4 +53,5 @@ export const ADMIN_SECURITY_NAV_ITEMS: readonly AdminSecurityNavigationItem[] = 
   { id: 'blocked-users', labelKey: 'NAV_BLOCKED_USERS', icon: Ban },
   { id: 'device-sessions', labelKey: 'NAV_DEVICE_SESSIONS', icon: Laptop },
   { id: 'events', labelKey: 'NAV_EVENTS', icon: BellRing },
+  { id: 'audit-trail', labelKey: 'NAV_AUDIT_TRAIL', icon: ShieldAlert },
 ] as const;

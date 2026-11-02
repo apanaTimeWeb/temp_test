@@ -54,8 +54,17 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
       return;
     }
     const newExpense: AdminAccountingExpense = {
-      id: Date.now(), date: values.date, category: values.category, description: values.description,
-      amount: toAdminAccountingMinorUnits(values.amount), paidBy: values.paidBy, mode: values.mode, notes: values.notes,
+      id: Date.now(),
+      date: values.date,
+      category: values.category,
+      description: values.description,
+      amount: toAdminAccountingMinorUnits(values.amount),
+      paidBy: values.paidBy,
+      mode: values.mode,
+      notes: values.notes,
+      status: 'APPROVED',
+      branchName: 'Downtown Central',
+      isPettyCashRequest: false,
     };
     onSaveExpense(newExpense);
     form.reset(values);

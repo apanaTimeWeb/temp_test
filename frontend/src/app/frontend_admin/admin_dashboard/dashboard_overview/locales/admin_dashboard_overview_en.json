@@ -84,6 +84,19 @@
     "LIBRARY_SEATS_TITLE": "Seats & shifts",
     "LIBRARY_SEATS_UNAVAILABLE": "Manage seat availability, shifts and maintenance in the seats workspace.",
     "LIBRARY_FINANCE_TITLE": "Finance",
-    "LIBRARY_FINANCE_UNAVAILABLE": "Open fee collection, payments and financial summaries in the finance workspace."
+    "LIBRARY_FINANCE_UNAVAILABLE": "Open fee collection, payments and financial summaries in the finance workspace.",
+    "LEADERBOARD_TITLE": "Branch Comparative Analytics & Benchmarking",
+    "LEADERBOARD_SUBTITLE": "Side-by-side branch leaderboard comparing occupancy, net profit, renewal rates, and operational bottlenecks across all locations.",
+    "LEADERBOARD_SORT_PROFIT": "Rank by Net Profit",
+    "LEADERBOARD_SORT_OCCUPANCY": "Rank by Occupancy",
+    "LEADERBOARD_SORT_RENEWAL": "Rank by Renewals",
+    "COL_RANK": "Rank",
+    "COL_BRANCH": "Branch & Manager",
+    "COL_CAPACITY": "Seats & Occupancy",
+    "COL_REVENUE": "Revenue (MTD)",
+    "COL_EXPENSES": "Expenses",
+    "COL_NET_PROFIT": "Net Profit",
+    "COL_RENEWAL": "Renewal Rate",
+    "COL_BOTTLENECK": "Primary Growth Bottleneck"
   }
 }

@@ -19,10 +19,14 @@ export interface AdminAccountingDeleteConfirmationDialogProps {
 }
 
 export type AdminAccountsExpensesCategoryFilter = 'all' | (typeof ADMIN_ACCOUNTING_EXPENSE_CATEGORIES)[number];
+export type AdminAccountsExpensesStatusFilter = 'all' | 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED';
 
 export interface AdminAccountsExpensesFilterSectionProps {
   value: AdminAccountsExpensesCategoryFilter;
+  statusFilter?: AdminAccountsExpensesStatusFilter;
   onChange: (value: AdminAccountsExpensesCategoryFilter) => void;
+  onStatusChange?: (status: AdminAccountsExpensesStatusFilter) => void;
+  pendingCount?: number;
 }
 
 export interface AdminAccountsExpensesHeaderSectionProps {
@@ -40,7 +44,23 @@ export type AdminAccountsExpensesRouteView = 'list' | 'add';
 export interface AdminAccountsExpensesTableSectionProps {
   expenses: readonly AdminAccountingExpense[];
   onRequestDelete: (expense: AdminAccountingExpense) => void;
+  onRequestApprove?: (expense: AdminAccountingExpense) => void;
+  onRequestReject?: (expense: AdminAccountingExpense) => void;
   canMutate: boolean;
+}
+
+export interface AdminAccountsExpensesApprovalModalProps {
+  expense: AdminAccountingExpense | null;
+  open: boolean;
+  onConfirm: (expenseId: number) => void;
+  onCancel: () => void;
+}
+
+export interface AdminAccountsExpensesRejectionModalProps {
+  expense: AdminAccountingExpense | null;
+  open: boolean;
+  onConfirm: (expenseId: number, reason: string) => void;
+  onCancel: () => void;
 }
 
 export type RouteSearchParams = Record<string, string | string[] | undefined>;
