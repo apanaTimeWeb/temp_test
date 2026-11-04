@@ -15,7 +15,6 @@ import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manag
 import type { ManagerMembersDirectoryProfileSectionProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
 export type { ManagerMembersDirectoryProfileSectionProps };
 
-
 function formatKnownIsoCalendarDate(value: string, locale: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   if (!match) return value;
@@ -268,7 +267,12 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                   <div className="pt-2 border-t border-border flex items-center justify-between text-xs text-secondary">
                     <span>{doc.uploadDate}</span>
                     <div className="flex items-center gap-2">
-                      <button type="button" className="text-primary hover:text-info flex items-center gap-1 text-xs" title={tManagerUi('preview')}>
+                      <button
+                        type="button"
+                        onClick={() => toast.info(`Viewing ${doc.type} (${doc.number || doc.fileName})`)}
+                        className="text-primary hover:text-info flex items-center gap-1 text-xs"
+                        title={tManagerUi('preview')}
+                      >
                         <ExternalLink size={12} /> {tManagerUi('preview')}
                       </button>
                     </div>

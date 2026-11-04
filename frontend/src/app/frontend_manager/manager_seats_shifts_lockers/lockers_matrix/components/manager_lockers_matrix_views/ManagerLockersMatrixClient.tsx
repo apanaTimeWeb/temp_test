@@ -1,5 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import { useRef, useState, useMemo } from 'react';
 import { useManagerLockerMatrixDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/hooks/ManagerLockersMatrixDialogFocus';
 import { useRouter } from 'next/navigation';
@@ -17,7 +18,6 @@ export function ManagerLockersMatrixClient() {
   const [studentSmartId, setStudentSmartId] = useState('');
   const [keyNumber, setKeyNumber] = useState('');
   const [depositAmount, setDepositAmount] = useState('500');
-  const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
 
   // Local overrides for newly assigned lockers
   const [localOverrides, setLocalOverrides] = useState<
@@ -69,7 +69,7 @@ export function ManagerLockersMatrixClient() {
     e.preventDefault();
     if (!assignTarget) return;
     if (!studentName.trim()) {
-      alert('Student name is required to assign locker.');
+      toast.error('Student name is required to assign locker.');
       return;
     }
 
@@ -82,10 +82,8 @@ export function ManagerLockersMatrixClient() {
       },
     }));
 
-    const message = `Locker ${assignTarget} successfully assigned to ${studentName} (Key #${keyNumber}, ₹${depositAmount} deposit recorded)!`;
-    setFeedbackToast(message);
+    toast.success(`Locker ${assignTarget} successfully assigned to ${studentName} (Key #${keyNumber}, ₹${depositAmount} deposit recorded)!`);
     setAssignTarget(null);
-    setTimeout(() => setFeedbackToast(null), 5000);
   };
 
   if (lockersQuery.isError)
@@ -127,13 +125,6 @@ export function ManagerLockersMatrixClient() {
             </div>
           </div>
         </div>
-
-        {feedbackToast && (
-          <div className="mb-4 p-3 rounded-xl bg-success-bg border border-success/30 text-success text-xs font-semibold flex items-center gap-2" role="status">
-            <span>✓</span>
-            <span>{feedbackToast}</span>
-          </div>
-        )}
 
         <div className="ss-locker-stats">
           {[

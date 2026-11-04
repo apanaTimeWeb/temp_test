@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Users2, X, Plus, Trash2, CheckCircle2, LayoutList, SlidersHorizontal, User, Phone, ShieldCheck, BookOpen } from 'lucide-react';
 
 export interface GroupStudentEntry {
@@ -119,7 +120,7 @@ export function ManagerMembersGroupAdmissionManualModal({
   const handleConfirm = () => {
     const valid = manualRows.filter((r) => r.name.trim().length > 0 && r.phone.trim().length >= 10);
     if (valid.length === 0) {
-      alert('Please fill at least one student name and a valid 10-digit phone number.');
+      toast.error('Please fill at least one student name and a valid 10-digit phone number.');
       return;
     }
     onConfirm(batchName.trim() || 'Co-Study Group Batch', manualRows);

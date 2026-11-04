@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Award, Briefcase, Calendar, CheckCircle2, GraduationCap, Phone, User, X } from 'lucide-react';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
 
@@ -29,15 +30,15 @@ export function ManagerMembersAlumniAddModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      alert('Student Full Name is required.');
+      toast.error('Student Full Name is required.');
       return;
     }
     if (!phone.trim() || phone.trim().length < 10) {
-      alert('Valid 10-digit mobile number is required.');
+      toast.error('Valid 10-digit mobile number is required.');
       return;
     }
     if (!exam.trim()) {
-      alert('Qualified Exam or Achievement is required.');
+      toast.error('Qualified Exam or Achievement is required.');
       return;
     }
 
