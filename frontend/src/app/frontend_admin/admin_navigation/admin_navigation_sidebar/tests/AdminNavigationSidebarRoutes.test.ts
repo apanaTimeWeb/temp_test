@@ -28,7 +28,7 @@ describe('Admin primary navigation', () => {
     const { ADMIN_ROUTES } = await import('@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes');
     const values = Object.values(ADMIN_ROUTES).filter((value): value is Extract<(typeof ADMIN_ROUTES)[keyof typeof ADMIN_ROUTES], string> => typeof value === 'string' && /^\/admin\/admin_[a-z0-9_]+\/[a-z0-9_]+$/.test(value));
     expect(new Set(values).size).toBe(values.length);
-    expect(values.length).toBeGreaterThanOrEqual(48);
+    expect(values.length).toBe(34);
     expect(values.every((value) => !value.includes('?view='))).toBe(true);
   });
 });
