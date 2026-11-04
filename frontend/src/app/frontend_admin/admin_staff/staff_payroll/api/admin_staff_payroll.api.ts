@@ -33,6 +33,7 @@ export async function disburseStaffSalary(input: DisburseSalaryInput): Promise<{
         baseSalary: 20000,
         allowances: 1000,
         deductions: 0,
+        advanceSalaryDeduction: 0,
         netPayable: 21000,
         status: 'DISBURSED',
         disbursedAt: new Date().toISOString(),

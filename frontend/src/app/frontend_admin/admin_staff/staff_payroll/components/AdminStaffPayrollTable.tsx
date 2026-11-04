@@ -75,7 +75,12 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
                     +₹{r.allowances.toLocaleString('en-IN')}
                   </td>
                   <td className="px-4 py-3 text-right font-mono text-xs text-danger-text">
-                    {r.deductions > 0 ? `-₹${r.deductions.toLocaleString('en-IN')}` : '₹0'}
+                    <div>{r.deductions > 0 ? `-₹${r.deductions.toLocaleString('en-IN')}` : '₹0'}</div>
+                    {r.advanceSalaryDeduction > 0 && (
+                      <div className="text-[10px] text-text-secondary font-sans font-normal">
+                        (Adv: -₹{r.advanceSalaryDeduction.toLocaleString('en-IN')})
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-right font-mono text-sm font-bold text-text-primary">
                     ₹{r.netPayable.toLocaleString('en-IN')}

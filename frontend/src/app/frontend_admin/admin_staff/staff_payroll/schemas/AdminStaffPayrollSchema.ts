@@ -32,6 +32,7 @@ export const StaffSalaryRecordSchema = z.object({
   baseSalary: z.number(),
   allowances: z.number(),
   deductions: z.number(),
+  advanceSalaryDeduction: z.number().optional().default(0),
   netPayable: z.number(),
   status: PayrollStatusSchema,
   disbursedAt: z.string().nullable(),

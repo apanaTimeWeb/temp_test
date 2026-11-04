@@ -55,6 +55,7 @@
   "SLIP_ACC_NO": "खाता संख्या",
   "SLIP_IFSC": "IFSC कोड",
   "BTN_PRINT": "पर्ची प्रिंट करें",
-  "BTN_CLOSE": "बंद करें"
+  "BTN_CLOSE": "बंद करें",
+  "ADVANCE_DEDUCTION_SETTLED": "वेतन अग्रिम (एडवांस) कटौती",
+  "SLIP_ADVANCE_SETTLED": "अग्रिम वेतन वसूली"
 }
-

@@ -108,6 +108,14 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
                   {record.deductions > 0 ? `-₹${record.deductions.toLocaleString('en-IN')}` : '₹0'}
                 </span>
               </div>
+              {record.advanceSalaryDeduction > 0 && (
+                <div className="flex justify-between text-text-secondary">
+                  <span>{t('SLIP_ADVANCE_SETTLED')}</span>
+                  <span className="font-mono text-warning-text">
+                    -₹{record.advanceSalaryDeduction.toLocaleString('en-IN')}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 

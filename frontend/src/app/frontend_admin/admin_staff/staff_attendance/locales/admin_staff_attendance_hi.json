@@ -23,7 +23,7 @@
   "SHIFT_MORNING": "सुबह (07 AM - 03 PM)",
   "SHIFT_EVENING": "दोपहर/शाम (03 PM - 11 PM)",
   "SHIFT_NIGHT": "रात (11 PM - 07 AM)",
-  "COL_STAFF": "स्टाफ सदस्य",
+  "COL_STAFF": "स्टाफ / पद",
   "COL_ROLE": "पद",
   "COL_BRANCH": "शाखा",
   "COL_SHIFT": "शिफ्ट समय",
@@ -49,6 +49,13 @@
   "BTN_CONFIRM_REGULARIZE": "नियमितीकरण सुरक्षित करें",
   "TOAST_REGULARIZE_SUCCESS": "{name} का उपस्थिति रिकॉर्ड सफलतापूर्वक अपडेट किया गया।",
   "MODAL_INSPECT_TITLE": "स्टाफ उपस्थिति रिकॉर्ड विवरण",
-  "BTN_CLOSE": "बंद करें"
+  "BTN_CLOSE": "बंद करें",
+  "TAB_LEAVES": "छुट्टी के अनुरोध",
+  "NO_LEAVES_TITLE": "कोई छुट्टी अनुरोध नहीं",
+  "NO_LEAVES_DESC": "इस फिल्टर के तहत कोई स्टाफ छुट्टी अनुरोध मौजूद नहीं है।",
+  "ACTION_APPROVE_LEAVE": "स्वीकृत करें",
+  "ACTION_REJECT_LEAVE": "अस्वीकार करें",
+  "COL_LEAVE_TYPE": "छुट्टी का प्रकार",
+  "COL_DURATION": "अवधि",
+  "COL_REASON": "कारण"
 }
-

@@ -23,7 +23,7 @@
   "SHIFT_MORNING": "Morning (07 AM - 03 PM)",
   "SHIFT_EVENING": "Evening (03 PM - 11 PM)",
   "SHIFT_NIGHT": "Night (11 PM - 07 AM)",
-  "COL_STAFF": "Staff Member",
+  "COL_STAFF": "Staff / Role",
   "COL_ROLE": "Role",
   "COL_BRANCH": "Branch",
   "COL_SHIFT": "Shift Timing",
@@ -49,6 +49,13 @@
   "BTN_CONFIRM_REGULARIZE": "Confirm Regularization",
   "TOAST_REGULARIZE_SUCCESS": "Attendance record for {name} updated successfully.",
   "MODAL_INSPECT_TITLE": "Staff Attendance Record Details",
-  "BTN_CLOSE": "Close"
+  "BTN_CLOSE": "Close",
+  "TAB_LEAVES": "Leave Requests",
+  "NO_LEAVES_TITLE": "No leave requests",
+  "NO_LEAVES_DESC": "No pending or historical staff leave requests match this filter.",
+  "ACTION_APPROVE_LEAVE": "Approve",
+  "ACTION_REJECT_LEAVE": "Reject",
+  "COL_LEAVE_TYPE": "Leave Type",
+  "COL_DURATION": "Duration",
+  "COL_REASON": "Reason"
 }
-

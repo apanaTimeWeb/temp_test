@@ -84,6 +84,12 @@ export function AdminStaffPayrollDisburseConfirmModal({
                 </p>
               </div>
             </div>
+            {record.advanceSalaryDeduction > 0 && (
+              <div className="mt-2.5 pt-2 border-t border-warning-border/40 flex justify-between text-xs text-warning-text font-medium">
+                <span>{t('ADVANCE_DEDUCTION_SETTLED')}:</span>
+                <span className="font-mono font-bold">-₹{record.advanceSalaryDeduction.toLocaleString('en-IN')}</span>
+              </div>
+            )}
           </div>
 
           <div className="space-y-1.5">

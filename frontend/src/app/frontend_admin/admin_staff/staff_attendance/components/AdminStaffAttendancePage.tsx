@@ -5,7 +5,10 @@ import { Toaster } from 'sonner';
 import { useAdminStaffAttendance } from '@/app/frontend_admin/admin_staff/staff_attendance/hooks/useAdminStaffAttendance';
 import { AdminStaffAttendanceOverviewSection } from '@/app/frontend_admin/admin_staff/staff_attendance/components/AdminStaffAttendanceOverviewSection';
 import { AdminStaffAttendanceLogTable } from '@/app/frontend_admin/admin_staff/staff_attendance/components/AdminStaffAttendanceLogTable';
-import { AdminStaffAttendanceRosterSection } from '@/app/frontend_admin/admin_staff/staff_attendance/components/AdminStaffAttendanceRosterSection';
+import {
+  AdminStaffAttendanceRosterSection,
+  AdminStaffAttendanceLeavesSection,
+} from '@/app/frontend_admin/admin_staff/staff_attendance/components/AdminStaffAttendanceRosterSection';
 import {
   AdminStaffAttendanceMarkModal,
   AdminStaffAttendanceInspectModal,
@@ -32,15 +35,20 @@ export function AdminStaffAttendancePage() {
       {/* KPIs & Controls */}
       <AdminStaffAttendanceOverviewSection model={model} />
 
-      {/* Main Content: Logs vs Roster */}
+      {/* Main Content: Logs vs Roster vs Leaves */}
       {model.filters.tab === 'logs' ? (
         <AdminStaffAttendanceLogTable
           records={model.records}
           onInspect={model.setInspectingRecord}
           onRegularize={model.setRegularizingRecord}
         />
-      ) : (
+      ) : model.filters.tab === 'roster' ? (
         <AdminStaffAttendanceRosterSection slots={model.rosterSlots} />
+      ) : (
+        <AdminStaffAttendanceLeavesSection
+          leaveRequests={model.leaveRequests}
+          onAction={model.handleLeaveAction}
+        />
       )}
 
       {/* Modals */}

@@ -69,4 +69,19 @@ describe('AdminStaffAttendanceRegressionSuite', () => {
 
     expect(screen.queryByText('Regularize Staff Punch / Leave')).toBeNull();
   });
+
+  it('switches to leave requests tab and renders leave applications', () => {
+    render(
+      <AdminStaffAttendanceHarness>
+        <AdminStaffAttendancePage />
+      </AdminStaffAttendanceHarness>
+    );
+
+    const leavesTab = screen.getByRole('button', { name: 'Leave Requests' });
+    fireEvent.click(leavesTab);
+
+    expect(screen.getByText("Attending sister's wedding in Jaipur.")).toBeDefined();
+    const approveButtons = screen.getAllByRole('button', { name: 'Approve' });
+    expect(approveButtons.length).toBeGreaterThan(0);
+  });
 });

@@ -111,7 +111,7 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
           <button
             type="button"
             onClick={() => setTab('logs')}
-            className={`min-h-9 rounded-md px-4 py-1.5 text-xs font-semibold transition-all ${
+            className={`min-h-9 rounded-md px-3.5 py-1.5 text-xs font-semibold transition-all ${
               filters.tab === 'logs' ? 'bg-card text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'
             }`}
           >
@@ -120,11 +120,20 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
           <button
             type="button"
             onClick={() => setTab('roster')}
-            className={`min-h-9 rounded-md px-4 py-1.5 text-xs font-semibold transition-all ${
+            className={`min-h-9 rounded-md px-3.5 py-1.5 text-xs font-semibold transition-all ${
               filters.tab === 'roster' ? 'bg-card text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'
             }`}
           >
             {t('TAB_ROSTER')}
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab('leaves')}
+            className={`min-h-9 rounded-md px-3.5 py-1.5 text-xs font-semibold transition-all ${
+              filters.tab === 'leaves' ? 'bg-card text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            {t('TAB_LEAVES')}
           </button>
         </div>
       </div>

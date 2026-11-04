@@ -47,3 +47,20 @@ export const RegularizeAttendanceInputSchema = z.object({
 });
 export type RegularizeAttendanceInput = z.infer<typeof RegularizeAttendanceInputSchema>;
 
+export const StaffLeaveRequestSchema = z.object({
+  id: z.string(),
+  staffId: z.string(),
+  staffName: z.string(),
+  role: z.string(),
+  branchId: z.string(),
+  branchName: z.string(),
+  leaveType: z.enum(['CASUAL', 'SICK', 'VACATION', 'UNPAID']),
+  startDate: z.string(),
+  endDate: z.string(),
+  daysCount: z.number(),
+  reason: z.string(),
+  status: z.enum(['PENDING', 'APPROVED', 'REJECTED']),
+});
+export type StaffLeaveRequest = z.infer<typeof StaffLeaveRequestSchema>;
+
+

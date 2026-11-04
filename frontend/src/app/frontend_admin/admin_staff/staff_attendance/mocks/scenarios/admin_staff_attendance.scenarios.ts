@@ -1,6 +1,7 @@
 import type {
   StaffAttendanceRecord,
   StaffRosterSlot,
+  StaffLeaveRequest,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 
 export const ADMIN_STAFF_ATTENDANCE_FIXTURES: StaffAttendanceRecord[] = [
@@ -185,4 +186,50 @@ export const ADMIN_STAFF_ROSTER_FIXTURES: StaffRosterSlot[] = [
     daysActive: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
   },
 ];
+
+export const ADMIN_STAFF_LEAVE_REQUEST_FIXTURES: StaffLeaveRequest[] = [
+  {
+    id: 'lev-001',
+    staffId: 'STF-MGR-01',
+    staffName: 'Vikramaditya Sharma',
+    role: 'Branch Manager',
+    branchId: 'BR-001',
+    branchName: 'Downtown Central',
+    leaveType: 'CASUAL',
+    startDate: '2026-11-10',
+    endDate: '2026-11-11',
+    daysCount: 2,
+    reason: "Attending sister's wedding in Jaipur.",
+    status: 'PENDING',
+  },
+  {
+    id: 'lev-002',
+    staffId: 'STF-AST-01',
+    staffName: 'Pooja Verma',
+    role: 'Desk Assistant',
+    branchId: 'BR-001',
+    branchName: 'Downtown Central',
+    leaveType: 'SICK',
+    startDate: '2026-11-08',
+    endDate: '2026-11-08',
+    daysCount: 1,
+    reason: 'Viral fever and doctor clinical checkup.',
+    status: 'PENDING',
+  },
+  {
+    id: 'lev-003',
+    staffId: 'STF-MGR-02',
+    staffName: 'Ananya Mukherjee',
+    role: 'Branch Manager',
+    branchId: 'BR-002',
+    branchName: 'Westside Branch',
+    leaveType: 'VACATION',
+    startDate: '2026-11-15',
+    endDate: '2026-11-17',
+    daysCount: 3,
+    reason: 'Family annual pilgrimage and travel.',
+    status: 'APPROVED',
+  },
+];
+
 
