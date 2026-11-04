@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { X, MessageSquarePlus, AlertCircle } from 'lucide-react';
 import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 
@@ -38,7 +39,7 @@ export default function ManagerCommunicationComplaintsAddModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!studentName.trim() || !title.trim() || !description.trim()) {
-      alert('Please fill in Student Name, Issue Title, and Description.');
+      toast.error('Please fill in Student Name, Issue Title, and Description.');
       return;
     }
 

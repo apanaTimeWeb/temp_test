@@ -3,7 +3,7 @@ export { ADMIN_SHIFTS_ROOT };
 /** Canonical route contract for shift management and its related views. */
 const adminShiftsRoute = (view: string): string => { const routes: Record<string, string> = {
     "gap": "/admin/admin_seats_shifts_lockers/shifts_gap",
-    "migration": "/admin/admin_seats_shifts_lockers/shifts_migration",
+    "migration": "/admin/admin_seats_shifts_lockers/shifts_management",
     "shift_management": "/admin/admin_seats_shifts_lockers/shifts_management"
   }; return routes[view] ?? "/admin/admin_seats_shifts_lockers/seats_matrix"; };
 export const ADMIN_SHIFTS_ROUTE_GAP = adminShiftsRoute('gap');

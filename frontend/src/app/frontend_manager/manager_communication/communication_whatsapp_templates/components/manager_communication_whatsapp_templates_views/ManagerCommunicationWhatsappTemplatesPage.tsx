@@ -69,7 +69,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
 
   const handleTest = () => {
     if (!testPhone.trim()) {
-      alert('Please enter a valid phone number.');
+      toast.error('Please enter a valid phone number.');
       return;
     }
     toast.success(`Test WhatsApp template message dispatched to ${testPhone.trim()}!`);

@@ -9,6 +9,7 @@ import { ManagerAttendanceDailyStudentRow } from '@/app/frontend_manager/manager
 import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight, Save } from 'lucide-react';
+import { toast } from 'sonner';
 import { ManagerAttendanceDailyEmptyState } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_empty_states/ManagerAttendanceDailyEmptyState';
 import { ManagerAttendanceDailyFloorTurnoverQueue } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyFloorTurnoverQueue';
 import type { AttStatus, Student, ManagerAttendanceDailyTimeField } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
@@ -51,6 +52,10 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
 
   const setField = (id: string, field: ManagerAttendanceDailyTimeField, val: string) =>
     setStudents(p => p.map(s => s.id === id ? { ...s, [field]: val } : s));
+
+  const handleSendAlert = (student: Student) => {
+    toast.success(`Absentee warning notice dispatched to ${student.name} (${student.smartId}) for ${student.consecutiveAbsent} consecutive days!`);
+  };
 
 
   return (
@@ -170,6 +175,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
                   student={student}
                   onStatusChange={setStatus}
                   onFieldChange={setField}
+                  onSendAlert={handleSendAlert}
                 />
               ))}
             </div>

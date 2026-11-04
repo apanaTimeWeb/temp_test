@@ -206,6 +206,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
               member={profileMember}
               onUpdateMember={updateMember}
               initialEdit={editIntent}
+              onBack={() => setActiveTab('All Members')}
             />
           )}
 

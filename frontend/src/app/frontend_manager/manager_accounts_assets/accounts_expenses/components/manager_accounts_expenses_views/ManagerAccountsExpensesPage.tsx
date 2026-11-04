@@ -1,6 +1,7 @@
 'use client';
 import type { ManagerAccountsExpensesMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesMainTypes';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import { useManagerExpensesCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/hooks/ManagerAccountsExpensesFormattingHook';
 import type { NativeColumn } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_table_parts/ManagerAccountsExpensesNativeTable';
 import { useState } from 'react';
@@ -36,12 +37,12 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   const handleCreateExpense = (e: React.FormEvent) => {
     e.preventDefault();
     if (!expenseDesc.trim()) {
-      alert('Expense description is required.');
+      toast.error('Expense description is required.');
       return;
     }
     const amt = Number(expenseAmount);
     if (!amt || amt <= 0) {
-      alert('Valid positive expense amount is required.');
+      toast.error('Valid positive expense amount is required.');
       return;
     }
 

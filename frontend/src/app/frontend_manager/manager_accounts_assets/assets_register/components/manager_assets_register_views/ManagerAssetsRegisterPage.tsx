@@ -1,10 +1,11 @@
 'use client';
 import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_register/types/ManagerAssetsRegisterMainTypes';
 import { useTranslations } from 'next-intl';
-import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
-import { MANAGER_ACCOUNTING_SAMPLE_ASSETS, type ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
+import { toast } from 'sonner';
 import { useState, useMemo } from 'react';
 import { Plus, X, CheckCircle, IndianRupee, ShieldCheck } from 'lucide-react';
+import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
+import { MANAGER_ACCOUNTING_SAMPLE_ASSETS, type ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import { ManagerAssetsRegisterEmptyState } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_empty_states/ManagerAssetsRegisterEmptyState';
 
 const STATUS_BADGE: Record<string, string> = {
@@ -65,12 +66,12 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
   const handleAddAsset = (e: React.FormEvent) => {
     e.preventDefault();
     if (!assetName.trim()) {
-      alert('Asset name is required.');
+      toast.error('Asset name is required.');
       return;
     }
     const val = Number(assetValue);
     if (!val || val <= 0) {
-      alert('Valid purchase value is required.');
+      toast.error('Valid purchase value is required.');
       return;
     }
 

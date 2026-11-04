@@ -3,6 +3,7 @@
 // DATA FLOW: Next.js route page -> Main -> GroupPage.
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import { Users2, Plus, Download, Upload, Trash2, CheckCircle2, X, FileSpreadsheet, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import { ManagerMembersGroupAdmissionManualModal } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal';
@@ -10,21 +11,11 @@ import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/m
 import type { ManagerMembersGroupAdmissionGroupPageRouteProps } from '@/app/frontend_manager/manager_members/members_group_admission/types/ManagerMembersGroupAdmissionComponentTypes';
 
 interface GroupStudentEntry {
-  id: string;
-  name: string;
-  phone: string;
-  email: string;
-  plan: string;
-  shift: string;
+  id: string; name: string; phone: string; email: string; plan: string; shift: string;
 }
 
 interface RecentGroupAdmission {
-  batchId: string;
-  batchName: string;
-  date: string;
-  count: number;
-  shift: string;
-  status: 'Active' | 'Processed';
+  batchId: string; batchName: string; date: string; count: number; shift: string; status: 'Active' | 'Processed';
 }
 
 const INITIAL_RECENT_GROUPS: RecentGroupAdmission[] = [
@@ -38,19 +29,14 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
   const [recentGroups, setRecentGroups] = useState<RecentGroupAdmission[]>(INITIAL_RECENT_GROUPS);
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [showManualModal, setShowManualModal] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Bulk Upload state
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [parsedRows, setParsedRows] = useState<GroupStudentEntry[]>([]);
   const [batchName, setBatchName] = useState('');
 
-  // Manual Entry modal state
-  // handled by ManagerMembersGroupAdmissionManualModal
-
   const showNotification = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 4000);
+    toast.success(msg);
   };
 
   const downloadTemplate = () => {
@@ -97,7 +83,7 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
 
   const confirmBulkUpload = () => {
     if (parsedRows.length === 0) {
-      alert('Please select a valid CSV file with student records.');
+      toast.error('Please select a valid CSV file with student records.');
       return;
     }
     const newBatch: RecentGroupAdmission = {
@@ -114,6 +100,20 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
     setParsedRows([]);
     setBatchName('');
     showNotification(`Bulk admission successful! Enrolled ${newBatch.count} members in batch ${newBatch.batchId}.`);
+  };
+
+  const handleManualConfirm = (confirmedBatchName: string, students: GroupStudentEntry[]) => {
+    const newBatch: RecentGroupAdmission = {
+      batchId: `GRP-2026-${String(recentGroups.length + 1).padStart(3, '0')}`,
+      batchName: confirmedBatchName,
+      date: new Date().toISOString().slice(0, 10),
+      count: students.length,
+      shift: students[0]?.shift || 'Morning',
+      status: 'Active',
+    };
+    setRecentGroups([newBatch, ...recentGroups]);
+    setShowManualModal(false);
+    showNotification(`Group admission registered successfully! Enrolled ${students.length} members in batch ${newBatch.batchId}.`);
   };
 
   return (
@@ -138,13 +138,6 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
           </button>
         </div>
       </div>
-
-      {toastMessage && (
-        <div className="mb-6 flex items-center gap-2 rounded-lg border border-success bg-success-bg p-4 text-sm text-success" role="alert">
-          <CheckCircle2 size={18} />
-          <span>{toastMessage}</span>
-        </div>
-      )}
 
       {/* Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -292,19 +285,7 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
       <ManagerMembersGroupAdmissionManualModal
         isOpen={showManualModal}
         onClose={() => setShowManualModal(false)}
-        onConfirm={(confirmedBatchName, students) => {
-          const newBatch: RecentGroupAdmission = {
-            batchId: `GRP-2026-${String(recentGroups.length + 1).padStart(3, '0')}`,
-            batchName: confirmedBatchName,
-            date: new Date().toISOString().slice(0, 10),
-            count: students.length,
-            shift: students[0]?.shift || 'Morning',
-            status: 'Active',
-          };
-          setRecentGroups([newBatch, ...recentGroups]);
-          setShowManualModal(false);
-          showNotification(`Group admission registered successfully! Enrolled ${students.length} members in batch ${newBatch.batchId}.`);
-        }}
+        onConfirm={handleManualConfirm}
       />
     </div>
   );

@@ -449,7 +449,8 @@
         "transaction_reference_required": "Transaction reference required.",
         "validation_field_required": "This field is required.",
         "confirm_leave_with_unsaved_changes": "You have unsaved fee-collection changes. Leave this page and discard them?",
-        "no_records_found": "No records available."
+        "no_records_found": "No records available.",
+        "no_security_deposits_found": "No security deposits found"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

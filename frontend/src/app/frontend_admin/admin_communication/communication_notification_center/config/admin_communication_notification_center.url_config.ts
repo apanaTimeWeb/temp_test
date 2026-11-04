@@ -9,10 +9,10 @@ export const ADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES = {
   WHATSAPP_TEMPLATES: '/admin/admin_communication/communication_whatsapp_templates',
   REPORTS: '/admin/admin_dashboard/dashboard_reports',
   CRM_ENQUIRIES: '/admin/admin_members/members_enquiries?view=enquiries',
-  FINANCE_RENEWALS: '/admin/admin_finance/finance_renewals',
-  FINANCE_PAYMENT_PROMISES: '/admin/admin_finance/finance_payment_promises',
-  FINANCE_LATE_FEES: '/admin/admin_finance/finance_late_fees',
-  SEAT_MAINTENANCE: '/admin/admin_seats_shifts_lockers/seats_maintenance',
+  FINANCE_RENEWALS: '/admin/admin_finance/finance_dashboard',
+  FINANCE_PAYMENT_PROMISES: '/admin/admin_finance/finance_dashboard',
+  FINANCE_LATE_FEES: '/admin/admin_finance/finance_dashboard',
+  SEAT_MAINTENANCE: '/admin/admin_seats_shifts_lockers/seats_management',
 } as const;
 
 /** Existing API adapter paths only; these do not establish a notification-service contract. */

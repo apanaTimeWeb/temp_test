@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, CheckCircle2, IdCard, MessageSquare, Printer, Search } from 'lucide-react';
+import { toast } from 'sonner';
 import StudentIdCard, { type IdCardData } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCard';
 import { useManagerIdCardGeneratorFormatting } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGeneratorFormatting';
 import { useManagerIdCardGenerator } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGenerator';
@@ -65,6 +66,15 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
     };
   }, [selected, formatDate]);
 
+  const handleShareWhatsApp = () => {
+    if (!selected) return;
+    const msg = encodeURIComponent(
+      `Hello ${selected.name},\nYour Library Smart ID Card is ready!\n\nSmart ID: ${selected.smartId}\nShift: ${selected.shift}\nAssigned Seat: ${selected.seat}\nPlan: ${selected.plan}\n\nPlease keep this card details handy while visiting the library.\n— Central Library Management`
+    );
+    window.open(`https://wa.me/91${selected.phone}?text=${msg}`, '_blank');
+    toast.success(`Smart ID card WhatsApp link opened for ${selected.name} (+91 ${selected.phone})`);
+  };
+
   if (isError) return <div className="mgr-page"><div className="mgr-state-card mgr-state-card-error" role="alert"><p className="mgr-state-title">{tManagerUi('unable_to_load_students')}</p><p className="mgr-state-description">{tManagerUi('please_retry_from_the_students_directory')}</p><button type="button" className="mgr-btn-primary mgr-btn-sm mt-3" onClick={() => { void refetch(); }} disabled={isFetching}>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button></div></div>;
 
   return (
@@ -95,7 +105,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               </div>
             </div>
           </div>
-          {selected && cardData && <div className="mgr-card mgr-idcard-actions-card"><div className="mgr-card-header"><h2 className="mgr-section-title">{tManagerUi('actions')}</h2></div><div className="mgr-card-body mgr-idcard-actions-body"><p className="mgr-input-hint" role="status" data-testid="manager-students-id-card-output-contract-warning">{tManagerUi('id_card_preview_only_contract_warning')}</p><button type="button" disabled title={tManagerUi('messaging_is_unavailable_until_authoritative_card_detail_7bcb52')} className="mgr-btn-whatsapp cursor-not-allowed" data-testid="manager-students-id-card-message-disabled"><MessageSquare size={18} strokeWidth={2} /> {tManagerUi('whatsapp_message_unavailable')}</button><button type="button" onClick={() => window.print()} title={tManagerUi('print_id_card')} className="mgr-btn-ghost mgr-btn-full" data-testid="manager-students-id-card-print"><Printer size={18} strokeWidth={2} /> {tManagerUi('print_id_card')}</button></div></div>}
+          {selected && cardData && <div className="mgr-card mgr-idcard-actions-card"><div className="mgr-card-header"><h2 className="mgr-section-title">{tManagerUi('actions')}</h2></div><div className="mgr-card-body mgr-idcard-actions-body"><p className="mgr-input-hint" role="status" data-testid="manager-students-id-card-output-contract-warning">{tManagerUi('id_card_preview_only_contract_warning')}</p><button type="button" onClick={handleShareWhatsApp} title="Share ID Card via WhatsApp" className="mgr-btn-whatsapp cursor-pointer flex items-center justify-center gap-2"><MessageSquare size={18} strokeWidth={2} /> <span>Share via WhatsApp</span></button><button type="button" onClick={() => window.print()} title={tManagerUi('print_id_card')} className="mgr-btn-ghost mgr-btn-full" data-testid="manager-students-id-card-print"><Printer size={18} strokeWidth={2} /> {tManagerUi('print_id_card')}</button></div></div>}
         </div>
         <div className="mgr-idcard-preview-panel">
           {cardData ? <><p className="mgr-page-subtitle mgr-idcard-preview-label">{tManagerUi('preview')} {selected?.name}</p><StudentIdCard data={cardData} /><p className="mgr-cell-sub mgr-idcard-preview-hint">{tManagerUi('use_preview_only_until_validity_and_verification_contract_is_supplied')}</p></> : <div className="mgr-card mgr-idcard-empty-card"><div className="mgr-empty-state"><div className="mgr-empty-icon"><IdCard size={40} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_student_selected')}</p><p className="mgr-empty-sub">{tManagerUi('search_and_select_a_student_to_preview_the_id_card')}</p></div></div>}
