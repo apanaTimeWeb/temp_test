@@ -9,6 +9,7 @@ export const ADMIN_ADMIN_NAVIGATION_SIDEBAR_ROUTES = {
   ACCOUNTS_ASSETS: ADMIN_ROUTES.ACCOUNTS_ASSETS,
   STAFF: ADMIN_ROUTES.STAFF,
   SETTINGS: ADMIN_ROUTES.SETTINGS,
+  COMMUNICATION: ADMIN_ROUTES.COMMUNICATION,
 } as const;
 
 /** Compatibility name retained for current navigation consumers; values remain owned here. */

@@ -27,6 +27,15 @@ export interface AdminLockersLockerMatrixViewModel {
   id: string;
   uuid?: string;
   status: AdminLockersLockerMatrixStatus;
+  student?: string;
+  smartId?: string;
+  phone?: string;
+  shift?: string;
+  expiry?: string;
+  branchId?: string;
+  branchName?: string;
+  allottedByManager?: string;
+  allottedDate?: string;
 }
 export interface AdminLockersShift {
   id: string;

@@ -34,6 +34,7 @@ export const AdminPlansFormSchema = z.object({
     .min(1, 'VALIDATION.DURATION_DAYS_REQUIRED')
     .refine((value) => /^\d+$/.test(value) && Number(value) >= 1 && Number.isSafeInteger(Number(value)), 'VALIDATION.DURATION_DAYS_INVALID'),
   features: z.string().max(4000, 'VALIDATION.FEATURES_TOO_LONG'),
+  branchApplicability: z.string().optional(),
 });
 
 export type AdminPlansFormValues = z.infer<typeof AdminPlansFormSchema>;
@@ -53,4 +54,5 @@ export interface AdminPlansPlan {
   features: string[];
   status: AdminPlansStatus;
   subscribers: number;
+  branchApplicability?: string;
 }

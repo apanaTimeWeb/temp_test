@@ -1,8 +1,9 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_ACCOUNTING_EXPENSE_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/mocks/scenarios/admin_accounts_expenses.scenarios';
 import { ADMIN_ACCOUNTS_EXPENSES_ROUTES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
 import type { AdminAccountingExpense } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas';
@@ -35,6 +36,7 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
   const router = useRouter();
   const t = useTranslations('ADMIN_ACCOUNTING.EXPENSES');
   const isDemoMode = isFrontendDemoModeEnabled();
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   const [expenses, setExpenses] = useState<AdminAccountingExpense[]>(() =>
     isDemoMode ? [...ADMIN_ACCOUNTING_EXPENSE_FIXTURES] : []
   );
@@ -107,11 +109,22 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
 
   const pendingCount = expenses.filter((e) => e.status === 'PENDING_APPROVAL').length;
 
-  const visibleExpenses = expenses.filter((expense) => {
-    if (catFilter !== 'all' && expense.category !== catFilter) return false;
-    if (statusFilter !== 'all' && (expense.status ?? 'APPROVED') !== statusFilter) return false;
-    return true;
-  });
+  const visibleExpenses = useMemo(() => {
+    return expenses.filter((expense) => {
+      if (!isAllBranches && selectedBranch) {
+        const matchesBranch = expense.branchName && (
+          expense.branchName.toLowerCase().includes(selectedBranch.name.toLowerCase()) ||
+          selectedBranch.name.toLowerCase().includes(expense.branchName.toLowerCase())
+        );
+        if (matchesBranch === false && expenses.some((e) => e.branchName && selectedBranch.name.toLowerCase().includes(e.branchName.toLowerCase()))) {
+          return false;
+        }
+      }
+      if (catFilter !== 'all' && expense.category !== catFilter) return false;
+      if (statusFilter !== 'all' && (expense.status ?? 'APPROVED') !== statusFilter) return false;
+      return true;
+    });
+  }, [expenses, isAllBranches, selectedBranch, catFilter, statusFilter]);
 
   return (
     <div className="space-y-6">

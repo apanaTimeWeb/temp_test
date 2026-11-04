@@ -3,7 +3,8 @@
 
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
-import { Activity, Users } from 'lucide-react';
+import { useMemo } from 'react';
+import { Activity, Users, Building2, Trophy } from 'lucide-react';
 import type { ApexOptions } from 'apexcharts';
 import type { AdminDashboardReportsAnalyticsDataset, AdminDashboardReportsAnalyticsRange, AdminDashboardReportsAnalyticsBranchSummary as AdminDashboardReportsAnalyticsBranchSummaryRow } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
 import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS, ADMIN_DASHBOARD_REPORTS_ANALYTICS_RANGE_LABEL_KEYS } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config';
@@ -51,6 +52,10 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
     { name: t('SERIES_JOINED'), data: growth.map((point) => point.joined) },
     { name: t('SERIES_EXITED'), data: growth.map((point) => point.exited) },
   ];
+  const sortedBranches = useMemo(() => {
+    return [...branches].sort((a, b) => (b.revenueMinor - b.expenseMinor) - (a.revenueMinor - a.expenseMinor));
+  }, [branches]);
+
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
@@ -64,16 +69,30 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
       </section>
       </div>
       <section className="admin-card p-5" aria-labelledby="admin-reports-branch-summary-title">
-        <div className="admin-card-header mb-3"><h2 id="admin-reports-branch-summary-title" className="admin-section-title">{t('BRANCH_SUMMARY_TITLE')}</h2></div>
+        <div className="admin-card-header mb-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Building2 size={18} className="text-primary" />
+            <h2 id="admin-reports-branch-summary-title" className="admin-section-title">{t('BRANCH_SUMMARY_TITLE')}</h2>
+          </div>
+          <span className="text-xs font-medium text-text-secondary">Cross-Branch Executive Leaderboard</span>
+        </div>
         {branches.length === 0 ? <AdminEmptyState title={t('BRANCH_SUMMARY_EMPTY_TITLE')} description={t('BRANCH_SUMMARY_EMPTY_DESCRIPTION')} /> : (
           <>
             <div className="grid gap-3 md:hidden">
-              {branches.map((row: AdminDashboardReportsAnalyticsBranchSummaryRow) => <article key={`mobile-${row.branch}`} className="rounded-lg border border-border p-4">
-                <h3 className="font-semibold text-text-primary">{row.branch}</h3>
+              {sortedBranches.map((row: AdminDashboardReportsAnalyticsBranchSummaryRow, index: number) => <article key={`mobile-${row.branch}`} className="rounded-lg border border-border p-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-text-primary">{row.branch}</h3>
+                  <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold ${
+                    index === 0 ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface text-text-secondary border border-border'
+                  }`}>
+                    {index === 0 ? <Trophy size={11} className="text-primary" /> : null}
+                    #{index + 1}
+                  </span>
+                </div>
                 <dl className="mt-3 grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
                   <div><dt className="text-text-secondary">{t('TABLE_REVENUE')}</dt><dd>{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor, data.currencyCode, locale)}</dd></div>
                   <div><dt className="text-text-secondary">{t('TABLE_EXPENSES')}</dt><dd>{adminDashboardReportsAnalyticsFormatCurrency(row.expenseMinor, data.currencyCode, locale)}</dd></div>
-                  <div><dt className="text-text-secondary">{t('TABLE_NET_PROFIT')}</dt><dd>{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor - row.expenseMinor, data.currencyCode, locale)}</dd></div>
+                  <div><dt className="text-text-secondary">{t('TABLE_NET_PROFIT')}</dt><dd className="font-semibold text-success-text">{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor - row.expenseMinor, data.currencyCode, locale)}</dd></div>
                   <div><dt className="text-text-secondary">{t('TABLE_STUDENTS')}</dt><dd>{adminDashboardReportsAnalyticsFormatNumber(row.students, locale)}</dd></div>
                   <div><dt className="text-text-secondary">{t('TABLE_OCCUPANCY')}</dt><dd>{adminDashboardReportsAnalyticsFormatNumber(row.occupancy, locale)}%</dd></div>
                 </dl>
@@ -91,12 +110,22 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
                     <th scope="col" className="p-3">{t('TABLE_OCCUPANCY')}</th>
                   </tr>
                 </thead>
-                <tbody>{branches.map((row: AdminDashboardReportsAnalyticsBranchSummaryRow) => { const profit = row.revenueMinor - row.expenseMinor; return (
+                <tbody>{sortedBranches.map((row: AdminDashboardReportsAnalyticsBranchSummaryRow, index: number) => { const profit = row.revenueMinor - row.expenseMinor; return (
                   <tr key={row.branch} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
-                    <th scope="row" className="p-3 font-medium text-text-primary">{row.branch}</th>
+                    <th scope="row" className="p-3 font-medium text-text-primary">
+                      <div className="flex items-center gap-2">
+                        <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold ${
+                          index === 0 ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface text-text-secondary border border-border'
+                        }`}>
+                          {index === 0 ? <Trophy size={12} className="text-primary" /> : null}
+                          #{index + 1}
+                        </span>
+                        <span className="font-semibold">{row.branch}</span>
+                      </div>
+                    </th>
                     <td className="p-3">{adminDashboardReportsAnalyticsFormatCurrency(row.revenueMinor, data.currencyCode, locale)}</td>
                     <td className="p-3">{adminDashboardReportsAnalyticsFormatCurrency(row.expenseMinor, data.currencyCode, locale)}</td>
-                    <td className="p-3">{adminDashboardReportsAnalyticsFormatCurrency(profit, data.currencyCode, locale)}</td>
+                    <td className="p-3 font-semibold text-success-text">{adminDashboardReportsAnalyticsFormatCurrency(profit, data.currencyCode, locale)}</td>
                     <td className="p-3">{adminDashboardReportsAnalyticsFormatNumber(row.students, locale)}</td>
                     <td className="p-3"><div className="flex items-center gap-2"><div className="h-2 min-w-20 flex-1 overflow-hidden rounded-full bg-surface-highlight"><div className={`h-full rounded-full bg-chart-primary admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(row.occupancy)))}`} /></div><span className="text-caption text-text-secondary">{adminDashboardReportsAnalyticsFormatNumber(row.occupancy, locale)}%</span></div></td>
                   </tr>

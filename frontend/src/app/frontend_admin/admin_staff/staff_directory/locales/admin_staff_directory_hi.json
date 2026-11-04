@@ -145,6 +145,8 @@
     "UNSAVED_CHANGES_TITLE": "बिना सहेजे बदलाव छोड़ें?",
     "UNSAVED_CHANGES_DESCRIPTION": "आपके बदलाव अभी सहेजे नहीं गए हैं। क्या आप वाकई जाना चाहते हैं? आपके बदलाव खो जाएँगे।",
     "UNSAVED_CHANGES_STAY": "इसी पेज पर रहें",
-    "UNSAVED_CHANGES_LEAVE": "बदलाव छोड़ें"
+    "UNSAVED_CHANGES_LEAVE": "बदलाव छोड़ें",
+    "OPEN_MANAGER_DESK": "डेस्क व्यू खोलें",
+    "OPEN_MANAGER_DESK_TOOLTIP": "{branch} के लिए मैनेजर काउंटर पोर्टल खोलें"
   }
 }

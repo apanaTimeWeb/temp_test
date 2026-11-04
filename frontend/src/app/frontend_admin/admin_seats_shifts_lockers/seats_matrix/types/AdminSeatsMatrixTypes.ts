@@ -20,6 +20,8 @@ export interface AdminSeatMatrixSeatMatrixViewModel {
   locker?: string;
   validFrom?: string;
   expiry?: string;
+  branchId?: string;
+  branchName?: string;
 }
 
 export type AdminSeatMatrixLockerMatrixStatus = 'free' | 'occupied' | 'maintenance' | 'unknown';

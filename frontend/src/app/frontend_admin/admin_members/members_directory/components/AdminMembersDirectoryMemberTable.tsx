@@ -4,7 +4,7 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 
 import { useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, MoreVertical } from 'lucide-react';
+import { Eye, MoreVertical, Building2 } from 'lucide-react';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { formatAdminMembersDate } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
 import { displayValue } from '@/lib/display_value';
@@ -46,6 +46,7 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
           <thead className="bg-surface-highlight uppercase text-xs text-text-secondary font-semibold">
             <tr>
               <th scope="col" className="px-4 py-3">{t('TABLE_MEMBER')}</th>
+              <th scope="col" className="px-4 py-3">Branch</th>
               <th scope="col" className="px-4 py-3">{t('TABLE_CONTACT')}</th>
               <th scope="col" className="px-4 py-3">{t('TABLE_PLAN')}</th>
               <th scope="col" className="px-4 py-3">Seat / Shift</th>
@@ -59,8 +60,14 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
               <tr key={member.id} className="border-b border-border hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
                 <th scope="row" className="px-4 py-3 font-medium text-text-primary">
                   <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
-                  <span className="block text-xs font-normal text-text-secondary">{displayValue(member.id)}{member.branch ? ` · ${member.branch}` : ''}</span>
+                  <span className="block text-xs font-normal text-text-secondary">{displayValue(member.id)}</span>
                 </th>
+                <td className="px-4 py-3">
+                  <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary whitespace-nowrap">
+                    <Building2 size={12} className="text-primary shrink-0" />
+                    <span>{member.branch || 'Downtown Central'}</span>
+                  </span>
+                </td>
                 <td className="px-4 py-3"><span className="block">{displayValue(member.email)}</span><span className="text-text-secondary">{displayValue(member.phone)}</span></td>
                 <td className="px-4 py-3">{displayValue(member.plan)}</td>
                 <td className="px-4 py-3">

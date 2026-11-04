@@ -1,8 +1,10 @@
 // components/AdminAccountsDailySettlementPage.tsx
 'use client';
+import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Search, RotateCcw, Building2, ShieldCheck } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminAccountsDailySettlementState } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/hooks/useAdminAccountsDailySettlementState';
 import { useAdminAccountsDailySettlementMutations } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/hooks/useAdminAccountsDailySettlementMutations';
 import AdminAccountsDailySettlementKpis from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/components/AdminAccountsDailySettlementKpis';
@@ -33,6 +35,21 @@ export function AdminAccountsDailySettlementPage() {
 
   const { isSubmitting, handleApprove, handleFlagDiscrepancy } =
     useAdminAccountsDailySettlementMutations(updateRecordStatus);
+
+  const { selectedBranchId, selectedBranch, isAllBranches } = useAdminBranch();
+
+  useEffect(() => {
+    if (isAllBranches || !selectedBranch) {
+      setBranchFilter('ALL');
+    } else {
+      const matched = availableBranches.find(
+        (b) => b.id === selectedBranchId || b.name.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(b.name.toLowerCase())
+      );
+      if (matched) {
+        setBranchFilter(matched.id);
+      }
+    }
+  }, [isAllBranches, selectedBranchId, selectedBranch, availableBranches, setBranchFilter]);
 
   const pendingCount = records.filter((r) => r.status === 'PENDING_APPROVAL').length;
   const flaggedCount = records.filter((r) => r.status === 'DISCREPANCY_FLAGGED').length;

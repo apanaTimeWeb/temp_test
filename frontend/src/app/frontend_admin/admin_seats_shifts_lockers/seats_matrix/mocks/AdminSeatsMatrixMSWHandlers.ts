@@ -10,9 +10,9 @@ export const ADMIN_SEAT_MATRIX_API_LOCKERS_FIXTURE = [
 ];
 
 export const ADMIN_SEAT_MATRIX_API_SEATS_FIXTURE = [
-  { id: 'seat-demo-01', seatNumber: 'S-01', isActive: true, status: 'Working', student: 'Demo Student 1', smartId: 'DEMO-001', shift: 'Morning', locker: 'A01' },
-  { id: 'seat-demo-02', seatNumber: 'S-02', isActive: false, status: 'Maintenance', student: '', smartId: '', shift: 'Evening', locker: 'A02' },
-  { id: 'seat-demo-03', seatNumber: 'S-03', isActive: true, status: 'Working', student: 'Demo Student 2', smartId: 'DEMO-002', shift: 'Full Day', locker: '' },
+  { id: 'seat-demo-01', seatNumber: 'S-01', isActive: true, status: 'Working', student: 'Demo Student 1', smartId: 'DEMO-001', shift: 'Morning', locker: 'A01', branchId: 'BR-001', branchName: 'Downtown Central' },
+  { id: 'seat-demo-02', seatNumber: 'S-02', isActive: false, status: 'Maintenance', student: '', smartId: '', shift: 'Evening', locker: 'A02', branchId: 'BR-001', branchName: 'Downtown Central' },
+  { id: 'seat-demo-03', seatNumber: 'S-03', isActive: true, status: 'Working', student: 'Demo Student 2', smartId: 'DEMO-002', shift: 'Full Day', locker: '', branchId: 'BR-002', branchName: 'Westside Branch' },
 ];
 
 /** Test-only contract handlers; the data is synthetic and not persisted. */

@@ -91,6 +91,8 @@
     "SUBMODULE_ASSETS_MAINTENANCE": "Assets Maintenance",
     "SUBMODULE_STAFF_DIRECTORY": "Staff Directory",
     "SUBMODULE_STAFF_ROLES_PERMISSIONS": "Staff Roles Permissions",
+    "SUBMODULE_STAFF_ATTENDANCE": "Staff Attendance & Shifts",
+    "SUBMODULE_STAFF_PAYROLL": "Staff Payroll & Salaries",
     "SUBMODULE_SYSTEM_SETTINGS": "System Settings",
     "SUBMODULE_SYSTEM_BRANDING": "System Branding",
     "SUBMODULE_SYSTEM_BACKUPS": "System Backups",

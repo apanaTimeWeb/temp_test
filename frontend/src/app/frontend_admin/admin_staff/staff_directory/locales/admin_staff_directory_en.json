@@ -145,6 +145,8 @@
     "UNSAVED_CHANGES_TITLE": "Discard unsaved changes?",
     "UNSAVED_CHANGES_DESCRIPTION": "You have unsaved changes. Are you sure you want to leave? Your changes will be lost.",
     "UNSAVED_CHANGES_STAY": "Stay and continue editing",
-    "UNSAVED_CHANGES_LEAVE": "Discard changes"
+    "UNSAVED_CHANGES_LEAVE": "Discard changes",
+    "OPEN_MANAGER_DESK": "Open Desk View",
+    "OPEN_MANAGER_DESK_TOOLTIP": "Launch Manager Counter Portal for {branch}"
   }
 }

@@ -14,7 +14,7 @@ import type { AdminPlansPlan } from '@/app/frontend_admin/admin_members/members_
 import type { AdminPlansFormDialogProps } from '@/app/frontend_admin/admin_members/members_plans/types/AdminMembersPlansComponentTypes';
 
 
-const EMPTY: AdminPlansFormValues = { name: '', price: '', duration: '', durationDays: '', features: '' };
+const EMPTY: AdminPlansFormValues = { name: '', price: '', duration: '', durationDays: '', features: '', branchApplicability: 'All Branches' };
 
 export default function AdminPlansFormDialog({ open, editingPlan, onClose, onValidated }: AdminPlansFormDialogProps) {
   const t = useTranslations('ADMIN_PLANS');
@@ -50,6 +50,7 @@ export default function AdminPlansFormDialog({ open, editingPlan, onClose, onVal
       duration: editingPlan.duration,
       durationDays: String(editingPlan.durationDays),
       features: editingPlan.features.join('\n'),
+      branchApplicability: editingPlan.branchApplicability || 'All Branches',
     } : EMPTY);
   }, [editingPlan, open, reset]);
 
@@ -97,6 +98,15 @@ export default function AdminPlansFormDialog({ open, editingPlan, onClose, onVal
               <label htmlFor="admin-plan-duration-days" className="admin-label admin-label-required">{t('VALIDITY_DAYS')}</label>
               <input id="admin-plan-duration-days" min="1" required className="admin-input" type="number" aria-invalid={Boolean(errors.durationDays)} aria-describedby={errors.durationDays ? 'admin-plan-duration-days-error' : undefined} {...register('durationDays')} placeholder={t('DAYS_PLACEHOLDER')} />
               {errors.durationDays ? <p id="admin-plan-duration-days-error" className="text-sm text-danger-text" role="alert">{getValidationMessage(errors.durationDays.message)}</p> : null}
+            </div>
+            <div className="admin-form-field admin-form-field-full">
+              <label htmlFor="admin-plan-branch" className="admin-label">Branch Pricing & Applicability</label>
+              <select id="admin-plan-branch" className="admin-input" {...register('branchApplicability')}>
+                <option value="All Branches">All Branches (Global Network Pricing)</option>
+                <option value="Downtown Central">Downtown Central (Main Campus)</option>
+                <option value="Westside Branch">Westside Branch</option>
+                <option value="North Hub">North Hub</option>
+              </select>
             </div>
             <div className="admin-form-field admin-form-field-full">
               <label htmlFor="admin-plan-features" className="admin-label">{t('FEATURES_HELP')}</label>

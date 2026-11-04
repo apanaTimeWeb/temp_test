@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState } from 'react';
-import { CheckCircle, Pencil, Plus, Trash2 } from 'lucide-react';
+import { CheckCircle, Pencil, Plus, Trash2, Building2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
@@ -78,6 +78,7 @@ export default function AdminPlansPage() {
       features: values.features.split('\n').map((feature) => feature.trim()).filter(Boolean),
       status: editingPlan?.status ?? ADMIN_PLANS_STATUS_VALUES[0],
       subscribers: editingPlan?.subscribers ?? 0,
+      branchApplicability: values.branchApplicability || 'All Branches',
     };
     setDemoPlans((current) => upsertAdminPlansDemoPlan(current, nextPlan));
     toast.success(t(editing ? 'DEMO_PLAN_UPDATED' : 'DEMO_PLAN_CREATED', { name: nextPlan.name }), { id: 'admin_members-members_plans-components-AdminMembersPlansPage-toast-48-2' });
@@ -136,7 +137,13 @@ export default function AdminPlansPage() {
                   <span className="text-3xl font-extrabold leading-none text-text-primary" aria-label={t('PRICE')}>{formatAdminPlansPrice(plan.price, plan.currencyCode, plan.amountUnit, locale)}</span>
                   <span className="ml-1 text-ui text-text-secondary">/ {t('DURATION_DAYS', { count: plan.durationDays })}</span>
                 </div>
-                <div><span data-testid="admin_plans-AdminMembersPlansMain-state-004" className="admin-badge admin-badge-info">👥 {plan.subscribers} {t('ACTIVE_SUBSCRIBERS')}</span></div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span data-testid="admin_plans-AdminMembersPlansMain-state-004" className="admin-badge admin-badge-info">👥 {plan.subscribers} {t('ACTIVE_SUBSCRIBERS')}</span>
+                  <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary">
+                    <Building2 size={12} className="text-primary shrink-0" />
+                    <span>{plan.branchApplicability || 'All Branches'}</span>
+                  </span>
+                </div>
                 <div className="border-t border-border pt-3">
                   <p className="mb-2 text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary">{t('FEATURES')}</p>
                   <ul className="m-0 flex list-none flex-col gap-1.5 p-0">

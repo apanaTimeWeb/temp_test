@@ -33,6 +33,9 @@ import {
   RotateCcw,
   Building,
   LifeBuoy,
+  MessageSquare,
+  Bell,
+  MessageCircle,
   type LucideIcon,
 } from 'lucide-react';
 import type { AdminNavItem } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/types/AdminNavigationSidebarTypes';
@@ -46,6 +49,7 @@ export const ADMIN_SIDEBAR_NAV: AdminNavItem[] = [
   { href: ADMIN_NAVIGATION_URLS.SEATS_SHIFTS_LOCKERS, icon: Armchair, label: 'Seats, Shifts & Lockers', labelKey: 'SEATS_SHIFTS_LOCKERS' },
   { href: ADMIN_NAVIGATION_URLS.FINANCE, icon: WalletCards, label: 'Finance', labelKey: 'FINANCE' },
   { href: ADMIN_NAVIGATION_URLS.ACCOUNTS_ASSETS, icon: Building2, label: 'Accounts & Assets', labelKey: 'ACCOUNTS_ASSETS' },
+  { href: ADMIN_NAVIGATION_URLS.COMMUNICATION, icon: MessageSquare, label: 'Communication', labelKey: 'COMMUNICATION' },
   { href: ADMIN_NAVIGATION_URLS.STAFF, icon: UserCog, label: 'Staff', labelKey: 'STAFF' },
   { href: ADMIN_NAVIGATION_URLS.SETTINGS, icon: Settings, label: 'Settings', labelKey: 'SETTINGS' },
 ];
@@ -134,6 +138,20 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     ],
   },
   {
+    id: 'communication',
+    primaryHref: ADMIN_ROUTES.COMMUNICATION,
+    labelKey: 'COMMUNICATION',
+    label: 'Communication',
+    icon: MessageSquare,
+    submodules: [
+      { href: ADMIN_ROUTES.COMMUNICATION_NOTICES, icon: Bell, label: 'Notices', labelKey: 'SUBMODULE_COMMUNICATION_NOTICES' },
+      { href: ADMIN_ROUTES.COMMUNICATION_COMPLAINTS, icon: AlertCircle, label: 'Complaints', labelKey: 'SUBMODULE_COMMUNICATION_COMPLAINTS' },
+      { href: ADMIN_ROUTES.COMMUNICATION_NOTIFICATION_CENTER, icon: MessageCircle, label: 'Notification Center', labelKey: 'SUBMODULE_COMMUNICATION_NOTIFICATION_CENTER' },
+      { href: ADMIN_ROUTES.COMMUNICATION_WHATSAPP_TEMPLATES, icon: FileText, label: 'WhatsApp Templates', labelKey: 'SUBMODULE_COMMUNICATION_WHATSAPP_TEMPLATES' },
+      { href: ADMIN_ROUTES.COMMUNICATION_WHATSAPP_LOGS, icon: History, label: 'WhatsApp Logs', labelKey: 'SUBMODULE_COMMUNICATION_WHATSAPP_LOGS' },
+    ],
+  },
+  {
     id: 'staff',
     primaryHref: ADMIN_ROUTES.STAFF,
     labelKey: 'STAFF',
@@ -142,6 +160,8 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     submodules: [
       { href: ADMIN_ROUTES.STAFF_DIRECTORY, icon: Users, label: 'Staff Directory', labelKey: 'SUBMODULE_STAFF_DIRECTORY' },
       { href: ADMIN_ROUTES.STAFF_ROLES_PERMISSIONS, icon: Shield, label: 'Roles & Permissions', labelKey: 'SUBMODULE_STAFF_ROLES_PERMISSIONS' },
+      { href: ADMIN_ROUTES.STAFF_ATTENDANCE, icon: CalendarCheck, label: 'Staff Attendance & Shifts', labelKey: 'SUBMODULE_STAFF_ATTENDANCE' },
+      { href: ADMIN_ROUTES.STAFF_PAYROLL, icon: DollarSign, label: 'Staff Payroll & Salaries', labelKey: 'SUBMODULE_STAFF_PAYROLL' },
     ],
   },
   {

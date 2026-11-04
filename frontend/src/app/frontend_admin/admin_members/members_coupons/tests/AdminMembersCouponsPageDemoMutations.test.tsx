@@ -176,9 +176,9 @@ describe('AdminCouponsCreateDialog validation and non-persistence', () => {
     fireEvent.change(screen.getByLabelText('Expiry Date'), { target: { value: '2027-12-31' } });
     fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Create Demo Coupon' }));
 
-    await waitFor(() => expect(onCreateDemoCoupon).toHaveBeenCalledWith({
+    await waitFor(() => expect(onCreateDemoCoupon).toHaveBeenCalledWith(expect.objectContaining({
       code: 'SAVE20', discount: 20, type: 'Flat', maxUses: 12, expiry: '2027-12-31',
-    }));
+    })));
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 });

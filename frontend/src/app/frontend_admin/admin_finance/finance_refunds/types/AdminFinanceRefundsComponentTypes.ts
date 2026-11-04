@@ -18,6 +18,8 @@ export interface AdminFinanceRefund {
   processedDate?: string;
   paymentMethod?: string;
   rejectionReason?: string;
+  branchName?: string;
+  branchId?: string;
 }
 
 export type AdminFinanceRefundsScenario = "ACTIVE" | "EMPTY" | "SERVER_500" | "TIMEOUT" | "UNAUTHORIZED";

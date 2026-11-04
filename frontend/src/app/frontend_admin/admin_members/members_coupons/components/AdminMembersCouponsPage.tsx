@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Trash2, CheckCircle } from 'lucide-react';
+import { Trash2, CheckCircle, Building2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { Toaster } from 'sonner';
@@ -65,6 +65,7 @@ export default function AdminCouponsPage() {
       usedCount: 0,
       maxUses: values.maxUses,
       expiry: values.expiry,
+      branchApplicability: values.branchApplicability || 'All Branches',
       status: 'Active',
     };
     queryClient.setQueryData<AdminCouponsCoupon[]>(queryKey, (current) => [nextCoupon, ...(current ?? [])]);
@@ -91,6 +92,18 @@ export default function AdminCouponsPage() {
       valueFormatter: ({ data }) => formatAdminCouponsDiscount(data, locale, t('DISCOUNT_SUFFIX')),
     },
     { field: 'usedCount', headerName: t('COLUMN_USAGE'), flex: 1, minWidth: 120, valueFormatter: ({ data }) => `${displayValue(data.usedCount)}/${displayValue(data.maxUses)}` },
+    {
+      field: 'branchApplicability',
+      headerName: 'Applicable Branch',
+      flex: 1.2,
+      minWidth: 140,
+      cellRenderer: ({ data }) => (
+        <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2 py-0.5 text-xs text-text-secondary">
+          <Building2 size={12} className="text-primary" />
+          {data.branchApplicability || 'All Branches'}
+        </span>
+      ),
+    },
     { field: 'expiry', headerName: t('COLUMN_EXPIRY'), flex: 1, minWidth: 120, valueFormatter: ({ data }) => formatAdminCouponsDate(data.expiry, locale) },
     {
       field: 'status', headerName: t('COLUMN_STATUS'), flex: 1, minWidth: 120, cellRenderer: (params: DataGridCellParams<AdminCouponsCoupon>) => {
@@ -216,6 +229,15 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
                 <option value="Percent">{t('TYPE_PERCENT')}</option>
               </select>
               {typeof form.formState.errors.type?.message === 'string' && <p id="admin-coupon-type-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.type.message}</p>}
+            </div>
+            <div className="space-y-1.5">
+              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-branch">Branch Applicability</label>
+              <select id="admin-coupon-branch" {...form.register('branchApplicability')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                <option value="All Branches">All Branches (Global Promotion)</option>
+                <option value="Downtown Central">Downtown Central</option>
+                <option value="Westside Branch">Westside Branch</option>
+                <option value="North Hub">North Hub</option>
+              </select>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
