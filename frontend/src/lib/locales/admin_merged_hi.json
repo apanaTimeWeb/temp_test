@@ -3890,7 +3890,8 @@
     "shiftAvailabilityRate": "{shift} शिफ्ट में {seats} सीटें उपलब्ध हैं। दर: ₹{rate}/दिन।",
     "daysCount": "{count} दिन",
     "maintenanceCostPlaceholder": "उदा. 350",
-    "maintenanceRemarkPlaceholder": "उदा. कुर्सी का पाया ठीक किया"
+    "maintenanceRemarkPlaceholder": "उदा. कुर्सी का पाया ठीक किया",
+    "allBranches": "सभी शाखाएँ"
   },
   "ADMIN_SHIFTS": {
     "exportMatrix": "मैट्रिक्स निर्यात करें",

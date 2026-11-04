@@ -3890,7 +3890,8 @@
     "shiftAvailabilityRate": "{seats} seats available in {shift} shift. Rate: ₹{rate}/day.",
     "daysCount": "{count, plural, one {# day} other {# days}}",
     "maintenanceCostPlaceholder": "e.g. 350",
-    "maintenanceRemarkPlaceholder": "e.g. Chair leg repaired"
+    "maintenanceRemarkPlaceholder": "e.g. Chair leg repaired",
+    "allBranches": "All Branches"
   },
   "ADMIN_SHIFTS": {
     "exportMatrix": "Export Matrix",
