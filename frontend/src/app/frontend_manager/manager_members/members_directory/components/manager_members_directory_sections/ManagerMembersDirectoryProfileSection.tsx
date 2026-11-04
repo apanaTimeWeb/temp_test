@@ -63,7 +63,7 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
       <div className="flex flex-col sm:flex-row gap-4 mb-8">
         <label className="sr-only" htmlFor="manager-members-profile-search">{tManagerUi('member_id_or_name')}</label>
         <input id="manager-members-profile-search" type="search" className="mgr-input flex-1" placeholder={tManagerUi('enter_member_id_or_name_e_g_lib_001')} value={searchValue} onChange={(event) => onSearchChange(event.target.value)} />
-        <button type="button" className="mgr-btn-primary" onClick={() => onSearchChange(searchValue.trim())} aria-label={tManagerUi('search_member_profile')}><Search size={16}/> {tManagerUi('search')}</button>
+        <button type="button" className="mgr-btn-primary" onClick={() => onSearchChange(searchValue.trim())} aria-label={tManagerUi('search_member_profile')}><Search size={16} /> {tManagerUi('search')}</button>
       </div>
       {!member ? <div className="mgr-empty-state"><p className="mgr-empty-title">{tManagerUi('no_matching_member')}</p><p className="mgr-empty-sub">{tManagerUi('try_a_member_id_or_name_from_the_directory')}</p></div> : (
         <div className="space-y-6">
@@ -88,15 +88,15 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                 </div>
                 <p className="text-sm text-info font-bold mb-4">{member.id} • {membershipTypeLabel} {tManagerUi('plan')}</p>
                 <div className="space-y-2 text-sm">
-                  <p className="flex items-center gap-2 text-secondary"><Phone size={14}/>{maskManagerMemberPhone(member.phone)}</p>
-                  <p className="flex items-center gap-2 text-secondary"><Mail size={14}/>{member.email || tManagerUi('no_email_provided')}</p>
-                  <p className="flex items-center gap-2 text-secondary"><MapPin size={14}/>{member.address || tManagerUi('address_not_provided')}</p>
+                  <p className="flex items-center gap-2 text-secondary"><Phone size={14} />{maskManagerMemberPhone(member.phone)}</p>
+                  <p className="flex items-center gap-2 text-secondary"><Mail size={14} />{member.email || tManagerUi('no_email_provided')}</p>
+                  <p className="flex items-center gap-2 text-secondary"><MapPin size={14} />{member.address || tManagerUi('address_not_provided')}</p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="p-3 rounded-xl bg-success-bg border border-success text-success">
                   <p className="text-xs font-bold uppercase mb-1">{tManagerUi('status')}</p>
-                  <p className="text-lg font-black flex items-center gap-2"><CheckCircle size={18}/> {memberStatusLabel}</p>
+                  <p className="text-lg font-black flex items-center gap-2"><CheckCircle size={18} /> {memberStatusLabel}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-card p-2 rounded-lg">
@@ -259,9 +259,8 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                         <p className="text-xs text-secondary font-mono mt-0.5">{doc.number || doc.fileName}</p>
                       </div>
                     </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 ${
-                      doc.status === 'Verified' ? 'bg-success-bg text-success border border-success/30' : 'bg-warning-bg text-warning border border-warning/30'
-                    }`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 ${doc.status === 'Verified' ? 'bg-success-bg text-success border border-success/30' : 'bg-warning-bg text-warning border border-warning/30'
+                      }`}>
                       {doc.status === 'Verified' ? <CheckCircle size={12} /> : <Clock size={12} />}
                       {doc.status === 'Verified' ? tManagerUi('verified') : tManagerUi('pending')}
                     </span>
