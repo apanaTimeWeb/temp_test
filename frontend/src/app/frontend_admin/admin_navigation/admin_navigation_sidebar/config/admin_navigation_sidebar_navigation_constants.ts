@@ -160,6 +160,7 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     submodules: [
       { href: ADMIN_ROUTES.STAFF_DIRECTORY, icon: Users, label: 'Staff Directory', labelKey: 'SUBMODULE_STAFF_DIRECTORY' },
       { href: ADMIN_ROUTES.STAFF_ROLES_PERMISSIONS, icon: Shield, label: 'Roles & Permissions', labelKey: 'SUBMODULE_STAFF_ROLES_PERMISSIONS' },
+      { href: ADMIN_ROUTES.STAFF_ATTENDANCE, icon: CalendarCheck, label: 'Staff Attendance & Shifts', labelKey: 'SUBMODULE_STAFF_ATTENDANCE' },
     ],
   },
   {

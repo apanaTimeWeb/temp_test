@@ -48,6 +48,8 @@ export const ADMIN_ROUTES = {
   ASSETS_REGISTER: '/admin/admin_accounts_assets/assets_register',
   STAFF_DIRECTORY: '/admin/admin_staff/staff_directory',
   STAFF_ROLES_PERMISSIONS: '/admin/admin_staff/staff_roles_permissions',
+  STAFF_ATTENDANCE: '/admin/admin_staff/staff_attendance',
+  STAFF_PAYROLL: '/admin/admin_staff/staff_payroll',
   SETTINGS_BRANCHES: '/admin/admin_settings/settings_branches',
   SETTINGS_SECURITY: '/admin/admin_settings/settings_security',
   SETTINGS_SUPPORT: '/admin/admin_settings/settings_support',

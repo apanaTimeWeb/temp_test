@@ -60,6 +60,7 @@ The active Admin role exposes exactly nine primary business domains. Each domain
 
 - `staff_directory` → `/admin/admin_staff/staff_directory`
 - `staff_roles_permissions` → `/admin/admin_staff/staff_roles_permissions`
+- `staff_attendance` → `/admin/admin_staff/staff_attendance`
 
 ## admin_system
 
