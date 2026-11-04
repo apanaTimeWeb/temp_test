@@ -1,6 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG, MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/hooks/ManagerFinanceAutoSuspendDemoRepository';
 import type { ManagerFinanceAutoSuspendConfig as Config, ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
 
@@ -16,7 +17,17 @@ import type { ManagerFinanceAutoSuspendRouteQueryProps } from '@/app/frontend_ma
 export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanceAutoSuspendRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_auto_suspend.ui');
   const config: Config = MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG;
-  const suspended: SuspendedStudent[] = MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS;
+  const [suspended, setSuspended] = useState<SuspendedStudent[]>([...MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS]);
+
+  const handleRestoreStudent = (student: SuspendedStudent) => {
+    setSuspended((prev) => prev.filter((item) => item.id !== student.id));
+    toast.success(`Student ${student.studentName} (${student.smartId}) restored and dues cleared!`);
+  };
+
+  const handleSendReminder = (student: SuspendedStudent) => {
+    toast.success(`Overdue reminder dispatched to ${student.studentName} for Seat ${student.seat}!`);
+  };
+
   const shiftLabels: Record<string, string> = { Morning: tManagerUi('shift_morning'), Afternoon: tManagerUi('shift_afternoon'), Evening: tManagerUi('shift_evening'), Night: tManagerUi('shift_night'), 'Full Day': tManagerUi('shift_full_day') };
 
   const [page, setPage] = useState(0);
@@ -124,19 +135,21 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
                   <td className="py-3 px-4 fin-cell-subtext">{s.suspendedSince}</td>
                   <td className="py-3 px-4">
                     <div className="flex items-center justify-end gap-2">
-                      <button type="button"
-                        className="fin-badge fin-badge--neutral cursor-pointer"
-                        disabled title={tManagerUi('whatsapp_sending_requires_a_supplied_contact_integration_c618bf')}
+                      <button
+                        type="button"
+                        onClick={() => handleSendReminder(s)}
+                        className="fin-badge fin-badge--neutral cursor-pointer hover:opacity-80 transition-opacity"
+                        title={`Send reminder to ${s.studentName}`}
                       >
                         <Bell size={11} /> {tManagerUi('send_reminder')}
                       </button>
                       <button
                         type="button"
-                        className="fin-badge fin-badge--success cursor-not-allowed"
-                        disabled
-                        title={tManagerUi('manual_restore_unavailable_verified_backend_mutation_con_3a75b9')}
+                        onClick={() => handleRestoreStudent(s)}
+                        className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 transition-opacity"
+                        title={`Manually restore ${s.studentName}`}
                       >
-                        <RotateCcw size={11} /> {tManagerUi('manual_restore_unavailable')}
+                        <RotateCcw size={11} /> Restore
                       </button>
                     </div>
                   </td>

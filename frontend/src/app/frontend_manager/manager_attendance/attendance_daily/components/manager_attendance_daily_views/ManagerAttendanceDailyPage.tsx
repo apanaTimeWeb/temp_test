@@ -8,7 +8,7 @@ import { ManagerAttendanceDailyStudentRow } from '@/app/frontend_manager/manager
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Save, FileBarChart2 } from 'lucide-react';
+import { ChevronRight, Save } from 'lucide-react';
 import { ManagerAttendanceDailyEmptyState } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_empty_states/ManagerAttendanceDailyEmptyState';
 import { ManagerAttendanceDailyFloorTurnoverQueue } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyFloorTurnoverQueue';
 import type { AttStatus, Student, ManagerAttendanceDailyTimeField } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
@@ -69,11 +69,6 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
           <div>
             <h1 className="eng-page-title">{tManagerUi('daily_attendance')}</h1>
             <p className="eng-page-subtitle">{tManagerUi('mark_attendance_for_all_enrolled_students_by_shift')}</p>
-          </div>
-          <div className="eng-page-actions">
-            <Link href={MANAGER_ATTENDANCE_DAILY_ROUTES.absenteeReport} className="eng-btn eng-btn--ghost eng-btn--sm">
-              <FileBarChart2 size={14} /> {tManagerUi('absentee_report')}
-            </Link>
           </div>
         </div>
       </div>

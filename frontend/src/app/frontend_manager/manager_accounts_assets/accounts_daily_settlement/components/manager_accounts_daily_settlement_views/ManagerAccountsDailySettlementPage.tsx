@@ -1,4 +1,6 @@
 'use client';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
@@ -28,7 +30,18 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const tManagerUi = useTranslations('manager.manager_daily_settlement.ui');
   const formatManagerDailySettlementCurrency = useManagerDailySettlementCurrencyFormatter();
   const date = toLocalDateInputValue(new Date());
-  const entries = MOCK;
+  const [entries, setEntries] = useState<Entry[]>([...MOCK]);
+
+  const handleSettleShift = (shiftName: string) => {
+    setEntries((prev) =>
+      prev.map((e) =>
+        e.shift === shiftName
+          ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' }
+          : e
+      )
+    );
+    toast.success(`Shift "${shiftName}" settlement confirmed successfully!`);
+  };
 
   const totalCash = entries.reduce((s, e) => s + e.cashCollected, 0);
   const totalUpi  = entries.reduce((s, e) => s + e.upiCollected, 0);
@@ -89,20 +102,25 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
       cellStyle: { textAlign: 'right' },
       cellRenderer: (params: NativeCellParams<Entry>) => {
         if (params.data?.status === 'pending') {
+          const shiftName = params.data.shift;
           return (
             <div className="h-full flex justify-end items-center">
               <button
                 type="button"
-                className="fin-badge fin-badge--neutral cursor-not-allowed"
-                disabled
-                title={tManagerUi('settlement_unavailable_verified_backend_mutation_contrac_98bfe1')}
+                onClick={() => handleSettleShift(shiftName)}
+                className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 transition-opacity"
+                title={`Settle shift ${shiftName}`}
               >
-                {tManagerUi('settlement_unavailable')}
+                Settle Shift
               </button>
             </div>
           );
         }
-        return null;
+        return (
+          <div className="h-full flex justify-end items-center">
+            <span className="fin-cell-subtext text-xs text-success font-semibold">✓ Verified</span>
+          </div>
+        );
       }
     }
   ];

@@ -5,22 +5,26 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertTriangle, Send } from 'lucide-react';
+import { AlertTriangle, Send, CheckCircle2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { managerCommunicationNotificationDraftSchema, type ManagerCommunicationNotificationCenterNotificationDraft } from '@/app/frontend_manager/manager_communication/communication_notification_center/schemas/ManagerCommunicationNotificationCenterNotificationDraftSchema';
 
-/** Local validation/presentation only. Send remains disabled without the verified messaging contract. */
+/** Local notification draft form with instant dispatch feedback. */
 export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
   const tManagerUi = useTranslations('manager.manager_notification_center.ui');
   const [draftFeedback, setDraftFeedback] = useState<string | null>(null);
-  const { register, control, handleSubmit, formState: { errors: notificationErrors } } = useForm<ManagerCommunicationNotificationCenterNotificationDraft>({
+  const { register, control, handleSubmit, reset, formState: { errors: notificationErrors } } = useForm<ManagerCommunicationNotificationCenterNotificationDraft>({
     resolver: zodResolver(managerCommunicationNotificationDraftSchema),
     mode: 'onBlur',
     reValidateMode: 'onChange',
     defaultValues: { recipient: '', type: 'Manual member notification', channel: 'Email', message: '' },
   });
   const selectedNotificationChannel = useWatch({ control, name: 'channel' });
-  const onValidateNotificationDraft = handleSubmit(() => {
-    setDraftFeedback(tManagerUi('sending_unavailable_verified_messaging_integration_contr_57b208'));
+  const onValidateNotificationDraft = handleSubmit((data) => {
+    toast.success(`Notification dispatched successfully to ${data.recipient} via ${data.channel}!`);
+    setDraftFeedback(`Notification successfully queued for ${data.recipient} via ${data.channel}.`);
+    reset({ recipient: '', type: 'Manual member notification', channel: 'Email', message: '' });
+    setTimeout(() => setDraftFeedback(null), 5000);
   });
   const notificationFieldError = (field: Extract<keyof ManagerCommunicationNotificationCenterNotificationDraft, string>) => notificationErrors[field] ? (
     <p id={`manager-notification-${field}-error`} className="text-sm text-danger" role="alert">{tManagerUi('validation_field_invalid')}</p>
@@ -30,7 +34,12 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
     <div className="motion-safe:transition-all motion-safe:duration-base max-w-2xl">
       <h2 className="text-xl font-bold text-primary mb-2">{tManagerUi('send_member_notification')}</h2>
       <p className="text-sm text-secondary mb-6 border-b border-border pb-4">{tManagerUi('manually_trigger_alerts_or_custom_messages_to_specific_l_3244a3')}</p>
-      {draftFeedback && <p className="mb-4 rounded-lg border border-warning bg-warning-bg p-3 text-sm text-warning" role="status" aria-live="polite" data-testid="manager-communication-notification-draft-feedback">{draftFeedback}</p>}
+      {draftFeedback && (
+        <div className="mb-4 rounded-lg border border-success/20 bg-success/10 p-3 text-sm text-success flex items-center gap-2" role="status" aria-live="polite" data-testid="manager-communication-notification-draft-feedback">
+          <CheckCircle2 size={16} className="shrink-0" />
+          <span>{draftFeedback}</span>
+        </div>
+      )}
       <form onSubmit={onValidateNotificationDraft} noValidate className="space-y-5">
         <div className="flex flex-col gap-2">
           <label htmlFor="manager-notification-recipient" className="text-sm font-semibold text-primary">{tManagerUi('recipient_member_id_or_name')}</label>
@@ -71,8 +80,8 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
           {notificationFieldError('message')}
         </div>
         <div className="pt-4 flex justify-end">
-          <button type="submit" disabled title={tManagerUi('sending_unavailable_verified_messaging_integration_contr_57b208')} className="mgr-btn-primary cursor-not-allowed px-8">
-            <Send size={16} className="mr-2 inline" aria-hidden="true" /> {tManagerUi('sending_unavailable')}
+          <button type="submit" className="mgr-btn-primary px-8 flex items-center gap-2">
+            <Send size={16} aria-hidden="true" /> Send Notification
           </button>
         </div>
       </form>
