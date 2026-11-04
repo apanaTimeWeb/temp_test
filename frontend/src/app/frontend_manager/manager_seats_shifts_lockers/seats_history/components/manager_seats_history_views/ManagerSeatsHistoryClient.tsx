@@ -73,6 +73,7 @@ export function ManagerSeatsHistoryClient() {
       { field: 'occupiedTill', headerName: tManagerUi('till'), flex: 1.3, cellClass: 'ss-cell-secondary', valueFormatter: (params: { value?: unknown }) => formatHistoryDate(String(params.value ?? '')) },
       { field: 'duration', headerName: tManagerUi('duration'), flex: 1, cellClass: 'ss-cell-secondary' },
       { field: 'reason', headerName: tManagerUi('reason'), flex: 1.3, cellRenderer: (params: ICellRendererParams<ManagerSeatsHistoryRow>) => { const reason = String(params.value ?? ''); return <span className={MANAGER_SEATS_HISTORY_HISTORY_REASON_CLASSES[reason] ?? 'ss-badge ss-badge--inactive'}>{formatReason(reason)}</span>; } },
+      { field: 'status', headerName: 'Status', flex: 1, cellRenderer: (params: ICellRendererParams<ManagerSeatsHistoryRow>) => { const status = String(params.value ?? 'Active'); const isActive = status.toLowerCase() === 'active'; return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${isActive ? 'bg-success-bg text-success' : 'bg-surface-highlight text-secondary'}`}>{status}</span>; } },
     ];
   }, [locale, tManagerUi]);
 

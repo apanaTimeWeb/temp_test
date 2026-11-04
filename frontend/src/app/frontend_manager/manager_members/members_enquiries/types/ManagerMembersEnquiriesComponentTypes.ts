@@ -24,6 +24,7 @@ export interface ManagerMembersEnquiriesFollowUpFormPanelProps {
   nextFollowUpStatusClassName: string;
   editFollowUpLabel: string;
   onDirtyChange?: (dirty: boolean) => void;
+  onAddFollowUp?: (data: { date: string; remark: string }) => void;
 }
 
 export interface ManagerMembersEnquiriesActivityTimelineProps {

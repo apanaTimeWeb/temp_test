@@ -8,7 +8,7 @@ import { MANAGER_SETTINGS_HELP_SUPPORT_SEARCH_DEBOUNCE_MS } from '@/app/frontend
 
 /** Keeps help-center tab, ticket tab, and documentation filter state inside the owning module. */
 export function useManagerHelpSupportPageState() {
-  const [activeTab, setActiveTab] = useState<ManagerSettingsHelpSupportTabName>('Help Center');
+  const [activeTab, setActiveTab] = useState<ManagerSettingsHelpSupportTabName>('Support Tickets');
   const [ticketTab, setTicketTab] = useState<ManagerSettingsHelpSupportTicketTab>('My Tickets');
   const [documentationQuery, setDocumentationQuery] = useState('');
   const [debouncedDocumentationQuery, setDebouncedDocumentationQuery] = useState(documentationQuery);

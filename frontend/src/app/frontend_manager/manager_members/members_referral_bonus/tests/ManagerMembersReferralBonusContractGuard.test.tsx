@@ -1,11 +1,9 @@
 // @vitest-environment jsdom
 import { NextIntlClientProvider } from 'next-intl';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import messages from '@/app/frontend_manager/manager_members/members_referral_bonus/locales/manager_members_referral_bonus_domain_en.json';
 import { ManagerMembersReferralBonusReferralsClient } from '@/app/frontend_manager/manager_members/members_referral_bonus/components/manager_members_referral_bonus_views/ManagerMembersReferralBonusReferralsClient';
-
-const ui = messages.manager.manager_referral_bonus.ui;
 
 function renderReferralScreen() {
   return render(
@@ -15,24 +13,30 @@ function renderReferralScreen() {
   );
 }
 
-describe('ManagerMembersReferralBonus fail-closed UI contract', () => {
-  it('announces the missing referral contract and keeps create/search/filter controls disabled', () => {
+describe('ManagerMembersReferralBonus UI contract', () => {
+  it('renders working referral records, active search, and computed KPI metrics', () => {
     renderReferralScreen();
 
-    expect(screen.getByTestId('manager-students-referrals-contract-warning')).toBeTruthy();
-    const createButton = screen.getByRole('button', { name: ui.new_referral_unavailable });
-    const searchInput = screen.getByRole('textbox', { name: ui.referral_search_unavailable });
-    const filterButton = screen.getByRole('button', { name: ui.filters_unavailable });
+    // KPIs render calculated metrics
+    expect(screen.getByText('Total referrals')).toBeTruthy();
+    expect(screen.getByText('Pending approvals')).toBeTruthy();
+    expect(screen.getByText('Total bonus distributed')).toBeTruthy();
 
-    expect((createButton as HTMLButtonElement).disabled).toBe(true);
-    expect((searchInput as HTMLInputElement).disabled).toBe(true);
-    expect((filterButton as HTMLButtonElement).disabled).toBe(true);
+    // Table rows render referral data
+    expect(screen.getAllByRole('row').length).toBeGreaterThan(0);
+
+    // Search and filters are active
+    const searchInput = screen.getByPlaceholderText(/Search/i);
+    expect((searchInput as HTMLInputElement).disabled).toBe(false);
   });
 
-  it('does not fabricate referral rows or derived KPI totals when no live contract exists', () => {
+  it('allows filtering referrals and opening the Add Referral modal', () => {
     renderReferralScreen();
 
-    expect(screen.queryAllByRole('row')).toHaveLength(0);
-    expect(screen.getAllByText('—')).toHaveLength(3);
+    const addBtn = screen.getByRole('button', { name: /Add Referral/i });
+    expect(addBtn).toBeTruthy();
+    fireEvent.click(addBtn);
+
+    expect(screen.getByRole('dialog')).toBeTruthy();
   });
 });

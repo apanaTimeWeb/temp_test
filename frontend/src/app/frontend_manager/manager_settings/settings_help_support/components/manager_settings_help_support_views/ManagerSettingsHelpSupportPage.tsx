@@ -8,7 +8,6 @@ import { useManagerHelpSupportPageState } from '@/app/frontend_manager/manager_s
 import { ManagerSettingsHelpSupportTicketForm } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_forms/ManagerSettingsHelpSupportTicketForm';
 import { MANAGER_HELP_SUPPORT_TABS, MANAGER_HELP_SUPPORT_DOCUMENTATION_CATEGORIES } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
 import { ManagerSettingsHelpSupportSystemStatusSection } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportSystemStatusSection';
-import { ManagerSettingsHelpSupportHelpCenterSection } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportHelpCenterSection';
 import { ManagerSettingsHelpSupportTabs } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportTabs';
 import { formatManagerHelpSupportCalendarDate } from '@/app/frontend_manager/manager_settings/settings_help_support/utils/ManagerSettingsHelpSupportDateFormatting';
 import {
@@ -53,8 +52,6 @@ export default function ManagerSettingsHelpSupportPage() {
       </div>
 
       <ManagerSettingsHelpSupportTabs tabs={MANAGER_HELP_SUPPORT_TABS} activeTab={activeTab} onSelect={setActiveTab} />
-
-      {activeTab === 'Help Center' && <ManagerSettingsHelpSupportHelpCenterSection />}
 
       {/* ----------------- DOCUMENTATION ----------------- */}
       {activeTab === 'Documentation' && (

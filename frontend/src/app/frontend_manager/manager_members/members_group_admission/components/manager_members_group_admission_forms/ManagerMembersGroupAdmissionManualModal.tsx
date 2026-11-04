@@ -9,11 +9,19 @@ export interface GroupStudentEntry {
   phone: string;
   email: string;
   gender: 'Male' | 'Female' | 'Other';
+  dob?: string;
+  bloodGroup?: string;
+  college?: string;
+  address?: string;
+  guardianName?: string;
+  guardianPhone: string;
+  emergencyPhone?: string;
+  preparationFor: string;
   plan: string;
   shift: string;
   seatPreference: string;
-  guardianPhone: string;
-  preparationFor: string;
+  lockerPreference?: string;
+  paymentMode?: string;
 }
 
 export interface ManagerMembersGroupAdmissionManualModalProps {
@@ -285,13 +293,83 @@ export function ManagerMembersGroupAdmissionManualModal({
                     </div>
 
                     <div>
-                      <label className="text-xs font-medium text-secondary block mb-1">Guardian Emergency Contact</label>
+                      <label className="text-xs font-medium text-secondary block mb-1">Date of Birth</label>
+                      <input
+                        type="date"
+                        className="mgr-input text-xs"
+                        value={row.dob || ''}
+                        onChange={(e) => updateStudent(index, 'dob', e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-medium text-secondary block mb-1">Blood Group</label>
+                      <select
+                        className="mgr-select text-xs"
+                        value={row.bloodGroup || 'B+'}
+                        onChange={(e) => updateStudent(index, 'bloodGroup', e.target.value)}
+                      >
+                        {['A+', 'B+', 'O+', 'AB+', 'A-', 'B-', 'O-', 'AB-'].map((bg) => (
+                          <option key={bg} value={bg}>{bg}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-medium text-secondary block mb-1">College / Institute</label>
+                      <input
+                        type="text"
+                        className="mgr-input text-xs"
+                        placeholder="e.g. Delhi University"
+                        value={row.college || ''}
+                        onChange={(e) => updateStudent(index, 'college', e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-medium text-secondary block mb-1">Guardian Full Name</label>
+                      <input
+                        type="text"
+                        className="mgr-input text-xs"
+                        placeholder="Father / Mother Name"
+                        value={row.guardianName || ''}
+                        onChange={(e) => updateStudent(index, 'guardianName', e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-medium text-secondary block mb-1">Guardian Phone *</label>
                       <input
                         type="tel"
                         className="mgr-input text-xs font-mono"
-                        placeholder="Optional contact"
+                        placeholder="Guardian mobile"
                         value={row.guardianPhone}
                         onChange={(e) => updateStudent(index, 'guardianPhone', e.target.value)}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-medium text-secondary block mb-1">Payment Mode</label>
+                      <select
+                        className="mgr-select text-xs"
+                        value={row.paymentMode || 'Cash'}
+                        onChange={(e) => updateStudent(index, 'paymentMode', e.target.value)}
+                      >
+                        <option value="Cash">Cash Counter</option>
+                        <option value="UPI">UPI / QR Code</option>
+                        <option value="Card">Debit / Credit Card</option>
+                        <option value="Net Banking">Net Banking</option>
+                      </select>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <label className="text-xs font-medium text-secondary block mb-1">Residential Address</label>
+                      <input
+                        type="text"
+                        className="mgr-input text-xs"
+                        placeholder="Flat / Room, Street, Landmark, City"
+                        value={row.address || ''}
+                        onChange={(e) => updateStudent(index, 'address', e.target.value)}
                       />
                     </div>
                   </div>
