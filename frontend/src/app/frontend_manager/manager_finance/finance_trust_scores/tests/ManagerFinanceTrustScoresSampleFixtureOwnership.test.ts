@@ -42,6 +42,6 @@ describe('Finance sample-fixture ownership and disabled actions — finance_trus
     const pageSource = readSource('components/manager_finance_trust_scores_views/ManagerFinanceTrustScoresTrustScorePage.tsx');
     expect(pageSource).not.toMatch(/RefundRequestPanel|RefundProcessDialog|RefundDeductionDialog/);
     expect(existsSync(join(moduleRoot, 'components/finance_trust_scores_widgets/FinanceTrustScoresRefundRequestPanel.tsx'))).toBe(false);
-    expect(existsSync(join(moduleRoot, '..', 'finance_refunds/config/manager_finance_refunds.url_config.ts'))).toBe(true);
+    expect(existsSync(join(moduleRoot, '..', 'finance_security_deposits/config/manager_finance_security_deposits.url_config.ts'))).toBe(true);
   });
 });

@@ -36,7 +36,6 @@ describe('Finance contract-dependent interaction closure — finance_payment_pro
   it('does not mount refund or fine-receipt workflows outside their canonical modules', () => {
     const pageSource = readSource('components/manager_finance_payment_promises_views/ManagerFinancePaymentPromisesPage.tsx');
     expect(pageSource).not.toMatch(/RefundRequestPanel|RefundProcessDialog|RefundDeductionDialog|FineReceiptPanel/);
-    expect(existsSync(join(moduleRoot, '..', 'finance_refunds/config/manager_finance_refunds.url_config.ts'))).toBe(true);
     expect(existsSync(join(moduleRoot, '..', 'finance_fines_payments/config/manager_finance_fines_payments.url_config.ts'))).toBe(true);
   });
 });
