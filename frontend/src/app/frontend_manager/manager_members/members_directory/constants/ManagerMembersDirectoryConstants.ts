@@ -6,7 +6,6 @@ export const MANAGER_MEMBERS_TABS: readonly { name: ManagerMembersDirectoryTab; 
   { name: 'Active Members', labelKey: 'tab_active_members', icon: UserCheck },
   { name: 'Expired Members', labelKey: 'tab_expired_members', icon: UserX },
   { name: 'Suspended Members', labelKey: 'tab_suspended_members', icon: UserMinus },
-  { name: 'Membership Renewal', labelKey: 'tab_membership_renewal', icon: RefreshCw },
 ];
 
 

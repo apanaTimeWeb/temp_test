@@ -6,27 +6,18 @@ import { useState } from 'react';
 
 import { useManagerHelpSupportPageState } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/useManagerSettingsHelpSupportPageState';
 import { ManagerSettingsHelpSupportTicketForm } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_forms/ManagerSettingsHelpSupportTicketForm';
-import { MANAGER_HELP_SUPPORT_TABS, MANAGER_HELP_SUPPORT_DOCUMENTATION_CATEGORIES } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
-import { ManagerSettingsHelpSupportSystemStatusSection } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportSystemStatusSection';
+import { MANAGER_HELP_SUPPORT_TABS } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
 import { ManagerSettingsHelpSupportTabs } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportTabs';
 import { formatManagerHelpSupportCalendarDate } from '@/app/frontend_manager/manager_settings/settings_help_support/utils/ManagerSettingsHelpSupportDateFormatting';
-import {
-  Megaphone, Plus, Search, FileText, CheckCircle, Clock
-} from 'lucide-react';
+import { Megaphone, Plus, CheckCircle, Clock } from 'lucide-react';
 
 export default function ManagerSettingsHelpSupportPage() {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');
   const locale = useLocale();
 
-  const { activeTab, setActiveTab, ticketTab, setTicketTab, documentationQuery, setDocumentationQuery, debouncedDocumentationQuery, documentationCategory, setDocumentationCategory, myTickets, documentationArticles, announcements } = useManagerHelpSupportPageState();
+  const { activeTab, setActiveTab, ticketTab, setTicketTab, myTickets, announcements } = useManagerHelpSupportPageState();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-
-  const visibleDocumentationArticles = documentationArticles.filter((article) => {
-    const matchesCategory = documentationCategory === 'All' || article.category === documentationCategory;
-    const searchableText = `${tManagerUi(article.titleKey)} ${tManagerUi(article.descriptionKey)} ${tManagerUi(article.categoryLabelKey)}`.toLowerCase();
-    return matchesCategory && searchableText.includes(debouncedDocumentationQuery.trim().toLowerCase());
-  });
 
   const totalRows = myTickets.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
@@ -52,48 +43,6 @@ export default function ManagerSettingsHelpSupportPage() {
       </div>
 
       <ManagerSettingsHelpSupportTabs tabs={MANAGER_HELP_SUPPORT_TABS} activeTab={activeTab} onSelect={setActiveTab} />
-
-      {/* ----------------- DOCUMENTATION ----------------- */}
-      {activeTab === 'Documentation' && (
-        <div className="motion-safe:transition-all motion-safe:duration-base flex flex-col lg:flex-row gap-8">
-          <div className="lg:w-1/3">
-            <div className="mgr-card p-5">
-              <div className="relative mb-6">
-                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                <label htmlFor="manager-support-docs-search" className="sr-only">{tManagerUi('search_docs')}</label>
-                <input id="manager-support-docs-search" type="search" value={documentationQuery} onChange={(event) => setDocumentationQuery(event.target.value)} placeholder={tManagerUi('search_docs')} className="mgr-input pl-10" />
-              </div>
-              <h4 className="text-xs font-bold text-secondary uppercase tracking-wider mb-3">{tManagerUi('categories')}</h4>
-              <ul className="space-y-2">
-                {MANAGER_HELP_SUPPORT_DOCUMENTATION_CATEGORIES.map((category) => (
-                  <li key={category.value}>
-                    <button type="button" aria-pressed={documentationCategory === category.value} onClick={() => setDocumentationCategory(category.value)} className={`w-full text-left text-sm px-3 py-2 rounded-md ${documentationCategory === category.value ? 'bg-primary-subtle text-primary font-bold' : 'text-primary hover:bg-card'}`}>
-                      {tManagerUi(category.labelKey)}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="lg:w-2/3 space-y-4">
-            <p className="text-sm text-warning" role="status">{tManagerUi('documentation_sample_content_notice')}</p>
-            {visibleDocumentationArticles.length === 0 ? (
-              <ManagerSettingsHelpSupportEmptyState className="mgr-card p-6 text-secondary" testId="manager-help-support-docs-empty">{tManagerUi('no_documentation_matches')}</ManagerSettingsHelpSupportEmptyState>
-            ) : visibleDocumentationArticles.map((article) => (
-              <div key={article.id} className="mgr-card p-5 flex items-start gap-4">
-                <div className="p-3 bg-surface-hover rounded-lg text-purple mt-1">
-                  <FileText size={20} />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-base font-bold text-primary mb-1">{tManagerUi(article.titleKey)}</h3>
-                  <p className="text-sm text-secondary mb-2">{tManagerUi(article.descriptionKey)}</p>
-                  <span className="text-xs text-purple font-semibold bg-purple-bg px-2 py-1 rounded">{tManagerUi(article.categoryLabelKey)}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* ----------------- SUPPORT TICKETS ----------------- */}
       {activeTab === 'Support Tickets' && (
@@ -245,8 +194,6 @@ export default function ManagerSettingsHelpSupportPage() {
           ))}
         </div>
       )}
-
-      {activeTab === 'System Status' && <ManagerSettingsHelpSupportSystemStatusSection />}
 
     </div>
   );

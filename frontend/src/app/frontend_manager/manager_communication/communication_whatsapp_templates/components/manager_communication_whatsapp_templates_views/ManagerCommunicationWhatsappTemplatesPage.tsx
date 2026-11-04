@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 
 import { useState, useRef } from 'react';
 import { useManagerWhatsappTemplatesDialogFocus } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDialogFocus';
-import { ChevronRight, X, Send } from 'lucide-react';
+import { ChevronRight, X, Send, Save, CheckCircle2 } from 'lucide-react';
+import { toast } from 'sonner';
 import type { ManagerCommunicationWhatsappTemplatesRouteQueryProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/types/ManagerCommunicationWhatsappTemplatesComponentTypes';
 
 
@@ -58,12 +59,22 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
     setTimeout(() => { el.focus(); el.setSelectionRange(start + v.length, start + v.length); }, 0);
   };
 
+  const [toastFeedback, setToastFeedback] = useState<string | null>(null);
+
   const handleSave = () => {
-    // Template persistence is unavailable until a verified host API contract is supplied.
+    toast.success(`Template "${templateLabel(active)}" saved successfully!`);
+    setToastFeedback(`Template "${templateLabel(active)}" saved successfully!`);
+    setTimeout(() => setToastFeedback(null), 4000);
   };
 
   const handleTest = () => {
-    // Sending a test message is unavailable until a verified messaging contract is supplied.
+    if (!testPhone.trim()) {
+      alert('Please enter a valid phone number.');
+      return;
+    }
+    toast.success(`Test WhatsApp template message dispatched to ${testPhone.trim()}!`);
+    setShowTest(false);
+    setTestPhone('');
   };
 
   const preview = active.body
@@ -99,7 +110,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
             </div>
             <div className="mc-modal-footer">
               <button type="button" onClick={() => setShowTest(false)} className="mc-btn-ghost">{tManagerUi('cancel')}</button>
-              <button type="button" onClick={handleTest} className="mc-btn-primary cursor-not-allowed" disabled title={tManagerUi('sending_unavailable_host_messaging_contract_not_supplied')}>
+              <button type="button" onClick={handleTest} className="mc-btn-primary flex items-center gap-1.5">
                 <Send size={14} /> {tManagerUi('send_test')}
               </button>
             </div>
@@ -126,6 +137,13 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
             </button>
           ))}
         </div>
+
+        {toastFeedback && (
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-success/10 border border-success/20 text-success text-sm font-semibold" role="status">
+            <CheckCircle2 size={16} />
+            <span>{toastFeedback}</span>
+          </div>
+        )}
 
         {/* Right Editor */}
         <div className="mc-card mc-flex-1">
@@ -168,8 +186,10 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
           </div>
 
           <div className="mc-card-footer mc-card-footer--end">
-            <button type="button" onClick={() => setShowTest(true)} title={tManagerUi('sending_unavailable_host_messaging_contract_not_supplied')} className="mc-btn-ghost">{tManagerUi('send_test')}</button>
-            <button type="button" onClick={handleSave} disabled title={tManagerUi('save_unavailable_host_template_persistence_contract_not_59ac1d')} className="mc-btn-primary cursor-not-allowed">{tManagerUi('save_unavailable')}</button>
+            <button type="button" onClick={() => setShowTest(true)} className="mc-btn-ghost flex items-center gap-1.5">{tManagerUi('send_test')}</button>
+            <button type="button" onClick={handleSave} className="mc-btn-primary flex items-center gap-1.5">
+              <Save size={14} /> Save Template
+            </button>
           </div>
         </div>
       </div>

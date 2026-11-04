@@ -1,8 +1,6 @@
 'use client';
 import { useLocale, useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useState } from 'react';
-import { MANAGER_MEMBERS_DIRECTORY_ROUTES } from '@/app/frontend_manager/manager_members/members_directory/config/manager_members_directory.url_config';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 
@@ -22,9 +20,6 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
   const locale = useLocale();
   const { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember, updateMember } = useManagerMemberDirectoryPageState(_routeQuery);
   const editIntent = _routeQuery.view === 'edit';
-  const tabDestinations: Partial<Record<(typeof MANAGER_MEMBERS_TABS)[number]['name'], string>> = {
-    'Membership Renewal': MANAGER_MEMBERS_DIRECTORY_ROUTES.membershipRenewal,
-  };
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -61,20 +56,16 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
         <div className="xl:col-span-3 space-y-2">
           {MANAGER_MEMBERS_TABS.map(tab => {
             const isActive = activeTab === tab.name;
-            const commonClassName = `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold motion-safe:transition-all ${
-              isActive ? 'bg-primary text-on-primary shadow-card' : 'text-secondary hover:bg-card hover:text-primary'
-            }`;
-            const destination = tabDestinations[tab.name];
-            if (destination) {
-              return (
-                <Link key={tab.name} href={destination} className={commonClassName}>
-                  <tab.icon size={18} aria-hidden="true" className="opacity-70" />
-                  {tManagerUi(tab.labelKey)}
-                </Link>
-              );
-            }
             return (
-              <button key={tab.name} type="button" onClick={() => { setActiveTab(tab.name); setPage(0); }} aria-pressed={isActive} className={commonClassName}>
+              <button
+                key={tab.name}
+                type="button"
+                onClick={() => { setActiveTab(tab.name); setPage(0); }}
+                aria-pressed={isActive}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold motion-safe:transition-all ${
+                  isActive ? 'bg-primary text-on-primary shadow-card' : 'text-secondary hover:bg-card hover:text-primary'
+                }`}
+              >
                 <tab.icon size={18} aria-hidden="true" className={isActive ? 'text-primary' : 'opacity-70'} />
                 {tManagerUi(tab.labelKey)}
               </button>
