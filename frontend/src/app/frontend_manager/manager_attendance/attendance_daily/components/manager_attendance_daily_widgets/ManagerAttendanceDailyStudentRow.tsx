@@ -12,7 +12,7 @@ import type { ManagerAttendanceDailyStudentRowProps } from '@/app/frontend_manag
 
 
 /** Single illustrative attendance row. All changes remain local preview state. */
-export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFieldChange }: ManagerAttendanceDailyStudentRowProps) {
+export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFieldChange, onSendAlert }: ManagerAttendanceDailyStudentRowProps) {
   const tManagerUi = useTranslations('manager.manager_attendance.ui');
   const isAlert = student.consecutiveAbsent >= 3;
 
@@ -50,9 +50,20 @@ export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFi
       {isAlert && (
         <div className="eng-att-alert">
           <span className="eng-badge eng-badge--warning">⚠️ {student.consecutiveAbsent} {tManagerUi('days_consecutive')}</span>
-          <button type="button" disabled title={tManagerUi('parent_alert_unavailable_verified_messaging_contract_not_500034')} className="eng-btn eng-btn--ghost eng-btn--sm cursor-not-allowed">
-            <Bell size={12} aria-hidden="true"/> {tManagerUi('alert_unavailable')}
-          </button>
+          {onSendAlert ? (
+            <button
+              type="button"
+              onClick={() => onSendAlert(student)}
+              title={`Send Attendance Notice for ${student.name}`}
+              className="eng-btn eng-btn--ghost eng-btn--sm text-warning hover:bg-warning/10 cursor-pointer font-semibold"
+            >
+              <Bell size={12} aria-hidden="true"/> Send Notice
+            </button>
+          ) : (
+            <button type="button" disabled title={tManagerUi('parent_alert_unavailable_verified_messaging_contract_not_500034')} className="eng-btn eng-btn--ghost eng-btn--sm cursor-not-allowed">
+              <Bell size={12} aria-hidden="true"/> {tManagerUi('alert_unavailable')}
+            </button>
+          )}
         </div>
       )}
     </div>

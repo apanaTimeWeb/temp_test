@@ -9,6 +9,7 @@ export interface ManagerMembersDirectoryProfileSectionProps {
   member: ManagerMembersDirectoryRecord | null;
   onUpdateMember?: (updatedMember: ManagerMembersDirectoryRecord) => void;
   initialEdit?: boolean;
+  onBack?: () => void;
 }
 
 export interface ManagerMembersDirectorySupportingSectionsProps {

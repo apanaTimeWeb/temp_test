@@ -5,23 +5,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import {
-  Armchair,
-  Award,
-  CheckCircle,
-  Clock,
-  ExternalLink,
-  FileText,
-  GraduationCap,
-  Layers,
-  Lock,
-  Mail,
-  MapPin,
-  Pencil,
-  Phone,
-  Search,
-  ShieldCheck,
-  User,
-  Users,
+  Armchair, Award, CheckCircle, Clock, ExternalLink, FileText, GraduationCap,
+  Layers, Lock, Mail, MapPin, Pencil, Phone, Search, ShieldCheck, User, Users, ArrowLeft
 } from 'lucide-react';
 
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
@@ -38,7 +23,7 @@ function formatKnownIsoCalendarDate(value: string, locale: string): string {
   return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(date);
 }
 
-export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchChange, member, onUpdateMember, initialEdit }: ManagerMembersDirectoryProfileSectionProps) {
+export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchChange, member, onUpdateMember, initialEdit, onBack }: ManagerMembersDirectoryProfileSectionProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
   const locale = useLocale();
   const [isEditModalOpen, setIsEditModalOpen] = useState(Boolean(initialEdit));
@@ -62,7 +47,19 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
 
   return (
     <section className="motion-safe:transition-all motion-safe:duration-base" aria-labelledby="manager-members-profile-title">
-      <h2 id="manager-members-profile-title" className="text-xl font-bold text-primary mb-6 border-b border-border pb-4">{tManagerUi('search_view_profile')}</h2>
+      <div className="flex items-center justify-between gap-4 mb-6 border-b border-border pb-4">
+        <h2 id="manager-members-profile-title" className="text-xl font-bold text-primary">{tManagerUi('search_view_profile')}</h2>
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="mgr-btn-secondary mgr-btn-sm inline-flex items-center gap-2 cursor-pointer font-semibold text-xs"
+          >
+            <ArrowLeft size={14} />
+            <span>Back to All Members</span>
+          </button>
+        )}
+      </div>
       <div className="flex flex-col sm:flex-row gap-4 mb-8">
         <label className="sr-only" htmlFor="manager-members-profile-search">{tManagerUi('member_id_or_name')}</label>
         <input id="manager-members-profile-search" type="search" className="mgr-input flex-1" placeholder={tManagerUi('enter_member_id_or_name_e_g_lib_001')} value={searchValue} onChange={(event) => onSearchChange(event.target.value)} />
