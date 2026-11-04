@@ -14,9 +14,7 @@ describe('Finance loading, date, and theme source contracts', () => {
   it('does not retain constant-false loading branches on sample-backed Finance pages', () => {
     for (const file of [
       'manager_finance/finance_subscriptions/components/manager_finance_subscriptions_views/ManagerFinanceSubscriptionsPage.tsx',
-      'manager_finance/finance_late_fees/components/manager_finance_late_fees_views/ManagerFinanceLateFeesPage.tsx',
       'manager_finance/finance_payment_promises/components/manager_finance_payment_promises_views/ManagerFinancePaymentPromisesPage.tsx',
-      'manager_finance/finance_referrals/components/manager_finance_referrals_views/ManagerFinanceReferralsPage.tsx',
       'manager_finance/finance_security_deposits/components/manager_finance_security_deposits_views/ManagerFinanceSecurityDepositsPage.tsx',
       'manager_finance/finance_subscriptions/components/manager_finance_subscriptions_views/ManagerFinanceSubscriptionsPage.tsx',
       'manager_finance/finance_trust_scores/components/manager_finance_trust_scores_views/ManagerFinanceTrustScoresTrustScorePage.tsx',

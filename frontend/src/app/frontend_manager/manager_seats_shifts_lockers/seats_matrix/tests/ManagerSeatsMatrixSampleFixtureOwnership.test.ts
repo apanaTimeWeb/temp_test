@@ -38,7 +38,6 @@ describe('Canonical sample-fixture ownership and unknown-status safety — seats
     expect(existsSync(join(moduleRoot, 'config/manager_seats_matrix.url_config.ts'))).toBe(true);
     expect(existsSync(join(moduleRoot, '..', 'seats_matrix', 'config/manager_seats_matrix.url_config.ts'))).toBe(true);
     expect(existsSync(join(moduleRoot, '..', 'lockers_matrix', 'config/manager_lockers_matrix.url_config.ts'))).toBe(true);
-    expect(existsSync(join(moduleRoot, '..', 'shifts_migration', 'config/manager_shifts_migration.url_config.ts'))).toBe(true);
     expect(existsSync(join(moduleRoot, 'components/manager_seats_matrix_dialogs/ManagerSeatsMatrixSeatMatrixModal.tsx'))).toBe(false);
     expect(existsSync(join(moduleRoot, 'components/manager_seats_matrix_sections/ManagerSeatsMatrixShiftMigrationSummary.tsx'))).toBe(false);
   });

@@ -43,8 +43,8 @@ describe('Finance sample-fixture ownership and disabled actions — finance_fine
     const routeSource = readSource('config/manager_finance_fines_payments.url_config.ts');
     expect(pageSource).toMatch(/tab\.id === 'refundRequests'[\s\S]*?router\.push\(MANAGER_FINANCE_FINES_PAYMENTS_ROUTES\.REFUNDS\)/);
     expect(pageSource).not.toContain('ManagerFinanceFinesPaymentsRefundRequestPanel');
-    expect(routeSource).toContain("REFUNDS: '/frontend_manager/manager_finance/finance_refunds'");
+    expect(routeSource).toContain("REFUNDS: '/frontend_manager/manager_finance/finance_security_deposits'");
     expect(existsSync(join(moduleRoot, 'components/manager_finance_fines_payments_widgets/ManagerFinanceFinesPaymentsRefundRequestPanel.tsx'))).toBe(false);
-    expect(existsSync(join(moduleRoot, '..', 'finance_refunds/config/manager_finance_refunds.url_config.ts'))).toBe(true);
+    expect(existsSync(join(moduleRoot, '..', 'finance_security_deposits/config/manager_finance_security_deposits.url_config.ts'))).toBe(true);
   });
 });

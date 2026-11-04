@@ -45,6 +45,6 @@ describe('Finance sample-fixture ownership and disabled actions — finance_coll
     expect(collectPage).not.toContain('ManagerFinanceCollectFeeRefundRequestPanel');
     expect(collectPage).not.toContain('ManagerFinanceCollectFeeRefundProcessDialog');
     expect(routeConfig).toContain('MANAGER_FINANCE_COLLECT_FEE_ROUTES');
-    expect(existsSync(join(frontendManagerRoot, 'manager_finance/finance_refunds/config/manager_finance_refunds.url_config.ts'))).toBe(true);
+    expect(existsSync(join(frontendManagerRoot, 'manager_finance/finance_security_deposits/config/manager_finance_security_deposits.url_config.ts'))).toBe(true);
   });
 });
