@@ -14,7 +14,7 @@
     "UNAVAILABLE_SUFFIX": "unavailable",
     "LIVE_UNAVAILABLE_DESCRIPTION": "This section cannot display live account data or perform changes until the host supplies a verified identity, session, and authentication contract.",
     "DEMO_ACCOUNT_NAME": "Library Admin",
-    "DEMO_ACCOUNT_BIO": "Main administrator managing operations for Smart Gym 360 branches.",
+    "DEMO_ACCOUNT_BIO": "Main administrator managing operations for Smart Library Management branches.",
     "UPDATE_PHOTO": "Update profile photo",
     "PHOTO_UPLOAD_BLOCKED": "Profile-photo upload is unavailable because no approved upload contract is supplied.",
     "DEMO_ONLY_LABEL": "Illustrative demo account — not a live identity",
