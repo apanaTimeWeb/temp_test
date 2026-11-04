@@ -1191,7 +1191,22 @@
         "preview_add_holiday_draft": "Preview holiday draft",
         "holiday_draft_preview_only": "Draft preview only; saving is unavailable without the host mutation contract.",
         "previous_month": "Previous month",
-        "next_month": "Next month"
+        "next_month": "Next month",
+        "turnover_queue_tab": "Floor Turnover & Overstay",
+        "roster_tab": "Daily Roster",
+        "turnover_title": "Live Shift Turnover & Overstay Queue",
+        "turnover_subtitle": "Verify physical seat vacancy on student mobile checkout & inspect unauthorized shift overstays.",
+        "stat_pending_verification": "Pending Desk Inspection",
+        "stat_active_overstays": "Active Overstays",
+        "stat_recovered_fines": "Overstay Fines",
+        "confirm_vacated": "Confirm Vacated & Ready",
+        "report_fake_checkout": "Still Occupied (Fake Checkout)",
+        "flag_overstay_fine": "Flag Overstay (+₹50 Fine)",
+        "manual_clear": "Student Vacated (Manual Clear)",
+        "vacated_success": "Seat confirmed vacated and marked ready for incoming shift.",
+        "overstay_fined_success": "Overstay recorded (+₹50 fine added to student dues).",
+        "fake_checkout_flagged": "Desk marked occupied. Student alerted for false checkout.",
+        "no_turnover_alerts": "All shift changeovers are clean! Zero pending turnover alerts."
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",
@@ -8151,7 +8166,8 @@
         "transaction_reference_required": "Transaction reference required.",
         "validation_field_required": "This field is required.",
         "confirm_leave_with_unsaved_changes": "You have unsaved fee-collection changes. Leave this page and discard them?",
-        "no_records_found": "No records available."
+        "no_records_found": "No records available.",
+        "no_security_deposits_found": "No security deposits found"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",
@@ -9442,7 +9458,17 @@
         "validation_enter_phone_number": "Enter a phone number.",
         "validation_enter_valid_email": "Enter a valid email address.",
         "validation_expiry_after_join": "Expiry date must be after the join date.",
-        "profile_edit_unavailable_host_contract_not_supplied": "Profile editing is unavailable because no verified host update API contract was supplied. This route shows a read-only profile; no changes are saved."
+        "profile_edit_unavailable_host_contract_not_supplied": "Profile editing is unavailable because no verified host update API contract was supplied. This route shows a read-only profile; no changes are saved.",
+        "kyc_documents": "KYC & Verification Documents",
+        "referral_rewards": "Referral Rewards & Bonus",
+        "referral_points": "Referral Points",
+        "referred_by": "Referred By",
+        "direct_walkin": "Direct Walk-in",
+        "verified": "Verified",
+        "pending": "Pending",
+        "preview": "Preview",
+        "download": "Download",
+        "points": "Points"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",
@@ -11173,7 +11199,18 @@
         "both_custom_times_required": "Enter both custom start and end times.",
         "custom_end_must_follow_start": "Custom end time must be after custom start time.",
         "new_status": "New status",
-        "active_status": "Active status"
+        "active_status": "Active status",
+        "vacate_and_clear_title": "Vacate Locker & Key Handover Clearance",
+        "security_deposit_held": "Security Deposit Escrow Held:",
+        "key_status_label": "Physical Key Inspection & Return",
+        "key_returned_option": "Physical Key Returned in Good Condition (₹0 Deduction)",
+        "key_lost_option": "Key Lost / Damaged Lock (Deduct ₹150 Replacement Fee)",
+        "deduction_amount": "Deduction Amount:",
+        "net_refund_payable": "Net Refund Payable to Student:",
+        "clearance_remarks": "Handover Remarks (Optional)",
+        "clearance_remarks_placeholder": "E.g., Locker checked clean, original key returned",
+        "submit_vacate_and_refund": "Confirm Handover & Queue Refund",
+        "vacate_success_toast": "Locker {id} vacated. Net refund of ₹{amount} queued for Admin approval."
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

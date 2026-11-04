@@ -449,7 +449,8 @@
         "transaction_reference_required": "लेन-देन संदर्भ आवश्यक है।",
         "validation_field_required": "यह फ़ील्ड आवश्यक है।",
         "confirm_leave_with_unsaved_changes": "تغييرات تحصيل الرسوم غير محفوظة. هل تريد مغادرة الصفحة والتخلص منها؟",
-        "no_records_found": "कोई रिकॉर्ड उपलब्ध नहीं है।"
+        "no_records_found": "कोई रिकॉर्ड उपलब्ध नहीं है।",
+        "no_security_deposits_found": "कोई सुरक्षा जमा नहीं मिली"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",
