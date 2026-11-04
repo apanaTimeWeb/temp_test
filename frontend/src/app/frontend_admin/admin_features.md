@@ -61,6 +61,7 @@ The active Admin role exposes exactly nine primary business domains. Each domain
 - `staff_directory` → `/admin/admin_staff/staff_directory`
 - `staff_roles_permissions` → `/admin/admin_staff/staff_roles_permissions`
 - `staff_attendance` → `/admin/admin_staff/staff_attendance`
+- `staff_payroll` → `/admin/admin_staff/staff_payroll`
 
 ## admin_system
 
@@ -95,4 +96,4 @@ The active Admin role exposes exactly nine primary business domains. Each domain
 - `settings_support` → `/admin/admin_settings/settings_support`
 - `settings_profile` → `/admin/admin_settings/settings_profile`
 
-`staff_payroll` and `staff_enrollment` remain reserved, unimplemented future submodules.
+`staff_enrollment` remains a reserved, unimplemented future submodule.
