@@ -1,6 +1,6 @@
 {
   "ADMIN_BLACKLIST": {
-    "BREADCRUMB": "Smart Gym 360 › Admin › Blacklist",
+    "BREADCRUMB": "Smart Library Management › Admin › Blacklist",
     "TITLE": "Blacklist",
     "SUBTITLE": "Students banned from re-joining the library.",
     "ADD_ACTION": "Blacklist Student",

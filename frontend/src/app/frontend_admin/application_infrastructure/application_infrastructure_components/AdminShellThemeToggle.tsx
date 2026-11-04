@@ -1,13 +1,20 @@
 'use client';
+import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useTranslations } from 'next-intl';
 
-/** Toggles the canonical `.dark` class through the application's approved theme provider. */
+/** Toggles the canonical `.dark` class through the application's approved theme provider without SSR hydration mismatch. */
 export function AdminShellThemeToggle() {
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const t = useTranslations('ADMIN_SHELL');
-  const isDark = resolvedTheme === 'dark';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted && resolvedTheme === 'dark';
 
   return (
     <button

@@ -33,7 +33,7 @@ export function downloadAdminMembersDemoCsv(members: readonly AdminMembersMember
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = 'smart-gym-360-demo-members.csv';
+  anchor.download = 'smart-library-management-demo-members.csv';
   anchor.hidden = true;
   document.body.append(anchor);
   anchor.click();
