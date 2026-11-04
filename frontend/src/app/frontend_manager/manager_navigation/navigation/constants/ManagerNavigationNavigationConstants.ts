@@ -6,11 +6,8 @@ import { MANAGER_MEMBERS_NEW_ADMISSION_ROUTES as MANAGER_NEW_ADMISSION_ROUTES } 
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES as MANAGER_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
 import { MANAGER_MEMBERS_ALUMNI_ROUTES as MANAGER_ALUMNI_ROUTES } from '@/app/frontend_manager/manager_members/members_alumni/config/manager_members_alumni.url_config';
 import { MANAGER_MEMBERS_REFERRAL_BONUS_ROUTES } from '@/app/frontend_manager/manager_members/members_referral_bonus/config/manager_members_referral_bonus.url_config';
-import { MANAGER_MEMBERS_DOCUMENT_VAULT_ROUTES as MANAGER_DOCUMENT_VAULT_ROUTES } from '@/app/frontend_manager/manager_members/members_document_vault/config/manager_members_document_vault.url_config';
 import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES as MANAGER_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import { MANAGER_SEATS_MATRIX_ROUTES as MANAGER_SEAT_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
-import { MANAGER_SHIFTS_MANAGEMENT_ROUTES as MANAGER_SHIFTS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_management/config/manager_shifts_management.url_config';
-import { MANAGER_SHIFTS_MIGRATION_ROUTES as MANAGER_SHIFT_MIGRATION_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/shifts_migration/config/manager_shifts_migration.url_config';
 import { MANAGER_SEATS_ALLOCATIONS_ROUTES as MANAGER_ALLOCATIONS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_allocations/config/manager_seats_allocations.url_config';
 import { MANAGER_SEATS_HISTORY_ROUTES as MANAGER_SEAT_HISTORY_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/config/manager_seats_history.url_config';
 import { MANAGER_LOCKERS_MANAGEMENT_ROUTES as MANAGER_LOCKERS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.url_config';
@@ -18,27 +15,19 @@ import { MANAGER_LOCKERS_MATRIX_ROUTES as MANAGER_LOCKER_MATRIX_ROUTES } from '@
 import { MANAGER_FINANCE_COLLECT_FEE_ROUTES } from '@/app/frontend_manager/manager_finance/finance_collect_fee/config/manager_finance_collect_fee.url_config';
 import { MANAGER_FINANCE_SUBSCRIPTIONS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_subscriptions/config/manager_finance_subscriptions.url_config';
 import { MANAGER_FINANCE_RENEWALS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_renewals/config/manager_finance_renewals.url_config';
-import { MANAGER_FINANCE_PAYMENTS_ROUTES as MANAGER_PAYMENTS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_payments/config/manager_finance_payments.url_config';
 import { MANAGER_FINANCE_PAYMENT_PROMISES_ROUTES } from '@/app/frontend_manager/manager_finance/finance_payment_promises/config/manager_finance_payment_promises.url_config';
 import { MANAGER_FINANCE_TRUST_SCORES_ROUTES } from '@/app/frontend_manager/manager_finance/finance_trust_scores/config/manager_finance_trust_scores.url_config';
 import { MANAGER_FINANCE_SECURITY_DEPOSITS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_security_deposits/config/manager_finance_security_deposits.url_config';
-import { MANAGER_FINANCE_LATE_FEES_ROUTES } from '@/app/frontend_manager/manager_finance/finance_late_fees/config/manager_finance_late_fees.url_config';
 import { MANAGER_FINANCE_FINES_PAYMENTS_ROUTES as MANAGER_FINES_PAYMENTS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_fines_payments/config/manager_finance_fines_payments.url_config';
 import { MANAGER_FINANCE_AUTO_SUSPEND_ROUTES } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/config/manager_finance_auto_suspend.url_config';
-import { MANAGER_FINANCE_INVOICES_ROUTES as MANAGER_INVOICE_ROUTES } from '@/app/frontend_manager/manager_finance/finance_invoices/config/manager_finance_invoices.url_config';
-import { MANAGER_FINANCE_RECEIPTS_ROUTES as MANAGER_RECEIPT_ROUTES } from '@/app/frontend_manager/manager_finance/finance_receipts/config/manager_finance_receipts.url_config';
-import { MANAGER_FINANCE_REFERRALS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_referrals/config/manager_finance_referrals.url_config';
-import { MANAGER_FINANCE_REFUNDS_ROUTES as MANAGER_REFUNDS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_refunds/config/manager_finance_refunds.url_config';
 import { MANAGER_ATTENDANCE_DAILY_ROUTES as MANAGER_ATTENDANCE_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_daily/config/manager_attendance_daily.url_config';
 import { MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES as MANAGER_ABSENTEE_REPORT_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/config/manager_attendance_absentee_report.url_config';
 import { MANAGER_ATTENDANCE_QR_SCANNER_ROUTES as MANAGER_QR_SCANNER_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_qr_scanner/config/manager_attendance_qr_scanner.url_config';
-import { MANAGER_ATTENDANCE_HOLIDAY_CALENDAR_ROUTES as MANAGER_HOLIDAY_CALENDAR_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_holiday_calendar/config/manager_attendance_holiday_calendar.url_config';
 import { MANAGER_ACCOUNTS_EXPENSES_ROUTES } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/config/manager_accounts_expenses.url_config';
 import { MANAGER_ACCOUNTS_DAILY_SETTLEMENT_ROUTES } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/config/manager_accounts_daily_settlement.url_config';
 import { MANAGER_ACCOUNTS_SEAT_GAP_REPORT_ROUTES } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/config/manager_accounts_seat_gap_report.url_config';
 import { MANAGER_ASSETS_REGISTER_ROUTES } from '@/app/frontend_manager/manager_accounts_assets/assets_register/config/manager_assets_register.url_config';
 import { MANAGER_ASSETS_MAINTENANCE_ROUTES } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/config/manager_assets_maintenance.url_config';
-import { MANAGER_COMMUNICATION_NOTICES_ROUTES as MANAGER_NOTICES_ROUTES } from '@/app/frontend_manager/manager_communication/communication_notices/config/manager_communication_notices.url_config';
 import { MANAGER_COMMUNICATION_COMPLAINTS_ROUTES as MANAGER_COMPLAINTS_ROUTES } from '@/app/frontend_manager/manager_communication/communication_complaints/config/manager_communication_complaints.url_config';
 import { MANAGER_COMMUNICATION_NOTIFICATION_CENTER_ROUTES as MANAGER_NOTIFICATION_CENTER_ROUTES } from '@/app/frontend_manager/manager_communication/communication_notification_center/config/manager_communication_notification_center.url_config';
 import { MANAGER_COMMUNICATION_WHATSAPP_LOGS_ROUTES as MANAGER_WHATSAPP_LOGS_ROUTES } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/config/manager_communication_whatsapp_logs.url_config';
@@ -47,24 +36,17 @@ import { MANAGER_SETTINGS_HELP_SUPPORT_ROUTES as MANAGER_HELP_SUPPORT_ROUTES } f
 import { MANAGER_SETTINGS_BRANCH_INFO_ROUTES as MANAGER_BRANCH_INFO_ROUTES } from '@/app/frontend_manager/manager_settings/settings_branch_info/config/manager_settings_branch_info.url_config';
 import {
   AlertCircle,
-  ArrowLeftRight,
   Award,
   BarChart,
   BarChart2,
-  Bell,
   BellRing,
-  BookOpen,
   Building,
   Ban,
-  Clock,
-  Calendar,
   CalendarCheck,
   ClipboardCheck,
   ClipboardList,
   CreditCard,
-  DollarSign,
   FileText,
-  FolderOpen,
   Handshake,
   History,
   IndianRupee,
@@ -76,7 +58,6 @@ import {
   Phone,
   QrCode,
   Receipt,
-  RefreshCw,
   RotateCcw,
   Shield,
   Smartphone,
