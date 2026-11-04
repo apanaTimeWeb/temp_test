@@ -8,7 +8,6 @@ import { MANAGER_MEMBERS_ALUMNI_ROUTES as MANAGER_ALUMNI_ROUTES } from '@/app/fr
 import { MANAGER_MEMBERS_REFERRAL_BONUS_ROUTES } from '@/app/frontend_manager/manager_members/members_referral_bonus/config/manager_members_referral_bonus.url_config';
 import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES as MANAGER_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import { MANAGER_SEATS_MATRIX_ROUTES as MANAGER_SEAT_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
-import { MANAGER_SEATS_ALLOCATIONS_ROUTES as MANAGER_ALLOCATIONS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_allocations/config/manager_seats_allocations.url_config';
 import { MANAGER_SEATS_HISTORY_ROUTES as MANAGER_SEAT_HISTORY_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/config/manager_seats_history.url_config';
 import { MANAGER_LOCKERS_MANAGEMENT_ROUTES as MANAGER_LOCKERS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.url_config';
 import { MANAGER_LOCKERS_MATRIX_ROUTES as MANAGER_LOCKER_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/config/manager_lockers_matrix.url_config';
@@ -44,7 +43,6 @@ import {
   Ban,
   CalendarCheck,
   ClipboardCheck,
-  ClipboardList,
   CreditCard,
   FileText,
   Handshake,
@@ -148,7 +146,6 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_ID_CARD_GENERATOR_ROUTES.root, icon: CreditCard, labelKey: 'nav_id_card_generator' },
   { kind: 'group', labelKey: 'group_seats_shifts' },
   { kind: 'link', href: MANAGER_SEAT_MATRIX_ROUTES.root, icon: LayoutGrid, labelKey: 'nav_seat_matrix' },
-  { kind: 'link', href: MANAGER_ALLOCATIONS_ROUTES.root, icon: ClipboardList, labelKey: 'nav_allocations' },
   { kind: 'link', href: MANAGER_SEAT_HISTORY_ROUTES.root, icon: History, labelKey: 'nav_seat_history' },
   { kind: 'link', href: MANAGER_LOCKERS_ROUTES.root, icon: Lock, labelKey: 'nav_lockers' },
   { kind: 'link', href: MANAGER_LOCKER_MATRIX_ROUTES.root, icon: LayoutGrid, labelKey: 'nav_locker_matrix' },

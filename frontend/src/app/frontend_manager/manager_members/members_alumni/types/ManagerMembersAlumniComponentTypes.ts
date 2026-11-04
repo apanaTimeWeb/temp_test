@@ -16,7 +16,7 @@ export interface ManagerMembersAlumniErrorBoundaryState {
   hasError: boolean;
 }
 
-export type MembersAlumniRow = { id: string; name: string; phone: string; leftDate: string; duration: string; exam: string; currentStatus: string };
+export type MembersAlumniRow = { id: string; name: string; phone: string; leftDate: string; duration: string; exam: string; currentStatus: string; designation?: string; testimonial?: string; };
 
 export type ManagerMembersAlumniPageProps = {
   searchParams?: Promise<ManagerMembersAlumniSearchParams>;

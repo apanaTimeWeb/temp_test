@@ -47,7 +47,9 @@ export function ManagerMembersAlumniAddModal({
       phone: phone.trim(),
       leftDate,
       duration: duration.trim() || '1 Year',
-      exam: designation.trim() ? `${exam.trim()} (${designation.trim()})` : exam.trim(),
+      exam: exam.trim(),
+      designation: designation.trim(),
+      testimonial: testimonial.trim(),
       currentStatus,
     };
 

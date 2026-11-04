@@ -27,7 +27,7 @@ export function ManagerSeatsMatrixClient() {
   const [genderFilter, setGenderFilter] = useState<'all' | 'Male' | 'Female'>('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newSeatLabel, setNewSeatLabel] = useState('');
-  const [newSeatWing, setNewSeatWing] = useState('North Reading Hall (AC)');
+  const [newSeatWing, setNewSeatWing] = useState('Ground Floor — AC Silent Reading Hall');
   const [addFeedback, setAddFeedback] = useState<string | null>(null);
 
   const [page, setPage] = useState(0);
@@ -386,17 +386,19 @@ export function ManagerSeatsMatrixClient() {
                 />
               </div>
               <div>
-                <label htmlFor="new-seat-wing" className="text-xs font-semibold text-secondary uppercase block mb-1">Wing / Section</label>
+                <label htmlFor="new-seat-wing" className="text-xs font-semibold text-secondary uppercase block mb-1">Floor / Reading Hall</label>
                 <select
                   id="new-seat-wing"
                   value={newSeatWing}
                   onChange={(e) => setNewSeatWing(e.target.value)}
                   className="mgr-select w-full"
                 >
-                  <option value="North Reading Hall (AC)">North Reading Hall (AC)</option>
-                  <option value="South Reading Hall (AC)">South Reading Hall (AC)</option>
-                  <option value="Silent Study Zone">Silent Study Zone</option>
-                  <option value="First Floor Main Wing">First Floor Main Wing</option>
+                  <option value="Ground Floor — AC Silent Reading Hall">Ground Floor — AC Silent Reading Hall</option>
+                  <option value="Ground Floor — Discussion & Group Area">Ground Floor — Discussion & Group Area</option>
+                  <option value="1st Floor — Main Study Hall">1st Floor — Main Study Hall</option>
+                  <option value="1st Floor — AC Cubicles & Premium Seats">1st Floor — AC Cubicles & Premium Seats</option>
+                  <option value="2nd Floor — Silent Zone (Non-AC)">2nd Floor — Silent Zone (Non-AC)</option>
+                  <option value="2nd Floor — Group Study & Discussion Room">2nd Floor — Group Study & Discussion Room</option>
                 </select>
               </div>
               <div className="flex gap-3 pt-2">

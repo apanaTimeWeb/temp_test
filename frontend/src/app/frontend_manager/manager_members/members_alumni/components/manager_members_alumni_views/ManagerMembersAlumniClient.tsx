@@ -7,14 +7,14 @@ import { ManagerMembersAlumniAddModal } from '@/app/frontend_manager/manager_mem
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
 
 const ALUMNI_RECORDS: MembersAlumniRow[] = [
-  { id: 'ALM-001', name: 'Rahul Sharma', phone: '9876543210', leftDate: '2025-08-15', duration: '14 Months', exam: 'UPSC Civil Services (AIR 142)', currentStatus: 'Cleared Exam' },
-  { id: 'ALM-002', name: 'Neha Gupta', phone: '9876543211', leftDate: '2024-11-20', duration: '8 Months', exam: 'SBI Probationary Officer', currentStatus: 'Employed' },
-  { id: 'ALM-003', name: 'Aman Verma', phone: '9876543212', leftDate: '2025-05-10', duration: '18 Months', exam: 'CA Final Both Groups', currentStatus: 'Cleared Exam' },
-  { id: 'ALM-004', name: 'Ritu Saxena', phone: '9876543213', leftDate: '2024-09-30', duration: '12 Months', exam: 'UPPSC (Sub-Divisional Magistrate)', currentStatus: 'Cleared Exam' },
-  { id: 'ALM-005', name: 'Deepak Patel', phone: '9876543214', leftDate: '2025-03-12', duration: '6 Months', exam: 'GATE Computer Science (AIR 89)', currentStatus: 'Higher Studies' },
-  { id: 'ALM-006', name: 'Shweta Singh', phone: '9876543215', leftDate: '2024-07-22', duration: '16 Months', exam: 'NEET PG (Top 500)', currentStatus: 'Higher Studies' },
-  { id: 'ALM-007', name: 'Vikram Mehta', phone: '9876543216', leftDate: '2025-01-18', duration: '10 Months', exam: 'RBI Grade B Officer', currentStatus: 'Employed' },
-  { id: 'ALM-008', name: 'Pooja Tiwari', phone: '9876543217', leftDate: '2024-12-05', duration: '9 Months', exam: 'SSC CGL (Inspector Income Tax)', currentStatus: 'Employed' },
+  { id: 'ALM-001', name: 'Rahul Sharma', phone: '9876543210', leftDate: '2025-08-15', duration: '14 Months', exam: 'UPSC Civil Services', designation: 'AIR 142 (IAS)', testimonial: 'The silent 14-hr air-conditioned library environment was key to my consistency.', currentStatus: 'Cleared Exam' },
+  { id: 'ALM-002', name: 'Neha Gupta', phone: '9876543211', leftDate: '2024-11-20', duration: '8 Months', exam: 'SBI Probationary Officer', designation: 'Probationary Officer (Scale I)', testimonial: 'Regular test series practice at designated silent desk helped me clear prelims & mains.', currentStatus: 'Employed' },
+  { id: 'ALM-003', name: 'Aman Verma', phone: '9876543212', leftDate: '2025-05-10', duration: '18 Months', exam: 'CA Final Both Groups', designation: 'Chartered Accountant', testimonial: 'Uninterrupted power & high-speed wifi made virtual classes completely seamless.', currentStatus: 'Cleared Exam' },
+  { id: 'ALM-004', name: 'Ritu Saxena', phone: '9876543213', leftDate: '2024-09-30', duration: '12 Months', exam: 'UPPSC', designation: 'Sub-Divisional Magistrate (SDM)', testimonial: 'Discipline in the study hall kept me focused through the long preparation months.', currentStatus: 'Cleared Exam' },
+  { id: 'ALM-005', name: 'Deepak Patel', phone: '9876543214', leftDate: '2025-03-12', duration: '6 Months', exam: 'GATE Computer Science', designation: 'AIR 89 (M.Tech IIT-B)', testimonial: 'Excellent night shift study culture for engineering aspirants.', currentStatus: 'Higher Studies' },
+  { id: 'ALM-006', name: 'Shweta Singh', phone: '9876543215', leftDate: '2024-07-22', duration: '16 Months', exam: 'NEET PG', designation: 'Top 500 (MD Medicine)', testimonial: 'Comfortable ergonomic chairs and sound isolation prevented physical fatigue.', currentStatus: 'Higher Studies' },
+  { id: 'ALM-007', name: 'Vikram Mehta', phone: '9876543216', leftDate: '2025-01-18', duration: '10 Months', exam: 'RBI Grade B Officer', designation: 'Assistant Manager', testimonial: 'Best environment for focused analytical reading and economic daily reviews.', currentStatus: 'Employed' },
+  { id: 'ALM-008', name: 'Pooja Tiwari', phone: '9876543217', leftDate: '2024-12-05', duration: '9 Months', exam: 'SSC CGL', designation: 'Inspector (Income Tax)', testimonial: 'Always clean, well maintained, and peaceful for intense mock solving.', currentStatus: 'Employed' },
 ];
 
 export function ManagerMembersAlumniClient() {
@@ -34,6 +34,7 @@ export function ManagerMembersAlumniClient() {
       const matchesSearch =
         record.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         record.exam.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        Boolean(record.designation && record.designation.toLowerCase().includes(searchQuery.toLowerCase())) ||
         record.phone.includes(searchQuery);
 
       const matchesYear = yearFilter === 'All' || record.leftDate.startsWith(yearFilter);
@@ -51,9 +52,9 @@ export function ManagerMembersAlumniClient() {
   }, [searchQuery, yearFilter, statusFilter, examFilter]);
 
   const handleExportCsv = () => {
-    const headers = 'ID,Name,Phone,Exit Date,Duration,Target Exam / Achievement,Current Status\n';
+    const headers = 'ID,Name,Phone,Exit Date,Duration,Target Exam / Achievement,Designation,Current Status,Testimonial\n';
     const rows = filteredAlumni
-      .map((r) => `"${r.id}","${r.name}","${r.phone}","${r.leftDate}","${r.duration}","${r.exam}","${r.currentStatus}"`)
+      .map((r) => `"${r.id}","${r.name}","${r.phone}","${r.leftDate}","${r.duration}","${r.exam}","${r.designation ?? ''}","${r.currentStatus}","${(r.testimonial ?? '').replace(/"/g, '""')}"`)
       .join('\n');
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -185,15 +186,16 @@ export function ManagerMembersAlumniClient() {
                 <th className="py-3 px-4">Student Name</th>
                 <th className="py-3 px-4">Contact Phone</th>
                 <th className="py-3 px-4">Completion Date</th>
-                <th className="py-3 px-4">Membership Tenure</th>
-                <th className="py-3 px-4">Exam Qualified / Outcome</th>
-                <th className="py-3 px-4">Current Status</th>
+                <th className="py-3 px-4">Tenure</th>
+                <th className="py-3 px-4">Exam & Rank / Post</th>
+                <th className="py-3 px-4">Junior Advice / Review</th>
+                <th className="py-3 px-4">Status</th>
               </tr>
             </thead>
             <tbody>
               {filteredAlumni.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-secondary">
+                  <td colSpan={8} className="py-12 text-center text-secondary">
                     No alumni records matching the selected search query and filters.
                   </td>
                 </tr>
@@ -206,9 +208,25 @@ export function ManagerMembersAlumniClient() {
                     <td className="py-3 px-4 text-secondary text-xs">{alumnus.leftDate}</td>
                     <td className="py-3 px-4 text-secondary text-xs">{alumnus.duration}</td>
                     <td className="py-3 px-4">
-                      <span className="font-semibold text-success flex items-center gap-1.5">
-                        <Award size={14} /> {alumnus.exam}
-                      </span>
+                      <div className="space-y-0.5">
+                        <span className="font-semibold text-success flex items-center gap-1.5">
+                          <Award size={14} className="shrink-0" /> {alumnus.exam}
+                        </span>
+                        {alumnus.designation ? (
+                          <span className="text-xs text-secondary flex items-center gap-1">
+                            <Briefcase size={12} className="shrink-0" /> {alumnus.designation}
+                          </span>
+                        ) : null}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 max-w-xs">
+                      {alumnus.testimonial ? (
+                        <p className="text-xs text-secondary italic line-clamp-2" title={alumnus.testimonial}>
+                          “{alumnus.testimonial}”
+                        </p>
+                      ) : (
+                        <span className="text-xs text-secondary/40">—</span>
+                      )}
                     </td>
                     <td className="py-3 px-4">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${

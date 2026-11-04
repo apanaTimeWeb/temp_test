@@ -69,7 +69,15 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
 
   return (
     <div className="mgr-page">
-      <div className="mgr-page-header"><div><Link href={MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES.LIST} className="mgr-back-link"><ArrowLeft size={18} strokeWidth={2} /> {tManagerUi('back_to_students_6de7b0')}</Link><h1 className="mgr-page-title">{tManagerUi('id_card_generator')}</h1><p className="mgr-page-subtitle">{tManagerUi('search_select_preview_only_until_authoritative_card_contract_is_supplied')}</p></div><div className="mgr-page-actions"><Link href={MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES.ADMISSION_PREVIEW} className="mgr-btn-ghost" title={tManagerUi('admission_unavailable_host_contract_not_supplied')}>{tManagerUi('new_student_admission')}</Link></div></div>
+      <div className="mgr-page-header">
+        <div>
+          <Link href={MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES.LIST} className="mgr-back-link">
+            <ArrowLeft size={18} strokeWidth={2} /> {tManagerUi('back_to_students_6de7b0')}
+          </Link>
+          <h1 className="mgr-page-title">{tManagerUi('id_card_generator')}</h1>
+          <p className="mgr-page-subtitle">{tManagerUi('search_select_preview_only_until_authoritative_card_contract_is_supplied')}</p>
+        </div>
+      </div>
       <div className="mgr-idcard-page-layout">
         <div>
           <div className="mgr-card">

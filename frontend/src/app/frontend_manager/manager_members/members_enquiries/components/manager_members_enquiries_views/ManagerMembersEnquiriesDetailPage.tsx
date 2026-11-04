@@ -42,6 +42,18 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
   const enquiryQuery = useQuery({ queryKey: MANAGER_CRM_QUERY_KEYS.enquiry(id), queryFn: () => fetchManagerEnquiriesEnquiryById(id), staleTime: 15_000 });
   const enquiry = enquiryQuery.data;
   const followUpForm = useForm<ManagerMembersEnquiriesFollowUpFormData>({ resolver: zodResolver(managerCrmFollowUpDraftSchema), defaultValues: { date: '', remark: '' } });
+  const [localFollowUps, setLocalFollowUps] = useState<Array<{ id: string; date: string; time: string; remark: string; by: string }>>([]);
+
+  const handleAddFollowUp = (data: { date: string; remark: string }) => {
+    const newEntry = {
+      id: `local-flw-${Date.now()}`,
+      date: data.date,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      remark: data.remark,
+      by: 'Manager (Desk)',
+    };
+    setLocalFollowUps((prev) => [newEntry, ...prev]);
+  };
 
   if (enquiryQuery.isPending) return <div className="crm-page crm-empty-state"><p>{tManagerUi('loading_enquiry')}</p></div>;
   if (enquiryQuery.isError) return <div className="crm-page crm-empty-state crm-not-found" role="alert"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('unable_to_load_enquiry')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-primary crm-mt-12" onClick={() => { void enquiryQuery.refetch(); }} disabled={enquiryQuery.isFetching}>{enquiryQuery.isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
@@ -76,7 +88,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
             yesterdayLabel={tManagerUi('yesterday')}
           />
           <ManagerMembersEnquiriesActivityTimeline
-            followUps={enquiry.followUps}
+            followUps={[...localFollowUps, ...(enquiry.followUps || [])]}
             locale={locale}
             title={tManagerUi('activity_timeline')}
             emptyLabel={tManagerUi('no_follow_ups_recorded_yet')}
@@ -102,6 +114,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
           />
           <ManagerMembersEnquiriesFollowUpFormPanel
             onDirtyChange={setFollowUpDirty}
+            onAddFollowUp={handleAddFollowUp}
             form={followUpForm}
             minimumDate={getManagerEnquiriesLocalDateInputMinimum()}
             title={tManagerUi('add_follow_up')}

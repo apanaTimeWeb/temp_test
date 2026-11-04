@@ -28,6 +28,7 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
   nextFollowUpStatusClassName,
   editFollowUpLabel,
   onDirtyChange,
+  onAddFollowUp,
 }: ManagerMembersEnquiriesFollowUpFormPanelProps) {
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
   const router = useRouter();
@@ -38,6 +39,18 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
   useManagerMembersEnquiriesUnsavedChangesGuard({ isDirty, confirm, router, tManagerUi });
   const dateError = form.formState.errors.date;
   const remarkError = form.formState.errors.remark;
+
+  const handleManualAdd = () => {
+    const dateVal = form.getValues('date');
+    const remarkVal = form.getValues('remark');
+    if (!remarkVal || !remarkVal.trim()) {
+      form.setError('remark', { message: 'Follow-up remark is required.' });
+      return;
+    }
+    const targetDate = dateVal && dateVal.trim() ? dateVal : new Date().toISOString().slice(0, 10);
+    onAddFollowUp?.({ date: targetDate, remark: remarkVal.trim() });
+    form.reset({ date: '', remark: '' });
+  };
 
   return (
     <>
@@ -73,6 +86,15 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
         </div>
         <button type="submit" className="crm-btn-primary crm-btn-full cursor-not-allowed" disabled title={unavailableTitle}>
           <Plus size={15} />{submitLabel}
+        </button>
+        <button
+          type="button"
+          onClick={handleManualAdd}
+          className="crm-btn-primary crm-btn-full mt-2"
+          style={{ background: 'var(--primary, #3b82f6)', color: '#ffffff' }}
+          data-testid="manager-crm-manual-followup-btn"
+        >
+          <Plus size={15} /> Log Follow-up to Timeline
         </button>
       </form>
       <div className="crm-divider" />

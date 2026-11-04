@@ -22,7 +22,7 @@ export function ManagerSeatsMatrixModal({ selectedSeat, onClose, onUpdateSeat }:
   const [feedback, setFeedback] = useState<string | null>(null);
 
   // Configuration editing states
-  const [configuredWing, setConfiguredWing] = useState(selectedSeat?.wing ?? 'North Reading Hall (AC)');
+  const [configuredWing, setConfiguredWing] = useState(selectedSeat?.wing ?? 'Ground Floor — AC Silent Reading Hall');
   const [hasSocket, setHasSocket] = useState(selectedSeat?.socketAvailable ?? true);
 
   useManagerSeatMatrixDialogFocus(dialogRef, onClose, Boolean(selectedSeat));
@@ -302,18 +302,19 @@ export function ManagerSeatsMatrixModal({ selectedSeat, onClose, onUpdateSeat }:
         {activeModalTab === 'config' && (
           <form onSubmit={handleSaveConfiguration} className="space-y-4">
             <div className="space-y-1">
-              <label htmlFor="seat-config-wing" className="text-xs font-semibold text-secondary uppercase block">Wing / Reading Hall</label>
+              <label htmlFor="seat-config-wing" className="text-xs font-semibold text-secondary uppercase block">Floor / Reading Hall</label>
               <select
                 id="seat-config-wing"
                 value={configuredWing}
                 onChange={(e) => setConfiguredWing(e.target.value)}
                 className="mgr-select w-full"
               >
-                <option value="North Reading Hall (AC)">North Reading Hall (AC)</option>
-                <option value="South Reading Hall (AC)">South Reading Hall (AC)</option>
-                <option value="Silent Study Zone">Silent Study Zone</option>
-                <option value="First Floor Main Wing">First Floor Main Wing</option>
-                <option value="Executive Cubicles">Executive Cubicles</option>
+                <option value="Ground Floor — AC Silent Reading Hall">Ground Floor — AC Silent Reading Hall</option>
+                <option value="Ground Floor — Discussion & Group Area">Ground Floor — Discussion & Group Area</option>
+                <option value="1st Floor — Main Study Hall">1st Floor — Main Study Hall</option>
+                <option value="1st Floor — AC Cubicles & Premium Seats">1st Floor — AC Cubicles & Premium Seats</option>
+                <option value="2nd Floor — Silent Zone (Non-AC)">2nd Floor — Silent Zone (Non-AC)</option>
+                <option value="2nd Floor — Group Study & Discussion Room">2nd Floor — Group Study & Discussion Room</option>
               </select>
             </div>
 

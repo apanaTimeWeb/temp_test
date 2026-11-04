@@ -23,7 +23,6 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
   const { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember, updateMember } = useManagerMemberDirectoryPageState(_routeQuery);
   const editIntent = _routeQuery.view === 'edit';
   const tabDestinations: Partial<Record<(typeof MANAGER_MEMBERS_TABS)[number]['name'], string>> = {
-    'Add Member': MANAGER_MEMBERS_DIRECTORY_ROUTES.newAdmission,
     'Membership Renewal': MANAGER_MEMBERS_DIRECTORY_ROUTES.membershipRenewal,
   };
 
