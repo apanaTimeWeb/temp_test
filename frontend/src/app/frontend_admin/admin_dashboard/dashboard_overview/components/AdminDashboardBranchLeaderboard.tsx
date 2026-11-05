@@ -2,7 +2,21 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Trophy, TrendingUp, AlertTriangle, Users, ArrowUpRight, ShieldAlert, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import {
+  Trophy,
+  TrendingUp,
+  AlertTriangle,
+  Users,
+  ArrowUpRight,
+  ShieldAlert,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  Building2,
+  Calendar,
+} from 'lucide-react';
+
+export type AdminDashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
 
 export interface BranchBenchmarkItem {
   id: string;
@@ -80,7 +94,11 @@ export const BRANCH_BENCHMARK_DATA: BranchBenchmarkItem[] = [
 
 type SortMetric = 'profit' | 'occupancy' | 'renewal' | 'revenue' | 'expenses' | 'branch';
 
-export function AdminDashboardBranchLeaderboard() {
+export function AdminDashboardBranchLeaderboard({
+  timeRange = 'this_month',
+}: {
+  timeRange?: AdminDashboardTimeRange;
+}) {
   const t = useTranslations('ADMIN_DASHBOARD');
   const [sortBy, setSortBy] = useState<SortMetric>('profit');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
@@ -94,223 +112,131 @@ export function AdminDashboardBranchLeaderboard() {
     }
   };
 
+  const multiplier = timeRange === 'today' ? 0.04 : timeRange === 'this_week' ? 0.25 : 1;
+
+  const adjustedBranches = useMemo(() => {
+    return BRANCH_BENCHMARK_DATA.map((b) => ({
+      ...b,
+      revenueDisplay: Math.round(b.revenueMtdRupees * multiplier),
+      expensesDisplay: Math.round(b.expensesMtdRupees * multiplier),
+      profitDisplay: Math.round(b.netProfitRupees * multiplier),
+    }));
+  }, [multiplier]);
+
   const sortedBranches = useMemo(() => {
-    return [...BRANCH_BENCHMARK_DATA].sort((a, b) => {
+    return [...adjustedBranches].sort((a, b) => {
       let diff = 0;
-      if (sortBy === 'profit') diff = a.netProfitRupees - b.netProfitRupees;
+      if (sortBy === 'profit') diff = a.profitDisplay - b.profitDisplay;
       else if (sortBy === 'occupancy') diff = a.occupancyRate - b.occupancyRate;
       else if (sortBy === 'renewal') diff = a.renewalRate - b.renewalRate;
-      else if (sortBy === 'revenue') diff = a.revenueMtdRupees - b.revenueMtdRupees;
-      else if (sortBy === 'expenses') diff = a.expensesMtdRupees - b.expensesMtdRupees;
+      else if (sortBy === 'revenue') diff = a.revenueDisplay - b.revenueDisplay;
+      else if (sortBy === 'expenses') diff = a.expensesDisplay - b.expensesDisplay;
       else if (sortBy === 'branch') return sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
       return sortDirection === 'asc' ? diff : -diff;
     });
-  }, [sortBy, sortDirection]);
+  }, [adjustedBranches, sortBy, sortDirection]);
 
-  const renderSortableHeader = (metric: SortMetric, label: string, align: 'left' | 'right' | 'center' = 'left') => {
+  const periodLabel = timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : 'MTD';
+
+  const renderSortableHeader = (metric: SortMetric, label: string) => {
     const isActive = sortBy === metric;
     return (
-      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`px-3.5 py-3 whitespace-nowrap ${align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'}`}>
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3">
         <button
           type="button"
           onClick={() => toggleSort(metric)}
-          className={`group inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''}`}
-          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'descending'}`}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
           <span>{label}</span>
           {isActive ? (
             sortDirection === 'asc' ? (
-              <ArrowUp className="text-primary font-bold shrink-0" size={13} aria-hidden="true" />
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             ) : (
-              <ArrowDown className="text-primary font-bold shrink-0" size={13} aria-hidden="true" />
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors shrink-0" size={13} aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
     );
   };
 
-  const formatRupees = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-
   return (
-    <section className="rounded-xl border border-border bg-card p-5 shadow-2xs space-y-4">
-      {/* Section Header with Sort Tabs */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-border pb-4">
+    <section aria-labelledby="branch-leaderboard-title" className="rounded-2xl border border-border bg-card p-5 shadow-sm space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-amber-500" />
-            <h2 className="text-base sm:text-lg font-semibold text-foreground">
-              {t('LEADERBOARD_TITLE')}
+            <Trophy className="text-amber-500" size={20} />
+            <h2 id="branch-leaderboard-title" className="text-base font-bold text-text-primary">
+              Multi-Branch Performance & Benchmarking
             </h2>
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {t('LEADERBOARD_SUBTITLE')}
+          <p className="text-xs text-text-secondary mt-1">
+            Comparative revenue, occupancy, and bottleneck diagnostics ({periodLabel} Horizon)
           </p>
-        </div>
-
-        {/* Sort Controls */}
-        <div className="flex items-center gap-1.5 rounded-lg border border-border bg-muted/40 p-1 self-start sm:self-auto">
-          <button
-            type="button"
-            onClick={() => setSortBy('profit')}
-            className={`rounded-md px-2.5 py-1 text-xs font-medium motion-safe:transition-colors ${
-              sortBy === 'profit'
-                ? 'bg-card text-foreground font-semibold shadow-xs'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            {t('LEADERBOARD_SORT_PROFIT')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setSortBy('occupancy')}
-            className={`rounded-md px-2.5 py-1 text-xs font-medium motion-safe:transition-colors ${
-              sortBy === 'occupancy'
-                ? 'bg-card text-foreground font-semibold shadow-xs'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            {t('LEADERBOARD_SORT_OCCUPANCY')}
-          </button>
-          <button
-            type="button"
-            onClick={() => setSortBy('renewal')}
-            className={`rounded-md px-2.5 py-1 text-xs font-medium motion-safe:transition-colors ${
-              sortBy === 'renewal'
-                ? 'bg-card text-foreground font-semibold shadow-xs'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            {t('LEADERBOARD_SORT_RENEWAL')}
-          </button>
         </div>
       </div>
 
-      {/* Comparative Leaderboard Table */}
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm border-collapse" aria-label="Branch Benchmark Leaderboard">
+        <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-border bg-muted/40 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              <th scope="col" className="px-3.5 py-3 text-center whitespace-nowrap">{t('COL_RANK')}</th>
-              {renderSortableHeader('branch', t('COL_BRANCH'))}
-              {renderSortableHeader('occupancy', t('COL_CAPACITY'))}
-              {renderSortableHeader('revenue', t('COL_REVENUE'), 'right')}
-              {renderSortableHeader('expenses', t('COL_EXPENSES'), 'right')}
-              {renderSortableHeader('profit', t('COL_NET_PROFIT'), 'right')}
-              {renderSortableHeader('renewal', t('COL_RENEWAL'), 'center')}
-              <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('COL_BOTTLENECK')}</th>
+            <tr className="border-b border-border bg-muted/20">
+              <th scope="col" className="p-3 uppercase font-semibold text-text-secondary">Rank</th>
+              {renderSortableHeader('branch', 'Branch & Manager')}
+              {renderSortableHeader('occupancy', 'Occupancy')}
+              {renderSortableHeader('revenue', `Revenue (${periodLabel})`)}
+              {renderSortableHeader('expenses', `Expenses (${periodLabel})`)}
+              {renderSortableHeader('profit', `Net Profit (${periodLabel})`)}
+              {renderSortableHeader('renewal', 'Renewal %')}
+              <th scope="col" className="p-3 uppercase font-semibold text-text-secondary">Key Bottleneck / Alert</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {sortedBranches.map((item, index) => {
-              const rank = index + 1;
-              const isProfitPositive = item.netProfitRupees > 0;
-
-              return (
-                <tr
-                  key={item.id}
-                  className="hover:bg-muted/20 motion-safe:transition-colors"
-                >
-                  {/* Rank Badge */}
-                  <td className="px-3.5 py-3.5 text-center whitespace-nowrap">
-                    {rank === 1 && (
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-600 dark:text-amber-400">
-                        1
-                      </span>
-                    )}
-                    {rank === 2 && (
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-300 dark:bg-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200">
-                        2
-                      </span>
-                    )}
-                    {rank === 3 && (
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-700/20 text-xs font-bold text-amber-800 dark:text-amber-300">
-                        3
-                      </span>
-                    )}
-                    {rank > 3 && (
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground">
-                        {rank}
-                      </span>
-                    )}
-                  </td>
-
-                  {/* Branch & Manager */}
-                  <td className="px-3.5 py-3.5 whitespace-nowrap">
-                    <p className="font-semibold text-foreground">{item.name}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {item.city} · Mgr: <span className="font-medium text-foreground">{item.managerName}</span>
-                    </p>
-                  </td>
-
-                  {/* Capacity & Occupancy Bar */}
-                  <td className="px-3.5 py-3.5 whitespace-nowrap min-w-[160px]">
-                    <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-medium text-foreground">{item.occupiedSeats}/{item.totalSeats} seats</span>
-                      <span className={`font-bold ${item.occupancyRate >= 80 ? 'text-success' : item.occupancyRate >= 60 ? 'text-warning' : 'text-destructive'}`}>
-                        {item.occupancyRate}%
-                      </span>
-                    </div>
-                    <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-                      <div
-                        className={`h-full rounded-full ${
-                          item.occupancyRate >= 80 ? 'bg-success' : item.occupancyRate >= 60 ? 'bg-warning' : 'bg-destructive'
-                        }`}
-                        style={{ width: `${item.occupancyRate}%` }}
-                      />
-                    </div>
-                  </td>
-
-                  {/* Revenue MTD */}
-                  <td className="px-3.5 py-3.5 text-right font-mono font-medium text-foreground whitespace-nowrap">
-                    {formatRupees(item.revenueMtdRupees)}
-                  </td>
-
-                  {/* Expenses MTD */}
-                  <td className="px-3.5 py-3.5 text-right font-mono text-muted-foreground whitespace-nowrap">
-                    {formatRupees(item.expensesMtdRupees)}
-                  </td>
-
-                  {/* Net Profit */}
-                  <td className="px-3.5 py-3.5 text-right font-mono font-bold whitespace-nowrap">
-                    <span className={isProfitPositive ? 'text-success' : 'text-destructive'}>
-                      {isProfitPositive ? `+${formatRupees(item.netProfitRupees)}` : formatRupees(item.netProfitRupees)}
-                    </span>
-                  </td>
-
-                  {/* Renewal Conversion Rate */}
-                  <td className="px-3.5 py-3.5 text-center whitespace-nowrap">
-                    <span
-                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
-                        item.renewalRate >= 80
-                          ? 'bg-success/15 text-success'
-                          : item.renewalRate >= 60
-                          ? 'bg-warning/15 text-warning-text'
-                          : 'bg-destructive/15 text-destructive'
+            {sortedBranches.map((branch, index) => (
+              <tr key={branch.id} className="hover:bg-surface-hover transition-colors">
+                <td className="p-3 font-bold text-primary">#{index + 1}</td>
+                <td className="p-3">
+                  <div className="font-semibold text-text-primary text-sm">{branch.name}</div>
+                  <div className="text-text-secondary text-[11px]">{branch.city} • Mgr: {branch.managerName}</div>
+                </td>
+                <td className="p-3">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-text-primary">{branch.occupancyRate}%</span>
+                    <span className="text-text-secondary text-[11px]">({branch.occupiedSeats}/{branch.totalSeats})</span>
+                  </div>
+                  <div className="w-24 bg-muted rounded-full h-1.5 mt-1">
+                    <div
+                      className={`h-1.5 rounded-full ${
+                        branch.occupancyRate >= 85 ? 'bg-emerald-500' : branch.occupancyRate >= 70 ? 'bg-amber-500' : 'bg-rose-500'
                       }`}
-                    >
-                      {item.renewalRate}%
-                    </span>
-                  </td>
-
-                  {/* Top Loss Reason / Growth Bottleneck */}
-                  <td className="px-3.5 py-3.5 whitespace-nowrap">
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <ShieldAlert className="h-3.5 w-3.5 text-amber-500 shrink-0" />
-                      <span className="font-medium text-foreground">{item.topBottleneck}</span>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                      style={{ width: `${branch.occupancyRate}%` }}
+                    />
+                  </div>
+                </td>
+                <td className="p-3 font-semibold text-text-primary">₹{branch.revenueDisplay.toLocaleString('en-IN')}</td>
+                <td className="p-3 text-rose-600 dark:text-rose-400 font-medium">₹{branch.expensesDisplay.toLocaleString('en-IN')}</td>
+                <td className="p-3 font-bold text-emerald-600 dark:text-emerald-400">₹{branch.profitDisplay.toLocaleString('en-IN')}</td>
+                <td className="p-3">
+                  <span
+                    className={`px-2 py-0.5 rounded-full font-bold text-[11px] ${
+                      branch.renewalRate >= 80
+                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                    }`}
+                  >
+                    {branch.renewalRate}%
+                  </span>
+                </td>
+                <td className="p-3">
+                  <span className="inline-flex items-center gap-1.5 text-xs text-text-secondary">
+                    <AlertTriangle size={13} className="text-amber-500 shrink-0" />
+                    <span>{branch.topBottleneck}</span>
+                  </span>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -319,4 +245,3 @@ export function AdminDashboardBranchLeaderboard() {
 }
 
 export default AdminDashboardBranchLeaderboard;
-

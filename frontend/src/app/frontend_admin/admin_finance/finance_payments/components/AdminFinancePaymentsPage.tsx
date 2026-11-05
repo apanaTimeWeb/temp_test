@@ -6,7 +6,7 @@ import useAdminFinancePaymentsQuery from '@/app/frontend_admin/admin_finance/fin
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { FileText, Receipt, Search } from 'lucide-react';
+import { FileText, Receipt, Search, Calendar, Download, TrendingUp, CreditCard } from 'lucide-react';
 import { toast } from 'sonner';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
@@ -60,6 +60,9 @@ export function AdminFinancePaymentsPage() {
   const [modeFilter, setModeFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | AdminFinancePayment['mode']>('modeFilter', 'all', { validValues: ['all', 'cash', 'upi', 'card', 'bank', 'unknown'] });
   const [showDeleted, setShowDeleted] = useState(false);
   const [search, setSearch] = useState('');
+  const [timeRange, setTimeRange] = useState<'all' | 'today' | 'this_week' | 'this_month' | 'custom'>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const { selectedBranch, isAllBranches } = useAdminBranch();
   const paymentsQuery = useAdminFinancePaymentsQuery();
   const allPayments = useMemo(() => (paymentsQuery.data ?? []).map(mapAdminFinancePayment), [paymentsQuery.data]);
@@ -76,8 +79,30 @@ export function AdminFinancePaymentsPage() {
       payment.smartId.toLowerCase().includes(q) ||
       payment.receiptNumber.toLowerCase().includes(q) ||
       (payment.txnId && payment.txnId.toLowerCase().includes(q));
-    return branchMatch && modeMatch && deletedMatch && searchMatch;
-  }), [allPayments, modeFilter, showDeleted, search, isAllBranches, selectedBranch]);
+
+    // Time-range filter
+    let dateMatch = true;
+    if (timeRange !== 'all' && payment.date) {
+      const payDate = new Date(payment.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (timeRange === 'today') {
+        const todayEnd = new Date(today); todayEnd.setHours(23, 59, 59, 999);
+        dateMatch = payDate >= today && payDate <= todayEnd;
+      } else if (timeRange === 'this_week') {
+        const weekStart = new Date(today); weekStart.setDate(today.getDate() - today.getDay());
+        dateMatch = payDate >= weekStart;
+      } else if (timeRange === 'this_month') {
+        const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+        dateMatch = payDate >= monthStart;
+      } else if (timeRange === 'custom') {
+        if (customStartDate) dateMatch = dateMatch && payDate >= new Date(customStartDate);
+        if (customEndDate) { const end = new Date(customEndDate); end.setHours(23,59,59,999); dateMatch = dateMatch && payDate <= end; }
+      }
+    }
+
+    return branchMatch && modeMatch && deletedMatch && searchMatch && dateMatch;
+  }), [allPayments, modeFilter, showDeleted, search, isAllBranches, selectedBranch, timeRange, customStartDate, customEndDate]);
 
   const handleExport = () => {
     const csv = buildAdminFinancePaymentsCsv(visible, { receipt: t('CSV_RECEIPT'), date: t('CSV_DATE'), student: t('CSV_STUDENT'), smartId: t('CSV_SMART_ID'), amount: t('CSV_AMOUNT'), currency: t('CSV_CURRENCY'), amountUnit: t('CSV_AMOUNT_UNIT'), mode: t('CSV_MODE'), lateFee: t('CSV_LATE_FEE'), receivedBy: t('CSV_RECEIVED_BY'), status: t('CSV_STATUS') });
@@ -107,35 +132,114 @@ export function AdminFinancePaymentsPage() {
   ], [router, t]);
 
   return (
-    <div className="space-y-6">
-      <div><h1 className="text-page-title font-bold text-text-primary">{t('PAYMENT_TITLE')}</h1><p className="mt-1 text-body text-text-secondary">{t('PAYMENT_SUBTITLE')}</p></div>
-      <div className="flex flex-wrap items-center gap-3">
+    <div className="space-y-6 pb-10">
+      {/* Executive Header with Global Time-Range Filter */}
+      <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-600 dark:text-blue-400">
+                <CreditCard className="h-3.5 w-3.5" />
+                Finance / Ledger
+              </span>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('PAYMENT_TITLE')}</h1>
+            <p className="text-sm text-text-secondary">{t('PAYMENT_SUBTITLE')}</p>
+          </div>
+
+          {/* Time Horizon Pill Bar */}
+          <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border/70 bg-surface/90 p-2 shadow-sm backdrop-blur-md">
+            <div className="flex items-center rounded-lg bg-surface-muted/60 p-1 border border-border/50">
+              {(['all', 'today', 'this_week', 'this_month', 'custom'] as const).map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => { setTimeRange(r); setUrlTablePage0(0); }}
+                  className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                    timeRange === r
+                      ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'
+                  }`}
+                >
+                  {r === 'all' ? 'All Time' : r === 'today' ? 'Today' : r === 'this_week' ? 'This Week' : r === 'this_month' ? 'This Month' : <><Calendar className="h-3 w-3" />Custom</>}
+                </button>
+              ))}
+            </div>
+            {timeRange === 'custom' && (
+              <div className="flex items-center gap-1.5 text-xs">
+                <input type="date" value={customStartDate} onChange={(e) => setCustomStartDate(e.target.value)} aria-label="Start date" className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+                <span className="text-text-muted">to</span>
+                <input type="date" value={customEndDate} onChange={(e) => setCustomEndDate(e.target.value)} aria-label="End date" className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Filters Toolbar */}
+      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border/70 bg-surface/80 p-3 shadow-sm backdrop-blur-sm">
         <div className="relative flex-1 min-w-[200px] max-w-sm">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
           <input
             type="text"
             placeholder="Search student, smart ID, receipt, txn ID..."
             value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setUrlTablePage0(0);
-            }}
-            className="min-h-11 w-full rounded-md border border-border bg-input pl-9 pr-3 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            onChange={(e) => { setSearch(e.target.value); setUrlTablePage0(0); }}
+            className="min-h-9 w-full rounded-lg border border-border bg-input pl-9 pr-3 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           />
         </div>
         <label className="sr-only" htmlFor="finance-payment-mode">{t('FILTER_PAYMENT_MODE')}</label>
-        <select id="finance-payment-mode" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" value={modeFilter} onChange={(event) => setModeFilter(event.target.value as 'all' | AdminFinancePayment['mode'])}>
-          <option value="all">{t('ALL_MODES')}</option><option value="cash">{t('CASH')}</option><option value="upi">{t('UPI')}</option><option value="card">{t('CARD')}</option><option value="bank">{t('BANK_TRANSFER')}</option><option value="unknown">{t('UNKNOWN_UNAVAILABLE')}</option>
+        <select
+          id="finance-payment-mode"
+          className="min-h-9 rounded-lg border border-border bg-input px-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-36"
+          value={modeFilter}
+          onChange={(event) => setModeFilter(event.target.value as 'all' | AdminFinancePayment['mode'])}
+        >
+          <option value="all">{t('ALL_MODES')}</option>
+          <option value="cash">{t('CASH')}</option>
+          <option value="upi">{t('UPI')}</option>
+          <option value="card">{t('CARD')}</option>
+          <option value="bank">{t('BANK_TRANSFER')}</option>
+          <option value="unknown">{t('UNKNOWN_UNAVAILABLE')}</option>
         </select>
-        <label className="flex items-center gap-2 text-text-secondary"><input type="checkbox" checked={showDeleted} onChange={(event) => setShowDeleted(event.target.checked)} />{t('SHOW_DELETED')}</label>
-        <button type="button" className="ml-auto inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-body font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" onClick={handleExport} disabled={isPending || Boolean(loadError)} aria-label={t('EXPORT_ARIA')}>{t('EXPORT_CSV')}</button>
-      </div>
-      {loadError ? <div className="flex min-h-56 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-card p-6 text-center" role="alert"><p className="text-section-title font-semibold text-text-primary">{t('PAYMENT_UNABLE')}</p><p className="text-caption text-text-secondary">{loadError}</p><button type="button" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover mt-3" onClick={() => void paymentsQuery.refetch()} disabled={paymentsQuery.isFetching}>{t('RETRY')}</button></div> : isPending ? <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card p-4" role="status" aria-label={t('LOADING_PAYMENTS')}><div className="motion-safe:animate-pulse rounded-sm bg-skeleton-base h-96 w-full" /></div> : <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card p-4">
-        <div className="min-w-0 overflow-x-auto rounded-lg border border-border bg-card h-96" aria-busy={false}>
-          <DataGrid rowData={visible} columnDefs={columns} rowHeight={56} pagination pageSize={25} emptyMessage={t('PAYMENT_EMPTY')}  page={urlTablePage0} onPageChange={setUrlTablePage0}/>
+        <label className="flex items-center gap-2 text-xs text-text-secondary cursor-pointer select-none">
+          <input type="checkbox" checked={showDeleted} onChange={(event) => setShowDeleted(event.target.checked)} className="rounded" />
+          {t('SHOW_DELETED')}
+        </label>
+        <div className="ml-auto flex items-center gap-2">
+          <span className="text-xs text-text-muted">{visible.length} records</span>
+          <button
+            type="button"
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-surface-elevated transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
+            onClick={handleExport}
+            disabled={isPending || Boolean(loadError)}
+            aria-label={t('EXPORT_ARIA')}
+          >
+            <Download size={14} strokeWidth={2} />
+            {t('EXPORT_CSV')}
+          </button>
         </div>
-        <p className="text-caption text-text-secondary mt-2">{t('MOBILE_PAYMENT_NOTE')}</p>
-      </div>}
+      </div>
+
+      {/* Data Grid */}
+      {loadError ? (
+        <div className="flex min-h-56 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-card p-6 text-center" role="alert">
+          <p className="text-section-title font-semibold text-text-primary">{t('PAYMENT_UNABLE')}</p>
+          <p className="text-caption text-text-secondary">{loadError}</p>
+          <button type="button" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border px-3.5 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-primary hover:bg-surface-hover mt-3" onClick={() => void paymentsQuery.refetch()} disabled={paymentsQuery.isFetching}>{t('RETRY')}</button>
+        </div>
+      ) : isPending ? (
+        <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card p-4" role="status" aria-label={t('LOADING_PAYMENTS')}>
+          <div className="motion-safe:animate-pulse rounded-sm bg-skeleton-base h-96 w-full" />
+        </div>
+      ) : (
+        <div className="min-w-0 overflow-hidden rounded-xl border border-border/80 bg-surface shadow-sm">
+          <div className="min-w-0 overflow-x-auto rounded-lg border border-border bg-card h-96" aria-busy={false}>
+            <DataGrid rowData={visible} columnDefs={columns} rowHeight={56} pagination pageSize={25} emptyMessage={t('PAYMENT_EMPTY')} page={urlTablePage0} onPageChange={setUrlTablePage0}/>
+          </div>
+          <p className="text-caption text-text-secondary mt-2 px-4 pb-3">{t('MOBILE_PAYMENT_NOTE')}</p>
+        </div>
+      )}
     </div>
   );
 }
