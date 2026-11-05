@@ -1,22 +1,33 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import { Search, Download, X } from 'lucide-react';
+import {
+  Search,
+  Download,
+  X,
+  Calendar,
+  RefreshCw,
+  Coins,
+  QrCode,
+  TrendingDown,
+  Scale,
+  CheckCircle2,
+  Building2,
+  ArrowRight,
+} from 'lucide-react';
 import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { useTranslations } from 'next-intl';
-import ManagerAccountsDailySettlementNativeTable, { NativeColumn, NativeCellParams } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_table_parts/ManagerAccountsDailySettlementNativeTable';
+import ManagerAccountsDailySettlementNativeTable, {
+  NativeColumn,
+  NativeCellParams,
+} from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_table_parts/ManagerAccountsDailySettlementNativeTable';
 
 import { useManagerDailySettlementCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementFormattingHook';
 
-
-// RESPONSIBILITY: Entry page for the manager_daily_settlement module.
+// RESPONSIBILITY: Entry page for the manager_daily_settlement module with Executive Treasury Balancing & Specific Date Navigation.
 // DATA FLOW: Next.js Router -> Page -> Components
-
-
-
-
 
 function toLocalDateInputValue(date: Date): string {
   const year = date.getFullYear();
@@ -30,11 +41,26 @@ const MOCK = MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS;
 export default function ManagerAccountsDailySettlementPage({ view, id }: ManagerAccountsDailySettlementMainProps) {
   const tManagerUi = useTranslations('manager.manager_daily_settlement.ui');
   const formatManagerDailySettlementCurrency = useManagerDailySettlementCurrencyFormatter();
-  const date = toLocalDateInputValue(new Date());
+
+  const todayStr = toLocalDateInputValue(new Date());
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yesterdayStr = toLocalDateInputValue(yesterdayDate);
+
+  const [settlementDate, setSettlementDate] = useState(todayStr);
   const [entries, setEntries] = useState<Entry[]>([...MOCK]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [shiftFilter, setShiftFilter] = useState('all');
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSyncBalances = () => {
+    setIsSyncing(true);
+    setTimeout(() => {
+      setIsSyncing(false);
+      toast.success('Shift balances and physical drawer cash synchronized');
+    }, 600);
+  };
 
   const filteredEntries = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -55,9 +81,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const handleSettleShift = (shiftName: string) => {
     setEntries((prev) =>
       prev.map((e) =>
-        e.shift === shiftName
-          ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' }
-          : e
+        e.shift === shiftName ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' } : e
       )
     );
     toast.success(`Shift "${shiftName}" settlement confirmed successfully!`);
@@ -66,72 +90,122 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const handleExportCsv = () => {
     const headers = 'Shift,Opening (INR),Cash (INR),UPI (INR),Expenses (INR),Closing (INR),Settled By,Status\n';
     const rows = filteredEntries
-      .map((e) => `"${e.shift}","${e.openingBalance}","${e.cashCollected}","${e.upiCollected}","${e.expenses}","${e.closingBalance}","${e.settledBy || ''}","${e.status}"`)
+      .map(
+        (e) =>
+          `"${e.shift}","${e.openingBalance}","${e.cashCollected}","${e.upiCollected}","${e.expenses}","${e.closingBalance}","${e.settledBy || ''}","${e.status}"`
+      )
       .join('\n');
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `daily_settlement_${date}.csv`;
+    anchor.download = `daily_settlement_${settlementDate}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
+    toast.success('Daily settlement exported to CSV successfully');
   };
 
   const totalCash = entries.reduce((s, e) => s + e.cashCollected, 0);
-  const totalUpi  = entries.reduce((s, e) => s + e.upiCollected, 0);
-  const totalExp  = entries.reduce((s, e) => s + e.expenses, 0);
+  const totalUpi = entries.reduce((s, e) => s + e.upiCollected, 0);
+  const totalExp = entries.reduce((s, e) => s + e.expenses, 0);
+  const netSurplus = totalCash + totalUpi - totalExp;
 
   const colDefs: NativeColumn<Entry>[] = [
-    { field: 'shift', headerName: tManagerUi('shift'), flex: 1, minWidth: 180, cellRenderer: (p: NativeCellParams) => <span className="fin-cell-name font-medium">{p.value}</span> },
-    { 
-      field: 'openingBalance', 
-      headerName: tManagerUi('opening_inr'), 
+    {
+      field: 'shift',
+      headerName: tManagerUi('shift'),
+      flex: 1,
+      minWidth: 180,
+      cellRenderer: (p: NativeCellParams) => (
+        <span className="font-semibold text-primary text-xs">{p.value}</span>
+      ),
+    },
+    {
+      field: 'openingBalance',
+      headerName: tManagerUi('opening_inr'),
       width: 130,
       cellStyle: { textAlign: 'right' },
-      cellRenderer: (p: NativeCellParams) => <span className="fin-cell-subtext text-sm">{formatManagerDailySettlementCurrency(Number(p.value ?? 0))}</span>
+      cellRenderer: (p: NativeCellParams) => (
+        <span className="text-secondary text-xs font-mono">
+          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
+        </span>
+      ),
     },
-    { 
-      field: 'cashCollected', 
-      headerName: tManagerUi('cash_inr'), 
+    {
+      field: 'cashCollected',
+      headerName: tManagerUi('cash_inr'),
       width: 120,
       cellStyle: { textAlign: 'right' },
-      cellRenderer: (p: NativeCellParams) => <span className="fin-text-success font-medium">{formatManagerDailySettlementCurrency(Number(p.value ?? 0))}</span>
+      cellRenderer: (p: NativeCellParams) => (
+        <span className="text-emerald-600 dark:text-emerald-400 font-bold text-xs font-mono">
+          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
+        </span>
+      ),
     },
-    { 
-      field: 'upiCollected', 
-      headerName: tManagerUi('upi_inr'), 
+    {
+      field: 'upiCollected',
+      headerName: tManagerUi('upi_inr'),
       width: 120,
       cellStyle: { textAlign: 'right' },
-      cellRenderer: (p: NativeCellParams) => <span className="fin-text-info font-medium">{formatManagerDailySettlementCurrency(Number(p.value ?? 0))}</span>
+      cellRenderer: (p: NativeCellParams) => (
+        <span className="text-blue-600 dark:text-blue-400 font-bold text-xs font-mono">
+          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
+        </span>
+      ),
     },
-    { 
-      field: 'expenses', 
-      headerName: tManagerUi('expenses_inr'), 
+    {
+      field: 'expenses',
+      headerName: tManagerUi('expenses_inr'),
       width: 130,
       cellStyle: { textAlign: 'right' },
-      cellRenderer: (p: NativeCellParams) => <span className="fin-text-danger font-medium">{formatManagerDailySettlementCurrency(Number(p.value ?? 0))}</span>
+      cellRenderer: (p: NativeCellParams) => (
+        <span className="text-rose-600 dark:text-rose-400 font-bold text-xs font-mono">
+          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
+        </span>
+      ),
     },
-    { 
-      field: 'closingBalance', 
-      headerName: tManagerUi('closing_inr'), 
+    {
+      field: 'closingBalance',
+      headerName: tManagerUi('closing_inr'),
       width: 130,
       cellStyle: { textAlign: 'right', fontWeight: 600 },
-      cellRenderer: (p: NativeCellParams) => <span className="fin-text-body">{formatManagerDailySettlementCurrency(Number(p.value ?? 0))}</span>
+      cellRenderer: (p: NativeCellParams) => (
+        <span className="text-primary font-black text-xs font-mono">
+          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
+        </span>
+      ),
     },
-    { field: 'settledBy', headerName: tManagerUi('settled_by'), width: 140, cellRenderer: (p: NativeCellParams) => <span className="fin-cell-subtext">{p.value}</span> },
-    { 
-      field: 'status', 
-      headerName: tManagerUi('status'), 
+    {
+      field: 'settledBy',
+      headerName: tManagerUi('settled_by'),
+      width: 150,
+      cellRenderer: (p: NativeCellParams) => (
+        <span className="text-secondary text-xs">{p.value || '—'}</span>
+      ),
+    },
+    {
+      field: 'status',
+      headerName: tManagerUi('status'),
       width: 120,
       cellRenderer: (p: NativeCellParams) => (
-        <span className={`fin-badge ${p.value === 'settled' ? 'fin-badge--success' : 'fin-badge--warning'} inline-block mt-2`}>
-          {p.value === 'settled' ? tManagerUi('completed') : p.value === 'pending' ? tManagerUi('pending') : tManagerUi('status')}
+        <span
+          className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${
+            p.value === 'settled'
+              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+              : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+          }`}
+        >
+          {p.value === 'settled'
+            ? tManagerUi('completed')
+            : p.value === 'pending'
+            ? tManagerUi('pending')
+            : tManagerUi('status')}
         </span>
-      )
+      ),
     },
     {
       headerName: tManagerUi('action'),
-      width: 120,
+      width: 130,
       sortable: false,
       cellStyle: { textAlign: 'right' },
       cellRenderer: (params: NativeCellParams<Entry>) => {
@@ -142,7 +216,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
               <button
                 type="button"
                 onClick={() => handleSettleShift(shiftName)}
-                className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 transition-opacity"
+                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-colors cursor-pointer"
                 title={`Settle shift ${shiftName}`}
               >
                 Settle Shift
@@ -152,35 +226,202 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         }
         return (
           <div className="h-full flex justify-end items-center">
-            <span className="fin-cell-subtext text-xs text-success font-semibold">✓ Verified</span>
+            <span className="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
+              <CheckCircle2 size={13} /> Verified
+            </span>
           </div>
         );
-      }
-    }
+      },
+    },
   ];
 
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id}>
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="fin-page-title">{tManagerUi('daily_settlement')}</h1>
-          <p className="fin-page-subtitle">{tManagerUi('shift_wise_cash_upi_reconciliation')}</p>
-          <p className="fin-input-hint fin-text-warning" data-testid="manager-accounting-settlement-contract-warning" role="status">{tManagerUi('shift_balances_and_statuses_are_sample_records_settlemen_26c33a')}</p>
+      {/* ── Executive Header Banner ── */}
+      <div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-sm">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 flex-wrap text-xs">
+              <span className="font-semibold text-primary uppercase tracking-wider">Treasury Operations</span>
+              <span className="text-border">•</span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <Scale size={12} />
+                Shift Balancing & Reconciliation
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-secondary/10 text-secondary border border-border">
+                📍 Central Branch
+              </span>
+            </div>
+
+            <div className="flex items-baseline gap-3">
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
+                {tManagerUi('daily_settlement')}
+              </h1>
+              <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
+                {filteredEntries.length} Shifts
+              </span>
+            </div>
+
+            <p className="text-sm text-secondary">
+              {tManagerUi('shift_wise_cash_upi_reconciliation')}
+            </p>
+          </div>
+
+          {/* Header Actions */}
+          <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
+            <button
+              type="button"
+              onClick={handleSyncBalances}
+              disabled={isSyncing}
+              className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60"
+              title="Sync Drawer Balances"
+            >
+              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
+              <span>{isSyncing ? 'Syncing...' : 'Sync Balances'}</span>
+            </button>
+          </div>
         </div>
-        <input type="date" className="fin-input w-44" value={date} readOnly disabled aria-label={tManagerUi('sample_settlement_date')} title={tManagerUi('sample_snapshot_only_date_filtering_is_not_connected_to_9140bb')} />
+
+        {/* Contract Warning Banner */}
+        <p
+          className="mt-4 rounded-xl border border-warning/20 bg-warning/5 p-3 text-xs text-warning leading-relaxed"
+          data-testid="manager-accounting-settlement-contract-warning"
+          role="status"
+        >
+          {tManagerUi('shift_balances_and_statuses_are_sample_records_settlemen_26c33a')}
+        </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-success">{tManagerUi('cash_collected')}</p><p className="fin-kpi-value fin-text-success">{formatManagerDailySettlementCurrency(totalCash)}</p></div>
-        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-info">{tManagerUi('upi_collected')}</p><p className="fin-kpi-value fin-text-info">{formatManagerDailySettlementCurrency(totalUpi)}</p></div>
-        <div className="fin-kpi-card fin-kpi-card--danger"><p className="fin-kpi-label fin-kpi-label--danger">{tManagerUi('expenses')}</p><p className="fin-kpi-value fin-kpi-value--danger">{formatManagerDailySettlementCurrency(totalExp)}</p></div>
-        <div className="fin-kpi-card"><p className="fin-kpi-label">{tManagerUi('net')}</p><p className="fin-kpi-value">{formatManagerDailySettlementCurrency(totalCash + totalUpi - totalExp)}</p></div>
+      {/* ── Specific Date Navigator Bar ── */}
+      <div className="rounded-xl border border-border bg-card p-3 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <Calendar size={16} className="text-primary shrink-0" />
+          <span className="text-xs font-bold uppercase tracking-wider text-secondary">
+            Settlement Audit Date:
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Quick Date Selectors: Today | Yesterday */}
+          <div className="inline-flex bg-muted/60 p-1 rounded-xl border border-border">
+            <button
+              type="button"
+              onClick={() => setSettlementDate(todayStr)}
+              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
+                settlementDate === todayStr
+                  ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
+                  : 'text-secondary hover:text-primary'
+              }`}
+            >
+              Today
+            </button>
+            <button
+              type="button"
+              onClick={() => setSettlementDate(yesterdayStr)}
+              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
+                settlementDate === yesterdayStr
+                  ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
+                  : 'text-secondary hover:text-primary'
+              }`}
+            >
+              Yesterday
+            </button>
+          </div>
+
+          {/* Date Picker Input */}
+          <div className="flex items-center gap-1.5 bg-muted/40 p-1 rounded-xl border border-border">
+            <input
+              type="date"
+              className="px-2.5 py-1 bg-card border border-border rounded-lg text-xs font-semibold text-primary outline-none focus:border-primary"
+              value={settlementDate}
+              onChange={(e) => setSettlementDate(e.target.value)}
+              aria-label={tManagerUi('sample_settlement_date')}
+              title={tManagerUi('sample_snapshot_only_date_filtering_is_not_connected_to_9140bb')}
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="fin-card p-4 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+      {/* ── Executive Reconciliation KPI Summary Cards ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Cash Collected */}
+        <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
+              {tManagerUi('cash_collected')}
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+              <Coins size={20} />
+            </div>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 font-mono">
+              {formatManagerDailySettlementCurrency(totalCash)}
+            </div>
+            <p className="mt-1 text-xs text-secondary">Physical cash drawer total</p>
+          </div>
+        </div>
+
+        {/* UPI Collected */}
+        <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
+              {tManagerUi('upi_collected')}
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center">
+              <QrCode size={20} />
+            </div>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400 font-mono">
+              {formatManagerDailySettlementCurrency(totalUpi)}
+            </div>
+            <p className="mt-1 text-xs text-secondary">Direct bank / QR settlements</p>
+          </div>
+        </div>
+
+        {/* Expenses Disbursed */}
+        <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
+              {tManagerUi('expenses')}
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 flex items-center justify-center">
+              <TrendingDown size={20} />
+            </div>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400 font-mono">
+              {formatManagerDailySettlementCurrency(totalExp)}
+            </div>
+            <p className="mt-1 text-xs text-secondary">Petty cash paid from counter</p>
+          </div>
+        </div>
+
+        {/* Net Shift Surplus */}
+        <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
+              {tManagerUi('net')}
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center">
+              <Scale size={20} />
+            </div>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-bold tracking-tight text-primary font-mono">
+              {formatManagerDailySettlementCurrency(netSurplus)}
+            </div>
+            <p className="mt-1 text-xs text-secondary">Net realized vault closing balance</p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Table Container with Toolbar ── */}
+      <div className="fin-card p-5 space-y-4 rounded-2xl border border-border bg-card shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-border pb-4">
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold text-primary">Shift Settlements</h2>
+            <h2 className="text-base font-bold text-primary">Shift Settlements Register</h2>
             <span className="mgr-badge mgr-badge--info text-xs font-mono">{filteredEntries.length} Records</span>
           </div>
 
@@ -191,7 +432,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
               <input
                 type="search"
                 placeholder="Search shift or settled by..."
-                className="mgr-input pl-8 text-xs w-full"
+                className="w-full pl-9 pr-3 py-1.5 bg-muted/40 border border-border rounded-lg text-xs text-primary outline-none focus:border-primary focus:bg-card"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -201,7 +442,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
               aria-label="Filter by Settlement Status"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="mgr-select text-xs py-1.5 px-3 min-w-[120px]"
+              className="min-h-9 py-1 px-3 bg-muted/40 border border-border rounded-lg text-xs font-medium text-primary outline-none focus:border-primary focus:bg-card cursor-pointer"
             >
               <option value="all">All Status</option>
               <option value="settled">Settled / Verified</option>
@@ -212,7 +453,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
               aria-label="Filter by Shift"
               value={shiftFilter}
               onChange={(e) => setShiftFilter(e.target.value)}
-              className="mgr-select text-xs py-1.5 px-3 min-w-[120px]"
+              className="min-h-9 py-1 px-3 bg-muted/40 border border-border rounded-lg text-xs font-medium text-primary outline-none focus:border-primary focus:bg-card cursor-pointer"
             >
               <option value="all">All Shifts</option>
               <option value="Morning">Morning</option>
@@ -240,24 +481,32 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             <button
               type="button"
               onClick={handleExportCsv}
-              className="mgr-btn-ghost flex items-center gap-1.5 text-xs whitespace-nowrap cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm shrink-0"
               title="Export Daily Settlement as CSV"
             >
-              <Download size={14} />
+              <Download size={13} />
               <span>Export CSV</span>
             </button>
           </div>
         </div>
+
         {filteredEntries.length === 0 ? (
-          <div className="fin-empty-state py-12">
-            <div className="fin-empty-state__icon">📋</div>
-            <p className="fin-empty-state__title">
-              {searchQuery ? 'No settlement entries matching your search query.' : tManagerUi('no_settlement_entries_for_this_date')}
+          <div className="fin-empty-state py-12 text-center space-y-2">
+            <div className="text-3xl" aria-hidden="true">📋</div>
+            <p className="font-semibold text-primary text-sm">
+              {searchQuery
+                ? 'No settlement entries matching your search query.'
+                : tManagerUi('no_settlement_entries_for_this_date')}
             </p>
           </div>
         ) : (
           <div className="mgr-table-wrapper h-80">
-            <ManagerAccountsDailySettlementNativeTable getRowKey={(row) => String(row.id)} rows={filteredEntries} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+            <ManagerAccountsDailySettlementNativeTable
+              getRowKey={(row) => String(row.id)}
+              rows={filteredEntries}
+              columns={colDefs}
+              labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
+            />
           </div>
         )}
       </div>

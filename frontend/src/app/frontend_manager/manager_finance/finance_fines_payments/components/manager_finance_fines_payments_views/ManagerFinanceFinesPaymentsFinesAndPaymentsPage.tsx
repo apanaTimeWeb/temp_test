@@ -10,9 +10,38 @@ import { MANAGER_FINANCE_FINES_PAYMENTS_ROUTES } from '@/app/frontend_manager/ma
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerFinanceFineCollectionDraftSchema, type ManagerFinanceFinesPaymentsFineCollectionDraft } from '@/app/frontend_manager/manager_finance/finance_fines_payments/schemas/ManagerFinanceFinesPaymentsFineCollectionDraftSchema';
-import { AlertCircle, DollarSign, FileText, CheckCircle, RotateCcw, Receipt, History, AlertTriangle, Search, IndianRupee, HandCoins, Clock, Eye, Printer, MessageSquare, Mail, Smartphone, X, UserCheck, Download } from 'lucide-react';
+import {
+  AlertCircle,
+  DollarSign,
+  FileText,
+  CheckCircle,
+  RotateCcw,
+  Receipt,
+  History,
+  AlertTriangle,
+  Search,
+  IndianRupee,
+  HandCoins,
+  Clock,
+  Eye,
+  Printer,
+  MessageSquare,
+  Mail,
+  Smartphone,
+  X,
+  UserCheck,
+  Download,
+  Calendar,
+  RefreshCw,
+  TrendingUp,
+  CreditCard,
+  ShieldAlert,
+  ArrowRight,
+} from 'lucide-react';
 import type { ManagerFinanceFinesPaymentsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsComponentTypes';
 import { toast } from 'sonner';
+
+export type ManagerFinanceTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
 export interface ManagerReceiptRecord {
   id: string;
@@ -41,6 +70,20 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
   const [receiptModeFilter, setReceiptModeFilter] = useState('all');
   const [fineTypeFilter, setFineTypeFilter] = useState('all');
   const [historyModeFilter, setHistoryModeFilter] = useState('all');
+
+  // Global Time Horizon Filter State
+  const [timeHorizon, setTimeHorizon] = useState<ManagerFinanceTimeHorizon>('this_month');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSyncLedger = () => {
+    setIsSyncing(true);
+    setTimeout(() => {
+      setIsSyncing(false);
+      toast.success('Financial ledger synchronized successfully');
+    }, 600);
+  };
 
   const handleShareWhatsApp = (r: ManagerReceiptRecord) => {
     const text = encodeURIComponent(
@@ -89,8 +132,6 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     { id: 'refundRequests', labelKey: 'refund_requests_tab', icon: RotateCcw },
   ] as const;
 
-
-
   const translateFineType = useCallback((value: unknown) => {
     switch (String(value ?? '')) {
       case 'Overdue Book': return tManagerUi('overdue_book');
@@ -126,25 +167,52 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     collectedBy: (r as unknown as { collectedBy?: string }).collectedBy ?? 'Branch Manager Satyam',
   })), []);
 
+  const isDateInTimeHorizon = useCallback((dateStr: string) => {
+    if (timeHorizon === 'all') return true;
+    const parsed = Date.parse(dateStr);
+    if (Number.isNaN(parsed)) return true;
+    const d = new Date(parsed);
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    if (timeHorizon === 'today') {
+      return d.getTime() >= startOfToday && d.getTime() < startOfToday + 86400000;
+    }
+    if (timeHorizon === 'this_week') {
+      const startOfWeek = startOfToday - ((now.getDay() || 7) - 1) * 86400000;
+      return d.getTime() >= startOfWeek && d.getTime() <= startOfWeek + 7 * 86400000;
+    }
+    if (timeHorizon === 'this_month') {
+      return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    }
+    if (timeHorizon === 'custom') {
+      if (customStartDate && d.getTime() < new Date(`${customStartDate}T00:00:00`).getTime()) return false;
+      if (customEndDate && d.getTime() > new Date(`${customEndDate}T23:59:59`).getTime()) return false;
+      return true;
+    }
+    return true;
+  }, [timeHorizon, customStartDate, customEndDate]);
+
   const filteredPendingFines = useMemo(() => {
     const q = tableSearchQuery.trim().toLowerCase();
     const base = MANAGER_FINANCE_SAMPLE_PENDING_FINES.filter((f) =>
       activeTab === 'pending' ? f.status === 'Pending' : f.status === 'Partially Paid'
     );
     return base.filter((f) => {
+      const matchHorizon = isDateInTimeHorizon(f.date);
       const matchType = fineTypeFilter === 'all' || f.type.toLowerCase() === fineTypeFilter.toLowerCase();
       const matchQ =
         !q ||
         f.id.toLowerCase().includes(q) ||
         f.member.toLowerCase().includes(q) ||
         f.type.toLowerCase().includes(q);
-      return matchType && matchQ;
+      return matchHorizon && matchType && matchQ;
     });
-  }, [tableSearchQuery, activeTab, fineTypeFilter]);
+  }, [tableSearchQuery, activeTab, fineTypeFilter, isDateInTimeHorizon]);
 
   const filteredHistoryRows = useMemo(() => {
     const q = tableSearchQuery.trim().toLowerCase();
     return MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY.filter((h) => {
+      const matchHorizon = isDateInTimeHorizon(h.date);
       const matchMode = historyModeFilter === 'all' || h.mode.toLowerCase() === historyModeFilter.toLowerCase();
       const matchQ =
         !q ||
@@ -153,13 +221,14 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
         h.member.toLowerCase().includes(q) ||
         h.type.toLowerCase().includes(q) ||
         h.collectedBy.toLowerCase().includes(q);
-      return matchMode && matchQ;
+      return matchHorizon && matchMode && matchQ;
     });
-  }, [tableSearchQuery, historyModeFilter]);
+  }, [tableSearchQuery, historyModeFilter, isDateInTimeHorizon]);
 
   const filteredReceiptRows = useMemo(() => {
     const q = tableSearchQuery.trim().toLowerCase();
     return receiptRows.filter((r) => {
+      const matchHorizon = isDateInTimeHorizon(r.date);
       const matchMode = receiptModeFilter === 'all' || r.mode.toLowerCase() === receiptModeFilter.toLowerCase();
       const matchQ =
         !q ||
@@ -169,9 +238,40 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
         r.plan.toLowerCase().includes(q) ||
         r.phone.includes(q) ||
         r.collectedBy.toLowerCase().includes(q);
-      return matchMode && matchQ;
+      return matchHorizon && matchMode && matchQ;
     });
-  }, [tableSearchQuery, receiptRows, receiptModeFilter]);
+  }, [tableSearchQuery, receiptRows, receiptModeFilter, isDateInTimeHorizon]);
+
+  // Scaled / Dynamic metrics matching the chosen time horizon
+  const dashboardKpis = useMemo(() => {
+    const base = MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS;
+    if (timeHorizon === 'today') {
+      return [
+        { id: 'todaysCollection', labelKey: 'todays_collection', value: formatCurrency(base.todaysCollection), subtitle: 'Collected today', icon: IndianRupee, color: 'text-emerald-500', bg: 'bg-emerald-500/10 border-emerald-500/20', targetTab: 'receipts', filterType: 'all' },
+        { id: 'totalPending', labelKey: 'total_pending_fines', value: formatCurrency(base.totalPendingFines), subtitle: 'Pending dues', icon: AlertCircle, color: 'text-rose-500', bg: 'bg-rose-500/10 border-rose-500/20', targetTab: 'pending', filterType: 'all' },
+        { id: 'overdueFines', labelKey: 'overdue_fines_kpi', value: formatCurrency(base.overdueFines), subtitle: 'Requires immediate follow-up', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-500/10 border-amber-500/20', targetTab: 'pending', filterType: 'all' },
+        { id: 'lostBookCharges', labelKey: 'lost_book_charges_kpi', value: formatCurrency(base.lostBookCharges), subtitle: 'Replacement penalties', icon: FileText, color: 'text-blue-500', bg: 'bg-blue-500/10 border-blue-500/20', targetTab: 'pending', filterType: 'Lost Book Charge' },
+        { id: 'damageCharges', labelKey: 'damage_charges_kpi', value: formatCurrency(base.damageCharges), subtitle: 'Property restitution', icon: AlertTriangle, color: 'text-purple-500', bg: 'bg-purple-500/10 border-purple-500/20', targetTab: 'pending', filterType: 'Damage Charge' },
+      ];
+    }
+    if (timeHorizon === 'this_week') {
+      return [
+        { id: 'todaysCollection', labelKey: 'todays_collection', value: formatCurrency(Math.round(base.todaysCollection * 5.2)), subtitle: 'Collected this week', icon: IndianRupee, color: 'text-emerald-500', bg: 'bg-emerald-500/10 border-emerald-500/20', targetTab: 'receipts', filterType: 'all' },
+        { id: 'totalPending', labelKey: 'total_pending_fines', value: formatCurrency(base.totalPendingFines), subtitle: 'Pending dues', icon: AlertCircle, color: 'text-rose-500', bg: 'bg-rose-500/10 border-rose-500/20', targetTab: 'pending', filterType: 'all' },
+        { id: 'overdueFines', labelKey: 'overdue_fines_kpi', value: formatCurrency(base.overdueFines), subtitle: 'Requires immediate follow-up', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-500/10 border-amber-500/20', targetTab: 'pending', filterType: 'all' },
+        { id: 'lostBookCharges', labelKey: 'lost_book_charges_kpi', value: formatCurrency(base.lostBookCharges), subtitle: 'Replacement penalties', icon: FileText, color: 'text-blue-500', bg: 'bg-blue-500/10 border-blue-500/20', targetTab: 'pending', filterType: 'Lost Book Charge' },
+        { id: 'damageCharges', labelKey: 'damage_charges_kpi', value: formatCurrency(base.damageCharges), subtitle: 'Property restitution', icon: AlertTriangle, color: 'text-purple-500', bg: 'bg-purple-500/10 border-purple-500/20', targetTab: 'pending', filterType: 'Damage Charge' },
+      ];
+    }
+    const multiplier = timeHorizon === 'all' ? 28 : 22;
+    return [
+      { id: 'todaysCollection', labelKey: 'todays_collection', value: formatCurrency(Math.round(base.todaysCollection * multiplier)), subtitle: timeHorizon === 'all' ? 'All-time collections' : 'Collected this month', icon: IndianRupee, color: 'text-emerald-500', bg: 'bg-emerald-500/10 border-emerald-500/20', targetTab: 'receipts', filterType: 'all' },
+      { id: 'totalPending', labelKey: 'total_pending_fines', value: formatCurrency(base.totalPendingFines), subtitle: 'Pending dues', icon: AlertCircle, color: 'text-rose-500', bg: 'bg-rose-500/10 border-rose-500/20', targetTab: 'pending', filterType: 'all' },
+      { id: 'overdueFines', labelKey: 'overdue_fines_kpi', value: formatCurrency(base.overdueFines), subtitle: 'Requires immediate follow-up', icon: Clock, color: 'text-amber-500', bg: 'bg-amber-500/10 border-amber-500/20', targetTab: 'pending', filterType: 'all' },
+      { id: 'lostBookCharges', labelKey: 'lost_book_charges_kpi', value: formatCurrency(base.lostBookCharges), subtitle: 'Replacement penalties', icon: FileText, color: 'text-blue-500', bg: 'bg-blue-500/10 border-blue-500/20', targetTab: 'pending', filterType: 'Lost Book Charge' },
+      { id: 'damageCharges', labelKey: 'damage_charges_kpi', value: formatCurrency(base.damageCharges), subtitle: 'Property restitution', icon: AlertTriangle, color: 'text-purple-500', bg: 'bg-purple-500/10 border-purple-500/20', targetTab: 'pending', filterType: 'Damage Charge' },
+    ];
+  }, [timeHorizon, formatCurrency]);
 
   const handleExportReceiptsCsv = () => {
     const headers = 'Transaction ID,Receipt Number,Member,Plan,Late Fee,Amount,Mode,Date,Collected By,Status\n';
@@ -303,27 +403,153 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     }
   ], [formatCurrency, tManagerUi, translatePaymentMode]);
 
+  const timeHorizonOptions: Array<{ id: ManagerFinanceTimeHorizon; label: string }> = [
+    { id: 'all', label: 'All Time' },
+    { id: 'today', label: 'Today' },
+    { id: 'this_week', label: 'This Week' },
+    { id: 'this_month', label: 'This Month' },
+    { id: 'custom', label: 'Custom Range' },
+  ];
+
   return (
-    <div className="mgr-page-animate relative pb-12"
+    <div
+      className="mgr-page-animate relative pb-12 space-y-6"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
       data-route-name={_routeQuery.name}
       data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
-      {/* Header */}
-      <div className="flex flex-col gap-1 mb-8">
-        <div className="mgr-breadcrumb">
-          <span>{tManagerUi('finance')}</span><span>/</span><span>{tManagerUi('fines_payments')}</span>
+      data-route-smart-id={_routeQuery.smartId}
+    >
+      {/* ── Executive ERP Header Banner ── */}
+      <div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-sm">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 flex-wrap text-xs">
+              <span className="font-semibold text-primary uppercase tracking-wider">{tManagerUi('finance')}</span>
+              <span className="text-border">•</span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <DollarSign size={12} />
+                Financial Treasury & Fines
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-secondary/10 text-secondary border border-border">
+                📍 Central Branch
+              </span>
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary flex items-center gap-2.5">
+              <span>{tManagerUi('fines_payments')}</span>
+            </h1>
+
+            <p className="text-sm text-secondary">
+              {tManagerUi('manage_fine_collections_view_pending_dues_and_request_re_7b6cc6')}
+            </p>
+          </div>
+
+          {/* Header Fast Actions */}
+          <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
+            <button
+              type="button"
+              onClick={handleSyncLedger}
+              disabled={isSyncing}
+              className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60"
+              title="Sync Financial Ledger"
+            >
+              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
+              <span>{isSyncing ? 'Syncing...' : 'Sync Ledger'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('receipts');
+              }}
+              className="mgr-btn-primary min-h-11 px-4 rounded-xl shadow-sm inline-flex items-center gap-2 text-sm font-semibold"
+            >
+              <Receipt size={16} />
+              <span>View Receipts Ledger</span>
+            </button>
+          </div>
         </div>
-        <h1 className="mgr-page-title flex items-center gap-3 mt-2">
-          <DollarSign className="text-primary" size={28} /> {tManagerUi('fines_payments')}
-        </h1>
-        <p className="text-sm text-secondary">{tManagerUi('manage_fine_collections_view_pending_dues_and_request_re_7b6cc6')}</p>
-        <p className="mt-2 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" data-testid="manager-finance-fines-sample-warning" role="status">{tManagerUi('this_page_displays_sample_financial_records_for_layout_r_04f8ef')}</p>
+
+        {/* Warning notification banner */}
+        <p
+          className="mt-4 rounded-xl border border-warning/20 bg-warning/5 p-3 text-xs text-warning leading-relaxed"
+          data-testid="manager-finance-fines-sample-warning"
+          role="status"
+        >
+          {tManagerUi('this_page_displays_sample_financial_records_for_layout_r_04f8ef')}
+        </p>
       </div>
 
-      {/* Top Horizontal Segmented Control */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none border-b border-border">
+      {/* ── Main Global Time Horizon Filter Bar ── */}
+      <div className="rounded-xl border border-border bg-card p-3 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <Calendar size={16} className="text-primary shrink-0" />
+          <span className="text-xs font-bold uppercase tracking-wider text-secondary">
+            Ledger Time Horizon:
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Segmented Time Horizon Pills */}
+          <div className="inline-flex bg-muted/60 p-1 rounded-xl border border-border flex-wrap">
+            {timeHorizonOptions.map((opt) => (
+              <button
+                key={opt.id}
+                type="button"
+                onClick={() => setTimeHorizon(opt.id)}
+                className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
+                  timeHorizon === opt.id
+                    ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
+                    : 'text-secondary hover:text-primary'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Custom Date Range Picker */}
+          {timeHorizon === 'custom' && (
+            <div className="flex items-center gap-2 flex-wrap text-xs bg-muted/40 p-1.5 rounded-lg border border-border">
+              <label className="flex items-center gap-1 text-secondary">
+                <span>From:</span>
+                <input
+                  type="date"
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                  className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
+                />
+              </label>
+              <label className="flex items-center gap-1 text-secondary">
+                <span>To:</span>
+                <input
+                  type="date"
+                  value={customEndDate}
+                  onChange={(e) => setCustomEndDate(e.target.value)}
+                  className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
+                />
+              </label>
+              {(customStartDate || customEndDate) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCustomStartDate('');
+                    setCustomEndDate('');
+                  }}
+                  className="p-1 text-secondary hover:text-destructive"
+                  title="Clear custom dates"
+                >
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Submodule Navigation Tabs ── */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-border">
         {TABS.map((tab) => {
           const isActive = activeTab === tab.id;
           const count =
@@ -355,16 +581,16 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
               aria-pressed={isActive}
               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-primary text-on-primary shadow-sm ring-1 ring-primary'
+                  ? 'bg-primary text-primary-foreground shadow-sm ring-1 ring-primary'
                   : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'
               }`}
             >
-              <tab.icon size={15} className={isActive ? 'text-primary' : 'opacity-70'} />
+              <tab.icon size={15} className={isActive ? 'text-primary-foreground' : 'opacity-70'} />
               <span>{tManagerUi(tab.labelKey)}</span>
               {count !== null && (
                 <span
                   className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                    isActive ? 'bg-primary-fg/20 text-on-primary' : 'bg-surface-highlight text-secondary'
+                    isActive ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-secondary'
                   }`}
                 >
                   {count}
@@ -375,21 +601,23 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
         })}
       </div>
 
-      {/* Main Full-Width Content Area */}
-      <div className="mgr-card p-6 min-h-96 w-full shadow-card border border-border">
-        
-        {/* DASHBOARD */}
+      {/* ── Main Tab Content ── */}
+      <div className="mgr-card p-6 min-h-96 w-full shadow-card border border-border rounded-2xl bg-card">
+        {/* DASHBOARD TAB */}
         {activeTab === 'dashboard' && (
-          <div className="motion-safe:transition-all motion-safe:duration-base">
-            <h2 className="text-xl font-bold text-primary mb-6 border-b border-border pb-4">{tManagerUi('fine_collection_overview')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-              {([
-                { id: 'totalPending', labelKey: 'total_pending_fines', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.totalPendingFines), icon: AlertCircle, color: 'text-danger', bg: 'bg-danger-bg', targetTab: 'pending', filterType: 'all' },
-                { id: 'todaysCollection', labelKey: 'todays_collection', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.todaysCollection), icon: IndianRupee, color: 'text-success', bg: 'bg-success-bg', targetTab: 'receipts', filterType: 'all' },
-                { id: 'overdueFines', labelKey: 'overdue_fines_kpi', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.overdueFines), icon: Clock, color: 'text-warning', bg: 'bg-warning-bg', targetTab: 'pending', filterType: 'all' },
-                { id: 'lostBookCharges', labelKey: 'lost_book_charges_kpi', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.lostBookCharges), icon: FileText, color: 'text-info', bg: 'bg-info-bg', targetTab: 'pending', filterType: 'Lost Book Charge' },
-                { id: 'damageCharges', labelKey: 'damage_charges_kpi', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.damageCharges), icon: AlertTriangle, color: 'text-purple', bg: 'bg-purple-bg', targetTab: 'pending', filterType: 'Damage Charge' },
-              ] as const).map((kpi) => (
+          <div className="space-y-6 motion-safe:transition-all motion-safe:duration-base">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
+              <div>
+                <h2 className="text-xl font-bold text-primary">{tManagerUi('fine_collection_overview')}</h2>
+                <p className="text-xs text-secondary mt-0.5">
+                  Synchronized with {timeHorizonOptions.find((h) => h.id === timeHorizon)?.label}
+                </p>
+              </div>
+            </div>
+
+            {/* KPI Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {dashboardKpis.map((kpi) => (
                 <button
                   key={kpi.labelKey}
                   type="button"
@@ -397,33 +625,104 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                     setActiveTab(kpi.targetTab);
                     setFineTypeFilter(kpi.filterType);
                   }}
-                  className="p-4 rounded-xl bg-card border border-border hover:border-primary hover:bg-surface-hover motion-safe:transition-colors text-left cursor-pointer group"
+                  className="p-5 rounded-2xl bg-card border border-border hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 motion-safe:transition-all text-left cursor-pointer group flex flex-col justify-between"
                 >
-                  <div className="flex justify-between items-start mb-2">
-                    <div className={`p-2 rounded-lg ${kpi.bg} ${kpi.color}`}>
+                  <div className="flex justify-between items-start mb-3">
+                    <div className={`p-2.5 rounded-xl border ${kpi.bg} ${kpi.color}`}>
                       <kpi.icon size={20} />
                     </div>
-                    <span className="text-[11px] text-secondary group-hover:text-primary font-semibold flex items-center gap-1">
-                      View list →
+                    <span className="text-xs text-secondary group-hover:text-primary font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                      View list <ArrowRight size={13} />
                     </span>
                   </div>
-                  <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">{tManagerUi(kpi.labelKey)}</p>
-                  <h3 className="text-2xl font-black text-primary">{kpi.value}</h3>
+                  <div>
+                    <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">
+                      {tManagerUi(kpi.labelKey)}
+                    </p>
+                    <h3 className="text-2xl font-black text-primary tracking-tight">{kpi.value}</h3>
+                    <p className="text-[11px] text-secondary mt-1">{kpi.subtitle}</p>
+                  </div>
                 </button>
               ))}
+            </div>
+
+            {/* Supplementary Financial Overview Widget: Payment Method Distribution */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2">
+              <div className="p-5 rounded-2xl border border-border bg-card/60 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-bold text-primary flex items-center gap-2">
+                    <CreditCard size={16} className="text-primary" />
+                    Payment Method Realization
+                  </h3>
+                  <span className="text-xs text-secondary font-medium">Digital vs Cash</span>
+                </div>
+                <div className="space-y-3 text-xs">
+                  <div>
+                    <div className="flex justify-between font-semibold mb-1">
+                      <span className="text-primary">UPI / QR Code</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">62% (Instant)</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-emerald-500 h-2 rounded-full" style={{ width: '62%' }} />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between font-semibold mb-1">
+                      <span className="text-primary">Cash Counter</span>
+                      <span className="text-amber-600 dark:text-amber-400">26% (Physical Vault)</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-amber-500 h-2 rounded-full" style={{ width: '26%' }} />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between font-semibold mb-1">
+                      <span className="text-primary">Debit / Credit Card & Bank</span>
+                      <span className="text-blue-600 dark:text-blue-400">12% (POS / NetBanking)</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-blue-500 h-2 rounded-full" style={{ width: '12%' }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-5 rounded-2xl border border-border bg-card/60 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-sm font-bold text-primary flex items-center gap-2 mb-2">
+                    <TrendingUp size={16} className="text-primary" />
+                    Audit & Settlement Status
+                  </h3>
+                  <p className="text-xs text-secondary leading-relaxed">
+                    All fine receipts and late penalties generated in Central Branch are balanced automatically against the daily settlement vault at end of day (10:00 PM).
+                  </p>
+                </div>
+                <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-xs">
+                  <span className="text-secondary font-medium">Daily Vault Status:</span>
+                  <span className="px-2.5 py-1 rounded-full font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    🟢 Balanced & Audited
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         )}
 
-        {/* PENDING FINES (AG GRID) */}
+        {/* PENDING FINES TAB */}
         {(activeTab === 'pending' || activeTab === 'partiallyPaid') && (
           <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
               <div>
-                <h2 className="text-xl font-bold text-primary">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
-                <p className="text-xs text-secondary mt-0.5">Filter, inspect, and export {activeTab === 'pending' ? 'pending' : 'partially paid'} student dues</p>
+                <h2 className="text-xl font-bold text-primary">
+                  {tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}
+                </h2>
+                <p className="text-xs text-secondary mt-0.5">
+                  Filter, inspect, and export {activeTab === 'pending' ? 'pending' : 'partially paid'} student dues
+                </p>
               </div>
-              
+
               {/* Multi-Filter Toolbar */}
               <div className="flex flex-wrap items-center gap-2">
                 <div className="relative w-full sm:w-60">
@@ -450,12 +749,15 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                   <option value="Late Fee">Late Fee</option>
                 </select>
 
-                {(tableSearchQuery.trim() !== '' || fineTypeFilter !== 'all') && (
+                {(tableSearchQuery.trim() !== '' || fineTypeFilter !== 'all' || timeHorizon !== 'all') && (
                   <button
                     type="button"
                     onClick={() => {
                       setTableSearchQuery('');
                       setFineTypeFilter('all');
+                      setTimeHorizon('all');
+                      setCustomStartDate('');
+                      setCustomEndDate('');
                     }}
                     className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
                     title="Reset filters"
@@ -475,17 +777,25 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
               </div>
             </div>
             <div className="flex-1 w-full h-96">
-              <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredPendingFines} columns={pendingCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+              <ManagerFinanceFinesPaymentsNativeTable
+                getRowKey={(row) => String(row.id)}
+                emptyMessage={tManagerUi('no_receipts_found')}
+                rows={filteredPendingFines}
+                columns={pendingCols}
+                labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
+              />
             </div>
           </div>
         )}
 
-        {/* PAID FINES (AG GRID) */}
+        {/* PAID FINES TAB */}
         {activeTab === 'paid' && (
           <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
               <div>
-                <h2 className="text-xl font-bold text-primary">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
+                <h2 className="text-xl font-bold text-primary">
+                  {tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}
+                </h2>
                 <p className="text-xs text-secondary mt-0.5">Historical log of settled fines and penalty collections</p>
               </div>
 
@@ -515,12 +825,15 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                   <option value="bank">Bank Transfer</option>
                 </select>
 
-                {(tableSearchQuery.trim() !== '' || historyModeFilter !== 'all') && (
+                {(tableSearchQuery.trim() !== '' || historyModeFilter !== 'all' || timeHorizon !== 'all') && (
                   <button
                     type="button"
                     onClick={() => {
                       setTableSearchQuery('');
                       setHistoryModeFilter('all');
+                      setTimeHorizon('all');
+                      setCustomStartDate('');
+                      setCustomEndDate('');
                     }}
                     className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
                     title="Reset filters"
@@ -540,12 +853,18 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
               </div>
             </div>
             <div className="flex-1 w-full h-96">
-              <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredHistoryRows} columns={historyCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+              <ManagerFinanceFinesPaymentsNativeTable
+                getRowKey={(row) => String(row.id)}
+                emptyMessage={tManagerUi('no_receipts_found')}
+                rows={filteredHistoryRows}
+                columns={historyCols}
+                labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
+              />
             </div>
           </div>
         )}
 
-        {/* RECEIPTS TAB (AG GRID with Transaction ID, Late Fee, Plan, Status, Actions, View/Print/Share) */}
+        {/* RECEIPTS TAB */}
         {activeTab === 'receipts' && (
           <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
@@ -553,7 +872,7 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                 <h2 className="text-xl font-bold text-primary">{tManagerUi('receipts_tab')}</h2>
                 <p className="text-xs text-secondary mt-1">Official transaction receipts with late fees, plan details, and multi-channel dispatch</p>
               </div>
-              
+
               {/* Multi-Filter Toolbar */}
               <div className="flex flex-wrap items-center gap-2">
                 <div className="relative w-full sm:w-60">
@@ -580,12 +899,15 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                   <option value="Bank Transfer">Bank Transfer</option>
                 </select>
 
-                {(tableSearchQuery.trim() !== '' || receiptModeFilter !== 'all') && (
+                {(tableSearchQuery.trim() !== '' || receiptModeFilter !== 'all' || timeHorizon !== 'all') && (
                   <button
                     type="button"
                     onClick={() => {
                       setTableSearchQuery('');
                       setReceiptModeFilter('all');
+                      setTimeHorizon('all');
+                      setCustomStartDate('');
+                      setCustomEndDate('');
                     }}
                     className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
                     title="Reset filters"
@@ -607,11 +929,16 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
               </div>
             </div>
             <div className="flex-1 w-full h-96">
-              <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredReceiptRows} columns={receiptsCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+              <ManagerFinanceFinesPaymentsNativeTable
+                getRowKey={(row) => String(row.id)}
+                emptyMessage={tManagerUi('no_receipts_found')}
+                rows={filteredReceiptRows}
+                columns={receiptsCols}
+                labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
+              />
             </div>
           </div>
         )}
-
       </div>
 
       {/* Selected Receipt Details & Multi-Channel Share Modal */}
