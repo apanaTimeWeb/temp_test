@@ -5,7 +5,7 @@ import { ManagerSeatsHistoryNativeTable } from '@/app/frontend_manager/manager_s
 import { useLocale, useTranslations } from 'next-intl';
 
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronDown, Search, Download } from 'lucide-react';
+import { ChevronDown, Search, Download, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { sanitizeManagerSeatHistoryCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryCsv';
 import { useManagerSeatsHistory } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/hooks/useManagerSeatsHistoryTables';
@@ -20,6 +20,8 @@ export function ManagerSeatsHistoryClient() {
   const tManagerUi = useTranslations('manager.manager_seat_history.ui');
   const locale = useLocale();
   const [seatFilter, setSeatFilter] = useState('all');
+  const [shiftFilter, setShiftFilter] = useState('all');
+  const [reasonFilter, setReasonFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   // Dependency rationale: debounce seat-history search (300ms) and clear stale timers when the query changes or the component unmounts.
@@ -33,16 +35,18 @@ export function ManagerSeatsHistoryClient() {
   const seatHistoryData: ManagerSeatsHistoryRow[] = historyQuery.data ?? [];
   const seatOptions: string[] = Array.from(new Set<string>(seatHistoryData.map((history: ManagerSeatsHistoryRow) => history.seatNo))).sort((a, b) => a.localeCompare(b));
   const normalizedSearch = debouncedSearch.trim().toLowerCase();
-  const hasActiveFilters = seatFilter !== 'all' || normalizedSearch.length > 0 || Boolean(dateFrom) || Boolean(dateTo);
+  const hasActiveFilters = seatFilter !== 'all' || normalizedSearch.length > 0 || Boolean(dateFrom) || Boolean(dateTo) || shiftFilter !== 'all' || reasonFilter !== 'all';
 
   const filtered = seatHistoryData.filter((h: ManagerSeatsHistoryRow) => {
     const matchSeat = seatFilter === 'all' || h.seatNo === seatFilter;
+    const matchShift = shiftFilter === 'all' || h.shift.toLowerCase() === shiftFilter.toLowerCase();
+    const matchReason = reasonFilter === 'all' || h.reason.toLowerCase() === reasonFilter.toLowerCase();
     const matchSearch = !normalizedSearch ||
       h.studentName.toLowerCase().includes(normalizedSearch) ||
       h.smartId.toLowerCase().includes(normalizedSearch);
     const matchFrom = !dateFrom || h.occupiedFrom >= dateFrom;
     const matchTo = !dateTo || h.occupiedTill <= dateTo;
-    return matchSeat && matchSearch && matchFrom && matchTo;
+    return matchSeat && matchShift && matchReason && matchSearch && matchFrom && matchTo;
   });
 
   const colDefs: ColDef<ManagerSeatsHistoryRow>[] = useMemo(() => {
@@ -121,7 +125,7 @@ export function ManagerSeatsHistoryClient() {
         </button>
       </div>
 
-      <div className="ss-filter-bar">
+      <div className="ss-filter-bar flex flex-wrap items-center gap-3">
         <div className="ss-filter-bar__select-wrap">
           <select aria-label={tManagerUi('filter_by_seat')} className="ss-select" value={seatFilter} onChange={e => setSeatFilter(e.target.value)}>
             <option value="all">{tManagerUi('all_seats')}</option>
@@ -133,12 +137,50 @@ export function ManagerSeatsHistoryClient() {
           <Search size={14} className="ss-input-icon" />
           <input aria-label={tManagerUi('search_by_student_name_or_id')} type="text" placeholder={tManagerUi('search_by_student_name_or_id')} className="ss-input" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
+        <div className="ss-filter-bar__select-wrap">
+          <select aria-label="Filter by Shift" className="ss-select" value={shiftFilter} onChange={e => setShiftFilter(e.target.value)}>
+            <option value="all">All Shifts</option>
+            <option value="Morning">Morning</option>
+            <option value="Afternoon">Afternoon</option>
+            <option value="Evening">Evening</option>
+            <option value="Night">Night</option>
+            <option value="Full Day">Full Day</option>
+          </select>
+          <ChevronDown size={14} className="ss-select-icon" />
+        </div>
+        <div className="ss-filter-bar__select-wrap">
+          <select aria-label="Filter by Reason" className="ss-select" value={reasonFilter} onChange={e => setReasonFilter(e.target.value)}>
+            <option value="all">All Reasons</option>
+            <option value="Admission">Admission</option>
+            <option value="Shift Change">Shift Change</option>
+            <option value="Seat Change">Seat Change</option>
+          </select>
+          <ChevronDown size={14} className="ss-select-icon" />
+        </div>
         <div className="ss-filter-bar__input-wrap">
           <input aria-label={tManagerUi('date_from')} type="date" className="ss-input ss-input--no-icon" value={dateFrom} onChange={e => setDateFrom(e.target.value)} />
         </div>
         <div className="ss-filter-bar__input-wrap">
           <input aria-label={tManagerUi('date_to')} type="date" className="ss-input ss-input--no-icon" value={dateTo} onChange={e => setDateTo(e.target.value)} />
         </div>
+
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={() => {
+              setSeatFilter('all');
+              setShiftFilter('all');
+              setReasonFilter('all');
+              setSearch('');
+              setDateFrom('');
+              setDateTo('');
+            }}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+            title="Reset all filters"
+          >
+            <X size={13} /> Reset
+          </button>
+        )}
       </div>
 
       {historyQuery.isError ? (

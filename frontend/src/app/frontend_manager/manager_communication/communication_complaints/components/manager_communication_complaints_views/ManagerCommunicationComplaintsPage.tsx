@@ -4,7 +4,8 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useManagerComplaintsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/ManagerCommunicationComplaintsDialogFocus';
-import { ChevronRight, X, Eye, RefreshCw, CheckCircle, MessageSquarePlus, ShieldCheck, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { ChevronRight, X, Eye, RefreshCw, CheckCircle, MessageSquarePlus, ShieldCheck, Search, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react';
+import { toast } from 'sonner';
 import { useManagerCommunicationComplaints } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/useManagerCommunicationComplaintsComplaints';
 import type { ManagerCommunicationComplaintsComplaint, ManagerCommunicationComplaintsComplaintStatus } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 import { MANAGER_COMMUNICATION_COMPLAINT_TABS } from '@/app/frontend_manager/manager_communication/communication_complaints/constants/ManagerCommunicationComplaintsComplaintConstants';
@@ -34,6 +35,7 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const dialogRef = useRef<HTMLDivElement | null>(null);
@@ -45,15 +47,36 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const base = tab === 'All' ? allComplaints : allComplaints.filter((c) => c.status === tab);
-    if (!q) return base;
-    return base.filter(
-      (c) =>
+    return base.filter((c) => {
+      const matchCat = categoryFilter === 'all' ||
+        c.title.toLowerCase().includes(categoryFilter.toLowerCase()) ||
+        c.description.toLowerCase().includes(categoryFilter.toLowerCase());
+      const matchQ =
+        !q ||
         c.title.toLowerCase().includes(q) ||
         (c.student && c.student.toLowerCase().includes(q)) ||
         c.description.toLowerCase().includes(q) ||
-        (c.resolvedBy && c.resolvedBy.toLowerCase().includes(q))
-    );
-  }, [allComplaints, tab, searchQuery]);
+        (c.resolvedBy && c.resolvedBy.toLowerCase().includes(q));
+      return matchCat && matchQ;
+    });
+  }, [allComplaints, tab, searchQuery, categoryFilter]);
+
+  const hasActiveFilters = Boolean(tab !== 'All' || searchQuery.trim() !== '' || categoryFilter !== 'all');
+
+  const handleExportCsv = () => {
+    const headers = 'ID,Title,Student,Description,Status,Date,Resolved By\n';
+    const rows = sortedComplaints.map((c) =>
+      `"${c.id}","${c.title}","${c.student || 'Anonymous'}","${c.description.replace(/"/g, '""')}","${c.status}","${c.date}","${c.resolvedBy || ''}"`
+    ).join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `complaints_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('Complaints list exported to CSV successfully');
+  };
   const toggleDesc = (complaintId: string) => setExpandedDesc(current => current.includes(complaintId) ? current.filter(item => item !== complaintId) : [...current, complaintId]);
   const statusBadge = (status: ManagerCommunicationComplaintsComplaintStatus) => status === 'Open' ? <span className="mc-badge mc-badge--danger">{tManagerUi('open')}</span> : status === 'In-Progress' ? <span className="mc-badge mc-badge--warning">{tManagerUi('in_progress')}</span> : <span className="mc-badge mc-badge--success">{tManagerUi('resolved')}</span>;
 
@@ -155,26 +178,93 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div className="mc-tabs mc-tabs-inline">
-          {MANAGER_COMMUNICATION_COMPLAINT_TABS.map(item => (
-            <button type="button" key={item} onClick={() => { setTab(item); setPage(0); }} className={`mc-tab${tab === item ? ' mc-tab--active' : ''}`} aria-pressed={tab === item}>
-              {item}
-            </button>
-          ))}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          {MANAGER_COMMUNICATION_COMPLAINT_TABS.map(item => {
+            const count = item === 'All' ? allComplaints.length : allComplaints.filter(c => c.status === item).length;
+            const isActive = tab === item;
+            return (
+              <button
+                type="button"
+                key={item}
+                onClick={() => { setTab(item); setPage(0); }}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-primary text-on-primary shadow-sm ring-1 ring-primary'
+                    : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'
+                }`}
+                aria-pressed={isActive}
+              >
+                <span>{item}</span>
+                <span
+                  className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                    isActive ? 'bg-primary-fg/20 text-on-primary' : 'bg-surface-highlight text-secondary'
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
         </div>
-        <div className="relative w-full sm:w-64">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-          <input
-            type="search"
-            placeholder="Search complaint, student, or title..."
-            className="mgr-input pl-8 text-xs w-full"
-            value={searchQuery}
+
+        {/* Multi-Filter Toolbar */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative w-full sm:w-56">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <input
+              type="search"
+              placeholder="Search complaint, student, or title..."
+              className="mgr-input pl-8 text-xs w-full"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(0);
+              }}
+            />
+          </div>
+
+          <select
+            aria-label="Filter by Category"
+            value={categoryFilter}
             onChange={(e) => {
-              setSearchQuery(e.target.value);
+              setCategoryFilter(e.target.value);
               setPage(0);
             }}
-          />
+            className="mgr-select text-xs py-1.5 px-3 min-w-[130px]"
+          >
+            <option value="all">All Categories</option>
+            <option value="Facility">Facility</option>
+            <option value="AC">AC / Climate</option>
+            <option value="WiFi">WiFi / Internet</option>
+            <option value="Noise">Noise / Disturbance</option>
+            <option value="Cleanliness">Cleanliness</option>
+          </select>
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={() => {
+                setTab('All');
+                setSearchQuery('');
+                setCategoryFilter('all');
+                setPage(0);
+              }}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+              title="Reset all filters"
+            >
+              <X size={13} /> Reset
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+            title="Export Complaints CSV"
+          >
+            <Download size={13} /> Export CSV
+          </button>
         </div>
       </div>
 

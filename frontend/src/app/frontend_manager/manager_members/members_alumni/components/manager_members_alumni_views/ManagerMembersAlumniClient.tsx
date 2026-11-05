@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Orchestrate the client-side view and local interactions for components. It does not own backend persistence or cross-feature business logic.
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Award, Briefcase, Download, Filter, GraduationCap, Plus, Search, Users, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Award, Briefcase, Download, Filter, GraduationCap, Plus, Search, Users, ArrowUpDown, ArrowUp, ArrowDown, X } from 'lucide-react';
 import { ManagerMembersAlumniAddModal } from '@/app/frontend_manager/manager_members/members_alumni/components/manager_members_alumni_dialogs/ManagerMembersAlumniAddModal';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
 
@@ -68,6 +68,13 @@ export function ManagerMembersAlumniClient() {
       return matchesSearch && matchesYear && matchesStatus && matchesExam;
     });
   }, [records, searchQuery, yearFilter, statusFilter, examFilter]);
+
+  const hasActiveFilters = Boolean(
+    searchQuery.trim() !== '' ||
+    yearFilter !== 'All' ||
+    statusFilter !== 'All' ||
+    examFilter !== 'All'
+  );
 
   const sortedAlumni = useMemo(() => {
     if (!sortField) return filteredAlumni;
@@ -249,6 +256,23 @@ export function ManagerMembersAlumniClient() {
               <option value="Higher Studies">Higher Studies</option>
             </select>
           </div>
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setYearFilter('All');
+                setExamFilter('All');
+                setStatusFilter('All');
+                setPage(0);
+              }}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer shrink-0 self-center"
+              title="Reset all filters"
+            >
+              <X size={13} /> Reset
+            </button>
+          )}
         </div>
       </div>
 

@@ -20,6 +20,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   
   const [expenses, setExpenses] = useState<Expense[]>(MOCK as Expense[]);
   const [catFilter, setCatFilter] = useState('all');
+  const [modeFilter, setModeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCategoryReviewOpen, setIsCategoryReviewOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
@@ -37,16 +38,20 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
 
   const searchedExpenses = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    const base = catFilter === 'all' ? expenses : expenses.filter((e) => e.category === catFilter);
-    if (!q) return base;
-    return base.filter(
-      (e) =>
+    return expenses.filter((e) => {
+      const matchCat = catFilter === 'all' || e.category === catFilter;
+      const matchMode = modeFilter === 'all' || e.mode.toLowerCase() === modeFilter.toLowerCase();
+      const matchQ =
+        !q ||
         e.description.toLowerCase().includes(q) ||
         e.category.toLowerCase().includes(q) ||
         e.paidBy.toLowerCase().includes(q) ||
-        e.mode.toLowerCase().includes(q)
-    );
-  }, [expenses, catFilter, searchQuery]);
+        e.mode.toLowerCase().includes(q);
+      return matchCat && matchMode && matchQ;
+    });
+  }, [expenses, catFilter, modeFilter, searchQuery]);
+
+  const hasActiveFilters = Boolean(searchQuery.trim() !== '' || catFilter !== 'all' || modeFilter !== 'all');
 
   const handleExportCsv = () => {
     const headers = 'Date,Description,Category,Amount (INR),Payment Mode,Paid By\n';
@@ -167,9 +172,9 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         </section>
       )}
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-card p-4 rounded-xl border border-border">
-        <div className="flex items-center gap-2 flex-1 max-w-lg">
-          <div className="relative flex-1">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-card p-4 rounded-xl border border-border">
+        <div className="flex flex-wrap items-center gap-2 flex-1">
+          <div className="relative flex-1 min-w-[200px] max-w-sm">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
             <input
               type="search"
@@ -179,17 +184,46 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+
+          <select
+            aria-label="Filter by Payment Mode"
+            value={modeFilter}
+            onChange={(e) => setModeFilter(e.target.value)}
+            className="mgr-select text-xs py-1.5 px-3 min-w-[120px]"
+          >
+            <option value="all">All Modes</option>
+            <option value="cash">Cash</option>
+            <option value="upi">UPI</option>
+            <option value="card">Card</option>
+            <option value="bank">Bank Transfer</option>
+          </select>
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setCatFilter('all');
+                setModeFilter('all');
+              }}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+              title="Reset all filters"
+            >
+              <X size={13} /> Reset
+            </button>
+          )}
+
           <button
             type="button"
             onClick={handleExportCsv}
-            className="mgr-btn-ghost flex items-center gap-1.5 text-xs whitespace-nowrap"
+            className="mgr-btn-ghost flex items-center gap-1.5 text-xs whitespace-nowrap cursor-pointer"
             title="Export Expenses as CSV"
           >
             <Download size={14} />
             <span>Export CSV</span>
           </button>
         </div>
-        <span className="text-xs text-secondary">{searchedExpenses.length} Records</span>
+        <span className="text-xs text-secondary font-mono shrink-0">{searchedExpenses.length} Records</span>
       </div>
 
       <ManagerAccountsExpensesExpenseLedger

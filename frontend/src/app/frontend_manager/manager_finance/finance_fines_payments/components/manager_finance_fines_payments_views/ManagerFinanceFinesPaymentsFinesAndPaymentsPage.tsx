@@ -10,7 +10,7 @@ import { MANAGER_FINANCE_FINES_PAYMENTS_ROUTES } from '@/app/frontend_manager/ma
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerFinanceFineCollectionDraftSchema, type ManagerFinanceFinesPaymentsFineCollectionDraft } from '@/app/frontend_manager/manager_finance/finance_fines_payments/schemas/ManagerFinanceFinesPaymentsFineCollectionDraftSchema';
-import { AlertCircle, DollarSign, FileText, CheckCircle, RotateCcw, Receipt, History, AlertTriangle, Search, IndianRupee, HandCoins, Clock, Eye, Printer, MessageSquare, Mail, Smartphone, X, UserCheck } from 'lucide-react';
+import { AlertCircle, DollarSign, FileText, CheckCircle, RotateCcw, Receipt, History, AlertTriangle, Search, IndianRupee, HandCoins, Clock, Eye, Printer, MessageSquare, Mail, Smartphone, X, UserCheck, Download } from 'lucide-react';
 import type { ManagerFinanceFinesPaymentsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsComponentTypes';
 import { toast } from 'sonner';
 
@@ -38,6 +38,9 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
   const [collectionDraftFeedback, setCollectionDraftFeedback] = useState<string | null>(null);
   const [selectedReceipt, setSelectedReceipt] = useState<ManagerReceiptRecord | null>(null);
   const [tableSearchQuery, setTableSearchQuery] = useState('');
+  const [receiptModeFilter, setReceiptModeFilter] = useState('all');
+  const [fineTypeFilter, setFineTypeFilter] = useState('all');
+  const [historyModeFilter, setHistoryModeFilter] = useState('all');
 
   const handleShareWhatsApp = (r: ManagerReceiptRecord) => {
     const text = encodeURIComponent(
@@ -128,41 +131,92 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     const base = MANAGER_FINANCE_SAMPLE_PENDING_FINES.filter((f) =>
       activeTab === 'pending' ? f.status === 'Pending' : f.status === 'Partially Paid'
     );
-    if (!q) return base;
-    return base.filter(
-      (f) =>
+    return base.filter((f) => {
+      const matchType = fineTypeFilter === 'all' || f.type.toLowerCase() === fineTypeFilter.toLowerCase();
+      const matchQ =
+        !q ||
         f.id.toLowerCase().includes(q) ||
         f.member.toLowerCase().includes(q) ||
-        f.type.toLowerCase().includes(q)
-    );
-  }, [tableSearchQuery, activeTab]);
+        f.type.toLowerCase().includes(q);
+      return matchType && matchQ;
+    });
+  }, [tableSearchQuery, activeTab, fineTypeFilter]);
 
   const filteredHistoryRows = useMemo(() => {
     const q = tableSearchQuery.trim().toLowerCase();
-    if (!q) return MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY;
-    return MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY.filter(
-      (h) =>
+    return MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY.filter((h) => {
+      const matchMode = historyModeFilter === 'all' || h.mode.toLowerCase() === historyModeFilter.toLowerCase();
+      const matchQ =
+        !q ||
         (h.receipt && h.receipt.toLowerCase().includes(q)) ||
         h.id.toLowerCase().includes(q) ||
         h.member.toLowerCase().includes(q) ||
         h.type.toLowerCase().includes(q) ||
-        h.collectedBy.toLowerCase().includes(q)
-    );
-  }, [tableSearchQuery]);
+        h.collectedBy.toLowerCase().includes(q);
+      return matchMode && matchQ;
+    });
+  }, [tableSearchQuery, historyModeFilter]);
 
   const filteredReceiptRows = useMemo(() => {
     const q = tableSearchQuery.trim().toLowerCase();
-    if (!q) return receiptRows;
-    return receiptRows.filter(
-      (r) =>
+    return receiptRows.filter((r) => {
+      const matchMode = receiptModeFilter === 'all' || r.mode.toLowerCase() === receiptModeFilter.toLowerCase();
+      const matchQ =
+        !q ||
         r.txnId.toLowerCase().includes(q) ||
         r.receiptNumber.toLowerCase().includes(q) ||
         r.member.toLowerCase().includes(q) ||
         r.plan.toLowerCase().includes(q) ||
         r.phone.includes(q) ||
-        r.collectedBy.toLowerCase().includes(q)
-    );
-  }, [tableSearchQuery, receiptRows]);
+        r.collectedBy.toLowerCase().includes(q);
+      return matchMode && matchQ;
+    });
+  }, [tableSearchQuery, receiptRows, receiptModeFilter]);
+
+  const handleExportReceiptsCsv = () => {
+    const headers = 'Transaction ID,Receipt Number,Member,Plan,Late Fee,Amount,Mode,Date,Collected By,Status\n';
+    const rows = filteredReceiptRows.map((r) =>
+      `"${r.txnId}","${r.receiptNumber}","${r.member}","${r.plan}","${r.lateFee}","${r.amount}","${r.mode}","${r.date}","${r.collectedBy}","${r.status}"`
+    ).join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `receipts_ledger_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('Receipts exported to CSV successfully');
+  };
+
+  const handleExportPendingFinesCsv = () => {
+    const headers = 'Fine ID,Member,Type,Amount,Date,Status\n';
+    const rows = filteredPendingFines.map((f) =>
+      `"${f.id}","${f.member}","${f.type}","${f.amount}","${f.date}","${f.status}"`
+    ).join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `fines_${activeTab}_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success(`Fines (${activeTab}) exported to CSV successfully`);
+  };
+
+  const handleExportHistoryCsv = () => {
+    const headers = 'Receipt,Member,Fine Type,Amount,Payment Mode,Date Time,Collected By\n';
+    const rows = filteredHistoryRows.map((h) =>
+      `"${h.receipt || ''}","${h.member}","${h.type}","${h.amount}","${h.mode}","${h.date}","${h.collectedBy}"`
+    ).join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `payment_history_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('Payment history exported to CSV successfully');
+  };
 
   // Native semantic table column definitions
   const pendingCols: NativeColumn[] = useMemo(() => [
@@ -268,71 +322,111 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
         <p className="mt-2 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" data-testid="manager-finance-fines-sample-warning" role="status">{tManagerUi('this_page_displays_sample_financial_records_for_layout_r_04f8ef')}</p>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+      {/* Top Horizontal Segmented Control */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none border-b border-border">
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab.id;
+          const count =
+            tab.id === 'pending'
+              ? MANAGER_FINANCE_SAMPLE_PENDING_FINES.filter((f) => f.status === 'Pending').length
+              : tab.id === 'partiallyPaid'
+              ? MANAGER_FINANCE_SAMPLE_PENDING_FINES.filter((f) => f.status === 'Partially Paid').length
+              : tab.id === 'paid'
+              ? MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY.length
+              : tab.id === 'receipts'
+              ? receiptRows.length
+              : null;
+
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => {
+                if (tab.id === 'refundRequests') {
+                  router.push(MANAGER_FINANCE_FINES_PAYMENTS_ROUTES.REFUNDS);
+                  return;
+                }
+                setActiveTab(tab.id);
+                setTableSearchQuery('');
+                setFineTypeFilter('all');
+                setHistoryModeFilter('all');
+                setReceiptModeFilter('all');
+              }}
+              aria-pressed={isActive}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
+                isActive
+                  ? 'bg-primary text-on-primary shadow-sm ring-1 ring-primary'
+                  : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'
+              }`}
+            >
+              <tab.icon size={15} className={isActive ? 'text-primary' : 'opacity-70'} />
+              <span>{tManagerUi(tab.labelKey)}</span>
+              {count !== null && (
+                <span
+                  className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                    isActive ? 'bg-primary-fg/20 text-on-primary' : 'bg-surface-highlight text-secondary'
+                  }`}
+                >
+                  {count}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Main Full-Width Content Area */}
+      <div className="mgr-card p-6 min-h-96 w-full shadow-card border border-border">
         
-        {/* Left Sidebar Tabs */}
-        <div className="xl:col-span-3 space-y-2">
-          {TABS.map(tab => {
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => {
-                  if (tab.id === 'refundRequests') {
-                    router.push(MANAGER_FINANCE_FINES_PAYMENTS_ROUTES.REFUNDS);
-                    return;
-                  }
-                  setActiveTab(tab.id);
-                }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold motion-safe:transition-all ${
-                  isActive 
-                    ? 'bg-primary text-on-primary shadow-lg' 
-                    : 'text-secondary hover:bg-card hover:text-primary'
-                }`}
-              >
-                <tab.icon size={18} className={isActive ? 'text-primary' : 'opacity-70'} />
-                {tManagerUi(tab.labelKey)}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Right Content Area */}
-        <div className="xl:col-span-9 mgr-card p-6 min-h-96">
-          
-          {/* DASHBOARD */}
-          {activeTab === 'dashboard' && (
-            <div className="motion-safe:transition-all motion-safe:duration-base">
-              <h2 className="text-xl font-bold text-primary mb-6 border-b border-border pb-4">{tManagerUi('fine_collection_overview')}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                {([
-                  { labelKey: 'total_pending_fines', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.totalPendingFines), icon: AlertCircle, color: 'text-danger', bg: 'bg-danger-bg' },
-                  { labelKey: 'todays_collection', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.todaysCollection), icon: IndianRupee, color: 'text-success', bg: 'bg-success-bg' },
-                  { labelKey: 'overdue_fines_kpi', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.overdueFines), icon: Clock, color: 'text-warning', bg: 'bg-warning-bg' },
-                  { labelKey: 'lost_book_charges_kpi', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.lostBookCharges), icon: FileText, color: 'text-info', bg: 'bg-info-bg' },
-                  { labelKey: 'damage_charges_kpi', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.damageCharges), icon: AlertTriangle, color: 'text-purple', bg: 'bg-purple-bg' },
-                ] as const).map((kpi, i) => (
-                  <div key={kpi.labelKey} className="p-4 rounded-xl bg-card border border-border hover:bg-surface-hover motion-safe:transition-colors">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className={`p-2 rounded-lg ${kpi.bg} ${kpi.color}`}>
-                        <kpi.icon size={20} />
-                      </div>
+        {/* DASHBOARD */}
+        {activeTab === 'dashboard' && (
+          <div className="motion-safe:transition-all motion-safe:duration-base">
+            <h2 className="text-xl font-bold text-primary mb-6 border-b border-border pb-4">{tManagerUi('fine_collection_overview')}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              {([
+                { id: 'totalPending', labelKey: 'total_pending_fines', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.totalPendingFines), icon: AlertCircle, color: 'text-danger', bg: 'bg-danger-bg', targetTab: 'pending', filterType: 'all' },
+                { id: 'todaysCollection', labelKey: 'todays_collection', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.todaysCollection), icon: IndianRupee, color: 'text-success', bg: 'bg-success-bg', targetTab: 'receipts', filterType: 'all' },
+                { id: 'overdueFines', labelKey: 'overdue_fines_kpi', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.overdueFines), icon: Clock, color: 'text-warning', bg: 'bg-warning-bg', targetTab: 'pending', filterType: 'all' },
+                { id: 'lostBookCharges', labelKey: 'lost_book_charges_kpi', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.lostBookCharges), icon: FileText, color: 'text-info', bg: 'bg-info-bg', targetTab: 'pending', filterType: 'Lost Book Charge' },
+                { id: 'damageCharges', labelKey: 'damage_charges_kpi', value: formatCurrency(MANAGER_FINANCE_SAMPLE_FINE_DASHBOARD_AMOUNTS.damageCharges), icon: AlertTriangle, color: 'text-purple', bg: 'bg-purple-bg', targetTab: 'pending', filterType: 'Damage Charge' },
+              ] as const).map((kpi) => (
+                <button
+                  key={kpi.labelKey}
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(kpi.targetTab);
+                    setFineTypeFilter(kpi.filterType);
+                  }}
+                  className="p-4 rounded-xl bg-card border border-border hover:border-primary hover:bg-surface-hover motion-safe:transition-colors text-left cursor-pointer group"
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <div className={`p-2 rounded-lg ${kpi.bg} ${kpi.color}`}>
+                      <kpi.icon size={20} />
                     </div>
-                    <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">{tManagerUi(kpi.labelKey)}</p>
-                    <h3 className="text-2xl font-black text-primary">{kpi.value}</h3>
+                    <span className="text-[11px] text-secondary group-hover:text-primary font-semibold flex items-center gap-1">
+                      View list →
+                    </span>
                   </div>
-                ))}
-              </div>
+                  <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">{tManagerUi(kpi.labelKey)}</p>
+                  <h3 className="text-2xl font-black text-primary">{kpi.value}</h3>
+                </button>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* PENDING FINES (AG GRID) */}
-          {(activeTab === 'pending' || activeTab === 'partiallyPaid') && (
-            <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
+        {/* PENDING FINES (AG GRID) */}
+        {(activeTab === 'pending' || activeTab === 'partiallyPaid') && (
+          <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
+              <div>
                 <h2 className="text-xl font-bold text-primary">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
-                <div className="relative w-full sm:w-64">
+                <p className="text-xs text-secondary mt-0.5">Filter, inspect, and export {activeTab === 'pending' ? 'pending' : 'partially paid'} student dues</p>
+              </div>
+              
+              {/* Multi-Filter Toolbar */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="relative w-full sm:w-60">
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
                   <input
                     type="search"
@@ -342,19 +436,62 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                     onChange={(e) => setTableSearchQuery(e.target.value)}
                   />
                 </div>
-              </div>
-              <div className="flex-1 w-full h-96">
-                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredPendingFines} columns={pendingCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+
+                <select
+                  aria-label="Filter by Fine Type"
+                  value={fineTypeFilter}
+                  onChange={(e) => setFineTypeFilter(e.target.value)}
+                  className="mgr-select text-xs py-1.5 px-3 min-w-[140px]"
+                >
+                  <option value="all">All Fine Types</option>
+                  <option value="Overdue Book">Overdue Book</option>
+                  <option value="Lost Book Charge">Lost Book Charge</option>
+                  <option value="Damage Charge">Damage Charge</option>
+                  <option value="Late Fee">Late Fee</option>
+                </select>
+
+                {(tableSearchQuery.trim() !== '' || fineTypeFilter !== 'all') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTableSearchQuery('');
+                      setFineTypeFilter('all');
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+                    title="Reset filters"
+                  >
+                    <X size={13} /> Reset
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleExportPendingFinesCsv}
+                  className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+                  title="Export Fines CSV"
+                >
+                  <Download size={13} /> Export CSV
+                </button>
               </div>
             </div>
-          )}
+            <div className="flex-1 w-full h-96">
+              <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredPendingFines} columns={pendingCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+            </div>
+          </div>
+        )}
 
-          {/* PAID FINES (AG GRID) */}
-          {activeTab === 'paid' && (
-            <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
+        {/* PAID FINES (AG GRID) */}
+        {activeTab === 'paid' && (
+          <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
+              <div>
                 <h2 className="text-xl font-bold text-primary">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
-                <div className="relative w-full sm:w-64">
+                <p className="text-xs text-secondary mt-0.5">Historical log of settled fines and penalty collections</p>
+              </div>
+
+              {/* Multi-Filter Toolbar */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="relative w-full sm:w-60">
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
                   <input
                     type="search"
@@ -364,42 +501,117 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                     onChange={(e) => setTableSearchQuery(e.target.value)}
                   />
                 </div>
-              </div>
-              <div className="flex-1 w-full h-96">
-                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredHistoryRows} columns={historyCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+
+                <select
+                  aria-label="Filter by Payment Mode"
+                  value={historyModeFilter}
+                  onChange={(e) => setHistoryModeFilter(e.target.value)}
+                  className="mgr-select text-xs py-1.5 px-3 min-w-[130px]"
+                >
+                  <option value="all">All Modes</option>
+                  <option value="cash">Cash</option>
+                  <option value="upi">UPI</option>
+                  <option value="card">Card</option>
+                  <option value="bank">Bank Transfer</option>
+                </select>
+
+                {(tableSearchQuery.trim() !== '' || historyModeFilter !== 'all') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTableSearchQuery('');
+                      setHistoryModeFilter('all');
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+                    title="Reset filters"
+                  >
+                    <X size={13} /> Reset
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleExportHistoryCsv}
+                  className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+                  title="Export Payment History CSV"
+                >
+                  <Download size={13} /> Export CSV
+                </button>
               </div>
             </div>
-          )}
+            <div className="flex-1 w-full h-96">
+              <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredHistoryRows} columns={historyCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+            </div>
+          </div>
+        )}
 
-          {/* RECEIPTS TAB (AG GRID with Transaction ID, Late Fee, Plan, Status, Actions, View/Print/Share) */}
-          {activeTab === 'receipts' && (
-            <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
-                <div>
-                  <h2 className="text-xl font-bold text-primary">{tManagerUi('receipts_tab')}</h2>
-                  <p className="text-xs text-secondary mt-1">Official transaction receipts with late fees, plan details, and multi-channel dispatch</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="relative w-full sm:w-64">
-                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                    <input
-                      type="search"
-                      placeholder="Search txn ID, receipt, member, plan..."
-                      className="mgr-input pl-8 text-xs w-full"
-                      value={tableSearchQuery}
-                      onChange={(e) => setTableSearchQuery(e.target.value)}
-                    />
-                  </div>
-                  <span className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">{filteredReceiptRows.length} Receipts</span>
-                </div>
+        {/* RECEIPTS TAB (AG GRID with Transaction ID, Late Fee, Plan, Status, Actions, View/Print/Share) */}
+        {activeTab === 'receipts' && (
+          <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
+              <div>
+                <h2 className="text-xl font-bold text-primary">{tManagerUi('receipts_tab')}</h2>
+                <p className="text-xs text-secondary mt-1">Official transaction receipts with late fees, plan details, and multi-channel dispatch</p>
               </div>
-              <div className="flex-1 w-full h-96">
-                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredReceiptRows} columns={receiptsCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+              
+              {/* Multi-Filter Toolbar */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="relative w-full sm:w-60">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                  <input
+                    type="search"
+                    placeholder="Search txn ID, receipt, member, plan..."
+                    className="mgr-input pl-8 text-xs w-full"
+                    value={tableSearchQuery}
+                    onChange={(e) => setTableSearchQuery(e.target.value)}
+                  />
+                </div>
+
+                <select
+                  aria-label="Filter Receipts by Mode"
+                  value={receiptModeFilter}
+                  onChange={(e) => setReceiptModeFilter(e.target.value)}
+                  className="mgr-select text-xs py-1.5 px-3 min-w-[130px]"
+                >
+                  <option value="all">All Modes</option>
+                  <option value="Cash">Cash</option>
+                  <option value="UPI">UPI</option>
+                  <option value="Card">Card</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                </select>
+
+                {(tableSearchQuery.trim() !== '' || receiptModeFilter !== 'all') && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTableSearchQuery('');
+                      setReceiptModeFilter('all');
+                    }}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+                    title="Reset filters"
+                  >
+                    <X size={13} /> Reset
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleExportReceiptsCsv}
+                  className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+                  title="Export Receipts CSV"
+                >
+                  <Download size={13} /> Export CSV
+                </button>
+
+                <span className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">{filteredReceiptRows.length} Receipts</span>
               </div>
             </div>
-          )}
+            <div className="flex-1 w-full h-96">
+              <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredReceiptRows} columns={receiptsCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+            </div>
+          </div>
+        )}
 
-        </div>
       </div>
 
       {/* Selected Receipt Details & Multi-Channel Share Modal */}

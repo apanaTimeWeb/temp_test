@@ -2,7 +2,8 @@
 // RESPONSIBILITY: Orchestrate client-side view and local interactions for referral bonus management.
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { CheckCircle2, Clock, DollarSign, Gift, Plus, Search, Users, X, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { CheckCircle2, Clock, DollarSign, Gift, Plus, Search, Users, X, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react';
+import { toast } from 'sonner';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 
 const INITIAL_REFERRALS: ReferralRow[] = [
@@ -19,6 +20,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const [records, setRecords] = useState<ReferralRow[]>(INITIAL_REFERRALS);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Credited' | 'Pending'>('All');
+  const [methodFilter, setMethodFilter] = useState<'All' | 'Fee Discount' | 'UPI Cash'>('All');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   type ReferralSortField = 'id' | 'referrer' | 'referred' | 'date' | 'bonus' | 'method' | 'status';
@@ -49,11 +51,29 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const filteredRows = useMemo(() => {
     return records.filter((r) => {
       const q = searchQuery.toLowerCase();
-      const matchQ = r.referrer.toLowerCase().includes(q) || r.referred.toLowerCase().includes(q) || r.id.toLowerCase().includes(q);
+      const matchQ = !q || r.referrer.toLowerCase().includes(q) || r.referred.toLowerCase().includes(q) || r.id.toLowerCase().includes(q);
       const matchS = statusFilter === 'All' || r.status === statusFilter;
-      return matchQ && matchS;
+      const matchM = methodFilter === 'All' || r.method.toLowerCase() === methodFilter.toLowerCase();
+      return matchQ && matchS && matchM;
     });
-  }, [records, searchQuery, statusFilter]);
+  }, [records, searchQuery, statusFilter, methodFilter]);
+
+  const hasActiveFilters = Boolean(searchQuery.trim() !== '' || statusFilter !== 'All' || methodFilter !== 'All');
+
+  const handleExportCsv = () => {
+    const headers = 'Referral ID,Referrer,Referred Member,Date,Bonus Amount,Reward Method,Status\n';
+    const rows = sortedRows.map((r) =>
+      `"${r.id}","${r.referrer}","${r.referred}","${r.date}","${r.bonus}","${r.method}","${r.status}"`
+    ).join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `referrals_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('Referrals exported to CSV successfully');
+  };
 
   const sortedRows = useMemo(() => {
     if (!sortField) return filteredRows;
@@ -156,60 +176,133 @@ export function ManagerMembersReferralBonusReferralsClient() {
 
       {/* KPI Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="mgr-card p-4">
+        <button
+          type="button"
+          onClick={() => {
+            setStatusFilter('All');
+            setPage(0);
+          }}
+          className={`mgr-card p-4 text-left cursor-pointer transition-all ${
+            statusFilter === 'All' ? 'ring-2 ring-primary border-primary' : 'hover:border-primary/50'
+          }`}
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs text-secondary font-medium">{tManagerUi('total_referrals')}</span>
             <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center"><Users size={16} /></div>
           </div>
           <p className="text-2xl font-bold text-primary mt-2">{records.length}</p>
-        </div>
-        <div className="mgr-card p-4">
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setStatusFilter('Pending');
+            setPage(0);
+          }}
+          className={`mgr-card p-4 text-left cursor-pointer transition-all ${
+            statusFilter === 'Pending' ? 'ring-2 ring-warning border-warning' : 'hover:border-warning/50'
+          }`}
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs text-secondary font-medium">{tManagerUi('pending_approvals')}</span>
             <div className="w-8 h-8 rounded-lg bg-warning/10 text-warning flex items-center justify-center"><Clock size={16} /></div>
           </div>
           <p className="text-2xl font-bold text-warning mt-2">{pendingCount}</p>
-        </div>
-        <div className="mgr-card p-4">
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setStatusFilter('Credited');
+            setPage(0);
+          }}
+          className={`mgr-card p-4 text-left cursor-pointer transition-all ${
+            statusFilter === 'Credited' ? 'ring-2 ring-success border-success' : 'hover:border-success/50'
+          }`}
+        >
           <div className="flex items-center justify-between">
             <span className="text-xs text-secondary font-medium">{tManagerUi('total_bonus_distributed')}</span>
             <div className="w-8 h-8 rounded-lg bg-success/10 text-success flex items-center justify-center"><DollarSign size={16} /></div>
           </div>
           <p className="text-2xl font-bold text-success mt-2">₹{totalBonusAmount.toLocaleString('en-IN')}</p>
-        </div>
+        </button>
       </div>
 
       {/* Filter and Search Bar */}
       <div className="mgr-card p-4 mb-6">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="mgr-input-icon-wrap flex-1">
-            <Search size={15} className="mgr-input-icon text-secondary" />
-            <input
-              type="search"
-              placeholder="Search by referrer, referred student, or Ref ID..."
-              className="mgr-input mgr-input-with-icon text-xs"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setPage(0);
-              }}
-            />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2 flex-1">
+            <div className="mgr-input-icon-wrap flex-1 min-w-[200px] max-w-sm">
+              <Search size={15} className="mgr-input-icon text-secondary" />
+              <input
+                type="search"
+                placeholder="Search by referrer, referred student, or Ref ID..."
+                className="mgr-input mgr-input-with-icon text-xs"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setPage(0);
+                }}
+              />
+            </div>
+
+            <div className="w-full sm:w-40">
+              <select
+                aria-label="Filter by Status"
+                value={statusFilter}
+                onChange={(e) => {
+                  setStatusFilter(e.target.value as 'All' | 'Credited' | 'Pending');
+                  setPage(0);
+                }}
+                className="mgr-select text-xs py-1.5 px-3"
+              >
+                <option value="All">All Statuses</option>
+                <option value="Credited">Credited</option>
+                <option value="Pending">Pending Approval</option>
+              </select>
+            </div>
+
+            <div className="w-full sm:w-40">
+              <select
+                aria-label="Filter by Reward Method"
+                value={methodFilter}
+                onChange={(e) => {
+                  setMethodFilter(e.target.value as 'All' | 'Fee Discount' | 'UPI Cash');
+                  setPage(0);
+                }}
+                className="mgr-select text-xs py-1.5 px-3"
+              >
+                <option value="All">All Methods</option>
+                <option value="Fee Discount">Fee Discount</option>
+                <option value="UPI Cash">UPI Cash</option>
+              </select>
+            </div>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setStatusFilter('All');
+                  setMethodFilter('All');
+                  setPage(0);
+                }}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+                title="Reset all filters"
+              >
+                <X size={13} /> Reset
+              </button>
+            )}
           </div>
-          <div className="w-full sm:w-44">
-            <select
-              aria-label="Filter by Status"
-              value={statusFilter}
-              onChange={(e) => {
-                setStatusFilter(e.target.value as 'All' | 'Credited' | 'Pending');
-                setPage(0);
-              }}
-              className="mgr-select text-xs"
-            >
-              <option value="All">All Statuses</option>
-              <option value="Credited">Credited</option>
-              <option value="Pending">Pending Approval</option>
-            </select>
-          </div>
+
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer shrink-0"
+            title="Export Referrals CSV"
+          >
+            <Download size={13} /> Export CSV
+          </button>
         </div>
       </div>
 

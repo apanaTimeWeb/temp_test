@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import { Search, Download } from 'lucide-react';
+import { Search, Download, X } from 'lucide-react';
 import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
@@ -33,17 +33,24 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const date = toLocalDateInputValue(new Date());
   const [entries, setEntries] = useState<Entry[]>([...MOCK]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [shiftFilter, setShiftFilter] = useState('all');
 
   const filteredEntries = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return entries;
-    return entries.filter(
-      (e) =>
+    return entries.filter((e) => {
+      const matchStatus = statusFilter === 'all' || e.status.toLowerCase() === statusFilter.toLowerCase();
+      const matchShift = shiftFilter === 'all' || e.shift.toLowerCase().includes(shiftFilter.toLowerCase());
+      const matchQ =
+        !q ||
         e.shift.toLowerCase().includes(q) ||
         (e.settledBy && e.settledBy.toLowerCase().includes(q)) ||
-        e.status.toLowerCase().includes(q)
-    );
-  }, [entries, searchQuery]);
+        e.status.toLowerCase().includes(q);
+      return matchStatus && matchShift && matchQ;
+    });
+  }, [entries, searchQuery, statusFilter, shiftFilter]);
+
+  const hasActiveFilters = Boolean(searchQuery.trim() !== '' || statusFilter !== 'all' || shiftFilter !== 'all');
 
   const handleSettleShift = (shiftName: string) => {
     setEntries((prev) =>
@@ -171,10 +178,15 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
       </div>
 
       <div className="fin-card p-4 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <h2 className="text-sm font-semibold text-primary">Shift Settlements</h2>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="relative w-full sm:w-64">
+            <h2 className="text-sm font-semibold text-primary">Shift Settlements</h2>
+            <span className="mgr-badge mgr-badge--info text-xs font-mono">{filteredEntries.length} Records</span>
+          </div>
+
+          {/* Multi-Filter Toolbar */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="relative w-full sm:w-56">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
               <input
                 type="search"
@@ -184,10 +196,51 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+
+            <select
+              aria-label="Filter by Settlement Status"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="mgr-select text-xs py-1.5 px-3 min-w-[120px]"
+            >
+              <option value="all">All Status</option>
+              <option value="settled">Settled / Verified</option>
+              <option value="pending">Pending</option>
+            </select>
+
+            <select
+              aria-label="Filter by Shift"
+              value={shiftFilter}
+              onChange={(e) => setShiftFilter(e.target.value)}
+              className="mgr-select text-xs py-1.5 px-3 min-w-[120px]"
+            >
+              <option value="all">All Shifts</option>
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+              <option value="Night">Night</option>
+              <option value="Full Day">Full Day</option>
+            </select>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setStatusFilter('all');
+                  setShiftFilter('all');
+                }}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+                title="Reset all filters"
+              >
+                <X size={13} /> Reset
+              </button>
+            )}
+
             <button
               type="button"
               onClick={handleExportCsv}
-              className="mgr-btn-ghost flex items-center gap-1.5 text-xs whitespace-nowrap"
+              className="mgr-btn-ghost flex items-center gap-1.5 text-xs whitespace-nowrap cursor-pointer"
               title="Export Daily Settlement as CSV"
             >
               <Download size={14} />

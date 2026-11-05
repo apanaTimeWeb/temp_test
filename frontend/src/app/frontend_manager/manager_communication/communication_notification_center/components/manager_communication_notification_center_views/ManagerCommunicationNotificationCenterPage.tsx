@@ -36,41 +36,36 @@ export default function ManagerCommunicationNotificationCenterPage({ view, id, n
         <p className="mt-2 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" data-testid="manager-communication-send-contract-warning" role="status">{tManagerUi('notification_history_is_sample_data_sending_messages_tri_40ef96')}</p>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-        
-        {/* Left Sidebar Tabs */}
-        <div className="xl:col-span-3 space-y-2">
-          {TABS.map(tab => {
-            const isActive = activeTab === tab.name;
-            return (
-              <button
-                key={tab.name}
-                type="button"
-                onClick={() => setActiveTab(tab.name)}
-                aria-pressed={isActive}
-                className={`w-full min-h-11 flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold motion-safe:transition-all ${
-                  isActive 
-                    ? 'bg-primary text-on-primary shadow-lg' 
-                    : 'text-secondary hover:bg-card hover:text-primary'
-                }`}
-              >
-                <tab.icon size={18} className={isActive ? 'text-primary' : 'opacity-70'} />
-                {tManagerUi(tab.labelKey)}
-              </button>
-            );
-          })}
-        </div>
+      {/* Top Horizontal Segmented Control */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-6 scrollbar-none border-b border-border">
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab.name;
+          return (
+            <button
+              key={tab.name}
+              type="button"
+              onClick={() => setActiveTab(tab.name)}
+              aria-pressed={isActive}
+              className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
+                isActive
+                  ? 'bg-primary text-on-primary shadow-sm ring-1 ring-primary'
+                  : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'
+              }`}
+            >
+              <tab.icon size={16} className={isActive ? 'text-primary' : 'opacity-70'} />
+              <span>{tManagerUi(tab.labelKey)}</span>
+            </button>
+          );
+        })}
+      </div>
 
-        {/* Right Content Area */}
-        <div className="xl:col-span-9 mgr-card p-6 min-h-96">
-          
-          {activeTab === 'My Notifications' && <ManagerCommunicationNotificationCenterMyNotificationsSection />}
+      {/* Main Full-Width Card */}
+      <div className="mgr-card p-6 min-h-96 w-full shadow-card border border-border">
+        {activeTab === 'My Notifications' && <ManagerCommunicationNotificationCenterMyNotificationsSection />}
 
-          {activeTab === 'Member Notifications' && <ManagerCommunicationNotificationCenterNotificationDraftForm />}
+        {activeTab === 'Member Notifications' && <ManagerCommunicationNotificationCenterNotificationDraftForm />}
 
-          {activeTab === 'Notification History' && <ManagerCommunicationNotificationCenterNotificationHistorySection />}
-
-        </div>
+        {activeTab === 'Notification History' && <ManagerCommunicationNotificationCenterNotificationHistorySection />}
       </div>
     </div>
   );

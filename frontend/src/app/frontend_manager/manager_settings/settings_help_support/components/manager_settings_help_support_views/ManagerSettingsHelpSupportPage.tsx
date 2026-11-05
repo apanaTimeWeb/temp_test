@@ -9,7 +9,8 @@ import { ManagerSettingsHelpSupportTicketForm } from '@/app/frontend_manager/man
 import { MANAGER_HELP_SUPPORT_TABS } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
 import { ManagerSettingsHelpSupportTabs } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportTabs';
 import { formatManagerHelpSupportCalendarDate } from '@/app/frontend_manager/manager_settings/settings_help_support/utils/ManagerSettingsHelpSupportDateFormatting';
-import { Megaphone, Plus, CheckCircle, Clock, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Megaphone, Plus, CheckCircle, Clock, Search, ArrowUpDown, ArrowUp, ArrowDown, X, Download } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function ManagerSettingsHelpSupportPage() {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');
@@ -17,6 +18,9 @@ export default function ManagerSettingsHelpSupportPage() {
 
   const { activeTab, setActiveTab, ticketTab, setTicketTab, myTickets, announcements } = useManagerHelpSupportPageState();
   const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [priorityFilter, setPriorityFilter] = useState('all');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   type TicketSortField = 'id' | 'subject' | 'category' | 'priority' | 'status' | 'date';
@@ -38,15 +42,36 @@ export default function ManagerSettingsHelpSupportPage() {
 
   const filteredTickets = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return myTickets;
-    return myTickets.filter(
-      (t) =>
+    return myTickets.filter((t) => {
+      const matchCat = categoryFilter === 'all' || t.category.toLowerCase() === categoryFilter.toLowerCase();
+      const matchStatus = statusFilter === 'all' || t.status.toLowerCase() === statusFilter.toLowerCase();
+      const matchPriority = priorityFilter === 'all' || t.priority.toLowerCase() === priorityFilter.toLowerCase();
+      const matchQ =
+        !q ||
         t.id.toLowerCase().includes(q) ||
         t.subject.toLowerCase().includes(q) ||
         t.category.toLowerCase().includes(q) ||
-        t.status.toLowerCase().includes(q)
-    );
-  }, [myTickets, searchQuery]);
+        t.status.toLowerCase().includes(q);
+      return matchCat && matchStatus && matchPriority && matchQ;
+    });
+  }, [myTickets, searchQuery, categoryFilter, statusFilter, priorityFilter]);
+
+  const hasActiveFilters = Boolean(searchQuery.trim() !== '' || categoryFilter !== 'all' || statusFilter !== 'all' || priorityFilter !== 'all');
+
+  const handleExportCsv = () => {
+    const headers = 'Ticket ID,Subject,Category,Priority,Status,Date\n';
+    const rows = sortedTickets.map((t) =>
+      `"${t.id}","${t.subject.replace(/"/g, '""')}","${t.category}","${t.priority}","${t.status}","${t.date}"`
+    ).join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `support_tickets_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('Support tickets exported to CSV successfully');
+  };
 
   const sortedTickets = useMemo(() => {
     if (!sortField) return filteredTickets;
@@ -137,20 +162,100 @@ export default function ManagerSettingsHelpSupportPage() {
 
           {ticketTab === 'My Tickets' && (
             <div className="mgr-card p-0 overflow-hidden">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b border-border">
-                <p className="text-sm text-warning" role="status">{tManagerUi('ticket_history_is_sample_data_not_live_user_tickets')}</p>
-                <div className="relative w-full sm:w-64">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                  <input
-                    type="search"
-                    placeholder="Search ticket ID, subject, or category..."
-                    className="mgr-input pl-8 text-xs w-full"
-                    value={searchQuery}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold text-secondary">Ticket Log</span>
+                  <span className="mgr-badge mgr-badge--info text-xs font-mono">{filteredTickets.length} Tickets</span>
+                </div>
+
+                {/* Multi-Filter Toolbar */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="relative w-full sm:w-52">
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                    <input
+                      type="search"
+                      placeholder="Search ticket ID, subject..."
+                      className="mgr-input pl-8 text-xs w-full"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setPage(0);
+                      }}
+                    />
+                  </div>
+
+                  <select
+                    aria-label="Filter by Category"
+                    value={categoryFilter}
                     onChange={(e) => {
-                      setSearchQuery(e.target.value);
+                      setCategoryFilter(e.target.value);
                       setPage(0);
                     }}
-                  />
+                    className="mgr-select text-xs py-1.5 px-3 min-w-[120px]"
+                  >
+                    <option value="all">All Categories</option>
+                    <option value="Finance">Finance</option>
+                    <option value="General">General</option>
+                    <option value="Facility">Facility</option>
+                    <option value="Technical">Technical</option>
+                  </select>
+
+                  <select
+                    aria-label="Filter by Status"
+                    value={statusFilter}
+                    onChange={(e) => {
+                      setStatusFilter(e.target.value);
+                      setPage(0);
+                    }}
+                    className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
+                  >
+                    <option value="all">All Status</option>
+                    <option value="Open">Open</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                  </select>
+
+                  <select
+                    aria-label="Filter by Priority"
+                    value={priorityFilter}
+                    onChange={(e) => {
+                      setPriorityFilter(e.target.value);
+                      setPage(0);
+                    }}
+                    className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
+                  >
+                    <option value="all">All Priorities</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                  </select>
+
+                  {hasActiveFilters && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSearchQuery('');
+                        setCategoryFilter('all');
+                        setStatusFilter('all');
+                        setPriorityFilter('all');
+                        setPage(0);
+                      }}
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+                      title="Reset all filters"
+                    >
+                      <X size={13} /> Reset
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={handleExportCsv}
+                    className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+                    title="Export Tickets CSV"
+                  >
+                    <Download size={13} /> Export CSV
+                  </button>
                 </div>
               </div>
               <div className="overflow-x-auto">

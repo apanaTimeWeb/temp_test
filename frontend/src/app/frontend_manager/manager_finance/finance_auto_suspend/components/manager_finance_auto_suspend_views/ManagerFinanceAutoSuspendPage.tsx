@@ -7,7 +7,7 @@ import type { ManagerFinanceAutoSuspendConfig as Config, ManagerFinanceAutoSuspe
 
 // RESPONSIBILITY: Entry page for the manager_auto_suspend module.
 // DATA FLOW: Next.js Router -> Page -> Components
-import { Settings, Ban, RotateCcw, Bell, UserCheck, ShieldAlert, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Settings, Ban, RotateCcw, Bell, UserCheck, ShieldAlert, Search, ArrowUpDown, ArrowUp, ArrowDown, X, Download } from 'lucide-react';
 import { ManagerFinanceAutoSuspendEmptyState } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/components/manager_finance_auto_suspend_empty_states/ManagerFinanceAutoSuspendEmptyState';
 import type { ManagerFinanceAutoSuspendRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendComponentTypes';
 
@@ -30,19 +30,41 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
+  const [shiftFilter, setShiftFilter] = useState('all');
+  const [overdueFilter, setOverdueFilter] = useState('all');
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
+    const minDays = overdueFilter === 'all' ? 0 : Number(overdueFilter);
     return suspended.filter((s) => {
-      return (
+      const matchShift = shiftFilter === 'all' || s.shift.toLowerCase() === shiftFilter.toLowerCase();
+      const matchOverdue = s.daysOverdue >= minDays;
+      const matchSearch =
         !q ||
         s.studentName.toLowerCase().includes(q) ||
         s.smartId.toLowerCase().includes(q) ||
         s.seat.toLowerCase().includes(q) ||
-        s.shift.toLowerCase().includes(q)
-      );
+        s.shift.toLowerCase().includes(q);
+      return matchShift && matchOverdue && matchSearch;
     });
-  }, [suspended, searchQuery]);
+  }, [suspended, searchQuery, shiftFilter, overdueFilter]);
+
+  const hasActiveFilters = Boolean(searchQuery.trim() !== '' || shiftFilter !== 'all' || overdueFilter !== 'all');
+
+  const handleExportCsv = () => {
+    const headers = 'Student Name,Smart ID,Seat,Shift,Days Overdue,Suspended Since\n';
+    const rows = sortedRows.map((s) =>
+      `"${s.studentName}","${s.smartId}","${s.seat}","${s.shift}","${s.daysOverdue}","${s.suspendedSince}"`
+    ).join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `suspended_students_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('Suspended students list exported to CSV successfully');
+  };
 
   type SuspendSortField = 'studentName' | 'seat' | 'shift' | 'daysOverdue' | 'suspendedSince';
   const [sortField, setSortField] = useState<SuspendSortField | null>(null);
@@ -157,23 +179,85 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
 
       {/* Suspended Students Table */}
       <div className="fin-card overflow-x-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 fin-border-bottom">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-4 fin-border-bottom">
           <div className="flex items-center gap-2">
             <Ban size={18} className="fin-text-danger" />
             <span className="fin-text-body font-semibold">{tManagerUi('suspended_students')}</span>
+            <span className="mgr-badge mgr-badge--danger text-xs font-mono ml-1">{filtered.length}</span>
           </div>
-          <div className="relative w-full sm:w-64">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-            <input
-              type="search"
-              placeholder="Search student, smart ID, or seat..."
-              className="mgr-input pl-8 text-xs w-full"
-              value={searchQuery}
+
+          {/* Multi-Filter Toolbar */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="relative w-full sm:w-56">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+              <input
+                type="search"
+                placeholder="Search student, smart ID, or seat..."
+                className="mgr-input pl-8 text-xs w-full"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setPage(0);
+                }}
+              />
+            </div>
+
+            <select
+              aria-label="Filter by Shift"
+              value={shiftFilter}
               onChange={(e) => {
-                setSearchQuery(e.target.value);
+                setShiftFilter(e.target.value);
                 setPage(0);
               }}
-            />
+              className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
+            >
+              <option value="all">All Shifts</option>
+              <option value="Morning">Morning</option>
+              <option value="Afternoon">Afternoon</option>
+              <option value="Evening">Evening</option>
+              <option value="Night">Night</option>
+              <option value="Full Day">Full Day</option>
+            </select>
+
+            <select
+              aria-label="Filter by Overdue Days"
+              value={overdueFilter}
+              onChange={(e) => {
+                setOverdueFilter(e.target.value);
+                setPage(0);
+              }}
+              className="mgr-select text-xs py-1.5 px-3 min-w-[120px]"
+            >
+              <option value="all">All Overdue</option>
+              <option value="7">&gt; 7 Days</option>
+              <option value="14">&gt; 14 Days</option>
+              <option value="30">&gt; 30 Days</option>
+            </select>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setShiftFilter('all');
+                  setOverdueFilter('all');
+                  setPage(0);
+                }}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+                title="Reset all filters"
+              >
+                <X size={13} /> Reset
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+              title="Export Suspended Students CSV"
+            >
+              <Download size={13} /> Export CSV
+            </button>
           </div>
         </div>
         <table className="w-full">
