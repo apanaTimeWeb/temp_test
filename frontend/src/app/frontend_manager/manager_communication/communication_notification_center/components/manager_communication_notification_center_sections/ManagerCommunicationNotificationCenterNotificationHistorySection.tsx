@@ -2,14 +2,27 @@
 // RESPONSIBILITY: Render the communication notification center notification history section section of the components feature. It does not own backend persistence or cross-feature business logic.
 import ManagerCommunicationNotificationCenterNativeTable, { type NativeColumn, type NativeCellParams } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_table_parts/ManagerCommunicationNotificationCenterNativeTable';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Mail, MessageSquare, Smartphone } from 'lucide-react';
+import { Mail, MessageSquare, Smartphone, Search } from 'lucide-react';
 import { MANAGER_COMMUNICATION_SAMPLE_NOTIFICATION_HISTORY } from '@/app/frontend_manager/manager_communication/communication_notification_center/hooks/ManagerCommunicationNotificationCenterDemoRepository';
 
 
 export function ManagerCommunicationNotificationCenterNotificationHistorySection() {
   const tManagerUi = useTranslations('manager.manager_notification_center.ui');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredHistory = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return MANAGER_COMMUNICATION_SAMPLE_NOTIFICATION_HISTORY;
+    return MANAGER_COMMUNICATION_SAMPLE_NOTIFICATION_HISTORY.filter(
+      (h) =>
+        h.recipient.toLowerCase().includes(q) ||
+        h.type.toLowerCase().includes(q) ||
+        h.channel.toLowerCase().includes(q) ||
+        h.status.toLowerCase().includes(q)
+    );
+  }, [searchQuery]);
   const columnDefs: NativeColumn[] = useMemo(() => {
     const typeLabels: Record<string, string> = {
       'Due reminder': tManagerUi('due_reminder'),
@@ -37,12 +50,29 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
 
   return (
     <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-      <div className="flex justify-between items-center mb-6 border-b border-border pb-4">
-        <h2 className="text-xl font-bold text-primary">{tManagerUi('notification_history')}</h2>
-        <p className="text-sm text-secondary">{tManagerUi('log_of_all_manual_and_automated_alerts_sent')}</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
+        <div>
+          <h2 className="text-xl font-bold text-primary">{tManagerUi('notification_history')}</h2>
+          <p className="text-xs text-secondary mt-0.5">{tManagerUi('log_of_all_manual_and_automated_alerts_sent')}</p>
+        </div>
+        <div className="relative w-full sm:w-64">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="search"
+            placeholder="Search recipient, type, or channel..."
+            className="mgr-input pl-8 text-xs w-full"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
       <div className="flex-1 w-full h-96">
-        <ManagerCommunicationNotificationCenterNativeTable getRowKey={(row) => row.id} rows={MANAGER_COMMUNICATION_SAMPLE_NOTIFICATION_HISTORY} columns={columnDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+        <ManagerCommunicationNotificationCenterNativeTable
+          getRowKey={(row) => row.id}
+          rows={filteredHistory}
+          columns={columnDefs}
+          labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
+        />
       </div>
     </div>
   );

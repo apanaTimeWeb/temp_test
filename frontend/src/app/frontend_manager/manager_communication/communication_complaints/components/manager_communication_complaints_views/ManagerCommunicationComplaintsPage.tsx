@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useManagerComplaintsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/ManagerCommunicationComplaintsDialogFocus';
-import { ChevronRight, X, Eye, RefreshCw, CheckCircle, MessageSquarePlus, ShieldCheck } from 'lucide-react';
+import { ChevronRight, X, Eye, RefreshCw, CheckCircle, MessageSquarePlus, ShieldCheck, Search } from 'lucide-react';
 import { useManagerCommunicationComplaints } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/useManagerCommunicationComplaintsComplaints';
 import type { ManagerCommunicationComplaintsComplaint, ManagerCommunicationComplaintsComplaintStatus } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 import { MANAGER_COMMUNICATION_COMPLAINT_TABS } from '@/app/frontend_manager/manager_communication/communication_complaints/constants/ManagerCommunicationComplaintsComplaintConstants';
@@ -33,6 +33,7 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
   const [localComplaints, setLocalComplaints] = useState<ManagerCommunicationComplaintsComplaint[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const dialogRef = useRef<HTMLDivElement | null>(null);
@@ -41,7 +42,18 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
   const [expandedDesc, setExpandedDesc] = useState<string[]>([]);
 
   const allComplaints = useMemo(() => [...localComplaints, ...complaints], [localComplaints, complaints]);
-  const filtered = useMemo(() => tab === 'All' ? allComplaints : allComplaints.filter(c => c.status === tab), [allComplaints, tab]);
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    const base = tab === 'All' ? allComplaints : allComplaints.filter((c) => c.status === tab);
+    if (!q) return base;
+    return base.filter(
+      (c) =>
+        c.title.toLowerCase().includes(q) ||
+        (c.student && c.student.toLowerCase().includes(q)) ||
+        c.description.toLowerCase().includes(q) ||
+        (c.resolvedBy && c.resolvedBy.toLowerCase().includes(q))
+    );
+  }, [allComplaints, tab, searchQuery]);
   const toggleDesc = (complaintId: string) => setExpandedDesc(current => current.includes(complaintId) ? current.filter(item => item !== complaintId) : [...current, complaintId]);
   const statusBadge = (status: ManagerCommunicationComplaintsComplaintStatus) => status === 'Open' ? <span className="mc-badge mc-badge--danger">{tManagerUi('open')}</span> : status === 'In-Progress' ? <span className="mc-badge mc-badge--warning">{tManagerUi('in_progress')}</span> : <span className="mc-badge mc-badge--success">{tManagerUi('resolved')}</span>;
 
@@ -90,12 +102,27 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
         </div>
       )}
 
-      <div className="mc-tabs mc-tabs-inline mb-6">
-        {MANAGER_COMMUNICATION_COMPLAINT_TABS.map(item => (
-          <button type="button" key={item} onClick={() => { setTab(item); setPage(0); }} className={`mc-tab${tab === item ? ' mc-tab--active' : ''}`} aria-pressed={tab === item}>
-            {item}
-          </button>
-        ))}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div className="mc-tabs mc-tabs-inline">
+          {MANAGER_COMMUNICATION_COMPLAINT_TABS.map(item => (
+            <button type="button" key={item} onClick={() => { setTab(item); setPage(0); }} className={`mc-tab${tab === item ? ' mc-tab--active' : ''}`} aria-pressed={tab === item}>
+              {item}
+            </button>
+          ))}
+        </div>
+        <div className="relative w-full sm:w-64">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="search"
+            placeholder="Search complaint, student, or title..."
+            className="mgr-input pl-8 text-xs w-full"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPage(0);
+            }}
+          />
+        </div>
       </div>
 
       <div className="mc-card mc-card--flush">
@@ -113,7 +140,7 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
           </div>
         ) : filtered.length === 0 ? (
           <ManagerCommunicationComplaintsEmptyState className="mc-empty">
-            <p className="mc-empty__title">{tManagerUi('no_complaints_in_this_view')}</p>
+            <p className="mc-empty__title">{searchQuery ? 'No complaints matching your search query.' : tManagerUi('no_complaints_in_this_view')}</p>
           </ManagerCommunicationComplaintsEmptyState>
         ) : (
           <div className="mc-scroll-x overflow-x-auto">

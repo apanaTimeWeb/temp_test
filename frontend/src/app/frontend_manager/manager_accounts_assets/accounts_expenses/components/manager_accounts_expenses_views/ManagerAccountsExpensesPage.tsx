@@ -4,8 +4,8 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useManagerExpensesCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/hooks/ManagerAccountsExpensesFormattingHook';
 import type { NativeColumn } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_table_parts/ManagerAccountsExpensesNativeTable';
-import { useState } from 'react';
-import { Plus, X, CheckCircle, IndianRupee, Receipt } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Plus, X, CheckCircle, IndianRupee, Receipt, Search } from 'lucide-react';
 import ManagerAccountsExpensesExpenseSummaryCards from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseSummaryCards';
 import ManagerAccountsExpensesExpenseCategoryFilter from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseCategoryFilter';
 import ManagerAccountsExpensesExpenseLedger from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_widgets/ManagerAccountsExpensesExpenseLedger';
@@ -20,6 +20,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   
   const [expenses, setExpenses] = useState<Expense[]>(MOCK as Expense[]);
   const [catFilter, setCatFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [isCategoryReviewOpen, setIsCategoryReviewOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
@@ -33,6 +34,19 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   const [voucherNo, setVoucherNo] = useState('');
 
   const visible = catFilter === 'all' ? expenses : expenses.filter((e) => e.category === catFilter);
+
+  const searchedExpenses = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    const base = catFilter === 'all' ? expenses : expenses.filter((e) => e.category === catFilter);
+    if (!q) return base;
+    return base.filter(
+      (e) =>
+        e.description.toLowerCase().includes(q) ||
+        e.category.toLowerCase().includes(q) ||
+        e.paidBy.toLowerCase().includes(q) ||
+        e.mode.toLowerCase().includes(q)
+    );
+  }, [expenses, catFilter, searchQuery]);
 
   const handleCreateExpense = (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,10 +153,24 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         </section>
       )}
 
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-card p-4 rounded-xl border border-border">
+        <div className="relative flex-1 max-w-md">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="search"
+            placeholder="Search expense description, payee, or category..."
+            className="mgr-input pl-8 text-xs w-full"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <span className="text-xs text-secondary">{searchedExpenses.length} Records</span>
+      </div>
+
       <ManagerAccountsExpensesExpenseLedger
-        rows={visible}
+        rows={searchedExpenses}
         columnDefs={colDefs}
-        emptyMessage={tManagerUi('no_expenses_found')}
+        emptyMessage={searchQuery ? 'No expenses matching your search query.' : tManagerUi('no_expenses_found')}
       />
 
       {/* Add Expense Modal */}

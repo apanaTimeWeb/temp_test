@@ -28,6 +28,8 @@ export function ManagerMembersAlumniClient() {
   const [yearFilter, setYearFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [examFilter, setExamFilter] = useState('All');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const filteredAlumni = useMemo(() => {
     return records.filter((record) => {
@@ -50,6 +52,13 @@ export function ManagerMembersAlumniClient() {
       return matchesSearch && matchesYear && matchesStatus && matchesExam;
     });
   }, [searchQuery, yearFilter, statusFilter, examFilter]);
+
+  const totalRows = filteredAlumni.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginatedAlumni = filteredAlumni.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   const handleExportCsv = () => {
     const headers = 'ID,Name,Phone,Exit Date,Duration,Target Exam / Achievement,Designation,Current Status,Testimonial\n';
@@ -123,7 +132,10 @@ export function ManagerMembersAlumniClient() {
               placeholder="Search by student name, qualified exam, or phone..."
               className="mgr-input mgr-input-with-icon"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(0);
+              }}
             />
           </div>
 
@@ -132,7 +144,10 @@ export function ManagerMembersAlumniClient() {
             <select
               aria-label="Filter by Year"
               value={yearFilter}
-              onChange={(e) => setYearFilter(e.target.value)}
+              onChange={(e) => {
+                setYearFilter(e.target.value);
+                setPage(0);
+              }}
               className="mgr-select text-xs"
             >
               <option value="All">All Years</option>
@@ -147,7 +162,10 @@ export function ManagerMembersAlumniClient() {
             <select
               aria-label="Filter by Exam Category"
               value={examFilter}
-              onChange={(e) => setExamFilter(e.target.value)}
+              onChange={(e) => {
+                setExamFilter(e.target.value);
+                setPage(0);
+              }}
               className="mgr-select text-xs"
             >
               <option value="All">All Exam Domains</option>
@@ -164,7 +182,10 @@ export function ManagerMembersAlumniClient() {
             <select
               aria-label="Filter by Status"
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setPage(0);
+              }}
               className="mgr-select text-xs"
             >
               <option value="All">All Statuses</option>
@@ -200,7 +221,7 @@ export function ManagerMembersAlumniClient() {
                   </td>
                 </tr>
               ) : (
-                filteredAlumni.map((alumnus) => (
+                paginatedAlumni.map((alumnus) => (
                   <tr key={alumnus.id} className="border-b border-border last:border-0 hover:bg-surface-hover">
                     <td className="py-3 px-4 font-mono font-bold text-primary">{alumnus.id}</td>
                     <td className="py-3 px-4 font-semibold text-primary">{alumnus.name}</td>
@@ -245,9 +266,52 @@ export function ManagerMembersAlumniClient() {
             </tbody>
           </table>
         </div>
-        <div className="border-t border-border px-4 py-3 flex justify-between items-center text-xs text-secondary">
-          <span>Showing {filteredAlumni.length} of {records.length} alumni records</span>
-        </div>
+        {totalRows > 0 && (
+          <div className="border-t border-border px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-secondary">
+            <span>
+              Showing {startItem}–{endItem} of {totalRows} alumni records
+            </span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="alumni-rows-per-page" className="text-xs text-secondary whitespace-nowrap">Rows per page:</label>
+                <select
+                  id="alumni-rows-per-page"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="rounded border border-border bg-input px-2 py-1 text-xs text-primary"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={effectivePage === 0}
+                  onClick={() => setPage(effectivePage - 1)}
+                  className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+                >
+                  Previous
+                </button>
+                <span className="text-xs">
+                  Page {effectivePage + 1} of {pageCount}
+                </span>
+                <button
+                  type="button"
+                  disabled={effectivePage >= pageCount - 1}
+                  onClick={() => setPage(effectivePage + 1)}
+                  className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <ManagerMembersAlumniAddModal

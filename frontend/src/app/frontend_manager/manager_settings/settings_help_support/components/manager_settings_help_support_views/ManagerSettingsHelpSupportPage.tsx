@@ -2,27 +2,40 @@
 // RESPONSIBILITY: Provide the page/orchestration entry component for the components feature. It does not own backend persistence or cross-feature business logic.
 import { ManagerSettingsHelpSupportEmptyState } from '@/app/frontend_manager/manager_settings/settings_help_support/components/ManagerSettingsHelpSupportEmptyState';
 import { useLocale, useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 import { useManagerHelpSupportPageState } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/useManagerSettingsHelpSupportPageState';
 import { ManagerSettingsHelpSupportTicketForm } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_forms/ManagerSettingsHelpSupportTicketForm';
 import { MANAGER_HELP_SUPPORT_TABS } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
 import { ManagerSettingsHelpSupportTabs } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportTabs';
 import { formatManagerHelpSupportCalendarDate } from '@/app/frontend_manager/manager_settings/settings_help_support/utils/ManagerSettingsHelpSupportDateFormatting';
-import { Megaphone, Plus, CheckCircle, Clock } from 'lucide-react';
+import { Megaphone, Plus, CheckCircle, Clock, Search } from 'lucide-react';
 
 export default function ManagerSettingsHelpSupportPage() {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');
   const locale = useLocale();
 
   const { activeTab, setActiveTab, ticketTab, setTicketTab, myTickets, announcements } = useManagerHelpSupportPageState();
+  const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
-  const totalRows = myTickets.length;
+  const filteredTickets = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return myTickets;
+    return myTickets.filter(
+      (t) =>
+        t.id.toLowerCase().includes(q) ||
+        t.subject.toLowerCase().includes(q) ||
+        t.category.toLowerCase().includes(q) ||
+        t.status.toLowerCase().includes(q)
+    );
+  }, [myTickets, searchQuery]);
+
+  const totalRows = filteredTickets.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginatedTickets = myTickets.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginatedTickets = filteredTickets.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
@@ -69,7 +82,22 @@ export default function ManagerSettingsHelpSupportPage() {
 
           {ticketTab === 'My Tickets' && (
             <div className="mgr-card p-0 overflow-hidden">
-              <p className="p-4 text-sm text-warning" role="status">{tManagerUi('ticket_history_is_sample_data_not_live_user_tickets')}</p>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b border-border">
+                <p className="text-sm text-warning" role="status">{tManagerUi('ticket_history_is_sample_data_not_live_user_tickets')}</p>
+                <div className="relative w-full sm:w-64">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                  <input
+                    type="search"
+                    placeholder="Search ticket ID, subject, or category..."
+                    className="mgr-input pl-8 text-xs w-full"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setPage(0);
+                    }}
+                  />
+                </div>
+              </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
@@ -83,9 +111,9 @@ export default function ManagerSettingsHelpSupportPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {myTickets.length === 0 ? (
+                    {filteredTickets.length === 0 ? (
                       <tr>
-                        <td colSpan={6}><ManagerSettingsHelpSupportEmptyState className="p-8 text-center text-secondary" testId="manager-help-support-tickets-empty">{tManagerUi('no_tickets_found')}</ManagerSettingsHelpSupportEmptyState></td>
+                        <td colSpan={6}><ManagerSettingsHelpSupportEmptyState className="p-8 text-center text-secondary" testId="manager-help-support-tickets-empty">{searchQuery ? 'No tickets found matching your search query.' : tManagerUi('no_tickets_found')}</ManagerSettingsHelpSupportEmptyState></td>
                       </tr>
                     ) : (
                       paginatedTickets.map(t => (

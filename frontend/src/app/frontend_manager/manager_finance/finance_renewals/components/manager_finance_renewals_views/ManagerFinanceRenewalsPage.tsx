@@ -10,7 +10,7 @@ import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_fin
 
 // RESPONSIBILITY: Entry page for the manager_renewals module.
 // DATA FLOW: Next.js Router -> Page -> Components
-import { Send, MessageSquare, Upload, Mail, Download, Printer, RotateCcw, CheckCircle, BellRing, AlertTriangle } from 'lucide-react';
+import { Send, MessageSquare, Upload, Mail, Download, Printer, RotateCcw, CheckCircle, BellRing, AlertTriangle, Search } from 'lucide-react';
 import { MANAGER_FINANCE_RENEWAL_FILTERS } from '@/app/frontend_manager/manager_finance/finance_renewals/constants/ManagerFinanceRenewalsRenewalConstants';
 import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
 
@@ -24,6 +24,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   
   const [renewalsList, setRenewalsList] = useState(MANAGER_FINANCE_SAMPLE_RENEWALS);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const expiringCritical = useMemo(() => renewalsList.filter((r) => r.daysLeft <= 3 && r.daysLeft >= 0), [renewalsList]);
@@ -35,6 +36,18 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
     if (filter === 'expiring_15') return r.daysLeft >= 0 && r.daysLeft <= 15;
     return true;
   });
+
+  const searchedRenewals = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return visible;
+    return visible.filter(
+      (r) =>
+        r.studentName.toLowerCase().includes(q) ||
+        r.smartId.toLowerCase().includes(q) ||
+        r.plan.toLowerCase().includes(q) ||
+        r.shift.toLowerCase().includes(q)
+    );
+  }, [visible, searchQuery]);
 
   const translateShift = (value: string) => {
     switch (value) {
@@ -265,22 +278,34 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
         </div>
       )}
 
-      {/* Filter tabs */}
-      <div className="flex gap-2">
-        {MANAGER_FINANCE_RENEWAL_FILTERS.map((f) => (
-          <button type="button"
-            key={f.value}
-            onClick={() => setUrlFilter('filter', f.value)}
-            className={filter === f.value ? 'fin-badge fin-badge--info cursor-pointer' : 'fin-badge fin-badge--neutral cursor-pointer'}
-          >
-            {f.emoji} {tManagerUi(f.labelKey)}
-          </button>
-        ))}
+      {/* Filter tabs and search bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex gap-2 flex-wrap">
+          {MANAGER_FINANCE_RENEWAL_FILTERS.map((f) => (
+            <button type="button"
+              key={f.value}
+              onClick={() => setUrlFilter('filter', f.value)}
+              className={filter === f.value ? 'fin-badge fin-badge--info cursor-pointer' : 'fin-badge fin-badge--neutral cursor-pointer'}
+            >
+              {f.emoji} {tManagerUi(f.labelKey)}
+            </button>
+          ))}
+        </div>
+        <div className="relative w-full sm:w-64">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="search"
+            placeholder="Search student, smart ID, or plan..."
+            className="mgr-input pl-8 text-xs w-full"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="fin-card p-4">
         <div className="mgr-table-wrapper h-112">
-          <ManagerFinanceRenewalsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_subscriptions_found')} rows={visible} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+          <ManagerFinanceRenewalsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_subscriptions_found')} rows={searchedRenewals} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
         </div>
       </div>
 

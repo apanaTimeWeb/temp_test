@@ -6,9 +6,9 @@ import ManagerAttendanceAbsenteeReportNativeTable, { type NativeColumn, type Nat
 import { MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/config/manager_attendance_absentee_report.url_config';
 import { useManagerAbsenteeReportDemoData } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/useManagerAttendanceAbsenteeReportDemoData';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Send } from 'lucide-react';
+import { ChevronRight, Send, Search } from 'lucide-react';
 import { createManagerAbsenteeReportAbsenteeColumns } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns';
 
 
@@ -21,12 +21,24 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
   const rows = useManagerAbsenteeReportDemoData();
   const [threshold, setThreshold] = useState('3');
   const [shift, setShift]         = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const shiftLabels: Record<string, string> = { Morning: tManagerUi('morning'), Afternoon: tManagerUi('afternoon'), Evening: tManagerUi('evening') };
 
-  const filtered = rows.filter(r => {
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
     const thr = threshold === 'all' ? 0 : parseInt(threshold);
-    return r.daysAbsent >= thr && (shift === 'All' || r.shift === shift);
-  });
+    return rows.filter((r) => {
+      const matchThr = r.daysAbsent >= thr;
+      const matchShift = shift === 'All' || r.shift === shift;
+      const matchQ =
+        !q ||
+        r.name.toLowerCase().includes(q) ||
+        r.smartId.toLowerCase().includes(q) ||
+        (r.parentPhone && r.parentPhone.includes(q)) ||
+        (r.parentEmail && r.parentEmail.toLowerCase().includes(q));
+      return matchThr && matchShift && matchQ;
+    });
+  }, [rows, threshold, shift, searchQuery]);
 
   const critical  = filtered.filter(r => r.daysAbsent >= 7);
   const moderate  = filtered.filter(r => r.daysAbsent >= 3 && r.daysAbsent < 7);
@@ -99,8 +111,18 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
 
       {/* ── Filters ── */}
       <div className="eng-card eng-card--flush eng-mb-6 p-4 border-b border-border">
-        <div className="eng-filter-bar flex items-center justify-between">
-          <div className="flex gap-6 items-center">
+        <div className="eng-filter-bar flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-wrap gap-4 items-center flex-1">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+              <input
+                type="search"
+                placeholder="Search student, smart ID, or phone..."
+                className="eng-input pl-8 text-xs w-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
             <div className="eng-filter-field flex flex-col">
               <label htmlFor="manager-engagement-absentee-threshold" className="eng-label mb-1 text-xs font-semibold text-secondary">{tManagerUi('days_threshold')}</label>
               <select id="manager-engagement-absentee-threshold" className="eng-select eng-filter-select py-1 px-2 border rounded" value={threshold}

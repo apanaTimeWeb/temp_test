@@ -1,16 +1,13 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG, MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/hooks/ManagerFinanceAutoSuspendDemoRepository';
 import type { ManagerFinanceAutoSuspendConfig as Config, ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
 
 // RESPONSIBILITY: Entry page for the manager_auto_suspend module.
 // DATA FLOW: Next.js Router -> Page -> Components
-
-// RESPONSIBILITY: Entry page for the manager_auto_suspend module.
-// DATA FLOW: Next.js Router -> Page -> Components
-import { Settings, Ban, RotateCcw, Bell, UserCheck, ShieldAlert } from 'lucide-react';
+import { Settings, Ban, RotateCcw, Bell, UserCheck, ShieldAlert, Search } from 'lucide-react';
 import { ManagerFinanceAutoSuspendEmptyState } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/components/manager_finance_auto_suspend_empty_states/ManagerFinanceAutoSuspendEmptyState';
 import type { ManagerFinanceAutoSuspendRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendComponentTypes';
 
@@ -32,11 +29,25 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const totalRows = suspended.length;
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return suspended.filter((s) => {
+      return (
+        !q ||
+        s.studentName.toLowerCase().includes(q) ||
+        s.smartId.toLowerCase().includes(q) ||
+        s.seat.toLowerCase().includes(q) ||
+        s.shift.toLowerCase().includes(q)
+      );
+    });
+  }, [suspended, searchQuery]);
+
+  const totalRows = filtered.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = suspended.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
@@ -91,9 +102,24 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
 
       {/* Suspended Students Table */}
       <div className="fin-card overflow-x-auto">
-        <div className="flex items-center gap-2 p-4 fin-border-bottom">
-          <Ban size={18} className="fin-text-danger" />
-          <span className="fin-text-body font-semibold">{tManagerUi('suspended_students')}</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 fin-border-bottom">
+          <div className="flex items-center gap-2">
+            <Ban size={18} className="fin-text-danger" />
+            <span className="fin-text-body font-semibold">{tManagerUi('suspended_students')}</span>
+          </div>
+          <div className="relative w-full sm:w-64">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <input
+              type="search"
+              placeholder="Search student, smart ID, or seat..."
+              className="mgr-input pl-8 text-xs w-full"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(0);
+              }}
+            />
+          </div>
         </div>
         <table className="w-full">
           <thead>
@@ -108,12 +134,14 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
             </tr>
           </thead>
           <tbody>
-            {suspended.length === 0 ? (
+            {filtered.length === 0 ? (
               <tr>
                 <td colSpan={7}>
                   <ManagerFinanceAutoSuspendEmptyState className="fin-empty-state">
                     <div className="fin-empty-state__icon">🔓</div>
-                    <p className="fin-empty-state__title">{tManagerUi('no_students_currently_suspended')}</p>
+                    <p className="fin-empty-state__title">
+                      {searchQuery ? 'No suspended students matching the search query.' : tManagerUi('no_students_currently_suspended')}
+                    </p>
                   </ManagerFinanceAutoSuspendEmptyState>
                 </td>
               </tr>
@@ -159,7 +187,7 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
           </tbody>
         </table>
 
-        {suspended.length > 0 && (
+        {totalRows > 0 && (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
             <span>
               Showing {startItem}–{endItem} of {totalRows} results

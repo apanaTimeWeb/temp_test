@@ -3,7 +3,7 @@ import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/mana
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useState, useMemo } from 'react';
-import { Plus, X, CheckCircle, IndianRupee, ShieldCheck } from 'lucide-react';
+import { Plus, X, CheckCircle, IndianRupee, ShieldCheck, Search } from 'lucide-react';
 import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS, type ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import { ManagerAssetsRegisterEmptyState } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_empty_states/ManagerAssetsRegisterEmptyState';
@@ -20,6 +20,7 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
   
   const [assets, setAssets] = useState<ManagerAssetsRegisterAsset[]>(MANAGER_ACCOUNTING_SAMPLE_ASSETS as ManagerAssetsRegisterAsset[]);
   const [catFilter, setCatFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -54,7 +55,18 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
     }
   };
 
-  const visible = catFilter === 'all' ? assets : assets.filter((a) => a.category === catFilter);
+  const visible = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return assets.filter((a) => {
+      const matchCat = catFilter === 'all' || a.category === catFilter;
+      const matchQ =
+        !q ||
+        a.name.toLowerCase().includes(q) ||
+        a.location.toLowerCase().includes(q) ||
+        a.category.toLowerCase().includes(q);
+      return matchCat && matchQ;
+    });
+  }, [assets, catFilter, searchQuery]);
 
   const totalRows = visible.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
@@ -123,7 +135,20 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
         <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-muted">{tManagerUi('disposed')}</p><p className="fin-kpi-value fin-text-muted">{assets.filter((a) => a.status === 'disposed').length}</p></div>
       </div>
 
-      <div className="fin-filter-bar">
+      <div className="fin-filter-bar flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="search"
+            placeholder="Search asset name, category, or location..."
+            className="mgr-input pl-8 text-xs w-full"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPage(0);
+            }}
+          />
+        </div>
         <select className="fin-select w-44" value={catFilter} onChange={(e) => { setCatFilter(e.target.value); setPage(0); }} aria-label={tManagerUi('all_categories')}>
           <option value="all">{tManagerUi('all_categories')}</option>
           {categories.map((c) => <option key={c} value={c}>{categoryLabel(c)}</option>)}
@@ -144,7 +169,7 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
           </thead>
           <tbody>
             {visible.length === 0 ? (
-              <tr><td colSpan={6}><ManagerAssetsRegisterEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🏷️</div><p className="fin-empty-state__title">{tManagerUi('no_assets_found')}</p></ManagerAssetsRegisterEmptyState></td></tr>
+              <tr><td colSpan={6}><ManagerAssetsRegisterEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🏷️</div><p className="fin-empty-state__title">{searchQuery ? 'No assets matching your search query.' : tManagerUi('no_assets_found')}</p></ManagerAssetsRegisterEmptyState></td></tr>
             ) : paginated.map((a) => (
               <tr key={a.id} className={`fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 ${a.status === 'disposed' ? 'opacity-50' : ''}`}>
                 <td className="py-3 px-4 fin-cell-name font-semibold">{a.name}</td>

@@ -37,6 +37,7 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
   const [activeTab, setActiveTab] = useState('dashboard');
   const [collectionDraftFeedback, setCollectionDraftFeedback] = useState<string | null>(null);
   const [selectedReceipt, setSelectedReceipt] = useState<ManagerReceiptRecord | null>(null);
+  const [tableSearchQuery, setTableSearchQuery] = useState('');
 
   const handleShareWhatsApp = (r: ManagerReceiptRecord) => {
     const text = encodeURIComponent(
@@ -121,6 +122,47 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     email: `${r.studentName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
     collectedBy: (r as unknown as { collectedBy?: string }).collectedBy ?? 'Branch Manager Satyam',
   })), []);
+
+  const filteredPendingFines = useMemo(() => {
+    const q = tableSearchQuery.trim().toLowerCase();
+    const base = MANAGER_FINANCE_SAMPLE_PENDING_FINES.filter((f) =>
+      activeTab === 'pending' ? f.status === 'Pending' : f.status === 'Partially Paid'
+    );
+    if (!q) return base;
+    return base.filter(
+      (f) =>
+        f.id.toLowerCase().includes(q) ||
+        f.member.toLowerCase().includes(q) ||
+        f.type.toLowerCase().includes(q)
+    );
+  }, [tableSearchQuery, activeTab]);
+
+  const filteredHistoryRows = useMemo(() => {
+    const q = tableSearchQuery.trim().toLowerCase();
+    if (!q) return MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY;
+    return MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY.filter(
+      (h) =>
+        (h.receipt && h.receipt.toLowerCase().includes(q)) ||
+        h.id.toLowerCase().includes(q) ||
+        h.member.toLowerCase().includes(q) ||
+        h.type.toLowerCase().includes(q) ||
+        h.collectedBy.toLowerCase().includes(q)
+    );
+  }, [tableSearchQuery]);
+
+  const filteredReceiptRows = useMemo(() => {
+    const q = tableSearchQuery.trim().toLowerCase();
+    if (!q) return receiptRows;
+    return receiptRows.filter(
+      (r) =>
+        r.txnId.toLowerCase().includes(q) ||
+        r.receiptNumber.toLowerCase().includes(q) ||
+        r.member.toLowerCase().includes(q) ||
+        r.plan.toLowerCase().includes(q) ||
+        r.phone.includes(q) ||
+        r.collectedBy.toLowerCase().includes(q)
+    );
+  }, [tableSearchQuery, receiptRows]);
 
   // Native semantic table column definitions
   const pendingCols: NativeColumn[] = useMemo(() => [
@@ -288,9 +330,21 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
           {/* PENDING FINES (AG GRID) */}
           {(activeTab === 'pending' || activeTab === 'partiallyPaid') && (
             <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-              <h2 className="text-xl font-bold text-primary mb-6 border-b border-border pb-4">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
+                <h2 className="text-xl font-bold text-primary">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
+                <div className="relative w-full sm:w-64">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                  <input
+                    type="search"
+                    placeholder="Search fine ID, member, or type..."
+                    className="mgr-input pl-8 text-xs w-full"
+                    value={tableSearchQuery}
+                    onChange={(e) => setTableSearchQuery(e.target.value)}
+                  />
+                </div>
+              </div>
               <div className="flex-1 w-full h-96">
-                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={MANAGER_FINANCE_SAMPLE_PENDING_FINES.filter(f => activeTab === 'pending' ? f.status === 'Pending' : f.status === 'Partially Paid')} columns={pendingCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredPendingFines} columns={pendingCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
               </div>
             </div>
           )}
@@ -298,9 +352,21 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
           {/* PAID FINES (AG GRID) */}
           {activeTab === 'paid' && (
             <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-              <h2 className="text-xl font-bold text-primary mb-6 border-b border-border pb-4">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
+                <h2 className="text-xl font-bold text-primary">{tManagerUi(TABS.find((tab) => tab.id === activeTab)?.labelKey ?? 'fines_dashboard_tab')}</h2>
+                <div className="relative w-full sm:w-64">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                  <input
+                    type="search"
+                    placeholder="Search receipt, member, or collector..."
+                    className="mgr-input pl-8 text-xs w-full"
+                    value={tableSearchQuery}
+                    onChange={(e) => setTableSearchQuery(e.target.value)}
+                  />
+                </div>
+              </div>
               <div className="flex-1 w-full h-96">
-                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={MANAGER_FINANCE_SAMPLE_PAYMENT_HISTORY} columns={historyCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredHistoryRows} columns={historyCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
               </div>
             </div>
           )}
@@ -308,17 +374,27 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
           {/* RECEIPTS TAB (AG GRID with Transaction ID, Late Fee, Plan, Status, Actions, View/Print/Share) */}
           {activeTab === 'receipts' && (
             <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-              <div className="flex items-center justify-between mb-6 border-b border-border pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-border pb-4">
                 <div>
                   <h2 className="text-xl font-bold text-primary">{tManagerUi('receipts_tab')}</h2>
                   <p className="text-xs text-secondary mt-1">Official transaction receipts with late fees, plan details, and multi-channel dispatch</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="mgr-badge mgr-badge--info font-mono text-xs">{receiptRows.length} Total Receipts</span>
+                <div className="flex items-center gap-3">
+                  <div className="relative w-full sm:w-64">
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                    <input
+                      type="search"
+                      placeholder="Search txn ID, receipt, member, plan..."
+                      className="mgr-input pl-8 text-xs w-full"
+                      value={tableSearchQuery}
+                      onChange={(e) => setTableSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <span className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">{filteredReceiptRows.length} Receipts</span>
                 </div>
               </div>
               <div className="flex-1 w-full h-96">
-                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={receiptRows} columns={receiptsCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+                <ManagerFinanceFinesPaymentsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_receipts_found')} rows={filteredReceiptRows} columns={receiptsCols} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
               </div>
             </div>
           )}
