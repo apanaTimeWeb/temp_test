@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   Eye,
@@ -13,6 +14,7 @@ import {
 } from 'lucide-react';
 import type { StaffAttendanceRecord } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 import { ATTENDANCE_STATUS_VARIANTS } from '@/app/frontend_admin/admin_staff/staff_attendance/config/admin_staff_attendance.url_config';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 interface Props {
   records: StaffAttendanceRecord[];
@@ -22,6 +24,13 @@ interface Props {
 
 export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize }: Props) {
   const t = useTranslations('ADMIN_STAFF_ATTENDANCE');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedRecords = useMemo(
+    () => records.slice(page * pageSize, (page + 1) * pageSize),
+    [records, page, pageSize]
+  );
 
   if (records.length === 0) {
     return (
@@ -51,7 +60,7 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {records.map((r) => {
+            {paginatedRecords.map((r) => {
               const statusBadgeClass = ATTENDANCE_STATUS_VARIANTS[r.status] || 'bg-surface text-text-secondary';
               return (
                 <tr key={r.id} className="transition-colors hover:bg-surface-hover">
@@ -128,6 +137,16 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
           </tbody>
         </table>
       </div>
+      <AdminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalRows={records.length}
+        onPageChange={setPage}
+        onPageSizeChange={(newPageSize) => {
+          setPageSize(newPageSize);
+          setPage(0);
+        }}
+      />
     </div>
   );
 }

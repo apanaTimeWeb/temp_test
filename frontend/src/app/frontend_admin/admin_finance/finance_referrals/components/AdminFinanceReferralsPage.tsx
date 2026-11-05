@@ -7,7 +7,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
-import { Users, Trophy, IndianRupee } from 'lucide-react';
+import { Users, Trophy, IndianRupee, Search } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_FINANCE_DEMO_REFERRERS } from '@/app/frontend_admin/admin_finance/finance_referrals/mocks/AdminFinanceReferralsDemoFixtures';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
@@ -21,12 +21,23 @@ export function AdminFinanceReferralsPage() {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
   const [isLoading, setIsLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
+  const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
+  const filteredReferrers = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return ADMIN_FINANCE_DEMO_REFERRERS.filter((r) =>
+      !q ||
+      r.name.toLowerCase().includes(q) ||
+      (r as unknown as { smartId?: string }).smartId?.toLowerCase().includes(q) ||
+      r.referredNames.some((rn) => rn.toLowerCase().includes(q))
+    );
+  }, [search]);
+
   const paginatedReferrers = useMemo(
-    () => ADMIN_FINANCE_DEMO_REFERRERS.slice(page * pageSize, (page + 1) * pageSize),
-    [page, pageSize]
+    () => filteredReferrers.slice(page * pageSize, (page + 1) * pageSize),
+    [filteredReferrers, page, pageSize]
   );
 
   useEffect(() => {
@@ -68,6 +79,23 @@ export function AdminFinanceReferralsPage() {
           </div>
           <p className="mt-2 text-kpi font-bold text-text-primary">{topReferrer.name}</p>
           <p className="text-caption text-text-secondary">{t('LISTED_REFERRALS', { count: topReferrer.referredNames.length })}</p>
+        </div>
+      </div>
+
+      {/* Search Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="relative w-full sm:w-72">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search referrer or student name..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(0);
+            }}
+            className="min-h-11 w-full rounded-md border border-border bg-input pl-9 pr-3 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          />
         </div>
       </div>
 
@@ -142,11 +170,11 @@ export function AdminFinanceReferralsPage() {
             )}
           </tbody>
         </table>
-        {ADMIN_FINANCE_DEMO_REFERRERS.length > 0 && (
+        {filteredReferrers.length > 0 && (
           <AdminTablePagination
             page={page}
             pageSize={pageSize}
-            totalCount={ADMIN_FINANCE_DEMO_REFERRERS.length}
+            totalCount={filteredReferrers.length}
             onPageChange={setPage}
             onPageSizeChange={(newSize: number) => {
               setPageSize(newSize);

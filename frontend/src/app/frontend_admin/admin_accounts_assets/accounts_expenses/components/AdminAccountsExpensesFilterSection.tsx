@@ -2,7 +2,7 @@
 // RESPONSIBILITY: AdminAccountsExpensesFilterSection component owned by admin_accounting; responsibility folder: admin_accounts_expenses_sections.
 
 import { useTranslations } from 'next-intl';
-import { TrendingUp, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { TrendingUp, Clock, CheckCircle2, XCircle, Search } from 'lucide-react';
 import { ADMIN_ACCOUNTING_EXPENSE_CATEGORIES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
 import type {
   AdminAccountsExpensesCategoryFilter,
@@ -25,6 +25,8 @@ const CATEGORY_TRANSLATION_KEY = {
 export function AdminAccountsExpensesFilterSection({
   value,
   statusFilter = 'all',
+  searchQuery = '',
+  onSearchChange,
   onChange,
   onStatusChange,
   pendingCount = 0,
@@ -97,34 +99,53 @@ export function AdminAccountsExpensesFilterSection({
         </div>
       )}
 
-      {/* Category Dropdown & Reset */}
+      {/* Category Dropdown, Search & Reset */}
       <section
         aria-label={t('FILTER_CATEGORY')}
         className="rounded-xl border border-border bg-card p-4 flex flex-wrap items-center justify-between gap-4"
       >
-        <div>
-          <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-category-filter">
-            {t('FILTER_CATEGORY')}
-          </label>
-          <select
-            id="expense-category-filter"
-            className="min-h-11 rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-48"
-            value={value}
-            onChange={(event) => onChange(event.target.value as AdminAccountsExpensesCategoryFilter)}
-          >
-            <option value="all">{t('ALL_CATEGORIES')}</option>
-            {ADMIN_ACCOUNTING_EXPENSE_CATEGORIES.map((category) => (
-              <option key={category} value={category}>
-                {t(CATEGORY_TRANSLATION_KEY[category])}
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-wrap items-center gap-4 flex-1">
+          {onSearchChange && (
+            <div className="relative flex-1 min-w-[220px] max-w-sm">
+              <label htmlFor="admin-expense-search" className="sr-only">
+                Search Expenses
+              </label>
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <input
+                id="admin-expense-search"
+                type="text"
+                placeholder="Search expense description, payee, category..."
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="w-full rounded-md border border-border bg-input pl-9 pr-3 py-2 text-sm text-text-primary placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-11"
+              />
+            </div>
+          )}
+          <div>
+            <label className="block text-xs font-medium text-text-secondary mb-1" htmlFor="expense-category-filter">
+              {t('FILTER_CATEGORY')}
+            </label>
+            <select
+              id="expense-category-filter"
+              className="min-h-11 rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-48 text-sm"
+              value={value}
+              onChange={(event) => onChange(event.target.value as AdminAccountsExpensesCategoryFilter)}
+            >
+              <option value="all">{t('ALL_CATEGORIES')}</option>
+              {ADMIN_ACCOUNTING_EXPENSE_CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {t(CATEGORY_TRANSLATION_KEY[category])}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <button
           type="button"
           className="inline-flex items-center rounded-md border border-border px-3 py-2 text-sm font-medium bg-card text-text-secondary min-h-11 cursor-pointer gap-1 hover:bg-card-hover"
           onClick={() => {
             onChange('all');
+            if (onSearchChange) onSearchChange('');
             if (onStatusChange) onStatusChange('all');
           }}
         >

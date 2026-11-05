@@ -1,6 +1,6 @@
 // components/AdminSettingsBranchesHolidaysSection.tsx
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
@@ -13,7 +13,9 @@ import {
   Building2,
   Trash2,
   CheckCircle2,
+  Search,
 } from 'lucide-react';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
@@ -110,6 +112,27 @@ export function AdminSettingsBranchesHolidaysSection({ isDemoMode }: Props) {
   const [holidays, setHolidays] = useState<BranchHoliday[]>(INITIAL_HOLIDAYS);
   const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
   const [isHolidayModalOpen, setIsHolidayModalOpen] = useState(false);
+
+  const [holidaySearch, setHolidaySearch] = useState('');
+  const [holidayPage, setHolidayPage] = useState(0);
+  const [holidayPageSize, setHolidayPageSize] = useState(10);
+
+  const filteredHolidays = useMemo(() => {
+    const q = holidaySearch.trim().toLowerCase();
+    if (!q) return holidays;
+    return holidays.filter(
+      (h) =>
+        h.holidayName.toLowerCase().includes(q) ||
+        h.date.toLowerCase().includes(q) ||
+        h.branchScope.toLowerCase().includes(q) ||
+        h.operatingTiming.toLowerCase().includes(q)
+    );
+  }, [holidays, holidaySearch]);
+
+  const paginatedHolidays = useMemo(
+    () => filteredHolidays.slice(holidayPage * holidayPageSize, (holidayPage + 1) * holidayPageSize),
+    [filteredHolidays, holidayPage, holidayPageSize]
+  );
 
   // New Notice Form State
   const [noticeTitle, setNoticeTitle] = useState('');
@@ -258,6 +281,23 @@ export function AdminSettingsBranchesHolidaysSection({ isDemoMode }: Props) {
           </button>
         </div>
 
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="relative flex-1 min-w-[240px] max-w-md">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              value={holidaySearch}
+              onChange={(e) => {
+                setHolidaySearch(e.target.value);
+                setHolidayPage(0);
+              }}
+              placeholder="Search holidays by name, date, scope..."
+              aria-label="Search holidays"
+              className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm border-collapse" aria-label="Branch Holiday Schedule">
             <thead>
@@ -269,35 +309,54 @@ export function AdminSettingsBranchesHolidaysSection({ isDemoMode }: Props) {
                 <th scope="col" className="px-3.5 py-3 text-center whitespace-nowrap">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
-              {holidays.map((h) => (
-                <tr key={h.id} className="hover:bg-muted/20 motion-safe:transition-colors">
-                  <td className="px-3.5 py-3 font-semibold text-foreground whitespace-nowrap">
-                    {h.holidayName}
-                  </td>
-                  <td className="px-3.5 py-3 font-mono text-xs text-muted-foreground whitespace-nowrap">
-                    {h.date}
-                  </td>
-                  <td className="px-3.5 py-3 text-xs font-medium text-foreground whitespace-nowrap">
-                    {h.branchScope}
-                  </td>
-                  <td className="px-3.5 py-3 text-xs text-foreground whitespace-nowrap">
-                    <span className="inline-flex items-center gap-1 rounded bg-muted px-2 py-0.5 font-medium">
-                      <Clock className="h-3 w-3 text-muted-foreground" />
-                      <span>{h.operatingTiming}</span>
-                    </span>
-                  </td>
-                  <td className="px-3.5 py-3 text-center whitespace-nowrap">
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-success">
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      <span>Enforced</span>
-                    </span>
+            <tbody className="divide-y border-border">
+              {filteredHolidays.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-xs text-muted-foreground">
+                    No holidays match your search criteria.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                paginatedHolidays.map((h) => (
+                  <tr key={h.id} className="hover:bg-muted/20 motion-safe:transition-colors">
+                    <td className="px-3.5 py-3 font-semibold text-foreground whitespace-nowrap">
+                      {h.holidayName}
+                    </td>
+                    <td className="px-3.5 py-3 font-mono text-xs text-muted-foreground whitespace-nowrap">
+                      {h.date}
+                    </td>
+                    <td className="px-3.5 py-3 text-xs font-medium text-foreground whitespace-nowrap">
+                      {h.branchScope}
+                    </td>
+                    <td className="px-3.5 py-3 text-xs text-foreground whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1 rounded bg-muted px-2 py-0.5 font-medium">
+                        <Clock className="h-3 w-3 text-muted-foreground" />
+                        <span>{h.operatingTiming}</span>
+                      </span>
+                    </td>
+                    <td className="px-3.5 py-3 text-center whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-success">
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        <span>Enforced</span>
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+
+        <AdminTablePagination
+          page={holidayPage}
+          pageSize={holidayPageSize}
+          totalRows={filteredHolidays.length}
+          onPageChange={setHolidayPage}
+          onPageSizeChange={(newPageSize) => {
+            setHolidayPageSize(newPageSize);
+            setHolidayPage(0);
+          }}
+        />
       </section>
 
       {/* Publish Notice Modal */}

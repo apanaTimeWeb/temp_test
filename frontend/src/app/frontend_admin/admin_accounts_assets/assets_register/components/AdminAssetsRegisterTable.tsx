@@ -1,5 +1,6 @@
 // components/AdminAssetsRegisterTable.tsx
 'use client';
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { ShieldCheck, AlertTriangle, Clock, Wrench, Phone, CalendarClock } from 'lucide-react';
 import type { AdminAssetRecord } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
@@ -10,6 +11,7 @@ import {
   getDaysUntilExpiry,
 } from '@/app/frontend_admin/admin_accounts_assets/assets_register/utils/AdminAssetsRegisterFormatters';
 import AdminAssetsRegisterEmptyState from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterEmptyState';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 interface Props {
   records: AdminAssetRecord[];
@@ -23,6 +25,13 @@ export function AdminAssetsRegisterTable({
   onResetFilters,
 }: Props) {
   const t = useTranslations('ADMIN_ASSETS_REGISTER');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedRecords = useMemo(
+    () => records.slice(page * pageSize, (page + 1) * pageSize),
+    [records, page, pageSize]
+  );
 
   if (records.length === 0) {
     return <AdminAssetsRegisterEmptyState onResetFilters={onResetFilters} />;
@@ -46,7 +55,7 @@ export function AdminAssetsRegisterTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {records.map((asset) => {
+            {paginatedRecords.map((asset) => {
               const expiringSoon = isExpiringSoon(asset.warrantyExpiryDate);
               const daysLeft = getDaysUntilExpiry(asset.warrantyExpiryDate);
 
@@ -178,6 +187,19 @@ export function AdminAssetsRegisterTable({
           </tbody>
         </table>
       </div>
+      {records.length > 0 && (
+        <AdminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalCount={records.length}
+          onPageChange={setPage}
+          onPageSizeChange={(newSize) => {
+            setPageSize(newSize);
+            setPage(0);
+          }}
+          id="admin-assets-register-page-size"
+        />
+      )}
     </div>
   );
 }

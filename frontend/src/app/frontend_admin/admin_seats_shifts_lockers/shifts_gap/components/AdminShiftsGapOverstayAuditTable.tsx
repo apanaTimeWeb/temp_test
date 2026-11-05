@@ -11,9 +11,11 @@ import {
   DollarSign,
   TrendingDown,
   Building2,
+  Search,
 } from 'lucide-react';
 import type { AdminShiftOverstayIncident } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapTypes';
 import { ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/mocks/AdminShiftsGapShiftGapFixtures';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 export function AdminShiftsGapOverstayAuditTable() {
   const t = useTranslations('ADMIN_SHIFTS');
@@ -22,6 +24,9 @@ export function AdminShiftsGapOverstayAuditTable() {
   ]);
   const [branchFilter, setBranchFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const branches = useMemo(() => {
     return Array.from(new Set(ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS.map((i) => i.branchName)));
@@ -31,9 +36,19 @@ export function AdminShiftsGapOverstayAuditTable() {
     return incidents.filter((i) => {
       const matchBranch = branchFilter === 'ALL' || i.branchName === branchFilter;
       const matchStatus = statusFilter === 'ALL' || i.status === statusFilter;
-      return matchBranch && matchStatus;
+      const q = searchQuery.trim().toLowerCase();
+      const matchSearch = !q ||
+        i.studentName.toLowerCase().includes(q) ||
+        i.smartId.toLowerCase().includes(q) ||
+        i.seatNumber.toLowerCase().includes(q) ||
+        i.branchName.toLowerCase().includes(q);
+      return matchBranch && matchStatus && matchSearch;
     });
-  }, [incidents, branchFilter, statusFilter]);
+  }, [incidents, branchFilter, statusFilter, searchQuery]);
+
+  const paginatedIncidents = useMemo(() => {
+    return filteredIncidents.slice(page * pageSize, (page + 1) * pageSize);
+  }, [filteredIncidents, page, pageSize]);
 
   const totalFinesRecovered = useMemo(() => {
     return incidents
@@ -93,12 +108,29 @@ export function AdminShiftsGapOverstayAuditTable() {
 
       {/* ── Filter Bar ── */}
       <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[220px] max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search student, smart ID, seat, branch..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPage(0);
+            }}
+            className="min-h-10 w-full rounded-md border border-border bg-input pl-9 pr-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          />
+        </div>
+
         <div className="flex items-center gap-2">
           <Building2 className="h-4 w-4 text-text-secondary" />
           <select
             aria-label={t('tableBranchSeat')}
             value={branchFilter}
-            onChange={(e) => setBranchFilter(e.target.value)}
+            onChange={(e) => {
+              setBranchFilter(e.target.value);
+              setPage(0);
+            }}
             className="min-h-10 rounded-md border border-border bg-input px-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <option value="ALL">{t('filterAllBranches')}</option>
@@ -113,7 +145,10 @@ export function AdminShiftsGapOverstayAuditTable() {
           <select
             aria-label={t('tableStatus')}
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(0);
+            }}
             className="min-h-10 rounded-md border border-border bg-input px-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <option value="ALL">All Audit Statuses</option>
@@ -146,7 +181,7 @@ export function AdminShiftsGapOverstayAuditTable() {
                 </td>
               </tr>
             ) : (
-              filteredIncidents.map((inc) => (
+              paginatedIncidents.map((inc) => (
                 <tr key={inc.id} className="hover:bg-surface-hover/50 transition-colors">
                   <td className="p-3">
                     <span className="font-semibold text-text-primary">{inc.branchName}</span>
@@ -217,6 +252,19 @@ export function AdminShiftsGapOverstayAuditTable() {
           </tbody>
         </table>
       </div>
+      {filteredIncidents.length > 0 && (
+        <AdminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalCount={filteredIncidents.length}
+          onPageChange={setPage}
+          onPageSizeChange={(newSize) => {
+            setPageSize(newSize);
+            setPage(0);
+          }}
+          id="admin-shifts-gap-overstay-page-size"
+        />
+      )}
     </section>
   );
 }

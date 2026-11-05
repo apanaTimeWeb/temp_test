@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   FileText,
@@ -12,6 +13,7 @@ import {
 } from 'lucide-react';
 import type { StaffSalaryRecord } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
 import { PAYROLL_STATUS_VARIANTS } from '@/app/frontend_admin/admin_staff/staff_payroll/config/admin_staff_payroll.url_config';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 interface Props {
   records: StaffSalaryRecord[];
@@ -21,6 +23,13 @@ interface Props {
 
 export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: Props) {
   const t = useTranslations('ADMIN_STAFF_PAYROLL');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedRecords = useMemo(
+    () => records.slice(page * pageSize, (page + 1) * pageSize),
+    [records, page, pageSize]
+  );
 
   if (records.length === 0) {
     return (
@@ -50,7 +59,7 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {records.map((r) => {
+            {paginatedRecords.map((r) => {
               const statusBadgeClass = PAYROLL_STATUS_VARIANTS[r.status] || 'bg-surface text-text-secondary';
               const isDisbursed = r.status === 'DISBURSED';
 
@@ -136,6 +145,16 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
           </tbody>
         </table>
       </div>
+      <AdminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalRows={records.length}
+        onPageChange={setPage}
+        onPageSizeChange={(newPageSize) => {
+          setPageSize(newPageSize);
+          setPage(0);
+        }}
+      />
     </div>
   );
 }

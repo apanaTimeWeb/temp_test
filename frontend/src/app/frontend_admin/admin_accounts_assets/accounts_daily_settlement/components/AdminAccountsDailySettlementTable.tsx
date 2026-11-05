@@ -1,5 +1,6 @@
 // components/AdminAccountsDailySettlementTable.tsx
 'use client';
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { Check, AlertTriangle, Clock, ExternalLink, ShieldAlert, Eye } from 'lucide-react';
 import type { DailySettlementRecord } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
@@ -9,6 +10,7 @@ import {
 } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/utils/AdminAccountsDailySettlementFormatters';
 import { displayValue } from '@/lib/display_value';
 import AdminAccountsDailySettlementEmptyState from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/components/AdminAccountsDailySettlementEmptyState';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 interface Props {
   records: DailySettlementRecord[];
@@ -24,6 +26,13 @@ export function AdminAccountsDailySettlementTable({
   onResetFilters,
 }: Props) {
   const t = useTranslations('ADMIN_ACCOUNTS_DAILY_SETTLEMENT');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const paginatedRecords = useMemo(
+    () => records.slice(page * pageSize, (page + 1) * pageSize),
+    [records, page, pageSize]
+  );
 
   if (records.length === 0) {
     return <AdminAccountsDailySettlementEmptyState onResetFilters={onResetFilters} />;
@@ -49,7 +58,7 @@ export function AdminAccountsDailySettlementTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {records.map((record) => {
+            {paginatedRecords.map((record) => {
               const isShortage = record.difference < 0;
               const isSurplus = record.difference > 0;
 
@@ -211,6 +220,19 @@ export function AdminAccountsDailySettlementTable({
           </tbody>
         </table>
       </div>
+      {records.length > 0 && (
+        <AdminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalCount={records.length}
+          onPageChange={setPage}
+          onPageSizeChange={(newSize) => {
+            setPageSize(newSize);
+            setPage(0);
+          }}
+          id="admin-daily-settlement-page-size"
+        />
+      )}
     </div>
   );
 }
