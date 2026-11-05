@@ -4,10 +4,17 @@ import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/ap
 // RESPONSIBILITY: Renders the top header for the admin module.
 // DATA FLOW: AdminRoute -> AdminHeader
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Building2, Bell, Menu } from 'lucide-react';
+import { Building2, Bell, Menu, LogOut } from 'lucide-react';
+import { toast } from 'sonner';
+import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
+import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
+import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
+import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
+import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
+import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import { AdminShellThemeToggle } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellThemeToggle';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import Select from '@/components/ui/select/Select';
@@ -25,6 +32,27 @@ export function AdminShellHeader({ onMobileOpen }: AdminShellHeaderProps) {
   const { branches, selectedBranchId, setSelectedBranchId } = useAdminBranch();
   const [greeting, setGreeting] = useState('');
   const [dateStr, setDateStr] = useState('');
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleSignOut = useCallback(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('admin_user');
+        sessionStorage.clear();
+        document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+      }
+    } catch {
+      // Storage access resilience
+    }
+    toast.success('Signed out successfully');
+    setShowLogoutModal(false);
+    window.location.href = '/public_auth/auth_sign_in';
+  }, []);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -83,7 +111,7 @@ export function AdminShellHeader({ onMobileOpen }: AdminShellHeaderProps) {
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <AdminShellThemeToggle />
         <button type="button" data-testid="admin_header-AdminShellHeader-control-002" className="admin-bell-btn" aria-label={t('NOTIFICATIONS_UNAVAILABLE')} disabled title={t('NOTIFICATIONS_BLOCKED')}>
           <Bell size={18} strokeWidth={2} aria-hidden="true" />
@@ -91,7 +119,42 @@ export function AdminShellHeader({ onMobileOpen }: AdminShellHeaderProps) {
         <Link data-testid="admin_header-AdminShellHeader-control-003" href={ADMIN_ROUTES.SETTINGS_PROFILE} className="admin-avatar admin-application-infrastructure-style-80d654f9c8" title={t('DEMO_PROFILE_TOOLTIP')} >
           LA
         </Link>
+        <button
+          type="button"
+          data-testid="admin_header-AdminShellHeader-control-logout"
+          onClick={() => setShowLogoutModal(true)}
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-danger-text hover:bg-danger-bg hover:border-danger-text/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+          title={t('LOG_OUT')}
+          aria-label={t('LOG_OUT')}
+        >
+          <LogOut size={16} strokeWidth={2} aria-hidden="true" />
+        </button>
       </div>
+
+      <Dialog open={showLogoutModal} onOpenChange={setShowLogoutModal}>
+        <DialogContent className="max-w-sm bg-overlay border-border">
+          <DialogHeader>
+            <DialogTitle>{t('LOG_OUT_TITLE')}</DialogTitle>
+            <DialogDescription>{t('LOG_OUT_DESCRIPTION')}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4 flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setShowLogoutModal(false)}
+              className="border border-border rounded-md px-4 py-2 text-text-secondary hover:bg-surface-hover transition-colors"
+            >
+              {t('CANCEL')}
+            </button>
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="bg-danger text-on-danger rounded-md px-4 py-2 font-medium hover:opacity-90 transition-opacity cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
+            >
+              {t('LOG_OUT')}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </header>
   );
 }
