@@ -14,13 +14,13 @@ import type { ManagerFinanceTrustScoresRouteQueryProps } from '@/app/frontend_ma
 const BADGE_CLASS: Record<string, string> = {
   reliable: 'fin-badge fin-badge--success',
   moderate: 'fin-badge fin-badge--warning',
-  low:      'fin-badge fin-badge--danger',
+  low: 'fin-badge fin-badge--danger',
 };
 
 const BADGE_ICON: Record<string, typeof ShieldCheck> = {
   reliable: ShieldCheck,
   moderate: ShieldAlert,
-  low:      ShieldX,
+  low: ShieldX,
 };
 
 function TrustGauge({ score }: { score: number }) {
