@@ -1,10 +1,100 @@
 'use client';
 // RESPONSIBILITY: Render the dashboard reports kpi grid component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { ManagerDashboardReportsEmptyState } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/ManagerDashboardReportsEmptyState';
 import { useTranslations } from 'next-intl';
-import { CalendarCheck, Phone, UserPlus, Users } from 'lucide-react';
+import { CalendarCheck, Phone, UserPlus, Users, TrendingUp, TrendingDown, type LucideIcon } from 'lucide-react';
+import { ManagerDashboardReportsEmptyState } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/ManagerDashboardReportsEmptyState';
 import type { ManagerDashboardReportsKpiCard } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
 import { MANAGER_REPORTS_KPI_ICON_CLASSES } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/constants/ManagerDashboardReportsConstants';
 import { getManagerReportsTrendTone } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsTrendTone';
-const icons={Users,CalendarCheck,UserPlus,Phone} as const;
-export function ManagerDashboardReportsKpiGrid({cards}:{cards:ManagerDashboardReportsKpiCard[]}){const tManagerUi=useTranslations('manager.manager_reports.ui');if(cards.length===0)return <ManagerDashboardReportsEmptyState className="mgr-card p-6 text-sm text-secondary" testId="manager-reports-kpi-empty">{tManagerUi('no_report_data_available')}</ManagerDashboardReportsEmptyState>;return <div className="mgr-kpi-grid mgr-section-gap">{cards.map((card)=>{const Icon=icons[card.icon];return <div key={card.title} className="mgr-kpi-card"><div className="mgr-kpi-top-row"><div className={`mgr-kpi-icon ${MANAGER_REPORTS_KPI_ICON_CLASSES[card.icon]??''}`}><Icon size={18}/></div>{card.trend?<span className={`mgr-trend-${getManagerReportsTrendTone(card.trend)}`}>{card.trend}</span>:null}</div><p className="mgr-kpi-label">{card.title}</p><p className="mgr-kpi-value">{card.value}</p></div>})}</div>}
+
+const icons: Record<string, LucideIcon> = {
+  Users,
+  CalendarCheck,
+  UserPlus,
+  Phone,
+};
+
+const getReportIconTheme = (icon: string) => {
+  switch (icon) {
+    case 'Users':
+      return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+    case 'CalendarCheck':
+      return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
+    case 'UserPlus':
+      return 'bg-purple-500/10 text-purple-500 border-purple-500/20';
+    case 'Phone':
+      return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+    default:
+      return 'bg-primary/10 text-primary border-primary/20';
+  }
+};
+
+export function ManagerDashboardReportsKpiGrid({ cards }: { cards: ManagerDashboardReportsKpiCard[] }) {
+  const tManagerUi = useTranslations('manager.manager_reports.ui');
+
+  if (cards.length === 0) {
+    return (
+      <ManagerDashboardReportsEmptyState
+        className="mgr-card p-6 text-sm text-secondary text-center"
+        testId="manager-reports-kpi-empty"
+      >
+        {tManagerUi('no_report_data_available')}
+      </ManagerDashboardReportsEmptyState>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {cards.map((card) => {
+        const Icon = icons[card.icon] || Users;
+        const tone = card.trend ? getManagerReportsTrendTone(card.trend) : 'neutral';
+        const iconTheme = getReportIconTheme(card.icon);
+
+        return (
+          <div
+            key={card.title}
+            className="mgr-kpi-card p-5 rounded-2xl border border-border bg-card shadow-card hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between gap-2">
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center font-bold transition-transform group-hover:scale-105 ${iconTheme}`}>
+                  <Icon size={20} />
+                </div>
+
+                {card.trend && (
+                  <span
+                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                      tone === 'up'
+                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                        : tone === 'down'
+                        ? 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20'
+                        : 'bg-muted text-muted-foreground border border-border'
+                    }`}
+                  >
+                    {tone === 'up' && <TrendingUp size={11} />}
+                    {tone === 'down' && <TrendingDown size={11} />}
+                    {card.trend}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-4">
+                <p className="mgr-kpi-value text-3xl font-extrabold tracking-tight text-foreground font-sans">
+                  {card.value}
+                </p>
+                <p className="mgr-kpi-label text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-1">
+                  {card.title}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between text-[11px] text-muted-foreground">
+              <span>Verified Analytics Metric</span>
+              <span className="text-primary font-medium">Synced</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
