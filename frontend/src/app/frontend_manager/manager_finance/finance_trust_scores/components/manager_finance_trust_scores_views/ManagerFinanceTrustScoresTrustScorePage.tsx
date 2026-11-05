@@ -1,26 +1,26 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_trust_scores/hooks/ManagerFinanceTrustScoresDemoRepository';
 import { useManagerTrustScoresUrlFilters } from '@/app/frontend_manager/manager_finance/finance_trust_scores/hooks/useManagerFinanceTrustScoresUrlFilters';
 
 // RESPONSIBILITY: Entry page for the manager_trust_scores module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { ShieldCheck, ShieldAlert, ShieldX, Users } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, ShieldX, Users, Search } from 'lucide-react';
 import { ManagerFinanceTrustScoresEmptyState } from '@/app/frontend_manager/manager_finance/finance_trust_scores/components/manager_finance_trust_scores_empty_states/ManagerFinanceTrustScoresEmptyState';
 import type { ManagerFinanceTrustScoresRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_trust_scores/types/ManagerFinanceTrustScoresComponentTypes';
 
 const BADGE_CLASS: Record<string, string> = {
   reliable: 'fin-badge fin-badge--success',
   moderate: 'fin-badge fin-badge--warning',
-  low:      'fin-badge fin-badge--danger',
+  low: 'fin-badge fin-badge--danger',
 };
 
 const BADGE_ICON: Record<string, typeof ShieldCheck> = {
   reliable: ShieldCheck,
   moderate: ShieldAlert,
-  low:      ShieldX,
+  low: ShieldX,
 };
 
 function TrustGauge({ score }: { score: number }) {
@@ -49,12 +49,17 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const filtered = MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.filter((s) => {
-    const lm = levelFilter === 'all' || s.badge === levelFilter;
-    const sm = shiftFilter === 'all' || s.shift === shiftFilter;
-    return lm && sm;
-  });
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.filter((s) => {
+      const lm = levelFilter === 'all' || s.badge === levelFilter;
+      const sm = shiftFilter === 'all' || s.shift === shiftFilter;
+      const qm = !q || s.studentName.toLowerCase().includes(q) || s.smartId.toLowerCase().includes(q);
+      return lm && sm && qm;
+    });
+  }, [levelFilter, shiftFilter, searchQuery]);
 
   const totalRows = filtered.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
@@ -116,7 +121,20 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
         </div>
       </div>
 
-      <div className="fin-filter-bar">
+      <div className="fin-filter-bar flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="search"
+            placeholder="Search student or smart ID..."
+            className="mgr-input pl-8 text-xs w-full"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPage(0);
+            }}
+          />
+        </div>
         <select className="fin-select w-40" value={levelFilter} onChange={(e) => { setUrlFilter('level', e.target.value); setPage(0); }} aria-label={tManagerUi('all_levels')}>
           <option value="all">{tManagerUi('all_levels')}</option>
           <option value="reliable">{tManagerUi('reliable')}</option>
@@ -151,7 +169,9 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
                 <td colSpan={8}>
                   <ManagerFinanceTrustScoresEmptyState className="fin-empty-state">
                     <div className="fin-empty-state__icon">🛡️</div>
-                    <p className="fin-empty-state__title">{tManagerUi('start_recording_payment_promises_to_build_trust_scores')}</p>
+                    <p className="fin-empty-state__title">
+                      {searchQuery ? 'No students found matching your search query.' : tManagerUi('start_recording_payment_promises_to_build_trust_scores')}
+                    </p>
                   </ManagerFinanceTrustScoresEmptyState>
                 </td>
               </tr>

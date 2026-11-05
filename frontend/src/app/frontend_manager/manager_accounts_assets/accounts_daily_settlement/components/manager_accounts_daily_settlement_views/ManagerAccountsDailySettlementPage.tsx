@@ -1,6 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
+import { Search } from 'lucide-react';
 import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
@@ -31,6 +32,18 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const formatManagerDailySettlementCurrency = useManagerDailySettlementCurrencyFormatter();
   const date = toLocalDateInputValue(new Date());
   const [entries, setEntries] = useState<Entry[]>([...MOCK]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredEntries = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return entries;
+    return entries.filter(
+      (e) =>
+        e.shift.toLowerCase().includes(q) ||
+        (e.settledBy && e.settledBy.toLowerCase().includes(q)) ||
+        e.status.toLowerCase().includes(q)
+    );
+  }, [entries, searchQuery]);
 
   const handleSettleShift = (shiftName: string) => {
     setEntries((prev) =>
@@ -143,15 +156,30 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         <div className="fin-kpi-card"><p className="fin-kpi-label">{tManagerUi('net')}</p><p className="fin-kpi-value">{formatManagerDailySettlementCurrency(totalCash + totalUpi - totalExp)}</p></div>
       </div>
 
-      <div className="fin-card p-4">
-        {entries.length === 0 ? (
+      <div className="fin-card p-4 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <h2 className="text-sm font-semibold text-primary">Shift Settlements</h2>
+          <div className="relative w-full sm:w-64">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <input
+              type="search"
+              placeholder="Search shift or settled by..."
+              className="mgr-input pl-8 text-xs w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+        {filteredEntries.length === 0 ? (
           <div className="fin-empty-state py-12">
             <div className="fin-empty-state__icon">📋</div>
-            <p className="fin-empty-state__title">{tManagerUi('no_settlement_entries_for_this_date')}</p>
+            <p className="fin-empty-state__title">
+              {searchQuery ? 'No settlement entries matching your search query.' : tManagerUi('no_settlement_entries_for_this_date')}
+            </p>
           </div>
         ) : (
           <div className="mgr-table-wrapper h-80">
-            <ManagerAccountsDailySettlementNativeTable getRowKey={(row) => String(row.id)} rows={entries} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
+            <ManagerAccountsDailySettlementNativeTable getRowKey={(row) => String(row.id)} rows={filteredEntries} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
           </div>
         )}
       </div>

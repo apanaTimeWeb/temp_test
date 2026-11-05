@@ -8,9 +8,9 @@ import { useManagerSubscriptionsFormatting } from '@/app/frontend_manager/manage
 // RESPONSIBILITY: Entry page for the manager_subscriptions module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
-import { Download, Upload, Printer, MessageSquare, Send, Mail, RefreshCw, Eye, CheckCircle, X } from 'lucide-react';
+import { Download, Upload, Printer, MessageSquare, Send, Mail, RefreshCw, Eye, CheckCircle, X, Search } from 'lucide-react';
 import { sanitizeManagerSubscriptionsCsvCell } from '@/app/frontend_manager/manager_finance/finance_subscriptions/utils/ManagerFinanceSubscriptionsCsv';
 import { ManagerFinanceSubscriptionsEmptyState } from '@/app/frontend_manager/manager_finance/finance_subscriptions/components/manager_finance_subscriptions_empty_states/ManagerFinanceSubscriptionsEmptyState';
 import type { ManagerFinanceSubscriptionsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsComponentTypes';
@@ -45,6 +45,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
   const shiftFilter = urlFilters.shift;
   const [rows, setRows] = useState(MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS);
   const [selectedSub, setSelectedSub] = useState<(typeof rows)[0] | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
@@ -115,10 +116,23 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
     setPage(0);
   }, [statusFilter, planFilter, shiftFilter]);
 
-  const totalRows = rows.length;
+  const filteredRows = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return rows;
+    return rows.filter((s) => {
+      return (
+        s.studentName.toLowerCase().includes(q) ||
+        s.smartId.toLowerCase().includes(q) ||
+        s.plan.toLowerCase().includes(q) ||
+        s.shift.toLowerCase().includes(q)
+      );
+    });
+  }, [rows, searchQuery]);
+
+  const totalRows = filteredRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = rows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = filteredRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
@@ -169,7 +183,20 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         </div>
       )}
 
-      <div className="fin-filter-bar">
+      <div className="fin-filter-bar flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="search"
+            placeholder="Search student, smart ID, plan..."
+            className="mgr-input pl-8 text-xs w-full"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPage(0);
+            }}
+          />
+        </div>
         <select className="fin-select w-40" value={statusFilter} onChange={(e) => setUrlFilter('status', e.target.value)} aria-label={tManagerUi('all_status')}>
           <option value="all">{tManagerUi('all_status')}</option>
           <option value="active">{tManagerUi('active')}</option>
@@ -210,12 +237,14 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
             </tr>
           </thead>
           <tbody>
-            {rows.length === 0 ? (
+            {filteredRows.length === 0 ? (
               <tr>
                 <td colSpan={13}>
                   <ManagerFinanceSubscriptionsEmptyState className="fin-empty-state">
                     <div className="fin-empty-state__icon">📋</div>
-                    <p className="fin-empty-state__title">{tManagerUi('no_subscriptions_found')}</p>
+                    <p className="fin-empty-state__title">
+                      {searchQuery ? 'No subscriptions matching your search query.' : tManagerUi('no_subscriptions_found')}
+                    </p>
                   </ManagerFinanceSubscriptionsEmptyState>
                 </td>
               </tr>

@@ -8,7 +8,8 @@ import { useManagerSeatGapReportCurrencyFormatter } from '@/app/frontend_manager
 // RESPONSIBILITY: Entry page for the manager_seat_gap_report module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import { ManagerAccountsSeatGapReportEmptyState } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/components/manager_accounts_seat_gap_report_empty_states/ManagerAccountsSeatGapReportEmptyState';
 
 function formatKnownIsoCalendarDate(value: string, locale: string): string {
@@ -30,13 +31,23 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
   const formatManagerSeatGapReportCurrency = useManagerSeatGapReportCurrencyFormatter();
   const [shiftFilter, setShiftFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
-  const visible = MOCK.filter(r =>
-    (shiftFilter === 'all' || r.shift === shiftFilter) &&
-    (statusFilter === 'all' || r.status === statusFilter)
-  );
+  const visible = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return MOCK.filter((r) => {
+      const matchShift = shiftFilter === 'all' || r.shift === shiftFilter;
+      const matchStatus = statusFilter === 'all' || r.status === statusFilter;
+      const matchQ =
+        !q ||
+        r.seatNo.toLowerCase().includes(q) ||
+        r.floor.toLowerCase().includes(q) ||
+        r.shift.toLowerCase().includes(q);
+      return matchShift && matchStatus && matchQ;
+    });
+  }, [shiftFilter, statusFilter, searchQuery]);
 
   const totalRows = visible.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
@@ -62,7 +73,20 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
         <div className="fin-kpi-card"><p className="fin-kpi-label">{tManagerUi('under_maintenance')}</p><p className="fin-kpi-value">{visible.filter(r=>r.status==='maintenance').length}</p></div>
       </div>
 
-      <div className="fin-filter-bar">
+      <div className="fin-filter-bar flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="search"
+            placeholder="Search seat no, floor, or shift..."
+            className="mgr-input pl-8 text-xs w-full"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPage(0);
+            }}
+          />
+        </div>
         <select className="fin-select w-40" value={shiftFilter} onChange={e => { setShiftFilter(e.target.value); setPage(0); }} aria-label={tManagerUi('all_shifts')}>
           <option value="all">{tManagerUi('all_shifts')}</option>
           <option value="Morning">{tManagerUi('morning')}</option>
@@ -92,7 +116,7 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
           </thead>
           <tbody>
             {visible.length === 0 ? (
-              <tr><td colSpan={7}><ManagerAccountsSeatGapReportEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🪑</div><p className="fin-empty-state__title">{tManagerUi('no_gap_seats_found')}</p></ManagerAccountsSeatGapReportEmptyState></td></tr>
+              <tr><td colSpan={7}><ManagerAccountsSeatGapReportEmptyState className="fin-empty-state"><div className="fin-empty-state__icon">🪑</div><p className="fin-empty-state__title">{searchQuery ? 'No gap seats matching your search query.' : tManagerUi('no_gap_seats_found')}</p></ManagerAccountsSeatGapReportEmptyState></td></tr>
             ) : paginated.map(r => (
               <tr key={r.seatNo} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
                 <td className="py-3 px-4 fin-cell-name">{r.seatNo}</td>

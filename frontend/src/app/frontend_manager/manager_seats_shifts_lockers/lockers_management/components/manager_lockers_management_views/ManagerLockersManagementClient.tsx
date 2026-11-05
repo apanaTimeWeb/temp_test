@@ -66,6 +66,7 @@ export function ManagerLockersManagementClient() {
   const tManagerUi = useTranslations('manager.manager_lockers.ui');
   const [lockers, setLockers] = useState<Locker[]>([...MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_LOCKERS]);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [mainTableSearch, setMainTableSearch] = useState('');
   const [showAssign, setShowAssign] = useState<Locker | null>(null);
   const [assignSearch, setAssignSearch] = useState('');
   const [freeTarget, setFreeTarget] = useState<Locker | null>(null);
@@ -95,7 +96,18 @@ export function ManagerLockersManagementClient() {
     setRemarks('');
   };
 
-  const filtered = lockers.filter(l => statusFilter === 'all' || l.status === statusFilter);
+  const filtered = useMemo(() => {
+    const q = mainTableSearch.trim().toLowerCase();
+    return lockers.filter((l) => {
+      const matchStatus = statusFilter === 'all' || l.status === statusFilter;
+      const matchQ =
+        !q ||
+        l.lockerId.toLowerCase().includes(q) ||
+        (l.assignedTo && l.assignedTo.toLowerCase().includes(q)) ||
+        (l.studentId && l.studentId.toLowerCase().includes(q));
+      return matchStatus && matchQ;
+    });
+  }, [lockers, statusFilter, mainTableSearch]);
 
   const colDefs: ColDef<Locker>[] = useMemo(() => [
     { field: 'lockerId', headerName: tManagerUi('locker'), flex: 1, cellRenderer: LockerIdCell },
@@ -143,7 +155,17 @@ export function ManagerLockersManagementClient() {
           </button>
         </div>
 
-        <div className="ss-filter-bar">
+        <div className="ss-filter-bar flex flex-wrap items-center gap-3">
+          <div className="relative flex-1 min-w-[200px]">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <input
+              type="search"
+              placeholder="Search locker number, student name, or ID..."
+              className="mgr-input pl-8 text-xs w-full"
+              value={mainTableSearch}
+              onChange={(e) => setMainTableSearch(e.target.value)}
+            />
+          </div>
           <div className="ss-filter-bar__select-wrap">
             <select aria-label={tManagerUi('filter_by_status')} className="ss-select" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
               <option value="all">{tManagerUi('all_statuses')}</option>

@@ -8,7 +8,8 @@ import { useManagerAssetsMaintenanceCurrencyFormatter } from '@/app/frontend_man
 // RESPONSIBILITY: Entry page for the manager_asset_maintenance module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import ManagerAssetsMaintenanceEmptyState from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceEmptyState';
 
 const MOCK = getManagerAssetsMaintenanceSampleLogs();
@@ -24,10 +25,22 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
   const formatManagerAssetMaintenanceCurrency = useManagerAssetsMaintenanceCurrencyFormatter();
   const logs = MOCK;
   const [statusFilter, setStatusFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
-  const visible = statusFilter === 'all' ? logs : logs.filter(l => l.status === statusFilter);
+  const visible = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return logs.filter((l) => {
+      const matchStatus = statusFilter === 'all' || l.status === statusFilter;
+      const matchQ =
+        !q ||
+        l.assetName.toLowerCase().includes(q) ||
+        l.issue.toLowerCase().includes(q) ||
+        l.vendor.toLowerCase().includes(q);
+      return matchStatus && matchQ;
+    });
+  }, [logs, statusFilter, searchQuery]);
   const totalCost = logs.filter(l => l.status === 'completed').reduce((s, l) => s + l.cost, 0);
 
   const totalRows = visible.length;
@@ -71,7 +84,20 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         </div>
       </div>
 
-      <div className="fin-filter-bar">
+      <div className="fin-filter-bar flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <input
+            type="search"
+            placeholder="Search asset, issue, or vendor..."
+            className="mgr-input pl-8 text-xs w-full"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPage(0);
+            }}
+          />
+        </div>
         <select className="fin-select w-44" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(0); }} aria-label={tManagerUi('all_status')}>
           <option value="all">{tManagerUi('all_status')}</option>
           <option value="pending">{tManagerUi('pending')}</option>
@@ -96,7 +122,7 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
           </thead>
           <tbody>
             {visible.length === 0 ? (
-              <tr><td colSpan={8}><ManagerAssetsMaintenanceEmptyState title={tManagerUi('no_maintenance_records_found')} /></td></tr>
+              <tr><td colSpan={8}><ManagerAssetsMaintenanceEmptyState title={searchQuery ? 'No maintenance records matching your search query.' : tManagerUi('no_maintenance_records_found')} /></td></tr>
             ) : paginated.map(l => (
               <tr key={l.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
                 <td className="py-3 px-4 fin-cell-name">{l.assetName}</td>

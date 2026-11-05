@@ -1,10 +1,10 @@
 'use client';
 // RESPONSIBILITY: Render the canonical group-admission feature view with incoming route context.
 // DATA FLOW: Next.js route page -> Main -> GroupPage.
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Users2, Plus, Download, Upload, Trash2, CheckCircle2, X, FileSpreadsheet, AlertCircle } from 'lucide-react';
+import { Users2, Plus, Download, Upload, Trash2, CheckCircle2, X, FileSpreadsheet, AlertCircle, Search } from 'lucide-react';
 import Link from 'next/link';
 import { ManagerMembersGroupAdmissionManualModal } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal';
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
@@ -29,6 +29,23 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
   const [recentGroups, setRecentGroups] = useState<RecentGroupAdmission[]>(INITIAL_RECENT_GROUPS);
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [showManualModal, setShowManualModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const filteredGroups = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return recentGroups.filter(
+      (g) => !q || g.batchId.toLowerCase().includes(q) || g.batchName.toLowerCase().includes(q) || g.shift.toLowerCase().includes(q)
+    );
+  }, [recentGroups, searchQuery]);
+
+  const totalRows = filteredGroups.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginatedGroups = filteredGroups.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   // Bulk Upload state
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -174,9 +191,24 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
 
       {/* Recent Group Admissions Table */}
       <div className="mgr-card p-6 mt-8">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-lg text-primary">{tManagerUi('recent_group_admissions')}</h3>
-          <span className="text-xs text-secondary">{recentGroups.length} batches enrolled</span>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+          <div>
+            <h3 className="font-bold text-lg text-primary">{tManagerUi('recent_group_admissions')}</h3>
+            <span className="text-xs text-secondary">{recentGroups.length} batches enrolled</span>
+          </div>
+          <div className="relative w-full sm:w-64">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <input
+              type="search"
+              placeholder="Search batch name, ID, or shift..."
+              className="mgr-input pl-8 text-xs w-full"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(0);
+              }}
+            />
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -191,27 +223,81 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
               </tr>
             </thead>
             <tbody>
-              {recentGroups.map((group) => (
-                <tr key={group.batchId} className="border-b border-border hover:bg-surface-hover">
-                  <td className="py-3 px-4 font-mono font-bold text-primary">{group.batchId}</td>
-                  <td className="py-3 px-4 font-semibold text-primary">{group.batchName}</td>
-                  <td className="py-3 px-4 text-secondary">{group.date}</td>
-                  <td className="py-3 px-4 text-center">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-subtle text-primary">
-                      {group.count} Students
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-secondary">{group.shift}</td>
-                  <td className="py-3 px-4">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-success-bg text-success">
-                      {group.status}
-                    </span>
+              {filteredGroups.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-10 text-center text-secondary text-xs">
+                    No group admission batches match your search criteria.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                paginatedGroups.map((group) => (
+                  <tr key={group.batchId} className="border-b border-border hover:bg-surface-hover">
+                    <td className="py-3 px-4 font-mono font-bold text-primary">{group.batchId}</td>
+                    <td className="py-3 px-4 font-semibold text-primary">{group.batchName}</td>
+                    <td className="py-3 px-4 text-secondary">{group.date}</td>
+                    <td className="py-3 px-4 text-center">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-subtle text-primary">
+                        {group.count} Students
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 text-secondary">{group.shift}</td>
+                    <td className="py-3 px-4">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-success-bg text-success">
+                        {group.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+        {totalRows > 0 && (
+          <div className="border-t border-border mt-4 pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-secondary">
+            <span>
+              Showing {startItem}–{endItem} of {totalRows} batch records
+            </span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="group-admissions-rows-per-page" className="text-xs text-secondary whitespace-nowrap">Rows per page:</label>
+                <select
+                  id="group-admissions-rows-per-page"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="rounded border border-border bg-input px-2 py-1 text-xs text-primary"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={effectivePage === 0}
+                  onClick={() => setPage(effectivePage - 1)}
+                  className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+                >
+                  Previous
+                </button>
+                <span className="text-xs">
+                  Page {effectivePage + 1} of {pageCount}
+                </span>
+                <button
+                  type="button"
+                  disabled={effectivePage >= pageCount - 1}
+                  onClick={() => setPage(effectivePage + 1)}
+                  className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Bulk Upload Modal */}

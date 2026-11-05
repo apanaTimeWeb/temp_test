@@ -6,9 +6,9 @@ import { MANAGER_ATTENDANCE_DAILY_ROUTES } from '@/app/frontend_manager/manager_
 import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE } from '@/app/frontend_manager/manager_attendance/attendance_daily/hooks/ManagerAttendanceDailyDemoRepository';
 import { ManagerAttendanceDailyStudentRow } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyStudentRow';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Save } from 'lucide-react';
+import { ChevronRight, Save, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { ManagerAttendanceDailyEmptyState } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_empty_states/ManagerAttendanceDailyEmptyState';
 import { ManagerAttendanceDailyFloorTurnoverQueue } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyFloorTurnoverQueue';
@@ -34,6 +34,9 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
   const [date, setDate] = useState(() => toLocalDateInputValue(new Date()));
   const [shift, setShift]       = useState('All');
   const [students, setStudents] = useState<Student[]>(INIT_STUDENTS);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
   const shiftLabels: Record<string, string> = {
     Morning: tManagerUi('morning'),
     Afternoon: tManagerUi('afternoon'),
@@ -41,7 +44,25 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
   };
   const shiftLabel = (value: string) => value === 'All' ? tManagerUi('all') : (shiftLabels[value] ?? value);
 
-  const filtered = shift === 'All' ? students : students.filter(s => s.shift === shift);
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return students.filter((s) => {
+      const matchShift = shift === 'All' || s.shift === shift;
+      const matchSearch =
+        !q ||
+        s.name.toLowerCase().includes(q) ||
+        s.smartId.toLowerCase().includes(q);
+      return matchShift && matchSearch;
+    });
+  }, [students, shift, searchQuery]);
+
+  const totalRows = filtered.length;
+  const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
+  const effectivePage = Math.min(page, pageCount - 1);
+  const paginatedStudents = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
+  const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
   const marked   = filtered.filter(s => s.status !== null).length;
   const present  = filtered.filter(s => s.status === 'present').length;
   const absent   = filtered.filter(s => s.status === 'absent').length;
@@ -138,6 +159,23 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
           {/* ── Filters ── */}
           <div className="eng-card eng-card--flush eng-mb-6">
             <div className="eng-filter-row">
+              <div className="eng-filter-field flex-1 min-w-[220px]">
+                <label className="eng-label" htmlFor="daily-att-search">Search Student</label>
+                <div className="relative">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+                  <input
+                    id="daily-att-search"
+                    type="search"
+                    placeholder="Search name or smart ID..."
+                    className="eng-input pl-8 w-full"
+                    value={searchQuery}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setPage(0);
+                    }}
+                  />
+                </div>
+              </div>
               <div className="eng-filter-field">
                 <label className="eng-label" htmlFor="rbg4-managerengagementattendancepage-103">{tManagerUi('date')}</label>
                 <input id="rbg4-managerengagementattendancepage-103" type="date" className="eng-input" value={date} onChange={(e) => setDate(e.target.value)} aria-label={tManagerUi('date')} />
@@ -145,7 +183,10 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
               <div className="eng-filter-field">
                 <label className="eng-label" htmlFor="rbg4-managerengagementattendancepage-108">{tManagerUi('shift')}</label>
                 <select id="rbg4-managerengagementattendancepage-108" className="eng-select eng-filter-select" value={shift}
-                  onChange={e => setShift(e.target.value)}>
+                  onChange={e => {
+                    setShift(e.target.value);
+                    setPage(0);
+                  }}>
                   <option value="All">{tManagerUi('all')}</option>
                   <option value="Morning">{tManagerUi('morning')}</option>
                   <option value="Afternoon">{tManagerUi('afternoon')}</option>
@@ -169,7 +210,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
                   <p className="eng-empty-title">{tManagerUi('no_students_in_this_shift')}</p>
                   <p className="eng-empty-sub">{tManagerUi('try_selecting_a_different_shift_or_date')}</p>
                 </ManagerAttendanceDailyEmptyState>
-              ) : filtered.map((student) => (
+              ) : paginatedStudents.map((student) => (
                 <ManagerAttendanceDailyStudentRow
                   key={student.id}
                   student={student}
@@ -179,6 +220,52 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
                 />
               ))}
             </div>
+            {totalRows > 0 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-xs text-text-secondary">
+                <span>
+                  Showing {startItem}–{endItem} of {totalRows} student records
+                </span>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1.5">
+                    <label htmlFor="daily-att-rows-per-page" className="text-xs text-text-secondary whitespace-nowrap">Rows per page:</label>
+                    <select
+                      id="daily-att-rows-per-page"
+                      value={pageSize}
+                      onChange={(e) => {
+                        setPageSize(Number(e.target.value));
+                        setPage(0);
+                      }}
+                      className="rounded border border-border bg-input px-2 py-1 text-xs text-text-primary"
+                    >
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      disabled={effectivePage === 0}
+                      onClick={() => setPage(effectivePage - 1)}
+                      className="eng-btn eng-btn--secondary py-1 px-3 text-xs disabled:opacity-40"
+                    >
+                      Previous
+                    </button>
+                    <span className="text-xs">
+                      Page {effectivePage + 1} of {pageCount}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={effectivePage >= pageCount - 1}
+                      onClick={() => setPage(effectivePage + 1)}
+                      className="eng-btn eng-btn--secondary py-1 px-3 text-xs disabled:opacity-40"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* ── Sticky Save Bar ── */}
