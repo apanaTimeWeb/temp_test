@@ -40,8 +40,8 @@ export function AdminAccountsFinancialReportsDashboard({ period }: AdminAccounts
 
   return (
     <div className="space-y-6">
-      <AdminAccountsFinancialReportsKpiCards totalIncomeMinor={totalIncomeMinor} totalExpenseMinor={totalExpenseMinor} />
-      <AdminAccountsFinancialReportsMonthlyChart rows={rows} />
+      <AdminAccountsFinancialReportsKpiCards totalIncomeMinor={totalIncomeMinor} totalExpenseMinor={totalExpenseMinor} period={period} />
+      <AdminAccountsFinancialReportsMonthlyChart rows={rows} period={period} />
       <AdminAccountsFinancialReportsCategoryBreakdown />
     </div>
   );

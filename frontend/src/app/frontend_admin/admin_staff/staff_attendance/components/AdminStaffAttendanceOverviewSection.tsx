@@ -32,52 +32,70 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
     <div className="space-y-6">
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-text-secondary">
-            <Users size={16} />
-            <span className="text-xs font-medium">{t('KPI_TOTAL_STAFF')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_TOTAL_STAFF')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+              <Users size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-text-primary">{kpis.totalStaff}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{kpis.totalStaff}</p>
+          <span className="text-xs text-text-muted">Total Roster Base</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-success-text">
-            <CheckCircle2 size={16} />
-            <span className="text-xs font-medium">{t('KPI_PRESENT')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_PRESENT')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <CheckCircle2 size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-success-text">{kpis.presentCount}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{kpis.presentCount}</p>
+          <span className="text-xs text-text-muted">Punched & On Floor</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-warning-text">
-            <Clock size={16} />
-            <span className="text-xs font-medium">{t('KPI_LATE')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_LATE')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <Clock size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-warning-text">{kpis.lateCount}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{kpis.lateCount}</p>
+          <span className="text-xs text-text-muted">&gt; 15 min punch-in</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-danger-text">
-            <UserX size={16} />
-            <span className="text-xs font-medium">{t('KPI_ABSENT')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_ABSENT')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">
+              <UserX size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-danger-text">{kpis.absentCount}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">{kpis.absentCount}</p>
+          <span className="text-xs text-text-muted">Unreported absence</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-text-secondary">
-            <CalendarCheck size={16} />
-            <span className="text-xs font-medium">{t('KPI_ON_LEAVE')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_ON_LEAVE')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+              <CalendarCheck size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-text-primary">{kpis.onLeaveCount}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{kpis.onLeaveCount}</p>
+          <span className="text-xs text-text-muted">Approved leaves</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-primary">
-            <Building2 size={16} />
-            <span className="text-xs font-medium">{t('KPI_ATTENDANCE_RATE')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_ATTENDANCE_RATE')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Building2 size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-primary">{kpis.attendanceRatePercent}%</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-primary">{kpis.attendanceRatePercent}%</p>
+          <span className="text-xs text-text-muted">Present vs Expected</span>
         </div>
       </div>
 
