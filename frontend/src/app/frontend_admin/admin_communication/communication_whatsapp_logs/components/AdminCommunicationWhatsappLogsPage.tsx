@@ -4,8 +4,9 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 // RESPONSIBILITY: Entry page for the admin_communication module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -51,6 +52,14 @@ export function AdminCommunicationWhatsappLogsPage() {
     dateFrom,
     dateTo,
   });
+
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+  const visibleLogs = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return filtered;
+    return filtered.filter((log) =>
+      !log.branch || log.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(log.branch.toLowerCase())
+    );
+  }, [filtered, isAllBranches, selectedBranch]);
 
   const colDefs: readonly DataGridColumn<AdminCommunicationWhatsappLog>[] = [
     { field: 'dateTime', headerName: t('WHATSAPP_COLUMN_DATETIME'), width: 160, sortable: true, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="text-text-secondary text-sm">{p.value}</span> },
@@ -180,7 +189,7 @@ export function AdminCommunicationWhatsappLogsPage() {
 
       {/* Table */}
       <div className="rounded-xl border border-border bg-card overflow-hidden p-4">
-        {filtered.length === 0 ? (
+        {visibleLogs.length === 0 ? (
           <div data-testid="admin_communication-page-state-011" className="gap-3 py-12 flex flex-col items-center justify-center text-center">
             <div data-testid="admin_communication-page-state-012" className="text-4xl mb-4">📱</div>
             <p data-testid="admin_communication-page-state-013" className="text-lg font-semibold text-text-primary">{isDemoMode ? t('WHATSAPP_LOGS_EMPTY_DEMO') : t('WHATSAPP_LOGS_EMPTY_LIVE')}</p>
@@ -188,7 +197,7 @@ export function AdminCommunicationWhatsappLogsPage() {
         ) : (
           <div className="min-w-0 overflow-x-auto rounded-lg border border-border bg-card h-96">
             <DataGrid
-                rowData={filtered}
+              rowData={visibleLogs}
               columnDefs={colDefs}
               rowHeight={56}
               pagination={true}

@@ -12,6 +12,7 @@ import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid'
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { AdminFinancePaymentApiRecord } from '@/app/frontend_admin/admin_finance/finance_payments/schemas/AdminFinancePaymentsSchema';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_FINANCE_PAYMENTS_ROUTES } from '@/app/frontend_admin/admin_finance/finance_payments/config/admin_finance_payments.url_config';
 import { buildAdminFinancePaymentsCsv } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsCsvUtils';
 import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
@@ -47,6 +48,7 @@ function mapAdminFinancePayment(record: AdminFinancePaymentApiRecord): AdminFina
     receivedBy: record.receivedBy ?? '—',
     status,
     deletionReason: record.deletionReason,
+    branch: (record as Record<string, unknown>).branch as string | undefined,
   };
 }
 
@@ -58,12 +60,14 @@ export function AdminFinancePaymentsPage() {
   const [modeFilter, setModeFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | AdminFinancePayment['mode']>('modeFilter', 'all', { validValues: ['all', 'cash', 'upi', 'card', 'bank', 'unknown'] });
   const [showDeleted, setShowDeleted] = useState(false);
   const [search, setSearch] = useState('');
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   const paymentsQuery = useAdminFinancePaymentsQuery();
   const allPayments = useMemo(() => (paymentsQuery.data ?? []).map(mapAdminFinancePayment), [paymentsQuery.data]);
   const isPending = paymentsQuery.isPending;
   const loadError = paymentsQuery.isError ? t('PAYMENT_LOAD_ERROR') : null;
 
   const visible = useMemo(() => allPayments.filter((payment) => {
+    const branchMatch = isAllBranches || !selectedBranch || !payment.branch || payment.branch.toLowerCase().includes(selectedBranch.name.toLowerCase());
     const modeMatch = modeFilter === 'all' || payment.mode === modeFilter;
     const deletedMatch = showDeleted || payment.status !== 'deleted';
     const q = search.trim().toLowerCase();
@@ -72,8 +76,8 @@ export function AdminFinancePaymentsPage() {
       payment.smartId.toLowerCase().includes(q) ||
       payment.receiptNumber.toLowerCase().includes(q) ||
       (payment.txnId && payment.txnId.toLowerCase().includes(q));
-    return modeMatch && deletedMatch && searchMatch;
-  }), [allPayments, modeFilter, showDeleted, search]);
+    return branchMatch && modeMatch && deletedMatch && searchMatch;
+  }), [allPayments, modeFilter, showDeleted, search, isAllBranches, selectedBranch]);
 
   const handleExport = () => {
     const csv = buildAdminFinancePaymentsCsv(visible, { receipt: t('CSV_RECEIPT'), date: t('CSV_DATE'), student: t('CSV_STUDENT'), smartId: t('CSV_SMART_ID'), amount: t('CSV_AMOUNT'), currency: t('CSV_CURRENCY'), amountUnit: t('CSV_AMOUNT_UNIT'), mode: t('CSV_MODE'), lateFee: t('CSV_LATE_FEE'), receivedBy: t('CSV_RECEIVED_BY'), status: t('CSV_STATUS') });

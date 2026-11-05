@@ -23,7 +23,10 @@ vi.mock('next-intl', () => ({
 }));
 vi.mock('next/link', () => ({ default: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string }) => <a href={href} {...props}>{children}</a> }));
 vi.mock('@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellThemeToggle', () => ({ AdminShellThemeToggle: () => <button type="button">Theme</button> }));
-const toastMock = { info: vi.fn(), error: vi.fn(), success: vi.fn() };
+const { toastMock } = vi.hoisted(() => {
+  const toastMock = { info: vi.fn(), error: vi.fn(), success: vi.fn() };
+  return { toastMock };
+});
 vi.mock('sonner', () => ({ default: toastMock, toast: toastMock, Toaster: () => null }));
 
 describe('AdminShellHeader branch selector contract', () => {

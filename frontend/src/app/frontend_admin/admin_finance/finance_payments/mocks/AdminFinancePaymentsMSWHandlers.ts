@@ -9,8 +9,8 @@ export const ADMIN_FINANCE_PAYMENTS_MSW_HANDLERS = [
 
 /** Synthetic payment fixtures for isolated tests only. */
 export const ADMIN_FINANCE_PAYMENTS_API_FIXTURE: readonly AdminFinancePaymentApiRecord[] = [
-  { id: 'synthetic-payment-cash', receiptNumber: 'TEST-RECEIPT-001', date: '2026-01-15', studentName: 'Synthetic Student A', amount: 12500, mode: 'cash', status: 'completed' },
-  { id: 'synthetic-payment-upi', receiptNumber: 'TEST-RECEIPT-002', date: '2026-01-16', studentName: 'Synthetic Student B', amount: 8500, mode: 'upi', status: 'completed' },
-  { id: 'synthetic-payment-card', receiptNumber: 'TEST-RECEIPT-003', date: '2026-01-17', studentName: 'Synthetic Student C', amount: 4500, mode: 'card', status: 'completed' },
-  { id: 'synthetic-payment-bank', receiptNumber: 'TEST-RECEIPT-004', date: '2026-01-18', studentName: 'Synthetic Student D', amount: 9900, mode: 'bank', status: 'completed' },
+  { id: 'synthetic-payment-cash', receiptNumber: 'TEST-RECEIPT-001', date: '2026-01-15', studentName: 'Synthetic Student A', amount: 12500, mode: 'cash', status: 'completed', branch: 'Downtown Central' },
+  { id: 'synthetic-payment-upi', receiptNumber: 'TEST-RECEIPT-002', date: '2026-01-16', studentName: 'Synthetic Student B', amount: 8500, mode: 'upi', status: 'completed', branch: 'Westside Branch' },
+  { id: 'synthetic-payment-card', receiptNumber: 'TEST-RECEIPT-003', date: '2026-01-17', studentName: 'Synthetic Student C', amount: 4500, mode: 'card', status: 'completed', branch: 'North Hub' },
+  { id: 'synthetic-payment-bank', receiptNumber: 'TEST-RECEIPT-004', date: '2026-01-18', studentName: 'Synthetic Student D', amount: 9900, mode: 'bank', status: 'completed', branch: 'Downtown Central' },
 ];

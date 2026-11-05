@@ -73,9 +73,9 @@ export function AdminFinanceRefundsPage() {
   const branchFiltered = useMemo(() => {
     if (isAllBranches || !selectedBranch) return allRefunds;
     return allRefunds.filter((r) => {
-      if (r.branchId) return r.branchId === selectedBranchId;
-      if (r.branchName) return r.branchName.toLowerCase().includes(selectedBranch.name.toLowerCase());
-      return true;
+      if (r.branchId) return r.branchId.toLowerCase() === selectedBranchId.toLowerCase();
+      if (r.branchName) return r.branchName.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(r.branchName.toLowerCase());
+      return false;
     });
   }, [allRefunds, isAllBranches, selectedBranch, selectedBranchId]);
 

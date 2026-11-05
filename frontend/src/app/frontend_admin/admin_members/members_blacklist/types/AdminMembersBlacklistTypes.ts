@@ -5,7 +5,7 @@ import type { DataGridColumn } from '@/app/frontend_admin/components/ui/data-gri
 import type { ReactNode } from 'react';
 
 export type AdminBlacklistStatus = typeof ADMIN_BLACKLIST_STATUS_VALUES[number];
-export interface AdminBlacklistRecord { id: string; name: string; phone: string; reason: string; blacklistedBy: string; blacklistedOn: string; previousSeat: string; status: AdminBlacklistStatus; }
+export interface AdminBlacklistRecord { id: string; name: string; phone: string; reason: string; blacklistedBy: string; blacklistedOn: string; previousSeat: string; status: AdminBlacklistStatus; branch?: string; }
 export interface AdminBlacklistFormValues { name: string; phone: string; reason: string; previousSeat: string; }
 
 export interface AdminBlacklistFormDialogProps {

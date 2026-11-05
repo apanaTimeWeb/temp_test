@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
@@ -34,6 +34,12 @@ export function useAdminStaffAttendance(): AdminStaffAttendanceModel {
   const [selectedShift, setSelectedShift] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  useEffect(() => {
+    if (globalBranchId) {
+      setSelectedBranchId(globalBranchId);
+    }
+  }, [globalBranchId]);
 
   const [records, setRecords] = useState<StaffAttendanceRecord[]>(ADMIN_STAFF_ATTENDANCE_FIXTURES);
   const [leaveRequests, setLeaveRequests] = useState<StaffLeaveRequest[]>(ADMIN_STAFF_LEAVE_REQUEST_FIXTURES);

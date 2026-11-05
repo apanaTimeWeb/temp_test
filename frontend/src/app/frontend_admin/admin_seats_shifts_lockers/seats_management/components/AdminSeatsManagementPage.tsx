@@ -1,6 +1,7 @@
 'use client';
 // Responsibility: AdminSeatsManagementPage component owned by admin_seats; responsibility folder: admin_seats_components_views.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 
 // RESPONSIBILITY: Read-only seat inventory with local search and canonical status filtering.
 // DATA FLOW: demo fixtures (demo mode only) -> filtered rows -> shared data grid.
@@ -45,12 +46,14 @@ export function AdminSeatsManagementPage() {
     return () => window.clearTimeout(timeoutId);
   }, [searchInput, setSearch]);
   const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | SeatStatus>('statusFilter', 'all', { validValues: ['all', 'Working', 'Maintenance', 'Broken'] });
+  const { selectedBranch, isAllBranches } = useAdminBranch();
 
   const filtered = seats.filter((seat) => {
+    const matchBranch = isAllBranches || !selectedBranch || seat.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(seat.branch.toLowerCase());
     const normalizedSearch = search.trim().toLocaleLowerCase();
     const matchesSearch = [seat.seatNo, seat.branch, seat.assignedTo]
       .some((value) => value.toLocaleLowerCase().includes(normalizedSearch));
-    return matchesSearch && matchesAdminSeatsFilter(seat.status, statusFilter);
+    return matchBranch && matchesSearch && matchesAdminSeatsFilter(seat.status, statusFilter);
   });
 
   const colDefs = useMemo<readonly DataGridColumn<Seat>[]>(() => [

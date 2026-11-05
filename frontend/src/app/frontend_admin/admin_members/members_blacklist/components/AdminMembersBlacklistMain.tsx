@@ -10,6 +10,7 @@ import type { AdminBlacklistRecord, AdminBlacklistFormDialogProps } from '@/app/
 import AdminBlacklistRecordsSection from '@/app/frontend_admin/admin_members/members_blacklist/components/AdminMembersBlacklistRecordsSection';
 import { Toaster } from 'sonner';
 import useAdminMembersBlacklistState from '@/app/frontend_admin/admin_members/members_blacklist/hooks/useAdminMembersBlacklistState';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -70,6 +71,14 @@ export default function AdminMembersBlacklistMain() {
   ], [isDemoMode, t, locale]);
 
   const errorMessage = recordsQuery.isError ? t('LOAD_ERROR') : null;
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+  const visibleRecords = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return records;
+    return records.filter((r) =>
+      !r.branch || r.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(r.branch.toLowerCase())
+    );
+  }, [records, isAllBranches, selectedBranch]);
+
   const selectedRecordDetails = selectedRecord ? [
     [t('TABLE_STUDENT'), selectedRecord.name],
     [t('PHONE_LABEL'), selectedRecord.phone],
@@ -92,7 +101,7 @@ export default function AdminMembersBlacklistMain() {
           </header>
         </div>
         <AdminBlacklistRecordsSection
-          records={records}
+          records={visibleRecords}
           columns={columns}
           isLoading={recordsQuery.isPending}
           isError={recordsQuery.isError}

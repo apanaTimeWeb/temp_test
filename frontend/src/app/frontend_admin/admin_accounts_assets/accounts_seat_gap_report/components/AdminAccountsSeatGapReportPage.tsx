@@ -13,6 +13,7 @@ import AdminAccountingSeatGapTableSection from '@/app/frontend_admin/admin_accou
 import { ADMIN_ACCOUNTING_SEAT_GAP_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/mocks/AdminAccountsSeatGapReportSeatGapFixtures';
 import type { AdminAccountingSeatGapRow } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/types/AdminAccountsSeatGapReportTypes';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportFormatCurrency';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { buildAdminAccountsSeatGapReportCsv, downloadAdminAccountingCsv } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportExportUtils';
 import { ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS, ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/config/admin_accounts_seat_gap_report.url_config';
 
@@ -31,6 +32,7 @@ export function AdminAccountsSeatGapReportPage() {
   const [shiftFilter, setShiftFilter] = useState<(typeof ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS)[number]>(ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS.includes(initialShift as (typeof ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS)[number]) ? initialShift as (typeof ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS)[number] : 'all');
   const [statusFilter, setStatusFilter] = useState<(typeof ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS)[number]>(ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS.includes(initialStatus as (typeof ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS)[number]) ? initialStatus as (typeof ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS)[number] : 'all');
   const [search, setSearch] = useState('');
+  const { selectedBranch, isAllBranches } = useAdminBranch();
 
   useEffect(() => {
     const nextShift = searchParams.get('shift');
@@ -51,12 +53,13 @@ export function AdminAccountsSeatGapReportPage() {
 
   const sourceRows = useMemo(() => isDemoMode ? ADMIN_ACCOUNTING_SEAT_GAP_FIXTURES : [], [isDemoMode]);
   const visible = useMemo(() => sourceRows.filter((row) => {
+    const matchBranch = isAllBranches || !selectedBranch || !row.branch || row.branch.toLowerCase().includes(selectedBranch.name.toLowerCase());
     const matchShift = shiftFilter === 'all' || row.shift === shiftFilter;
     const matchStatus = statusFilter === 'all' || row.status === statusFilter;
     const q = search.trim().toLowerCase();
     const matchSearch = !q || row.seatNo.toLowerCase().includes(q) || row.floor.toLowerCase().includes(q) || row.shift.toLowerCase().includes(q);
-    return matchShift && matchStatus && matchSearch;
-  }), [sourceRows, shiftFilter, statusFilter, search]);
+    return matchBranch && matchShift && matchStatus && matchSearch;
+  }), [sourceRows, shiftFilter, statusFilter, search, isAllBranches, selectedBranch]);
   const totalLoss = visible.reduce((sum, row) => sum + row.revenueLoss, 0);
 
   const exportCsv = () => {

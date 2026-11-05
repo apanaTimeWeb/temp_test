@@ -1,6 +1,7 @@
 'use client';
 // DATA FLOW: members_enquiries route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Enquiry, EnquiryStatus } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
@@ -24,10 +25,10 @@ export const ADMIN_MEMBERS_ENQUIRIES_QUERY_KEYS = {
 
 
 const INITIAL_ENQUIRIES: Enquiry[] = [
-  { id: '1', name: 'Rahul Sharma', phone: '9876543210', shift: 'Morning', status: 'New', handledBy: 'Admin', addedDate: '2026-10-01', isToday: true, avatar: 'RS' },
-  { id: '2', name: 'Sneha Patil', phone: '9123456789', shift: 'Evening', status: 'Visited', handledBy: 'John', addedDate: '2026-09-30', isUpcoming: true, avatar: 'SP' },
-  { id: '3', name: 'Amit Kumar', phone: '9988776655', shift: 'Night', status: 'Interested', handledBy: 'Admin', addedDate: '2026-09-29', isOverdue: true, avatar: 'AK' },
-  { id: '4', name: 'Priya Singh', phone: '9001122334', shift: 'Morning', status: 'Converted', handledBy: 'Jane', addedDate: '2026-09-28', convertedDate: '2026-09-30', avatar: 'PS' },
+  { id: '1', name: 'Rahul Sharma', phone: '9876543210', shift: 'Morning', status: 'New', handledBy: 'Admin', addedDate: '2026-10-01', isToday: true, avatar: 'RS', preferredBranch: 'Downtown Central' },
+  { id: '2', name: 'Sneha Patil', phone: '9123456789', shift: 'Evening', status: 'Visited', handledBy: 'John', addedDate: '2026-09-30', isUpcoming: true, avatar: 'SP', preferredBranch: 'Westside Branch' },
+  { id: '3', name: 'Amit Kumar', phone: '9988776655', shift: 'Night', status: 'Interested', handledBy: 'Admin', addedDate: '2026-09-29', isOverdue: true, avatar: 'AK', preferredBranch: 'North Hub' },
+  { id: '4', name: 'Priya Singh', phone: '9001122334', shift: 'Morning', status: 'Converted', handledBy: 'Jane', addedDate: '2026-09-28', convertedDate: '2026-09-30', avatar: 'PS', preferredBranch: 'Downtown Central' },
 ];
 
 // Demo records are intentionally memory-only: business entities must not be persisted in browser storage.
@@ -90,6 +91,7 @@ export default function useAdminEnquiriesPage() {
   const [view, setView] = useAdminApplicationInfrastructureUrlQueryState<'kanban' | 'table'>('displayMode', 'kanban', { validValues: ['kanban', 'table'] });
   const [search, setSearch] = useAdminApplicationInfrastructureUrlQueryState<string>('search', '');
   const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('statusFilter', 'All', { validValues: ['All', 'New', 'Visited', 'Interested', 'Converted', 'Lost'] });
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   useEffect(() => {
     // Browser storage is a demo fixture only. Never load it into the production state path.
     if (!isDemoMode) {
@@ -99,9 +101,10 @@ export default function useAdminEnquiriesPage() {
     setEnquiries(getEnquiries());
   }, [isDemoMode]);
   const filtered = useMemo(() => enquiries.filter((enquiry) => {
+    const matchBranch = isAllBranches || !selectedBranch || !enquiry.preferredBranch || enquiry.preferredBranch.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(enquiry.preferredBranch.toLowerCase());
     const matchSearch = matchesAdminEnquiriesEnquirySearch(enquiry, search);
-    return matchSearch && (statusFilter === 'All' || enquiry.status === statusFilter);
-  }), [enquiries, search, statusFilter]);
+    return matchBranch && matchSearch && (statusFilter === 'All' || enquiry.status === statusFilter);
+  }), [enquiries, search, statusFilter, isAllBranches, selectedBranch]);
   const colEnquiries = (status: EnquiryStatus) => filtered.filter((enquiry) => enquiry.status === status);
   return { router, isDemoMode, enquiries, setEnquiries, view, setView, search, setSearch, statusFilter, setStatusFilter, filtered, colEnquiries } as const;
 }

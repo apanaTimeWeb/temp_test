@@ -1,7 +1,8 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import {
   ShieldAlert,
   AlertTriangle,
@@ -47,6 +48,21 @@ export function AdminShiftsGapOverstayAuditTable() {
   const branches = useMemo(() => {
     return Array.from(new Set(ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS.map((i) => i.branchName)));
   }, []);
+
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+
+  useEffect(() => {
+    if (isAllBranches || !selectedBranch) {
+      setBranchFilter('ALL');
+    } else {
+      const matched = branches.find(
+        (b) => b.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(b.toLowerCase())
+      );
+      if (matched) {
+        setBranchFilter(matched);
+      }
+    }
+  }, [selectedBranch, isAllBranches, branches]);
 
   const filteredIncidents = useMemo(() => {
     return incidents.filter((i) => {

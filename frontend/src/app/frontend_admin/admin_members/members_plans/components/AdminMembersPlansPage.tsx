@@ -1,9 +1,10 @@
 'use client';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { CheckCircle, Pencil, Plus, Trash2, Building2 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminPlans } from '@/app/frontend_admin/admin_members/members_plans/hooks/useAdminMembersPlansMain';
 import type { AdminPlansPlan, AdminPlansFormValues } from '@/app/frontend_admin/admin_members/members_plans/schemas/AdminMembersPlansSchema';
 import { ADMIN_PLANS_STATUS_VALUES } from '@/app/frontend_admin/admin_members/members_plans/config/admin_members_plans.url_config';
@@ -47,13 +48,80 @@ export function removeAdminPlansDemoPlan(plans: readonly AdminPlansPlan[], planI
   return plans.filter((plan) => plan.id !== planId);
 }
 
+const DEFAULT_DEMO_PLANS: AdminPlansPlan[] = [
+  {
+    id: 'demo-plan-1',
+    name: 'Full Day Dedicated Desk',
+    price: 6500,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    duration: 'Monthly',
+    durationDays: 30,
+    features: ['Reserved personal desk & ergonomic chair', 'High-speed Wi-Fi & power socket', 'Free tea/coffee & locker included'],
+    status: 'Active',
+    subscribers: 28,
+    branchApplicability: 'Downtown Central',
+  },
+  {
+    id: 'demo-plan-2',
+    name: 'Flexi Shift Half Day',
+    price: 3800,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    duration: 'Monthly',
+    durationDays: 30,
+    features: ['6-hour flexible access morning or evening', 'High-speed Wi-Fi & silent zone', 'Cafeteria access'],
+    status: 'Active',
+    subscribers: 42,
+    branchApplicability: 'All Branches',
+  },
+  {
+    id: 'demo-plan-3',
+    name: 'Night Owl Special',
+    price: 3200,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    duration: 'Monthly',
+    durationDays: 30,
+    features: ['10 PM to 6 AM uninterrupted access', 'Dedicated charging slot', 'Security & CCTV guarded'],
+    status: 'Active',
+    subscribers: 15,
+    branchApplicability: 'Westside Branch',
+  },
+  {
+    id: 'demo-plan-4',
+    name: 'Weekend Warrior Pass',
+    price: 1800,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    duration: 'Monthly',
+    durationDays: 30,
+    features: ['Saturday & Sunday unlimited access', 'High-speed Wi-Fi', 'Discussion room credits'],
+    status: 'Active',
+    subscribers: 19,
+    branchApplicability: 'North Hub',
+  },
+];
+
 export default function AdminPlansPage() {
   const t = useTranslations('ADMIN_PLANS');
   const locale = useLocale();
   const isDemoMode = isFrontendDemoModeEnabled();
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   const plansQuery = useAdminPlans(!isDemoMode);
-  const [demoPlans, setDemoPlans] = useState<AdminPlansPlan[]>([]);
+  const [demoPlans, setDemoPlans] = useState<AdminPlansPlan[]>(() => isDemoMode ? [...DEFAULT_DEMO_PLANS] : []);
   const plans: AdminPlansPlan[] = isDemoMode ? demoPlans : plansQuery.data ?? [];
+
+  const visiblePlans = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return plans;
+    return plans.filter((plan) => {
+      if (!plan.branchApplicability || plan.branchApplicability === 'All Branches') return true;
+      const bName = plan.branchApplicability.toLowerCase();
+      const sName = selectedBranch.name.toLowerCase();
+      return bName.includes(sName) || sName.includes(bName);
+    });
+  }, [plans, selectedBranch, isAllBranches]);
+
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -114,10 +182,10 @@ export default function AdminPlansPage() {
         </div>
       ) : null}
       {!isDemoMode && plansQuery.isPending ? <div role="status" className="rounded-lg border border-border bg-card p-8 text-center text-text-secondary">{t('LOADING')}</div> : null}
-      {(isDemoMode || (!plansQuery.isPending && !plansQuery.isError)) && plans.length === 0 ? <div role="status" className="rounded-lg border border-border bg-card p-8 text-center text-text-secondary">{t('EMPTY')}</div> : null}
-      {(isDemoMode || (!plansQuery.isPending && !plansQuery.isError)) && plans.length > 0 ? (
+      {(isDemoMode || (!plansQuery.isPending && !plansQuery.isError)) && visiblePlans.length === 0 ? <div role="status" className="rounded-lg border border-border bg-card p-8 text-center text-text-secondary">{t('EMPTY')}</div> : null}
+      {(isDemoMode || (!plansQuery.isPending && !plansQuery.isError)) && visiblePlans.length > 0 ? (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
-          {plans.map((plan) => {
+          {visiblePlans.map((plan) => {
             const localizedStatus = plan.status === ADMIN_PLANS_STATUS_VALUES[0]
               ? t('STATUS_ACTIVE')
               : plan.status === ADMIN_PLANS_STATUS_VALUES[1]

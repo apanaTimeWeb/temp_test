@@ -13,6 +13,7 @@ import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/memb
 import { ADMIN_COUPONS_QUERY_KEYS } from '@/app/frontend_admin/admin_members/members_coupons/api/admin_members_coupons.query_keys';
 import { ADMIN_COUPONS_STATUS_VALUES, ADMIN_COUPONS_UNKNOWN_STATUS, ADMIN_COUPONS_EMPTY_FORM } from '@/app/frontend_admin/admin_members/members_coupons/config/admin_members_coupons.url_config';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminMembersCouponsState, useAdminCouponsListQuery } from '@/app/frontend_admin/admin_members/members_coupons/hooks/useAdminMembersCouponsPageHooks';
 import AdminCouponsOverviewSection, { formatAdminCouponsDiscount, formatAdminCouponsDate } from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsOverviewSection';
 import { displayValue } from '@/lib/display_value';
@@ -51,6 +52,17 @@ export default function AdminCouponsPage() {
   const [couponToDelete, setCouponToDelete] = useState<AdminCouponsCoupon | null>(null);
   const couponsQuery = useAdminCouponsListQuery();
   const coupons = couponsQuery.data ?? [];
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+
+  const visibleCoupons = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return coupons;
+    return coupons.filter((c) =>
+      !c.branchApplicability ||
+      c.branchApplicability.toLowerCase().includes('all') ||
+      c.branchApplicability.toLowerCase().includes(selectedBranch.name.toLowerCase()) ||
+      selectedBranch.name.toLowerCase().includes(c.branchApplicability.toLowerCase())
+    );
+  }, [coupons, isAllBranches, selectedBranch]);
 
   const handleCreateDemoCoupon = useCallback((values: AdminCouponsFormOutput) => {
     if (!isDemoMode) {
@@ -148,7 +160,7 @@ export default function AdminCouponsPage() {
           isDemoMode={isDemoMode}
           onCreateCoupon={openCreateDialog}
           onValidateDraft={openDraftDialog}
-          coupons={coupons}
+          coupons={visibleCoupons}
           columns={columns}
           isError={couponsQuery.isError}
           isPending={couponsQuery.isPending}

@@ -7,6 +7,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { Users, Trophy, IndianRupee, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_FINANCE_DEMO_REFERRERS } from '@/app/frontend_admin/admin_finance/finance_referrals/mocks/AdminFinanceReferralsDemoFixtures';
@@ -38,15 +39,19 @@ export function AdminFinanceReferralsPage() {
     }
   };
 
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+
   const filteredReferrers = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return ADMIN_FINANCE_DEMO_REFERRERS.filter((r) =>
-      !q ||
-      r.name.toLowerCase().includes(q) ||
-      (r as unknown as { smartId?: string }).smartId?.toLowerCase().includes(q) ||
-      r.referredNames.some((rn) => rn.toLowerCase().includes(q))
-    );
-  }, [search]);
+    return ADMIN_FINANCE_DEMO_REFERRERS.filter((r) => {
+      const matchBranch = isAllBranches || !selectedBranch || !r.branch || r.branch.toLowerCase().includes(selectedBranch.name.toLowerCase());
+      const matchSearch = !q ||
+        r.name.toLowerCase().includes(q) ||
+        (r as unknown as { smartId?: string }).smartId?.toLowerCase().includes(q) ||
+        r.referredNames.some((rn) => rn.toLowerCase().includes(q));
+      return matchBranch && matchSearch;
+    });
+  }, [search, isAllBranches, selectedBranch]);
 
   const sortedReferrers = useMemo(() => {
     if (!sortField) return filteredReferrers;

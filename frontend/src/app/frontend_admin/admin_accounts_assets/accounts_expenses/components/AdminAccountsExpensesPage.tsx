@@ -117,7 +117,7 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
           expense.branchName.toLowerCase().includes(selectedBranch.name.toLowerCase()) ||
           selectedBranch.name.toLowerCase().includes(expense.branchName.toLowerCase())
         );
-        if (matchesBranch === false && expenses.some((e) => e.branchName && selectedBranch.name.toLowerCase().includes(e.branchName.toLowerCase()))) {
+        if (!matchesBranch) {
           return false;
         }
       }
