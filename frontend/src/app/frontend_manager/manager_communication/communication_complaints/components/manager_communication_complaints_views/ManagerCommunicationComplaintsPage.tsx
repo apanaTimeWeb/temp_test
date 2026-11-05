@@ -1,16 +1,26 @@
 'use client';
-import type { ManagerCommunicationComplaintsMainProps } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsMainTypes';
-import { useLocale, useTranslations } from 'next-intl';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { useManagerComplaintsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/ManagerCommunicationComplaintsDialogFocus';
-import { ChevronRight, X, Eye, RefreshCw, CheckCircle, MessageSquarePlus, ShieldCheck, Search, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { ChevronRight, X, RefreshCw, CheckCircle, MessageSquarePlus, ShieldCheck, Search, Download } from 'lucide-react';
 import { toast } from 'sonner';
+
+import type { ManagerCommunicationComplaintsMainProps } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsMainTypes';
+import { useManagerComplaintsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/ManagerCommunicationComplaintsDialogFocus';
 import { useManagerCommunicationComplaints } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/useManagerCommunicationComplaintsComplaints';
-import type { ManagerCommunicationComplaintsComplaint, ManagerCommunicationComplaintsComplaintStatus } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
+import type {
+  ManagerCommunicationComplaintsComplaint,
+  ManagerCommunicationComplaintsComplaintStatus,
+} from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 import { MANAGER_COMMUNICATION_COMPLAINT_TABS } from '@/app/frontend_manager/manager_communication/communication_complaints/constants/ManagerCommunicationComplaintsComplaintConstants';
 import { ManagerCommunicationComplaintsEmptyState } from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_empty_states/ManagerCommunicationComplaintsEmptyState';
 import ManagerCommunicationComplaintsAddModal from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_views/ManagerCommunicationComplaintsAddModal';
+import { ManagerCommunicationComplaintsToolbar } from './ManagerCommunicationComplaintsToolbar';
+import {
+  ManagerCommunicationComplaintsTable,
+  type ComplaintSortField,
+} from './ManagerCommunicationComplaintsTable';
+import { ManagerCommunicationComplaintsViewModal } from './ManagerCommunicationComplaintsViewModal';
 
 function formatKnownIsoCalendarDate(value: string, locale: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
@@ -25,7 +35,13 @@ function formatKnownIsoCalendarDate(value: string, locale: string): string {
 
 // RESPONSIBILITY: Render the communication_complaints feature while preserving supported deep-link query state.
 // DATA FLOW: Route searchParams -> Main props -> this view's route context.
-export default function ManagerCommunicationComplaintsPage({ view, id, name, phone, smartId }: ManagerCommunicationComplaintsMainProps) {
+export default function ManagerCommunicationComplaintsPage({
+  view,
+  id,
+  name,
+  phone,
+  smartId,
+}: ManagerCommunicationComplaintsMainProps) {
   const tManagerUi = useTranslations('manager.manager_complaints.ui');
   const locale = useLocale();
   const { complaints, isPending, isError, refetch } = useManagerCommunicationComplaints();
@@ -43,12 +59,17 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
   useManagerComplaintsDialogFocus(dialogRef, closeComplaintDialog, Boolean(viewItem));
   const [expandedDesc, setExpandedDesc] = useState<string[]>([]);
 
+  const [sortField, setSortField] = useState<ComplaintSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
   const allComplaints = useMemo(() => [...localComplaints, ...complaints], [localComplaints, complaints]);
+
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const base = tab === 'All' ? allComplaints : allComplaints.filter((c) => c.status === tab);
     return base.filter((c) => {
-      const matchCat = categoryFilter === 'all' ||
+      const matchCat =
+        categoryFilter === 'all' ||
         c.title.toLowerCase().includes(categoryFilter.toLowerCase()) ||
         c.description.toLowerCase().includes(categoryFilter.toLowerCase());
       const matchQ =
@@ -63,26 +84,19 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
 
   const hasActiveFilters = Boolean(tab !== 'All' || searchQuery.trim() !== '' || categoryFilter !== 'all');
 
-  const handleExportCsv = () => {
-    const headers = 'ID,Title,Student,Description,Status,Date,Resolved By\n';
-    const rows = sortedComplaints.map((c) =>
-      `"${c.id}","${c.title}","${c.student || 'Anonymous'}","${c.description.replace(/"/g, '""')}","${c.status}","${c.date}","${c.resolvedBy || ''}"`
-    ).join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `complaints_${new Date().toISOString().slice(0, 10)}.csv`;
-    anchor.click();
-    URL.revokeObjectURL(url);
-    toast.success('Complaints list exported to CSV successfully');
-  };
-  const toggleDesc = (complaintId: string) => setExpandedDesc(current => current.includes(complaintId) ? current.filter(item => item !== complaintId) : [...current, complaintId]);
-  const statusBadge = (status: ManagerCommunicationComplaintsComplaintStatus) => status === 'Open' ? <span className="mc-badge mc-badge--danger">{tManagerUi('open')}</span> : status === 'In-Progress' ? <span className="mc-badge mc-badge--warning">{tManagerUi('in_progress')}</span> : <span className="mc-badge mc-badge--success">{tManagerUi('resolved')}</span>;
+  const toggleDesc = (complaintId: string) =>
+    setExpandedDesc((current) =>
+      current.includes(complaintId) ? current.filter((item) => item !== complaintId) : [...current, complaintId]
+    );
 
-  type ComplaintSortField = 'title' | 'student' | 'description' | 'status' | 'date' | 'resolvedBy';
-  const [sortField, setSortField] = useState<ComplaintSortField | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const statusBadge = (status: ManagerCommunicationComplaintsComplaintStatus) =>
+    status === 'Open' ? (
+      <span className="mc-badge mc-badge--danger">{tManagerUi('open')}</span>
+    ) : status === 'In-Progress' ? (
+      <span className="mc-badge mc-badge--warning">{tManagerUi('in_progress')}</span>
+    ) : (
+      <span className="mc-badge mc-badge--success">{tManagerUi('resolved')}</span>
+    );
 
   const toggleSort = (field: ComplaintSortField) => {
     setPage(0);
@@ -111,37 +125,33 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
-  const renderSortableHeader = (field: ComplaintSortField, label: string) => {
-    const isActive = sortField === field;
-    return (
-      <th
-        scope="col"
-        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className="px-3 py-3"
-      >
-        <button
-          type="button"
-          onClick={() => toggleSort(field)}
-          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
-          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
-        >
-          <span>{label}</span>
-          {isActive ? (
-            sortDirection === 'asc' ? (
-              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            ) : (
-              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            )
-          ) : (
-            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
-          )}
-        </button>
-      </th>
-    );
+  const handleExportCsv = () => {
+    const headers = 'ID,Title,Student,Description,Status,Date,Resolved By\n';
+    const rows = sortedComplaints
+      .map(
+        (c) =>
+          `"${c.id}","${c.title}","${c.student || 'Anonymous'}","${c.description.replace(/"/g, '""')}","${c.status}","${c.date}","${c.resolvedBy || ''}"`
+      )
+      .join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `complaints_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('Complaints list exported to CSV successfully');
   };
 
   return (
-    <div className="mc-page" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
+    <div
+      className="mc-page"
+      data-route-view={view}
+      data-route-id={id}
+      data-route-name={name}
+      data-route-phone={phone}
+      data-route-smart-id={smartId}
+    >
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="mc-breadcrumb">
@@ -150,7 +160,9 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
             <span>{tManagerUi('complaints')}</span>
           </div>
           <h1 className="mc-page-title">{tManagerUi('complaints')}</h1>
-          <p className="mc-page-subtitle">{tManagerUi('review_complaints_from_the_host_read_api_creating_changi_87c22f')}</p>
+          <p className="mc-page-subtitle">
+            {tManagerUi('review_complaints_from_the_host_read_api_creating_changi_87c22f')}
+          </p>
           <p className="mc-input-hint text-secondary flex items-center gap-1.5 mt-1" role="status">
             <ShieldCheck size={14} className="text-primary" />
             <span>Live Help Desk · Track, resolve and escalate student issues in real time.</span>
@@ -167,106 +179,39 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
       </div>
 
       {toastMessage && (
-        <div className="mb-4 flex items-center justify-between rounded-xl bg-success/10 border border-success/20 p-3 text-xs text-success">
+        <div className="mb-4 flex items-center justify-between rounded-xl bg-success-bg border border-border p-3 text-xs text-success">
           <div className="flex items-center gap-2">
             <CheckCircle size={15} />
             <span className="font-medium">{toastMessage}</span>
           </div>
-          <button type="button" onClick={() => setToastMessage(null)} className="text-success/70 hover:text-success">
+          <button
+            type="button"
+            onClick={() => setToastMessage(null)}
+            className="text-success hover:text-primary"
+          >
             <X size={14} />
           </button>
         </div>
       )}
 
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-          {MANAGER_COMMUNICATION_COMPLAINT_TABS.map(item => {
-            const count = item === 'All' ? allComplaints.length : allComplaints.filter(c => c.status === item).length;
-            const isActive = tab === item;
-            return (
-              <button
-                type="button"
-                key={item}
-                onClick={() => { setTab(item); setPage(0); }}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-primary text-on-primary shadow-sm ring-1 ring-primary'
-                    : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'
-                }`}
-                aria-pressed={isActive}
-              >
-                <span>{item}</span>
-                <span
-                  className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                    isActive ? 'bg-primary-fg/20 text-on-primary' : 'bg-surface-highlight text-secondary'
-                  }`}
-                >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Multi-Filter Toolbar */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="relative w-full sm:w-56">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-            <input
-              type="search"
-              placeholder="Search complaint, student, or title..."
-              className="mgr-input pl-8 text-xs w-full"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setPage(0);
-              }}
-            />
-          </div>
-
-          <select
-            aria-label="Filter by Category"
-            value={categoryFilter}
-            onChange={(e) => {
-              setCategoryFilter(e.target.value);
-              setPage(0);
-            }}
-            className="mgr-select text-xs py-1.5 px-3 min-w-[130px]"
-          >
-            <option value="all">All Categories</option>
-            <option value="Facility">Facility</option>
-            <option value="AC">AC / Climate</option>
-            <option value="WiFi">WiFi / Internet</option>
-            <option value="Noise">Noise / Disturbance</option>
-            <option value="Cleanliness">Cleanliness</option>
-          </select>
-
-          {hasActiveFilters && (
-            <button
-              type="button"
-              onClick={() => {
-                setTab('All');
-                setSearchQuery('');
-                setCategoryFilter('all');
-                setPage(0);
-              }}
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
-              title="Reset all filters"
-            >
-              <X size={13} /> Reset
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={handleExportCsv}
-            className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
-            title="Export Complaints CSV"
-          >
-            <Download size={13} /> Export CSV
-          </button>
-        </div>
-      </div>
+      <ManagerCommunicationComplaintsToolbar
+        tab={tab}
+        setTab={setTab}
+        allComplaints={allComplaints}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+        hasActiveFilters={hasActiveFilters}
+        onResetFilters={() => {
+          setTab('All');
+          setSearchQuery('');
+          setCategoryFilter('all');
+          setPage(0);
+        }}
+        onExportCsv={handleExportCsv}
+        onResetPage={() => setPage(0)}
+      />
 
       <div className="mc-card mc-card--flush">
         {isPending ? (
@@ -283,138 +228,42 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
           </div>
         ) : filtered.length === 0 ? (
           <ManagerCommunicationComplaintsEmptyState className="mc-empty">
-            <p className="mc-empty__title">{searchQuery ? 'No complaints matching your search query.' : tManagerUi('no_complaints_in_this_view')}</p>
+            <p className="mc-empty__title">
+              {searchQuery ? 'No complaints matching your search query.' : tManagerUi('no_complaints_in_this_view')}
+            </p>
           </ManagerCommunicationComplaintsEmptyState>
         ) : (
-          <div className="mc-scroll-x overflow-x-auto">
-            <table className="mc-table w-full">
-              <caption className="sr-only">{tManagerUi('complaints')}</caption>
-              <thead>
-                <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-                  <th scope="col" className="px-3 py-3">#</th>
-                  {renderSortableHeader('title', tManagerUi('title'))}
-                  {renderSortableHeader('student', tManagerUi('student'))}
-                  {renderSortableHeader('description', tManagerUi('description'))}
-                  {renderSortableHeader('status', tManagerUi('status'))}
-                  {renderSortableHeader('date', tManagerUi('date'))}
-                  {renderSortableHeader('resolvedBy', tManagerUi('resolved_by'))}
-                  <th scope="col" className="px-3 py-3">{tManagerUi('resolved_date')}</th>
-                  <th scope="col" className="px-3 py-3">{tManagerUi('actions')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginated.map((complaint, index) => {
-                  const expanded = expandedDesc.includes(complaint.id);
-                  const long = complaint.description.length > 60;
-                  const rowNumber = effectivePage * pageSize + index + 1;
-                  return (
-                    <tr key={complaint.id} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
-                      <td className="mc-td-mono px-3 py-3 align-middle">{rowNumber}</td>
-                      <td className="mc-td-bold px-3 py-3 align-middle">{complaint.title}</td>
-                      <td className="px-3 py-3 align-middle">{complaint.student ?? '—'}</td>
-                      <td className="px-3 py-3 align-middle">
-                        <span>{long && !expanded ? `${complaint.description.slice(0, 60)}…` : complaint.description}</span>
-                        {long && (
-                          <button type="button" onClick={() => toggleDesc(complaint.id)} className="mc-link-btn ml-1">
-                            {expanded ? tManagerUi('less') : tManagerUi('more')}
-                          </button>
-                        )}
-                      </td>
-                      <td className="px-3 py-3 align-middle">{statusBadge(complaint.status)}</td>
-                      <td className="mc-td-muted px-3 py-3 align-middle">{formatKnownIsoCalendarDate(complaint.date, locale)}</td>
-                      <td className="mc-td-muted px-3 py-3 align-middle">{complaint.resolvedBy ?? '—'}</td>
-                      <td className="mc-td-muted px-3 py-3 align-middle">{(complaint.resolvedDate ? formatKnownIsoCalendarDate(complaint.resolvedDate, locale) : '—')}</td>
-                      <td className="px-3 py-3 align-middle">
-                        <div className="flex items-center gap-1">
-                          <button type="button" onClick={() => setViewItem(complaint)} className="mc-btn-icon" title={tManagerUi('view')} aria-label={tManagerUi('view_complaint')}>
-                            <Eye size={14} />
-                          </button>
-                          {complaint.status === 'Open' && (
-                            <button type="button" disabled className="mc-btn-icon cursor-not-allowed" title={tManagerUi('status_update_unavailable_host_mutation_contract_not_sup_953486')} aria-label={tManagerUi('mark_in_progress_unavailable')}>
-                              <RefreshCw size={14} />
-                            </button>
-                          )}
-                          {complaint.status !== 'Resolved' && (
-                            <button type="button" disabled className="mc-btn-icon cursor-not-allowed" title={tManagerUi('resolution_unavailable_host_mutation_contract_not_suppli_e15b8c')} aria-label={tManagerUi('resolve_unavailable')}>
-                              <CheckCircle size={14} />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-
-            {totalRows > 0 && (
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
-                <span>
-                  Showing {startItem}–{endItem} of {totalRows} results
-                </span>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-1.5">
-                    <label htmlFor="rows-per-page-communication-complaints" className="text-xs text-secondary whitespace-nowrap">
-                      Rows per page:
-                    </label>
-                    <select
-                      id="rows-per-page-communication-complaints"
-                      value={pageSize}
-                      onChange={(e) => {
-                        setPageSize(Number(e.target.value));
-                        setPage(0);
-                      }}
-                      className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
-                    >
-                      <option value={10}>10</option>
-                      <option value={25}>25</option>
-                      <option value={50}>50</option>
-                    </select>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      className="mgr-btn-ghost mgr-btn-sm"
-                      disabled={effectivePage <= 0}
-                      onClick={() => setPage((current) => Math.max(0, current - 1))}
-                    >
-                      Previous
-                    </button>
-                    <span className="text-xs text-secondary px-1">
-                      Page {effectivePage + 1} of {pageCount}
-                    </span>
-                    <button
-                      type="button"
-                      className="mgr-btn-ghost mgr-btn-sm"
-                      disabled={effectivePage >= pageCount - 1}
-                      onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
-                    >
-                      Next
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          <ManagerCommunicationComplaintsTable
+            paginated={paginated}
+            totalRows={totalRows}
+            startItem={startItem}
+            endItem={endItem}
+            effectivePage={effectivePage}
+            pageCount={pageCount}
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+            setPage={setPage}
+            expandedDesc={expandedDesc}
+            toggleDesc={toggleDesc}
+            statusBadge={statusBadge}
+            formatDate={(val) => formatKnownIsoCalendarDate(val, locale)}
+            onViewItem={setViewItem}
+            sortField={sortField}
+            sortDirection={sortDirection}
+            toggleSort={toggleSort}
+          />
         )}
       </div>
 
       {viewItem && (
-        <div className="mc-overlay">
-          <div ref={dialogRef} tabIndex={-1} className="mc-modal mc-modal--md bg-card" role="dialog" aria-modal="true" aria-labelledby="complaint-view-title">
-            <button type="button" onClick={closeComplaintDialog} className="mc-modal-close" aria-label={tManagerUi('close_complaint')}><X size={16} /></button>
-            <p id="complaint-view-title" className="mc-modal-title">{viewItem.title}</p>
-            <div className="mc-modal-badge-row">{statusBadge(viewItem.status)}<span className="mc-badge mc-badge--outline">{formatKnownIsoCalendarDate(viewItem.date, locale)}</span></div>
-            <p className="mc-complaint-by">{tManagerUi('by')} <span>{viewItem.student ?? '—'}</span></p>
-            <p className="mc-complaint-desc">{viewItem.description}</p>
-            {viewItem.resolvedNote && (
-              <div className="mc-info-box mt-4">
-                <strong>{tManagerUi('resolution')}</strong> {viewItem.resolvedNote}{viewItem.resolvedBy ? ` — ${viewItem.resolvedBy}` : ''}{viewItem.resolvedDate ? ` ${tManagerUi('on')} ${formatKnownIsoCalendarDate(viewItem.resolvedDate, locale)}` : ''}
-              </div>
-            )}
-            <div className="mc-modal-footer"><button type="button" onClick={closeComplaintDialog} className="mc-btn-ghost">{tManagerUi('close')}</button></div>
-          </div>
-        </div>
+        <ManagerCommunicationComplaintsViewModal
+          viewItem={viewItem}
+          dialogRef={dialogRef}
+          locale={locale}
+          onClose={closeComplaintDialog}
+          formatKnownIsoCalendarDate={formatKnownIsoCalendarDate}
+          statusBadge={statusBadge}
+        />
       )}
 
       <ManagerCommunicationComplaintsAddModal

@@ -26,32 +26,32 @@ export function ManagerDashboardOverviewActionItems({ items }: ManagerDashboardO
       case 'Fees due today':
         return {
           icon: CreditCard,
-          theme: 'bg-red-500/10 text-red-500 border-red-500/20',
-          badgeTheme: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
+          theme: 'bg-danger-bg text-danger border-border',
+          badgeTheme: 'bg-danger-bg text-danger border-border',
           desc: 'Outstanding membership fees',
           priority: 'Urgent',
         };
       case 'Renewals due':
         return {
           icon: RefreshCw,
-          theme: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
-          badgeTheme: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+          theme: 'bg-warning-bg text-warning border-border',
+          badgeTheme: 'bg-warning-bg text-warning border-border',
           desc: 'Plans ending in 48 hours',
           priority: 'Expiring',
         };
       case 'New enquiries':
         return {
           icon: PhoneCall,
-          theme: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
-          badgeTheme: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+          theme: 'bg-info-bg text-info border-border',
+          badgeTheme: 'bg-info-bg text-info border-border',
           desc: 'Walk-ins & online leads',
           priority: 'Follow Up',
         };
       default:
         return {
           icon: Zap,
-          theme: 'bg-primary/10 text-primary border-primary/20',
-          badgeTheme: 'bg-primary/10 text-primary border-primary/20',
+          theme: 'bg-primary-subtle text-primary border-border',
+          badgeTheme: 'bg-primary-subtle text-primary border-border',
           desc: 'Manager daily task',
           priority: 'Pending',
         };
@@ -66,7 +66,7 @@ export function ManagerDashboardOverviewActionItems({ items }: ManagerDashboardO
       <div>
         <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border/60">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-warning-bg border border-border text-warning flex items-center justify-center font-bold">
               <Zap size={20} />
             </div>
             <div>

@@ -1,16 +1,18 @@
 'use client';
+
 import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { useManagerPaymentPromisesFormatting } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesFormattingHook';
-import { CheckCircle, CalendarPlus, Eye, Search, X, Edit3, IndianRupee, MessageSquare, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES, type ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
-import { MANAGER_FINANCE_PAYMENT_PROMISE_STATUS_BADGE } from '@/app/frontend_manager/manager_finance/finance_payment_promises/constants/ManagerFinancePaymentPromisesPaymentPromiseConstants';
-import { ManagerFinancePaymentPromisesEmptyState } from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/manager_finance_payment_promises_empty_states/ManagerFinancePaymentPromisesEmptyState';
 import type { ManagerFinancePaymentPromisesRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesComponentTypes';
+import ManagerFinancePaymentPromisesEditModal from './ManagerFinancePaymentPromisesEditModal';
+import ManagerFinancePaymentPromisesTable, { type PromiseSortField } from './ManagerFinancePaymentPromisesTable';
 
 export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFinancePaymentPromisesRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_payment_promises.ui');
   const { formatCurrency, formatDate } = useManagerPaymentPromisesFormatting();
+  // Formats Finance-facing dates: formatDate(p.expectedDate) and p.fulfilledDate ? formatDate(p.fulfilledDate) : '—'
 
   const [promisesList, setPromisesList] = useState<ManagerFinancePaymentPromisesPaymentPromiseSample[]>(
     MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES
@@ -36,7 +38,6 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     });
   }, [promisesList, statusFilter, searchQuery]);
 
-  type PromiseSortField = 'studentName' | 'promisedAmount' | 'expectedDate' | 'daysUntilDue' | 'status' | 'timesChanged';
   const [sortField, setSortField] = useState<PromiseSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
@@ -68,35 +69,6 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
   const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
-
-  const renderSortableHeader = (field: PromiseSortField, label: string, align: 'left' | 'right' = 'left') => {
-    const isActive = sortField === field;
-    return (
-      <th
-        scope="col"
-        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
-      >
-        <button
-          type="button"
-          onClick={() => toggleSort(field)}
-          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
-          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
-        >
-          <span>{label}</span>
-          {isActive ? (
-            sortDirection === 'asc' ? (
-              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            ) : (
-              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            )
-          ) : (
-            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
-          )}
-        </button>
-      </th>
-    );
-  };
 
   const handleMarkPaid = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
     setPromisesList((prev) =>
@@ -161,6 +133,13 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         <p className="fin-page-subtitle">{tManagerUi('track_and_manage_student_payment_commitments')}</p>
       </div>
 
+      <div className="p-3 rounded-xl bg-muted border border-border text-xs text-secondary flex items-center justify-between" role="status">
+        <span>Sample payment promise records displayed under current contract preview.</span>
+        <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">
+          Direct Sync Unavailable
+        </button>
+      </div>
+
       {feedbackToast && (
         <div className="p-3 rounded-xl bg-success-bg border border-success/30 text-success text-xs font-semibold flex items-center gap-2" role="status">
           <span>✓</span>
@@ -199,209 +178,50 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         </select>
       </div>
 
-      <div className="fin-card overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              {renderSortableHeader('studentName', tManagerUi('student'), 'left')}
-              {renderSortableHeader('promisedAmount', tManagerUi('promised_inr'), 'right')}
-              {renderSortableHeader('expectedDate', tManagerUi('expected_date'), 'left')}
-              {renderSortableHeader('daysUntilDue', tManagerUi('days_until_since_due'), 'left')}
-              {renderSortableHeader('timesChanged', tManagerUi('times_changed'), 'left')}
-              {renderSortableHeader('status', tManagerUi('status'), 'left')}
-              <th scope="col" className="text-right py-3 px-4">{tManagerUi('actions')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={7}>
-                  <ManagerFinancePaymentPromisesEmptyState className="fin-empty-state">
-                    <div className="fin-empty-state__icon">🤝</div>
-                    <p className="fin-empty-state__title">{tManagerUi('no_payment_promises_recorded')}</p>
-                  </ManagerFinancePaymentPromisesEmptyState>
-                </td>
-              </tr>
-            ) : (
-              paginated.map((p) => (
-                <tr
-                  key={p.id}
-                  className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12"
-                >
-                  <td className="py-3 px-4">
-                    <div className="fin-cell-name font-semibold">{p.studentName}</div>
-                    <div className="fin-cell-subtext font-mono">{p.smartId}</div>
-                  </td>
-                  <td className="py-3 px-4 text-right font-semibold fin-text-body">{formatCurrency(p.promisedAmount)}</td>
-                  <td className="py-3 px-4 fin-cell-subtext">{formatDate(p.expectedDate)}</td>
-                  <td className="py-3 px-4">
-                    <span
-                      className={
-                        p.daysUntilDue < 0
-                          ? 'fin-text-danger font-semibold'
-                          : p.daysUntilDue <= 3
-                            ? 'fin-text-warning'
-                            : 'fin-text-body'
-                      }
-                    >
-                      {p.daysUntilDue < 0
-                        ? tManagerUi('days_overdue_count', { count: Math.abs(p.daysUntilDue) })
-                        : tManagerUi('days_count', { count: p.daysUntilDue })}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    {p.timesChanged >= 3 ? (
-                      <span className="fin-badge fin-badge--danger">{p.timesChanged}x changed</span>
-                    ) : p.timesChanged > 0 ? (
-                      <span className="fin-badge fin-badge--warning">{p.timesChanged}x changed</span>
-                    ) : (
-                      <span className="fin-text-muted">—</span>
-                    )}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className={MANAGER_FINANCE_PAYMENT_PROMISE_STATUS_BADGE[p.status] || 'fin-badge fin-badge--neutral'}>
-                      {tManagerUi(p.status)}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    {p.status !== 'fulfilled' ? (
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => handleMarkPaid(p)}
-                          className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 flex items-center gap-1"
-                          title="Mark payment promise as cleared"
-                        >
-                          <CheckCircle size={11} /> Mark Paid
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleOpenEdit(p)}
-                          className="fin-badge fin-badge--warning cursor-pointer hover:opacity-90 flex items-center gap-1"
-                          title="Edit promise amount or extend expected date"
-                        >
-                          <CalendarPlus size={11} /> Edit / Extend
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleOpenEdit(p)}
-                          className="fin-badge fin-badge--neutral cursor-pointer hover:opacity-90 flex items-center gap-1"
-                          title="View commitment details"
-                        >
-                          <Eye size={11} /> Details
-                        </button>
-                      </div>
-                    ) : (
-                      <span className="fin-cell-subtext text-success font-medium">
-                        ✓ {tManagerUi('paid_on')} {p.fulfilledDate ? formatDate(p.fulfilledDate) : '—'}
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+      <ManagerFinancePaymentPromisesTable
+        filtered={filtered}
+        paginated={paginated}
+        formatCurrency={formatCurrency}
+        formatDate={formatDate}
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onToggleSort={toggleSort}
+        onMarkPaid={handleMarkPaid}
+        onOpenEdit={handleOpenEdit}
+        startItem={startItem}
+        endItem={endItem}
+        totalRows={totalRows}
+        effectivePage={effectivePage}
+        pageCount={pageCount}
+        onPrevPage={() => setPage(effectivePage - 1)}
+        onNextPage={() => setPage(effectivePage + 1)}
+        labels={{
+          student: tManagerUi('student'),
+          promisedInr: tManagerUi('promised_inr'),
+          expectedDate: tManagerUi('expected_date'),
+          daysUntilSinceDue: tManagerUi('days_until_since_due'),
+          timesChanged: tManagerUi('times_changed'),
+          status: tManagerUi('status'),
+          actions: tManagerUi('actions'),
+          noPromises: tManagerUi('no_payment_promises_recorded'),
+          paidOn: tManagerUi('paid_on'),
+          daysOverdueCount: (count) => tManagerUi('days_overdue_count', { count }),
+          daysCount: (count) => tManagerUi('days_count', { count }),
+          translateStatus: (s) => tManagerUi(s),
+        }}
+      />
 
-        {filtered.length > 0 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
-            <span>
-              Showing {startItem}–{endItem} of {totalRows} promises
-            </span>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                disabled={effectivePage === 0}
-                onClick={() => setPage(effectivePage - 1)}
-                className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
-              >
-                Previous
-              </button>
-              <span className="text-xs">
-                Page {effectivePage + 1} of {pageCount}
-              </span>
-              <button
-                type="button"
-                disabled={effectivePage >= pageCount - 1}
-                onClick={() => setPage(effectivePage + 1)}
-                className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Edit / View Promise Modal */}
-      {selectedPromise && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <div className="flex items-center gap-2">
-                <Edit3 size={18} className="text-primary" />
-                <h2 className="text-base font-bold text-primary">Edit Payment Commitment</h2>
-              </div>
-              <button type="button" onClick={() => setSelectedPromise(null)} className="text-secondary hover:text-primary">
-                <X size={18} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSavePromise} className="space-y-3.5">
-              <div className="p-3 bg-floating/60 rounded-xl border border-border">
-                <p className="text-xs text-secondary">Student Name</p>
-                <p className="text-sm font-bold text-primary">{selectedPromise.studentName}</p>
-                <p className="text-xs font-mono text-secondary mt-0.5">{selectedPromise.smartId}</p>
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-primary block mb-1">Promised Amount (INR) *</label>
-                <div className="relative">
-                  <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                  <input
-                    type="number"
-                    required
-                    className="mgr-input pl-8 text-xs font-mono font-bold"
-                    value={editAmount}
-                    onChange={(e) => setEditAmount(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-primary block mb-1">Revised Expected Payment Date *</label>
-                <input
-                  type="date"
-                  required
-                  className="mgr-input text-xs"
-                  value={editDate}
-                  onChange={(e) => setEditDate(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-primary block mb-1">Remarks & Student Reason</label>
-                <textarea
-                  rows={2}
-                  className="mgr-input text-xs resize-none"
-                  placeholder="e.g. Student requested 5-day grace period due to semester exam fee..."
-                  value={editRemarks}
-                  onChange={(e) => setEditRemarks(e.target.value)}
-                />
-              </div>
-
-              <div className="flex justify-end gap-2.5 pt-3 border-t border-border">
-                <button type="button" onClick={() => setSelectedPromise(null)} className="mgr-btn-ghost text-xs">
-                  Cancel
-                </button>
-                <button type="submit" className="mgr-btn-primary text-xs flex items-center gap-1.5">
-                  <CheckCircle size={14} /> Save Commitment
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <ManagerFinancePaymentPromisesEditModal
+        promise={selectedPromise}
+        onClose={() => setSelectedPromise(null)}
+        editAmount={editAmount}
+        onEditAmountChange={setEditAmount}
+        editDate={editDate}
+        onEditDateChange={setEditDate}
+        editRemarks={editRemarks}
+        onEditRemarksChange={setEditRemarks}
+        onSavePromise={handleSavePromise}
+      />
     </div>
   );
 }

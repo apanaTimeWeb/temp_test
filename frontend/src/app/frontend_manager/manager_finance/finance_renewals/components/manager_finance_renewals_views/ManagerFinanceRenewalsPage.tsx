@@ -1,18 +1,19 @@
 'use client';
+
 import { useState, useRef, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { MANAGER_FINANCE_SAMPLE_RENEWALS } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsDemoRepository';
 import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
-import ManagerFinanceRenewalsNativeTable, { type NativeCellParams } from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
+import ManagerFinanceRenewalsNativeTable from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
 import { sanitizeManagerRenewalsCsvCell } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
-
 import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsFormattingHook';
-
-// RESPONSIBILITY: Entry page for the manager_renewals module.
-// DATA FLOW: Next.js Router -> Page -> Components
-import { Send, MessageSquare, Upload, Mail, Download, Printer, RotateCcw, CheckCircle, BellRing, AlertTriangle, Search, X } from 'lucide-react';
+import { CheckCircle, Search, X } from 'lucide-react';
 import { MANAGER_FINANCE_RENEWAL_FILTERS } from '@/app/frontend_manager/manager_finance/finance_renewals/constants/ManagerFinanceRenewalsRenewalConstants';
 import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
+import ManagerFinanceRenewalsAlertBanner from './ManagerFinanceRenewalsAlertBanner';
+import ManagerFinanceRenewalsHeader from './ManagerFinanceRenewalsHeader';
+import ManagerFinanceRenewalsFilterBar from './ManagerFinanceRenewalsFilterBar';
+import { buildRenewalColumns } from './ManagerFinanceRenewalsTableColumns';
 
 const URL_FILTERS = { filter: { defaultValue: 'expiring_7', allowedValues: ['expired', 'expiring_7', 'expiring_15'] } } as const;
 
@@ -21,7 +22,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   const { formatCurrency, formatDate } = useManagerRenewalsFormatting();
   const { values: urlFilters, setValue: setUrlFilter } = useManagerRenewalsUrlFilters(URL_FILTERS);
   const filter = urlFilters.filter as FilterType;
-  
+
   const [renewalsList, setRenewalsList] = useState(MANAGER_FINANCE_SAMPLE_RENEWALS);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,8 +35,8 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   const expiredCount = useMemo(() => renewalsList.filter((r) => r.daysLeft < 0).length, [renewalsList]);
 
   const visible = renewalsList.filter((r) => {
-    if (filter === 'expired')     return r.daysLeft < 0;
-    if (filter === 'expiring_7')  return r.daysLeft >= 0 && r.daysLeft <= 7;
+    if (filter === 'expired') return r.daysLeft < 0;
+    if (filter === 'expiring_7') return r.daysLeft >= 0 && r.daysLeft <= 7;
     if (filter === 'expiring_15') return r.daysLeft >= 0 && r.daysLeft <= 15;
     return true;
   });
@@ -72,6 +73,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
       default: return value;
     }
   };
+
   const translatePlanTier = (value: string) => {
     switch (value) {
       case 'Basic': return tManagerUi('basic_tier');
@@ -98,27 +100,25 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `subscription_renewals_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `renewals_${filter}_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     setFeedbackMsg(`Exported ${visible.length} renewal records to CSV successfully.`);
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => window.print();
 
   const handleWhatsAppAll = () => {
-    setFeedbackMsg(`WhatsApp renewal reminders dispatched to all ${visible.length} members.`);
+    setFeedbackMsg(`WhatsApp renewal reminders dispatched to all ${searchedRenewals.length} displayed students.`);
   };
 
   const handleEmailAll = () => {
-    setFeedbackMsg(`Email renewal reminders dispatched to all ${visible.length} members.`);
+    setFeedbackMsg(`Email renewal reminders dispatched to all ${searchedRenewals.length} displayed students.`);
   };
 
   const handleRemindAll = () => {
-    setFeedbackMsg(`Dispatched multi-channel renewal reminders to all ${visible.length} members.`);
+    setFeedbackMsg(`Omnichannel renewal alerts scheduled for ${searchedRenewals.length} members.`);
   };
 
   const handleImportClick = () => {
@@ -157,136 +157,65 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
     setFeedbackMsg(`Renewal reminder successfully sent to ${studentName} via WhatsApp & SMS.`);
   };
 
-  const colDefs = [
-    { field: 'studentName', headerName: tManagerUi('student'), flex: 1, minWidth: 150, cellRenderer: (p: NativeCellParams) => <span className="fin-cell-name font-medium">{p.value}</span> },
-    { field: 'smartId', headerName: tManagerUi('smart_id'), width: 120, cellRenderer: (p: NativeCellParams) => <span className="fin-mono text-sm">{p.value}</span> },
-    { field: 'shift', headerName: tManagerUi('shift'), width: 110, cellRenderer: (p: NativeCellParams) => <div className="h-full flex items-center"><span className="fin-badge fin-badge--neutral">{typeof p.value === 'string' ? translateShift(p.value) : '—'}</span></div> },
-    { field: 'plan', headerName: tManagerUi('plan'), width: 110, cellRenderer: (p: NativeCellParams) => <span className="fin-text-body">{typeof p.value === 'string' ? translatePlanTier(p.value) : '—'}</span> },
-    { field: 'expiryDate', headerName: tManagerUi('expiry_date'), width: 120, cellRenderer: (p: NativeCellParams) => <span className="fin-cell-subtext">{typeof p.value === 'string' ? formatDate(p.value) : p.value}</span> },
-    { 
-      field: 'daysLeft', 
-      headerName: tManagerUi('days_left'), 
-      width: 120,
-      cellRenderer: (p: NativeCellParams) => {
-        const daysLeft = typeof p.value === 'number' ? p.value : 0;
-        return <span className={daysLeft < 0 ? 'fin-text-danger font-semibold' : daysLeft <= 7 ? 'fin-text-warning font-semibold' : 'fin-text-body'}>
-          {daysLeft < 0 ? tManagerUi('days_ago_count', { count: Math.abs(daysLeft) }) : tManagerUi('days_count', { count: daysLeft })}
-        </span>;
-      }
-    },
-    { field: 'lastPaymentDate', headerName: tManagerUi('last_payment'), width: 130, cellRenderer: (p: NativeCellParams) => <span className="fin-cell-subtext">{typeof p.value === 'string' ? formatDate(p.value) : p.value}</span> },
-    { 
-      field: 'due', 
-      headerName: tManagerUi('due_inr'), 
-      width: 110,
-      cellStyle: { textAlign: 'right', fontWeight: 600 },
-      cellRenderer: (p: NativeCellParams) => {
-        const due = typeof p.value === 'number' ? p.value : 0;
-        return <span className={due > 0 ? 'fin-text-danger' : 'fin-text-body'}>{formatCurrency(due)}</span>;
-      }
-    },
-    {
-      headerName: tManagerUi('actions'),
-      width: 200,
-      sortable: false,
-      cellRenderer: (p: NativeCellParams) => {
-        const row = p.data as { id: number | string; studentName: string };
-        return (
-          <div className="flex items-center gap-2 h-full">
-            <button
-              type="button"
-              onClick={() => handleRenewStudent(row.id, row.studentName)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
-              title={`Renew subscription for ${row.studentName}`}
-            >
-              <RotateCcw size={12} /> Renew
-            </button>
-            <button
-              type="button"
-              onClick={() => handleRemindStudent(row.studentName)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded border border-border bg-card hover:bg-surface-hover text-secondary transition-colors cursor-pointer"
-              title={`Send reminder to ${row.studentName}`}
-            >
-              <Send size={12} className="text-amber-500" /> Remind
-            </button>
-          </div>
-        );
-      }
-    }
-  ];
+  const colDefs = useMemo(
+    () =>
+      buildRenewalColumns({
+        tManagerUi,
+        translateShift,
+        translatePlanTier,
+        formatDate,
+        formatCurrency,
+        onRenewStudent: handleRenewStudent,
+        onRemindStudent: handleRemindStudent,
+      }),
+    [tManagerUi, formatDate, formatCurrency]
+  );
 
   return (
-    <div className="space-y-6"
+    <div
+      className="space-y-6"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
       data-route-name={_routeQuery.name}
       data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
-      
-      <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".csv,.xlsx" className="hidden" />
+      data-route-smart-id={_routeQuery.smartId}
+    >
+      <ManagerFinanceRenewalsHeader
+        renewalsTitle={tManagerUi('renewals')}
+        renewalsSubtitle={tManagerUi('track_upcoming_and_overdue_membership_renewals')}
+        sampleWarningText={tManagerUi('renewals_queue_displays_sample_membership_records_for_l_36ae94')}
+        importLabel={tManagerUi('import')}
+        waAllLabel={tManagerUi('wa_all')}
+        emailAllLabel={tManagerUi('email_all')}
+        remindAllLabel={tManagerUi('remind_all')}
+        hasVisibleRows={visible.length > 0}
+        onImportClick={handleImportClick}
+        onExportCsv={handleExportCsv}
+        onPrint={handlePrint}
+        onWhatsAppAll={handleWhatsAppAll}
+        onEmailAll={handleEmailAll}
+        onRemindAll={handleRemindAll}
+        fileInputRef={fileInputRef}
+        onFileChange={handleFileChange}
+      />
 
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <div>
-          <p className="fin-input-hint fin-text-warning" role="status">{tManagerUi('renewal_records_are_sample_data_reminder_sending_and_sub_1a7d9e')}</p>
-          <h1 className="fin-page-title">{tManagerUi('subscription_renewals')}</h1>
-          <p className="fin-page-subtitle">{tManagerUi('subscriptions_needing_renewal_attention')}</p>
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          <button type="button" onClick={handleImportClick} className="fin-btn fin-btn-secondary cursor-pointer hover:bg-surface-hover" title={tManagerUi('import')}>
-            <Upload size={14} className="mr-1" /> {tManagerUi('import')}
-          </button>
-          <button type="button" onClick={handleExportCsv} disabled={visible.length === 0} className="fin-btn fin-btn-secondary cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title="Export CSV" data-testid="manager-finance-renewals-export">
-            <Download size={14} className="mr-1" /> CSV
-          </button>
-          <button type="button" onClick={handlePrint} disabled={visible.length === 0} className="fin-btn fin-btn-secondary cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title="Print Renewals" data-testid="manager-finance-renewals-print">
-            <Printer size={14} className="mr-1" /> Print
-          </button>
-          <button type="button" onClick={handleWhatsAppAll} disabled={visible.length === 0} className="fin-btn fin-btn-secondary text-success cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={tManagerUi('wa_all')}>
-            <MessageSquare size={14} className="mr-1" /> {tManagerUi('wa_all')}
-          </button>
-          <button type="button" onClick={handleEmailAll} disabled={visible.length === 0} className="fin-btn fin-btn-secondary text-purple cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={tManagerUi('email_all')}>
-            <Mail size={14} className="mr-1" /> {tManagerUi('email_all')}
-          </button>
-          <button type="button" onClick={handleRemindAll} disabled={visible.length === 0} className="fin-btn fin-btn-secondary cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={tManagerUi('remind_all')}>
-            <Send size={14} className="mr-1 text-amber-500" /> {tManagerUi('remind_all')}
-          </button>
-        </div>
+      <div className="p-3 rounded-xl bg-muted border border-border text-xs text-secondary flex items-center justify-between" role="status">
+        <span>Sample renewals queue active under current contract layout preview.</span>
+        <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">
+          Renewal API Unavailable
+        </button>
       </div>
 
-      {/* Active Remaining Days Alert Notification Banner */}
-      <div className="p-4 rounded-xl bg-card border border-warning/40 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-warning/15 text-warning flex items-center justify-center shrink-0">
-            <BellRing size={20} className="motion-safe:animate-bounce" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-primary flex items-center gap-2">
-              <span>Subscription Expiry Notification</span>
-              <span className="px-2 py-0.5 rounded-full text-[11px] bg-danger text-on-danger font-bold">
-                {expiringCritical.length + expiredCount} Urgently Pending
-              </span>
-            </h3>
-            <p className="text-xs text-secondary mt-0.5">
-              <strong className="text-danger">{expiredCount} subscriptions already expired</strong> ·{' '}
-              <strong className="text-warning">{expiringCritical.length} members have ≤ 3 days remaining</strong>. Send reminders to safeguard seat renewals.
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={handleWhatsAppAll}
-            className="mgr-btn-primary text-xs flex items-center gap-1.5"
-          >
-            <MessageSquare size={14} /> Send Due Reminders ({expiringCritical.length + expiredCount})
-          </button>
-        </div>
-      </div>
+      <ManagerFinanceRenewalsAlertBanner
+        expiringCount={expiringCritical.length}
+        expiredCount={expiredCount}
+        onSendDueReminders={handleWhatsAppAll}
+      />
 
       {feedbackMsg && (
-        <div role="status" aria-live="polite" className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 rounded-lg text-sm flex items-center justify-between">
+        <div role="status" aria-live="polite" className="p-3 bg-success-bg border border-border text-success rounded-lg text-sm flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CheckCircle size={16} className="text-emerald-600 dark:text-emerald-400" />
+            <CheckCircle size={16} />
             <span>{feedbackMsg}</span>
           </div>
           <button type="button" onClick={() => setFeedbackMsg(null)} className="text-xs font-semibold hover:underline cursor-pointer">Dismiss</button>
@@ -294,91 +223,39 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
       )}
 
       {/* Filter tabs and search bar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-        <div className="flex gap-2 flex-wrap items-center">
-          {MANAGER_FINANCE_RENEWAL_FILTERS.map((f) => (
-            <button type="button"
-              key={f.value}
-              onClick={() => setUrlFilter('filter', f.value)}
-              className={filter === f.value ? 'fin-badge fin-badge--info cursor-pointer' : 'fin-badge fin-badge--neutral cursor-pointer'}
-            >
-              {f.emoji} {tManagerUi(f.labelKey)}
-            </button>
-          ))}
-        </div>
+      <ManagerFinanceRenewalsFilterBar
+        filter={filter}
+        onFilterChange={(f) => setUrlFilter('filter', f)}
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+        shiftFilter={shiftFilter}
+        onShiftFilterChange={setShiftFilter}
+        planFilter={planFilter}
+        onPlanFilterChange={setPlanFilter}
+        dueFilter={dueFilter}
+        onDueFilterChange={setDueFilter}
+        onResetFilters={() => {
+          setSearchQuery('');
+          setShiftFilter('all');
+          setPlanFilter('all');
+          setDueFilter('all');
+          setUrlFilter('filter', 'expiring_7');
+        }}
+        hasActiveFilters={hasActiveFilters}
+        searchedCount={searchedRenewals.length}
+        totalVisibleCount={visible.length}
+        tManagerUi={(k) => tManagerUi(k)}
+      />
 
-        {/* Multi-Filter Toolbar */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="relative w-full sm:w-56">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-            <input
-              type="search"
-              placeholder="Search student, smart ID, or plan..."
-              className="mgr-input pl-8 text-xs w-full"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <select
-            aria-label="Filter by Shift"
-            value={shiftFilter}
-            onChange={(e) => setShiftFilter(e.target.value)}
-            className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
-          >
-            <option value="all">All Shifts</option>
-            <option value="Morning">Morning</option>
-            <option value="Evening">Evening</option>
-            <option value="Full Day">Full Day</option>
-          </select>
-
-          <select
-            aria-label="Filter by Plan Tier"
-            value={planFilter}
-            onChange={(e) => setPlanFilter(e.target.value)}
-            className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
-          >
-            <option value="all">All Plans</option>
-            <option value="Basic">Basic</option>
-            <option value="Premium">Premium</option>
-            <option value="Elite">Elite</option>
-          </select>
-
-          <select
-            aria-label="Filter by Due Status"
-            value={dueFilter}
-            onChange={(e) => setDueFilter(e.target.value)}
-            className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
-          >
-            <option value="all">All Dues</option>
-            <option value="due_only">Due &gt; ₹0</option>
-          </select>
-
-          {hasActiveFilters && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery('');
-                setShiftFilter('all');
-                setPlanFilter('all');
-                setDueFilter('all');
-                setUrlFilter('filter', 'expiring_7');
-              }}
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
-              title="Reset all filters"
-            >
-              <X size={13} /> Reset
-            </button>
-          )}
-        </div>
+      <div className="fin-card overflow-hidden">
+        <ManagerFinanceRenewalsNativeTable
+          columns={colDefs}
+          rows={searchedRenewals}
+          getRowKey={(row) => String(row.id)}
+          emptyMessage={searchQuery ? 'No renewals matching active search criteria.' : tManagerUi('no_renewals_found')}
+          labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
+        />
       </div>
-
-      <div className="fin-card p-4">
-        <div className="mgr-table-wrapper h-112">
-          <ManagerFinanceRenewalsNativeTable getRowKey={(row) => String(row.id)} emptyMessage={tManagerUi('no_subscriptions_found')} rows={searchedRenewals} columns={colDefs} labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }} />
-        </div>
-      </div>
-
     </div>
   );
 }

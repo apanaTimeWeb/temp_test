@@ -1,14 +1,17 @@
 'use client';
+
+import { useRef, useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { useRef, useState, useMemo } from 'react';
-import { useManagerLockerMatrixDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/hooks/ManagerLockersMatrixDialogFocus';
 import { useRouter } from 'next/navigation';
+import { Search } from 'lucide-react';
+
+import { useManagerLockerMatrixDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/hooks/ManagerLockersMatrixDialogFocus';
 import { useManagerLockerMatrixLockers } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/hooks/useManagerLockersMatrixTables';
 import { LEGEND_ITEMS } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/constants/ManagerLockersMatrixConstants';
 import { MANAGER_LOCKERS_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/config/manager_lockers_matrix.url_config';
 import type { LockerCellStatus, LockerData } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/types/ManagerLockersMatrixTypes';
-import { KeyRound, ShieldCheck, User, X, Search } from 'lucide-react';
+import { ManagerLockersMatrixAllotModal } from './ManagerLockersMatrixAllotModal';
 
 // RESPONSIBILITY: Render locker matrix UI with live interactive vacant locker assignment workflow.
 export function ManagerLockersMatrixClient() {
@@ -97,7 +100,9 @@ export function ManagerLockersMatrixClient() {
       },
     }));
 
-    toast.success(`Locker ${assignTarget} successfully assigned to ${studentName} (Key #${keyNumber}, ₹${depositAmount} deposit recorded)!`);
+    toast.success(
+      `Locker ${assignTarget} successfully assigned to ${studentName} (Key #${keyNumber}, ₹${depositAmount} deposit recorded)!`
+    );
     setAssignTarget(null);
   };
 
@@ -143,10 +148,30 @@ export function ManagerLockersMatrixClient() {
 
         <div className="ss-locker-stats">
           {[
-            { labelKey: 'total_capacity', value: String(stats.total), border: 'ss-kpi-card__border-primary', valueClass: 'ss-kpi-card__value--primary' },
-            { labelKey: 'available', value: String(stats.available), border: 'ss-kpi-card__border-success', valueClass: 'ss-kpi-card__value--success' },
-            { labelKey: 'occupied', value: String(stats.occupied), border: 'ss-kpi-card__border-danger', valueClass: 'ss-kpi-card__value--danger' },
-            { labelKey: 'service_required', value: String(stats.service).padStart(2, '0'), border: 'ss-kpi-card__border-warning', valueClass: 'ss-kpi-card__value--warning' },
+            {
+              labelKey: 'total_capacity',
+              value: String(stats.total),
+              border: 'ss-kpi-card__border-primary',
+              valueClass: 'ss-kpi-card__value--primary',
+            },
+            {
+              labelKey: 'available',
+              value: String(stats.available),
+              border: 'ss-kpi-card__border-success',
+              valueClass: 'ss-kpi-card__value--success',
+            },
+            {
+              labelKey: 'occupied',
+              value: String(stats.occupied),
+              border: 'ss-kpi-card__border-danger',
+              valueClass: 'ss-kpi-card__value--danger',
+            },
+            {
+              labelKey: 'service_required',
+              value: String(stats.service).padStart(2, '0'),
+              border: 'ss-kpi-card__border-warning',
+              valueClass: 'ss-kpi-card__value--warning',
+            },
           ].map(({ labelKey, value, border, valueClass }) => (
             <div key={labelKey} className={`ss-kpi-card ${border}`}>
               <span className="ss-kpi-card__label">{tManagerUi(labelKey)}</span>
@@ -179,7 +204,13 @@ export function ManagerLockersMatrixClient() {
                     : 'bg-surface-highlight text-secondary hover:text-primary'
                 }`}
               >
-                {status === 'all' ? 'All Lockers' : status === 'free' ? 'Available' : status === 'occupied' ? 'Occupied' : 'Maintenance'}
+                {status === 'all'
+                  ? 'All Lockers'
+                  : status === 'free'
+                  ? 'Available'
+                  : status === 'occupied'
+                  ? 'Occupied'
+                  : 'Maintenance'}
               </button>
             ))}
           </div>
@@ -220,18 +251,27 @@ export function ManagerLockersMatrixClient() {
           <div className="ss-card">
             <div className="ss-card-header">
               <h3 className="ss-section-heading">{tManagerUi('locker_summary')}</h3>
-              <button type="button" className="ss-btn-ghost ss-btn--sm" onClick={() => router.push(MANAGER_LOCKERS_MATRIX_ROUTES.lockersList)}>
+              <button
+                type="button"
+                className="ss-btn-ghost ss-btn--sm"
+                onClick={() => router.push(MANAGER_LOCKERS_MATRIX_ROUTES.lockersList)}
+              >
                 {tManagerUi('view_all')}
               </button>
             </div>
             <p className="ss-table__cell-sub">
-              {tManagerUi('available_lockers')} {stats.available} · {tManagerUi('occupied_lockers')} {stats.occupied} · {tManagerUi('maintenance_8f2233')} {stats.service}.
+              {tManagerUi('available_lockers')} {stats.available} · {tManagerUi('occupied_lockers')} {stats.occupied} ·{' '}
+              {tManagerUi('maintenance_8f2233')} {stats.service}.
             </p>
           </div>
           <div className="ss-card ss-card--primary-accent ss-toolkit-card">
             <div>
-              <h3 className="ss-section-heading ss-section-heading--primary ss-toolkit-heading">{tManagerUi('management_toolkit')}</h3>
-              <p className="ss-toolkit-desc">Assign vacant lockers immediately on floor walk or when collecting security deposit.</p>
+              <h3 className="ss-section-heading ss-section-heading--primary ss-toolkit-heading">
+                {tManagerUi('management_toolkit')}
+              </h3>
+              <p className="ss-toolkit-desc">
+                Assign vacant lockers immediately on floor walk or when collecting security deposit.
+              </p>
             </div>
           </div>
         </div>
@@ -239,109 +279,20 @@ export function ManagerLockersMatrixClient() {
 
       {/* Interactive Allotment Modal */}
       {assignTarget && (
-        <div className="ss-modal-overlay" onClick={() => setAssignTarget(null)}>
-          <div
-            ref={dialogRef}
-            tabIndex={-1}
-            className="ss-modal max-w-md w-full p-6 rounded-2xl bg-card border border-border shadow-dialog space-y-4"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="ss-locker-matrix-assign-title"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                  <KeyRound size={18} />
-                </div>
-                <div>
-                  <h2 id="ss-locker-matrix-assign-title" className="text-base font-bold text-primary">
-                    Allot Locker #{assignTarget}
-                  </h2>
-                  <p className="text-xs text-secondary">Assign vacant locker to an active library member</p>
-                </div>
-              </div>
-              <button type="button" onClick={() => setAssignTarget(null)} className="text-secondary hover:text-primary">
-                <X size={18} />
-              </button>
-            </div>
-
-            <form onSubmit={handleConfirmAssignment} className="space-y-3.5">
-              <div>
-                <label className="text-xs font-semibold text-primary block mb-1">Student Full Name *</label>
-                <div className="relative">
-                  <User size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                  <input
-                    type="text"
-                    required
-                    className="mgr-input pl-8 text-xs"
-                    placeholder="e.g. Rahul Sharma"
-                    value={studentName}
-                    onChange={(e) => setStudentName(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs font-semibold text-primary block mb-1">Student Smart ID</label>
-                  <input
-                    type="text"
-                    className="mgr-input text-xs font-mono"
-                    value={studentSmartId}
-                    onChange={(e) => setStudentSmartId(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-primary block mb-1">Physical Key No.</label>
-                  <input
-                    type="text"
-                    className="mgr-input text-xs font-mono"
-                    value={keyNumber}
-                    onChange={(e) => setKeyNumber(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs font-semibold text-primary block mb-1">Monthly Rent</label>
-                  <input
-                    type="text"
-                    readOnly
-                    className="mgr-input text-xs bg-floating cursor-not-allowed"
-                    value="₹200 / month"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-primary block mb-1">Security Deposit</label>
-                  <input
-                    type="number"
-                    className="mgr-input text-xs"
-                    value={depositAmount}
-                    onChange={(e) => setDepositAmount(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="p-3 rounded-xl bg-floating/70 border border-border text-xs space-y-1 text-secondary">
-                <p className="flex items-center gap-1.5 font-medium text-primary">
-                  <ShieldCheck size={14} className="text-success" /> Key Handover Policy
-                </p>
-                <p>₹{depositAmount} refundable security deposit will be logged under Member Finance profile.</p>
-              </div>
-
-              <div className="flex justify-end gap-2.5 pt-3 border-t border-border">
-                <button type="button" className="mgr-btn-ghost text-xs" onClick={() => setAssignTarget(null)}>
-                  {tManagerUi('cancel')}
-                </button>
-                <button type="submit" className="mgr-btn-primary text-xs flex items-center gap-1.5">
-                  <KeyRound size={14} /> Confirm & Handover Key
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <ManagerLockersMatrixAllotModal
+          assignTarget={assignTarget}
+          dialogRef={dialogRef}
+          studentName={studentName}
+          setStudentName={setStudentName}
+          studentSmartId={studentSmartId}
+          setStudentSmartId={setStudentSmartId}
+          keyNumber={keyNumber}
+          setKeyNumber={setKeyNumber}
+          depositAmount={depositAmount}
+          setDepositAmount={setDepositAmount}
+          onClose={() => setAssignTarget(null)}
+          onSubmit={handleConfirmAssignment}
+        />
       )}
     </>
   );

@@ -116,7 +116,7 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
                   aria-pressed={isSelected}
                   className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all ${
                     isSelected
-                      ? 'border-primary bg-primary/10 shadow-xs ring-1 ring-primary text-primary'
+                      ? 'border-primary bg-primary-subtle shadow-xs ring-1 ring-primary text-primary'
                       : 'border-border bg-card hover:bg-surface-hover text-secondary'
                   }`}
                 >

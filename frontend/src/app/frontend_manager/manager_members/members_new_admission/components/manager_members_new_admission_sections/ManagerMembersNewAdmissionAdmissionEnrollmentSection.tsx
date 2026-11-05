@@ -110,7 +110,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
                   aria-pressed={isSelected}
                   className={`p-3 rounded-xl border text-left flex flex-col justify-between motion-safe:transition-all ${
                     isSelected
-                      ? 'border-primary bg-primary/10 shadow-sm ring-1 ring-primary'
+                      ? 'border-primary bg-primary-subtle shadow-sm ring-1 ring-primary'
                       : 'border-border bg-card hover:bg-floating'
                   }`}
                 >

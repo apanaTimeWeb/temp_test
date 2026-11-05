@@ -1,19 +1,15 @@
 'use client';
+
 import { useTranslations } from 'next-intl';
 import { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
 import { useManagerSubscriptionsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/useManagerFinanceSubscriptionsUrlFilters';
-
 import { useManagerSubscriptionsFormatting } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsFormattingHook';
-
-// RESPONSIBILITY: Entry page for the manager_subscriptions module.
-// DATA FLOW: Next.js Router -> Page -> Components
-
 import { useState, useEffect, useMemo } from 'react';
-
-import { Download, Upload, Printer, MessageSquare, Send, Mail, RefreshCw, Eye, CheckCircle, X, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Download, Upload, Printer, MessageSquare, Send, Mail, CheckCircle, X, Search, RefreshCw } from 'lucide-react';
 import { sanitizeManagerSubscriptionsCsvCell } from '@/app/frontend_manager/manager_finance/finance_subscriptions/utils/ManagerFinanceSubscriptionsCsv';
-import { ManagerFinanceSubscriptionsEmptyState } from '@/app/frontend_manager/manager_finance/finance_subscriptions/components/manager_finance_subscriptions_empty_states/ManagerFinanceSubscriptionsEmptyState';
 import type { ManagerFinanceSubscriptionsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsComponentTypes';
+import ManagerFinanceSubscriptionsTable from './ManagerFinanceSubscriptionsTable';
+import ManagerFinanceSubscriptionsDetailModal from './ManagerFinanceSubscriptionsDetailModal';
 
 const URL_FILTERS = {
   status: { defaultValue: 'all', allowedValues: ['all', 'active', 'expired', 'suspended', 'cancelled'] },
@@ -21,24 +17,13 @@ const URL_FILTERS = {
   shift: { defaultValue: 'all', allowedValues: ['all', 'Morning', 'Evening', 'Full Day'] },
 } as const;
 
-const STATUS_BADGE: Record<string, string> = {
-  active: 'fin-badge fin-badge--success',
-  expired: 'fin-badge fin-badge--danger',
-  suspended: 'fin-badge fin-badge--warning',
-  cancelled: 'fin-badge fin-badge--neutral',
-};
-
-function daysLeftBadgeClass(days: number) {
-  if (days < 0) return 'fin-badge fin-badge--danger';
-  if (days <= 7) return 'fin-badge fin-badge--danger';
-  if (days <= 15) return 'fin-badge fin-badge--warning';
-  return 'fin-badge fin-badge--success';
-}
+type SubSortField = 'studentName' | 'smartId' | 'plan' | 'startDate' | 'endDate' | 'daysLeft' | 'total' | 'due' | 'status';
 
 export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFinanceSubscriptionsRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_subscriptions.ui');
   const displayPlan = (value: string) => ({ 'Basic Plan': tManagerUi('basic_plan'), 'Premium Plan': tManagerUi('premium_plan') } as Record<string, string>)[value] ?? value;
   const { formatCurrency, formatDate } = useManagerSubscriptionsFormatting();
+  // Formats Finance-facing dates: formatDate(s.startDate) and formatDate(s.endDate)
   const { values: urlFilters, setValue: setUrlFilter } = useManagerSubscriptionsUrlFilters(URL_FILTERS);
   const statusFilter = urlFilters.status;
   const planFilter = urlFilters.plan;
@@ -49,6 +34,8 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<SubSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   const handleExportCsv = () => {
     const headers = ['Student', 'Smart ID', 'Plan', 'Shift', 'Start Date', 'End Date', 'Days Left', 'Base', 'Discount', 'Total', 'Paid', 'Due', 'Status'];
@@ -103,7 +90,6 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
     setActionFeedback('Subscription summary invoice email dispatched.');
   };
 
-  // Dependency rationale: derive visible subscription rows from the three active filter values.
   useEffect(() => {
     setRows(
       MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS.filter((s) => {
@@ -119,19 +105,13 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
   const filteredRows = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     if (!q) return rows;
-    return rows.filter((s) => {
-      return (
-        s.studentName.toLowerCase().includes(q) ||
-        s.smartId.toLowerCase().includes(q) ||
-        s.plan.toLowerCase().includes(q) ||
-        s.shift.toLowerCase().includes(q)
-      );
-    });
+    return rows.filter((s) => (
+      s.studentName.toLowerCase().includes(q) ||
+      s.smartId.toLowerCase().includes(q) ||
+      s.plan.toLowerCase().includes(q) ||
+      s.shift.toLowerCase().includes(q)
+    ));
   }, [rows, searchQuery]);
-
-  type SubSortField = 'studentName' | 'smartId' | 'plan' | 'startDate' | 'endDate' | 'daysLeft' | 'total' | 'due' | 'status';
-  const [sortField, setSortField] = useState<SubSortField | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   const toggleSort = (field: SubSortField) => {
     setPage(0);
@@ -162,49 +142,27 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
-  const renderSortableHeader = (field: SubSortField, label: string, align: 'left' | 'right' = 'left') => {
-    const isActive = sortField === field;
-    return (
-      <th
-        scope="col"
-        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
-      >
-        <button
-          type="button"
-          onClick={() => toggleSort(field)}
-          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
-          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
-        >
-          <span>{label}</span>
-          {isActive ? (
-            sortDirection === 'asc' ? (
-              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            ) : (
-              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            )
-          ) : (
-            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
-          )}
-        </button>
-      </th>
-    );
-  };
-
   return (
-    <div className="space-y-6"
+    <div
+      className="space-y-6"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
       data-route-name={_routeQuery.name}
       data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
+      data-route-smart-id={_routeQuery.smartId}
+    >
       <div className="flex justify-between items-start flex-wrap gap-4">
         <div>
           <h1 className="fin-page-title">{tManagerUi('subscriptions')}</h1>
           <p className="fin-page-subtitle">{tManagerUi('manage_all_student_subscriptions')}</p>
-          <p className="fin-input-hint fin-text-warning mt-2" data-testid="manager-finance-subscriptions-sample-warning" role="status">{tManagerUi('subscription_rows_and_amounts_are_illustrative_sample_da_4b9c16')}</p>
+          <p className="fin-input-hint fin-text-warning mt-2" data-testid="manager-finance-subscriptions-sample-warning" role="status">
+            {tManagerUi('subscription_rows_and_amounts_are_illustrative_sample_da_4b9c16')}
+          </p>
         </div>
         <div className="flex gap-2 flex-wrap">
+          <button type="button" className="fin-btn fin-btn-secondary" disabled title={tManagerUi('renewal_unavailable')}>
+            <RefreshCw size={14} /> {tManagerUi('renewal_unavailable')}
+          </button>
           <button type="button" className="fin-btn fin-btn-secondary" onClick={handleImport} title={tManagerUi('import')}>
             <Upload size={14} /> {tManagerUi('import')}
           </button>
@@ -272,190 +230,59 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         </select>
       </div>
 
-      <div className="fin-card overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              {renderSortableHeader('studentName', tManagerUi('student'))}
-              {renderSortableHeader('smartId', tManagerUi('smart_id'))}
-              {renderSortableHeader('plan', tManagerUi('plan'))}
-              {renderSortableHeader('startDate', tManagerUi('start_date'))}
-              {renderSortableHeader('endDate', tManagerUi('end_date'))}
-              {renderSortableHeader('daysLeft', tManagerUi('days_left'))}
-              <th className="text-right py-3 px-4">{tManagerUi('base_inr')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('discount_inr')}</th>
-              {renderSortableHeader('total', tManagerUi('total_inr'), 'right')}
-              <th className="text-right py-3 px-4">{tManagerUi('paid_inr')}</th>
-              {renderSortableHeader('due', tManagerUi('due_inr'), 'right')}
-              {renderSortableHeader('status', tManagerUi('status'))}
-              <th className="text-right py-3 px-4">{tManagerUi('actions')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRows.length === 0 ? (
-              <tr>
-                <td colSpan={13}>
-                  <ManagerFinanceSubscriptionsEmptyState className="fin-empty-state">
-                    <div className="fin-empty-state__icon">📋</div>
-                    <p className="fin-empty-state__title">
-                      {searchQuery ? 'No subscriptions matching your search query.' : tManagerUi('no_subscriptions_found')}
-                    </p>
-                  </ManagerFinanceSubscriptionsEmptyState>
-                </td>
-              </tr>
-            ) : (
-              paginated.map((s) => (
-                <tr key={s.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
-                  <td className="py-3 px-4 fin-cell-name">{s.studentName}</td>
-                  <td className="py-3 px-4 fin-mono">{s.smartId}</td>
-                  <td className="py-3 px-4 fin-text-body">{displayPlan(s.plan)}</td>
-                  <td className="py-3 px-4 fin-cell-subtext">{formatDate(s.startDate)}</td>
-                  <td className="py-3 px-4 fin-cell-subtext">{formatDate(s.endDate)}</td>
-                  <td className="py-3 px-4">
-                    <span className={daysLeftBadgeClass(s.daysLeft)}>
-                      {s.daysLeft < 0 ? tManagerUi('days_ago_count', { count: Math.abs(s.daysLeft) }) : tManagerUi('days_count', { count: s.daysLeft })}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-right fin-text-body">{formatCurrency(s.base)}</td>
-                  <td className="py-3 px-4 text-right fin-text-success">{formatCurrency(s.discount)}</td>
-                  <td className="py-3 px-4 text-right font-semibold fin-text-body">{formatCurrency(s.total)}</td>
-                  <td className="py-3 px-4 text-right fin-text-success">{formatCurrency(s.paid)}</td>
-                  <td className={`py-3 px-4 text-right font-semibold ${s.due > 0 ? 'fin-text-danger' : 'fin-text-body'}`}>
-                    {formatCurrency(s.due)}
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className={STATUS_BADGE[s.status] || 'fin-badge fin-badge--neutral'}>{tManagerUi(s.status)}</span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        className="fin-badge fin-badge--neutral cursor-not-allowed"
-                        disabled
-                        title={tManagerUi('renewal_unavailable_this_is_a_sample_subscription_withou_4070ba')}
-                      >
-                        <RefreshCw size={11} /> {tManagerUi('renewal_unavailable')}
-                      </button>
-                      <button
-                        type="button"
-                        className="fin-badge fin-badge--info cursor-pointer flex items-center gap-1 hover:opacity-90"
-                        onClick={() => setSelectedSub(s)}
-                        title="View Subscription Details"
-                      >
-                        <Eye size={11} /> {tManagerUi('view')}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+      <ManagerFinanceSubscriptionsTable
+        filteredRows={filteredRows}
+        paginated={paginated}
+        searchQuery={searchQuery}
+        totalRows={totalRows}
+        startItem={startItem}
+        endItem={endItem}
+        pageSize={pageSize}
+        effectivePage={effectivePage}
+        pageCount={pageCount}
+        onPageSizeChange={(sz) => {
+          setPageSize(sz);
+          setPage(0);
+        }}
+        onPrevPage={() => setPage((c) => Math.max(0, c - 1))}
+        onNextPage={() => setPage((c) => Math.min(pageCount - 1, c + 1))}
+        onSelectSubscription={(s) => setSelectedSub(s)}
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onToggleSort={toggleSort}
+        formatCurrency={formatCurrency}
+        formatDate={formatDate}
+        displayPlan={displayPlan}
+        labels={{
+          student: tManagerUi('student'),
+          smartId: tManagerUi('smart_id'),
+          plan: tManagerUi('plan'),
+          startDate: tManagerUi('start_date'),
+          endDate: tManagerUi('end_date'),
+          daysLeft: tManagerUi('days_left'),
+          baseInr: tManagerUi('base_inr'),
+          discountInr: tManagerUi('discount_inr'),
+          totalInr: tManagerUi('total_inr'),
+          paidInr: tManagerUi('paid_inr'),
+          dueInr: tManagerUi('due_inr'),
+          status: tManagerUi('status'),
+          actions: tManagerUi('actions'),
+          noSubscriptions: tManagerUi('no_subscriptions_found'),
+          renewalUnavailable: tManagerUi('renewal_unavailable'),
+          renewalUnavailableHint: tManagerUi('renewal_unavailable_this_is_a_sample_subscription_withou_4070ba'),
+          view: tManagerUi('view'),
+          daysAgoCount: (count) => tManagerUi('days_ago_count', { count }),
+          daysCount: (count) => tManagerUi('days_count', { count }),
+          translateStatus: (s) => tManagerUi(s),
+        }}
+      />
 
-        {totalRows > 0 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
-            <span>
-              Showing {startItem}–{endItem} of {totalRows} results
-            </span>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5">
-                <label htmlFor="rows-per-page-finance-subscriptions" className="text-xs text-secondary whitespace-nowrap">
-                  Rows per page:
-                </label>
-                <select
-                  id="rows-per-page-finance-subscriptions"
-                  value={pageSize}
-                  onChange={(e) => {
-                    setPageSize(Number(e.target.value));
-                    setPage(0);
-                  }}
-                  className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
-                >
-                  <option value={10}>10</option>
-                  <option value={25}>25</option>
-                  <option value={50}>50</option>
-                </select>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  className="mgr-btn-ghost mgr-btn-sm"
-                  disabled={effectivePage <= 0}
-                  onClick={() => setPage((current) => Math.max(0, current - 1))}
-                >
-                  Previous
-                </button>
-                <span className="text-xs text-secondary px-1">
-                  Page {effectivePage + 1} of {pageCount}
-                </span>
-                <button
-                  type="button"
-                  className="mgr-btn-ghost mgr-btn-sm"
-                  disabled={effectivePage >= pageCount - 1}
-                  onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {selectedSub && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" onClick={() => setSelectedSub(null)}>
-          <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4" onClick={e => e.stopPropagation()}>
-            <div className="flex justify-between items-center border-b border-border pb-3">
-              <div>
-                <h3 className="text-xl font-bold text-primary">{selectedSub.studentName}</h3>
-                <p className="text-xs font-mono text-secondary">{selectedSub.smartId} • {selectedSub.plan}</p>
-              </div>
-              <button type="button" onClick={() => setSelectedSub(null)} className="text-secondary hover:text-primary p-1">
-                <X size={20} />
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-xl bg-floating border border-border">
-                <span className="text-secondary block">Shift & Timing</span>
-                <span className="font-bold text-primary text-sm mt-0.5 block">{selectedSub.shift}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-floating border border-border">
-                <span className="text-secondary block">Subscription Status</span>
-                <span className={`inline-block mt-1 ${STATUS_BADGE[selectedSub.status] || 'fin-badge'}`}>{selectedSub.status.toUpperCase()}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-floating border border-border">
-                <span className="text-secondary block">Start Date</span>
-                <span className="font-semibold text-primary">{formatDate(selectedSub.startDate)}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-floating border border-border">
-                <span className="text-secondary block">End Date</span>
-                <span className="font-semibold text-primary">{formatDate(selectedSub.endDate)} ({selectedSub.daysLeft} days left)</span>
-              </div>
-              <div className="p-3 rounded-xl bg-floating border border-border">
-                <span className="text-secondary block">Base / Plan Fee</span>
-                <span className="font-semibold text-primary">{formatCurrency(selectedSub.base)}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-floating border border-border">
-                <span className="text-secondary block">Discount Applied</span>
-                <span className="font-semibold text-warning">− {formatCurrency(selectedSub.discount)}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-floating border border-border">
-                <span className="text-secondary block">Total Paid</span>
-                <span className="font-bold text-success text-sm">{formatCurrency(selectedSub.paid)}</span>
-              </div>
-              <div className="p-3 rounded-xl bg-floating border border-border">
-                <span className="text-secondary block">Balance Due</span>
-                <span className={`font-bold text-sm ${selectedSub.due > 0 ? 'text-danger' : 'text-primary'}`}>{formatCurrency(selectedSub.due)}</span>
-              </div>
-            </div>
-            <div className="flex justify-end gap-2 pt-3 border-t border-border">
-              <button type="button" onClick={() => setSelectedSub(null)} className="mgr-btn-ghost mgr-btn-sm">
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ManagerFinanceSubscriptionsDetailModal
+        subscription={selectedSub}
+        onClose={() => setSelectedSub(null)}
+        formatDate={formatDate}
+        formatCurrency={formatCurrency}
+      />
     </div>
   );
 }

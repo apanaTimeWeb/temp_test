@@ -15,9 +15,11 @@ export function ManagerDashboardOverviewRecentActivity({
   enquiries,
   studentsHref,
   enquiriesHref,
+  timeRangeLabel,
 }: ManagerDashboardOverviewRecentActivityProps) {
   const tManagerUi = useTranslations('manager.manager_dashboard.ui');
   const enquiryKeys = createManagerDashboardRecentEnquiryKeys(enquiries);
+  const activeScopeBadge = timeRangeLabel || 'Today';
 
   const localizeShift = (value: string) => {
     const keys: Record<string, string> = {
@@ -85,10 +87,15 @@ export function ManagerDashboardOverviewRecentActivity({
                 <UserCheck size={20} />
               </div>
               <div>
-                <h2 className="text-base sm:text-lg font-bold text-foreground">
-                  {tManagerUi('recent_new_admissions')}
-                </h2>
-                <p className="text-xs text-muted-foreground">Latest member registrations</p>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base sm:text-lg font-bold text-foreground">
+                    {tManagerUi('recent_new_admissions')}
+                  </h2>
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                    [{activeScopeBadge}]
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">Latest member registrations • Scope: {activeScopeBadge}</p>
               </div>
             </div>
 
@@ -157,10 +164,15 @@ export function ManagerDashboardOverviewRecentActivity({
                 <PhoneCall size={20} />
               </div>
               <div>
-                <h2 className="text-base sm:text-lg font-bold text-foreground">
-                  {tManagerUi('recent_enquiries')}
-                </h2>
-                <p className="text-xs text-muted-foreground">Prospects inquiring for seats</p>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base sm:text-lg font-bold text-foreground">
+                    {tManagerUi('recent_enquiries')}
+                  </h2>
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                    [{activeScopeBadge}]
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground">Prospects inquiring for seats • Scope: {activeScopeBadge}</p>
               </div>
             </div>
 

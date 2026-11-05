@@ -11,6 +11,8 @@ export interface ManagerDashboardOverviewErrorFallbackProps {
 // RESPONSIBILITY: Renders the read-only grid of KPI cards. Receives data via props. No API calls.
 export interface ManagerDashboardOverviewKpiGridProps {
   kpiData: ManagerDashboardOverviewKpiData[];
+  timeRange?: 'today' | 'this_week' | 'this_month' | 'custom';
+  timeRangeLabel?: string;
 }
 
 export type ManagerDashboardOverviewQuickLinkTitleKey =
@@ -30,6 +32,7 @@ export interface ManagerDashboardOverviewRecentActivityProps {
   enquiries: ManagerDashboardOverviewRecentEnquiry[];
   studentsHref: string;
   enquiriesHref: string;
+  timeRangeLabel?: string;
 }
 
 export interface ManagerDashboardOverviewErrorBoundaryProps {
