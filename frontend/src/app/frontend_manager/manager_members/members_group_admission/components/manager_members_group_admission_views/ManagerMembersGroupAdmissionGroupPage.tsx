@@ -4,7 +4,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Users2, Plus, Download, Upload, Trash2, CheckCircle2, X, FileSpreadsheet, AlertCircle, Search } from 'lucide-react';
+import { Users2, Plus, Download, Upload, Trash2, CheckCircle2, X, FileSpreadsheet, AlertCircle, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import Link from 'next/link';
 import { ManagerMembersGroupAdmissionManualModal } from '@/app/frontend_manager/manager_members/members_group_admission/components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal';
 import { MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_group_admission/config/manager_members_group_admission.url_config';
@@ -32,6 +32,22 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  type GroupSortField = 'batchId' | 'batchName' | 'date' | 'count' | 'shift' | 'status';
+  const [sortField, setSortField] = useState<GroupSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: GroupSortField) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else {
+        setSortField(null);
+        setSortDirection('asc');
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
 
   const filteredGroups = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -40,12 +56,53 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
     );
   }, [recentGroups, searchQuery]);
 
-  const totalRows = filteredGroups.length;
+  const sortedGroups = useMemo(() => {
+    if (!sortField) return filteredGroups;
+    return [...filteredGroups].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredGroups, sortField, sortDirection]);
+
+  const totalRows = sortedGroups.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginatedGroups = filteredGroups.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginatedGroups = sortedGroups.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: GroupSortField, label: string, align: 'left' | 'center' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className={`py-3 px-4 ${align === 'center' ? 'text-center' : 'text-left'}`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'center' ? 'mx-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   // Bulk Upload state
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -214,12 +271,12 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-surface-highlight text-xs text-secondary uppercase font-semibold text-left">
-                <th className="py-3 px-4">Batch ID</th>
-                <th className="py-3 px-4">Batch / Group Name</th>
-                <th className="py-3 px-4">Date</th>
-                <th className="py-3 px-4 text-center">Students Count</th>
-                <th className="py-3 px-4">Shift</th>
-                <th className="py-3 px-4">Status</th>
+                {renderSortableHeader('batchId', 'Batch ID')}
+                {renderSortableHeader('batchName', 'Batch / Group Name')}
+                {renderSortableHeader('date', 'Date')}
+                {renderSortableHeader('count', 'Students Count', 'center')}
+                {renderSortableHeader('shift', 'Shift')}
+                {renderSortableHeader('status', 'Status')}
               </tr>
             </thead>
             <tbody>

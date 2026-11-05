@@ -2,9 +2,9 @@
 import { useLocale, useTranslations } from 'next-intl';
 
 import { useRouter } from 'next/navigation';
-import { useState, type KeyboardEvent, type MouseEvent } from 'react';
+import { useState, useMemo, type KeyboardEvent, type MouseEvent } from 'react';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
-import { Eye, CheckCircle, XCircle, PhoneCall, Plus } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, PhoneCall, Plus, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { formatManagerEnquiriesDisplayDate, maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import { MANAGER_CRM_STATUS_BADGE } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 import type { ManagerMembersEnquiriesTableProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
@@ -34,12 +34,65 @@ export function ManagerMembersEnquiriesTable({ filtered }: ManagerMembersEnquiri
     );
   }
 
-  const totalRows = filtered.length;
+  type EnqSortField = 'name' | 'phone' | 'shift' | 'status' | 'handledBy' | 'addedDate';
+  const [sortField, setSortField] = useState<EnqSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: EnqSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedEnquiries = useMemo(() => {
+    if (!sortField) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = String(a[sortField] ?? '');
+      const bVal = String(b[sortField] ?? '');
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filtered, sortField, sortDirection]);
+
+  const totalRows = sortedEnquiries.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedEnquiries.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: EnqSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className="p-3"
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const openDetails = (id: string) => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.DETAIL(id));
 
@@ -85,12 +138,12 @@ export function ManagerMembersEnquiriesTable({ filtered }: ManagerMembersEnquiri
           <thead>
             <tr className="border-b border-border bg-surface-highlight text-secondary text-xs uppercase font-semibold">
               <th className="p-3">#</th>
-              <th className="p-3">{tManagerUi('name')}</th>
-              <th className="p-3">{tManagerUi('phone')}</th>
-              <th className="p-3">{tManagerUi('shift')}</th>
-              <th className="p-3">{tManagerUi('status')}</th>
-              <th className="p-3">{tManagerUi('handled_by')}</th>
-              <th className="p-3">{tManagerUi('date_added')}</th>
+              {renderSortableHeader('name', tManagerUi('name'))}
+              {renderSortableHeader('phone', tManagerUi('phone'))}
+              {renderSortableHeader('shift', tManagerUi('shift'))}
+              {renderSortableHeader('status', tManagerUi('status'))}
+              {renderSortableHeader('handledBy', tManagerUi('handled_by'))}
+              {renderSortableHeader('addedDate', tManagerUi('date_added'))}
               <th className="p-3">{tManagerUi('actions')}</th>
             </tr>
           </thead>

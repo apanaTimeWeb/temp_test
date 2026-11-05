@@ -10,7 +10,7 @@ import { useManagerSubscriptionsFormatting } from '@/app/frontend_manager/manage
 
 import { useState, useEffect, useMemo } from 'react';
 
-import { Download, Upload, Printer, MessageSquare, Send, Mail, RefreshCw, Eye, CheckCircle, X, Search } from 'lucide-react';
+import { Download, Upload, Printer, MessageSquare, Send, Mail, RefreshCw, Eye, CheckCircle, X, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { sanitizeManagerSubscriptionsCsvCell } from '@/app/frontend_manager/manager_finance/finance_subscriptions/utils/ManagerFinanceSubscriptionsCsv';
 import { ManagerFinanceSubscriptionsEmptyState } from '@/app/frontend_manager/manager_finance/finance_subscriptions/components/manager_finance_subscriptions_empty_states/ManagerFinanceSubscriptionsEmptyState';
 import type { ManagerFinanceSubscriptionsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsComponentTypes';
@@ -129,12 +129,67 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
     });
   }, [rows, searchQuery]);
 
-  const totalRows = filteredRows.length;
+  type SubSortField = 'studentName' | 'smartId' | 'plan' | 'startDate' | 'endDate' | 'daysLeft' | 'total' | 'due' | 'status';
+  const [sortField, setSortField] = useState<SubSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: SubSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return filteredRows;
+    return [...filteredRows].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredRows, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = filteredRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: SubSortField, label: string, align: 'left' | 'right' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   return (
     <div className="space-y-6"
@@ -221,18 +276,18 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         <table className="w-full">
           <thead>
             <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              <th className="text-left py-3 px-4">{tManagerUi('student')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('smart_id')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('plan')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('start_date')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('end_date')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('days_left')}</th>
+              {renderSortableHeader('studentName', tManagerUi('student'))}
+              {renderSortableHeader('smartId', tManagerUi('smart_id'))}
+              {renderSortableHeader('plan', tManagerUi('plan'))}
+              {renderSortableHeader('startDate', tManagerUi('start_date'))}
+              {renderSortableHeader('endDate', tManagerUi('end_date'))}
+              {renderSortableHeader('daysLeft', tManagerUi('days_left'))}
               <th className="text-right py-3 px-4">{tManagerUi('base_inr')}</th>
               <th className="text-right py-3 px-4">{tManagerUi('discount_inr')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('total_inr')}</th>
+              {renderSortableHeader('total', tManagerUi('total_inr'), 'right')}
               <th className="text-right py-3 px-4">{tManagerUi('paid_inr')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('due_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('status')}</th>
+              {renderSortableHeader('due', tManagerUi('due_inr'), 'right')}
+              {renderSortableHeader('status', tManagerUi('status'))}
               <th className="text-right py-3 px-4">{tManagerUi('actions')}</th>
             </tr>
           </thead>

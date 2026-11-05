@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useManagerComplaintsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/ManagerCommunicationComplaintsDialogFocus';
-import { ChevronRight, X, Eye, RefreshCw, CheckCircle, MessageSquarePlus, ShieldCheck, Search } from 'lucide-react';
+import { ChevronRight, X, Eye, RefreshCw, CheckCircle, MessageSquarePlus, ShieldCheck, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useManagerCommunicationComplaints } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/useManagerCommunicationComplaintsComplaints';
 import type { ManagerCommunicationComplaintsComplaint, ManagerCommunicationComplaintsComplaintStatus } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 import { MANAGER_COMMUNICATION_COMPLAINT_TABS } from '@/app/frontend_manager/manager_communication/communication_complaints/constants/ManagerCommunicationComplaintsComplaintConstants';
@@ -57,12 +57,65 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
   const toggleDesc = (complaintId: string) => setExpandedDesc(current => current.includes(complaintId) ? current.filter(item => item !== complaintId) : [...current, complaintId]);
   const statusBadge = (status: ManagerCommunicationComplaintsComplaintStatus) => status === 'Open' ? <span className="mc-badge mc-badge--danger">{tManagerUi('open')}</span> : status === 'In-Progress' ? <span className="mc-badge mc-badge--warning">{tManagerUi('in_progress')}</span> : <span className="mc-badge mc-badge--success">{tManagerUi('resolved')}</span>;
 
-  const totalRows = filtered.length;
+  type ComplaintSortField = 'title' | 'student' | 'description' | 'status' | 'date' | 'resolvedBy';
+  const [sortField, setSortField] = useState<ComplaintSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: ComplaintSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedComplaints = useMemo(() => {
+    if (!sortField) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = String(a[sortField] ?? '');
+      const bVal = String(b[sortField] ?? '');
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filtered, sortField, sortDirection]);
+
+  const totalRows = sortedComplaints.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedComplaints.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: ComplaintSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className="px-3 py-3"
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   return (
     <div className="mc-page" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
@@ -149,12 +202,12 @@ export default function ManagerCommunicationComplaintsPage({ view, id, name, pho
               <thead>
                 <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
                   <th scope="col" className="px-3 py-3">#</th>
-                  <th scope="col" className="px-3 py-3">{tManagerUi('title')}</th>
-                  <th scope="col" className="px-3 py-3">{tManagerUi('student')}</th>
-                  <th scope="col" className="px-3 py-3">{tManagerUi('description')}</th>
-                  <th scope="col" className="px-3 py-3">{tManagerUi('status')}</th>
-                  <th scope="col" className="px-3 py-3">{tManagerUi('date')}</th>
-                  <th scope="col" className="px-3 py-3">{tManagerUi('resolved_by')}</th>
+                  {renderSortableHeader('title', tManagerUi('title'))}
+                  {renderSortableHeader('student', tManagerUi('student'))}
+                  {renderSortableHeader('description', tManagerUi('description'))}
+                  {renderSortableHeader('status', tManagerUi('status'))}
+                  {renderSortableHeader('date', tManagerUi('date'))}
+                  {renderSortableHeader('resolvedBy', tManagerUi('resolved_by'))}
                   <th scope="col" className="px-3 py-3">{tManagerUi('resolved_date')}</th>
                   <th scope="col" className="px-3 py-3">{tManagerUi('actions')}</th>
                 </tr>

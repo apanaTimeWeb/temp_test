@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Orchestrate client-side view and local interactions for referral bonus management.
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { CheckCircle2, Clock, DollarSign, Gift, Plus, Search, Users, X } from 'lucide-react';
+import { CheckCircle2, Clock, DollarSign, Gift, Plus, Search, Users, X, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 
 const INITIAL_REFERRALS: ReferralRow[] = [
@@ -21,6 +21,23 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const [statusFilter, setStatusFilter] = useState<'All' | 'Credited' | 'Pending'>('All');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  type ReferralSortField = 'id' | 'referrer' | 'referred' | 'date' | 'bonus' | 'method' | 'status';
+  const [sortField, setSortField] = useState<ReferralSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: ReferralSortField) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else {
+        setSortField(null);
+        setSortDirection('asc');
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
@@ -38,12 +55,51 @@ export function ManagerMembersReferralBonusReferralsClient() {
     });
   }, [records, searchQuery, statusFilter]);
 
-  const totalRows = filteredRows.length;
+  const sortedRows = useMemo(() => {
+    if (!sortField) return filteredRows;
+    return [...filteredRows].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredRows, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginatedRows = filteredRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginatedRows = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: ReferralSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className="py-3 px-4"
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const totalBonusAmount = useMemo(() => {
     return records.filter((r) => r.status === 'Credited').reduce((sum, r) => sum + (parseInt(r.bonus.replace(/[^0-9]/g, ''), 10) || 0), 0);
@@ -163,14 +219,14 @@ export function ManagerMembersReferralBonusReferralsClient() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold text-left">
-                <th className="py-3 px-4">{tManagerUi('ref_id')}</th>
-                <th className="py-3 px-4">{tManagerUi('referrer_existing')}</th>
-                <th className="py-3 px-4">{tManagerUi('referred_student')}</th>
-                <th className="py-3 px-4">{tManagerUi('date')}</th>
-                <th className="py-3 px-4">{tManagerUi('bonus')}</th>
-                <th className="py-3 px-4">{tManagerUi('payout_method')}</th>
-                <th className="py-3 px-4">{tManagerUi('status')}</th>
-                <th className="py-3 px-4 text-right">Action</th>
+                {renderSortableHeader('id', tManagerUi('ref_id'))}
+                {renderSortableHeader('referrer', tManagerUi('referrer_existing'))}
+                {renderSortableHeader('referred', tManagerUi('referred_student'))}
+                {renderSortableHeader('date', tManagerUi('date'))}
+                {renderSortableHeader('bonus', tManagerUi('bonus'))}
+                {renderSortableHeader('method', tManagerUi('payout_method'))}
+                {renderSortableHeader('status', tManagerUi('status'))}
+                <th scope="col" className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
             <tbody>

@@ -9,7 +9,7 @@ import { useManagerSeatGapReportCurrencyFormatter } from '@/app/frontend_manager
 // DATA FLOW: Next.js Router -> Page -> Components
 
 import { useState, useMemo } from 'react';
-import { Search } from 'lucide-react';
+import { Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { ManagerAccountsSeatGapReportEmptyState } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/components/manager_accounts_seat_gap_report_empty_states/ManagerAccountsSeatGapReportEmptyState';
 
 function formatKnownIsoCalendarDate(value: string, locale: string): string {
@@ -49,12 +49,67 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
     });
   }, [shiftFilter, statusFilter, searchQuery]);
 
-  const totalRows = visible.length;
+  type GapSortField = 'seatNo' | 'shift' | 'floor' | 'lastOccupied' | 'gapDays' | 'revenueLoss' | 'status';
+  const [sortField, setSortField] = useState<GapSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: GapSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return visible;
+    return [...visible].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [visible, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = visible.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: GapSortField, label: string, align: 'left' | 'right' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const totalLoss = visible.reduce((s, r) => s + r.revenueLoss, 0);
 
@@ -105,13 +160,13 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
         <table className="w-full">
           <thead>
             <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              <th className="text-left py-3 px-4">{tManagerUi('seat_no')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('shift')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('floor')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('last_occupied')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('gap_days')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('revenue_loss_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('status')}</th>
+              {renderSortableHeader('seatNo', tManagerUi('seat_no'))}
+              {renderSortableHeader('shift', tManagerUi('shift'))}
+              {renderSortableHeader('floor', tManagerUi('floor'))}
+              {renderSortableHeader('lastOccupied', tManagerUi('last_occupied'))}
+              {renderSortableHeader('gapDays', tManagerUi('gap_days'), 'right')}
+              {renderSortableHeader('revenueLoss', tManagerUi('revenue_loss_inr'), 'right')}
+              {renderSortableHeader('status', tManagerUi('status'))}
             </tr>
           </thead>
           <tbody>

@@ -1,10 +1,10 @@
 'use client';
 import { useLocale, useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 
-import { Eye, Search } from 'lucide-react';
+import { Eye, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
 import { ManagerMembersDirectoryEmptyState } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_states/ManagerMembersDirectoryEmptyState';
 import { ManagerMembersDirectorySupportingSections } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectorySupportingSections';
@@ -24,12 +24,65 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
-  const totalRows = filteredMembers.length;
+  type MemberSortField = 'id' | 'name' | 'phone' | 'type' | 'status' | 'expiryDate';
+  const [sortField, setSortField] = useState<MemberSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: MemberSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedMembers = useMemo(() => {
+    if (!sortField) return filteredMembers;
+    return [...filteredMembers].sort((a, b) => {
+      const aVal = String(a[sortField] ?? '');
+      const bVal = String(b[sortField] ?? '');
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredMembers, sortField, sortDirection]);
+
+  const totalRows = sortedMembers.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginatedMembers = filteredMembers.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginatedMembers = sortedMembers.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: MemberSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className="px-3 py-3"
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   return (
     <div className="mgr-page-animate relative pb-12"
@@ -97,12 +150,12 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
                     <table className="mgr-table w-full">
                       <thead>
                         <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-                          <th scope="col" className="px-3 py-3">{tManagerUi('member_id_7a88b2')}</th>
-                          <th scope="col" className="px-3 py-3">{tManagerUi('name')}</th>
-                          <th scope="col" className="px-3 py-3">{tManagerUi('phone')}</th>
-                          <th scope="col" className="px-3 py-3">{tManagerUi('plan')}</th>
-                          <th scope="col" className="px-3 py-3">{tManagerUi('status')}</th>
-                          <th scope="col" className="px-3 py-3">{tManagerUi('expiry_date')}</th>
+                          {renderSortableHeader('id', tManagerUi('member_id_7a88b2'))}
+                          {renderSortableHeader('name', tManagerUi('name'))}
+                          {renderSortableHeader('phone', tManagerUi('phone'))}
+                          {renderSortableHeader('type', tManagerUi('plan'))}
+                          {renderSortableHeader('status', tManagerUi('status'))}
+                          {renderSortableHeader('expiryDate', tManagerUi('expiry_date'))}
                           <th scope="col" className="px-3 py-3 text-right">Actions</th>
                         </tr>
                       </thead>

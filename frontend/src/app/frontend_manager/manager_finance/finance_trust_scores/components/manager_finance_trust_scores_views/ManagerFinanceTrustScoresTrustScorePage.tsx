@@ -7,7 +7,7 @@ import { useManagerTrustScoresUrlFilters } from '@/app/frontend_manager/manager_
 // RESPONSIBILITY: Entry page for the manager_trust_scores module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { ShieldCheck, ShieldAlert, ShieldX, Users, Search } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, ShieldX, Users, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { ManagerFinanceTrustScoresEmptyState } from '@/app/frontend_manager/manager_finance/finance_trust_scores/components/manager_finance_trust_scores_empty_states/ManagerFinanceTrustScoresEmptyState';
 import type { ManagerFinanceTrustScoresRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_trust_scores/types/ManagerFinanceTrustScoresComponentTypes';
 
@@ -50,6 +50,22 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
+  type TrustSortField = 'rank' | 'studentName' | 'shift' | 'trustScore' | 'totalPromises' | 'timesChanged' | 'fulfilledCount' | 'badge';
+  const [sortField, setSortField] = useState<TrustSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: TrustSortField) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else {
+        setSortField(null);
+        setSortDirection('asc');
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -61,12 +77,53 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
     });
   }, [levelFilter, shiftFilter, searchQuery]);
 
-  const totalRows = filtered.length;
+  const sortedRows = useMemo(() => {
+    if (!sortField) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filtered, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: TrustSortField, label: string, align: 'left' | 'center' | 'right' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className={`py-3 px-4 ${align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'}`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const lowTrust = MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.filter((s) => s.trustScore < 40).length;
   const avg = MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.length > 0
@@ -153,14 +210,14 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
         <table className="w-full">
           <thead>
             <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              <th className="text-left py-3 px-4">{tManagerUi('rank')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('student')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('shift')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('trust_score')}</th>
-              <th className="text-center py-3 px-4">{tManagerUi('total_promises')}</th>
-              <th className="text-center py-3 px-4">{tManagerUi('times_changed')}</th>
-              <th className="text-center py-3 px-4">{tManagerUi('fulfilled')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('badge')}</th>
+              {renderSortableHeader('rank', tManagerUi('rank'), 'left')}
+              {renderSortableHeader('studentName', tManagerUi('student'), 'left')}
+              {renderSortableHeader('shift', tManagerUi('shift'), 'left')}
+              {renderSortableHeader('trustScore', tManagerUi('trust_score'), 'left')}
+              {renderSortableHeader('totalPromises', tManagerUi('total_promises'), 'center')}
+              {renderSortableHeader('timesChanged', tManagerUi('times_changed'), 'center')}
+              {renderSortableHeader('fulfilledCount', tManagerUi('fulfilled'), 'center')}
+              {renderSortableHeader('badge', tManagerUi('badge'), 'left')}
             </tr>
           </thead>
           <tbody>

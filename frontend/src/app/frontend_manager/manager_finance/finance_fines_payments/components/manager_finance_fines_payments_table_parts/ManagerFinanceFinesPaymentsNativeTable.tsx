@@ -5,7 +5,7 @@ import { displayValue } from '@/app/frontend_manager/manager_finance/finance_fin
 
 import { useMemo, useState } from 'react';
 
-import { Inbox } from 'lucide-react';
+import { Inbox, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { ManagerFinanceFinesPaymentsNativeTableProps, NativeCellParams, NativeColumn, ManagerFinanceFinesPaymentsSortDirection } from '@/app/frontend_manager/manager_finance/finance_fines_payments/types/ManagerFinanceFinesPaymentsComponentTypes';
 export type { NativeCellParams, NativeColumn };
 
@@ -43,9 +43,25 @@ export default function ManagerFinanceFinesPaymentsNativeTable<T extends object>
       <table className="w-full border-collapse text-left" aria-rowcount={rows.length + 1}>
         <thead><tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
           {columns.map((column, index) => <th key={column.field ?? column.headerName ?? JSON.stringify(column)} scope="col" aria-sort={sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-3 py-3 font-semibold whitespace-nowrap">
-            {column.field && column.sortable !== false ? <button type="button" className="inline-flex items-center gap-1 text-left" onClick={() => changeSort(String(column.field))} aria-label={`Sort by ${column.headerName ?? column.field}`}>
-              {column.headerName ?? column.field} {sortField === column.field ? (sortDirection === 'asc' ? '↑' : '↓') : null}
-            </button> : (column.headerName ?? column.field ?? '—')}
+            {column.field && column.sortable !== false ? (
+              <button
+                type="button"
+                className="group inline-flex items-center gap-1.5 text-left"
+                onClick={() => changeSort(String(column.field))}
+                aria-label={`Sort by ${column.headerName ?? column.field}, currently ${sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'unsorted'}`}
+              >
+                <span>{column.headerName ?? column.field}</span>
+                {sortField === column.field ? (
+                  sortDirection === 'asc' ? (
+                    <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                  ) : (
+                    <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                  )
+                ) : (
+                  <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+                )}
+              </button>
+            ) : (column.headerName ?? column.field ?? '—')}
           </th>)}
         </tr></thead>
         <tbody>{rows.length === 0 ? <tr><td colSpan={Math.max(columns.length, 1)} className="p-6 text-center text-secondary"><div className="flex flex-col items-center justify-center gap-2" role="status"><Inbox size={20} aria-hidden="true" /><span>{emptyMessage ?? '—'}</span></div></td></tr> : visibleRows.map((row, rowIndex) => <tr key={getRowKey(row)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">

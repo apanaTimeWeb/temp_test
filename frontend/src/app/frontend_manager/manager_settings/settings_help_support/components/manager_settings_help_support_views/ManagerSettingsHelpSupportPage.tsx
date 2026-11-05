@@ -9,7 +9,7 @@ import { ManagerSettingsHelpSupportTicketForm } from '@/app/frontend_manager/man
 import { MANAGER_HELP_SUPPORT_TABS } from '@/app/frontend_manager/manager_settings/settings_help_support/constants/ManagerSettingsHelpSupportConstants';
 import { ManagerSettingsHelpSupportTabs } from '@/app/frontend_manager/manager_settings/settings_help_support/components/manager_settings_help_support_sections/ManagerSettingsHelpSupportTabs';
 import { formatManagerHelpSupportCalendarDate } from '@/app/frontend_manager/manager_settings/settings_help_support/utils/ManagerSettingsHelpSupportDateFormatting';
-import { Megaphone, Plus, CheckCircle, Clock, Search } from 'lucide-react';
+import { Megaphone, Plus, CheckCircle, Clock, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 
 export default function ManagerSettingsHelpSupportPage() {
   const tManagerUi = useTranslations('manager.manager_help_support.ui');
@@ -19,6 +19,22 @@ export default function ManagerSettingsHelpSupportPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  type TicketSortField = 'id' | 'subject' | 'category' | 'priority' | 'status' | 'date';
+  const [sortField, setSortField] = useState<TicketSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: TicketSortField) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else {
+        setSortField(null);
+        setSortDirection('asc');
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
 
   const filteredTickets = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -32,12 +48,51 @@ export default function ManagerSettingsHelpSupportPage() {
     );
   }, [myTickets, searchQuery]);
 
-  const totalRows = filteredTickets.length;
+  const sortedTickets = useMemo(() => {
+    if (!sortField) return filteredTickets;
+    return [...filteredTickets].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredTickets, sortField, sortDirection]);
+
+  const totalRows = sortedTickets.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginatedTickets = filteredTickets.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginatedTickets = sortedTickets.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: TicketSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className="p-4 font-semibold"
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   return (
     <div className="mgr-page-animate relative">
@@ -102,12 +157,12 @@ export default function ManagerSettingsHelpSupportPage() {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-surface-highlight border-b border-border text-secondary text-xs uppercase font-semibold">
-                      <th className="p-4 font-semibold">{tManagerUi('ticket_id')}</th>
-                      <th className="p-4 font-semibold">{tManagerUi('subject')}</th>
-                      <th className="p-4 font-semibold">{tManagerUi('category')}</th>
-                      <th className="p-4 font-semibold">{tManagerUi('priority')}</th>
-                      <th className="p-4 font-semibold">{tManagerUi('status')}</th>
-                      <th className="p-4 font-semibold">{tManagerUi('date')}</th>
+                      {renderSortableHeader('id', tManagerUi('ticket_id'))}
+                      {renderSortableHeader('subject', tManagerUi('subject'))}
+                      {renderSortableHeader('category', tManagerUi('category'))}
+                      {renderSortableHeader('priority', tManagerUi('priority'))}
+                      {renderSortableHeader('status', tManagerUi('status'))}
+                      {renderSortableHeader('date', tManagerUi('date'))}
                     </tr>
                   </thead>
                   <tbody>

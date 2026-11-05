@@ -9,7 +9,7 @@ import { useManagerAssetsMaintenanceCurrencyFormatter } from '@/app/frontend_man
 // DATA FLOW: Next.js Router -> Page -> Components
 
 import { useState, useMemo } from 'react';
-import { Search } from 'lucide-react';
+import { Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import ManagerAssetsMaintenanceEmptyState from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceEmptyState';
 
 const MOCK = getManagerAssetsMaintenanceSampleLogs();
@@ -28,6 +28,22 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  type MaintenanceSortField = 'assetName' | 'issue' | 'reportedDate' | 'scheduledDate' | 'vendor' | 'cost' | 'status';
+  const [sortField, setSortField] = useState<MaintenanceSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: MaintenanceSortField) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else {
+        setSortField(null);
+        setSortDirection('asc');
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
 
   const visible = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -41,14 +57,56 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
       return matchStatus && matchQ;
     });
   }, [logs, statusFilter, searchQuery]);
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return visible;
+    return [...visible].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [visible, sortField, sortDirection]);
+
   const totalCost = logs.filter(l => l.status === 'completed').reduce((s, l) => s + l.cost, 0);
 
-  const totalRows = visible.length;
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = visible.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: MaintenanceSortField, label: string, align: 'left' | 'right' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id}>
@@ -110,14 +168,14 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         <table className="w-full">
           <thead>
             <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              <th className="text-left py-3 px-4">{tManagerUi('asset')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('issue')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('reported')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('scheduled')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('vendor')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('cost_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('status')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('action')}</th>
+              {renderSortableHeader('assetName', tManagerUi('asset'), 'left')}
+              {renderSortableHeader('issue', tManagerUi('issue'), 'left')}
+              {renderSortableHeader('reportedDate', tManagerUi('reported'), 'left')}
+              {renderSortableHeader('scheduledDate', tManagerUi('scheduled'), 'left')}
+              {renderSortableHeader('vendor', tManagerUi('vendor'), 'left')}
+              {renderSortableHeader('cost', tManagerUi('cost_inr'), 'right')}
+              {renderSortableHeader('status', tManagerUi('status'), 'left')}
+              <th scope="col" className="text-right py-3 px-4">{tManagerUi('action')}</th>
             </tr>
           </thead>
           <tbody>

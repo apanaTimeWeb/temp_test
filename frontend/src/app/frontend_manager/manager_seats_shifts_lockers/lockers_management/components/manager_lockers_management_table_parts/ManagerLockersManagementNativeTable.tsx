@@ -1,7 +1,8 @@
 'use client';
 // RESPONSIBILITY: Define or render the table structure for the components feature. It does not own backend persistence or cross-feature business logic.
 import { displayValue } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementDisplayValue';
-import { createElement, useState, type ReactNode } from 'react';
+import { createElement, useState, useMemo, type ReactNode } from 'react';
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { ManagerLockersManagementNativeCellParams, ManagerLockersManagementNativeColumn, ManagerLockersManagementNativeTableProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementComponentTypes';
 export type { ManagerLockersManagementNativeCellParams, ManagerLockersManagementNativeColumn, ManagerLockersManagementNativeTableProps };
 
@@ -9,11 +10,32 @@ export type { ManagerLockersManagementNativeCellParams, ManagerLockersManagement
 export function ManagerLockersManagementNativeTable<T extends object>({ rows, columns, getRowKey, label }: ManagerLockersManagementNativeTableProps<T>) {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-  const totalRows = rows.length;
+  const changeSort = (field: string) => {
+    setPage(0);
+    if (sortField === field) setSortDirection((dir) => (dir === 'asc' ? 'desc' : 'asc'));
+    else { setSortField(field); setSortDirection('asc'); }
+  };
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return rows;
+    const getValue = (row: T): unknown => (row as unknown as Record<string, unknown>)[sortField];
+    return [...rows].sort((a, b) => {
+      const left = getValue(a);
+      const right = getValue(b);
+      const comparison = typeof left === 'number' && typeof right === 'number'
+        ? left - right
+        : String(left ?? '').localeCompare(String(right ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }, [rows, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const visibleRows = rows.slice(effectivePage * pageSize, effectivePage * pageSize + pageSize);
+  const visibleRows = sortedRows.slice(effectivePage * pageSize, effectivePage * pageSize + pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
@@ -22,11 +44,40 @@ export function ManagerLockersManagementNativeTable<T extends object>({ rows, co
       <table className="ss-table w-full" aria-label={label}>
         <thead>
           <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-            {columns.map((column, index) => (
-              <th scope="col" key={`${column.headerName}-${index}`} className="px-3 py-3 font-semibold whitespace-nowrap">
-                {column.headerName}
-              </th>
-            ))}
+            {columns.map((column, index) => {
+              const field = column.field == null ? undefined : String(column.field);
+              const isActive = sortField === field;
+              return (
+                <th
+                  scope="col"
+                  key={`${column.headerName}-${index}`}
+                  aria-sort={field && isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+                  className="px-3 py-3 font-semibold whitespace-nowrap"
+                >
+                  {field ? (
+                    <button
+                      type="button"
+                      onClick={() => changeSort(field)}
+                      className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+                      aria-label={`Sort by ${column.headerName ?? field}, currently ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'unsorted'}`}
+                    >
+                      <span>{column.headerName}</span>
+                      {isActive ? (
+                        sortDirection === 'asc' ? (
+                          <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                        ) : (
+                          <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                        )
+                      ) : (
+                        <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+                      )}
+                    </button>
+                  ) : (
+                    column.headerName
+                  )}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>

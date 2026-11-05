@@ -3,7 +3,7 @@ import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/mana
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useState, useMemo } from 'react';
-import { Plus, X, CheckCircle, IndianRupee, ShieldCheck, Search } from 'lucide-react';
+import { Plus, X, CheckCircle, IndianRupee, ShieldCheck, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS, type ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import { ManagerAssetsRegisterEmptyState } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_empty_states/ManagerAssetsRegisterEmptyState';
@@ -68,12 +68,67 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
     });
   }, [assets, catFilter, searchQuery]);
 
-  const totalRows = visible.length;
+  type AssetSortField = 'name' | 'category' | 'purchaseDate' | 'purchaseValue' | 'location' | 'status';
+  const [sortField, setSortField] = useState<AssetSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: AssetSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return visible;
+    return [...visible].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [visible, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = visible.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: AssetSortField, label: string, align: 'left' | 'right' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const handleAddAsset = (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,12 +214,12 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
         <table className="w-full">
           <thead>
             <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              <th className="text-left py-3 px-4">{tManagerUi('asset_name')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('category')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('purchase_date')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('purchase_value_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('location')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('status')}</th>
+              {renderSortableHeader('name', tManagerUi('asset_name'))}
+              {renderSortableHeader('category', tManagerUi('category'))}
+              {renderSortableHeader('purchaseDate', tManagerUi('purchase_date'))}
+              {renderSortableHeader('purchaseValue', tManagerUi('purchase_value_inr'), 'right')}
+              {renderSortableHeader('location', tManagerUi('location'))}
+              {renderSortableHeader('status', tManagerUi('status'))}
             </tr>
           </thead>
           <tbody>

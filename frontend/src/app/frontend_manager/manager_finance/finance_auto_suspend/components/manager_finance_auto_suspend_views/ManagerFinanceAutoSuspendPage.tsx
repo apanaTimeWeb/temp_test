@@ -7,7 +7,7 @@ import type { ManagerFinanceAutoSuspendConfig as Config, ManagerFinanceAutoSuspe
 
 // RESPONSIBILITY: Entry page for the manager_auto_suspend module.
 // DATA FLOW: Next.js Router -> Page -> Components
-import { Settings, Ban, RotateCcw, Bell, UserCheck, ShieldAlert, Search } from 'lucide-react';
+import { Settings, Ban, RotateCcw, Bell, UserCheck, ShieldAlert, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { ManagerFinanceAutoSuspendEmptyState } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/components/manager_finance_auto_suspend_empty_states/ManagerFinanceAutoSuspendEmptyState';
 import type { ManagerFinanceAutoSuspendRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendComponentTypes';
 
@@ -44,12 +44,67 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
     });
   }, [suspended, searchQuery]);
 
-  const totalRows = filtered.length;
+  type SuspendSortField = 'studentName' | 'seat' | 'shift' | 'daysOverdue' | 'suspendedSince';
+  const [sortField, setSortField] = useState<SuspendSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: SuspendSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filtered, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: SuspendSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className="text-left py-3 px-4"
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const KPI_CARDS = [
     { label: tManagerUi('days_before_suspend'), value: config?.daysBeforeSuspend, icon: Settings, variant: 'default' },
@@ -124,12 +179,12 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
         <table className="w-full">
           <thead>
             <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              <th className="text-left py-3 px-4">{tManagerUi('student')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('seat')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('shift')}</th>
+              {renderSortableHeader('studentName', tManagerUi('student'))}
+              {renderSortableHeader('seat', tManagerUi('seat'))}
+              {renderSortableHeader('shift', tManagerUi('shift'))}
               <th className="text-left py-3 px-4">{tManagerUi('last_payment_date')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('days_overdue')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('suspended_since')}</th>
+              {renderSortableHeader('daysOverdue', tManagerUi('days_overdue'))}
+              {renderSortableHeader('suspendedSince', tManagerUi('suspended_since'))}
               <th className="text-right py-3 px-4">{tManagerUi('actions')}</th>
             </tr>
           </thead>

@@ -1,11 +1,12 @@
 'use client';
 // RESPONSIBILITY: AdminShiftsManagementPage component owned by admin_shifts; responsibility folder: admin_shifts_components_views.
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Download, Plus, Printer, Upload, X } from 'lucide-react';
+import { Download, Plus, Printer, Upload, X, Search, Building2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_SHIFTS_DEMO_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/mocks/scenarios/admin_shifts_management.scenarios';
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
 import { serializeAdminShiftsCsv } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/utils/AdminShiftsManagementCsvUtils';
@@ -14,12 +15,16 @@ import { serializeAdminShiftsCsv } from '@/app/frontend_admin/admin_seats_shifts
 export function AdminShiftsManagementPage() {
   const t = useTranslations('ADMIN_SHIFTS');
   const isDemoMode = isFrontendDemoModeEnabled();
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   const [shifts, setShifts] = useState<AdminShiftsShift[]>(() => isDemoMode ? [...ADMIN_SHIFTS_DEMO_SHIFTS] : []);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [name, setName] = useState('');
   const [startTime, setStartTime] = useState('06:00');
   const [endTime, setEndTime] = useState('12:00');
   const [capacity, setCapacity] = useState(40);
+  const [branchName, setBranchName] = useState('Downtown Central');
   const [formError, setFormError] = useState<string | null>(null);
 
   const handleAddShift = (e: React.FormEvent) => {
@@ -36,6 +41,7 @@ export function AdminShiftsManagementPage() {
       occupancy: 0,
       capacity: Number(capacity) || 40,
       active: true,
+      branchName: branchName || selectedBranch?.name || 'Downtown Central',
     };
     setShifts((prev) => [...prev, newShift]);
     toast.success(`Shift "${newShift.name}" added successfully.`);
@@ -46,6 +52,28 @@ export function AdminShiftsManagementPage() {
     setCapacity(40);
     setFormError(null);
   };
+
+  const visibleShifts = useMemo(() => {
+    return shifts.filter((shift) => {
+      if (!isAllBranches && selectedBranch) {
+        if (shift.branchName) {
+          const sName = selectedBranch.name.toLowerCase();
+          const bName = shift.branchName.toLowerCase();
+          if (!sName.includes(bName) && !bName.includes(sName)) return false;
+        }
+      }
+      if (statusFilter === 'active' && !shift.active) return false;
+      if (statusFilter === 'inactive' && shift.active) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchesName = shift.name.toLowerCase().includes(q);
+        const matchesTimes = `${shift.startTime} ${shift.endTime}`.toLowerCase().includes(q);
+        const matchesBranch = shift.branchName?.toLowerCase().includes(q) ?? false;
+        if (!matchesName && !matchesTimes && !matchesBranch) return false;
+      }
+      return true;
+    });
+  }, [shifts, isAllBranches, selectedBranch, statusFilter, searchQuery]);
 
   const exportCsv = () => {
     if (!isDemoMode) return;
@@ -113,7 +141,36 @@ export function AdminShiftsManagementPage() {
         </div>
       </div>
 
-      {shifts.length === 0 ? (
+      {/* Search and Filters Bar */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-border bg-card p-4 shadow-xs">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search shifts by name, timing, or branch..."
+            className="w-full rounded-md border border-border bg-input pl-9 pr-3 py-2 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          />
+        </div>
+        <div className="flex items-center gap-2 overflow-x-auto">
+          {(['all', 'active', 'inactive'] as const).map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => setStatusFilter(filter)}
+              className={`rounded-md px-3 py-1.5 text-xs font-medium uppercase tracking-wider transition-colors ${statusFilter === filter
+                ? 'bg-primary text-primary-foreground font-semibold'
+                : 'bg-surface-highlight text-muted-foreground hover:text-foreground'
+                }`}
+            >
+              {filter === 'all' ? 'All Shifts' : filter === 'active' ? 'Active' : 'Inactive'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {visibleShifts.length === 0 ? (
         <div data-testid="admin_shifts-page-state-004" className="flex min-h-48 flex-col items-center justify-center gap-2 rounded-xl border border-border bg-card p-6 text-center">
           <p data-testid="admin_shifts-page-state-005" className="mb-1 text-3xl">🕐</p>
           <p data-testid="admin_shifts-page-state-006" className="text-sm font-semibold text-text-primary">{t('noShiftsDefined')}</p>
@@ -121,17 +178,25 @@ export function AdminShiftsManagementPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {shifts.map((shift) => (
+          {visibleShifts.map((shift) => (
             <div key={shift.id} className={`min-w-0 rounded-xl border border-border bg-card p-4${!shift.active ? ' min-w-0 rounded-xl border border-border bg-card p-4' : ''}`}>
               <div className="space-y-4 p-4">
                 <div className="flex items-start justify-between gap-3 border-b border-border p-4">
                   <h2 className="text-section-title font-semibold text-text-primary">{shift.name}</h2>
-                  <span
-                    data-testid="admin_shifts-page-state-008"
-                    className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium ${shift.active ? 'border-success-text bg-success-bg text-success-text' : 'border-border bg-surface-highlight text-text-secondary'}`}
-                  >
-                    {shift.active ? t('activeStatus') : t('inactiveStatus')}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span
+                      data-testid="admin_shifts-page-state-008"
+                      className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium ${shift.active ? 'border-success-text bg-success-bg text-success-text' : 'border-border bg-surface-highlight text-text-secondary'}`}
+                    >
+                      {shift.active ? t('activeStatus') : t('inactiveStatus')}
+                    </span>
+                    {shift.branchName && (
+                      <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary">
+                        <Building2 size={12} className="text-primary shrink-0" />
+                        <span>{shift.branchName}</span>
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-2 rounded-lg bg-surface-highlight p-3">
                   <p className={`min-w-0 rounded-lg border border-border bg-card p-3${!shift.active ? ' min-w-0 rounded-lg border border-border bg-card p-3' : ''}`}>
