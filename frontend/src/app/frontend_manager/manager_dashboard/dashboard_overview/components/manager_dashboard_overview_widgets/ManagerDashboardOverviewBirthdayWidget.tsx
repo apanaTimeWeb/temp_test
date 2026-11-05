@@ -60,20 +60,20 @@ export function ManagerDashboardOverviewBirthdayWidget() {
   };
 
   return (
-    <div className="mgr-card p-5 border border-primary/20 bg-linear-to-r from-card to-primary-subtle/30 motion-safe:transition-all">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 border-b border-border pb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-primary/10 text-primary">
+    <div className="rounded-2xl border border-primary/25 bg-linear-to-r from-card via-card to-primary-subtle/20 p-5 sm:p-6 shadow-card transition-all">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-border/60 pb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center font-bold">
             <Cake size={22} className="text-primary animate-bounce" />
           </div>
           <div>
-            <h3 className="font-bold text-primary text-base flex items-center gap-2">
+            <h3 className="font-bold text-foreground text-base sm:text-lg flex items-center gap-2">
               Today&apos;s Birthday Celebrations
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                 <Sparkles size={12} /> {TODAY_BIRTHDAYS.length} Celebrating Today
               </span>
             </h3>
-            <p className="text-xs text-secondary mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5">
               Send personalized WhatsApp birthday greetings to students studying at your library today.
             </p>
           </div>
@@ -86,39 +86,39 @@ export function ManagerDashboardOverviewBirthdayWidget() {
           return (
             <div
               key={student.id}
-              className="p-4 rounded-xl bg-card border border-border hover:border-primary/40 shadow-xs flex flex-col justify-between gap-3 transition-all"
+              className="p-4 rounded-xl bg-card border border-border hover:border-primary/40 shadow-xs flex flex-col justify-between gap-3.5 transition-all group hover:-translate-y-0.5"
             >
               <div className="flex items-start gap-3">
-                <div className="w-11 h-11 rounded-full bg-linear-to-br from-amber-400 to-orange-500 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-xs">
+                <div className="w-11 h-11 rounded-full bg-linear-to-br from-amber-400 to-amber-600 text-primary-foreground font-black text-sm flex items-center justify-center shrink-0 shadow-xs">
                   {student.name.slice(0, 2).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between">
-                    <p className="font-bold text-primary text-sm truncate">{student.name}</p>
-                    <span className="text-xs font-semibold text-amber-600 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded">
+                  <div className="flex items-center justify-between gap-1">
+                    <p className="font-bold text-foreground text-sm truncate">{student.name}</p>
+                    <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full shrink-0">
                       🎂 Today
                     </span>
                   </div>
-                  <p className="text-xs text-secondary font-mono">
+                  <p className="text-xs text-muted-foreground font-mono mt-0.5">
                     {student.smartId} • {student.seat}
                   </p>
-                  <p className="text-xs text-secondary truncate mt-0.5">
+                  <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {student.shift} • {student.branch}
                   </p>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-border/60 flex items-center justify-between gap-2">
-                <span className="text-xs text-secondary flex items-center gap-1 font-mono">
-                  <Phone size={11} /> +91 {student.phone.slice(0, 5)}...
+              <div className="pt-2.5 border-t border-border/60 flex items-center justify-between gap-2">
+                <span className="text-xs text-muted-foreground flex items-center gap-1 font-mono">
+                  <Phone size={11} className="text-primary" /> +91 {student.phone.slice(0, 5)}...
                 </span>
                 <button
                   type="button"
                   onClick={() => handleSendWish(student)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 ${
                     isWished
-                      ? 'bg-surface text-secondary border border-border'
-                      : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
+                      ? 'bg-muted text-muted-foreground border border-border'
+                      : 'bg-emerald-600 hover:bg-emerald-700 text-white'
                   }`}
                   title={`Send WhatsApp birthday wish to ${student.name}`}
                 >
