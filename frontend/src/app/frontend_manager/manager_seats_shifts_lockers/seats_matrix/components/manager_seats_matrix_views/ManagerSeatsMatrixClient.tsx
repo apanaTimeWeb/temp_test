@@ -2,7 +2,9 @@
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
-import { CalendarDays, LayoutGrid, List, Plus, Search, CheckCircle, SlidersHorizontal, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { CalendarDays, LayoutGrid, List, Plus, Search, CheckCircle, SlidersHorizontal, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react';
+import { toast } from 'sonner';
+import { sanitizeManagerSeatMatrixCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixCsv';
 import { useManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/useManagerSeatsMatrixSeatMatrix';
 import { SHIFT_TABS, LEGEND_ITEMS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
 import { ManagerSeatsMatrixModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModal';
@@ -134,6 +136,30 @@ export function ManagerSeatsMatrixClient() {
     }, 1000);
   };
 
+  const handleExportCsv = () => {
+    const headers = ['Seat No', 'Wing / Hall', 'Shift', 'Status', 'Assigned Student', 'Smart ID', 'Gender'];
+    const rows = filteredTableSeats.map((s) => [
+      sanitizeManagerSeatMatrixCsvCell(s.id),
+      sanitizeManagerSeatMatrixCsvCell(s.wing ?? 'Ground Floor — AC Silent Reading Hall'),
+      sanitizeManagerSeatMatrixCsvCell(s.shift ?? activeTab),
+      sanitizeManagerSeatMatrixCsvCell(s.status),
+      sanitizeManagerSeatMatrixCsvCell(s.student ?? '—'),
+      sanitizeManagerSeatMatrixCsvCell(s.smartId ?? '—'),
+      sanitizeManagerSeatMatrixCsvCell(s.studentGender ?? '—'),
+    ]);
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `seat_matrix_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success('Seat matrix exported successfully');
+  };
+
   if (isError) {
     return (
       <section className="ss-page p-8" role="alert" aria-live="assertive">
@@ -202,6 +228,14 @@ export function ManagerSeatsMatrixClient() {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors"
+          >
+            <Download size={14} /> Export CSV
+          </button>
+
           {/* Add Seat CTA */}
           <button
             type="button"

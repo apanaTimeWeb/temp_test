@@ -36,7 +36,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     });
   }, [promisesList, statusFilter, searchQuery]);
 
-  type PromiseSortField = 'studentName' | 'promisedAmount' | 'expectedDate' | 'daysUntilDue' | 'status';
+  type PromiseSortField = 'studentName' | 'promisedAmount' | 'expectedDate' | 'daysUntilDue' | 'status' | 'timesChanged';
   const [sortField, setSortField] = useState<PromiseSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 

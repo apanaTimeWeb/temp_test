@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 
-import { Eye, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Eye, Search, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
 import { ManagerMembersDirectoryEmptyState } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_states/ManagerMembersDirectoryEmptyState';
 import { ManagerMembersDirectorySupportingSections } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectorySupportingSections';
@@ -54,6 +54,20 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
   const paginatedMembers = sortedMembers.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const handleExportCsv = () => {
+    const headers = 'Member ID,Name,Phone,Plan,Status,Expiry Date\n';
+    const rows = sortedMembers
+      .map((m) => `"${m.id}","${m.name}","${m.phone}","${m.type}","${m.status}","${m.expiryDate}"`)
+      .join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `students_directory_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
 
   const renderSortableHeader = (field: MemberSortField, label: string) => {
     const isActive = sortField === field;
@@ -134,12 +148,23 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
             <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-border pb-4">
                 <h2 className="text-xl font-bold text-primary">{tManagerUi(MANAGER_MEMBERS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'tab_all_members')}</h2>
-                <div className="relative w-full sm:w-64">
-                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                  <label htmlFor="manager-members-search" className="sr-only">{tManagerUi('search_by_name_or_id')}</label>
-                  <input id="manager-members-search" type="text" className="mgr-input pl-9" placeholder={tManagerUi('search_by_name_or_id')} 
-                    value={searchQuery} onChange={e => { setSearchQuery(e.target.value); setPage(0); }}
-                  />
+                <div className="flex items-center gap-2">
+                  <div className="relative w-full sm:w-64">
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                    <label htmlFor="manager-members-search" className="sr-only">{tManagerUi('search_by_name_or_id')}</label>
+                    <input id="manager-members-search" type="text" className="mgr-input pl-9" placeholder={tManagerUi('search_by_name_or_id')} 
+                      value={searchQuery} onChange={e => { setSearchQuery(e.target.value); setPage(0); }}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleExportCsv}
+                    className="mgr-btn-ghost flex items-center gap-1.5 text-xs whitespace-nowrap"
+                    title="Export Students List as CSV"
+                  >
+                    <Download size={14} />
+                    <span>Export CSV</span>
+                  </button>
                 </div>
               </div>
               <div className="flex-1 w-full overflow-x-auto">

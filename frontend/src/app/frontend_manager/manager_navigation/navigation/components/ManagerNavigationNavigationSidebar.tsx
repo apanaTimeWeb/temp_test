@@ -389,11 +389,28 @@ export default function ManagerNavigationSidebar({
       {showLogout && (
         <div className="mgr-modal-overlay" role="presentation" onMouseDown={() => setShowLogout(false)}>
           <div ref={logoutDialogRef} tabIndex={-1} className="mgr-modal mgr-logout-modal" role="dialog" data-testid="manager-logout-dialog" aria-modal="true" aria-labelledby="manager-logout-title" onMouseDown={(event) => event.stopPropagation()}>
-            <p id="manager-logout-title" className="mgr-modal-title">{tManagerUi('sign_out_unavailable')}</p>
-            <p className="mgr-modal-desc" role="status" data-testid="manager-signout-contract-warning">{tManagerUi('actual_sign_out_requires_the_host_authentication_provide_1b9c36')}</p>
+            <p id="manager-logout-title" className="mgr-modal-title">{tManagerUi('log_out')}</p>
+            <p className="mgr-modal-desc" role="status">Are you sure you want to sign out of the manager portal?</p>
             <div className="mgr-modal-footer">
               <button type="button" className="mgr-btn-ghost" data-testid="manager-logout-cancel" onClick={() => setShowLogout(false)}>{tManagerUi('close')}</button>
-              <button type="button" className="mgr-btn-danger" disabled title={tManagerUi('sign_out_unavailable_host_authentication_contract_not_su_b8edeb')}>{tManagerUi('sign_out_unavailable')}</button>
+              <button
+                type="button"
+                className="mgr-btn-danger"
+                data-testid="manager-logout-confirm"
+                onClick={() => {
+                  try {
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('manager_session');
+                    sessionStorage.clear();
+                    document.cookie = 'auth_token=; Max-Age=0; path=/;';
+                  } catch {
+                    // ignore
+                  }
+                  window.location.href = '/login';
+                }}
+              >
+                {tManagerUi('log_out')}
+              </button>
             </div>
           </div>
         </div>

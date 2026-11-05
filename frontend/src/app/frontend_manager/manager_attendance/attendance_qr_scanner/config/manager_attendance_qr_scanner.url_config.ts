@@ -9,5 +9,7 @@ export const MANAGER_ATTENDANCE_QR_SCANNER_ROUTES = {
   qrScanner: '/frontend_manager/manager_attendance/attendance_qr_scanner',
 } as const;
 
-/** No additional external API contract is declared by this route-config repair. */
-export const MANAGER_ATTENDANCE_QR_SCANNER_API = {} as const;
+export const MANAGER_ATTENDANCE_QR_SCANNER_API = {
+  SCAN: '/api/v1/manager/attendance/qr-scanner/scan' as const,
+  VERIFY: '/api/v1/manager/attendance/qr-scanner/verify' as const,
+} as const;

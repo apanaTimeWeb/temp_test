@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useManagerExpensesCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/hooks/ManagerAccountsExpensesFormattingHook';
 import type { NativeColumn } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_table_parts/ManagerAccountsExpensesNativeTable';
 import { useState, useMemo } from 'react';
-import { Plus, X, CheckCircle, IndianRupee, Receipt, Search } from 'lucide-react';
+import { Plus, X, CheckCircle, IndianRupee, Receipt, Search, Download } from 'lucide-react';
 import ManagerAccountsExpensesExpenseSummaryCards from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseSummaryCards';
 import ManagerAccountsExpensesExpenseCategoryFilter from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseCategoryFilter';
 import ManagerAccountsExpensesExpenseLedger from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_widgets/ManagerAccountsExpensesExpenseLedger';
@@ -47,6 +47,20 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         e.mode.toLowerCase().includes(q)
     );
   }, [expenses, catFilter, searchQuery]);
+
+  const handleExportCsv = () => {
+    const headers = 'Date,Description,Category,Amount (INR),Payment Mode,Paid By\n';
+    const rows = searchedExpenses
+      .map((e) => `"${e.date}","${e.description}","${e.category}","${(e.amount / 100).toFixed(2)}","${e.mode}","${e.paidBy}"`)
+      .join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `expenses_ledger_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
 
   const handleCreateExpense = (e: React.FormEvent) => {
     e.preventDefault();
@@ -154,15 +168,26 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
       )}
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-card p-4 rounded-xl border border-border">
-        <div className="relative flex-1 max-w-md">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-          <input
-            type="search"
-            placeholder="Search expense description, payee, or category..."
-            className="mgr-input pl-8 text-xs w-full"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+        <div className="flex items-center gap-2 flex-1 max-w-lg">
+          <div className="relative flex-1">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <input
+              type="search"
+              placeholder="Search expense description, payee, or category..."
+              className="mgr-input pl-8 text-xs w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="mgr-btn-ghost flex items-center gap-1.5 text-xs whitespace-nowrap"
+            title="Export Expenses as CSV"
+          >
+            <Download size={14} />
+            <span>Export CSV</span>
+          </button>
         </div>
         <span className="text-xs text-secondary">{searchedExpenses.length} Records</span>
       </div>

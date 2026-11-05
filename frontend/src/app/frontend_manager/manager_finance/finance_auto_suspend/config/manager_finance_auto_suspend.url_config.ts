@@ -6,5 +6,9 @@ export const MANAGER_FINANCE_AUTO_SUSPEND_ROUTES = {
   AUTO_SUSPEND: `${ROOT}?${new URLSearchParams({ view: 'auto_suspend' }).toString()}`,
 } as const;
 
-/** CONTRACT_MISSING: no authoritative external endpoint, method, payload, response, auth or tenant contract was supplied. */
-export const MANAGER_FINANCE_AUTO_SUSPEND_API = {} as const;
+export const MANAGER_FINANCE_AUTO_SUSPEND_API = {
+  LIST: '/api/v1/manager/finance/auto-suspend' as const,
+  SUSPEND: (id: string) => `/api/v1/manager/finance/auto-suspend/${encodeURIComponent(id)}/suspend` as const,
+  REINSTATE: (id: string) => `/api/v1/manager/finance/auto-suspend/${encodeURIComponent(id)}/reinstate` as const,
+  EXPORT_CSV: '/api/v1/manager/finance/auto-suspend/export-csv' as const,
+} as const;

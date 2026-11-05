@@ -5,7 +5,9 @@ import { ManagerSeatsHistoryNativeTable } from '@/app/frontend_manager/manager_s
 import { useLocale, useTranslations } from 'next-intl';
 
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronDown, Search } from 'lucide-react';
+import { ChevronDown, Search, Download } from 'lucide-react';
+import { toast } from 'sonner';
+import { sanitizeManagerSeatHistoryCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryCsv';
 import { useManagerSeatsHistory } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/hooks/useManagerSeatsHistoryTables';
 import type { ManagerSeatsHistoryRow } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/types/ManagerSeatsHistoryTypes';
 import {MANAGER_SEATS_HISTORY_HISTORY_REASON_CLASSES, MANAGER_SEATS_HISTORY_SEARCH_DEBOUNCE_MS} from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/constants/ManagerSeatsHistoryConstants';
@@ -77,6 +79,32 @@ export function ManagerSeatsHistoryClient() {
     ];
   }, [locale, tManagerUi]);
 
+  const handleExportCsv = () => {
+    const headers = ['Seat No', 'Student Name', 'Smart ID', 'Shift', 'Occupied From', 'Occupied Till', 'Duration', 'Reason', 'Status'];
+    const rows = filtered.map((h) => [
+      sanitizeManagerSeatHistoryCsvCell(h.seatNo),
+      sanitizeManagerSeatHistoryCsvCell(h.studentName),
+      sanitizeManagerSeatHistoryCsvCell(h.smartId),
+      sanitizeManagerSeatHistoryCsvCell(h.shift),
+      sanitizeManagerSeatHistoryCsvCell(h.occupiedFrom),
+      sanitizeManagerSeatHistoryCsvCell(h.occupiedTill),
+      sanitizeManagerSeatHistoryCsvCell(h.duration),
+      sanitizeManagerSeatHistoryCsvCell(h.reason),
+      sanitizeManagerSeatHistoryCsvCell(h.status ?? 'Active'),
+    ]);
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `seat_history_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success('Seat history exported successfully');
+  };
+
   return (
     <div className="ss-page">
       <div className="ss-page-header">
@@ -84,6 +112,13 @@ export function ManagerSeatsHistoryClient() {
           <h1 className="ss-page-title">{tManagerUi('seat_history')}</h1>
           <p className="ss-page-subtitle">{tManagerUi('complete_occupancy_history_for_every_seat')}</p>
         </div>
+        <button
+          type="button"
+          className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors"
+          onClick={handleExportCsv}
+        >
+          <Download size={14} /> Export CSV
+        </button>
       </div>
 
       <div className="ss-filter-bar">

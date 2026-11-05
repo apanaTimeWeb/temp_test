@@ -3,7 +3,7 @@ import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/mana
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useState, useMemo } from 'react';
-import { Plus, X, CheckCircle, IndianRupee, ShieldCheck, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, X, CheckCircle, IndianRupee, ShieldCheck, Search, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react';
 import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS, type ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import { ManagerAssetsRegisterEmptyState } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_empty_states/ManagerAssetsRegisterEmptyState';
@@ -161,6 +161,20 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
     setTimeout(() => setFeedbackToast(null), 4000);
   };
 
+  const handleExportCsv = () => {
+    const headers = 'Asset Name,Category,Purchase Date,Value (INR),Location,Status\n';
+    const rows = sortedRows
+      .map((a) => `"${a.name}","${a.category}","${a.purchaseDate}","${a.purchaseValue}","${a.location}","${a.status}"`)
+      .join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `assets_register_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
       <div className="flex items-center justify-between">
@@ -168,13 +182,23 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
           <h1 className="fin-page-title">{tManagerUi('asset_manager')}</h1>
           <p className="fin-page-subtitle">{tManagerUi('review_the_sample_asset_register_asset_changes_are_unava_f6b9af')}</p>
         </div>
-        <button
-          type="button"
-          onClick={() => setIsAddModalOpen(true)}
-          className="mgr-btn-primary flex items-center gap-1.5 text-xs font-semibold"
-        >
-          <Plus size={14} /> Add Library Asset
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="mgr-btn-ghost flex items-center gap-1.5 text-xs font-semibold"
+            title="Export Assets Register as CSV"
+          >
+            <Download size={14} /> Export CSV
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="mgr-btn-primary flex items-center gap-1.5 text-xs font-semibold"
+          >
+            <Plus size={14} /> Add Library Asset
+          </button>
+        </div>
       </div>
 
       {feedbackToast && (

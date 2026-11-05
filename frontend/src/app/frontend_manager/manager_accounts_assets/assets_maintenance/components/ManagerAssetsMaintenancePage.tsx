@@ -9,7 +9,8 @@ import { useManagerAssetsMaintenanceCurrencyFormatter } from '@/app/frontend_man
 // DATA FLOW: Next.js Router -> Page -> Components
 
 import { useState, useMemo } from 'react';
-import { Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Search, ArrowUpDown, ArrowUp, ArrowDown, Plus, X, Download, Wrench } from 'lucide-react';
+import { toast } from 'sonner';
 import ManagerAssetsMaintenanceEmptyState from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceEmptyState';
 
 const MOCK = getManagerAssetsMaintenanceSampleLogs();
@@ -23,7 +24,7 @@ const STATUS_BADGE: Record<string, string> = {
 export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssetsMaintenanceMainProps) {
   const tManagerUi = useTranslations('manager.manager_assets_maintenance.ui');
   const formatManagerAssetMaintenanceCurrency = useManagerAssetsMaintenanceCurrencyFormatter();
-  const logs = MOCK;
+  const [logsList, setLogsList] = useState(MOCK);
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
@@ -31,6 +32,59 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
   type MaintenanceSortField = 'assetName' | 'issue' | 'reportedDate' | 'scheduledDate' | 'vendor' | 'cost' | 'status';
   const [sortField, setSortField] = useState<MaintenanceSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  // Modal State
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [assetName, setAssetName] = useState('');
+  const [issue, setIssue] = useState('');
+  const [vendor, setVendor] = useState('');
+  const [cost, setCost] = useState('');
+  const [scheduledDate, setScheduledDate] = useState(() => new Date().toISOString().slice(0, 10));
+
+  const handleCreateOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!assetName.trim() || !issue.trim()) {
+      toast.error('Asset name and issue description are required.');
+      return;
+    }
+    const newLog = {
+      id: Date.now(),
+      assetName: assetName.trim(),
+      issue: issue.trim(),
+      reportedDate: new Date().toISOString().slice(0, 10),
+      scheduledDate,
+      vendor: vendor.trim() || 'Internal Technician',
+      cost: Number(cost) || 0,
+      status: 'pending' as const,
+    };
+    setLogsList([newLog, ...logsList]);
+    setIsAddModalOpen(false);
+    setAssetName('');
+    setIssue('');
+    setVendor('');
+    setCost('');
+    toast.success(`Maintenance request for "${newLog.assetName}" logged successfully.`);
+  };
+
+  const handleUpdateStatus = (id: number, currentStatus: string) => {
+    const nextStatus = currentStatus === 'pending' ? 'in-progress' : 'completed';
+    setLogsList((prev) => prev.map((l) => (l.id === id ? { ...l, status: nextStatus as any } : l)));
+    toast.success(`Work order status updated to ${nextStatus.toUpperCase()}!`);
+  };
+
+  const handleExportCsv = () => {
+    const headers = 'Asset Name,Issue,Reported Date,Scheduled Date,Vendor,Cost (INR),Status\n';
+    const rows = sortedRows
+      .map((l) => `"${l.assetName}","${l.issue}","${l.reportedDate}","${l.scheduledDate}","${l.vendor}","${l.cost}","${l.status}"`)
+      .join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `asset_maintenance_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  };
 
   const toggleSort = (field: MaintenanceSortField) => {
     if (sortField === field) {
@@ -47,7 +101,7 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
 
   const visible = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    return logs.filter((l) => {
+    return logsList.filter((l) => {
       const matchStatus = statusFilter === 'all' || l.status === statusFilter;
       const matchQ =
         !q ||
@@ -56,7 +110,7 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         l.vendor.toLowerCase().includes(q);
       return matchStatus && matchQ;
     });
-  }, [logs, statusFilter, searchQuery]);
+  }, [logsList, statusFilter, searchQuery]);
 
   const sortedRows = useMemo(() => {
     if (!sortField) return visible;
@@ -70,7 +124,7 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
     });
   }, [visible, sortField, sortDirection]);
 
-  const totalCost = logs.filter(l => l.status === 'completed').reduce((s, l) => s + l.cost, 0);
+  const totalCost = logsList.filter(l => l.status === 'completed').reduce((s, l) => s + l.cost, 0);
 
   const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
@@ -115,20 +169,36 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
           <h1 className="fin-page-title">{tManagerUi('asset_maintenance')}</h1>
           <p className="fin-page-subtitle">{tManagerUi('review_the_sample_maintenance_register_updates_are_unava_163c7f')}</p>
         </div>
-        <button type="button" disabled title={tManagerUi('logging_maintenance_unavailable_host_mutation_contract_n_40db9f')} className="fin-badge fin-badge--info cursor-not-allowed">{tManagerUi('log_request_unavailable')}</button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="mgr-btn-ghost flex items-center gap-1.5 text-xs font-semibold"
+            title="Export Maintenance Register as CSV"
+          >
+            <Download size={14} /> Export CSV
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="mgr-btn-primary flex items-center gap-1.5 text-xs font-semibold"
+          >
+            <Plus size={14} /> Log Maintenance Request
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="fin-kpi-card fin-kpi-card--warning"><p className="fin-kpi-label fin-kpi-label--warning">{tManagerUi('pending')}</p><p className="fin-kpi-value fin-kpi-value--warning">{logs.filter(l=>l.status==='pending').length}</p></div>
-        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-info">{tManagerUi('in_progress')}</p><p className="fin-kpi-value fin-text-info">{logs.filter(l=>l.status==='in-progress').length}</p></div>
-        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-success">{tManagerUi('completed')}</p><p className="fin-kpi-value fin-text-success">{logs.filter(l=>l.status==='completed').length}</p></div>
+        <div className="fin-kpi-card fin-kpi-card--warning"><p className="fin-kpi-label fin-kpi-label--warning">{tManagerUi('pending')}</p><p className="fin-kpi-value fin-kpi-value--warning">{logsList.filter(l=>l.status==='pending').length}</p></div>
+        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-info">{tManagerUi('in_progress')}</p><p className="fin-kpi-value fin-text-info">{logsList.filter(l=>l.status==='in-progress').length}</p></div>
+        <div className="fin-kpi-card"><p className="fin-kpi-label fin-text-success">{tManagerUi('completed')}</p><p className="fin-kpi-value fin-text-success">{logsList.filter(l=>l.status==='completed').length}</p></div>
         <div className="fin-kpi-card fin-kpi-card--danger"><p className="fin-kpi-label fin-kpi-label--danger">{tManagerUi('total_cost')}</p><p className="fin-kpi-value fin-kpi-value--danger">{formatManagerAssetMaintenanceCurrency(totalCost)}</p></div>
       </div>
 
       <div className="fin-card p-4">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-semibold text-primary">Maintenance Work Orders & Status Resolution</h3>
-          <span className="text-xs text-secondary">{logs.length} Total Service Tickets</span>
+          <span className="text-xs text-secondary">{logsList.length} Total Service Tickets</span>
         </div>
         <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
           <div style={{ width: '60%' }} className="bg-success h-full" title="Completed (60%)" />
@@ -192,8 +262,13 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
                 <td className="py-3 px-4"><span className={`fin-badge ${STATUS_BADGE[l.status]}`}>{l.status === 'pending' ? tManagerUi('pending') : l.status === 'in-progress' ? tManagerUi('in_progress') : l.status === 'completed' ? tManagerUi('completed') : l.status}</span></td>
                 <td className="py-3 px-4 text-right">
                   {l.status !== 'completed' && (
-                    <button type="button" disabled title={tManagerUi('status_update_unavailable_host_mutation_contract_not_sup_953486')} className="fin-badge fin-badge--success cursor-not-allowed">
-                      {tManagerUi('update_unavailable')}
+                    <button
+                      type="button"
+                      onClick={() => handleUpdateStatus(l.id, l.status)}
+                      className="fin-badge fin-badge--success cursor-pointer hover:opacity-90"
+                      title="Advance maintenance status"
+                    >
+                      {l.status === 'pending' ? 'Start Work' : 'Complete'}
                     </button>
                   )}
                 </td>
@@ -253,6 +328,101 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
       </div>
 
       <p className="fin-input-hint fin-text-warning" role="status" data-testid="manager-accounting-maintenance-contract-warning">{tManagerUi('sample_data_only_creating_maintenance_logs_or_completing_cfeb24')}</p>
+
+      {/* Log Maintenance Request Modal */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-warning/10 text-warning flex items-center justify-center">
+                  <Wrench size={18} />
+                </div>
+                <h2 className="text-base font-bold text-primary">Log Maintenance Request</h2>
+              </div>
+              <button type="button" onClick={() => setIsAddModalOpen(false)} className="text-secondary hover:text-primary">
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateOrder} className="space-y-3">
+              <div>
+                <label className="text-xs font-semibold text-secondary">Asset Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Inverter Battery Bank 2, AC Unit 4"
+                  className="mgr-input w-full mt-1"
+                  value={assetName}
+                  onChange={(e) => setAssetName(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-secondary">Issue Description *</label>
+                <textarea
+                  required
+                  rows={2}
+                  placeholder="Describe breakdown or routine servicing requirement..."
+                  className="mgr-input w-full mt-1"
+                  value={issue}
+                  onChange={(e) => setIssue(e.target.value)}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-secondary">Assigned Vendor / Tech</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Daikin Care Services"
+                    className="mgr-input w-full mt-1"
+                    value={vendor}
+                    onChange={(e) => setVendor(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-secondary">Estimated Cost (₹)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="e.g. 1500"
+                    className="mgr-input w-full mt-1"
+                    value={cost}
+                    onChange={(e) => setCost(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-secondary">Scheduled Date</label>
+                <input
+                  type="date"
+                  className="mgr-input w-full mt-1"
+                  value={scheduledDate}
+                  onChange={(e) => setScheduledDate(e.target.value)}
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
+                <button
+                  type="button"
+                  onClick={() => setIsAddModalOpen(false)}
+                  className="mgr-btn-ghost text-xs"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="mgr-btn-primary text-xs"
+                >
+                  Log Maintenance Order
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
