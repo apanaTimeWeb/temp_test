@@ -40,6 +40,8 @@ export interface ManagerMembersDirectoryKpiSectionProps {
   activeMembers: number;
   expiredMembers: number;
   suspendedMembers: number;
+  activeTab?: string;
+  onSelectTab?: (tab: ManagerMembersDirectoryTab) => void;
 }
 
 export type ManagerMembersDirectoryTab = 'All Members' | 'Active Members' | 'Expired Members' | 'Suspended Members' | 'Add Member' | 'Member Profile' | 'Membership Renewal';

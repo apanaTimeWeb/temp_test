@@ -4,13 +4,13 @@ import { useState, useMemo } from 'react';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 
-import { Eye, Search, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react';
+import { Eye, Search, ArrowUpDown, ArrowUp, ArrowDown, Download, X } from 'lucide-react';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
 import { ManagerMembersDirectoryEmptyState } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_states/ManagerMembersDirectoryEmptyState';
 import { ManagerMembersDirectorySupportingSections } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectorySupportingSections';
 import { ManagerMembersDirectoryKpiSection } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryKpiSection';
 import { ManagerMembersDirectoryHeader } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryHeader';
-import { MANAGER_MEMBERS_STATUS_BADGES, MANAGER_MEMBERS_TABS } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
+import { MANAGER_MEMBERS_STATUS_BADGES, MANAGER_MEMBERS_TABS, MANAGER_MEMBERSHIP_TYPE_OPTIONS, MANAGER_MEMBERS_GENDER_OPTIONS } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
 import { useManagerMemberDirectoryPageState } from '@/app/frontend_manager/manager_members/members_directory/hooks/useManagerMembersDirectoryPageState';
 import { ManagerMembersDirectoryProfileSection } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryProfileSection';
 import type { ManagerMembersDirectoryRouteQueryProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
@@ -23,6 +23,10 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [planFilter, setPlanFilter] = useState('all');
+  const [shiftFilter, setShiftFilter] = useState('all');
+  const [genderFilter, setGenderFilter] = useState('all');
+  const [expiryFilter, setExpiryFilter] = useState('all');
 
   type MemberSortField = 'id' | 'name' | 'phone' | 'type' | 'status' | 'expiryDate';
   const [sortField, setSortField] = useState<MemberSortField | null>(null);
@@ -38,15 +42,49 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
     }
   };
 
+  const multiFilteredMembers = useMemo(() => {
+    return filteredMembers.filter((m) => {
+      if (planFilter !== 'all' && m.type !== planFilter) return false;
+      if (shiftFilter !== 'all' && m.shift !== shiftFilter) return false;
+      if (genderFilter !== 'all' && m.gender !== genderFilter) return false;
+      if (expiryFilter !== 'all') {
+        const today = new Date();
+        const expiry = new Date(m.expiryDate);
+        const diffDays = Math.ceil((expiry.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        if (expiryFilter === '7days' && (diffDays < 0 || diffDays > 7)) return false;
+        if (expiryFilter === '30days' && (diffDays < 0 || diffDays > 30)) return false;
+      }
+      return true;
+    });
+  }, [filteredMembers, planFilter, shiftFilter, genderFilter, expiryFilter]);
+
+  const hasActiveFilters =
+    searchQuery.trim().length > 0 ||
+    planFilter !== 'all' ||
+    shiftFilter !== 'all' ||
+    genderFilter !== 'all' ||
+    expiryFilter !== 'all' ||
+    activeTab !== 'All Members';
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setPlanFilter('all');
+    setShiftFilter('all');
+    setGenderFilter('all');
+    setExpiryFilter('all');
+    setActiveTab('All Members');
+    setPage(0);
+  };
+
   const sortedMembers = useMemo(() => {
-    if (!sortField) return filteredMembers;
-    return [...filteredMembers].sort((a, b) => {
+    if (!sortField) return multiFilteredMembers;
+    return [...multiFilteredMembers].sort((a, b) => {
       const aVal = String(a[sortField] ?? '');
       const bVal = String(b[sortField] ?? '');
       const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
       return sortDirection === 'asc' ? cmp : -cmp;
     });
-  }, [filteredMembers, sortField, sortDirection]);
+  }, [multiFilteredMembers, sortField, sortDirection]);
 
   const totalRows = sortedMembers.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
@@ -116,59 +154,164 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
         activeMembers={members.filter(m => m.status === 'Active').length}
         expiredMembers={members.filter(m => m.status === 'Expired').length}
         suspendedMembers={members.filter(m => m.status === 'Suspended').length}
+        activeTab={activeTab}
+        onSelectTab={(tab) => {
+          setActiveTab(tab);
+          setPage(0);
+        }}
       />
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-        {/* Left Sidebar Tabs */}
-        <div className="xl:col-span-3 space-y-2">
-          {MANAGER_MEMBERS_TABS.map(tab => {
-            const isActive = activeTab === tab.name;
-            return (
-              <button
-                key={tab.name}
-                type="button"
-                onClick={() => { setActiveTab(tab.name); setPage(0); }}
-                aria-pressed={isActive}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold motion-safe:transition-all ${
-                  isActive ? 'bg-primary text-on-primary shadow-card' : 'text-secondary hover:bg-card hover:text-primary'
-                }`}
-              >
-                <tab.icon size={18} aria-hidden="true" className={isActive ? 'text-primary' : 'opacity-70'} />
-                {tManagerUi(tab.labelKey)}
-              </button>
-            );
-          })}
-        </div>
+      {/* ── Main Full-Width Content Card ── */}
+      <div className="mgr-card p-6 min-h-96 w-full shadow-card border border-border">
+        
+        {/* GRIDS (All, Active, Expired, Suspended) */}
+        {['All Members', 'Active Members', 'Expired Members', 'Suspended Members'].includes(activeTab) && (
+          <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
+            
+            {/* ── Header Row: Horizontal Segmented Tab Control + Export CSV ── */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5 border-b border-border pb-4">
+              {/* Horizontal Segmented Tabs with Counts */}
+              <div className="flex flex-wrap items-center gap-1.5 p-1 bg-surface-highlight/70 rounded-xl border border-border">
+                {MANAGER_MEMBERS_TABS.map((tab) => {
+                  const isActive = activeTab === tab.name;
+                  const count =
+                    tab.name === 'All Members'
+                      ? members.length
+                      : tab.name === 'Active Members'
+                      ? members.filter((m) => m.status === 'Active').length
+                      : tab.name === 'Expired Members'
+                      ? members.filter((m) => m.status === 'Expired').length
+                      : members.filter((m) => m.status === 'Suspended').length;
 
-        {/* Right Content Area */}
-        <div className="xl:col-span-9 mgr-card p-6 min-h-96">
-          
-          {/* GRIDS (All, Active, Expired, Suspended) */}
-          {['All Members', 'Active Members', 'Expired Members', 'Suspended Members'].includes(activeTab) && (
-            <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-border pb-4">
-                <h2 className="text-xl font-bold text-primary">{tManagerUi(MANAGER_MEMBERS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'tab_all_members')}</h2>
-                <div className="flex items-center gap-2">
-                  <div className="relative w-full sm:w-64">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                    <label htmlFor="manager-members-search" className="sr-only">{tManagerUi('search_by_name_or_id')}</label>
-                    <input id="manager-members-search" type="text" className="mgr-input pl-9" placeholder={tManagerUi('search_by_name_or_id')} 
-                      value={searchQuery} onChange={e => { setSearchQuery(e.target.value); setPage(0); }}
-                    />
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleExportCsv}
-                    className="mgr-btn-ghost flex items-center gap-1.5 text-xs whitespace-nowrap"
-                    title="Export Students List as CSV"
-                  >
-                    <Download size={14} />
-                    <span>Export CSV</span>
-                  </button>
-                </div>
+                  return (
+                    <button
+                      key={tab.name}
+                      type="button"
+                      onClick={() => { setActiveTab(tab.name); setPage(0); }}
+                      aria-pressed={isActive}
+                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        isActive
+                          ? 'bg-card text-primary shadow-xs border border-border'
+                          : 'text-secondary hover:text-primary hover:bg-card/50'
+                      }`}
+                    >
+                      <tab.icon size={15} aria-hidden="true" className={isActive ? 'text-primary' : 'opacity-70'} />
+                      <span>{tManagerUi(tab.labelKey)}</span>
+                      <span
+                        className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                          isActive
+                            ? 'bg-primary/10 text-primary'
+                            : 'bg-surface text-secondary'
+                        }`}
+                      >
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
-              <div className="flex-1 w-full overflow-x-auto">
-                {filteredMembers.length === 0 ? (
+
+              {/* Action Controls: Export CSV */}
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleExportCsv}
+                  className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+                  title="Export Filtered Students List as CSV"
+                >
+                  <Download size={14} />
+                  <span>Export CSV</span>
+                </button>
+              </div>
+            </div>
+
+            {/* ── Comprehensive Multi-Filter Bar ── */}
+            <div className="flex flex-wrap items-center gap-2.5 mb-5 p-3 rounded-xl bg-surface/50 border border-border">
+              {/* Search Bar */}
+              <div className="relative flex-1 min-w-[220px]">
+                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                <label htmlFor="manager-members-search" className="sr-only">{tManagerUi('search_by_name_or_id')}</label>
+                <input
+                  id="manager-members-search"
+                  type="search"
+                  className="mgr-input pl-9 text-xs w-full"
+                  placeholder={tManagerUi('search_by_name_or_id')}
+                  value={searchQuery}
+                  onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
+                />
+              </div>
+
+              {/* Plan Filter */}
+              <select
+                aria-label="Filter by membership plan"
+                value={planFilter}
+                onChange={(e) => { setPlanFilter(e.target.value); setPage(0); }}
+                className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
+              >
+                <option value="all">📦 All Plans</option>
+                {MANAGER_MEMBERSHIP_TYPE_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.value}
+                  </option>
+                ))}
+              </select>
+
+              {/* Shift Filter */}
+              <select
+                aria-label="Filter by shift"
+                value={shiftFilter}
+                onChange={(e) => { setShiftFilter(e.target.value); setPage(0); }}
+                className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
+              >
+                <option value="all">⏰ All Shifts</option>
+                <option value="Morning">Morning Shift</option>
+                <option value="Afternoon">Afternoon Shift</option>
+                <option value="Evening">Evening Shift</option>
+                <option value="Full Day">Full Day</option>
+              </select>
+
+              {/* Gender Filter */}
+              <select
+                aria-label="Filter by gender"
+                value={genderFilter}
+                onChange={(e) => { setGenderFilter(e.target.value); setPage(0); }}
+                className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
+              >
+                <option value="all">👥 All Genders</option>
+                {MANAGER_MEMBERS_GENDER_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.value}
+                  </option>
+                ))}
+              </select>
+
+              {/* Expiry Filter */}
+              <select
+                aria-label="Filter by validity expiration"
+                value={expiryFilter}
+                onChange={(e) => { setExpiryFilter(e.target.value); setPage(0); }}
+                className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
+              >
+                <option value="all">📅 All Expiry</option>
+                <option value="7days">⚠️ Expiring in ≤ 7 Days</option>
+                <option value="30days">🗓️ Expiring in ≤ 30 Days</option>
+              </select>
+
+              {/* Reset Filters CTA */}
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={handleResetFilters}
+                  className="flex items-center gap-1 px-2.5 py-2 rounded-lg text-xs font-bold text-danger hover:bg-danger-bg transition-colors cursor-pointer"
+                  title="Clear all active filters"
+                >
+                  <X size={13} />
+                  <span>Reset</span>
+                </button>
+              )}
+            </div>
+            <div className="flex-1 w-full overflow-x-auto">
+              {sortedMembers.length === 0 ? (
                   <ManagerMembersDirectoryEmptyState />
                 ) : (
                   <>
@@ -288,9 +431,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
             />
           )}
 
-          <ManagerMembersDirectorySupportingSections activeTab={activeTab} />
-
-        </div>
+        <ManagerMembersDirectorySupportingSections activeTab={activeTab} />
       </div>
     </div>
   );
