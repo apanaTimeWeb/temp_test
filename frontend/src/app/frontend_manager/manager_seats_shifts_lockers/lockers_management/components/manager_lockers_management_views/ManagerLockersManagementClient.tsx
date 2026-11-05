@@ -12,7 +12,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerSeatsLockerDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/schemas/ManagerLockersManagementDraftSchemas';
 import { useManagerLockersDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/hooks/ManagerLockersManagementDialogFocus';
-import { Plus, ChevronDown, Search, UserPlus, Unlock, Wrench, Key } from 'lucide-react';
+import { Plus, ChevronDown, Search, UserPlus, Unlock, Wrench, Key, Download, X } from 'lucide-react';
+import { sanitizeManagerLockersCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/utils/ManagerLockersManagementCsv';
 import type { ManagerLockersManagementNativeColumn as ColDef, ManagerLockersManagementNativeCellParams as ICellRendererParams } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
 import { MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_LOCKERS, type ManagerLockersManagementSampleLocker as Locker } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 import type { LockerStatus } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/types/ManagerLockersManagementComponentTypes';
@@ -96,6 +97,52 @@ export function ManagerLockersManagementClient() {
     setRemarks('');
   };
 
+  const handleAddLocker = () => {
+    if (!newLockerId.trim()) {
+      toast.error('Please enter a locker ID');
+      return;
+    }
+    const id = newLockerId.trim().toUpperCase();
+    if (lockers.some((l) => l.lockerId.toUpperCase() === id)) {
+      toast.error(`Locker ${id} already exists`);
+      return;
+    }
+    const newLocker: Locker = {
+      id,
+      lockerId: id,
+      status: 'Free',
+      assignedTo: '—',
+      studentId: '—',
+      assignedSince: '—',
+    };
+    setLockers((prev) => [newLocker, ...prev]);
+    toast.success(`Locker ${id} added successfully`);
+    setShowAddModal(false);
+    reset({ lockerId: '' });
+  };
+
+  const handleExportCsv = () => {
+    const headers = ['Locker ID', 'Status', 'Assigned To', 'Student ID', 'Assigned Since'];
+    const rows = filtered.map((l) => [
+      sanitizeManagerLockersCsvCell(l.lockerId),
+      sanitizeManagerLockersCsvCell(l.status),
+      sanitizeManagerLockersCsvCell(l.assignedTo),
+      sanitizeManagerLockersCsvCell(l.studentId ?? '—'),
+      sanitizeManagerLockersCsvCell(l.assignedSince),
+    ]);
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `lockers_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success('Lockers exported successfully');
+  };
+
   const filtered = useMemo(() => {
     const q = mainTableSearch.trim().toLowerCase();
     return lockers.filter((l) => {
@@ -150,9 +197,52 @@ export function ManagerLockersManagementClient() {
             <p className="ss-page-subtitle">{tManagerUi('manage_locker_assignments_and_availability')}</p>
             <p className="ss-page-subtitle" role="status" data-testid="manager-seats-contract-warning">{tManagerUi('sample_data_only_writes_are_disabled_until_the_verified_8ca5b6')}</p>
           </div>
-          <button type="button" className="ss-btn-primary ss-btn-start" onClick={() => { reset({ lockerId: '' }); clearErrors(); setShowAddModal(true); }}>
-            <Plus size={16} />{tManagerUi('add_locker')}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors"
+              onClick={handleExportCsv}
+            >
+              <Download size={14} /> Export CSV
+            </button>
+            <button type="button" className="ss-btn-primary ss-btn-start" onClick={() => { reset({ lockerId: '' }); clearErrors(); setShowAddModal(true); }}>
+              <Plus size={16} />{tManagerUi('add_locker')}
+            </button>
+          </div>
+        </div>
+
+        {/* Interactive Status KPI Counter Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 mb-4 scrollbar-none">
+          {([
+            { id: 'all', label: tManagerUi('all_statuses'), count: lockers.length, color: 'text-primary' },
+            { id: 'Free', label: tManagerUi('free'), count: lockers.filter(l => l.status === 'Free').length, color: 'text-success' },
+            { id: 'Occupied', label: tManagerUi('occupied'), count: lockers.filter(l => l.status === 'Occupied').length, color: 'text-danger' },
+            { id: 'Maintenance', label: tManagerUi('maintenance'), count: lockers.filter(l => l.status === 'Maintenance').length, color: 'text-warning' },
+          ] as const).map((tab) => {
+            const isActive = statusFilter === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setStatusFilter(tab.id)}
+                aria-pressed={isActive}
+                className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-primary text-on-primary shadow-sm ring-1 ring-primary'
+                    : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'
+                }`}
+              >
+                <span>{tab.label}</span>
+                <span
+                  className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
+                    isActive ? 'bg-primary-fg/20 text-on-primary' : 'bg-surface-highlight text-secondary'
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         <div className="ss-filter-bar flex flex-wrap items-center gap-3">
@@ -175,6 +265,20 @@ export function ManagerLockersManagementClient() {
             </select>
             <ChevronDown size={14} className="ss-select-icon" />
           </div>
+
+          {(statusFilter !== 'all' || mainTableSearch.trim() !== '') && (
+            <button
+              type="button"
+              onClick={() => {
+                setStatusFilter('all');
+                setMainTableSearch('');
+              }}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+              title="Reset filters"
+            >
+              <X size={13} /> Reset
+            </button>
+          )}
         </div>
 
         {filtered.length === 0 ? (
@@ -208,7 +312,7 @@ export function ManagerLockersManagementClient() {
             </div>
             <div className="ss-modal-footer">
               <button type="button" className="ss-btn-ghost" onClick={() => setShowAddModal(false)}>{tManagerUi('cancel')}</button>
-              <button type="button" className="ss-btn-primary cursor-not-allowed" disabled title={tManagerUi('add_locker_unavailable_host_mutation_contract_not_suppli_0c4933')}>{tManagerUi('add_unavailable')}</button>
+              <button type="button" className="ss-btn-primary" onClick={handleAddLocker}>{tManagerUi('add_locker')}</button>
             </div>
           </div>
         </div>

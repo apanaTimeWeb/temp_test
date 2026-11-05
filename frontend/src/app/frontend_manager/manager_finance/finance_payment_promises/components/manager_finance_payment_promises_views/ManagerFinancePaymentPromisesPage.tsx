@@ -2,7 +2,7 @@
 import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { useManagerPaymentPromisesFormatting } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesFormattingHook';
-import { CheckCircle, CalendarPlus, Eye, Search, X, Edit3, IndianRupee, MessageSquare } from 'lucide-react';
+import { CheckCircle, CalendarPlus, Eye, Search, X, Edit3, IndianRupee, MessageSquare, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES, type ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_STATUS_BADGE } from '@/app/frontend_manager/manager_finance/finance_payment_promises/constants/ManagerFinancePaymentPromisesPaymentPromiseConstants';
 import { ManagerFinancePaymentPromisesEmptyState } from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/manager_finance_payment_promises_empty_states/ManagerFinancePaymentPromisesEmptyState';
@@ -11,7 +11,7 @@ import type { ManagerFinancePaymentPromisesRouteQueryProps } from '@/app/fronten
 export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFinancePaymentPromisesRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_payment_promises.ui');
   const { formatCurrency, formatDate } = useManagerPaymentPromisesFormatting();
-  
+
   const [promisesList, setPromisesList] = useState<ManagerFinancePaymentPromisesPaymentPromiseSample[]>(
     MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES
   );
@@ -36,12 +36,67 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     });
   }, [promisesList, statusFilter, searchQuery]);
 
-  const totalRows = filtered.length;
+  type PromiseSortField = 'studentName' | 'promisedAmount' | 'expectedDate' | 'daysUntilDue' | 'status' | 'timesChanged';
+  const [sortField, setSortField] = useState<PromiseSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: PromiseSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedRows = useMemo(() => {
+    if (!sortField) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filtered, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: PromiseSortField, label: string, align: 'left' | 'right' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const handleMarkPaid = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
     setPromisesList((prev) =>
@@ -148,13 +203,13 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         <table className="w-full">
           <thead>
             <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              <th className="text-left py-3 px-4">{tManagerUi('student')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('promised_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('expected_date')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('days_until_since_due')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('times_changed')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('status')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('actions')}</th>
+              {renderSortableHeader('studentName', tManagerUi('student'), 'left')}
+              {renderSortableHeader('promisedAmount', tManagerUi('promised_inr'), 'right')}
+              {renderSortableHeader('expectedDate', tManagerUi('expected_date'), 'left')}
+              {renderSortableHeader('daysUntilDue', tManagerUi('days_until_since_due'), 'left')}
+              {renderSortableHeader('timesChanged', tManagerUi('times_changed'), 'left')}
+              {renderSortableHeader('status', tManagerUi('status'), 'left')}
+              <th scope="col" className="text-right py-3 px-4">{tManagerUi('actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -185,8 +240,8 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
                         p.daysUntilDue < 0
                           ? 'fin-text-danger font-semibold'
                           : p.daysUntilDue <= 3
-                          ? 'fin-text-warning'
-                          : 'fin-text-body'
+                            ? 'fin-text-warning'
+                            : 'fin-text-body'
                       }
                     >
                       {p.daysUntilDue < 0

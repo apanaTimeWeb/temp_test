@@ -10,7 +10,7 @@ import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_fin
 
 // RESPONSIBILITY: Entry page for the manager_renewals module.
 // DATA FLOW: Next.js Router -> Page -> Components
-import { Send, MessageSquare, Upload, Mail, Download, Printer, RotateCcw, CheckCircle, BellRing, AlertTriangle, Search } from 'lucide-react';
+import { Send, MessageSquare, Upload, Mail, Download, Printer, RotateCcw, CheckCircle, BellRing, AlertTriangle, Search, X } from 'lucide-react';
 import { MANAGER_FINANCE_RENEWAL_FILTERS } from '@/app/frontend_manager/manager_finance/finance_renewals/constants/ManagerFinanceRenewalsRenewalConstants';
 import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
 
@@ -25,6 +25,9 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   const [renewalsList, setRenewalsList] = useState(MANAGER_FINANCE_SAMPLE_RENEWALS);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [shiftFilter, setShiftFilter] = useState('all');
+  const [planFilter, setPlanFilter] = useState('all');
+  const [dueFilter, setDueFilter] = useState('all');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const expiringCritical = useMemo(() => renewalsList.filter((r) => r.daysLeft <= 3 && r.daysLeft >= 0), [renewalsList]);
@@ -39,15 +42,27 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
 
   const searchedRenewals = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return visible;
-    return visible.filter(
-      (r) =>
+    return visible.filter((r) => {
+      const matchShift = shiftFilter === 'all' || r.shift.toLowerCase() === shiftFilter.toLowerCase();
+      const matchPlan = planFilter === 'all' || r.plan.toLowerCase().includes(planFilter.toLowerCase());
+      const matchDue = dueFilter === 'all' || (dueFilter === 'due_only' ? Number(r.due) > 0 : true);
+      const matchQ =
+        !q ||
         r.studentName.toLowerCase().includes(q) ||
         r.smartId.toLowerCase().includes(q) ||
         r.plan.toLowerCase().includes(q) ||
-        r.shift.toLowerCase().includes(q)
-    );
-  }, [visible, searchQuery]);
+        r.shift.toLowerCase().includes(q);
+      return matchShift && matchPlan && matchDue && matchQ;
+    });
+  }, [visible, searchQuery, shiftFilter, planFilter, dueFilter]);
+
+  const hasActiveFilters = Boolean(
+    searchQuery.trim() !== '' ||
+    shiftFilter !== 'all' ||
+    planFilter !== 'all' ||
+    dueFilter !== 'all' ||
+    filter !== 'expiring_7'
+  );
 
   const translateShift = (value: string) => {
     switch (value) {
@@ -279,8 +294,8 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
       )}
 
       {/* Filter tabs and search bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex gap-2 flex-wrap">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <div className="flex gap-2 flex-wrap items-center">
           {MANAGER_FINANCE_RENEWAL_FILTERS.map((f) => (
             <button type="button"
               key={f.value}
@@ -291,15 +306,70 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
             </button>
           ))}
         </div>
-        <div className="relative w-full sm:w-64">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-          <input
-            type="search"
-            placeholder="Search student, smart ID, or plan..."
-            className="mgr-input pl-8 text-xs w-full"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+
+        {/* Multi-Filter Toolbar */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative w-full sm:w-56">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <input
+              type="search"
+              placeholder="Search student, smart ID, or plan..."
+              className="mgr-input pl-8 text-xs w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <select
+            aria-label="Filter by Shift"
+            value={shiftFilter}
+            onChange={(e) => setShiftFilter(e.target.value)}
+            className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
+          >
+            <option value="all">All Shifts</option>
+            <option value="Morning">Morning</option>
+            <option value="Evening">Evening</option>
+            <option value="Full Day">Full Day</option>
+          </select>
+
+          <select
+            aria-label="Filter by Plan Tier"
+            value={planFilter}
+            onChange={(e) => setPlanFilter(e.target.value)}
+            className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
+          >
+            <option value="all">All Plans</option>
+            <option value="Basic">Basic</option>
+            <option value="Premium">Premium</option>
+            <option value="Elite">Elite</option>
+          </select>
+
+          <select
+            aria-label="Filter by Due Status"
+            value={dueFilter}
+            onChange={(e) => setDueFilter(e.target.value)}
+            className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
+          >
+            <option value="all">All Dues</option>
+            <option value="due_only">Due &gt; ₹0</option>
+          </select>
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setShiftFilter('all');
+                setPlanFilter('all');
+                setDueFilter('all');
+                setUrlFilter('filter', 'expiring_7');
+              }}
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+              title="Reset all filters"
+            >
+              <X size={13} /> Reset
+            </button>
+          )}
         </div>
       </div>
 

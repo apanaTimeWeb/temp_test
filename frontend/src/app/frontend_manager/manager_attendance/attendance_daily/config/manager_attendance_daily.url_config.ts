@@ -9,5 +9,9 @@ export const MANAGER_ATTENDANCE_DAILY_ROUTES = {
   qrScanner: '/frontend_manager/manager_attendance/attendance_qr_scanner',
 } as const;
 
-/** No additional external API contract is declared by this route-config repair. */
-export const MANAGER_ATTENDANCE_DAILY_API = {} as const;
+export const MANAGER_ATTENDANCE_DAILY_API = {
+  LIST: '/api/v1/manager/attendance/daily' as const,
+  MARK: '/api/v1/manager/attendance/daily/mark' as const,
+  BULK_MARK: '/api/v1/manager/attendance/daily/bulk-mark' as const,
+  EXPORT_CSV: '/api/v1/manager/attendance/daily/export-csv' as const,
+} as const;

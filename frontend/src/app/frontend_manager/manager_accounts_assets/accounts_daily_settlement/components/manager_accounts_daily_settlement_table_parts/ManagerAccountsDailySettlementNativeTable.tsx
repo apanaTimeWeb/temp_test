@@ -4,6 +4,7 @@
 import { displayValue } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/utils/ManagerAccountsDailySettlementDisplayValue';
 
 import { useMemo, useState } from 'react';
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { ManagerAccountsDailySettlementNativeTableProps, NativeCellParams, NativeColumn, ManagerAccountsDailySettlementSortDirection } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementComponentTypes';
 export type { NativeCellParams, NativeColumn };
 
@@ -55,11 +56,20 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
                 {column.field && column.sortable !== false ? (
                   <button
                     type="button"
-                    className={`inline-flex items-center gap-1 ${isRightAligned ? 'justify-end w-full' : 'text-left'}`}
+                    className={`group inline-flex items-center gap-1.5 ${isRightAligned ? 'justify-end w-full' : 'text-left'}`}
                     onClick={() => changeSort(String(column.field))}
-                    aria-label={`Sort by ${column.headerName ?? column.field}`}
+                    aria-label={`Sort by ${column.headerName ?? column.field}, currently ${sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'unsorted'}`}
                   >
-                    {column.headerName ?? column.field} {sortField === column.field ? (sortDirection === 'asc' ? '↑' : '↓') : null}
+                    <span>{column.headerName ?? column.field}</span>
+                    {sortField === column.field ? (
+                      sortDirection === 'asc' ? (
+                        <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                      ) : (
+                        <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                      )
+                    ) : (
+                      <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+                    )}
                   </button>
                 ) : (
                   column.headerName ?? column.field ?? '—'

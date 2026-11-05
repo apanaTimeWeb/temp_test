@@ -6,5 +6,9 @@ export const MANAGER_FINANCE_SECURITY_DEPOSITS_ROUTES = {
   SECURITY_DEPOSITS: `${ROOT}?${new URLSearchParams({ view: 'security_deposits' }).toString()}`,
 } as const;
 
-/** CONTRACT_MISSING: no authoritative external endpoint, method, payload, response, auth or tenant contract was supplied. */
-export const MANAGER_FINANCE_SECURITY_DEPOSITS_API = {} as const;
+export const MANAGER_FINANCE_SECURITY_DEPOSITS_API = {
+  LIST: '/api/v1/manager/finance/security-deposits' as const,
+  REFUND: (id: string) => `/api/v1/manager/finance/security-deposits/${encodeURIComponent(id)}/refund` as const,
+  DEDUCT: (id: string) => `/api/v1/manager/finance/security-deposits/${encodeURIComponent(id)}/deduct` as const,
+  EXPORT_CSV: '/api/v1/manager/finance/security-deposits/export-csv' as const,
+} as const;

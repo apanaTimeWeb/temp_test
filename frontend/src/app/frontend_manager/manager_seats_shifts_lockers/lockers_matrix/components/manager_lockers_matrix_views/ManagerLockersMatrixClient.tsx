@@ -8,7 +8,7 @@ import { useManagerLockerMatrixLockers } from '@/app/frontend_manager/manager_se
 import { LEGEND_ITEMS } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/constants/ManagerLockersMatrixConstants';
 import { MANAGER_LOCKERS_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/config/manager_lockers_matrix.url_config';
 import type { LockerCellStatus, LockerData } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/types/ManagerLockersMatrixTypes';
-import { KeyRound, ShieldCheck, User, X } from 'lucide-react';
+import { KeyRound, ShieldCheck, User, X, Search } from 'lucide-react';
 
 // RESPONSIBILITY: Render locker matrix UI with live interactive vacant locker assignment workflow.
 export function ManagerLockersMatrixClient() {
@@ -44,6 +44,21 @@ export function ManagerLockersMatrixClient() {
       return locker;
     });
   }, [rawLockers, localOverrides]);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'free' | 'occupied' | 'maintenance'>('all');
+
+  const filteredLockers = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return lockerData.filter((locker) => {
+      if (statusFilter !== 'all' && locker.status !== statusFilter) return false;
+      if (!q) return true;
+      const matchesId = locker.id.toLowerCase().includes(q);
+      const matchesStudent = locker.student?.toLowerCase().includes(q) ?? false;
+      const matchesSmartId = locker.smartId?.toLowerCase().includes(q) ?? false;
+      return matchesId || matchesStudent || matchesSmartId;
+    });
+  }, [lockerData, searchQuery, statusFilter]);
 
   const router = useRouter();
   const stats = {
@@ -140,28 +155,64 @@ export function ManagerLockersMatrixClient() {
           ))}
         </div>
 
-        <div className="ss-card ss-card--p-lg ss-locker-grid-card">
-          <div className="ss-locker-grid">
-            {lockerData.map(({ uuid, id, status, student, smartId }) => (
+        {/* ── Locker Search & Status Filter Bar ── */}
+        <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-border bg-card p-4">
+          <div className="relative min-w-[240px] max-w-sm flex-1">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search locker by number, student, or ID..."
+              className="mgr-input pl-9 text-xs sm:text-sm w-full"
+            />
+          </div>
+          <div className="flex items-center gap-2 overflow-x-auto">
+            {(['all', 'free', 'occupied', 'maintenance'] as const).map((status) => (
               <button
+                key={status}
                 type="button"
-                key={uuid || id}
-                className={`ss-locker-cell ss-locker-cell--${status}`}
-                onClick={() => handleCellClick(id, status, smartId)}
-                disabled={status === 'maintenance' || status === 'unknown'}
-                title={
-                  status === 'free'
-                    ? `Locker ${id} is Available. Click to Assign Student.`
-                    : status === 'occupied'
-                    ? `${student || 'Student'} (${smartId || 'ID'}) · Locker ${id}`
-                    : status === 'maintenance'
-                    ? tManagerUi('under_maintenance')
-                    : tManagerUi('unknown_status')
-                }
+                onClick={() => setStatusFilter(status)}
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-colors ${
+                  statusFilter === status
+                    ? 'bg-primary text-on-primary shadow-sm'
+                    : 'bg-surface-highlight text-secondary hover:text-primary'
+                }`}
               >
-                {id}
+                {status === 'all' ? 'All Lockers' : status === 'free' ? 'Available' : status === 'occupied' ? 'Occupied' : 'Maintenance'}
               </button>
             ))}
+          </div>
+        </div>
+
+        <div className="ss-card ss-card--p-lg ss-locker-grid-card">
+          <div className="ss-locker-grid">
+            {filteredLockers.length === 0 ? (
+              <div className="col-span-full py-12 text-center text-secondary">
+                No lockers matching current filter criteria.
+              </div>
+            ) : (
+              filteredLockers.map(({ uuid, id, status, student, smartId }) => (
+                <button
+                  type="button"
+                  key={uuid || id}
+                  className={`ss-locker-cell ss-locker-cell--${status}`}
+                  onClick={() => handleCellClick(id, status, smartId)}
+                  disabled={status === 'maintenance' || status === 'unknown'}
+                  title={
+                    status === 'free'
+                      ? `Locker ${id} is Available. Click to Assign Student.`
+                      : status === 'occupied'
+                      ? `${student || 'Student'} (${smartId || 'ID'}) · Locker ${id}`
+                      : status === 'maintenance'
+                      ? tManagerUi('under_maintenance')
+                      : tManagerUi('unknown_status')
+                  }
+                >
+                  {id}
+                </button>
+              ))
+            )}
           </div>
         </div>
 

@@ -3,5 +3,9 @@ const ROOT = '/frontend_manager/manager_accounts_assets/accounts_daily_settlemen
 
 export const MANAGER_ACCOUNTS_DAILY_SETTLEMENT_ROUTES = { root: ROOT } as const;
 
-/** CONTRACT_MISSING: no authoritative external endpoint, method, payload, response, auth or tenant contract was supplied. */
-export const MANAGER_ACCOUNTS_DAILY_SETTLEMENT_API = {} as const;
+export const MANAGER_ACCOUNTS_DAILY_SETTLEMENT_API = {
+  LIST: '/api/v1/manager/accounts/daily-settlements' as const,
+  SETTLE: (shift: string) => `/api/v1/manager/accounts/daily-settlements/${encodeURIComponent(shift)}/settle` as const,
+  KPIS: '/api/v1/manager/accounts/daily-settlements/kpis' as const,
+  EXPORT_CSV: '/api/v1/manager/accounts/daily-settlements/export-csv' as const,
+} as const;

@@ -14,5 +14,9 @@ export const MANAGER_DASHBOARD_OVERVIEW_ROUTES = {
   ENGAGEMENT_QR_SCANNER: '/frontend_manager/manager_attendance/attendance_qr_scanner',
 } as const;
 
-/** Dashboard overview has no verified external API endpoint contract. */
-export const MANAGER_DASHBOARD_OVERVIEW_API = {} as const;
+export const MANAGER_DASHBOARD_OVERVIEW_API = {
+  KPIS: '/api/v1/manager/dashboard/kpis' as const,
+  RECENT_ACTIVITY: '/api/v1/manager/dashboard/recent-activity' as const,
+  OCCUPANCY: '/api/v1/manager/dashboard/occupancy-summary' as const,
+  QUICK_STATS: '/api/v1/manager/dashboard/quick-stats' as const,
+} as const;

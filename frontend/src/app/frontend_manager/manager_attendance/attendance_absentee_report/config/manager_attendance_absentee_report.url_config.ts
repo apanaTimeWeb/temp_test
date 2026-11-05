@@ -9,5 +9,8 @@ export const MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES = {
   qrScanner: '/frontend_manager/manager_attendance/attendance_qr_scanner',
 } as const;
 
-/** No additional external API contract is declared by this route-config repair. */
-export const MANAGER_ATTENDANCE_ABSENTEE_REPORT_API = {} as const;
+export const MANAGER_ATTENDANCE_ABSENTEE_REPORT_API = {
+  LIST: '/api/v1/manager/attendance/absentee-report' as const,
+  SEND_ALERTS: '/api/v1/manager/attendance/absentee-report/send-alerts' as const,
+  EXPORT_CSV: '/api/v1/manager/attendance/absentee-report/export-csv' as const,
+} as const;

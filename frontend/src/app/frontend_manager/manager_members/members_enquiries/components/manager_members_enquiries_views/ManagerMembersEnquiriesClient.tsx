@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 
 import { useRouter } from 'next/navigation';
-import { LayoutGrid, List, Plus, Search } from 'lucide-react';
+import { LayoutGrid, List, Plus, Search, Download } from 'lucide-react';
 import { useManagerMembersEnquiries } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesEnquiries';
 import { ManagerMembersEnquiriesKanban } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesKanban';
 import { ManagerMembersEnquiriesTable } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesTable';
@@ -28,6 +28,20 @@ export function ManagerMembersEnquiriesClient() {
     Interested: tManagerUi('interested'),
     Converted: tManagerUi('converted'),
     Lost: tManagerUi('lost'),
+  };
+
+  const handleExportCsv = () => {
+    const headers = 'Name,Phone,Shift,Status,Handled By,Date\n';
+    const rows = filtered
+      .map((e) => `"${e.name}","${e.phone}","${e.shift}","${e.status}","${e.handledBy || ''}","${e.addedDate || ''}"`)
+      .join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `crm_enquiries_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
   };
 
   if (isError) {
@@ -107,6 +121,15 @@ export function ManagerMembersEnquiriesClient() {
             <option key={status} value={status}>{statusLabels[status]}</option>
           ))}
         </select>
+        <button
+          type="button"
+          onClick={handleExportCsv}
+          className="mgr-btn-ghost flex items-center gap-1.5 text-xs whitespace-nowrap ml-auto"
+          title="Export CRM Enquiries as CSV"
+        >
+          <Download size={14} />
+          <span>Export CSV</span>
+        </button>
       </div>
 
       {/* ── Views ── */}

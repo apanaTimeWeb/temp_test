@@ -2,7 +2,9 @@
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 
-import { CalendarDays, LayoutGrid, List, Plus, Search, CheckCircle, SlidersHorizontal } from 'lucide-react';
+import { CalendarDays, LayoutGrid, List, Plus, Search, CheckCircle, SlidersHorizontal, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react';
+import { toast } from 'sonner';
+import { sanitizeManagerSeatMatrixCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixCsv';
 import { useManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/useManagerSeatsMatrixSeatMatrix';
 import { SHIFT_TABS, LEGEND_ITEMS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
 import { ManagerSeatsMatrixModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModal';
@@ -56,10 +58,63 @@ export function ManagerSeatsMatrixClient() {
     });
   }, [visible, genderFilter]);
 
-  const totalTablePages = Math.max(1, Math.ceil(filteredTableSeats.length / pageSize));
+  type SeatSortField = 'id' | 'wing' | 'shift' | 'status' | 'student';
+  const [sortField, setSortField] = useState<SeatSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: SeatSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedTableSeats = useMemo(() => {
+    if (!sortField) return filteredTableSeats;
+    return [...filteredTableSeats].sort((a, b) => {
+      const aVal = String(a[sortField] ?? '');
+      const bVal = String(b[sortField] ?? '');
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredTableSeats, sortField, sortDirection]);
+
+  const totalTablePages = Math.max(1, Math.ceil(sortedTableSeats.length / pageSize));
   const paginatedTableSeats = useMemo(() => {
-    return filteredTableSeats.slice(page * pageSize, (page + 1) * pageSize);
-  }, [filteredTableSeats, page, pageSize]);
+    return sortedTableSeats.slice(page * pageSize, (page + 1) * pageSize);
+  }, [sortedTableSeats, page, pageSize]);
+
+  const renderSortableHeader = (field: SeatSortField, label: string, widthClass: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className={`py-3 px-4 ${widthClass}`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const handleCreateSeat = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,6 +134,30 @@ export function ManagerSeatsMatrixClient() {
       setIsAddModalOpen(false);
       setNewSeatLabel('');
     }, 1000);
+  };
+
+  const handleExportCsv = () => {
+    const headers = ['Seat No', 'Wing / Hall', 'Shift', 'Status', 'Assigned Student', 'Smart ID', 'Gender'];
+    const rows = filteredTableSeats.map((s) => [
+      sanitizeManagerSeatMatrixCsvCell(s.id),
+      sanitizeManagerSeatMatrixCsvCell(s.wing ?? 'Ground Floor — AC Silent Reading Hall'),
+      sanitizeManagerSeatMatrixCsvCell(s.shift ?? activeTab),
+      sanitizeManagerSeatMatrixCsvCell(s.status),
+      sanitizeManagerSeatMatrixCsvCell(s.student ?? '—'),
+      sanitizeManagerSeatMatrixCsvCell(s.smartId ?? '—'),
+      sanitizeManagerSeatMatrixCsvCell(s.studentGender ?? '—'),
+    ]);
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `seat_matrix_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success('Seat matrix exported successfully');
   };
 
   if (isError) {
@@ -149,6 +228,14 @@ export function ManagerSeatsMatrixClient() {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors"
+          >
+            <Download size={14} /> Export CSV
+          </button>
+
           {/* Add Seat CTA */}
           <button
             type="button"
@@ -264,11 +351,11 @@ export function ManagerSeatsMatrixClient() {
             <table className="mgr-table w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-border bg-floating text-secondary text-xs uppercase font-semibold">
-                  <th className="py-3 px-4 w-2/12">Seat ID</th>
-                  <th className="py-3 px-4 w-2/12">Wing / Zone</th>
-                  <th className="py-3 px-4 w-2/12">Shift</th>
-                  <th className="py-3 px-4 w-2/12">Status</th>
-                  <th className="py-3 px-4 w-3/12">Assigned Student</th>
+                  {renderSortableHeader('id', 'Seat ID', 'w-2/12')}
+                  {renderSortableHeader('wing', 'Wing / Zone', 'w-2/12')}
+                  {renderSortableHeader('shift', 'Shift', 'w-2/12')}
+                  {renderSortableHeader('status', 'Status', 'w-2/12')}
+                  {renderSortableHeader('student', 'Assigned Student', 'w-3/12')}
                   <th className="py-3 px-4 w-1/12 text-right">Actions</th>
                 </tr>
               </thead>

@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { useManagerSecurityDepositsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/useManagerFinanceSecurityDepositsUrlFilters';
 import { useManagerSecurityDepositsFormatting } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsFormattingHook';
-import { Undo2, Minus, Search, X, CheckCircle, IndianRupee, AlertCircle } from 'lucide-react';
+import { Undo2, Minus, Search, X, CheckCircle, IndianRupee, AlertCircle, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { MANAGER_FINANCE_SAMPLE_DEPOSITS } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 import { ManagerFinanceSecurityDepositsEmptyState } from '@/app/frontend_manager/manager_finance/finance_security_deposits/components/manager_finance_security_deposits_empty_states/ManagerFinanceSecurityDepositsEmptyState';
@@ -30,6 +30,22 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  type DepositSortField = 'studentName' | 'depositAmount' | 'status' | 'collectedBy' | 'collectedDate' | 'deductionAmount' | 'refundedDate';
+  const [sortField, setSortField] = useState<DepositSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: DepositSortField) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else {
+        setSortField(null);
+        setSortDirection('asc');
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
 
   // Modals
   const [refundTarget, setRefundTarget] = useState<ManagerFinanceSecurityDepositsSampleDeposit | null>(null);
@@ -49,12 +65,53 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
     });
   }, [depositsList, statusFilter, searchQuery]);
 
-  const totalRows = filtered.length;
+  const sortedRows = useMemo(() => {
+    if (!sortField) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
+        ? aVal - bVal
+        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filtered, sortField, sortDirection]);
+
+  const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginated = filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: DepositSortField, label: string, align: 'left' | 'right' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const confirmRefund = (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,15 +214,15 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
         <table className="w-full">
           <thead>
             <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              <th className="text-left py-3 px-4">{tManagerUi('student')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('deposit_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('status')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('collected_by')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('collected_date')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('deduction_inr')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('deduction_reason')}</th>
-              <th className="text-left py-3 px-4">{tManagerUi('refunded_date')}</th>
-              <th className="text-right py-3 px-4">{tManagerUi('actions')}</th>
+              {renderSortableHeader('studentName', tManagerUi('student'), 'left')}
+              {renderSortableHeader('depositAmount', tManagerUi('deposit_inr'), 'right')}
+              {renderSortableHeader('status', tManagerUi('status'), 'left')}
+              {renderSortableHeader('collectedBy', tManagerUi('collected_by'), 'left')}
+              {renderSortableHeader('collectedDate', tManagerUi('collected_date'), 'left')}
+              {renderSortableHeader('deductionAmount', tManagerUi('deduction_inr'), 'right')}
+              <th scope="col" className="text-left py-3 px-4">{tManagerUi('deduction_reason')}</th>
+              {renderSortableHeader('refundedDate', tManagerUi('refunded_date'), 'left')}
+              <th scope="col" className="text-right py-3 px-4">{tManagerUi('actions')}</th>
             </tr>
           </thead>
           <tbody>

@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Orchestrate the client-side view and local interactions for components. It does not own backend persistence or cross-feature business logic.
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Award, Briefcase, Download, Filter, GraduationCap, Plus, Search, Users } from 'lucide-react';
+import { Award, Briefcase, Download, Filter, GraduationCap, Plus, Search, Users, ArrowUpDown, ArrowUp, ArrowDown, X } from 'lucide-react';
 import { ManagerMembersAlumniAddModal } from '@/app/frontend_manager/manager_members/members_alumni/components/manager_members_alumni_dialogs/ManagerMembersAlumniAddModal';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
 
@@ -30,6 +30,22 @@ export function ManagerMembersAlumniClient() {
   const [examFilter, setExamFilter] = useState('All');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  type AlumniSortField = 'id' | 'name' | 'phone' | 'leftDate' | 'duration' | 'exam' | 'currentStatus';
+  const [sortField, setSortField] = useState<AlumniSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: AlumniSortField) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else {
+        setSortField(null);
+        setSortDirection('asc');
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
 
   const filteredAlumni = useMemo(() => {
     return records.filter((record) => {
@@ -51,14 +67,60 @@ export function ManagerMembersAlumniClient() {
 
       return matchesSearch && matchesYear && matchesStatus && matchesExam;
     });
-  }, [searchQuery, yearFilter, statusFilter, examFilter]);
+  }, [records, searchQuery, yearFilter, statusFilter, examFilter]);
 
-  const totalRows = filteredAlumni.length;
+  const hasActiveFilters = Boolean(
+    searchQuery.trim() !== '' ||
+    yearFilter !== 'All' ||
+    statusFilter !== 'All' ||
+    examFilter !== 'All'
+  );
+
+  const sortedAlumni = useMemo(() => {
+    if (!sortField) return filteredAlumni;
+    return [...filteredAlumni].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredAlumni, sortField, sortDirection]);
+
+  const totalRows = sortedAlumni.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
-  const paginatedAlumni = filteredAlumni.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  const paginatedAlumni = sortedAlumni.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+
+  const renderSortableHeader = (field: AlumniSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className="py-3 px-4"
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const handleExportCsv = () => {
     const headers = 'ID,Name,Phone,Exit Date,Duration,Target Exam / Achievement,Designation,Current Status,Testimonial\n';
@@ -194,6 +256,23 @@ export function ManagerMembersAlumniClient() {
               <option value="Higher Studies">Higher Studies</option>
             </select>
           </div>
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setYearFilter('All');
+                setExamFilter('All');
+                setStatusFilter('All');
+                setPage(0);
+              }}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer shrink-0 self-center"
+              title="Reset all filters"
+            >
+              <X size={13} /> Reset
+            </button>
+          )}
         </div>
       </div>
 
@@ -203,14 +282,14 @@ export function ManagerMembersAlumniClient() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold text-left">
-                <th className="py-3 px-4">Alumni ID</th>
-                <th className="py-3 px-4">Student Name</th>
-                <th className="py-3 px-4">Contact Phone</th>
-                <th className="py-3 px-4">Completion Date</th>
-                <th className="py-3 px-4">Tenure</th>
-                <th className="py-3 px-4">Exam & Rank / Post</th>
-                <th className="py-3 px-4">Junior Advice / Review</th>
-                <th className="py-3 px-4">Status</th>
+                {renderSortableHeader('id', 'Alumni ID')}
+                {renderSortableHeader('name', 'Student Name')}
+                {renderSortableHeader('phone', 'Contact Phone')}
+                {renderSortableHeader('leftDate', 'Completion Date')}
+                {renderSortableHeader('duration', 'Tenure')}
+                {renderSortableHeader('exam', 'Exam & Rank / Post')}
+                <th scope="col" className="py-3 px-4">Junior Advice / Review</th>
+                {renderSortableHeader('currentStatus', 'Status')}
               </tr>
             </thead>
             <tbody>
