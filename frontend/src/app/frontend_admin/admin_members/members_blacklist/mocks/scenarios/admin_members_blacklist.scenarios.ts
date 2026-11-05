@@ -96,8 +96,8 @@ export const createAdminMembersBlacklistScenarioCatalog = (activeRecords: unknow
 
 /** Synthetic rows for explicitly enabled development demo mode only. */
 export const ADMIN_BLACKLIST_DEMO_FIXTURES: readonly AdminBlacklistRecord[] = [
-  { id: 'demo-blacklist-001', name: 'Demo Student A', phone: '+91 90000 00001', reason: 'Repeated policy violations (demo)', blacklistedBy: 'Demo Admin', blacklistedOn: '2026-10-01', previousSeat: 'A-04', status: 'Blacklisted' },
-  { id: 'demo-blacklist-002', name: 'Demo Student B', phone: '+91 90000 00002', reason: 'Unresolved account issue (demo)', blacklistedBy: 'Demo Admin', blacklistedOn: '2026-10-03', previousSeat: 'B-12', status: 'Blacklisted' },
+  { id: 'demo-blacklist-001', name: 'Demo Student A', phone: '+91 90000 00001', reason: 'Repeated policy violations (demo)', blacklistedBy: 'Demo Admin', blacklistedOn: '2026-10-01', previousSeat: 'A-04', status: 'Blacklisted', branch: 'Downtown Central' },
+  { id: 'demo-blacklist-002', name: 'Demo Student B', phone: '+91 90000 00002', reason: 'Unresolved account issue (demo)', blacklistedBy: 'Demo Admin', blacklistedOn: '2026-10-03', previousSeat: 'B-12', status: 'Blacklisted', branch: 'Westside Branch' },
 ];
 
 /** Synthetic frontend response fixture for API-layer tests only. */

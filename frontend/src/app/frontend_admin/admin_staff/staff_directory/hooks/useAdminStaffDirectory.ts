@@ -11,6 +11,7 @@ import { ADMIN_STAFF_DIRECTORY_DEMO_BRANCH_OPTIONS } from '@/app/frontend_admin/
 import type { AdminStaffDirectoryTab, AdminStaffDirectoryManager } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import type { AdminStaffDirectoryCreateManagerFormValues } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import { ADMIN_STAFF_DIRECTORY_FIXTURE_DATA } from '@/app/frontend_admin/admin_staff/staff_directory/mocks/scenarios/admin_staff_directory.scenarios';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { isFrontendDemoModeEnabled } from '@/lib/runtimeFeatures';
 import type { AdminStaffDirectoryManagerDetailTab } from '@/app/frontend_admin/admin_staff/staff_directory/types/AdminStaffDirectoryComponentTypes';
 
@@ -60,8 +61,17 @@ export default function useAdminStaffDirectory() {
   const [demoManagersOverride, setDemoManagersOverride] = useState<AdminStaffDirectoryManager[] | null>(null);
   const [viewingManager, setViewingManager] = useState<AdminStaffDirectoryManager | null>(null);
   const [managerDetailTab, setManagerDetailTab] = useState<AdminStaffDirectoryManagerDetailTab>('overview');
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   const managersQuery = useQuery({ queryKey: ADMIN_STAFF_DIRECTORY_QUERY_KEYS.list(), queryFn: fetchAdminStaffDirectory, enabled: !isDemoMode });
-  const managers = isDemoMode ? demoManagersOverride ?? ADMIN_STAFF_DIRECTORY_FIXTURE_DATA : (managersQuery.data ?? []);
+  const rawManagers = isDemoMode ? demoManagersOverride ?? ADMIN_STAFF_DIRECTORY_FIXTURE_DATA : (managersQuery.data ?? []);
+  const managers = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return rawManagers;
+    return rawManagers.filter((m) =>
+      !m.branch ||
+      m.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) ||
+      selectedBranch.name.toLowerCase().includes(m.branch.toLowerCase())
+    );
+  }, [rawManagers, isAllBranches, selectedBranch]);
   const isLoading = !isDemoMode && managersQuery.isPending;
   const hasLoadError = !isDemoMode && managersQuery.isError;
   const handleAddManager = (values: AdminStaffDirectoryCreateManagerFormValues): 'created' | 'duplicate' | 'blocked' => {

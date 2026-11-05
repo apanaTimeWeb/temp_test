@@ -1,8 +1,9 @@
 'use client';
 // RESPONSIBILITY: Owns the profile overview, login-history, and sessions read-only presentation states.
 
-import { Camera, LogOut, Mail, MonitorSmartphone, Phone } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Camera, LogOut, Mail, MonitorSmartphone, Phone } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
 import { ADMIN_PROFILE_DEMO_ACCOUNT, ADMIN_PROFILE_DEMO_LOGIN_HISTORY, ADMIN_PROFILE_DEMO_SESSIONS } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
 import type { AdminSettingsProfileReadOnlyPanelsProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 
@@ -13,6 +14,58 @@ import type { AdminSettingsProfileReadOnlyPanelsProps } from '@/app/frontend_adm
  */
 export default function AdminSettingsProfileReadOnlyPanels({ view }: AdminSettingsProfileReadOnlyPanelsProps) {
   const t = useTranslations('ADMIN_PROFILE');
+
+  type HistorySortField = 'dateKey' | 'ip' | 'deviceKey' | 'status';
+  const [sortField, setSortField] = useState<HistorySortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: HistorySortField) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedHistory = useMemo(() => {
+    if (!sortField) return ADMIN_PROFILE_DEMO_LOGIN_HISTORY;
+    return [...ADMIN_PROFILE_DEMO_LOGIN_HISTORY].sort((a, b) => {
+      const aVal = String(a[sortField] || '');
+      const bVal = String(b[sortField] || '');
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [sortField, sortDirection]);
+
+  const renderSortableHeader = (field: HistorySortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th
+        scope="col"
+        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+        className="p-3 whitespace-nowrap text-left"
+      >
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   if (view === 'profile') {
     return (
@@ -51,14 +104,14 @@ export default function AdminSettingsProfileReadOnlyPanels({ view }: AdminSettin
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-                <th scope="col" className="p-3">{t('HISTORY_DATE')}</th>
-                <th scope="col" className="p-3">{t('HISTORY_IP')}</th>
-                <th scope="col" className="p-3">{t('HISTORY_DEVICE')}</th>
-                <th scope="col" className="p-3">{t('HISTORY_STATUS')}</th>
+                {renderSortableHeader('dateKey', t('HISTORY_DATE'))}
+                {renderSortableHeader('ip', t('HISTORY_IP'))}
+                {renderSortableHeader('deviceKey', t('HISTORY_DEVICE'))}
+                {renderSortableHeader('status', t('HISTORY_STATUS'))}
               </tr>
             </thead>
             <tbody>
-              {ADMIN_PROFILE_DEMO_LOGIN_HISTORY.map((entry) => (
+              {sortedHistory.map((entry) => (
                 <tr key={entry.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
                   <td className="p-3">{t(entry.dateKey)}</td>
                   <td className="p-3">{entry.ip}</td>

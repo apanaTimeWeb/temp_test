@@ -7,7 +7,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
-import { Users, Trophy, IndianRupee } from 'lucide-react';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
+import { Users, Trophy, IndianRupee, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_FINANCE_DEMO_REFERRERS } from '@/app/frontend_admin/admin_finance/finance_referrals/mocks/AdminFinanceReferralsDemoFixtures';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
@@ -21,13 +22,94 @@ export function AdminFinanceReferralsPage() {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
   const [isLoading, setIsLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
+  const [search, setSearch] = useState('');
+  type ReferralsSortField = 'name' | 'referredCount' | 'bonusEarned' | 'redeemed' | 'balance';
+  const [sortField, setSortField] = useState<ReferralsSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
+  const toggleSort = (field: ReferralsSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+
+  const filteredReferrers = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return ADMIN_FINANCE_DEMO_REFERRERS.filter((r) => {
+      const matchBranch = isAllBranches || !selectedBranch || !r.branch || r.branch.toLowerCase().includes(selectedBranch.name.toLowerCase());
+      const matchSearch = !q ||
+        r.name.toLowerCase().includes(q) ||
+        (r as unknown as { smartId?: string }).smartId?.toLowerCase().includes(q) ||
+        r.referredNames.some((rn) => rn.toLowerCase().includes(q));
+      return matchBranch && matchSearch;
+    });
+  }, [search, isAllBranches, selectedBranch]);
+
+  const sortedReferrers = useMemo(() => {
+    if (!sortField) return filteredReferrers;
+    return [...filteredReferrers].sort((a, b) => {
+      let aVal: string | number = '';
+      let bVal: string | number = '';
+      if (sortField === 'name') {
+        aVal = a.name;
+        bVal = b.name;
+        return sortDirection === 'asc'
+          ? aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' })
+          : bVal.localeCompare(aVal, undefined, { numeric: true, sensitivity: 'base' });
+      } else if (sortField === 'referredCount') {
+        aVal = a.referredNames.length;
+        bVal = b.referredNames.length;
+      } else if (sortField === 'bonusEarned') {
+        aVal = a.bonusEarned;
+        bVal = b.bonusEarned;
+      } else if (sortField === 'redeemed') {
+        aVal = a.redeemed;
+        bVal = b.redeemed;
+      } else if (sortField === 'balance') {
+        aVal = a.bonusEarned - a.redeemed;
+        bVal = b.bonusEarned - b.redeemed;
+      }
+      return sortDirection === 'asc' ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number);
+    });
+  }, [filteredReferrers, sortField, sortDirection]);
+
   const paginatedReferrers = useMemo(
-    () => ADMIN_FINANCE_DEMO_REFERRERS.slice(page * pageSize, (page + 1) * pageSize),
-    [page, pageSize]
+    () => sortedReferrers.slice(page * pageSize, (page + 1) * pageSize),
+    [sortedReferrers, page, pageSize]
   );
+
+  const renderSortableHeader = (field: ReferralsSortField, label: string, align: 'left' | 'right' | 'center' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`py-3 px-4 whitespace-nowrap ${align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'}`}>
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 700);
@@ -71,17 +153,34 @@ export function AdminFinanceReferralsPage() {
         </div>
       </div>
 
+      {/* Search Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="relative w-full sm:w-72">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search referrer or student name..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(0);
+            }}
+            className="min-h-11 w-full rounded-md border border-border bg-input pl-9 pr-3 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          />
+        </div>
+      </div>
+
       <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card overflow-x-auto">
         <table className="w-full text-left">
           <thead>
             <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
               <th className="text-left py-3 px-4">{t('RANK')}</th>
-              <th className="text-left py-3 px-4">{t('REFERRER')}</th>
+              {renderSortableHeader('name', t('REFERRER'))}
               <th className="text-left py-3 px-4">{t('REFERRED_STUDENTS')}</th>
-              <th className="text-center py-3 px-4">{t('REFERRED_COUNT')}</th>
-              <th className="text-right py-3 px-4">{t('BONUS_EARNED')}</th>
-              <th className="text-right py-3 px-4">{t('REDEEMED')}</th>
-              <th className="text-right py-3 px-4">{t('BALANCE')}</th>
+              {renderSortableHeader('referredCount', t('REFERRED_COUNT'), 'center')}
+              {renderSortableHeader('bonusEarned', t('BONUS_EARNED'), 'right')}
+              {renderSortableHeader('redeemed', t('REDEEMED'), 'right')}
+              {renderSortableHeader('balance', t('BALANCE'), 'right')}
             </tr>
           </thead>
           <tbody>
@@ -142,11 +241,11 @@ export function AdminFinanceReferralsPage() {
             )}
           </tbody>
         </table>
-        {ADMIN_FINANCE_DEMO_REFERRERS.length > 0 && (
+        {filteredReferrers.length > 0 && (
           <AdminTablePagination
             page={page}
             pageSize={pageSize}
-            totalCount={ADMIN_FINANCE_DEMO_REFERRERS.length}
+            totalCount={filteredReferrers.length}
             onPageChange={setPage}
             onPageSizeChange={(newSize: number) => {
               setPageSize(newSize);

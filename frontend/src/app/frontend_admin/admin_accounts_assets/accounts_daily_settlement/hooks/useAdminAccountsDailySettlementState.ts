@@ -28,7 +28,11 @@ export function useAdminAccountsDailySettlementState(initialRecords: DailySettle
       // Tab filter
       if (tabFilter !== 'ALL' && r.status !== tabFilter) return false;
       // Branch filter
-      if (branchFilter !== 'ALL' && r.branchId !== branchFilter) return false;
+      if (
+        branchFilter !== 'ALL' &&
+        r.branchId.toLowerCase() !== branchFilter.toLowerCase() &&
+        !r.branchName.toLowerCase().includes(branchFilter.toLowerCase())
+      ) return false;
       // Search query
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();

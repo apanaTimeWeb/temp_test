@@ -6,4 +6,5 @@ export type AdminFinanceDemoReferrer = {
   bonusEarned: number;
   redeemed: number;
   balance: number;
+  branch?: string;
 };

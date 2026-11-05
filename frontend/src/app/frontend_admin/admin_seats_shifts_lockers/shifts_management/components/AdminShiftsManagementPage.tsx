@@ -159,10 +159,11 @@ export function AdminShiftsManagementPage() {
               key={filter}
               type="button"
               onClick={() => setStatusFilter(filter)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium uppercase tracking-wider transition-colors ${statusFilter === filter
-                ? 'bg-primary text-primary-foreground font-semibold'
-                : 'bg-surface-highlight text-muted-foreground hover:text-foreground'
-                }`}
+              className={`rounded-md px-3 py-1.5 text-xs font-medium uppercase tracking-wider transition-colors ${
+                statusFilter === filter
+                  ? 'bg-primary text-primary-foreground font-semibold'
+                  : 'bg-surface-highlight text-muted-foreground hover:text-foreground'
+              }`}
             >
               {filter === 'all' ? 'All Shifts' : filter === 'active' ? 'Active' : 'Inactive'}
             </button>

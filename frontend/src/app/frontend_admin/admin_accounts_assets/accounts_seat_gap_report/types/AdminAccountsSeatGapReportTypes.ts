@@ -66,6 +66,7 @@ export interface AdminAccountingSeatGapRow {
   gapDays: number;
   revenueLoss: number;
   status: AdminAccountingSeatGapRowStatus;
+  branch?: string;
 }
 
 export interface AdminAccountingShiftGap {

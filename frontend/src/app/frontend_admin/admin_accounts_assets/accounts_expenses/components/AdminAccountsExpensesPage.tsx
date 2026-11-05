@@ -42,6 +42,7 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
   );
   const [catFilter, setCatFilter] = useState<AdminAccountsExpensesCategoryFilter>('all');
   const [statusFilter, setStatusFilter] = useState<AdminAccountsExpensesStatusFilter>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [pendingDelete, setPendingDelete] = useState<AdminAccountingExpense | null>(null);
   const [pendingApprove, setPendingApprove] = useState<AdminAccountingExpense | null>(null);
   const [pendingReject, setPendingReject] = useState<AdminAccountingExpense | null>(null);
@@ -116,15 +117,23 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
           expense.branchName.toLowerCase().includes(selectedBranch.name.toLowerCase()) ||
           selectedBranch.name.toLowerCase().includes(expense.branchName.toLowerCase())
         );
-        if (matchesBranch === false && expenses.some((e) => e.branchName && selectedBranch.name.toLowerCase().includes(e.branchName.toLowerCase()))) {
+        if (!matchesBranch) {
           return false;
         }
       }
       if (catFilter !== 'all' && expense.category !== catFilter) return false;
       if (statusFilter !== 'all' && (expense.status ?? 'APPROVED') !== statusFilter) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.trim().toLowerCase();
+        const matchDesc = expense.description?.toLowerCase().includes(q);
+        const matchPayee = expense.paidBy?.toLowerCase().includes(q);
+        const matchCategory = expense.category?.toLowerCase().includes(q);
+        const matchBranch = expense.branchName?.toLowerCase().includes(q);
+        if (!matchDesc && !matchPayee && !matchCategory && !matchBranch) return false;
+      }
       return true;
     });
-  }, [expenses, isAllBranches, selectedBranch, catFilter, statusFilter]);
+  }, [expenses, isAllBranches, selectedBranch, catFilter, statusFilter, searchQuery]);
 
   return (
     <div className="space-y-6">
@@ -141,6 +150,8 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
       <AdminAccountsExpensesFilterSection
         value={catFilter}
         statusFilter={statusFilter}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
         onChange={setCatFilter}
         onStatusChange={setStatusFilter}
         pendingCount={pendingCount}

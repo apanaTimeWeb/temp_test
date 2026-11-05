@@ -33,7 +33,11 @@ export function useAdminAssetsRegisterState(initialRecords: AdminAssetRecord[] =
       if (tabFilter === 'NEEDS_SERVICE' && r.status !== 'MAINTENANCE_REQUIRED' && r.status !== 'UNDER_REPAIR') return false;
 
       // Branch filter
-      if (branchFilter !== 'ALL' && r.branchId !== branchFilter) return false;
+      if (
+        branchFilter !== 'ALL' &&
+        r.branchId.toLowerCase() !== branchFilter.toLowerCase() &&
+        !r.branchName.toLowerCase().includes(branchFilter.toLowerCase())
+      ) return false;
 
       // Category filter
       if (categoryFilter !== 'ALL' && r.category !== categoryFilter) return false;

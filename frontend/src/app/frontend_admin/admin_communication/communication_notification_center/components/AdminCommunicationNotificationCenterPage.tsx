@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ChevronRight, ArrowRight, CheckCheck } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import {
   ADMIN_COMMUNICATION_NOTIFICATION_CATEGORIES,
   ADMIN_COMMUNICATION_NOTIFICATION_ICON_CLASS,
@@ -25,9 +26,13 @@ export function AdminCommunicationNotificationCenterPage() {
 
   if (!isDemoMode) return <section className="space-y-3 rounded-lg border border-warning-bg bg-card p-6" aria-labelledby="notification-center-title"><h1 id="notification-center-title" className="flex items-center gap-3 text-2xl font-bold tracking-tight text-text-primary">{t('NOTIFICATION_CENTER_TITLE')}</h1><p role="status" className="text-warning-text">{t('NOTIFICATION_CENTER_LIVE_UNAVAILABLE')}</p></section>;
 
-  const filtered = filterAdminCommunicationNotifications(notifs, cat);
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+  const categoryFiltered = filterAdminCommunicationNotifications(notifs, cat);
+  const filtered = categoryFiltered.filter((n) =>
+    isAllBranches || !selectedBranch || !n.branch || n.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(n.branch.toLowerCase())
+  );
 
-  const unread = countUnreadAdminCommunicationNotifications(notifs);
+  const unread = countUnreadAdminCommunicationNotifications(filtered);
   const markAllRead = () => setNotifs((previous) => markAdminCommunicationNotificationsRead(previous));
 
   return (

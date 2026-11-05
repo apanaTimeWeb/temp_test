@@ -2,7 +2,8 @@
 // RESPONSIBILITY: Owns the coupons page summary, KPI indicators, and explicit query result states.
 
 import { useTranslations } from 'next-intl';
-import { Tag, Plus } from 'lucide-react';
+import { Tag, Plus, Search } from 'lucide-react';
+import { useState, useMemo } from 'react';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
@@ -32,6 +33,19 @@ export function formatAdminCouponsDate(value: string | undefined, locale: string
 export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon, onValidateDraft, coupons, columns, isError, isPending, onRetry }: AdminCouponsOverviewSectionProps) {
   const t = useTranslations('ADMIN_COUPONS');
   const [urlTablePage0, setUrlTablePage0] = useAdminApplicationInfrastructureUrlQueryState<number>('admin-coupons-admin-coupons-results-section-1-page', 0);
+  const [search, setSearch] = useState('');
+
+  const filteredCoupons = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return coupons;
+    return coupons.filter((c) =>
+      c.code.toLowerCase().includes(q) ||
+      (c.branchApplicability && c.branchApplicability.toLowerCase().includes(q)) ||
+      (c.status && c.status.toLowerCase().includes(q)) ||
+      (c.type && c.type.toLowerCase().includes(q))
+    );
+  }, [coupons, search]);
+
   const metrics = [
     { label: t('KPI_TOTAL_COUPONS'), value: coupons.length, background: 'bg-primary-subtle', foreground: 'text-primary' },
     { label: t('KPI_ACTIVE'), value: coupons.filter((coupon) => coupon.status === 'Active').length, background: 'bg-success-bg', foreground: 'text-success-text' },
@@ -42,7 +56,35 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
   if (isError) results = <section role="alert" className="rounded-lg border border-danger-text bg-danger-bg p-6 text-danger-text"><p>{t('LOAD_ERROR')}</p><button type="button" className="mt-3 min-h-11 rounded-md border border-border px-3 py-2 text-primary" onClick={onRetry}>{t('RETRY')}</button></section>;
   else if (isPending) results = <section role="status" aria-busy="true" aria-label={t('LOADING')} className="space-y-3 rounded-lg border border-border bg-card p-4 sm:p-6"><span className="sr-only">{t('LOADING')}</span><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }, (_, index) => <div key={`coupon-skeleton-card-${index + 1}`} className="h-10 rounded bg-skeleton-base motion-safe:animate-pulse" />)}</div><div className="space-y-2 pt-3">{Array.from({ length: 5 }, (_, index) => <div key={`coupon-skeleton-row-${index + 1}`} className="h-11 rounded bg-skeleton-highlight motion-safe:animate-pulse" />)}</div></section>;
   else if (coupons.length === 0) results = <AdminEmptyState showIcon={false} title={t('EMPTY_TITLE')} description={t('EMPTY_DESCRIPTION')} />;
-  else results = <DataGrid rowData={[...coupons]} columnDefs={columns} pagination pageSize={25} emptyMessage={t('EMPTY_TITLE')} page={urlTablePage0} onPageChange={setUrlTablePage0} />;
+  else results = (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="relative flex-1 min-w-[240px] max-w-md">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setUrlTablePage0(0);
+            }}
+            placeholder="Search coupons by code, branch, status..."
+            aria-label="Search coupons"
+            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-border bg-input text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+      </div>
+      <DataGrid
+        rowData={filteredCoupons}
+        columnDefs={columns}
+        pagination
+        pageSize={25}
+        emptyMessage={t('EMPTY_TITLE')}
+        page={urlTablePage0}
+        onPageChange={setUrlTablePage0}
+      />
+    </div>
+  );
   return <div className="space-y-6">
     <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div className="min-w-0 space-y-1"><p className="text-caption text-text-secondary">{t('BREADCRUMB')}</p><h1 className="text-page-title font-bold text-text-primary">{t('PAGE_TITLE')}</h1><p className="text-sm text-text-secondary">{t('PAGE_SUBTITLE')}</p></div><div className="flex flex-wrap items-center gap-3"><button type="button" className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 py-2 text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:text-text-disabled" disabled={!isDemoMode} aria-describedby="admin-coupons-mutation-note" title={isDemoMode ? t('DEMO_MODE_NOTICE') : t('MUTATIONS_UNAVAILABLE')} onClick={onCreateCoupon}><Plus size={18} strokeWidth={2}/>{t('CREATE_COUPON')}</button><button type="button" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={onValidateDraft}>{t('VALIDATE_DRAFT')}</button></div></header>
     <p id="admin-coupons-mutation-note" role="status" className="rounded-lg border border-warning-bg bg-warning-bg p-3 text-sm text-warning-text">{isDemoMode ? t('DEMO_MODE_NOTICE') : t('MUTATIONS_UNAVAILABLE')}</p>

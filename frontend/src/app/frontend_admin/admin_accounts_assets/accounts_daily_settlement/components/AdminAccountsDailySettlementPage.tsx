@@ -43,10 +43,15 @@ export function AdminAccountsDailySettlementPage() {
       setBranchFilter('ALL');
     } else {
       const matched = availableBranches.find(
-        (b) => b.id === selectedBranchId || b.name.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(b.name.toLowerCase())
+        (b) =>
+          b.id.toLowerCase() === selectedBranchId.toLowerCase() ||
+          b.name.toLowerCase().includes(selectedBranch.name.toLowerCase()) ||
+          selectedBranch.name.toLowerCase().includes(b.name.toLowerCase())
       );
       if (matched) {
         setBranchFilter(matched.id);
+      } else {
+        setBranchFilter(selectedBranchId);
       }
     }
   }, [isAllBranches, selectedBranchId, selectedBranch, availableBranches, setBranchFilter]);

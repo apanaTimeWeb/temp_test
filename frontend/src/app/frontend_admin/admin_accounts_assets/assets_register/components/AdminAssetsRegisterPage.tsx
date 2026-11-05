@@ -1,8 +1,10 @@
 // components/AdminAssetsRegisterPage.tsx
 'use client';
+import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Search, RotateCcw, PlusCircle, ShieldCheck, AlertCircle } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminAssetsRegisterState } from '@/app/frontend_admin/admin_accounts_assets/assets_register/hooks/useAdminAssetsRegisterState';
 import { useAdminAssetsRegisterMutations } from '@/app/frontend_admin/admin_accounts_assets/assets_register/hooks/useAdminAssetsRegisterMutations';
 import AdminAssetsRegisterKpis from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterKpis';
@@ -38,6 +40,26 @@ export function AdminAssetsRegisterPage() {
 
   const { isSubmitting, handleCreateAsset, handleUpdateAmc } =
     useAdminAssetsRegisterMutations(addRecord, updateRecord);
+
+  const { selectedBranchId, selectedBranch, isAllBranches } = useAdminBranch();
+
+  useEffect(() => {
+    if (isAllBranches || !selectedBranch) {
+      setBranchFilter('ALL');
+    } else {
+      const matched = availableBranches.find(
+        (b) =>
+          b.id.toLowerCase() === selectedBranchId.toLowerCase() ||
+          b.name.toLowerCase().includes(selectedBranch.name.toLowerCase()) ||
+          selectedBranch.name.toLowerCase().includes(b.name.toLowerCase())
+      );
+      if (matched) {
+        setBranchFilter(matched.id);
+      } else {
+        setBranchFilter(selectedBranchId);
+      }
+    }
+  }, [selectedBranchId, selectedBranch, isAllBranches, availableBranches, setBranchFilter]);
 
   const expiringCount = records.filter((r) => isExpiringSoon(r.warrantyExpiryDate)).length;
   const needsServiceCount = records.filter(

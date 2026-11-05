@@ -2,7 +2,7 @@ import { ADMIN_LOCKERS_ROOT } from '@/app/frontend_admin/application_infrastruct
 export { ADMIN_LOCKERS_ROOT };
 /** Canonical route and observed API URL contract for locker management. */
 const adminLockersRoute = (view: string): string => { const routes: Record<string, string> = {
-    "lockers": "/admin/admin_seats_shifts_lockers/lockers_management",
+    "lockers": "/admin/admin_seats_shifts_lockers/lockers_matrix",
     "matrix": "/admin/admin_seats_shifts_lockers/lockers_matrix"
   }; return routes[view] ?? "/admin/admin_seats_shifts_lockers/seats_matrix"; };
 export const ADMIN_LOCKERS_ROUTE_LOCKERS = adminLockersRoute('lockers');

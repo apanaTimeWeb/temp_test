@@ -96,6 +96,7 @@
     "noSeatsFound": "कोई सीट नहीं मिली।",
     "seatNumber": "सीट नंबर",
     "branch": "शाखा",
+    "allBranches": "सभी शाखाएँ",
     "save": "सहेजें",
     "markSeatBrokenTitle": "सीट को खराब चिह्नित करें",
     "markSeatBrokenPrompt": "सीट को खराब चिह्नित करें? इसके बाद इसे आवंटित नहीं किया जा सकेगा।",

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   Sun,
@@ -13,12 +14,16 @@ import {
   X,
   Clock,
   UserX,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import type {
   StaffRosterSlot,
   StaffLeaveRequest,
 } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 import { ADMIN_STAFF_SHIFTS } from '@/app/frontend_admin/admin_staff/staff_attendance/config/admin_staff_attendance.url_config';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 interface Props {
   slots: StaffRosterSlot[];
@@ -114,6 +119,68 @@ interface LeavesProps {
 
 export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: LeavesProps) {
   const t = useTranslations('ADMIN_STAFF_ATTENDANCE');
+  type LeaveSortField = 'staffName' | 'branchName' | 'leaveType' | 'daysCount' | 'status';
+  const [sortField, setSortField] = useState<LeaveSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const toggleSort = (field: LeaveSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedRequests = useMemo(() => {
+    if (!sortField) return leaveRequests;
+    return [...leaveRequests].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+        return sortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        const diff = aVal - bVal;
+        return sortDirection === 'asc' ? diff : -diff;
+      }
+      return 0;
+    });
+  }, [leaveRequests, sortField, sortDirection]);
+
+  const paginatedRequests = useMemo(
+    () => sortedRequests.slice(page * pageSize, (page + 1) * pageSize),
+    [sortedRequests, page, pageSize]
+  );
+
+  const renderSortableHeader = (field: LeaveSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-4 py-3 whitespace-nowrap">
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   if (leaveRequests.length === 0) {
     return (
@@ -142,7 +209,7 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
     <div className="space-y-4">
       {/* Mobile Card View */}
       <div className="space-y-3 md:hidden">
-        {leaveRequests.map((req) => (
+        {paginatedRequests.map((req) => (
           <article key={req.id} className="rounded-xl border border-border bg-card p-4 shadow-sm space-y-3">
             <div className="flex items-start justify-between gap-2">
               <div>
@@ -196,17 +263,17 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
         <table className="w-full text-left text-sm">
           <thead className="border-b border-border bg-surface text-xs font-semibold uppercase text-text-secondary">
             <tr>
-              <th scope="col" className="px-4 py-3">{t('COL_STAFF')}</th>
-              <th scope="col" className="px-4 py-3">{t('COL_BRANCH')}</th>
-              <th scope="col" className="px-4 py-3">{t('COL_LEAVE_TYPE')}</th>
-              <th scope="col" className="px-4 py-3">{t('COL_DURATION')}</th>
+              {renderSortableHeader('staffName', t('COL_STAFF'))}
+              {renderSortableHeader('branchName', t('COL_BRANCH'))}
+              {renderSortableHeader('leaveType', t('COL_LEAVE_TYPE'))}
+              {renderSortableHeader('daysCount', t('COL_DURATION'))}
               <th scope="col" className="px-4 py-3">{t('COL_REASON')}</th>
-              <th scope="col" className="px-4 py-3">{t('COL_STATUS')}</th>
+              {renderSortableHeader('status', t('COL_STATUS'))}
               <th scope="col" className="px-4 py-3 text-right">{t('COL_ACTIONS')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {leaveRequests.map((req) => (
+            {paginatedRequests.map((req) => (
               <tr key={req.id} className="hover:bg-surface-hover transition-colors">
                 <td className="px-4 py-3 font-medium text-text-primary">
                   <div>{req.staffName}</div>
@@ -259,6 +326,17 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
           </tbody>
         </table>
       </div>
+
+      <AdminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalRows={leaveRequests.length}
+        onPageChange={setPage}
+        onPageSizeChange={(newPageSize) => {
+          setPageSize(newPageSize);
+          setPage(0);
+        }}
+      />
     </div>
   );
 }

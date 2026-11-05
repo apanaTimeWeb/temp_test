@@ -96,6 +96,7 @@
     "noSeatsFound": "No seats found.",
     "seatNumber": "Seat Number",
     "branch": "Branch",
+    "allBranches": "All Branches",
     "save": "Save",
     "markSeatBrokenTitle": "Mark Seat as Broken",
     "markSeatBrokenPrompt": "Mark seat as broken? It will be unavailable for assignment.",

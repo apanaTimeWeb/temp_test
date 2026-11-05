@@ -24,6 +24,8 @@ export type AdminAccountsExpensesStatusFilter = 'all' | 'PENDING_APPROVAL' | 'AP
 export interface AdminAccountsExpensesFilterSectionProps {
   value: AdminAccountsExpensesCategoryFilter;
   statusFilter?: AdminAccountsExpensesStatusFilter;
+  searchQuery?: string;
+  onSearchChange?: (val: string) => void;
   onChange: (value: AdminAccountsExpensesCategoryFilter) => void;
   onStatusChange?: (status: AdminAccountsExpensesStatusFilter) => void;
   pendingCount?: number;

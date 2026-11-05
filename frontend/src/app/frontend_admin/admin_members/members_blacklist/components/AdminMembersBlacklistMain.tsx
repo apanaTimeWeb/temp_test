@@ -10,6 +10,7 @@ import type { AdminBlacklistRecord, AdminBlacklistFormDialogProps } from '@/app/
 import AdminBlacklistRecordsSection from '@/app/frontend_admin/admin_members/members_blacklist/components/AdminMembersBlacklistRecordsSection';
 import { Toaster } from 'sonner';
 import useAdminMembersBlacklistState from '@/app/frontend_admin/admin_members/members_blacklist/hooks/useAdminMembersBlacklistState';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -60,16 +61,24 @@ export default function AdminMembersBlacklistMain() {
   const { isDemoMode, recordsQuery, records, showForm, setShowForm, removeId, setRemoveId, selectedRecord, setSelectedRecord, submit, confirmRemove } = useAdminMembersBlacklistState();
 
   const columns = useMemo<readonly DataGridColumn<AdminBlacklistRecord>[]>(() => [
-    { field: 'name', headerName: t('TABLE_STUDENT'), flex: 2, minWidth: 180 },
-    { field: 'reason', headerName: t('TABLE_REASON'), flex: 2.5, minWidth: 220 },
-    { field: 'blacklistedBy', headerName: t('TABLE_BLACKLISTED_BY'), flex: 1.5, minWidth: 150 },
-    { field: 'blacklistedOn', headerName: t('TABLE_DATE'), flex: 1, minWidth: 120, cellRenderer: ({ value }: DataGridCellParams<AdminBlacklistRecord>) => formatAdminBlacklistDate(typeof value === 'string' ? value : undefined, locale) },
-    { field: 'previousSeat', headerName: t('TABLE_PREVIOUS_SEAT'), flex: 0.8, minWidth: 100 },
-    { field: 'status', headerName: t('TABLE_STATUS'), flex: 1, minWidth: 120, cellRenderer: ({ value }: DataGridCellParams<AdminBlacklistRecord>) => <span className="admin-badge bg-danger-bg text-danger-text">{value == null || value === ADMIN_BLACKLIST_STATUS_VALUES[0] ? t('STATUS_BLACKLISTED') : String(value)}</span> },
+    { field: 'name', headerName: t('TABLE_STUDENT'), flex: 2, minWidth: 180, sortable: true },
+    { field: 'reason', headerName: t('TABLE_REASON'), flex: 2.5, minWidth: 220, sortable: true },
+    { field: 'blacklistedBy', headerName: t('TABLE_BLACKLISTED_BY'), flex: 1.5, minWidth: 150, sortable: true },
+    { field: 'blacklistedOn', headerName: t('TABLE_DATE'), flex: 1, minWidth: 120, sortable: true, cellRenderer: ({ value }: DataGridCellParams<AdminBlacklistRecord>) => formatAdminBlacklistDate(typeof value === 'string' ? value : undefined, locale) },
+    { field: 'previousSeat', headerName: t('TABLE_PREVIOUS_SEAT'), flex: 0.8, minWidth: 100, sortable: true },
+    { field: 'status', headerName: t('TABLE_STATUS'), flex: 1, minWidth: 120, sortable: true, cellRenderer: ({ value }: DataGridCellParams<AdminBlacklistRecord>) => <span className="admin-badge bg-danger-bg text-danger-text">{value == null || value === ADMIN_BLACKLIST_STATUS_VALUES[0] ? t('STATUS_BLACKLISTED') : String(value)}</span> },
     { headerName: t('TABLE_ACTIONS'), minWidth: 110, sortable: false, cellRenderer: ({ data }) => <button type="button" disabled={!isDemoMode} className="admin-btn-icon min-h-11 min-w-11 disabled:cursor-not-allowed disabled:opacity-50" aria-label={t('REMOVE_ARIA', { name: data.name })} title={!isDemoMode ? t('LIVE_UNAVAILABLE') : undefined} onClick={() => setRemoveId(data.id)}><X size={18} strokeWidth={2} /></button> },
   ], [isDemoMode, t, locale]);
 
   const errorMessage = recordsQuery.isError ? t('LOAD_ERROR') : null;
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+  const visibleRecords = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return records;
+    return records.filter((r) =>
+      !r.branch || r.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(r.branch.toLowerCase())
+    );
+  }, [records, isAllBranches, selectedBranch]);
+
   const selectedRecordDetails = selectedRecord ? [
     [t('TABLE_STUDENT'), selectedRecord.name],
     [t('PHONE_LABEL'), selectedRecord.phone],
@@ -92,7 +101,7 @@ export default function AdminMembersBlacklistMain() {
           </header>
         </div>
         <AdminBlacklistRecordsSection
-          records={records}
+          records={visibleRecords}
           columns={columns}
           isLoading={recordsQuery.isPending}
           isError={recordsQuery.isError}

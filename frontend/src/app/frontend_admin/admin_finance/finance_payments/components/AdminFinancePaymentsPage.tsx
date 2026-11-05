@@ -6,12 +6,13 @@ import useAdminFinancePaymentsQuery from '@/app/frontend_admin/admin_finance/fin
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { FileText, Receipt } from 'lucide-react';
+import { FileText, Receipt, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { AdminFinancePaymentApiRecord } from '@/app/frontend_admin/admin_finance/finance_payments/schemas/AdminFinancePaymentsSchema';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_FINANCE_PAYMENTS_ROUTES } from '@/app/frontend_admin/admin_finance/finance_payments/config/admin_finance_payments.url_config';
 import { buildAdminFinancePaymentsCsv } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsCsvUtils';
 import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
@@ -47,6 +48,7 @@ function mapAdminFinancePayment(record: AdminFinancePaymentApiRecord): AdminFina
     receivedBy: record.receivedBy ?? '—',
     status,
     deletionReason: record.deletionReason,
+    branch: (record as Record<string, unknown>).branch as string | undefined,
   };
 }
 
@@ -57,16 +59,25 @@ export function AdminFinancePaymentsPage() {
   const router = useRouter();
   const [modeFilter, setModeFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | AdminFinancePayment['mode']>('modeFilter', 'all', { validValues: ['all', 'cash', 'upi', 'card', 'bank', 'unknown'] });
   const [showDeleted, setShowDeleted] = useState(false);
+  const [search, setSearch] = useState('');
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   const paymentsQuery = useAdminFinancePaymentsQuery();
   const allPayments = useMemo(() => (paymentsQuery.data ?? []).map(mapAdminFinancePayment), [paymentsQuery.data]);
   const isPending = paymentsQuery.isPending;
   const loadError = paymentsQuery.isError ? t('PAYMENT_LOAD_ERROR') : null;
 
   const visible = useMemo(() => allPayments.filter((payment) => {
+    const branchMatch = isAllBranches || !selectedBranch || !payment.branch || payment.branch.toLowerCase().includes(selectedBranch.name.toLowerCase());
     const modeMatch = modeFilter === 'all' || payment.mode === modeFilter;
     const deletedMatch = showDeleted || payment.status !== 'deleted';
-    return modeMatch && deletedMatch;
-  }), [allPayments, modeFilter, showDeleted]);
+    const q = search.trim().toLowerCase();
+    const searchMatch = !q ||
+      payment.studentName.toLowerCase().includes(q) ||
+      payment.smartId.toLowerCase().includes(q) ||
+      payment.receiptNumber.toLowerCase().includes(q) ||
+      (payment.txnId && payment.txnId.toLowerCase().includes(q));
+    return branchMatch && modeMatch && deletedMatch && searchMatch;
+  }), [allPayments, modeFilter, showDeleted, search, isAllBranches, selectedBranch]);
 
   const handleExport = () => {
     const csv = buildAdminFinancePaymentsCsv(visible, { receipt: t('CSV_RECEIPT'), date: t('CSV_DATE'), student: t('CSV_STUDENT'), smartId: t('CSV_SMART_ID'), amount: t('CSV_AMOUNT'), currency: t('CSV_CURRENCY'), amountUnit: t('CSV_AMOUNT_UNIT'), mode: t('CSV_MODE'), lateFee: t('CSV_LATE_FEE'), receivedBy: t('CSV_RECEIVED_BY'), status: t('CSV_STATUS') });
@@ -99,6 +110,19 @@ export function AdminFinancePaymentsPage() {
     <div className="space-y-6">
       <div><h1 className="text-page-title font-bold text-text-primary">{t('PAYMENT_TITLE')}</h1><p className="mt-1 text-body text-text-secondary">{t('PAYMENT_SUBTITLE')}</p></div>
       <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search student, smart ID, receipt, txn ID..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setUrlTablePage0(0);
+            }}
+            className="min-h-11 w-full rounded-md border border-border bg-input pl-9 pr-3 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          />
+        </div>
         <label className="sr-only" htmlFor="finance-payment-mode">{t('FILTER_PAYMENT_MODE')}</label>
         <select id="finance-payment-mode" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 pr-8 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary w-40" value={modeFilter} onChange={(event) => setModeFilter(event.target.value as 'all' | AdminFinancePayment['mode'])}>
           <option value="all">{t('ALL_MODES')}</option><option value="cash">{t('CASH')}</option><option value="upi">{t('UPI')}</option><option value="card">{t('CARD')}</option><option value="bank">{t('BANK_TRANSFER')}</option><option value="unknown">{t('UNKNOWN_UNAVAILABLE')}</option>
