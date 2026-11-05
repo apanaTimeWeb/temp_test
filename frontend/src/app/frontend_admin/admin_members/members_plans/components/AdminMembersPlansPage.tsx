@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState, useMemo } from 'react';
-import { CheckCircle, Pencil, Plus, Trash2, Building2 } from 'lucide-react';
+import { CheckCircle, Pencil, Plus, Trash2, Building2, Search } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
@@ -111,16 +111,31 @@ export default function AdminPlansPage() {
   const plansQuery = useAdminPlans(!isDemoMode);
   const [demoPlans, setDemoPlans] = useState<AdminPlansPlan[]>(() => isDemoMode ? [...DEFAULT_DEMO_PLANS] : []);
   const plans: AdminPlansPlan[] = isDemoMode ? demoPlans : plansQuery.data ?? [];
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'Active' | 'Inactive'>('all');
 
   const visiblePlans = useMemo(() => {
-    if (isAllBranches || !selectedBranch) return plans;
     return plans.filter((plan) => {
-      if (!plan.branchApplicability || plan.branchApplicability === 'All Branches') return true;
-      const bName = plan.branchApplicability.toLowerCase();
-      const sName = selectedBranch.name.toLowerCase();
-      return bName.includes(sName) || sName.includes(bName);
+      if (!isAllBranches && selectedBranch) {
+        if (plan.branchApplicability && plan.branchApplicability !== 'All Branches') {
+          const bName = plan.branchApplicability.toLowerCase();
+          const sName = selectedBranch.name.toLowerCase();
+          if (!bName.includes(sName) && !sName.includes(bName)) return false;
+        }
+      }
+      if (statusFilter !== 'all' && plan.status !== statusFilter) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchesName = plan.name.toLowerCase().includes(q);
+        const matchesDuration = plan.duration.toLowerCase().includes(q);
+        const matchesPrice = String(plan.price).includes(q);
+        const matchesFeature = plan.features.some((f) => f.toLowerCase().includes(q));
+        const matchesBranch = plan.branchApplicability?.toLowerCase().includes(q) ?? false;
+        if (!matchesName && !matchesDuration && !matchesPrice && !matchesFeature && !matchesBranch) return false;
+      }
+      return true;
     });
-  }, [plans, selectedBranch, isAllBranches]);
+  }, [plans, selectedBranch, isAllBranches, statusFilter, searchQuery]);
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -173,6 +188,35 @@ export default function AdminPlansPage() {
           <button type="button" data-testid="admin_plans-AdminMembersPlansMain-control-001" className="admin-btn-primary disabled:cursor-not-allowed disabled:opacity-60" onClick={handleCreate} disabled={!isDemoMode} title={!isDemoMode ? t('PERSISTENCE_BLOCKED') : undefined}>
             <Plus size={18} strokeWidth={2} /> {t('CREATE_PLAN')}
           </button>
+        </div>
+      </div>
+
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div className="relative min-w-[260px] max-w-sm flex-1">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search plans by name, feature, duration, or branch..."
+            className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          {(['all', 'Active', 'Inactive'] as const).map((status) => (
+            <button
+              key={status}
+              type="button"
+              onClick={() => setStatusFilter(status)}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                statusFilter === status
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'border border-border bg-card text-text-secondary hover:bg-surface-highlight hover:text-text-primary'
+              }`}
+            >
+              {status === 'all' ? 'All Plans' : status}
+            </button>
+          ))}
         </div>
       </div>
       {!isDemoMode && plansQuery.isError ? (

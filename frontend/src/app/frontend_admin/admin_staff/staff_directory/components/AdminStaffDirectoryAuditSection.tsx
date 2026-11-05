@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, Search } from 'lucide-react';
 import type { AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import {
   ADMIN_STAFF_DIRECTORY_ACTIVITY_FIXTURES,
@@ -21,6 +21,7 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
   type SessionSortField = 'managerName' | 'operatingSystem' | 'ipAddress' | 'timeKey';
   const [sessionSortField, setSessionSortField] = useState<SessionSortField | null>(null);
   const [sessionSortDirection, setSessionSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [sessionSearchQuery, setSessionSearchQuery] = useState('');
   const [sessionsPage, setSessionsPage] = useState(0);
   const [sessionsPageSize, setSessionsPageSize] = useState(10);
 
@@ -30,15 +31,26 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
     else { setSessionSortField(field); setSessionSortDirection('asc'); }
   };
 
+  const filteredSessions = useMemo(() => {
+    if (!sessionSearchQuery.trim()) return ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES;
+    const q = sessionSearchQuery.toLowerCase().trim();
+    return ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES.filter(
+      (s) =>
+        s.managerName.toLowerCase().includes(q) ||
+        s.operatingSystem.toLowerCase().includes(q) ||
+        s.ipAddress.toLowerCase().includes(q)
+    );
+  }, [sessionSearchQuery]);
+
   const sortedSessions = useMemo(() => {
-    if (!sessionSortField) return ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES;
-    return [...ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES].sort((a, b) => {
+    if (!sessionSortField) return filteredSessions;
+    return [...filteredSessions].sort((a, b) => {
       const aVal = a[sessionSortField];
       const bVal = b[sessionSortField];
       const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
       return sessionSortDirection === 'asc' ? cmp : -cmp;
     });
-  }, [sessionSortField, sessionSortDirection]);
+  }, [filteredSessions, sessionSortField, sessionSortDirection]);
 
   const paginatedSessions = useMemo(
     () => sortedSessions.slice(sessionsPage * sessionsPageSize, (sessionsPage + 1) * sessionsPageSize),
@@ -48,6 +60,7 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
   type HistorySortField = 'managerName' | 'timeKey' | 'statusKey' | 'location';
   const [historySortField, setHistorySortField] = useState<HistorySortField | null>(null);
   const [historySortDirection, setHistorySortDirection] = useState<'asc' | 'desc'>('asc');
+  const [historySearchQuery, setHistorySearchQuery] = useState('');
   const [historyPage, setHistoryPage] = useState(0);
   const [historyPageSize, setHistoryPageSize] = useState(10);
 
@@ -57,19 +70,44 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
     else { setHistorySortField(field); setHistorySortDirection('asc'); }
   };
 
+  const filteredHistory = useMemo(() => {
+    if (!historySearchQuery.trim()) return ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES;
+    const q = historySearchQuery.toLowerCase().trim();
+    return ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES.filter(
+      (h) => h.managerName.toLowerCase().includes(q) || h.location.toLowerCase().includes(q)
+    );
+  }, [historySearchQuery]);
+
   const sortedHistory = useMemo(() => {
-    if (!historySortField) return ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES;
-    return [...ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES].sort((a, b) => {
+    if (!historySortField) return filteredHistory;
+    return [...filteredHistory].sort((a, b) => {
       const aVal = a[historySortField];
       const bVal = b[historySortField];
       const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
       return historySortDirection === 'asc' ? cmp : -cmp;
     });
-  }, [historySortField, historySortDirection]);
+  }, [filteredHistory, historySortField, historySortDirection]);
 
   const paginatedHistory = useMemo(
     () => sortedHistory.slice(historyPage * historyPageSize, (historyPage + 1) * historyPageSize),
     [sortedHistory, historyPage, historyPageSize]
+  );
+
+  const [activitySearchQuery, setActivitySearchQuery] = useState('');
+  const [activityPage, setActivityPage] = useState(0);
+  const [activityPageSize, setActivityPageSize] = useState(10);
+
+  const filteredActivity = useMemo(() => {
+    if (!activitySearchQuery.trim()) return ADMIN_STAFF_DIRECTORY_ACTIVITY_FIXTURES;
+    const q = activitySearchQuery.toLowerCase().trim();
+    return ADMIN_STAFF_DIRECTORY_ACTIVITY_FIXTURES.filter(
+      (a) => a.managerName.toLowerCase().includes(q) || a.actionKey.toLowerCase().includes(q)
+    );
+  }, [activitySearchQuery]);
+
+  const paginatedActivity = useMemo(
+    () => filteredActivity.slice(activityPage * activityPageSize, (activityPage + 1) * activityPageSize),
+    [filteredActivity, activityPage, activityPageSize]
   );
 
   const renderSortableHeader = (label: string, active: boolean, direction: 'asc' | 'desc', onToggle: () => void) => (
@@ -96,7 +134,22 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
 
   if (tab === 'sessions') return (
     <section className="admin-card">
-      <h2 className="p-4 text-lg font-semibold text-text-primary">{t('SESSION_TITLE')}</h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border-b border-border">
+        <h2 className="text-lg font-semibold text-text-primary">{t('SESSION_TITLE')}</h2>
+        <div className="relative min-w-[220px] max-w-sm">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <input
+            type="text"
+            value={sessionSearchQuery}
+            onChange={(e) => {
+              setSessionSearchQuery(e.target.value);
+              setSessionsPage(0);
+            }}
+            placeholder="Search sessions..."
+            className="w-full rounded-lg border border-border bg-card py-1.5 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+        </div>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
@@ -109,25 +162,33 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
             </tr>
           </thead>
           <tbody>
-            {paginatedSessions.map((session) => (
-              <tr key={session.managerName} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
-                <th scope="row" className="p-3 font-medium text-text-primary">{session.managerName}</th>
-                <td className="p-3">{session.operatingSystem}</td>
-                <td className="p-3">{session.ipAddress}</td>
-                <td className="p-3">{t(session.timeKey)}</td>
-                <td className="p-3 text-right">
-                  <button type="button" disabled title={t('ROW_ACTIONS_BLOCKED')} className="min-h-11 cursor-not-allowed rounded-md px-3 text-text-disabled">{t('SESSION_REVOKE')}</button>
+            {paginatedSessions.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="p-6 text-center text-sm text-text-secondary">
+                  No active sessions found.
                 </td>
               </tr>
-            ))}
+            ) : (
+              paginatedSessions.map((session) => (
+                <tr key={session.managerName} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                  <th scope="row" className="p-3 font-medium text-text-primary">{session.managerName}</th>
+                  <td className="p-3">{session.operatingSystem}</td>
+                  <td className="p-3">{session.ipAddress}</td>
+                  <td className="p-3">{t(session.timeKey)}</td>
+                  <td className="p-3 text-right">
+                    <button type="button" disabled title={t('ROW_ACTIONS_BLOCKED')} className="min-h-11 cursor-not-allowed rounded-md px-3 text-text-disabled">{t('SESSION_REVOKE')}</button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
-      {ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES.length > 0 && (
+      {sortedSessions.length > 0 && (
         <AdminTablePagination
           page={sessionsPage}
           pageSize={sessionsPageSize}
-          totalCount={ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES.length}
+          totalCount={sortedSessions.length}
           onPageChange={setSessionsPage}
           onPageSizeChange={(newSize: number) => {
             setSessionsPageSize(newSize);
@@ -140,7 +201,22 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
 
   if (tab === 'history') return (
     <section className="admin-card">
-      <h2 className="p-4 text-lg font-semibold text-text-primary">{t('HISTORY_TITLE')}</h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border-b border-border">
+        <h2 className="text-lg font-semibold text-text-primary">{t('HISTORY_TITLE')}</h2>
+        <div className="relative min-w-[220px] max-w-sm">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <input
+            type="text"
+            value={historySearchQuery}
+            onChange={(e) => {
+              setHistorySearchQuery(e.target.value);
+              setHistoryPage(0);
+            }}
+            placeholder="Search login history..."
+            className="w-full rounded-lg border border-border bg-card py-1.5 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+        </div>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
@@ -152,24 +228,32 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
             </tr>
           </thead>
           <tbody>
-            {paginatedHistory.map((entry) => (
-              <tr key={`${entry.managerName}-${entry.timeKey}`} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
-                <th scope="row" className="p-3 font-medium text-text-primary">{entry.managerName}</th>
-                <td className="p-3">{t(entry.timeKey)}</td>
-                <td className="p-3">
-                  <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${entry.statusKey === 'STATUS_SUCCESS' ? 'bg-success-bg text-success-text' : 'bg-danger-bg text-danger-text'}`}>{t(entry.statusKey)}</span>
+            {paginatedHistory.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="p-6 text-center text-sm text-text-secondary">
+                  No login history records found.
                 </td>
-                <td className="p-3">{entry.location}</td>
               </tr>
-            ))}
+            ) : (
+              paginatedHistory.map((entry) => (
+                <tr key={`${entry.managerName}-${entry.timeKey}`} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                  <th scope="row" className="p-3 font-medium text-text-primary">{entry.managerName}</th>
+                  <td className="p-3">{t(entry.timeKey)}</td>
+                  <td className="p-3">
+                    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${entry.statusKey === 'STATUS_SUCCESS' ? 'bg-success-bg text-success-text' : 'bg-danger-bg text-danger-text'}`}>{t(entry.statusKey)}</span>
+                  </td>
+                  <td className="p-3">{entry.location}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
-      {ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES.length > 0 && (
+      {sortedHistory.length > 0 && (
         <AdminTablePagination
           page={historyPage}
           pageSize={historyPageSize}
-          totalCount={ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES.length}
+          totalCount={sortedHistory.length}
           onPageChange={setHistoryPage}
           onPageSizeChange={(newSize: number) => {
             setHistoryPageSize(newSize);
@@ -182,10 +266,47 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
 
   return (
     <section className="admin-card">
-      <h2 className="p-4 text-lg font-semibold text-text-primary">{t('ACTIVITY_TITLE')}</h2>
-      <div className="divide-y divide-border">{ADMIN_STAFF_DIRECTORY_ACTIVITY_FIXTURES.map((entry) => <article key={`${entry.timeKey}-${entry.actionKey}`} className="p-4">
-        <p className="text-text-primary">{t(entry.actionKey)}</p><p className="mt-1 text-sm text-text-secondary">{t('PERFORMED_BY', { name: entry.managerName })}</p><time className="mt-1 block text-xs text-text-secondary">{t(entry.timeKey)}</time>
-      </article>)}</div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border-b border-border">
+        <h2 className="text-lg font-semibold text-text-primary">{t('ACTIVITY_TITLE')}</h2>
+        <div className="relative min-w-[220px] max-w-sm">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <input
+            type="text"
+            value={activitySearchQuery}
+            onChange={(e) => {
+              setActivitySearchQuery(e.target.value);
+              setActivityPage(0);
+            }}
+            placeholder="Search activity..."
+            className="w-full rounded-lg border border-border bg-card py-1.5 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+        </div>
+      </div>
+      <div className="divide-y divide-border">
+        {paginatedActivity.length === 0 ? (
+          <p className="p-6 text-center text-sm text-text-secondary">No activity logs found.</p>
+        ) : (
+          paginatedActivity.map((entry) => (
+            <article key={`${entry.timeKey}-${entry.actionKey}`} className="p-4">
+              <p className="text-text-primary">{t(entry.actionKey)}</p>
+              <p className="mt-1 text-sm text-text-secondary">{t('PERFORMED_BY', { name: entry.managerName })}</p>
+              <time className="mt-1 block text-xs text-text-secondary">{t(entry.timeKey)}</time>
+            </article>
+          ))
+        )}
+      </div>
+      {filteredActivity.length > 0 && (
+        <AdminTablePagination
+          page={activityPage}
+          pageSize={activityPageSize}
+          totalCount={filteredActivity.length}
+          onPageChange={setActivityPage}
+          onPageSizeChange={(newSize: number) => {
+            setActivityPageSize(newSize);
+            setActivityPage(0);
+          }}
+        />
+      )}
     </section>
   );
 }

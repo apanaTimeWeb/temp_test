@@ -1,6 +1,6 @@
 // components/AdminSettingsSecurityAuditTrailPanel.tsx
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   ShieldAlert,
@@ -15,6 +15,7 @@ import {
   ArrowUp,
   ArrowDown,
 } from 'lucide-react';
+import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { ADMIN_SECURITY_ANTI_FRAUD_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
 import type {
   AntiFraudSeverity,
@@ -32,8 +33,11 @@ export function AdminSettingsSecurityAuditTrailPanel() {
   type AuditSortField = 'timestamp' | 'severity' | 'actionTitle' | 'targetEntity' | 'managerName';
   const [sortField, setSortField] = useState<AuditSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const toggleSort = (field: AuditSortField) => {
+    setPage(0);
     if (sortField === field) setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
     else { setSortField(field); setSortDirection('asc'); }
   };
@@ -61,6 +65,14 @@ export function AdminSettingsSecurityAuditTrailPanel() {
       return sortDirection === 'asc' ? cmp : -cmp;
     });
   }, [severityFilter, entityFilter, searchQuery, sortField, sortDirection]);
+
+  useEffect(() => {
+    setPage(0);
+  }, [severityFilter, entityFilter, searchQuery]);
+
+  const paginatedLogs = useMemo(() => {
+    return filteredLogs.slice(page * pageSize, (page + 1) * pageSize);
+  }, [filteredLogs, page, pageSize]);
 
   const renderSortableHeader = (field: AuditSortField, label: string, align: 'left' | 'center' = 'left') => {
     const isActive = sortField === field;
@@ -191,7 +203,7 @@ export function AdminSettingsSecurityAuditTrailPanel() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {filteredLogs.map((log) => (
+              {paginatedLogs.map((log) => (
                 <tr key={log.id} className="hover:bg-muted/20 motion-safe:transition-colors">
                   {/* Timestamp */}
                   <td className="px-3.5 py-3 whitespace-nowrap font-mono text-xs text-muted-foreground">
@@ -250,6 +262,16 @@ export function AdminSettingsSecurityAuditTrailPanel() {
             </tbody>
           </table>
         </div>
+        <AdminTablePagination
+          page={page}
+          pageSize={pageSize}
+          totalRows={filteredLogs.length}
+          onPageChange={setPage}
+          onPageSizeChange={(newSize) => {
+            setPageSize(newSize);
+            setPage(0);
+          }}
+        />
       </div>
     </section>
   );

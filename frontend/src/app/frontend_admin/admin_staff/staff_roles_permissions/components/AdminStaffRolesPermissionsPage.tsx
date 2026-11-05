@@ -1,8 +1,9 @@
 'use client';
 // RESPONSIBILITY: AdminStaffRolesPermissionsPage presentation component owned by admin_staff_roles_permissions; responsibility folder: admin_staff_roles_permissions_components_views.
 
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Search } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import AdminStaffRolesPermissionsMatrixTable from '@/app/frontend_admin/admin_staff/staff_roles_permissions/components/AdminStaffRolesPermissionsMatrixTable';
@@ -17,6 +18,24 @@ export default function AdminStaffRolesPermissionsPage() {
   const t = useTranslations('ADMIN_STAFF_ROLES_PERMISSIONS');
   const demoMode = isFrontendDemoModeEnabled();
   const { permsQuery, perms, setPerms } = useAdminStaffRolesPermissionsState();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredPerms = useMemo(() => {
+    if (!searchQuery.trim()) return perms;
+    const q = searchQuery.toLowerCase().trim();
+    return perms
+      .map((m) => {
+        const matchesModule = m.module.toLowerCase().includes(q);
+        const matchedActions = m.actions.filter(
+          (a) => matchesModule || a.label.toLowerCase().includes(q) || a.key.toLowerCase().includes(q)
+        );
+        return {
+          ...m,
+          actions: matchedActions,
+        };
+      })
+      .filter((m) => m.actions.length > 0);
+  }, [perms, searchQuery]);
 
   const toggle = (moduleIndex: number, actionIndex: number, roleKey: string) => {
     if (!demoMode) return;
@@ -28,6 +47,18 @@ export default function AdminStaffRolesPermissionsPage() {
             : action),
         }
       : module));
+  };
+
+  const handleToggle = (filteredModIdx: number, filteredActIdx: number, roleKey: string) => {
+    const mod = filteredPerms[filteredModIdx];
+    if (!mod) return;
+    const act = mod.actions[filteredActIdx];
+    if (!act) return;
+    const origModIdx = perms.findIndex((m) => m.module === mod.module);
+    if (origModIdx === -1) return;
+    const origActIdx = perms[origModIdx].actions.findIndex((a) => a.key === act.key);
+    if (origActIdx === -1) return;
+    toggle(origModIdx, origActIdx, roleKey);
   };
 
   const save = () => {
@@ -60,9 +91,21 @@ export default function AdminStaffRolesPermissionsPage() {
           </button>
         </header>
 
-        <p id="admin-permissions-save-help" className="text-sm text-text-secondary" role="status">
-          {demoMode ? t('SAVE_HELP_DEMO') : t('SAVE_HELP_BLOCKED')}
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <p id="admin-permissions-save-help" className="text-sm text-text-secondary" role="status">
+            {demoMode ? t('SAVE_HELP_DEMO') : t('SAVE_HELP_BLOCKED')}
+          </p>
+          <div className="relative min-w-[260px] max-w-sm">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search permissions by action or module..."
+              className="w-full rounded-lg border border-border bg-card py-1.5 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+          </div>
+        </div>
 
         {permsQuery.isError ? (
           <div role="alert" className="rounded-lg border border-border bg-card p-6 text-danger-text">
@@ -77,8 +120,12 @@ export default function AdminStaffRolesPermissionsPage() {
           </div>
         ) : perms.length === 0 ? (
           <AdminEmptyState showIcon={false} title={t('EMPTY_TITLE')} description={t('EMPTY_DESCRIPTION')} />
+        ) : filteredPerms.length === 0 ? (
+          <div className="rounded-lg border border-border bg-card p-8 text-center text-text-secondary">
+            No permissions found matching &quot;{searchQuery}&quot;.
+          </div>
         ) : (
-          <AdminStaffRolesPermissionsMatrixTable modules={perms} demoMode={demoMode} onToggle={toggle} />
+          <AdminStaffRolesPermissionsMatrixTable modules={filteredPerms} demoMode={demoMode} onToggle={handleToggle} />
         )}
       </div>
     </>
