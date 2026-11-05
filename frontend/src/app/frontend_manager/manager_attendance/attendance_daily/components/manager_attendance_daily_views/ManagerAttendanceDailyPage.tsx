@@ -114,8 +114,14 @@ export default function ManagerAttendanceDailyPage({
     );
   };
 
+  const dateLabel = useMemo(() => {
+    if (date === todayStr) return 'Today';
+    if (date === yesterdayStr) return 'Yesterday';
+    return date;
+  }, [date, todayStr, yesterdayStr]);
+
   const handleExportCsv = () => {
-    const headers = 'Smart ID,Name,Shift,Status,In Time,Out Time\n';
+    const headers = `Attendance Register Export - Date: ${dateLabel}\nSmart ID,Name,Shift,Status,In Time,Out Time\n`;
     const rows = filtered
       .map(
         (s) =>
@@ -126,14 +132,14 @@ export default function ManagerAttendanceDailyPage({
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `attendance_register_${date}.csv`;
+    anchor.download = `attendance_register_${dateLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
     toast.success('Attendance register exported to CSV');
   };
 
   const handleSaveAttendance = () => {
-    toast.success(`Attendance for ${date} (${marked} students recorded) saved successfully.`);
+    toast.success(`Attendance for ${dateLabel} (${marked} students recorded) saved successfully.`);
   };
 
   return (
@@ -166,17 +172,17 @@ export default function ManagerAttendanceDailyPage({
               </span>
             </div>
 
-            <div className="flex items-baseline gap-3">
+            <div className="flex items-baseline gap-3 flex-wrap">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
                 {tManagerUi('daily_attendance')}
               </h1>
               <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-                {filtered.length} Students
+                {filtered.length} Students • Date: {dateLabel}
               </span>
             </div>
 
             <p className="text-sm text-secondary">
-              {tManagerUi('mark_attendance_for_all_enrolled_students_by_shift')}
+              {tManagerUi('mark_attendance_for_all_enrolled_students_by_shift')} • Date: {dateLabel}
             </p>
           </div>
 
@@ -277,9 +283,14 @@ export default function ManagerAttendanceDailyPage({
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-primary">{filtered.length}</div>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-primary">{filtered.length}</div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                [{dateLabel}]
+              </span>
+            </div>
             <p className="mt-1 text-xs text-secondary">
-              {shiftLabel(shift)} {tManagerUi('shift_dbd79b')}
+              {shiftLabel(shift)} shift ({dateLabel})
             </p>
           </div>
         </div>
@@ -295,12 +306,17 @@ export default function ManagerAttendanceDailyPage({
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
-              {present}
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
+                {present}
+              </div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-emerald-600 dark:text-emerald-400 border border-border">
+                [{dateLabel}]
+              </span>
             </div>
             <p className="mt-1 text-xs text-secondary">
               {filtered.length ? Math.round((present / filtered.length) * 100) : 0}
-              {tManagerUi('rate')} attendance rate
+              {tManagerUi('rate')} attendance rate ({dateLabel})
             </p>
           </div>
         </div>
@@ -316,11 +332,16 @@ export default function ManagerAttendanceDailyPage({
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">
-              {absent}
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">
+                {absent}
+              </div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-rose-600 dark:text-rose-400 border border-border">
+                [{dateLabel}]
+              </span>
             </div>
             <p className="mt-1 text-xs text-secondary">
-              {filtered.filter((s) => s.consecutiveAbsent >= 3).length} {tManagerUi('need_alerts')}
+              {filtered.filter((s) => s.consecutiveAbsent >= 3).length} {tManagerUi('need_alerts')} ({dateLabel})
             </p>
           </div>
         </div>
@@ -336,9 +357,14 @@ export default function ManagerAttendanceDailyPage({
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{late}</div>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{late}</div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-amber-600 dark:text-amber-400 border border-border">
+                [{dateLabel}]
+              </span>
+            </div>
             <p className="mt-1 text-xs text-secondary">
-              {marked}/{filtered.length} {tManagerUi('marked')}
+              {marked}/{filtered.length} {tManagerUi('marked')} ({dateLabel})
             </p>
           </div>
         </div>
@@ -426,6 +452,9 @@ export default function ManagerAttendanceDailyPage({
                   <span className="px-2 py-0.5 rounded-full font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
                     {late} {tManagerUi('late')}
                   </span>
+                  <span className="text-xs font-semibold text-secondary px-1 shrink-0">
+                    Showing {startItem}-{endItem} of {totalRows} students ({dateLabel})
+                  </span>
                 </div>
               </div>
 
@@ -450,7 +479,9 @@ export default function ManagerAttendanceDailyPage({
                   <div className="text-3xl mb-2" aria-hidden="true">
                     📅
                   </div>
-                  <p className="font-semibold text-primary text-sm">{tManagerUi('no_students_in_this_shift')}</p>
+                  <p className="font-semibold text-primary text-sm">
+                    No students found for {shiftLabel(shift)} shift on {dateLabel}.
+                  </p>
                   <p className="text-xs text-secondary mt-1">
                     {tManagerUi('try_selecting_a_different_shift_or_date')}
                   </p>

@@ -121,8 +121,22 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
     searchQuery.trim() !== '' || catFilter !== 'all' || modeFilter !== 'all' || timeHorizon !== 'all'
   );
 
+  const timeHorizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'all': return 'All Time';
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom':
+        return customStartDate && customEndDate
+          ? `${customStartDate} to ${customEndDate}`
+          : 'Custom Range';
+      default: return 'This Month';
+    }
+  }, [timeHorizon, customStartDate, customEndDate]);
+
   const handleExportCsv = () => {
-    const headers = 'Date,Description,Category,Amount (INR),Payment Mode,Paid By\n';
+    const headers = `Expense Ledger Export - Scope: ${timeHorizonLabel}\nDate,Description,Category,Amount (INR),Payment Mode,Paid By\n`;
     const rows = searchedExpenses
       .map(
         (e) =>
@@ -133,7 +147,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `expenses_ledger_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.download = `expenses_ledger_${timeHorizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
     toast.success('Expenses exported to CSV successfully');
@@ -210,12 +224,12 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
               </span>
             </div>
 
-            <div className="flex items-baseline gap-3">
+            <div className="flex items-baseline gap-3 flex-wrap">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
                 {tManagerUi('expense_ledger')}
               </h1>
               <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-                {searchedExpenses.length} Records
+                {searchedExpenses.length} Records • Scope: {timeHorizonLabel}
               </span>
             </div>
 
@@ -337,6 +351,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
           entries: tManagerUi('entries'),
           categories: tManagerUi('categories'),
         }}
+        timeHorizonLabel={timeHorizonLabel}
       />
 
       {/* ── Category Filter Pills ── */}
@@ -440,6 +455,10 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
               <X size={13} /> Reset
             </button>
           )}
+
+          <span className="text-xs font-semibold text-secondary px-1 shrink-0">
+            Showing {searchedExpenses.length} of {expenses.length} expenses ({timeHorizonLabel})
+          </span>
         </div>
 
         <button
@@ -455,7 +474,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
 
       {/* ── Native Table Ledger ── */}
       <ManagerAccountsExpensesExpenseLedger
-        emptyMessage={tManagerUi('no_matching_expenses_found')}
+        emptyMessage={hasActiveFilters ? `No expenses recorded for ${timeHorizonLabel} matching the selected criteria.` : tManagerUi('no_matching_expenses_found')}
         rows={searchedExpenses}
         columnDefs={colDefs}
       />

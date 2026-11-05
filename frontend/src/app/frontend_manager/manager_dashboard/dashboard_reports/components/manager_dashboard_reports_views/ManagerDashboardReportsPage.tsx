@@ -19,15 +19,17 @@ export default function ManagerDashboardReportsPage() {
   const [isCustomMode, setIsCustomMode] = useState<boolean>(false);
   const query = useManagerReports(dateRange);
 
+  const activeDateScope = isCustomMode ? 'Custom Range' : dateRange;
+
   const handleExportCsv = () => {
     if (!query.data) return;
-    const headers = 'Report Metric,Value,Trend\n';
+    const headers = `Report Scope: ${activeDateScope}\nReport Metric,Value,Trend\n`;
     const rows = query.data.kpiCards.map((c) => `"${c.title}","${c.value}","${c.trend || ''}"`).join('\n');
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `manager_reports_${dateRange.toLowerCase().replace(/\s+/g, '_')}.csv`;
+    a.download = `manager_reports_${activeDateScope.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -246,7 +248,7 @@ export default function ManagerDashboardReportsPage() {
         </div>
       ) : (
         <div className="space-y-6">
-          <ManagerDashboardReportsKpiGrid cards={data.kpiCards} />
+          <ManagerDashboardReportsKpiGrid cards={data.kpiCards} dateRange={activeDateScope} />
           <ManagerDashboardReportsChartsGrid data={data} />
           <ManagerDashboardReportsTablesGrid data={data} />
         </div>

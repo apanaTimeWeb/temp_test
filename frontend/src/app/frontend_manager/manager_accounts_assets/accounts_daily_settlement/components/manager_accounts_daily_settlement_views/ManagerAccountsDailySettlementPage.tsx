@@ -48,11 +48,19 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const yesterdayStr = toLocalDateInputValue(yesterdayDate);
 
   const [settlementDate, setSettlementDate] = useState(todayStr);
+  const [isAllDates, setIsAllDates] = useState(false);
   const [entries, setEntries] = useState<Entry[]>([...MOCK]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [shiftFilter, setShiftFilter] = useState('all');
   const [isSyncing, setIsSyncing] = useState(false);
+
+  const dateScopeLabel = useMemo(() => {
+    if (isAllDates) return 'All Dates';
+    if (settlementDate === todayStr) return 'Today';
+    if (settlementDate === yesterdayStr) return 'Yesterday';
+    return settlementDate;
+  }, [isAllDates, settlementDate, todayStr, yesterdayStr]);
 
   const handleSyncBalances = () => {
     setIsSyncing(true);
@@ -88,7 +96,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   };
 
   const handleExportCsv = () => {
-    const headers = 'Shift,Opening (INR),Cash (INR),UPI (INR),Expenses (INR),Closing (INR),Settled By,Status\n';
+    const headers = `Daily Settlement Export - Scope: ${dateScopeLabel}\nShift,Opening (INR),Cash (INR),UPI (INR),Expenses (INR),Closing (INR),Settled By,Status\n`;
     const rows = filteredEntries
       .map(
         (e) =>
@@ -99,7 +107,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `daily_settlement_${settlementDate}.csv`;
+    anchor.download = `daily_settlement_${dateScopeLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
     toast.success('Daily settlement exported to CSV successfully');
@@ -253,17 +261,17 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
               </span>
             </div>
 
-            <div className="flex items-baseline gap-3">
+            <div className="flex items-baseline gap-3 flex-wrap">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
                 {tManagerUi('daily_settlement')}
               </h1>
               <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-                {filteredEntries.length} Shifts
+                {filteredEntries.length} Shifts • Scope: {dateScopeLabel}
               </span>
             </div>
 
             <p className="text-sm text-secondary">
-              {tManagerUi('shift_wise_cash_upi_reconciliation')}
+              {tManagerUi('shift_wise_cash_upi_reconciliation')} • Date: {dateScopeLabel}
             </p>
           </div>
 
@@ -302,13 +310,27 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {/* Quick Date Selectors: Today | Yesterday */}
+          {/* Quick Date Selectors: All Dates | Today | Yesterday */}
           <div className="inline-flex bg-muted/60 p-1 rounded-xl border border-border">
             <button
               type="button"
-              onClick={() => setSettlementDate(todayStr)}
+              onClick={() => setIsAllDates(true)}
               className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
-                settlementDate === todayStr
+                isAllDates
+                  ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
+                  : 'text-secondary hover:text-primary'
+              }`}
+            >
+              All Dates
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setIsAllDates(false);
+                setSettlementDate(todayStr);
+              }}
+              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
+                !isAllDates && settlementDate === todayStr
                   ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
                   : 'text-secondary hover:text-primary'
               }`}
@@ -317,9 +339,12 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             </button>
             <button
               type="button"
-              onClick={() => setSettlementDate(yesterdayStr)}
+              onClick={() => {
+                setIsAllDates(false);
+                setSettlementDate(yesterdayStr);
+              }}
               className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
-                settlementDate === yesterdayStr
+                !isAllDates && settlementDate === yesterdayStr
                   ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
                   : 'text-secondary hover:text-primary'
               }`}
@@ -334,7 +359,10 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
               type="date"
               className="px-2.5 py-1 bg-card border border-border rounded-lg text-xs font-semibold text-primary outline-none focus:border-primary"
               value={settlementDate}
-              onChange={(e) => setSettlementDate(e.target.value)}
+              onChange={(e) => {
+                setIsAllDates(false);
+                setSettlementDate(e.target.value);
+              }}
               aria-label={tManagerUi('sample_settlement_date')}
               title={tManagerUi('sample_snapshot_only_date_filtering_is_not_connected_to_9140bb')}
             />
@@ -355,10 +383,15 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 font-mono">
-              {formatManagerDailySettlementCurrency(totalCash)}
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 font-mono">
+                {formatManagerDailySettlementCurrency(totalCash)}
+              </div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-emerald-600 dark:text-emerald-400 border border-border">
+                [{dateScopeLabel}]
+              </span>
             </div>
-            <p className="mt-1 text-xs text-secondary">Physical cash drawer total</p>
+            <p className="mt-1 text-xs text-secondary">Physical cash drawer total ({dateScopeLabel})</p>
           </div>
         </div>
 
@@ -373,10 +406,15 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400 font-mono">
-              {formatManagerDailySettlementCurrency(totalUpi)}
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400 font-mono">
+                {formatManagerDailySettlementCurrency(totalUpi)}
+              </div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-blue-600 dark:text-blue-400 border border-border">
+                [{dateScopeLabel}]
+              </span>
             </div>
-            <p className="mt-1 text-xs text-secondary">Direct bank / QR settlements</p>
+            <p className="mt-1 text-xs text-secondary">Direct bank / QR settlements ({dateScopeLabel})</p>
           </div>
         </div>
 
@@ -391,10 +429,15 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400 font-mono">
-              {formatManagerDailySettlementCurrency(totalExp)}
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400 font-mono">
+                {formatManagerDailySettlementCurrency(totalExp)}
+              </div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-rose-600 dark:text-rose-400 border border-border">
+                [{dateScopeLabel}]
+              </span>
             </div>
-            <p className="mt-1 text-xs text-secondary">Petty cash paid from counter</p>
+            <p className="mt-1 text-xs text-secondary">Petty cash paid from counter ({dateScopeLabel})</p>
           </div>
         </div>
 
@@ -409,10 +452,15 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-primary font-mono">
-              {formatManagerDailySettlementCurrency(netSurplus)}
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-primary font-mono">
+                {formatManagerDailySettlementCurrency(netSurplus)}
+              </div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                [{dateScopeLabel}]
+              </span>
             </div>
-            <p className="mt-1 text-xs text-secondary">Net realized vault closing balance</p>
+            <p className="mt-1 text-xs text-secondary">Net realized vault closing balance ({dateScopeLabel})</p>
           </div>
         </div>
       </div>
@@ -420,9 +468,11 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
       {/* ── Table Container with Toolbar ── */}
       <div className="fin-card p-5 space-y-4 rounded-2xl border border-border bg-card shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-border pb-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <h2 className="text-base font-bold text-primary">Shift Settlements Register</h2>
-            <span className="mgr-badge mgr-badge--info text-xs font-mono">{filteredEntries.length} Records</span>
+            <span className="mgr-badge mgr-badge--info text-xs font-mono">
+              Showing {filteredEntries.length} of {entries.length} Shifts ({dateScopeLabel})
+            </span>
           </div>
 
           {/* Multi-Filter Toolbar */}
@@ -496,8 +546,17 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             <p className="font-semibold text-primary text-sm">
               {searchQuery
                 ? 'No settlement entries matching your search query.'
-                : tManagerUi('no_settlement_entries_for_this_date')}
+                : `No settlement entries recorded for ${dateScopeLabel}.`}
             </p>
+            {!isAllDates && (
+              <button
+                type="button"
+                onClick={() => setIsAllDates(true)}
+                className="mt-2 px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
+              >
+                View All Dates
+              </button>
+            )}
           </div>
         ) : (
           <div className="mgr-table-wrapper h-80">

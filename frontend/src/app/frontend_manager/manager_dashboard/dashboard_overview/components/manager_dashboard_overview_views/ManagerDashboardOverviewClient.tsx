@@ -42,6 +42,21 @@ export function ManagerDashboardOverviewClient() {
     );
   }, []);
 
+  const timeRangeLabel = useMemo(() => {
+    switch (timeRange) {
+      case 'today':
+        return 'Today';
+      case 'this_week':
+        return 'This Week';
+      case 'this_month':
+        return 'This Month';
+      case 'custom':
+        return 'Custom';
+      default:
+        return 'Today';
+    }
+  }, [timeRange]);
+
   const adjustedKpiData = useMemo(() => {
     if (!data?.kpiData) return [];
     if (timeRange === 'this_week') {
@@ -222,7 +237,11 @@ export function ManagerDashboardOverviewClient() {
       </div>
 
       {/* KPI Stat Cards Grid */}
-      <ManagerDashboardOverviewKpiGrid kpiData={adjustedKpiData} />
+      <ManagerDashboardOverviewKpiGrid
+        kpiData={adjustedKpiData}
+        timeRange={timeRange}
+        timeRangeLabel={timeRangeLabel}
+      />
 
       {/* Today's Birthday Celebrations */}
       <ManagerDashboardOverviewBirthdayWidget />
@@ -243,6 +262,7 @@ export function ManagerDashboardOverviewClient() {
         enquiries={data.recentEnquiries}
         studentsHref={MANAGER_DASHBOARD_OVERVIEW_ROUTES.STUDENTS}
         enquiriesHref={MANAGER_DASHBOARD_OVERVIEW_ROUTES.CRM_ENQUIRIES}
+        timeRangeLabel={timeRangeLabel}
       />
 
       {/* Quick Access Navigation Tiles */}

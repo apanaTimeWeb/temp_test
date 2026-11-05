@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Users, CalendarCheck, Phone, Armchair, TrendingUp, TrendingDown, ChevronRight, type LucideIcon } from 'lucide-react';
@@ -13,8 +14,28 @@ const iconMap: Record<string, LucideIcon> = {
   Armchair,
 };
 
-export function ManagerDashboardOverviewKpiGrid({ kpiData }: ManagerDashboardOverviewKpiGridProps) {
+export function ManagerDashboardOverviewKpiGrid({
+  kpiData,
+  timeRange = 'today',
+  timeRangeLabel,
+}: ManagerDashboardOverviewKpiGridProps) {
   const tManagerUi = useTranslations('manager.manager_dashboard.ui');
+
+  const periodBadgeLabel = useMemo(() => {
+    if (timeRangeLabel) return timeRangeLabel;
+    switch (timeRange) {
+      case 'today':
+        return 'Today';
+      case 'this_week':
+        return 'This Week';
+      case 'this_month':
+        return 'This Month';
+      case 'custom':
+        return 'Custom';
+      default:
+        return 'Today';
+    }
+  }, [timeRange, timeRangeLabel]);
 
   const localizeKnownTitle = (title: string) => {
     switch (title) {
@@ -23,9 +44,15 @@ export function ManagerDashboardOverviewKpiGrid({ kpiData }: ManagerDashboardOve
         return tManagerUi('dashboard_kpi_total_students');
       case 'Attendance Today':
       case 'Today Attendance':
+        if (timeRange === 'this_week') return 'Attendance (This Week)';
+        if (timeRange === 'this_month') return 'Attendance (This Month)';
+        if (timeRange === 'custom') return 'Attendance (Custom)';
         return tManagerUi('dashboard_kpi_attendance_today');
       case 'New Enquiries':
       case 'New Inquiries':
+        if (timeRange === 'this_week') return 'New Enquiries (This Week)';
+        if (timeRange === 'this_month') return 'New Enquiries (This Month)';
+        if (timeRange === 'custom') return 'New Enquiries (Custom)';
         return tManagerUi('dashboard_kpi_new_enquiries');
       case 'Occupied Seats':
       case 'Seats Occupied':
@@ -80,9 +107,15 @@ export function ManagerDashboardOverviewKpiGrid({ kpiData }: ManagerDashboardOve
         return 'Active enrolled students';
       case 'Attendance Today':
       case 'Today Attendance':
+        if (timeRange === 'this_week') return 'Total check-ins this week';
+        if (timeRange === 'this_month') return 'Monthly attendance aggregate';
+        if (timeRange === 'custom') return 'Check-ins for custom period';
         return 'Check-ins recorded today';
       case 'New Enquiries':
       case 'New Inquiries':
+        if (timeRange === 'this_week') return 'Leads logged this week';
+        if (timeRange === 'this_month') return 'Total leads this month';
+        if (timeRange === 'custom') return 'Leads in custom period';
         return 'Leads awaiting follow-up';
       case 'Occupied Seats':
       case 'Seats Occupied':
@@ -146,9 +179,14 @@ export function ManagerDashboardOverviewKpiGrid({ kpiData }: ManagerDashboardOve
               </div>
 
               <div className="mt-4">
-                <p className="mgr-kpi-value text-3xl font-extrabold tracking-tight text-foreground font-sans">
-                  {kpi.value}
-                </p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="mgr-kpi-value text-3xl font-extrabold tracking-tight text-foreground font-sans">
+                    {kpi.value}
+                  </p>
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                    [{periodBadgeLabel}]
+                  </span>
+                </div>
                 <p className="mgr-kpi-label text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-1">
                   {localizeKnownTitle(kpi.title)}
                 </p>

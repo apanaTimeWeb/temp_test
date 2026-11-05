@@ -9,6 +9,7 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
   visibleExpenses,
   formatCurrency,
   labels,
+  timeHorizonLabel = 'This Month',
 }: ManagerAccountsExpensesExpenseSummaryCardsProps) {
   const totalOutflow = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const activeHorizonOutflow = visibleExpenses.reduce((sum, expense) => sum + expense.amount, 0);
@@ -26,8 +27,13 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
         <div className="mt-3">
-          <div className="text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">
-            {formatCurrency(totalOutflow)}
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">
+              {formatCurrency(totalOutflow)}
+            </div>
+            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-rose-600 dark:text-rose-400 border border-border">
+              [All Time]
+            </span>
           </div>
           <p className="mt-1 text-xs text-secondary">Cumulative recorded outflow</p>
         </div>
@@ -42,10 +48,15 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
         <div className="mt-3">
-          <div className="text-2xl font-bold tracking-tight text-primary">
-            {formatCurrency(activeHorizonOutflow)}
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-2xl font-bold tracking-tight text-primary">
+              {formatCurrency(activeHorizonOutflow)}
+            </div>
+            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-amber-600 dark:text-amber-400 border border-border">
+              [{timeHorizonLabel}]
+            </span>
           </div>
-          <p className="mt-1 text-xs text-secondary">Filtered time horizon spend</p>
+          <p className="mt-1 text-xs text-secondary">Filtered time horizon spend ({timeHorizonLabel})</p>
         </div>
       </div>
 
@@ -58,10 +69,15 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
         <div className="mt-3">
-          <div className="text-2xl font-bold tracking-tight text-primary">
-            {totalEntries}
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-2xl font-bold tracking-tight text-primary">
+              {totalEntries}
+            </div>
+            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-blue-600 dark:text-blue-400 border border-border">
+              [{timeHorizonLabel}]
+            </span>
           </div>
-          <p className="mt-1 text-xs text-secondary">Disbursement vouchers</p>
+          <p className="mt-1 text-xs text-secondary">Disbursement vouchers ({timeHorizonLabel})</p>
         </div>
       </div>
 
@@ -74,10 +90,15 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
         <div className="mt-3">
-          <div className="text-2xl font-bold tracking-tight text-primary">
-            {distinctCategories}
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-2xl font-bold tracking-tight text-primary">
+              {distinctCategories}
+            </div>
+            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-purple-600 dark:text-purple-400 border border-border">
+              [{timeHorizonLabel}]
+            </span>
           </div>
-          <p className="mt-1 text-xs text-secondary">Active budget cost heads</p>
+          <p className="mt-1 text-xs text-secondary">Active budget cost heads ({timeHorizonLabel})</p>
         </div>
       </div>
     </div>

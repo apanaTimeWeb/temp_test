@@ -29,7 +29,13 @@ const getReportIconTheme = (icon: string) => {
   }
 };
 
-export function ManagerDashboardReportsKpiGrid({ cards }: { cards: ManagerDashboardReportsKpiCard[] }) {
+export function ManagerDashboardReportsKpiGrid({
+  cards,
+  dateRange = 'This Month',
+}: {
+  cards: ManagerDashboardReportsKpiCard[];
+  dateRange?: string;
+}) {
   const tManagerUi = useTranslations('manager.manager_reports.ui');
 
   if (cards.length === 0) {
@@ -79,9 +85,14 @@ export function ManagerDashboardReportsKpiGrid({ cards }: { cards: ManagerDashbo
               </div>
 
               <div className="mt-4">
-                <p className="mgr-kpi-value text-3xl font-extrabold tracking-tight text-foreground font-sans">
-                  {card.value}
-                </p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="mgr-kpi-value text-3xl font-extrabold tracking-tight text-foreground font-sans">
+                    {card.value}
+                  </p>
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                    [{dateRange}]
+                  </span>
+                </div>
                 <p className="mgr-kpi-label text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-1">
                   {card.title}
                 </p>
@@ -89,7 +100,7 @@ export function ManagerDashboardReportsKpiGrid({ cards }: { cards: ManagerDashbo
             </div>
 
             <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between text-[11px] text-muted-foreground">
-              <span>Verified Analytics Metric</span>
+              <span>Verified {dateRange} Metric</span>
               <span className="text-primary font-medium">Synced</span>
             </div>
           </div>

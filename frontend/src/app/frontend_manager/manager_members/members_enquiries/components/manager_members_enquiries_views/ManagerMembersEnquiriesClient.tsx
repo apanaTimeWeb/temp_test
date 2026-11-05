@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import {
@@ -64,8 +65,27 @@ export function ManagerMembersEnquiriesClient() {
     Lost: tManagerUi('lost'),
   };
 
+  const horizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'all':
+        return 'All Time';
+      case 'today':
+        return 'Today';
+      case 'this_week':
+        return 'This Week';
+      case 'this_month':
+        return 'This Month';
+      case 'custom':
+        return customStartDate && customEndDate
+          ? `${customStartDate} to ${customEndDate}`
+          : 'Custom Range';
+      default:
+        return 'All Time';
+    }
+  }, [timeHorizon, customStartDate, customEndDate]);
+
   const handleExportCsv = () => {
-    const headers = 'Name,Phone,Shift,Status,Handled By,Date\n';
+    const headers = `CRM Enquiries Export - Scope: ${horizonLabel}\nName,Phone,Shift,Status,Handled By,Date\n`;
     const rows = filtered
       .map((e) => `"${e.name}","${e.phone}","${e.shift}","${e.status}","${e.handledBy || ''}","${e.addedDate || ''}"`)
       .join('\n');
@@ -73,7 +93,7 @@ export function ManagerMembersEnquiriesClient() {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `crm_enquiries_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.download = `crm_enquiries_${horizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
   };
@@ -125,12 +145,12 @@ export function ManagerMembersEnquiriesClient() {
               </span>
             </div>
 
-            <div className="flex items-baseline gap-3">
+            <div className="flex items-baseline gap-3 flex-wrap">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
                 {tManagerUi('enquiry_pipeline')}
               </h1>
               <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-                {filtered.length} Leads
+                {filtered.length} Leads • Scope: {horizonLabel}
               </span>
             </div>
 
@@ -288,9 +308,14 @@ export function ManagerMembersEnquiriesClient() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-primary">{stats.total}</div>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-primary">{stats.total}</div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                [{horizonLabel}]
+              </span>
+            </div>
             <p className="mt-1 text-xs text-secondary flex items-center gap-1">
-              <span>In current time horizon</span>
+              <span>All enquiries in {horizonLabel}</span>
             </p>
           </div>
         </div>
@@ -304,8 +329,13 @@ export function ManagerMembersEnquiriesClient() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400">{stats.newLeads}</div>
-            <p className="mt-1 text-xs text-secondary">Awaiting initial response</p>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400">{stats.newLeads}</div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                [{horizonLabel}]
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-secondary">Awaiting response ({horizonLabel})</p>
           </div>
         </div>
 
@@ -318,8 +348,13 @@ export function ManagerMembersEnquiriesClient() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-purple-600 dark:text-purple-400">{stats.activePipeline}</div>
-            <p className="mt-1 text-xs text-secondary">{stats.visited} visited · {stats.interested} interested</p>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-purple-600 dark:text-purple-400">{stats.activePipeline}</div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                [{horizonLabel}]
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-secondary">{stats.visited} visited · {stats.interested} interested ({horizonLabel})</p>
           </div>
         </div>
 
@@ -332,9 +367,14 @@ export function ManagerMembersEnquiriesClient() {
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{stats.converted}</div>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{stats.converted}</div>
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                [{horizonLabel}]
+              </span>
+            </div>
             <p className="mt-1 text-xs text-secondary">
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">{stats.conversionRate}%</span> conversion rate
+              <span className="font-semibold text-emerald-600 dark:text-emerald-400">{stats.conversionRate}%</span> conversion rate ({horizonLabel})
             </p>
           </div>
         </div>
@@ -408,6 +448,10 @@ export function ManagerMembersEnquiriesClient() {
               Reset Filters
             </button>
           )}
+
+          <span className="text-xs font-semibold text-secondary px-1 shrink-0">
+            Showing {filtered.length} leads ({horizonLabel})
+          </span>
         </div>
 
         {/* Export CSV Button */}
@@ -423,7 +467,32 @@ export function ManagerMembersEnquiriesClient() {
       </div>
 
       {/* ── Views: Kanban Board or Table ── */}
-      {isPending ? (
+      {filtered.length === 0 && !isPending ? (
+        <div className="flex flex-col items-center justify-center p-16 text-center bg-card rounded-2xl border border-border space-y-3">
+          <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl font-bold">
+            🔍
+          </div>
+          <p className="text-base font-bold text-foreground">
+            No enquiries found for {horizonLabel}
+          </p>
+          <p className="text-xs text-muted-foreground max-w-sm">
+            There are no leads matching your selected time horizon or filter criteria.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setTimeHorizon('all');
+              setSearch('');
+              setStatusFilter('All');
+              setCustomStartDate('');
+              setCustomEndDate('');
+            }}
+            className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
+          >
+            View All Time Leads
+          </button>
+        </div>
+      ) : isPending ? (
         <div className="flex flex-col items-center justify-center p-24 text-secondary gap-3 bg-card rounded-2xl border border-border">
           <RefreshCw size={28} className="animate-spin text-primary" />
           <p className="text-sm font-medium">{tManagerUi('loading_pipeline')}</p>

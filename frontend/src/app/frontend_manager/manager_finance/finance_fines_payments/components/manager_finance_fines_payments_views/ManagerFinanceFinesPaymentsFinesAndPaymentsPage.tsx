@@ -273,8 +273,22 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     ];
   }, [timeHorizon, formatCurrency]);
 
+  const timeHorizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'all': return 'All Time';
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom':
+        return customStartDate && customEndDate
+          ? `${customStartDate} to ${customEndDate}`
+          : 'Custom Range';
+      default: return 'This Month';
+    }
+  }, [timeHorizon, customStartDate, customEndDate]);
+
   const handleExportReceiptsCsv = () => {
-    const headers = 'Transaction ID,Receipt Number,Member,Plan,Late Fee,Amount,Mode,Date,Collected By,Status\n';
+    const headers = `Receipts Ledger Export - Scope: ${timeHorizonLabel}\nTransaction ID,Receipt Number,Member,Plan,Late Fee,Amount,Mode,Date,Collected By,Status\n`;
     const rows = filteredReceiptRows.map((r) =>
       `"${r.txnId}","${r.receiptNumber}","${r.member}","${r.plan}","${r.lateFee}","${r.amount}","${r.mode}","${r.date}","${r.collectedBy}","${r.status}"`
     ).join('\n');
@@ -282,14 +296,14 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `receipts_ledger_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.download = `receipts_ledger_${timeHorizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
     toast.success('Receipts exported to CSV successfully');
   };
 
   const handleExportPendingFinesCsv = () => {
-    const headers = 'Fine ID,Member,Type,Amount,Date,Status\n';
+    const headers = `Fines Export (${activeTab}) - Scope: ${timeHorizonLabel}\nFine ID,Member,Type,Amount,Date,Status\n`;
     const rows = filteredPendingFines.map((f) =>
       `"${f.id}","${f.member}","${f.type}","${f.amount}","${f.date}","${f.status}"`
     ).join('\n');
@@ -297,14 +311,14 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `fines_${activeTab}_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.download = `fines_${activeTab}_${timeHorizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
     toast.success(`Fines (${activeTab}) exported to CSV successfully`);
   };
 
   const handleExportHistoryCsv = () => {
-    const headers = 'Receipt,Member,Fine Type,Amount,Payment Mode,Date Time,Collected By\n';
+    const headers = `Payment History Export - Scope: ${timeHorizonLabel}\nReceipt,Member,Fine Type,Amount,Payment Mode,Date Time,Collected By\n`;
     const rows = filteredHistoryRows.map((h) =>
       `"${h.receipt || ''}","${h.member}","${h.type}","${h.amount}","${h.mode}","${h.date}","${h.collectedBy}"`
     ).join('\n');
@@ -312,7 +326,7 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `payment_history_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.download = `payment_history_${timeHorizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.click();
     URL.revokeObjectURL(url);
     toast.success('Payment history exported to CSV successfully');
@@ -436,12 +450,17 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary flex items-center gap-2.5">
-              <span>{tManagerUi('fines_payments')}</span>
-            </h1>
+            <div className="flex items-baseline gap-3 flex-wrap">
+              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary flex items-center gap-2.5">
+                <span>{tManagerUi('fines_payments')}</span>
+              </h1>
+              <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
+                {filteredReceiptRows.length} Receipts • Scope: {timeHorizonLabel}
+              </span>
+            </div>
 
             <p className="text-sm text-secondary">
-              {tManagerUi('manage_fine_collections_view_pending_dues_and_request_re_7b6cc6')}
+              {tManagerUi('manage_fine_collections_view_pending_dues_and_request_re_7b6cc6')} • Scope: {timeHorizonLabel}
             </p>
           </div>
 
@@ -636,11 +655,16 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                     </span>
                   </div>
                   <div>
-                    <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">
-                      {tManagerUi(kpi.labelKey)}
-                    </p>
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <p className="text-xs font-semibold text-secondary uppercase tracking-wider">
+                        {tManagerUi(kpi.labelKey)}
+                      </p>
+                      <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                        [{timeHorizonLabel}]
+                      </span>
+                    </div>
                     <h3 className="text-2xl font-black text-primary tracking-tight">{kpi.value}</h3>
-                    <p className="text-[11px] text-secondary mt-1">{kpi.subtitle}</p>
+                    <p className="text-[11px] text-secondary mt-1">{kpi.subtitle} ({timeHorizonLabel})</p>
                   </div>
                 </button>
               ))}
@@ -774,12 +798,16 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                 >
                   <Download size={13} /> Export CSV
                 </button>
+
+                <span className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">
+                  Showing {filteredPendingFines.length} Fines ({timeHorizonLabel})
+                </span>
               </div>
             </div>
             <div className="flex-1 w-full h-96">
               <ManagerFinanceFinesPaymentsNativeTable
                 getRowKey={(row) => String(row.id)}
-                emptyMessage={tManagerUi('no_receipts_found')}
+                emptyMessage={tableSearchQuery ? tManagerUi('no_receipts_found') : `No ${activeTab === 'pending' ? 'pending' : 'partially paid'} fines found for ${timeHorizonLabel}.`}
                 rows={filteredPendingFines}
                 columns={pendingCols}
                 labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
@@ -850,12 +878,16 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                 >
                   <Download size={13} /> Export CSV
                 </button>
+
+                <span className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">
+                  Showing {filteredHistoryRows.length} Payments ({timeHorizonLabel})
+                </span>
               </div>
             </div>
             <div className="flex-1 w-full h-96">
               <ManagerFinanceFinesPaymentsNativeTable
                 getRowKey={(row) => String(row.id)}
-                emptyMessage={tManagerUi('no_receipts_found')}
+                emptyMessage={tableSearchQuery ? tManagerUi('no_receipts_found') : `No payment history records found for ${timeHorizonLabel}.`}
                 rows={filteredHistoryRows}
                 columns={historyCols}
                 labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
@@ -925,13 +957,15 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                   <Download size={13} /> Export CSV
                 </button>
 
-                <span className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">{filteredReceiptRows.length} Receipts</span>
+                <span className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">
+                  Showing {filteredReceiptRows.length} of {receiptRows.length} Receipts ({timeHorizonLabel})
+                </span>
               </div>
             </div>
             <div className="flex-1 w-full h-96">
               <ManagerFinanceFinesPaymentsNativeTable
                 getRowKey={(row) => String(row.id)}
-                emptyMessage={tManagerUi('no_receipts_found')}
+                emptyMessage={tableSearchQuery ? tManagerUi('no_receipts_found') : `No receipts found for ${timeHorizonLabel}.`}
                 rows={filteredReceiptRows}
                 columns={receiptsCols}
                 labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
