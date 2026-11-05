@@ -141,6 +141,7 @@ export default function AdminDashboardOverviewMain() {
     {
       id: 'kpi-branches',
       title: 'Operating Branches',
+      periodBadge: null,
       value: rawMetrics.branches,
       subtext: rawMetrics.branchesSub,
       Icon: Building2,
@@ -150,6 +151,7 @@ export default function AdminDashboardOverviewMain() {
     {
       id: 'kpi-members',
       title: 'Active Members',
+      periodBadge: null,
       value: rawMetrics.members,
       subtext: rawMetrics.membersSub,
       Icon: Users,
@@ -159,6 +161,7 @@ export default function AdminDashboardOverviewMain() {
     {
       id: 'kpi-occupancy',
       title: 'Seat Occupancy',
+      periodBadge: null,
       value: rawMetrics.occupancy,
       subtext: rawMetrics.occupancySub,
       Icon: Armchair,
@@ -167,7 +170,8 @@ export default function AdminDashboardOverviewMain() {
     },
     {
       id: 'kpi-revenue',
-      title: timeRange === 'today' ? 'Collections Today' : timeRange === 'this_week' ? 'Collections (Week)' : 'Monthly Collections',
+      title: timeRange === 'today' ? 'Collections Today' : timeRange === 'this_week' ? 'Collections (Week)' : timeRange === 'custom' ? 'Collections (Custom)' : 'Monthly Collections',
+      periodBadge: timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'custom' ? 'Custom' : 'This Month',
       value: dynamicRevenue.value,
       subtext: dynamicRevenue.subtext,
       Icon: WalletCards,
@@ -308,7 +312,14 @@ export default function AdminDashboardOverviewMain() {
               className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">{kpi.title}</span>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">{kpi.title}</span>
+                  {kpi.periodBadge && (
+                    <span className="rounded-md bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                      {kpi.periodBadge}
+                    </span>
+                  )}
+                </div>
                 <div className={`p-2 rounded-xl border ${kpi.theme}`}>
                   <KpiIcon className="h-4 w-4" aria-hidden="true" />
                 </div>

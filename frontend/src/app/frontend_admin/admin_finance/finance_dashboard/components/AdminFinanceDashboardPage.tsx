@@ -62,6 +62,7 @@ export function AdminFinanceDashboardPage() {
       label: t('TOTAL_COLLECTIONS'),
       value: formatAdminFinanceCurrency(computedStats.totalCollections),
       icon: PiggyBank,
+      periodBadge: computedStats.periodLabel,
       sub: (
         <span className="inline-flex items-center gap-1 text-caption font-medium text-emerald-600 dark:text-emerald-400">
           <TrendingUp size={15} strokeWidth={2.5}/>
@@ -75,6 +76,7 @@ export function AdminFinanceDashboardPage() {
       label: t('ACTIVE_STUDENTS'),
       value: computedStats.activeStudents,
       icon: Users,
+      periodBadge: null,
       sub: <span className="text-caption text-text-muted">Network Active Base</span>,
       variant: 'default' as const,
       color: 'blue',
@@ -83,6 +85,7 @@ export function AdminFinanceDashboardPage() {
       label: t('EXPIRING_SOON'),
       value: computedStats.expiringSoon,
       icon: Clock,
+      periodBadge: null,
       sub: <span className="text-caption font-medium text-amber-600 dark:text-amber-400">{t('WITHIN_7_DAYS')}</span>,
       variant: 'warning' as const,
       color: 'amber',
@@ -91,6 +94,7 @@ export function AdminFinanceDashboardPage() {
       label: t('CURRENTLY_SUSPENDED'),
       value: computedStats.suspended,
       icon: Ban,
+      periodBadge: null,
       sub: <span className="text-caption text-rose-500 font-medium">Access Suspended</span>,
       variant: 'danger' as const,
       color: 'rose',
@@ -99,6 +103,7 @@ export function AdminFinanceDashboardPage() {
       label: t('TOTAL_REFERRALS'),
       value: computedStats.totalReferrals,
       icon: UsersRound,
+      periodBadge: null,
       sub: <span className="text-caption text-text-muted">Affiliate Conversions</span>,
       variant: 'default' as const,
       color: 'indigo',
@@ -107,6 +112,7 @@ export function AdminFinanceDashboardPage() {
       label: t('DEPOSITS_HELD'),
       value: formatAdminFinanceCurrency(computedStats.depositsHeld),
       icon: ShieldAlert,
+      periodBadge: null,
       sub: <span className="text-caption text-text-muted">Escrow & Caution Fund</span>,
       variant: 'default' as const,
       color: 'purple',
@@ -115,6 +121,7 @@ export function AdminFinanceDashboardPage() {
       label: t('PENDING_PROMISES'),
       value: computedStats.pendingPromises,
       icon: Receipt,
+      periodBadge: null,
       sub: <span className="text-caption text-text-secondary">{t('PROMISES_PENDING')}</span>,
       variant: 'default' as const,
       color: 'sky',
@@ -123,6 +130,7 @@ export function AdminFinanceDashboardPage() {
       label: t('OVERDUE_STUDENTS'),
       value: computedStats.overdueStudents,
       icon: AlertTriangle,
+      periodBadge: null,
       sub: <span className="text-caption font-medium text-amber-600 dark:text-amber-400">{t('LATE_FEE_ACCRUING')}</span>,
       variant: 'warning' as const,
       color: 'amber',
@@ -131,6 +139,7 @@ export function AdminFinanceDashboardPage() {
       label: t('RENEWALS_DUE'),
       value: computedStats.renewalsDue,
       icon: RefreshCw,
+      periodBadge: null,
       sub: <span className="text-caption text-text-secondary">{t('NEED_RENEWAL')}</span>,
       variant: 'default' as const,
       color: 'teal',
@@ -139,6 +148,7 @@ export function AdminFinanceDashboardPage() {
       label: t('PENDING_REFUNDS'),
       value: computedStats.pendingRefunds,
       icon: IndianRupee,
+      periodBadge: null,
       sub: <span className="text-caption text-text-secondary">{t('DEPOSIT_REFUNDS')}</span>,
       variant: 'default' as const,
       color: 'orange',
@@ -147,6 +157,7 @@ export function AdminFinanceDashboardPage() {
       label: t('LATE_FEE_ACCRUED'),
       value: formatAdminFinanceCurrency(computedStats.lateFeeAccrued),
       icon: TrendingDown,
+      periodBadge: computedStats.periodLabel,
       sub: <span className="text-caption font-medium text-rose-600 dark:text-rose-400">{computedStats.periodLabel}</span>,
       variant: 'danger' as const,
       color: 'rose',
@@ -259,15 +270,22 @@ export function AdminFinanceDashboardPage() {
                 <div className="motion-safe:animate-pulse rounded-sm bg-skeleton-base h-3 w-24" />
               </div>
             ))
-          : statCards.map(({ label, value, icon: Icon, sub, variant, color }) => (
+          : statCards.map(({ label, value, icon: Icon, sub, variant, color, periodBadge }) => (
               <div
                 key={label}
                 className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
               >
                 <div className="mb-2 flex items-center justify-between gap-3">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
-                    {label}
-                  </span>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                      {label}
+                    </span>
+                    {periodBadge && (
+                      <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary tracking-wide">
+                        {periodBadge}
+                      </span>
+                    )}
+                  </div>
                   <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
                     color === 'emerald' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' :
                     color === 'blue' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' :
