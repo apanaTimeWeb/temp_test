@@ -93,16 +93,16 @@ export default function ManagerDashboardReportsPage() {
 
   const hasReportData =
     data.kpiCards.length +
-      data.occupancyData.length +
-      data.growthData.length +
-      data.attendanceData.length +
-      data.absenteesChartData.length +
-      data.complaintsData.length +
-      data.absenteeRows.length +
-      data.conversionRows.length +
-      data.seatRows.length +
-      data.lockerRows.length +
-      data.maintenanceRows.length >
+    data.occupancyData.length +
+    data.growthData.length +
+    data.attendanceData.length +
+    data.absenteesChartData.length +
+    data.complaintsData.length +
+    data.absenteeRows.length +
+    data.conversionRows.length +
+    data.seatRows.length +
+    data.lockerRows.length +
+    data.maintenanceRows.length >
     0;
 
   return (
@@ -166,8 +166,8 @@ export default function ManagerDashboardReportsPage() {
                   range === 'This Week'
                     ? tManagerUi('range_this_week')
                     : range === 'This Month'
-                    ? tManagerUi('range_this_month')
-                    : tManagerUi('range_last_30_days');
+                      ? tManagerUi('range_this_month')
+                      : tManagerUi('range_last_30_days');
 
                 return (
                   <button
@@ -177,11 +177,10 @@ export default function ManagerDashboardReportsPage() {
                       setIsCustomMode(false);
                       setDateRange(range);
                     }}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                      isSelected
-                        ? 'bg-primary text-primary-foreground shadow-xs font-bold'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-surface-hover'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${isSelected
+                      ? 'bg-primary text-primary-foreground shadow-xs font-bold'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-surface-hover'
+                      }`}
                   >
                     {label}
                   </button>
@@ -190,11 +189,10 @@ export default function ManagerDashboardReportsPage() {
               <button
                 type="button"
                 onClick={() => setIsCustomMode(true)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  isCustomMode
-                    ? 'bg-primary text-primary-foreground shadow-xs font-bold'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-surface-hover'
-                }`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${isCustomMode
+                  ? 'bg-primary text-primary-foreground shadow-xs font-bold'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-surface-hover'
+                  }`}
               >
                 <CalendarRange size={13} />
                 <span>Custom Range</span>
