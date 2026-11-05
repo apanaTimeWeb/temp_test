@@ -7,7 +7,7 @@ import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/A
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Building2, Search } from 'lucide-react';
+import { Building2, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import { getAdminFinanceRefundStatusLabelKey } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsRefundStatus';
@@ -49,8 +49,21 @@ export function AdminFinanceRefundsPage() {
   const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | AdminFinanceRefund['status']>('statusFilter', 'all', { validValues: ['all', 'pending', 'approved', 'rejected', 'processed'] });
   const [search, setSearch] = useState('');
   const [statusOverrides, setStatusOverrides] = useState<Record<string, AdminFinanceRefund['status']>>({});
+  type RefundSortField = 'studentName' | 'branchName' | 'exitDate' | 'depositHeld' | 'deductionAmount' | 'netRefund' | 'status' | 'paymentMethod';
+  const [sortField, setSortField] = useState<RefundSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+
+  const toggleSort = (field: RefundSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
   const refundsQuery = useAdminFinanceRefundsQuery();
   const rawRefunds = useMemo(() => (refundsQuery.data ?? []).map(mapAdminFinanceRefund), [refundsQuery.data]);
   const allRefunds = useMemo(() => rawRefunds.map((refund) => statusOverrides[refund.id] ? { ...refund, status: statusOverrides[refund.id] } : refund), [rawRefunds, statusOverrides]);
@@ -80,12 +93,54 @@ export function AdminFinanceRefundsPage() {
       );
     });
   }, [branchFiltered, statusFilter, search]);
-  const paginated = useMemo(() => filtered.slice(page * pageSize, (page + 1) * pageSize), [filtered, page, pageSize]);
+  const sortedRefunds = useMemo(() => {
+    if (!sortField) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+        return sortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        const diff = aVal - bVal;
+        return sortDirection === 'asc' ? diff : -diff;
+      }
+      return 0;
+    });
+  }, [filtered, sortField, sortDirection]);
+
+  const paginated = useMemo(() => sortedRefunds.slice(page * pageSize, (page + 1) * pageSize), [sortedRefunds, page, pageSize]);
   const processedRefunds = branchFiltered.filter((refund) => refund.status === 'processed');
   const totalRefunded = processedRefunds.reduce((sum, refund) => sum + refund.netRefund, 0);
   const firstProcessedRefund = processedRefunds[0];
   const hasSingleCurrencyUnit = Boolean(firstProcessedRefund?.currencyCode && firstProcessedRefund.amountUnit && processedRefunds.every((refund) => refund.currencyCode === firstProcessedRefund.currencyCode && refund.amountUnit === firstProcessedRefund.amountUnit));
   const pendingCount = branchFiltered.filter((refund) => refund.status === 'pending').length;
+
+  const renderSortableHeader = (field: RefundSortField, label: string, align: 'left' | 'right' | 'center' = 'left', extraClass: string = '') => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`py-3 px-4 whitespace-nowrap ${align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'} ${extraClass}`}>
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -111,11 +166,10 @@ export function AdminFinanceRefundsPage() {
           <button
             type="button"
             onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
-            className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-              isAllBranches
+            className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isAllBranches
                 ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
                 : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-            }`}
+              }`}
           >
             All Branches
           </button>
@@ -126,11 +180,10 @@ export function AdminFinanceRefundsPage() {
                 key={b.id}
                 type="button"
                 onClick={() => setSelectedBranchId(b.id)}
-                className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                  isSelected
+                className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${isSelected
                     ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
                     : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-                }`}
+                  }`}
               >
                 {b.name} {b.isMain ? '★' : ''}
               </button>
@@ -192,14 +245,14 @@ export function AdminFinanceRefundsPage() {
             <table className="min-w-230 w-full text-left">
               <thead>
                 <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-                  <th scope="col" className="text-left py-3 px-4 sticky left-0 bg-surface-highlight">{t('STUDENT')}</th>
-                  <th scope="col" className="text-left py-3 px-4">Branch</th>
-                  <th scope="col" className="text-left py-3 px-4">{t('EXIT_DATE')}</th>
-                  <th scope="col" className="text-right py-3 px-4">{t('DEPOSIT_HELD')}</th>
-                  <th scope="col" className="text-right py-3 px-4">{t('DEDUCTION')}</th>
-                  <th scope="col" className="text-right py-3 px-4">{t('NET_REFUND')}</th>
-                  <th scope="col" className="text-left py-3 px-4">{t('STATUS')}</th>
-                  <th scope="col" className="text-left py-3 px-4">{t('PROCESSING')}</th>
+                  {renderSortableHeader('studentName', t('STUDENT'), 'left', 'sticky left-0 bg-surface-highlight')}
+                  {renderSortableHeader('branchName', 'Branch')}
+                  {renderSortableHeader('exitDate', t('EXIT_DATE'))}
+                  {renderSortableHeader('depositHeld', t('DEPOSIT_HELD'), 'right')}
+                  {renderSortableHeader('deductionAmount', t('DEDUCTION'), 'right')}
+                  {renderSortableHeader('netRefund', t('NET_REFUND'), 'right')}
+                  {renderSortableHeader('status', t('STATUS'))}
+                  {renderSortableHeader('paymentMethod', t('PROCESSING'))}
                 </tr>
               </thead>
               <tbody>

@@ -12,6 +12,9 @@ import {
   TrendingDown,
   Building2,
   Search,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import type { AdminShiftOverstayIncident } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapTypes';
 import { ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/mocks/AdminShiftsGapShiftGapFixtures';
@@ -22,11 +25,24 @@ export function AdminShiftsGapOverstayAuditTable() {
   const [incidents, setIncidents] = useState<AdminShiftOverstayIncident[]>([
     ...ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS,
   ]);
+  type OverstaySortField = 'branchName' | 'studentName' | 'bookedShift' | 'overstayMinutes' | 'fineAmount' | 'status';
+  const [sortField, setSortField] = useState<OverstaySortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [branchFilter, setBranchFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+
+  const toggleSort = (field: OverstaySortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
 
   const branches = useMemo(() => {
     return Array.from(new Set(ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS.map((i) => i.branchName)));
@@ -46,9 +62,51 @@ export function AdminShiftsGapOverstayAuditTable() {
     });
   }, [incidents, branchFilter, statusFilter, searchQuery]);
 
+  const sortedIncidents = useMemo(() => {
+    if (!sortField) return filteredIncidents;
+    return [...filteredIncidents].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+        return sortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        const diff = aVal - bVal;
+        return sortDirection === 'asc' ? diff : -diff;
+      }
+      return 0;
+    });
+  }, [filteredIncidents, sortField, sortDirection]);
+
   const paginatedIncidents = useMemo(() => {
-    return filteredIncidents.slice(page * pageSize, (page + 1) * pageSize);
-  }, [filteredIncidents, page, pageSize]);
+    return sortedIncidents.slice(page * pageSize, (page + 1) * pageSize);
+  }, [sortedIncidents, page, pageSize]);
+
+  const renderSortableHeader = (field: OverstaySortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3 whitespace-nowrap">
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const totalFinesRecovered = useMemo(() => {
     return incidents
@@ -164,12 +222,12 @@ export function AdminShiftsGapOverstayAuditTable() {
         <table className="w-full text-left text-xs">
           <thead>
             <tr className="border-b border-border bg-surface-highlight text-text-secondary font-semibold uppercase">
-              <th scope="col" className="p-3">{t('tableBranchSeat')}</th>
-              <th scope="col" className="p-3">{t('tableStudent')}</th>
-              <th scope="col" className="p-3">{t('tableShiftScheduled')}</th>
-              <th scope="col" className="p-3">{t('tableOverstayTime')}</th>
-              <th scope="col" className="p-3">{t('tableActionFine')}</th>
-              <th scope="col" className="p-3">{t('tableStatus')}</th>
+              {renderSortableHeader('branchName', t('tableBranchSeat'))}
+              {renderSortableHeader('studentName', t('tableStudent'))}
+              {renderSortableHeader('bookedShift', t('tableShiftScheduled'))}
+              {renderSortableHeader('overstayMinutes', t('tableOverstayTime'))}
+              {renderSortableHeader('fineAmount', t('tableActionFine'))}
+              {renderSortableHeader('status', t('tableStatus'))}
               <th scope="col" className="p-3 text-right">Action</th>
             </tr>
           </thead>

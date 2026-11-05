@@ -3,6 +3,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import {
   ADMIN_STAFF_DIRECTORY_ACTIVITY_FIXTURES,
@@ -16,18 +17,81 @@ import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/A
 /** Renders explicitly synthetic audit/activity panels only in demo mode; no API-backed audit endpoint is inferred. */
 export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirectoryAuditSectionProps) {
   const t = useTranslations('ADMIN_STAFF_DIRECTORY');
+
+  type SessionSortField = 'managerName' | 'operatingSystem' | 'ipAddress' | 'timeKey';
+  const [sessionSortField, setSessionSortField] = useState<SessionSortField | null>(null);
+  const [sessionSortDirection, setSessionSortDirection] = useState<'asc' | 'desc'>('asc');
   const [sessionsPage, setSessionsPage] = useState(0);
   const [sessionsPageSize, setSessionsPageSize] = useState(10);
+
+  const toggleSessionSort = (field: SessionSortField) => {
+    setSessionsPage(0);
+    if (sessionSortField === field) setSessionSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    else { setSessionSortField(field); setSessionSortDirection('asc'); }
+  };
+
+  const sortedSessions = useMemo(() => {
+    if (!sessionSortField) return ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES;
+    return [...ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES].sort((a, b) => {
+      const aVal = a[sessionSortField];
+      const bVal = b[sessionSortField];
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sessionSortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [sessionSortField, sessionSortDirection]);
+
   const paginatedSessions = useMemo(
-    () => ADMIN_STAFF_DIRECTORY_SESSION_FIXTURES.slice(sessionsPage * sessionsPageSize, (sessionsPage + 1) * sessionsPageSize),
-    [sessionsPage, sessionsPageSize]
+    () => sortedSessions.slice(sessionsPage * sessionsPageSize, (sessionsPage + 1) * sessionsPageSize),
+    [sortedSessions, sessionsPage, sessionsPageSize]
   );
 
+  type HistorySortField = 'managerName' | 'timeKey' | 'statusKey' | 'location';
+  const [historySortField, setHistorySortField] = useState<HistorySortField | null>(null);
+  const [historySortDirection, setHistorySortDirection] = useState<'asc' | 'desc'>('asc');
   const [historyPage, setHistoryPage] = useState(0);
   const [historyPageSize, setHistoryPageSize] = useState(10);
+
+  const toggleHistorySort = (field: HistorySortField) => {
+    setHistoryPage(0);
+    if (historySortField === field) setHistorySortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    else { setHistorySortField(field); setHistorySortDirection('asc'); }
+  };
+
+  const sortedHistory = useMemo(() => {
+    if (!historySortField) return ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES;
+    return [...ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES].sort((a, b) => {
+      const aVal = a[historySortField];
+      const bVal = b[historySortField];
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return historySortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [historySortField, historySortDirection]);
+
   const paginatedHistory = useMemo(
-    () => ADMIN_STAFF_DIRECTORY_LOGIN_HISTORY_FIXTURES.slice(historyPage * historyPageSize, (historyPage + 1) * historyPageSize),
-    [historyPage, historyPageSize]
+    () => sortedHistory.slice(historyPage * historyPageSize, (historyPage + 1) * historyPageSize),
+    [sortedHistory, historyPage, historyPageSize]
+  );
+
+  const renderSortableHeader = (label: string, active: boolean, direction: 'asc' | 'desc', onToggle: () => void) => (
+    <th scope="col" aria-sort={active ? (direction === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3 whitespace-nowrap">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+        aria-label={`${label}, sort ${active ? (direction === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+      >
+        <span>{label}</span>
+        {active ? (
+          direction === 'asc' ? (
+            <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+          ) : (
+            <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+          )
+        ) : (
+          <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+        )}
+      </button>
+    </th>
   );
 
   if (tab === 'sessions') return (
@@ -37,10 +101,10 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-              <th scope="col" className="p-3">{t('SESSION_COLUMN_MANAGER')}</th>
-              <th scope="col" className="p-3">{t('SESSION_COLUMN_DEVICE')}</th>
-              <th scope="col" className="p-3">{t('SESSION_COLUMN_IP')}</th>
-              <th scope="col" className="p-3">{t('SESSION_COLUMN_LAST_ACTIVE')}</th>
+              {renderSortableHeader(t('SESSION_COLUMN_MANAGER'), sessionSortField === 'managerName', sessionSortDirection, () => toggleSessionSort('managerName'))}
+              {renderSortableHeader(t('SESSION_COLUMN_DEVICE'), sessionSortField === 'operatingSystem', sessionSortDirection, () => toggleSessionSort('operatingSystem'))}
+              {renderSortableHeader(t('SESSION_COLUMN_IP'), sessionSortField === 'ipAddress', sessionSortDirection, () => toggleSessionSort('ipAddress'))}
+              {renderSortableHeader(t('SESSION_COLUMN_LAST_ACTIVE'), sessionSortField === 'timeKey', sessionSortDirection, () => toggleSessionSort('timeKey'))}
               <th scope="col" className="p-3 text-right">{t('SESSION_COLUMN_ACTION')}</th>
             </tr>
           </thead>
@@ -81,10 +145,10 @@ export default function AdminStaffDirectoryAuditSection({ tab }: AdminStaffDirec
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-              <th scope="col" className="p-3">{t('HISTORY_COLUMN_MANAGER')}</th>
-              <th scope="col" className="p-3">{t('HISTORY_COLUMN_DATETIME')}</th>
-              <th scope="col" className="p-3">{t('HISTORY_COLUMN_STATUS')}</th>
-              <th scope="col" className="p-3">{t('HISTORY_COLUMN_LOCATION')}</th>
+              {renderSortableHeader(t('HISTORY_COLUMN_MANAGER'), historySortField === 'managerName', historySortDirection, () => toggleHistorySort('managerName'))}
+              {renderSortableHeader(t('HISTORY_COLUMN_DATETIME'), historySortField === 'timeKey', historySortDirection, () => toggleHistorySort('timeKey'))}
+              {renderSortableHeader(t('HISTORY_COLUMN_STATUS'), historySortField === 'statusKey', historySortDirection, () => toggleHistorySort('statusKey'))}
+              {renderSortableHeader(t('HISTORY_COLUMN_LOCATION'), historySortField === 'location', historySortDirection, () => toggleHistorySort('location'))}
             </tr>
           </thead>
           <tbody>

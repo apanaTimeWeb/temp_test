@@ -3,18 +3,64 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { ADMIN_SECURITY_DEVICE_SESSION_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
 /** Renders synthetic device sessions; each revocation action explicitly reports the missing live contract. */
 export default function AdminSecurityDeviceSessionsPanel() {
   const t = useTranslations('ADMIN_SECURITY');
+  type DeviceSortField = 'managerKey' | 'deviceKey' | 'ip' | 'dateKey';
+  const [sortField, setSortField] = useState<DeviceSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+
+  const toggleSort = (field: DeviceSortField) => {
+    setPage(0);
+    if (sortField === field) setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    else { setSortField(field); setSortDirection('asc'); }
+  };
+
+  const sortedDevices = useMemo(() => {
+    if (!sortField) return ADMIN_SECURITY_DEVICE_SESSION_FIXTURES;
+    return [...ADMIN_SECURITY_DEVICE_SESSION_FIXTURES].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [sortField, sortDirection]);
+
   const paginatedDevices = useMemo(
-    () => ADMIN_SECURITY_DEVICE_SESSION_FIXTURES.slice(page * pageSize, (page + 1) * pageSize),
-    [page, pageSize]
+    () => sortedDevices.slice(page * pageSize, (page + 1) * pageSize),
+    [sortedDevices, page, pageSize]
   );
+
+  const renderSortableHeader = (field: DeviceSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3 whitespace-nowrap">
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   return (
     <section className="admin-card p-6" aria-labelledby="admin-security-device-sessions-title">
@@ -37,10 +83,10 @@ export default function AdminSecurityDeviceSessionsPanel() {
         <table className="w-full min-w-190 text-left text-sm">
           <thead>
             <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-              <th scope="col" className="p-3">{t('COLUMN_MANAGER')}</th>
-              <th scope="col" className="p-3">{t('COLUMN_DEVICE')}</th>
-              <th scope="col" className="p-3">{t('COLUMN_LOCATION_IP')}</th>
-              <th scope="col" className="p-3">{t('COLUMN_FIRST_SEEN')}</th>
+              {renderSortableHeader('managerKey', t('COLUMN_MANAGER'))}
+              {renderSortableHeader('deviceKey', t('COLUMN_DEVICE'))}
+              {renderSortableHeader('ip', t('COLUMN_LOCATION_IP'))}
+              {renderSortableHeader('dateKey', t('COLUMN_FIRST_SEEN'))}
               <th scope="col" className="p-3">{t('COLUMN_ACTION')}</th>
             </tr>
           </thead>

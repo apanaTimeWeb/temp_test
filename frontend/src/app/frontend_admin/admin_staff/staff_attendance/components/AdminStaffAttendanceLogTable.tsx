@@ -11,6 +11,9 @@ import {
   CheckCircle2,
   AlertTriangle,
   UserX,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import type { StaffAttendanceRecord } from '@/app/frontend_admin/admin_staff/staff_attendance/schemas/AdminStaffAttendanceSchema';
 import { ATTENDANCE_STATUS_VARIANTS } from '@/app/frontend_admin/admin_staff/staff_attendance/config/admin_staff_attendance.url_config';
@@ -24,13 +27,68 @@ interface Props {
 
 export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize }: Props) {
   const t = useTranslations('ADMIN_STAFF_ATTENDANCE');
+  type AttendanceSortField = 'staffName' | 'role' | 'branchName' | 'shiftType' | 'clockIn' | 'clockOut' | 'totalHours' | 'status';
+  const [sortField, setSortField] = useState<AttendanceSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
+  const toggleSort = (field: AttendanceSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedRecords = useMemo(() => {
+    if (!sortField) return records;
+    return [...records].sort((a, b) => {
+      const aVal = a[sortField] ?? '';
+      const bVal = b[sortField] ?? '';
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+        return sortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        const diff = aVal - bVal;
+        return sortDirection === 'asc' ? diff : -diff;
+      }
+      return 0;
+    });
+  }, [records, sortField, sortDirection]);
+
   const paginatedRecords = useMemo(
-    () => records.slice(page * pageSize, (page + 1) * pageSize),
-    [records, page, pageSize]
+    () => sortedRecords.slice(page * pageSize, (page + 1) * pageSize),
+    [sortedRecords, page, pageSize]
   );
+
+  const renderSortableHeader = (field: AttendanceSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-4 py-3 whitespace-nowrap">
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   if (records.length === 0) {
     return (
@@ -48,14 +106,14 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
         <table className="w-full text-left text-sm">
           <thead className="border-b border-border bg-surface text-xs font-semibold uppercase tracking-wider text-text-secondary">
             <tr>
-              <th className="px-4 py-3">{t('COL_STAFF')}</th>
-              <th className="px-4 py-3">{t('COL_ROLE')}</th>
-              <th className="px-4 py-3">{t('COL_BRANCH')}</th>
-              <th className="px-4 py-3">{t('COL_SHIFT')}</th>
-              <th className="px-4 py-3">{t('COL_CLOCK_IN')}</th>
-              <th className="px-4 py-3">{t('COL_CLOCK_OUT')}</th>
-              <th className="px-4 py-3">{t('COL_HOURS')}</th>
-              <th className="px-4 py-3">{t('COL_STATUS')}</th>
+              {renderSortableHeader('staffName', t('COL_STAFF'))}
+              {renderSortableHeader('role', t('COL_ROLE'))}
+              {renderSortableHeader('branchName', t('COL_BRANCH'))}
+              {renderSortableHeader('shiftType', t('COL_SHIFT'))}
+              {renderSortableHeader('clockIn', t('COL_CLOCK_IN'))}
+              {renderSortableHeader('clockOut', t('COL_CLOCK_OUT'))}
+              {renderSortableHeader('totalHours', t('COL_HOURS'))}
+              {renderSortableHeader('status', t('COL_STATUS'))}
               <th className="px-4 py-3 text-right">{t('COL_ACTIONS')}</th>
             </tr>
           </thead>

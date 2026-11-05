@@ -2,7 +2,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Trophy, TrendingUp, AlertTriangle, Users, ArrowUpRight, ShieldAlert } from 'lucide-react';
+import { Trophy, TrendingUp, AlertTriangle, Users, ArrowUpRight, ShieldAlert, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 
 export interface BranchBenchmarkItem {
   id: string;
@@ -78,19 +78,59 @@ export const BRANCH_BENCHMARK_DATA: BranchBenchmarkItem[] = [
   },
 ];
 
-type SortMetric = 'profit' | 'occupancy' | 'renewal';
+type SortMetric = 'profit' | 'occupancy' | 'renewal' | 'revenue' | 'expenses' | 'branch';
 
 export function AdminDashboardBranchLeaderboard() {
   const t = useTranslations('ADMIN_DASHBOARD');
   const [sortBy, setSortBy] = useState<SortMetric>('profit');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  const toggleSort = (metric: SortMetric) => {
+    if (sortBy === metric) {
+      setSortDirection((prev) => (prev === 'desc' ? 'asc' : 'desc'));
+    } else {
+      setSortBy(metric);
+      setSortDirection('desc');
+    }
+  };
 
   const sortedBranches = useMemo(() => {
     return [...BRANCH_BENCHMARK_DATA].sort((a, b) => {
-      if (sortBy === 'profit') return b.netProfitRupees - a.netProfitRupees;
-      if (sortBy === 'occupancy') return b.occupancyRate - a.occupancyRate;
-      return b.renewalRate - a.renewalRate;
+      let diff = 0;
+      if (sortBy === 'profit') diff = a.netProfitRupees - b.netProfitRupees;
+      else if (sortBy === 'occupancy') diff = a.occupancyRate - b.occupancyRate;
+      else if (sortBy === 'renewal') diff = a.renewalRate - b.renewalRate;
+      else if (sortBy === 'revenue') diff = a.revenueMtdRupees - b.revenueMtdRupees;
+      else if (sortBy === 'expenses') diff = a.expensesMtdRupees - b.expensesMtdRupees;
+      else if (sortBy === 'branch') return sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+      return sortDirection === 'asc' ? diff : -diff;
     });
-  }, [sortBy]);
+  }, [sortBy, sortDirection]);
+
+  const renderSortableHeader = (metric: SortMetric, label: string, align: 'left' | 'right' | 'center' = 'left') => {
+    const isActive = sortBy === metric;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`px-3.5 py-3 whitespace-nowrap ${align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'}`}>
+        <button
+          type="button"
+          onClick={() => toggleSort(metric)}
+          className={`group inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'descending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={13} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={13} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors shrink-0" size={13} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const formatRupees = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -160,12 +200,12 @@ export function AdminDashboardBranchLeaderboard() {
           <thead>
             <tr className="border-b border-border bg-muted/40 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               <th scope="col" className="px-3.5 py-3 text-center whitespace-nowrap">{t('COL_RANK')}</th>
-              <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('COL_BRANCH')}</th>
-              <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('COL_CAPACITY')}</th>
-              <th scope="col" className="px-3.5 py-3 text-right whitespace-nowrap">{t('COL_REVENUE')}</th>
-              <th scope="col" className="px-3.5 py-3 text-right whitespace-nowrap">{t('COL_EXPENSES')}</th>
-              <th scope="col" className="px-3.5 py-3 text-right whitespace-nowrap">{t('COL_NET_PROFIT')}</th>
-              <th scope="col" className="px-3.5 py-3 text-center whitespace-nowrap">{t('COL_RENEWAL')}</th>
+              {renderSortableHeader('branch', t('COL_BRANCH'))}
+              {renderSortableHeader('occupancy', t('COL_CAPACITY'))}
+              {renderSortableHeader('revenue', t('COL_REVENUE'), 'right')}
+              {renderSortableHeader('expenses', t('COL_EXPENSES'), 'right')}
+              {renderSortableHeader('profit', t('COL_NET_PROFIT'), 'right')}
+              {renderSortableHeader('renewal', t('COL_RENEWAL'), 'center')}
               <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('COL_BOTTLENECK')}</th>
             </tr>
           </thead>

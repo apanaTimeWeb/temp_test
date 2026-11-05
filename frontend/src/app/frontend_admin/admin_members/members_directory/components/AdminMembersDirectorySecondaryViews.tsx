@@ -3,7 +3,7 @@
 
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
-import { Tags, Building, DownloadCloud, UploadCloud, ArrowRight } from 'lucide-react';
+import { Tags, Building, DownloadCloud, UploadCloud, ArrowRight, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminMembersCategory, AdminMembersDepartment, AdminMembersRenewal, AdminMembersDemoMutationResult } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import useAdminMembersDirectoryMain from '@/app/frontend_admin/admin_members/members_directory/hooks/useAdminMembersDirectoryMain';
@@ -22,6 +22,24 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
   const [departmentName, setDepartmentName] = useState('');
   const [departmentHead, setDepartmentHead] = useState('');
   const [departmentError, setDepartmentError] = useState<string | null>(null);
+
+  type DeptSortField = 'name' | 'head' | 'members';
+  const [deptSortField, setDeptSortField] = useState<DeptSortField | null>(null);
+  const [deptSortDirection, setDeptSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  type RenewalSortField = 'member' | 'plan' | 'expiresIn';
+  const [renewalSortField, setRenewalSortField] = useState<RenewalSortField | null>(null);
+  const [renewalSortDirection, setRenewalSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleDeptSort = (field: DeptSortField) => {
+    if (deptSortField === field) setDeptSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    else { setDeptSortField(field); setDeptSortDirection('asc'); }
+  };
+
+  const toggleRenewalSort = (field: RenewalSortField) => {
+    if (renewalSortField === field) setRenewalSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    else { setRenewalSortField(field); setRenewalSortDirection('asc'); }
+  };
   useEffect(() => {
     setCategoryCreating(false); setCategoryName(''); setCategoryError(null);
     setDepartmentCreating(false); setDepartmentName(''); setDepartmentHead(''); setDepartmentError(null);
@@ -54,15 +72,100 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
     </section>;
   }
   if (model.activeTab === 'departments') {
-    const departments: readonly AdminMembersDepartment[] = model.demoDepartments;
+    const rawDepartments: readonly AdminMembersDepartment[] = model.demoDepartments;
+    const departments = [...rawDepartments].sort((a, b) => {
+      if (!deptSortField) return 0;
+      if (deptSortField === 'name') {
+        const cmp = a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
+        return deptSortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (deptSortField === 'head') {
+        const cmp = a.head.localeCompare(b.head, undefined, { numeric: true, sensitivity: 'base' });
+        return deptSortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (deptSortField === 'members') {
+        const diff = a.members - b.members;
+        return deptSortDirection === 'asc' ? diff : -diff;
+      }
+      return 0;
+    });
+
+    const renderDeptHeader = (field: DeptSortField, label: string) => {
+      const isActive = deptSortField === field;
+      return (
+        <th scope="col" aria-sort={isActive ? (deptSortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3">
+          <button
+            type="button"
+            onClick={() => toggleDeptSort(field)}
+            className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+            aria-label={`${label}, sort ${isActive ? (deptSortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+          >
+            <span>{label}</span>
+            {isActive ? (
+              deptSortDirection === 'asc' ? (
+                <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              ) : (
+                <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              )
+            ) : (
+              <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            )}
+          </button>
+        </th>
+      );
+    };
+
     return <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-departments-title"><div className="mb-5 flex flex-wrap items-center justify-between gap-4"><h2 id="admin-members-departments-title" className="admin-shared-card-heading">{t('DEPARTMENTS_TITLE')}</h2><button type="button" data-testid="admin_members-AdminMembersDepartmentsView-control-001" className="admin-btn-primary" aria-expanded={departmentCreating} aria-controls="admin-members-department-create" onClick={() => { setDepartmentCreating((current) => !current); setDepartmentError(null); }}><Building size={18} aria-hidden="true" /> {t('DEPARTMENT_ADD')}</button></div>
       {departmentCreating && <form id="admin-members-department-create" className="my-4 grid gap-3 sm:grid-cols-2" onSubmit={submitDepartment}><div className="grid gap-1"><label htmlFor="admin-members-department-name" className="admin-label">{t('DEPARTMENT_NAME_LABEL')}</label><input id="admin-members-department-name" className="admin-input" value={departmentName} onChange={(event) => setDepartmentName(event.target.value)} required maxLength={100} /></div><div className="grid gap-1"><label htmlFor="admin-members-department-head" className="admin-label">{t('DEPARTMENT_HEAD_LABEL')}</label><input id="admin-members-department-head" className="admin-input" value={departmentHead} onChange={(event) => setDepartmentHead(event.target.value)} required maxLength={100} /></div>{departmentError && <p role="alert" className="text-sm text-danger-text sm:col-span-2">{departmentError}</p>}<div className="flex flex-wrap gap-2 sm:col-span-2"><button type="submit" className="admin-btn-primary min-h-11">{t('DEPARTMENT_SAVE')}</button><button type="button" className="admin-btn-ghost min-h-11" onClick={() => { setDepartmentCreating(false); setDepartmentName(''); setDepartmentHead(''); setDepartmentError(null); }}>{t('CANCEL')}</button></div></form>}
-      <div className="overflow-x-auto"><table className="w-full min-w-100 border-collapse text-left text-sm"><thead><tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border"><th scope="col" className="p-3">{t('DEPARTMENT_NAME')}</th><th scope="col" className="p-3">{t('DEPARTMENT_HEAD')}</th><th scope="col" className="p-3">{t('DEPARTMENT_MEMBERS_COUNT')}</th></tr></thead><tbody>{departments.map((department) => <tr key={department.name} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30"><th scope="row" className="p-3 text-left font-medium text-text-primary">{department.name}</th><td className="p-3">{department.head}</td><td className="p-3">{department.members}</td></tr>)}</tbody></table></div>
+      <div className="overflow-x-auto"><table className="w-full min-w-100 border-collapse text-left text-sm"><thead><tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">{renderDeptHeader('name', t('DEPARTMENT_NAME'))}{renderDeptHeader('head', t('DEPARTMENT_HEAD'))}{renderDeptHeader('members', t('DEPARTMENT_MEMBERS_COUNT'))}</tr></thead><tbody>{departments.map((department) => <tr key={department.name} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30"><th scope="row" className="p-3 text-left font-medium text-text-primary">{department.name}</th><td className="p-3">{department.head}</td><td className="p-3">{department.members}</td></tr>)}</tbody></table></div>
     </section>;
   }
   if (model.activeTab === 'renewal') {
-    const renewals: readonly AdminMembersRenewal[] = model.demoRenewals;
-    return <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-renewals-title"><h2 id="admin-members-renewals-title" className="admin-shared-section-heading">{t('RENEWALS_TITLE')}</h2><div className="mt-4 grid gap-3 md:hidden" aria-label={t('RENEWALS_TITLE')}>{renewals.map((renewal) => <article key={`mobile-${renewal.member}`} className="rounded-lg border border-border p-4"><h3 className="font-semibold text-text-primary">{renewal.member}</h3><dl className="mt-2 grid gap-2 text-sm"><div><dt className="text-text-secondary">{t('RENEWALS_CURRENT_PLAN')}</dt><dd>{renewal.plan}</dd></div><div><dt className="text-text-secondary">{t('RENEWALS_EXPIRY_IN')}</dt><dd>{expiryLabel(renewal.expiresIn)}</dd></div></dl><button type="button" className="admin-btn-primary mt-3 min-h-11 w-full" disabled={renewal.reminderRecorded} title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined} onClick={() => recordReminder(renewal.member)}>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</button></article>)}</div><div className="mt-4 hidden overflow-x-auto md:block"><table className="w-full text-left text-sm"><thead><tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border"><th scope="col" className="p-3">{t('RENEWALS_MEMBER')}</th><th scope="col" className="p-3">{t('RENEWALS_CURRENT_PLAN')}</th><th scope="col" className="p-3">{t('RENEWALS_EXPIRY_IN')}</th><th scope="col" className="p-3">{t('RENEWALS_ACTION')}</th></tr></thead><tbody>{renewals.map((renewal) => <tr key={renewal.member} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30"><th scope="row" className="p-3 text-left font-medium text-text-primary">{renewal.member}</th><td className="p-3">{renewal.plan}</td><td className="p-3">{expiryLabel(renewal.expiresIn)}</td><td className="p-3"><button type="button" className="admin-btn-primary min-h-11" disabled={renewal.reminderRecorded} title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined} onClick={() => recordReminder(renewal.member)}>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</button></td></tr>)}</tbody></table></div></section>;
+    const rawRenewals: readonly AdminMembersRenewal[] = model.demoRenewals;
+    const renewals = [...rawRenewals].sort((a, b) => {
+      if (!renewalSortField) return 0;
+      if (renewalSortField === 'member') {
+        const cmp = a.member.localeCompare(b.member, undefined, { numeric: true, sensitivity: 'base' });
+        return renewalSortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (renewalSortField === 'plan') {
+        const cmp = a.plan.localeCompare(b.plan, undefined, { numeric: true, sensitivity: 'base' });
+        return renewalSortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (renewalSortField === 'expiresIn') {
+        const aDays = a.expiresIn.unit === 'week' ? a.expiresIn.value * 7 : a.expiresIn.value;
+        const bDays = b.expiresIn.unit === 'week' ? b.expiresIn.value * 7 : b.expiresIn.value;
+        return renewalSortDirection === 'asc' ? aDays - bDays : bDays - aDays;
+      }
+      return 0;
+    });
+
+    const renderRenewalHeader = (field: RenewalSortField, label: string) => {
+      const isActive = renewalSortField === field;
+      return (
+        <th scope="col" aria-sort={isActive ? (renewalSortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3">
+          <button
+            type="button"
+            onClick={() => toggleRenewalSort(field)}
+            className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+            aria-label={`${label}, sort ${isActive ? (renewalSortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+          >
+            <span>{label}</span>
+            {isActive ? (
+              renewalSortDirection === 'asc' ? (
+                <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              ) : (
+                <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              )
+            ) : (
+              <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            )}
+          </button>
+        </th>
+      );
+    };
+
+    return <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-renewals-title"><h2 id="admin-members-renewals-title" className="admin-shared-section-heading">{t('RENEWALS_TITLE')}</h2><div className="mt-4 grid gap-3 md:hidden" aria-label={t('RENEWALS_TITLE')}>{renewals.map((renewal) => <article key={`mobile-${renewal.member}`} className="rounded-lg border border-border p-4"><h3 className="font-semibold text-text-primary">{renewal.member}</h3><dl className="mt-2 grid gap-2 text-sm"><div><dt className="text-text-secondary">{t('RENEWALS_CURRENT_PLAN')}</dt><dd>{renewal.plan}</dd></div><div><dt className="text-text-secondary">{t('RENEWALS_EXPIRY_IN')}</dt><dd>{expiryLabel(renewal.expiresIn)}</dd></div></dl><button type="button" className="admin-btn-primary mt-3 min-h-11 w-full" disabled={renewal.reminderRecorded} title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined} onClick={() => recordReminder(renewal.member)}>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</button></article>)}</div><div className="mt-4 hidden overflow-x-auto md:block"><table className="w-full text-left text-sm"><thead><tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">{renderRenewalHeader('member', t('RENEWALS_MEMBER'))}{renderRenewalHeader('plan', t('RENEWALS_CURRENT_PLAN'))}{renderRenewalHeader('expiresIn', t('RENEWALS_EXPIRY_IN'))}<th scope="col" className="p-3">{t('RENEWALS_ACTION')}</th></tr></thead><tbody>{renewals.map((renewal) => <tr key={renewal.member} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30"><th scope="row" className="p-3 text-left font-medium text-text-primary">{renewal.member}</th><td className="p-3">{renewal.plan}</td><td className="p-3">{expiryLabel(renewal.expiresIn)}</td><td className="p-3"><button type="button" className="admin-btn-primary min-h-11" disabled={renewal.reminderRecorded} title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined} onClick={() => recordReminder(renewal.member)}>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</button></td></tr>)}</tbody></table></div></section>;
   }
   if (model.activeTab === 'import') return <section className="admin-card p-10 text-center" aria-labelledby="admin-members-import-title"><div className="mb-3 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-subtle text-primary" aria-hidden="true"><UploadCloud size={22} /></div><h2 id="admin-members-import-title" className="mb-3 text-2xl font-bold text-text-primary">{t('IMPORT_TITLE')}</h2><p className="mt-2 text-text-secondary">{t('IMPORT_DESCRIPTION')}</p><p className="mt-3 rounded-md border border-warning-bg bg-warning-bg p-4 text-warning-text" role="status">{t('IMPORT_UNAVAILABLE')}</p><button type="button" className="admin-btn-ghost mt-3 min-h-11" disabled title={t('IMPORT_TEMPLATE_BLOCKED')}><DownloadCloud size={18} aria-hidden="true" /> {t('IMPORT_TEMPLATE')}</button></section>;
   return null;

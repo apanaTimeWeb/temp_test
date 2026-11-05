@@ -54,12 +54,13 @@ export function AdminSeatsManagementPage() {
   });
 
   const colDefs = useMemo<readonly DataGridColumn<Seat>[]>(() => [
-    { field: 'seatNo', headerName: t('seatNumber'), flex: 1, cellRenderer: renderSeatNoCell },
-    { field: 'branch', headerName: t('branch'), flex: 2, cellRenderer: renderBranchCell },
+    { field: 'seatNo', headerName: t('seatNumber'), flex: 1, sortable: true, cellRenderer: renderSeatNoCell },
+    { field: 'branch', headerName: t('branch'), flex: 2, sortable: true, cellRenderer: renderBranchCell },
     {
       field: 'status',
       headerName: t('status'),
       flex: 1.2,
+      sortable: true,
       cellRenderer: ({ value }: { value: string }) => {
         const statusKey = ADMIN_SEATS_MANAGEMENT_STATUS_OPTIONS.find((option) => option.value === value)?.labelKey ?? 'statusUnknown';
         return (
@@ -69,8 +70,8 @@ export function AdminSeatsManagementPage() {
         );
       },
     },
-    { field: 'assignedTo', headerName: t('assignedTo'), flex: 2, cellClass: 'text-sm text-text-secondary' },
-    { field: 'lastMaintenance', headerName: t('lastMaintenance'), flex: 1.5, cellClass: 'text-sm text-text-secondary' },
+    { field: 'assignedTo', headerName: t('assignedTo'), flex: 2, sortable: true, cellClass: 'text-sm text-text-secondary' },
+    { field: 'lastMaintenance', headerName: t('lastMaintenance'), flex: 1.5, sortable: true, cellClass: 'text-sm text-text-secondary' },
     {
       headerName: t('actions'),
       flex: 1.5,

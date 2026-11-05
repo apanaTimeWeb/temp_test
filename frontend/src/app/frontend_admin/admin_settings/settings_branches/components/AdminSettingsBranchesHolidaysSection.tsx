@@ -14,6 +14,9 @@ import {
   Trash2,
   CheckCircle2,
   Search,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
@@ -113,9 +116,18 @@ export function AdminSettingsBranchesHolidaysSection({ isDemoMode }: Props) {
   const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
   const [isHolidayModalOpen, setIsHolidayModalOpen] = useState(false);
 
+  type HolidaySortField = 'holidayName' | 'date' | 'branchScope' | 'operatingTiming';
+  const [holidaySortField, setHolidaySortField] = useState<HolidaySortField | null>(null);
+  const [holidaySortDirection, setHolidaySortDirection] = useState<'asc' | 'desc'>('asc');
   const [holidaySearch, setHolidaySearch] = useState('');
   const [holidayPage, setHolidayPage] = useState(0);
   const [holidayPageSize, setHolidayPageSize] = useState(10);
+
+  const toggleHolidaySort = (field: HolidaySortField) => {
+    setHolidayPage(0);
+    if (holidaySortField === field) setHolidaySortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    else { setHolidaySortField(field); setHolidaySortDirection('asc'); }
+  };
 
   const filteredHolidays = useMemo(() => {
     const q = holidaySearch.trim().toLowerCase();
@@ -129,10 +141,45 @@ export function AdminSettingsBranchesHolidaysSection({ isDemoMode }: Props) {
     );
   }, [holidays, holidaySearch]);
 
+  const sortedHolidays = useMemo(() => {
+    if (!holidaySortField) return filteredHolidays;
+    return [...filteredHolidays].sort((a, b) => {
+      const aVal = a[holidaySortField];
+      const bVal = b[holidaySortField];
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return holidaySortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredHolidays, holidaySortField, holidaySortDirection]);
+
   const paginatedHolidays = useMemo(
-    () => filteredHolidays.slice(holidayPage * holidayPageSize, (holidayPage + 1) * holidayPageSize),
-    [filteredHolidays, holidayPage, holidayPageSize]
+    () => sortedHolidays.slice(holidayPage * holidayPageSize, (holidayPage + 1) * holidayPageSize),
+    [sortedHolidays, holidayPage, holidayPageSize]
   );
+
+  const renderHolidaySortableHeader = (field: HolidaySortField, label: string) => {
+    const isActive = holidaySortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (holidaySortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-3.5 py-3 whitespace-nowrap">
+        <button
+          type="button"
+          onClick={() => toggleHolidaySort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (holidaySortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            holidaySortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   // New Notice Form State
   const [noticeTitle, setNoticeTitle] = useState('');
@@ -302,10 +349,10 @@ export function AdminSettingsBranchesHolidaysSection({ isDemoMode }: Props) {
           <table className="w-full text-left text-sm border-collapse" aria-label="Branch Holiday Schedule">
             <thead>
               <tr className="border-b border-border bg-muted/40 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('HOLIDAY_NAME')}</th>
-                <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('HOLIDAY_DATE')}</th>
-                <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('HOLIDAY_SCOPE')}</th>
-                <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('HOLIDAY_TIMING')}</th>
+                {renderHolidaySortableHeader('holidayName', t('HOLIDAY_NAME'))}
+                {renderHolidaySortableHeader('date', t('HOLIDAY_DATE'))}
+                {renderHolidaySortableHeader('branchScope', t('HOLIDAY_SCOPE'))}
+                {renderHolidaySortableHeader('operatingTiming', t('HOLIDAY_TIMING'))}
                 <th scope="col" className="px-3.5 py-3 text-center whitespace-nowrap">Status</th>
               </tr>
             </thead>

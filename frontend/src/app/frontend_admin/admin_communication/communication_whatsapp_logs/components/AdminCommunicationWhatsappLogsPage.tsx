@@ -53,13 +53,14 @@ export function AdminCommunicationWhatsappLogsPage() {
   });
 
   const colDefs: readonly DataGridColumn<AdminCommunicationWhatsappLog>[] = [
-    { field: 'dateTime', headerName: t('WHATSAPP_COLUMN_DATETIME'), width: 160, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="text-text-secondary text-sm">{p.value}</span> },
-    { field: 'phone', headerName: t('WHATSAPP_COLUMN_PHONE'), width: 130, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="font-mono text-ui text-text-secondary font-medium">{p.value}</span> },
-    { field: 'student', headerName: t('WHATSAPP_COLUMN_STUDENT'), flex: 1, minWidth: 150, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="font-semibold">{p.value}</span> },
+    { field: 'dateTime', headerName: t('WHATSAPP_COLUMN_DATETIME'), width: 160, sortable: true, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="text-text-secondary text-sm">{p.value}</span> },
+    { field: 'phone', headerName: t('WHATSAPP_COLUMN_PHONE'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="font-mono text-ui text-text-secondary font-medium">{p.value}</span> },
+    { field: 'student', headerName: t('WHATSAPP_COLUMN_STUDENT'), flex: 1, minWidth: 150, sortable: true, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="font-semibold">{p.value}</span> },
     { 
       field: 'type', 
       headerName: t('WHATSAPP_COLUMN_TYPE'),
       width: 130,
+      sortable: true,
       cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
         <span data-testid={`admin_communication-whatsapp-type-${p.data.id}`} className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE[String(p.value ?? '')] ?? 'bg-surface-highlight text-text-secondary border-border'} mt-2`}>
           {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL[String(p.value ?? 'welcome')] ?? 'WHATSAPP_TYPE_UNKNOWN')}
@@ -70,6 +71,7 @@ export function AdminCommunicationWhatsappLogsPage() {
       field: 'status', 
       headerName: t('WHATSAPP_COLUMN_STATUS'),
       width: 120,
+      sortable: true,
       cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
         <span data-testid={`admin_communication-whatsapp-status-${p.data.id}`} className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE[String(p.value ?? '')] ?? 'bg-surface-highlight text-text-secondary border-border'} mt-2`}>
           {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL[String(p.value ?? '')] ?? 'WHATSAPP_STATUS_UNKNOWN')}

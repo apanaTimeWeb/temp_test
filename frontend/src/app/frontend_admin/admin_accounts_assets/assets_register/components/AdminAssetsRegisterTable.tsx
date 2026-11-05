@@ -2,7 +2,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { ShieldCheck, AlertTriangle, Clock, Wrench, Phone, CalendarClock } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, Clock, Wrench, Phone, CalendarClock, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { AdminAssetRecord } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
 import {
   formatPaiseToRupees,
@@ -25,13 +25,68 @@ export function AdminAssetsRegisterTable({
   onResetFilters,
 }: Props) {
   const t = useTranslations('ADMIN_ASSETS_REGISTER');
+  type AssetSortField = 'name' | 'branchName' | 'category' | 'purchaseCost' | 'warrantyExpiryDate' | 'amcStatus' | 'vendorName' | 'status';
+  const [sortField, setSortField] = useState<AssetSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
 
+  const toggleSort = (field: AssetSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedRecords = useMemo(() => {
+    if (!sortField) return records;
+    return [...records].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+        return sortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        const diff = aVal - bVal;
+        return sortDirection === 'asc' ? diff : -diff;
+      }
+      return 0;
+    });
+  }, [records, sortField, sortDirection]);
+
   const paginatedRecords = useMemo(
-    () => records.slice(page * pageSize, (page + 1) * pageSize),
-    [records, page, pageSize]
+    () => sortedRecords.slice(page * pageSize, (page + 1) * pageSize),
+    [sortedRecords, page, pageSize]
   );
+
+  const renderSortableHeader = (field: AssetSortField, label: string, align: 'left' | 'right' | 'center' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`px-4 py-3.5 whitespace-nowrap ${align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'}`}>
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   if (records.length === 0) {
     return <AdminAssetsRegisterEmptyState onResetFilters={onResetFilters} />;
@@ -43,14 +98,14 @@ export function AdminAssetsRegisterTable({
         <table className="w-full text-left text-sm border-collapse" aria-label={t('TITLE')}>
           <thead>
             <tr className="border-b border-border bg-muted/60 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              <th scope="col" className="px-4 py-3.5 whitespace-nowrap">{t('TABLE.ASSET')}</th>
-              <th scope="col" className="px-4 py-3.5 whitespace-nowrap">{t('TABLE.BRANCH')}</th>
-              <th scope="col" className="px-4 py-3.5 whitespace-nowrap">{t('TABLE.CATEGORY')}</th>
-              <th scope="col" className="px-4 py-3.5 text-right whitespace-nowrap">{t('TABLE.PURCHASE')}</th>
-              <th scope="col" className="px-4 py-3.5 whitespace-nowrap">{t('TABLE.WARRANTY_EXPIRY')}</th>
-              <th scope="col" className="px-4 py-3.5 text-center whitespace-nowrap">{t('TABLE.AMC_STATUS')}</th>
-              <th scope="col" className="px-4 py-3.5 whitespace-nowrap">{t('TABLE.VENDOR')}</th>
-              <th scope="col" className="px-4 py-3.5 text-center whitespace-nowrap">{t('TABLE.STATUS')}</th>
+              {renderSortableHeader('name', t('TABLE.ASSET'))}
+              {renderSortableHeader('branchName', t('TABLE.BRANCH'))}
+              {renderSortableHeader('category', t('TABLE.CATEGORY'))}
+              {renderSortableHeader('purchaseCost', t('TABLE.PURCHASE'), 'right')}
+              {renderSortableHeader('warrantyExpiryDate', t('TABLE.WARRANTY_EXPIRY'))}
+              {renderSortableHeader('amcStatus', t('TABLE.AMC_STATUS'), 'center')}
+              {renderSortableHeader('vendorName', t('TABLE.VENDOR'))}
+              {renderSortableHeader('status', t('TABLE.STATUS'), 'center')}
               <th scope="col" className="px-4 py-3.5 text-center whitespace-nowrap">{t('TABLE.ACTIONS')}</th>
             </tr>
           </thead>
@@ -191,7 +246,7 @@ export function AdminAssetsRegisterTable({
         <AdminTablePagination
           page={page}
           pageSize={pageSize}
-          totalCount={records.length}
+          totalCount={sortedRecords.length}
           onPageChange={setPage}
           onPageSizeChange={(newSize) => {
             setPageSize(newSize);

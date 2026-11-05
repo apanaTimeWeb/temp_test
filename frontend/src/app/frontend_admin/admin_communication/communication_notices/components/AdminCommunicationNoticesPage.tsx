@@ -141,11 +141,12 @@ export function AdminCommunicationNoticesPage() {
   }, [isAllBranches, selectedBranch, notices, search]);
 
   const colDefs: readonly DataGridColumn<Notice>[] = [
-    { field: 'title', headerName: t('NOTICE_COLUMN_TITLE'), width: 200, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-semibold text-primary">{p.value}</span> },
+    { field: 'title', headerName: t('NOTICE_COLUMN_TITLE'), width: 200, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-semibold text-primary">{p.value}</span> },
     {
       field: 'targetBranch',
       headerName: 'Target Branch',
       width: 160,
+      sortable: true,
       cellRenderer: (p: DataGridCellParams<Notice>) => (
         <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary mt-2 whitespace-nowrap">
           <Building2 size={12} className="text-primary shrink-0" />
@@ -158,15 +159,16 @@ export function AdminCommunicationNoticesPage() {
       field: 'status', 
       headerName: t('NOTICE_COLUMN_STATUS'),
       width: 120,
+      sortable: true,
       cellRenderer: (p: DataGridCellParams<Notice>) => (
         <span data-testid="admin_communication-page-state-001" className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${p.value === 'Active' ? 'bg-success-bg text-success-text border-success-bg' : 'bg-transparent text-text-secondary border-border'} mt-2`}>
           {p.value === 'Active' ? t('NOTICE_STATUS_ACTIVE') : p.value === 'Expired' ? t('NOTICE_STATUS_EXPIRED') : t('NOTICE_STATUS_UNKNOWN')}
         </span>
       )
     },
-    { field: 'validTill', headerName: t('NOTICE_COLUMN_VALID_TILL'), width: 130, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
-    { field: 'postedBy', headerName: t('NOTICE_COLUMN_POSTED_BY'), width: 130, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm">{p.value}</span> },
-    { field: 'postedDate', headerName: t('NOTICE_COLUMN_POSTED_DATE'), width: 130, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
+    { field: 'validTill', headerName: t('NOTICE_COLUMN_VALID_TILL'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
+    { field: 'postedBy', headerName: t('NOTICE_COLUMN_POSTED_BY'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm">{p.value}</span> },
+    { field: 'postedDate', headerName: t('NOTICE_COLUMN_POSTED_DATE'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
     {
       headerName: t('NOTICE_COLUMN_ACTIONS'),
       width: 140,

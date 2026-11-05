@@ -60,12 +60,12 @@ export default function AdminMembersBlacklistMain() {
   const { isDemoMode, recordsQuery, records, showForm, setShowForm, removeId, setRemoveId, selectedRecord, setSelectedRecord, submit, confirmRemove } = useAdminMembersBlacklistState();
 
   const columns = useMemo<readonly DataGridColumn<AdminBlacklistRecord>[]>(() => [
-    { field: 'name', headerName: t('TABLE_STUDENT'), flex: 2, minWidth: 180 },
-    { field: 'reason', headerName: t('TABLE_REASON'), flex: 2.5, minWidth: 220 },
-    { field: 'blacklistedBy', headerName: t('TABLE_BLACKLISTED_BY'), flex: 1.5, minWidth: 150 },
-    { field: 'blacklistedOn', headerName: t('TABLE_DATE'), flex: 1, minWidth: 120, cellRenderer: ({ value }: DataGridCellParams<AdminBlacklistRecord>) => formatAdminBlacklistDate(typeof value === 'string' ? value : undefined, locale) },
-    { field: 'previousSeat', headerName: t('TABLE_PREVIOUS_SEAT'), flex: 0.8, minWidth: 100 },
-    { field: 'status', headerName: t('TABLE_STATUS'), flex: 1, minWidth: 120, cellRenderer: ({ value }: DataGridCellParams<AdminBlacklistRecord>) => <span className="admin-badge bg-danger-bg text-danger-text">{value == null || value === ADMIN_BLACKLIST_STATUS_VALUES[0] ? t('STATUS_BLACKLISTED') : String(value)}</span> },
+    { field: 'name', headerName: t('TABLE_STUDENT'), flex: 2, minWidth: 180, sortable: true },
+    { field: 'reason', headerName: t('TABLE_REASON'), flex: 2.5, minWidth: 220, sortable: true },
+    { field: 'blacklistedBy', headerName: t('TABLE_BLACKLISTED_BY'), flex: 1.5, minWidth: 150, sortable: true },
+    { field: 'blacklistedOn', headerName: t('TABLE_DATE'), flex: 1, minWidth: 120, sortable: true, cellRenderer: ({ value }: DataGridCellParams<AdminBlacklistRecord>) => formatAdminBlacklistDate(typeof value === 'string' ? value : undefined, locale) },
+    { field: 'previousSeat', headerName: t('TABLE_PREVIOUS_SEAT'), flex: 0.8, minWidth: 100, sortable: true },
+    { field: 'status', headerName: t('TABLE_STATUS'), flex: 1, minWidth: 120, sortable: true, cellRenderer: ({ value }: DataGridCellParams<AdminBlacklistRecord>) => <span className="admin-badge bg-danger-bg text-danger-text">{value == null || value === ADMIN_BLACKLIST_STATUS_VALUES[0] ? t('STATUS_BLACKLISTED') : String(value)}</span> },
     { headerName: t('TABLE_ACTIONS'), minWidth: 110, sortable: false, cellRenderer: ({ data }) => <button type="button" disabled={!isDemoMode} className="admin-btn-icon min-h-11 min-w-11 disabled:cursor-not-allowed disabled:opacity-50" aria-label={t('REMOVE_ARIA', { name: data.name })} title={!isDemoMode ? t('LIVE_UNAVAILABLE') : undefined} onClick={() => setRemoveId(data.id)}><X size={18} strokeWidth={2} /></button> },
   ], [isDemoMode, t, locale]);
 

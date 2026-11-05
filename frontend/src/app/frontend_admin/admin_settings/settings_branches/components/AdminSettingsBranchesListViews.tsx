@@ -7,7 +7,7 @@ import type { KeyboardEvent, MouseEvent } from 'react';
 import useAdminSettingsBranchesMain from '@/app/frontend_admin/admin_settings/settings_branches/hooks/useAdminSettingsBranchesMain';
 import type { AdminBranchesBranch, AdminBranchesStatus } from '@/app/frontend_admin/admin_settings/settings_branches/schemas/AdminSettingsBranchesSchema';
 import { ADMIN_BRANCHES_DEFAULT_PAGE_SIZE, ADMIN_BRANCHES_PAGE_SIZE_OPTIONS, ADMIN_BRANCHES_STATUS_OPTIONS } from '@/app/frontend_admin/admin_settings/settings_branches/config/admin_settings_branches.url_config';
-import { Eye, MoreVertical, Search } from 'lucide-react';
+import { Eye, MoreVertical, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { AdminBranchesListViewsProps } from '@/app/frontend_admin/admin_settings/settings_branches/types/AdminSettingsBranchesComponentTypes';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
@@ -17,9 +17,19 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
   const { activeTab, setActiveTab, branches, setViewingBranch } = model;
   const filterStatus: AdminBranchesStatus | undefined = activeTab === 'active' ? ADMIN_BRANCHES_STATUS_OPTIONS[0] : activeTab === 'suspended' ? ADMIN_BRANCHES_STATUS_OPTIONS[1] : activeTab === 'archived' ? ADMIN_BRANCHES_STATUS_OPTIONS[2] : undefined;
   const [search, setSearch] = useState('');
+  type BranchSortField = 'name' | 'manager' | 'status';
+  const [sortField, setSortField] = useState<BranchSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useAdminApplicationInfrastructureUrlQueryState<number>('page', 0);
   const [pageSize, setPageSize] = useAdminApplicationInfrastructureUrlQueryState<number>('pageSize', ADMIN_BRANCHES_DEFAULT_PAGE_SIZE, { validValues: [10, 25, 50] });
   const [openActionsFor, setOpenActionsFor] = useState<string | null>(null);
+
+  const toggleSort = (field: BranchSortField) => {
+    setPage(0);
+    if (sortField === field) setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    else { setSortField(field); setSortDirection('asc'); }
+  };
+
   const prevFilterRef = useRef(filterStatus);
   useEffect(() => {
     if (prevFilterRef.current !== filterStatus) {
@@ -42,9 +52,44 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
     return list;
   }, [branches, filterStatus, search]);
 
-  const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));
+  const sortedRows = useMemo(() => {
+    if (!sortField) return rows;
+    return [...rows].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [rows, sortField, sortDirection]);
+
+  const pageCount = Math.max(1, Math.ceil(sortedRows.length / pageSize));
   const safePage = Math.min(page, pageCount - 1);
-  const visibleRows = useMemo(() => rows.slice(safePage * pageSize, (safePage + 1) * pageSize), [safePage, pageSize, rows]);
+  const visibleRows = useMemo(() => sortedRows.slice(safePage * pageSize, (safePage + 1) * pageSize), [safePage, pageSize, sortedRows]);
+
+  const renderSortableHeader = (field: BranchSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-4 py-3 whitespace-nowrap text-left">
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
   const statusClass = (status: AdminBranchesStatus) => status === ADMIN_BRANCHES_STATUS_OPTIONS[0] ? 'bg-success-bg text-success-text' : status === ADMIN_BRANCHES_STATUS_OPTIONS[1] ? 'bg-danger-bg text-danger-text' : 'bg-surface-highlight text-text-secondary';
   const activateRow = (event: KeyboardEvent<HTMLTableRowElement>, branch: AdminBranchesBranch) => {
     const target = event.target;
@@ -105,9 +150,9 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
             <table className="w-full text-sm text-left">
               <thead>
                 <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-                  <th className="px-4 py-3 text-left">{t('TABLE_BRANCH')}</th>
-                  <th className="px-4 py-3 text-left">{t('TABLE_MANAGER')}</th>
-                  <th className="px-4 py-3 text-left">{t('TABLE_STATUS')}</th>
+                  {renderSortableHeader('name', t('TABLE_BRANCH'))}
+                  {renderSortableHeader('manager', t('TABLE_MANAGER'))}
+                  {renderSortableHeader('status', t('TABLE_STATUS'))}
                   <th className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
                 </tr>
               </thead>
@@ -147,12 +192,13 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
           <AdminTablePagination
             page={safePage}
             pageSize={pageSize}
-            totalRows={rows.length}
+            totalRows={sortedRows.length}
             onPageChange={setPage}
             onPageSizeChange={(sz) => {
               setPageSize(sz);
               setPage(0);
             }}
+            labels={{ results: '' }}
           />
         </>
       )}

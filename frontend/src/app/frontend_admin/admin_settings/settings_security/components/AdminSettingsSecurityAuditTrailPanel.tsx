@@ -11,6 +11,9 @@ import {
   CheckCircle2,
   Eye,
   ExternalLink,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import { ADMIN_SECURITY_ANTI_FRAUD_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
 import type {
@@ -26,8 +29,17 @@ export function AdminSettingsSecurityAuditTrailPanel() {
   const [searchQuery, setSearchQuery] = useState('');
   const [inspectingRecord, setInspectingRecord] = useState<AntiFraudAuditRecord | null>(null);
 
+  type AuditSortField = 'timestamp' | 'severity' | 'actionTitle' | 'targetEntity' | 'managerName';
+  const [sortField, setSortField] = useState<AuditSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const toggleSort = (field: AuditSortField) => {
+    if (sortField === field) setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    else { setSortField(field); setSortDirection('asc'); }
+  };
+
   const filteredLogs = useMemo(() => {
-    return ADMIN_SECURITY_ANTI_FRAUD_FIXTURES.filter((item) => {
+    const list = ADMIN_SECURITY_ANTI_FRAUD_FIXTURES.filter((item) => {
       if (severityFilter !== 'ALL' && item.severity !== severityFilter) return false;
       if (entityFilter !== 'ALL' && item.entityType !== entityFilter) return false;
       if (searchQuery.trim()) {
@@ -40,7 +52,40 @@ export function AdminSettingsSecurityAuditTrailPanel() {
       }
       return true;
     });
-  }, [severityFilter, entityFilter, searchQuery]);
+
+    if (!sortField) return list;
+    return [...list].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [severityFilter, entityFilter, searchQuery, sortField, sortDirection]);
+
+  const renderSortableHeader = (field: AuditSortField, label: string, align: 'left' | 'center' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`px-3.5 py-3 whitespace-nowrap ${align === 'center' ? 'text-center' : 'text-left'}`}>
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'center' ? 'mx-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const highRiskCount = ADMIN_SECURITY_ANTI_FRAUD_FIXTURES.filter(
     (i) => i.severity === 'HIGH_RISK'
@@ -137,11 +182,11 @@ export function AdminSettingsSecurityAuditTrailPanel() {
           <table className="w-full text-left text-sm border-collapse" aria-label="Anti-Fraud Audit Trail">
             <thead>
               <tr className="border-b border-border bg-muted/50 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('AUDIT_COL_TIMESTAMP')}</th>
-                <th scope="col" className="px-3.5 py-3 text-center whitespace-nowrap">{t('AUDIT_COL_SEVERITY')}</th>
-                <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('AUDIT_COL_ACTION')}</th>
-                <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('AUDIT_COL_CHANGE')}</th>
-                <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('AUDIT_COL_ACTOR')}</th>
+                {renderSortableHeader('timestamp', t('AUDIT_COL_TIMESTAMP'))}
+                {renderSortableHeader('severity', t('AUDIT_COL_SEVERITY'), 'center')}
+                {renderSortableHeader('actionTitle', t('AUDIT_COL_ACTION'))}
+                {renderSortableHeader('targetEntity', t('AUDIT_COL_CHANGE'))}
+                {renderSortableHeader('managerName', t('AUDIT_COL_ACTOR'))}
                 <th scope="col" className="px-3.5 py-3 whitespace-nowrap">{t('AUDIT_COL_NOTES')}</th>
               </tr>
             </thead>

@@ -7,7 +7,7 @@ import AdminStaffDirectoryAuditSection from '@/app/frontend_admin/admin_staff/st
 import AdminStaffDirectoryDetailLogsSection from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryDetailLogsSection';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useMemo, useState } from 'react';
-import { Eye, ExternalLink, MoreVertical, Search } from 'lucide-react';
+import { Eye, ExternalLink, MoreVertical, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import type { AdminStaffDirectoryManager, AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import { ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
@@ -77,9 +77,23 @@ export type { AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionMAINLISTVIEWSSectio
 /** Renders one manager status table; unsupported row actions remain disabled until their API behavior is verified. */
 export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, onSelectManager }: AdminStaffDirectoryManagerTableProps) {
   const t = useTranslations('ADMIN_STAFF_DIRECTORY');
+  type ManagerSortField = 'name' | 'email' | 'branch' | 'lastActive' | 'status';
+  const [sortField, setSortField] = useState<ManagerSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useAdminApplicationInfrastructureUrlQueryState<number>('page', 0);
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState('');
+
+  const toggleSort = (field: ManagerSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
   const tabTitleKey = { all: 'PANEL_ALL', staff: 'PANEL_STAFF', active: 'PANEL_ACTIVE', suspended: 'PANEL_SUSPENDED', deactivated: 'PANEL_DEACTIVATED' } as const;
   const tabFilterStatus: Partial<Record<NonNullable<typeof tab>, AdminStaffDirectoryManager['status']>> = { active: 'Active', suspended: 'Suspended', deactivated: 'Deactivated' };
   const effectiveFilterStatus = filterStatus ?? (tab ? tabFilterStatus[tab] : undefined);
@@ -106,9 +120,48 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
     }
     return result;
   }, [effectiveFilterStatus, managers, tab, search]);
-  const pageCount = Math.max(1, Math.ceil(filteredManagers.length / pageSize));
+
+  const sortedManagers = useMemo(() => {
+    if (!sortField) return filteredManagers;
+    return [...filteredManagers].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+        return sortDirection === 'asc' ? cmp : -cmp;
+      }
+      return 0;
+    });
+  }, [filteredManagers, sortField, sortDirection]);
+
+  const pageCount = Math.max(1, Math.ceil(sortedManagers.length / pageSize));
   const currentPage = Math.min(page, pageCount - 1);
-  const visibleManagers = filteredManagers.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
+  const visibleManagers = sortedManagers.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
+
+  const renderSortableHeader = (field: ManagerSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-4 py-3 whitespace-nowrap">
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const handleOpenDesk = (branchName: string) => {
     const branchParam = encodeURIComponent(branchName);
@@ -155,11 +208,11 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-                  <th scope="col" className="px-4 py-3">{t('TABLE_MANAGER')}</th>
-                  <th scope="col" className="px-4 py-3">{t('TABLE_CONTACT')}</th>
-                  <th scope="col" className="px-4 py-3">{t('TABLE_BRANCH')}</th>
-                  <th scope="col" className="px-4 py-3">{t('TABLE_LAST_ACTIVE')}</th>
-                  <th scope="col" className="px-4 py-3">{t('TABLE_STATUS')}</th>
+                  {renderSortableHeader('name', t('TABLE_MANAGER'))}
+                  {renderSortableHeader('email', t('TABLE_CONTACT'))}
+                  {renderSortableHeader('branch', t('TABLE_BRANCH'))}
+                  {renderSortableHeader('lastActive', t('TABLE_LAST_ACTIVE'))}
+                  {renderSortableHeader('status', t('TABLE_STATUS'))}
                   <th scope="col" className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
                 </tr>
               </thead>
