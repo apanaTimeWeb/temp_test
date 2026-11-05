@@ -215,11 +215,20 @@ export function DataGrid<TRow extends object>({
                   {column.field && column.sortable ? (
                     <button
                       type="button"
-                      className="min-h-11 text-left text-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                      className="group inline-flex items-center gap-1.5 min-h-11 text-left text-inherit focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       onClick={() => handleHeaderSort(column.field!)}
                       aria-label={`${effectivePaginationLabels.sortBy} ${column.headerName ?? column.field}${sortField === column.field ? `, ${effectivePaginationLabels.currently} ${sortDirection === 'asc' ? effectivePaginationLabels.ascending : effectivePaginationLabels.descending}` : ''}`}
                     >
-                      {column.headerName ?? column.field} {sortField === column.field ? (sortDirection === 'asc' ? '↑' : '↓') : '↕'}
+                      <span>{column.headerName ?? column.field}</span>
+                      {sortField === column.field ? (
+                        <span className="text-primary font-bold inline-flex items-center" aria-hidden="true">
+                          {sortDirection === 'asc' ? '↑' : '↓'}
+                        </span>
+                      ) : (
+                        <span className="text-text-secondary/50 group-hover:text-text-secondary transition-colors inline-flex items-center" aria-hidden="true">
+                          ↕
+                        </span>
+                      )}
                     </button>
                   ) : column.headerName ?? column.field}
                 </th>

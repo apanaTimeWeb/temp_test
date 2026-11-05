@@ -40,7 +40,7 @@ export function AdminTablePagination({
 
   const txtShowing = labels?.showing ?? 'Showing';
   const txtOf = labels?.of ?? 'of';
-  const txtResults = labels?.results ?? 'results';
+  const txtResults = labels?.results !== undefined ? labels.results : 'results';
   const txtRowsPerPage = labels?.rowsPerPage ?? 'Rows per page:';
   const txtPrevious = labels?.previous ?? 'Previous';
   const txtNext = labels?.next ?? 'Next';
@@ -49,7 +49,7 @@ export function AdminTablePagination({
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-text-secondary">
       <span>
-        {txtShowing} {startItem}–{endItem} {txtOf} {total} {txtResults}
+        {txtShowing} {startItem}–{endItem} {txtOf} {total}{txtResults ? ` ${txtResults}` : ''}
       </span>
       <div className="flex items-center gap-4">
         {onPageSizeChange && (

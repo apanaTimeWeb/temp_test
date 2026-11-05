@@ -3,8 +3,8 @@
 
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
-import { Activity, Users, Building2, Trophy } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Activity, Users, Building2, Trophy, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { ApexOptions } from 'apexcharts';
 import type { AdminDashboardReportsAnalyticsDataset, AdminDashboardReportsAnalyticsRange, AdminDashboardReportsAnalyticsBranchSummary as AdminDashboardReportsAnalyticsBranchSummaryRow } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/types/AdminDashboardReportsComponentTypes';
 import { ADMIN_DASHBOARD_REPORTS_ANALYTICS_PERIOD_LABEL_KEYS, ADMIN_DASHBOARD_REPORTS_ANALYTICS_RANGE_LABEL_KEYS } from '@/app/frontend_admin/admin_dashboard/dashboard_reports/config/admin_dashboard_reports.url_config';
@@ -52,9 +52,55 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
     { name: t('SERIES_JOINED'), data: growth.map((point) => point.joined) },
     { name: t('SERIES_EXITED'), data: growth.map((point) => point.exited) },
   ];
+  type BranchSortField = 'branch' | 'revenueMinor' | 'expenseMinor' | 'profit' | 'students' | 'occupancy';
+  const [sortField, setSortField] = useState<BranchSortField>('profit');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  const toggleSort = (field: BranchSortField) => {
+    if (sortField === field) setSortDirection((prev) => (prev === 'desc' ? 'asc' : 'desc'));
+    else { setSortField(field); setSortDirection('desc'); }
+  };
+
   const sortedBranches = useMemo(() => {
-    return [...branches].sort((a, b) => (b.revenueMinor - b.expenseMinor) - (a.revenueMinor - a.expenseMinor));
-  }, [branches]);
+    return [...branches].sort((a, b) => {
+      let diff = 0;
+      if (sortField === 'branch') {
+        const cmp = a.branch.localeCompare(b.branch, undefined, { numeric: true, sensitivity: 'base' });
+        return sortDirection === 'asc' ? cmp : -cmp;
+      }
+      if (sortField === 'revenueMinor') diff = a.revenueMinor - b.revenueMinor;
+      else if (sortField === 'expenseMinor') diff = a.expenseMinor - b.expenseMinor;
+      else if (sortField === 'profit') diff = (a.revenueMinor - a.expenseMinor) - (b.revenueMinor - b.expenseMinor);
+      else if (sortField === 'students') diff = a.students - b.students;
+      else if (sortField === 'occupancy') diff = a.occupancy - b.occupancy;
+      return sortDirection === 'asc' ? diff : -diff;
+    });
+  }, [branches, sortField, sortDirection]);
+
+  const renderSortableHeader = (field: BranchSortField, label: string) => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3 whitespace-nowrap">
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   return (
     <div className="space-y-5">
@@ -102,12 +148,12 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-                    <th scope="col" className="p-3">{t('TABLE_BRANCH')}</th>
-                    <th scope="col" className="p-3">{t('TABLE_REVENUE')}</th>
-                    <th scope="col" className="p-3">{t('TABLE_EXPENSES')}</th>
-                    <th scope="col" className="p-3">{t('TABLE_NET_PROFIT')}</th>
-                    <th scope="col" className="p-3">{t('TABLE_STUDENTS')}</th>
-                    <th scope="col" className="p-3">{t('TABLE_OCCUPANCY')}</th>
+                    {renderSortableHeader('branch', t('TABLE_BRANCH'))}
+                    {renderSortableHeader('revenueMinor', t('TABLE_REVENUE'))}
+                    {renderSortableHeader('expenseMinor', t('TABLE_EXPENSES'))}
+                    {renderSortableHeader('profit', t('TABLE_NET_PROFIT'))}
+                    {renderSortableHeader('students', t('TABLE_STUDENTS'))}
+                    {renderSortableHeader('occupancy', t('TABLE_OCCUPANCY'))}
                   </tr>
                 </thead>
                 <tbody>{sortedBranches.map((row: AdminDashboardReportsAnalyticsBranchSummaryRow, index: number) => { const profit = row.revenueMinor - row.expenseMinor; return (

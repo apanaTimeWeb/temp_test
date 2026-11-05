@@ -13,6 +13,7 @@ import AdminAccountingSeatGapTableSection from '@/app/frontend_admin/admin_accou
 import { ADMIN_ACCOUNTING_SEAT_GAP_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/mocks/AdminAccountsSeatGapReportSeatGapFixtures';
 import type { AdminAccountingSeatGapRow } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/types/AdminAccountsSeatGapReportTypes';
 import { formatAdminAccountingCurrency } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportFormatCurrency';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { buildAdminAccountsSeatGapReportCsv, downloadAdminAccountingCsv } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/utils/AdminAccountsSeatGapReportExportUtils';
 import { ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS, ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS } from '@/app/frontend_admin/admin_accounts_assets/accounts_seat_gap_report/config/admin_accounts_seat_gap_report.url_config';
 
@@ -30,6 +31,8 @@ export function AdminAccountsSeatGapReportPage() {
   const initialStatus = searchParams.get('status');
   const [shiftFilter, setShiftFilter] = useState<(typeof ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS)[number]>(ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS.includes(initialShift as (typeof ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS)[number]) ? initialShift as (typeof ADMIN_ACCOUNTING_SHIFT_FILTER_OPTIONS)[number] : 'all');
   const [statusFilter, setStatusFilter] = useState<(typeof ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS)[number]>(ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS.includes(initialStatus as (typeof ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS)[number]) ? initialStatus as (typeof ADMIN_ACCOUNTING_SEAT_GAP_STATUS_FILTER_OPTIONS)[number] : 'all');
+  const [search, setSearch] = useState('');
+  const { selectedBranch, isAllBranches } = useAdminBranch();
 
   useEffect(() => {
     const nextShift = searchParams.get('shift');
@@ -49,7 +52,14 @@ export function AdminAccountsSeatGapReportPage() {
   };
 
   const sourceRows = useMemo(() => isDemoMode ? ADMIN_ACCOUNTING_SEAT_GAP_FIXTURES : [], [isDemoMode]);
-  const visible = useMemo(() => sourceRows.filter((row) => (shiftFilter === 'all' || row.shift === shiftFilter) && (statusFilter === 'all' || row.status === statusFilter)), [sourceRows, shiftFilter, statusFilter]);
+  const visible = useMemo(() => sourceRows.filter((row) => {
+    const matchBranch = isAllBranches || !selectedBranch || !row.branch || row.branch.toLowerCase().includes(selectedBranch.name.toLowerCase());
+    const matchShift = shiftFilter === 'all' || row.shift === shiftFilter;
+    const matchStatus = statusFilter === 'all' || row.status === statusFilter;
+    const q = search.trim().toLowerCase();
+    const matchSearch = !q || row.seatNo.toLowerCase().includes(q) || row.floor.toLowerCase().includes(q) || row.shift.toLowerCase().includes(q);
+    return matchBranch && matchShift && matchStatus && matchSearch;
+  }), [sourceRows, shiftFilter, statusFilter, search, isAllBranches, selectedBranch]);
   const totalLoss = visible.reduce((sum, row) => sum + row.revenueLoss, 0);
 
   const exportCsv = () => {
@@ -73,7 +83,7 @@ export function AdminAccountsSeatGapReportPage() {
     {!isDemoMode && <p role="status" className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('LIVE_UNAVAILABLE')}</p>}
     <div><h1 className="text-page-title font-bold text-text-primary">{t('TITLE')}</h1><p className="mt-1 text-body text-text-secondary">{t('SUBTITLE')}</p></div>
     <AdminAccountingSeatGapSummarySection rows={visible} totalLossLabel={formatAdminAccountingCurrency(totalLoss, locale)} labels={{ totalGapSeats: t('TOTAL_GAP_SEATS'), revenueLoss: t('REVENUE_LOSS'), averageGapDays: t('AVG_GAP_DAYS'), underMaintenance: t('UNDER_MAINTENANCE') }} />
-    <AdminAccountingSeatGapFilterSection shift={shiftFilter} status={statusFilter} onFilterChange={updateFilter} onExport={exportCsv} canExport={isDemoMode} exportBlockedLabel={t('EXPORT_BLOCKED')} labels={{ shift: t('SHIFT'), status: t('STATUS'), allShifts: t('ALL_SHIFTS'), morning: t('MORNING'), afternoon: t('AFTERNOON'), night: t('NIGHT'), allStatus: t('ALL_STATUS'), vacant: t('VACANT'), maintenance: t('MAINTENANCE'), export: t('EXPORT') }} />
+    <AdminAccountingSeatGapFilterSection shift={shiftFilter} status={statusFilter} search={search} onSearchChange={setSearch} onFilterChange={updateFilter} onExport={exportCsv} canExport={isDemoMode} exportBlockedLabel={t('EXPORT_BLOCKED')} labels={{ shift: t('SHIFT'), status: t('STATUS'), allShifts: t('ALL_SHIFTS'), morning: t('MORNING'), afternoon: t('AFTERNOON'), night: t('NIGHT'), allStatus: t('ALL_STATUS'), vacant: t('VACANT'), maintenance: t('MAINTENANCE'), export: t('EXPORT') }} />
     <AdminAccountingSeatGapTableSection rows={visible} columns={columns} emptyMessage={t('NO_GAP_SEATS')} title={t('TITLE')} />
   </div>;
 }

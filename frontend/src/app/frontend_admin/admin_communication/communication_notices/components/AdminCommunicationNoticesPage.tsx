@@ -11,7 +11,7 @@ import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import useAdminCommunicationNoticesUnsavedChangesGuard from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesUnsavedChangesGuard';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2 } from 'lucide-react';
+import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2, Search } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { getAdminCommunicationNoticeStatus } from '@/app/frontend_admin/admin_communication/communication_notices/utils/AdminCommunicationNoticesDateUtils';
@@ -43,6 +43,7 @@ export function AdminCommunicationNoticesPage() {
   const [editItem, setEditItem] = useState<Notice | null>(null);
   const [deleteItem, setDeleteItem] = useState<Notice | null>(null);
   const [broadcastItem, setBroadcastItem] = useState<Notice | null>(null);
+  const [search, setSearch] = useState('');
   const [toast, setToast] = useState('');
   const toastTimeoutRef = useRef<number | null>(null);
 
@@ -120,19 +121,32 @@ export function AdminCommunicationNoticesPage() {
   };
 
   const filteredNotices = useMemo(() => {
-    if (isAllBranches || !selectedBranch) return notices;
-    return notices.filter((n) => {
-      if (!n.targetBranch || n.targetBranch === 'All Branches') return true;
-      return n.targetBranch.toLowerCase().includes(selectedBranch.name.toLowerCase());
-    });
-  }, [isAllBranches, selectedBranch, notices]);
+    let list = notices;
+    if (!isAllBranches && selectedBranch) {
+      list = list.filter((n) => {
+        if (!n.targetBranch || n.targetBranch === 'All Branches') return true;
+        return n.targetBranch.toLowerCase().includes(selectedBranch.name.toLowerCase());
+      });
+    }
+    const q = search.trim().toLowerCase();
+    if (q) {
+      list = list.filter((n) =>
+        n.title.toLowerCase().includes(q) ||
+        n.message.toLowerCase().includes(q) ||
+        (n.targetBranch ? n.targetBranch.toLowerCase().includes(q) : false) ||
+        (n.postedBy ? n.postedBy.toLowerCase().includes(q) : false)
+      );
+    }
+    return list;
+  }, [isAllBranches, selectedBranch, notices, search]);
 
   const colDefs: readonly DataGridColumn<Notice>[] = [
-    { field: 'title', headerName: t('NOTICE_COLUMN_TITLE'), width: 200, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-semibold text-primary">{p.value}</span> },
+    { field: 'title', headerName: t('NOTICE_COLUMN_TITLE'), width: 200, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-semibold text-primary">{p.value}</span> },
     {
       field: 'targetBranch',
       headerName: 'Target Branch',
       width: 160,
+      sortable: true,
       cellRenderer: (p: DataGridCellParams<Notice>) => (
         <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary mt-2 whitespace-nowrap">
           <Building2 size={12} className="text-primary shrink-0" />
@@ -145,15 +159,16 @@ export function AdminCommunicationNoticesPage() {
       field: 'status', 
       headerName: t('NOTICE_COLUMN_STATUS'),
       width: 120,
+      sortable: true,
       cellRenderer: (p: DataGridCellParams<Notice>) => (
         <span data-testid="admin_communication-page-state-001" className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${p.value === 'Active' ? 'bg-success-bg text-success-text border-success-bg' : 'bg-transparent text-text-secondary border-border'} mt-2`}>
           {p.value === 'Active' ? t('NOTICE_STATUS_ACTIVE') : p.value === 'Expired' ? t('NOTICE_STATUS_EXPIRED') : t('NOTICE_STATUS_UNKNOWN')}
         </span>
       )
     },
-    { field: 'validTill', headerName: t('NOTICE_COLUMN_VALID_TILL'), width: 130, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
-    { field: 'postedBy', headerName: t('NOTICE_COLUMN_POSTED_BY'), width: 130, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm">{p.value}</span> },
-    { field: 'postedDate', headerName: t('NOTICE_COLUMN_POSTED_DATE'), width: 130, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
+    { field: 'validTill', headerName: t('NOTICE_COLUMN_VALID_TILL'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
+    { field: 'postedBy', headerName: t('NOTICE_COLUMN_POSTED_BY'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm">{p.value}</span> },
+    { field: 'postedDate', headerName: t('NOTICE_COLUMN_POSTED_DATE'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
     {
       headerName: t('NOTICE_COLUMN_ACTIONS'),
       width: 140,
@@ -273,6 +288,20 @@ export function AdminCommunicationNoticesPage() {
             <span>({selectedBranch.code})</span>
           </span>
         )}
+      </div>
+
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="relative flex-1 min-w-[240px] max-w-md">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search notices by title, message, target branch..."
+            aria-label="Search notices"
+            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-border bg-input text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
       </div>
 
       <div className="rounded-xl border border-border bg-card overflow-hidden p-4">

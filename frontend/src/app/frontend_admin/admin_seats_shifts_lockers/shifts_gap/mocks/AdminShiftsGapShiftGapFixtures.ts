@@ -41,7 +41,7 @@ export const ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS: readonly AdminShiftOverstayIn
   {
     id: 'inc-101',
     date: '2026-11-01',
-    branchName: 'Karol Bagh Central',
+    branchName: 'Downtown Central',
     seatNumber: 'Seat A-14',
     studentName: 'Rahul Sharma',
     smartId: 'SL-001',
@@ -56,7 +56,7 @@ export const ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS: readonly AdminShiftOverstayIn
   {
     id: 'inc-102',
     date: '2026-11-01',
-    branchName: 'Laxmi Nagar Hub',
+    branchName: 'Westside Branch',
     seatNumber: 'Seat B-08',
     studentName: 'Amit Kumar',
     smartId: 'SL-003',
@@ -71,7 +71,7 @@ export const ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS: readonly AdminShiftOverstayIn
   {
     id: 'inc-103',
     date: '2026-10-31',
-    branchName: 'Mukherjee Nagar',
+    branchName: 'North Hub',
     seatNumber: 'Seat C-02',
     studentName: 'Priya Verma',
     smartId: 'SL-002',
@@ -86,7 +86,7 @@ export const ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS: readonly AdminShiftOverstayIn
   {
     id: 'inc-104',
     date: '2026-10-31',
-    branchName: 'Karol Bagh Central',
+    branchName: 'Downtown Central',
     seatNumber: 'Seat A-22',
     studentName: 'Sneha Patel',
     smartId: 'SL-004',

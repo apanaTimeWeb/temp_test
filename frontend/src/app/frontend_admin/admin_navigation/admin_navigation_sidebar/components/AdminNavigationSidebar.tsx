@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import {
   LogOut,
   Menu,
@@ -76,6 +77,26 @@ export function AdminNavigationSidebar({
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   const [internalMobileOpen, setInternalMobileOpen] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
+
+  const handleSignOut = useCallback(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        localStorage.removeItem('admin_user');
+        sessionStorage.clear();
+        document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+      }
+    } catch {
+      // Storage access resilience
+    }
+    toast.success('Signed out successfully');
+    setShowLogout(false);
+    window.location.href = '/public_auth/auth_sign_in';
+  }, []);
   // Default only the active domain accordion group to expanded
   const [expandedGroups, setExpandedGroups] = useState<string[]>(() => {
     if (!pathname) return [];
@@ -440,26 +461,21 @@ export function AdminNavigationSidebar({
           <DialogHeader>
             <DialogTitle>{t('LOG_OUT_TITLE')}</DialogTitle>
             <DialogDescription>{t('LOG_OUT_DESCRIPTION')}</DialogDescription>
-            <p id="admin-logout-unavailable" role="status" className="text-sm text-text-secondary">
-              {t('LOG_OUT_UNAVAILABLE')}
-            </p>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className="mt-4 flex justify-end gap-2">
             <button
               data-testid="admin_sidebar-AdminNavigationSidebar-control-004"
               type="button"
               onClick={() => setShowLogout(false)}
-              className="border border-border rounded-md px-4 py-2 text-primary"
+              className="border border-border rounded-md px-4 py-2 text-text-secondary hover:bg-surface-hover transition-colors"
             >
               {t('CANCEL')}
             </button>
             <button
               data-testid="admin_sidebar-AdminNavigationSidebar-control-005"
               type="button"
-              disabled
-              title={t('LOG_OUT_UNAVAILABLE')}
-              aria-describedby="admin-logout-unavailable"
-              className="bg-danger text-on-danger rounded-md px-4 py-2 opacity-60 cursor-not-allowed"
+              onClick={handleSignOut}
+              className="bg-danger text-on-danger rounded-md px-4 py-2 font-medium hover:opacity-90 transition-opacity cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
             >
               {t('LOG_OUT')}
             </button>

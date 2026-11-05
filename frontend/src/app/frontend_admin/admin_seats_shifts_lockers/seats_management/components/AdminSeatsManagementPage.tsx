@@ -1,6 +1,7 @@
 'use client';
 // Responsibility: AdminSeatsManagementPage component owned by admin_seats; responsibility folder: admin_seats_components_views.
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 
 // RESPONSIBILITY: Read-only seat inventory with local search and canonical status filtering.
 // DATA FLOW: demo fixtures (demo mode only) -> filtered rows -> shared data grid.
@@ -45,21 +46,24 @@ export function AdminSeatsManagementPage() {
     return () => window.clearTimeout(timeoutId);
   }, [searchInput, setSearch]);
   const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | SeatStatus>('statusFilter', 'all', { validValues: ['all', 'Working', 'Maintenance', 'Broken'] });
+  const { selectedBranch, isAllBranches } = useAdminBranch();
 
   const filtered = seats.filter((seat) => {
+    const matchBranch = isAllBranches || !selectedBranch || seat.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(seat.branch.toLowerCase());
     const normalizedSearch = search.trim().toLocaleLowerCase();
     const matchesSearch = [seat.seatNo, seat.branch, seat.assignedTo]
       .some((value) => value.toLocaleLowerCase().includes(normalizedSearch));
-    return matchesSearch && matchesAdminSeatsFilter(seat.status, statusFilter);
+    return matchBranch && matchesSearch && matchesAdminSeatsFilter(seat.status, statusFilter);
   });
 
   const colDefs = useMemo<readonly DataGridColumn<Seat>[]>(() => [
-    { field: 'seatNo', headerName: t('seatNumber'), flex: 1, cellRenderer: renderSeatNoCell },
-    { field: 'branch', headerName: t('branch'), flex: 2, cellRenderer: renderBranchCell },
+    { field: 'seatNo', headerName: t('seatNumber'), flex: 1, sortable: true, cellRenderer: renderSeatNoCell },
+    { field: 'branch', headerName: t('branch'), flex: 2, sortable: true, cellRenderer: renderBranchCell },
     {
       field: 'status',
       headerName: t('status'),
       flex: 1.2,
+      sortable: true,
       cellRenderer: ({ value }: { value: string }) => {
         const statusKey = ADMIN_SEATS_MANAGEMENT_STATUS_OPTIONS.find((option) => option.value === value)?.labelKey ?? 'statusUnknown';
         return (
@@ -69,8 +73,8 @@ export function AdminSeatsManagementPage() {
         );
       },
     },
-    { field: 'assignedTo', headerName: t('assignedTo'), flex: 2, cellClass: 'text-sm text-text-secondary' },
-    { field: 'lastMaintenance', headerName: t('lastMaintenance'), flex: 1.5, cellClass: 'text-sm text-text-secondary' },
+    { field: 'assignedTo', headerName: t('assignedTo'), flex: 2, sortable: true, cellClass: 'text-sm text-text-secondary' },
+    { field: 'lastMaintenance', headerName: t('lastMaintenance'), flex: 1.5, sortable: true, cellClass: 'text-sm text-text-secondary' },
     {
       headerName: t('actions'),
       flex: 1.5,

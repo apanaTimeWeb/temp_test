@@ -13,6 +13,7 @@ import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/memb
 import { ADMIN_COUPONS_QUERY_KEYS } from '@/app/frontend_admin/admin_members/members_coupons/api/admin_members_coupons.query_keys';
 import { ADMIN_COUPONS_STATUS_VALUES, ADMIN_COUPONS_UNKNOWN_STATUS, ADMIN_COUPONS_EMPTY_FORM } from '@/app/frontend_admin/admin_members/members_coupons/config/admin_members_coupons.url_config';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminMembersCouponsState, useAdminCouponsListQuery } from '@/app/frontend_admin/admin_members/members_coupons/hooks/useAdminMembersCouponsPageHooks';
 import AdminCouponsOverviewSection, { formatAdminCouponsDiscount, formatAdminCouponsDate } from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsOverviewSection';
 import { displayValue } from '@/lib/display_value';
@@ -51,6 +52,17 @@ export default function AdminCouponsPage() {
   const [couponToDelete, setCouponToDelete] = useState<AdminCouponsCoupon | null>(null);
   const couponsQuery = useAdminCouponsListQuery();
   const coupons = couponsQuery.data ?? [];
+  const { selectedBranch, isAllBranches } = useAdminBranch();
+
+  const visibleCoupons = useMemo(() => {
+    if (isAllBranches || !selectedBranch) return coupons;
+    return coupons.filter((c) =>
+      !c.branchApplicability ||
+      c.branchApplicability.toLowerCase().includes('all') ||
+      c.branchApplicability.toLowerCase().includes(selectedBranch.name.toLowerCase()) ||
+      selectedBranch.name.toLowerCase().includes(c.branchApplicability.toLowerCase())
+    );
+  }, [coupons, isAllBranches, selectedBranch]);
 
   const handleCreateDemoCoupon = useCallback((values: AdminCouponsFormOutput) => {
     if (!isDemoMode) {
@@ -83,20 +95,22 @@ export default function AdminCouponsPage() {
   const openDraftDialog = () => { setDialogIntent('draft'); setShowForm(true); };
 
   const columns = useMemo<readonly DataGridColumn<AdminCouponsCoupon>[]>(() => [
-    { field: 'code', headerName: t('COLUMN_CODE'), flex: 1.5, minWidth: 150 },
+    { field: 'code', headerName: t('COLUMN_CODE'), flex: 1.5, minWidth: 150, sortable: true },
     {
       field: 'discount',
       headerName: t('COLUMN_DISCOUNT'),
       flex: 1,
       minWidth: 120,
+      sortable: true,
       valueFormatter: ({ data }) => formatAdminCouponsDiscount(data, locale, t('DISCOUNT_SUFFIX')),
     },
-    { field: 'usedCount', headerName: t('COLUMN_USAGE'), flex: 1, minWidth: 120, valueFormatter: ({ data }) => `${displayValue(data.usedCount)}/${displayValue(data.maxUses)}` },
+    { field: 'usedCount', headerName: t('COLUMN_USAGE'), flex: 1, minWidth: 120, sortable: true, valueFormatter: ({ data }) => `${displayValue(data.usedCount)}/${displayValue(data.maxUses)}` },
     {
       field: 'branchApplicability',
       headerName: 'Applicable Branch',
       flex: 1.2,
       minWidth: 140,
+      sortable: true,
       cellRenderer: ({ data }) => (
         <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2 py-0.5 text-xs text-text-secondary">
           <Building2 size={12} className="text-primary" />
@@ -104,9 +118,9 @@ export default function AdminCouponsPage() {
         </span>
       ),
     },
-    { field: 'expiry', headerName: t('COLUMN_EXPIRY'), flex: 1, minWidth: 120, valueFormatter: ({ data }) => formatAdminCouponsDate(data.expiry, locale) },
+    { field: 'expiry', headerName: t('COLUMN_EXPIRY'), flex: 1, minWidth: 120, sortable: true, valueFormatter: ({ data }) => formatAdminCouponsDate(data.expiry, locale) },
     {
-      field: 'status', headerName: t('COLUMN_STATUS'), flex: 1, minWidth: 120, cellRenderer: (params: DataGridCellParams<AdminCouponsCoupon>) => {
+      field: 'status', headerName: t('COLUMN_STATUS'), flex: 1, minWidth: 120, sortable: true, cellRenderer: (params: DataGridCellParams<AdminCouponsCoupon>) => {
         const status = ADMIN_COUPONS_STATUS_VALUES.find((candidate) => candidate === params.value) ?? ADMIN_COUPONS_UNKNOWN_STATUS;
         const className = status === 'Active'
           ? 'bg-success-bg text-success-text'
@@ -146,7 +160,7 @@ export default function AdminCouponsPage() {
           isDemoMode={isDemoMode}
           onCreateCoupon={openCreateDialog}
           onValidateDraft={openDraftDialog}
-          coupons={coupons}
+          coupons={visibleCoupons}
           columns={columns}
           isError={couponsQuery.isError}
           isPending={couponsQuery.isPending}

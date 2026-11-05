@@ -7,7 +7,7 @@ import { enUS, hi } from 'date-fns/locale';
 import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight, Plus, Eye, RefreshCw, CheckCircle, SearchX, Building2, AlertTriangle } from 'lucide-react';
+import { ChevronRight, Plus, Eye, RefreshCw, CheckCircle, SearchX, Building2, AlertTriangle, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { getAdminCommunicationComplaintStatus, ADMIN_COMMUNICATION_COMPLAINT_STATUS, type AdminCommunicationComplaintStatus } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
 import { createAdminCommunicationComplaintSchema, type AdminCommunicationComplaintFormValues } from '@/app/frontend_admin/admin_communication/communication_complaints/schemas/AdminCommunicationComplaintsSchema';
 import AdminCommunicationComplaintAddModal from '@/app/frontend_admin/admin_communication/communication_complaints/components/AdminCommunicationComplaintsComplaintAddModal';
@@ -102,8 +102,21 @@ export function AdminCommunicationComplaintsPage() {
   const [viewItem, setViewItem] = useState<Complaint | null>(null);
   const [resolveItem, setResolveItem] = useState<Complaint | null>(null);
   const [resolveNote, setResolveNote] = useState('');
+  type ComplaintSortField = 'title' | 'branchName' | 'student' | 'status' | 'date' | 'resolvedBy' | 'resolvedDate';
+  const [sortField, setSortField] = useState<ComplaintSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+
+  const toggleSort = (field: ComplaintSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
 
   const isLoading = !isDemoMode && complaintsQuery.isPending;
   const errorMessage = !isDemoMode && complaintsQuery.isError ? t('COMPLAINT_UNKNOWN_ERROR') : null;
@@ -142,7 +155,46 @@ export function AdminCommunicationComplaintsPage() {
   }, [isAllBranches, selectedBranch, complaints]);
 
   const filtered = tab === 'All' ? branchFiltered : branchFiltered.filter(c => c.status === tab);
-  const paginated = useMemo(() => filtered.slice(page * pageSize, (page + 1) * pageSize), [filtered, page, pageSize]);
+
+  const sortedComplaints = useMemo(() => {
+    if (!sortField) return filtered;
+    return [...filtered].sort((a, b) => {
+      const aVal = a[sortField];
+      const bVal = b[sortField];
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+        return sortDirection === 'asc' ? cmp : -cmp;
+      }
+      return 0;
+    });
+  }, [filtered, sortField, sortDirection]);
+
+  const paginated = useMemo(() => sortedComplaints.slice(page * pageSize, (page + 1) * pageSize), [sortedComplaints, page, pageSize]);
+
+  const renderSortableHeader = (field: ComplaintSortField, label: string, align: 'left' | 'right' = 'left') => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`py-3 px-4 whitespace-nowrap ${align === 'right' ? 'text-right' : 'text-left'}`}>
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   const handleAdd = (values: AdminCommunicationComplaintFormValues) => {
     if (!isDemoMode) { showToast(t('COMPLAINT_SUBMISSION_BLOCKED')); return; }
@@ -306,14 +358,14 @@ export function AdminCommunicationComplaintsPage() {
               <thead>
                 <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
                   <th className="py-3 px-4 text-left">{t('TABLE_NUMBER')}</th>
-                  <th className="py-3 px-4 text-left">{t('TABLE_TITLE')}</th>
-                  <th className="py-3 px-4 text-left">Branch</th>
-                  <th className="py-3 px-4 text-left">{t('TABLE_STUDENT')}</th>
+                  {renderSortableHeader('title', t('TABLE_TITLE'))}
+                  {renderSortableHeader('branchName', 'Branch')}
+                  {renderSortableHeader('student', t('TABLE_STUDENT'))}
                   <th className="py-3 px-4 text-left">{t('TABLE_DESCRIPTION')}</th>
-                  <th className="py-3 px-4 text-left">{t('TABLE_STATUS')}</th>
-                  <th className="py-3 px-4 text-left">{t('TABLE_DATE')}</th>
-                  <th className="py-3 px-4 text-left">{t('TABLE_RESOLVED_BY')}</th>
-                  <th className="py-3 px-4 text-left">{t('TABLE_RESOLVED_DATE')}</th>
+                  {renderSortableHeader('status', t('TABLE_STATUS'))}
+                  {renderSortableHeader('date', t('TABLE_DATE'))}
+                  {renderSortableHeader('resolvedBy', t('TABLE_RESOLVED_BY'))}
+                  {renderSortableHeader('resolvedDate', t('TABLE_RESOLVED_DATE'))}
                   <th className="py-3 px-4 text-right">{t('TABLE_ACTIONS')}</th>
                 </tr>
               </thead>

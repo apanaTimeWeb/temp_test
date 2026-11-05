@@ -26,6 +26,7 @@ export interface AdminCommunicationNotification {
   priority: AdminCommunicationNotificationPriority;
   link: string;
   read: boolean;
+  branch?: string;
 }
 
 export interface AdminCommunicationNotificationCenterHarnessProps {

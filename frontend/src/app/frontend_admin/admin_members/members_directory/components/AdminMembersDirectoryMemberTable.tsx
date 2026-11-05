@@ -4,7 +4,7 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 
 import { useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, MoreVertical, Building2 } from 'lucide-react';
+import { Eye, MoreVertical, Building2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { formatAdminMembersDate } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
 import { displayValue } from '@/lib/display_value';
@@ -22,18 +22,71 @@ const STATUS_TRANSLATION_KEYS = {
 export default function AdminMembersMemberTable({ members, filterStatus, onSelectMember, onAction, canMutate = true }: AdminMembersMemberTableProps) {
   const t = useTranslations('ADMIN_MEMBERS');
   const locale = useLocale();
+  type MemberSortField = 'name' | 'branch' | 'phone' | 'plan' | 'seat' | 'expiryDate' | 'status';
+  const [sortField, setSortField] = useState<MemberSortField | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useAdminApplicationInfrastructureUrlQueryState<number>('page', 0);
   const [openActionsFor, setOpenActionsFor] = useState<string | null>(null);
   const [pageSize, setPageSize] = useState(10);
+
+  const toggleSort = (field: MemberSortField) => {
+    setPage(0);
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
   const filteredMembers = useMemo(
     () => members.filter((member) => !filterStatus || member.status === filterStatus),
     [filterStatus, members],
   );
-  const pageCount = Math.max(1, Math.ceil(filteredMembers.length / pageSize));
+
+  const sortedMembers = useMemo(() => {
+    if (!sortField) return filteredMembers;
+    return [...filteredMembers].sort((a, b) => {
+      const aVal = a[sortField] ?? '';
+      const bVal = b[sortField] ?? '';
+      if (typeof aVal === 'string' && typeof bVal === 'string') {
+        const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
+        return sortDirection === 'asc' ? cmp : -cmp;
+      }
+      return 0;
+    });
+  }, [filteredMembers, sortField, sortDirection]);
+
+  const pageCount = Math.max(1, Math.ceil(sortedMembers.length / pageSize));
   const currentPage = Math.min(page, pageCount - 1);
-  const visibleMembers = filteredMembers.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
+  const visibleMembers = sortedMembers.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
   const statusLabel = (status: AdminMembersMember['status']) => t(STATUS_TRANSLATION_KEYS[status] ?? 'STATUS_UNKNOWN');
   const expiryLabel = (date: string) => formatAdminMembersDate(date, locale, t('UNKNOWN_DATE'));
+
+  const renderSortableHeader = (field: MemberSortField, label: string, extraClass: string = '') => {
+    const isActive = sortField === field;
+    return (
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`px-4 py-3 whitespace-nowrap ${extraClass}`}>
+        <button
+          type="button"
+          onClick={() => toggleSort(field)}
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
+        >
+          <span>{label}</span>
+          {isActive ? (
+            sortDirection === 'asc' ? (
+              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            ) : (
+              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+            )
+          ) : (
+            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+          )}
+        </button>
+      </th>
+    );
+  };
 
   if (filteredMembers.length === 0) {
     return <div className="p-6 text-center text-text-secondary" role="status">{t('TABLE_EMPTY')}</div>;
@@ -45,13 +98,13 @@ export default function AdminMembersMemberTable({ members, filterStatus, onSelec
         <table className="w-full text-left text-sm">
           <thead className="bg-surface-highlight uppercase text-xs text-text-secondary font-semibold">
             <tr>
-              <th scope="col" className="px-4 py-3">{t('TABLE_MEMBER')}</th>
-              <th scope="col" className="px-4 py-3">Branch</th>
-              <th scope="col" className="px-4 py-3">{t('TABLE_CONTACT')}</th>
-              <th scope="col" className="px-4 py-3">{t('TABLE_PLAN')}</th>
-              <th scope="col" className="px-4 py-3">Seat / Shift</th>
-              <th scope="col" className="px-4 py-3">{t('TABLE_EXPIRY')}</th>
-              <th scope="col" className="px-4 py-3">{t('TABLE_STATUS')}</th>
+              {renderSortableHeader('name', t('TABLE_MEMBER'))}
+              {renderSortableHeader('branch', 'Branch')}
+              {renderSortableHeader('phone', t('TABLE_CONTACT'))}
+              {renderSortableHeader('plan', t('TABLE_PLAN'))}
+              {renderSortableHeader('seat', 'Seat / Shift')}
+              {renderSortableHeader('expiryDate', t('TABLE_EXPIRY'))}
+              {renderSortableHeader('status', t('TABLE_STATUS'))}
               <th scope="col" className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
             </tr>
           </thead>

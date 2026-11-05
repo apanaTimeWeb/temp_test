@@ -16,6 +16,7 @@ export interface AdminCommunicationWhatsappLog {
   status: AdminCommunicationWhatsappLogStatus;
   error: string;
   message: string;
+  branch?: string;
 }
 
 export interface AdminCommunicationComplaintAddModalProps {

@@ -21,6 +21,7 @@ export interface AdminFinancePayment {
   receivedBy: string;
   status: AdminFinancePaymentStatus3;
   deletionReason?: string;
+  branch?: string;
 }
 
 export type AdminFinancePaymentsScenario = "ACTIVE" | "EMPTY" | "SERVER_500" | "TIMEOUT" | "UNAUTHORIZED";

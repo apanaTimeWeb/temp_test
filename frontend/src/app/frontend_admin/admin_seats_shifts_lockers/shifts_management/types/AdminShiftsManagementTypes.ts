@@ -36,6 +36,8 @@ export interface AdminShiftsShift {
   occupancy: number;
   capacity: number;
   active: boolean;
+  branchName?: string;
+  branchId?: string;
 }
 export interface AdminShiftsBookedBlock {
   startH: number;
