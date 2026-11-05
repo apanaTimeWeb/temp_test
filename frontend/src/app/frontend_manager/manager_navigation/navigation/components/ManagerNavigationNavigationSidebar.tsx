@@ -1,14 +1,19 @@
 'use client';
 // RESPONSIBILITY: Render the navigation navigation sidebar navigation UI for navigation. It does not own backend persistence or cross-feature business logic.
-import { useTranslations } from 'next-intl';
 
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { BookOpen, ChevronDown, LogOut, Menu, Search, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { BookOpen, LogOut, Menu, Search, X } from 'lucide-react';
+
 import { MANAGER_NAVIGATION_HREFS, MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
 import type { ManagerNavigationSidebarProps } from '@/app/frontend_manager/manager_navigation/navigation/types/ManagerNavigationNavigationComponentTypes';
+import { ManagerNavigationSidebarLogoutModal } from './ManagerNavigationSidebarLogoutModal';
+import { ManagerNavigationSidebarSearch } from './ManagerNavigationSidebarSearch';
+import { ManagerNavigationSidebarNavSection } from './ManagerNavigationSidebarNavSection';
+
 export type { ManagerNavigationSidebarProps };
 
 export default function ManagerNavigationSidebar({
@@ -33,7 +38,6 @@ export default function ManagerNavigationSidebar({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const mobileTriggerRef = useRef<HTMLButtonElement>(null);
   const mobileDrawerRef = useRef<HTMLElement>(null);
-  const logoutDialogRef = useRef<HTMLDivElement>(null);
 
   // Dependency rationale: mobileOpen controls the body lock, focus hand-off, and Escape listener lifetime.
   useEffect(() => {
@@ -42,17 +46,38 @@ export default function ManagerNavigationSidebar({
     const previousOverflow = document.body.style.overflow;
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     document.body.style.overflow = 'hidden';
-    const focusable = (): HTMLElement[] => (Array.from(mobileDrawerRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])') ?? []) as HTMLElement[]).filter((element) => !element.hasAttribute('hidden') && element.getAttribute('aria-hidden') !== 'true');
+    const focusable = (): HTMLElement[] =>
+      (
+        Array.from(
+          mobileDrawerRef.current?.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          ) ?? []
+        ) as HTMLElement[]
+      ).filter((element) => !element.hasAttribute('hidden') && element.getAttribute('aria-hidden') !== 'true');
     (focusable()[0] ?? mobileTriggerRef.current)?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') { event.preventDefault(); onMobileClose(); return; }
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onMobileClose();
+        return;
+      }
       if (event.key !== 'Tab') return;
       const items = focusable();
-      if (!items.length) { event.preventDefault(); mobileDrawerRef.current?.focus(); return; }
-      const first = items[0]; const last = items[items.length - 1];
-      if (event.shiftKey && (document.activeElement === first || !mobileDrawerRef.current?.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && (document.activeElement === last || !mobileDrawerRef.current?.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
+      if (!items.length) {
+        event.preventDefault();
+        mobileDrawerRef.current?.focus();
+        return;
+      }
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && (document.activeElement === first || !mobileDrawerRef.current?.contains(document.activeElement))) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || !mobileDrawerRef.current?.contains(document.activeElement))) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -62,30 +87,6 @@ export default function ManagerNavigationSidebar({
       if (previousFocus?.isConnected) previousFocus.focus();
     };
   }, [mobileOpen, onMobileClose]);
-
-  // Dependency rationale: showLogout controls dialog focus trapping and keyboard-listener lifetime.
-  useEffect(() => {
-    if (!showLogout) return;
-    const dialog = logoutDialogRef.current;
-    if (!dialog) return;
-    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const getFocusable = (): HTMLElement[] => Array.from(dialog.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')) as HTMLElement[];
-    (getFocusable()[0] ?? dialog).focus();
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') { event.preventDefault(); setShowLogout(false); return; }
-      if (event.key !== 'Tab') return;
-      const items = getFocusable();
-      if (!items.length) { event.preventDefault(); dialog.focus(); return; }
-      const first = items[0]; const last = items[items.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      if (previousFocus?.isConnected) previousFocus.focus();
-    };
-  }, [showLogout]);
 
   const isActive = (href: string) => {
     const target = new URL(href, 'https://manager.invalid');
@@ -156,9 +157,7 @@ export default function ManagerNavigationSidebar({
 
   const toggleGroup = (groupKey: string) => {
     setExpandedGroups((current) =>
-      current.includes(groupKey)
-        ? current.filter((key) => key !== groupKey)
-        : [...current, groupKey]
+      current.includes(groupKey) ? current.filter((key) => key !== groupKey) : [...current, groupKey]
     );
   };
 
@@ -200,7 +199,11 @@ export default function ManagerNavigationSidebar({
             {mobileOpen ? <X size={18} strokeWidth={2} /> : <Menu size={18} strokeWidth={2} />}
           </button>
           {(!collapsed || mobileOpen) && (
-            <Link href={MANAGER_NAVIGATION_NAVIGATION_ROUTES.DASHBOARD} className="mgr-sidebar-brand" onClick={mobileOpen ? onMobileClose : undefined}>
+            <Link
+              href={MANAGER_NAVIGATION_NAVIGATION_ROUTES.DASHBOARD}
+              className="mgr-sidebar-brand"
+              onClick={mobileOpen ? onMobileClose : undefined}
+            >
               <span className="mgr-sidebar-brand-mark" aria-hidden="true">
                 <BookOpen size={18} strokeWidth={2} />
               </span>
@@ -209,65 +212,26 @@ export default function ManagerNavigationSidebar({
           )}
         </div>
 
-        {(!collapsed || mobileOpen) ? (
-          <div className="mgr-sidebar-search">
-            <div className="mgr-sidebar-search-wrap">
-              <Search size={14} className="mgr-sidebar-search-icon" aria-hidden="true" />
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') {
-                    e.preventDefault();
-                    setSearchQuery('');
-                  }
-                }}
-                placeholder={tManagerUi('search_navigation') ?? 'Search modules...'}
-                aria-label={tManagerUi('search_navigation') ?? 'Search modules'}
-                data-testid="manager-sidebar-search-input"
-                className="mgr-sidebar-search-input"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchQuery('');
-                    searchInputRef.current?.focus();
-                  }}
-                  className="mgr-sidebar-search-clear"
-                  data-testid="manager-sidebar-search-clear"
-                  aria-label={tManagerUi('clear_search') ?? 'Clear search'}
-                >
-                  <X size={13} strokeWidth={2.5} />
-                </button>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="mgr-sidebar-search-collapsed">
-            <button
-              type="button"
-              onClick={() => {
-                onToggle();
-                setTimeout(() => searchInputRef.current?.focus(), 150);
-              }}
-              className="mgr-sidebar-search-collapsed-btn"
-              title={tManagerUi('search_navigation') ?? 'Search modules'}
-              aria-label={tManagerUi('search_navigation') ?? 'Search modules'}
-              data-testid="manager-sidebar-search-collapsed-toggle"
-            >
-              <Search size={16} strokeWidth={2} />
-            </button>
-          </div>
-        )}
+        <ManagerNavigationSidebarSearch
+          collapsed={collapsed}
+          mobileOpen={mobileOpen}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          searchInputRef={searchInputRef}
+          onToggle={onToggle}
+        />
 
-        <nav className="mgr-sidebar-nav" data-testid="manager-navigation" aria-label={tManagerUi('manager_navigation')}>
+        <nav
+          className="mgr-sidebar-nav"
+          data-testid="manager-navigation"
+          aria-label={tManagerUi('manager_navigation')}
+        >
           {filteredSections.length === 0 ? (
             <div className="mgr-nav-search-empty" role="status" data-testid="manager-nav-search-empty">
               <Search size={24} className="mgr-nav-search-empty-icon" aria-hidden="true" />
-              <p className="mgr-nav-search-empty-title">{tManagerUi('no_matching_modules') ?? 'No matching modules'}</p>
+              <p className="mgr-nav-search-empty-title">
+                {tManagerUi('no_matching_modules') ?? 'No matching modules'}
+              </p>
               <p className="mgr-nav-search-empty-sub">
                 {tManagerUi('no_results_for') ?? 'No results for'} &ldquo;{searchQuery}&rdquo;
               </p>
@@ -284,83 +248,22 @@ export default function ManagerNavigationSidebar({
             filteredSections.map((section) => {
               const expanded = isSearching
                 ? true
-                : (collapsed && !mobileOpen)
-                  ? true
-                  : section.key === 'primary' || expandedGroups.includes(section.key);
-
-              if (section.key === 'primary') {
-                return (
-                  <div key={section.key} className="mgr-nav-section">
-                    {section.items.map((item) => {
-                      const active = isActive(item.href);
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className={`mgr-nav-item${active ? ' active' : ''}`}
-                          data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`}
-                          aria-current={active ? 'page' : undefined}
-                          title={collapsed && !mobileOpen ? getNavLabel(item.labelKey) : undefined}
-                          onClick={handleLinkClick}
-                        >
-                          <Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />
-                          {(!collapsed || mobileOpen) && (
-                            <span className="mgr-nav-label">{getNavLabel(item.labelKey)}</span>
-                          )}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                );
-              }
+                : collapsed && !mobileOpen
+                ? true
+                : section.key === 'primary' || expandedGroups.includes(section.key);
 
               return (
-                <section key={section.key} className="mgr-nav-section">
-                  {(!collapsed || mobileOpen) && (
-                    <button
-                      type="button"
-                      className="mgr-nav-group-label"
-                      aria-expanded={expanded}
-                      aria-controls={`manager-nav-group-${section.key}`}
-                      data-testid={`manager-nav-group-toggle-${section.key}`}
-                      onClick={() => toggleGroup(section.key)}
-                    >
-                      <span>{getNavLabel(section.labelKey!)}</span>
-                      <ChevronDown
-                        size={14}
-                        aria-hidden="true"
-                        className={`mgr-nav-group-chevron${expanded ? ' is-expanded' : ''}`}
-                      />
-                    </button>
-                  )}
-                  <div
-                    id={`manager-nav-group-${section.key}`}
-                    hidden={!expanded}
-                    className={`mgr-nav-group-items${!expanded ? ' mgr-nav-group-items-collapsed' : ''}`}
-                  >
-                    {section.items.map((item) => {
-                      const active = isActive(item.href);
-                      const Icon = item.icon;
-                      return (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className={`mgr-nav-item${active ? ' active' : ''}`}
-                          data-testid={`manager-nav-link-${item.href.replace(/[^a-zA-Z0-9]+/g, '-')}`}
-                          aria-current={active ? 'page' : undefined}
-                          title={collapsed && !mobileOpen ? getNavLabel(item.labelKey) : undefined}
-                          onClick={handleLinkClick}
-                        >
-                          <Icon size={18} strokeWidth={2} className="mgr-nav-item-icon" aria-hidden="true" />
-                          {(!collapsed || mobileOpen) && (
-                            <span className="mgr-nav-label">{getNavLabel(item.labelKey)}</span>
-                          )}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </section>
+                <ManagerNavigationSidebarNavSection
+                  key={section.key}
+                  section={section}
+                  expanded={expanded}
+                  collapsed={collapsed}
+                  mobileOpen={mobileOpen}
+                  isActive={isActive}
+                  getNavLabel={getNavLabel}
+                  onToggleGroup={toggleGroup}
+                  onLinkClick={handleLinkClick}
+                />
               );
             })
           )}
@@ -368,7 +271,9 @@ export default function ManagerNavigationSidebar({
 
         {(!collapsed || mobileOpen) && (
           <div className="mgr-sidebar-footer">
-            <div className="mgr-avatar" aria-hidden="true">{tManagerUi('mg')}</div>
+            <div className="mgr-avatar" aria-hidden="true">
+              {tManagerUi('mg')}
+            </div>
             <div className="mgr-sidebar-user-info">
               <p className="mgr-sidebar-user-name">{tManagerUi('manager')}</p>
               <p className="mgr-sidebar-user-email">{tManagerUi('manager_library_com')}</p>
@@ -386,35 +291,10 @@ export default function ManagerNavigationSidebar({
         )}
       </aside>
 
-      {showLogout && (
-        <div className="mgr-modal-overlay" role="presentation" onMouseDown={() => setShowLogout(false)}>
-          <div ref={logoutDialogRef} tabIndex={-1} className="mgr-modal mgr-logout-modal" role="dialog" data-testid="manager-logout-dialog" aria-modal="true" aria-labelledby="manager-logout-title" onMouseDown={(event) => event.stopPropagation()}>
-            <p id="manager-logout-title" className="mgr-modal-title">{tManagerUi('log_out')}</p>
-            <p className="mgr-modal-desc" role="status">Are you sure you want to sign out of the manager portal?</p>
-            <div className="mgr-modal-footer">
-              <button type="button" className="mgr-btn-ghost" data-testid="manager-logout-cancel" onClick={() => setShowLogout(false)}>{tManagerUi('close')}</button>
-              <button
-                type="button"
-                className="mgr-btn-danger"
-                data-testid="manager-logout-confirm"
-                onClick={() => {
-                  try {
-                    localStorage.removeItem('auth_token');
-                    localStorage.removeItem('manager_session');
-                    sessionStorage.clear();
-                    document.cookie = 'auth_token=; Max-Age=0; path=/;';
-                  } catch {
-                    // ignore
-                  }
-                  window.location.href = '/login';
-                }}
-              >
-                {tManagerUi('log_out')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ManagerNavigationSidebarLogoutModal
+        isOpen={showLogout}
+        onClose={() => setShowLogout(false)}
+      />
     </>
   );
 }

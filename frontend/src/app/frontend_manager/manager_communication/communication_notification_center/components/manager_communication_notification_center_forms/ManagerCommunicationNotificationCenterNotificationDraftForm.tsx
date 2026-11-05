@@ -35,7 +35,7 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
       <h2 className="text-xl font-bold text-primary mb-2">{tManagerUi('send_member_notification')}</h2>
       <p className="text-sm text-secondary mb-6 border-b border-border pb-4">{tManagerUi('manually_trigger_alerts_or_custom_messages_to_specific_l_3244a3')}</p>
       {draftFeedback && (
-        <div className="mb-4 rounded-lg border border-success/20 bg-success/10 p-3 text-sm text-success flex items-center gap-2" role="status" aria-live="polite" data-testid="manager-communication-notification-draft-feedback">
+        <div className="mb-4 rounded-lg border border-border bg-success-bg p-3 text-sm text-success flex items-center gap-2" role="status" aria-live="polite" data-testid="manager-communication-notification-draft-feedback">
           <CheckCircle2 size={16} className="shrink-0" />
           <span>{draftFeedback}</span>
         </div>

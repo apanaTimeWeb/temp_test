@@ -55,7 +55,7 @@ export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFi
               type="button"
               onClick={() => onSendAlert(student)}
               title={`Send Attendance Notice for ${student.name}`}
-              className="eng-btn eng-btn--ghost eng-btn--sm text-warning hover:bg-warning/10 cursor-pointer font-semibold"
+              className="eng-btn eng-btn--ghost eng-btn--sm text-warning hover:bg-warning-bg cursor-pointer font-semibold"
             >
               <Bell size={12} aria-hidden="true"/> Send Notice
             </button>

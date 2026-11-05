@@ -2,9 +2,14 @@
 // RESPONSIBILITY: Orchestrate client-side view and local interactions for referral bonus management.
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { CheckCircle2, Clock, DollarSign, Gift, Plus, Search, Users, X, ArrowUpDown, ArrowUp, ArrowDown, Download } from 'lucide-react';
+import { Clock, DollarSign, Plus, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
+import {
+  ManagerMembersReferralBonusTable,
+  type ReferralSortField,
+} from './ManagerMembersReferralBonusTable';
+import { ManagerMembersReferralBonusAddModal } from '../manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusAddModal';
 
 const INITIAL_REFERRALS: ReferralRow[] = [
   { id: 'REF-101', referrer: 'Amit Sharma (LIB-1042)', referred: 'Rohan Verma', date: '2026-10-24', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
@@ -23,9 +28,10 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const [methodFilter, setMethodFilter] = useState<'All' | 'Fee Discount' | 'UPI Cash'>('All');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  type ReferralSortField = 'id' | 'referrer' | 'referred' | 'date' | 'bonus' | 'method' | 'status';
   const [sortField, setSortField] = useState<ReferralSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const toggleSort = (field: ReferralSortField) => {
     if (sortField === field) {
@@ -40,14 +46,6 @@ export function ManagerMembersReferralBonusReferralsClient() {
     }
   };
 
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [toastMsg, setToastMsg] = useState<string | null>(null);
-
-  const [referrer, setReferrer] = useState('');
-  const [referred, setReferred] = useState('');
-  const [bonusAmount, setBonusAmount] = useState('500');
-  const [method, setMethod] = useState('Fee Discount');
-
   const filteredRows = useMemo(() => {
     return records.filter((r) => {
       const q = searchQuery.toLowerCase();
@@ -59,21 +57,6 @@ export function ManagerMembersReferralBonusReferralsClient() {
   }, [records, searchQuery, statusFilter, methodFilter]);
 
   const hasActiveFilters = Boolean(searchQuery.trim() !== '' || statusFilter !== 'All' || methodFilter !== 'All');
-
-  const handleExportCsv = () => {
-    const headers = 'Referral ID,Referrer,Referred Member,Date,Bonus Amount,Reward Method,Status\n';
-    const rows = sortedRows.map((r) =>
-      `"${r.id}","${r.referrer}","${r.referred}","${r.date}","${r.bonus}","${r.method}","${r.status}"`
-    ).join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `referrals_${new Date().toISOString().slice(0, 10)}.csv`;
-    anchor.click();
-    URL.revokeObjectURL(url);
-    toast.success('Referrals exported to CSV successfully');
-  };
 
   const sortedRows = useMemo(() => {
     if (!sortField) return filteredRows;
@@ -92,35 +75,6 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
-  const renderSortableHeader = (field: ReferralSortField, label: string) => {
-    const isActive = sortField === field;
-    return (
-      <th
-        scope="col"
-        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className="py-3 px-4"
-      >
-        <button
-          type="button"
-          onClick={() => toggleSort(field)}
-          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
-          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
-        >
-          <span>{label}</span>
-          {isActive ? (
-            sortDirection === 'asc' ? (
-              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            ) : (
-              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            )
-          ) : (
-            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
-          )}
-        </button>
-      </th>
-    );
-  };
-
   const totalBonusAmount = useMemo(() => {
     return records.filter((r) => r.status === 'Credited').reduce((sum, r) => sum + (parseInt(r.bonus.replace(/[^0-9]/g, ''), 10) || 0), 0);
   }, [records]);
@@ -133,22 +87,23 @@ export function ManagerMembersReferralBonusReferralsClient() {
     setTimeout(() => setToastMsg(null), 3500);
   };
 
-  const handleAddReferral = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!referrer.trim() || !referred.trim()) return;
-    const newRecord: ReferralRow = {
-      id: `REF-${100 + records.length + 1}`,
-      referrer: referrer.trim(),
-      referred: referred.trim(),
-      date: new Date().toISOString().slice(0, 10),
-      status: 'Pending',
-      bonus: `₹${bonusAmount || '500'}`,
-      method,
-    };
+  const handleExportCsv = () => {
+    const headers = 'Referral ID,Referrer,Referred Member,Date,Bonus Amount,Reward Method,Status\n';
+    const rows = sortedRows
+      .map((r) => `"${r.id}","${r.referrer}","${r.referred}","${r.date}","${r.bonus}","${r.method}","${r.status}"`)
+      .join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `referrals_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('Referrals exported to CSV successfully');
+  };
+
+  const handleAddReferral = (newRecord: ReferralRow) => {
     setRecords([newRecord, ...records]);
-    setReferrer('');
-    setReferred('');
-    setIsAddModalOpen(false);
     setToastMsg(`New referral for "${newRecord.referred}" recorded successfully!`);
     setTimeout(() => setToastMsg(null), 3500);
   };
@@ -169,7 +124,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
       </div>
 
       {toastMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-success-bg border border-success/30 text-success text-xs font-semibold flex items-center gap-2" role="status">
+        <div className="mb-4 p-3 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center gap-2" role="status">
           <span>✓</span> <span>{toastMsg}</span>
         </div>
       )}
@@ -188,7 +143,9 @@ export function ManagerMembersReferralBonusReferralsClient() {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs text-secondary font-medium">{tManagerUi('total_referrals')}</span>
-            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center"><Users size={16} /></div>
+            <div className="w-8 h-8 rounded-lg bg-primary-subtle text-primary flex items-center justify-center">
+              <Users size={16} />
+            </div>
           </div>
           <p className="text-2xl font-bold text-primary mt-2">{records.length}</p>
         </button>
@@ -205,7 +162,9 @@ export function ManagerMembersReferralBonusReferralsClient() {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs text-secondary font-medium">{tManagerUi('pending_approvals')}</span>
-            <div className="w-8 h-8 rounded-lg bg-warning/10 text-warning flex items-center justify-center"><Clock size={16} /></div>
+            <div className="w-8 h-8 rounded-lg bg-warning-bg text-warning border border-border flex items-center justify-center">
+              <Clock size={16} />
+            </div>
           </div>
           <p className="text-2xl font-bold text-warning mt-2">{pendingCount}</p>
         </button>
@@ -222,230 +181,65 @@ export function ManagerMembersReferralBonusReferralsClient() {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs text-secondary font-medium">{tManagerUi('total_bonus_distributed')}</span>
-            <div className="w-8 h-8 rounded-lg bg-success/10 text-success flex items-center justify-center"><DollarSign size={16} /></div>
+            <div className="w-8 h-8 rounded-lg bg-success-bg text-success border border-border flex items-center justify-center">
+              <DollarSign size={16} />
+            </div>
           </div>
           <p className="text-2xl font-bold text-success mt-2">₹{totalBonusAmount.toLocaleString('en-IN')}</p>
         </button>
       </div>
 
-      {/* Filter and Search Bar */}
-      <div className="mgr-card p-4 mb-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2 flex-1">
-            <div className="mgr-input-icon-wrap flex-1 min-w-[200px] max-w-sm">
-              <Search size={15} className="mgr-input-icon text-secondary" />
-              <input
-                type="search"
-                placeholder="Search by referrer, referred student, or Ref ID..."
-                className="mgr-input mgr-input-with-icon text-xs"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setPage(0);
-                }}
-              />
-            </div>
-
-            <div className="w-full sm:w-40">
-              <select
-                aria-label="Filter by Status"
-                value={statusFilter}
-                onChange={(e) => {
-                  setStatusFilter(e.target.value as 'All' | 'Credited' | 'Pending');
-                  setPage(0);
-                }}
-                className="mgr-select text-xs py-1.5 px-3"
-              >
-                <option value="All">All Statuses</option>
-                <option value="Credited">Credited</option>
-                <option value="Pending">Pending Approval</option>
-              </select>
-            </div>
-
-            <div className="w-full sm:w-40">
-              <select
-                aria-label="Filter by Reward Method"
-                value={methodFilter}
-                onChange={(e) => {
-                  setMethodFilter(e.target.value as 'All' | 'Fee Discount' | 'UPI Cash');
-                  setPage(0);
-                }}
-                className="mgr-select text-xs py-1.5 px-3"
-              >
-                <option value="All">All Methods</option>
-                <option value="Fee Discount">Fee Discount</option>
-                <option value="UPI Cash">UPI Cash</option>
-              </select>
-            </div>
-
-            {hasActiveFilters && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery('');
-                  setStatusFilter('All');
-                  setMethodFilter('All');
-                  setPage(0);
-                }}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
-                title="Reset all filters"
-              >
-                <X size={13} /> Reset
-              </button>
-            )}
-          </div>
-
-          <button
-            type="button"
-            onClick={handleExportCsv}
-            className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer shrink-0"
-            title="Export Referrals CSV"
-          >
-            <Download size={13} /> Export CSV
-          </button>
-        </div>
-      </div>
-
-      {/* Referrals Table */}
-      <div className="mgr-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold text-left">
-                {renderSortableHeader('id', tManagerUi('ref_id'))}
-                {renderSortableHeader('referrer', tManagerUi('referrer_existing'))}
-                {renderSortableHeader('referred', tManagerUi('referred_student'))}
-                {renderSortableHeader('date', tManagerUi('date'))}
-                {renderSortableHeader('bonus', tManagerUi('bonus'))}
-                {renderSortableHeader('method', tManagerUi('payout_method'))}
-                {renderSortableHeader('status', tManagerUi('status'))}
-                <th scope="col" className="py-3 px-4 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRows.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="py-12 text-center text-secondary text-xs">No referral records matching the search criteria.</td>
-                </tr>
-              ) : (
-                paginatedRows.map((r) => (
-                  <tr key={r.id} className="border-b border-border last:border-0 hover:bg-surface-hover">
-                    <td className="py-3 px-4 font-mono font-bold text-primary text-xs">{r.id}</td>
-                    <td className="py-3 px-4 font-semibold text-primary text-xs">{r.referrer}</td>
-                    <td className="py-3 px-4 text-primary text-xs">{r.referred}</td>
-                    <td className="py-3 px-4 text-secondary text-xs">{r.date}</td>
-                    <td className="py-3 px-4 font-bold text-success text-xs">{r.bonus}</td>
-                    <td className="py-3 px-4 text-secondary text-xs">{r.method}</td>
-                    <td className="py-3 px-4">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${r.status === 'Credited' ? 'bg-success-bg text-success' : 'bg-warning-bg text-warning'}`}>
-                        {r.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      {r.status === 'Pending' ? (
-                        <button type="button" onClick={() => handleApprove(r.id)} className="mgr-btn-primary mgr-btn-sm text-xs py-1 px-2.5 inline-flex items-center gap-1">
-                          <CheckCircle2 size={13} /> Approve
-                        </button>
-                      ) : (
-                        <span className="text-xs text-secondary/50 font-medium">Done</span>
-                      )}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-        {totalRows > 0 && (
-          <div className="border-t border-border px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-secondary">
-            <span>
-              Showing {startItem}–{endItem} of {totalRows} referral records
-            </span>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5">
-                <label htmlFor="referrals-rows-per-page" className="text-xs text-secondary whitespace-nowrap">Rows per page:</label>
-                <select
-                  id="referrals-rows-per-page"
-                  value={pageSize}
-                  onChange={(e) => {
-                    setPageSize(Number(e.target.value));
-                    setPage(0);
-                  }}
-                  className="rounded border border-border bg-input px-2 py-1 text-xs text-primary"
-                >
-                  <option value={10}>10</option>
-                  <option value={25}>25</option>
-                  <option value={50}>50</option>
-                </select>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  disabled={effectivePage === 0}
-                  onClick={() => setPage(effectivePage - 1)}
-                  className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
-                >
-                  Previous
-                </button>
-                <span className="text-xs">
-                  Page {effectivePage + 1} of {pageCount}
-                </span>
-                <button
-                  type="button"
-                  disabled={effectivePage >= pageCount - 1}
-                  onClick={() => setPage(effectivePage + 1)}
-                  className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      {/* Referrals Table Section */}
+      <ManagerMembersReferralBonusTable
+        filteredRows={filteredRows}
+        paginatedRows={paginatedRows}
+        totalRows={totalRows}
+        searchQuery={searchQuery}
+        setSearchQuery={(val) => {
+          setSearchQuery(val);
+          setPage(0);
+        }}
+        statusFilter={statusFilter}
+        setStatusFilter={(val) => {
+          setStatusFilter(val);
+          setPage(0);
+        }}
+        methodFilter={methodFilter}
+        setMethodFilter={(val) => {
+          setMethodFilter(val);
+          setPage(0);
+        }}
+        hasActiveFilters={hasActiveFilters}
+        onResetFilters={() => {
+          setSearchQuery('');
+          setStatusFilter('All');
+          setMethodFilter('All');
+          setPage(0);
+        }}
+        sortField={sortField}
+        sortDirection={sortDirection}
+        onToggleSort={toggleSort}
+        onApprove={handleApprove}
+        onExportCsv={handleExportCsv}
+        page={page}
+        pageSize={pageSize}
+        pageCount={pageCount}
+        startItem={startItem}
+        endItem={endItem}
+        onPageChange={setPage}
+        onPageSizeChange={(newSize) => {
+          setPageSize(newSize);
+          setPage(0);
+        }}
+      />
 
       {/* Add Referral Modal */}
-      {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <div className="flex items-center gap-2">
-                <Gift size={20} className="text-primary" />
-                <h3 className="text-base font-bold text-primary">Record New Student Referral</h3>
-              </div>
-              <button type="button" onClick={() => setIsAddModalOpen(false)} className="text-secondary hover:text-primary"><X size={18} /></button>
-            </div>
-            <form onSubmit={handleAddReferral} className="space-y-4 text-xs">
-              <div>
-                <label className="font-semibold text-primary block mb-1">Referrer Student (Name & Smart ID) *</label>
-                <input type="text" required placeholder="e.g. Ramesh Kumar (LIB-1210)" className="mgr-input" value={referrer} onChange={(e) => setReferrer(e.target.value)} />
-              </div>
-              <div>
-                <label className="font-semibold text-primary block mb-1">Referred New Student Name *</label>
-                <input type="text" required placeholder="e.g. Alok Verma" className="mgr-input" value={referred} onChange={(e) => setReferred(e.target.value)} />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="font-semibold text-primary block mb-1">Bonus Amount (₹)</label>
-                  <input type="number" min="50" step="50" className="mgr-input font-mono" value={bonusAmount} onChange={(e) => setBonusAmount(e.target.value)} />
-                </div>
-                <div>
-                  <label className="font-semibold text-primary block mb-1">Reward Method</label>
-                  <select className="mgr-select" value={method} onChange={(e) => setMethod(e.target.value)}>
-                    <option value="Fee Discount">Fee Discount</option>
-                    <option value="UPI Cash">UPI Cash</option>
-                    <option value="Locker Credit">Locker Credit</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex justify-end gap-2 pt-3 border-t border-border">
-                <button type="button" onClick={() => setIsAddModalOpen(false)} className="mgr-btn-ghost text-xs">Cancel</button>
-                <button type="submit" className="mgr-btn-primary text-xs flex items-center gap-1.5"><CheckCircle2 size={14} /> Save Referral</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <ManagerMembersReferralBonusAddModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onAddReferral={handleAddReferral}
+        nextId={`REF-${100 + records.length + 1}`}
+      />
     </div>
   );
 }

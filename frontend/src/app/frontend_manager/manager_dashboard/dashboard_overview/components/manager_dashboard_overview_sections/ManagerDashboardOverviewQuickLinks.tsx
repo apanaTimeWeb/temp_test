@@ -28,27 +28,27 @@ export type {
 const quickLinkIconMap: Record<string, { icon: LucideIcon; theme: string }> = {
   quick_all_students: {
     icon: Users,
-    theme: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+    theme: 'bg-warning-bg text-warning border-border',
   },
   quick_enquiries: {
     icon: PhoneCall,
-    theme: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
+    theme: 'bg-info-bg text-info border-border',
   },
   quick_collect_fee: {
     icon: CreditCard,
-    theme: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+    theme: 'bg-success-bg text-success border-border',
   },
   quick_add_complaint: {
     icon: AlertCircle,
-    theme: 'bg-red-500/10 text-red-500 border-red-500/20',
+    theme: 'bg-danger-bg text-danger border-border',
   },
   quick_mark_attendance: {
     icon: CalendarCheck,
-    theme: 'bg-purple-500/10 text-purple-500 border-purple-500/20',
+    theme: 'bg-purple-bg text-purple border-border',
   },
   quick_qr_scanner: {
     icon: QrCode,
-    theme: 'bg-teal-500/10 text-teal-500 border-teal-500/20',
+    theme: 'bg-pay-cash-bg text-pay-cash border-border',
   },
 };
 
@@ -62,7 +62,7 @@ export function ManagerDashboardOverviewQuickLinks({ links }: ManagerDashboardOv
     >
       <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border/60">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-primary-subtle border border-border text-primary flex items-center justify-center font-bold">
             <Compass size={20} />
           </div>
           <div>
@@ -78,7 +78,7 @@ export function ManagerDashboardOverviewQuickLinks({ links }: ManagerDashboardOv
         {links.map((link) => {
           const config = quickLinkIconMap[link.titleKey] || {
             icon: Compass,
-            theme: 'bg-primary/10 text-primary border-primary/20',
+            theme: 'bg-primary-subtle text-primary border-border',
           };
           const Icon = config.icon;
 

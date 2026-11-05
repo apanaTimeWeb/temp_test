@@ -17,15 +17,15 @@ const icons: Record<string, LucideIcon> = {
 const getReportIconTheme = (icon: string) => {
   switch (icon) {
     case 'Users':
-      return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+      return 'bg-warning-bg text-warning border-border';
     case 'CalendarCheck':
-      return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
+      return 'bg-success-bg text-success border-border';
     case 'UserPlus':
-      return 'bg-purple-500/10 text-purple-500 border-purple-500/20';
+      return 'bg-purple-bg text-purple border-border';
     case 'Phone':
-      return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+      return 'bg-info-bg text-info border-border';
     default:
-      return 'bg-primary/10 text-primary border-primary/20';
+      return 'bg-primary-subtle text-primary border-border';
   }
 };
 

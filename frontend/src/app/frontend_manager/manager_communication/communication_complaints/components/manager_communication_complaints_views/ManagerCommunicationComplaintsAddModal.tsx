@@ -68,7 +68,7 @@ export default function ManagerCommunicationComplaintsAddModal({
       <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-danger/10 text-danger flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-danger-bg text-danger flex items-center justify-center">
               <MessageSquarePlus size={18} />
             </div>
             <div>
@@ -164,7 +164,7 @@ export default function ManagerCommunicationComplaintsAddModal({
           </div>
 
           {priority === 'Urgent' && (
-            <div className="flex items-center gap-2 rounded-lg bg-danger/10 border border-danger/20 p-2.5 text-xs text-danger">
+            <div className="flex items-center gap-2 rounded-lg bg-danger-bg border border-border p-2.5 text-xs text-danger">
               <AlertCircle size={15} className="shrink-0" />
               <span>Marked as urgent. This ticket will be prioritized on the supervisor dashboard.</span>
             </div>

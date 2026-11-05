@@ -6,9 +6,6 @@ import { useManagerCollectFeeFormatting } from '@/app/frontend_manager/manager_f
 
 // RESPONSIBILITY: Entry page for the manager_collect_fee module.
 // DATA FLOW: Next.js Router -> Page -> Components
-
-// RESPONSIBILITY: Entry page for the manager_collect_fee module.
-// DATA FLOW: Next.js Router -> Page -> Components
 import { useEffect, useState, type KeyboardEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useManagerFinanceCollectFeeConfirm } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/useManagerFinanceCollectFeeConfirm';
@@ -19,13 +16,14 @@ import { managerFinanceCollectFeeDraftSchema, type ManagerFinanceCollectFeeDraft
 import { toast } from 'sonner';
 import { Search, IndianRupee, CheckCircle, UserCheck } from 'lucide-react';
 import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview';
+import ManagerFinanceCollectFeeDurationSelector from './ManagerFinanceCollectFeeDurationSelector';
+import ManagerFinanceCollectFeeDiscountsSection from './ManagerFinanceCollectFeeDiscountsSection';
+import ManagerFinanceCollectFeeStudentInfo from './ManagerFinanceCollectFeeStudentInfo';
 import { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
 import type { ManagerFinanceCollectFeeMode } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 import { MANAGER_FINANCE_COLLECT_FEE_MODES, MANAGER_FINANCE_COLLECT_FEE_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
 import { ManagerFinanceCollectFeeEmptyState } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_empty_states/ManagerFinanceCollectFeeEmptyState';
 import type { ManagerFinanceCollectFeeRouteQueryProps, ManagerFinanceCollectFeeContractStatus } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeComponentTypes';
-
-
 
 export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinanceCollectFeeRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_collect_fee.ui');
@@ -48,20 +46,8 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     defaultValues: { member: '', amount: '', mode: 'cash', txnId: '', couponCode: '', lateFee: '', monthsToRenew: '1', remark: '' },
     mode: 'onChange',
   });
-  const amount = watch('amount');
-  const mode = watch('mode');
-  const txnId = watch('txnId');
-  const couponCode = watch('couponCode');
-  const lateFee = watch('lateFee');
-  const monthsToRenew = watch('monthsToRenew');
-  const remark = watch('remark');
-  const setAmount = (value: string) => setValue('amount', value, { shouldDirty: true, shouldValidate: true });
-  const setMode = (value: ManagerFinanceCollectFeeMode) => setValue('mode', value, { shouldDirty: true, shouldValidate: true });
-  const setTxnId = (value: string) => setValue('txnId', value, { shouldDirty: true, shouldValidate: true });
-  const setCouponCode = (value: string) => setValue('couponCode', value, { shouldDirty: true, shouldValidate: true });
-  const setLateFee = (value: string) => setValue('lateFee', value, { shouldDirty: true, shouldValidate: true });
-  const setMonthsToRenew = (value: ManagerFinanceCollectFeeDraft['monthsToRenew']) => setValue('monthsToRenew', value, { shouldDirty: true, shouldValidate: true });
-  const setRemark = (value: string) => setValue('remark', value, { shouldDirty: true, shouldValidate: true });
+  const { amount, mode, txnId, couponCode, lateFee, monthsToRenew, remark } = watch();
+  const setDraftValue = (k: keyof ManagerFinanceCollectFeeDraft, v: string) => setValue(k, v as never, { shouldDirty: true, shouldValidate: true });
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [couponStatus, setCouponStatus] = useState<ManagerFinanceCollectFeeContractStatus>('idle');
   const [lateFeeOverride, setLateFeeOverride] = useState(false);
@@ -86,8 +72,8 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     setActiveStudentIndex(-1);
     setValue('member', String(student.id), { shouldDirty: true, shouldValidate: true });
     // Sample fixtures may identify a preview record, but must never supply a real charge or fee.
-    setLateFee('');
-    setAmount('');
+    setDraftValue('lateFee', '');
+    setDraftValue('amount', '');
   }
 
   function handleStudentSearchKeyDown(event: KeyboardEvent<HTMLInputElement>) {
@@ -136,8 +122,6 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     resetForm();
   });
 
-
-
   return (
     <>
       {unsavedConfirmDialog}
@@ -184,90 +168,32 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                   ))}
                 </div>
               ))}
-              {selectedStudent && (
-                <div className="fin-student-confirmed">
-                  <CheckCircle size={16} />
-                  <span className="fin-cell-name">{selectedStudent.name}</span>
-                  <span className="fin-cell-subtext">({selectedStudent.smartId})</span>
-                  <span className="fin-cell-subtext">· +91-{maskManagerCollectFeePhone(selectedStudent.phone)}</span>
-                </div>
-              )}
-              {selectedStudent != null && selectedStudent.dueAmount > 0 && (
-                <div className="fin-badge fin-badge--danger w-full justify-center py-2">
-                  {tManagerUi('due_amount')} {formatCurrency(selectedStudent?.dueAmount ?? 0)} {tManagerUi('pending')}
-                </div>
-              )}
+              <ManagerFinanceCollectFeeStudentInfo
+                selectedStudent={selectedStudent}
+                dueAmountText={`${tManagerUi('due_amount')} `}
+                formatCurrency={formatCurrency}
+              />
             </div>
 
             <div className="fin-card p-6 space-y-4">
               <p className="fin-section-label">{tManagerUi('payment_details')}</p>
-              <div>
-                <div className="flex items-center justify-between">
-                  <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-128">{tManagerUi('months_paying_for_cycle')}</label>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (isCustomDuration) {
-                        setIsCustomDuration(false);
-                        setMonthsToRenew('1');
-                      } else {
-                        setIsCustomDuration(true);
-                      }
-                    }}
-                    className="text-xs text-primary font-medium hover:underline cursor-pointer"
-                  >
-                    {isCustomDuration ? 'Standard Cycle' : '+ Custom Duration'}
-                  </button>
-                </div>
-                {!isCustomDuration ? (
-                  <select
-                    id="rbg4-managerfinancecollectfeepage-128"
-                    className="fin-select w-full mt-1"
-                    value={monthsToRenew}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (val === 'custom') {
-                        setIsCustomDuration(true);
-                      } else {
-                        setMonthsToRenew(val as ManagerFinanceCollectFeeDraft['monthsToRenew']);
-                        if (Number(val) > 0) {
-                          setAmount(String(Number(val) * 1200));
-                        }
-                      }
-                    }}
-                  >
-                    <option value="1">{tManagerUi('label_1_month')} (₹1,200)</option>
-                    <option value="3">{tManagerUi('label_3_months_quarterly')} (₹3,400)</option>
-                    <option value="6">{tManagerUi('label_6_months_half_yearly')} (₹6,500)</option>
-                    <option value="12">{tManagerUi('label_12_months_annual')} (₹12,000)</option>
-                    <option value="custom">Custom Duration / Months...</option>
-                  </select>
-                ) : (
-                  <div className="flex gap-2 mt-1 items-center">
-                    <input
-                      type="number"
-                      min="1"
-                      max="36"
-                      className="fin-input flex-1"
-                      placeholder="Enter custom months (e.g. 2, 4, 8, 18)"
-                      value={monthsToRenew}
-                      onChange={(e) => {
-                        const m = e.target.value;
-                        setMonthsToRenew(m);
-                        if (Number(m) > 0) {
-                          setAmount(String(Number(m) * 1200));
-                        }
-                      }}
-                    />
-                    <span className="text-xs text-secondary font-medium px-2 shrink-0">Months</span>
-                  </div>
-                )}
-              </div>
+              <ManagerFinanceCollectFeeDurationSelector
+                isCustomDuration={isCustomDuration}
+                onToggleCustomDuration={setIsCustomDuration}
+                monthsToRenew={monthsToRenew}
+                onMonthsToRenewChange={(val) => setDraftValue('monthsToRenew', val)}
+                onAmountChange={(val) => setDraftValue('amount', val)}
+                labelMonthPayingForCycle={tManagerUi('months_paying_for_cycle')}
+                label1Month={tManagerUi('label_1_month')}
+                label3MonthsQuarterly={tManagerUi('label_3_months_quarterly')}
+                label6MonthsHalfYearly={tManagerUi('label_6_months_half_yearly')}
+                label12MonthsAnnual={tManagerUi('label_12_months_annual')}
+              />
               <div>
                 <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-137">{tManagerUi('amount_43dc85')} <span className="fin-text-danger">*</span></label>
                 <div className="relative mt-1">
                   <IndianRupee size={14} className="absolute left-3 top-1/2 -translate-y-1/2 fin-icon-muted" />
-                  <input id="rbg4-managerfinancecollectfeepage-137" type="number" min="0.01" step="0.01" className="fin-input fin-input--pl8" placeholder="0.00" value={amount} aria-invalid={Boolean(formState.errors.amount)} onChange={e => setAmount(e.target.value)} />
+                  <input id="rbg4-managerfinancecollectfeepage-137" type="number" min="0.01" step="0.01" className="fin-input fin-input--pl8" placeholder="0.00" value={amount} aria-invalid={Boolean(formState.errors.amount)} onChange={e => setDraftValue('amount', e.target.value)} />
                   {formState.errors.amount && <p className="fin-input-hint fin-text-danger" role="alert">{tManagerUi(formState.errors.amount.message ?? 'enter_valid_amount')}</p>}
                 </div>
               </div>
@@ -275,7 +201,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                 <p className="fin-label" id="manager-collect-fee-payment-mode-label">{tManagerUi('payment_mode_23b35c')}</p>
                 <div className="flex gap-2 mt-1 flex-wrap" role="group" aria-labelledby="manager-collect-fee-payment-mode-label">
                   {MANAGER_FINANCE_COLLECT_FEE_MODES.map(m => (
-                    <button type="button" key={m} aria-pressed={mode === m} onClick={() => setMode(m)} className={`fin-badge cursor-pointer ${mode === m ? 'fin-badge--info' : 'fin-badge--neutral'}`}>
+                    <button type="button" key={m} aria-pressed={mode === m} onClick={() => setDraftValue('mode', m)} className={`fin-badge cursor-pointer ${mode === m ? 'fin-badge--info' : 'fin-badge--neutral'}`}>
                       {modeLabels[m]}
                     </button>
                   ))}
@@ -284,7 +210,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
               {mode !== 'cash' && (
                 <div>
                   <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-155">{tManagerUi('transaction_id')} <span className="fin-text-danger">*</span></label>
-                  <input id="rbg4-managerfinancecollectfeepage-155" className="fin-input w-full mt-1" placeholder={tManagerUi('enter_transaction_reference')} value={txnId} aria-invalid={Boolean(formState.errors.txnId)} onChange={e => setTxnId(e.target.value)} />
+                  <input id="rbg4-managerfinancecollectfeepage-155" className="fin-input w-full mt-1" placeholder={tManagerUi('enter_transaction_reference')} value={txnId} aria-invalid={Boolean(formState.errors.txnId)} onChange={e => setDraftValue('txnId', e.target.value)} />
                   {formState.errors.txnId && <p className="fin-input-hint fin-text-danger" role="alert">{tManagerUi(formState.errors.txnId.message ?? 'transaction_reference_required')}</p>}
                 </div>
               )}
@@ -304,28 +230,30 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                   />
                 </div>
               </div>
-              <div>
-                <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-160">{tManagerUi('coupon_code')}</label>
-                <div className="flex gap-2 mt-1">
-                  <input id="rbg4-managerfinancecollectfeepage-160" className="fin-input flex-1" placeholder={tManagerUi('enter_coupon_code')} value={couponCode}
-                    onChange={e => { setCouponCode(e.target.value); setCouponStatus('idle'); setCouponDiscount(0); }} />
-                  <button type="button" className="fin-badge fin-badge--neutral cursor-pointer" onClick={handleApplyCoupon}>{tManagerUi('apply')}</button>
-                </div>
-                {couponStatus === 'unavailable' && <p className="fin-input-hint fin-text-warning" role="status" data-testid="manager-finance-coupon-contract-warning">{tManagerUi('coupon_validation_unavailable_no_discount_has_been_appli_0e35b5')}</p>}
-              </div>
-              <div>
-                <div className="flex items-center justify-between">
-                  <label className="fin-label" htmlFor="manager-collect-fee-late-fee">{tManagerUi('late_fee')}</label>
-                  <label className="flex items-center gap-1 fin-text-xs cursor-pointer">
-                    <input type="checkbox" checked={lateFeeOverride} onChange={e => setLateFeeOverride(e.target.checked)} /> {tManagerUi('override')}
-                  </label>
-                </div>
-                <input id="manager-collect-fee-late-fee" type="number" className="fin-input w-full mt-1" value={lateFee} onChange={e => setLateFee(e.target.value)} readOnly={!lateFeeOverride} />
-              </div>
-              <div>
-                <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-178">{tManagerUi('remark_optional')}</label>
-                <textarea id="rbg4-managerfinancecollectfeepage-178" className="fin-textarea mt-1" rows={2} placeholder={tManagerUi('any_notes')} value={remark} onChange={e => setRemark(e.target.value)} />
-              </div>
+              <ManagerFinanceCollectFeeDiscountsSection
+                couponCode={couponCode}
+                onCouponCodeChange={(val) => {
+                  setDraftValue('couponCode', val);
+                  setCouponStatus('idle');
+                  setCouponDiscount(0);
+                }}
+                couponStatus={couponStatus}
+                onApplyCoupon={handleApplyCoupon}
+                lateFee={lateFee}
+                onLateFeeChange={(val) => setDraftValue('lateFee', val)}
+                lateFeeOverride={lateFeeOverride}
+                onLateFeeOverrideChange={setLateFeeOverride}
+                remark={remark}
+                onRemarkChange={(val) => setDraftValue('remark', val)}
+                couponCodeLabel={tManagerUi('coupon_code')}
+                enterCouponCodePlaceholder={tManagerUi('enter_coupon_code')}
+                applyLabel={tManagerUi('apply')}
+                couponValidationUnavailableText={tManagerUi('coupon_validation_unavailable_no_discount_has_been_appli_0e35b5')}
+                lateFeeLabel={tManagerUi('late_fee')}
+                overrideLabel={tManagerUi('override')}
+                remarkOptionalLabel={tManagerUi('remark_optional')}
+                anyNotesPlaceholder={tManagerUi('any_notes')}
+              />
 
               <div className="pt-3 border-t border-border mt-4">
                 <button

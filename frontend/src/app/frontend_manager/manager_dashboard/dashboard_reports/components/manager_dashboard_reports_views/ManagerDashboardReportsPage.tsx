@@ -115,7 +115,7 @@ export default function ManagerDashboardReportsPage() {
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
               <span className="mgr-breadcrumb">{tManagerUi('manager_reports')}</span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-primary-subtle text-primary border border-border">
                 <BarChart3 size={11} />
                 Analytics Engine
               </span>

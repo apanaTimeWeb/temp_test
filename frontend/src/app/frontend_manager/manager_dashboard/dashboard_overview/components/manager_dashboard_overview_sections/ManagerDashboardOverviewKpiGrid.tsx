@@ -88,15 +88,15 @@ export function ManagerDashboardOverviewKpiGrid({
         return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
       case 'Attendance Today':
       case 'Today Attendance':
-        return 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20';
+        return 'bg-success-bg text-success border-border';
       case 'New Enquiries':
       case 'New Inquiries':
-        return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+        return 'bg-info-bg text-info border-border';
       case 'Occupied Seats':
       case 'Seats Occupied':
-        return 'bg-purple-500/10 text-purple-500 border-purple-500/20';
+        return 'bg-purple-bg text-purple border-border';
       default:
-        return 'bg-primary/10 text-primary border-primary/20';
+        return 'bg-primary-subtle text-primary border-border';
     }
   };
 
@@ -201,7 +201,7 @@ export function ManagerDashboardOverviewKpiGrid({
                     <span className="font-semibold text-foreground">75%</span>
                   </div>
                   <div className="w-full bg-surface-highlight rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-primary h-full rounded-full transition-all duration-500" style={{ width: '75%' }} />
+                    <div className="bg-primary h-full rounded-full motion-safe:transition-all motion-safe:duration-500 w-3/4" />
                   </div>
                 </div>
               ) : (

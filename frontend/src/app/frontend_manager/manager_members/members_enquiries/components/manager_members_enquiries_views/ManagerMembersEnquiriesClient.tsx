@@ -3,23 +3,7 @@
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import {
-  LayoutGrid,
-  List,
-  Plus,
-  Search,
-  Download,
-  RefreshCw,
-  Sparkles,
-  Users,
-  PhoneCall,
-  CheckCircle2,
-  Calendar,
-  Filter,
-  X,
-  Target,
-  ArrowRight,
-} from 'lucide-react';
+import { LayoutGrid, List, Plus, RefreshCw, Target } from 'lucide-react';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 import {
   useManagerMembersEnquiries,
@@ -27,7 +11,9 @@ import {
 } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesEnquiries';
 import { ManagerMembersEnquiriesKanban } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesKanban';
 import { ManagerMembersEnquiriesTable } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesTable';
-import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
+import { ManagerMembersEnquiriesKpis } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesKpis';
+import { ManagerMembersEnquiriesTimeHorizonBar } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesTimeHorizonBar';
+import { ManagerMembersEnquiriesToolbar } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesToolbar';
 
 // RESPONSIBILITY: Main Client view for CRM Enquiries with Executive Pipeline Analytics and Global Horizon Filtering.
 
@@ -67,20 +53,15 @@ export function ManagerMembersEnquiriesClient() {
 
   const horizonLabel = useMemo(() => {
     switch (timeHorizon) {
-      case 'all':
-        return 'All Time';
-      case 'today':
-        return 'Today';
-      case 'this_week':
-        return 'This Week';
-      case 'this_month':
-        return 'This Month';
+      case 'all': return 'All Time';
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
       case 'custom':
         return customStartDate && customEndDate
           ? `${customStartDate} to ${customEndDate}`
           : 'Custom Range';
-      default:
-        return 'All Time';
+      default: return 'All Time';
     }
   }, [timeHorizon, customStartDate, customEndDate]);
 
@@ -126,6 +107,8 @@ export function ManagerMembersEnquiriesClient() {
     );
   }
 
+  const hasActiveFilters = Boolean(search || statusFilter !== 'All' || timeHorizon !== 'all');
+
   return (
     <div className="crm-page space-y-6">
       {/* ── Executive Header Banner ── */}
@@ -136,11 +119,11 @@ export function ManagerMembersEnquiriesClient() {
             <div className="flex items-center gap-2 flex-wrap text-xs">
               <span className="font-semibold text-primary uppercase tracking-wider">{tManagerUi('crm_to_enquiries')}</span>
               <span className="text-border">•</span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-warning-bg text-warning border border-border">
                 <Target size={12} />
                 Lead Intelligence Pipeline
               </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-secondary/10 text-secondary border border-border">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
                 📍 Central Branch
               </span>
             </div>
@@ -174,7 +157,7 @@ export function ManagerMembersEnquiriesClient() {
             </button>
 
             {/* View Mode Toggle */}
-            <div className="inline-flex bg-muted/60 p-1 rounded-xl border border-border">
+            <div className="inline-flex bg-muted p-1 rounded-xl border border-border">
               <button
                 type="button"
                 className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 motion-safe:transition-all ${
@@ -231,245 +214,43 @@ export function ManagerMembersEnquiriesClient() {
       </div>
 
       {/* ── Main Global Time Horizon Filter Bar ── */}
-      <div className="rounded-xl border border-border bg-card p-3 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-primary shrink-0" />
-          <span className="text-xs font-bold uppercase tracking-wider text-secondary">
-            Pipeline Time Horizon:
-          </span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Segmented Time Horizon Pills */}
-          <div className="inline-flex bg-muted/60 p-1 rounded-xl border border-border flex-wrap">
-            {timeHorizonOptions.map((opt) => (
-              <button
-                key={opt.id}
-                type="button"
-                onClick={() => setTimeHorizon(opt.id)}
-                className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
-                  timeHorizon === opt.id
-                    ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
-                    : 'text-secondary hover:text-primary'
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Inline Custom Date Inputs if Custom Range is active */}
-          {timeHorizon === 'custom' && (
-            <div className="flex items-center gap-2 flex-wrap text-xs bg-muted/40 p-1.5 rounded-lg border border-border">
-              <label className="flex items-center gap-1 text-secondary">
-                <span>From:</span>
-                <input
-                  type="date"
-                  value={customStartDate}
-                  onChange={(e) => setCustomStartDate(e.target.value)}
-                  className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
-                />
-              </label>
-              <label className="flex items-center gap-1 text-secondary">
-                <span>To:</span>
-                <input
-                  type="date"
-                  value={customEndDate}
-                  onChange={(e) => setCustomEndDate(e.target.value)}
-                  className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
-                />
-              </label>
-              {(customStartDate || customEndDate) && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCustomStartDate('');
-                    setCustomEndDate('');
-                  }}
-                  className="p-1 text-secondary hover:text-destructive"
-                  title="Clear custom dates"
-                >
-                  <X size={13} />
-                </button>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
+      <ManagerMembersEnquiriesTimeHorizonBar
+        timeHorizon={timeHorizon}
+        setTimeHorizon={setTimeHorizon}
+        timeHorizonOptions={timeHorizonOptions}
+        customStartDate={customStartDate}
+        setCustomStartDate={setCustomStartDate}
+        customEndDate={customEndDate}
+        setCustomEndDate={setCustomEndDate}
+      />
 
       {/* ── Executive CRM Funnel KPI Cards Grid ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* KPI 1: Total Enquiries */}
-        <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">Total Leads</span>
-            <div className="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center">
-              <Users size={18} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-primary">{stats.total}</div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-                [{horizonLabel}]
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-secondary flex items-center gap-1">
-              <span>All enquiries in {horizonLabel}</span>
-            </p>
-          </div>
-        </div>
-
-        {/* KPI 2: New Prospects */}
-        <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">New Leads</span>
-            <div className="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center">
-              <Sparkles size={18} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400">{stats.newLeads}</div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-                [{horizonLabel}]
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-secondary">Awaiting response ({horizonLabel})</p>
-          </div>
-        </div>
-
-        {/* KPI 3: Active Pipeline (Visited + Interested) */}
-        <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">In Pipeline</span>
-            <div className="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 flex items-center justify-center">
-              <PhoneCall size={18} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-purple-600 dark:text-purple-400">{stats.activePipeline}</div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-                [{horizonLabel}]
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-secondary">{stats.visited} visited · {stats.interested} interested ({horizonLabel})</p>
-          </div>
-        </div>
-
-        {/* KPI 4: Admissions Converted */}
-        <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">Admitted / Won</span>
-            <div className="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-              <CheckCircle2 size={18} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{stats.converted}</div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-                [{horizonLabel}]
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-secondary">
-              <span className="font-semibold text-emerald-600 dark:text-emerald-400">{stats.conversionRate}%</span> conversion rate ({horizonLabel})
-            </p>
-          </div>
-        </div>
-      </div>
+      <ManagerMembersEnquiriesKpis stats={stats} horizonLabel={horizonLabel} />
 
       {/* ── Toolbar: Search, Status Filter & CSV Export ── */}
-      <div className="flex flex-wrap gap-3 items-center justify-between bg-card p-3 rounded-xl border border-border">
-        <div className="flex flex-wrap items-center gap-3 flex-grow max-w-xl">
-          {/* Search Input */}
-          <div className="relative flex-grow min-w-[200px]">
-            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-            <input
-              type="text"
-              className="w-full pl-9 pr-8 py-2 bg-muted/40 border border-border rounded-lg text-sm text-primary outline-none focus:border-primary focus:bg-card motion-safe:transition-all"
-              placeholder={tManagerUi('search_by_name_or_phone')}
-              aria-label={tManagerUi('search_by_name_or_phone')}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded"
-                title="Clear search"
-              >
-                <X size={14} />
-              </button>
-            )}
-          </div>
-
-          {/* Status Dropdown Filter */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            <Filter size={14} className="text-secondary shrink-0" />
-            <select
-              className="min-h-10 py-1.5 px-3 bg-muted/40 border border-border rounded-lg text-xs font-medium text-primary outline-none focus:border-primary focus:bg-card motion-safe:transition-all cursor-pointer"
-              aria-label={tManagerUi('status')}
-              value={statusFilter}
-              onChange={(event) => {
-                const nextStatus = event.currentTarget.value;
-                if (
-                  nextStatus === 'All' ||
-                  MANAGER_CRM_STATUS_OPTIONS.includes(nextStatus as (typeof MANAGER_CRM_STATUS_OPTIONS)[number])
-                ) {
-                  setStatusFilter(nextStatus as typeof statusFilter);
-                }
-              }}
-            >
-              <option value="All">{tManagerUi('all_statuses')}</option>
-              {MANAGER_CRM_STATUS_OPTIONS.map((status) => (
-                <option key={status} value={status}>
-                  {statusLabels[status]}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Clear Filters Reset Button */}
-          {(search || statusFilter !== 'All' || timeHorizon !== 'all') && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearch('');
-                setStatusFilter('All');
-                setTimeHorizon('all');
-                setCustomStartDate('');
-                setCustomEndDate('');
-              }}
-              className="text-xs font-semibold text-primary hover:underline px-2 py-1"
-            >
-              Reset Filters
-            </button>
-          )}
-
-          <span className="text-xs font-semibold text-secondary px-1 shrink-0">
-            Showing {filtered.length} leads ({horizonLabel})
-          </span>
-        </div>
-
-        {/* Export CSV Button */}
-        <button
-          type="button"
-          onClick={handleExportCsv}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm shrink-0"
-          title="Export CRM Enquiries as CSV"
-        >
-          <Download size={14} />
-          <span>Export CSV</span>
-        </button>
-      </div>
+      <ManagerMembersEnquiriesToolbar
+        search={search}
+        setSearch={setSearch}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        statusLabels={statusLabels}
+        filteredCount={filtered.length}
+        horizonLabel={horizonLabel}
+        hasActiveFilters={hasActiveFilters}
+        onResetFilters={() => {
+          setSearch('');
+          setStatusFilter('All');
+          setTimeHorizon('all');
+          setCustomStartDate('');
+          setCustomEndDate('');
+        }}
+        onExportCsv={handleExportCsv}
+      />
 
       {/* ── Views: Kanban Board or Table ── */}
       {filtered.length === 0 && !isPending ? (
         <div className="flex flex-col items-center justify-center p-16 text-center bg-card rounded-2xl border border-border space-y-3">
-          <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl font-bold">
+          <div className="w-12 h-12 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xl font-bold">
             🔍
           </div>
           <p className="text-base font-bold text-foreground">

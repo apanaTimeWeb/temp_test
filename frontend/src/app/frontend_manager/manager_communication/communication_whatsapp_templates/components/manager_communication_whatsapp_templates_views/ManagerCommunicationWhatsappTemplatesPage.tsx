@@ -139,7 +139,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
         </div>
 
         {toastFeedback && (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-success/10 border border-success/20 text-success text-sm font-semibold" role="status">
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-success-bg border border-border text-success text-sm font-semibold" role="status">
             <CheckCircle2 size={16} />
             <span>{toastFeedback}</span>
           </div>

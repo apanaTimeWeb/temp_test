@@ -1,21 +1,20 @@
 'use client';
+
 import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { useManagerSecurityDepositsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/useManagerFinanceSecurityDepositsUrlFilters';
 import { useManagerSecurityDepositsFormatting } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsFormattingHook';
-import { Undo2, Minus, Search, X, CheckCircle, IndianRupee, AlertCircle, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { MANAGER_FINANCE_SAMPLE_DEPOSITS } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
-import { ManagerFinanceSecurityDepositsEmptyState } from '@/app/frontend_manager/manager_finance/finance_security_deposits/components/manager_finance_security_deposits_empty_states/ManagerFinanceSecurityDepositsEmptyState';
 import type { ManagerFinanceSecurityDepositsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_security_deposits/types/ManagerFinanceSecurityDepositsComponentTypes';
+import ManagerFinanceSecurityDepositsRefundModal from './ManagerFinanceSecurityDepositsRefundModal';
+import ManagerFinanceSecurityDepositsDeductionModal from './ManagerFinanceSecurityDepositsDeductionModal';
+import ManagerFinanceSecurityDepositsTable from './ManagerFinanceSecurityDepositsTable';
 
 const URL_FILTERS = { status: { defaultValue: 'all', allowedValues: ['all', 'held', 'refunded', 'forfeited'] } as const };
 
-const STATUS_BADGE: Record<string, string> = {
-  held: 'fin-badge fin-badge--info',
-  refunded: 'fin-badge fin-badge--success',
-  forfeited: 'fin-badge fin-badge--danger',
-};
+type DepositSortField = 'studentName' | 'depositAmount' | 'status' | 'collectedBy' | 'collectedDate' | 'deductionAmount' | 'refundedDate';
 
 export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerFinanceSecurityDepositsRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_security_deposits.ui');
@@ -28,9 +27,8 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
   );
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize] = useState(10);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  type DepositSortField = 'studentName' | 'depositAmount' | 'status' | 'collectedBy' | 'collectedDate' | 'deductionAmount' | 'refundedDate';
   const [sortField, setSortField] = useState<DepositSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
@@ -47,7 +45,6 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
     }
   };
 
-  // Modals
   const [refundTarget, setRefundTarget] = useState<ManagerFinanceSecurityDepositsSampleDeposit | null>(null);
   const [refundMode, setRefundMode] = useState<'cash' | 'upi'>('upi');
   const [refundRef, setRefundRef] = useState('');
@@ -173,8 +170,15 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
         <p className="fin-page-subtitle">{tManagerUi('review_student_security_deposit_records')}</p>
       </div>
 
+      <div className="p-3 rounded-xl bg-muted border border-border text-xs text-secondary flex items-center justify-between" role="status">
+        <span>Sample security deposit records loaded for preview under active contract.</span>
+        <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">
+          Export Unavailable
+        </button>
+      </div>
+
       {toastMessage && (
-        <div className="p-3 rounded-xl bg-success-bg border border-success/30 text-success text-xs font-semibold flex items-center gap-2" role="status">
+        <div className="p-3 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center gap-2" role="status">
           <span>✓</span>
           <span>{toastMessage}</span>
         </div>
@@ -210,269 +214,58 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
         </select>
       </div>
 
-      <div className="fin-card overflow-x-auto">
-        <table className="w-full">
-          <thead>
-            <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              {renderSortableHeader('studentName', tManagerUi('student'), 'left')}
-              {renderSortableHeader('depositAmount', tManagerUi('deposit_inr'), 'right')}
-              {renderSortableHeader('status', tManagerUi('status'), 'left')}
-              {renderSortableHeader('collectedBy', tManagerUi('collected_by'), 'left')}
-              {renderSortableHeader('collectedDate', tManagerUi('collected_date'), 'left')}
-              {renderSortableHeader('deductionAmount', tManagerUi('deduction_inr'), 'right')}
-              <th scope="col" className="text-left py-3 px-4">{tManagerUi('deduction_reason')}</th>
-              {renderSortableHeader('refundedDate', tManagerUi('refunded_date'), 'left')}
-              <th scope="col" className="text-right py-3 px-4">{tManagerUi('actions')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={9}>
-                  <ManagerFinanceSecurityDepositsEmptyState className="fin-empty-state">
-                    <div className="fin-empty-state__icon">🔒</div>
-                    <p className="fin-empty-state__title">{tManagerUi('no_security_deposits_found')}</p>
-                  </ManagerFinanceSecurityDepositsEmptyState>
-                </td>
-              </tr>
-            ) : (
-              paginated.map((d) => (
-                <tr
-                  key={d.id}
-                  className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12"
-                >
-                  <td className="py-3 px-4">
-                    <div className="fin-cell-name font-semibold">{d.studentName}</div>
-                    <div className="fin-cell-subtext font-mono">{d.smartId}</div>
-                  </td>
-                  <td className="py-3 px-4 text-right font-semibold fin-text-body">{formatCurrency(d.depositAmount)}</td>
-                  <td className="py-3 px-4">
-                    <span className={STATUS_BADGE[d.status] || 'fin-badge fin-badge--neutral'}>{tManagerUi(d.status)}</span>
-                  </td>
-                  <td className="py-3 px-4 fin-text-body">{d.collectedBy}</td>
-                  <td className="py-3 px-4 fin-cell-subtext">{d.collectedDate}</td>
-                  <td className={`py-3 px-4 text-right font-medium ${d.deductionAmount > 0 ? 'fin-text-danger' : 'fin-text-muted'}`}>
-                    {d.deductionAmount > 0 ? formatCurrency(d.deductionAmount) : '—'}
-                  </td>
-                  <td className="py-3 px-4 fin-cell-subtext">{d.deductionReason || '—'}</td>
-                  <td className="py-3 px-4 fin-cell-subtext">{d.refundedDate || '—'}</td>
-                  <td className="py-3 px-4">
-                    {d.status === 'held' && (
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => setRefundTarget(d)}
-                          className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 flex items-center gap-1"
-                          title="Process deposit return to student"
-                        >
-                          <Undo2 size={11} /> Refund
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setDeductionTarget(d);
-                            setDeductionAmount('150');
-                            setDeductionReason('Locker Key Lost');
-                          }}
-                          className="fin-badge fin-badge--warning cursor-pointer hover:opacity-90 flex items-center gap-1"
-                          title="Add penalty or damage deduction"
-                        >
-                          <Minus size={11} /> Deduct
-                        </button>
-                      </div>
-                    )}
-                    {d.status === 'refunded' && (
-                      <span className="fin-cell-subtext text-success font-medium">✓ Refunded {d.refundedDate}</span>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+      <ManagerFinanceSecurityDepositsTable
+        filtered={filtered}
+        paginated={paginated}
+        formatCurrency={formatCurrency}
+        renderSortableHeader={renderSortableHeader}
+        onOpenRefund={(d) => setRefundTarget(d)}
+        onOpenDeduct={(d) => {
+          setDeductionTarget(d);
+          setDeductionAmount('150');
+          setDeductionReason('Locker Key Lost');
+        }}
+        startItem={startItem}
+        endItem={endItem}
+        totalRows={totalRows}
+        effectivePage={effectivePage}
+        pageCount={pageCount}
+        onPrevPage={() => setPage(effectivePage - 1)}
+        onNextPage={() => setPage(effectivePage + 1)}
+        labels={{
+          student: tManagerUi('student'),
+          depositInr: tManagerUi('deposit_inr'),
+          status: tManagerUi('status'),
+          collectedBy: tManagerUi('collected_by'),
+          collectedDate: tManagerUi('collected_date'),
+          deductionInr: tManagerUi('deduction_inr'),
+          deductionReason: tManagerUi('deduction_reason'),
+          refundedDate: tManagerUi('refunded_date'),
+          actions: tManagerUi('actions'),
+          noDeposits: tManagerUi('no_security_deposits_found'),
+        }}
+        translateStatus={(s) => tManagerUi(s)}
+      />
 
-        {filtered.length > 0 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
-            <span>
-              Showing {startItem}–{endItem} of {totalRows} deposit records
-            </span>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                disabled={effectivePage === 0}
-                onClick={() => setPage(effectivePage - 1)}
-                className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
-              >
-                Previous
-              </button>
-              <span className="text-xs">
-                Page {effectivePage + 1} of {pageCount}
-              </span>
-              <button
-                type="button"
-                disabled={effectivePage >= pageCount - 1}
-                onClick={() => setPage(effectivePage + 1)}
-                className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+      <ManagerFinanceSecurityDepositsRefundModal
+        refundTarget={refundTarget}
+        onClose={() => setRefundTarget(null)}
+        refundMode={refundMode}
+        onRefundModeChange={setRefundMode}
+        refundRef={refundRef}
+        onRefundRefChange={setRefundRef}
+        onConfirmRefund={confirmRefund}
+      />
 
-      {/* Process Refund Modal */}
-      {refundTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <div className="flex items-center gap-2">
-                <Undo2 size={18} className="text-success" />
-                <h2 className="text-base font-bold text-primary">Process Security Deposit Refund</h2>
-              </div>
-              <button type="button" onClick={() => setRefundTarget(null)} className="text-secondary hover:text-primary">
-                <X size={18} />
-              </button>
-            </div>
-
-            <form onSubmit={confirmRefund} className="space-y-3.5">
-              <div className="p-3 bg-floating/60 rounded-xl border border-border space-y-1">
-                <p className="text-xs text-secondary">Student Name</p>
-                <p className="text-sm font-bold text-primary">{refundTarget.studentName} ({refundTarget.smartId})</p>
-                <div className="flex justify-between text-xs pt-1 border-t border-border mt-1">
-                  <span className="text-secondary">Gross Deposit Held:</span>
-                  <span className="font-semibold text-primary">₹{refundTarget.depositAmount}</span>
-                </div>
-                {refundTarget.deductionAmount > 0 && (
-                  <div className="flex justify-between text-xs text-danger">
-                    <span>Less Deductions ({refundTarget.deductionReason}):</span>
-                    <span>- ₹{refundTarget.deductionAmount}</span>
-                  </div>
-                )}
-                <div className="flex justify-between text-sm font-bold text-success pt-1 border-t border-border">
-                  <span>Net Refund Payable:</span>
-                  <span>₹{refundTarget.depositAmount - (refundTarget.deductionAmount || 0)}</span>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-primary block mb-1">Refund Payment Mode</label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setRefundMode('upi')}
-                    className={`py-2 text-xs font-semibold rounded-lg border text-center transition-colors ${
-                      refundMode === 'upi' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
-                    }`}
-                  >
-                    UPI Transfer
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRefundMode('cash')}
-                    className={`py-2 text-xs font-semibold rounded-lg border text-center transition-colors ${
-                      refundMode === 'cash' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
-                    }`}
-                  >
-                    Cash from Counter
-                  </button>
-                </div>
-              </div>
-
-              {refundMode === 'upi' && (
-                <div>
-                  <label className="text-xs font-semibold text-primary block mb-1">UPI Transaction Reference</label>
-                  <input
-                    type="text"
-                    className="mgr-input text-xs font-mono"
-                    placeholder="e.g. UPI/2026/987123"
-                    value={refundRef}
-                    onChange={(e) => setRefundRef(e.target.value)}
-                  />
-                </div>
-              )}
-
-              <div className="flex justify-end gap-2.5 pt-3 border-t border-border">
-                <button type="button" onClick={() => setRefundTarget(null)} className="mgr-btn-ghost text-xs">
-                  Cancel
-                </button>
-                <button type="submit" className="mgr-btn-primary text-xs flex items-center gap-1.5">
-                  <CheckCircle size={14} /> Confirm & Release Refund
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Add Deduction Modal */}
-      {deductionTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <div className="flex items-center gap-2">
-                <Minus size={18} className="text-danger" />
-                <h2 className="text-base font-bold text-primary">Add Deposit Deduction</h2>
-              </div>
-              <button type="button" onClick={() => setDeductionTarget(null)} className="text-secondary hover:text-primary">
-                <X size={18} />
-              </button>
-            </div>
-
-            <form onSubmit={confirmDeduction} className="space-y-3.5">
-              <div className="p-3 bg-floating/60 rounded-xl border border-border">
-                <p className="text-xs text-secondary">Student Name</p>
-                <p className="text-sm font-bold text-primary">{deductionTarget.studentName} ({deductionTarget.smartId})</p>
-                <p className="text-xs text-secondary mt-1">Available Deposit: <strong>₹{deductionTarget.depositAmount - (deductionTarget.deductionAmount || 0)}</strong></p>
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-primary block mb-1">Deduction Reason *</label>
-                <select
-                  className="mgr-select text-xs"
-                  value={deductionReason}
-                  onChange={(e) => {
-                    const r = e.target.value;
-                    setDeductionReason(r);
-                    if (r === 'Locker Key Lost') setDeductionAmount('150');
-                    if (r === 'Desk or Chair Damage') setDeductionAmount('300');
-                    if (r === 'Lost Library RFID Smart ID') setDeductionAmount('100');
-                  }}
-                >
-                  <option value="Locker Key Lost">Locker Key Lost (₹150)</option>
-                  <option value="Desk or Chair Damage">Desk or Chair Damage (₹300)</option>
-                  <option value="Lost Library RFID Smart ID">Lost Library RFID Smart ID (₹100)</option>
-                  <option value="Unpaid Late Overstay Fee">Unpaid Late Overstay Fee</option>
-                  <option value="Other">Other Specific Deduction</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs font-semibold text-primary block mb-1">Deduction Amount (INR) *</label>
-                <div className="relative">
-                  <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-                  <input
-                    type="number"
-                    required
-                    className="mgr-input pl-8 text-xs font-mono font-bold"
-                    value={deductionAmount}
-                    onChange={(e) => setDeductionAmount(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-2.5 pt-3 border-t border-border">
-                <button type="button" onClick={() => setDeductionTarget(null)} className="mgr-btn-ghost text-xs">
-                  Cancel
-                </button>
-                <button type="submit" className="mgr-btn-primary text-xs flex items-center gap-1.5 bg-danger hover:bg-danger/90">
-                  <CheckCircle size={14} /> Apply Deduction
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <ManagerFinanceSecurityDepositsDeductionModal
+        deductionTarget={deductionTarget}
+        onClose={() => setDeductionTarget(null)}
+        deductionReason={deductionReason}
+        onDeductionReasonChange={setDeductionReason}
+        deductionAmount={deductionAmount}
+        onDeductionAmountChange={setDeductionAmount}
+        onConfirmDeduction={confirmDeduction}
+      />
     </div>
   );
 }

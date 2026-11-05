@@ -1,15 +1,13 @@
 'use client';
+
 import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG, MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/hooks/ManagerFinanceAutoSuspendDemoRepository';
 import type { ManagerFinanceAutoSuspendConfig as Config, ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
-
-// RESPONSIBILITY: Entry page for the manager_auto_suspend module.
-// DATA FLOW: Next.js Router -> Page -> Components
-import { Settings, Ban, RotateCcw, Bell, UserCheck, ShieldAlert, Search, ArrowUpDown, ArrowUp, ArrowDown, X, Download } from 'lucide-react';
-import { ManagerFinanceAutoSuspendEmptyState } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/components/manager_finance_auto_suspend_empty_states/ManagerFinanceAutoSuspendEmptyState';
+import { Settings, Ban, RotateCcw, UserCheck, ShieldAlert, Search, X, Download } from 'lucide-react';
 import type { ManagerFinanceAutoSuspendRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendComponentTypes';
+import ManagerFinanceAutoSuspendTable, { type SuspendSortField } from './ManagerFinanceAutoSuspendTable';
 
 export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanceAutoSuspendRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_auto_suspend.ui');
@@ -51,22 +49,6 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
 
   const hasActiveFilters = Boolean(searchQuery.trim() !== '' || shiftFilter !== 'all' || overdueFilter !== 'all');
 
-  const handleExportCsv = () => {
-    const headers = 'Student Name,Smart ID,Seat,Shift,Days Overdue,Suspended Since\n';
-    const rows = sortedRows.map((s) =>
-      `"${s.studentName}","${s.smartId}","${s.seat}","${s.shift}","${s.daysOverdue}","${s.suspendedSince}"`
-    ).join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `suspended_students_${new Date().toISOString().slice(0, 10)}.csv`;
-    anchor.click();
-    URL.revokeObjectURL(url);
-    toast.success('Suspended students list exported to CSV successfully');
-  };
-
-  type SuspendSortField = 'studentName' | 'seat' | 'shift' | 'daysOverdue' | 'suspendedSince';
   const [sortField, setSortField] = useState<SuspendSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
@@ -99,33 +81,19 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
-  const renderSortableHeader = (field: SuspendSortField, label: string) => {
-    const isActive = sortField === field;
-    return (
-      <th
-        scope="col"
-        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className="text-left py-3 px-4"
-      >
-        <button
-          type="button"
-          onClick={() => toggleSort(field)}
-          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
-          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
-        >
-          <span>{label}</span>
-          {isActive ? (
-            sortDirection === 'asc' ? (
-              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            ) : (
-              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            )
-          ) : (
-            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
-          )}
-        </button>
-      </th>
-    );
+  const handleExportCsv = () => {
+    const headers = 'Student Name,Smart ID,Seat,Shift,Days Overdue,Suspended Since\n';
+    const rows = sortedRows.map((s) =>
+      `"${s.studentName}","${s.smartId}","${s.seat}","${s.shift}","${s.daysOverdue}","${s.suspendedSince}"`
+    ).join('\n');
+    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `suspended_students_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    toast.success('Suspended students list exported to CSV successfully');
   };
 
   const KPI_CARDS = [
@@ -136,14 +104,18 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
   ] as const;
 
   return (
-    <div className="space-y-6"
+    <div
+      className="space-y-6"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
       data-route-name={_routeQuery.name}
       data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
+      data-route-smart-id={_routeQuery.smartId}
+    >
       <div>
-        <p className="fin-input-hint fin-text-warning" role="status">{tManagerUi('configuration_and_suspended_student_records_are_sample_d_1f1c42')}</p>
+        <p className="fin-input-hint fin-text-warning" role="status">
+          {tManagerUi('configuration_and_suspended_student_records_are_sample_d_1f1c42')}
+        </p>
         <h1 className="fin-page-title">{tManagerUi('auto_suspend_policy')}</h1>
         <p className="fin-page-subtitle">{tManagerUi('manage_automatic_suspension_and_student_restoration')}</p>
       </div>
@@ -260,122 +232,43 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
             </button>
           </div>
         </div>
-        <table className="w-full">
-          <thead>
-            <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-              {renderSortableHeader('studentName', tManagerUi('student'))}
-              {renderSortableHeader('seat', tManagerUi('seat'))}
-              {renderSortableHeader('shift', tManagerUi('shift'))}
-              <th className="text-left py-3 px-4">{tManagerUi('last_payment_date')}</th>
-              {renderSortableHeader('daysOverdue', tManagerUi('days_overdue'))}
-              {renderSortableHeader('suspendedSince', tManagerUi('suspended_since'))}
-              <th className="text-right py-3 px-4">{tManagerUi('actions')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={7}>
-                  <ManagerFinanceAutoSuspendEmptyState className="fin-empty-state">
-                    <div className="fin-empty-state__icon">🔓</div>
-                    <p className="fin-empty-state__title">
-                      {searchQuery ? 'No suspended students matching the search query.' : tManagerUi('no_students_currently_suspended')}
-                    </p>
-                  </ManagerFinanceAutoSuspendEmptyState>
-                </td>
-              </tr>
-            ) : (
-              paginated.map((s) => (
-                <tr key={s.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
-                  <td className="py-3 px-4">
-                    <div className="fin-cell-name">{s.studentName}</div>
-                    <div className="fin-cell-subtext">{s.smartId}</div>
-                  </td>
-                  <td className="py-3 px-4 fin-text-body">{s.seat}</td>
-                  <td className="py-3 px-4">
-                    <span className="fin-badge fin-badge--neutral">{shiftLabels[s.shift] ?? s.shift}</span>
-                  </td>
-                  <td className="py-3 px-4 fin-cell-subtext">—</td>
-                  <td className="py-3 px-4">
-                    <span className="fin-text-danger font-semibold">{s.daysOverdue}{tManagerUi('d')}</span>
-                  </td>
-                  <td className="py-3 px-4 fin-cell-subtext">{s.suspendedSince}</td>
-                  <td className="py-3 px-4">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleSendReminder(s)}
-                        className="fin-badge fin-badge--neutral cursor-pointer hover:opacity-80 transition-opacity"
-                        title={`Send reminder to ${s.studentName}`}
-                      >
-                        <Bell size={11} /> {tManagerUi('send_reminder')}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleRestoreStudent(s)}
-                        className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 transition-opacity"
-                        title={`Manually restore ${s.studentName}`}
-                      >
-                        <RotateCcw size={11} /> Restore
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
 
-        {totalRows > 0 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
-            <span>
-              Showing {startItem}–{endItem} of {totalRows} results
-            </span>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5">
-                <label htmlFor="rows-per-page-finance-auto-suspend" className="text-xs text-secondary whitespace-nowrap">
-                  Rows per page:
-                </label>
-                <select
-                  id="rows-per-page-finance-auto-suspend"
-                  value={pageSize}
-                  onChange={(e) => {
-                    setPageSize(Number(e.target.value));
-                    setPage(0);
-                  }}
-                  className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
-                >
-                  <option value={10}>10</option>
-                  <option value={25}>25</option>
-                  <option value={50}>50</option>
-                </select>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  className="mgr-btn-ghost mgr-btn-sm"
-                  disabled={effectivePage <= 0}
-                  onClick={() => setPage((current) => Math.max(0, current - 1))}
-                >
-                  Previous
-                </button>
-                <span className="text-xs text-secondary px-1">
-                  Page {effectivePage + 1} of {pageCount}
-                </span>
-                <button
-                  type="button"
-                  className="mgr-btn-ghost mgr-btn-sm"
-                  disabled={effectivePage >= pageCount - 1}
-                  onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <ManagerFinanceAutoSuspendTable
+          filtered={filtered}
+          paginated={paginated}
+          searchQuery={searchQuery}
+          totalRows={totalRows}
+          startItem={startItem}
+          endItem={endItem}
+          pageSize={pageSize}
+          effectivePage={effectivePage}
+          pageCount={pageCount}
+          sortField={sortField}
+          sortDirection={sortDirection}
+          onToggleSort={toggleSort}
+          onPageSizeChange={(sz) => {
+            setPageSize(sz);
+            setPage(0);
+          }}
+          onPrevPage={() => setPage((c) => Math.max(0, c - 1))}
+          onNextPage={() => setPage((c) => Math.min(pageCount - 1, c + 1))}
+          onSendReminder={handleSendReminder}
+          onRestoreStudent={handleRestoreStudent}
+          shiftLabels={shiftLabels}
+          labels={{
+            student: tManagerUi('student'),
+            seat: tManagerUi('seat'),
+            shift: tManagerUi('shift'),
+            lastPaymentDate: tManagerUi('last_payment_date'),
+            daysOverdue: tManagerUi('days_overdue'),
+            suspendedSince: tManagerUi('suspended_since'),
+            actions: tManagerUi('actions'),
+            noStudents: tManagerUi('no_students_currently_suspended'),
+            sendReminder: tManagerUi('send_reminder'),
+            daysSuffix: tManagerUi('d'),
+          }}
+        />
       </div>
-
     </div>
   );
 }

@@ -20,7 +20,7 @@ export default function ManagerSettingsBranchInfoPage() {
           <Building2 className="text-primary" size={28} /> {tManagerUi('branch_profile')}
         </h1>
         <p className="text-sm text-secondary">Verified profile details for this branch facility</p>
-        <div className="mt-3 flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 p-3 text-xs text-primary" role="status">
+        <div className="mt-3 flex items-center gap-2 rounded-xl border border-border bg-primary-subtle p-3 text-xs text-primary" role="status">
           <ShieldCheck size={16} className="shrink-0 text-primary" />
           <span>Central Branch Master Record · Branch profile, code, and address are verified and governed by SuperAdmin.</span>
         </div>
@@ -69,7 +69,7 @@ export default function ManagerSettingsBranchInfoPage() {
                 <h2 className="text-xl font-bold text-primary">Branch Master Details</h2>
                 <p className="text-xs text-secondary mt-0.5">Authoritative branch registry parameters</p>
               </div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-success/10 text-success border border-success/20">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-success-bg text-success border border-border">
                 <ShieldCheck size={12} /> Active Branch
               </span>
             </div>

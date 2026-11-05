@@ -26,7 +26,7 @@ export function ManagerDashboardReportsComplaintsChart({ data }: { data: Manager
     colors: [chartTheme.danger, chartTheme.warning, chartTheme.info],
     stroke: {
       show: true,
-      colors: [chartTheme.isDark ? '#111111' : '#FFFFFF'],
+      colors: [chartTheme.cardBg],
       width: 2,
     },
     legend: {

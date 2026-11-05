@@ -26,7 +26,7 @@ export function ManagerDashboardReportsShiftOccupancyChart({ data }: { data: Man
     colors: [chartTheme.primary, chartTheme.success, chartTheme.warning, chartTheme.info],
     stroke: {
       show: true,
-      colors: [chartTheme.isDark ? '#111111' : '#FFFFFF'],
+      colors: [chartTheme.cardBg],
       width: 2,
     },
     legend: {

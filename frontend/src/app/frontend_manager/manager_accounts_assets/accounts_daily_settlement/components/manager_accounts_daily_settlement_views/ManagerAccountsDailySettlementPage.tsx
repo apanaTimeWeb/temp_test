@@ -1,30 +1,16 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import {
-  Search,
-  Download,
-  X,
-  Calendar,
-  RefreshCw,
-  Coins,
-  QrCode,
-  TrendingDown,
-  Scale,
-  CheckCircle2,
-  Building2,
-  ArrowRight,
-} from 'lucide-react';
+import { Calendar, RefreshCw, Scale } from 'lucide-react';
 import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { useTranslations } from 'next-intl';
-import ManagerAccountsDailySettlementNativeTable, {
-  NativeColumn,
-  NativeCellParams,
-} from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_table_parts/ManagerAccountsDailySettlementNativeTable';
-
+import ManagerAccountsDailySettlementNativeTable from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_table_parts/ManagerAccountsDailySettlementNativeTable';
+import { createManagerAccountsDailySettlementColumns } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/components/manager_accounts_daily_settlement_table_parts/ManagerAccountsDailySettlementColumns';
 import { useManagerDailySettlementCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementFormattingHook';
+import { ManagerAccountsDailySettlementKpis } from './ManagerAccountsDailySettlementKpis';
+import { ManagerAccountsDailySettlementToolbar } from './ManagerAccountsDailySettlementToolbar';
 
 // RESPONSIBILITY: Entry page for the manager_daily_settlement module with Executive Treasury Balancing & Specific Date Navigation.
 // DATA FLOW: Next.js Router -> Page -> Components
@@ -118,130 +104,27 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const totalExp = entries.reduce((s, e) => s + e.expenses, 0);
   const netSurplus = totalCash + totalUpi - totalExp;
 
-  const colDefs: NativeColumn<Entry>[] = [
-    {
-      field: 'shift',
-      headerName: tManagerUi('shift'),
-      flex: 1,
-      minWidth: 180,
-      cellRenderer: (p: NativeCellParams) => (
-        <span className="font-semibold text-primary text-xs">{p.value}</span>
-      ),
-    },
-    {
-      field: 'openingBalance',
-      headerName: tManagerUi('opening_inr'),
-      width: 130,
-      cellStyle: { textAlign: 'right' },
-      cellRenderer: (p: NativeCellParams) => (
-        <span className="text-secondary text-xs font-mono">
-          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
-        </span>
-      ),
-    },
-    {
-      field: 'cashCollected',
-      headerName: tManagerUi('cash_inr'),
-      width: 120,
-      cellStyle: { textAlign: 'right' },
-      cellRenderer: (p: NativeCellParams) => (
-        <span className="text-emerald-600 dark:text-emerald-400 font-bold text-xs font-mono">
-          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
-        </span>
-      ),
-    },
-    {
-      field: 'upiCollected',
-      headerName: tManagerUi('upi_inr'),
-      width: 120,
-      cellStyle: { textAlign: 'right' },
-      cellRenderer: (p: NativeCellParams) => (
-        <span className="text-blue-600 dark:text-blue-400 font-bold text-xs font-mono">
-          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
-        </span>
-      ),
-    },
-    {
-      field: 'expenses',
-      headerName: tManagerUi('expenses_inr'),
-      width: 130,
-      cellStyle: { textAlign: 'right' },
-      cellRenderer: (p: NativeCellParams) => (
-        <span className="text-rose-600 dark:text-rose-400 font-bold text-xs font-mono">
-          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
-        </span>
-      ),
-    },
-    {
-      field: 'closingBalance',
-      headerName: tManagerUi('closing_inr'),
-      width: 130,
-      cellStyle: { textAlign: 'right', fontWeight: 600 },
-      cellRenderer: (p: NativeCellParams) => (
-        <span className="text-primary font-black text-xs font-mono">
-          {formatManagerDailySettlementCurrency(Number(p.value ?? 0))}
-        </span>
-      ),
-    },
-    {
-      field: 'settledBy',
-      headerName: tManagerUi('settled_by'),
-      width: 150,
-      cellRenderer: (p: NativeCellParams) => (
-        <span className="text-secondary text-xs">{p.value || '—'}</span>
-      ),
-    },
-    {
-      field: 'status',
-      headerName: tManagerUi('status'),
-      width: 120,
-      cellRenderer: (p: NativeCellParams) => (
-        <span
-          className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${
-            p.value === 'settled'
-              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-              : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
-          }`}
-        >
-          {p.value === 'settled'
-            ? tManagerUi('completed')
-            : p.value === 'pending'
-            ? tManagerUi('pending')
-            : tManagerUi('status')}
-        </span>
-      ),
-    },
-    {
-      headerName: tManagerUi('action'),
-      width: 130,
-      sortable: false,
-      cellStyle: { textAlign: 'right' },
-      cellRenderer: (params: NativeCellParams<Entry>) => {
-        if (params.data?.status === 'pending') {
-          const shiftName = params.data.shift;
-          return (
-            <div className="h-full flex justify-end items-center">
-              <button
-                type="button"
-                onClick={() => handleSettleShift(shiftName)}
-                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm transition-colors cursor-pointer"
-                title={`Settle shift ${shiftName}`}
-              >
-                Settle Shift
-              </button>
-            </div>
-          );
-        }
-        return (
-          <div className="h-full flex justify-end items-center">
-            <span className="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-semibold">
-              <CheckCircle2 size={13} /> Verified
-            </span>
-          </div>
-        );
-      },
-    },
-  ];
+  const colDefs = useMemo(
+    () =>
+      createManagerAccountsDailySettlementColumns({
+        labels: {
+          shift: tManagerUi('shift'),
+          opening: tManagerUi('opening_inr'),
+          cash: tManagerUi('cash_inr'),
+          upi: tManagerUi('upi_inr'),
+          expenses: tManagerUi('expenses_inr'),
+          closing: tManagerUi('closing_inr'),
+          settledBy: tManagerUi('settled_by'),
+          status: tManagerUi('status'),
+          completed: tManagerUi('completed'),
+          pending: tManagerUi('pending'),
+          action: tManagerUi('action'),
+        },
+        formatCurrency: formatManagerDailySettlementCurrency,
+        onSettleShift: handleSettleShift,
+      }),
+    [tManagerUi, formatManagerDailySettlementCurrency]
+  );
 
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id}>
@@ -252,11 +135,11 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             <div className="flex items-center gap-2 flex-wrap text-xs">
               <span className="font-semibold text-primary uppercase tracking-wider">Treasury Operations</span>
               <span className="text-border">•</span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-success-bg text-success border border-border">
                 <Scale size={12} />
                 Shift Balancing & Reconciliation
               </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-secondary/10 text-secondary border border-border">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
                 📍 Central Branch
               </span>
             </div>
@@ -292,7 +175,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
 
         {/* Contract Warning Banner */}
         <p
-          className="mt-4 rounded-xl border border-warning/20 bg-warning/5 p-3 text-xs text-warning leading-relaxed"
+          className="mt-4 rounded-xl border border-border bg-warning-bg p-3 text-xs text-warning leading-relaxed"
           data-testid="manager-accounting-settlement-contract-warning"
           role="status"
         >
@@ -311,7 +194,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Quick Date Selectors: All Dates | Today | Yesterday */}
-          <div className="inline-flex bg-muted/60 p-1 rounded-xl border border-border">
+          <div className="inline-flex bg-muted p-1 rounded-xl border border-border">
             <button
               type="button"
               onClick={() => setIsAllDates(true)}
@@ -354,7 +237,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
           </div>
 
           {/* Date Picker Input */}
-          <div className="flex items-center gap-1.5 bg-muted/40 p-1 rounded-xl border border-border">
+          <div className="flex items-center gap-1.5 bg-muted p-1 rounded-xl border border-border">
             <input
               type="date"
               className="px-2.5 py-1 bg-card border border-border rounded-lg text-xs font-semibold text-primary outline-none focus:border-primary"
@@ -371,174 +254,41 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
       </div>
 
       {/* ── Executive Reconciliation KPI Summary Cards ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Cash Collected */}
-        <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
-              {tManagerUi('cash_collected')}
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-              <Coins size={20} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 font-mono">
-                {formatManagerDailySettlementCurrency(totalCash)}
-              </div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-emerald-600 dark:text-emerald-400 border border-border">
-                [{dateScopeLabel}]
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-secondary">Physical cash drawer total ({dateScopeLabel})</p>
-          </div>
-        </div>
-
-        {/* UPI Collected */}
-        <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
-              {tManagerUi('upi_collected')}
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center">
-              <QrCode size={20} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-blue-600 dark:text-blue-400 font-mono">
-                {formatManagerDailySettlementCurrency(totalUpi)}
-              </div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-blue-600 dark:text-blue-400 border border-border">
-                [{dateScopeLabel}]
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-secondary">Direct bank / QR settlements ({dateScopeLabel})</p>
-          </div>
-        </div>
-
-        {/* Expenses Disbursed */}
-        <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
-              {tManagerUi('expenses')}
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 flex items-center justify-center">
-              <TrendingDown size={20} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400 font-mono">
-                {formatManagerDailySettlementCurrency(totalExp)}
-              </div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-rose-600 dark:text-rose-400 border border-border">
-                [{dateScopeLabel}]
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-secondary">Petty cash paid from counter ({dateScopeLabel})</p>
-          </div>
-        </div>
-
-        {/* Net Shift Surplus */}
-        <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
-              {tManagerUi('net')}
-            </span>
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center">
-              <Scale size={20} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-primary font-mono">
-                {formatManagerDailySettlementCurrency(netSurplus)}
-              </div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-                [{dateScopeLabel}]
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-secondary">Net realized vault closing balance ({dateScopeLabel})</p>
-          </div>
-        </div>
-      </div>
+      <ManagerAccountsDailySettlementKpis
+        totalCash={totalCash}
+        totalUpi={totalUpi}
+        totalExp={totalExp}
+        netSurplus={netSurplus}
+        dateScopeLabel={dateScopeLabel}
+        formatCurrency={formatManagerDailySettlementCurrency}
+        labels={{
+          cashCollected: tManagerUi('cash_collected'),
+          upiCollected: tManagerUi('upi_collected'),
+          expenses: tManagerUi('expenses'),
+          net: tManagerUi('net'),
+        }}
+      />
 
       {/* ── Table Container with Toolbar ── */}
       <div className="fin-card p-5 space-y-4 rounded-2xl border border-border bg-card shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-border pb-4">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-base font-bold text-primary">Shift Settlements Register</h2>
-            <span className="mgr-badge mgr-badge--info text-xs font-mono">
-              Showing {filteredEntries.length} of {entries.length} Shifts ({dateScopeLabel})
-            </span>
-          </div>
-
-          {/* Multi-Filter Toolbar */}
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="relative w-full sm:w-56">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-              <input
-                type="search"
-                placeholder="Search shift or settled by..."
-                className="w-full pl-9 pr-3 py-1.5 bg-muted/40 border border-border rounded-lg text-xs text-primary outline-none focus:border-primary focus:bg-card"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <select
-              aria-label="Filter by Settlement Status"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="min-h-9 py-1 px-3 bg-muted/40 border border-border rounded-lg text-xs font-medium text-primary outline-none focus:border-primary focus:bg-card cursor-pointer"
-            >
-              <option value="all">All Status</option>
-              <option value="settled">Settled / Verified</option>
-              <option value="pending">Pending</option>
-            </select>
-
-            <select
-              aria-label="Filter by Shift"
-              value={shiftFilter}
-              onChange={(e) => setShiftFilter(e.target.value)}
-              className="min-h-9 py-1 px-3 bg-muted/40 border border-border rounded-lg text-xs font-medium text-primary outline-none focus:border-primary focus:bg-card cursor-pointer"
-            >
-              <option value="all">All Shifts</option>
-              <option value="Morning">Morning</option>
-              <option value="Afternoon">Afternoon</option>
-              <option value="Evening">Evening</option>
-              <option value="Night">Night</option>
-              <option value="Full Day">Full Day</option>
-            </select>
-
-            {hasActiveFilters && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery('');
-                  setStatusFilter('all');
-                  setShiftFilter('all');
-                }}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
-                title="Reset all filters"
-              >
-                <X size={13} /> Reset
-              </button>
-            )}
-
-            <button
-              type="button"
-              onClick={handleExportCsv}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm shrink-0"
-              title="Export Daily Settlement as CSV"
-            >
-              <Download size={13} />
-              <span>Export CSV</span>
-            </button>
-          </div>
-        </div>
+        <ManagerAccountsDailySettlementToolbar
+          filteredCount={filteredEntries.length}
+          totalCount={entries.length}
+          dateScopeLabel={dateScopeLabel}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          shiftFilter={shiftFilter}
+          setShiftFilter={setShiftFilter}
+          hasActiveFilters={hasActiveFilters}
+          onResetFilters={() => {
+            setSearchQuery('');
+            setStatusFilter('all');
+            setShiftFilter('all');
+          }}
+          onExportCsv={handleExportCsv}
+        />
 
         {filteredEntries.length === 0 ? (
           <div className="fin-empty-state py-12 text-center space-y-2">

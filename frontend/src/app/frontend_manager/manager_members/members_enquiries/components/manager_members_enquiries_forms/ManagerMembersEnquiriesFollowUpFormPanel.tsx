@@ -90,8 +90,7 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
         <button
           type="button"
           onClick={handleManualAdd}
-          className="crm-btn-primary crm-btn-full mt-2"
-          style={{ background: 'var(--primary, #3b82f6)', color: '#ffffff' }}
+          className="crm-btn-primary crm-btn-full mt-2 bg-primary text-on-primary"
           data-testid="manager-crm-manual-followup-btn"
         >
           <Plus size={15} /> Log Follow-up to Timeline
