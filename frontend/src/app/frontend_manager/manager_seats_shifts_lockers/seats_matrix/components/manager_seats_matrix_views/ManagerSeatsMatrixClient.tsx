@@ -31,7 +31,7 @@ export function ManagerSeatsMatrixClient() {
   const [addFeedback, setAddFeedback] = useState<string | null>(null);
 
   const [page, setPage] = useState(0);
-  const pageSize = 12;
+  const [pageSize, setPageSize] = useState(10);
 
   // Filtered seats for Table View
   const filteredTableSeats = useMemo(() => {
@@ -334,27 +334,50 @@ export function ManagerSeatsMatrixClient() {
           </div>
 
           {/* Table Pagination */}
-          <div className="flex items-center justify-between pt-4 border-t border-border text-xs text-secondary">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-border text-xs text-secondary">
             <span>
-              Showing {filteredTableSeats.length === 0 ? 0 : page * pageSize + 1} to {Math.min((page + 1) * pageSize, filteredTableSeats.length)} of {filteredTableSeats.length} seats
+              Showing {filteredTableSeats.length === 0 ? 0 : page * pageSize + 1}–{Math.min((page + 1) * pageSize, filteredTableSeats.length)} of {filteredTableSeats.length} results
             </span>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                disabled={page === 0}
-                onClick={() => setPage((prev) => Math.max(0, prev - 1))}
-                className="mgr-btn-ghost text-xs px-3 py-1 disabled:opacity-40"
-              >
-                Previous
-              </button>
-              <button
-                type="button"
-                disabled={page >= totalTablePages - 1}
-                onClick={() => setPage((prev) => Math.min(totalTablePages - 1, prev + 1))}
-                className="mgr-btn-ghost text-xs px-3 py-1 disabled:opacity-40"
-              >
-                Next
-              </button>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <label htmlFor="rows-per-page-seats-matrix" className="text-xs text-secondary whitespace-nowrap">
+                  Rows per page:
+                </label>
+                <select
+                  id="rows-per-page-seats-matrix"
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+                >
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={page === 0}
+                  onClick={() => setPage((prev) => Math.max(0, prev - 1))}
+                  className="mgr-btn-ghost text-xs px-3 py-1 disabled:opacity-40"
+                >
+                  Previous
+                </button>
+                <span className="text-xs text-secondary px-1">
+                  Page {page + 1} of {totalTablePages}
+                </span>
+                <button
+                  type="button"
+                  disabled={page >= totalTablePages - 1}
+                  onClick={() => setPage((prev) => Math.min(totalTablePages - 1, prev + 1))}
+                  className="mgr-btn-ghost text-xs px-3 py-1 disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>
