@@ -40,10 +40,10 @@ export function AdminAccountsDailySettlementPage() {
   const { selectedBranchId, selectedBranch, isAllBranches } = useAdminBranch();
 
   // Specific Date Navigator state
-  const todayStr = format(new Date(), 'yyyy-MM-dd');
-  const yesterdayStr = format(subDays(new Date(), 1), 'yyyy-MM-dd');
-  const [selectedDate, setSelectedDate] = useState<string>(todayStr);
-  const [dateMode, setDateMode] = useState<'today' | 'yesterday' | 'custom'>('today');
+  const demoTodayStr = '2026-11-01';
+  const demoYesterdayStr = '2026-10-31';
+  const [selectedDate, setSelectedDate] = useState<string>(demoTodayStr);
+  const [dateMode, setDateMode] = useState<'all' | 'today' | 'yesterday' | 'custom'>('all');
 
   useEffect(() => {
     if (isAllBranches || !selectedBranch) {
@@ -63,20 +63,24 @@ export function AdminAccountsDailySettlementPage() {
     }
   }, [isAllBranches, selectedBranchId, selectedBranch, availableBranches, setBranchFilter]);
 
-  const pendingCount = records.filter((r) => r.status === 'PENDING_APPROVAL').length;
-  const flaggedCount = records.filter((r) => r.status === 'DISCREPANCY_FLAGGED').length;
-
   const handleResetFilters = () => {
     setTabFilter('ALL');
     setBranchFilter('ALL');
     setSearchQuery('');
+    setDateMode('all');
   };
 
   // Filter records by selected date
   const dateFilteredRecords = filteredRecords.filter((r) => {
+    if (dateMode === 'all') return true;
     if (!r.date) return true;
-    return r.date === selectedDate;
+    const target = dateMode === 'today' ? demoTodayStr : dateMode === 'yesterday' ? demoYesterdayStr : selectedDate;
+    return r.date === target;
   });
+
+  const pendingCount = dateFilteredRecords.filter((r) => r.status === 'PENDING_APPROVAL').length;
+  const flaggedCount = dateFilteredRecords.filter((r) => r.status === 'DISCREPANCY_FLAGGED').length;
+  const dateModeLabel = dateMode === 'all' ? 'All Dates' : dateMode === 'today' ? 'Today (01 Nov)' : dateMode === 'yesterday' ? 'Yesterday (31 Oct)' : format(new Date(selectedDate), 'dd MMM yyyy');
 
   return (
     <div className="space-y-6 pb-10">
@@ -110,14 +114,21 @@ export function AdminAccountsDailySettlementPage() {
             <div className="flex items-center rounded-lg bg-surface-muted/60 p-1 border border-border/50">
               <button
                 type="button"
-                onClick={() => { setDateMode('today'); setSelectedDate(todayStr); }}
+                onClick={() => setDateMode('all')}
+                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${dateMode === 'all' ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'}`}
+              >
+                All Dates
+              </button>
+              <button
+                type="button"
+                onClick={() => { setDateMode('today'); setSelectedDate(demoTodayStr); }}
                 className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${dateMode === 'today' ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'}`}
               >
                 Today
               </button>
               <button
                 type="button"
-                onClick={() => { setDateMode('yesterday'); setSelectedDate(yesterdayStr); }}
+                onClick={() => { setDateMode('yesterday'); setSelectedDate(demoYesterdayStr); }}
                 className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${dateMode === 'yesterday' ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'}`}
               >
                 Yesterday
@@ -141,7 +152,7 @@ export function AdminAccountsDailySettlementPage() {
               />
             )}
             <div className="text-xs font-medium text-text-secondary border-l border-border/60 pl-2.5 ml-0.5">
-              {format(new Date(selectedDate), 'dd MMM yyyy')}
+              {dateModeLabel}
               <span className="ml-1.5 text-text-muted">· {dateFilteredRecords.length} records</span>
             </div>
           </div>

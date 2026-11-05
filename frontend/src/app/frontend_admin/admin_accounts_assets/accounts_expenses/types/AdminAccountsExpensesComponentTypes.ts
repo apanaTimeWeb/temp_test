@@ -39,6 +39,7 @@ export interface AdminAccountsExpensesHeaderSectionProps {
 export interface AdminAccountsExpensesKpiSectionProps {
   expenses: readonly AdminAccountingExpense[];
   visibleExpenses: readonly AdminAccountingExpense[];
+  timeRangeLabel?: string;
 }
 
 export type AdminAccountsExpensesRouteView = 'list' | 'add';

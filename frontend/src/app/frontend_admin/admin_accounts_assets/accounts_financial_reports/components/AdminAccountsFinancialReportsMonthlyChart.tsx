@@ -16,9 +16,11 @@ const AdminAccountsFinancialReportsApexChart = dynamic(() => import('react-apexc
 });
 
 /** Renders the feature-owned income/expense chart with ApexCharts and currency values stored in paise. */
-export function AdminAccountsFinancialReportsMonthlyChart({ rows }: AdminAccountsFinancialReportsMonthlyChartProps) {
+export function AdminAccountsFinancialReportsMonthlyChart({ rows, period }: AdminAccountsFinancialReportsMonthlyChartProps) {
   const locale = useLocale();
   const t = useTranslations('ADMIN_ACCOUNTING.FINANCIAL_REPORTS');
+  const periodLabel = period === 'quarterly' ? 'Quarterly Breakdown' : period === 'yearly' ? 'Annual Aggregate' : 'Monthly Trend';
+
   const options: ApexOptions = {
     chart: { type: 'bar', toolbar: { show: false }, background: 'transparent', animations: { enabled: false } },
     colors: ['var(--chart-success)', 'var(--chart-danger)'],
@@ -39,7 +41,12 @@ export function AdminAccountsFinancialReportsMonthlyChart({ rows }: AdminAccount
 
   return (
     <section className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card p-6" aria-labelledby="accounting-income-expense-chart-title">
-      <h2 id="accounting-income-expense-chart-title" className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary mb-4">{t('CHART_TITLE')}</h2>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 id="accounting-income-expense-chart-title" className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('CHART_TITLE')}</h2>
+        <span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+          {periodLabel}
+        </span>
+      </div>
       <div role="img" aria-label={t('CHART_ARIA')} className="min-h-64">
         <AdminAccountsFinancialReportsApexChart type="bar" options={options} series={series} height={260} width="100%" />
       </div>

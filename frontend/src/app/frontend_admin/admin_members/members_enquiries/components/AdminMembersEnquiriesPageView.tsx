@@ -63,6 +63,10 @@ export default function AdminEnquiriesPageView() {
 
   const colTimeFiltered = (status: Enquiry['status']) => timeFiltered.filter((e) => e.status === status);
 
+  const timeRangeLabel = useMemo(() => {
+    return timeRange === 'all' ? 'All Time' : timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'this_month' ? 'This Month' : 'Custom Range';
+  }, [timeRange]);
+
   const downloadCsv = () => {
     if (!isDemoMode) {
       toast.error(t('LIVE_EXPORT_UNAVAILABLE'), { id: 'admin_members-members_enquiries-components-AdminMembersEnquiriesPageView-toast-35-1' });
@@ -99,7 +103,7 @@ export default function AdminEnquiriesPageView() {
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('PAGE_TITLE')}</h1>
             <p className="text-sm text-text-secondary">
-              {isDemoMode ? t('DEMO_SUBTITLE', { count: timeFiltered.length }) : t('LIVE_SUBTITLE')}
+              {isDemoMode ? t('DEMO_SUBTITLE', { count: timeFiltered.length }) : t('LIVE_SUBTITLE')} • Range: <span className="font-semibold text-primary">{timeRangeLabel}</span>
             </p>
           </div>
 
@@ -128,14 +132,19 @@ export default function AdminEnquiriesPageView() {
       {/* ── 4 Executive CRM Funnel KPI Cards ── */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {[
-          { label: 'Total Leads', value: totalLeads, icon: Users, color: 'indigo', sub: 'All enquiries in period' },
-          { label: 'New Prospects', value: newProspects, icon: UserCheck, color: 'sky', sub: 'Fresh inbound leads' },
-          { label: 'In Pipeline', value: inPipeline, icon: TrendingUp, color: 'amber', sub: 'Visited + Interested' },
-          { label: 'Conversion Rate', value: `${conversionRate}%`, icon: Target, color: 'emerald', sub: `${converted} admitted` },
-        ].map(({ label, value, icon: Icon, color, sub }) => (
+          { label: 'Total Leads', value: totalLeads, icon: Users, color: 'indigo', sub: `All enquiries in ${timeRangeLabel}`, periodBadge: timeRangeLabel },
+          { label: 'New Prospects', value: newProspects, icon: UserCheck, color: 'sky', sub: `Fresh inbound leads (${timeRangeLabel})`, periodBadge: timeRangeLabel },
+          { label: 'In Pipeline', value: inPipeline, icon: TrendingUp, color: 'amber', sub: `Visited + Interested (${timeRangeLabel})`, periodBadge: timeRangeLabel },
+          { label: 'Conversion Rate', value: `${conversionRate}%`, icon: Target, color: 'emerald', sub: `${converted} admitted in ${timeRangeLabel}`, periodBadge: timeRangeLabel },
+        ].map(({ label, value, icon: Icon, color, sub, periodBadge }) => (
           <div key={label} className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{label}</span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{label}</span>
+                <span className="rounded-md bg-surface-muted px-1.5 py-0.5 text-[10px] font-bold text-primary">
+                  {periodBadge}
+                </span>
+              </div>
               <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${color === 'indigo' ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' : color === 'sky' ? 'bg-sky-500/10 text-sky-600 dark:text-sky-400' : color === 'amber' ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'}`}>
                 <Icon size={17} strokeWidth={2.2} />
               </div>

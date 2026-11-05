@@ -57,6 +57,13 @@ export function AdminFinanceDashboardPage() {
     };
   }, [stats, timeRange, t]);
 
+  // Dynamically filter recent transactions according to active horizon
+  const displayedPayments = useMemo(() => {
+    if (timeRange === 'today') return recentPayments.slice(0, 1);
+    if (timeRange === 'this_week') return recentPayments.slice(0, 3);
+    return recentPayments;
+  }, [recentPayments, timeRange]);
+
   const statCards = computedStats ? [
     {
       label: t('TOTAL_COLLECTIONS'),
@@ -317,12 +324,19 @@ export function AdminFinanceDashboardPage() {
               <Receipt size={17} strokeWidth={2.2} />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-text-primary">{t('RECENT_PAYMENTS')}</h2>
-              <p className="text-xs text-text-secondary">Direct collections & transactions feed</p>
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-text-primary">{t('RECENT_PAYMENTS')}</h2>
+                {computedStats && (
+                  <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                    {computedStats.periodLabel}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-text-secondary">Direct collections & transactions feed for {computedStats?.periodLabel ?? 'period'}</p>
             </div>
           </div>
           <span className="rounded-full bg-surface-muted px-2.5 py-0.5 text-xs font-medium text-text-secondary">
-            {recentPayments.length} entries
+            Showing {displayedPayments.length} of {recentPayments.length} entries
           </span>
         </div>
 
@@ -340,10 +354,13 @@ export function AdminFinanceDashboardPage() {
                   </div>
                 </div>
               ))
-            : recentPayments.length === 0 ? (
-                <div className="p-8 text-center text-sm text-text-muted">{t('EMPTY_PAYMENTS')}</div>
+            : displayedPayments.length === 0 ? (
+                <div className="p-8 text-center text-sm text-text-muted">
+                  <p>{t('EMPTY_PAYMENTS')}</p>
+                  <p className="mt-1 text-xs">No transactions recorded for {computedStats?.periodLabel}. Switch to &apos;This Month&apos; to view all records.</p>
+                </div>
               ) : (
-                recentPayments.map((p) => (
+                displayedPayments.map((p) => (
                   <div key={p.id} className="flex items-center justify-between gap-4 p-4 hover:bg-surface-elevated/40 transition-colors">
                     <div>
                       <div className="text-sm font-semibold text-text-primary">{p.studentName}</div>

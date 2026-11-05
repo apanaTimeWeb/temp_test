@@ -155,6 +155,10 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
     });
   }, [expenses, isAllBranches, selectedBranch, catFilter, statusFilter, searchQuery, timeRange, customStartDate, customEndDate]);
 
+  const timeRangeLabel = useMemo(() => {
+    return timeRange === 'all' ? 'All Time' : timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'this_month' ? 'This Month' : 'Custom Range';
+  }, [timeRange]);
+
   return (
     <div className="space-y-6 pb-10">
       {!isDemoMode && (
@@ -190,7 +194,7 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
         </div>
       </div>
 
-      <AdminAccountsExpensesKpiSection expenses={expenses} visibleExpenses={visibleExpenses} />
+      <AdminAccountsExpensesKpiSection expenses={expenses} visibleExpenses={visibleExpenses} timeRangeLabel={timeRangeLabel} />
       <AdminAccountsExpensesFilterSection
         value={catFilter}
         statusFilter={statusFilter}

@@ -104,6 +104,10 @@ export function AdminFinancePaymentsPage() {
     return branchMatch && modeMatch && deletedMatch && searchMatch && dateMatch;
   }), [allPayments, modeFilter, showDeleted, search, isAllBranches, selectedBranch, timeRange, customStartDate, customEndDate]);
 
+  const timeRangeLabel = useMemo(() => {
+    return timeRange === 'all' ? 'All Time' : timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'this_month' ? 'This Month' : 'Custom Range';
+  }, [timeRange]);
+
   const handleExport = () => {
     const csv = buildAdminFinancePaymentsCsv(visible, { receipt: t('CSV_RECEIPT'), date: t('CSV_DATE'), student: t('CSV_STUDENT'), smartId: t('CSV_SMART_ID'), amount: t('CSV_AMOUNT'), currency: t('CSV_CURRENCY'), amountUnit: t('CSV_AMOUNT_UNIT'), mode: t('CSV_MODE'), lateFee: t('CSV_LATE_FEE'), receivedBy: t('CSV_RECEIVED_BY'), status: t('CSV_STATUS') });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
@@ -144,7 +148,9 @@ export function AdminFinancePaymentsPage() {
               </span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('PAYMENT_TITLE')}</h1>
-            <p className="text-sm text-text-secondary">{t('PAYMENT_SUBTITLE')}</p>
+            <p className="text-sm text-text-secondary">
+              {t('PAYMENT_SUBTITLE')} • Scope: <span className="font-semibold text-primary">{timeRangeLabel}</span>
+            </p>
           </div>
 
           {/* Time Horizon Pill Bar */}
@@ -207,7 +213,7 @@ export function AdminFinancePaymentsPage() {
           {t('SHOW_DELETED')}
         </label>
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-xs text-text-muted">{visible.length} records</span>
+          <span className="text-xs text-text-muted">Showing {visible.length} of {allPayments.length} ({timeRangeLabel})</span>
           <button
             type="button"
             className="inline-flex min-h-9 items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-surface-elevated transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
@@ -235,7 +241,16 @@ export function AdminFinancePaymentsPage() {
       ) : (
         <div className="min-w-0 overflow-hidden rounded-xl border border-border/80 bg-surface shadow-sm">
           <div className="min-w-0 overflow-x-auto rounded-lg border border-border bg-card h-96" aria-busy={false}>
-            <DataGrid rowData={visible} columnDefs={columns} rowHeight={56} pagination pageSize={25} emptyMessage={t('PAYMENT_EMPTY')} page={urlTablePage0} onPageChange={setUrlTablePage0}/>
+            <DataGrid
+              rowData={visible}
+              columnDefs={columns}
+              rowHeight={56}
+              pagination
+              pageSize={25}
+              emptyMessage={visible.length === 0 && allPayments.length > 0 ? `No payments found for ${timeRangeLabel}.` : t('PAYMENT_EMPTY')}
+              page={urlTablePage0}
+              onPageChange={setUrlTablePage0}
+            />
           </div>
           <p className="text-caption text-text-secondary mt-2 px-4 pb-3">{t('MOBILE_PAYMENT_NOTE')}</p>
         </div>

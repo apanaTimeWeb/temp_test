@@ -8,22 +8,48 @@ import type { AdminAccountsFinancialReportsKpiCardsProps } from '@/app/frontend_
 
 
 /** Shows derived totals from the already scoped report-period rows. Values are stored in paise. */
-export function AdminAccountsFinancialReportsKpiCards({ totalIncomeMinor, totalExpenseMinor }: AdminAccountsFinancialReportsKpiCardsProps) {
+export function AdminAccountsFinancialReportsKpiCards({ totalIncomeMinor, totalExpenseMinor, period }: AdminAccountsFinancialReportsKpiCardsProps) {
   const locale = useLocale();
   const t = useTranslations('ADMIN_ACCOUNTING.FINANCIAL_REPORTS');
   const netProfitMinor = totalIncomeMinor - totalExpenseMinor;
+  const periodLabel = period === 'quarterly' ? 'Quarterly' : period === 'yearly' ? 'Yearly' : 'Monthly';
+
   return (
     <section className="grid grid-cols-1 gap-4 md:grid-cols-3" aria-label={t('REPORT_TOTALS')}>
       <div className="rounded-xl border border-border bg-card p-5 shadow-card">
-        <div className="mb-2 flex items-center justify-between gap-3 text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary"><p className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_INCOME')}</p><TrendingUp size={18} className="text-success-text" strokeWidth={2} /></div>
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_INCOME')}</span>
+            <span className="rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+              {periodLabel}
+            </span>
+          </div>
+          <TrendingUp size={18} className="text-success-text" strokeWidth={2} />
+        </div>
         <p className="mt-2 text-kpi font-bold text-text-primary text-success-text">{formatAdminAccountingCurrency(totalIncomeMinor, locale)}</p>
       </div>
       <div className="rounded-xl border border-border bg-card p-5 shadow-card border-danger-bg bg-danger-bg">
-        <div className="mb-2 flex items-center justify-between gap-3 text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary"><p className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_EXPENSES')}</p><TrendingDown size={18} className="text-danger-text" strokeWidth={2} /></div>
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_EXPENSES')}</span>
+            <span className="rounded-md bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-bold text-rose-600 dark:text-rose-400">
+              {periodLabel}
+            </span>
+          </div>
+          <TrendingDown size={18} className="text-danger-text" strokeWidth={2} />
+        </div>
         <p className="mt-2 text-kpi font-bold text-text-primary text-danger-text">{formatAdminAccountingCurrency(totalExpenseMinor, locale)}</p>
       </div>
       <div className="rounded-xl border border-border bg-card p-5 shadow-card">
-        <div className="mb-2 flex items-center justify-between gap-3 text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary"><p className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('NET_PROFIT')}</p><BarChart2 size={18} strokeWidth={2} className="text-text-secondary" /></div>
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('NET_PROFIT')}</span>
+            <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">
+              {periodLabel}
+            </span>
+          </div>
+          <BarChart2 size={18} strokeWidth={2} className="text-text-secondary" />
+        </div>
         <p className={`mt-2 text-kpi font-bold text-text-primary ${netProfitMinor >= 0 ? 'text-success-text' : 'text-danger-text'}`}>{formatAdminAccountingCurrency(netProfitMinor, locale)}</p>
       </div>
     </section>

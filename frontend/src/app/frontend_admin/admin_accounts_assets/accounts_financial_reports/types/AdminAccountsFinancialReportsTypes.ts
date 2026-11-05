@@ -16,10 +16,12 @@ export interface AdminAccountsFinancialReportsDashboardProps {
 export interface AdminAccountsFinancialReportsKpiCardsProps {
   totalIncomeMinor: number;
   totalExpenseMinor: number;
+  period?: AdminAccountingFinancialReportPeriod;
 }
 
 export interface AdminAccountsFinancialReportsMonthlyChartProps {
   rows: readonly AdminAccountingFinancialReportPeriodRow[];
+  period?: AdminAccountingFinancialReportPeriod;
 }
 
 export interface AdminAccountsFinancialReportsHarnessProps {
