@@ -35,6 +35,12 @@ export const AdminPlansFormSchema = z.object({
     .refine((value) => /^\d+$/.test(value) && Number(value) >= 1 && Number.isSafeInteger(Number(value)), 'VALIDATION.DURATION_DAYS_INVALID'),
   features: z.string().max(4000, 'VALIDATION.FEATURES_TOO_LONG'),
   branchApplicability: z.string().optional(),
+  morningRate: z.string().optional(),
+  afternoonRate: z.string().optional(),
+  eveningRate: z.string().optional(),
+  nightRate: z.string().optional(),
+  fullDayRate: z.string().optional(),
+  multiShiftDiscount: z.string().optional(),
 });
 
 export type AdminPlansFormValues = z.infer<typeof AdminPlansFormSchema>;

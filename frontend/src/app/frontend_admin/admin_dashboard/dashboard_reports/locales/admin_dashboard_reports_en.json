@@ -89,6 +89,7 @@
     "KPI_TREND_PROFIT": "18% vs last month",
     "KPI_TREND_STUDENTS": "8% vs last month",
     "SHIFT_MORNING": "Morning",
+    "SHIFT_AFTERNOON": "Afternoon",
     "SHIFT_EVENING": "Evening",
     "SHIFT_NIGHT": "Night",
     "SHIFT_FULL_DAY": "Full day",

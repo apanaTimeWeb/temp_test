@@ -18,6 +18,7 @@ export function createAdminEnquiriesAddEnquirySchema(t: AdminEnquiriesValidation
     name: z.string().min(2, t('VALIDATION_NAME_MIN')),
     phone: z.string().min(10, t('VALIDATION_PHONE_REQUIRED')).regex(/^\d{10}$/, t('VALIDATION_PHONE_FORMAT')),
     preferredShift: z.string().optional(),
+    preferredBranch: z.string().optional(),
     source: z.preprocess((value) => value === '' ? undefined : value, z.enum(ADMIN_ENQUIRIES_ENQUIRY_SOURCE_VALUES).optional()),
     handledBy: z.string().optional(),
     notes: z.string().optional(),

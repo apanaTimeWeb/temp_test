@@ -204,6 +204,11 @@ const suite0_jsonFixture = {
       "token": "chart-primary"
     },
     {
+      "name": "Afternoon",
+      "value": 78,
+      "token": "chart-warning"
+    },
+    {
       "name": "Evening",
       "value": 90,
       "token": "chart-success"

@@ -27,7 +27,7 @@ function fmtH(h: number) {
 export function AdminShiftsShiftGapPage() {
   const t = useTranslations('ADMIN_SHIFTS');
   const isDemoMode = isFrontendDemoModeEnabled();
-  const [shiftFilter, setShiftFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('shiftFilter', 'All', { validValues: ['All', 'Morning', 'Afternoon', 'Evening'] });
+  const [shiftFilter, setShiftFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('shiftFilter', 'All', { validValues: ['All', 'Morning', 'Afternoon', 'Evening', 'Night', 'Full Day'] });
 
   const visible = shiftFilter === 'All' ? ADMIN_SHIFTS_DEMO_SHIFT_GAPS : ADMIN_SHIFTS_DEMO_SHIFT_GAPS.filter((shift) => shift.name === shiftFilter);
 

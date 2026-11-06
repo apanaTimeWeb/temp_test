@@ -16,6 +16,7 @@ import AdminMembersMemberTable from '@/app/frontend_admin/admin_members/members_
 import AdminMembersDirectoryBulkWhatsAppModal from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryBulkWhatsAppModal';
 import AdminMembersDirectoryDataToolsView from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDataToolsView';
 import AdminMembersDirectorySecondaryViews from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectorySecondaryViews';
+import { AdminMembersDirectoryMemberDetailCard } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberDetailCard';
 import type { AdminMembersDirectoryDataToolsViewProps, AdminMembersDirectoryViewProps, AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps, AdminMembersExportStatusFilter } from '@/app/frontend_admin/admin_members/members_directory/types/AdminMembersDirectoryComponentTypes';
 
 export default function AdminMembersDirectoryView({ model }: AdminMembersDirectoryViewProps) {
@@ -243,48 +244,14 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
           )}
 
           {/* -------------------- DETAILED MEMBER VIEW -------------------- */}
-          {model.viewingMember && (() => {
-            const member = model.viewingMember;
-            const detailLabels = { profile: t('DETAIL_PROFILE'), attendance: t('DETAIL_ATTENDANCE'), membership: t('DETAIL_MEMBERSHIP'), renewalHistory: t('DETAIL_RENEWAL_HISTORY'), paymentHistory: t('DETAIL_PAYMENT_HISTORY'), lostHistory: t('DETAIL_LOST_HISTORY'), activityHistory: t('DETAIL_ACTIVITY_HISTORY'), documents: t('DETAIL_DOCUMENTS') } as const;
-            const status = t(({ Active: 'STATUS_ACTIVE', Expired: 'STATUS_EXPIRED', Suspended: 'STATUS_SUSPENDED', Blocked: 'STATUS_BLOCKED' } as const)[member.status] ?? 'STATUS_UNKNOWN');
-            const expiryDate = formatAdminMembersDate(member.expiryDate, locale, t('UNKNOWN_DATE'));
-            const unavailable = <p className="rounded-md border border-warning-bg bg-warning-bg p-4 text-warning-text" role="status">{t('DETAIL_API_UNAVAILABLE', { section: detailLabels[model.detailTab] ?? t('DETAIL_TAB_UNKNOWN') })}</p>;
-            return <section className="admin-card mt-4 p-5"><div className="mb-5 flex flex-wrap items-start justify-between gap-4"><div><h2 className="text-lg font-semibold">{member.name}</h2><p className="text-sm text-text-secondary">{member.id}</p></div><button type="button" className="admin-btn-ghost disabled:cursor-not-allowed disabled:opacity-50" disabled={!model.isDemoMode} title={!model.isDemoMode ? t('MEMBER_EDIT_UNAVAILABLE') : undefined} onClick={() => model.handleAction('EDIT', member)}>{t('ACTION_EDIT_MEMBER')}</button></div>
-              {model.detailTab === 'profile' ? <div className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="flex items-start gap-3"><UserRound size={18} aria-hidden="true"/><div><p className="text-sm text-text-secondary">{t('DETAIL_CONTACT')}</p><p>{member.email}</p><p>{member.phone}</p></div></div>
-                  <div className="flex items-start gap-3"><CreditCard size={18} aria-hidden="true"/><div><p className="text-sm text-text-secondary">{t('DETAIL_MEMBERSHIP')}</p><p>{member.plan}</p><p>{t('DETAIL_STATUS_PREFIX', { status })}</p><p>{t('DETAIL_EXPIRY_PREFIX', { expiry: expiryDate })}</p></div></div>
-                  <div className="flex items-start gap-3"><Armchair size={18} aria-hidden="true"/><div><p className="text-sm text-text-secondary">Seat & Shift</p><p className="font-semibold text-text-primary text-sm">{member.seat ? `Seat: ${member.seat}` : 'Seat: Unassigned'}</p><p className="text-xs text-text-secondary">Shift: {member.shift || 'General'}</p><p className="text-xs text-text-secondary">Locker: {member.locker || '—'}</p></div></div>
-                  <div className="flex items-start gap-3"><IndianRupee size={18} aria-hidden="true"/><div><p className="text-sm text-text-secondary">Fee Status</p><p className={member.feeStatus === 'Due' ? 'text-danger-text font-semibold text-sm' : 'text-success-text font-semibold text-sm'}>{member.feeStatus || 'Paid'}</p>{member.totalPaidMinor !== undefined && <p className="text-xs text-text-secondary">Paid: ₹{((member.totalPaidMinor || 0) / 100).toLocaleString('en-IN')}</p>}{member.dueFeeMinor !== undefined && member.dueFeeMinor > 0 && <p className="text-xs text-danger-text font-medium">Due: ₹{((member.dueFeeMinor || 0) / 100).toLocaleString('en-IN')}</p>}</div></div>
-                  {member.branch && <div className="flex items-start gap-3"><Users size={18} aria-hidden="true"/><div><p className="text-sm text-text-secondary">Branch</p><p className="font-medium text-text-primary text-sm">{member.branch}</p></div></div>}
-                </div>
-                <div className="flex flex-wrap items-center gap-3 border-t border-border pt-4">
-                  {member.phone && (
-                    <a
-                      href={`https://wa.me/${member.phone.replace(/[^0-9]/g, '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="admin-btn-ghost inline-flex min-h-11 items-center gap-1.5 text-success-text hover:text-success-text"
-                    >
-                      <MessageSquare size={16} aria-hidden="true"/> WhatsApp
-                    </a>
-                  )}
-                  {member.status === 'Active' && (
-                    <button
-                      type="button"
-                      className="admin-btn-ghost inline-flex min-h-11 items-center gap-1.5 text-warning-text hover:text-warning-text"
-                      onClick={() => toast.info(`Member status change requested for ${member.name}`)}
-                    >
-                      <ShieldAlert size={16} aria-hidden="true"/> Suspend
-                    </button>
-                  )}
-                </div>
-              </div>
-              : model.detailTab === 'membership' ? <div className="flex items-start gap-3"><CalendarClock size={18} aria-hidden="true"/><div><h3 className="font-medium">{t('DETAIL_CURRENT_MEMBERSHIP')}</h3><p>{member.plan}</p><p>{t('DETAIL_STATUS_PREFIX', { status })}</p><p>{t('DETAIL_EXPIRY_PREFIX', { expiry: expiryDate })}</p></div></div>
-              : model.detailTab === 'documents' ? <div className="flex items-start gap-3"><FileText size={18} aria-hidden="true"/><div><h3 className="font-medium">{t('DETAIL_MEMBER_DOCUMENTS')}</h3>{unavailable}</div></div>
-              : model.detailTab === 'attendance' ? <div className="flex items-start gap-3"><Activity size={18} aria-hidden="true"/><div><h3 className="font-medium">{t('DETAIL_ATTENDANCE_HISTORY')}</h3>{unavailable}</div></div> : unavailable}
-            </section>;
-          })()}
+          {model.viewingMember && (
+            <AdminMembersDirectoryMemberDetailCard
+              member={model.viewingMember}
+              detailTab={model.detailTab}
+              isDemoMode={isDemoMode}
+              onEdit={(member) => model.handleAction('EDIT', member)}
+            />
+          )}
 
       </div>;
 }

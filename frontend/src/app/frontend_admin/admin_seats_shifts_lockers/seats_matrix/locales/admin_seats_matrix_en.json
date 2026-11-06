@@ -64,6 +64,7 @@
     "morning": "Morning",
     "afternoon": "Afternoon",
     "evening": "Evening",
+    "night": "Night",
     "fullDay": "Full Day",
     "allStatuses": "All Statuses",
     "active": "Active",

@@ -40,6 +40,7 @@ export const ADMIN_DASHBOARD_REPORTS_ANALYTICS_FIXTURE: AdminDashboardReportsAna
   },
   shiftOccupancy: [
     { name: 'Morning', value: 85, token: 'chart-primary' },
+    { name: 'Afternoon', value: 78, token: 'chart-warning' },
     { name: 'Evening', value: 90, token: 'chart-success' },
     { name: 'Night', value: 70, token: 'chart-warning' },
     { name: 'Full Day', value: 95, token: 'chart-info' },

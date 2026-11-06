@@ -27,7 +27,7 @@ export const ADMIN_SEAT_MATRIX_STATUS = {
   MAINTENANCE: "maintenance",
 } as const;
 
-export const ADMIN_SEAT_MATRIX_SHIFTS = ["All", "Morning", "Evening", "Full Day"] as const;
+export const ADMIN_SEAT_MATRIX_SHIFTS = ["All", "Morning", "Afternoon", "Evening", "Night", "Full Day"] as const;
 export const ADMIN_SEAT_MATRIX_SEAT_STATUS_BADGE_CLASS = {
   Working: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium border-success-text bg-success-bg text-success-text',
   Maintenance: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium border-warning-text bg-warning-bg text-warning-text',
@@ -56,7 +56,9 @@ export const ADMIN_SEAT_MATRIX_ALLOCATION_FEE_STATUS_BADGE_CLASS = {
 
 export const ADMIN_SEAT_MATRIX_SHIFT_BADGE_CLASS = {
   Morning: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium border-primary bg-primary-subtle text-primary',
+  Afternoon: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium border-warning-text bg-warning-bg text-warning-text',
   Evening: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium border-success-text bg-success-bg text-success-text',
+  Night: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium border-purple-text bg-purple-bg text-purple-text',
   'Full Day': 'inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium border-info-text bg-info-bg text-info-text',
 } as const;
 

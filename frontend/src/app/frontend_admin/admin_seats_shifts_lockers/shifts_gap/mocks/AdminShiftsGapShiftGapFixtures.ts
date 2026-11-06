@@ -35,6 +35,26 @@ export const ADMIN_SHIFTS_DEMO_SHIFT_GAPS: readonly AdminShiftsShiftGapFixture[]
     ],
     gaps: [{ startH: 19, endH: 21, seats: 8, revLoss: 800 }],
   },
+  {
+    id: '4',
+    name: 'Night',
+    occupied: 12,
+    capacity: 30,
+    booked: [
+      { startH: 22, endH: 24, label: 'Night Owls (12 students)' },
+    ],
+    gaps: [{ startH: 23, endH: 24, seats: 5, revLoss: 500 }],
+  },
+  {
+    id: '5',
+    name: 'Full Day',
+    occupied: 35,
+    capacity: 50,
+    booked: [
+      { startH: 6, endH: 22, label: 'Full Day Dedicated (35 students)' },
+    ],
+    gaps: [{ startH: 14, endH: 16, seats: 4, revLoss: 400 }],
+  },
 ];
 
 export const ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS: readonly AdminShiftOverstayIncident[] = [
