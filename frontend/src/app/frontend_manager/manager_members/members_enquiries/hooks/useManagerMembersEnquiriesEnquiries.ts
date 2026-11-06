@@ -120,6 +120,50 @@ export function useManagerMembersEnquiries() {
     return { total, newLeads, visited, interested, converted, lost, activePipeline, conversionRate };
   }, [filtered]);
 
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkWhatsAppModalOpen, setBulkWhatsAppModalOpen] = useState(false);
+
+  const toggleSelectOne = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    setSelectedIds((prev) => {
+      const allFilteredIds = filtered.map((e) => e.id);
+      const allSelected = allFilteredIds.length > 0 && allFilteredIds.every((id) => prev.includes(id));
+      if (allSelected) {
+        return prev.filter((id) => !allFilteredIds.includes(id));
+      }
+      return Array.from(new Set([...prev, ...allFilteredIds]));
+    });
+  };
+
+  const selectByStatus = (status: ManagerMembersEnquiriesEnquiryStatus) => {
+    const statusIds = filtered.filter((e) => e.status === status).map((e) => e.id);
+    setSelectedIds((prev) => {
+      const allSelected = statusIds.length > 0 && statusIds.every((id) => prev.includes(id));
+      if (allSelected) {
+        return prev.filter((id) => !statusIds.includes(id));
+      }
+      return Array.from(new Set([...prev, ...statusIds]));
+    });
+  };
+
+  const selectAllFiltered = () => {
+    setSelectedIds(filtered.map((e) => e.id));
+  };
+
+  const clearSelection = () => {
+    setSelectedIds([]);
+  };
+
+  const selectedEnquiries = useMemo(
+    () => (query.data ?? []).filter((e) => selectedIds.includes(e.id)),
+    [query.data, selectedIds]
+  );
+
   const getCardsByStatus = (status: ManagerMembersEnquiriesEnquiryStatus): ManagerMembersEnquiriesEnquiry[] =>
     filtered.filter((enquiry) => enquiry.status === status);
 
@@ -140,5 +184,15 @@ export function useManagerMembersEnquiries() {
     setCustomEndDate,
     stats,
     getCardsByStatus,
+    selectedIds,
+    setSelectedIds,
+    selectedEnquiries,
+    bulkWhatsAppModalOpen,
+    setBulkWhatsAppModalOpen,
+    toggleSelectOne,
+    toggleSelectAll,
+    selectByStatus,
+    selectAllFiltered,
+    clearSelection,
   };
 }

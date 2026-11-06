@@ -54,4 +54,29 @@ export interface ManagerDashboardOverviewSeatMatrixProps {
   seatData: ManagerDashboardOverviewSeatData[];
 }
 
+export interface ManagerDashboardOverviewLiveShiftBarProps {
+  currentShiftName?: string;
+  shiftTiming?: string;
+  timeRemaining?: string;
+  activeOccupancy?: number;
+  totalCapacity?: number;
+  overstayCount?: number;
+  timeRangeLabel?: string;
+}
+
+export interface ManagerDashboardOverviewCashDrawerCardProps {
+  cashInDrawer?: number;
+  digitalCollections?: number;
+  totalCollections?: number;
+  settlementStatus?: 'pending' | 'verified';
+  timeRangeLabel?: string;
+}
+
+export interface ManagerDashboardOverviewOperationalAlertsProps {
+  dropoutRiskCount?: number;
+  facilityTicketsCount?: number;
+  hotLeadsCount?: number;
+  timeRangeLabel?: string;
+}
+
 export type ManagerDashboardOverviewTrendTone = 'up' | 'down' | 'neutral';

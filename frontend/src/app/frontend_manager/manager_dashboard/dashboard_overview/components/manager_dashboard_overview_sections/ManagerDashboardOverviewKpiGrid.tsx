@@ -85,7 +85,7 @@ export function ManagerDashboardOverviewKpiGrid({
     switch (title) {
       case 'Total Students':
       case 'Total Members':
-        return 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+        return 'bg-warning-bg text-warning border-border';
       case 'Attendance Today':
       case 'Today Attendance':
         return 'bg-success-bg text-success border-border';
@@ -161,9 +161,9 @@ export function ManagerDashboardOverviewKpiGrid({
                   <span
                     className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                       tone === 'up'
-                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                        ? 'bg-success-bg text-success border border-border'
                         : tone === 'down'
-                        ? 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20'
+                        ? 'bg-danger-bg text-danger border border-border'
                         : 'bg-muted text-muted-foreground border border-border'
                     }`}
                   >
@@ -173,7 +173,7 @@ export function ManagerDashboardOverviewKpiGrid({
                   </span>
                   <ChevronRight
                     size={15}
-                    className="text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0"
+                    className="text-muted-foreground opacity-40 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0"
                   />
                 </div>
               </div>
@@ -193,7 +193,7 @@ export function ManagerDashboardOverviewKpiGrid({
               </div>
             </div>
 
-            <div className="mt-3 pt-3 border-t border-border/50">
+            <div className="mt-3 pt-3 border-t border-border">
               {isSeats ? (
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground">
@@ -205,7 +205,7 @@ export function ManagerDashboardOverviewKpiGrid({
                   </div>
                 </div>
               ) : (
-                <p className="text-[11px] text-muted-foreground/80 flex items-center justify-between">
+                <p className="text-[11px] text-muted-foreground flex items-center justify-between">
                   <span>{getKpiSubtitle(kpi.title)}</span>
                   <span className="text-primary font-medium group-hover:underline">View →</span>
                 </p>

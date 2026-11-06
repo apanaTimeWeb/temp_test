@@ -6,21 +6,16 @@ import { toast } from 'sonner';
 
 import {
   Armchair, Award, CheckCircle, Clock, ExternalLink, FileText, GraduationCap,
-  Layers, Lock, Mail, MapPin, Pencil, Phone, Search, ShieldCheck, User, Users, ArrowLeft
+  Layers, Lock, Mail, MapPin, Pencil, Phone, Search, ShieldCheck, User, Users, ArrowLeft, MessageSquare
 } from 'lucide-react';
 
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
+import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 import { ManagerMembersDirectoryEditModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryEditModal';
+import { ManagerMembersDirectoryExtendedCards } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryExtendedCards';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 import type { ManagerMembersDirectoryProfileSectionProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
 export type { ManagerMembersDirectoryProfileSectionProps };
-
-function formatKnownIsoCalendarDate(value: string, locale: string): string {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  if (!match) return value;
-  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-  return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(date);
-}
 
 export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchChange, member, onUpdateMember, initialEdit, onBack }: ManagerMembersDirectoryProfileSectionProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
@@ -31,6 +26,20 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
     onUpdateMember?.(updated);
     setIsEditModalOpen(false);
     toast.success(`Profile for ${updated.name} (${updated.id}) updated successfully!`);
+  };
+
+  const handleWhatsAppMember = () => {
+    if (!member) return;
+    const cleanPhone = member.phone.replace(/\D/g, '');
+    const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+    const text = encodeURIComponent(
+      `Hello ${member.name},\nThis is Central Library Management regarding your membership (${member.id} • ${member.type} Plan).\n` +
+      `Assigned Seat: ${member.seat || 'General Study'} • Shift: ${member.shift || 'Morning'}.\n\n` +
+      `How may we assist you today?\n— Central Library Administration`
+    );
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    if (popup) popup.opener = null;
+    toast.success(`WhatsApp opened for ${member.name} (+91 ${cleanPhone})`);
   };
 
   const membershipTypeLabels: Record<string, string> = { Basic: tManagerUi('basic'), Pro: tManagerUi('pro'), Enterprise: tManagerUi('enterprise') };
@@ -75,15 +84,26 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
               <div>
                 <div className="flex items-start justify-between gap-3 mb-1">
                   <h3 className="text-2xl font-black text-primary">{member.name}</h3>
-                  <button
-                    type="button"
-                    onClick={() => setIsEditModalOpen(true)}
-                    className="mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5 shrink-0"
-                    title="Edit Member Profile"
-                  >
-                    <Pencil size={13} />
-                    <span>Edit Profile</span>
-                  </button>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={handleWhatsAppMember}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                      title="Send WhatsApp message"
+                    >
+                      <MessageSquare size={13} />
+                      <span>WhatsApp</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsEditModalOpen(true)}
+                      className="mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5"
+                      title="Edit Member Profile"
+                    >
+                      <Pencil size={13} />
+                      <span>Edit Profile</span>
+                    </button>
+                  </div>
                 </div>
                 <p className="text-sm text-info font-bold mb-4">{member.id} • {membershipTypeLabel} {tManagerUi('plan')}</p>
                 <div className="space-y-2 text-sm">
@@ -100,11 +120,11 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-card p-2 rounded-lg">
                     <span className="text-xs text-secondary block">{tManagerUi('joined')}</span>
-                    <span className="text-primary font-semibold">{formatKnownIsoCalendarDate(member.joinDate, locale)}</span>
+                    <span className="text-primary font-semibold">{formatManagerMemberDirectoryCalendarDate(member.joinDate, locale)}</span>
                   </div>
                   <div className="bg-card p-2 rounded-lg">
                     <span className="text-xs text-secondary block">{tManagerUi('expires')}</span>
-                    <span className="text-primary font-semibold">{formatKnownIsoCalendarDate(member.expiryDate, locale)}</span>
+                    <span className="text-primary font-semibold">{formatManagerMemberDirectoryCalendarDate(member.expiryDate, locale)}</span>
                   </div>
                 </div>
               </div>
@@ -112,104 +132,10 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
           </div>
 
           {/* New Admission Extended Details Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Seat & Shift Details */}
-            <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
-              <div className="flex items-center justify-between border-b border-border pb-2">
-                <h4 className="font-bold text-primary flex items-center gap-2 text-sm">
-                  <Armchair size={16} className="text-primary" /> Seat & Shift Allotment
-                </h4>
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(true)}
-                  className="text-xs text-info hover:text-info-hover font-semibold inline-flex items-center gap-1"
-                  title="Change Seat, Shift, or Locker"
-                >
-                  <Pencil size={11} /> Edit
-                </button>
-              </div>
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary flex items-center gap-1.5"><Armchair size={14} /> Assigned Seat:</span>
-                  <span className="font-bold text-primary bg-primary-subtle px-2 py-0.5 rounded">{member.seat || 'S-01'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary flex items-center gap-1.5"><Clock size={14} /> Shift Timing:</span>
-                  <span className="font-semibold text-primary">{member.shift || 'Morning (06:00 AM – 02:00 PM)'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary flex items-center gap-1.5"><Layers size={14} /> Floor:</span>
-                  <span className="font-medium text-primary">{member.floor || '1st Floor (General Study)'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary flex items-center gap-1.5"><Lock size={14} /> Locker:</span>
-                  <span className="font-medium text-primary">{member.locker || 'L-04 (Assigned)'}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Parent & Guardian Information */}
-            <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
-              <div className="flex items-center justify-between border-b border-border pb-2">
-                <h4 className="font-bold text-primary flex items-center gap-2 text-sm">
-                  <User size={16} className="text-info" /> Guardian & Family Info
-                </h4>
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(true)}
-                  className="text-xs text-info hover:text-info-hover font-semibold inline-flex items-center gap-1"
-                  title="Edit Guardian Details"
-                >
-                  <Pencil size={11} /> Edit
-                </button>
-              </div>
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary">Parent / Guardian:</span>
-                  <span className="font-bold text-primary">{member.guardian || 'Ramesh Sharma (Father)'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary">Guardian Contact:</span>
-                  <span className="font-mono text-primary">{member.emergencyContact || '9811223344'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary">Gender:</span>
-                  <span className="font-medium text-primary">{member.gender || 'Male'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary">Date of Birth:</span>
-                  <span className="font-medium text-primary">{member.dob || '1998-04-12'}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Academic & Goal Preparation */}
-            <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
-              <div className="flex items-center justify-between border-b border-border pb-2">
-                <h4 className="font-bold text-primary flex items-center gap-2 text-sm">
-                  <GraduationCap size={16} className="text-success" /> Academic & Target Goal
-                </h4>
-                <button
-                  type="button"
-                  onClick={() => setIsEditModalOpen(true)}
-                  className="text-xs text-info hover:text-info-hover font-semibold inline-flex items-center gap-1"
-                  title="Edit Academic Goal"
-                >
-                  <Pencil size={11} /> Edit
-                </button>
-              </div>
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary">Target Preparation:</span>
-                  <span className="font-bold text-success bg-success-bg px-2 py-0.5 rounded">{member.preparationFor || 'UPSC Civil Services'}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-secondary">Study Stream:</span>
-                  <span className="font-medium text-primary">General Studies & Research</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ManagerMembersDirectoryExtendedCards
+            member={member}
+            onEdit={() => setIsEditModalOpen(true)}
+          />
 
           {/* Referral Rewards & Bonus Banner (Consolidated from Sidebar) */}
           <div className="p-5 rounded-2xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">

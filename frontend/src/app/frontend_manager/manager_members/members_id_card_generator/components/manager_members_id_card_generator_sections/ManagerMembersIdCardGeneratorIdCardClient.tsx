@@ -14,6 +14,7 @@ import type { ManagerStudent } from '@/app/frontend_manager/manager_members/memb
 import {MANAGER_STUDENT_STATUS_ACTIVE, MANAGER_STUDENT_STATUS_SUSPENDED, MANAGER_MEMBERS_ID_CARD_GENERATOR_SEARCH_DEBOUNCE_MS} from '@/app/frontend_manager/manager_members/members_id_card_generator/constants/ManagerMembersIdCardGeneratorConstants';
 import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import { ManagerMembersIdCardGeneratorEmptyState } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_empty_states/ManagerMembersIdCardGeneratorEmptyState';
+import { ManagerMembersIdCardBulkDispatchModal } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardBulkDispatchModal';
 
 export function ManagerMembersIdCardGeneratorIdCardClient() {
   const tManagerUi = useTranslations('manager.manager_id_card_generator.ui');
@@ -24,6 +25,8 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   const searchParams = useSearchParams();
   const requestedId = searchParams.get('id')?.trim() ?? '';
   const [selectedId, setSelectedId] = useState(requestedId);
+  const [bulkSelectedIds, setBulkSelectedIds] = useState<string[]>([]);
+  const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   // Dependency rationale: the URL id is canonical, so external URL changes must refresh the selected card.
   useEffect(() => {
     if (requestedId) {
@@ -50,6 +53,26 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
     return students.filter((student) => !value || student.name.toLowerCase().includes(value) || student.smartId.toLowerCase().includes(value) || student.phone.toLowerCase().includes(value));
   }, [students, debouncedSearch]);
   const selected = useMemo(() => students.find((student) => student.smartId === selectedId), [students, selectedId]);
+
+  const bulkStudents = useMemo(
+    () => students.filter((s) => bulkSelectedIds.includes(s.smartId)),
+    [students, bulkSelectedIds]
+  );
+
+  const toggleSelectOne = (smartId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setBulkSelectedIds((prev) =>
+      prev.includes(smartId) ? prev.filter((id) => id !== smartId) : [...prev, smartId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (bulkSelectedIds.length === filtered.length) {
+      setBulkSelectedIds([]);
+    } else {
+      setBulkSelectedIds(filtered.map((s) => s.smartId));
+    }
+  };
   const cardData: IdCardData | null = useMemo(() => {
     if (!selected) return null;
     return {
@@ -91,16 +114,72 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
       <div className="mgr-idcard-page-layout">
         <div>
           <div className="mgr-card">
-            <div className="mgr-card-header"><h2 className="mgr-section-title"><IdCard size={18} strokeWidth={2} /> {tManagerUi('select_student')}</h2>{selected && <span className="mgr-badge mgr-badge--success"><CheckCircle2 size={18} strokeWidth={2} /> {selected.name}</span>}</div>
+            <div className="mgr-card-header flex items-center justify-between">
+              <h2 className="mgr-section-title"><IdCard size={18} strokeWidth={2} /> {tManagerUi('select_student')}</h2>
+              <div className="flex items-center gap-2">
+                {bulkSelectedIds.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setIsBulkModalOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                    title="Send selected ID cards via WhatsApp"
+                  >
+                    <MessageSquare size={13} />
+                    <span>Bulk WhatsApp ({bulkSelectedIds.length})</span>
+                  </button>
+                )}
+                {selected && <span className="mgr-badge mgr-badge--success"><CheckCircle2 size={18} strokeWidth={2} /> {selected.name}</span>}
+              </div>
+            </div>
             <div className="mgr-card-body">
-              <div className="mgr-input-icon-wrap mgr-input-spacing"><Search size={18} strokeWidth={2} className="mgr-input-icon" /><label className="sr-only" htmlFor="manager-id-card-search">{tManagerUi('search_students')}</label><input id="manager-id-card-search" className="mgr-input mgr-input-with-icon" placeholder={tManagerUi('search_name_smart_id_phone')} value={search} onChange={(event) => setSearch(event.target.value)} /></div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="mgr-input-icon-wrap flex-1">
+                  <Search size={18} strokeWidth={2} className="mgr-input-icon" />
+                  <label className="sr-only" htmlFor="manager-id-card-search">{tManagerUi('search_students')}</label>
+                  <input id="manager-id-card-search" className="mgr-input mgr-input-with-icon" placeholder={tManagerUi('search_name_smart_id_phone')} value={search} onChange={(event) => setSearch(event.target.value)} />
+                </div>
+                {filtered.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={toggleSelectAll}
+                    className="px-2.5 py-2 text-xs font-semibold rounded-lg border border-border bg-surface hover:bg-surface-hover text-secondary whitespace-nowrap transition-colors"
+                  >
+                    {bulkSelectedIds.length === filtered.length ? 'Deselect All' : 'Select All'}
+                  </button>
+                )}
+              </div>
               {requestedId && !isPending && !selected && <p className="mgr-input-hint" role="alert" data-testid="manager-student-id-card-request-not-found">{tManagerUi('no_loaded_student_matches_the_requested_smart_id')}{requestedId}{tManagerUi('no_other_student_s_card_has_been_selected')}</p>}
               <div className="mgr-idcard-student-list">
                 {isPending ? <div className="mgr-loading-state">{tManagerUi('loading_students_522ba5')}</div> : filtered.length === 0 ? <ManagerMembersIdCardGeneratorEmptyState className="mgr-empty-state"><div className="mgr-empty-icon"><Search size={36} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_students_found')}</p></ManagerMembersIdCardGeneratorEmptyState> : filtered.map((student: ManagerStudent) => {
                   const initials = student.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase();
                   const statusLabel = student.status === MANAGER_STUDENT_STATUS_ACTIVE ? tManagerUi('status_active') : student.status === MANAGER_STUDENT_STATUS_SUSPENDED ? tManagerUi('status_suspended') : tManagerUi('status_expired');
                   const shiftLabels: Record<string, string> = { Morning: tManagerUi('shift_morning'), Afternoon: tManagerUi('shift_afternoon'), Evening: tManagerUi('shift_evening'), Night: tManagerUi('shift_night'), 'Full Day': tManagerUi('shift_full_day') };
-                  return <button type="button" key={student.smartId} onClick={() => selectStudent(student.smartId)} className={`mgr-idcard-student-row${student.smartId === selectedId ? ' mgr-idcard-student-row--active' : ''}`} aria-pressed={student.smartId === selectedId}><div className="mgr-avatar-sm">{initials}</div><div className="mgr-idcard-student-info"><p className="mgr-cell-name">{student.name}</p><p className="mgr-cell-sub">{student.smartId} · {shiftLabels[student.shift] ?? student.shift} · {student.seat}</p></div><span className={student.status === MANAGER_STUDENT_STATUS_ACTIVE ? 'mgr-badge mgr-badge--success' : student.status === MANAGER_STUDENT_STATUS_SUSPENDED ? 'mgr-badge mgr-badge--warning' : 'mgr-badge mgr-badge--danger'}>{statusLabel}</span></button>;
+                  const isChecked = bulkSelectedIds.includes(student.smartId);
+                  return (
+                    <div
+                      key={student.smartId}
+                      onClick={() => selectStudent(student.smartId)}
+                      className={`mgr-idcard-student-row flex items-center gap-2 cursor-pointer${student.smartId === selectedId ? ' mgr-idcard-student-row--active' : ''}${isChecked ? ' bg-primary-subtle' : ''}`}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') selectStudent(student.smartId); }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={(e) => toggleSelectOne(student.smartId, e as unknown as React.MouseEvent)}
+                        onClick={(e) => e.stopPropagation()}
+                        className="rounded border-border text-primary focus:ring-primary h-4 w-4 shrink-0"
+                        aria-label={`Select ${student.name} for bulk ID card dispatch`}
+                      />
+                      <div className="mgr-avatar-sm shrink-0">{initials}</div>
+                      <div className="mgr-idcard-student-info flex-1 min-w-0">
+                        <p className="mgr-cell-name truncate">{student.name}</p>
+                        <p className="mgr-cell-sub truncate">{student.smartId} · {shiftLabels[student.shift] ?? student.shift} · {student.seat}</p>
+                      </div>
+                      <span className={`shrink-0 ${student.status === MANAGER_STUDENT_STATUS_ACTIVE ? 'mgr-badge mgr-badge--success' : student.status === MANAGER_STUDENT_STATUS_SUSPENDED ? 'mgr-badge mgr-badge--warning' : 'mgr-badge mgr-badge--danger'}`}>{statusLabel}</span>
+                    </div>
+                  );
                 })}
               </div>
             </div>
@@ -111,6 +190,16 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
           {cardData ? <><p className="mgr-page-subtitle mgr-idcard-preview-label">{tManagerUi('preview')} {selected?.name}</p><StudentIdCard data={cardData} /><p className="mgr-cell-sub mgr-idcard-preview-hint">{tManagerUi('use_preview_only_until_validity_and_verification_contract_is_supplied')}</p></> : <div className="mgr-card mgr-idcard-empty-card"><div className="mgr-empty-state"><div className="mgr-empty-icon"><IdCard size={40} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_student_selected')}</p><p className="mgr-empty-sub">{tManagerUi('search_and_select_a_student_to_preview_the_id_card')}</p></div></div>}
         </div>
       </div>
+
+      <ManagerMembersIdCardBulkDispatchModal
+        isOpen={isBulkModalOpen}
+        onClose={() => setIsBulkModalOpen(false)}
+        students={bulkStudents}
+        onComplete={() => {
+          setIsBulkModalOpen(false);
+          setBulkSelectedIds([]);
+        }}
+      />
     </div>
   );
 }

@@ -33,14 +33,15 @@ export function useManagerMembersEnquiriesConfirm() {
   useManagerEnquiriesDialogFocus(dialogRef, () => settle(false), Boolean(pending));
 
   const dialog = pending ? (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" data-testid="managermembersenquiries-unsaved-confirm-overlay">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" data-testid="managermembersenquiries-unsaved-confirm-overlay">
+      <div className="fixed inset-0 bg-black opacity-60" onClick={() => settle(false)} aria-hidden="true" />
       <div
         ref={dialogRef}
         tabIndex={-1}
         role="alertdialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="w-full max-w-md rounded-xl border border-border bg-overlay p-6 shadow-dialog"
+        className="relative z-10 w-full max-w-md rounded-xl border border-border bg-overlay p-6 shadow-dialog"
       >
         <h2 id={titleId} className="text-lg font-semibold text-foreground">{pending.message}</h2>
         <div className="mt-6 flex flex-col-reverse justify-end gap-3 sm:flex-row">

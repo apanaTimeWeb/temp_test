@@ -25,3 +25,21 @@ export const MANAGER_CRM_DOT_CLASS: Record<ManagerMembersEnquiriesEnquiryStatus,
   Converted: 'crm-col-dot--converted',
   Lost: 'crm-col-dot--lost',
 };
+
+export const MANAGER_CRM_DEFAULT_WHATSAPP_TEMPLATES = [
+  {
+    id: 'demo_session',
+    label: 'Free Demo Invite',
+    text: 'Hello {name}, thank you for inquiring about seat booking at Central Library! We have study slots available in your preferred shift. Would you like to visit today for a free demo session?',
+  },
+  {
+    id: 'followup',
+    label: 'Visit Follow-up',
+    text: 'Hi {name}, following up on your recent visit to our library! We have reserved a trial seat for you. Let us know if you would like to confirm your membership this week.',
+  },
+  {
+    id: 'fee_offer',
+    label: 'Special Fee Offer',
+    text: 'Dear {name}, we are offering a 10% discount on 3-month library plans this week! Reserved reserved silent zone seats are filling up fast. Reply here to secure your booking.',
+  },
+] as const;

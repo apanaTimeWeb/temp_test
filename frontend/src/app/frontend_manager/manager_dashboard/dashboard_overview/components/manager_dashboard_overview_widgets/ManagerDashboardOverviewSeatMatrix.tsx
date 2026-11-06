@@ -33,7 +33,7 @@ export function ManagerDashboardOverviewSeatMatrix({
   return (
     <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all flex flex-col justify-between h-full">
       <div>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-border/60">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-surface-highlight border border-border text-primary flex items-center justify-center font-bold">
               <Armchair size={20} />
@@ -77,11 +77,11 @@ export function ManagerDashboardOverviewSeatMatrix({
                 type="button"
                 className={`mgr-seat-cell mgr-seat-cell-button ${SEAT_CLASS[seat.status] || ''} h-16 w-full rounded-xl flex flex-col items-center justify-center gap-1 transition-all duration-200 cursor-pointer border-2 hover:scale-105 shadow-xs ${
                   isAvailable
-                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:border-emerald-500'
+                    ? 'bg-success-bg text-success border-border hover:border-success'
                     : isOccupied
-                    ? 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30 hover:border-red-500'
+                    ? 'bg-danger-bg text-danger border-border hover:border-danger'
                     : isExpiring
-                    ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30 hover:border-amber-500'
+                    ? 'bg-warning-bg text-warning-text border-border hover:border-warning'
                     : 'bg-muted text-muted-foreground border-border'
                 }`}
                 onClick={() =>
@@ -102,18 +102,18 @@ export function ManagerDashboardOverviewSeatMatrix({
       </div>
 
       {/* Legend with Counts */}
-      <div className="mt-5 pt-4 border-t border-border/60 flex flex-wrap items-center gap-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+      <div className="mt-5 pt-4 border-t border-border flex flex-wrap items-center gap-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-success-bg border border-border text-xs font-semibold text-success">
           <CheckCircle2 size={13} />
           <span>{tManagerUi('available')}:</span>
           <span className="font-bold">{availableCount}</span>
         </div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-xs font-semibold text-red-600 dark:text-red-400">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-danger-bg border border-border text-xs font-semibold text-danger">
           <AlertCircle size={13} />
           <span>{tManagerUi('occupied')}:</span>
           <span className="font-bold">{occupiedCount}</span>
         </div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs font-semibold text-amber-600 dark:text-amber-400">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-warning-bg border border-border text-xs font-semibold text-warning-text">
           <Clock size={13} />
           <span>{tManagerUi('expiring_soon')}:</span>
           <span className="font-bold">{expiringCount}</span>

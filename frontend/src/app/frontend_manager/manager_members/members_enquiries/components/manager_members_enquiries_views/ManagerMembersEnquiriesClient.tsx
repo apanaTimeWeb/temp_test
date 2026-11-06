@@ -3,19 +3,22 @@
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { LayoutGrid, List, Plus, RefreshCw, Target } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 import {
   useManagerMembersEnquiries,
   type ManagerCrmTimeHorizon,
 } from '@/app/frontend_manager/manager_members/members_enquiries/hooks/useManagerMembersEnquiriesEnquiries';
+import { ManagerMembersEnquiriesHeaderBanner } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesHeaderBanner';
+import { ManagerMembersEnquiriesBulkToolbar } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesBulkToolbar';
+import { ManagerMembersEnquiriesBulkWhatsAppModal } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesBulkWhatsAppModal';
 import { ManagerMembersEnquiriesKanban } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesKanban';
 import { ManagerMembersEnquiriesTable } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesTable';
 import { ManagerMembersEnquiriesKpis } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesKpis';
 import { ManagerMembersEnquiriesTimeHorizonBar } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesTimeHorizonBar';
 import { ManagerMembersEnquiriesToolbar } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesToolbar';
 
-// RESPONSIBILITY: Main Client view for CRM Enquiries with Executive Pipeline Analytics and Global Horizon Filtering.
+// RESPONSIBILITY: Main Client view for CRM Enquiries with Executive Pipeline Analytics, Horizon Filtering and Bulk WhatsApp Dispatch.
 
 export function ManagerMembersEnquiriesClient() {
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
@@ -41,6 +44,15 @@ export function ManagerMembersEnquiriesClient() {
     setCustomEndDate,
     stats,
     getCardsByStatus,
+    selectedIds,
+    selectedEnquiries,
+    bulkWhatsAppModalOpen,
+    setBulkWhatsAppModalOpen,
+    toggleSelectOne,
+    toggleSelectAll,
+    selectByStatus,
+    selectAllFiltered,
+    clearSelection,
   } = useManagerMembersEnquiries();
 
   const statusLabels = {
@@ -90,7 +102,7 @@ export function ManagerMembersEnquiriesClient() {
   if (isError) {
     return (
       <section className="crm-page p-6 sm:p-8" role="alert" aria-live="assertive">
-        <div className="rounded-2xl border border-border bg-danger-bg p-8 text-center max-w-xl mx-auto shadow-sm">
+        <div className="rounded-2xl border border-border bg-danger-bg p-8 text-center max-w-xl mx-auto shadow-xs">
           <p className="text-destructive font-semibold text-base mb-1">{tManagerUi('unable_to_load_the_enquiry_pipeline')}</p>
           <p className="text-secondary text-sm mb-6">{tManagerUi('check_your_connection_and_try_again')}</p>
           <button
@@ -112,106 +124,30 @@ export function ManagerMembersEnquiriesClient() {
   return (
     <div className="crm-page space-y-6">
       {/* ── Executive Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          {/* Left: Titles & Meta Chips */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 flex-wrap text-xs">
-              <span className="font-semibold text-primary uppercase tracking-wider">{tManagerUi('crm_to_enquiries')}</span>
-              <span className="text-border">•</span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-warning-bg text-warning border border-border">
-                <Target size={12} />
-                Lead Intelligence Pipeline
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
-                📍 Central Branch
-              </span>
-            </div>
+      <ManagerMembersEnquiriesHeaderBanner
+        filteredCount={filtered.length}
+        horizonLabel={horizonLabel}
+        isFetching={isFetching}
+        onRefresh={() => { void refetch(); }}
+        view={view}
+        onViewChange={setView}
+        onAddEnquiry={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}
+        selectedCount={selectedIds.length}
+        onOpenBulkWhatsApp={() => setBulkWhatsAppModalOpen(true)}
+      />
 
-            <div className="flex items-baseline gap-3 flex-wrap">
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
-                {tManagerUi('enquiry_pipeline')}
-              </h1>
-              <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-                {filtered.length} Leads • Scope: {horizonLabel}
-              </span>
-            </div>
-
-            <p className="text-sm text-secondary">
-              {tManagerUi('track_every_prospect_from_enquiry_to_admission')}
-            </p>
-          </div>
-
-          {/* Right: Actions */}
-          <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
-            {/* Live Refresh Button */}
-            <button
-              type="button"
-              onClick={() => { void refetch(); }}
-              disabled={isFetching}
-              title="Refresh CRM Pipeline"
-              className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60"
-            >
-              <RefreshCw size={14} className={isFetching ? 'animate-spin text-primary' : ''} />
-              <span className="hidden sm:inline">{isFetching ? 'Syncing...' : 'Sync Pipeline'}</span>
-            </button>
-
-            {/* View Mode Toggle */}
-            <div className="inline-flex bg-muted p-1 rounded-xl border border-border">
-              <button
-                type="button"
-                className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 motion-safe:transition-all ${
-                  view === 'kanban'
-                    ? 'bg-card text-primary shadow-sm font-semibold'
-                    : 'text-secondary hover:text-primary'
-                }`}
-                onClick={() => setView('kanban')}
-                title={tManagerUi('kanban_view')}
-                aria-label={tManagerUi('show_kanban_view')}
-                aria-pressed={view === 'kanban'}
-              >
-                <LayoutGrid size={15} />
-                <span className="hidden md:inline">Kanban</span>
-              </button>
-              <button
-                type="button"
-                className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 motion-safe:transition-all ${
-                  view === 'table'
-                    ? 'bg-card text-primary shadow-sm font-semibold'
-                    : 'text-secondary hover:text-primary'
-                }`}
-                onClick={() => setView('table')}
-                title={tManagerUi('table_view')}
-                aria-label={tManagerUi('show_table_view')}
-                aria-pressed={view === 'table'}
-              >
-                <List size={15} />
-                <span className="hidden md:inline">Table</span>
-              </button>
-            </div>
-
-            {/* Add Enquiry Primary CTA */}
-            <button
-              type="button"
-              className="mgr-btn-primary min-h-11 px-4 rounded-xl shadow-sm inline-flex items-center gap-2 text-sm font-semibold"
-              onClick={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}
-            >
-              <Plus size={16} />
-              <span>{tManagerUi('add_enquiry')}</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Contract Warning Banner */}
-        <div
-          className="crm-contract-warning mt-4 flex items-center justify-between text-xs"
-          role="status"
-          data-testid="manager-crm-pipeline-contract-warning"
-        >
-          <span>{tManagerUi('crm_mutations_unavailable_host_contract')}</span>
-          <span className="hidden sm:inline font-mono text-[10px] opacity-75">LIVE MOCK PIPELINE ACTIVE</span>
-        </div>
-      </div>
+      {/* ── Bulk Actions Floating Toolbar (When items selected) ── */}
+      <ManagerMembersEnquiriesBulkToolbar
+        selectedCount={selectedIds.length}
+        totalFilteredCount={filtered.length}
+        onSelectAllFiltered={selectAllFiltered}
+        onSelectByStatus={selectByStatus}
+        onClearSelection={clearSelection}
+        onOpenBulkWhatsApp={() => setBulkWhatsAppModalOpen(true)}
+        visitedCount={stats.visited}
+        newCount={stats.newLeads}
+        interestedCount={stats.interested}
+      />
 
       {/* ── Main Global Time Horizon Filter Bar ── */}
       <ManagerMembersEnquiriesTimeHorizonBar
@@ -243,6 +179,7 @@ export function ManagerMembersEnquiriesClient() {
           setTimeHorizon('all');
           setCustomStartDate('');
           setCustomEndDate('');
+          clearSelection();
         }}
         onExportCsv={handleExportCsv}
       />
@@ -267,6 +204,7 @@ export function ManagerMembersEnquiriesClient() {
               setStatusFilter('All');
               setCustomStartDate('');
               setCustomEndDate('');
+              clearSelection();
             }}
             className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
           >
@@ -284,8 +222,30 @@ export function ManagerMembersEnquiriesClient() {
           getCardsByStatus={getCardsByStatus}
         />
       ) : (
-        <ManagerMembersEnquiriesTable filtered={filtered} />
+        <ManagerMembersEnquiriesTable
+          filtered={filtered}
+          selectedIds={selectedIds}
+          onToggleSelectOne={toggleSelectOne}
+          onToggleSelectAll={toggleSelectAll}
+          onQuickWhatsApp={(enq) => {
+            const digits = enq.phone.replace(/\D/g, '');
+            const phone = digits.length === 10 ? `91${digits}` : digits;
+            const text = encodeURIComponent(
+              `Hello ${enq.name}, thank you for inquiring at Central Library! How can we assist you with seat booking today?`
+            );
+            const w = window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+            if (w) w.opener = null;
+          }}
+        />
       )}
+
+      {/* ── Bulk WhatsApp Queue Dialog Modal ── */}
+      <ManagerMembersEnquiriesBulkWhatsAppModal
+        isOpen={bulkWhatsAppModalOpen}
+        onClose={() => setBulkWhatsAppModalOpen(false)}
+        recipients={selectedEnquiries.length > 0 ? selectedEnquiries : filtered}
+        onClearSelection={clearSelection}
+      />
     </div>
   );
 }

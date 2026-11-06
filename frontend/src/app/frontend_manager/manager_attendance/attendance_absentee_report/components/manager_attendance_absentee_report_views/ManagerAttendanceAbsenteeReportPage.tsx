@@ -6,14 +6,18 @@ import { MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES } from '@/app/frontend_manage
 import { useManagerAbsenteeReportDemoData } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/useManagerAttendanceAbsenteeReportDemoData';
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { ChevronRight, Send, Search } from 'lucide-react';
+import { ChevronRight, Send, Search, MessageSquare } from 'lucide-react';
 import { createManagerAbsenteeReportAbsenteeColumns } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns';
 import ManagerAttendanceAbsenteeTimeHorizonBar, { type ManagerAbsenteeTimeHorizon } from './ManagerAttendanceAbsenteeTimeHorizonBar';
+import { ManagerAttendanceAbsenteeBulkWhatsAppModal } from './ManagerAttendanceAbsenteeBulkWhatsAppModal';
+import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '../../hooks/ManagerAttendanceAbsenteeReportDemoRepository';
 
 export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, phone, smartId }: ManagerAttendanceAbsenteeReportMainProps) {
   const tManagerUi = useTranslations('manager.manager_absentee_report.ui');
   const locale = useLocale();
-  const rows = useManagerAbsenteeReportDemoData();
+  const initialRows = useManagerAbsenteeReportDemoData();
+  const [rowsList, setRowsList] = useState(initialRows);
+  const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
   const [timeHorizon, setTimeHorizon] = useState<ManagerAbsenteeTimeHorizon>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
@@ -22,10 +26,21 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
   const [searchQuery, setSearchQuery] = useState('');
   const shiftLabels: Record<string, string> = { Morning: tManagerUi('morning'), Afternoon: tManagerUi('afternoon'), Evening: tManagerUi('evening') };
 
+  const handleAlertWhatsApp = (item: ManagerAttendanceAbsenteeReportSampleAbsentee) => {
+    const cleanPhone = (item.parentPhone || '9876543210').replace(/\D/g, '');
+    const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+    const text = encodeURIComponent(
+      `Dear Parent / Student, this is an official attendance notice from Central Library. ${item.name} (${item.smartId}, ${item.shift} Shift) has been absent for ${item.daysAbsent} consecutive days. Last attended date: ${item.lastSeen}. Kindly ensure regular study attendance. — Central Library Administration`
+    );
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    if (popup) popup.opener = null;
+    setRowsList((prev) => prev.map((r) => r.smartId === item.smartId ? { ...r, notified: true } : r));
+  };
+
   const timeFilteredRows = useMemo(() => {
-    if (timeHorizon === 'all') return rows;
+    if (timeHorizon === 'all') return rowsList;
     const now = new Date('2026-04-15T12:00:00Z');
-    return rows.filter((r) => {
+    return rowsList.filter((r) => {
       const recDate = new Date(r.lastSeen);
       if (isNaN(recDate.getTime())) return true;
       if (timeHorizon === 'today') return recDate.toISOString().slice(0, 10) === now.toISOString().slice(0, 10);
@@ -42,7 +57,7 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
       }
       return true;
     });
-  }, [rows, timeHorizon, customStartDate, customEndDate]);
+  }, [rowsList, timeHorizon, customStartDate, customEndDate]);
 
   const timeHorizonLabel = useMemo(() => {
     switch (timeHorizon) {
@@ -91,7 +106,8 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
       locale,
     },
     shiftLabels,
-    badgeClass
+    badgeClass,
+    handleAlertWhatsApp
   );
 
   return (
@@ -114,8 +130,14 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
             </p>
           </div>
           <div className="eng-page-actions">
-            <button type="button" disabled title={tManagerUi('bulk_alerts_unavailable_verified_messaging_integration_c_f7eade')} className="eng-btn eng-btn--ghost cursor-not-allowed">
-              <Send size={14} /> {tManagerUi('bulk_alerts_unavailable')}
+            <button
+              type="button"
+              onClick={() => setIsBulkWhatsAppOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+              title="Launch bulk WhatsApp alerts queue for absentees"
+            >
+              <MessageSquare size={14} />
+              <span>Bulk WhatsApp Alerts ({filtered.length})</span>
             </button>
           </div>
         </div>
@@ -231,6 +253,16 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
           </div>
         )}
       </div>
+
+      <ManagerAttendanceAbsenteeBulkWhatsAppModal
+        isOpen={isBulkWhatsAppOpen}
+        onClose={() => setIsBulkWhatsAppOpen(false)}
+        absentees={filtered}
+        onComplete={() => {
+          setIsBulkWhatsAppOpen(false);
+          setRowsList((prev) => prev.map((r) => filtered.some((f) => f.smartId === r.smartId) ? { ...r, notified: true } : r));
+        }}
+      />
     </div>
   );
 }

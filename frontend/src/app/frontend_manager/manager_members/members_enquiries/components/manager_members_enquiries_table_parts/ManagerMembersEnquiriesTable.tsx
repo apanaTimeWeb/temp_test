@@ -4,12 +4,20 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState, useMemo, type KeyboardEvent, type MouseEvent } from 'react';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
-import { Eye, CheckCircle, XCircle, PhoneCall, Plus, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, PhoneCall, Plus, ArrowUpDown, ArrowUp, ArrowDown, MessageCircle } from 'lucide-react';
 import { formatManagerEnquiriesDisplayDate, maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import { MANAGER_CRM_STATUS_BADGE } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
+import { ManagerMembersEnquiriesMobileCards } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesMobileCards';
 import type { ManagerMembersEnquiriesTableProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
+import type { ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 
-export function ManagerMembersEnquiriesTable({ filtered }: ManagerMembersEnquiriesTableProps) {
+export function ManagerMembersEnquiriesTable({
+  filtered,
+  selectedIds = [],
+  onToggleSelectOne,
+  onToggleSelectAll,
+  onQuickWhatsApp,
+}: ManagerMembersEnquiriesTableProps) {
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
   const locale = useLocale();
   const router = useRouter();
@@ -18,21 +26,6 @@ export function ManagerMembersEnquiriesTable({ filtered }: ManagerMembersEnquiri
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-
-  if (filtered.length === 0) {
-    return (
-      <div className="crm-card crm-card--flush">
-        <div className="crm-empty-state bg-card border border-border rounded-lg p-12 text-center">
-          <PhoneCall size={40} className="text-secondary mx-auto mb-4" />
-          <p className="text-primary font-semibold text-lg mb-2">{tManagerUi('no_enquiries_found')}</p>
-          <p className="text-secondary text-sm mb-6">{tManagerUi('try_a_different_search_or_status_filter')}</p>
-          <button type="button" className="mgr-btn-primary" onClick={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}>
-            <Plus size={15} /> {tManagerUi('add_enquiry')}
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   type EnqSortField = 'name' | 'phone' | 'shift' | 'status' | 'handledBy' | 'addedDate';
   const [sortField, setSortField] = useState<EnqSortField | null>(null);
@@ -58,21 +51,33 @@ export function ManagerMembersEnquiriesTable({ filtered }: ManagerMembersEnquiri
     });
   }, [filtered, sortField, sortDirection]);
 
+  if (filtered.length === 0) {
+    return (
+      <div className="crm-card crm-card--flush">
+        <div className="crm-empty-state bg-card border border-border rounded-lg p-12 text-center">
+          <PhoneCall size={40} className="text-secondary mx-auto mb-4" />
+          <p className="text-primary font-semibold text-lg mb-2">{tManagerUi('no_enquiries_found')}</p>
+          <p className="text-secondary text-sm mb-6">{tManagerUi('try_a_different_search_or_status_filter')}</p>
+          <button type="button" className="mgr-btn-primary" onClick={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}>
+            <Plus size={15} /> {tManagerUi('add_enquiry')}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const totalRows = sortedEnquiries.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
   const paginated = sortedEnquiries.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
+  const isAllSelected = filtered.length > 0 && filtered.every((e) => selectedIds.includes(e.id));
 
   const renderSortableHeader = (field: EnqSortField, label: string) => {
     const isActive = sortField === field;
     return (
-      <th
-        scope="col"
-        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className="p-3"
-      >
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3">
         <button
           type="button"
           onClick={() => toggleSort(field)}
@@ -81,11 +86,7 @@ export function ManagerMembersEnquiriesTable({ filtered }: ManagerMembersEnquiri
         >
           <span>{label}</span>
           {isActive ? (
-            sortDirection === 'asc' ? (
-              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            ) : (
-              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            )
+            sortDirection === 'asc' ? <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" /> : <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
           ) : (
             <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
           )}
@@ -109,35 +110,55 @@ export function ManagerMembersEnquiriesTable({ filtered }: ManagerMembersEnquiri
     router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADMISSION_CONVERSION());
   };
 
+  const handleSendWhatsApp = (e: MouseEvent, enq: ManagerMembersEnquiriesEnquiry) => {
+    e.stopPropagation();
+    if (onQuickWhatsApp) {
+      onQuickWhatsApp(enq);
+      return;
+    }
+    const digits = enq.phone.replace(/\D/g, '');
+    const phone = digits.length === 10 ? `91${digits}` : digits;
+    const text = encodeURIComponent(
+      `Hello ${enq.name}, thank you for inquiring at Central Library! How can we assist you with seat booking today?`
+    );
+    const win = window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+    if (win) win.opener = null;
+  };
+
   return (
     <div className="crm-card crm-card--flush">
-      <div className="crm-mobile-enquiry-list">
-        {paginated.map((enq, idx) => (
-          <article className="crm-mobile-enquiry-card" key={`mobile-${enq.id}`}>
-            <button type="button" className="crm-mobile-enquiry-main" onClick={() => openDetails(enq.id)}>
-              <span className="crm-mobile-enquiry-index">#{effectivePage * pageSize + idx + 1}</span>
-              <span className="crm-mobile-enquiry-name">{enq.name}</span>
-              <span className="crm-mobile-enquiry-phone">{maskManagerEnquiriesPhone(enq.phone)}</span>
-            </button>
-            <div className="crm-mobile-enquiry-meta">
-              <span><span className="crm-mobile-enquiry-label">{tManagerUi('shift')}</span><span className="mgr-badge mgr-badge--info">{shiftLabels[enq.shift] ?? enq.shift}</span></span>
-              <span><span className="crm-mobile-enquiry-label">{tManagerUi('status')}</span><span className={`mgr-badge ${MANAGER_CRM_STATUS_BADGE[enq.status]}`}>{statusLabels[enq.status]}</span></span>
-              <span><span className="crm-mobile-enquiry-label">{tManagerUi('handled_by')}</span><span>{enq.handledBy === 'Unassigned' ? tManagerUi('unassigned') : enq.handledBy}</span></span>
-              <span><span className="crm-mobile-enquiry-label">{tManagerUi('date_added')}</span><span>{formatManagerEnquiriesDisplayDate(enq.addedDate, locale, { today: tManagerUi('today'), yesterday: tManagerUi('yesterday') })}</span></span>
-            </div>
-            <div className="crm-mobile-enquiry-actions">
-              <button type="button" className="mgr-btn-icon" aria-label={tManagerUi('view_details')} title={tManagerUi('view_details')} onClick={() => openDetails(enq.id)}><Eye size={16} /></button>
-              <button type="button" className="mgr-btn-icon text-success" aria-label={tManagerUi('convert_to_admission')} title={tManagerUi('convert_to_admission')} onClick={handleQuickConvert}><CheckCircle size={16} /></button>
-              <button type="button" className="mgr-btn-icon text-danger cursor-not-allowed" aria-label={tManagerUi('crm_mark_lost_unavailable')} title={tManagerUi('crm_mutations_unavailable_host_contract')} disabled><XCircle size={16} /></button>
-            </div>
-          </article>
-        ))}
-      </div>
+      {/* Mobile Card List View */}
+      <ManagerMembersEnquiriesMobileCards
+        paginated={paginated}
+        effectivePage={effectivePage}
+        pageSize={pageSize}
+        selectedIds={selectedIds}
+        onToggleSelectOne={onToggleSelectOne}
+        onOpenDetails={openDetails}
+        onQuickConvert={handleQuickConvert}
+        onSendWhatsApp={handleSendWhatsApp}
+        shiftLabels={shiftLabels}
+        statusLabels={statusLabels}
+        locale={locale}
+      />
+
+      {/* Desktop Responsive Table View */}
       <div className="crm-table-wrap overflow-x-auto">
         <table className="crm-table w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-border bg-surface-highlight text-secondary text-xs uppercase font-semibold">
-              <th className="p-3">#</th>
+              <th className="p-3 w-10 text-center">
+                {onToggleSelectAll && (
+                  <input
+                    type="checkbox"
+                    checked={isAllSelected}
+                    onChange={onToggleSelectAll}
+                    aria-label="Select all enquiries"
+                    className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                  />
+                )}
+              </th>
+              <th className="p-3 w-10">#</th>
               {renderSortableHeader('name', tManagerUi('name'))}
               {renderSortableHeader('phone', tManagerUi('phone'))}
               {renderSortableHeader('shift', tManagerUi('shift'))}
@@ -148,49 +169,77 @@ export function ManagerMembersEnquiriesTable({ filtered }: ManagerMembersEnquiri
             </tr>
           </thead>
           <tbody>
-            {paginated.map((enq, idx) => (
-              <tr
-                key={enq.id}
-                onClick={() => openDetails(enq.id)}
-                onKeyDown={(e) => handleRowKeyDown(e, enq.id)}
-                tabIndex={0}
-                role="link"
-                aria-label={`${tManagerUi('view_details')}: ${enq.name}`}
-                className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 cursor-pointer motion-safe:transition-colors"
-              >
-                <td className="p-3 text-secondary">{effectivePage * pageSize + idx + 1}</td>
-                <td className="p-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-floating flex items-center justify-center text-xs font-bold text-secondary">
-                      {enq.avatar}
+            {paginated.map((enq, idx) => {
+              const isSelected = selectedIds.includes(enq.id);
+              return (
+                <tr
+                  key={enq.id}
+                  onClick={() => openDetails(enq.id)}
+                  onKeyDown={(e) => handleRowKeyDown(e, enq.id)}
+                  tabIndex={0}
+                  role="link"
+                  aria-label={`${tManagerUi('view_details')}: ${enq.name}`}
+                  className={`border-b border-border last:border-0 h-12 cursor-pointer motion-safe:transition-colors ${
+                    isSelected
+                      ? 'bg-primary-subtle text-foreground'
+                      : 'hover:bg-surface-hover even:bg-surface-zebra'
+                  }`}
+                >
+                  <td className="p-3 w-10 text-center" onClick={(e) => e.stopPropagation()}>
+                    {onToggleSelectOne && (
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => onToggleSelectOne(enq.id)}
+                        aria-label={`Select ${enq.name}`}
+                        className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                      />
+                    )}
+                  </td>
+                  <td className="p-3 text-secondary">{effectivePage * pageSize + idx + 1}</td>
+                  <td className="p-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-floating flex items-center justify-center text-xs font-bold text-secondary">
+                        {enq.avatar}
+                      </div>
+                      <span className="font-medium text-primary">{enq.name}</span>
                     </div>
-                    <span className="font-medium text-primary">{enq.name}</span>
-                  </div>
-                </td>
-                <td className="p-3 font-mono text-sm text-secondary">{maskManagerEnquiriesPhone(enq.phone)}</td>
-                <td className="p-3"><span className="mgr-badge mgr-badge--info">{shiftLabels[enq.shift] ?? enq.shift}</span></td>
-                <td className="p-3"><span className={`mgr-badge ${MANAGER_CRM_STATUS_BADGE[enq.status]}`}>{statusLabels[enq.status]}</span></td>
-                <td className="p-3 text-secondary">{enq.handledBy === 'Unassigned' ? tManagerUi('unassigned') : enq.handledBy}</td>
-                <td className="p-3 text-secondary">{formatManagerEnquiriesDisplayDate(enq.addedDate, locale, { today: tManagerUi('today'), yesterday: tManagerUi('yesterday') })}</td>
-                <td className="p-3">
-                  <div className="flex items-center gap-2">
-                    <button type="button" className="mgr-btn-icon" aria-label={tManagerUi('view_details')} title={tManagerUi('view_details')} onClick={(e) => { e.stopPropagation(); router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.DETAIL(enq.id)); }}>
-                      <Eye size={14} />
-                    </button>
-                    <button type="button" className="mgr-btn-icon text-success" aria-label={tManagerUi('convert_to_admission')} title={tManagerUi('convert_to_admission')} onClick={handleQuickConvert}>
-                      <CheckCircle size={14} />
-                    </button>
-                    <button type="button" className="mgr-btn-icon text-danger cursor-not-allowed" title={tManagerUi('crm_mutations_unavailable_host_contract')} aria-label={tManagerUi('crm_mark_lost_unavailable')} disabled>
-                      <XCircle size={14} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="p-3 font-mono text-sm text-secondary">{maskManagerEnquiriesPhone(enq.phone)}</td>
+                  <td className="p-3"><span className="mgr-badge mgr-badge--info">{shiftLabels[enq.shift] ?? enq.shift}</span></td>
+                  <td className="p-3"><span className={`mgr-badge ${MANAGER_CRM_STATUS_BADGE[enq.status]}`}>{statusLabels[enq.status]}</span></td>
+                  <td className="p-3 text-secondary">{enq.handledBy === 'Unassigned' ? tManagerUi('unassigned') : enq.handledBy}</td>
+                  <td className="p-3 text-secondary">{formatManagerEnquiriesDisplayDate(enq.addedDate, locale, { today: tManagerUi('today'), yesterday: tManagerUi('yesterday') })}</td>
+                  <td className="p-3">
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        className="mgr-btn-icon text-emerald-600 hover:text-emerald-700 hover:bg-success-bg"
+                        aria-label={`WhatsApp ${enq.name}`}
+                        title={`WhatsApp chat with ${enq.name}`}
+                        onClick={(e) => handleSendWhatsApp(e, enq)}
+                      >
+                        <MessageCircle size={15} />
+                      </button>
+                      <button type="button" className="mgr-btn-icon" aria-label={tManagerUi('view_details')} title={tManagerUi('view_details')} onClick={(e) => { e.stopPropagation(); router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.DETAIL(enq.id)); }}>
+                        <Eye size={14} />
+                      </button>
+                      <button type="button" className="mgr-btn-icon text-success" aria-label={tManagerUi('convert_to_admission')} title={tManagerUi('convert_to_admission')} onClick={handleQuickConvert}>
+                        <CheckCircle size={14} />
+                      </button>
+                      <button type="button" className="mgr-btn-icon text-danger cursor-not-allowed" title={tManagerUi('crm_mutations_unavailable_host_contract')} aria-label={tManagerUi('crm_mark_lost_unavailable')} disabled>
+                        <XCircle size={14} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
+      {/* Pagination Footer */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-3 py-3 text-sm text-secondary">
         <span>
           Showing {startItem}–{endItem} of {totalRows} results

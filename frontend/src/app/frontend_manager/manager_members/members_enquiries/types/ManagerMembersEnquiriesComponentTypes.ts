@@ -75,6 +75,10 @@ export interface ManagerMembersEnquiriesErrorBoundaryState {
 // RESPONSIBILITY: Renders the Table view for CRM Enquiries. It does not own backend persistence or cross-feature business logic.
 export interface ManagerMembersEnquiriesTableProps {
   filtered: ManagerMembersEnquiriesEnquiry[];
+  selectedIds?: string[];
+  onToggleSelectOne?: (id: string) => void;
+  onToggleSelectAll?: () => void;
+  onQuickWhatsApp?: (enquiry: ManagerMembersEnquiriesEnquiry) => void;
 }
 
 export type ManagerMembersEnquiriesAddPageRouteProps = {
