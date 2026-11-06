@@ -99,7 +99,7 @@ export function AdminFinanceRefundsTable({
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -145,7 +145,7 @@ export function AdminFinanceRefundsTable({
               paginated.map((refund) => (
                 <tr
                   key={refund.id}
-                  className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30"
+                  className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra"
                 >
                   <td className="py-3 px-4 sticky left-0 bg-inherit">
                     <div className="text-body font-semibold text-text-primary">{refund.studentName}</div>

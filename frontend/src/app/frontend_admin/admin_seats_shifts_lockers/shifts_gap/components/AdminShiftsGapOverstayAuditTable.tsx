@@ -114,7 +114,7 @@ export function AdminShiftsGapOverstayAuditTable() {
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -202,7 +202,7 @@ export function AdminShiftsGapOverstayAuditTable() {
               </tr>
             ) : (
               paginatedIncidents.map((inc) => (
-                <tr key={inc.id} className="hover:bg-surface-hover/50 transition-colors">
+                <tr key={inc.id} className="hover:bg-surface-hover transition-colors">
                   <td className="p-3">
                     <span className="font-semibold text-text-primary">{inc.branchName}</span>
                     <span className="block text-text-secondary font-medium">{inc.seatNumber}</span>

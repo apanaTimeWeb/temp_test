@@ -19,7 +19,7 @@ export function AdminDashboardBranchLeaderboardRow({
   const clampedOccupancy = Math.min(100, Math.max(0, Math.round(item.occupancyRate)));
 
   return (
-    <tr className="hover:bg-muted/20 motion-safe:transition-colors">
+    <tr className="hover:bg-muted-hover motion-safe:transition-colors">
       {/* Rank Badge */}
       <td className="px-3.5 py-3.5 text-center whitespace-nowrap">
         {rank === 1 && (

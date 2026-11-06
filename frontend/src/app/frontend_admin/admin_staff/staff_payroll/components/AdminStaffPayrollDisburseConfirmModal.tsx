@@ -68,7 +68,7 @@ export function AdminStaffPayrollDisburseConfirmModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Summary Box */}
-          <div className="rounded-xl border border-warning-border bg-warning-bg/10 p-3.5">
+          <div className="rounded-xl border border-warning-border bg-warning-bg p-3.5">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm font-bold text-text-primary">{record.staffName}</p>
@@ -85,7 +85,7 @@ export function AdminStaffPayrollDisburseConfirmModal({
               </div>
             </div>
             {record.advanceSalaryDeduction > 0 && (
-              <div className="mt-2.5 pt-2 border-t border-warning-border/40 flex justify-between text-xs text-warning-text font-medium">
+              <div className="mt-2.5 pt-2 border-t border-warning-border flex justify-between text-xs text-warning-text font-medium">
                 <span>{t('ADVANCE_DEDUCTION_SETTLED')}:</span>
                 <span className="font-mono font-bold">-₹{record.advanceSalaryDeduction.toLocaleString('en-IN')}</span>
               </div>

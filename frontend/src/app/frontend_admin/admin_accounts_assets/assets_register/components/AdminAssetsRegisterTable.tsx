@@ -81,7 +81,7 @@ export function AdminAssetsRegisterTable({
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-muted-foreground opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -97,7 +97,7 @@ export function AdminAssetsRegisterTable({
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm border-collapse" aria-label={t('TITLE')}>
           <thead>
-            <tr className="border-b border-border bg-muted/60 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <tr className="border-b border-border bg-muted text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               {renderSortableHeader('name', t('TABLE.ASSET'))}
               {renderSortableHeader('branchName', t('TABLE.BRANCH'))}
               {renderSortableHeader('category', t('TABLE.CATEGORY'))}
@@ -117,7 +117,7 @@ export function AdminAssetsRegisterTable({
               return (
                 <tr
                   key={asset.id}
-                  className="hover:bg-muted/30 motion-safe:transition-colors focus-within:bg-muted/40"
+                  className="hover:bg-muted-hover motion-safe:transition-colors focus-within:bg-muted"
                 >
                   {/* Asset & Code */}
                   <td className="px-4 py-3.5 whitespace-nowrap">
@@ -153,7 +153,7 @@ export function AdminAssetsRegisterTable({
                   <td className="px-4 py-3.5 whitespace-nowrap">
                     <p className="font-medium text-foreground">{formatAssetDate(asset.warrantyExpiryDate)}</p>
                     {expiringSoon ? (
-                      <span className="inline-flex items-center gap-1 rounded bg-amber-500/15 px-1.5 py-0.5 text-[11px] font-bold text-amber-700 dark:text-amber-400">
+                      <span className="inline-flex items-center gap-1 rounded bg-warning-bg px-1.5 py-0.5 text-[11px] font-bold text-warning-text">
                         <Clock className="h-3 w-3" />
                         <span>Expires in {daysLeft}d</span>
                       </span>

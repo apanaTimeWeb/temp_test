@@ -2,8 +2,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, RotateCcw, Building2, ShieldCheck, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
-import { format, subDays } from 'date-fns';
+import { Search, RotateCcw, ShieldCheck } from 'lucide-react';
+import { format } from 'date-fns';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminAccountsDailySettlementState } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/hooks/useAdminAccountsDailySettlementState';
@@ -12,13 +12,13 @@ import AdminAccountsDailySettlementKpis from '@/app/frontend_admin/admin_account
 import AdminAccountsDailySettlementTable from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/components/AdminAccountsDailySettlementTable';
 import AdminAccountsDailySettlementApprovalModal from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/components/AdminAccountsDailySettlementApprovalModal';
 import AdminAccountsDailySettlementDiscrepancyModal from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/components/AdminAccountsDailySettlementDiscrepancyModal';
+import { AdminAccountsDailySettlementHeader } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/components/AdminAccountsDailySettlementHeader';
 
 export function AdminAccountsDailySettlementPage() {
   const t = useTranslations('ADMIN_ACCOUNTS_DAILY_SETTLEMENT');
   const isDemo = isFrontendDemoModeEnabled();
 
   const {
-    records,
     filteredRecords,
     tabFilter,
     setTabFilter,
@@ -96,68 +96,16 @@ export function AdminAccountsDailySettlementPage() {
       )}
 
       {/* Executive Header & Specific Date Navigator */}
-      <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-teal-500/10 px-2.5 py-0.5 text-xs font-semibold text-teal-600 dark:text-teal-400">
-                <Building2 className="h-3.5 w-3.5" />
-                Accounts / Daily Settlement
-              </span>
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('TITLE')}</h1>
-            <p className="text-sm text-text-secondary">{t('SUBTITLE')}</p>
-          </div>
-
-          {/* Specific Date Navigator */}
-          <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border/70 bg-surface/90 p-2 shadow-sm backdrop-blur-md">
-            <div className="flex items-center rounded-lg bg-surface-muted/60 p-1 border border-border/50">
-              <button
-                type="button"
-                onClick={() => setDateMode('all')}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${dateMode === 'all' ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'}`}
-              >
-                All Dates
-              </button>
-              <button
-                type="button"
-                onClick={() => { setDateMode('today'); setSelectedDate(demoTodayStr); }}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${dateMode === 'today' ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'}`}
-              >
-                Today
-              </button>
-              <button
-                type="button"
-                onClick={() => { setDateMode('yesterday'); setSelectedDate(demoYesterdayStr); }}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${dateMode === 'yesterday' ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'}`}
-              >
-                Yesterday
-              </button>
-              <button
-                type="button"
-                onClick={() => setDateMode('custom')}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${dateMode === 'custom' ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'}`}
-              >
-                <Calendar className="h-3 w-3" />
-                Pick Date 📅
-              </button>
-            </div>
-            {dateMode === 'custom' && (
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                aria-label="Pick specific date"
-                className="rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              />
-            )}
-            <div className="text-xs font-medium text-text-secondary border-l border-border/60 pl-2.5 ml-0.5">
-              {dateModeLabel}
-              <span className="ml-1.5 text-text-muted">· {dateFilteredRecords.length} records</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AdminAccountsDailySettlementHeader
+        dateMode={dateMode}
+        setDateMode={setDateMode}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+        demoTodayStr={demoTodayStr}
+        demoYesterdayStr={demoYesterdayStr}
+        dateModeLabel={dateModeLabel}
+        filteredCount={dateFilteredRecords.length}
+      />
 
       {/* KPI Cards */}
       <AdminAccountsDailySettlementKpis records={dateFilteredRecords} />
@@ -299,4 +247,3 @@ export function AdminAccountsDailySettlementPage() {
 }
 
 export default AdminAccountsDailySettlementPage;
-

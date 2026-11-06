@@ -95,7 +95,7 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -157,7 +157,7 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
                   </tr>
                 </thead>
                 <tbody>{sortedBranches.map((row: AdminDashboardReportsAnalyticsBranchSummaryRow, index: number) => { const profit = row.revenueMinor - row.expenseMinor; return (
-                  <tr key={row.branch} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                  <tr key={row.branch} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
                     <th scope="row" className="p-3 font-medium text-text-primary">
                       <div className="flex items-center gap-2">
                         <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold ${

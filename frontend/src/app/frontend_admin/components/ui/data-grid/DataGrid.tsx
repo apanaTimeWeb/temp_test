@@ -176,7 +176,7 @@ export function DataGrid<TRow extends object>({
                           {sortDirection === 'asc' ? '↑' : '↓'}
                         </span>
                       ) : (
-                        <span className="text-text-secondary/50 group-hover:text-text-secondary transition-colors inline-flex items-center" aria-hidden="true">
+                        <span className="text-text-secondary opacity-50 group-hover:opacity-100 transition-opacity inline-flex items-center" aria-hidden="true">
                           ↕
                         </span>
                       )}
@@ -201,7 +201,7 @@ export function DataGrid<TRow extends object>({
                   aria-rowindex={shouldVirtualize ? (renderedRowIndexes[index] ?? index) + 2 : undefined}
                   data-row-identity={rowId}
                   data-row-height={`${safeRowHeight}px`}
-                  className={`border-t border-border bg-card even:bg-surface-zebra/30 motion-safe:transition-colors hover:bg-surface-hover focus-within:bg-surface-hover ${rowHeightClass} ${rowClickable ? 'cursor-pointer' : ''}`}
+                  className={`border-t border-border bg-card even:bg-surface-zebra motion-safe:transition-colors hover:bg-surface-hover focus-within:bg-surface-hover ${rowHeightClass} ${rowClickable ? 'cursor-pointer' : ''}`}
                   tabIndex={rowClickable ? 0 : undefined}
                   onClick={rowClickable ? (event) => handleRowClick(event, row) : undefined}
                   onKeyDown={rowClickable ? (event) => handleRowKeyDown(event, row) : undefined}

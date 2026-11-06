@@ -83,7 +83,7 @@ export function AdminSettingsBranchesHolidaysCard({
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-muted-foreground opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -134,7 +134,7 @@ export function AdminSettingsBranchesHolidaysCard({
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm border-collapse" aria-label="Branch Holiday Schedule">
           <thead>
-            <tr className="border-b border-border bg-muted/40 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <tr className="border-b border-border bg-muted text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               {renderHolidaySortableHeader('holidayName', t('HOLIDAY_NAME'))}
               {renderHolidaySortableHeader('date', t('HOLIDAY_DATE'))}
               {renderHolidaySortableHeader('branchScope', t('HOLIDAY_SCOPE'))}
@@ -151,7 +151,7 @@ export function AdminSettingsBranchesHolidaysCard({
               </tr>
             ) : (
               paginatedHolidays.map((h) => (
-                <tr key={h.id} className="hover:bg-muted/20 motion-safe:transition-colors">
+                <tr key={h.id} className="hover:bg-muted-hover motion-safe:transition-colors">
                   <td className="px-3.5 py-3 font-semibold text-foreground whitespace-nowrap">
                     {h.holidayName}
                   </td>

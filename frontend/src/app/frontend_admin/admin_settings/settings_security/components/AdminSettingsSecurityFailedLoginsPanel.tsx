@@ -64,7 +64,7 @@ export default function AdminSecurityFailedLoginsPanel() {
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -127,7 +127,7 @@ export default function AdminSecurityFailedLoginsPanel() {
               </tr>
             ) : (
               paginatedLogins.map((event) => (
-                <tr key={event.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                <tr key={event.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
                   <td className="p-3 text-text-primary">{t(event.timeKey)}</td>
                   <td className="p-3 text-text-primary">{event.account}</td>
                   <td className="p-3 text-text-secondary">{event.ip}</td>

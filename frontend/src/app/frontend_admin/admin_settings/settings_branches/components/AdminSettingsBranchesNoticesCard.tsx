@@ -43,7 +43,7 @@ export function AdminSettingsBranchesNoticesCard({
         {notices.map((n) => (
           <article
             key={n.id}
-            className="rounded-lg border border-border bg-muted/20 p-4 space-y-2 hover:bg-muted/30 motion-safe:transition-colors"
+            className="rounded-lg border border-border bg-muted p-4 space-y-2 hover:bg-muted-hover motion-safe:transition-colors"
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">

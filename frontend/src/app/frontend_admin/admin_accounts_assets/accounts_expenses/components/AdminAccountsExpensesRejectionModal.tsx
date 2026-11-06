@@ -54,7 +54,7 @@ export function AdminAccountsExpensesRejectionModal({
             <DialogDescription>{t('REJECT_DESCRIPTION')}</DialogDescription>
           </DialogHeader>
 
-          <div className="rounded-lg border border-border bg-muted/40 p-3 text-xs space-y-1">
+          <div className="rounded-lg border border-border bg-muted p-3 text-xs space-y-1">
             <p className="font-semibold text-foreground">{expense.description}</p>
             <p className="text-muted-foreground">Branch: {expense.branchName ?? 'Main Branch'}</p>
           </div>

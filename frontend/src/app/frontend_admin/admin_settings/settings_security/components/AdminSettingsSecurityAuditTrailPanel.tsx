@@ -92,7 +92,7 @@ export function AdminSettingsSecurityAuditTrailPanel() {
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-muted-foreground/40 group-hover:text-muted-foreground transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-muted-foreground opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -193,7 +193,7 @@ export function AdminSettingsSecurityAuditTrailPanel() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm border-collapse" aria-label="Anti-Fraud Audit Trail">
             <thead>
-              <tr className="border-b border-border bg-muted/50 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              <tr className="border-b border-border bg-muted text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 {renderSortableHeader('timestamp', t('AUDIT_COL_TIMESTAMP'))}
                 {renderSortableHeader('severity', t('AUDIT_COL_SEVERITY'), 'center')}
                 {renderSortableHeader('actionTitle', t('AUDIT_COL_ACTION'))}
@@ -204,7 +204,7 @@ export function AdminSettingsSecurityAuditTrailPanel() {
             </thead>
             <tbody className="divide-y divide-border">
               {paginatedLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-muted/20 motion-safe:transition-colors">
+                <tr key={log.id} className="hover:bg-muted-hover motion-safe:transition-colors">
                   {/* Timestamp */}
                   <td className="px-3.5 py-3 whitespace-nowrap font-mono text-xs text-muted-foreground">
                     {log.timestamp}

@@ -76,7 +76,7 @@ export function AdminAccountsDailySettlementApprovalModal({
           </DialogHeader>
 
           {/* Settlement Details Summary Card */}
-          <div className="rounded-lg border border-border bg-muted/40 p-3.5 text-xs space-y-2">
+          <div className="rounded-lg border border-border bg-muted p-3.5 text-xs space-y-2">
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <span className="text-muted-foreground">{t('BRANCH')}:</span>

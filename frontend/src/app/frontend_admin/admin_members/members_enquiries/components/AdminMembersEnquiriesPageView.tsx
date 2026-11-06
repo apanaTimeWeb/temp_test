@@ -88,14 +88,14 @@ export default function AdminEnquiriesPageView() {
     if (typeof window !== 'undefined') window.print();
   };
   return (
-    <div className="space-y-6 pb-10"><p className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-xs font-medium text-amber-700 dark:text-amber-300" role="status">{t('CRM_DEMO_BANNER')}</p><div className="min-w-0 space-y-6 text-text-primary">
+    <div className="space-y-6 pb-10"><p className="rounded-xl border border-warning-border bg-warning-bg p-3 text-xs font-medium text-warning-text" role="status">{t('CRM_DEMO_BANNER')}</p><div className="min-w-0 space-y-6 text-text-primary">
 
       {/* ── Executive CRM Header & Global Time Horizon ── */}
-      <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-indigo-500/10 px-2.5 py-0.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-info-bg px-2.5 py-0.5 text-xs font-semibold text-info-text">
                 <Target className="h-3.5 w-3.5" />
                 {t('BREADCRUMB')}
               </span>
@@ -108,11 +108,11 @@ export default function AdminEnquiriesPageView() {
           </div>
 
           {/* Global Time Horizon Pill Bar */}
-          <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border/70 bg-surface/90 p-2 shadow-sm backdrop-blur-md">
-            <div className="flex items-center rounded-lg bg-surface-muted/60 p-1 border border-border/50">
+          <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border bg-surface p-2 shadow-sm backdrop-blur-md">
+            <div className="flex items-center rounded-lg bg-surface-muted p-1 border border-border">
               {(['all', 'today', 'this_week', 'this_month', 'custom'] as const).map((r) => (
                 <button key={r} type="button" onClick={() => setTimeRange(r)}
-                  className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${timeRange === r ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'}`}
+                  className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${timeRange === r ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'}`}
                 >
                   {r === 'all' ? 'All Time' : r === 'today' ? 'Today' : r === 'this_week' ? 'This Week' : r === 'this_month' ? 'This Month' : <><Calendar className="h-3 w-3" />Custom</>}
                 </button>
@@ -137,7 +137,7 @@ export default function AdminEnquiriesPageView() {
           { label: 'In Pipeline', value: inPipeline, icon: TrendingUp, color: 'amber', sub: `Visited + Interested (${timeRangeLabel})`, periodBadge: timeRangeLabel },
           { label: 'Conversion Rate', value: `${conversionRate}%`, icon: Target, color: 'emerald', sub: `${converted} admitted in ${timeRangeLabel}`, periodBadge: timeRangeLabel },
         ].map(({ label, value, icon: Icon, color, sub, periodBadge }) => (
-          <div key={label} className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div key={label} className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
             <div className="mb-2 flex items-center justify-between">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{label}</span>
@@ -145,7 +145,7 @@ export default function AdminEnquiriesPageView() {
                   {periodBadge}
                 </span>
               </div>
-              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${color === 'indigo' ? 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' : color === 'sky' ? 'bg-sky-500/10 text-sky-600 dark:text-sky-400' : color === 'amber' ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400' : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'}`}>
+              <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${color === 'indigo' || color === 'sky' ? 'bg-info-bg text-info-text' : color === 'amber' ? 'bg-warning-bg text-warning-text' : 'bg-success-bg text-success-text'}`}>
                 <Icon size={17} strokeWidth={2.2} />
               </div>
             </div>
@@ -156,7 +156,7 @@ export default function AdminEnquiriesPageView() {
       </div>
 
       {/* ── Toolbar ── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border/70 bg-surface/80 p-3 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 shadow-sm">
         {/* Search */}
         <div className="relative min-w-0 flex-1 max-w-sm">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" strokeWidth={2} />
@@ -185,7 +185,7 @@ export default function AdminEnquiriesPageView() {
         </select>
 
         {/* View toggle */}
-        <div className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface-muted/60 p-1">
+        <div className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface-muted p-1">
           <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-001"
             className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all ${view === 'kanban' ? 'bg-primary text-primary-contrast shadow-sm' : 'hover:bg-surface-elevated'}`}
             onClick={() => setView('kanban')} title={t('KANBAN_TITLE')} aria-label={t('KANBAN_SWITCH')} aria-pressed={view === 'kanban'}

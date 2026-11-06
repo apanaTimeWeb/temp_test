@@ -28,23 +28,23 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
   return (
     <section aria-label={t('PAGE_TITLE')} className="space-y-4">
       {props.isDemoMode ? (
-        <div role="status" className="flex items-center gap-2 rounded-xl border border-blue-500/20 bg-blue-500/10 p-3.5 text-xs font-medium text-blue-700 dark:text-blue-300 shadow-sm backdrop-blur-sm">
-          <ShieldCheck className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
+        <div role="status" className="flex items-center gap-2 rounded-xl border border-info-border bg-info-bg p-3.5 text-xs font-medium text-info-text shadow-sm backdrop-blur-sm">
+          <ShieldCheck className="h-4 w-4 shrink-0 text-info-text" />
           <span>{t('DEMO_BANNER')}</span>
         </div>
       ) : (
-        <div role="status" className="flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3.5 text-xs font-medium text-amber-700 dark:text-amber-300 shadow-sm backdrop-blur-sm">
+        <div role="status" className="flex items-center gap-2 rounded-xl border border-warning-border bg-warning-bg p-3.5 text-xs font-medium text-warning-text shadow-sm backdrop-blur-sm">
           <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
           <span>{t('LIVE_UNAVAILABLE_BANNER')}</span>
         </div>
       )}
 
       {/* Executive Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-primary-subtle px-2.5 py-0.5 text-xs font-semibold text-primary">
                 <BarChart3 className="h-3.5 w-3.5" />
                 {t('BREADCRUMB')}
               </span>
@@ -55,11 +55,11 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
           </div>
 
           {/* Unified Global Time Horizon & Action Toolbar */}
-          <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border/70 bg-surface/90 p-2 shadow-sm backdrop-blur-md">
+          <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border bg-surface p-2 shadow-sm backdrop-blur-md">
             {/* Range Tabs */}
             <div
               data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-001"
-              className="flex items-center rounded-lg bg-surface-muted/60 p-1 border border-border/50"
+              className="flex items-center rounded-lg bg-surface-muted p-1 border border-border"
               role="tablist"
               aria-label={t('REPORT_RANGE_LABEL')}
               aria-orientation="horizontal"
@@ -80,7 +80,7 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
                   className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
                     props.range === option.key
                       ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
                   }`}
                 >
                   <Calendar className="h-3 w-3 shrink-0 opacity-70" />
@@ -97,7 +97,7 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
                 disabled={!props.isDemoMode}
                 value={props.branch}
                 onChange={(event) => props.onBranchChange(event.target.value)}
-                className="admin-select admin-select-sm text-xs font-medium rounded-lg bg-surface border border-border/70 py-1.5 pl-3 pr-8 shadow-sm hover:border-primary/50 focus:ring-2 focus:ring-primary/20"
+                className="admin-select admin-select-sm text-xs font-medium rounded-lg bg-surface border border-border py-1.5 pl-3 pr-8 shadow-sm hover:border-primary focus:ring-2 focus:ring-primary"
               >
                 <option value="All Branches">{t('ALL_BRANCHES')}</option>
                 {props.branchOptions.map((option) => (
@@ -106,7 +106,7 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
               </select>
             </div>
 
-            <div className="h-5 w-[1px] bg-border/60 mx-0.5" />
+            <div className="h-5 w-[1px] bg-border mx-0.5" />
 
             {/* Action Buttons */}
             <div className="flex items-center gap-1.5">
@@ -114,7 +114,7 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
                 type="button"
                 data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-004"
                 onClick={props.onPrint}
-                className="admin-btn-ghost admin-btn-sm text-xs inline-flex items-center gap-1.5 rounded-lg border border-border/60 px-2.5 py-1.5 text-text-secondary hover:bg-surface-elevated hover:text-text-primary transition-colors"
+                className="admin-btn-ghost admin-btn-sm text-xs inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-text-secondary hover:bg-surface-elevated hover:text-text-primary transition-colors"
                 title={t('PRINT_SAVE_PDF')}
               >
                 <Printer size={15} strokeWidth={2} aria-hidden="true" />
@@ -126,7 +126,7 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
                 data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-005"
                 disabled
                 title={t('EMAIL_UNAVAILABLE_TITLE')}
-                className="admin-btn-ghost admin-btn-sm text-xs inline-flex items-center gap-1.5 rounded-lg border border-border/40 px-2.5 py-1.5 text-text-muted opacity-50 cursor-not-allowed"
+                className="admin-btn-ghost admin-btn-sm text-xs inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-text-muted opacity-50 cursor-not-allowed"
               >
                 <Mail size={15} strokeWidth={2} aria-hidden="true" />
                 <span className="hidden sm:inline">{t('EMAIL')}</span>
@@ -136,7 +136,7 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
                 type="button"
                 data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-006"
                 onClick={props.onPrint}
-                className="admin-btn-ghost admin-btn-sm text-xs inline-flex items-center gap-1.5 rounded-lg border border-border/60 px-2.5 py-1.5 text-text-secondary hover:bg-surface-elevated hover:text-text-primary transition-colors"
+                className="admin-btn-ghost admin-btn-sm text-xs inline-flex items-center gap-1.5 rounded-lg border border-border px-2.5 py-1.5 text-text-secondary hover:bg-surface-elevated hover:text-text-primary transition-colors"
                 title={t('PDF_EXPORT')}
               >
                 <FileText size={15} strokeWidth={2} aria-hidden="true" />
