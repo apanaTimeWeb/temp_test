@@ -72,7 +72,6 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
           ? nextShifts[0]
           : `${nextShifts.join(' + ')} (Multi-Shift)`;
 
-    console.log('handleToggleShift called:', shiftId, '-> next:', nextShifts, 'consolidated:', consolidated);
     setValue('shift', consolidated, { shouldValidate: true, shouldDirty: true });
   };
 

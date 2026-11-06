@@ -39,7 +39,6 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
   const selectedShifts = propSelectedShifts ?? internalSelectedShifts;
 
   const handleToggleShift = (shiftId: string) => {
-    console.log('EnrollmentSection handleToggleShift clicked:', shiftId, 'has propOnToggleShift:', !!propOnToggleShift);
     if (propOnToggleShift) {
       propOnToggleShift(shiftId);
       return;

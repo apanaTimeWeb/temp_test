@@ -28,7 +28,9 @@ export function ManagerSeatsMatrixModal({ selectedSeat, onClose, onUpdateSeat }:
 
   const shiftLabels: Record<string, string> = {
     Morning: tManagerUi('morning'),
+    Afternoon: 'Afternoon',
     Evening: tManagerUi('evening'),
+    Night: 'Night',
     'Full Day': tManagerUi('full_day'),
   };
   const shiftLabel = selectedSeat.shift ? (shiftLabels[selectedSeat.shift] ?? selectedSeat.shift) : '';
@@ -102,7 +104,7 @@ export function ManagerSeatsMatrixModal({ selectedSeat, onClose, onUpdateSeat }:
   };
 
   return (
-    <div className="ss-modal-overlay flex items-center justify-center fixed inset-0 z-50 bg-overlay" onClick={onClose}>
+    <div className="ss-modal-overlay flex items-center justify-center fixed inset-0 z-50 bg-overlay-backdrop" onClick={onClose}>
       <div
         ref={dialogRef}
         tabIndex={-1}

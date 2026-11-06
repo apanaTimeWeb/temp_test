@@ -41,7 +41,7 @@ export function ManagerSeatsMatrixAddModal({
   };
 
   return (
-    <div className="ss-modal-overlay flex items-center justify-center fixed inset-0 z-50 bg-overlay" onClick={onClose}>
+    <div className="ss-modal-overlay flex items-center justify-center fixed inset-0 z-50 bg-overlay-backdrop" onClick={onClose}>
       <div className="bg-card p-6 rounded-xl shadow-xl w-full max-w-md border border-border" onClick={(e) => e.stopPropagation()}>
         <h3 className="text-lg font-bold text-primary mb-4">Add New Library Desk / Seat</h3>
         {addFeedback && (

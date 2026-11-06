@@ -18,7 +18,9 @@ export function ManagerSeatsMatrixClient() {
   const tManagerUi = useTranslations('manager.manager_seat_matrix.ui');
   const shiftLabels: Record<string, string> = {
     Morning: tManagerUi('morning'),
+    Afternoon: 'Afternoon',
     Evening: tManagerUi('evening'),
+    Night: 'Night',
     'Full Day': tManagerUi('full_day'),
   };
   const shiftLabel = (value?: string) => (value ? (shiftLabels[value] ?? value) : '—');

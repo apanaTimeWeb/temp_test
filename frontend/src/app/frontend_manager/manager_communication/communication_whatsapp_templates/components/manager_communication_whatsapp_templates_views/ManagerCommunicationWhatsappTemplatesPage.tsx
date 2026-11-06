@@ -193,6 +193,63 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
           </div>
         </div>
       </div>
+
+      {showTest && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" onClick={() => setShowTest(false)}>
+          <div
+            ref={dialogRef}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="test-whatsapp-title"
+            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <div className="flex items-center gap-2">
+                <Send size={18} className="text-primary" />
+                <h3 id="test-whatsapp-title" className="text-base font-bold text-primary">Dispatch Test WhatsApp</h3>
+              </div>
+              <button type="button" onClick={() => setShowTest(false)} className="text-secondary hover:text-primary">
+                <X size={18} />
+              </button>
+            </div>
+
+            <p className="text-xs text-secondary">
+              Send sample message with filled tags to a verified test mobile number.
+            </p>
+
+            <div>
+              <label htmlFor="test-phone-input" className="text-xs font-semibold text-primary block mb-1">
+                Recipient Mobile (+91) *
+              </label>
+              <input
+                id="test-phone-input"
+                type="tel"
+                placeholder="e.g. 9876543210"
+                value={testPhone}
+                onChange={(e) => setTestPhone(e.target.value)}
+                className="mgr-input text-xs w-full font-mono"
+                autoFocus
+              />
+            </div>
+
+            <div className="p-3 rounded-xl bg-surface-highlight border border-border text-xs text-secondary space-y-1">
+              <span className="font-semibold text-primary block">Preview Output:</span>
+              <p className="line-clamp-3 italic">{preview}</p>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button type="button" onClick={() => setShowTest(false)} className="mgr-btn-ghost flex-1 text-xs">
+                Cancel
+              </button>
+              <button type="button" onClick={handleTest} className="mgr-btn-primary flex-1 text-xs flex items-center justify-center gap-1.5">
+                <Send size={13} /> Send Test WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

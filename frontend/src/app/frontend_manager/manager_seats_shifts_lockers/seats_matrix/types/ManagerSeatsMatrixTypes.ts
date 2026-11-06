@@ -1,5 +1,5 @@
 export type SeatStatus = 'free' | 'occupied' | 'expiring' | 'maintenance' | 'unknown';
-export type ShiftType = 'Morning' | 'Evening' | 'Full Day';
+export type ShiftType = 'Morning' | 'Afternoon' | 'Evening' | 'Night' | 'Full Day';
 export type LockerCellStatus = 'free' | 'occupied' | 'maintenance' | 'unknown';
 export type AllocationStatus = 'Active' | 'Expired' | 'Suspended' | 'unknown';
 export type SeatHistoryReason = 'Admission' | 'Shift Change' | 'Seat Change' | 'unknown' | (string & {});

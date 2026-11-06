@@ -15,9 +15,11 @@ export const LEGEND_ITEMS = [
 ] as const;
 
 export const SHIFT_BADGE: Record<string, string> = {
-  Morning:  'ss-badge ss-badge--primary',
-  Evening:  'ss-badge ss-badge--success',
-  'Full Day':'ss-badge ss-badge--info',
+  Morning:   'ss-badge ss-badge--primary',
+  Afternoon: 'ss-badge ss-badge--warning',
+  Evening:   'ss-badge ss-badge--success',
+  Night:     'ss-badge ss-badge--purple',
+  'Full Day': 'ss-badge ss-badge--info',
 };
 
 export const MANAGER_SEATS_MATRIX_ALLOCATION_STATUS_CLASSES: Record<string, string> = {

@@ -78,7 +78,9 @@ export function ManagerSeatsMatrixModalActionsTab({
                 className="mgr-select w-full"
               >
                 <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
                 <option value="Evening">Evening</option>
+                <option value="Night">Night</option>
                 <option value="Full Day">Full Day</option>
               </select>
             </div>
