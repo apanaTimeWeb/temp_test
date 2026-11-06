@@ -38,6 +38,7 @@ export interface AdminShiftsShift {
   active: boolean;
   branchName?: string;
   branchId?: string;
+  monthlyPrice?: number;
 }
 export interface AdminShiftsBookedBlock {
   startH: number;

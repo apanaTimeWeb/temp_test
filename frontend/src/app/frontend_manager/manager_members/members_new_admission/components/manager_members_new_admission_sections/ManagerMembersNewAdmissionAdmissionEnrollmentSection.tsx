@@ -1,45 +1,48 @@
 'use client';
 // RESPONSIBILITY: Render the members new admission admission enrollment section with multi-shift support.
 import { useTranslations } from 'next-intl';
-import { Armchair, FileText, Layers, Lock, Clock, Check } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Armchair, FileText, Layers, Lock, Clock, Check, IndianRupee } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
 import type { ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
+import { getLibraryPricingConfig, type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
 
 export type { ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps };
-
-interface ShiftOption {
-  id: string;
-  name: string;
-  hours: string;
-  badge: string;
-}
-
-const SHIFT_OPTIONS: ShiftOption[] = [
-  { id: 'Morning', name: 'Morning Shift', hours: '06:00 AM – 02:00 PM', badge: '8 Hrs' },
-  { id: 'Evening', name: 'Evening Shift', hours: '02:00 PM – 10:00 PM', badge: '8 Hrs' },
-  { id: 'Night', name: 'Night Shift', hours: '10:00 PM – 06:00 AM', badge: '8 Hrs' },
-  { id: 'Full Day', name: 'Full Day Access', hours: '06:00 AM – 10:00 PM', badge: '16 Hrs' },
-];
 
 export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
   register,
   errors,
   setValue,
   watch,
+  selectedShifts: propSelectedShifts,
+  onToggleShift: propOnToggleShift,
+  watchedShift: propWatchedShift,
 }: ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps) {
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
-  const watchedShift = watch ? watch('shift') : '';
+  const watchedShift = propWatchedShift ?? (watch ? watch('shift') : '');
+  const [pricingConfig, setPricingConfig] = useState<LibraryPricingConfig>(() => getLibraryPricingConfig());
 
-  // Multi-shift toggle state
-  const [selectedShifts, setSelectedShifts] = useState<string[]>(() => {
+  useEffect(() => {
+    const handleUpdate = () => setPricingConfig(getLibraryPricingConfig());
+    window.addEventListener('library_pricing_updated', handleUpdate);
+    return () => window.removeEventListener('library_pricing_updated', handleUpdate);
+  }, []);
+
+  // Derive selected shifts directly from react-hook-form watchedShift
+  const internalSelectedShifts = useMemo(() => {
     if (!watchedShift) return [];
     if (watchedShift.includes('+')) {
       return watchedShift.split('+').map(s => s.trim().replace(/\(.*\)/, '').trim());
     }
-    return [watchedShift];
-  });
+    return [watchedShift.replace(/\(.*\)/, '').trim()].filter(Boolean);
+  }, [watchedShift]);
+
+  const selectedShifts = propSelectedShifts ?? internalSelectedShifts;
 
   const handleToggleShift = (shiftId: string) => {
+    if (propOnToggleShift) {
+      propOnToggleShift(shiftId);
+      return;
+    }
     let nextShifts: string[];
 
     if (shiftId === 'Full Day') {
@@ -53,9 +56,6 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
       }
     }
 
-    setSelectedShifts(nextShifts);
-
-    // Format consolidated string for form submission
     let consolidated = '';
     if (nextShifts.length === 0) {
       consolidated = '';
@@ -70,15 +70,13 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
     }
   };
 
-  useEffect(() => {
-    if (watchedShift && !selectedShifts.length) {
-      if (watchedShift.includes('+')) {
-        setSelectedShifts(watchedShift.split('+').map(s => s.trim().replace(/\(.*\)/, '').trim()));
-      } else {
-        setSelectedShifts([watchedShift]);
-      }
-    }
-  }, [watchedShift, selectedShifts.length]);
+  const shiftsToRender = pricingConfig.shifts;
+  const currentTotalMonthlyShiftRate = selectedShifts.includes('Full Day')
+    ? (pricingConfig.shifts.find(s => s.id === 'Full Day')?.monthlyPrice ?? 1500)
+    : selectedShifts.reduce((acc, shiftId) => {
+        const found = pricingConfig.shifts.find(s => s.id === shiftId);
+        return acc + (found?.monthlyPrice ?? 700);
+      }, 0);
 
   return (
     <section className="mgr-card" aria-labelledby="manager-students-admission-enrollment">
@@ -100,7 +98,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
           </label>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-            {SHIFT_OPTIONS.map((shift) => {
+            {shiftsToRender.map((shift) => {
               const isSelected = selectedShifts.includes(shift.id);
               return (
                 <button
@@ -122,7 +120,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
                       isSelected ? 'bg-primary text-on-primary' : 'bg-floating text-secondary'
                     }`}>
                       {isSelected ? <Check size={12} className="inline mr-0.5" /> : null}
-                      {shift.badge}
+                      ₹{shift.monthlyPrice}/mo
                     </span>
                   </div>
                   <span className="text-xs text-secondary">{shift.hours}</span>
@@ -130,6 +128,21 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
               );
             })}
           </div>
+
+          {selectedShifts.length > 0 && (
+            <div className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs">
+              <span className="text-secondary font-medium">
+                Selected: <strong className="text-primary">{selectedShifts.join(' + ')}</strong>
+                {selectedShifts.length > 1 && !selectedShifts.includes('Full Day') ? (
+                  <span className="ml-1 text-success-text font-bold">({pricingConfig.multiShiftDiscountPercent}% Combo Discount Applies)</span>
+                ) : null}
+              </span>
+              <span className="font-bold text-primary flex items-center gap-1">
+                <IndianRupee size={12} />
+                <span>Base: ₹{currentTotalMonthlyShiftRate} / mo</span>
+              </span>
+            </div>
+          )}
 
           {/* Hidden or synced shift input for react-hook-form */}
           <input type="hidden" {...register('shift')} />

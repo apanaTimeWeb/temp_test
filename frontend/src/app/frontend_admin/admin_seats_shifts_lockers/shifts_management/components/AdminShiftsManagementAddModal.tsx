@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { X } from 'lucide-react';
+import { IndianRupee, X } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
+import { getLibraryPricingConfig, saveLibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
 
 interface AdminShiftsManagementAddModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export function AdminShiftsManagementAddModal({
   const [startTime, setStartTime] = useState('06:00');
   const [endTime, setEndTime] = useState('12:00');
   const [capacity, setCapacity] = useState(40);
+  const [monthlyPrice, setMonthlyPrice] = useState(700);
   const [branchName, setBranchName] = useState('Downtown Central');
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -42,7 +44,25 @@ export function AdminShiftsManagementAddModal({
       capacity: Number(capacity) || 40,
       active: true,
       branchName: branchName || selectedBranchName || 'Downtown Central',
+      monthlyPrice: Number(monthlyPrice) || 700,
     };
+
+    // Sync to centralized pricing engine
+    const currentConfig = getLibraryPricingConfig();
+    const updatedShifts = [
+      ...currentConfig.shifts.filter((s) => s.id !== newShift.name),
+      {
+        id: newShift.name,
+        name: newShift.name,
+        startTime: newShift.startTime,
+        endTime: newShift.endTime,
+        monthlyPrice: Number(monthlyPrice) || 700,
+        hours: `${newShift.startTime} – ${newShift.endTime}`,
+        badge: 'Custom',
+      },
+    ];
+    saveLibraryPricingConfig({ ...currentConfig, shifts: updatedShifts });
+
     onAddShift(newShift);
     toast.success(`Shift "${newShift.name}" added successfully.`);
     onClose();
@@ -50,6 +70,7 @@ export function AdminShiftsManagementAddModal({
     setStartTime('06:00');
     setEndTime('12:00');
     setCapacity(40);
+    setMonthlyPrice(700);
     setFormError(null);
   };
 
@@ -112,18 +133,37 @@ export function AdminShiftsManagementAddModal({
               />
             </div>
           </div>
-          <div className="space-y-1">
-            <label htmlFor="shift-capacity" className="text-sm font-medium text-text-primary">Total Capacity (Seats)</label>
-            <input
-              id="shift-capacity"
-              type="number"
-              min="1"
-              max="1000"
-              required
-              value={capacity}
-              onChange={(e) => setCapacity(Number(e.target.value))}
-              className="admin-input w-full"
-            />
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="space-y-1">
+              <label htmlFor="shift-capacity" className="text-sm font-medium text-text-primary">Total Capacity (Seats)</label>
+              <input
+                id="shift-capacity"
+                type="number"
+                min="1"
+                max="1000"
+                required
+                value={capacity}
+                onChange={(e) => setCapacity(Number(e.target.value))}
+                className="admin-input w-full"
+              />
+            </div>
+            <div className="space-y-1">
+              <label htmlFor="shift-monthly-price" className="text-sm font-medium text-text-primary flex items-center gap-1">
+                <IndianRupee size={14} className="text-primary" />
+                <span>Base Monthly Fee (₹)</span>
+              </label>
+              <input
+                id="shift-monthly-price"
+                type="number"
+                min="0"
+                step="50"
+                required
+                value={monthlyPrice}
+                onChange={(e) => setMonthlyPrice(Number(e.target.value))}
+                placeholder="700"
+                className="admin-input w-full"
+              />
+            </div>
           </div>
           <div className="flex justify-end gap-2 border-t border-border pt-4">
             <button

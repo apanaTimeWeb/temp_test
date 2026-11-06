@@ -13,7 +13,22 @@ export type { ManagerMembersNewAdmissionAdmissionSummaryProps };
 
 
 
-export function ManagerMembersNewAdmissionAdmissionSummary({ smartIdPreview, plan, shift, seat, locker, baseAmountMinor, discountMinor, totalPayableMinor, amountPaidMinor, currency, isSubmitting, canSubmit, pricingAvailable = false }: ManagerMembersNewAdmissionAdmissionSummaryProps) {
+export function ManagerMembersNewAdmissionAdmissionSummary({
+  smartIdPreview,
+  plan,
+  shift,
+  seat,
+  locker,
+  baseAmountMinor,
+  discountMinor,
+  totalPayableMinor,
+  amountPaidMinor,
+  currency,
+  isSubmitting,
+  canSubmit,
+  pricingAvailable = false,
+  breakdown,
+}: ManagerMembersNewAdmissionAdmissionSummaryProps) {
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
   const { formatCurrency } = useManagerNewAdmissionFormatting();
   const balanceMinor = Math.max(0, totalPayableMinor - amountPaidMinor);
@@ -30,8 +45,25 @@ export function ManagerMembersNewAdmissionAdmissionSummary({ smartIdPreview, pla
             <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('locker')}</span><span className="mgr-summary-value">{locker || '—'}</span></div>
             {pricingAvailable ? <>
               <div className="mgr-summary-divider" />
-              <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('base_amount')}</span><span className="mgr-summary-value">{formatCurrency(baseAmountMinor, currency)}</span></div>
-              <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('discount')}</span><span className="mgr-text-warning">− {formatCurrency(discountMinor, currency)}</span></div>
+              {breakdown && breakdown.length > 0 ? (
+                <div className="space-y-1.5 py-1">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-secondary">Itemized Invoice</p>
+                  {breakdown.map((item, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-xs">
+                      <span className="text-secondary">{item.label}</span>
+                      <span className={item.isNegative ? 'mgr-text-warning font-semibold' : 'font-semibold text-primary'}>
+                        {item.isNegative ? '− ' : ''}{formatCurrency(item.amount * 100, currency)}
+                      </span>
+                    </div>
+                  ))}
+                  <div className="mgr-summary-divider my-2" />
+                </div>
+              ) : (
+                <>
+                  <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('base_amount')}</span><span className="mgr-summary-value">{formatCurrency(baseAmountMinor, currency)}</span></div>
+                  <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('discount')}</span><span className="mgr-text-warning">− {formatCurrency(discountMinor, currency)}</span></div>
+                </>
+              )}
               <div className="mgr-summary-total-row"><span className="mgr-summary-total-label">{tManagerUi('total_payable')}</span><span className="mgr-summary-total-value">{formatCurrency(totalPayableMinor, currency)}</span></div>
               <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('paid_now')}</span><span className="mgr-text-success">{formatCurrency(amountPaidMinor, currency)}</span></div>
               {balanceMinor > 0 && <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('balance_due')}</span><span className="mgr-text-danger">{formatCurrency(balanceMinor, currency)}</span></div>}

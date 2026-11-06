@@ -13,11 +13,24 @@ export interface ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps {
   errors: FieldErrors<ManagerMembersNewAdmissionAdmissionFormValues>;
   setValue?: UseFormSetValue<ManagerMembersNewAdmissionAdmissionFormValues>;
   watch?: UseFormWatch<ManagerMembersNewAdmissionAdmissionFormValues>;
+  selectedShifts?: string[];
+  onToggleShift?: (shiftId: string) => void;
+  watchedShift?: string;
+}
+
+export interface DynamicPlanOption {
+  id: string;
+  label: string;
+  months: number;
+  totalAmount: number;
+  savingsText?: string;
 }
 
 export interface ManagerMembersNewAdmissionAdmissionPaymentSectionProps {
   register: UseFormRegister<ManagerMembersNewAdmissionAdmissionFormValues>;
   errors: FieldErrors<ManagerMembersNewAdmissionAdmissionFormValues>;
+  planOptions?: DynamicPlanOption[];
+  effectiveMonthlyRate?: number;
 }
 
 export interface ManagerMembersNewAdmissionAdmissionPersonalSectionProps {
@@ -40,6 +53,8 @@ export interface ManagerMembersNewAdmissionAdmissionSummaryProps {
   canSubmit: boolean;
   pricingAvailable?: boolean;
   hasUnsavedChanges?: boolean;
+  breakdown?: { label: string; amount: number; isNegative?: boolean }[];
+  durationLabel?: string;
 }
 
 export interface ManagerMembersNewAdmissionErrorBoundaryProps {

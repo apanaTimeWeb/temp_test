@@ -1,18 +1,31 @@
 'use client';
-// RESPONSIBILITY: Render the members new admission admission payment section section of the components feature. It does not own backend persistence or cross-feature business logic.
+// RESPONSIBILITY: Render the members new admission admission payment section with dynamic shift-based plan pricing.
 import { useTranslations } from 'next-intl';
-import { CreditCard, FileText, IndianRupee, MessageSquare, Tag } from 'lucide-react';
+import { CreditCard, FileText, IndianRupee, MessageSquare, Tag, Sparkles } from 'lucide-react';
 import type { ManagerMembersNewAdmissionAdmissionPaymentSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 
 export type { ManagerMembersNewAdmissionAdmissionPaymentSectionProps };
 
-export function ManagerMembersNewAdmissionAdmissionPaymentSection({ register, errors }: ManagerMembersNewAdmissionAdmissionPaymentSectionProps) {
+export function ManagerMembersNewAdmissionAdmissionPaymentSection({
+  register,
+  errors,
+  planOptions,
+  effectiveMonthlyRate = 0,
+}: ManagerMembersNewAdmissionAdmissionPaymentSectionProps) {
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
   return (
     <section className="mgr-card" aria-labelledby="manager-students-admission-payment">
       <div className="mgr-card-header">
         <div className="mgr-section-number">04</div>
-        <h2 id="manager-students-admission-payment" className="mgr-section-title">{tManagerUi('fee_payment')}</h2>
+        <div>
+          <h2 id="manager-students-admission-payment" className="mgr-section-title">{tManagerUi('fee_payment')}</h2>
+          {effectiveMonthlyRate > 0 && (
+            <p className="text-xs text-primary font-medium flex items-center gap-1 mt-0.5">
+              <Sparkles size={13} />
+              <span>Dynamic Plan Rates calculated from Shift Base: <strong>₹{effectiveMonthlyRate} / mo</strong></span>
+            </p>
+          )}
+        </div>
       </div>
       <div className="mgr-card-body">
         <div className="mgr-form-grid">
@@ -22,12 +35,21 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({ register, er
             <div className="mgr-input-icon-wrap">
               <FileText size={18} strokeWidth={2} className="mgr-input-icon" />
               <select id="admission-plan" {...register('plan')} className={`mgr-select mgr-input-with-icon${errors.plan ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.plan)}>
-                <option value="">-- Select Subscription Plan --</option>
-                <option value="Basic Monthly">Basic Monthly (₹1,000 / month)</option>
-                <option value="Pro Monthly">Pro Monthly (₹1,500 / month)</option>
-                <option value="Quarterly Standard">Quarterly Standard (₹2,700 / 3 months)</option>
-                <option value="Half-Yearly Saver">Half-Yearly Saver (₹5,000 / 6 months)</option>
-                <option value="Annual Elite">Annual Elite (₹9,500 / year)</option>
+                <option value="">-- Select Subscription Duration --</option>
+                {planOptions && planOptions.length > 0 ? (
+                  planOptions.map((opt) => (
+                    <option key={opt.id} value={opt.label}>
+                      {opt.label} — ₹{opt.totalAmount.toLocaleString('en-IN')}{opt.savingsText ? ` (${opt.savingsText})` : ''}
+                    </option>
+                  ))
+                ) : (
+                  <>
+                    <option value="1 Month (Monthly)">1 Month (Monthly) (₹1,000 / month)</option>
+                    <option value="3 Months (Quarterly)">3 Months (Quarterly) (₹2,700 / 3 months)</option>
+                    <option value="6 Months (Half-Yearly)">6 Months (Half-Yearly) (₹5,000 / 6 months)</option>
+                    <option value="1 Year (Annual)">1 Year (Annual) (₹9,500 / year)</option>
+                  </>
+                )}
               </select>
             </div>
             {errors.plan && <p className="mgr-error" role="alert">{errors.plan.message}</p>}

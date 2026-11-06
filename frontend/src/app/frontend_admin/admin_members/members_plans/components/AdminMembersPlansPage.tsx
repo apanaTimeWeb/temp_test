@@ -10,21 +10,11 @@ import type { AdminPlansPlan, AdminPlansFormValues } from '@/app/frontend_admin/
 import { ADMIN_PLANS_STATUS_VALUES } from '@/app/frontend_admin/admin_members/members_plans/config/admin_members_plans.url_config';
 import AdminPlansFormDialog from '@/app/frontend_admin/admin_members/members_plans/components/AdminMembersPlansFormDialog';
 import AdminPlansDeleteDialog from '@/app/frontend_admin/admin_members/members_plans/components/AdminMembersPlansDeleteDialog';
+import { AdminMembersPlansPricingRuleSettings } from './AdminMembersPlansPricingRuleSettings';
 
 import type { AdminPlansEmptyStateProps } from '@/app/frontend_admin/admin_members/members_plans/types/AdminMembersPlansComponentTypes';
 
 // RESPONSIBILITY: Owns the admin membership-plans page composition and local demo-only actions.
-
-
-
-
-
-
-
-
-
-
-
 
 /** Formats prices only when the source record explicitly declares currency and unit. */
 export function formatAdminPlansPrice(amount: number, currencyCode: string | undefined, amountUnit: 'minor' | 'major' | undefined, locale: string): string {
@@ -190,6 +180,8 @@ export default function AdminPlansPage() {
           </button>
         </div>
       </div>
+
+      <AdminMembersPlansPricingRuleSettings />
 
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div className="relative min-w-[260px] max-w-sm flex-1">

@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Download, Plus, Printer, Upload, Search, Building2 } from 'lucide-react';
+import { Download, Plus, Printer, Upload, Search, Building2, IndianRupee } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_SHIFTS_DEMO_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/mocks/scenarios/admin_shifts_management.scenarios';
@@ -167,10 +167,14 @@ export function AdminShiftsManagementPage() {
                     )}
                   </div>
                 </div>
-                <div className="space-y-2 rounded-lg bg-surface-highlight p-3">
-                  <p className={`min-w-0 rounded-lg border border-border bg-card p-3${!shift.active ? ' min-w-0 rounded-lg border border-border bg-card p-3' : ''}`}>
+                <div className="flex items-center justify-between gap-2 rounded-lg bg-surface-highlight p-3">
+                  <p className="text-xs sm:text-sm font-medium text-text-primary">
                     {shift.startTime} → {shift.endTime}
                   </p>
+                  <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1 text-xs font-bold text-primary shadow-xs">
+                    <IndianRupee size={12} />
+                    <span>{shift.monthlyPrice ?? 700} / mo</span>
+                  </span>
                 </div>
                 <div className="flex items-center justify-between gap-2">
                   <div>

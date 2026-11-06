@@ -1,8 +1,8 @@
 'use client';
-// RESPONSIBILITY: Render the members new admission admission form component within the components feature. It does not own backend persistence or cross-feature business logic.
+// RESPONSIBILITY: Render the members new admission admission form component with dynamic shift & tenure pricing.
 import { useTranslations } from 'next-intl';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -16,6 +16,8 @@ import { useManagerNewAdmissionAdmission } from '@/app/frontend_manager/manager_
 import { useManagerMembersNewAdmissionConfirm } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionConfirm';
 import { useManagerMembersNewAdmissionUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionUnsavedChangesGuard';
 import { MANAGER_MEMBERS_NEW_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission.url_config';
+import { getLibraryPricingConfig, calculateAdmissionFee, type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
+import type { DynamicPlanOption } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 
 export default function ManagerMembersNewAdmissionAdmissionForm() {
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
@@ -24,27 +26,116 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const [draftFeedback, setDraftFeedback] = useState<string | null>(null);
   const [admittedStudent, setAdmittedStudent] = useState<AdmittedStudentInfo | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pricingConfig, setPricingConfig] = useState<LibraryPricingConfig>(() => getLibraryPricingConfig());
   const { register, watch, setValue, reset, formState: { errors, isDirty } } = form;
   const router = useRouter();
   useManagerMembersNewAdmissionUnsavedChangesGuard({ isDirty, confirm, router, tManagerUi, replayAnchorOnConfirm: true });
+
+  useEffect(() => {
+    const handlePriceUpdate = () => setPricingConfig(getLibraryPricingConfig());
+    window.addEventListener('library_pricing_updated', handlePriceUpdate);
+    return () => window.removeEventListener('library_pricing_updated', handlePriceUpdate);
+  }, []);
+
   const watchedPlan = watch('plan');
   const watchedShift = watch('shift');
   const watchedSeat = watch('seat');
+  const watchedFloor = watch('floor');
   const watchedLocker = watch('locker');
   const watchedAmountPaid = watch('amountPaid');
   const watchedDiscount = watch('manualDiscount');
 
-  const amountPaidMinor = (Number(watchedAmountPaid) || 0) * 100;
-  const discountMinor = (Number(watchedDiscount) || 0) * 100;
-  const planRateMap: Record<string, number> = {
-    'Basic Monthly': 100000,
-    'Pro Monthly': 150000,
-    'Quarterly Standard': 270000,
-    'Half-Yearly Saver': 500000,
-    'Annual Elite': 950000,
+  const selectedShifts = useMemo(() => {
+    if (!watchedShift) return [];
+    if (watchedShift.includes('+')) {
+      return watchedShift.split('+').map(s => s.trim().replace(/\(.*\)/, '').trim());
+    }
+    return [watchedShift.replace(/\(.*\)/, '').trim()].filter(Boolean);
+  }, [watchedShift]);
+
+  const handleToggleShift = (shiftId: string) => {
+    let nextShifts: string[];
+    if (shiftId === 'Full Day') {
+      nextShifts = selectedShifts.includes('Full Day') ? [] : ['Full Day'];
+    } else {
+      const filtered = selectedShifts.filter((s) => s !== 'Full Day');
+      if (filtered.includes(shiftId)) {
+        nextShifts = filtered.filter((s) => s !== shiftId);
+      } else {
+        nextShifts = [...filtered, shiftId];
+      }
+    }
+    const consolidated =
+      nextShifts.length === 0
+        ? ''
+        : nextShifts.length === 1
+        ? nextShifts[0]
+        : `${nextShifts.join(' + ')} (Multi-Shift)`;
+
+    setValue('shift', consolidated, { shouldValidate: true, shouldDirty: true });
   };
-  const baseAmountMinor = planRateMap[watchedPlan] ?? (amountPaidMinor > 0 ? amountPaidMinor : 100000);
-  const totalPayableMinor = Math.max(0, baseAmountMinor - discountMinor);
+
+  // Compute dynamic plan options based on chosen shifts
+  const planOptions: DynamicPlanOption[] = useMemo(() => {
+    const activeShifts = selectedShifts.length > 0 ? selectedShifts : ['Morning'];
+    return pricingConfig.durationTiers.map((tier) => {
+      const calc = calculateAdmissionFee(
+        {
+          selectedShifts: activeShifts,
+          planDurationKey: tier.id,
+          floor: watchedFloor,
+          hasLocker: Boolean(watchedLocker),
+          manualDiscount: 0,
+        },
+        pricingConfig
+      );
+      const savings = calc.tenureDiscountAmount > 0
+        ? `Save ₹${calc.tenureDiscountAmount.toLocaleString('en-IN')} • ${tier.discountPercent}% Off`
+        : undefined;
+      return {
+        id: tier.id,
+        label: tier.name,
+        months: tier.months,
+        totalAmount: calc.finalPayable,
+        savingsText: savings,
+      };
+    });
+  }, [pricingConfig, selectedShifts, watchedFloor, watchedLocker]);
+
+  // Compute active calculation for the current form state
+  const calcResult = useMemo(() => {
+    return calculateAdmissionFee(
+      {
+        selectedShifts,
+        planDurationKey: watchedPlan || '1_month',
+        floor: watchedFloor,
+        hasLocker: Boolean(watchedLocker),
+        manualDiscount: Number(watchedDiscount) || 0,
+      },
+      pricingConfig
+    );
+  }, [selectedShifts, watchedPlan, watchedFloor, watchedLocker, watchedDiscount, pricingConfig]);
+
+  // Sync default plan and auto-fill amountPaid
+  useEffect(() => {
+    if (!watchedPlan && planOptions.length > 0) {
+      const firstOption = planOptions[0];
+      if (firstOption) {
+        setValue('plan', firstOption.label, { shouldDirty: false });
+      }
+    }
+  }, [watchedPlan, planOptions, setValue]);
+
+  useEffect(() => {
+    if (calcResult.finalPayable > 0) {
+      setValue('amountPaid', String(calcResult.finalPayable), { shouldValidate: true });
+    }
+  }, [calcResult.finalPayable, setValue]);
+
+  const baseAmountMinor = calcResult.grossTenureFee * 100;
+  const discountMinor = (calcResult.tenureDiscountAmount + calcResult.manualDiscountAmount) * 100;
+  const totalPayableMinor = calcResult.finalPayable * 100;
+  const amountPaidMinor = (Number(watchedAmountPaid) || calcResult.finalPayable) * 100;
 
   const handleResetAdmission = () => {
     reset();
@@ -74,7 +165,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   return (
     <>
       {unsavedConfirmDialog}
-<div className="mgr-page">
+      <div className="mgr-page">
         <div className="mgr-page-header">
           <div>
             <Link href={MANAGER_MEMBERS_NEW_ADMISSION_ROUTES.LIST} className="mgr-back-link"><ArrowLeft size={18} strokeWidth={2} /> {tManagerUi('back_to_students_6de7b0')}</Link>
@@ -96,9 +187,22 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
           <div className="mgr-admission-layout">
             <div className="mgr-admission-main">
               <ManagerMembersNewAdmissionAdmissionPersonalSection register={register} errors={errors} />
-              <ManagerMembersNewAdmissionAdmissionEnrollmentSection register={register} errors={errors} setValue={setValue} watch={watch} />
+              <ManagerMembersNewAdmissionAdmissionEnrollmentSection
+                register={register}
+                errors={errors}
+                setValue={setValue}
+                watch={watch}
+                selectedShifts={selectedShifts}
+                onToggleShift={handleToggleShift}
+                watchedShift={watchedShift}
+              />
               <ManagerMembersNewAdmissionAdmissionDocumentSection />
-              <ManagerMembersNewAdmissionAdmissionPaymentSection register={register} errors={errors} />
+              <ManagerMembersNewAdmissionAdmissionPaymentSection
+                register={register}
+                errors={errors}
+                planOptions={planOptions}
+                effectiveMonthlyRate={calcResult.effectiveMonthlyShiftFee}
+              />
             </div>
             <ManagerMembersNewAdmissionAdmissionSummary
               smartIdPreview="LIB-NEW"
@@ -115,6 +219,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
               isSubmitting={isSubmitting}
               canSubmit={true}
               hasUnsavedChanges={isDirty}
+              breakdown={calcResult.breakdown}
             />
           </div>
         </form>
