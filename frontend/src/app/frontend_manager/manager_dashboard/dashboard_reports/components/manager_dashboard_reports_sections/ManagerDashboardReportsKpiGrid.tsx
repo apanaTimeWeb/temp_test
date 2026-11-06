@@ -59,7 +59,7 @@ export function ManagerDashboardReportsKpiGrid({
         return (
           <div
             key={card.title}
-            className="mgr-kpi-card p-5 rounded-2xl border border-border bg-card shadow-card hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between"
+            className="mgr-kpi-card p-5 rounded-2xl border border-border bg-card shadow-card hover:border-primary hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between gap-2">

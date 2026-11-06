@@ -8,7 +8,10 @@ import { SEAT_CLASS } from '@/app/frontend_manager/manager_dashboard/dashboard_o
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
 import type { ManagerDashboardOverviewSeatMatrixProps } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
 
-export function ManagerDashboardOverviewSeatMatrix({ seatData }: ManagerDashboardOverviewSeatMatrixProps) {
+export function ManagerDashboardOverviewSeatMatrix({
+  seatData,
+  timeRangeLabel,
+}: ManagerDashboardOverviewSeatMatrixProps & { timeRangeLabel?: string }) {
   const tManagerUi = useTranslations('manager.manager_dashboard.ui');
   const router = useRouter();
 
@@ -32,13 +35,20 @@ export function ManagerDashboardOverviewSeatMatrix({ seatData }: ManagerDashboar
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-4 border-b border-border/60">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-500 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-surface-highlight border border-border text-primary flex items-center justify-center font-bold">
               <Armchair size={20} />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-foreground">
-                {tManagerUi('mini_seat_matrix_today_apos_s_shifts')}
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-foreground">
+                  {tManagerUi('mini_seat_matrix_today_apos_s_shifts')}
+                </h2>
+                {timeRangeLabel && (
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                    [{timeRangeLabel}]
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-muted-foreground">
                 Current shift snapshot • Click seat to inspect allocated student
               </p>

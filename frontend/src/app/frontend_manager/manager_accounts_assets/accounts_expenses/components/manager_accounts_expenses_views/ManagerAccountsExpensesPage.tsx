@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useManagerExpensesCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/hooks/ManagerAccountsExpensesFormattingHook';
 import type { NativeColumn } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_table_parts/ManagerAccountsExpensesNativeTable';
 import { useState, useMemo, useCallback } from 'react';
-import { Plus, X, RefreshCw, Wallet } from 'lucide-react';
+import { Plus, RefreshCw, Wallet } from 'lucide-react';
 import ManagerAccountsExpensesExpenseSummaryCards from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseSummaryCards';
 import ManagerAccountsExpensesExpenseCategoryFilter from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseCategoryFilter';
 import ManagerAccountsExpensesExpenseLedger from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_widgets/ManagerAccountsExpensesExpenseLedger';
@@ -20,6 +20,14 @@ import { ManagerAccountsExpensesCategoryReview } from '@/app/frontend_manager/ma
 
 export type ManagerExpensesTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
+const TIME_HORIZON_OPTIONS: Array<{ id: ManagerExpensesTimeHorizon; label: string }> = [
+  { id: 'all', label: 'All Time' },
+  { id: 'today', label: 'Today' },
+  { id: 'this_week', label: 'This Week' },
+  { id: 'this_month', label: 'This Month' },
+  { id: 'custom', label: 'Custom Range' },
+];
+
 export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccountsExpensesMainProps) {
   const tManagerUi = useTranslations('manager.manager_expenses.ui');
   const formatManagerExpensesCurrency = useManagerExpensesCurrencyFormatter();
@@ -33,7 +41,6 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
 
-  // Global Time Horizon State
   const [timeHorizon, setTimeHorizon] = useState<ManagerExpensesTimeHorizon>('this_month');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
@@ -55,16 +62,12 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
       const now = new Date();
       const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
 
-      if (timeHorizon === 'today') {
-        return d.getTime() >= startOfToday && d.getTime() < startOfToday + 86400000;
-      }
+      if (timeHorizon === 'today') return d.getTime() >= startOfToday && d.getTime() < startOfToday + 86400000;
       if (timeHorizon === 'this_week') {
         const startOfWeek = startOfToday - ((now.getDay() || 7) - 1) * 86400000;
         return d.getTime() >= startOfWeek && d.getTime() <= startOfWeek + 7 * 86400000;
       }
-      if (timeHorizon === 'this_month') {
-        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
-      }
+      if (timeHorizon === 'this_month') return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
       if (timeHorizon === 'custom') {
         if (customStartDate && d.getTime() < new Date(`${customStartDate}T00:00:00`).getTime()) return false;
         if (customEndDate && d.getTime() > new Date(`${customEndDate}T23:59:59`).getTime()) return false;
@@ -75,7 +78,6 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
     [timeHorizon, customStartDate, customEndDate]
   );
 
-  // Expenses filtered by category and time horizon
   const visible = useMemo(() => {
     return expenses.filter((e) => {
       const matchCat = catFilter === 'all' || e.category === catFilter;
@@ -84,7 +86,6 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
     });
   }, [expenses, catFilter, isDateInTimeHorizon]);
 
-  // Expenses filtered by category, time horizon, search query, and mode
   const searchedExpenses = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return visible.filter((e) => {
@@ -110,9 +111,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
       case 'this_week': return 'This Week';
       case 'this_month': return 'This Month';
       case 'custom':
-        return customStartDate && customEndDate
-          ? `${customStartDate} to ${customEndDate}`
-          : 'Custom Range';
+        return customStartDate && customEndDate ? `${customStartDate} to ${customEndDate}` : 'Custom Range';
       default: return 'This Month';
     }
   }, [timeHorizon, customStartDate, customEndDate]);
@@ -121,8 +120,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
     const headers = `Expense Ledger Export - Scope: ${timeHorizonLabel}\nDate,Description,Category,Amount (INR),Payment Mode,Paid By\n`;
     const rows = searchedExpenses
       .map(
-        (e) =>
-          `"${e.date}","${e.description}","${e.category}","${(e.amount / 100).toFixed(2)}","${e.mode}","${e.paidBy}"`
+        (e) => `"${e.date}","${e.description}","${e.category}","${(e.amount / 100).toFixed(2)}","${e.mode}","${e.paidBy}"`
       )
       .join('\n');
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
@@ -155,14 +153,6 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
     formatManagerExpensesCurrency
   );
 
-  const timeHorizonOptions: Array<{ id: ManagerExpensesTimeHorizon; label: string }> = [
-    { id: 'all', label: 'All Time' },
-    { id: 'today', label: 'Today' },
-    { id: 'this_week', label: 'This Week' },
-    { id: 'this_month', label: 'This Month' },
-    { id: 'custom', label: 'Custom Range' },
-  ];
-
   const handleResetFilters = () => {
     setSearchQuery('');
     setCatFilter('all');
@@ -175,15 +165,14 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id}>
       {/* ── Executive ERP Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap text-xs">
               <span className="font-semibold text-primary uppercase tracking-wider">Accounting & Operations</span>
               <span className="text-border">•</span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-danger-bg text-danger border border-border">
-                <Wallet size={12} />
-                Disbursement & Petty Cash
+                <Wallet size={12} /> Disbursement & Petty Cash
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
                 📍 Central Branch
@@ -199,12 +188,9 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
               </span>
             </div>
 
-            <p className="text-sm text-secondary">
-              {tManagerUi('track_all_library_operational_expenses')}
-            </p>
+            <p className="text-sm text-secondary">{tManagerUi('track_all_library_operational_expenses')}</p>
           </div>
 
-          {/* Action buttons */}
           <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
             <button
               type="button"
@@ -230,10 +216,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
       </div>
 
       {feedbackToast && (
-        <div
-          className="p-4 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center gap-2 shadow-sm"
-          role="status"
-        >
+        <div className="p-4 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center gap-2 shadow-sm" role="status">
           <span>✓</span>
           <span>{feedbackToast}</span>
         </div>
@@ -243,7 +226,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
       <ManagerAccountsExpensesTimeHorizonBar
         timeHorizon={timeHorizon}
         setTimeHorizon={setTimeHorizon}
-        timeHorizonOptions={timeHorizonOptions}
+        timeHorizonOptions={TIME_HORIZON_OPTIONS}
         customStartDate={customStartDate}
         setCustomStartDate={setCustomStartDate}
         customEndDate={customEndDate}
@@ -257,7 +240,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         formatCurrency={formatManagerExpensesCurrency}
         labels={{
           totalExpenses: tManagerUi('total_expenses'),
-          thisMonth: timeHorizonOptions.find((h) => h.id === timeHorizon)?.label ?? tManagerUi('this_month'),
+          thisMonth: TIME_HORIZON_OPTIONS.find((h) => h.id === timeHorizon)?.label ?? tManagerUi('this_month'),
           entries: tManagerUi('entries'),
           categories: tManagerUi('categories'),
         }}

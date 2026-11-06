@@ -11,9 +11,10 @@ import type { ManagerFinanceSecurityDepositsRouteQueryProps } from '@/app/fronte
 import ManagerFinanceSecurityDepositsRefundModal from './ManagerFinanceSecurityDepositsRefundModal';
 import ManagerFinanceSecurityDepositsDeductionModal from './ManagerFinanceSecurityDepositsDeductionModal';
 import ManagerFinanceSecurityDepositsTable from './ManagerFinanceSecurityDepositsTable';
+import ManagerFinanceSecurityDepositsTimeHorizonBar, { type ManagerDepositsTimeHorizon } from './ManagerFinanceSecurityDepositsTimeHorizonBar';
+import ManagerFinanceSecurityDepositsKpis from './ManagerFinanceSecurityDepositsKpis';
 
 const URL_FILTERS = { status: { defaultValue: 'all', allowedValues: ['all', 'held', 'refunded', 'forfeited'] } as const };
-
 type DepositSortField = 'studentName' | 'depositAmount' | 'status' | 'collectedBy' | 'collectedDate' | 'deductionAmount' | 'refundedDate';
 
 export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerFinanceSecurityDepositsRouteQueryProps) {
@@ -22,45 +23,74 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
   const { values: urlFilters, setValue: setUrlFilter } = useManagerSecurityDepositsUrlFilters(URL_FILTERS);
   const statusFilter = urlFilters.status;
 
-  const [depositsList, setDepositsList] = useState<ManagerFinanceSecurityDepositsSampleDeposit[]>(
-    MANAGER_FINANCE_SAMPLE_DEPOSITS
-  );
+  const [depositsList, setDepositsList] = useState<ManagerFinanceSecurityDepositsSampleDeposit[]>(MANAGER_FINANCE_SAMPLE_DEPOSITS);
   const [searchQuery, setSearchQuery] = useState('');
+  const [timeHorizon, setTimeHorizon] = useState<ManagerDepositsTimeHorizon>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize] = useState(10);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [sortField, setSortField] = useState<DepositSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
+  const [refundTarget, setRefundTarget] = useState<ManagerFinanceSecurityDepositsSampleDeposit | null>(null);
+  const [refundMode, setRefundMode] = useState<'cash' | 'upi'>('upi');
+  const [refundRef, setRefundRef] = useState('');
+  const [deductionTarget, setDeductionTarget] = useState<ManagerFinanceSecurityDepositsSampleDeposit | null>(null);
+  const [deductionAmount, setDeductionAmount] = useState('150');
+  const [deductionReason, setDeductionReason] = useState('Locker Key Lost');
+
   const toggleSort = (field: DepositSortField) => {
     if (sortField === field) {
       if (sortDirection === 'asc') setSortDirection('desc');
-      else {
-        setSortField(null);
-        setSortDirection('asc');
-      }
+      else { setSortField(null); setSortDirection('asc'); }
     } else {
       setSortField(field);
       setSortDirection('asc');
     }
   };
 
-  const [refundTarget, setRefundTarget] = useState<ManagerFinanceSecurityDepositsSampleDeposit | null>(null);
-  const [refundMode, setRefundMode] = useState<'cash' | 'upi'>('upi');
-  const [refundRef, setRefundRef] = useState('');
+  const timeFilteredDeposits = useMemo(() => {
+    if (timeHorizon === 'all') return depositsList;
+    const now = new Date('2026-04-15T12:00:00Z');
+    return depositsList.filter((d) => {
+      const recDate = new Date(d.collectedDate);
+      if (isNaN(recDate.getTime())) return true;
+      if (timeHorizon === 'today') return recDate.toISOString().slice(0, 10) === now.toISOString().slice(0, 10);
+      if (timeHorizon === 'this_week') {
+        const diffDays = (now.getTime() - recDate.getTime()) / (1000 * 3600 * 24);
+        return diffDays >= 0 && diffDays <= 7;
+      }
+      if (timeHorizon === 'this_month') return recDate.getFullYear() === now.getFullYear() && recDate.getMonth() === now.getMonth();
+      if (timeHorizon === 'custom') {
+        const dateStr = recDate.toISOString().slice(0, 10);
+        if (customStartDate && dateStr < customStartDate) return false;
+        if (customEndDate && dateStr > customEndDate) return false;
+        return true;
+      }
+      return true;
+    });
+  }, [depositsList, timeHorizon, customStartDate, customEndDate]);
 
-  const [deductionTarget, setDeductionTarget] = useState<ManagerFinanceSecurityDepositsSampleDeposit | null>(null);
-  const [deductionAmount, setDeductionAmount] = useState('150');
-  const [deductionReason, setDeductionReason] = useState('Locker Key Lost');
+  const timeHorizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom': return customStartDate && customEndDate ? `${customStartDate} - ${customEndDate}` : 'Custom Range';
+      default: return 'All Time';
+    }
+  }, [timeHorizon, customStartDate, customEndDate]);
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    return depositsList.filter((d) => {
+    return timeFilteredDeposits.filter((d) => {
       const matchStatus = statusFilter === 'all' || d.status === statusFilter;
       const matchSearch = !q || d.studentName.toLowerCase().includes(q) || d.smartId.toLowerCase().includes(q);
       return matchStatus && matchSearch;
     });
-  }, [depositsList, statusFilter, searchQuery]);
+  }, [timeFilteredDeposits, statusFilter, searchQuery]);
 
   const sortedRows = useMemo(() => {
     if (!sortField) return filtered;
@@ -84,11 +114,7 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
   const renderSortableHeader = (field: DepositSortField, label: string, align: 'left' | 'right' = 'left') => {
     const isActive = sortField === field;
     return (
-      <th
-        scope="col"
-        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
-      >
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}>
         <button
           type="button"
           onClick={() => toggleSort(field)}
@@ -97,13 +123,9 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
         >
           <span>{label}</span>
           {isActive ? (
-            sortDirection === 'asc' ? (
-              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            ) : (
-              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            )
+            sortDirection === 'asc' ? <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" /> : <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
           ) : (
-            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
@@ -113,20 +135,7 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
   const confirmRefund = (e: React.FormEvent) => {
     e.preventDefault();
     if (!refundTarget) return;
-
-    setDepositsList((prev) =>
-      prev.map((item) => {
-        if (item.id === refundTarget.id) {
-          return {
-            ...item,
-            status: 'refunded',
-            refundedDate: new Date().toISOString().slice(0, 10),
-          };
-        }
-        return item;
-      })
-    );
-
+    setDepositsList((prev) => prev.map((item) => item.id === refundTarget.id ? { ...item, status: 'refunded', refundedDate: new Date().toISOString().slice(0, 10) } : item));
     const netRefund = refundTarget.depositAmount - (refundTarget.deductionAmount || 0);
     setToastMessage(`Refund of ₹${netRefund} processed for ${refundTarget.studentName} via ${refundMode.toUpperCase()}!`);
     setRefundTarget(null);
@@ -136,45 +145,35 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
   const confirmDeduction = (e: React.FormEvent) => {
     e.preventDefault();
     if (!deductionTarget) return;
-
     const amt = Number(deductionAmount) || 0;
-    setDepositsList((prev) =>
-      prev.map((item) => {
-        if (item.id === deductionTarget.id) {
-          return {
-            ...item,
-            deductionAmount: (item.deductionAmount || 0) + amt,
-            deductionReason: deductionReason.trim() || 'Penalty',
-          };
-        }
-        return item;
-      })
-    );
-
+    setDepositsList((prev) => prev.map((item) => item.id === deductionTarget.id ? { ...item, deductionAmount: (item.deductionAmount || 0) + amt, deductionReason: deductionReason.trim() || 'Penalty' } : item));
     setToastMessage(`Deduction of ₹${amt} logged for ${deductionTarget.studentName} (${deductionReason})!`);
     setDeductionTarget(null);
     setTimeout(() => setToastMessage(null), 4000);
   };
 
   return (
-    <div
-      className="space-y-6"
-      data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}
-    >
+    <div className="space-y-6" data-route-view={_routeQuery.view} data-route-id={_routeQuery.id} data-route-name={_routeQuery.name} data-route-phone={_routeQuery.phone} data-route-smart-id={_routeQuery.smartId}>
       <div>
         <h1 className="fin-page-title">{tManagerUi('security_deposits')}</h1>
         <p className="fin-page-subtitle">{tManagerUi('review_student_security_deposit_records')}</p>
       </div>
 
+      <ManagerFinanceSecurityDepositsTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        activeCount={filtered.length}
+      />
+
+      <ManagerFinanceSecurityDepositsKpis deposits={timeFilteredDeposits} timeHorizonLabel={timeHorizonLabel} />
+
       <div className="p-3 rounded-xl bg-muted border border-border text-xs text-secondary flex items-center justify-between" role="status">
         <span>Sample security deposit records loaded for preview under active contract.</span>
-        <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">
-          Export Unavailable
-        </button>
+        <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">Export Unavailable</button>
       </div>
 
       {toastMessage && (
@@ -192,19 +191,13 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
             placeholder="Search student or Smart ID..."
             className="mgr-input pl-9 text-xs w-full"
             value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setPage(0);
-            }}
+            onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
           />
         </div>
         <select
           className="fin-select w-40 text-xs"
           value={statusFilter}
-          onChange={(e) => {
-            setUrlFilter('status', e.target.value);
-            setPage(0);
-          }}
+          onChange={(e) => { setUrlFilter('status', e.target.value); setPage(0); }}
           aria-label={tManagerUi('all_status')}
         >
           <option value="all">{tManagerUi('all_status')}</option>
@@ -220,11 +213,7 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
         formatCurrency={formatCurrency}
         renderSortableHeader={renderSortableHeader}
         onOpenRefund={(d) => setRefundTarget(d)}
-        onOpenDeduct={(d) => {
-          setDeductionTarget(d);
-          setDeductionAmount('150');
-          setDeductionReason('Locker Key Lost');
-        }}
+        onOpenDeduct={(d) => { setDeductionTarget(d); setDeductionAmount('150'); setDeductionReason('Locker Key Lost'); }}
         startItem={startItem}
         endItem={endItem}
         totalRows={totalRows}

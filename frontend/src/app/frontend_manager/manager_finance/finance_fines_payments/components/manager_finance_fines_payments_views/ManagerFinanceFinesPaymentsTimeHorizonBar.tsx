@@ -41,7 +41,7 @@ export default function ManagerFinanceFinesPaymentsTimeHorizonBar({
 
       <div className="flex flex-wrap items-center gap-2">
         {/* Segmented Time Horizon Pills */}
-        <div className="inline-flex bg-muted/60 p-1 rounded-xl border border-border flex-wrap">
+        <div className="inline-flex bg-muted p-1 rounded-xl border border-border flex-wrap">
           {timeHorizonOptions.map((opt) => (
             <button
               key={opt.id}
@@ -60,7 +60,7 @@ export default function ManagerFinanceFinesPaymentsTimeHorizonBar({
 
         {/* Custom Date Range Picker */}
         {timeHorizon === 'custom' && (
-          <div className="flex items-center gap-2 flex-wrap text-xs bg-muted/40 p-1.5 rounded-lg border border-border">
+          <div className="flex items-center gap-2 flex-wrap text-xs bg-muted p-1.5 rounded-lg border border-border">
             <label className="flex items-center gap-1 text-secondary">
               <span>From:</span>
               <input

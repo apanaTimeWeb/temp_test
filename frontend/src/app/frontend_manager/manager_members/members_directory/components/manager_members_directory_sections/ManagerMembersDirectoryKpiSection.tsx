@@ -3,7 +3,15 @@ import { useTranslations } from 'next-intl';
 import { Users, UserCheck, UserX, UserMinus } from 'lucide-react';
 import type { ManagerMembersDirectoryKpiSectionProps, ManagerMembersDirectoryTab } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 
-export function ManagerMembersDirectoryKpiSection({ totalMembers, activeMembers, expiredMembers, suspendedMembers, activeTab, onSelectTab }: ManagerMembersDirectoryKpiSectionProps) {
+export function ManagerMembersDirectoryKpiSection({
+  totalMembers,
+  activeMembers,
+  expiredMembers,
+  suspendedMembers,
+  activeTab,
+  onSelectTab,
+  timeHorizonLabel = 'All Members',
+}: ManagerMembersDirectoryKpiSectionProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
   const kpis: { id: string; tab: ManagerMembersDirectoryTab; label: string; value: number; icon: typeof Users; color: string; bg: string }[] = [
     { id: 'total', tab: 'All Members', label: tManagerUi('kpi_total_members'), value: totalMembers, icon: Users, color: 'text-info', bg: 'bg-info-bg' },
@@ -21,20 +29,25 @@ export function ManagerMembersDirectoryKpiSection({ totalMembers, activeMembers,
             key={kpi.id}
             type="button"
             onClick={() => onSelectTab?.(kpi.tab)}
-            className={`mgr-card p-4 flex items-center gap-4 text-left transition-all cursor-pointer ${
-              isSelected ? 'ring-2 ring-primary border-primary shadow-sm' : 'hover:border-primary/40'
+            className={`mgr-card p-4 flex items-center justify-between gap-3 text-left transition-all cursor-pointer ${
+              isSelected ? 'ring-2 ring-primary border-primary shadow-sm' : 'hover:border-primary'
             }`}
             title={`Quick filter: ${kpi.label}`}
           >
-            <div className={`p-3 rounded-xl ${kpi.bg} ${kpi.color}`}>
-              <kpi.icon size={24} />
+            <div className="flex items-center gap-3">
+              <div className={`p-3 rounded-xl ${kpi.bg} ${kpi.color}`}>
+                <kpi.icon size={22} />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-secondary uppercase">{kpi.label}</p>
+                <h3 data-testid={kpi.id === 'total' ? 'manager-members-total-count' : undefined} className="text-2xl font-black text-primary">
+                  {kpi.value}
+                </h3>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-bold text-secondary uppercase">{kpi.label}</p>
-              <h3 data-testid={kpi.id === 'total' ? 'manager-members-total-count' : undefined} className="text-2xl font-black text-primary">
-                {kpi.value}
-              </h3>
-            </div>
+            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border shrink-0">
+              [{timeHorizonLabel}]
+            </span>
           </button>
         );
       })}

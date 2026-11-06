@@ -90,7 +90,7 @@ export function ManagerMembersEnquiriesClient() {
   if (isError) {
     return (
       <section className="crm-page p-6 sm:p-8" role="alert" aria-live="assertive">
-        <div className="rounded-2xl border border-destructive/20 bg-destructive/5 p-8 text-center max-w-xl mx-auto shadow-sm">
+        <div className="rounded-2xl border border-border bg-danger-bg p-8 text-center max-w-xl mx-auto shadow-sm">
           <p className="text-destructive font-semibold text-base mb-1">{tManagerUi('unable_to_load_the_enquiry_pipeline')}</p>
           <p className="text-secondary text-sm mb-6">{tManagerUi('check_your_connection_and_try_again')}</p>
           <button
@@ -112,7 +112,7 @@ export function ManagerMembersEnquiriesClient() {
   return (
     <div className="crm-page space-y-6">
       {/* ── Executive Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           {/* Left: Titles & Meta Chips */}
           <div className="space-y-2">

@@ -1,11 +1,9 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
-import { Download } from 'lucide-react';
 import { ManagerMembersDirectorySupportingSections } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectorySupportingSections';
 import { ManagerMembersDirectoryKpiSection } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryKpiSection';
 import { ManagerMembersDirectoryHeader } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryHeader';
-import { MANAGER_MEMBERS_TABS } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
 import { useManagerMemberDirectoryPageState } from '@/app/frontend_manager/manager_members/members_directory/hooks/useManagerMembersDirectoryPageState';
 import { ManagerMembersDirectoryProfileSection } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryProfileSection';
 import type { ManagerMembersDirectoryRouteQueryProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
@@ -13,6 +11,8 @@ import {
   ManagerMembersDirectoryTable,
   type MemberSortField,
 } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryTable';
+import ManagerMembersDirectoryTimeHorizonBar, { type ManagerMembersTimeHorizon } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryTimeHorizonBar';
+import ManagerMembersDirectoryStatusTabs from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryStatusTabs';
 
 export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersDirectoryRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
@@ -30,6 +30,9 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
   } = useManagerMemberDirectoryPageState(_routeQuery);
   const editIntent = _routeQuery.view === 'edit';
 
+  const [timeHorizon, setTimeHorizon] = useState<ManagerMembersTimeHorizon>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [planFilter, setPlanFilter] = useState('all');
@@ -49,8 +52,40 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
     }
   };
 
-  const multiFilteredMembers = useMemo(() => {
+  const timeFilteredMembers = useMemo(() => {
+    if (timeHorizon === 'all') return filteredMembers;
+    const now = new Date('2026-04-15T12:00:00Z');
     return filteredMembers.filter((m) => {
+      const recDate = new Date(m.joinDate);
+      if (isNaN(recDate.getTime())) return true;
+      if (timeHorizon === 'today') return recDate.toISOString().slice(0, 10) === now.toISOString().slice(0, 10);
+      if (timeHorizon === 'this_week') {
+        const diffDays = (now.getTime() - recDate.getTime()) / (1000 * 3600 * 24);
+        return diffDays >= 0 && diffDays <= 7;
+      }
+      if (timeHorizon === 'this_month') return recDate.getFullYear() === now.getFullYear() && recDate.getMonth() === now.getMonth();
+      if (timeHorizon === 'custom') {
+        const dateStr = recDate.toISOString().slice(0, 10);
+        if (customStartDate && dateStr < customStartDate) return false;
+        if (customEndDate && dateStr > customEndDate) return false;
+        return true;
+      }
+      return true;
+    });
+  }, [filteredMembers, timeHorizon, customStartDate, customEndDate]);
+
+  const timeHorizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom': return customStartDate && customEndDate ? `${customStartDate} - ${customEndDate}` : 'Custom Range';
+      default: return 'All Members';
+    }
+  }, [timeHorizon, customStartDate, customEndDate]);
+
+  const multiFilteredMembers = useMemo(() => {
+    return timeFilteredMembers.filter((m) => {
       if (planFilter !== 'all' && m.type !== planFilter) return false;
       if (shiftFilter !== 'all' && m.shift !== shiftFilter) return false;
       if (genderFilter !== 'all' && m.gender !== genderFilter) return false;
@@ -63,7 +98,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
       }
       return true;
     });
-  }, [filteredMembers, planFilter, shiftFilter, genderFilter, expiryFilter]);
+  }, [timeFilteredMembers, planFilter, shiftFilter, genderFilter, expiryFilter]);
 
   const hasActiveFilters =
     searchQuery.trim().length > 0 ||
@@ -71,6 +106,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
     shiftFilter !== 'all' ||
     genderFilter !== 'all' ||
     expiryFilter !== 'all' ||
+    timeHorizon !== 'all' ||
     activeTab !== 'All Members';
 
   const handleResetFilters = () => {
@@ -79,6 +115,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
     setShiftFilter('all');
     setGenderFilter('all');
     setExpiryFilter('all');
+    setTimeHorizon('all');
     setActiveTab('All Members');
     setPage(0);
   };
@@ -133,12 +170,23 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
         {tManagerUi('demo_mode_existing_members_are_sample_records_new_member_014d0f')}
       </p>
 
+      <ManagerMembersDirectoryTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        activeCount={multiFilteredMembers.length}
+      />
+
       <ManagerMembersDirectoryKpiSection
-        totalMembers={members.length}
-        activeMembers={members.filter((m) => m.status === 'Active').length}
-        expiredMembers={members.filter((m) => m.status === 'Expired').length}
-        suspendedMembers={members.filter((m) => m.status === 'Suspended').length}
+        totalMembers={timeFilteredMembers.length}
+        activeMembers={timeFilteredMembers.filter((m) => m.status === 'Active').length}
+        expiredMembers={timeFilteredMembers.filter((m) => m.status === 'Expired').length}
+        suspendedMembers={timeFilteredMembers.filter((m) => m.status === 'Suspended').length}
         activeTab={activeTab}
+        timeHorizonLabel={timeHorizonLabel}
         onSelectTab={(tab) => {
           setActiveTab(tab);
           setPage(0);
@@ -150,60 +198,15 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
         {/* GRIDS (All, Active, Expired, Suspended) */}
         {['All Members', 'Active Members', 'Expired Members', 'Suspended Members'].includes(activeTab) && (
           <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-            {/* ── Header Row: Horizontal Segmented Tab Control + Export CSV ── */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5 border-b border-border pb-4">
-              <div className="flex flex-wrap items-center gap-1.5 p-1 bg-surface-highlight/70 rounded-xl border border-border">
-                {MANAGER_MEMBERS_TABS.map((tab) => {
-                  const isActive = activeTab === tab.name;
-                  const count =
-                    tab.name === 'All Members'
-                      ? members.length
-                      : tab.name === 'Active Members'
-                        ? members.filter((m) => m.status === 'Active').length
-                        : tab.name === 'Expired Members'
-                          ? members.filter((m) => m.status === 'Expired').length
-                          : members.filter((m) => m.status === 'Suspended').length;
-
-                  return (
-                    <button
-                      key={tab.name}
-                      type="button"
-                      onClick={() => {
-                        setActiveTab(tab.name);
-                        setPage(0);
-                      }}
-                      aria-pressed={isActive}
-                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${isActive
-                        ? 'bg-card text-primary shadow-xs border border-border'
-                        : 'text-secondary hover:text-primary hover:bg-card/50'
-                        }`}
-                    >
-                      <tab.icon size={15} aria-hidden="true" className={isActive ? 'text-primary' : 'opacity-70'} />
-                      <span>{tManagerUi(tab.labelKey)}</span>
-                      <span
-                        className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-primary-subtle text-primary' : 'bg-surface text-secondary'
-                          }`}
-                      >
-                        {count}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Action Controls: Export CSV */}
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={handleExportCsv}
-                  className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
-                  title="Export Filtered Students List as CSV"
-                >
-                  <Download size={14} />
-                  <span>Export CSV</span>
-                </button>
-              </div>
-            </div>
+            <ManagerMembersDirectoryStatusTabs
+              activeTab={activeTab as any}
+              onSelectTab={(tab) => {
+                setActiveTab(tab);
+                setPage(0);
+              }}
+              members={timeFilteredMembers}
+              onExportCsv={handleExportCsv}
+            />
 
             {/* Table and Filter Bar */}
             <ManagerMembersDirectoryTable

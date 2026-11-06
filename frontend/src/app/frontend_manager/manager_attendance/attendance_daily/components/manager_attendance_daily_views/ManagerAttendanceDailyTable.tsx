@@ -79,7 +79,7 @@ export function ManagerAttendanceDailyTable({
       </div>
 
       {totalRows > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-5 py-3 text-xs text-secondary bg-muted/10">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-5 py-3 text-xs text-secondary bg-muted">
           <span>
             Showing {startItem}–{endItem} of {totalRows} student records
           </span>

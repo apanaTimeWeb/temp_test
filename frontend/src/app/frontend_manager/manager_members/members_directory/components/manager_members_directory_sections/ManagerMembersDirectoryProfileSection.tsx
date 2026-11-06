@@ -214,13 +214,13 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
           {/* Referral Rewards & Bonus Banner (Consolidated from Sidebar) */}
           <div className="p-5 rounded-2xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-warning-bg flex items-center justify-center text-warning shrink-0 border border-warning/30">
+              <div className="w-12 h-12 rounded-xl bg-warning-bg flex items-center justify-center text-warning shrink-0 border border-border">
                 <Award size={24} />
               </div>
               <div>
                 <h4 className="font-bold text-primary flex items-center gap-2">
                   {tManagerUi('referral_rewards')}
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-warning-bg text-warning border border-warning/30">
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-warning-bg text-warning border border-border">
                     {referralPoints} {tManagerUi('points')}
                   </span>
                 </h4>
@@ -258,7 +258,7 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                         <p className="text-xs text-secondary font-mono mt-0.5">{doc.number || doc.fileName}</p>
                       </div>
                     </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 ${doc.status === 'Verified' ? 'bg-success-bg text-success border border-success/30' : 'bg-warning-bg text-warning border border-warning/30'
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 ${doc.status === 'Verified' ? 'bg-success-bg text-success border border-border' : 'bg-warning-bg text-warning border border-border'
                       }`}>
                       {doc.status === 'Verified' ? <CheckCircle size={12} /> : <Clock size={12} />}
                       {doc.status === 'Verified' ? tManagerUi('verified') : tManagerUi('pending')}

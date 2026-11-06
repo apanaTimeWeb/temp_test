@@ -125,7 +125,7 @@ export function ManagerMembersDirectoryEditModal({ member, isOpen, onClose, onSa
         {/* Form Body */}
         <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-6 space-y-4">
           {error && (
-            <div className="p-3 rounded-lg bg-danger-bg border border-danger/30 text-xs font-medium text-danger">
+            <div className="p-3 rounded-lg bg-danger-bg border border-border text-xs font-medium text-danger">
               {error}
             </div>
           )}

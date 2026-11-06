@@ -28,7 +28,7 @@ export function ManagerAccountsDailySettlementKpis({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Cash Collected */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
             {labels.cashCollected}
@@ -51,7 +51,7 @@ export function ManagerAccountsDailySettlementKpis({
       </div>
 
       {/* UPI Collected */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
             {labels.upiCollected}
@@ -74,7 +74,7 @@ export function ManagerAccountsDailySettlementKpis({
       </div>
 
       {/* Expenses Disbursed */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
             {labels.expenses}
@@ -97,7 +97,7 @@ export function ManagerAccountsDailySettlementKpis({
       </div>
 
       {/* Net Shift Surplus */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
             {labels.net}

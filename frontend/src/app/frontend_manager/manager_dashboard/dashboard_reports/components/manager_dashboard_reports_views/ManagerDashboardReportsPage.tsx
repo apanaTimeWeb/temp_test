@@ -137,7 +137,7 @@ export default function ManagerDashboardReportsPage() {
               type="button"
               onClick={() => void query.refetch()}
               disabled={query.isFetching}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary/50 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               title="Refresh reports data"
             >
               <RotateCw size={13} className={query.isFetching ? 'animate-spin text-primary' : 'text-muted-foreground'} />
@@ -146,7 +146,7 @@ export default function ManagerDashboardReportsPage() {
             <button
               type="button"
               onClick={handleExportCsv}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary/50 text-foreground text-xs font-bold hover:bg-surface-hover shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary text-foreground text-xs font-bold hover:bg-surface-hover shadow-xs transition-all cursor-pointer"
             >
               <Download size={14} className="text-primary" />
               <span>Export CSV</span>
@@ -217,7 +217,7 @@ export default function ManagerDashboardReportsPage() {
           </div>
 
           {isCustomMode ? (
-            <div className="flex items-center gap-2 bg-card border border-primary/30 p-1.5 rounded-xl text-xs shadow-xs animate-in fade-in duration-200">
+            <div className="flex items-center gap-2 bg-card border border-primary p-1.5 rounded-xl text-xs shadow-xs animate-in fade-in duration-200">
               <span className="text-muted-foreground font-medium pl-1">From:</span>
               <input
                 type="date"
@@ -249,8 +249,8 @@ export default function ManagerDashboardReportsPage() {
       ) : (
         <div className="space-y-6">
           <ManagerDashboardReportsKpiGrid cards={data.kpiCards} dateRange={activeDateScope} />
-          <ManagerDashboardReportsChartsGrid data={data} />
-          <ManagerDashboardReportsTablesGrid data={data} />
+          <ManagerDashboardReportsChartsGrid data={data} dateRange={activeDateScope} />
+          <ManagerDashboardReportsTablesGrid data={data} dateRange={activeDateScope} />
         </div>
       )}
     </div>

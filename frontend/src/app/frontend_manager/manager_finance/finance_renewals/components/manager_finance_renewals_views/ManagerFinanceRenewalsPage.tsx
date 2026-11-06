@@ -13,6 +13,7 @@ import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/fr
 import ManagerFinanceRenewalsAlertBanner from './ManagerFinanceRenewalsAlertBanner';
 import ManagerFinanceRenewalsHeader from './ManagerFinanceRenewalsHeader';
 import ManagerFinanceRenewalsFilterBar from './ManagerFinanceRenewalsFilterBar';
+import ManagerFinanceRenewalsTimeHorizonBar, { type ManagerRenewalsTimeHorizon } from './ManagerFinanceRenewalsTimeHorizonBar';
 import { buildRenewalColumns } from './ManagerFinanceRenewalsTableColumns';
 
 const URL_FILTERS = { filter: { defaultValue: 'expiring_7', allowedValues: ['expired', 'expiring_7', 'expiring_15'] } } as const;
@@ -29,12 +30,34 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   const [shiftFilter, setShiftFilter] = useState('all');
   const [planFilter, setPlanFilter] = useState('all');
   const [dueFilter, setDueFilter] = useState('all');
+  const [timeHorizon, setTimeHorizon] = useState<ManagerRenewalsTimeHorizon>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const expiringCritical = useMemo(() => renewalsList.filter((r) => r.daysLeft <= 3 && r.daysLeft >= 0), [renewalsList]);
-  const expiredCount = useMemo(() => renewalsList.filter((r) => r.daysLeft < 0).length, [renewalsList]);
+  const timeHorizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom': return 'Custom Range';
+      default: return 'All Time';
+    }
+  }, [timeHorizon]);
 
-  const visible = renewalsList.filter((r) => {
+  const horizonFiltered = useMemo(() => {
+    return renewalsList.filter((r) => {
+      if (timeHorizon === 'today') return r.daysLeft <= 0;
+      if (timeHorizon === 'this_week') return r.daysLeft <= 7;
+      if (timeHorizon === 'this_month') return r.daysLeft <= 30;
+      return true;
+    });
+  }, [renewalsList, timeHorizon]);
+
+  const expiringCritical = useMemo(() => horizonFiltered.filter((r) => r.daysLeft <= 3 && r.daysLeft >= 0), [horizonFiltered]);
+  const expiredCount = useMemo(() => horizonFiltered.filter((r) => r.daysLeft < 0).length, [horizonFiltered]);
+
+  const visible = horizonFiltered.filter((r) => {
     if (filter === 'expired') return r.daysLeft < 0;
     if (filter === 'expiring_7') return r.daysLeft >= 0 && r.daysLeft <= 7;
     if (filter === 'expiring_15') return r.daysLeft >= 0 && r.daysLeft <= 15;
@@ -205,6 +228,16 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
           Renewal API Unavailable
         </button>
       </div>
+
+      <ManagerFinanceRenewalsTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        activeCount={visible.length}
+      />
 
       <ManagerFinanceRenewalsAlertBanner
         expiringCount={expiringCritical.length}

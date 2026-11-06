@@ -50,7 +50,7 @@ export default function ManagerFinanceFinesPaymentsDashboardTab({
             key={kpi.labelKey}
             type="button"
             onClick={() => onSelectKpi(kpi.targetTab, kpi.filterType)}
-            className="p-5 rounded-2xl bg-card border border-border hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 motion-safe:transition-all text-left cursor-pointer group flex flex-col justify-between"
+            className="p-5 rounded-2xl bg-card border border-border hover:border-primary hover:shadow-md hover:-translate-y-0.5 motion-safe:transition-all text-left cursor-pointer group flex flex-col justify-between"
           >
             <div className="flex justify-between items-start mb-3">
               <div className={`p-2.5 rounded-xl border ${kpi.bg} ${kpi.color}`}>
@@ -78,7 +78,7 @@ export default function ManagerFinanceFinesPaymentsDashboardTab({
 
       {/* Supplementary Financial Overview Widget: Payment Method Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-2">
-        <div className="p-5 rounded-2xl border border-border bg-card/60 space-y-4">
+        <div className="p-5 rounded-2xl border border-border bg-card space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-primary flex items-center gap-2">
               <CreditCard size={16} className="text-primary" />
@@ -119,7 +119,7 @@ export default function ManagerFinanceFinesPaymentsDashboardTab({
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl border border-border bg-card/60 flex flex-col justify-between">
+        <div className="p-5 rounded-2xl border border-border bg-card flex flex-col justify-between">
           <div>
             <h3 className="text-sm font-bold text-primary flex items-center gap-2 mb-2">
               <TrendingUp size={16} className="text-primary" />

@@ -18,7 +18,7 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* KPI 1: Total Enquiries */}
-      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary hover:shadow-sm">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">Total Leads</span>
           <div className="w-9 h-9 rounded-lg bg-warning-bg text-warning border border-border flex items-center justify-center">
@@ -39,7 +39,7 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
       </div>
 
       {/* KPI 2: New Prospects */}
-      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary hover:shadow-sm">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">New Leads</span>
           <div className="w-9 h-9 rounded-lg bg-primary-subtle text-primary border border-border flex items-center justify-center">
@@ -58,7 +58,7 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
       </div>
 
       {/* KPI 3: Active Pipeline (Visited + Interested) */}
-      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary hover:shadow-sm">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">In Pipeline</span>
           <div className="w-9 h-9 rounded-lg bg-muted text-secondary border border-border flex items-center justify-center">
@@ -79,7 +79,7 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
       </div>
 
       {/* KPI 4: Admissions Converted */}
-      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/40 hover:shadow-sm">
+      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary hover:shadow-sm">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">Admitted / Won</span>
           <div className="w-9 h-9 rounded-lg bg-success-bg text-success border border-border flex items-center justify-center">

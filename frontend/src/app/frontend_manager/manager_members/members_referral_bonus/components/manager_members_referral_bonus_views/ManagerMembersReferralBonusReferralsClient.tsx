@@ -2,27 +2,29 @@
 // RESPONSIBILITY: Orchestrate client-side view and local interactions for referral bonus management.
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Clock, DollarSign, Plus, Users } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
-import {
-  ManagerMembersReferralBonusTable,
-  type ReferralSortField,
-} from './ManagerMembersReferralBonusTable';
+import { ManagerMembersReferralBonusTable, type ReferralSortField } from './ManagerMembersReferralBonusTable';
 import { ManagerMembersReferralBonusAddModal } from '../manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusAddModal';
+import ManagerMembersReferralBonusTimeHorizonBar, { type ManagerReferralTimeHorizon } from './ManagerMembersReferralBonusTimeHorizonBar';
+import ManagerMembersReferralBonusKpis from './ManagerMembersReferralBonusKpis';
 
 const INITIAL_REFERRALS: ReferralRow[] = [
-  { id: 'REF-101', referrer: 'Amit Sharma (LIB-1042)', referred: 'Rohan Verma', date: '2026-10-24', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
-  { id: 'REF-102', referrer: 'Priya Patel (LIB-1088)', referred: 'Sneha Rao', date: '2026-10-25', status: 'Credited', bonus: '₹500', method: 'UPI Cash' },
-  { id: 'REF-103', referrer: 'Vikram Singh (LIB-1120)', referred: 'Karan Malhotra', date: '2026-10-28', status: 'Pending', bonus: '₹500', method: 'Fee Discount' },
-  { id: 'REF-104', referrer: 'Ananya Roy (LIB-1155)', referred: 'Pooja Iyer', date: '2026-10-29', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
-  { id: 'REF-105', referrer: 'Rahul Gupta (LIB-1190)', referred: 'Aditya Mehra', date: '2026-11-01', status: 'Pending', bonus: '₹500', method: 'UPI Cash' },
-  { id: 'REF-106', referrer: 'Neha Verma (LIB-1204)', referred: 'Siddharth Jain', date: '2026-11-02', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
+  { id: 'REF-101', referrer: 'Amit Sharma (LIB-1042)', referred: 'Rohan Verma', date: '2026-04-12', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
+  { id: 'REF-102', referrer: 'Priya Patel (LIB-1088)', referred: 'Sneha Rao', date: '2026-04-14', status: 'Credited', bonus: '₹500', method: 'UPI Cash' },
+  { id: 'REF-103', referrer: 'Vikram Singh (LIB-1120)', referred: 'Karan Malhotra', date: '2026-04-15', status: 'Pending', bonus: '₹500', method: 'Fee Discount' },
+  { id: 'REF-104', referrer: 'Ananya Roy (LIB-1155)', referred: 'Pooja Iyer', date: '2026-03-29', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
+  { id: 'REF-105', referrer: 'Rahul Gupta (LIB-1190)', referred: 'Aditya Mehra', date: '2026-04-02', status: 'Pending', bonus: '₹500', method: 'UPI Cash' },
+  { id: 'REF-106', referrer: 'Neha Verma (LIB-1204)', referred: 'Siddharth Jain', date: '2026-04-10', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
 ];
 
 export function ManagerMembersReferralBonusReferralsClient() {
   const tManagerUi = useTranslations('manager.manager_referral_bonus.ui');
   const [records, setRecords] = useState<ReferralRow[]>(INITIAL_REFERRALS);
+  const [timeHorizon, setTimeHorizon] = useState<ManagerReferralTimeHorizon>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'All' | 'Credited' | 'Pending'>('All');
   const [methodFilter, setMethodFilter] = useState<'All' | 'Fee Discount' | 'UPI Cash'>('All');
@@ -46,17 +48,49 @@ export function ManagerMembersReferralBonusReferralsClient() {
     }
   };
 
-  const filteredRows = useMemo(() => {
+  const timeFilteredRecords = useMemo(() => {
+    if (timeHorizon === 'all') return records;
+    const now = new Date('2026-04-15T12:00:00Z');
     return records.filter((r) => {
+      const recDate = new Date(r.date);
+      if (isNaN(recDate.getTime())) return true;
+      if (timeHorizon === 'today') return recDate.toISOString().slice(0, 10) === now.toISOString().slice(0, 10);
+      if (timeHorizon === 'this_week') {
+        const diffDays = (now.getTime() - recDate.getTime()) / (1000 * 3600 * 24);
+        return diffDays >= 0 && diffDays <= 7;
+      }
+      if (timeHorizon === 'this_month') return recDate.getFullYear() === now.getFullYear() && recDate.getMonth() === now.getMonth();
+      if (timeHorizon === 'custom') {
+        const dateStr = recDate.toISOString().slice(0, 10);
+        if (customStartDate && dateStr < customStartDate) return false;
+        if (customEndDate && dateStr > customEndDate) return false;
+        return true;
+      }
+      return true;
+    });
+  }, [records, timeHorizon, customStartDate, customEndDate]);
+
+  const timeHorizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom': return customStartDate && customEndDate ? `${customStartDate} - ${customEndDate}` : 'Custom Range';
+      default: return 'All Time';
+    }
+  }, [timeHorizon, customStartDate, customEndDate]);
+
+  const filteredRows = useMemo(() => {
+    return timeFilteredRecords.filter((r) => {
       const q = searchQuery.toLowerCase();
       const matchQ = !q || r.referrer.toLowerCase().includes(q) || r.referred.toLowerCase().includes(q) || r.id.toLowerCase().includes(q);
       const matchS = statusFilter === 'All' || r.status === statusFilter;
       const matchM = methodFilter === 'All' || r.method.toLowerCase() === methodFilter.toLowerCase();
       return matchQ && matchS && matchM;
     });
-  }, [records, searchQuery, statusFilter, methodFilter]);
+  }, [timeFilteredRecords, searchQuery, statusFilter, methodFilter]);
 
-  const hasActiveFilters = Boolean(searchQuery.trim() !== '' || statusFilter !== 'All' || methodFilter !== 'All');
+  const hasActiveFilters = Boolean(searchQuery.trim() !== '' || statusFilter !== 'All' || methodFilter !== 'All' || timeHorizon !== 'all');
 
   const sortedRows = useMemo(() => {
     if (!sortField) return filteredRows;
@@ -74,12 +108,6 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const paginatedRows = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
-
-  const totalBonusAmount = useMemo(() => {
-    return records.filter((r) => r.status === 'Credited').reduce((sum, r) => sum + (parseInt(r.bonus.replace(/[^0-9]/g, ''), 10) || 0), 0);
-  }, [records]);
-
-  const pendingCount = useMemo(() => records.filter((r) => r.status === 'Pending').length, [records]);
 
   const handleApprove = (id: string) => {
     setRecords((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'Credited' } : r)));
@@ -129,65 +157,27 @@ export function ManagerMembersReferralBonusReferralsClient() {
         </div>
       )}
 
+      {/* Global Time Horizon Filter Bar */}
+      <ManagerMembersReferralBonusTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        activeCount={filteredRows.length}
+      />
+
       {/* KPI Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <button
-          type="button"
-          onClick={() => {
-            setStatusFilter('All');
-            setPage(0);
-          }}
-          className={`mgr-card p-4 text-left cursor-pointer transition-all ${
-            statusFilter === 'All' ? 'ring-2 ring-primary border-primary' : 'hover:border-primary/50'
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-secondary font-medium">{tManagerUi('total_referrals')}</span>
-            <div className="w-8 h-8 rounded-lg bg-primary-subtle text-primary flex items-center justify-center">
-              <Users size={16} />
-            </div>
-          </div>
-          <p className="text-2xl font-bold text-primary mt-2">{records.length}</p>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setStatusFilter('Pending');
-            setPage(0);
-          }}
-          className={`mgr-card p-4 text-left cursor-pointer transition-all ${
-            statusFilter === 'Pending' ? 'ring-2 ring-warning border-warning' : 'hover:border-warning/50'
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-secondary font-medium">{tManagerUi('pending_approvals')}</span>
-            <div className="w-8 h-8 rounded-lg bg-warning-bg text-warning border border-border flex items-center justify-center">
-              <Clock size={16} />
-            </div>
-          </div>
-          <p className="text-2xl font-bold text-warning mt-2">{pendingCount}</p>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setStatusFilter('Credited');
-            setPage(0);
-          }}
-          className={`mgr-card p-4 text-left cursor-pointer transition-all ${
-            statusFilter === 'Credited' ? 'ring-2 ring-success border-success' : 'hover:border-success/50'
-          }`}
-        >
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-secondary font-medium">{tManagerUi('total_bonus_distributed')}</span>
-            <div className="w-8 h-8 rounded-lg bg-success-bg text-success border border-border flex items-center justify-center">
-              <DollarSign size={16} />
-            </div>
-          </div>
-          <p className="text-2xl font-bold text-success mt-2">₹{totalBonusAmount.toLocaleString('en-IN')}</p>
-        </button>
-      </div>
+      <ManagerMembersReferralBonusKpis
+        records={timeFilteredRecords}
+        timeHorizonLabel={timeHorizonLabel}
+        statusFilter={statusFilter}
+        onSelectStatusFilter={(status) => {
+          setStatusFilter(status);
+          setPage(0);
+        }}
+      />
 
       {/* Referrals Table Section */}
       <ManagerMembersReferralBonusTable
@@ -214,6 +204,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
           setSearchQuery('');
           setStatusFilter('All');
           setMethodFilter('All');
+          setTimeHorizon('all');
           setPage(0);
         }}
         sortField={sortField}
@@ -243,3 +234,4 @@ export function ManagerMembersReferralBonusReferralsClient() {
     </div>
   );
 }
+export default ManagerMembersReferralBonusReferralsClient;

@@ -134,7 +134,7 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
       {/* Action Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Bulk Upload Card */}
-        <div className="mgr-card p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-primary/40 bg-floating hover:border-primary transition-all">
+        <div className="mgr-card p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-primary bg-floating hover:border-primary transition-all">
           <div className="w-16 h-16 rounded-full bg-primary-subtle flex items-center justify-center text-primary mb-1">
             <Upload size={28} />
           </div>

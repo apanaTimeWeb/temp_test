@@ -10,11 +10,7 @@ import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/man
 import { MANAGER_ATTENDANCE_DAILY_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_daily/config/manager_attendance_daily.url_config';
 import { MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE } from '@/app/frontend_manager/manager_attendance/attendance_daily/hooks/ManagerAttendanceDailyDemoRepository';
 import { ManagerAttendanceDailyFloorTurnoverQueue } from '@/app/frontend_manager/manager_attendance/attendance_daily/components/manager_attendance_daily_widgets/ManagerAttendanceDailyFloorTurnoverQueue';
-import type {
-  AttStatus,
-  Student,
-  ManagerAttendanceDailyTimeField,
-} from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
+import type { AttStatus, Student, ManagerAttendanceDailyTimeField } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
 import { ManagerAttendanceDailyKpis } from './ManagerAttendanceDailyKpis';
 import { ManagerAttendanceDailyToolbar } from './ManagerAttendanceDailyToolbar';
 import { ManagerAttendanceDailyTable } from './ManagerAttendanceDailyTable';
@@ -28,15 +24,7 @@ function toLocalDateInputValue(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-// RESPONSIBILITY: Render the attendance_daily feature view while preserving supported deep-link query state.
-// DATA FLOW: Route searchParams -> Main props -> this view's route context.
-export default function ManagerAttendanceDailyPage({
-  view,
-  id,
-  name,
-  phone,
-  smartId,
-}: ManagerAttendanceDailyMainProps) {
+export default function ManagerAttendanceDailyPage({ view, id, name, phone, smartId }: ManagerAttendanceDailyMainProps) {
   const tManagerUi = useTranslations('manager.manager_attendance.ui');
   const todayStr = toLocalDateInputValue(new Date());
   const yesterdayDate = new Date();
@@ -71,10 +59,7 @@ export default function ManagerAttendanceDailyPage({
     const q = searchQuery.trim().toLowerCase();
     return students.filter((s) => {
       const matchShift = shift === 'All' || s.shift === shift;
-      const matchSearch =
-        !q ||
-        s.name.toLowerCase().includes(q) ||
-        s.smartId.toLowerCase().includes(q);
+      const matchSearch = !q || s.name.toLowerCase().includes(q) || s.smartId.toLowerCase().includes(q);
       return matchShift && matchSearch;
     });
   }, [students, shift, searchQuery]);
@@ -98,9 +83,7 @@ export default function ManagerAttendanceDailyPage({
     setStudents((p) => p.map((s) => (s.id === studentId ? { ...s, [field]: val } : s)));
 
   const handleSendAlert = (student: Student) => {
-    toast.success(
-      `Absentee warning notice dispatched to ${student.name} (${student.smartId}) for ${student.consecutiveAbsent} consecutive days!`
-    );
+    toast.success(`Absentee warning notice dispatched to ${student.name} (${student.smartId}) for ${student.consecutiveAbsent} consecutive days!`);
   };
 
   const dateLabel = useMemo(() => {
@@ -112,10 +95,7 @@ export default function ManagerAttendanceDailyPage({
   const handleExportCsv = () => {
     const headers = `Attendance Register Export - Date: ${dateLabel}\nSmart ID,Name,Shift,Status,In Time,Out Time\n`;
     const rows = filtered
-      .map(
-        (s) =>
-          `"${s.smartId}","${s.name}","${s.shift}","${s.status ?? 'unmarked'}","${s.inTime || ''}","${s.outTime || ''}"`
-      )
+      .map((s) => `"${s.smartId}","${s.name}","${s.shift}","${s.status ?? 'unmarked'}","${s.inTime || ''}","${s.outTime || ''}"`)
       .join('\n');
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -132,29 +112,18 @@ export default function ManagerAttendanceDailyPage({
   };
 
   return (
-    <div
-      className="eng-page space-y-6"
-      data-route-view={view}
-      data-route-id={id}
-      data-route-name={name}
-      data-route-phone={phone}
-      data-route-smart-id={smartId}
-    >
+    <div className="eng-page space-y-6" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
       {/* ── Executive ERP Header Banner ── */}
       <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap text-xs">
-              <Link
-                href={MANAGER_ATTENDANCE_DAILY_ROUTES.attendance}
-                className="font-semibold text-primary uppercase tracking-wider hover:underline"
-              >
+              <Link href={MANAGER_ATTENDANCE_DAILY_ROUTES.attendance} className="font-semibold text-primary uppercase tracking-wider hover:underline">
                 {tManagerUi('engagement')}
               </Link>
               <ChevronRight size={12} className="text-secondary" />
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-success-bg text-success border border-border">
-                <CheckCircle2 size={12} />
-                Daily Attendance Register
+                <CheckCircle2 size={12} /> Daily Attendance Register
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-surface-highlight text-secondary border border-border">
                 📍 Central Branch
@@ -175,7 +144,6 @@ export default function ManagerAttendanceDailyPage({
             </p>
           </div>
 
-          {/* Header Actions */}
           <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
             <button
               type="button"
@@ -190,12 +158,7 @@ export default function ManagerAttendanceDailyPage({
           </div>
         </div>
 
-        {/* Warning hint */}
-        <p
-          className="mt-4 rounded-xl border border-border bg-warning-bg p-3 text-xs text-warning leading-relaxed"
-          role="status"
-          data-testid="manager-engagement-attendance-contract-warning"
-        >
+        <p className="mt-4 rounded-xl border border-border bg-warning-bg p-3 text-xs text-warning leading-relaxed" role="status" data-testid="manager-engagement-attendance-contract-warning">
           {tManagerUi('sample_attendance_only_status_edits_are_an_in_page_previ_f63093')}
         </p>
       </div>
@@ -237,9 +200,7 @@ export default function ManagerAttendanceDailyPage({
           type="button"
           onClick={() => setActiveTab('roster')}
           className={`pb-3 px-1 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-            activeTab === 'roster'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-secondary hover:text-primary'
+            activeTab === 'roster' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
           }`}
         >
           {tManagerUi('roster_tab')}
@@ -248,15 +209,11 @@ export default function ManagerAttendanceDailyPage({
           type="button"
           onClick={() => setActiveTab('turnover')}
           className={`flex items-center gap-1.5 pb-3 px-1 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
-            activeTab === 'turnover'
-              ? 'border-primary text-primary'
-              : 'border-transparent text-secondary hover:text-primary'
+            activeTab === 'turnover' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
           }`}
         >
           <span>{tManagerUi('turnover_queue_tab')}</span>
-          <span className="rounded-full bg-danger-bg text-danger border border-border px-2 py-0.5 text-xs font-bold">
-            3
-          </span>
+          <span className="rounded-full bg-danger-bg text-danger border border-border px-2 py-0.5 text-xs font-bold">3</span>
         </button>
       </div>
 
