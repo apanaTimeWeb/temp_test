@@ -6,7 +6,7 @@ import useAdminFinancePaymentsQuery from '@/app/frontend_admin/admin_finance/fin
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { FileText, Receipt, Search, Calendar, Download, TrendingUp, CreditCard } from 'lucide-react';
+import { FileText, Receipt, Search, Calendar, Download, TrendingUp, CreditCard, MessageSquare } from 'lucide-react';
 import { toast } from 'sonner';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
@@ -132,7 +132,44 @@ export function AdminFinancePaymentsPage() {
     { field: 'txnId', headerName: t('TXN_ID'), width: 130, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => <span className="font-mono text-caption text-text-secondary">{String(params.value ?? '—')}</span> },
     { field: 'lateFee', headerName: t('LATE_FEE'), width: 110, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => { const amount = typeof params.value === 'number' ? params.value : null; return <span className={amount !== null && amount > 0 ? 'text-warning-text' : 'text-text-secondary'}>{amount === null ? '—' : formatAdminFinanceApiAmount(amount, params.data.currencyCode, params.data.amountUnit)}</span>; } },
     { field: 'status', headerName: t('STATUS'), width: 130, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => <span className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap ${params.data.status === 'valid' ? 'bg-success-bg text-success-text border-success-bg' : 'bg-card text-text-secondary border-border'}`}>{params.data.status === 'valid' ? t('VALID') : params.data.status === 'deleted' ? t('DELETED') : t('UNKNOWN')}</span> },
-    { headerName: t('ACTIONS'), width: 140, sortable: false, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => params.data.status === 'valid' ? <div className="flex items-center gap-2"><button type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => router.push(ADMIN_FINANCE_PAYMENTS_ROUTES.RECEIPT(params.data.id))} aria-label={t('VIEW_RECEIPT', { number: params.data.receiptNumber })}><Receipt size={18} strokeWidth={2} /></button><button type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => router.push(ADMIN_FINANCE_PAYMENTS_ROUTES.INVOICE(params.data.id))} aria-label={t('VIEW_INVOICE', { number: params.data.receiptNumber })}><FileText size={18} strokeWidth={2} /></button></div> : null },
+    {
+      headerName: t('ACTIONS'),
+      width: 170,
+      sortable: false,
+      cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) =>
+        params.data.status === 'valid' ? (
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              onClick={() => router.push(ADMIN_FINANCE_PAYMENTS_ROUTES.RECEIPT(params.data.id))}
+              aria-label={t('VIEW_RECEIPT', { number: params.data.receiptNumber })}
+            >
+              <Receipt size={18} strokeWidth={2} />
+            </button>
+            <button
+              type="button"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              onClick={() => router.push(ADMIN_FINANCE_PAYMENTS_ROUTES.INVOICE(params.data.id))}
+              aria-label={t('VIEW_INVOICE', { number: params.data.receiptNumber })}
+            >
+              <FileText size={18} strokeWidth={2} />
+            </button>
+            <button
+              type="button"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              title="Share receipt via WhatsApp"
+              aria-label={`Share receipt ${params.data.receiptNumber} with ${params.data.studentName} on WhatsApp`}
+              onClick={() => {
+                const text = `Hello ${params.data.studentName}, thank you for your payment!\nReceipt No: ${params.data.receiptNumber}\nDate: ${formatDate(params.data.date)}\nAmount: ${formatAdminFinanceApiAmount(params.data.amount, params.data.currencyCode, params.data.amountUnit)}\nMode: ${params.data.mode.toUpperCase()}\nStatus: Verified & Confirmed.\nSmart Library Admin`;
+                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+              }}
+            >
+              <MessageSquare size={18} strokeWidth={2} />
+            </button>
+          </div>
+        ) : null,
+    },
   ], [router, t]);
 
   return (

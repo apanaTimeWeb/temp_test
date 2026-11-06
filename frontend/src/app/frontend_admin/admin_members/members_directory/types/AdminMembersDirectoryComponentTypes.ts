@@ -18,6 +18,10 @@ export interface AdminMembersMemberTableProps {
   onSelectMember: (member: AdminMembersMember) => void;
   onAction: (action: string, member: AdminMembersMember) => void;
   canMutate?: boolean;
+  selectedIds?: string[];
+  onToggleSelectOne?: (id: string) => void;
+  onToggleSelectAll?: () => void;
+  onQuickWhatsApp?: (member: AdminMembersMember) => void;
 }
 
 export interface AdminMembersDirectorySecondaryViewsProps { model: ReturnType<typeof useAdminMembersDirectoryMain>; }

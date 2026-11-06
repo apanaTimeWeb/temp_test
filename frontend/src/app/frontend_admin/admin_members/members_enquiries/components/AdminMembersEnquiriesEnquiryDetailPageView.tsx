@@ -4,7 +4,7 @@
 import { toast, Toaster } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useLocale, useTranslations } from 'next-intl';
-import { ArrowLeft, Phone, MapPin, User, CalendarDays, Tag, Clock, Pencil } from 'lucide-react';
+import { ArrowLeft, Phone, MapPin, User, CalendarDays, Tag, Clock, Pencil, MessageSquare } from 'lucide-react';
 import { ADMIN_ENQUIRIES_URLS } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
 import { getInitials, maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import useAdminEnquiriesEnquiryDetailPage from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesEnquiryDetailPage';
@@ -68,7 +68,19 @@ export default function AdminEnquiriesEnquiryDetailPageView({ params }: AdminEnq
                     <h1 className="text-section-title font-semibold text-text-primary">{enquiry.name}</h1>
                     <span data-testid="admin_enquiries-AdminEnquiriesEnquiryDetailPageView-state-002" className={`inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold ${statusBadgeCls}`}>{statusLabel(enquiry.status)}</span>
                   </div>
-                  <p className="mt-1 text-body text-text-secondary"><Phone size={18} strokeWidth={2} aria-hidden="true" /> +91 {maskPhone(enquiry.phone)}</p>
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-body text-text-secondary">
+                    <Phone size={18} strokeWidth={2} aria-hidden="true" />
+                    <span>+91 {maskPhone(enquiry.phone)}</span>
+                    <a
+                      href={`https://wa.me/${enquiry.phone.replace(/\D/g, '').length === 10 ? `91${enquiry.phone.replace(/\D/g, '')}` : enquiry.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${enquiry.name}, greetings from Smart Library!`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Chat on WhatsApp"
+                      className="inline-flex items-center gap-1 rounded-md bg-success-bg px-2 py-0.5 text-xs font-semibold text-success-text hover:bg-success hover:text-on-success transition-all ml-1"
+                    >
+                      <MessageSquare size={12} /> WhatsApp
+                    </a>
+                  </div>
                 </div>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -136,8 +148,17 @@ export default function AdminEnquiriesEnquiryDetailPageView({ params }: AdminEnq
               )}
             </div>
 
-            <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card grid gap-4">
+            <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card p-4 space-y-3">
               <h3 className="text-caption font-semibold uppercase tracking-wide text-text-secondary">{t('ACTIONS_TITLE')}</h3>
+              <a
+                href={`https://wa.me/${enquiry.phone.replace(/\D/g, '').length === 10 ? `91${enquiry.phone.replace(/\D/g, '')}` : enquiry.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${enquiry.name}, greetings from Smart Library! We are reaching out regarding your enquiry.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-success-bg bg-success-bg px-4 py-2 text-body font-semibold text-success-text hover:bg-success hover:text-on-success transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <MessageSquare size={18} strokeWidth={2} />
+                Chat on WhatsApp
+              </a>
               <p className="text-caption text-text-secondary">{t('VIEW_ACTIONS_DISABLED')}</p>
             </div>
           </div>
