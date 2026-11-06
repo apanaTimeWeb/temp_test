@@ -150,7 +150,7 @@ export function AdminDashboardBranchLeaderboard({
               <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown size={14} className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
@@ -176,7 +176,7 @@ export function AdminDashboardBranchLeaderboard({
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-border bg-muted/20">
+            <tr className="border-b border-border bg-muted">
               <th scope="col" className="p-3 uppercase font-semibold text-text-secondary">Rank</th>
               {renderSortableHeader('branch', 'Branch & Manager')}
               {renderSortableHeader('occupancy', 'Occupancy')}

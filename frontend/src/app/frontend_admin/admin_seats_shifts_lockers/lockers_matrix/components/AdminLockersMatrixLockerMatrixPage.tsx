@@ -263,7 +263,7 @@ export function AdminLockersLockerMatrixPage() {
               )}
 
               {/* Administrative Policy Notice */}
-              <div className="flex items-start gap-2 rounded-lg border border-border bg-surface-highlight/50 p-3 text-xs text-text-secondary">
+              <div className="flex items-start gap-2 rounded-lg border border-border bg-surface-highlight p-3 text-xs text-text-secondary">
                 <Info size={15} className="mt-0.5 shrink-0 text-primary" />
                 <span>
                   Admin HQ Oversight: Physical keys are handled exclusively on-site by Branch Managers. Central Admin monitors occupancy rates, capacity planning, and branch asset audits.

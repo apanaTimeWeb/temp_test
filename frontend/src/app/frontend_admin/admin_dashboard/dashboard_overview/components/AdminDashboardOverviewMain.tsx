@@ -59,11 +59,13 @@ export default function AdminDashboardOverviewMain() {
     return { value: rawMetrics.revenue, subtext: rawMetrics.revenueSub };
   }, [rawMetrics, timeRange]);
 
+  const periodLabel = timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'custom' ? 'Custom Range' : 'This Month';
+
   const executiveKpis = [
     {
       id: 'kpi-branches',
       title: 'Operating Branches',
-      periodBadge: null,
+      periodBadge: periodLabel,
       value: rawMetrics.branches,
       subtext: rawMetrics.branchesSub,
       Icon: Building2,
@@ -73,7 +75,7 @@ export default function AdminDashboardOverviewMain() {
     {
       id: 'kpi-members',
       title: 'Active Members',
-      periodBadge: null,
+      periodBadge: periodLabel,
       value: rawMetrics.members,
       subtext: rawMetrics.membersSub,
       Icon: Users,
@@ -83,7 +85,7 @@ export default function AdminDashboardOverviewMain() {
     {
       id: 'kpi-occupancy',
       title: 'Seat Occupancy',
-      periodBadge: null,
+      periodBadge: periodLabel,
       value: rawMetrics.occupancy,
       subtext: rawMetrics.occupancySub,
       Icon: Armchair,
@@ -93,7 +95,7 @@ export default function AdminDashboardOverviewMain() {
     {
       id: 'kpi-revenue',
       title: timeRange === 'today' ? 'Collections Today' : timeRange === 'this_week' ? 'Collections (Week)' : timeRange === 'custom' ? 'Collections (Custom)' : 'Monthly Collections',
-      periodBadge: timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'custom' ? 'Custom' : 'This Month',
+      periodBadge: periodLabel,
       value: dynamicRevenue.value,
       subtext: dynamicRevenue.subtext,
       Icon: WalletCards,
@@ -112,7 +114,7 @@ export default function AdminDashboardOverviewMain() {
   return (
     <main className="mx-auto w-full max-w-7xl space-y-6 p-4 text-text-primary sm:p-6 lg:p-8">
       {/* ── Executive Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap text-xs">
@@ -124,7 +126,7 @@ export default function AdminDashboardOverviewMain() {
                 <Building2 size={12} />
                 Multi-Branch Network
               </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-secondary/10 text-text-secondary border border-border">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-secondary-subtle text-text-secondary border border-border">
                 Scope: <strong className="text-text-primary">{selectedBranch ? `${selectedBranch.name} (${selectedBranch.code})` : 'All Branches (Network View)'}</strong>
               </span>
             </div>
@@ -165,7 +167,7 @@ export default function AdminDashboardOverviewMain() {
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Segmented Time Horizon Pills */}
-          <div className="inline-flex bg-muted/60 p-1 rounded-xl border border-border flex-wrap">
+          <div className="inline-flex bg-muted p-1 rounded-xl border border-border flex-wrap">
             {timeHorizonOptions.map((opt) => (
               <button
                 key={opt.id}
@@ -184,7 +186,7 @@ export default function AdminDashboardOverviewMain() {
 
           {/* Custom Date Range Picker */}
           {timeRange === 'custom' && (
-            <div className="flex items-center gap-2 flex-wrap text-xs bg-muted/40 p-1.5 rounded-lg border border-border">
+            <div className="flex items-center gap-2 flex-wrap text-xs bg-muted p-1.5 rounded-lg border border-border">
               <label className="flex items-center gap-1 text-text-secondary">
                 <span>From:</span>
                 <input

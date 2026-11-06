@@ -32,10 +32,10 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
     <div className="space-y-6">
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_TOTAL_STAFF')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-info-bg text-info-text">
               <Users size={15} strokeWidth={2.2} />
             </div>
           </div>
@@ -43,10 +43,10 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
           <span className="text-xs text-text-muted">Total Roster Base</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_PRESENT')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-success-bg text-success-text">
               <CheckCircle2 size={15} strokeWidth={2.2} />
             </div>
           </div>
@@ -54,10 +54,10 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
           <span className="text-xs text-text-muted">Punched & On Floor</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_LATE')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-warning-bg text-warning-text">
               <Clock size={15} strokeWidth={2.2} />
             </div>
           </div>
@@ -65,10 +65,10 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
           <span className="text-xs text-text-muted">&gt; 15 min punch-in</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_ABSENT')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600 dark:text-rose-400">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-danger-bg text-danger-text">
               <UserX size={15} strokeWidth={2.2} />
             </div>
           </div>
@@ -76,10 +76,10 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
           <span className="text-xs text-text-muted">Unreported absence</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_ON_LEAVE')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-info-bg text-info-text">
               <CalendarCheck size={15} strokeWidth={2.2} />
             </div>
           </div>
@@ -87,10 +87,10 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
           <span className="text-xs text-text-muted">Approved leaves</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_ATTENDANCE_RATE')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-subtle text-primary">
               <Building2 size={15} strokeWidth={2.2} />
             </div>
           </div>

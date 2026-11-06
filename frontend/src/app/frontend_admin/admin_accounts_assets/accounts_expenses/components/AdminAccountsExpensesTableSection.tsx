@@ -75,7 +75,7 @@ export function AdminAccountsExpensesTableSection({
           <div className="flex items-center gap-1.5">
             <span className="font-medium text-foreground">{params.data.description}</span>
             {params.data.isPettyCashRequest && (
-              <span className="rounded bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-600 dark:text-amber-400">
+              <span className="rounded bg-warning-bg px-1.5 py-0.5 text-[10px] font-semibold text-warning-text">
                 Petty Cash
               </span>
             )}
@@ -205,7 +205,7 @@ export function AdminAccountsExpensesTableSection({
               type="button"
               data-testid={`admin_accounting-expenses-delete-${params.data.id}`}
               aria-label={t('DELETE_EXPENSE', { description: params.data.description })}
-              className="inline-flex items-center justify-center rounded-md border border-border p-1.5 text-danger-text bg-danger-bg hover:bg-danger-bg/80 min-h-[32px] min-w-[32px] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center justify-center rounded-md border border-border p-1.5 text-danger-text bg-danger-bg hover:opacity-80 min-h-[32px] min-w-[32px] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!canMutate}
               title={!canMutate ? t('DELETE_BLOCKED') : undefined}
               onClick={(event) => {

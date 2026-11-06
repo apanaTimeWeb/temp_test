@@ -99,7 +99,7 @@ export function AdminCommunicationComplaintsTable({
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -161,7 +161,7 @@ export function AdminCommunicationComplaintsTable({
             const isLong = c.description.length > 60;
             const globalIndex = page * pageSize + i;
             return (
-              <tr key={c.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+              <tr key={c.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
                 <td className="py-3 px-4 font-mono text-ui text-text-secondary">{globalIndex + 1}</td>
                 <td className="py-3 px-4">
                   <div className="font-semibold text-text-primary">{c.title}</div>

@@ -26,7 +26,7 @@ export function AdminDashboardOverviewKpis({ kpis, sectionLabel }: AdminDashboar
         return (
           <article
             key={kpi.id}
-            className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5"
+            className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md hover:-translate-y-0.5"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 flex-wrap">

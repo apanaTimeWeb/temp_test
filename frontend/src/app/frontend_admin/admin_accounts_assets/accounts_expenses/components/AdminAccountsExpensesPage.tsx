@@ -162,7 +162,7 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
   return (
     <div className="space-y-6 pb-10">
       {!isDemoMode && (
-        <p role="status" className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-xs font-medium text-amber-700 dark:text-amber-300">
+        <p role="status" className="rounded-xl border border-warning-border bg-warning-bg p-3 text-xs font-medium text-warning-text">
           {t('LIVE_UNAVAILABLE')}
         </p>
       )}
@@ -174,11 +174,11 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
           canMutate={isDemoMode}
         />
         {/* Time Horizon Pill Bar */}
-        <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border/70 bg-surface/90 p-2 shadow-sm backdrop-blur-md self-start">
-          <div className="flex items-center rounded-lg bg-surface-muted/60 p-1 border border-border/50">
+        <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border bg-surface p-2 shadow-sm backdrop-blur-md self-start">
+          <div className="flex items-center rounded-lg bg-surface-muted p-1 border border-border">
             {(['all', 'today', 'this_week', 'this_month', 'custom'] as const).map((r) => (
               <button key={r} type="button" onClick={() => setTimeRange(r)}
-                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${timeRange === r ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface/60'}`}
+                className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${timeRange === r ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'}`}
               >
                 {r === 'all' ? 'All Time' : r === 'today' ? 'Today' : r === 'this_week' ? 'This Week' : r === 'this_month' ? 'This Month' : <><Calendar className="h-3 w-3" />Custom</>}
               </button>

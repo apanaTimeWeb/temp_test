@@ -20,7 +20,7 @@ export function AdminAccountsFinancialReportsKpiCards({ totalIncomeMinor, totalE
         <div className="mb-2 flex items-center justify-between gap-3">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_INCOME')}</span>
-            <span className="rounded-md bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+            <span className="rounded-md bg-success-bg px-1.5 py-0.5 text-[10px] font-bold text-success-text">
               {periodLabel}
             </span>
           </div>
@@ -32,7 +32,7 @@ export function AdminAccountsFinancialReportsKpiCards({ totalIncomeMinor, totalE
         <div className="mb-2 flex items-center justify-between gap-3">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_EXPENSES')}</span>
-            <span className="rounded-md bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-bold text-rose-600 dark:text-rose-400">
+            <span className="rounded-md bg-danger-bg px-1.5 py-0.5 text-[10px] font-bold text-danger-text">
               {periodLabel}
             </span>
           </div>
@@ -44,7 +44,7 @@ export function AdminAccountsFinancialReportsKpiCards({ totalIncomeMinor, totalE
         <div className="mb-2 flex items-center justify-between gap-3">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('NET_PROFIT')}</span>
-            <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">
+            <span className="rounded-md bg-primary-subtle px-1.5 py-0.5 text-[10px] font-bold text-primary">
               {periodLabel}
             </span>
           </div>

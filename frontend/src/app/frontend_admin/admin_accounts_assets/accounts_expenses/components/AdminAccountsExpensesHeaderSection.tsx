@@ -13,7 +13,7 @@ export function AdminAccountsExpensesHeaderSection({ onAddExpense, canMutate }: 
   return (
     <header className="space-y-1.5">
       <div className="flex items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 rounded-md bg-orange-500/10 px-2.5 py-0.5 text-xs font-semibold text-orange-600 dark:text-orange-400">
+        <span className="inline-flex items-center gap-1.5 rounded-md bg-warning-bg px-2.5 py-0.5 text-xs font-semibold text-warning-text">
           <Receipt className="h-3.5 w-3.5" />
           Accounts / Expenses
         </span>
@@ -25,7 +25,7 @@ export function AdminAccountsExpensesHeaderSection({ onAddExpense, canMutate }: 
         </div>
         <button
           type="button"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-primary px-3.5 py-2 text-sm font-semibold text-primary-contrast shadow-sm hover:bg-primary/90 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-primary px-3.5 py-2 text-sm font-semibold text-primary-contrast shadow-sm hover:opacity-90 transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
           disabled={!canMutate}
           title={!canMutate ? t('CREATE_BLOCKED') : undefined}
           onClick={onAddExpense}

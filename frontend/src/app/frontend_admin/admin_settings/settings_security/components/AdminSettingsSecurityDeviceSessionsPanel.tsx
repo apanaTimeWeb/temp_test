@@ -55,7 +55,7 @@ export default function AdminSecurityDeviceSessionsPanel() {
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -92,7 +92,7 @@ export default function AdminSecurityDeviceSessionsPanel() {
           </thead>
           <tbody>
             {paginatedDevices.map((device) => (
-              <tr key={device.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+              <tr key={device.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
                 <td className="p-3 text-text-primary">{t(device.managerKey)}</td>
                 <td className="p-3 text-text-primary">{t(device.deviceKey)}</td>
                 <td className="p-3 text-text-secondary">{t(device.locationKey)} ({device.ip})</td>

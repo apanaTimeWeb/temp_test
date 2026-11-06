@@ -135,7 +135,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
               </div>
 
               {/* Multi-Branch Filter Pills */}
-              <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-lg border border-border bg-surface-highlight/40 p-2.5 my-3">
+              <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-lg border border-border bg-surface-highlight p-2.5 my-3">
                 <div className="flex flex-wrap items-center gap-1.5">
                   <span className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-text-secondary mr-1">
                     <Building2 size={13} className="text-primary shrink-0" />

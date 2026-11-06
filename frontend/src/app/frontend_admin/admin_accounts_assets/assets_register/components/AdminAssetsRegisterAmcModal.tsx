@@ -91,7 +91,7 @@ export function AdminAssetsRegisterAmcModal({
           </DialogHeader>
 
           {/* Asset Context Snapshot */}
-          <div className="rounded-lg border border-border bg-muted/40 p-3 text-xs space-y-1.5">
+          <div className="rounded-lg border border-border bg-muted p-3 text-xs space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-foreground">{asset.name}</span>
               <span className="font-mono text-muted-foreground">{asset.assetCode}</span>
@@ -101,7 +101,7 @@ export function AdminAssetsRegisterAmcModal({
               <span>OEM Warranty: {formatAssetDate(asset.warrantyExpiryDate)}</span>
             </div>
             {daysUntilWarranty !== null && daysUntilWarranty <= 30 && (
-              <div className="rounded bg-amber-500/10 p-1.5 text-amber-700 dark:text-amber-300 font-medium">
+              <div className="rounded bg-warning-bg p-1.5 text-warning-text font-medium">
                 ⚠️ OEM Warranty expires in {daysUntilWarranty} days. Free service check is available!
               </div>
             )}

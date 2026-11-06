@@ -15,7 +15,7 @@ export default function AdminStaffAttendanceError({
   }, [error]);
 
   return (
-    <div className="flex min-h-[300px] flex-col items-center justify-center rounded-xl border border-danger-text/20 bg-card p-6 text-center">
+    <div className="flex min-h-[300px] flex-col items-center justify-center rounded-xl border border-danger-border bg-card p-6 text-center">
       <AlertCircle className="h-10 w-10 text-danger-text" />
       <h2 className="mt-3 text-lg font-bold text-text-primary">Unable to load Staff Attendance</h2>
       <p className="mt-1 text-sm text-text-secondary">

@@ -38,7 +38,7 @@ export default function AdminStaffRolesPermissionsMatrixTable({ modules, demoMod
                 </th>
               </tr>
               {module.actions.map((action, actionIndex) => (
-                <tr key={action.key} className="h-12 border-t border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                <tr key={action.key} className="h-12 border-t border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
                   <th scope="row" className="p-3 text-left font-normal text-text-primary">{action.label}</th>
                   {ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.map((role) => {
                     const entry = resolveAdminStaffRolesPermissionsRoleEntry(action.roles, role);

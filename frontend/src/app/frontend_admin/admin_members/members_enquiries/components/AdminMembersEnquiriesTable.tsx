@@ -98,7 +98,7 @@ export default function AdminEnquiriesTable({ enquiries, onSelectEnquiry }: Admi
               </thead>
               <tbody>
                 {pageRows.map((enquiry, index) => (
-                  <tr key={enquiry.id} className="border-b border-border hover:bg-surface-hover even:bg-surface-zebra/30 h-12" data-testid={`admin_enquiries-AdminEnquiriesTable-row-${enquiry.id}`}>
+                  <tr key={enquiry.id} className="border-b border-border hover:bg-surface-hover even:bg-surface-zebra h-12" data-testid={`admin_enquiries-AdminEnquiriesTable-row-${enquiry.id}`}>
                     <td className="w-12 text-caption text-text-secondary">{safePage * pageSize + index + 1}</td>
                     <td>
                       <button type="button" className="min-w-48 min-h-11 rounded text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectEnquiry(enquiry)} aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })}>

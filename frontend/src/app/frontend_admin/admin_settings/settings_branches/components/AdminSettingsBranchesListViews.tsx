@@ -84,7 +84,7 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -158,7 +158,7 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
               </thead>
               <tbody>
                 {visibleRows.map((branch) => (
-                  <tr key={branch.id} tabIndex={0} className="h-12 cursor-pointer border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={(event) => clickRow(event, branch)} onKeyDown={(event) => activateRow(event, branch)} aria-label={t('OPEN_BRANCH', { name: branch.name })}>
+                  <tr key={branch.id} tabIndex={0} className="h-12 cursor-pointer border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={(event) => clickRow(event, branch)} onKeyDown={(event) => activateRow(event, branch)} aria-label={t('OPEN_BRANCH', { name: branch.name })}>
                     <td className="px-4 py-3">
                       <button type="button" className="text-left text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => setViewingBranch(branch)}>
                         <span className="font-medium">{branch.name}</span>

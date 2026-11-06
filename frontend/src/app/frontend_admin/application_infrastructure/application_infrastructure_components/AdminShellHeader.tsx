@@ -83,7 +83,7 @@ export function AdminShellHeader({ onMobileOpen }: AdminShellHeaderProps) {
           <Building2 size={18} strokeWidth={2} className="text-text-secondary hidden sm:block" />
           <Select value={selectedBranchId} onValueChange={setSelectedBranchId}>
             <SelectTrigger 
-              className="w-36 sm:w-48 h-9 text-sm font-medium border border-border/50 rounded-lg shadow-2xs focus:ring-1 focus:ring-primary admin-application-infrastructure-style-05c66736e4"
+              className="w-36 sm:w-48 h-9 text-sm font-medium border border-border rounded-lg shadow-2xs focus:ring-1 focus:ring-primary admin-application-infrastructure-style-05c66736e4"
               aria-label={t('SELECT_BRANCH')}
             >
               <SelectValue placeholder={t('SELECT_BRANCH')} />
@@ -123,7 +123,7 @@ export function AdminShellHeader({ onMobileOpen }: AdminShellHeaderProps) {
           type="button"
           data-testid="admin_header-AdminShellHeader-control-logout"
           onClick={() => setShowLogoutModal(true)}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-danger-text hover:bg-danger-bg hover:border-danger-text/40 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-danger-text hover:bg-danger-bg hover:border-destructive transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
           title={t('LOG_OUT')}
           aria-label={t('LOG_OUT')}
         >

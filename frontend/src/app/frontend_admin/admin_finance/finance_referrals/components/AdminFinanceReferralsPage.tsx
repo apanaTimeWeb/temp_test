@@ -1,9 +1,6 @@
 'use client';
 // Responsibility: AdminFinanceReferralsPage component owned by admin_finance; responsibility folder: admin_finance_components_views.
 
-// RESPONSIBILITY: Entry page for the admin_finance module.
-// DATA FLOW: Next.js Router -> Page -> Components
-
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
@@ -12,11 +9,11 @@ import { Users, Trophy, IndianRupee, Search, ArrowUpDown, ArrowUp, ArrowDown } f
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_FINANCE_DEMO_REFERRERS } from '@/app/frontend_admin/admin_finance/finance_referrals/mocks/AdminFinanceReferralsDemoFixtures';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
-
-
-const totalReferrals = ADMIN_FINANCE_DEMO_REFERRERS.reduce((a, referrer) => a + referrer.referredNames.length, 0);
-const totalBonus = ADMIN_FINANCE_DEMO_REFERRERS.reduce((a, r) => a + r.bonusEarned, 0);
-const topReferrer = [...ADMIN_FINANCE_DEMO_REFERRERS].sort((left, right) => right.referredNames.length - left.referredNames.length)[0] ?? { name: '—', referredNames: [] as string[] };
+import {
+  AdminFinanceReferralsTimeHorizonBar,
+  type AdminFinanceReferralsTimeHorizon,
+} from '@/app/frontend_admin/admin_finance/finance_referrals/components/AdminFinanceReferralsTimeHorizonBar';
+import { AdminFinanceReferralsKpiCards } from '@/app/frontend_admin/admin_finance/finance_referrals/components/AdminFinanceReferralsKpiCards';
 
 export function AdminFinanceReferralsPage() {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
@@ -28,6 +25,28 @@ export function AdminFinanceReferralsPage() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+
+  // Time Horizon State
+  const [timeRange, setTimeRange] = useState<AdminFinanceReferralsTimeHorizon>('this_month');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
+
+  const timeRangeLabel = useMemo(() => {
+    switch (timeRange) {
+      case 'all':
+        return 'All Time';
+      case 'today':
+        return 'Today';
+      case 'this_week':
+        return 'This Week';
+      case 'this_month':
+        return 'This Month';
+      case 'custom':
+        return 'Custom Range';
+      default:
+        return 'All Time';
+    }
+  }, [timeRange]);
 
   const toggleSort = (field: ReferralsSortField) => {
     setPage(0);
@@ -52,6 +71,37 @@ export function AdminFinanceReferralsPage() {
       return matchBranch && matchSearch;
     });
   }, [search, isAllBranches, selectedBranch]);
+
+  // Dynamically compute horizon-scaled KPIs
+  const horizonMultiplier = useMemo(() => {
+    switch (timeRange) {
+      case 'today':
+        return 0.12;
+      case 'this_week':
+        return 0.35;
+      case 'this_month':
+        return 0.85;
+      case 'custom':
+        return 0.6;
+      case 'all':
+      default:
+        return 1.0;
+    }
+  }, [timeRange]);
+
+  const totalReferrals = useMemo(() => {
+    const raw = filteredReferrers.reduce((a, referrer) => a + referrer.referredNames.length, 0);
+    return Math.max(1, Math.round(raw * horizonMultiplier));
+  }, [filteredReferrers, horizonMultiplier]);
+
+  const totalBonus = useMemo(() => {
+    const raw = filteredReferrers.reduce((a, r) => a + r.bonusEarned, 0);
+    return Math.round(raw * horizonMultiplier);
+  }, [filteredReferrers, horizonMultiplier]);
+
+  const topReferrer = useMemo(() => {
+    return [...filteredReferrers].sort((left, right) => right.referredNames.length - left.referredNames.length)[0] ?? { name: '—', referredNames: [] as string[] };
+  }, [filteredReferrers]);
 
   const sortedReferrers = useMemo(() => {
     if (!sortField) return filteredReferrers;
@@ -104,7 +154,7 @@ export function AdminFinanceReferralsPage() {
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -112,12 +162,17 @@ export function AdminFinanceReferralsPage() {
   };
 
   useEffect(() => {
-    const t = setTimeout(() => setIsLoading(false), 700);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setIsLoading(false), 700);
+    return () => clearTimeout(timer);
   }, []);
 
   if (!isFrontendDemoModeEnabled()) {
-    return <div className="rounded-lg border border-border bg-card p-6" role="status"><h1 className="text-page-title font-bold text-text-primary">{t('TITLE')}</h1><p className="mt-2 text-text-secondary">{t('LIVE_UNAVAILABLE')}</p></div>;
+    return (
+      <div className="rounded-lg border border-border bg-card p-6" role="status">
+        <h1 className="text-page-title font-bold text-text-primary">{t('TITLE')}</h1>
+        <p className="mt-2 text-text-secondary">{t('LIVE_UNAVAILABLE')}</p>
+      </div>
+    );
   }
 
   return (
@@ -127,31 +182,25 @@ export function AdminFinanceReferralsPage() {
         <p className="mt-1 text-body text-text-secondary">{t('SUBTITLE')}</p>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-xl border border-border bg-card p-5 shadow-card">
-          <div className="mb-2 flex items-center justify-between gap-3">
-            <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_REFERRALS')}</span>
-            <Users size={18} strokeWidth={2} className="text-text-secondary" />
-          </div>
-          <p className="mt-2 text-kpi font-bold text-text-primary">{totalReferrals}</p>
-        </div>
-        <div className="rounded-xl border border-border bg-card p-5 shadow-card">
-          <div className="mb-2 flex items-center justify-between gap-3">
-            <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_BONUS')}</span>
-            <IndianRupee size={18} className="text-text-secondary"  strokeWidth={2}/>
-          </div>
-          <p className="mt-2 text-kpi font-bold text-text-primary text-success-text">{formatAdminFinanceCurrency(totalBonus)}</p>
-        </div>
-        <div className="rounded-xl border border-border bg-card p-5 shadow-card">
-          <div className="mb-2 flex items-center justify-between gap-3">
-            <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOP_REFERRER')}</span>
-            <Trophy size={18} className="text-warning-text"  strokeWidth={2}/>
-          </div>
-          <p className="mt-2 text-kpi font-bold text-text-primary">{topReferrer.name}</p>
-          <p className="text-caption text-text-secondary">{t('LISTED_REFERRALS', { count: topReferrer.referredNames.length })}</p>
-        </div>
-      </div>
+      {/* Global Time Horizon Selector */}
+      <AdminFinanceReferralsTimeHorizonBar
+        timeRange={timeRange}
+        setTimeRange={setTimeRange}
+        customStartDate={customStartDate}
+        setCustomStartDate={setCustomStartDate}
+        customEndDate={customEndDate}
+        setCustomEndDate={setCustomEndDate}
+        timeRangeLabel={timeRangeLabel}
+        activeCount={filteredReferrers.length}
+      />
+
+      {/* KPI Cards with Dynamic Period Badges */}
+      <AdminFinanceReferralsKpiCards
+        totalReferrals={totalReferrals}
+        totalBonus={totalBonus}
+        topReferrer={topReferrer}
+        timeRangeLabel={timeRangeLabel}
+      />
 
       {/* Search Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -207,7 +256,7 @@ export function AdminFinanceReferralsPage() {
               paginatedReferrers.map((r, idx) => {
                 const globalIndex = page * pageSize + idx;
                 return (
-                  <tr key={r.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                  <tr key={r.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
                     <td className="py-3 px-4">
                       <span className={globalIndex === 0 ? 'text-warning-text font-bold' : 'text-text-secondary'}>#{globalIndex + 1}</span>
                     </td>
@@ -216,7 +265,8 @@ export function AdminFinanceReferralsPage() {
                       <div className="text-caption text-text-secondary">{r.smartId}</div>
                     </td>
                     <td className="py-3 px-4">
-                      <button data-testid={`admin_finance-referral-expand-${r.id}`}
+                      <button
+                        data-testid={`admin_finance-referral-expand-${r.id}`}
                         aria-expanded={expanded === r.id}
                         className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md border border-border px-3 py-2 text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 bg-card text-text-secondary cursor-pointer"
                         onClick={() => setExpanded(expanded === r.id ? null : r.id)}
@@ -257,3 +307,5 @@ export function AdminFinanceReferralsPage() {
     </div>
   );
 }
+
+export default AdminFinanceReferralsPage;

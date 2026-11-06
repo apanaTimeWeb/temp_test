@@ -30,7 +30,7 @@ export function AdminDashboardOverviewDestinations({
       {destinations.map(({ key, Icon, href }) => (
         <article
           key={key}
-          className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md flex flex-col justify-between"
+          className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md flex flex-col justify-between"
         >
           <div>
             <div className="w-10 h-10 rounded-xl bg-primary-subtle text-primary border border-border flex items-center justify-center">
@@ -45,7 +45,7 @@ export function AdminDashboardOverviewDestinations({
           </div>
           <Link
             href={href}
-            className="mt-4 inline-flex min-h-10 items-center justify-between rounded-xl border border-border bg-muted/30 px-3 py-2 text-xs font-semibold text-text-primary hover:bg-surface-hover hover:border-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="mt-4 inline-flex min-h-10 items-center justify-between rounded-xl border border-border bg-muted px-3 py-2 text-xs font-semibold text-text-primary hover:bg-surface-hover hover:border-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <span>{openLabel}</span>
             <ArrowRight size={13} className="text-text-secondary" />

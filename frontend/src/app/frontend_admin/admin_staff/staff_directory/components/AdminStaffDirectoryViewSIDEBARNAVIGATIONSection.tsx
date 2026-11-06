@@ -156,7 +156,7 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary/40 group-hover:text-text-secondary transition-colors shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -217,7 +217,7 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
                 </tr>
               </thead>
               <tbody>{visibleManagers.map((manager) => (
-                <tr key={manager.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra/30">
+                <tr key={manager.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
                   <th scope="row" className="px-4 py-3 font-medium text-text-primary">
                     <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectManager(manager)}>{manager.name}</button>
                     <span className="block text-xs font-normal text-text-secondary">@{manager.username}{manager.role ? ` · ${manager.role}` : ''}</span>

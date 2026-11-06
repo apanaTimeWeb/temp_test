@@ -43,7 +43,7 @@ export function AdminAccountsFinancialReportsMonthlyChart({ rows, period }: Admi
     <section className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card p-6" aria-labelledby="accounting-income-expense-chart-title">
       <div className="mb-4 flex items-center justify-between">
         <h2 id="accounting-income-expense-chart-title" className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('CHART_TITLE')}</h2>
-        <span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+        <span className="rounded-md bg-primary-subtle px-2 py-0.5 text-xs font-semibold text-primary">
           {periodLabel}
         </span>
       </div>
