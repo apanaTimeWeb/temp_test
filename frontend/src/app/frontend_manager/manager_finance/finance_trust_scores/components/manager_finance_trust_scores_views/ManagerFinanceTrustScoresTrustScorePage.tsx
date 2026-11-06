@@ -12,7 +12,7 @@ import { ManagerFinanceTrustScoresTable, type TrustSortField } from './ManagerFi
 
 const URL_FILTERS = {
   level: { defaultValue: 'all', allowedValues: ['all', 'reliable', 'moderate', 'low'] },
-  shift: { defaultValue: 'all', allowedValues: ['all', 'Morning', 'Evening', 'Full Day'] },
+  shift: { defaultValue: 'all', allowedValues: ['all', 'Morning', 'Afternoon', 'Evening', 'Night', 'Full Day'] },
 } as const;
 
 export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: ManagerFinanceTrustScoresRouteQueryProps) {
@@ -171,7 +171,9 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
         >
           <option value="all">{tManagerUi('all_shifts')}</option>
           <option value="Morning">{tManagerUi('morning')}</option>
+          <option value="Afternoon">{tManagerUi('afternoon')}</option>
           <option value="Evening">{tManagerUi('evening')}</option>
+          <option value="Night">{tManagerUi('night')}</option>
           <option value="Full Day">{tManagerUi('full_day')}</option>
         </select>
       </div>

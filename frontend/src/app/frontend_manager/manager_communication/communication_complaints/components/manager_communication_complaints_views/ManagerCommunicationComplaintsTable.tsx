@@ -117,7 +117,7 @@ export function ManagerCommunicationComplaintsTable({
             return (
               <tr
                 key={complaint.id}
-                className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12"
+                className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12"
               >
                 <td className="mc-td-mono px-3 py-3 align-middle">{rowNumber}</td>
                 <td className="mc-td-bold px-3 py-3 align-middle">{complaint.title}</td>

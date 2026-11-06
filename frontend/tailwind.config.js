@@ -31,8 +31,14 @@ module.exports = {
         warning: 'var(--color-warning, #F59E0B)',
         info: 'var(--color-info, #1D4ED8)',
         surface: {
+          DEFAULT: 'var(--color-bg-card, #111111)',
           hover: 'var(--color-surface-hover, rgba(250, 204, 21, 0.08))',
           highlight: 'var(--color-surface-highlight, rgba(250, 204, 21, 0.05))',
+          zebra: 'var(--color-surface-zebra, #141414)',
+        },
+        overlay: {
+          DEFAULT: 'var(--color-bg-overlay, #242424)',
+          backdrop: 'var(--color-overlay-backdrop, rgba(0, 0, 0, 0.6))',
         },
         skeleton: {
           base: 'var(--color-skeleton-base, #111111)',

@@ -71,9 +71,9 @@ export function ManagerDashboardReportsKpiGrid({
                   <span
                     className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                       tone === 'up'
-                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                        ? 'bg-success-bg text-success border border-border'
                         : tone === 'down'
-                        ? 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20'
+                        ? 'bg-danger-bg text-danger border border-border'
                         : 'bg-muted text-muted-foreground border border-border'
                     }`}
                   >
@@ -99,7 +99,7 @@ export function ManagerDashboardReportsKpiGrid({
               </div>
             </div>
 
-            <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between text-[11px] text-muted-foreground">
+            <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground">
               <span>Verified {dateRange} Metric</span>
               <span className="text-primary font-medium">Synced</span>
             </div>

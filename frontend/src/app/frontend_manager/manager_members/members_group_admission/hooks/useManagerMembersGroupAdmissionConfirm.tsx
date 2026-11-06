@@ -33,7 +33,7 @@ export function useManagerMembersGroupAdmissionConfirm() {
   useManagerGroupAdmissionDialogFocus(dialogRef, () => settle(false), Boolean(pending));
 
   const dialog = pending ? (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" data-testid="managermembersgroupadmission-overlay">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" data-testid="managermembersgroupadmission-overlay">
       <div
         ref={dialogRef}
         tabIndex={-1}

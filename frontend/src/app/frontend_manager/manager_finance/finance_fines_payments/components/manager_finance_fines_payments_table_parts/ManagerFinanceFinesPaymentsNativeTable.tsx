@@ -64,7 +64,7 @@ export default function ManagerFinanceFinesPaymentsNativeTable<T extends object>
             ) : (column.headerName ?? column.field ?? '—')}
           </th>)}
         </tr></thead>
-        <tbody>{rows.length === 0 ? <tr><td colSpan={Math.max(columns.length, 1)} className="p-6 text-center text-secondary"><div className="flex flex-col items-center justify-center gap-2" role="status"><Inbox size={20} aria-hidden="true" /><span>{emptyMessage ?? '—'}</span></div></td></tr> : visibleRows.map((row, rowIndex) => <tr key={getRowKey(row)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
+        <tbody>{rows.length === 0 ? <tr><td colSpan={Math.max(columns.length, 1)} className="p-6 text-center text-secondary"><div className="flex flex-col items-center justify-center gap-2" role="status"><Inbox size={20} aria-hidden="true" /><span>{emptyMessage ?? '—'}</span></div></td></tr> : visibleRows.map((row, rowIndex) => <tr key={getRowKey(row)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12">
           {columns.map((column, columnIndex) => {
             const rawValue = column.field ? (row as unknown as Record<string, unknown>)[column.field] : undefined;
             const value: NativeCellParams<T>['value'] = typeof rawValue === 'string' || typeof rawValue === 'number' || typeof rawValue === 'boolean' ? rawValue : rawValue == null ? null : String(rawValue);

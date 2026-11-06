@@ -14,7 +14,7 @@ import ManagerFinanceSubscriptionsDetailModal from './ManagerFinanceSubscription
 const URL_FILTERS = {
   status: { defaultValue: 'all', allowedValues: ['all', 'active', 'expired', 'suspended', 'cancelled'] },
   plan: { defaultValue: 'all', allowedValues: ['all', 'Basic Plan', 'Premium Plan'] },
-  shift: { defaultValue: 'all', allowedValues: ['all', 'Morning', 'Evening', 'Full Day'] },
+  shift: { defaultValue: 'all', allowedValues: ['all', 'Morning', 'Afternoon', 'Evening', 'Night', 'Full Day'] },
 } as const;
 
 type SubSortField = 'studentName' | 'smartId' | 'plan' | 'startDate' | 'endDate' | 'daysLeft' | 'total' | 'due' | 'status';
@@ -225,7 +225,9 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         <select className="fin-select w-40" value={shiftFilter} onChange={(e) => setUrlFilter('shift', e.target.value)} aria-label={tManagerUi('all_shifts')}>
           <option value="all">{tManagerUi('all_shifts')}</option>
           <option value="Morning">{tManagerUi('morning')}</option>
+          <option value="Afternoon">{tManagerUi('afternoon')}</option>
           <option value="Evening">{tManagerUi('evening')}</option>
+          <option value="Night">{tManagerUi('night')}</option>
           <option value="Full Day">{tManagerUi('full_day')}</option>
         </select>
       </div>

@@ -155,13 +155,13 @@ export default function ManagerDashboardReportsPage() {
         </div>
 
         {/* Global Time Horizon Segmented Filter Bar */}
-        <div className="mt-5 pt-4 border-t border-border/60 flex flex-wrap items-center justify-between gap-3">
+        <div className="mt-5 pt-4 border-t border-border flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2.5">
             <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
               <Clock size={13} className="text-primary" />
               {tManagerUi('date_range')}:
             </span>
-            <div className="inline-flex items-center rounded-xl bg-surface-highlight/40 border border-border p-1 gap-1">
+            <div className="inline-flex items-center rounded-xl bg-surface-highlight border border-border p-1 gap-1">
               {MANAGER_REPORTS_DATE_RANGES.map((range) => {
                 const isSelected = !isCustomMode && dateRange === range;
                 const label =

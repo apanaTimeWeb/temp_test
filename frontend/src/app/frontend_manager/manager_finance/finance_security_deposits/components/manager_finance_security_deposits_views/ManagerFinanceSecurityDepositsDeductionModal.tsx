@@ -39,7 +39,7 @@ export default function ManagerFinanceSecurityDepositsDeductionModal({
         </div>
 
         <form onSubmit={onConfirmDeduction} className="space-y-3.5">
-          <div className="p-3 bg-floating/60 rounded-xl border border-border">
+          <div className="p-3 bg-surface-highlight rounded-xl border border-border">
             <p className="text-xs text-secondary">Student Name</p>
             <p className="text-sm font-bold text-primary">{deductionTarget.studentName} ({deductionTarget.smartId})</p>
             <p className="text-xs text-secondary mt-1">Available Deposit: <strong>₹{deductionTarget.depositAmount - (deductionTarget.deductionAmount || 0)}</strong></p>

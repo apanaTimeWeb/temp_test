@@ -15,6 +15,7 @@ export interface ManagerMembersDirectoryEditFormTabsProps {
 
 const SHIFT_OPTIONS = [
   { id: 'Morning', label: 'Morning Shift', hours: '06:00 AM – 02:00 PM', badge: '8 Hrs', fullName: 'Morning (06:00 AM – 02:00 PM)' },
+  { id: 'Afternoon', label: 'Afternoon Shift', hours: '11:00 AM – 04:00 PM', badge: '5 Hrs', fullName: 'Afternoon (11:00 AM – 04:00 PM)' },
   { id: 'Evening', label: 'Evening Shift', hours: '02:00 PM – 10:00 PM', badge: '8 Hrs', fullName: 'Evening (02:00 PM – 10:00 PM)' },
   { id: 'Night', label: 'Night Shift', hours: '10:00 PM – 06:00 AM', badge: '8 Hrs', fullName: 'Night (10:00 PM – 06:00 AM)' },
   { id: 'Full Day', label: 'Full Day Access', hours: '06:00 AM – 10:00 PM', badge: '16 Hrs', fullName: 'Full Day (06:00 AM – 10:00 PM)' },

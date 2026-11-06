@@ -3,10 +3,11 @@
 import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { useManagerPaymentPromisesFormatting } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesFormattingHook';
-import { Search } from 'lucide-react';
+import { Search, Plus } from 'lucide-react';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES, type ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import type { ManagerFinancePaymentPromisesRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesComponentTypes';
 import ManagerFinancePaymentPromisesEditModal from './ManagerFinancePaymentPromisesEditModal';
+import { ManagerFinancePaymentPromisesAddModal } from './ManagerFinancePaymentPromisesAddModal';
 import ManagerFinancePaymentPromisesTable, { type PromiseSortField } from './ManagerFinancePaymentPromisesTable';
 import ManagerFinancePaymentPromisesTimeHorizonBar, { type ManagerPromisesTimeHorizon } from './ManagerFinancePaymentPromisesTimeHorizonBar';
 import ManagerFinancePaymentPromisesKpis from './ManagerFinancePaymentPromisesKpis';
@@ -27,6 +28,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // Edit / Details Modal State
   const [selectedPromise, setSelectedPromise] = useState<ManagerFinancePaymentPromisesPaymentPromiseSample | null>(null);
@@ -149,6 +151,12 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     setTimeout(() => setFeedbackToast(null), 4000);
   };
 
+  const handleAddNewPromise = (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
+    setPromisesList([p, ...promisesList]);
+    setFeedbackToast(`Payment commitment recorded for ${p.studentName} (₹${p.promisedAmount}) due on ${p.expectedDate}!`);
+    setTimeout(() => setFeedbackToast(null), 4000);
+  };
+
   return (
     <div
       className="space-y-6"
@@ -158,9 +166,18 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
       data-route-phone={_routeQuery.phone}
       data-route-smart-id={_routeQuery.smartId}
     >
-      <div>
-        <h1 className="fin-page-title">{tManagerUi('payment_promises')}</h1>
-        <p className="fin-page-subtitle">{tManagerUi('track_and_manage_student_payment_commitments')}</p>
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="fin-page-title">{tManagerUi('payment_promises')}</h1>
+          <p className="fin-page-subtitle">{tManagerUi('track_and_manage_student_payment_commitments')}</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsAddModalOpen(true)}
+          className="mgr-btn-primary text-xs flex items-center gap-1.5 py-2 px-3.5 shadow-sm"
+        >
+          <Plus size={14} /> Record Payment Promise
+        </button>
       </div>
 
       <div className="p-3 rounded-xl bg-muted border border-border text-xs text-secondary flex items-center justify-between" role="status">
@@ -269,6 +286,12 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         editRemarks={editRemarks}
         onEditRemarksChange={setEditRemarks}
         onSavePromise={handleSavePromise}
+      />
+
+      <ManagerFinancePaymentPromisesAddModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onAddPromise={handleAddNewPromise}
       />
     </div>
   );

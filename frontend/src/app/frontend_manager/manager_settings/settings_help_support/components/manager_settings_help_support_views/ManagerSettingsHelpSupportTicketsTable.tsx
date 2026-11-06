@@ -157,7 +157,7 @@ export function ManagerSettingsHelpSupportTicketsTable({
               paginatedTickets.map((t) => (
                 <tr
                   key={t.id}
-                  className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 motion-safe:transition-colors"
+                  className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12 motion-safe:transition-colors"
                 >
                   <td className="p-4 text-sm font-medium text-primary">{t.id}</td>
                   <td className="p-4 text-sm text-primary">{t.subject}</td>

@@ -50,7 +50,7 @@ export function ManagerMembersDirectoryEditModal({ member, isOpen, onClose, onSa
       role="dialog"
       aria-modal="true"
       aria-labelledby="manager-edit-member-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop backdrop-blur-xs p-4 overflow-y-auto"
       onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }}
     >
       <div className="bg-card border border-border rounded-2xl shadow-floating max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden motion-safe:animate-in motion-safe:fade-in-50 motion-safe:zoom-in-95">

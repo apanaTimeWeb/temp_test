@@ -117,7 +117,7 @@ export default function ManagerFinancePaymentPromisesTable({
             paginated.map((p) => (
               <tr
                 key={p.id}
-                className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12"
+                className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12"
               >
                 <td className="py-3 px-4">
                   <div className="fin-cell-name font-semibold">{p.studentName}</div>

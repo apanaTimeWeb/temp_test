@@ -24,7 +24,13 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
   const [threshold, setThreshold] = useState('3');
   const [shift, setShift] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const shiftLabels: Record<string, string> = { Morning: tManagerUi('morning'), Afternoon: tManagerUi('afternoon'), Evening: tManagerUi('evening') };
+  const shiftLabels: Record<string, string> = {
+    Morning: tManagerUi('morning'),
+    Afternoon: tManagerUi('afternoon'),
+    Evening: tManagerUi('evening'),
+    Night: tManagerUi('night'),
+    'Full Day': tManagerUi('full_day'),
+  };
 
   const handleAlertWhatsApp = (item: ManagerAttendanceAbsenteeReportSampleAbsentee) => {
     const cleanPhone = (item.parentPhone || '9876543210').replace(/\D/g, '');
@@ -228,6 +234,8 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
                 <option value="Morning">{tManagerUi('morning')}</option>
                 <option value="Afternoon">{tManagerUi('afternoon')}</option>
                 <option value="Evening">{tManagerUi('evening')}</option>
+                <option value="Night">{tManagerUi('night')}</option>
+                <option value="Full Day">{tManagerUi('full_day')}</option>
               </select>
             </div>
           </div>

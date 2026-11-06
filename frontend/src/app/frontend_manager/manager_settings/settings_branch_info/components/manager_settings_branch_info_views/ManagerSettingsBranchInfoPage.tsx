@@ -81,7 +81,7 @@ export default function ManagerSettingsBranchInfoPage() {
                   </label>
                   <input
                     type="text"
-                    className="mgr-input bg-surface-highlight/50 cursor-default"
+                    className="mgr-input bg-surface-highlight cursor-default"
                     readOnly
                     value={branchData.branchName}
                   />
@@ -92,7 +92,7 @@ export default function ManagerSettingsBranchInfoPage() {
                   </label>
                   <input
                     type="text"
-                    className="mgr-input font-mono bg-surface-highlight/50 cursor-default"
+                    className="mgr-input font-mono bg-surface-highlight cursor-default"
                     readOnly
                     value={branchData.branchCode}
                   />
@@ -103,7 +103,7 @@ export default function ManagerSettingsBranchInfoPage() {
                   </label>
                   <textarea
                     rows={2}
-                    className="mgr-input resize-none py-3 bg-surface-highlight/50 cursor-default"
+                    className="mgr-input resize-none py-3 bg-surface-highlight cursor-default"
                     readOnly
                     value={branchData.address}
                   />
@@ -114,7 +114,7 @@ export default function ManagerSettingsBranchInfoPage() {
                   </label>
                   <input
                     type="tel"
-                    className="mgr-input bg-surface-highlight/50 cursor-default"
+                    className="mgr-input bg-surface-highlight cursor-default"
                     readOnly
                     value={branchData.phone}
                   />
@@ -125,7 +125,7 @@ export default function ManagerSettingsBranchInfoPage() {
                   </label>
                   <input
                     type="email"
-                    className="mgr-input bg-surface-highlight/50 cursor-default"
+                    className="mgr-input bg-surface-highlight cursor-default"
                     readOnly
                     value={branchData.email}
                   />
@@ -136,7 +136,7 @@ export default function ManagerSettingsBranchInfoPage() {
                   </label>
                   <input
                     type="text"
-                    className="mgr-input bg-surface-highlight/50 cursor-default"
+                    className="mgr-input bg-surface-highlight cursor-default"
                     readOnly
                     value={branchData.managerName}
                   />
@@ -147,7 +147,7 @@ export default function ManagerSettingsBranchInfoPage() {
                   </label>
                   <input
                     type="text"
-                    className="mgr-input bg-surface-highlight/50 cursor-default"
+                    className="mgr-input bg-surface-highlight cursor-default"
                     readOnly
                     value={branchData.workingHours}
                   />

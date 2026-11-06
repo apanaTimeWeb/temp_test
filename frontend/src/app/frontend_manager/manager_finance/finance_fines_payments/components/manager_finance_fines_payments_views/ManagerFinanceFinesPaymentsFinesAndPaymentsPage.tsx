@@ -191,14 +191,14 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
               aria-pressed={isActive}
               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-primary text-primary-foreground shadow-sm ring-1 ring-primary'
+                  ? 'bg-primary text-on-primary shadow-sm ring-1 ring-primary'
                   : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'
               }`}
             >
-              <tab.icon size={15} className={isActive ? 'text-primary-foreground' : 'opacity-70'} />
+              <tab.icon size={15} className={isActive ? 'text-on-primary' : 'text-secondary'} />
               <span>{tManagerUi(tab.labelKey)}</span>
               {count !== null && (
-                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-muted text-secondary'}`}>
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-black text-primary' : 'bg-muted text-secondary'}`}>
                   {count}
                 </span>
               )}

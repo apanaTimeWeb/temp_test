@@ -168,7 +168,7 @@ export function ManagerMembersGroupAdmissionManualModal({
         </div>
 
         {/* Batch Info */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0 bg-floating/60 p-3.5 rounded-xl border border-border">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0 bg-surface-highlight p-3.5 rounded-xl border border-border">
           <div className="sm:col-span-2">
             <label className="text-xs font-semibold text-primary block mb-1">Group / Coaching Batch Reference</label>
             <input

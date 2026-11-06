@@ -104,7 +104,7 @@ export function ManagerAttendanceDailyFloorTurnoverQueue() {
           </div>
         </div>
         <div className="flex items-center gap-3 rounded-lg border border-border bg-card p-3 shadow-sm">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-danger-subtle text-danger-text">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-danger-bg text-danger-text">
             <AlertTriangle className="h-5 w-5" />
           </div>
           <div>
@@ -144,7 +144,7 @@ export function ManagerAttendanceDailyFloorTurnoverQueue() {
                 key={item.id}
                 className={`relative flex flex-col justify-between gap-4 rounded-xl border p-4 shadow-sm transition-all sm:flex-row sm:items-center ${
                   isOverstay
-                    ? 'border-danger-border bg-danger-subtle/10'
+                    ? 'border-danger bg-danger-bg'
                     : 'border-border bg-card'
                 }`}
               >
@@ -153,7 +153,7 @@ export function ManagerAttendanceDailyFloorTurnoverQueue() {
                   <div
                     className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
                       isOverstay
-                        ? 'bg-danger-subtle text-danger-text'
+                        ? 'bg-danger-bg text-danger-text'
                         : 'bg-primary-subtle text-primary'
                     }`}
                   >
@@ -214,7 +214,7 @@ export function ManagerAttendanceDailyFloorTurnoverQueue() {
                       <button
                         type="button"
                         onClick={() => handleReportFake(item.id, item.studentName)}
-                        className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-danger-border bg-card px-3 py-1.5 text-xs font-medium text-danger-text hover:bg-danger-subtle/20"
+                        className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-danger bg-card px-3 py-1.5 text-xs font-medium text-danger-text hover:bg-danger-bg"
                       >
                         <AlertTriangle className="h-4 w-4" />
                         {t('report_fake_checkout')}

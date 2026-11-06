@@ -46,7 +46,7 @@ export function ManagerDashboardOverviewOperationalAlerts({
         <div className="space-y-3">
           {/* Dropout Risk / Consecutive Absentees */}
           <Link
-            href="/frontend_manager/manager_engagement/engagement_attendance"
+            href="/frontend_manager/manager_attendance/attendance_absentee_report"
             className="group block p-3 rounded-xl border border-border bg-surface-highlight hover:border-danger hover:bg-surface-hover transition-all"
           >
             <div className="flex items-start justify-between gap-2.5">

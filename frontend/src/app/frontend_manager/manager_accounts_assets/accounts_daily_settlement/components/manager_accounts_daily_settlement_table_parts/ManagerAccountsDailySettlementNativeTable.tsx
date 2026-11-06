@@ -78,7 +78,7 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
             );
           })}
         </tr></thead>
-        <tbody>{visibleRows.map((row, rowIndex) => <tr key={getRowKey(row)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
+        <tbody>{visibleRows.map((row, rowIndex) => <tr key={getRowKey(row)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12">
           {columns.map((column, columnIndex) => {
             const rawValue = column.field ? (row as unknown as Record<string, unknown>)[column.field] : undefined;
             const value: NativeCellParams<T>['value'] = typeof rawValue === 'string' || typeof rawValue === 'number' || typeof rawValue === 'boolean' ? rawValue : rawValue == null ? null : String(rawValue);

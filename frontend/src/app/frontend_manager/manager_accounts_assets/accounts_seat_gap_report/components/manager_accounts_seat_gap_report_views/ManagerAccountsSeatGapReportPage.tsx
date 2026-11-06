@@ -207,7 +207,9 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
           <option value="all">{tManagerUi('all_shifts')}</option>
           <option value="Morning">{tManagerUi('morning')}</option>
           <option value="Afternoon">{tManagerUi('afternoon')}</option>
+          <option value="Evening">{tManagerUi('evening')}</option>
           <option value="Night">{tManagerUi('night')}</option>
+          <option value="Full Day">{tManagerUi('full_day')}</option>
         </select>
         <select className="fin-select w-40" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setPage(0); }} aria-label={tManagerUi('all_status')}>
           <option value="all">{tManagerUi('all_status')}</option>

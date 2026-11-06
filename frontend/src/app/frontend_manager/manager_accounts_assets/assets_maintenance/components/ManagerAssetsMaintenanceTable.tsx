@@ -115,7 +115,7 @@ export function ManagerAssetsMaintenanceTable({
             </tr>
           ) : (
             paginated.map((l) => (
-              <tr key={l.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
+              <tr key={l.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12">
                 <td className="py-3 px-4 fin-cell-name">{l.assetName}</td>
                 <td className="py-3 px-4 fin-text-body">{l.issue}</td>
                 <td className="py-3 px-4 fin-cell-subtext">{l.reportedDate}</td>

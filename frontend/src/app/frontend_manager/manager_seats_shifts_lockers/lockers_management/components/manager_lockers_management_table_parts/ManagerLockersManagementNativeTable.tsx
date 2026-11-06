@@ -82,7 +82,7 @@ export function ManagerLockersManagementNativeTable<T extends object>({ rows, co
         </thead>
         <tbody>
           {visibleRows.map((row, rowIndex) => (
-            <tr key={getRowKey(row, effectivePage * pageSize + rowIndex)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
+            <tr key={getRowKey(row, effectivePage * pageSize + rowIndex)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12">
               {columns.map((column, columnIndex) => {
                 const field = column.field == null ? undefined : String(column.field);
                 const value = field ? (row as unknown as Record<string, unknown>)[field] : undefined;

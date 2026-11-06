@@ -55,7 +55,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop backdrop-blur-xs p-4">
       <div className="bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full overflow-hidden motion-safe:animate-scale-up">
         <div className="flex items-center justify-between p-5 border-b border-border bg-muted">
           <div className="flex items-center gap-2">

@@ -1,8 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Wrench, X } from 'lucide-react';
 import { toast } from 'sonner';
 import type { MaintenanceLogItem } from './ManagerAssetsMaintenanceTable';
+import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { MANAGER_ACCOUNTING_SAMPLE_ASSETS } from '@/app/frontend_manager/manager_accounts_assets/assets_register/mocks/manager_assets_register_fixtures/ManagerAssetsRegisterAssetSampleFixtures';
 
 interface ManagerAssetsMaintenanceAddModalProps {
   isOpen: boolean;
@@ -20,6 +22,15 @@ export function ManagerAssetsMaintenanceAddModal({
   const [vendor, setVendor] = useState('');
   const [cost, setCost] = useState('');
   const [scheduledDate, setScheduledDate] = useState(() => new Date().toISOString().slice(0, 10));
+
+  const assetOptions: ComboboxOption[] = useMemo(() => {
+    return MANAGER_ACCOUNTING_SAMPLE_ASSETS.map((a) => ({
+      value: a.name,
+      label: a.name,
+      subLabel: `${a.category} · Location: ${a.location}`,
+      badge: a.status,
+    }));
+  }, []);
 
   if (!isOpen) return null;
 
@@ -57,31 +68,31 @@ export function ManagerAssetsMaintenanceAddModal({
             </div>
             <h2 className="text-base font-bold text-primary">Log Maintenance Request</h2>
           </div>
-          <button type="button" onClick={onClose} className="text-secondary hover:text-primary">
+          <button type="button" onClick={onClose} className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-hover">
             <X size={18} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="text-xs font-semibold text-secondary">Asset Name *</label>
-            <input
-              type="text"
-              required
-              placeholder="e.g. Inverter Battery Bank 2, AC Unit 4"
-              className="mgr-input w-full mt-1"
+            <label className="text-xs font-semibold text-secondary block mb-1">Select Registered Asset *</label>
+            <SearchableCombobox
+              options={assetOptions}
               value={assetName}
-              onChange={(e) => setAssetName(e.target.value)}
+              onChange={(val) => setAssetName(val)}
+              placeholder="Search library assets (e.g. AC Unit, CCTV, Water Purifier)..."
+              searchPlaceholder="Type asset name or category..."
+              aria-label="Select registered library asset for maintenance"
             />
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-secondary">Issue Description *</label>
+            <label className="text-xs font-semibold text-secondary block mb-1">Issue Description *</label>
             <textarea
               required
               rows={2}
               placeholder="Describe breakdown or routine servicing requirement..."
-              className="mgr-input w-full mt-1"
+              className="mgr-input w-full mt-1 text-xs"
               value={issue}
               onChange={(e) => setIssue(e.target.value)}
             />
@@ -89,22 +100,22 @@ export function ManagerAssetsMaintenanceAddModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-secondary">Assigned Vendor / Tech</label>
+              <label className="text-xs font-semibold text-secondary block mb-1">Assigned Vendor / Tech</label>
               <input
                 type="text"
                 placeholder="e.g. Daikin Care Services"
-                className="mgr-input w-full mt-1"
+                className="mgr-input w-full text-xs"
                 value={vendor}
                 onChange={(e) => setVendor(e.target.value)}
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-secondary">Estimated Cost (₹)</label>
+              <label className="text-xs font-semibold text-secondary block mb-1">Estimated Cost (₹)</label>
               <input
                 type="number"
                 min="0"
                 placeholder="e.g. 1500"
-                className="mgr-input w-full mt-1"
+                className="mgr-input w-full text-xs"
                 value={cost}
                 onChange={(e) => setCost(e.target.value)}
               />
@@ -112,10 +123,10 @@ export function ManagerAssetsMaintenanceAddModal({
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-secondary">Scheduled Date</label>
+            <label className="text-xs font-semibold text-secondary block mb-1">Scheduled Date</label>
             <input
               type="date"
-              className="mgr-input w-full mt-1"
+              className="mgr-input w-full text-xs"
               value={scheduledDate}
               onChange={(e) => setScheduledDate(e.target.value)}
             />
@@ -131,7 +142,8 @@ export function ManagerAssetsMaintenanceAddModal({
             </button>
             <button
               type="submit"
-              className="mgr-btn-primary text-xs"
+              disabled={!assetName.trim()}
+              className="mgr-btn-primary text-xs disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Log Maintenance Order
             </button>
@@ -141,4 +153,3 @@ export function ManagerAssetsMaintenanceAddModal({
     </div>
   );
 }
-

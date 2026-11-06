@@ -72,7 +72,7 @@ export function ManagerDashboardOverviewLiveShiftBar({
           {/* Overstay Alert Chip */}
           {overstayCount > 0 ? (
             <Link
-              href="/frontend_manager/manager_seats_shifts_lockers/shifts_gap"
+              href="/frontend_manager/manager_accounts_assets/accounts_seat_gap_report"
               className="group flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-warning-bg border border-border text-warning-text hover:border-warning transition-colors"
               title="View overstaying students past shift buffer"
             >

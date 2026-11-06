@@ -39,7 +39,7 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
         </div>
 
         <form onSubmit={onConfirmRefund} className="space-y-3.5">
-          <div className="p-3 bg-floating/60 rounded-xl border border-border space-y-1">
+          <div className="p-3 bg-surface-highlight rounded-xl border border-border space-y-1">
             <p className="text-xs text-secondary">Student Name</p>
             <p className="text-sm font-bold text-primary">{refundTarget.studentName} ({refundTarget.smartId})</p>
             <div className="flex justify-between text-xs pt-1 border-t border-border mt-1">

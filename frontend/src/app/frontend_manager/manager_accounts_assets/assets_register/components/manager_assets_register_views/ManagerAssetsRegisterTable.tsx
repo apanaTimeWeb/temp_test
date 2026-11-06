@@ -108,7 +108,7 @@ export function ManagerAssetsRegisterTable({
             paginated.map((a) => (
               <tr
                 key={a.id}
-                className={`fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 ${
+                className={`fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12 ${
                   a.status === 'disposed' ? 'opacity-50' : ''
                 }`}
               >

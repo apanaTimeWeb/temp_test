@@ -24,7 +24,7 @@ export function ManagerMembersGroupAdmissionCardView({
           key={row.id}
           className="p-4 rounded-xl border border-border bg-card shadow-xs space-y-3 relative hover:border-primary transition-colors"
         >
-          <div className="flex items-center justify-between border-b border-border/60 pb-2">
+          <div className="flex items-center justify-between border-b border-border pb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-2">
               <span className="w-5 h-5 rounded-full bg-primary-subtle text-primary flex items-center justify-center text-xs">
                 {index + 1}

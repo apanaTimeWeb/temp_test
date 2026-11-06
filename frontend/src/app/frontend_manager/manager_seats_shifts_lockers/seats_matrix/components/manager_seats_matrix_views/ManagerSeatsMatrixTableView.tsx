@@ -142,7 +142,7 @@ export function ManagerSeatsMatrixTableView({
               </tr>
             ) : (
               paginatedTableSeats.map((seat) => (
-                <tr key={seat.uuid || seat.id} className="border-b border-border/50 hover:bg-floating/50 transition-colors">
+                <tr key={seat.uuid || seat.id} className="border-b border-border hover:bg-surface-hover transition-colors">
                   <td className="py-3 px-4 font-mono font-bold text-primary">{seat.id}</td>
                   <td className="py-3 px-4 text-secondary text-xs">{seat.wing || 'North Reading Hall (AC)'}</td>
                   <td className="py-3 px-4 text-xs">{shiftLabel(seat.shift)}</td>

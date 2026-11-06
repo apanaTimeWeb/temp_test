@@ -149,7 +149,7 @@ export default function ManagerFinanceSubscriptionsTable({
             </tr>
           ) : (
             paginated.map((s) => (
-              <tr key={s.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12">
+              <tr key={s.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12">
                 <td className="py-3 px-4 fin-cell-name">{s.studentName}</td>
                 <td className="py-3 px-4 fin-mono">{s.smartId}</td>
                 <td className="py-3 px-4 fin-text-body">{displayPlan(s.plan)}</td>

@@ -43,7 +43,7 @@ export default function ManagerFinancePaymentPromisesEditModal({
         </div>
 
         <form onSubmit={onSavePromise} className="space-y-3.5">
-          <div className="p-3 bg-floating/60 rounded-xl border border-border">
+          <div className="p-3 bg-surface rounded-xl border border-border">
             <p className="text-xs text-secondary">Student Name</p>
             <p className="text-sm font-bold text-primary">{promise.studentName}</p>
             <p className="text-xs font-mono text-secondary mt-0.5">{promise.smartId}</p>
