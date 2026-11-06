@@ -17,10 +17,7 @@ import { ManagerNavigationSidebarNavSection } from './ManagerNavigationSidebarNa
 export type { ManagerNavigationSidebarProps };
 
 export default function ManagerNavigationSidebar({
-  collapsed,
-  onToggle,
-  mobileOpen,
-  onMobileClose,
+  collapsed, onToggle, mobileOpen, onMobileClose,
 }: ManagerNavigationSidebarProps) {
   const tManagerUi = useTranslations('manager.manager_navigation.ui');
   const getNavLabel = (key: string) => {
@@ -33,7 +30,9 @@ export default function ManagerNavigationSidebar({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [showLogout, setShowLogout] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
+  const [expandedGroups, setExpandedGroups] = useState<string[]>(() =>
+    MANAGER_NAVIGATION_ITEMS.filter((item) => item.kind === 'group').map((item) => item.labelKey)
+  );
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
   const mobileTriggerRef = useRef<HTMLButtonElement>(null);
@@ -47,13 +46,11 @@ export default function ManagerNavigationSidebar({
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     document.body.style.overflow = 'hidden';
     const focusable = (): HTMLElement[] =>
-      (
-        Array.from(
-          mobileDrawerRef.current?.querySelectorAll<HTMLElement>(
-            'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-          ) ?? []
-        ) as HTMLElement[]
-      ).filter((element) => !element.hasAttribute('hidden') && element.getAttribute('aria-hidden') !== 'true');
+      Array.from(
+        mobileDrawerRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        ) ?? []
+      ).filter((el) => !el.hasAttribute('hidden') && el.getAttribute('aria-hidden') !== 'true');
     (focusable()[0] ?? mobileTriggerRef.current)?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -71,10 +68,11 @@ export default function ManagerNavigationSidebar({
       }
       const first = items[0];
       const last = items[items.length - 1];
-      if (event.shiftKey && (document.activeElement === first || !mobileDrawerRef.current?.contains(document.activeElement))) {
+      const isOutside = !mobileDrawerRef.current?.contains(document.activeElement);
+      if (event.shiftKey && (document.activeElement === first || isOutside)) {
         event.preventDefault();
         last.focus();
-      } else if (!event.shiftKey && (document.activeElement === last || !mobileDrawerRef.current?.contains(document.activeElement))) {
+      } else if (!event.shiftKey && (document.activeElement === last || isOutside)) {
         event.preventDefault();
         first.focus();
       }
@@ -291,10 +289,7 @@ export default function ManagerNavigationSidebar({
         )}
       </aside>
 
-      <ManagerNavigationSidebarLogoutModal
-        isOpen={showLogout}
-        onClose={() => setShowLogout(false)}
-      />
+      <ManagerNavigationSidebarLogoutModal isOpen={showLogout} onClose={() => setShowLogout(false)} />
     </>
   );
 }

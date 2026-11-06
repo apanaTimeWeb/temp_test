@@ -92,12 +92,7 @@ describe('ManagerNavigationSidebar Search and Dropdown Functionality', () => {
     const membersGroup = document.getElementById('manager-nav-group-group_members');
     expect(membersGroup).toBeTruthy();
 
-    // Initially group_members is not active (dashboard is active), so it starts collapsed
-    expect(membersToggle.getAttribute('aria-expanded')).toBe('false');
-    expect(membersGroup?.hasAttribute('hidden')).toBe(true);
-
-    // Click to expand
-    fireEvent.click(membersToggle);
+    // All navigation groups are expanded by default
     expect(membersToggle.getAttribute('aria-expanded')).toBe('true');
     expect(membersGroup?.hasAttribute('hidden')).toBe(false);
 
@@ -105,6 +100,11 @@ describe('ManagerNavigationSidebar Search and Dropdown Functionality', () => {
     fireEvent.click(membersToggle);
     expect(membersToggle.getAttribute('aria-expanded')).toBe('false');
     expect(membersGroup?.hasAttribute('hidden')).toBe(true);
+
+    // Click to expand again
+    fireEvent.click(membersToggle);
+    expect(membersToggle.getAttribute('aria-expanded')).toBe('true');
+    expect(membersGroup?.hasAttribute('hidden')).toBe(false);
   });
 
   it('renders collapsed search toggle button in collapsed mode and triggers onToggle', () => {
