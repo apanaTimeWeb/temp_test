@@ -67,7 +67,7 @@ export function ManagerDashboardOverviewActionItems({
       aria-labelledby="manager-dashboard-action-items-heading"
     >
       <div>
-        <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border/60">
+        <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-warning-bg border border-border text-warning flex items-center justify-center font-bold">
               <Zap size={20} />

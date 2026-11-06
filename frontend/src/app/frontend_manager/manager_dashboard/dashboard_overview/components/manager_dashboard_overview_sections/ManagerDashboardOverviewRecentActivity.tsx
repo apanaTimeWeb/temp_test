@@ -35,15 +35,15 @@ export function ManagerDashboardOverviewRecentActivity({
   const getShiftBadge = (shift: string) => {
     switch (shift) {
       case 'Morning':
-        return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20';
+        return 'bg-warning-bg text-warning-text border-border';
       case 'Afternoon':
-        return 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20';
+        return 'bg-warning-bg text-warning-text border-border';
       case 'Evening':
-        return 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20';
+        return 'bg-info-bg text-info border-border';
       case 'Night':
-        return 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20';
+        return 'bg-primary-subtle text-primary border-border';
       case 'Full Day':
-        return 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20';
+        return 'bg-purple-bg text-purple border-border';
       default:
         return 'bg-muted text-muted-foreground border-border';
     }
@@ -63,14 +63,14 @@ export function ManagerDashboardOverviewRecentActivity({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'New':
-        return 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20';
+        return 'bg-info-bg text-info border-border';
       case 'Interested':
-        return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20';
+        return 'bg-warning-bg text-warning-text border-border';
       case 'Visited':
       case 'Converted':
-        return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
+        return 'bg-success-bg text-success border-border';
       case 'Lost':
-        return 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20';
+        return 'bg-danger-bg text-danger border-border';
       default:
         return 'bg-muted text-muted-foreground border-border';
     }
@@ -81,9 +81,9 @@ export function ManagerDashboardOverviewRecentActivity({
       {/* Recent Admissions Card */}
       <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all flex flex-col justify-between">
         <div>
-          <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border/60">
+          <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-xl bg-warning-bg border border-border text-warning flex items-center justify-center font-bold">
                 <UserCheck size={20} />
               </div>
               <div>
@@ -125,12 +125,12 @@ export function ManagerDashboardOverviewRecentActivity({
                     <th scope="col" className="w-3/12 pb-2.5 text-right">{tManagerUi('shift')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/40">
+                <tbody className="divide-y divide-border">
                   {admissions.map((row) => (
                     <tr key={row.smartId} className="hover:bg-surface-hover transition-colors">
                       <td className="w-5/12 py-3 truncate font-semibold text-foreground">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold text-[10px] flex items-center justify-center shrink-0">
+                          <div className="w-6 h-6 rounded-full bg-warning-bg text-warning-text font-bold text-[10px] flex items-center justify-center shrink-0">
                             {row.name.charAt(0)}
                           </div>
                           <span className="truncate">{row.name}</span>
@@ -158,9 +158,9 @@ export function ManagerDashboardOverviewRecentActivity({
       {/* Recent Enquiries Card */}
       <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all flex flex-col justify-between">
         <div>
-          <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border/60">
+          <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-500 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-xl bg-info-bg border border-border text-info flex items-center justify-center font-bold">
                 <PhoneCall size={20} />
               </div>
               <div>
@@ -202,12 +202,12 @@ export function ManagerDashboardOverviewRecentActivity({
                     <th scope="col" className="w-3/12 pb-2.5 text-right">{tManagerUi('status')}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/40">
+                <tbody className="divide-y divide-border">
                   {enquiries.map((row, index) => (
                     <tr key={enquiryKeys[index]} className="hover:bg-surface-hover transition-colors">
                       <td className="w-5/12 py-3 truncate font-semibold text-foreground">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-[10px] flex items-center justify-center shrink-0">
+                          <div className="w-6 h-6 rounded-full bg-info-bg text-info font-bold text-[10px] flex items-center justify-center shrink-0">
                             {row.name.charAt(0)}
                           </div>
                           <span className="truncate">{row.name}</span>

@@ -60,16 +60,16 @@ export function ManagerDashboardOverviewBirthdayWidget() {
   };
 
   return (
-    <div className="rounded-2xl border border-primary/25 bg-linear-to-r from-card via-card to-primary-subtle/20 p-5 sm:p-6 shadow-card transition-all">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-border/60 pb-4">
+    <div className="rounded-2xl border border-border bg-linear-to-r from-card via-card to-primary-subtle p-5 sm:p-6 shadow-card transition-all">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 border-b border-border pb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center font-bold">
+          <div className="w-10 h-10 rounded-xl bg-warning-bg border border-border text-warning flex items-center justify-center font-bold">
             <Cake size={22} className="text-primary animate-bounce" />
           </div>
           <div>
             <h3 className="font-bold text-foreground text-base sm:text-lg flex items-center gap-2">
               Today&apos;s Birthday Celebrations
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-success-bg text-success border border-border">
                 <Sparkles size={12} /> {TODAY_BIRTHDAYS.length} Celebrating Today
               </span>
             </h3>
@@ -95,7 +95,7 @@ export function ManagerDashboardOverviewBirthdayWidget() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-1">
                     <p className="font-bold text-foreground text-sm truncate">{student.name}</p>
-                    <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-full shrink-0">
+                    <span className="text-[11px] font-semibold text-warning bg-warning-bg border border-border px-2 py-0.5 rounded-full shrink-0">
                       🎂 Today
                     </span>
                   </div>
@@ -108,7 +108,7 @@ export function ManagerDashboardOverviewBirthdayWidget() {
                 </div>
               </div>
 
-              <div className="pt-2.5 border-t border-border/60 flex items-center justify-between gap-2">
+              <div className="pt-2.5 border-t border-border flex items-center justify-between gap-2">
                 <span className="text-xs text-muted-foreground flex items-center gap-1 font-mono">
                   <Phone size={11} className="text-primary" /> +91 {student.phone.slice(0, 5)}...
                 </span>

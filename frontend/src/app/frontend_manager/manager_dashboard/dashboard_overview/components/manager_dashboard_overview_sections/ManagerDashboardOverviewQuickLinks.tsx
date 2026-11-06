@@ -60,7 +60,7 @@ export function ManagerDashboardOverviewQuickLinks({ links }: ManagerDashboardOv
       className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all"
       aria-labelledby="manager-dashboard-quick-links-heading"
     >
-      <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border/60">
+      <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary-subtle border border-border text-primary flex items-center justify-center font-bold">
             <Compass size={20} />
