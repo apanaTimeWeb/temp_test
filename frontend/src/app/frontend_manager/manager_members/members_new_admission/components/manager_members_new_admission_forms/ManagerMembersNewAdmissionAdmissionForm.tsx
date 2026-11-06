@@ -11,6 +11,7 @@ import { ManagerMembersNewAdmissionAdmissionDocumentSection } from '@/app/fronte
 import { ManagerMembersNewAdmissionAdmissionPaymentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection';
 import { ManagerMembersNewAdmissionAdmissionPersonalSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPersonalSection';
 import { ManagerMembersNewAdmissionAdmissionSummary } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionSummary';
+import { ManagerMembersNewAdmissionSuccessBanner, type AdmittedStudentInfo } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionSuccessBanner';
 import { useManagerNewAdmissionAdmission } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionAdmission';
 import { useManagerMembersNewAdmissionConfirm } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionConfirm';
 import { useManagerMembersNewAdmissionUnsavedChangesGuard } from '@/app/frontend_manager/manager_members/members_new_admission/hooks/useManagerMembersNewAdmissionUnsavedChangesGuard';
@@ -21,8 +22,9 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const { confirm, dialog: unsavedConfirmDialog } = useManagerMembersNewAdmissionConfirm();
   const { form } = useManagerNewAdmissionAdmission();
   const [draftFeedback, setDraftFeedback] = useState<string | null>(null);
+  const [admittedStudent, setAdmittedStudent] = useState<AdmittedStudentInfo | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { register, watch, setValue, formState: { errors, isDirty } } = form;
+  const { register, watch, setValue, reset, formState: { errors, isDirty } } = form;
   const router = useRouter();
   useManagerMembersNewAdmissionUnsavedChangesGuard({ isDirty, confirm, router, tManagerUi, replayAnchorOnConfirm: true });
   const watchedPlan = watch('plan');
@@ -44,10 +46,27 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const baseAmountMinor = planRateMap[watchedPlan] ?? (amountPaidMinor > 0 ? amountPaidMinor : 100000);
   const totalPayableMinor = Math.max(0, baseAmountMinor - discountMinor);
 
+  const handleResetAdmission = () => {
+    reset();
+    setAdmittedStudent(null);
+    setDraftFeedback(null);
+  };
+
   const submit = form.handleSubmit((values) => {
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
+      const studentData: AdmittedStudentInfo = {
+        fullName: values.fullName,
+        phone: values.phone,
+        smartId: `LIB-${Math.floor(100 + Math.random() * 900)}`,
+        seat: values.seat || 'General Study',
+        shift: values.shift,
+        plan: values.plan,
+        paymentMode: values.paymentMode,
+        amountPaid: values.amountPaid,
+      };
+      setAdmittedStudent(studentData);
       setDraftFeedback(`Admission registered successfully for ${values.fullName}! Assigned Seat: ${values.seat || 'General'}, Shift: ${values.shift}, Plan: ${values.plan}, Mode: ${values.paymentMode}.`);
     }, 500);
   });
@@ -61,6 +80,12 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
             <Link href={MANAGER_MEMBERS_NEW_ADMISSION_ROUTES.LIST} className="mgr-back-link"><ArrowLeft size={18} strokeWidth={2} /> {tManagerUi('back_to_students_6de7b0')}</Link>
             <h1 className="mgr-page-title">{tManagerUi('new_student_admission')}</h1>
             <p className="mgr-page-subtitle">{tManagerUi('fill_all_mandatory_fields_accurately_smart_id_is_auto_ge_026bb4')}</p>
+            {admittedStudent && (
+              <ManagerMembersNewAdmissionSuccessBanner
+                student={admittedStudent}
+                onReset={handleResetAdmission}
+              />
+            )}
             <p className="mt-3 rounded-lg border border-warning bg-warning-bg p-3 text-sm text-warning" role="status" data-testid="manager-students-admission-contract-warning">{tManagerUi('admission_unavailable_host_contract_not_supplied')}</p>
             {draftFeedback && <p className="mt-3 rounded-lg border border-warning bg-warning-bg p-3 text-sm text-warning" role="status" aria-live="polite" data-testid="manager-students-admission-draft-feedback">{draftFeedback}</p>}
           </div>

@@ -1,6 +1,6 @@
 // RESPONSIBILITY: Render the attendance absentee report columns component within the components feature. It does not own backend persistence or cross-feature business logic.
 // RESPONSIBILITY: Render the attendance absentee report columns component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { Mail, Phone, Send } from 'lucide-react';
+import { Mail, Phone, MessageSquare } from 'lucide-react';
 import type { NativeColumn, NativeCellParams } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportNativeTable';
 import { formatManagerAbsenteeReportCalendarDate } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/utils/ManagerAttendanceAbsenteeReportDateFormatting';
 import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/ManagerAttendanceAbsenteeReportDemoRepository';
@@ -13,6 +13,7 @@ export function createManagerAbsenteeReportAbsenteeColumns(
   labels: ManagerAttendanceAbsenteeReportAbsenteeColumnLabels,
   shiftLabels: Record<string, string>,
   badgeClass: (daysAbsent: number) => string,
+  onAlertWhatsApp?: (item: ManagerAttendanceAbsenteeReportSampleAbsentee) => void,
 ): NativeColumn<ManagerAttendanceAbsenteeReportSampleAbsentee>[] {
   return [
     {
@@ -51,8 +52,13 @@ export function createManagerAbsenteeReportAbsenteeColumns(
           {params.data?.notified ? (
             <span className="eng-badge eng-badge--neutral">{labels.samplePreviouslyNotified}</span>
           ) : (
-            <button type="button" disabled title={labels.parentAlertsUnavailable} className="eng-btn eng-btn--ghost eng-btn--sm cursor-not-allowed">
-              <Send size={12} className="mr-1" aria-hidden="true"/> {labels.alertUnavailable}
+            <button
+              type="button"
+              onClick={() => params.data && onAlertWhatsApp?.(params.data)}
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+              title={`Send WhatsApp alert to ${params.data?.name}'s parent`}
+            >
+              <MessageSquare size={12} className="mr-0.5" /> WhatsApp
             </button>
           )}
         </div>

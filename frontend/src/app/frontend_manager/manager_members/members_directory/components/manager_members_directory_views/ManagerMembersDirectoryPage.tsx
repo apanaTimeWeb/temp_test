@@ -13,6 +13,10 @@ import {
 } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryTable';
 import ManagerMembersDirectoryTimeHorizonBar, { type ManagerMembersTimeHorizon } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryTimeHorizonBar';
 import ManagerMembersDirectoryStatusTabs from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryStatusTabs';
+import { ManagerMembersDirectoryBulkToolbar } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryBulkToolbar';
+import { ManagerMembersDirectoryBulkWhatsAppModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryBulkWhatsAppModal';
+import { useManagerMembersDirectoryBulkWhatsApp } from '@/app/frontend_manager/manager_members/members_directory/hooks/useManagerMembersDirectoryBulkWhatsApp';
+import { useManagerMembersDirectoryTimeFilter } from '@/app/frontend_manager/manager_members/members_directory/hooks/useManagerMembersDirectoryTimeFilter';
 
 export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersDirectoryRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
@@ -30,9 +34,17 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
   } = useManagerMemberDirectoryPageState(_routeQuery);
   const editIntent = _routeQuery.view === 'edit';
 
-  const [timeHorizon, setTimeHorizon] = useState<ManagerMembersTimeHorizon>('all');
-  const [customStartDate, setCustomStartDate] = useState('');
-  const [customEndDate, setCustomEndDate] = useState('');
+  const {
+    timeHorizon,
+    setTimeHorizon,
+    customStartDate,
+    setCustomStartDate,
+    customEndDate,
+    setCustomEndDate,
+    timeFilteredMembers,
+    timeHorizonLabel,
+  } = useManagerMembersDirectoryTimeFilter(filteredMembers);
+
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [planFilter, setPlanFilter] = useState('all');
@@ -51,38 +63,6 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
       setSortDirection('asc');
     }
   };
-
-  const timeFilteredMembers = useMemo(() => {
-    if (timeHorizon === 'all') return filteredMembers;
-    const now = new Date('2026-04-15T12:00:00Z');
-    return filteredMembers.filter((m) => {
-      const recDate = new Date(m.joinDate);
-      if (isNaN(recDate.getTime())) return true;
-      if (timeHorizon === 'today') return recDate.toISOString().slice(0, 10) === now.toISOString().slice(0, 10);
-      if (timeHorizon === 'this_week') {
-        const diffDays = (now.getTime() - recDate.getTime()) / (1000 * 3600 * 24);
-        return diffDays >= 0 && diffDays <= 7;
-      }
-      if (timeHorizon === 'this_month') return recDate.getFullYear() === now.getFullYear() && recDate.getMonth() === now.getMonth();
-      if (timeHorizon === 'custom') {
-        const dateStr = recDate.toISOString().slice(0, 10);
-        if (customStartDate && dateStr < customStartDate) return false;
-        if (customEndDate && dateStr > customEndDate) return false;
-        return true;
-      }
-      return true;
-    });
-  }, [filteredMembers, timeHorizon, customStartDate, customEndDate]);
-
-  const timeHorizonLabel = useMemo(() => {
-    switch (timeHorizon) {
-      case 'today': return 'Today';
-      case 'this_week': return 'This Week';
-      case 'this_month': return 'This Month';
-      case 'custom': return customStartDate && customEndDate ? `${customStartDate} - ${customEndDate}` : 'Custom Range';
-      default: return 'All Members';
-    }
-  }, [timeHorizon, customStartDate, customEndDate]);
 
   const multiFilteredMembers = useMemo(() => {
     return timeFilteredMembers.filter((m) => {
@@ -137,18 +117,23 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
+  const {
+    selectedIds,
+    selectedMembers,
+    isModalOpen,
+    setIsModalOpen,
+    toggleSelectOne,
+    toggleSelectAll,
+    selectAllFiltered,
+    clearSelection,
+    quickWhatsApp,
+  } = useManagerMembersDirectoryBulkWhatsApp(members, paginatedMembers, sortedMembers);
+
   const handleExportCsv = () => {
-    const headers = 'Member ID,Name,Phone,Plan,Status,Expiry Date\n';
-    const rows = sortedMembers
-      .map((m) => `"${m.id}","${m.name}","${m.phone}","${m.type}","${m.status}","${m.expiryDate}"`)
-      .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `students_directory_${new Date().toISOString().slice(0, 10)}.csv`;
+    const csv = 'Member ID,Name,Phone,Plan,Status,Expiry Date\n' + sortedMembers.map((m) => `"${m.id}","${m.name}","${m.phone}","${m.type}","${m.status}","${m.expiryDate}"`).join('\n');
+    const anchor = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })), download: `students_directory_${new Date().toISOString().slice(0, 10)}.csv` });
     anchor.click();
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(anchor.href);
   };
 
   return (
@@ -247,6 +232,10 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
                 setProfileSearch(memberId);
                 setActiveTab('Member Profile');
               }}
+              selectedIds={selectedIds}
+              onToggleSelectOne={toggleSelectOne}
+              onToggleSelectAll={toggleSelectAll}
+              onQuickWhatsApp={quickWhatsApp}
               page={page}
               pageSize={pageSize}
               pageCount={pageCount}
@@ -275,6 +264,24 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
 
         <ManagerMembersDirectorySupportingSections activeTab={activeTab} />
       </div>
+
+      <ManagerMembersDirectoryBulkToolbar
+        selectedCount={selectedIds.length}
+        totalFilteredCount={sortedMembers.length}
+        onClearSelection={clearSelection}
+        onSelectAllFiltered={selectAllFiltered}
+        onOpenBulkWhatsApp={() => setIsModalOpen(true)}
+      />
+
+      <ManagerMembersDirectoryBulkWhatsAppModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        members={selectedMembers}
+        onComplete={() => {
+          setIsModalOpen(false);
+          clearSelection();
+        }}
+      />
     </div>
   );
 }

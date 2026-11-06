@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { X } from 'lucide-react';
+import { X, MessageSquare } from 'lucide-react';
+import { toast } from 'sonner';
 import type {
   ManagerCommunicationComplaintsComplaint,
   ManagerCommunicationComplaintsComplaintStatus,
@@ -26,6 +27,21 @@ export function ManagerCommunicationComplaintsViewModal({
   statusBadge,
 }: ManagerCommunicationComplaintsViewModalProps) {
   const tManagerUi = useTranslations('manager.manager_complaints.ui');
+
+  const handleWhatsAppStudent = () => {
+    const studentName = viewItem.student || 'Student';
+    const cleanPhone = (viewItem.phone || '9876543210').replace(/\D/g, '');
+    const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+    const resolutionText = viewItem.resolvedNote ? `\n\nResolution: ${viewItem.resolvedNote}` : '';
+    const text = encodeURIComponent(
+      `Hello ${studentName},\nThis is an update regarding your query/complaint (#${viewItem.id} - "${viewItem.title}") at Central Library.\n` +
+      `Current Status: ${viewItem.status}${resolutionText}\n\n` +
+      `Please let us know if you require any further assistance.\n— Central Library Administration`
+    );
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    if (popup) popup.opener = null;
+    toast.success(`WhatsApp opened for ${studentName} (+91 ${cleanPhone})`);
+  };
 
   return (
     <div className="mc-overlay">
@@ -67,7 +83,16 @@ export function ManagerCommunicationComplaintsViewModal({
               : ''}
           </div>
         )}
-        <div className="mc-modal-footer">
+        <div className="mc-modal-footer flex items-center justify-between">
+          <button
+            type="button"
+            onClick={handleWhatsAppStudent}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+            title="Send resolution update via WhatsApp"
+          >
+            <MessageSquare size={13} />
+            <span>WhatsApp Student</span>
+          </button>
           <button type="button" onClick={onClose} className="mc-btn-ghost">
             {tManagerUi('close')}
           </button>

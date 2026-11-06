@@ -4,13 +4,34 @@ import { useTranslations } from 'next-intl';
 
 import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
 import { useManagerCollectFeeFormatting } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/ManagerFinanceCollectFeeFormattingHook';
-import { AlertCircle, BookOpen, CheckCircle, X } from 'lucide-react';
+import { AlertCircle, BookOpen, CheckCircle, X, MessageSquare } from 'lucide-react';
+import { toast } from 'sonner';
 import type { ManagerFinanceCollectFeeReceiptPreviewProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 
 
 export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, modeLabels, amount, total, isSubmitting, isCollectAvailable, receiptNumber, collectedBy = 'Branch Manager Satyam', onCollect, onCancel }: ManagerFinanceCollectFeeReceiptPreviewProps) {
   const tManagerUi = useTranslations('manager.manager_collect_fee.ui');
   const { formatCurrency, toMinorUnits, formatDate } = useManagerCollectFeeFormatting();
+
+  const handleSendReceiptWhatsApp = () => {
+    if (!selectedStudent) return;
+    const cleanPhone = selectedStudent.phone.replace(/\D/g, '');
+    const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+    const formattedTotal = total > 0 ? formatCurrency(toMinorUnits(total)) : '₹0';
+    const text = encodeURIComponent(
+      `Hello ${selectedStudent.name},\nThank you for your fee payment at Central Library! 🧾\n\n` +
+      `• Receipt No: ${receiptNumber}\n` +
+      `• Smart ID: ${selectedStudent.smartId}\n` +
+      `• Amount Paid: ${formattedTotal}\n` +
+      `• Payment Mode: ${modeLabels[mode] || mode}\n` +
+      `• Date: ${formatDate(new Date().toISOString())}\n` +
+      `• Verified By: ${collectedBy || 'Branch Manager'}\n\n` +
+      `Knowledge is the best investment. Please preserve this receipt for your records.\n— Central Library Management`
+    );
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    if (popup) popup.opener = null;
+    toast.success(`WhatsApp receipt link opened for ${selectedStudent.name} (+91 ${cleanPhone})`);
+  };
   return (
 <div className="lg:col-span-2">
             <div className="fin-receipt-preview" data-testid="manager-finance-collect-preview">
@@ -66,6 +87,17 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
                 </div>
               </div>
               <div className="space-y-3 mt-4">
+                {selectedStudent && (
+                  <button
+                    type="button"
+                    onClick={handleSendReceiptWhatsApp}
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                    title="Send Fee Receipt via WhatsApp"
+                  >
+                    <MessageSquare size={15} />
+                    <span>Send Receipt via WhatsApp</span>
+                  </button>
+                )}
                 <button type="button" className="fin-receipt-btn-secondary flex items-center justify-center gap-2 w-full" onClick={onCancel}><X size={16} /> {tManagerUi('cancel')}</button>
               </div>
             </div>

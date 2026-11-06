@@ -1,6 +1,6 @@
 'use client';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
@@ -31,6 +31,10 @@ interface ManagerMembersDirectoryTableProps {
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: MemberSortField) => void;
   onSelectMemberProfile: (memberId: string) => void;
+  selectedIds?: string[];
+  onToggleSelectOne?: (id: string) => void;
+  onToggleSelectAll?: () => void;
+  onQuickWhatsApp?: (member: ManagerMembersDirectoryRecord) => void;
   page: number;
   pageSize: number;
   pageCount: number;
@@ -60,6 +64,10 @@ export function ManagerMembersDirectoryTable({
   sortDirection,
   onToggleSort,
   onSelectMemberProfile,
+  selectedIds = [],
+  onToggleSelectOne,
+  onToggleSelectAll,
+  onQuickWhatsApp,
   page,
   pageSize,
   pageCount,
@@ -127,6 +135,17 @@ export function ManagerMembersDirectoryTable({
             <table className="mgr-table w-full">
               <thead>
                 <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
+                  <th scope="col" className="w-10 px-3 py-3 align-middle text-left">
+                    {onToggleSelectAll && (
+                      <input
+                        type="checkbox"
+                        checked={paginatedMembers.length > 0 && paginatedMembers.every((m) => selectedIds.includes(m.id))}
+                        onChange={onToggleSelectAll}
+                        aria-label="Select all members on this page"
+                        className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                      />
+                    )}
+                  </th>
                   {renderSortableHeader('id', tManagerUi('member_id_7a88b2'))}
                   {renderSortableHeader('name', tManagerUi('name'))}
                   {renderSortableHeader('phone', tManagerUi('phone'))}
@@ -141,13 +160,27 @@ export function ManagerMembersDirectoryTable({
               <tbody>
                 {paginatedMembers.map((member) => {
                   const badge = (MANAGER_MEMBERS_STATUS_BADGES as Record<string, { readonly className: string; readonly labelKey: string }>)[member.status];
+                  const isChecked = selectedIds.includes(member.id);
                   return (
                     <tr
                       key={member.id}
                       onClick={() => onSelectMemberProfile(member.id)}
-                      className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface h-12 cursor-pointer transition-colors group"
+                      className={`border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface h-12 cursor-pointer transition-colors group${
+                        isChecked ? ' bg-primary-subtle text-foreground' : ''
+                      }`}
                       title={`Click to view profile of ${member.name} (${member.id})`}
                     >
+                      <td className="w-10 px-3 py-3 align-middle" onClick={(e) => e.stopPropagation()}>
+                        {onToggleSelectOne && (
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => onToggleSelectOne(member.id)}
+                            aria-label={`Select ${member.name}`}
+                            className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                          />
+                        )}
+                      </td>
                       <td className="px-3 py-3 align-middle">
                         <span className="font-mono text-primary font-semibold group-hover:underline">{member.id}</span>
                       </td>
@@ -167,18 +200,34 @@ export function ManagerMembersDirectoryTable({
                         {formatManagerMemberDirectoryCalendarDate(displayValue(member.expiryDate), locale)}
                       </td>
                       <td className="px-3 py-3 align-middle text-right">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onSelectMemberProfile(member.id);
-                          }}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-surface border border-border text-primary hover:bg-primary hover:text-on-primary transition-colors"
-                          title={`View profile of ${member.name}`}
-                        >
-                          <Eye size={13} aria-hidden="true" />
-                          <span>View Profile</span>
-                        </button>
+                        <div className="flex items-center justify-end gap-1.5">
+                          {onQuickWhatsApp && (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onQuickWhatsApp(member);
+                              }}
+                              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                              title={`Send WhatsApp to ${member.name}`}
+                            >
+                              <MessageSquare size={12} />
+                              <span className="hidden sm:inline">WhatsApp</span>
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onSelectMemberProfile(member.id);
+                            }}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-surface border border-border text-primary hover:bg-primary hover:text-on-primary transition-colors"
+                            title={`View profile of ${member.name}`}
+                          >
+                            <Eye size={13} aria-hidden="true" />
+                            <span>View Profile</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { MANAGER_FINANCE_SAMPLE_RENEWALS } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsDemoRepository';
 import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsUrlFilters';
 import ManagerFinanceRenewalsNativeTable from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
-import { sanitizeManagerRenewalsCsvCell } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
+import { exportManagerRenewalsCsv } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
 import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsFormattingHook';
 import { CheckCircle, Search, X } from 'lucide-react';
 import { MANAGER_FINANCE_RENEWAL_FILTERS } from '@/app/frontend_manager/manager_finance/finance_renewals/constants/ManagerFinanceRenewalsRenewalConstants';
@@ -15,6 +15,7 @@ import ManagerFinanceRenewalsHeader from './ManagerFinanceRenewalsHeader';
 import ManagerFinanceRenewalsFilterBar from './ManagerFinanceRenewalsFilterBar';
 import ManagerFinanceRenewalsTimeHorizonBar, { type ManagerRenewalsTimeHorizon } from './ManagerFinanceRenewalsTimeHorizonBar';
 import { buildRenewalColumns } from './ManagerFinanceRenewalsTableColumns';
+import { ManagerFinanceRenewalsBulkWhatsAppModal } from './ManagerFinanceRenewalsBulkWhatsAppModal';
 
 const URL_FILTERS = { filter: { defaultValue: 'expiring_7', allowedValues: ['expired', 'expiring_7', 'expiring_15'] } } as const;
 
@@ -26,6 +27,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
 
   const [renewalsList, setRenewalsList] = useState(MANAGER_FINANCE_SAMPLE_RENEWALS);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
+  const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [shiftFilter, setShiftFilter] = useState('all');
   const [planFilter, setPlanFilter] = useState('all');
@@ -107,33 +109,14 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   };
 
   const handleExportCsv = () => {
-    const headers = ['Student Name', 'Smart ID', 'Shift', 'Plan', 'Expiry Date', 'Days Left', 'Last Payment', 'Due (INR)'];
-    const rows = visible.map((r) => [
-      sanitizeManagerRenewalsCsvCell(r.studentName),
-      sanitizeManagerRenewalsCsvCell(r.smartId),
-      sanitizeManagerRenewalsCsvCell(r.shift),
-      sanitizeManagerRenewalsCsvCell(r.plan),
-      sanitizeManagerRenewalsCsvCell(r.expiryDate),
-      sanitizeManagerRenewalsCsvCell(r.daysLeft),
-      sanitizeManagerRenewalsCsvCell(r.lastPaymentDate),
-      sanitizeManagerRenewalsCsvCell(r.due),
-    ]);
-    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `renewals_${filter}_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    exportManagerRenewalsCsv(visible, filter);
     setFeedbackMsg(`Exported ${visible.length} renewal records to CSV successfully.`);
   };
 
   const handlePrint = () => window.print();
 
   const handleWhatsAppAll = () => {
-    setFeedbackMsg(`WhatsApp renewal reminders dispatched to all ${searchedRenewals.length} displayed students.`);
+    setIsBulkWhatsAppOpen(true);
   };
 
   const handleEmailAll = () => {
@@ -177,7 +160,18 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   };
 
   const handleRemindStudent = (studentName: string) => {
-    setFeedbackMsg(`Renewal reminder successfully sent to ${studentName} via WhatsApp & SMS.`);
+    const student = renewalsList.find((r) => r.studentName === studentName);
+    if (student) {
+      const cleanPhone = `98765432${String(student.id).padStart(2, '0')}`;
+      const text = encodeURIComponent(
+        `Hello ${student.studentName}, your Central Library subscription (${student.smartId} • ${student.plan}) ${
+          student.daysLeft < 0 ? `expired ${Math.abs(student.daysLeft)} days ago` : `expires in ${student.daysLeft} days`
+        }. Amount due: ₹${Math.round(student.due / 100)}. Please renew to maintain your seat access. — Central Library Administration`
+      );
+      const popup = window.open(`https://wa.me/91${cleanPhone}?text=${text}`, '_blank');
+      if (popup) popup.opener = null;
+    }
+    setFeedbackMsg(`Renewal WhatsApp message opened for ${studentName}.`);
   };
 
   const colDefs = useMemo(
@@ -289,6 +283,13 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
           labels={{ previous: tManagerUi('previous_page'), next: tManagerUi('next_page') }}
         />
       </div>
+
+      <ManagerFinanceRenewalsBulkWhatsAppModal
+        isOpen={isBulkWhatsAppOpen}
+        onClose={() => setIsBulkWhatsAppOpen(false)}
+        renewals={searchedRenewals}
+        onComplete={() => setIsBulkWhatsAppOpen(false)}
+      />
     </div>
   );
 }
