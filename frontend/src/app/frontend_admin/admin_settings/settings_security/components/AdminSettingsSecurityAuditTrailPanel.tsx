@@ -129,11 +129,11 @@ export function AdminSettingsSecurityAuditTrailPanel() {
             {ADMIN_SECURITY_ANTI_FRAUD_FIXTURES.length}
           </p>
         </div>
-        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 shadow-xs">
+        <div className="rounded-lg border border-destructive-bg bg-destructive-bg p-3 shadow-xs">
           <p className="text-xs font-semibold text-destructive">{t('AUDIT_HIGH_RISK')}</p>
           <p className="mt-1 text-xl font-bold text-destructive">{highRiskCount}</p>
         </div>
-        <div className="rounded-lg border border-warning/30 bg-warning/5 p-3 shadow-xs">
+        <div className="rounded-lg border border-warning-bg bg-warning-bg p-3 shadow-xs">
           <p className="text-xs font-semibold text-warning">{t('AUDIT_MEDIUM_WARNING')}</p>
           <p className="mt-1 text-xl font-bold text-warning-text">{mediumCount}</p>
         </div>
@@ -213,13 +213,13 @@ export function AdminSettingsSecurityAuditTrailPanel() {
                   {/* Severity Badge */}
                   <td className="px-3.5 py-3 text-center whitespace-nowrap">
                     {log.severity === 'HIGH_RISK' && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-destructive/15 px-2 py-0.5 text-xs font-bold text-destructive">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-destructive-bg px-2 py-0.5 text-xs font-bold text-destructive">
                         <ShieldAlert className="h-3 w-3" />
                         <span>High Risk</span>
                       </span>
                     )}
                     {log.severity === 'MEDIUM_WARNING' && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-warning/15 px-2 py-0.5 text-xs font-semibold text-warning-text">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-warning-bg px-2 py-0.5 text-xs font-semibold text-warning-text">
                         <AlertTriangle className="h-3 w-3" />
                         <span>Warning</span>
                       </span>

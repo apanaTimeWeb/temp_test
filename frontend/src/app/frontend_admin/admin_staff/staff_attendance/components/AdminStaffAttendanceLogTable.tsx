@@ -183,7 +183,7 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
                         onClick={() => onRegularize(r)}
                         title={t('ACTION_REGULARIZE')}
                         aria-label={t('ACTION_REGULARIZE')}
-                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md text-primary hover:bg-primary-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       >
                         <Edit3 size={16} />
                       </button>

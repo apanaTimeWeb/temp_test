@@ -2,19 +2,8 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import {
-  Trophy,
-  TrendingUp,
-  AlertTriangle,
-  Users,
-  ArrowUpRight,
-  ShieldAlert,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
-  Building2,
-  Calendar,
-} from 'lucide-react';
+import { Trophy, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { AdminDashboardBranchLeaderboardRow } from './AdminDashboardBranchLeaderboardRow';
 
 export type AdminDashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -31,6 +20,9 @@ export interface BranchBenchmarkItem {
   netProfitRupees: number; // in ₹
   renewalRate: number; // percentage (e.g. 88)
   topBottleneck: string;
+  revenueDisplay?: number;
+  expensesDisplay?: number;
+  profitDisplay?: number;
 }
 
 export const BRANCH_BENCHMARK_DATA: BranchBenchmarkItem[] = [
@@ -103,6 +95,8 @@ export function AdminDashboardBranchLeaderboard({
   const [sortBy, setSortBy] = useState<SortMetric>('profit');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
+  const formatRupees = (amount: number) => `₹${amount.toLocaleString('en-IN')}`;
+
   const toggleSort = (metric: SortMetric) => {
     if (sortBy === metric) {
       setSortDirection((prev) => (prev === 'desc' ? 'asc' : 'desc'));
@@ -126,11 +120,11 @@ export function AdminDashboardBranchLeaderboard({
   const sortedBranches = useMemo(() => {
     return [...adjustedBranches].sort((a, b) => {
       let diff = 0;
-      if (sortBy === 'profit') diff = a.profitDisplay - b.profitDisplay;
+      if (sortBy === 'profit') diff = (a.profitDisplay ?? a.netProfitRupees) - (b.profitDisplay ?? b.netProfitRupees);
       else if (sortBy === 'occupancy') diff = a.occupancyRate - b.occupancyRate;
       else if (sortBy === 'renewal') diff = a.renewalRate - b.renewalRate;
-      else if (sortBy === 'revenue') diff = a.revenueDisplay - b.revenueDisplay;
-      else if (sortBy === 'expenses') diff = a.expensesDisplay - b.expensesDisplay;
+      else if (sortBy === 'revenue') diff = (a.revenueDisplay ?? a.revenueMtdRupees) - (b.revenueDisplay ?? b.revenueMtdRupees);
+      else if (sortBy === 'expenses') diff = (a.expensesDisplay ?? a.expensesMtdRupees) - (b.expensesDisplay ?? b.expensesMtdRupees);
       else if (sortBy === 'branch') return sortDirection === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
       return sortDirection === 'asc' ? diff : -diff;
     });
@@ -138,14 +132,14 @@ export function AdminDashboardBranchLeaderboard({
 
   const periodLabel = timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : 'MTD';
 
-  const renderSortableHeader = (metric: SortMetric, label: string) => {
+  const renderSortableHeader = (metric: SortMetric, label: string, align: 'left' | 'right' | 'center' = 'left') => {
     const isActive = sortBy === metric;
     return (
       <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3">
         <button
           type="button"
           onClick={() => toggleSort(metric)}
-          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''}`}
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
           <span>{label}</span>
@@ -168,7 +162,7 @@ export function AdminDashboardBranchLeaderboard({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <Trophy className="text-amber-500" size={20} />
+            <Trophy className="text-warning" size={20} />
             <h2 id="branch-leaderboard-title" className="text-base font-bold text-text-primary">
               Multi-Branch Performance & Benchmarking
             </h2>
@@ -186,56 +180,21 @@ export function AdminDashboardBranchLeaderboard({
               <th scope="col" className="p-3 uppercase font-semibold text-text-secondary">Rank</th>
               {renderSortableHeader('branch', 'Branch & Manager')}
               {renderSortableHeader('occupancy', 'Occupancy')}
-              {renderSortableHeader('revenue', `Revenue (${periodLabel})`)}
-              {renderSortableHeader('expenses', `Expenses (${periodLabel})`)}
-              {renderSortableHeader('profit', `Net Profit (${periodLabel})`)}
-              {renderSortableHeader('renewal', 'Renewal %')}
+              {renderSortableHeader('revenue', `Revenue (${periodLabel})`, 'right')}
+              {renderSortableHeader('expenses', `Expenses (${periodLabel})`, 'right')}
+              {renderSortableHeader('profit', `Net Profit (${periodLabel})`, 'right')}
+              {renderSortableHeader('renewal', 'Renewal %', 'center')}
               <th scope="col" className="p-3 uppercase font-semibold text-text-secondary">Key Bottleneck / Alert</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {sortedBranches.map((branch, index) => (
-              <tr key={branch.id} className="hover:bg-surface-hover transition-colors">
-                <td className="p-3 font-bold text-primary">#{index + 1}</td>
-                <td className="p-3">
-                  <div className="font-semibold text-text-primary text-sm">{branch.name}</div>
-                  <div className="text-text-secondary text-[11px]">{branch.city} • Mgr: {branch.managerName}</div>
-                </td>
-                <td className="p-3">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-text-primary">{branch.occupancyRate}%</span>
-                    <span className="text-text-secondary text-[11px]">({branch.occupiedSeats}/{branch.totalSeats})</span>
-                  </div>
-                  <div className="w-24 bg-muted rounded-full h-1.5 mt-1">
-                    <div
-                      className={`h-1.5 rounded-full ${
-                        branch.occupancyRate >= 85 ? 'bg-emerald-500' : branch.occupancyRate >= 70 ? 'bg-amber-500' : 'bg-rose-500'
-                      }`}
-                      style={{ width: `${branch.occupancyRate}%` }}
-                    />
-                  </div>
-                </td>
-                <td className="p-3 font-semibold text-text-primary">₹{branch.revenueDisplay.toLocaleString('en-IN')}</td>
-                <td className="p-3 text-rose-600 dark:text-rose-400 font-medium">₹{branch.expensesDisplay.toLocaleString('en-IN')}</td>
-                <td className="p-3 font-bold text-emerald-600 dark:text-emerald-400">₹{branch.profitDisplay.toLocaleString('en-IN')}</td>
-                <td className="p-3">
-                  <span
-                    className={`px-2 py-0.5 rounded-full font-bold text-[11px] ${
-                      branch.renewalRate >= 80
-                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                        : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20'
-                    }`}
-                  >
-                    {branch.renewalRate}%
-                  </span>
-                </td>
-                <td className="p-3">
-                  <span className="inline-flex items-center gap-1.5 text-xs text-text-secondary">
-                    <AlertTriangle size={13} className="text-amber-500 shrink-0" />
-                    <span>{branch.topBottleneck}</span>
-                  </span>
-                </td>
-              </tr>
+            {sortedBranches.map((item, index) => (
+              <AdminDashboardBranchLeaderboardRow
+                key={item.id}
+                item={item}
+                rank={index + 1}
+                formatRupees={formatRupees}
+              />
             ))}
           </tbody>
         </table>

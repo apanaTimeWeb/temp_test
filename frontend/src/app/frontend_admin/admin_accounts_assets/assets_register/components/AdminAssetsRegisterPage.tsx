@@ -79,7 +79,7 @@ export function AdminAssetsRegisterPage() {
       {isDemo && (
         <div
           role="status"
-          className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs text-primary font-medium"
+          className="flex items-center gap-2 rounded-lg border border-border bg-primary-subtle p-3 text-xs text-primary font-medium"
         >
           <ShieldCheck className="h-4 w-4 shrink-0" />
           <span>{t('LIVE_UNAVAILABLE')}</span>
@@ -99,7 +99,7 @@ export function AdminAssetsRegisterPage() {
         <button
           type="button"
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-2 text-xs sm:text-sm font-semibold text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary self-start sm:self-auto motion-safe:transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-2 text-xs sm:text-sm font-semibold text-primary-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary self-start sm:self-auto motion-safe:transition-colors"
         >
           <PlusCircle className="h-4 w-4" />
           <span>{t('ACTIONS.ADD_ASSET')}</span>
@@ -165,7 +165,7 @@ export function AdminAssetsRegisterPage() {
           >
             <span>{t('TABS.NEEDS_SERVICE')}</span>
             {needsServiceCount > 0 && (
-              <span className="ml-1.5 rounded-full bg-destructive/15 px-2 py-0.5 text-xs font-bold text-destructive">
+              <span className="ml-1.5 rounded-full bg-destructive-bg px-2 py-0.5 text-xs font-bold text-destructive">
                 {needsServiceCount}
               </span>
             )}

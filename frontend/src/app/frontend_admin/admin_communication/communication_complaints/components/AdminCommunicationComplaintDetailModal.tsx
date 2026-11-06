@@ -59,7 +59,7 @@ export function AdminCommunicationComplaintDetailModal({
                 {formatComplaintDate(viewItem.date)}
               </span>
               {viewItem.isEscalatedToHq && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-danger-bg text-danger-text px-2 py-0.5 text-xs font-semibold border border-danger/20">
+                <span className="inline-flex items-center gap-1 rounded-full bg-danger-bg text-danger-text px-2 py-0.5 text-xs font-semibold border border-border">
                   <AlertTriangle size={12} className="shrink-0" />
                   Escalated to HQ
                 </span>
