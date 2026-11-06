@@ -27,7 +27,7 @@ export default function ManagerFinanceFinesPaymentsHeaderBanner({
   warningNotice,
 }: ManagerFinanceFinesPaymentsHeaderBannerProps) {
   return (
-    <div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-sm">
+    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div className="space-y-2">
           <div className="flex items-center gap-2 flex-wrap text-xs">
@@ -37,7 +37,7 @@ export default function ManagerFinanceFinesPaymentsHeaderBanner({
               <DollarSign size={12} />
               Financial Treasury & Fines
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-secondary/10 text-secondary border border-border">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
               📍 Central Branch
             </span>
           </div>

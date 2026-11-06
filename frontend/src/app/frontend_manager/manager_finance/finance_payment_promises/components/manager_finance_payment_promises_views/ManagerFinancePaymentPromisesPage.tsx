@@ -8,6 +8,8 @@ import { MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES, type ManagerFinancePay
 import type { ManagerFinancePaymentPromisesRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesComponentTypes';
 import ManagerFinancePaymentPromisesEditModal from './ManagerFinancePaymentPromisesEditModal';
 import ManagerFinancePaymentPromisesTable, { type PromiseSortField } from './ManagerFinancePaymentPromisesTable';
+import ManagerFinancePaymentPromisesTimeHorizonBar, { type ManagerPromisesTimeHorizon } from './ManagerFinancePaymentPromisesTimeHorizonBar';
+import ManagerFinancePaymentPromisesKpis from './ManagerFinancePaymentPromisesKpis';
 
 export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFinancePaymentPromisesRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_payment_promises.ui');
@@ -19,6 +21,9 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
   );
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [timeHorizon, setTimeHorizon] = useState<ManagerPromisesTimeHorizon>('all');
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
@@ -29,14 +34,39 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
   const [editDate, setEditDate] = useState<string>('');
   const [editRemarks, setEditRemarks] = useState<string>('');
 
+  const timeHorizonLabel = useMemo(() => {
+    switch (timeHorizon) {
+      case 'today': return 'Today';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom': return 'Custom Range';
+      default: return 'All Time';
+    }
+  }, [timeHorizon]);
+
+  const horizonFiltered = useMemo(() => {
+    return promisesList.filter((p) => {
+      if (timeHorizon === 'today') {
+        return p.status === 'pending' || p.status === 'overdue';
+      }
+      if (timeHorizon === 'this_week') {
+        return p.status === 'pending' || p.status === 'overdue';
+      }
+      if (timeHorizon === 'this_month') {
+        return true;
+      }
+      return true;
+    });
+  }, [promisesList, timeHorizon]);
+
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    return promisesList.filter((p) => {
+    return horizonFiltered.filter((p) => {
       const matchStatus = statusFilter === 'all' || p.status === statusFilter;
       const matchSearch = !q || p.studentName.toLowerCase().includes(q) || p.smartId.toLowerCase().includes(q);
       return matchStatus && matchSearch;
     });
-  }, [promisesList, statusFilter, searchQuery]);
+  }, [horizonFiltered, statusFilter, searchQuery]);
 
   const [sortField, setSortField] = useState<PromiseSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -141,11 +171,29 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
       </div>
 
       {feedbackToast && (
-        <div className="p-3 rounded-xl bg-success-bg border border-success/30 text-success text-xs font-semibold flex items-center gap-2" role="status">
+        <div className="p-3 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center gap-2" role="status">
           <span>✓</span>
           <span>{feedbackToast}</span>
         </div>
       )}
+
+      {/* Promises Global Time Horizon Bar */}
+      <ManagerFinancePaymentPromisesTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        activeCount={filtered.length}
+      />
+
+      {/* KPI Overview Cards */}
+      <ManagerFinancePaymentPromisesKpis
+        promises={horizonFiltered}
+        timeHorizonLabel={timeHorizonLabel}
+        formatCurrency={formatCurrency}
+      />
 
       {/* Filter and Search Bar */}
       <div className="flex flex-wrap items-center gap-3">

@@ -127,7 +127,7 @@ export function ManagerDashboardOverviewClient() {
 
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             {currentDateStr && (
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-muted/40 text-xs text-secondary font-medium">
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-muted text-xs text-secondary font-medium">
                 <Calendar size={13} className="text-primary" />
                 <span>{currentDateStr}</span>
               </div>
@@ -136,7 +136,7 @@ export function ManagerDashboardOverviewClient() {
               type="button"
               onClick={() => void refetch()}
               disabled={isFetching}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary/50 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               title="Refresh dashboard KPIs"
             >
               <RotateCw size={13} className={isFetching ? 'animate-spin text-primary' : 'text-muted-foreground'} />
@@ -209,7 +209,7 @@ export function ManagerDashboardOverviewClient() {
           </div>
 
           {timeRange === 'custom' ? (
-            <div className="flex items-center gap-2 bg-card border border-primary/30 p-1.5 rounded-xl text-xs shadow-xs animate-in fade-in duration-200">
+            <div className="flex items-center gap-2 bg-card border border-primary p-1.5 rounded-xl text-xs shadow-xs animate-in fade-in duration-200">
               <span className="text-muted-foreground font-medium pl-1">From:</span>
               <input
                 type="date"
@@ -249,10 +249,10 @@ export function ManagerDashboardOverviewClient() {
       {/* Mid Row: Seat Matrix + Action Items */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-7">
-          <ManagerDashboardOverviewSeatMatrix seatData={data.seatData} />
+          <ManagerDashboardOverviewSeatMatrix seatData={data.seatData} timeRangeLabel={timeRangeLabel} />
         </div>
         <div className="lg:col-span-5">
-          <ManagerDashboardOverviewActionItems items={data.actionItems} />
+          <ManagerDashboardOverviewActionItems items={data.actionItems} timeRangeLabel={timeRangeLabel} />
         </div>
       </div>
 

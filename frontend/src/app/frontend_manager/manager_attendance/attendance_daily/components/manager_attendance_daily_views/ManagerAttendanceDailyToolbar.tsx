@@ -58,7 +58,7 @@ export function ManagerAttendanceDailyToolbar({
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Quick Date Selectors: Today | Yesterday */}
-          <div className="inline-flex bg-muted/60 p-1 rounded-xl border border-border">
+          <div className="inline-flex bg-muted p-1 rounded-xl border border-border">
             <button
               type="button"
               onClick={() => {
@@ -90,7 +90,7 @@ export function ManagerAttendanceDailyToolbar({
           </div>
 
           {/* Date Picker Input */}
-          <div className="flex items-center gap-1.5 bg-muted/40 p-1 rounded-xl border border-border">
+          <div className="flex items-center gap-1.5 bg-muted p-1 rounded-xl border border-border">
             <input
               id="rbg4-managerengagementattendancepage-103"
               type="date"
@@ -117,7 +117,7 @@ export function ManagerAttendanceDailyToolbar({
                 id="daily-att-search"
                 type="search"
                 placeholder="Search student name or smart ID..."
-                className="w-full pl-9 pr-3 py-1.5 bg-muted/40 border border-border rounded-lg text-xs text-primary outline-none focus:border-primary focus:bg-card"
+                className="w-full pl-9 pr-3 py-1.5 bg-muted border border-border rounded-lg text-xs text-primary outline-none focus:border-primary focus:bg-card"
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
@@ -130,7 +130,7 @@ export function ManagerAttendanceDailyToolbar({
             <div className="flex items-center gap-1.5">
               <select
                 id="rbg4-managerengagementattendancepage-108"
-                className="min-h-9 py-1 px-3 bg-muted/40 border border-border rounded-lg text-xs font-medium text-primary outline-none focus:border-primary focus:bg-card cursor-pointer"
+                className="min-h-9 py-1 px-3 bg-muted border border-border rounded-lg text-xs font-medium text-primary outline-none focus:border-primary focus:bg-card cursor-pointer"
                 value={shift}
                 onChange={(e) => {
                   setShift(e.target.value);

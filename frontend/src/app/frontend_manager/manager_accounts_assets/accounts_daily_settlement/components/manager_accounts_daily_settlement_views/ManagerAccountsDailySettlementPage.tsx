@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import { Calendar, RefreshCw, Scale } from 'lucide-react';
+import { RefreshCw, Scale } from 'lucide-react';
 import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
@@ -11,9 +11,7 @@ import { createManagerAccountsDailySettlementColumns } from '@/app/frontend_mana
 import { useManagerDailySettlementCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementFormattingHook';
 import { ManagerAccountsDailySettlementKpis } from './ManagerAccountsDailySettlementKpis';
 import { ManagerAccountsDailySettlementToolbar } from './ManagerAccountsDailySettlementToolbar';
-
-// RESPONSIBILITY: Entry page for the manager_daily_settlement module with Executive Treasury Balancing & Specific Date Navigation.
-// DATA FLOW: Next.js Router -> Page -> Components
+import ManagerAccountsDailySettlementTimeHorizonBar, { type ManagerDailySettlementTimeHorizon } from './ManagerAccountsDailySettlementTimeHorizonBar';
 
 function toLocalDateInputValue(date: Date): string {
   const year = date.getFullYear();
@@ -34,7 +32,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const yesterdayStr = toLocalDateInputValue(yesterdayDate);
 
   const [settlementDate, setSettlementDate] = useState(todayStr);
-  const [isAllDates, setIsAllDates] = useState(false);
+  const [timeHorizon, setTimeHorizon] = useState<ManagerDailySettlementTimeHorizon>('today');
   const [entries, setEntries] = useState<Entry[]>([...MOCK]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -42,11 +40,16 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const [isSyncing, setIsSyncing] = useState(false);
 
   const dateScopeLabel = useMemo(() => {
-    if (isAllDates) return 'All Dates';
-    if (settlementDate === todayStr) return 'Today';
-    if (settlementDate === yesterdayStr) return 'Yesterday';
-    return settlementDate;
-  }, [isAllDates, settlementDate, todayStr, yesterdayStr]);
+    switch (timeHorizon) {
+      case 'all': return 'All Dates';
+      case 'today': return 'Today';
+      case 'yesterday': return 'Yesterday';
+      case 'this_week': return 'This Week';
+      case 'this_month': return 'This Month';
+      case 'custom': return settlementDate;
+      default: return 'All Dates';
+    }
+  }, [timeHorizon, settlementDate]);
 
   const handleSyncBalances = () => {
     setIsSyncing(true);
@@ -129,7 +132,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id}>
       {/* ── Executive Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap text-xs">
@@ -184,74 +187,13 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
       </div>
 
       {/* ── Specific Date Navigator Bar ── */}
-      <div className="rounded-xl border border-border bg-card p-3 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-primary shrink-0" />
-          <span className="text-xs font-bold uppercase tracking-wider text-secondary">
-            Settlement Audit Date:
-          </span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Quick Date Selectors: All Dates | Today | Yesterday */}
-          <div className="inline-flex bg-muted p-1 rounded-xl border border-border">
-            <button
-              type="button"
-              onClick={() => setIsAllDates(true)}
-              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
-                isAllDates
-                  ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
-                  : 'text-secondary hover:text-primary'
-              }`}
-            >
-              All Dates
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsAllDates(false);
-                setSettlementDate(todayStr);
-              }}
-              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
-                !isAllDates && settlementDate === todayStr
-                  ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
-                  : 'text-secondary hover:text-primary'
-              }`}
-            >
-              Today
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsAllDates(false);
-                setSettlementDate(yesterdayStr);
-              }}
-              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
-                !isAllDates && settlementDate === yesterdayStr
-                  ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
-                  : 'text-secondary hover:text-primary'
-              }`}
-            >
-              Yesterday
-            </button>
-          </div>
-
-          {/* Date Picker Input */}
-          <div className="flex items-center gap-1.5 bg-muted p-1 rounded-xl border border-border">
-            <input
-              type="date"
-              className="px-2.5 py-1 bg-card border border-border rounded-lg text-xs font-semibold text-primary outline-none focus:border-primary"
-              value={settlementDate}
-              onChange={(e) => {
-                setIsAllDates(false);
-                setSettlementDate(e.target.value);
-              }}
-              aria-label={tManagerUi('sample_settlement_date')}
-              title={tManagerUi('sample_snapshot_only_date_filtering_is_not_connected_to_9140bb')}
-            />
-          </div>
-        </div>
-      </div>
+      <ManagerAccountsDailySettlementTimeHorizonBar
+        timeHorizon={timeHorizon}
+        onChangeTimeHorizon={setTimeHorizon}
+        settlementDate={settlementDate}
+        onSettlementDateChange={setSettlementDate}
+        sampleDateLabel={tManagerUi('sample_settlement_date')}
+      />
 
       {/* ── Executive Reconciliation KPI Summary Cards ── */}
       <ManagerAccountsDailySettlementKpis
@@ -298,10 +240,10 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
                 ? 'No settlement entries matching your search query.'
                 : `No settlement entries recorded for ${dateScopeLabel}.`}
             </p>
-            {!isAllDates && (
+            {timeHorizon !== 'all' && (
               <button
                 type="button"
-                onClick={() => setIsAllDates(true)}
+                onClick={() => setTimeHorizon('all')}
                 className="mt-2 px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
               >
                 View All Dates

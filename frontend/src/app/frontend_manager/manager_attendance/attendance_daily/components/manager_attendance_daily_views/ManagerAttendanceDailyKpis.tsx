@@ -31,7 +31,7 @@ export function ManagerAttendanceDailyKpis({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Total Students */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
             {tManagerUi('total_students')}
@@ -54,7 +54,7 @@ export function ManagerAttendanceDailyKpis({
       </div>
 
       {/* Present */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
             {tManagerUi('present')}
@@ -78,7 +78,7 @@ export function ManagerAttendanceDailyKpis({
       </div>
 
       {/* Absent */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
             {tManagerUi('absent')}
@@ -101,7 +101,7 @@ export function ManagerAttendanceDailyKpis({
       </div>
 
       {/* Late */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md">
+      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
             {tManagerUi('late')}

@@ -149,7 +149,7 @@ export function ManagerDashboardOverviewKpiGrid({
           <Link
             key={kpi.title}
             href={route}
-            className="mgr-kpi-card group relative flex flex-col justify-between p-5 rounded-2xl border border-border bg-card shadow-card hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer overflow-hidden text-inherit no-underline"
+            className="mgr-kpi-card group relative flex flex-col justify-between p-5 rounded-2xl border border-border bg-card shadow-card hover:border-primary hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer overflow-hidden text-inherit no-underline"
           >
             <div>
               <div className="flex items-center justify-between gap-2">

@@ -86,7 +86,7 @@ export function ManagerDashboardOverviewBirthdayWidget() {
           return (
             <div
               key={student.id}
-              className="p-4 rounded-xl bg-card border border-border hover:border-primary/40 shadow-xs flex flex-col justify-between gap-3.5 transition-all group hover:-translate-y-0.5"
+              className="p-4 rounded-xl bg-card border border-border hover:border-primary shadow-xs flex flex-col justify-between gap-3.5 transition-all group hover:-translate-y-0.5"
             >
               <div className="flex items-start gap-3">
                 <div className="w-11 h-11 rounded-full bg-linear-to-br from-amber-400 to-amber-600 text-primary-foreground font-black text-sm flex items-center justify-center shrink-0 shadow-xs">

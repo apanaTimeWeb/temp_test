@@ -137,7 +137,7 @@ export function ManagerDashboardOverviewRecentActivity({
                         </div>
                       </td>
                       <td className="w-4/12 py-3">
-                        <span className="mgr-table-id font-mono text-[11px] font-semibold px-2 py-0.5 rounded bg-muted/60 text-foreground">
+                        <span className="mgr-table-id font-mono text-[11px] font-semibold px-2 py-0.5 rounded bg-muted text-foreground">
                           {row.smartId || '—'}
                         </span>
                       </td>

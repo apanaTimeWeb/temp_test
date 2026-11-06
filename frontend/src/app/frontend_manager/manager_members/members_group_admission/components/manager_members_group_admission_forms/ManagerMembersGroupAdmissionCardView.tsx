@@ -22,7 +22,7 @@ export function ManagerMembersGroupAdmissionCardView({
       {manualRows.map((row, index) => (
         <div
           key={row.id}
-          className="p-4 rounded-xl border border-border bg-card/60 shadow-xs space-y-3 relative hover:border-primary/40 transition-colors"
+          className="p-4 rounded-xl border border-border bg-card shadow-xs space-y-3 relative hover:border-primary transition-colors"
         >
           <div className="flex items-center justify-between border-b border-border/60 pb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-2">

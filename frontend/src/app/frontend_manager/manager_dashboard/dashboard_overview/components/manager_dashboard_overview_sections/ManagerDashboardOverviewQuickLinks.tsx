@@ -86,7 +86,7 @@ export function ManagerDashboardOverviewQuickLinks({ links }: ManagerDashboardOv
             <Link
               key={link.titleKey}
               href={link.href}
-              className="p-3.5 rounded-xl border border-border bg-surface-highlight/30 hover:border-primary/50 hover:bg-surface-highlight/60 transition-all duration-200 group flex items-center justify-between gap-2.5 shadow-xs hover:-translate-y-0.5 text-inherit no-underline"
+              className="p-3.5 rounded-xl border border-border bg-surface-highlight hover:border-primary hover:bg-surface-highlight transition-all duration-200 group flex items-center justify-between gap-2.5 shadow-xs hover:-translate-y-0.5 text-inherit no-underline"
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <div className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 ${config.theme}`}>

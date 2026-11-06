@@ -5,7 +5,10 @@ import { ManagerDashboardOverviewEmptyState } from '@/app/frontend_manager/manag
 import type { ManagerDashboardOverviewActionItemsProps } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/types/ManagerDashboardOverviewComponentTypes';
 export type { ManagerDashboardOverviewActionItemsProps };
 
-export function ManagerDashboardOverviewActionItems({ items }: ManagerDashboardOverviewActionItemsProps) {
+export function ManagerDashboardOverviewActionItems({
+  items,
+  timeRangeLabel,
+}: ManagerDashboardOverviewActionItemsProps & { timeRangeLabel?: string }) {
   const tManagerUi = useTranslations('manager.manager_dashboard.ui');
 
   const localizeKnownTitle = (title: string) => {
@@ -70,14 +73,21 @@ export function ManagerDashboardOverviewActionItems({ items }: ManagerDashboardO
               <Zap size={20} />
             </div>
             <div>
-              <h2 id="manager-dashboard-action-items-heading" className="text-base sm:text-lg font-bold text-foreground">
-                {tManagerUi('my_action_items')}
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 id="manager-dashboard-action-items-heading" className="text-base sm:text-lg font-bold text-foreground">
+                  {tManagerUi('my_action_items')}
+                </h2>
+                {timeRangeLabel && (
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                    [{timeRangeLabel}]
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-muted-foreground">High-priority operational workflows</p>
             </div>
           </div>
           {items.length > 0 && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-warning-bg text-warning-text border border-border">
               {items.length} Pending
             </span>
           )}
@@ -99,7 +109,7 @@ export function ManagerDashboardOverviewActionItems({ items }: ManagerDashboardO
               return (
                 <div
                   key={item.title}
-                  className="mgr-action-item p-3.5 rounded-xl border border-border bg-surface-highlight/30 hover:border-primary/40 hover:bg-surface-highlight/50 transition-all flex items-center justify-between gap-3"
+                  className="mgr-action-item p-3.5 rounded-xl border border-border bg-surface-highlight hover:border-primary hover:bg-surface-highlight transition-all flex items-center justify-between gap-3"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className={`w-9 h-9 rounded-lg border flex items-center justify-center shrink-0 ${meta.theme}`}>
@@ -123,7 +133,7 @@ export function ManagerDashboardOverviewActionItems({ items }: ManagerDashboardO
                       className={
                         item.showRenew
                           ? 'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-primary text-primary-foreground hover:bg-primary-hover shadow-xs transition-all'
-                          : 'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-card border border-border text-foreground hover:border-primary/50 hover:bg-surface-hover transition-all'
+                          : 'inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-card border border-border text-foreground hover:border-primary hover:bg-surface-hover transition-all'
                       }
                     >
                       <span>{item.showRenew ? tManagerUi('renew') : tManagerUi('view')}</span>

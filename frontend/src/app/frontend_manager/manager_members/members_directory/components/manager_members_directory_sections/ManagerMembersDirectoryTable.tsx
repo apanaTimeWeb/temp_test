@@ -1,12 +1,13 @@
 'use client';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, Search, ArrowUpDown, ArrowUp, ArrowDown, X } from 'lucide-react';
+import { Eye, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
 import { ManagerMembersDirectoryEmptyState } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_states/ManagerMembersDirectoryEmptyState';
-import { MANAGER_MEMBERS_STATUS_BADGES, MANAGER_MEMBERSHIP_TYPE_OPTIONS, MANAGER_MEMBERS_GENDER_OPTIONS } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
+import { MANAGER_MEMBERS_STATUS_BADGES } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import ManagerMembersDirectoryFilterBar from './ManagerMembersDirectoryFilterBar';
 
 export type MemberSortField = 'id' | 'name' | 'phone' | 'type' | 'status' | 'expiryDate';
 
@@ -93,7 +94,7 @@ export function ManagerMembersDirectoryTable({
               <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown size={14} className="text-secondary/40 group-hover:text-secondary transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
@@ -102,93 +103,21 @@ export function ManagerMembersDirectoryTable({
 
   return (
     <>
-      {/* ── Comprehensive Multi-Filter Bar ── */}
-      <div className="flex flex-wrap items-center gap-2.5 mb-5 p-3 rounded-xl bg-surface/50 border border-border">
-        {/* Search Bar */}
-        <div className="relative flex-1 min-w-[220px]">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-          <label htmlFor="manager-members-search" className="sr-only">
-            {tManagerUi('search_by_name_or_id')}
-          </label>
-          <input
-            id="manager-members-search"
-            type="search"
-            className="mgr-input pl-9 text-xs w-full"
-            placeholder={tManagerUi('search_by_name_or_id')}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        {/* Plan Filter */}
-        <select
-          aria-label="Filter by membership plan"
-          value={planFilter}
-          onChange={(e) => setPlanFilter(e.target.value)}
-          className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
-        >
-          <option value="all">📦 All Plans</option>
-          {MANAGER_MEMBERSHIP_TYPE_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.value}
-            </option>
-          ))}
-        </select>
-
-        {/* Shift Filter */}
-        <select
-          aria-label="Filter by shift"
-          value={shiftFilter}
-          onChange={(e) => setShiftFilter(e.target.value)}
-          className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
-        >
-          <option value="all">⏰ All Shifts</option>
-          <option value="Morning">Morning Shift</option>
-          <option value="Afternoon">Afternoon Shift</option>
-          <option value="Evening">Evening Shift</option>
-          <option value="Full Day">Full Day</option>
-        </select>
-
-        {/* Gender Filter */}
-        <select
-          aria-label="Filter by gender"
-          value={genderFilter}
-          onChange={(e) => setGenderFilter(e.target.value)}
-          className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
-        >
-          <option value="all">👥 All Genders</option>
-          {MANAGER_MEMBERS_GENDER_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.value}
-            </option>
-          ))}
-        </select>
-
-        {/* Expiry Filter */}
-        <select
-          aria-label="Filter by validity expiration"
-          value={expiryFilter}
-          onChange={(e) => setExpiryFilter(e.target.value)}
-          className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
-        >
-          <option value="all">📅 All Expiry</option>
-          <option value="7days">⚠️ Expiring in ≤ 7 Days</option>
-          <option value="30days">🗓️ Expiring in ≤ 30 Days</option>
-        </select>
-
-        {/* Reset Filters CTA */}
-        {hasActiveFilters && (
-          <button
-            type="button"
-            onClick={onResetFilters}
-            className="flex items-center gap-1 px-2.5 py-2 rounded-lg text-xs font-bold text-danger hover:bg-danger-bg transition-colors cursor-pointer"
-            title="Clear all active filters"
-          >
-            <X size={13} />
-            <span>Reset</span>
-          </button>
-        )}
-      </div>
+      {/* ── Multi-Filter Bar ── */}
+      <ManagerMembersDirectoryFilterBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        planFilter={planFilter}
+        setPlanFilter={setPlanFilter}
+        shiftFilter={shiftFilter}
+        setShiftFilter={setShiftFilter}
+        genderFilter={genderFilter}
+        setGenderFilter={setGenderFilter}
+        expiryFilter={expiryFilter}
+        setExpiryFilter={setExpiryFilter}
+        hasActiveFilters={hasActiveFilters}
+        onResetFilters={onResetFilters}
+      />
 
       <div className="flex-1 w-full overflow-x-auto">
         {sortedMembers.length === 0 ? (
@@ -216,7 +145,7 @@ export function ManagerMembersDirectoryTable({
                     <tr
                       key={member.id}
                       onClick={() => onSelectMemberProfile(member.id)}
-                      className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-12 cursor-pointer transition-colors group"
+                      className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface h-12 cursor-pointer transition-colors group"
                       title={`Click to view profile of ${member.name} (${member.id})`}
                     >
                       <td className="px-3 py-3 align-middle">
@@ -306,4 +235,4 @@ export function ManagerMembersDirectoryTable({
     </>
   );
 }
-
+export default ManagerMembersDirectoryTable;
