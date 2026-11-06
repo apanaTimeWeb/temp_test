@@ -12911,7 +12911,9 @@
         "both_custom_times_required": "कस्टम प्रारंभ और समाप्ति दोनों समय दर्ज करें।",
         "custom_end_must_follow_start": "कस्टम समाप्ति समय, प्रारंभ समय के बाद होना चाहिए।",
         "new_status": "नई स्थिति",
-        "active_status": "सक्रिय स्थिति"
+        "active_status": "सक्रिय स्थिति",
+        "shift_tab_afternoon": "दोपहर",
+        "shift_tab_night": "रात"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",

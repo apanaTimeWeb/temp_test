@@ -12911,7 +12911,9 @@
         "both_custom_times_required": "Enter both custom start and end times.",
         "custom_end_must_follow_start": "Custom end time must be after custom start time.",
         "new_status": "New status",
-        "active_status": "Active status"
+        "active_status": "Active status",
+        "shift_tab_afternoon": "Afternoon",
+        "shift_tab_night": "Night"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",
