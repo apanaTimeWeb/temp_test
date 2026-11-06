@@ -60,28 +60,28 @@ export function AdminAccountsExpensesKpiSection({ expenses, visibleExpenses, tim
       {kpis.map(({ label, value, icon: Icon, color, sub, badge }) => (
         <div
           key={label}
-          className="group relative overflow-hidden rounded-xl border border-border/80 bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+          className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5"
         >
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{label}</span>
               {badge && (
-                <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary">
+                <span className="rounded-md bg-primary-subtle px-1.5 py-0.5 text-[10px] font-bold text-primary">
                   {badge}
                 </span>
               )}
             </div>
             <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
-              color === 'rose' ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400' :
-              color === 'amber' ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400' :
-              color === 'blue' ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400' :
-              'bg-purple-500/10 text-purple-600 dark:text-purple-400'
+              color === 'rose' ? 'bg-danger-bg text-danger-text' :
+              color === 'amber' ? 'bg-warning-bg text-warning-text' :
+              color === 'blue' ? 'bg-info-bg text-info-text' :
+              'bg-surface-highlight text-primary'
             }`}>
               <Icon size={16} strokeWidth={2.2} />
             </div>
           </div>
           <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{value}</p>
-          <p className="mt-1 text-xs text-text-muted">{sub}</p>
+          <p className="mt-1 text-xs text-text-secondary">{sub}</p>
         </div>
       ))}
     </section>

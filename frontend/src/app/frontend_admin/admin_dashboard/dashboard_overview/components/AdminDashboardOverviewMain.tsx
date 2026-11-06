@@ -1,105 +1,27 @@
 'use client';
 // RESPONSIBILITY: Owns the AdminDashboardOverviewMain presentation responsibility for the dashboard_overview module. It does not own cross-module business logic or API transport.
-import Link from 'next/link';
 import { useState, useMemo } from 'react';
 import {
   Armchair,
   Users,
   WalletCards,
   Building2,
-  TrendingUp,
   Calendar,
   RefreshCw,
   X,
-  Layers,
-  ChevronRight,
-  ArrowRight,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { ADMIN_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/config/admin_dashboard_overview.url_config';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import AdminDashboardBranchLeaderboard, {
   type AdminDashboardTimeRange,
 } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardBranchLeaderboard';
+import { AdminDashboardOverviewKpis } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardOverviewKpis';
+import { AdminDashboardOverviewDestinations } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/components/AdminDashboardOverviewDestinations';
+import {
+  ADMIN_DASHBOARD_DESTINATIONS,
+  ADMIN_DASHBOARD_BRANCH_METRICS,
+} from '@/app/frontend_admin/admin_dashboard/dashboard_overview/constants/AdminDashboardOverviewConstants';
 import { toast } from 'sonner';
-
-const destinations = [
-  {
-    key: 'MEMBERS',
-    Icon: Users,
-    href: ADMIN_DASHBOARD_OVERVIEW_ROUTES.MEMBERS_DIRECTORY,
-  },
-  {
-    key: 'SEATS',
-    Icon: Armchair,
-    href: ADMIN_DASHBOARD_OVERVIEW_ROUTES.SEATS_MATRIX,
-  },
-  {
-    key: 'FINANCE',
-    Icon: WalletCards,
-    href: ADMIN_DASHBOARD_OVERVIEW_ROUTES.FINANCE_DASHBOARD,
-  },
-] as const;
-
-const BRANCH_METRICS: Record<
-  string,
-  {
-    branches: string;
-    branchesSub: string;
-    members: string;
-    membersSub: string;
-    occupancy: string;
-    occupancySub: string;
-    revenue: string;
-    revenueNum: number;
-    revenueSub: string;
-  }
-> = {
-  all: {
-    branches: '3',
-    branchesSub: 'All network branches active',
-    members: '1,248',
-    membersSub: 'Across all 3 branches',
-    occupancy: '84.2%',
-    occupancySub: 'Peak shift utilization',
-    revenue: '₹4,82,500',
-    revenueNum: 482500,
-    revenueSub: 'Realized this month (Network)',
-  },
-  'BR-001': {
-    branches: '1',
-    branchesSub: 'Downtown Central (Main Campus)',
-    members: '520',
-    membersSub: 'Downtown active members',
-    occupancy: '89.4%',
-    occupancySub: 'Near full capacity',
-    revenue: '₹2,10,000',
-    revenueNum: 210000,
-    revenueSub: 'Downtown branch collections',
-  },
-  'BR-002': {
-    branches: '1',
-    branchesSub: 'Westside Branch (Suspended)',
-    members: '280',
-    membersSub: 'Westside registered members',
-    occupancy: '64.0%',
-    occupancySub: 'Reduced occupancy window',
-    revenue: '₹92,500',
-    revenueNum: 92500,
-    revenueSub: 'Westside branch collections',
-  },
-  'BR-003': {
-    branches: '1',
-    branchesSub: 'North Hub (Active)',
-    members: '448',
-    membersSub: 'North Hub active members',
-    occupancy: '86.1%',
-    occupancySub: 'Optimal shift distribution',
-    revenue: '₹1,80,000',
-    revenueNum: 180000,
-    revenueSub: 'North Hub collections',
-  },
-};
 
 /**
  * Renders the canonical dashboard landing page for the multi-library Admin.
@@ -108,7 +30,7 @@ const BRANCH_METRICS: Record<
 export default function AdminDashboardOverviewMain() {
   const t = useTranslations('ADMIN_DASHBOARD');
   const { selectedBranchId, selectedBranch } = useAdminBranch();
-  const rawMetrics = BRANCH_METRICS[selectedBranchId] ?? BRANCH_METRICS.all;
+  const rawMetrics = ADMIN_DASHBOARD_BRANCH_METRICS[selectedBranchId] ?? ADMIN_DASHBOARD_BRANCH_METRICS.all;
 
   // Global Time Horizon State
   const [timeRange, setTimeRange] = useState<AdminDashboardTimeRange>('this_month');
@@ -146,7 +68,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: rawMetrics.branchesSub,
       Icon: Building2,
       trend: selectedBranchId === 'all' ? '+1 this quarter' : 'Branch Active',
-      theme: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+      theme: 'bg-warning-bg text-warning-text border-border',
     },
     {
       id: 'kpi-members',
@@ -156,7 +78,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: rawMetrics.membersSub,
       Icon: Users,
       trend: '+12% vs last month',
-      theme: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+      theme: 'bg-info-bg text-info-text border-border',
     },
     {
       id: 'kpi-occupancy',
@@ -166,7 +88,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: rawMetrics.occupancySub,
       Icon: Armchair,
       trend: 'Optimal capacity',
-      theme: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+      theme: 'bg-surface-highlight text-primary border-border',
     },
     {
       id: 'kpi-revenue',
@@ -176,7 +98,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: dynamicRevenue.subtext,
       Icon: WalletCards,
       trend: '96% on-time fee recovery',
-      theme: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+      theme: 'bg-success-bg text-success-text border-border',
     },
   ];
 
@@ -198,7 +120,7 @@ export default function AdminDashboardOverviewMain() {
                 {t('LIBRARY_OVERVIEW_EYEBROW')}
               </span>
               <span className="text-border">•</span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-success-bg text-success-text border border-border">
                 <Building2 size={12} />
                 Multi-Branch Network
               </span>
@@ -300,76 +222,19 @@ export default function AdminDashboardOverviewMain() {
       </div>
 
       {/* ── Executive Multi-Branch Overview KPI Cards ── */}
-      <section
-        aria-label={t('KPI_SECTION_LABEL')}
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
-      >
-        {executiveKpis.map((kpi) => {
-          const KpiIcon = kpi.Icon;
-          return (
-            <article
-              key={kpi.id}
-              className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">{kpi.title}</span>
-                  {kpi.periodBadge && (
-                    <span className="rounded-md bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                      {kpi.periodBadge}
-                    </span>
-                  )}
-                </div>
-                <div className={`p-2 rounded-xl border ${kpi.theme}`}>
-                  <KpiIcon className="h-4 w-4" aria-hidden="true" />
-                </div>
-              </div>
-              <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-2xl font-black tracking-tight text-text-primary">{kpi.value}</span>
-              </div>
-              <div className="mt-2 flex items-center justify-between text-xs text-text-secondary border-t border-border pt-2">
-                <span>{kpi.subtext}</span>
-                <span className="font-semibold text-emerald-600 dark:text-emerald-400">{kpi.trend}</span>
-              </div>
-            </article>
-          );
-        })}
-      </section>
+      <AdminDashboardOverviewKpis kpis={executiveKpis} sectionLabel={t('KPI_SECTION_LABEL')} />
 
       {/* ── Multi-Branch Comparative Analytics & Benchmarking Leaderboard ── */}
       <AdminDashboardBranchLeaderboard timeRange={timeRange} />
 
       {/* ── Core Operational Workspace Hubs ── */}
-      <section
-        aria-label={t('LIBRARY_DESTINATIONS')}
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-      >
-        {destinations.map(({ key, Icon, href }) => (
-          <article
-            key={key}
-            className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary/50 hover:shadow-md flex flex-col justify-between"
-          >
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center justify-center">
-                <Icon className="h-5 w-5" aria-hidden="true" />
-              </div>
-              <h2 className="mt-3 text-base font-bold text-text-primary">
-                {t(`LIBRARY_${key}_TITLE`)}
-              </h2>
-              <p className="mt-1.5 text-xs text-text-secondary leading-relaxed">
-                {t(`LIBRARY_${key}_UNAVAILABLE`)}
-              </p>
-            </div>
-            <Link
-              href={href}
-              className="mt-4 inline-flex min-h-10 items-center justify-between rounded-xl border border-border bg-muted/30 px-3 py-2 text-xs font-semibold text-text-primary hover:bg-surface-hover hover:border-border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <span>{t('LIBRARY_OPEN_DESTINATION')}</span>
-              <ArrowRight size={13} className="text-text-secondary" />
-            </Link>
-          </article>
-        ))}
-      </section>
+      <AdminDashboardOverviewDestinations
+        destinations={ADMIN_DASHBOARD_DESTINATIONS}
+        sectionLabel={t('LIBRARY_DESTINATIONS')}
+        openLabel={t('LIBRARY_OPEN_DESTINATION')}
+        getTitle={(key) => t(`LIBRARY_${key}_TITLE`)}
+        getUnavailable={(key) => t(`LIBRARY_${key}_UNAVAILABLE`)}
+      />
 
       <aside
         role="status"

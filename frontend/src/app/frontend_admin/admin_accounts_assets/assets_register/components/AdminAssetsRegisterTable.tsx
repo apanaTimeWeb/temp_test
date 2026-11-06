@@ -165,19 +165,19 @@ export function AdminAssetsRegisterTable({
                   {/* AMC Protection Status */}
                   <td className="px-4 py-3.5 text-center whitespace-nowrap">
                     {asset.amcStatus === 'ACTIVE_AMC' && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-success/30 bg-success-bg px-2.5 py-0.5 text-xs font-medium text-success-text">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-success-bg px-2.5 py-0.5 text-xs font-medium text-success-text">
                         <ShieldCheck className="h-3 w-3" />
                         <span>{t('AMC_STATUS.ACTIVE_AMC')}</span>
                       </span>
                     )}
                     {asset.amcStatus === 'UNDER_WARRANTY' && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-blue-500/30 bg-blue-500/10 px-2.5 py-0.5 text-xs font-medium text-blue-600 dark:text-blue-400">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-0.5 text-xs font-medium text-info">
                         <ShieldCheck className="h-3 w-3" />
                         <span>{t('AMC_STATUS.UNDER_WARRANTY')}</span>
                       </span>
                     )}
                     {asset.amcStatus === 'EXPIRED_NO_AMC' && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-destructive/30 bg-destructive/15 px-2.5 py-0.5 text-xs font-medium text-destructive">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-destructive-bg px-2.5 py-0.5 text-xs font-medium text-destructive">
                         <AlertTriangle className="h-3 w-3" />
                         <span>{t('AMC_STATUS.EXPIRED_NO_AMC')}</span>
                       </span>

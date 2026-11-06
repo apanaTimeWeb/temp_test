@@ -30,7 +30,7 @@ export default function FeatureError({
       <button
         type="button"
         onClick={reset}
-        className="min-h-11 rounded-md bg-primary px-4 py-2 text-on-primary hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors"
+        className="min-h-11 rounded-md bg-primary px-4 py-2 text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors"
       >
         {t('ROUTE_ERROR_RETRY')}
       </button>

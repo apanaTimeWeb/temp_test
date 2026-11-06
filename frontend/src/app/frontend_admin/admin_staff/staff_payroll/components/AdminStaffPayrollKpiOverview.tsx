@@ -92,8 +92,7 @@ export function AdminStaffPayrollKpiOverview({ model }: Props) {
           </div>
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-surface">
             <div
-              className="h-full bg-primary transition-all duration-300"
-              style={{ width: `${progressPercent}%` }}
+              className={`h-full bg-primary transition-all duration-300 admin-dynamic-width-${Math.min(100, Math.max(0, Math.round(progressPercent)))}`}
             />
           </div>
           <p className="mt-2 text-[11px] text-text-disabled">

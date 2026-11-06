@@ -113,7 +113,7 @@ export function AdminAccountsExpensesTableSection({
         const status = params.data.status ?? 'APPROVED';
         if (status === 'PENDING_APPROVAL') {
           return (
-            <span className="inline-flex items-center gap-1 rounded-full border border-warning/30 bg-warning-bg px-2 py-0.5 text-xs font-medium text-warning-text">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-warning-bg px-2 py-0.5 text-xs font-medium text-warning-text">
               <Clock className="h-3 w-3" />
               <span>{t('STATUS_PENDING')}</span>
             </span>
@@ -121,14 +121,14 @@ export function AdminAccountsExpensesTableSection({
         }
         if (status === 'APPROVED') {
           return (
-            <span className="inline-flex items-center gap-1 rounded-full border border-success/30 bg-success-bg px-2 py-0.5 text-xs font-medium text-success-text">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-success-bg px-2 py-0.5 text-xs font-medium text-success-text">
               <CheckCircle2 className="h-3 w-3" />
               <span>{t('STATUS_APPROVED')}</span>
             </span>
           );
         }
         return (
-          <span className="inline-flex items-center gap-1 rounded-full border border-destructive/30 bg-destructive/15 px-2 py-0.5 text-xs font-medium text-destructive">
+          <span className="inline-flex items-center gap-1 rounded-full border border-destructive-bg bg-destructive-bg px-2 py-0.5 text-xs font-medium text-destructive">
             <XCircle className="h-3 w-3" />
             <span>{t('STATUS_REJECTED')}</span>
           </span>
@@ -159,7 +159,7 @@ export function AdminAccountsExpensesTableSection({
             target="_blank"
             rel="noreferrer"
             title={t('VIEW_QUOTATION')}
-            className="inline-flex items-center justify-center p-1.5 rounded text-primary hover:bg-primary/10"
+            className="inline-flex items-center justify-center p-1.5 rounded text-primary hover:bg-primary-subtle"
           >
             <ExternalLink className="h-4 w-4" />
           </a>
@@ -183,7 +183,7 @@ export function AdminAccountsExpensesTableSection({
                   onRequestApprove(params.data);
                 }}
                 title={t('APPROVE')}
-                className="inline-flex items-center justify-center rounded-md bg-success p-1.5 text-white hover:bg-success/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success min-h-[32px] min-w-[32px]"
+                className="inline-flex items-center justify-center rounded-md bg-success p-1.5 text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success min-h-[32px] min-w-[32px]"
               >
                 <Check className="h-3.5 w-3.5" />
               </button>
@@ -196,7 +196,7 @@ export function AdminAccountsExpensesTableSection({
                   onRequestReject(params.data);
                 }}
                 title={t('REJECT')}
-                className="inline-flex items-center justify-center rounded-md border border-destructive/30 bg-card p-1.5 text-destructive hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive min-h-[32px] min-w-[32px]"
+                className="inline-flex items-center justify-center rounded-md border border-border bg-card p-1.5 text-destructive hover:bg-destructive-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive min-h-[32px] min-w-[32px]"
               >
                 <X className="h-3.5 w-3.5" />
               </button>

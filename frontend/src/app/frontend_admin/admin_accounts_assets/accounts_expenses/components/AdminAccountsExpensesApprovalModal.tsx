@@ -99,7 +99,7 @@ export function AdminAccountsExpensesApprovalModal({
             <button
               type="button"
               onClick={() => onConfirm(expense.id)}
-              className="inline-flex items-center gap-1.5 rounded-md bg-success px-4 py-2 text-sm font-medium text-white hover:bg-success/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success motion-safe:transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-md bg-success px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success motion-safe:transition-colors"
             >
               <Check className="h-4 w-4" />
               <span>{t('APPROVE')}</span>

@@ -198,11 +198,11 @@ export function AdminAccountsDailySettlementTable({
                   {/* Variance */}
                   <td className="px-4 py-3.5 text-right font-mono whitespace-nowrap">
                     {isShortage ? (
-                      <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-xs font-semibold bg-destructive/15 text-destructive">
+                      <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-xs font-semibold bg-destructive-bg text-destructive">
                         {formatPaiseToRupees(record.difference)}
                       </span>
                     ) : isSurplus ? (
-                      <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-xs font-semibold bg-success/15 text-success">
+                      <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-xs font-semibold bg-success-bg text-success-text">
                         +{formatPaiseToRupees(record.difference)}
                       </span>
                     ) : (
@@ -213,19 +213,19 @@ export function AdminAccountsDailySettlementTable({
                   {/* Status Badge */}
                   <td className="px-4 py-3.5 text-center whitespace-nowrap">
                     {record.status === 'PENDING_APPROVAL' && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-warning/30 bg-warning-bg px-2.5 py-0.5 text-xs font-medium text-warning-text">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-warning-bg bg-warning-bg px-2.5 py-0.5 text-xs font-medium text-warning-text">
                         <Clock className="h-3 w-3" />
                         <span>{t('STATUS.PENDING_APPROVAL')}</span>
                       </span>
                     )}
                     {record.status === 'APPROVED' && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-success/30 bg-success-bg px-2.5 py-0.5 text-xs font-medium text-success-text">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-success-bg bg-success-bg px-2.5 py-0.5 text-xs font-medium text-success-text">
                         <Check className="h-3 w-3" />
                         <span>{t('STATUS.APPROVED')}</span>
                       </span>
                     )}
                     {record.status === 'DISCREPANCY_FLAGGED' && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-destructive/30 bg-destructive/15 px-2.5 py-0.5 text-xs font-medium text-destructive">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-destructive-bg bg-destructive-bg px-2.5 py-0.5 text-xs font-medium text-destructive">
                         <AlertTriangle className="h-3 w-3" />
                         <span>{t('STATUS.DISCREPANCY_FLAGGED')}</span>
                       </span>
@@ -241,7 +241,7 @@ export function AdminAccountsDailySettlementTable({
                             type="button"
                             onClick={() => onApprove(record)}
                             title={t('ACTIONS.APPROVE_CLEAR')}
-                            className="inline-flex items-center gap-1 rounded-md bg-success px-2.5 py-1.5 text-xs font-medium text-white hover:bg-success/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success min-h-[32px] motion-safe:transition-colors"
+                            className="inline-flex items-center gap-1 rounded-md bg-success px-2.5 py-1.5 text-xs font-medium text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success min-h-[32px] motion-safe:transition-colors"
                           >
                             <Check className="h-3.5 w-3.5" />
                             <span>{t('ACTIONS.APPROVE_CLEAR')}</span>
@@ -250,7 +250,7 @@ export function AdminAccountsDailySettlementTable({
                             type="button"
                             onClick={() => onFlag(record)}
                             title={t('ACTIONS.FLAG_DISCREPANCY')}
-                            className="inline-flex items-center gap-1 rounded-md border border-destructive/30 bg-card px-2 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive min-h-[32px] motion-safe:transition-colors"
+                            className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1.5 text-xs font-medium text-destructive hover:bg-destructive-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive min-h-[32px] motion-safe:transition-colors"
                           >
                             <ShieldAlert className="h-3.5 w-3.5" />
                             <span>{t('ACTIONS.FLAG_DISCREPANCY')}</span>

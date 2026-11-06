@@ -129,7 +129,7 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-text-primary">{row.branch}</h3>
                   <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold ${
-                    index === 0 ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface text-text-secondary border border-border'
+                    index === 0 ? 'bg-primary-subtle text-primary border border-border' : 'bg-surface text-text-secondary border border-border'
                   }`}>
                     {index === 0 ? <Trophy size={11} className="text-primary" /> : null}
                     #{index + 1}
@@ -161,7 +161,7 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
                     <th scope="row" className="p-3 font-medium text-text-primary">
                       <div className="flex items-center gap-2">
                         <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold ${
-                          index === 0 ? 'bg-primary/10 text-primary border border-primary/20' : 'bg-surface text-text-secondary border border-border'
+                          index === 0 ? 'bg-primary-subtle text-primary border border-border' : 'bg-surface text-text-secondary border border-border'
                         }`}>
                           {index === 0 ? <Trophy size={12} className="text-primary" /> : null}
                           #{index + 1}
