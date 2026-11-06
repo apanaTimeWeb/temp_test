@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { X, Building2, AlertTriangle } from 'lucide-react';
+import { X, Building2, AlertTriangle, MessageSquare } from 'lucide-react';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -84,7 +84,18 @@ export function AdminCommunicationComplaintDetailModal({
                 })}
               </div>
             )}
-            <div className="mt-4 flex flex-wrap justify-end gap-2.5 border-border pt-3">
+            <div className="mt-4 flex flex-wrap justify-between items-center gap-2.5 border-border pt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  const msg = encodeURIComponent(`Hello ${viewItem.student}, regarding your complaint "${viewItem.title}" at Smart Library:\n${viewItem.resolvedNote ? `Resolution: ${viewItem.resolvedNote}` : 'We are actively investigating and will resolve it shortly.'}\nThank you!`);
+                  window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                }}
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-success-bg bg-success-bg px-3.5 py-2 text-ui font-semibold text-success-text hover:bg-success hover:text-on-success transition-all"
+              >
+                <MessageSquare size={16} />
+                WhatsApp Student
+              </button>
               <button
                 type="button"
                 data-testid="admin_communication-page-control-010"
@@ -127,25 +138,40 @@ export function AdminCommunicationComplaintDetailModal({
                 onChange={e => onChangeResolveNote(e.target.value)}
               />
             </div>
-            <div className="mt-4 flex flex-wrap justify-end gap-2.5 border-border pt-3">
+            <div className="mt-4 flex flex-wrap justify-between items-center gap-2.5 border-border pt-3">
               <button
                 type="button"
-                data-testid="admin_communication-page-control-012"
-                onClick={onCloseResolve}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-ui font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base"
+                disabled={!resolveNote.trim()}
+                onClick={() => {
+                  const msg = encodeURIComponent(`Hello ${resolveItem.student}, good news! Your complaint regarding "${resolveItem.title}" has been resolved by Smart Library Admin:\n"${resolveNote}"\nThank you for your patience!`);
+                  window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                }}
+                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-success-bg bg-success-bg px-3 py-2 text-xs font-semibold text-success-text hover:bg-success hover:text-on-success transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Send resolution message on WhatsApp"
               >
-                {t('BUTTON_CANCEL')}
+                <MessageSquare size={15} />
+                WhatsApp Update
               </button>
-              <button
-                type="button"
-                data-testid="admin_communication-page-control-013"
-                disabled={!isDemoMode || !resolveNote.trim()}
-                title={!isDemoMode ? t('COMPLAINT_RESOLUTION_BLOCKED') : undefined}
-                onClick={onConfirmResolve}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-success bg-success px-4 py-2 text-body font-semibold text-on-success hover:bg-success focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {t('BUTTON_MARK_RESOLVED')}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  data-testid="admin_communication-page-control-012"
+                  onClick={onCloseResolve}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-ui font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base"
+                >
+                  {t('BUTTON_CANCEL')}
+                </button>
+                <button
+                  type="button"
+                  data-testid="admin_communication-page-control-013"
+                  disabled={!isDemoMode || !resolveNote.trim()}
+                  title={!isDemoMode ? t('COMPLAINT_RESOLUTION_BLOCKED') : undefined}
+                  onClick={onConfirmResolve}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-success bg-success px-4 py-2 text-body font-semibold text-on-success hover:bg-success focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {t('BUTTON_MARK_RESOLVED')}
+                </button>
+              </div>
             </div>
           </DialogContent>
         </Dialog>

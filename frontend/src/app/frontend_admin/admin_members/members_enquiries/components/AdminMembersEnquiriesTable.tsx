@@ -4,13 +4,12 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 
 import { useEffect, useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { ArrowDown, ArrowUp, Clock, Eye } from 'lucide-react';
+import { ArrowDown, ArrowUp, Clock, Eye, MessageSquare } from 'lucide-react';
 import type { Enquiry, EnquiryStatus } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import { ADMIN_ENQUIRIES_ENQUIRY_STATUS_BADGE } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
 import { maskPhone } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import { formatAdminEnquiriesDate } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import type { AdminEnquiriesEnquirySortField, AdminEnquiriesEnquirySortDirection, AdminEnquiriesTableProps } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
-
 
 function getAdminEnquiriesEnquirySortValue(enquiry: Enquiry, field: AdminEnquiriesEnquirySortField): string {
   const value = enquiry[field];
@@ -19,7 +18,14 @@ function getAdminEnquiriesEnquirySortValue(enquiry: Enquiry, field: AdminEnquiri
 }
 
 /** Accessible, sortable and paginated enquiry table with a mobile card-stack equivalent. */
-export default function AdminEnquiriesTable({ enquiries, onSelectEnquiry }: AdminEnquiriesTableProps) {
+export default function AdminEnquiriesTable({
+  enquiries,
+  onSelectEnquiry,
+  selectedIds = [],
+  onToggleSelectOne,
+  onToggleSelectAll,
+  onQuickWhatsApp,
+}: AdminEnquiriesTableProps) {
   const t = useTranslations('ADMIN_ENQUIRIES');
   const locale = useLocale();
   const statusLabel = (status: EnquiryStatus) => {
@@ -72,6 +78,17 @@ export default function AdminEnquiriesTable({ enquiries, onSelectEnquiry }: Admi
     ? t('SHOWING_ZERO')
     : t('SHOWING_RANGE', { start: safePage * pageSize + 1, end: Math.min((safePage + 1) * pageSize, sorted.length), total: sorted.length });
 
+  const handleWhatsAppClick = (enquiry: Enquiry) => {
+    if (onQuickWhatsApp) {
+      onQuickWhatsApp(enquiry);
+    } else {
+      const digits = enquiry.phone.replace(/\D/g, '');
+      const phone = digits.length === 10 ? `91${digits}` : digits;
+      const text = encodeURIComponent(`Hello ${enquiry.name}, greetings from Smart Library! We are reaching out regarding your enquiry.`);
+      window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <div className="space-y-4">
       {sorted.length === 0 ? (
@@ -85,6 +102,17 @@ export default function AdminEnquiriesTable({ enquiries, onSelectEnquiry }: Admi
             <table className="w-full border-collapse text-left text-body">
               <thead>
                 <tr className="bg-surface-highlight uppercase text-xs text-text-secondary font-semibold h-12">
+                  <th scope="col" className="w-10 px-3">
+                    {onToggleSelectAll && (
+                      <input
+                        type="checkbox"
+                        aria-label="Select all enquiries on this page"
+                        checked={pageRows.length > 0 && pageRows.every((r) => selectedIds.includes(r.id))}
+                        onChange={onToggleSelectAll}
+                        className="rounded border-border"
+                      />
+                    )}
+                  </th>
                   <th scope="col" className="px-3">#</th>
                   {sortHeader(t('NAME'), 'name')}
                   {sortHeader(t('PHONE'), 'phone')}
@@ -97,28 +125,57 @@ export default function AdminEnquiriesTable({ enquiries, onSelectEnquiry }: Admi
                 </tr>
               </thead>
               <tbody>
-                {pageRows.map((enquiry, index) => (
-                  <tr key={enquiry.id} className="border-b border-border hover:bg-surface-hover even:bg-surface-zebra h-12" data-testid={`admin_enquiries-AdminEnquiriesTable-row-${enquiry.id}`}>
-                    <td className="w-12 text-caption text-text-secondary">{safePage * pageSize + index + 1}</td>
-                    <td>
-                      <button type="button" className="min-w-48 min-h-11 rounded text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectEnquiry(enquiry)} aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })}>
-                        <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-subtle font-semibold text-primary h-8 w-8 text-caption" aria-hidden="true">{enquiry.avatar}</span>
-                        <span className="font-semibold text-text-primary">{enquiry.name}</span>
-                      </button>
-                    </td>
-                    <td className="select-none text-text-secondary">{maskPhone(enquiry.phone)}</td>
-                    <td><span className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-info-bg text-info-text">{enquiry.shift || '—'}</span></td>
-                    <td>{renderStatusBadge(enquiry.status)}</td>
-                    <td className="text-text-secondary">{enquiry.handledBy || t('UNASSIGNED')}</td>
-                    <td className="text-text-secondary">{formatAdminEnquiriesDate(enquiry.addedDate, locale)}</td>
-                    <td>{enquiry.isOverdue ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-001" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-danger-bg text-danger-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_OVERDUE')}</span> : enquiry.isToday ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-002" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-warning-bg text-warning-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_TODAY')}</span> : enquiry.isUpcoming ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-003" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-success-bg text-success-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_UPCOMING')}</span> : null}</td>
-                    <td>
-                      <button type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })} onClick={() => onSelectEnquiry(enquiry)}>
-                        <Eye aria-hidden="true" size={18} strokeWidth={2} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {pageRows.map((enquiry, index) => {
+                  const isSelected = selectedIds.includes(enquiry.id);
+                  return (
+                    <tr
+                      key={enquiry.id}
+                      className={`border-b border-border hover:bg-surface-hover even:bg-surface-zebra h-12 ${isSelected ? 'bg-primary-subtle' : ''}`}
+                      data-testid={`admin_enquiries-AdminEnquiriesTable-row-${enquiry.id}`}
+                    >
+                      <td className="w-10 px-3">
+                        {onToggleSelectOne && (
+                          <input
+                            type="checkbox"
+                            aria-label={`Select ${enquiry.name}`}
+                            checked={isSelected}
+                            onChange={() => onToggleSelectOne(enquiry.id)}
+                            className="rounded border-border"
+                          />
+                        )}
+                      </td>
+                      <td className="w-12 text-caption text-text-secondary">{safePage * pageSize + index + 1}</td>
+                      <td>
+                        <button type="button" className="min-w-48 min-h-11 rounded text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectEnquiry(enquiry)} aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })}>
+                          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-subtle font-semibold text-primary h-8 w-8 text-caption" aria-hidden="true">{enquiry.avatar}</span>
+                          <span className="font-semibold text-text-primary ml-2">{enquiry.name}</span>
+                        </button>
+                      </td>
+                      <td className="select-none text-text-secondary">{maskPhone(enquiry.phone)}</td>
+                      <td><span className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-info-bg text-info-text">{enquiry.shift || '—'}</span></td>
+                      <td>{renderStatusBadge(enquiry.status)}</td>
+                      <td className="text-text-secondary">{enquiry.handledBy || t('UNASSIGNED')}</td>
+                      <td className="text-text-secondary">{formatAdminEnquiriesDate(enquiry.addedDate, locale)}</td>
+                      <td>{enquiry.isOverdue ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-001" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-danger-bg text-danger-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_OVERDUE')}</span> : enquiry.isToday ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-002" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-warning-bg text-warning-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_TODAY')}</span> : enquiry.isUpcoming ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-003" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-success-bg text-success-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_UPCOMING')}</span> : null}</td>
+                      <td className="whitespace-nowrap">
+                        <div className="flex items-center gap-1.5">
+                          <button type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })} onClick={() => onSelectEnquiry(enquiry)}>
+                            <Eye aria-hidden="true" size={18} strokeWidth={2} />
+                          </button>
+                          <button
+                            type="button"
+                            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                            title="Chat on WhatsApp"
+                            aria-label={`Chat with ${enquiry.name} on WhatsApp`}
+                            onClick={() => handleWhatsAppClick(enquiry)}
+                          >
+                            <MessageSquare aria-hidden="true" size={18} strokeWidth={2} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -127,9 +184,20 @@ export default function AdminEnquiriesTable({ enquiries, onSelectEnquiry }: Admi
             {pageRows.map((enquiry) => (
               <article key={enquiry.id} className="rounded-lg border border-border bg-card p-4">
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h2 className="font-semibold text-text-primary">{enquiry.name}</h2>
-                    <p className="mt-1 text-sm text-text-secondary">{maskPhone(enquiry.phone)}</p>
+                  <div className="flex items-center gap-2">
+                    {onToggleSelectOne && (
+                      <input
+                        type="checkbox"
+                        aria-label={`Select ${enquiry.name}`}
+                        checked={selectedIds.includes(enquiry.id)}
+                        onChange={() => onToggleSelectOne(enquiry.id)}
+                        className="rounded border-border mt-1"
+                      />
+                    )}
+                    <div>
+                      <h2 className="font-semibold text-text-primary">{enquiry.name}</h2>
+                      <p className="mt-1 text-sm text-text-secondary">{maskPhone(enquiry.phone)}</p>
+                    </div>
                   </div>
                   {renderStatusBadge(enquiry.status)}
                 </div>
@@ -139,9 +207,18 @@ export default function AdminEnquiriesTable({ enquiries, onSelectEnquiry }: Admi
                   <div><dt className="text-text-secondary">{t('DATE_ADDED')}</dt><dd className="text-text-primary">{formatAdminEnquiriesDate(enquiry.addedDate, locale)}</dd></div>
                   <div><dt className="text-text-secondary">{t('FOLLOW_UP')}</dt><dd>{enquiry.isOverdue ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-001" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-danger-bg text-danger-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_OVERDUE')}</span> : enquiry.isToday ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-002" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-warning-bg text-warning-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_TODAY')}</span> : enquiry.isUpcoming ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-003" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-success-bg text-success-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_UPCOMING')}</span> : null}</dd></div>
                 </dl>
-                <button type="button" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-body font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 mt-4 w-full" onClick={() => onSelectEnquiry(enquiry)}>
-                  <Eye aria-hidden="true" size={18} strokeWidth={2} /> {t('VIEW_DETAILS')}
-                </button>
+                <div className="mt-4 flex gap-2">
+                  <button type="button" className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-body font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectEnquiry(enquiry)}>
+                    <Eye aria-hidden="true" size={18} strokeWidth={2} /> {t('VIEW_DETAILS')}
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-body font-medium text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    onClick={() => handleWhatsAppClick(enquiry)}
+                  >
+                    <MessageSquare aria-hidden="true" size={18} strokeWidth={2} /> WhatsApp
+                  </button>
+                </div>
               </article>
             ))}
           </div>
@@ -163,6 +240,5 @@ export default function AdminEnquiriesTable({ enquiries, onSelectEnquiry }: Admi
     </div>
   );
 }
-
 
 export type { AdminEnquiriesTableProps };

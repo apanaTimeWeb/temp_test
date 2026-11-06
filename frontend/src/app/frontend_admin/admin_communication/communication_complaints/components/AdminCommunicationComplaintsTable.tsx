@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Eye, RefreshCw, CheckCircle, SearchX, Building2, AlertTriangle, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Eye, RefreshCw, CheckCircle, SearchX, Building2, AlertTriangle, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
 import { ADMIN_COMMUNICATION_COMPLAINT_STATUS } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
 import AdminCommunicationEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
@@ -200,6 +200,18 @@ export function AdminCommunicationComplaintsTable({
                 <td className="py-3 px-4 text-text-secondary">{formatComplaintDate(c.resolvedDate)}</td>
                 <td className="py-3 px-4 text-right">
                   <div className="flex items-center justify-end gap-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const msg = encodeURIComponent(`Hello ${c.student}, regarding your ticket "${c.title}" at Smart Library: We are contacting you to assist with your complaint.`);
+                        window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                      }}
+                      className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors motion-safe:duration-base"
+                      title="WhatsApp student"
+                      aria-label={`WhatsApp ${c.student} regarding ${c.title}`}
+                    >
+                      <MessageSquare size={18} strokeWidth={2}/>
+                    </button>
                     <button
                       data-testid={`admin_communication-complaint-view-${c.id}`}
                       onClick={() => onView(c)}

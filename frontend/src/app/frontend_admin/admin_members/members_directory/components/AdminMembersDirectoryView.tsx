@@ -13,6 +13,8 @@ import { ADMIN_MEMBERS_DOCUMENT_FIXTURES, ADMIN_MEMBERS_EXPORT_PLAN_OPTIONS, ADM
 import { downloadAdminMembersDemoCsv, formatAdminMembersDate } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
 import AdminMembersDirectoryMemberForm from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberForm';
 import AdminMembersMemberTable from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberTable';
+import AdminMembersDirectoryBulkWhatsAppModal from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryBulkWhatsAppModal';
+import AdminMembersDirectoryDataToolsView from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDataToolsView';
 import AdminMembersDirectorySecondaryViews from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectorySecondaryViews';
 import type { AdminMembersDirectoryDataToolsViewProps, AdminMembersDirectoryViewProps, AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps, AdminMembersExportStatusFilter } from '@/app/frontend_admin/admin_members/members_directory/types/AdminMembersDirectoryComponentTypes';
 
@@ -107,6 +109,8 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
   const locale = useLocale();
   const { activeTab, setActiveTab, viewingMember, dummyMembers, isDemoMode, handleAction, openMemberDetails } = model;
   const { branches, selectedBranchId, selectedBranch, setSelectedBranchId, isAllBranches } = useAdminBranch();
+  const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([]);
+  const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
 
   const branchFilteredMembers = useMemo(() => {
     if (isAllBranches || !selectedBranch) return dummyMembers;
@@ -114,6 +118,15 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
       m.branch ? m.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) : true
     );
   }, [isAllBranches, selectedBranch, dummyMembers]);
+
+  const toggleSelectOne = (id: string) => {
+    setSelectedMemberIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  };
+  const toggleSelectAll = () => {
+    const allIds = branchFilteredMembers.map((m) => m.id);
+    setSelectedMemberIds((prev) => (prev.length === allIds.length ? [] : allIds));
+  };
+  const clearSelection = () => setSelectedMemberIds([]);
 
   const memberListConfig = {
     all: { titleKey: 'NAV_ALL_MEMBERS', filterStatus: undefined },
@@ -171,11 +184,48 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
                     );
                   })}
                 </div>
+
+                <div className="flex items-center gap-2">
+                  {selectedMemberIds.length > 0 && (
+                    <button type="button" onClick={clearSelection} className="text-xs text-text-secondary hover:text-text-primary underline px-1">
+                      Clear ({selectedMemberIds.length})
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setIsBulkWhatsAppOpen(true)}
+                    disabled={branchFilteredMembers.length === 0}
+                    className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-success-bg bg-success-bg px-2.5 py-1 text-xs font-semibold text-success-text hover:bg-success hover:text-on-success transition-all disabled:opacity-50"
+                  >
+                    <MessageSquare size={13} /> Bulk WhatsApp
+                    {selectedMemberIds.length > 0 && (
+                      <span className="rounded-full bg-success text-on-success px-1.5 py-0.2 text-[10px] font-bold">
+                        {selectedMemberIds.length}
+                      </span>
+                    )}
+                  </button>
+                </div>
               </div>
 
-              <AdminMembersMemberTable members={branchFilteredMembers} filterStatus={memberListConfig.filterStatus} onSelectMember={openMemberDetails} onAction={handleAction} canMutate={isDemoMode}/>
+              <AdminMembersMemberTable
+                members={branchFilteredMembers}
+                filterStatus={memberListConfig.filterStatus}
+                onSelectMember={openMemberDetails}
+                onAction={handleAction}
+                canMutate={isDemoMode}
+                selectedIds={selectedMemberIds}
+                onToggleSelectOne={toggleSelectOne}
+                onToggleSelectAll={toggleSelectAll}
+              />
             </section>
           )}
+
+          {/* Bulk WhatsApp Modal */}
+          <AdminMembersDirectoryBulkWhatsAppModal
+            isOpen={isBulkWhatsAppOpen}
+            onClose={() => setIsBulkWhatsAppOpen(false)}
+            members={selectedMemberIds.length > 0 ? branchFilteredMembers.filter((m) => selectedMemberIds.includes(m.id)) : branchFilteredMembers}
+          />
 
           {/* ADD MEMBER FORM */}
           <AdminMembersDirectoryMemberForm model={model} />
@@ -239,24 +289,5 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
       </div>;
 }
 
-export function AdminMembersDirectoryDataToolsView({ mode, members }: AdminMembersDirectoryDataToolsViewProps) {
-  const t = useTranslations('ADMIN_MEMBERS');
-  const locale = useLocale();
-  const [search, setSearch] = useAdminApplicationInfrastructureUrlQueryState<string>('search', '');
-  const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<AdminMembersExportStatusFilter>('statusFilter', 'all', { validValues: ['all', 'Active', 'Expired', 'Suspended', 'Blocked'] });
-  const [planFilter, setPlanFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | 'Premium' | 'Standard'>('planFilter', 'all', { validValues: ['all', 'Premium', 'Standard'] });
-  const documents = useMemo(() => ADMIN_MEMBERS_DOCUMENT_FIXTURES.filter((document) => `${document.memberId} ${document.memberLabel}`.toLowerCase().includes(search.trim().toLowerCase())), [search]);
-  const filteredMembers = useMemo(() => members.filter((member) => (statusFilter === 'all' || member.status === statusFilter) && (planFilter === 'all' || member.plan.toLowerCase().includes(planFilter.toLowerCase()))), [members, planFilter, statusFilter]);
-  const exportCsv = () => {
-    if (!filteredMembers.length) { toast.info(t('EXPORT_NO_MATCH'), { id: 'admin_members-members_directory-components-AdminMembersDirectoryExportPanel-toast-31-1' }); return; }
-    downloadAdminMembersDemoCsv(filteredMembers);
-    toast.success(t('EXPORT_SUCCESS', { count: filteredMembers.length }), { id: 'admin_members-members_directory-components-AdminMembersDirectoryExportPanel-toast-35-2' });
-  };
-  if (mode === 'documents') {
-    const formatDate = (date: string) => formatAdminMembersDate(date, locale, t('UNKNOWN_DATE'));
-    return <section className="admin-card space-y-4 p-5" aria-labelledby="admin-members-documents-title"><h2 id="admin-members-documents-title" className="text-section-title font-semibold text-text-primary">{t('DOCUMENTS_TITLE')}</h2><div className="space-y-1"><label htmlFor="admin-members-document-search" className="admin-label">{t('DOCUMENTS_SEARCH_LABEL')}</label><input id="admin-members-document-search" type="search" className="admin-input" placeholder={t('DOCUMENTS_SEARCH_PLACEHOLDER')} value={search} onChange={(event) => setSearch(event.target.value)} aria-controls="admin-members-document-results"/></div><div id="admin-members-document-results" className="divide-y divide-border">{documents.length === 0 ? <p role="status" className="p-4 text-text-secondary">{t('DOCUMENTS_NO_MATCHES')}</p> : documents.map((document) => <div key={document.memberId} className="flex flex-wrap items-center gap-3 py-3"><FileText size={18} className="text-purple-text" aria-hidden="true"/><div className="min-w-0 flex-1"><p className="font-medium text-text-primary">{document.type}</p><p className="text-sm text-text-secondary">{document.memberLabel} · {formatDate(document.date)}</p></div><button type="button" className="admin-btn-ghost min-h-11" disabled title={t('DOCUMENTS_DOWNLOAD_CONTRACT_MISSING')}>{t('DOCUMENTS_DOWNLOAD_UNAVAILABLE')}</button></div>)}</div><p className="text-sm text-warning-text" role="status">{t('DOCUMENTS_SAMPLE_NOTICE')}</p></section>;
-  }
-  return <section className="admin-card space-y-5 p-5" aria-labelledby="admin-members-export-title"><div className="flex items-center gap-3"><DownloadCloud size={20} className="text-success-text" aria-hidden="true"/><div><h2 id="admin-members-export-title" className="text-section-title font-semibold text-text-primary">{t('EXPORT_TITLE')}</h2><p className="text-sm text-text-secondary">{t('EXPORT_DESCRIPTION')}</p></div></div><div className="grid gap-4 sm:grid-cols-2"><div className="space-y-1"><label className="admin-label" htmlFor="admin-members-export-status">{t('EXPORT_FILTER_STATUS')}</label><select id="admin-members-export-status" className="admin-input" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as typeof statusFilter)}>{ADMIN_MEMBERS_EXPORT_STATUS_OPTIONS.map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}</select></div><div className="space-y-1"><label className="admin-label" htmlFor="admin-members-export-plan">{t('EXPORT_FILTER_PLAN')}</label><select id="admin-members-export-plan" className="admin-input" value={planFilter} onChange={(event) => setPlanFilter(event.target.value as typeof planFilter)}>{ADMIN_MEMBERS_EXPORT_PLAN_OPTIONS.map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}</select></div></div><p className="text-sm text-text-secondary" role="status" aria-live="polite">{t('EXPORT_MATCH_COUNT', { count: filteredMembers.length })}</p><div className="flex flex-wrap gap-3 border-t border-border pt-4"><button type="button" className="admin-btn-primary min-h-11" onClick={exportCsv}><FileText size={18} aria-hidden="true"/> {t('EXPORT_CSV')}</button><button type="button" className="admin-btn-ghost min-h-11" disabled title={t('EXPORT_XLSX_CONTRACT_MISSING')}><FileText size={18} aria-hidden="true"/> {t('EXPORT_XLSX_UNAVAILABLE')}</button></div></section>;
-}
-
+export { AdminMembersDirectoryDataToolsView };
 export type { AdminMembersDirectoryViewProps, AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps, AdminMembersDirectoryDataToolsViewProps };

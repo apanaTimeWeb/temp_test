@@ -13,6 +13,10 @@ export type AdminEnquiriesEnquirySortDirection = 'ascending' | 'descending';
 export interface AdminEnquiriesTableProps {
   enquiries: readonly Enquiry[];
   onSelectEnquiry: (enquiry: Enquiry) => void;
+  selectedIds?: string[];
+  onToggleSelectOne?: (id: string) => void;
+  onToggleSelectAll?: () => void;
+  onQuickWhatsApp?: (enquiry: Enquiry) => void;
 }
 
 export type AdminMembersEnquiriesSearchParams = Promise<Record<string, string | string[] | undefined>>;
