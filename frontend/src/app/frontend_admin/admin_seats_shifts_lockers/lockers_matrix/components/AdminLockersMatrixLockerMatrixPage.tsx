@@ -195,7 +195,7 @@ export function AdminLockersLockerMatrixPage() {
           >
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                <div className="rounded-lg bg-primary-subtle p-2 text-primary">
                   <KeyRound size={20} />
                 </div>
                 <div>
@@ -245,14 +245,14 @@ export function AdminLockersLockerMatrixPage() {
                   </div>
                 </>
               ) : selectedLocker.status === 'free' ? (
-                <div className="rounded-lg border border-success/20 bg-success-bg p-3.5 text-xs text-success-text">
+                <div className="rounded-lg border border-border bg-success-bg p-3.5 text-xs text-success-text">
                   <p className="font-semibold">Locker #{selectedLocker.id} is Vacant & Available</p>
                   <p className="mt-1 opacity-90">
                     Physical key is stored in the branch key rack. Allocation is performed directly at the counter by the Branch Manager upon student enrollment.
                   </p>
                 </div>
               ) : selectedLocker.status === 'maintenance' ? (
-                <div className="rounded-lg border border-warning/20 bg-warning-bg p-3.5 text-xs text-warning-text">
+                <div className="rounded-lg border border-border bg-warning-bg p-3.5 text-xs text-warning-text">
                   <p className="font-semibold">Locker #{selectedLocker.id} Under Maintenance</p>
                   <p className="mt-1 opacity-90">
                     Key lock mechanism or door hinge inspection required. Work order logged with Branch Maintenance.

@@ -5,61 +5,27 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 import {
   LogOut,
   Menu,
   X,
   BookOpen,
   Search,
-  ChevronDown,
-  type LucideIcon,
 } from 'lucide-react';
-import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
-import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
-import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
-import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
-import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import {
   ADMIN_SIDEBAR_NAV,
   ADMIN_NAVIGATION_GROUPS,
-  type AdminNavigationGroup,
 } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import type { AdminNavigationSidebarProps } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/types/AdminNavigationSidebarComponentTypes';
-
-const ALL_HREFS = ADMIN_SIDEBAR_NAV.filter((n): n is { href: string; icon: LucideIcon; label: string } => 'href' in n).map(n => n.href);
-
-function normalizePath(p: string | null | undefined): string {
-  if (!p) return '';
-  return p.replace(/^\/frontend_admin(\/|$)/, '/admin$1').split('?')[0].split('#')[0].replace(/\/$/, '');
-}
-
-function isSubmoduleActive(currentPath: string, subHref: string): boolean {
-  const normCurrent = normalizePath(currentPath);
-  const normSub = normalizePath(subHref);
-  if (!normSub) return false;
-  return normCurrent === normSub || normCurrent.startsWith(normSub + '/');
-}
-
-function isGroupActive(currentPath: string, group: AdminNavigationGroup): boolean {
-  const normCurrent = normalizePath(currentPath);
-  const normPrimary = normalizePath(group.primaryHref);
-  if (normCurrent === normPrimary || normCurrent.startsWith(normPrimary + '/')) return true;
-  return group.submodules.some((sub) => isSubmoduleActive(currentPath, sub.href));
-}
-
-function isSidebarLinkActive(currentPath: string, href: string): boolean {
-  const normCurrent = normalizePath(currentPath);
-  const normHref = normalizePath(href);
-  if (normCurrent === normHref) return true;
-  if (!normHref || normHref === '/' || !normCurrent.startsWith(normHref + '/')) return false;
-  return !ALL_HREFS.some(other => {
-    const normOther = normalizePath(other);
-    return normOther !== normHref && normOther.startsWith(normHref) && normCurrent.startsWith(normOther);
-  });
-}
+import { AdminNavigationSidebarLogoutModal } from './AdminNavigationSidebarLogoutModal';
+import { AdminNavigationSidebarSearch } from './AdminNavigationSidebarSearch';
+import { AdminNavigationSidebarNavGroup } from './AdminNavigationSidebarNavGroup';
+import {
+  isGroupActive,
+  isSidebarLinkActive,
+  isSubmoduleActive,
+} from '../utils/AdminNavigationSidebarPathUtils';
 
 /**
  * @description Renders role-owned navigation, interactive search, expandable submodule accordions, responsive drawer behavior, and the admin logout confirmation.
@@ -78,25 +44,6 @@ export function AdminNavigationSidebar({
   const [internalMobileOpen, setInternalMobileOpen] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
 
-  const handleSignOut = useCallback(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        localStorage.removeItem('admin_user');
-        sessionStorage.clear();
-        document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
-        document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
-        document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
-      }
-    } catch {
-      // Storage access resilience
-    }
-    toast.success('Signed out successfully');
-    setShowLogout(false);
-    window.location.href = '/public_auth/auth_sign_in';
-  }, []);
   // Default only the active domain accordion group to expanded
   const [expandedGroups, setExpandedGroups] = useState<string[]>(() => {
     if (!pathname) return [];
@@ -254,59 +201,16 @@ export function AdminNavigationSidebar({
           )}
         </div>
 
-        {expanded ? (
-          <div className="admin-sidebar-search">
-            <div className="admin-sidebar-search-wrap">
-              <Search size={14} className="admin-sidebar-search-icon" aria-hidden="true" />
-              <input
-                ref={searchInputRef}
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') {
-                    e.preventDefault();
-                    setSearchQuery('');
-                  }
-                }}
-                placeholder={t('SEARCH_NAVIGATION') ?? 'Search modules...'}
-                aria-label={t('SEARCH_NAVIGATION') ?? 'Search modules'}
-                data-testid="admin-sidebar-search-input"
-                className="admin-sidebar-search-input"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchQuery('');
-                    searchInputRef.current?.focus();
-                  }}
-                  className="admin-sidebar-search-clear"
-                  data-testid="admin-sidebar-search-clear"
-                  aria-label={t('CLEAR_SEARCH') ?? 'Clear search'}
-                >
-                  <X size={13} strokeWidth={2.5} />
-                </button>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="admin-sidebar-search-collapsed">
-            <button
-              type="button"
-              onClick={() => {
-                toggle();
-                setTimeout(() => searchInputRef.current?.focus(), 150);
-              }}
-              className="admin-sidebar-search-collapsed-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              title={t('SEARCH_NAVIGATION') ?? 'Search modules'}
-              aria-label={t('SEARCH_NAVIGATION') ?? 'Search modules'}
-              data-testid="admin-sidebar-search-collapsed-toggle"
-            >
-              <Search size={16} strokeWidth={2} />
-            </button>
-          </div>
-        )}
+        <AdminNavigationSidebarSearch
+          expanded={expanded}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          onCollapsedToggle={() => {
+            toggle();
+            setTimeout(() => searchInputRef.current?.focus(), 150);
+          }}
+          searchInputRef={searchInputRef}
+        />
 
         <nav className="admin-sidebar-nav" aria-label={t('ADMIN_NAVIGATION')} data-testid="admin-navigation">
           {!expanded ? (
@@ -355,81 +259,18 @@ export function AdminNavigationSidebar({
               </button>
             </div>
           ) : (
-            filteredGroups.map((group) => {
-              const isGroupOpen = isSearching ? true : expandedGroups.includes(group.id);
-              const activeGroup = isGroupActive(pathname, group);
-              const GroupIcon = group.icon;
-              const groupLabel = t(group.labelKey) ?? group.label;
-
-              return (
-                <div key={group.id} className="admin-sidebar-group-block">
-                  <button
-                    type="button"
-                    aria-expanded={isGroupOpen}
-                    aria-controls={`admin-sidebar-sublinks-${group.id}`}
-                    onClick={() => toggleGroup(group.id)}
-                    data-testid={
-                      group.id === 'dashboard'
-                        ? 'admin_sidebar-AdminShellSidebar-link-admin-admin-dashboard'
-                        : `admin_sidebar-AdminNavigationSidebar-group-${group.id}`
-                    }
-                    className={`admin-sidebar-group-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-                      activeGroup ? 'is-active' : ''
-                    }`}
-                  >
-                    <div className="admin-sidebar-group-btn-content">
-                      <GroupIcon
-                        size={17}
-                        strokeWidth={2}
-                        className="admin-sidebar-group-icon"
-                        aria-hidden="true"
-                      />
-                      <span className="admin-sidebar-group-label">{groupLabel}</span>
-                    </div>
-                    <ChevronDown
-                      size={14}
-                      strokeWidth={2}
-                      className={`admin-sidebar-group-chevron ${isGroupOpen ? 'is-expanded' : ''}`}
-                      aria-hidden="true"
-                    />
-                  </button>
-
-                  <div
-                    id={`admin-sidebar-sublinks-${group.id}`}
-                    hidden={!isGroupOpen}
-                    className="admin-sidebar-sublinks"
-                  >
-                    {group.submodules.map((sub) => {
-                      const subActive = isSubmoduleActive(pathname, sub.href);
-                      const SubIcon = sub.icon;
-                      const subLabel = t(sub.labelKey) ?? sub.label;
-                      return (
-                        <Link
-                          key={sub.href}
-                          href={sub.href}
-                          onClick={handleLinkClick}
-                          aria-current={subActive ? 'page' : undefined}
-                          data-testid={`admin_sidebar-AdminNavigationSidebar-link-${sub.href
-                            .replace(/[^a-zA-Z0-9]+/g, '-')
-                            .replace(/^-|-$/g, '')}`}
-                          className={`admin-sidebar-sublink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-                            subActive ? 'admin-sidebar-sublink-active' : ''
-                          }`}
-                        >
-                          <SubIcon
-                            size={14}
-                            strokeWidth={2}
-                            className="admin-sidebar-sublink-icon"
-                            aria-hidden="true"
-                          />
-                          <span className="admin-sidebar-sublink-label">{subLabel}</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })
+            filteredGroups.map((group) => (
+              <AdminNavigationSidebarNavGroup
+                key={group.id}
+                group={group}
+                isGroupOpen={isSearching ? true : expandedGroups.includes(group.id)}
+                activeGroup={isGroupActive(pathname, group)}
+                pathname={pathname}
+                onToggleGroup={toggleGroup}
+                onLinkClick={handleLinkClick}
+                isSubmoduleActive={isSubmoduleActive}
+              />
+            ))
           )}
         </nav>
 
@@ -456,32 +297,10 @@ export function AdminNavigationSidebar({
         </div>
       </aside>
 
-      <Dialog open={showLogout} onOpenChange={setShowLogout}>
-        <DialogContent className="max-w-sm bg-overlay border-border">
-          <DialogHeader>
-            <DialogTitle>{t('LOG_OUT_TITLE')}</DialogTitle>
-            <DialogDescription>{t('LOG_OUT_DESCRIPTION')}</DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="mt-4 flex justify-end gap-2">
-            <button
-              data-testid="admin_sidebar-AdminNavigationSidebar-control-004"
-              type="button"
-              onClick={() => setShowLogout(false)}
-              className="border border-border rounded-md px-4 py-2 text-text-secondary hover:bg-surface-hover transition-colors"
-            >
-              {t('CANCEL')}
-            </button>
-            <button
-              data-testid="admin_sidebar-AdminNavigationSidebar-control-005"
-              type="button"
-              onClick={handleSignOut}
-              className="bg-danger text-on-danger rounded-md px-4 py-2 font-medium hover:opacity-90 transition-opacity cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
-            >
-              {t('LOG_OUT')}
-            </button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <AdminNavigationSidebarLogoutModal
+        open={showLogout}
+        onOpenChange={setShowLogout}
+      />
     </>
   );
 }

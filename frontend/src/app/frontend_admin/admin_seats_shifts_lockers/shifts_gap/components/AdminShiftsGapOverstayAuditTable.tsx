@@ -8,11 +8,6 @@ import {
   AlertTriangle,
   Clock,
   CheckCircle2,
-  Filter,
-  DollarSign,
-  TrendingDown,
-  Building2,
-  Search,
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
@@ -20,6 +15,8 @@ import {
 import type { AdminShiftOverstayIncident } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapTypes';
 import { ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/mocks/AdminShiftsGapShiftGapFixtures';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
+import { AdminShiftsGapAuditSummary } from './AdminShiftsGapAuditSummary';
+import { AdminShiftsGapAuditToolbar } from './AdminShiftsGapAuditToolbar';
 
 export function AdminShiftsGapOverstayAuditTable() {
   const t = useTranslations('ADMIN_SHIFTS');
@@ -157,81 +154,30 @@ export function AdminShiftsGapOverstayAuditTable() {
       </div>
 
       {/* ── KPI Row ── */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border border-border bg-surface-highlight p-3">
-          <span className="text-xs text-text-secondary">{t('kpiTotalOverstays')}</span>
-          <p className="mt-1 text-2xl font-bold text-text-primary">{incidents.length}</p>
-          <span className="text-xs text-text-secondary">Across 3 active branches</span>
-        </div>
-        <div className="rounded-lg border border-border bg-surface-highlight p-3">
-          <span className="text-xs text-text-secondary">{t('kpiRevenueRecovered')}</span>
-          <p className="mt-1 text-2xl font-bold text-success-text">₹{totalFinesRecovered}</p>
-          <span className="text-xs text-text-secondary">Recovered penalty dues</span>
-        </div>
-        <div className="rounded-lg border border-border bg-surface-highlight p-3">
-          <span className="text-xs text-text-secondary">{t('kpiAvgOverstayMins')}</span>
-          <p className="mt-1 text-2xl font-bold text-text-primary">32m</p>
-          <span className="text-xs text-text-secondary">Per detected incident</span>
-        </div>
-        <div className="rounded-lg border border-border bg-surface-highlight p-3">
-          <span className="text-xs text-text-secondary">{t('kpiGhostRate')}</span>
-          <p className="mt-1 text-2xl font-bold text-warning-text">4.8%</p>
-          <span className="text-xs text-text-secondary">Shift transition leak</span>
-        </div>
-      </div>
+      <AdminShiftsGapAuditSummary
+        totalIncidents={incidents.length}
+        totalFinesRecovered={totalFinesRecovered}
+      />
 
       {/* ── Filter Bar ── */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[220px] max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search student, smart ID, seat, branch..."
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setPage(0);
-            }}
-            className="min-h-10 w-full rounded-md border border-border bg-input pl-9 pr-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Building2 className="h-4 w-4 text-text-secondary" />
-          <select
-            aria-label={t('tableBranchSeat')}
-            value={branchFilter}
-            onChange={(e) => {
-              setBranchFilter(e.target.value);
-              setPage(0);
-            }}
-            className="min-h-10 rounded-md border border-border bg-input px-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <option value="ALL">{t('filterAllBranches')}</option>
-            {branches.map((b) => (
-              <option key={b} value={b}>{b}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-text-secondary" />
-          <select
-            aria-label={t('tableStatus')}
-            value={statusFilter}
-            onChange={(e) => {
-              setStatusFilter(e.target.value);
-              setPage(0);
-            }}
-            className="min-h-10 rounded-md border border-border bg-input px-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            <option value="ALL">All Audit Statuses</option>
-            <option value="RECOVERED">{t('statusRecovered')}</option>
-            <option value="PENDING_CLEARANCE">{t('statusPendingClearance')}</option>
-            <option value="WAIVED">{t('statusWaived')}</option>
-          </select>
-        </div>
-      </div>
+      <AdminShiftsGapAuditToolbar
+        searchQuery={searchQuery}
+        onSearchChange={(q) => {
+          setSearchQuery(q);
+          setPage(0);
+        }}
+        branchFilter={branchFilter}
+        onBranchFilterChange={(b) => {
+          setBranchFilter(b);
+          setPage(0);
+        }}
+        branches={branches}
+        statusFilter={statusFilter}
+        onStatusFilterChange={(s) => {
+          setStatusFilter(s);
+          setPage(0);
+        }}
+      />
 
       {/* ── Incidents Table ── */}
       <div className="overflow-x-auto rounded-lg border border-border">
@@ -270,7 +216,7 @@ export function AdminShiftsGapOverstayAuditTable() {
                     <span className="block text-text-secondary">Scheduled End: {inc.scheduledEndTime}</span>
                   </td>
                   <td className="p-3">
-                    <span className="inline-flex items-center gap-1 rounded bg-danger-subtle px-2 py-0.5 font-bold text-danger-text">
+                    <span className="inline-flex items-center gap-1 rounded bg-danger-bg px-2 py-0.5 font-bold text-danger-text">
                       <Clock className="h-3 w-3" />
                       +{inc.overstayMinutes}m ({inc.actualDepartureTime})
                     </span>
@@ -344,4 +290,3 @@ export function AdminShiftsGapOverstayAuditTable() {
 }
 
 export default AdminShiftsGapOverstayAuditTable;
-

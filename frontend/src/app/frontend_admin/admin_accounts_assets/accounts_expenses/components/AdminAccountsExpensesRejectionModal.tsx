@@ -88,7 +88,7 @@ export function AdminAccountsExpensesRejectionModal({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 rounded-md bg-destructive px-4 py-2 text-sm font-medium text-white hover:bg-destructive/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive motion-safe:transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-md bg-destructive px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive motion-safe:transition-colors"
             >
               <X className="h-4 w-4" />
               <span>{t('REJECT')}</span>

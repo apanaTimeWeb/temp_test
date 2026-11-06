@@ -120,7 +120,7 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
           </div>
 
           {/* Net Take-Home Highlight */}
-          <div className="flex items-center justify-between rounded-xl bg-primary/10 p-4">
+          <div className="flex items-center justify-between rounded-xl bg-primary-subtle p-4">
             <div>
               <span className="text-xs font-semibold text-text-secondary block">{t('SLIP_NET_PAY')}</span>
               <span className="text-[11px] text-text-disabled">Net salary transferred to bank</span>

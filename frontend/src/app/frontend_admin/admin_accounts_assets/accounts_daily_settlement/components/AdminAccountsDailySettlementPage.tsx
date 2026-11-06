@@ -88,9 +88,9 @@ export function AdminAccountsDailySettlementPage() {
       {isDemo && (
         <div
           role="status"
-          className="flex items-center gap-2 rounded-xl border border-blue-500/20 bg-blue-500/10 p-3.5 text-xs font-medium text-blue-700 dark:text-blue-300 shadow-sm"
+          className="flex items-center gap-2 rounded-lg border border-border bg-primary-subtle p-3 text-xs text-primary font-medium"
         >
-          <ShieldCheck className="h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
+          <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
           <span>{t('LIVE_UNAVAILABLE')}</span>
         </div>
       )}
@@ -215,7 +215,7 @@ export function AdminAccountsDailySettlementPage() {
           >
             {t('TABS.FLAGGED')}
             {flaggedCount > 0 && (
-              <span className="ml-1.5 rounded-full bg-destructive/15 px-2 py-0.5 text-xs font-bold text-destructive">
+              <span className="ml-1.5 rounded-full bg-destructive-bg px-2 py-0.5 text-xs font-bold text-destructive">
                 {flaggedCount}
               </span>
             )}

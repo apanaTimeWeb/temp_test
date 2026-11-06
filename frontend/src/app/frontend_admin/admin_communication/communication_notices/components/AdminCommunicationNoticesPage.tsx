@@ -4,14 +4,10 @@ import useAdminCommunicationNoticesQuery from '@/app/frontend_admin/admin_commun
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
-import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
-import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
-import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import useAdminCommunicationNoticesUnsavedChangesGuard from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesUnsavedChangesGuard';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2, Search } from 'lucide-react';
+import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2 } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { getAdminCommunicationNoticeStatus } from '@/app/frontend_admin/admin_communication/communication_notices/utils/AdminCommunicationNoticesDateUtils';
@@ -20,8 +16,9 @@ import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatu
 import { ADMIN_COMMUNICATION_NOTICE_API_FIXTURE } from '@/app/frontend_admin/admin_communication/communication_notices/mocks/scenarios/admin_communication_notices.scenarios';
 import type { Notice, AdminCommunicationEmptyStateProps } from '@/app/frontend_admin/admin_communication/communication_notices/types/AdminCommunicationNoticesComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { ALL_BRANCHES_ID } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
 import AdminCommunicationNoticeModal from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticeModal';
+import { AdminCommunicationNoticesConfirmDialogs } from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticesConfirmDialogs';
+import { AdminCommunicationNoticesBranchBar } from '@/app/frontend_admin/admin_communication/communication_notices/components/AdminCommunicationNoticesBranchBar';
 
 // Responsibility: AdminCommunicationNoticesPage component owned by admin_communication; responsibility folder: admin_communication_components_views.
 
@@ -205,33 +202,16 @@ export function AdminCommunicationNoticesPage() {
         onSave={handleSave}
       />
 
-      {/* Delete Confirmation */}
-      {deleteItem && (
-        <Dialog open onOpenChange={(nextOpen) => { if (!nextOpen) setDeleteItem(null); }}>
-          <DialogContent className="relative w-full overflow-y-auto rounded-xl border border-border bg-overlay p-6 shadow-dialog max-w-[400px]">
-            <DialogTitle className="text-lg mb-2 font-bold text-text-primary">{t('NOTICE_DELETE_DIALOG_TITLE')}</DialogTitle>
-            <DialogDescription className="mb-5 text-sm text-text-secondary">{t('NOTICE_DELETE_BLOCKED_DESCRIPTION', { title: deleteItem.title })}</DialogDescription>
-            <div className="flex-wrap border-border pt-3 mt-6 flex justify-end gap-3">
-              <button type="button" data-testid="admin_communication-page-control-008" onClick={() => setDeleteItem(null)} className="min-h-11 px-4 py-2 border border-border text-primary rounded hover:bg-surface-hover motion-safe:transition-colors">{t('NOTICE_CANCEL')}</button>
-              <button type="button" data-testid="admin_communication-page-control-009" disabled={!isDemoMode} title={!isDemoMode ? t('NOTICE_DELETE_BLOCKED_TOAST') : undefined} onClick={handleDelete} className="min-h-11 px-4 py-2 bg-danger-bg text-danger-text rounded motion-safe:transition-colors">{t('NOTICE_WHY_UNAVAILABLE')}</button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {/* Broadcast Confirmation */}
-      {broadcastItem && (
-        <Dialog open onOpenChange={(nextOpen) => { if (!nextOpen) setBroadcastItem(null); }}>
-          <DialogContent className="relative w-full overflow-y-auto rounded-xl border border-border bg-overlay p-6 shadow-dialog max-w-[400px]">
-            <DialogTitle className="text-lg mb-2 font-bold text-text-primary">{t('NOTICE_BROADCAST_DIALOG_TITLE')}</DialogTitle>
-            <DialogDescription className="mb-5 text-sm text-text-secondary">{t('NOTICE_BROADCAST_BLOCKED_DESCRIPTION', { title: broadcastItem.title })}</DialogDescription>
-            <div className="flex-wrap border-border pt-3 mt-6 flex justify-end gap-3">
-              <button type="button" data-testid="admin_communication-page-control-010" onClick={() => setBroadcastItem(null)} className="min-h-11 px-4 py-2 border border-border text-primary rounded hover:bg-surface-hover motion-safe:transition-colors">{t('NOTICE_CLOSE')}</button>
-              <button type="button" data-testid="admin_communication-page-control-011" disabled title={t('NOTICE_BROADCAST_BLOCKED_DESCRIPTION', { title: broadcastItem.title })} onClick={handleBroadcast} className="min-h-11 px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary-hover motion-safe:transition-colors">{t('NOTICE_WHY_UNAVAILABLE')}</button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+      {/* Delete / Broadcast Dialogs */}
+      <AdminCommunicationNoticesConfirmDialogs
+        deleteItem={deleteItem}
+        broadcastItem={broadcastItem}
+        isDemoMode={isDemoMode}
+        onCloseDelete={() => setDeleteItem(null)}
+        onConfirmDelete={handleDelete}
+        onCloseBroadcast={() => setBroadcastItem(null)}
+        onConfirmBroadcast={handleBroadcast}
+      />
 
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -246,63 +226,17 @@ export function AdminCommunicationNoticesPage() {
         </button>
       </div>
 
-      {/* Multi-Branch Notice Filter Pills */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary">
-            <Building2 size={14} className="text-primary shrink-0" />
-            Branch Filter:
-          </span>
-          <button
-            type="button"
-            onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
-            className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-              isAllBranches
-                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-            }`}
-          >
-            All Notices ({notices.length})
-          </button>
-          {branches.map((b) => {
-            const isSelected = selectedBranchId === b.id;
-            return (
-              <button
-                key={b.id}
-                type="button"
-                onClick={() => setSelectedBranchId(b.id)}
-                className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                  isSelected
-                    ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                    : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-                }`}
-              >
-                {b.name}
-              </button>
-            );
-          })}
-        </div>
-        {selectedBranch && (
-          <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2.5 py-1 text-xs text-text-secondary">
-            <span className="font-medium text-text-primary">{selectedBranch.name}</span>
-            <span>({selectedBranch.code})</span>
-          </span>
-        )}
-      </div>
-
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="relative flex-1 min-w-[240px] max-w-md">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search notices by title, message, target branch..."
-            aria-label="Search notices"
-            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-border bg-input text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-      </div>
+      {/* Multi-Branch Notice Filter Pills & Search */}
+      <AdminCommunicationNoticesBranchBar
+        branches={branches}
+        selectedBranchId={selectedBranchId}
+        selectedBranch={selectedBranch}
+        setSelectedBranchId={setSelectedBranchId}
+        isAllBranches={isAllBranches}
+        totalNotices={notices.length}
+        search={search}
+        onSearchChange={setSearch}
+      />
 
       <div className="rounded-xl border border-border bg-card overflow-hidden p-4">
         {isLoading ? (

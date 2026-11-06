@@ -74,7 +74,7 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
           </DialogHeader>
 
           {/* Settlement Context Snapshot */}
-          <div className="rounded-lg border border-destructive/20 bg-destructive/5 p-3 text-xs space-y-2">
+          <div className="rounded-lg border border-destructive-bg bg-destructive-bg p-3 text-xs space-y-2">
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <span className="text-muted-foreground">Branch:</span>
@@ -159,7 +159,7 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 rounded-md bg-destructive px-4 py-2 text-sm font-medium text-white hover:bg-destructive/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive disabled:opacity-50 motion-safe:transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-md bg-destructive px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive disabled:opacity-50 motion-safe:transition-colors"
             >
               <Flag className="h-4 w-4" />
               <span>{isSubmitting ? 'Flagging...' : t('SUBMIT')}</span>
