@@ -69,9 +69,10 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
       nextShifts.length === 0
         ? ''
         : nextShifts.length === 1
-        ? nextShifts[0]
-        : `${nextShifts.join(' + ')} (Multi-Shift)`;
+          ? nextShifts[0]
+          : `${nextShifts.join(' + ')} (Multi-Shift)`;
 
+    console.log('handleToggleShift called:', shiftId, '-> next:', nextShifts, 'consolidated:', consolidated);
     setValue('shift', consolidated, { shouldValidate: true, shouldDirty: true });
   };
 
@@ -186,7 +187,12 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
         <form onSubmit={submit} noValidate>
           <div className="mgr-admission-layout">
             <div className="mgr-admission-main">
-              <ManagerMembersNewAdmissionAdmissionPersonalSection register={register} errors={errors} />
+              <ManagerMembersNewAdmissionAdmissionPersonalSection
+                register={register}
+                errors={errors}
+                setValue={setValue}
+                watch={watch}
+              />
               <ManagerMembersNewAdmissionAdmissionEnrollmentSection
                 register={register}
                 errors={errors}

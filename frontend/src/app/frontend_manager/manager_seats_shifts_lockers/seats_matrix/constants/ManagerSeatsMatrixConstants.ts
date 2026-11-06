@@ -1,7 +1,9 @@
 export const SHIFT_TABS = [
   { value: 'All', labelKey: 'shift_tab_all' },
   { value: 'Morning', labelKey: 'shift_tab_morning' },
+  { value: 'Afternoon', labelKey: 'shift_tab_afternoon' },
   { value: 'Evening', labelKey: 'shift_tab_evening' },
+  { value: 'Night', labelKey: 'shift_tab_night' },
   { value: 'Full Day', labelKey: 'shift_tab_full_day' },
 ] as const;
 

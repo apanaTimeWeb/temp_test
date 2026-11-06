@@ -1,15 +1,35 @@
 'use client';
 // RESPONSIBILITY: Render the members new admission admission personal section section of the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Award, BookOpen, Calendar, Camera, GraduationCap, Mail, MapPin, Phone, ShieldAlert, User, Building, HeartPulse, Activity, Accessibility } from 'lucide-react';
+import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
 import type { ManagerMembersNewAdmissionAdmissionPersonalSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 
 export type { ManagerMembersNewAdmissionAdmissionPersonalSectionProps };
 
-export function ManagerMembersNewAdmissionAdmissionPersonalSection({ register, errors }: ManagerMembersNewAdmissionAdmissionPersonalSectionProps) {
+export function ManagerMembersNewAdmissionAdmissionPersonalSection({
+  register,
+  errors,
+  setValue,
+  watch,
+}: ManagerMembersNewAdmissionAdmissionPersonalSectionProps) {
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const watchedReferredBy = watch ? watch('referredBy') : '';
+
+  const referralOptions: ComboboxOption[] = useMemo(() => {
+    return [
+      { value: 'Direct Walk-in', label: 'Direct Walk-in / Self (No Referral)', badge: 'Default' },
+      ...MANAGER_MEMBERS_DEMO_RECORDS.map((r) => ({
+        value: `${r.id} (${r.name})`,
+        label: `${r.name} (${r.id})`,
+        subLabel: `Phone: ${r.phone} · Seat: ${r.seat || 'General'}`,
+        badge: r.status,
+      })),
+    ];
+  }, []);
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -127,9 +147,11 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({ register, e
             </div>
           </div>
 
-          {/* College / University */}
+          {/* College / University (Optional) */}
           <div className="mgr-form-field">
-            <label className="mgr-label" htmlFor="admission-college">College / Institute Name</label>
+            <label className="mgr-label" htmlFor="admission-college">
+              College / Institute Name <span className="text-secondary font-normal text-xs">(Optional)</span>
+            </label>
             <div className="mgr-input-icon-wrap">
               <GraduationCap size={18} strokeWidth={2} className="mgr-input-icon" />
               <input id="admission-college" {...register('college')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Delhi University / Self-Study" />
@@ -155,17 +177,22 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({ register, e
             </div>
           </div>
 
-          {/* Library Branch */}
+          {/* Library Branch (Locked to Manager's Assigned Branch) */}
           <div className="mgr-form-field">
-            <label className="mgr-label" htmlFor="admission-branch">Library Branch</label>
+            <label className="mgr-label" htmlFor="admission-branch">
+              Library Branch <span className="text-xs font-semibold text-success">(Current Branch)</span>
+            </label>
             <div className="mgr-input-icon-wrap">
-              <Building size={18} strokeWidth={2} className="mgr-input-icon" />
-              <select id="admission-branch" {...register('branch')} className="mgr-select mgr-input-with-icon">
-                <option value="Main Central Branch">Main Central Branch (Sector 14)</option>
-                <option value="North Campus Branch">North Campus Branch (GTB Nagar)</option>
-                <option value="South Extension Branch">South Extension Branch</option>
-                <option value="East Hub Branch">East Hub Branch (Laxmi Nagar)</option>
-              </select>
+              <Building size={18} strokeWidth={2} className="mgr-input-icon text-primary" />
+              <input
+                id="admission-branch"
+                type="text"
+                readOnly
+                value="Main Central Branch (Sector 14)"
+                className="mgr-input mgr-input-with-icon bg-surface font-semibold text-primary cursor-not-allowed"
+                title="Branch is fixed to manager's authorized branch"
+              />
+              <input type="hidden" {...register('branch')} value="Main Central Branch" />
             </div>
           </div>
 
@@ -205,13 +232,24 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({ register, e
             </div>
           </div>
 
-          {/* Referred By */}
+          {/* Referred By (Optional + Searchable Combobox) */}
           <div className="mgr-form-field mgr-form-field-full">
-            <label className="mgr-label" htmlFor="admission-referred-by">Referred By (Student ID / Name)</label>
-            <div className="mgr-input-icon-wrap">
-              <Award size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
-              <input id="admission-referred-by" {...register('referredBy')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. LIB-001 (Rahul Sharma) or Direct Walk-in" />
-            </div>
+            <label className="mgr-label" htmlFor="admission-referred-by">
+              Referred By (Student ID / Name) <span className="text-secondary font-normal text-xs">(Optional)</span>
+            </label>
+            <SearchableCombobox
+              id="admission-referred-by"
+              options={referralOptions}
+              value={watchedReferredBy || 'Direct Walk-in'}
+              onChange={(val) => {
+                if (setValue) {
+                  setValue('referredBy', val, { shouldDirty: true, shouldValidate: true });
+                }
+              }}
+              placeholder="Search student referrer by name or smart ID..."
+              searchPlaceholder="Type name or LIB-ID..."
+              aria-label="Referred by student selector"
+            />
           </div>
         </div>
       </div>

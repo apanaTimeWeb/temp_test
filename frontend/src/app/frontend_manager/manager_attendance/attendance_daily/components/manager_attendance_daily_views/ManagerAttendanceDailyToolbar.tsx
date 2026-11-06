@@ -141,6 +141,8 @@ export function ManagerAttendanceDailyToolbar({
                 <option value="Morning">{tManagerUi('morning')}</option>
                 <option value="Afternoon">{tManagerUi('afternoon')}</option>
                 <option value="Evening">{tManagerUi('evening')}</option>
+                <option value="Night">Night</option>
+                <option value="Full Day">Full Day</option>
               </select>
             </div>
 

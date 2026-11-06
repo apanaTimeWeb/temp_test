@@ -75,7 +75,9 @@ export default function ManagerFinanceRenewalsFilterBar({
         >
           <option value="all">All Shifts</option>
           <option value="Morning">Morning</option>
+          <option value="Afternoon">Afternoon</option>
           <option value="Evening">Evening</option>
+          <option value="Night">Night</option>
           <option value="Full Day">Full Day</option>
         </select>
 

@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import { X, MessageSquarePlus, AlertCircle } from 'lucide-react';
+import { X, MessageSquarePlus, AlertCircle, Armchair } from 'lucide-react';
+import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
+import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
 import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
 
 export interface ManagerCommunicationComplaintsAddModalProps {
@@ -27,6 +29,7 @@ export default function ManagerCommunicationComplaintsAddModal({
   onClose,
   onSubmit,
 }: ManagerCommunicationComplaintsAddModalProps) {
+  const [selectedStudentId, setSelectedStudentId] = useState('');
   const [studentName, setStudentName] = useState('');
   const [seatNumber, setSeatNumber] = useState('');
   const [category, setCategory] = useState<string>(CATEGORIES[0]);
@@ -34,12 +37,30 @@ export default function ManagerCommunicationComplaintsAddModal({
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState<'Normal' | 'Urgent'>('Normal');
 
+  const studentOptions: ComboboxOption[] = useMemo(() => {
+    return MANAGER_MEMBERS_DEMO_RECORDS.map((s) => ({
+      value: s.id,
+      label: `${s.name} (${s.id})`,
+      subLabel: `Seat: ${s.seat || 'General'} · Shift: ${s.shift || 'Morning'}`,
+      badge: s.status,
+    }));
+  }, []);
+
+  const handleSelectStudent = (studentId: string) => {
+    setSelectedStudentId(studentId);
+    const found = MANAGER_MEMBERS_DEMO_RECORDS.find((s) => s.id === studentId);
+    if (found) {
+      setStudentName(`${found.name} (${found.id})`);
+      setSeatNumber(found.seat || 'S-01');
+    }
+  };
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!studentName.trim() || !title.trim() || !description.trim()) {
-      toast.error('Please fill in Student Name, Issue Title, and Description.');
+      toast.error('Please select Student and fill in Issue Title & Description.');
       return;
     }
 
@@ -56,6 +77,7 @@ export default function ManagerCommunicationComplaintsAddModal({
     };
 
     onSubmit(complaint);
+    toast.success(`Complaint registered for ${studentName}`);
     onClose();
   };
 
@@ -65,8 +87,8 @@ export default function ManagerCommunicationComplaintsAddModal({
       role="dialog"
       aria-modal="true"
     >
-      <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
-        <div className="flex items-center justify-between border-b border-border pb-3">
+      <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4 max-h-[90vh] flex flex-col">
+        <div className="flex items-center justify-between border-b border-border pb-3 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-danger-bg text-danger flex items-center justify-center">
               <MessageSquarePlus size={18} />
@@ -86,25 +108,37 @@ export default function ManagerCommunicationComplaintsAddModal({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3.5">
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto space-y-3.5 pr-1 text-xs">
+          {/* Select Member from Directory */}
+          <div className="space-y-1">
+            <label className="font-semibold text-primary block">Select Student from Directory *</label>
+            <SearchableCombobox
+              options={studentOptions}
+              value={selectedStudentId}
+              onChange={handleSelectStudent}
+              placeholder="Search student by name or Smart ID (e.g. Rahul, LIB-001)..."
+              searchPlaceholder="Type name or ID..."
+            />
+          </div>
+
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Student Name *</label>
+              <label className="font-semibold text-primary block mb-1">Student Identifier *</label>
               <input
                 type="text"
                 required
                 className="mgr-input text-xs"
-                placeholder="e.g. Rahul Sharma"
+                placeholder="Student name"
                 value={studentName}
                 onChange={(e) => setStudentName(e.target.value)}
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Seat Number</label>
+              <label className="font-semibold text-primary block mb-1">Assigned Seat</label>
               <input
                 type="text"
                 className="mgr-input text-xs"
-                placeholder="e.g. A-14 / B-02"
+                placeholder="e.g. S-14"
                 value={seatNumber}
                 onChange={(e) => setSeatNumber(e.target.value)}
               />
@@ -113,7 +147,7 @@ export default function ManagerCommunicationComplaintsAddModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Issue Category *</label>
+              <label className="font-semibold text-primary block mb-1">Issue Category *</label>
               <select
                 className="mgr-select text-xs"
                 value={category}
@@ -127,56 +161,55 @@ export default function ManagerCommunicationComplaintsAddModal({
               </select>
             </div>
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Priority</label>
+              <label className="font-semibold text-primary block mb-1">Priority Level</label>
               <select
-                className="mgr-select text-xs"
+                className="mgr-select text-xs font-semibold"
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as 'Normal' | 'Urgent')}
               >
-                <option value="Normal">Normal</option>
-                <option value="Urgent">Urgent / Immediate Action</option>
+                <option value="Normal">🟢 Normal Priority</option>
+                <option value="Urgent">🔴 Urgent Priority</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-primary block mb-1">Issue Summary / Title *</label>
+            <label className="font-semibold text-primary block mb-1">Issue Title / Summary *</label>
             <input
               type="text"
               required
               className="mgr-input text-xs"
-              placeholder="e.g. AC cooling low in Row A"
+              placeholder="e.g. Chair armrest broken at Desk #14"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-primary block mb-1">Detailed Description *</label>
+            <label className="font-semibold text-primary block mb-1">Detailed Description *</label>
             <textarea
-              rows={3}
               required
+              rows={3}
               className="mgr-input text-xs resize-none"
-              placeholder="Describe the complaint in detail for maintenance staff..."
+              placeholder="Describe the complaint in detail..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
-          {priority === 'Urgent' && (
-            <div className="flex items-center gap-2 rounded-lg bg-danger-bg border border-border p-2.5 text-xs text-danger">
-              <AlertCircle size={15} className="shrink-0" />
-              <span>Marked as urgent. This ticket will be prioritized on the supervisor dashboard.</span>
-            </div>
-          )}
-
-          <div className="flex justify-end gap-2.5 pt-3 border-t border-border">
-            <button type="button" onClick={onClose} className="mgr-btn-ghost text-xs">
+          <div className="flex justify-end gap-2 pt-3 border-t border-border">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-3 py-1.5 rounded-lg border border-border text-secondary hover:text-primary transition-colors"
+            >
               Cancel
             </button>
-            <button type="submit" className="mgr-btn-primary text-xs flex items-center gap-1.5">
-              <MessageSquarePlus size={14} />
-              <span>Submit Complaint</span>
+            <button
+              type="submit"
+              className="mgr-btn-primary mgr-btn-sm text-xs font-bold"
+            >
+              Submit Ticket
             </button>
           </div>
         </form>
@@ -184,4 +217,3 @@ export default function ManagerCommunicationComplaintsAddModal({
     </div>
   );
 }
-

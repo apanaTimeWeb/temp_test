@@ -1,6 +1,7 @@
 'use client';
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
+import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, ShieldCheck } from 'lucide-react';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
@@ -8,6 +9,8 @@ import { ManagerMembersDirectoryEmptyState } from '@/app/frontend_manager/manage
 import { MANAGER_MEMBERS_STATUS_BADGES } from '@/app/frontend_manager/manager_members/members_directory/constants/ManagerMembersDirectoryConstants';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 import ManagerMembersDirectoryFilterBar from './ManagerMembersDirectoryFilterBar';
+import { ManagerMembersDirectoryPhotoKycModal } from './ManagerMembersDirectoryPhotoKycModal';
+import { ManagerMembersDirectoryTablePagination } from './ManagerMembersDirectoryTablePagination';
 
 export type MemberSortField = 'id' | 'name' | 'phone' | 'type' | 'status' | 'expiryDate';
 
@@ -79,6 +82,7 @@ export function ManagerMembersDirectoryTable({
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
   const locale = useLocale();
   const effectivePage = Math.min(page, pageCount - 1);
+  const [previewMember, setPreviewMember] = useState<ManagerMembersDirectoryRecord | null>(null);
 
   const renderSortableHeader = (field: MemberSortField, label: string) => {
     const isActive = sortField === field;
@@ -185,7 +189,25 @@ export function ManagerMembersDirectoryTable({
                         <span className="font-mono text-primary font-semibold group-hover:underline">{member.id}</span>
                       </td>
                       <td className="px-3 py-3 align-middle font-bold text-primary group-hover:text-primary-hover">
-                        {member.name}
+                        <div className="flex items-center gap-2.5">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPreviewMember(member);
+                            }}
+                            className="w-8 h-8 rounded-full border border-primary bg-surface-zebra flex items-center justify-center shrink-0 overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary transition-all text-xs font-bold text-primary"
+                            title={`Preview Photo & KYC of ${member.name}`}
+                          >
+                            {member.name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
+                          </button>
+                          <div>
+                            <span className="block leading-tight">{member.name}</span>
+                            <span className="text-[11px] text-secondary font-normal block">
+                              {member.seat ? `Seat ${member.seat}` : 'General'} · {member.shift || 'Morning'}
+                            </span>
+                          </div>
+                        </div>
                       </td>
                       <td className="px-3 py-3 align-middle">{maskManagerMemberPhone(member.phone)}</td>
                       <td className="px-3 py-3 align-middle">
@@ -201,6 +223,18 @@ export function ManagerMembersDirectoryTable({
                       </td>
                       <td className="px-3 py-3 align-middle text-right">
                         <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPreviewMember(member);
+                            }}
+                            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold bg-surface border border-border text-secondary hover:text-primary hover:border-primary transition-colors cursor-pointer"
+                            title={`Preview Photo & KYC for ${member.name}`}
+                          >
+                            <ShieldCheck size={12} className="text-primary" />
+                            <span className="hidden md:inline">Photo & KYC</span>
+                          </button>
                           {onQuickWhatsApp && (
                             <button
                               type="button"
@@ -235,52 +269,28 @@ export function ManagerMembersDirectoryTable({
               </tbody>
             </table>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-3 py-3 text-sm text-secondary">
-              <span>
-                Showing {startItem}–{endItem} of {totalRows} results
-              </span>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1.5">
-                  <label htmlFor="rows-per-page-members-directory" className="text-xs text-secondary whitespace-nowrap">
-                    Rows per page:
-                  </label>
-                  <select
-                    id="rows-per-page-members-directory"
-                    value={pageSize}
-                    onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                    className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
-                  >
-                    <option value={10}>10</option>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                  </select>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    className="mgr-btn-ghost mgr-btn-sm"
-                    disabled={effectivePage <= 0}
-                    onClick={() => onPageChange(Math.max(0, effectivePage - 1))}
-                  >
-                    Previous
-                  </button>
-                  <span className="text-xs text-secondary px-1">
-                    Page {effectivePage + 1} of {pageCount}
-                  </span>
-                  <button
-                    type="button"
-                    className="mgr-btn-ghost mgr-btn-sm"
-                    disabled={effectivePage >= pageCount - 1}
-                    onClick={() => onPageChange(Math.min(pageCount - 1, effectivePage + 1))}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            </div>
+            <ManagerMembersDirectoryTablePagination
+              startItem={startItem}
+              endItem={endItem}
+              totalRows={totalRows}
+              pageSize={pageSize}
+              onPageSizeChange={onPageSizeChange}
+              effectivePage={effectivePage}
+              pageCount={pageCount}
+              onPageChange={onPageChange}
+            />
           </>
         )}
       </div>
+
+      {/* Student Photo & KYC Lightbox Preview Modal */}
+      <ManagerMembersDirectoryPhotoKycModal
+        isOpen={Boolean(previewMember)}
+        member={previewMember}
+        onClose={() => setPreviewMember(null)}
+        onViewFullProfile={onSelectMemberProfile}
+        onQuickWhatsApp={onQuickWhatsApp}
+      />
     </>
   );
 }

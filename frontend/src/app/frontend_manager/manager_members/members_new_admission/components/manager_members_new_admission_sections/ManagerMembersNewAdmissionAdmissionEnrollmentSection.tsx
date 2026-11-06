@@ -39,6 +39,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
   const selectedShifts = propSelectedShifts ?? internalSelectedShifts;
 
   const handleToggleShift = (shiftId: string) => {
+    console.log('EnrollmentSection handleToggleShift clicked:', shiftId, 'has propOnToggleShift:', !!propOnToggleShift);
     if (propOnToggleShift) {
       propOnToggleShift(shiftId);
       return;
@@ -74,9 +75,9 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
   const currentTotalMonthlyShiftRate = selectedShifts.includes('Full Day')
     ? (pricingConfig.shifts.find(s => s.id === 'Full Day')?.monthlyPrice ?? 1500)
     : selectedShifts.reduce((acc, shiftId) => {
-        const found = pricingConfig.shifts.find(s => s.id === shiftId);
-        return acc + (found?.monthlyPrice ?? 700);
-      }, 0);
+      const found = pricingConfig.shifts.find(s => s.id === shiftId);
+      return acc + (found?.monthlyPrice ?? 700);
+    }, 0);
 
   return (
     <section className="mgr-card" aria-labelledby="manager-students-admission-enrollment">
@@ -106,19 +107,17 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
                   key={shift.id}
                   onClick={() => handleToggleShift(shift.id)}
                   aria-pressed={isSelected}
-                  className={`p-3 rounded-xl border text-left flex flex-col justify-between motion-safe:transition-all ${
-                    isSelected
+                  className={`p-3 rounded-xl border text-left flex flex-col justify-between motion-safe:transition-all ${isSelected
                       ? 'border-primary bg-primary-subtle shadow-sm ring-1 ring-primary'
                       : 'border-border bg-card hover:bg-floating'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between w-full mb-1">
                     <span className={`text-sm font-bold ${isSelected ? 'text-primary' : 'text-primary'}`}>
                       {shift.name}
                     </span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
-                      isSelected ? 'bg-primary text-on-primary' : 'bg-floating text-secondary'
-                    }`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${isSelected ? 'bg-primary text-on-primary' : 'bg-floating text-secondary'
+                      }`}>
                       {isSelected ? <Check size={12} className="inline mr-0.5" /> : null}
                       ₹{shift.monthlyPrice}/mo
                     </span>

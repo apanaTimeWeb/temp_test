@@ -36,6 +36,8 @@ export interface ManagerMembersNewAdmissionAdmissionPaymentSectionProps {
 export interface ManagerMembersNewAdmissionAdmissionPersonalSectionProps {
   register: UseFormRegister<ManagerMembersNewAdmissionAdmissionFormValues>;
   errors: FieldErrors<ManagerMembersNewAdmissionAdmissionFormValues>;
+  setValue?: UseFormSetValue<ManagerMembersNewAdmissionAdmissionFormValues>;
+  watch?: UseFormWatch<ManagerMembersNewAdmissionAdmissionFormValues>;
 }
 
 export interface ManagerMembersNewAdmissionAdmissionSummaryProps {

@@ -27,13 +27,9 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   const [selectedId, setSelectedId] = useState(requestedId);
   const [bulkSelectedIds, setBulkSelectedIds] = useState<string[]>([]);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
-  // Dependency rationale: the URL id is canonical, so external URL changes must refresh the selected card.
   useEffect(() => {
-    if (requestedId) {
-      setSelectedId(requestedId);
-    } else if (students.length > 0 && !selectedId) {
-      setSelectedId(students[0].smartId);
-    }
+    if (requestedId) setSelectedId(requestedId);
+    else if (students.length > 0 && !selectedId) setSelectedId(students[0].smartId);
   }, [requestedId, students, selectedId]);
   const selectStudent = (smartId: string) => {
     setSelectedId(smartId);
@@ -43,15 +39,49 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   };
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState(search);
+  const [shiftFilter, setShiftFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [page, setPage] = useState(0);
+  const pageSize = 6;
+
   // Dependency rationale: debounce the member lookup text (300ms) and cancel stale timers before recalculating the filtered card candidates.
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedSearch(search), 300);
+    const timeout = window.setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(0);
+    }, 300);
     return () => window.clearTimeout(timeout);
   }, [search]);
+
   const filtered = useMemo(() => {
     const value = debouncedSearch.trim().toLowerCase();
-    return students.filter((student) => !value || student.name.toLowerCase().includes(value) || student.smartId.toLowerCase().includes(value) || student.phone.toLowerCase().includes(value));
-  }, [students, debouncedSearch]);
+    return students.filter((student) => {
+      const matchesSearch =
+        !value ||
+        student.name.toLowerCase().includes(value) ||
+        student.smartId.toLowerCase().includes(value) ||
+        student.phone.toLowerCase().includes(value);
+
+      const matchesShift =
+        shiftFilter === 'All' ||
+        student.shift === shiftFilter ||
+        (student.shift && student.shift.includes(shiftFilter));
+
+      const matchesStatus =
+        statusFilter === 'All' ||
+        (statusFilter === 'Active' && student.status === MANAGER_STUDENT_STATUS_ACTIVE) ||
+        (statusFilter === 'Suspended' && student.status === MANAGER_STUDENT_STATUS_SUSPENDED) ||
+        (statusFilter === 'Expired' && student.status !== MANAGER_STUDENT_STATUS_ACTIVE && student.status !== MANAGER_STUDENT_STATUS_SUSPENDED);
+
+      return matchesSearch && matchesShift && matchesStatus;
+    });
+  }, [students, debouncedSearch, shiftFilter, statusFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const effectivePage = Math.min(page, totalPages - 1);
+  const paginatedStudents = useMemo(() => {
+    return filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
+  }, [filtered, effectivePage, pageSize]);
   const selected = useMemo(() => students.find((student) => student.smartId === selectedId), [students, selectedId]);
 
   const bulkStudents = useMemo(
@@ -132,25 +162,55 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               </div>
             </div>
             <div className="mgr-card-body">
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-2">
                 <div className="mgr-input-icon-wrap flex-1">
-                  <Search size={18} strokeWidth={2} className="mgr-input-icon" />
+                  <Search size={16} strokeWidth={2} className="mgr-input-icon" />
                   <label className="sr-only" htmlFor="manager-id-card-search">{tManagerUi('search_students')}</label>
-                  <input id="manager-id-card-search" className="mgr-input mgr-input-with-icon" placeholder={tManagerUi('search_name_smart_id_phone')} value={search} onChange={(event) => setSearch(event.target.value)} />
+                  <input id="manager-id-card-search" className="mgr-input mgr-input-with-icon text-xs py-1.5" placeholder={tManagerUi('search_name_smart_id_phone')} value={search} onChange={(event) => setSearch(event.target.value)} />
                 </div>
                 {filtered.length > 0 && (
                   <button
                     type="button"
                     onClick={toggleSelectAll}
-                    className="px-2.5 py-2 text-xs font-semibold rounded-lg border border-border bg-surface hover:bg-surface-hover text-secondary whitespace-nowrap transition-colors"
+                    className="px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-border bg-surface hover:bg-surface-hover text-secondary whitespace-nowrap transition-colors"
                   >
                     {bulkSelectedIds.length === filtered.length ? 'Deselect All' : 'Select All'}
                   </button>
                 )}
               </div>
+
+              {/* Multi-Dimensional Filter Bar: Shift & Status */}
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <select
+                  aria-label="Filter by Shift"
+                  value={shiftFilter}
+                  onChange={(e) => { setShiftFilter(e.target.value); setPage(0); }}
+                  className="rounded-lg border border-border bg-surface px-2 py-1 text-xs text-primary font-medium"
+                >
+                  <option value="All">All Shifts</option>
+                  <option value="Morning">Morning</option>
+                  <option value="Afternoon">Afternoon</option>
+                  <option value="Evening">Evening</option>
+                  <option value="Night">Night</option>
+                  <option value="Full Day">Full Day</option>
+                </select>
+
+                <select
+                  aria-label="Filter by Status"
+                  value={statusFilter}
+                  onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
+                  className="rounded-lg border border-border bg-surface px-2 py-1 text-xs text-primary font-medium"
+                >
+                  <option value="All">All Status</option>
+                  <option value="Active">Active Only</option>
+                  <option value="Suspended">Suspended Only</option>
+                  <option value="Expired">Expired Only</option>
+                </select>
+              </div>
+
               {requestedId && !isPending && !selected && <p className="mgr-input-hint" role="alert" data-testid="manager-student-id-card-request-not-found">{tManagerUi('no_loaded_student_matches_the_requested_smart_id')}{requestedId}{tManagerUi('no_other_student_s_card_has_been_selected')}</p>}
               <div className="mgr-idcard-student-list">
-                {isPending ? <div className="mgr-loading-state">{tManagerUi('loading_students_522ba5')}</div> : filtered.length === 0 ? <ManagerMembersIdCardGeneratorEmptyState className="mgr-empty-state"><div className="mgr-empty-icon"><Search size={36} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_students_found')}</p></ManagerMembersIdCardGeneratorEmptyState> : filtered.map((student: ManagerStudent) => {
+                {isPending ? <div className="mgr-loading-state">{tManagerUi('loading_students_522ba5')}</div> : filtered.length === 0 ? <ManagerMembersIdCardGeneratorEmptyState className="mgr-empty-state"><div className="mgr-empty-icon"><Search size={36} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_students_found')}</p></ManagerMembersIdCardGeneratorEmptyState> : paginatedStudents.map((student: ManagerStudent) => {
                   const initials = student.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase();
                   const statusLabel = student.status === MANAGER_STUDENT_STATUS_ACTIVE ? tManagerUi('status_active') : student.status === MANAGER_STUDENT_STATUS_SUSPENDED ? tManagerUi('status_suspended') : tManagerUi('status_expired');
                   const shiftLabels: Record<string, string> = { Morning: tManagerUi('shift_morning'), Afternoon: tManagerUi('shift_afternoon'), Evening: tManagerUi('shift_evening'), Night: tManagerUi('shift_night'), 'Full Day': tManagerUi('shift_full_day') };
@@ -182,6 +242,36 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   );
                 })}
               </div>
+
+              {/* ID Card List Pagination Footer */}
+              {filtered.length > pageSize && (
+                <div className="flex items-center justify-between border-t border-border pt-3 mt-3 text-xs text-secondary">
+                  <span>
+                    {effectivePage * pageSize + 1}–{Math.min((effectivePage + 1) * pageSize, filtered.length)} of {filtered.length}
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      disabled={effectivePage <= 0}
+                      onClick={() => setPage((p) => Math.max(0, p - 1))}
+                      className="px-2 py-1 rounded border border-border bg-surface text-secondary hover:text-primary disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Prev
+                    </button>
+                    <span className="px-1 font-medium text-primary">
+                      {effectivePage + 1}/{totalPages}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={effectivePage >= totalPages - 1}
+                      onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                      className="px-2 py-1 rounded border border-border bg-surface text-secondary hover:text-primary disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           {selected && cardData && <div className="mgr-card mgr-idcard-actions-card"><div className="mgr-card-header"><h2 className="mgr-section-title">{tManagerUi('actions')}</h2></div><div className="mgr-card-body mgr-idcard-actions-body"><p className="mgr-input-hint" role="status" data-testid="manager-students-id-card-output-contract-warning">{tManagerUi('id_card_preview_only_contract_warning')}</p><button type="button" onClick={handleShareWhatsApp} title="Share ID Card via WhatsApp" className="mgr-btn-whatsapp cursor-pointer flex items-center justify-center gap-2"><MessageSquare size={18} strokeWidth={2} /> <span>Share via WhatsApp</span></button><button type="button" onClick={() => window.print()} title={tManagerUi('print_id_card')} className="mgr-btn-ghost mgr-btn-full" data-testid="manager-students-id-card-print"><Printer size={18} strokeWidth={2} /> {tManagerUi('print_id_card')}</button></div></div>}

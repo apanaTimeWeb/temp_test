@@ -1,7 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
-import { CalendarDays, LayoutGrid, List, Plus, Download } from 'lucide-react';
+import { Search, LayoutGrid, List, Plus, Download, Armchair } from 'lucide-react';
 import { toast } from 'sonner';
 import { sanitizeManagerSeatMatrixCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixCsv';
 import { useManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/useManagerSeatsMatrixSeatMatrix';
@@ -107,12 +107,9 @@ export function ManagerSeatsMatrixClient() {
       sanitizeManagerSeatMatrixCsvCell(s.smartId ?? '—'),
       sanitizeManagerSeatMatrixCsvCell(s.studentGender ?? '—'),
     ]);
-    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([[headers.join(','), ...rows.map((r) => r.join(','))].join('\n')], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `seat_matrix_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    const link = Object.assign(document.createElement('a'), { href: url, download: `seat_matrix_${new Date().toISOString().slice(0, 10)}.csv` });
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -138,97 +135,112 @@ export function ManagerSeatsMatrixClient() {
   }
 
   return (
-    <div className="ss-page">
-      {/* ── Top Unified Toolbar ── */}
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Shift filter tabs */}
-          <div className="ss-tab-group flex bg-floating p-1 rounded-lg border border-border">
-            {SHIFT_TABS.map(({ value, labelKey }) => (
-              <button
-                type="button"
-                key={value}
-                onClick={() => { setActiveTab(value); setPage(0); }}
-                className={`px-3 py-1.5 text-sm font-medium rounded-md motion-safe:transition-colors ${
-                  activeTab === value ? 'bg-card text-primary shadow-sm' : 'text-secondary hover:text-primary'
-                }`}
-              >
-                {tManagerUi(labelKey)}
-              </button>
-            ))}
+    <div className="ss-page space-y-5">
+      {/* ── Top Unified Control Center (Clean 2-Tier Toolbar) ── */}
+      <div className="flex flex-col gap-4 p-4 rounded-2xl bg-card border border-border shadow-sm">
+        {/* Tier 1: Title, Hall Indicator, View Mode & Action Buttons */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-subtle text-primary flex items-center justify-center">
+              <Armchair size={20} />
+            </div>
+            <div>
+              <h1 className="text-base font-bold text-primary">Reading Hall Seat Matrix</h1>
+              <p className="text-xs text-secondary">Interactive Multi-Shift Vacancy & Student Allocation Grid</p>
+            </div>
           </div>
 
-          {/* Gender filter tabs */}
-          <div className="flex items-center gap-1.5 bg-floating p-1 rounded-lg border border-border">
+          <div className="flex items-center gap-2">
+            {/* View Mode Toggle */}
+            <div className="flex items-center p-1 rounded-xl bg-surface border border-border">
+              <button
+                type="button"
+                onClick={() => setViewMode('grid')}
+                aria-pressed={viewMode === 'grid'}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                  viewMode === 'grid' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'
+                }`}
+              >
+                <LayoutGrid size={13} /> ⊞ Grid
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('table')}
+                aria-pressed={viewMode === 'table'}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                  viewMode === 'table' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'
+                }`}
+              >
+                <List size={13} /> ☰ Table
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-xl border border-border bg-surface hover:bg-surface-hover text-secondary hover:text-primary transition-colors"
+            >
+              <Download size={13} /> Export CSV
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsAddModalOpen(true)}
+              className="mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5 text-xs font-bold"
+            >
+              <Plus size={14} /> Add Seat
+            </button>
+          </div>
+        </div>
+
+        {/* Tier 2: Search Box + Shift Tabs + Gender Filter */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          {/* Universal Student / Seat Search */}
+          <div className="relative min-w-[240px] flex-1 max-w-sm">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <input
+              type="search"
+              placeholder="Search student, seat #, or Smart ID (e.g. Rahul, S-12)..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(0);
+              }}
+              className="mgr-input pl-8 py-1.5 text-xs w-full"
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Shift Filter Pills */}
+            <div className="flex items-center p-1 rounded-xl bg-surface border border-border">
+              {SHIFT_TABS.map(({ value, labelKey }) => (
+                <button
+                  type="button"
+                  key={value}
+                  onClick={() => { setActiveTab(value); setPage(0); }}
+                  className={`px-2.5 py-1 text-xs font-medium rounded-lg transition-colors ${
+                    activeTab === value ? 'bg-card text-primary font-bold shadow-sm' : 'text-secondary hover:text-primary'
+                  }`}
+                >
+                  {tManagerUi(labelKey)}
+                </button>
+              ))}
+            </div>
+
+            {/* Gender Selector */}
             <select
               aria-label="Filter seats by gender"
               value={genderFilter}
               onChange={(e) => { setGenderFilter(e.target.value as 'all' | 'Male' | 'Female'); setPage(0); }}
-              className="bg-card text-primary text-xs font-semibold px-2.5 py-1.5 rounded-md border-0 focus:ring-1 focus:ring-primary shadow-xs"
+              className="bg-surface text-primary text-xs font-semibold px-2.5 py-1.5 rounded-xl border border-border focus:ring-1 focus:ring-primary shadow-xs"
             >
               <option value="all">👥 All Genders</option>
               <option value="Male">👨 Male Students</option>
               <option value="Female">👩 Female Students</option>
             </select>
           </div>
-
-          {/* View mode toggle */}
-          <div className="flex items-center gap-1 bg-floating p-1 rounded-lg border border-border">
-            <button
-              type="button"
-              onClick={() => setViewMode('grid')}
-              aria-pressed={viewMode === 'grid'}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'grid' ? 'bg-card text-primary shadow-sm' : 'text-secondary hover:text-primary'
-              }`}
-            >
-              <LayoutGrid size={15} /> ⊞ Grid View
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('table')}
-              aria-pressed={viewMode === 'table'}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'table' ? 'bg-card text-primary shadow-sm' : 'text-secondary hover:text-primary'
-              }`}
-            >
-              <List size={15} /> ☰ Table View
-            </button>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={handleExportCsv}
-            className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors"
-          >
-            <Download size={14} /> Export CSV
-          </button>
-
-          {/* Add Seat CTA */}
-          <button
-            type="button"
-            onClick={() => setIsAddModalOpen(true)}
-            className="mgr-btn-primary flex items-center gap-1.5 text-sm"
-          >
-            <Plus size={16} /> Add Seat
-          </button>
-
-          <div
-            className="ss-date-btn flex items-center gap-2 bg-card border border-border px-3 py-2 rounded-lg text-secondary"
-            aria-describedby="manager-seat-matrix-date-filter-help"
-            title={tManagerUi('date_filtering_is_unavailable_because_the_supplied_seat_8f003e')}
-          >
-            <CalendarDays size={15} aria-hidden="true" />
-            <span className="text-sm">{tManagerUi('date_filter_unavailable')}</span>
-          </div>
         </div>
       </div>
-
-      <p id="manager-seat-matrix-date-filter-help" className="text-secondary text-xs mb-4" role="status">
-        {tManagerUi('date_based_filtering_is_disabled_until_an_authoritative_a5c22e')}
-      </p>
 
       {/* ── Dynamic Content: GRID VIEW OR TABLE VIEW ── */}
       {viewMode === 'grid' ? (
@@ -238,26 +250,18 @@ export function ManagerSeatsMatrixClient() {
           freeCount={freeCount}
           onSelectSeat={setSelectedSeat}
           shiftLabel={shiftLabel}
+          searchQuery={searchQuery}
         />
       ) : (
         <ManagerSeatsMatrixTableView
           filteredTableSeats={filteredTableSeats}
           paginatedTableSeats={paginatedTableSeats}
           searchQuery={searchQuery}
-          setSearchQuery={(val) => {
-            setSearchQuery(val);
-            setPage(0);
-          }}
+          setSearchQuery={(val) => { setSearchQuery(val); setPage(0); }}
           statusFilter={statusFilter}
-          setStatusFilter={(val) => {
-            setStatusFilter(val);
-            setPage(0);
-          }}
+          setStatusFilter={(val) => { setStatusFilter(val); setPage(0); }}
           genderFilter={genderFilter}
-          setGenderFilter={(val) => {
-            setGenderFilter(val);
-            setPage(0);
-          }}
+          setGenderFilter={(val) => { setGenderFilter(val); setPage(0); }}
           sortField={sortField}
           sortDirection={sortDirection}
           onToggleSort={toggleSort}
@@ -267,10 +271,7 @@ export function ManagerSeatsMatrixClient() {
           pageSize={pageSize}
           totalTablePages={totalTablePages}
           onPageChange={setPage}
-          onPageSizeChange={(newSize) => {
-            setPageSize(newSize);
-            setPage(0);
-          }}
+          onPageSizeChange={(newSize) => { setPageSize(newSize); setPage(0); }}
         />
       )}
 
