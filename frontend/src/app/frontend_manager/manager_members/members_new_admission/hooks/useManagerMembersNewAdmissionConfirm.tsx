@@ -11,6 +11,7 @@ export function useManagerMembersNewAdmissionConfirm() {
   const [pending, setPending] = useState<PendingConfirmation | null>(null);
   const pendingRef = useRef<PendingConfirmation | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const titleId = useId();
 
   const settle = useCallback((confirmed: boolean) => {
@@ -19,10 +20,16 @@ export function useManagerMembersNewAdmissionConfirm() {
     pendingRef.current = null;
     setPending(null);
     current.resolve(confirmed);
+    if (previousFocusRef.current && typeof previousFocusRef.current.focus === 'function') {
+      previousFocusRef.current.focus();
+    }
   }, []);
 
   const confirm = useCallback((message: string, cancelLabel: string, continueLabel: string): Promise<boolean> => {
     if (pendingRef.current) return Promise.resolve(false);
+    if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
+      previousFocusRef.current = document.activeElement;
+    }
     return new Promise<boolean>((resolve) => {
       const next = { message, cancelLabel, continueLabel, resolve };
       pendingRef.current = next;

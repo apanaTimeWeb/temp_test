@@ -15,9 +15,6 @@ export function ManagerMembersNewAdmissionMain(props: ManagerMembersNewAdmission
     <div
       data-route-view={props.view}
       data-route-id={props.id}
-      data-route-name={props.name}
-      data-route-phone={props.phone}
-      data-route-smart-id={props.smartId}
     >
       <ManagerMembersNewAdmissionErrorBoundary><Suspense fallback={<div>{t('loading_form')}</div>}><ManagerMembersNewAdmissionAdmissionForm /></Suspense></ManagerMembersNewAdmissionErrorBoundary>
     </div>

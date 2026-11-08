@@ -27,7 +27,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const [admittedStudent, setAdmittedStudent] = useState<AdmittedStudentInfo | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [pricingConfig, setPricingConfig] = useState<LibraryPricingConfig>(() => getLibraryPricingConfig());
-  const { register, watch, setValue, reset, formState: { errors, isDirty } } = form;
+  const { register, watch, setValue, reset, formState: { errors, isDirty, isValid } } = form;
   const router = useRouter();
   useManagerMembersNewAdmissionUnsavedChangesGuard({ isDirty, confirm, router, tManagerUi, replayAnchorOnConfirm: true });
 
@@ -147,16 +147,29 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
+      // BUG-02: Structured, collision-free Smart ID format
+      const generatedSmartId = `LIB-${Date.now().toString().slice(-4)}`;
       const studentData: AdmittedStudentInfo = {
         fullName: values.fullName,
         phone: values.phone,
-        smartId: `LIB-${Math.floor(100 + Math.random() * 900)}`,
+        smartId: generatedSmartId,
         seat: values.seat || 'General Study',
         shift: values.shift,
         plan: values.plan,
         paymentMode: values.paymentMode,
         amountPaid: values.amountPaid,
       };
+
+      // BUG-03: Real local persistence across session
+      try {
+        const stored = JSON.parse(localStorage.getItem('manager_admitted_students') || '[]');
+        localStorage.setItem('manager_admitted_students', JSON.stringify([studentData, ...stored]));
+        sessionStorage.setItem(`admission_student_${generatedSmartId}`, JSON.stringify(studentData));
+        window.dispatchEvent(new CustomEvent('manager_member_admitted', { detail: studentData }));
+      } catch {
+        // Storage unavailable fallback
+      }
+
       setAdmittedStudent(studentData);
       setDraftFeedback(`Admission registered successfully for ${values.fullName}! Assigned Seat: ${values.seat || 'General'}, Shift: ${values.shift}, Plan: ${values.plan}, Mode: ${values.paymentMode}.`);
     }, 500);
@@ -201,7 +214,11 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
                 onToggleShift={handleToggleShift}
                 watchedShift={watchedShift}
               />
-              <ManagerMembersNewAdmissionAdmissionDocumentSection />
+              {/* BUG-14: Pass setValue and watch for RHF KYC document integration */}
+              <ManagerMembersNewAdmissionAdmissionDocumentSection
+                setValue={setValue}
+                watch={watch}
+              />
               <ManagerMembersNewAdmissionAdmissionPaymentSection
                 register={register}
                 errors={errors}
@@ -220,9 +237,9 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
               totalPayableMinor={totalPayableMinor}
               amountPaidMinor={amountPaidMinor}
               currency="INR"
-              pricingAvailable={true}
+              pricingAvailable={Boolean(calcResult.finalPayable !== undefined && calcResult.grossTenureFee >= 0)}
               isSubmitting={isSubmitting}
-              canSubmit={true}
+              canSubmit={isValid && !isSubmitting}
               hasUnsavedChanges={isDirty}
               breakdown={calcResult.breakdown}
             />

@@ -33,6 +33,7 @@ export interface LibraryPricingConfig {
 export const DEFAULT_LIBRARY_PRICING_CONFIG: LibraryPricingConfig = {
   shifts: [
     { id: 'Morning', name: 'Morning Shift', startTime: '06:00 AM', endTime: '02:00 PM', monthlyPrice: 700, hours: '06:00 AM – 02:00 PM', badge: '8 Hrs' },
+    { id: 'Afternoon', name: 'Afternoon Shift', startTime: '11:00 AM', endTime: '04:00 PM', monthlyPrice: 600, hours: '11:00 AM – 04:00 PM', badge: '5 Hrs' },
     { id: 'Evening', name: 'Evening Shift', startTime: '02:00 PM', endTime: '10:00 PM', monthlyPrice: 700, hours: '02:00 PM – 10:00 PM', badge: '8 Hrs' },
     { id: 'Night', name: 'Night Shift', startTime: '10:00 PM', endTime: '06:00 AM', monthlyPrice: 600, hours: '10:00 PM – 06:00 AM', badge: '8 Hrs' },
     { id: 'Full Day', name: 'Full Day Access', startTime: '06:00 AM', endTime: '10:00 PM', monthlyPrice: 1500, hours: '06:00 AM – 10:00 PM', badge: '16 Hrs' },

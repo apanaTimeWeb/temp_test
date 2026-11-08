@@ -59,10 +59,8 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
     let consolidated = '';
     if (nextShifts.length === 0) {
       consolidated = '';
-    } else if (nextShifts.length === 1) {
-      consolidated = nextShifts[0];
     } else {
-      consolidated = `${nextShifts.join(' + ')} (Multi-Shift)`;
+      consolidated = nextShifts.join(' + ');
     }
 
     if (setValue) {
@@ -106,7 +104,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
                   key={shift.id}
                   onClick={() => handleToggleShift(shift.id)}
                   aria-pressed={isSelected}
-                  className={`p-3 rounded-xl border text-left flex flex-col justify-between motion-safe:transition-all ${isSelected
+                  className={`p-3 rounded-xl border text-left flex flex-col justify-between motion-safe:transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none cursor-pointer ${isSelected
                       ? 'border-primary bg-primary-subtle shadow-sm ring-1 ring-primary'
                       : 'border-border bg-card hover:bg-floating'
                     }`}
@@ -154,6 +152,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
             <div className="mgr-input-icon-wrap">
               <Layers size={18} strokeWidth={2} className="mgr-input-icon" />
               <select id="admission-floor" {...register('floor')} className="mgr-select mgr-input-with-icon">
+                <option value="">-- Select Floor (Optional) --</option>
                 <option value="1">1st Floor (General Study Hall)</option>
                 <option value="2">2nd Floor (Silent Zone / AC)</option>
                 <option value="3">3rd Floor (Reserved / Dedicated Cabin)</option>

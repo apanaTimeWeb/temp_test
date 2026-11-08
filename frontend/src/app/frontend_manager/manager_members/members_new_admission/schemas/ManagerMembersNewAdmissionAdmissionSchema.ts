@@ -4,7 +4,7 @@ export const ManagerMembersNewAdmissionAdmissionSchema = z.object({
   fullName: z.string().trim().min(2, 'Full name is required'),
   phone: z.string().trim().min(10, 'Valid phone number required'),
   email: z.string().trim().email('Valid email required').optional().or(z.literal('')),
-  gender: z.string().optional(),
+  gender: z.string().min(1, 'Please select a gender'),
   dob: z.string().optional(),
   address: z.string().optional(),
   parentName: z.string().optional(),
@@ -12,6 +12,7 @@ export const ManagerMembersNewAdmissionAdmissionSchema = z.object({
   college: z.string().optional(),
   preparationFor: z.string().optional(),
   avatar: z.string().optional(),
+  photoUrl: z.string().optional(),
   branch: z.string().optional(),
   bloodGroup: z.string().optional(),
   medicalIssues: z.string().optional(),
@@ -27,6 +28,14 @@ export const ManagerMembersNewAdmissionAdmissionSchema = z.object({
   paymentMode: z.string().min(1, 'Payment mode is required'),
   remarks: z.string().optional(),
   referredBy: z.string().optional(),
+  documents: z.array(z.object({
+    id: z.string(),
+    type: z.string(),
+    number: z.string().optional(),
+    fileName: z.string(),
+    status: z.enum(['Verified', 'Pending', 'Rejected']).default('Verified'),
+    uploadDate: z.string(),
+  })).optional(),
 });
 
 export type ManagerMembersNewAdmissionAdmissionFormValues = z.infer<typeof ManagerMembersNewAdmissionAdmissionSchema>;

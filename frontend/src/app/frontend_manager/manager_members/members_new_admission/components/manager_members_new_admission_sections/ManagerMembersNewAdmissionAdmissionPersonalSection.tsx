@@ -36,7 +36,11 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        setPhotoPreview(event.target?.result as string);
+        const res = event.target?.result as string;
+        setPhotoPreview(res);
+        if (setValue) {
+          setValue('photoUrl', res, { shouldDirty: true, shouldValidate: true });
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -96,19 +100,37 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             <label className="mgr-label" htmlFor="admission-email">Email Address</label>
             <div className="mgr-input-icon-wrap">
               <Mail size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-email" {...register('email')} type="email" className={`mgr-input mgr-input-with-icon${errors.email ? ' mgr-input-error' : ''}`} placeholder="student@example.com" />
+              <input
+                id="admission-email"
+                {...register('email')}
+                type="email"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'admission-email-error' : undefined}
+                className={`mgr-input mgr-input-with-icon${errors.email ? ' mgr-input-error' : ''}`}
+                placeholder="student@example.com"
+              />
             </div>
-            {errors.email && <p className="mgr-error" role="alert">{errors.email.message}</p>}
+            {errors.email && <p id="admission-email-error" className="mgr-error" role="alert">{errors.email.message}</p>}
           </div>
 
           {/* Gender */}
           <div className="mgr-form-field">
-            <label className="mgr-label" htmlFor="admission-gender">Gender</label>
-            <select id="admission-gender" {...register('gender')} className="mgr-select">
+            <label className="mgr-label mgr-label-required" htmlFor="admission-gender">Gender</label>
+            <select
+              id="admission-gender"
+              {...register('gender')}
+              required
+              aria-required="true"
+              aria-invalid={Boolean(errors.gender)}
+              aria-describedby={errors.gender ? 'admission-gender-error' : undefined}
+              className={`mgr-select${errors.gender ? ' mgr-input-error' : ''}`}
+            >
+              <option value="">-- Select Gender --</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
+            {errors.gender && <p id="admission-gender-error" className="mgr-error" role="alert">{errors.gender.message}</p>}
           </div>
 
           {/* Date of Birth */}
@@ -134,7 +156,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             <label className="mgr-label" htmlFor="admission-parent-name">Parent / Guardian Name</label>
             <div className="mgr-input-icon-wrap">
               <User size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-parent-name" {...register('parentName')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Ramesh Sharma (Father)" />
+              <input id="admission-parent-name" {...register('parentName')} type="text" className="mgr-input mgr-input-with-icon" placeholder="e.g. Guardian Full Name (Father/Mother)" />
             </div>
           </div>
 
@@ -202,6 +224,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             <div className="mgr-input-icon-wrap">
               <HeartPulse size={18} strokeWidth={2} className="mgr-input-icon text-danger" />
               <select id="admission-blood-group" {...register('bloodGroup')} className="mgr-select mgr-input-with-icon">
+                <option value="">-- Select Blood Group (Optional) --</option>
                 <option value="B+">B+ (Positive)</option>
                 <option value="A+">A+ (Positive)</option>
                 <option value="O+">O+ (Positive)</option>

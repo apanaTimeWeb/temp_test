@@ -79,7 +79,8 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             <label className="mgr-label mgr-label-required" htmlFor="admission-payment-mode">{tManagerUi('payment_mode_23b35c')}</label>
             <div className="mgr-input-icon-wrap">
               <CreditCard size={18} strokeWidth={2} className="mgr-input-icon" />
-              <select id="admission-payment-mode" {...register('paymentMode')} className={`mgr-select mgr-input-with-icon${errors.paymentMode ? ' mgr-input-error' : ''}`}>
+              <select id="admission-payment-mode" {...register('paymentMode')} className={`mgr-select mgr-input-with-icon${errors.paymentMode ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.paymentMode)} aria-required="true">
+                <option value="">-- Select Payment Mode --</option>
                 <option value="UPI">UPI (Google Pay / PhonePe / Paytm / QR)</option>
                 <option value="Cash">Cash at Reception</option>
                 <option value="Card">Debit / Credit Card (POS Machine)</option>

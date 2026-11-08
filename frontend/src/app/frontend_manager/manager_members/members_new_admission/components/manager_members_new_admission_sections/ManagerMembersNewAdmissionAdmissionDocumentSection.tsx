@@ -3,17 +3,60 @@
 
 import { useState } from 'react';
 import { FileText, Upload, CheckCircle2 } from 'lucide-react';
+import type { UseFormSetValue, UseFormWatch } from 'react-hook-form';
+import type { ManagerMembersNewAdmissionAdmissionFormValues } from '@/app/frontend_manager/manager_members/members_new_admission/schemas/ManagerMembersNewAdmissionAdmissionSchema';
 
-export function ManagerMembersNewAdmissionAdmissionDocumentSection() {
+export interface ManagerMembersNewAdmissionAdmissionDocumentSectionProps {
+  setValue?: UseFormSetValue<ManagerMembersNewAdmissionAdmissionFormValues>;
+  watch?: UseFormWatch<ManagerMembersNewAdmissionAdmissionFormValues>;
+}
+
+export function ManagerMembersNewAdmissionAdmissionDocumentSection({
+  setValue,
+}: ManagerMembersNewAdmissionAdmissionDocumentSectionProps = {}) {
   const [docType, setDocType] = useState('Aadhaar Card');
   const [docNumber, setDocNumber] = useState('');
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+
+  const syncDocumentToForm = (type: string, numberVal: string, fileName: string | null) => {
+    if (setValue) {
+      const sanitizedNum = numberVal.replace(/[^a-zA-Z0-9 -]/g, '').slice(0, 30);
+      setValue(
+        'documents',
+        [
+          {
+            id: 'doc-kyc-1',
+            type,
+            number: sanitizedNum,
+            fileName: fileName || `${type.toLowerCase().replace(/\s+/g, '_')}.pdf`,
+            status: 'Verified',
+            uploadDate: new Date().toISOString().split('T')[0],
+          },
+        ],
+        { shouldValidate: true, shouldDirty: true }
+      );
+    }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFileName(file.name);
+      syncDocumentToForm(docType, docNumber, file.name);
     }
+  };
+
+  const handleDocNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // BUG-22: Input sanitization - allow only alphanumeric, spaces, and hyphens up to 30 characters
+    const sanitized = e.target.value.replace(/[^a-zA-Z0-9 -]/g, '').slice(0, 30);
+    setDocNumber(sanitized);
+    syncDocumentToForm(docType, sanitized, selectedFileName);
+  };
+
+  const handleDocTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newType = e.target.value;
+    setDocType(newType);
+    syncDocumentToForm(newType, docNumber, selectedFileName);
   };
 
   return (
@@ -31,7 +74,7 @@ export function ManagerMembersNewAdmissionAdmissionDocumentSection() {
               <select
                 id="admission-doc-type"
                 value={docType}
-                onChange={(e) => setDocType(e.target.value)}
+                onChange={handleDocTypeChange}
                 className="mgr-select mgr-input-with-icon"
               >
                 <option value="Aadhaar Card">Aadhaar Card</option>
@@ -49,7 +92,8 @@ export function ManagerMembersNewAdmissionAdmissionDocumentSection() {
               id="admission-doc-number"
               type="text"
               value={docNumber}
-              onChange={(e) => setDocNumber(e.target.value)}
+              onChange={handleDocNumberChange}
+              maxLength={30}
               placeholder="e.g. 5489 1234 5678"
               className="mgr-input"
             />
