@@ -84,7 +84,7 @@ export function ManagerMembersEnquiriesFollowUpFormPanel({
           />
           {remarkError && <p id="crm-followup-remark-error" className="crm-error" role="alert">{remarkError.message}</p>}
         </div>
-        <button type="submit" className="crm-btn-primary crm-btn-full cursor-not-allowed" disabled title={unavailableTitle}>
+        <button type="submit" className="crm-btn-primary crm-btn-full cursor-not-allowed opacity-60" disabled title={unavailableTitle}>
           <Plus size={15} />{submitLabel}
         </button>
         <button

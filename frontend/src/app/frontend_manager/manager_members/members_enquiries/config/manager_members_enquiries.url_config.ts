@@ -12,6 +12,7 @@ export const MANAGER_MEMBERS_ENQUIRIES_ROUTES = {
   DETAIL: (id: string) => managerMembersEnquiriesView('detail', { id }),
   /** This route carries no name/phone PII in the URL. */
   ADMISSION_CONVERSION: () => '/frontend_manager/manager_members/members_directory?view=new',
+  NEW_ADMISSION: '/frontend_manager/manager_members/members_new_admission',
 } as const;
 
 /** Existing source-backed API-relative paths only; write operations remain fail-closed. */

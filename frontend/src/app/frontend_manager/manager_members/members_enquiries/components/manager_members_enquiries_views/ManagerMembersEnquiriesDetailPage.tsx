@@ -42,7 +42,15 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
   const enquiryQuery = useQuery({ queryKey: MANAGER_CRM_QUERY_KEYS.enquiry(id), queryFn: () => fetchManagerEnquiriesEnquiryById(id), staleTime: 15_000 });
   const enquiry = enquiryQuery.data;
   const followUpForm = useForm<ManagerMembersEnquiriesFollowUpFormData>({ resolver: zodResolver(managerCrmFollowUpDraftSchema), defaultValues: { date: '', remark: '' } });
-  const [localFollowUps, setLocalFollowUps] = useState<Array<{ id: string; date: string; time: string; remark: string; by: string }>>([]);
+  const [localFollowUps, setLocalFollowUps] = useState<Array<{ id: string; date: string; time: string; remark: string; by: string }>>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const stored = sessionStorage.getItem(`manager_crm_followups_${id}`);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const handleAddFollowUp = (data: { date: string; remark: string }) => {
     const newEntry = {
@@ -52,7 +60,15 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
       remark: data.remark,
       by: 'Manager (Desk)',
     };
-    setLocalFollowUps((prev) => [newEntry, ...prev]);
+    setLocalFollowUps((prev) => {
+      const updated = [newEntry, ...prev];
+      try {
+        sessionStorage.setItem(`manager_crm_followups_${id}`, JSON.stringify(updated));
+      } catch {
+        // Safe storage fallback
+      }
+      return updated;
+    });
   };
 
   if (enquiryQuery.isPending) return <div className="crm-page crm-empty-state"><p>{tManagerUi('loading_enquiry')}</p></div>;

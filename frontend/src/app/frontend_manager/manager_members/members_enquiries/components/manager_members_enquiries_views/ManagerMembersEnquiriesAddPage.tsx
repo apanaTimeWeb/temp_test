@@ -59,10 +59,7 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
 <div className="crm-drawer-overlay" onClick={handleClose} aria-hidden="true" />
     <aside ref={dialogRef} tabIndex={-1} className="crm-drawer" role="dialog" aria-labelledby="crm-new-enquiry-title" aria-modal="true"
       data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
+      data-route-id={_routeQuery.id}>
       <div className="crm-drawer-header"><div className="crm-drawer-header-left"><div className="crm-drawer-icon"><PhoneCall size={18} aria-hidden="true" /></div><div><h2 id="crm-new-enquiry-title" className="crm-drawer-title">{tManagerUi('new_enquiry')}</h2><p className="crm-drawer-subtitle">{tManagerUi('capture_a_new_prospective_student')}</p></div></div><button type="button" className="crm-btn-icon" onClick={handleClose} title={tManagerUi('close')} aria-label={tManagerUi('close_drawer')}><X size={18} /></button></div>
       <p className="crm-contract-warning" role="status" data-testid="manager-crm-create-contract-warning">{tManagerUi('crm_mutations_unavailable_host_contract')}</p>
       {draftFeedback && <p className="crm-contract-warning" role="status" aria-live="polite" data-testid="manager-crm-create-draft-feedback">{draftFeedback}</p>}
@@ -75,7 +72,7 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
           <div className="crm-field"><label htmlFor="enq-handled-by" className="crm-label">{tManagerUi('handled_by')} <span className="crm-label-optional">{tManagerUi('optional')}</span></label><select id="enq-handled-by" className="crm-select" {...register('handledBy')}><option value="">{tManagerUi('assign_a_staff_member')}</option>{MANAGER_CRM_SAMPLE_STAFF_OPTIONS.map((staff) => <option key={staff.id} value={staff.name}>{staff.name}</option>)}</select></div>
           <div className="crm-field"><label htmlFor="enq-notes" className="crm-label">{tManagerUi('notes')} <span className="crm-label-optional">{tManagerUi('optional')}</span></label><textarea id="enq-notes" rows={3} className="crm-textarea" {...register('notes')} /></div>
         </div></div>
-        <div className="crm-drawer-footer"><button type="button" className="crm-btn-ghost crm-btn-flex-1" onClick={handleClose}>{tManagerUi('cancel')}</button><button type="submit" className="crm-btn-primary crm-btn-flex-2 cursor-not-allowed" disabled title={tManagerUi('crm_mutations_unavailable_host_contract')}><Save size={15} />{tManagerUi('crm_creation_unavailable')}</button></div>
+        <div className="crm-drawer-footer"><button type="button" className="crm-btn-ghost crm-btn-flex-1" onClick={handleClose}>{tManagerUi('cancel')}</button><button type="submit" className="crm-btn-primary crm-btn-flex-2 cursor-not-allowed opacity-60" disabled title={tManagerUi('crm_mutations_unavailable_host_contract')}><Save size={15} />{tManagerUi('crm_creation_unavailable')}</button></div>
       </form>
     </aside>
   </>;
