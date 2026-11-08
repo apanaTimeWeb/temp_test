@@ -28,6 +28,7 @@ export function ManagerMembersDirectoryKpiSection({
           <button
             key={kpi.id}
             type="button"
+            data-testid={`manager-kpi-card-${kpi.id}`}
             onClick={() => onSelectTab?.(kpi.tab)}
             className={`mgr-card p-4 flex items-center justify-between gap-3 text-left transition-all cursor-pointer ${
               isSelected ? 'ring-2 ring-primary border-primary shadow-sm' : 'hover:border-primary'
@@ -40,7 +41,10 @@ export function ManagerMembersDirectoryKpiSection({
               </div>
               <div>
                 <p className="text-xs font-bold text-secondary uppercase">{kpi.label}</p>
-                <h3 data-testid={kpi.id === 'total' ? 'manager-members-total-count' : undefined} className="text-2xl font-black text-primary">
+                <h3
+                  data-testid={kpi.id === 'total' ? 'manager-members-total-count' : `manager-members-${kpi.id}-count`}
+                  className="text-2xl font-black text-primary"
+                >
                   {kpi.value}
                 </h3>
               </div>

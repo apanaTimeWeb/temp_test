@@ -7,9 +7,13 @@ export function ManagerMembersDirectoryHeader() {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
   return (
 <div className="flex flex-col gap-1 mb-8">
-        <div className="mgr-breadcrumb">
-          <span>{tManagerUi('members')}</span><span>/</span><span>{tManagerUi('directory')}</span>
-        </div>
+        <nav aria-label="Breadcrumb">
+          <ol className="mgr-breadcrumb flex items-center gap-1.5 list-none p-0 m-0 text-xs text-secondary">
+            <li><span>{tManagerUi('members')}</span></li>
+            <li aria-hidden="true" className="select-none">/</li>
+            <li aria-current="page"><span className="text-primary font-medium">{tManagerUi('directory')}</span></li>
+          </ol>
+        </nav>
         <h1 className="mgr-page-title flex items-center gap-3 mt-2">
           <Users className="text-primary" size={28} /> {tManagerUi('members_management')}
         </h1>

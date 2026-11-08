@@ -143,6 +143,13 @@ export function ManagerMembersDirectoryTable({
                     {onToggleSelectAll && (
                       <input
                         type="checkbox"
+                        ref={(el) => {
+                          if (el) {
+                            const all = paginatedMembers.length > 0 && paginatedMembers.every((m) => selectedIds.includes(m.id));
+                            const some = paginatedMembers.some((m) => selectedIds.includes(m.id));
+                            el.indeterminate = some && !all;
+                          }
+                        }}
                         checked={paginatedMembers.length > 0 && paginatedMembers.every((m) => selectedIds.includes(m.id))}
                         onChange={onToggleSelectAll}
                         aria-label="Select all members on this page"
@@ -225,10 +232,7 @@ export function ManagerMembersDirectoryTable({
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPreviewMember(member);
-                            }}
+                            onClick={(e) => { e.stopPropagation(); setPreviewMember(member); }}
                             className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold bg-surface border border-border text-secondary hover:text-primary hover:border-primary transition-colors cursor-pointer"
                             title={`Preview Photo & KYC for ${member.name}`}
                           >
@@ -238,23 +242,18 @@ export function ManagerMembersDirectoryTable({
                           {onQuickWhatsApp && (
                             <button
                               type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onQuickWhatsApp(member);
-                              }}
+                              onClick={(e) => { e.stopPropagation(); onQuickWhatsApp(member); }}
+                              aria-label={`Send WhatsApp message to ${member.name}`}
                               className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
                               title={`Send WhatsApp to ${member.name}`}
                             >
-                              <MessageSquare size={12} />
+                              <MessageSquare size={12} aria-hidden="true" />
                               <span className="hidden sm:inline">WhatsApp</span>
                             </button>
                           )}
                           <button
                             type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onSelectMemberProfile(member.id);
-                            }}
+                            onClick={(e) => { e.stopPropagation(); onSelectMemberProfile(member.id); }}
                             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-surface border border-border text-primary hover:bg-primary hover:text-on-primary transition-colors"
                             title={`View profile of ${member.name}`}
                           >

@@ -4,14 +4,17 @@ import { useState, useMemo } from 'react';
 import type { ManagerMembersDirectoryRecord } from '../types/ManagerMembersDirectoryTypes';
 import type { ManagerMembersTimeHorizon } from '../components/manager_members_directory_sections/ManagerMembersDirectoryTimeHorizonBar';
 
-export function useManagerMembersDirectoryTimeFilter(filteredMembers: ManagerMembersDirectoryRecord[]) {
+export function useManagerMembersDirectoryTimeFilter(
+  filteredMembers: ManagerMembersDirectoryRecord[],
+  referenceDate?: Date,
+) {
   const [timeHorizon, setTimeHorizon] = useState<ManagerMembersTimeHorizon>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
 
   const timeFilteredMembers = useMemo(() => {
     if (timeHorizon === 'all') return filteredMembers;
-    const now = new Date('2026-04-15T12:00:00Z');
+    const now = referenceDate ?? new Date();
     return filteredMembers.filter((m) => {
       const recDate = new Date(m.joinDate);
       if (isNaN(recDate.getTime())) return true;

@@ -89,10 +89,11 @@ export function ManagerMembersDirectoryTimeHorizonBar({
                   onCustomStartDateChange('');
                   onCustomEndDateChange('');
                 }}
-                className="p-1 text-secondary hover:text-danger"
+                className="p-1 text-secondary hover:text-danger cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none rounded"
                 title="Clear custom dates"
+                aria-label="Clear custom dates"
               >
-                <X size={13} />
+                <X size={13} aria-hidden="true" />
               </button>
             )}
           </div>

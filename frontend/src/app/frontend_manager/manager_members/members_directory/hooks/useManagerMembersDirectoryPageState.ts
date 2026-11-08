@@ -59,16 +59,31 @@ export function useManagerMemberDirectoryPageState(routeIntent: ManagerMembersDi
       filtered = filtered.filter((member) => (
         member.name.toLowerCase().includes(normalizedQuery) ||
         member.id.toLowerCase().includes(normalizedQuery) ||
+        (member.phone && member.phone.toLowerCase().includes(normalizedQuery)) ||
+        (member.email && member.email.toLowerCase().includes(normalizedQuery)) ||
+        (member.smartId && member.smartId.toLowerCase().includes(normalizedQuery)) ||
         (member.seat && member.seat.toLowerCase().includes(normalizedQuery))
       ));
     }
     return filtered;
   }, [activeTab, members, debouncedSearchQuery]);
 
-  const profileMember = useMemo(
-    () => members.find((record) => `${record.id} ${record.name}`.toLowerCase().includes(debouncedProfileSearch.trim().toLowerCase())) ?? null,
-    [members, debouncedProfileSearch],
-  );
+  const profileMember = useMemo(() => {
+    const q = debouncedProfileSearch.trim().toLowerCase();
+    if (!q) return members[0] ?? null;
+    const exactId = members.find((r) => r.id.toLowerCase() === q || (r.smartId && r.smartId.toLowerCase() === q));
+    if (exactId) return exactId;
+    const cleanDigits = q.replace(/\D/g, '');
+    if (cleanDigits.length >= 4) {
+      const exactPhone = members.find((r) => r.phone && r.phone.replace(/\D/g, '').includes(cleanDigits));
+      if (exactPhone) return exactPhone;
+    }
+    const idPrefix = members.find((r) => r.id.toLowerCase().startsWith(q));
+    if (idPrefix) return idPrefix;
+    const nameMatch = members.find((r) => r.name.toLowerCase().includes(q));
+    if (nameMatch) return nameMatch;
+    return members.find((r) => `${r.id} ${r.name}`.toLowerCase().includes(q)) ?? null;
+  }, [members, debouncedProfileSearch]);
 
   return { activeTab, setActiveTab, searchQuery, setSearchQuery, profileSearch, setProfileSearch, members, filteredMembers, profileMember, updateMember };
 }

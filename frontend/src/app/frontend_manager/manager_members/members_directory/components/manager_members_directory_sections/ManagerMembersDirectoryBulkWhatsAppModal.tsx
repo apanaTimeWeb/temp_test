@@ -75,7 +75,7 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay-backdrop backdrop-blur-sm animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay-backdrop backdrop-blur-sm transition-opacity duration-200"
       role="dialog"
       aria-modal="true"
       aria-labelledby="bulk-members-whatsapp-title"
@@ -227,7 +227,11 @@ export function ManagerMembersDirectoryBulkWhatsAppModal({
             {isComplete && (
               <button
                 type="button"
-                onClick={onComplete}
+                onClick={() => {
+                  const count = members.length;
+                  onComplete();
+                  toast.success(`Cleared selection of ${count} members.`);
+                }}
                 className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
               >
                 All Done & Clear Selection

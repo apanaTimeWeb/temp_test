@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 import {
   Armchair, Award, CheckCircle, Clock, ExternalLink, FileText, GraduationCap,
-  Layers, Lock, Mail, MapPin, Pencil, Phone, Search, ShieldCheck, User, Users, ArrowLeft, MessageSquare
+  Layers, Lock, Mail, MapPin, Pencil, Phone, Search, ShieldCheck, User, Users, ArrowLeft, MessageSquare, AlertTriangle
 } from 'lucide-react';
 
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
@@ -46,12 +46,17 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
   const memberStatusLabels: Record<string, string> = { Active: tManagerUi('member_status_active'), Expired: tManagerUi('member_status_expired'), Suspended: tManagerUi('member_status_suspended') };
   const membershipTypeLabel = member ? (membershipTypeLabels[member.type] ?? member.type) : '';
   const memberStatusLabel = member ? (memberStatusLabels[member.status] ?? member.status) : '';
-  const displayDocuments = (member?.documents && member.documents.length > 0) ? member.documents : (member ? [
-    { id: 'DOC-1', type: 'Aadhaar Card', number: '•••• •••• 5678', status: 'Verified' as const, fileName: 'aadhaar_card.pdf', uploadDate: member.joinDate },
-    { id: 'DOC-2', type: 'Student Photo', number: 'PHOTO-01', status: 'Verified' as const, fileName: 'passport_photo.png', uploadDate: member.joinDate },
-  ] : []);
-  const referralPoints = member?.referralPoints ?? 150;
+  const displayDocuments = member?.documents && member.documents.length > 0 ? member.documents : [];
+  const referralPoints = member?.referralPoints ?? 0;
   const referredBy = member?.referredBy || tManagerUi('direct_walkin');
+
+  const statusConfig = member
+    ? {
+        Active: { container: 'bg-success-bg border-success text-success', icon: <CheckCircle size={18} aria-hidden="true" /> },
+        Expired: { container: 'bg-danger-bg border-danger text-danger', icon: <Clock size={18} aria-hidden="true" /> },
+        Suspended: { container: 'bg-warning-bg border-warning text-warning', icon: <AlertTriangle size={18} aria-hidden="true" /> },
+      }[member.status] ?? { container: 'bg-card border-border text-primary', icon: <CheckCircle size={18} aria-hidden="true" /> }
+    : { container: 'bg-card border-border text-primary', icon: <CheckCircle size={18} aria-hidden="true" /> };
 
   return (
     <section className="motion-safe:transition-all motion-safe:duration-base" aria-labelledby="manager-members-profile-title">
@@ -113,9 +118,9 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                 </div>
               </div>
               <div className="space-y-4">
-                <div className="p-3 rounded-xl bg-success-bg border border-success text-success">
+                <div className={`p-3 rounded-xl border ${statusConfig.container}`}>
                   <p className="text-xs font-bold uppercase mb-1">{tManagerUi('status')}</p>
-                  <p className="text-lg font-black flex items-center gap-2"><CheckCircle size={18} /> {memberStatusLabel}</p>
+                  <p className="text-lg font-black flex items-center gap-2">{statusConfig.icon} {memberStatusLabel}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="bg-card p-2 rounded-lg">
@@ -173,39 +178,47 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                 {displayDocuments.length} files attached
               </span>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {displayDocuments.map((doc) => (
-                <div key={doc.id} className="p-4 rounded-xl bg-card border border-border flex flex-col justify-between gap-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <FileText size={18} className="text-info shrink-0" />
-                      <div>
-                        <p className="text-sm font-bold text-primary leading-tight">{doc.type}</p>
-                        <p className="text-xs text-secondary font-mono mt-0.5">{doc.number || doc.fileName}</p>
+            {displayDocuments.length === 0 ? (
+              <div className="p-6 rounded-xl bg-card border border-border text-center text-xs text-secondary">
+                <FileText size={24} className="mx-auto text-secondary mb-2 opacity-50" />
+                <p className="font-semibold text-primary">No KYC Documents Attached</p>
+                <p className="mt-1">Member identity proof documents have not been uploaded to this account yet.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {displayDocuments.map((doc) => (
+                  <div key={doc.id} className="p-4 rounded-xl bg-card border border-border flex flex-col justify-between gap-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <FileText size={18} className="text-info shrink-0" />
+                        <div>
+                          <p className="text-sm font-bold text-primary leading-tight">{doc.type}</p>
+                          <p className="text-xs text-secondary font-mono mt-0.5">{doc.number || doc.fileName}</p>
+                        </div>
+                      </div>
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 ${doc.status === 'Verified' ? 'bg-success-bg text-success border border-border' : 'bg-warning-bg text-warning border border-border'
+                        }`}>
+                        {doc.status === 'Verified' ? <CheckCircle size={12} /> : <Clock size={12} />}
+                        {doc.status === 'Verified' ? tManagerUi('verified') : tManagerUi('pending')}
+                      </span>
+                    </div>
+                    <div className="pt-2 border-t border-border flex items-center justify-between text-xs text-secondary">
+                      <span>{doc.uploadDate}</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toast.info(`Viewing ${doc.type} (${doc.number || doc.fileName})`)}
+                          className="text-primary hover:text-info flex items-center gap-1 text-xs"
+                          title={tManagerUi('preview')}
+                        >
+                          <ExternalLink size={12} /> {tManagerUi('preview')}
+                        </button>
                       </div>
                     </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-semibold flex items-center gap-1 ${doc.status === 'Verified' ? 'bg-success-bg text-success border border-border' : 'bg-warning-bg text-warning border border-border'
-                      }`}>
-                      {doc.status === 'Verified' ? <CheckCircle size={12} /> : <Clock size={12} />}
-                      {doc.status === 'Verified' ? tManagerUi('verified') : tManagerUi('pending')}
-                    </span>
                   </div>
-                  <div className="pt-2 border-t border-border flex items-center justify-between text-xs text-secondary">
-                    <span>{doc.uploadDate}</span>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => toast.info(`Viewing ${doc.type} (${doc.number || doc.fileName})`)}
-                        className="text-primary hover:text-info flex items-center gap-1 text-xs"
-                        title={tManagerUi('preview')}
-                      >
-                        <ExternalLink size={12} /> {tManagerUi('preview')}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

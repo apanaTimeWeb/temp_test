@@ -22,7 +22,7 @@ export function ManagerMembersDirectoryBulkToolbar({
 
   return (
     <div
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[340px] max-w-[95vw] px-4 py-3 bg-card border border-border shadow-2xl rounded-2xl flex items-center justify-between gap-4 animate-in fade-in slide-in-from-bottom-3"
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-auto min-w-[340px] max-w-[95vw] px-4 py-3 bg-card border border-border shadow-2xl rounded-2xl flex items-center justify-between gap-4 transition-all duration-200"
       role="region"
       aria-label="Bulk actions toolbar"
     >

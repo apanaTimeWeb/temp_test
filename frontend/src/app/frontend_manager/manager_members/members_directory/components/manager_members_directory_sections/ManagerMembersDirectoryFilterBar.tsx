@@ -51,7 +51,7 @@ export function ManagerMembersDirectoryFilterBar({
           id="manager-members-search"
           type="search"
           className="mgr-input pl-9 text-xs w-full"
-          placeholder={tManagerUi('search_by_name_or_id')}
+          placeholder="Search by name, ID, phone, email, seat..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -64,10 +64,10 @@ export function ManagerMembersDirectoryFilterBar({
         onChange={(e) => setPlanFilter(e.target.value)}
         className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
       >
-        <option value="all">📦 All Plans</option>
+        <option value="all">All Plans</option>
         {MANAGER_MEMBERSHIP_TYPE_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
-            {opt.value}
+            {tManagerUi(opt.labelKey as any) || opt.value}
           </option>
         ))}
       </select>
@@ -79,10 +79,11 @@ export function ManagerMembersDirectoryFilterBar({
         onChange={(e) => setShiftFilter(e.target.value)}
         className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
       >
-        <option value="all">⏰ All Shifts</option>
+        <option value="all">All Shifts</option>
         <option value="Morning">Morning Shift</option>
         <option value="Afternoon">Afternoon Shift</option>
         <option value="Evening">Evening Shift</option>
+        <option value="Night">Night Shift</option>
         <option value="Full Day">Full Day</option>
       </select>
 
@@ -93,10 +94,10 @@ export function ManagerMembersDirectoryFilterBar({
         onChange={(e) => setGenderFilter(e.target.value)}
         className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
       >
-        <option value="all">👥 All Genders</option>
+        <option value="all">All Genders</option>
         {MANAGER_MEMBERS_GENDER_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
-            {opt.value}
+            {tManagerUi(opt.labelKey as any) || opt.value}
           </option>
         ))}
       </select>
@@ -108,9 +109,9 @@ export function ManagerMembersDirectoryFilterBar({
         onChange={(e) => setExpiryFilter(e.target.value)}
         className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
       >
-        <option value="all">📅 All Expiry</option>
-        <option value="7days">⚠️ Expiring in ≤ 7 Days</option>
-        <option value="30days">🗓️ Expiring in ≤ 30 Days</option>
+        <option value="all">All Expiry Dates</option>
+        <option value="7days">Expiring within 7 Days</option>
+        <option value="30days">Expiring within 30 Days</option>
       </select>
 
       {/* Reset Filters CTA */}

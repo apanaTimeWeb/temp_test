@@ -87,6 +87,8 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
     genderFilter !== 'all' ||
     expiryFilter !== 'all' ||
     timeHorizon !== 'all' ||
+    Boolean(customStartDate) ||
+    Boolean(customEndDate) ||
     activeTab !== 'All Members';
 
   const handleResetFilters = () => {
@@ -96,6 +98,8 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
     setGenderFilter('all');
     setExpiryFilter('all');
     setTimeHorizon('all');
+    setCustomStartDate('');
+    setCustomEndDate('');
     setActiveTab('All Members');
     setPage(0);
   };
@@ -129,9 +133,26 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
     quickWhatsApp,
   } = useManagerMembersDirectoryBulkWhatsApp(members, paginatedMembers, sortedMembers);
 
+  const escapeCsvVal = (val: unknown): string => {
+    const s = String(val ?? '');
+    return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : `"${s}"`;
+  };
+
   const handleExportCsv = () => {
-    const csv = 'Member ID,Name,Phone,Plan,Status,Expiry Date\n' + sortedMembers.map((m) => `"${m.id}","${m.name}","${m.phone}","${m.type}","${m.status}","${m.expiryDate}"`).join('\n');
-    const anchor = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })), download: `students_directory_${new Date().toISOString().slice(0, 10)}.csv` });
+    const headers = ['Member ID', 'Name', 'Phone', 'Plan', 'Status', 'Expiry Date'];
+    const rows = sortedMembers.map((m) => [
+      escapeCsvVal(m.id),
+      escapeCsvVal(m.name),
+      escapeCsvVal(m.phone),
+      escapeCsvVal(m.type),
+      escapeCsvVal(m.status),
+      escapeCsvVal(m.expiryDate),
+    ].join(','));
+    const csv = [headers.join(','), ...rows].join('\r\n');
+    const anchor = Object.assign(document.createElement('a'), {
+      href: URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })),
+      download: `students_directory_${new Date().toISOString().slice(0, 10)}.csv`,
+    });
     anchor.click();
     URL.revokeObjectURL(anchor.href);
   };
@@ -141,10 +162,6 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
       className="mgr-page-animate relative pb-12"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}
-      data-route-seat={_routeQuery.seat}
     >
       <ManagerMembersDirectoryHeader />
       <p
@@ -184,7 +201,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
         {['All Members', 'Active Members', 'Expired Members', 'Suspended Members'].includes(activeTab) && (
           <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
             <ManagerMembersDirectoryStatusTabs
-              activeTab={activeTab as any}
+              activeTab={activeTab}
               onSelectTab={(tab) => {
                 setActiveTab(tab);
                 setPage(0);
@@ -199,30 +216,15 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
               paginatedMembers={paginatedMembers}
               totalRows={totalRows}
               searchQuery={searchQuery}
-              setSearchQuery={(val) => {
-                setSearchQuery(val);
-                setPage(0);
-              }}
+              setSearchQuery={(val) => { setSearchQuery(val); setPage(0); }}
               planFilter={planFilter}
-              setPlanFilter={(val) => {
-                setPlanFilter(val);
-                setPage(0);
-              }}
+              setPlanFilter={(val) => { setPlanFilter(val); setPage(0); }}
               shiftFilter={shiftFilter}
-              setShiftFilter={(val) => {
-                setShiftFilter(val);
-                setPage(0);
-              }}
+              setShiftFilter={(val) => { setShiftFilter(val); setPage(0); }}
               genderFilter={genderFilter}
-              setGenderFilter={(val) => {
-                setGenderFilter(val);
-                setPage(0);
-              }}
+              setGenderFilter={(val) => { setGenderFilter(val); setPage(0); }}
               expiryFilter={expiryFilter}
-              setExpiryFilter={(val) => {
-                setExpiryFilter(val);
-                setPage(0);
-              }}
+              setExpiryFilter={(val) => { setExpiryFilter(val); setPage(0); }}
               hasActiveFilters={hasActiveFilters}
               onResetFilters={handleResetFilters}
               sortField={sortField}
@@ -242,10 +244,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
               startItem={startItem}
               endItem={endItem}
               onPageChange={setPage}
-              onPageSizeChange={(newSize) => {
-                setPageSize(newSize);
-                setPage(0);
-              }}
+              onPageSizeChange={(newSize) => { setPageSize(newSize); setPage(0); }}
             />
           </div>
         )}

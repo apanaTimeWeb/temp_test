@@ -1,5 +1,6 @@
 export interface ManagerMembersDirectoryRecord {
   id: string;
+  smartId?: string;
   name: string;
   phone: string;
   email: string;

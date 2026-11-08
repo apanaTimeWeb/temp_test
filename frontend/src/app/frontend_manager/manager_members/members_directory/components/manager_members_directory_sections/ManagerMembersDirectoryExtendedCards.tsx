@@ -33,19 +33,19 @@ export function ManagerMembersDirectoryExtendedCards({
         <div className="space-y-2 text-xs">
           <div className="flex justify-between items-center">
             <span className="text-secondary flex items-center gap-1.5"><Armchair size={14} /> Assigned Seat:</span>
-            <span className="font-bold text-primary bg-primary-subtle px-2 py-0.5 rounded">{member.seat || 'S-01'}</span>
+            <span className="font-bold text-primary bg-primary-subtle px-2 py-0.5 rounded">{member.seat || 'Unassigned'}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-secondary flex items-center gap-1.5"><Clock size={14} /> Shift Timing:</span>
-            <span className="font-semibold text-primary">{member.shift || 'Morning (06:00 AM – 02:00 PM)'}</span>
+            <span className="font-semibold text-primary">{member.shift || 'Not Selected'}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-secondary flex items-center gap-1.5"><Layers size={14} /> Floor:</span>
-            <span className="font-medium text-primary">{member.floor || '1st Floor (General Study)'}</span>
+            <span className="font-medium text-primary">{member.floor || 'Unallocated'}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-secondary flex items-center gap-1.5"><Lock size={14} /> Locker:</span>
-            <span className="font-medium text-primary">{member.locker || 'L-04 (Assigned)'}</span>
+            <span className="font-medium text-primary">{member.locker || 'None'}</span>
           </div>
         </div>
       </div>
@@ -68,19 +68,19 @@ export function ManagerMembersDirectoryExtendedCards({
         <div className="space-y-2 text-xs">
           <div className="flex justify-between items-center">
             <span className="text-secondary">Parent / Guardian:</span>
-            <span className="font-bold text-primary">{member.guardian || 'Ramesh Sharma (Father)'}</span>
+            <span className="font-bold text-primary">{member.guardian || 'Not Provided'}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-secondary">Guardian Contact:</span>
-            <span className="font-mono text-primary">{member.emergencyContact || '9811223344'}</span>
+            <span className="font-mono text-primary">{member.emergencyContact || 'Not Provided'}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-secondary">Gender:</span>
-            <span className="font-medium text-primary">{member.gender || 'Male'}</span>
+            <span className="font-medium text-primary">{member.gender || 'Not Specified'}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-secondary">Date of Birth:</span>
-            <span className="font-medium text-primary">{member.dob || '1998-04-12'}</span>
+            <span className="font-medium text-primary">{member.dob || 'Not Provided'}</span>
           </div>
         </div>
       </div>
@@ -103,11 +103,11 @@ export function ManagerMembersDirectoryExtendedCards({
         <div className="space-y-2 text-xs">
           <div className="flex justify-between items-center">
             <span className="text-secondary">Target Preparation:</span>
-            <span className="font-bold text-success bg-success-bg px-2 py-0.5 rounded">{member.preparationFor || 'UPSC Civil Services'}</span>
+            <span className="font-bold text-success bg-success-bg px-2 py-0.5 rounded">{member.preparationFor || 'General Study'}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-secondary">Study Stream:</span>
-            <span className="font-medium text-primary">General Studies & Research</span>
+            <span className="text-secondary">Course / Stream:</span>
+            <span className="font-medium text-primary">{member.department || 'General Studies & Research'}</span>
           </div>
         </div>
       </div>
