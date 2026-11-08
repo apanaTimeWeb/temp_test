@@ -24,7 +24,19 @@ const ALUMNI_RECORDS: MembersAlumniRow[] = [
 export function ManagerMembersAlumniClient() {
   const tManagerUi = useTranslations('manager.manager_alumni.ui');
 
-  const [records, setRecords] = useState<MembersAlumniRow[]>(ALUMNI_RECORDS);
+  const [records, setRecords] = useState<MembersAlumniRow[]>(() => {
+    if (typeof window === 'undefined') return ALUMNI_RECORDS;
+    try {
+      const stored = localStorage.getItem('manager_alumni_records');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // storage fallback
+    }
+    return ALUMNI_RECORDS;
+  });
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
@@ -113,6 +125,35 @@ export function ManagerMembersAlumniClient() {
     URL.revokeObjectURL(url);
   };
 
+  const kpis = useMemo(() => {
+    const total = records.length;
+    if (total === 0) {
+      return { successRate: '0%', officersPercent: '0%', avgTenure: '0 Mos' };
+    }
+    const cleared = records.filter((r) => r.currentStatus === 'Cleared Exam').length;
+    const successRate = `${Math.round((cleared / total) * 100)}%`;
+
+    const officers = records.filter((r) =>
+      /ias|ips|irs|ssc|bank|officer|rbi|inspector|govt|psu/i.test(r.designation || '') ||
+      /upsc|ssc|banking|state psc/i.test(r.exam || '')
+    ).length;
+    const officersPercent = `${Math.round((officers / total) * 100)}%`;
+
+    let totalMonths = 0;
+    records.forEach((r) => {
+      const match = /(\d+)\s*(month|yr|year)/i.exec(r.duration);
+      if (match && match[1] && match[2]) {
+        const val = parseInt(match[1], 10);
+        totalMonths += match[2].toLowerCase().startsWith('y') ? val * 12 : val;
+      } else {
+        totalMonths += 12;
+      }
+    });
+    const avgTenure = `${(totalMonths / total).toFixed(1)} Mos`;
+
+    return { successRate, officersPercent, avgTenure };
+  }, [records]);
+
   return (
     <div className="mgr-page">
       <div className="mgr-page-header">
@@ -148,15 +189,15 @@ export function ManagerMembersAlumniClient() {
         </div>
         <div className="mgr-card p-4">
           <span className="text-xs text-secondary font-medium">Exam Success Rate</span>
-          <p className="text-2xl font-bold text-success mt-1">87.5%</p>
+          <p className="text-2xl font-bold text-success mt-1">{kpis.successRate}</p>
         </div>
         <div className="mgr-card p-4">
           <span className="text-xs text-secondary font-medium">Govt / PSU Officers</span>
-          <p className="text-2xl font-bold text-info mt-1">62%</p>
+          <p className="text-2xl font-bold text-info mt-1">{kpis.officersPercent}</p>
         </div>
         <div className="mgr-card p-4">
           <span className="text-xs text-secondary font-medium">Average Tenure</span>
-          <p className="text-2xl font-bold text-warning mt-1">11.8 Mos</p>
+          <p className="text-2xl font-bold text-warning mt-1">{kpis.avgTenure}</p>
         </div>
       </div>
 
@@ -212,7 +253,16 @@ export function ManagerMembersAlumniClient() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAdd={(newAlumni) => {
-          setRecords([newAlumni, ...records]);
+          setRecords((prev) => {
+            const updated = [newAlumni, ...prev];
+            try {
+              localStorage.setItem('manager_alumni_records', JSON.stringify(updated));
+              window.dispatchEvent(new CustomEvent('manager_alumni_created', { detail: newAlumni }));
+            } catch {
+              // storage fallback
+            }
+            return updated;
+          });
           setToastMsg(`Alumni record for "${newAlumni.name}" added successfully!`);
           setTimeout(() => setToastMsg(null), 4000);
         }}

@@ -98,6 +98,7 @@ export function ManagerMembersAlumniTable({
               type="search"
               placeholder="Search by student name, qualified exam, or phone..."
               className="mgr-input mgr-input-with-icon"
+              data-testid="manager-alumni-search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -106,6 +107,7 @@ export function ManagerMembersAlumniTable({
           {/* Year Filter */}
           <div className="w-full md:w-44">
             <select
+              data-testid="manager-alumni-year-filter"
               aria-label="Filter by Year"
               value={yearFilter}
               onChange={(e) => setYearFilter(e.target.value)}
@@ -121,6 +123,7 @@ export function ManagerMembersAlumniTable({
           {/* Exam Domain Filter */}
           <div className="w-full md:w-48">
             <select
+              data-testid="manager-alumni-exam-filter"
               aria-label="Filter by Exam Category"
               value={examFilter}
               onChange={(e) => setExamFilter(e.target.value)}
@@ -138,6 +141,7 @@ export function ManagerMembersAlumniTable({
           {/* Status Filter */}
           <div className="w-full md:w-44">
             <select
+              data-testid="manager-alumni-status-filter"
               aria-label="Filter by Status"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -153,6 +157,7 @@ export function ManagerMembersAlumniTable({
           {hasActiveFilters && (
             <button
               type="button"
+              data-testid="manager-alumni-reset-filters"
               onClick={onResetFilters}
               className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer shrink-0 self-center"
               title="Reset all filters"
@@ -166,7 +171,7 @@ export function ManagerMembersAlumniTable({
       {/* Alumni Records Table */}
       <div className="mgr-card overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm" data-testid="manager-alumni-table">
             <thead>
               <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold text-left">
                 {renderSortableHeader('id', 'Alumni ID')}
@@ -191,7 +196,11 @@ export function ManagerMembersAlumniTable({
                   <tr key={alumnus.id} className="border-b border-border last:border-0 hover:bg-surface-hover">
                     <td className="py-3 px-4 font-mono font-bold text-primary">{alumnus.id}</td>
                     <td className="py-3 px-4 font-semibold text-primary">{alumnus.name}</td>
-                    <td className="py-3 px-4 font-mono text-secondary text-xs">{alumnus.phone}</td>
+                    <td className="py-3 px-4 font-mono text-secondary text-xs">
+                      {alumnus.phone.replace(/\D/g, '').length === 10
+                        ? `+91 ${alumnus.phone.replace(/\D/g, '').slice(0, 5)} ${alumnus.phone.replace(/\D/g, '').slice(5)}`
+                        : alumnus.phone}
+                    </td>
                     <td className="py-3 px-4 text-secondary text-xs">{alumnus.leftDate}</td>
                     <td className="py-3 px-4 text-secondary text-xs">{alumnus.duration}</td>
                     <td className="py-3 px-4">
@@ -257,6 +266,7 @@ export function ManagerMembersAlumniTable({
               <div className="flex items-center gap-2">
                 <button
                   type="button"
+                  data-testid="manager-alumni-pagination-prev"
                   disabled={effectivePage === 0}
                   onClick={() => onPageChange(effectivePage - 1)}
                   className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
@@ -268,6 +278,7 @@ export function ManagerMembersAlumniTable({
                 </span>
                 <button
                   type="button"
+                  data-testid="manager-alumni-pagination-next"
                   disabled={effectivePage >= pageCount - 1}
                   onClick={() => onPageChange(effectivePage + 1)}
                   className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"

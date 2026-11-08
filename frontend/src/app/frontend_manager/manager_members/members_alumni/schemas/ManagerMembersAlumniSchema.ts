@@ -20,3 +20,16 @@ export const ManagerStudentSchema = z.object({
 export const ManagerMembersAlumniListResponseSchema = z.array(ManagerStudentSchema);
 export const ManagerStudentDetailResponseSchema = ManagerStudentSchema;
 
+export const MembersAlumniRowSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  phone: z.string().min(7),
+  leftDate: z.string().min(1),
+  duration: z.string().min(1),
+  exam: z.string().min(1),
+  currentStatus: z.string().min(1),
+  designation: z.string().optional(),
+  testimonial: z.string().optional(),
+});
+export const ManagerAlumniListSchema = z.array(MembersAlumniRowSchema);
+

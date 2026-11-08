@@ -70,10 +70,11 @@ export function ManagerMembersAlumniAddModal({
       return;
     }
 
+    const cleanPhone = phone.trim().replace(/\D/g, '');
     const newRecord: MembersAlumniRow = {
-      id: `ALM-${String(Date.now()).slice(-3)}`,
+      id: `ALM-${Date.now().toString().slice(-4)}`,
       name: name.trim(),
-      phone: phone.trim(),
+      phone: cleanPhone.length === 10 ? cleanPhone : phone.trim(),
       leftDate,
       duration: duration.trim() || '1 Year',
       exam: exam.trim(),
@@ -88,7 +89,7 @@ export function ManagerMembersAlumniAddModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true" aria-labelledby="add-alumni-title">
       <div className="w-full max-w-xl rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-5 max-h-[90vh] flex flex-col">
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-border pb-3 shrink-0">
@@ -97,7 +98,7 @@ export function ManagerMembersAlumniAddModal({
               <GraduationCap size={22} />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-primary">Add Alumni Record from Library Students</h2>
+              <h2 id="add-alumni-title" className="text-lg font-bold text-primary">Add Alumni Record from Library Students</h2>
               <p className="text-xs text-secondary">Select an enrolled or past student to celebrate their competitive achievement</p>
             </div>
           </div>
