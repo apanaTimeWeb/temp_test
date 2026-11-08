@@ -10,7 +10,6 @@ export const MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES = {
   ID_CARD: '/frontend_manager/manager_members/members_id_card_generator',
   DETAIL: (id: string) => `/frontend_manager/manager_members/members_directory?${new URLSearchParams({ view: 'profile', id }).toString()}`,
   EDIT: (id: string) => `/frontend_manager/manager_members/members_directory?${new URLSearchParams({ view: 'edit', id }).toString()}`,
-  COLLECT_FEE_FOR_STUDENT: (smartId: string) => `/frontend_manager/manager_finance/finance_collect_fee?${new URLSearchParams({ id: smartId }).toString()}`,
 } as const;
 export const MANAGER_MEMBERS_GROUP_ADMISSION_API = {
   LIST: '/students',

@@ -11,6 +11,7 @@ export function useManagerMembersGroupAdmissionConfirm() {
   const [pending, setPending] = useState<PendingConfirmation | null>(null);
   const pendingRef = useRef<PendingConfirmation | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const titleId = useId();
 
   const settle = useCallback((confirmed: boolean) => {
@@ -19,10 +20,16 @@ export function useManagerMembersGroupAdmissionConfirm() {
     pendingRef.current = null;
     setPending(null);
     current.resolve(confirmed);
+    if (previousFocusRef.current && typeof previousFocusRef.current.focus === 'function') {
+      previousFocusRef.current.focus();
+    }
   }, []);
 
   const confirm = useCallback((message: string, cancelLabel: string, continueLabel: string): Promise<boolean> => {
     if (pendingRef.current) return Promise.resolve(false);
+    if (typeof document !== 'undefined' && document.activeElement instanceof HTMLElement) {
+      previousFocusRef.current = document.activeElement;
+    }
     return new Promise<boolean>((resolve) => {
       const next = { message, cancelLabel, continueLabel, resolve };
       pendingRef.current = next;
@@ -40,6 +47,7 @@ export function useManagerMembersGroupAdmissionConfirm() {
         role="alertdialog"
         aria-modal="true"
         aria-labelledby={titleId}
+        aria-describedby={titleId}
         className="w-full max-w-md rounded-xl border border-border bg-overlay p-6 shadow-dialog"
       >
         <h2 id={titleId} className="text-lg font-semibold text-foreground">{pending.message}</h2>

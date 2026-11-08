@@ -70,18 +70,6 @@ export function ManagerMembersGroupAdmissionManualModal({
       guardianPhone: '',
       preparationFor: 'UPSC Civil Services',
     },
-    {
-      id: '2',
-      name: '',
-      phone: '',
-      email: '',
-      gender: 'Female',
-      plan: 'Pro Monthly (₹1,500/mo)',
-      shift: 'Evening (02:00 PM – 10:00 PM)',
-      seatPreference: 'AC Cabin',
-      guardianPhone: '',
-      preparationFor: 'SSC CGL',
-    },
   ]);
 
   if (!isOpen) return null;
@@ -125,7 +113,7 @@ export function ManagerMembersGroupAdmissionManualModal({
       toast.error('Please fill at least one student name and a valid 10-digit phone number.');
       return;
     }
-    onConfirm(batchName.trim() || 'Co-Study Group Batch', manualRows);
+    onConfirm(batchName.trim() || 'Co-Study Group Batch', valid);
   };
 
   return (

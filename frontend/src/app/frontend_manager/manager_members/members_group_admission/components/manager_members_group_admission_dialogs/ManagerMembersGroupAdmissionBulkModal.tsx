@@ -47,11 +47,12 @@ export function ManagerMembersGroupAdmissionBulkModal({
       for (let i = startIndex; i < lines.length; i++) {
         const parts = lines[i]?.split(',').map((p) => p.trim());
         if (parts && parts[0]) {
+          const cleanPhone = (parts[1] || '').replace(/\D/g, '');
           rows.push({
             id: String(i),
-            name: parts[0] || `Student ${i}`,
-            phone: parts[1] || '9876500000',
-            email: parts[2] || 'student@example.com',
+            name: parts[0],
+            phone: cleanPhone,
+            email: parts[2] || '',
             plan: parts[3] || 'Pro Monthly',
             shift: parts[4] || 'Morning',
           });
@@ -67,8 +68,14 @@ export function ManagerMembersGroupAdmissionBulkModal({
       toast.error('Please select a valid CSV file with student records.');
       return;
     }
+    const invalidPhoneRows = parsedRows.filter((r) => r.phone.length < 10);
+    if (invalidPhoneRows.length > 0) {
+      toast.error(`${invalidPhoneRows.length} student row(s) have invalid or missing 10-digit phone numbers.`);
+      return;
+    }
+    const generatedBatchId = `GRP-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}`;
     const newBatch: RecentGroupAdmission = {
-      batchId: `GRP-2026-${String(recentGroupsCount + 1).padStart(3, '0')}`,
+      batchId: generatedBatchId,
       batchName: batchName || 'Bulk Uploaded Batch',
       date: new Date().toISOString().slice(0, 10),
       count: parsedRows.length,
@@ -83,10 +90,10 @@ export function ManagerMembersGroupAdmissionBulkModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true" aria-labelledby="bulk-upload-title">
       <div className="w-full max-w-2xl rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-5">
         <div className="flex items-center justify-between border-b border-border pb-3">
-          <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+          <h2 id="bulk-upload-title" className="text-xl font-bold text-primary flex items-center gap-2">
             <FileSpreadsheet size={20} className="text-primary" /> Bulk Group CSV Import
           </h2>
           <button type="button" onClick={onClose} className="text-secondary hover:text-primary">

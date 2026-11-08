@@ -57,7 +57,7 @@ export default function ManagerMembersGroupAdmissionAdmissionForm() {
               plan={watchedPlan}
               shift={watchedShift}
               seat={watchedSeat}
-              locker={watchedLocker}
+              locker={watchedLocker || ''}
               baseAmountMinor={0}
               discountMinor={0}
               totalPayableMinor={0}

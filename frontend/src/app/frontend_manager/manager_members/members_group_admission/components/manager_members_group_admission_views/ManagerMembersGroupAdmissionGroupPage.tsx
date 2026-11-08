@@ -15,6 +15,7 @@ import {
   type GroupSortField,
 } from '../manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
 import { ManagerMembersGroupAdmissionBulkModal } from '../manager_members_group_admission_dialogs/ManagerMembersGroupAdmissionBulkModal';
+import { sanitizeManagerGroupAdmissionCsvCell } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionCsv';
 
 const INITIAL_RECENT_GROUPS: RecentGroupAdmission[] = [
   { batchId: 'GRP-2026-001', batchName: 'UPSC Aspirants Study Circle', date: '2026-10-25', count: 6, shift: 'Morning', status: 'Active' },
@@ -24,7 +25,19 @@ const INITIAL_RECENT_GROUPS: RecentGroupAdmission[] = [
 export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: ManagerMembersGroupAdmissionGroupPageRouteProps) {
   const tManagerUi = useTranslations('manager.manager_group_admission.ui');
 
-  const [recentGroups, setRecentGroups] = useState<RecentGroupAdmission[]>(INITIAL_RECENT_GROUPS);
+  const [recentGroups, setRecentGroups] = useState<RecentGroupAdmission[]>(() => {
+    if (typeof window === 'undefined') return INITIAL_RECENT_GROUPS;
+    try {
+      const stored = localStorage.getItem('manager_group_admissions');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // storage fallback
+    }
+    return INITIAL_RECENT_GROUPS;
+  });
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [showManualModal, setShowManualModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -73,7 +86,10 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   const downloadTemplate = () => {
-    const csv = 'Name,Phone,Email,Plan,Shift\nRahul Sharma,9876543210,rahul@example.com,Pro Monthly,Morning\nPriya Verma,9876543211,priya@example.com,Basic Monthly,Evening\nAmit Kumar,9876543212,amit@example.com,Full Day Saver,Full Day\n';
+    const headers = ['Name', 'Phone', 'Email', 'Plan', 'Shift'].map(sanitizeManagerGroupAdmissionCsvCell).join(',');
+    const sampleRow1 = ['Rahul Sharma', '9876543210', 'rahul@example.com', 'Pro Monthly (₹1,500/mo)', 'Morning (06:00 AM – 02:00 PM)'].map(sanitizeManagerGroupAdmissionCsvCell).join(',');
+    const sampleRow2 = ['Priya Verma', '9876543211', 'priya@example.com', 'Basic Monthly (₹1,000/mo)', 'Evening (02:00 PM – 10:00 PM)'].map(sanitizeManagerGroupAdmissionCsvCell).join(',');
+    const csv = `${headers}\n${sampleRow1}\n${sampleRow2}\n`;
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
     const anchor = document.createElement('a');
     anchor.href = url;
@@ -84,20 +100,38 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
   };
 
   const handleBulkConfirmBatch = (newBatch: RecentGroupAdmission) => {
-    setRecentGroups([newBatch, ...recentGroups]);
+    setRecentGroups((prev) => {
+      const updated = [newBatch, ...prev];
+      try {
+        localStorage.setItem('manager_group_admissions', JSON.stringify(updated));
+        window.dispatchEvent(new CustomEvent('manager_group_batch_created', { detail: newBatch }));
+      } catch {
+        // storage fallback
+      }
+      return updated;
+    });
     toast.success(`Bulk admission successful! Enrolled ${newBatch.count} members in batch ${newBatch.batchId}.`);
   };
 
   const handleManualConfirm = (confirmedBatchName: string, students: GroupStudentEntry[]) => {
     const newBatch: RecentGroupAdmission = {
-      batchId: `GRP-2026-${String(recentGroups.length + 1).padStart(3, '0')}`,
+      batchId: `GRP-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}`,
       batchName: confirmedBatchName,
       date: new Date().toISOString().slice(0, 10),
       count: students.length,
       shift: students[0]?.shift || 'Morning',
       status: 'Active',
     };
-    setRecentGroups([newBatch, ...recentGroups]);
+    setRecentGroups((prev) => {
+      const updated = [newBatch, ...prev];
+      try {
+        localStorage.setItem('manager_group_admissions', JSON.stringify(updated));
+        window.dispatchEvent(new CustomEvent('manager_group_batch_created', { detail: newBatch }));
+      } catch {
+        // storage fallback
+      }
+      return updated;
+    });
     setShowManualModal(false);
     toast.success(`Group admission registered successfully! Enrolled ${students.length} members in batch ${newBatch.batchId}.`);
   };
@@ -107,9 +141,9 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
       className="mgr-page"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}
+      
+      
+      
     >
       <div className="mgr-page-header">
         <div>

@@ -138,9 +138,10 @@ export function ManagerMembersGroupAdmissionCardView({
               <label className="text-xs font-medium text-secondary block mb-1">Blood Group</label>
               <select
                 className="mgr-select text-xs"
-                value={row.bloodGroup || 'B+'}
+                value={row.bloodGroup || ''}
                 onChange={(e) => updateStudent(index, 'bloodGroup', e.target.value)}
               >
+                <option value="">-- Select Blood Group (Optional) --</option>
                 {['A+', 'B+', 'O+', 'AB+', 'A-', 'B-', 'O-', 'AB-'].map((bg) => (
                   <option key={bg} value={bg}>{bg}</option>
                 ))}
