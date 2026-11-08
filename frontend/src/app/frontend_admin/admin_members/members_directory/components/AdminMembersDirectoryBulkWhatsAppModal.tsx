@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: AdminMembersDirectoryBulkWhatsAppModal component owned by admin_members.
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { X, Send, CheckCircle2, MessageSquare, Sparkles, ExternalLink } from 'lucide-react';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 
@@ -42,6 +42,15 @@ export default function AdminMembersDirectoryBulkWhatsAppModal({
     return Math.round((openedIds.size / members.length) * 100);
   }, [openedIds.size, members.length]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const sanitizePhone = (rawPhone: string): string => {
@@ -74,7 +83,15 @@ export default function AdminMembersDirectoryBulkWhatsAppModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay" role="dialog" aria-modal="true" aria-labelledby="members-bulk-whatsapp-title">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="members-bulk-whatsapp-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
       <div className="relative flex max-h-[90vh] w-full max-w-2xl flex-col rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border px-6 py-4 bg-surface">
