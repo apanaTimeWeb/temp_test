@@ -111,9 +111,6 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
       className="space-y-6"
       data-route-view={view}
       data-route-id={id}
-      data-route-name={name}
-      data-route-phone={phone}
-      data-route-smart-id={smartId}
     >
       <div className="flex items-center justify-between">
         <div>

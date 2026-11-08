@@ -197,7 +197,10 @@ export function useManagerFinanceFinesPaymentsPageData({
 
   const handleShareWhatsApp = (r: ManagerReceiptRecord) => {
     const text = encodeURIComponent(`Hello ${r.member}, your Library fee receipt #${r.receiptNumber} (${r.plan}) of ${formatCurrency(r.amount)} is confirmed. Txn ID: ${r.txnId}.`);
-    window.open(`https://wa.me/91${r.phone}?text=${text}`, '_blank');
+    const digits = (r.phone || '').replace(/\D/g, '');
+    const targetPhone = digits.length === 10 ? `91${digits}` : digits;
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    if (popup) popup.opener = null;
     toast.success(`WhatsApp receipt link generated for ${r.member}`);
   };
 

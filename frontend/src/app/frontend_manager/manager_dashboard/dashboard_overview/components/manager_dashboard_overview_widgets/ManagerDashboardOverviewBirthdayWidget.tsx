@@ -54,7 +54,10 @@ export function ManagerDashboardOverviewBirthdayWidget() {
     const greeting = encodeURIComponent(
       `🎉 Dear ${student.name}, Heartiest Birthday Wishes from Library OS (${student.branch})! 🎂 Wishing you endless focus, good health, and grand success in your competitive exams and studies. Keep shining! 📚🌟`
     );
-    window.open(`https://wa.me/91${student.phone}?text=${greeting}`, '_blank');
+    const digits = (student.phone || '').replace(/\D/g, '');
+    const targetPhone = digits.length === 10 ? `91${digits}` : digits;
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${greeting}`, '_blank');
+    if (popup) popup.opener = null;
     setWishedIds((prev) => ({ ...prev, [student.id]: true }));
     toast.success(`Birthday greeting dispatched to ${student.name}!`);
   };

@@ -112,7 +112,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
   };
 
   return (
-    <div className="eng-page space-y-6" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
+    <div className="eng-page space-y-6" data-route-view={view} data-route-id={id}>
       {/* ── Executive ERP Header Banner ── */}
       <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">

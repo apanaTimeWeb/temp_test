@@ -148,9 +148,6 @@ export default function ManagerCommunicationComplaintsPage({
       className="mc-page"
       data-route-view={view}
       data-route-id={id}
-      data-route-name={name}
-      data-route-phone={phone}
-      data-route-smart-id={smartId}
     >
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>

@@ -45,7 +45,7 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
 
   const timeFilteredRows = useMemo(() => {
     if (timeHorizon === 'all') return rowsList;
-    const now = new Date('2026-04-15T12:00:00Z');
+    const now = new Date();
     return rowsList.filter((r) => {
       const recDate = new Date(r.lastSeen);
       if (isNaN(recDate.getTime())) return true;
@@ -117,7 +117,7 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
   );
 
   return (
-    <div className="eng-page" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
+    <div className="eng-page" data-route-view={view} data-route-id={id}>
       {/* ── Breadcrumb ── */}
       <div className="eng-breadcrumb">
         <Link href={MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES.attendance}>{tManagerUi('engagement')}</Link>

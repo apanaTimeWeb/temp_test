@@ -12,9 +12,6 @@ export function ManagerMembersAlumniMain(props: ManagerMembersAlumniMainProps) {
     <div
       data-route-view={props.view}
       data-route-id={props.id}
-      data-route-name={props.name}
-      data-route-phone={props.phone}
-      data-route-smart-id={props.smartId}
     >
       <ManagerMembersAlumniErrorBoundary><ManagerMembersAlumniClient /></ManagerMembersAlumniErrorBoundary>
     </div>

@@ -39,7 +39,7 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
 
   const timeFiltered = useMemo(() => {
     if (timeHorizon === 'all') return MOCK;
-    const now = new Date('2026-04-15T12:00:00Z');
+    const now = new Date();
     return MOCK.filter((r) => {
       const recDate = new Date(r.lastOccupied);
       if (isNaN(recDate.getTime())) return true;

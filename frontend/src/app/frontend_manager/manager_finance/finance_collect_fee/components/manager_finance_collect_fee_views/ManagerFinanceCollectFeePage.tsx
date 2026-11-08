@@ -127,10 +127,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
       {unsavedConfirmDialog}
       <div className="space-y-6"
         data-route-view={_routeQuery.view}
-        data-route-id={_routeQuery.id}
-        data-route-name={_routeQuery.name}
-        data-route-phone={_routeQuery.phone}
-        data-route-smart-id={_routeQuery.smartId}>
+        data-route-id={_routeQuery.id}>
         <div>
           <h1 className="fin-page-title">{tManagerUi('collect_fee')}</h1>
           <p className="fin-page-subtitle">{tManagerUi('preview_fee_collection_details_recording_a_payment_is_cu_5bded1')}</p>

@@ -147,9 +147,6 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
       className="space-y-6"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}
     >
       <div className="flex justify-between items-start flex-wrap gap-4">
         <div>

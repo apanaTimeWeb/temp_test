@@ -108,9 +108,6 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
       className="space-y-6"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}
     >
       <div>
         <p className="fin-input-hint fin-text-warning" role="status">

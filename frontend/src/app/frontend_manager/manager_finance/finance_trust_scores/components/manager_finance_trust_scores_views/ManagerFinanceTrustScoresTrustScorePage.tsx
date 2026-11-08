@@ -85,9 +85,6 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
       data-testid="manager-finance-trust-scores-page"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}
     >
       <div className="flex items-start justify-between gap-4">
         <div>

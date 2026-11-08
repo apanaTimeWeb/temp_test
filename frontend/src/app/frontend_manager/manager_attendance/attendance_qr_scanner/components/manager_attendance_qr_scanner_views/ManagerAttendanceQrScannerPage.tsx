@@ -55,7 +55,7 @@ export default function ManagerAttendanceQrScannerPage({ view, id, name, phone, 
   };
 
   return (
-    <div className="eng-page space-y-6" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
+    <div className="eng-page space-y-6" data-route-view={view} data-route-id={id}>
       <div className="eng-breadcrumb">
         <Link href={MANAGER_ATTENDANCE_QR_SCANNER_ROUTES.attendance}>{tManagerUi('engagement')}</Link>
         <ChevronRight size={12} className="eng-breadcrumb-sep" />

@@ -89,10 +89,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
   return (
     <div className="mc-page"
       data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
+      data-route-id={_routeQuery.id}>
 <p role="status" className="mc-input-hint mc-text-warning mb-4" data-testid="manager-communication-template-contract-warning">{tManagerUi('template_edits_are_draft_only_saving_templates_and_sendi_b21f71')}</p>
 <p role="status" className="mc-input-hint mb-4">{tManagerUi('template_bodies_are_sample_english_copy')}</p>
 

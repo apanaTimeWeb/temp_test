@@ -109,10 +109,7 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
   return (
     <div className="mc-page"
       data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}>
+      data-route-id={_routeQuery.id}>
       <ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog
         log={viewLog}
         typeLabel={viewLog ? getTypeLabel(viewLog.type) : ''}

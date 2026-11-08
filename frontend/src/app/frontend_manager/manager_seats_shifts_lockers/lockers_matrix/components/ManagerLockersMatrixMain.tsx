@@ -11,9 +11,6 @@ export function ManagerLockersMatrixMain(props: ManagerLockersMatrixMainProps) {
     <div
       data-route-view={props.view}
       data-route-id={props.id}
-      data-route-name={props.name}
-      data-route-phone={props.phone}
-      data-route-smart-id={props.smartId}
     >
       <ManagerLockersMatrixClient />
     </div>

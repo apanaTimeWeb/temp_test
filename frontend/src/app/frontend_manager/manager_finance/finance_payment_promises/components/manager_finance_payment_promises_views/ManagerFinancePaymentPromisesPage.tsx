@@ -162,9 +162,6 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
       className="space-y-6"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}
     >
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>

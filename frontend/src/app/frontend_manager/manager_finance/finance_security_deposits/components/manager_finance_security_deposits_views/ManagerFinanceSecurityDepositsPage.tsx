@@ -53,7 +53,7 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
 
   const timeFilteredDeposits = useMemo(() => {
     if (timeHorizon === 'all') return depositsList;
-    const now = new Date('2026-04-15T12:00:00Z');
+    const now = new Date();
     return depositsList.filter((d) => {
       const recDate = new Date(d.collectedDate);
       if (isNaN(recDate.getTime())) return true;
@@ -153,7 +153,7 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
   };
 
   return (
-    <div className="space-y-6" data-route-view={_routeQuery.view} data-route-id={_routeQuery.id} data-route-name={_routeQuery.name} data-route-phone={_routeQuery.phone} data-route-smart-id={_routeQuery.smartId}>
+    <div className="space-y-6" data-route-view={_routeQuery.view} data-route-id={_routeQuery.id}>
       <div>
         <h1 className="fin-page-title">{tManagerUi('security_deposits')}</h1>
         <p className="fin-page-subtitle">{tManagerUi('review_student_security_deposit_records')}</p>

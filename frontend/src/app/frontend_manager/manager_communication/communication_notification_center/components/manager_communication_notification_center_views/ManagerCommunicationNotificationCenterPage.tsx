@@ -23,7 +23,7 @@ export default function ManagerCommunicationNotificationCenterPage({ view, id, n
 
 
   return (
-    <div className="mgr-page-animate relative pb-12" data-route-view={view} data-route-id={id} data-route-name={name} data-route-phone={phone} data-route-smart-id={smartId}>
+    <div className="mgr-page-animate relative pb-12" data-route-view={view} data-route-id={id}>
       {/* Header */}
       <div className="flex flex-col gap-1 mb-8">
         <div className="mgr-breadcrumb">

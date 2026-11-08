@@ -168,7 +168,10 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
           student.daysLeft < 0 ? `expired ${Math.abs(student.daysLeft)} days ago` : `expires in ${student.daysLeft} days`
         }. Amount due: ₹${Math.round(student.due / 100)}. Please renew to maintain your seat access. — Central Library Administration`
       );
-      const popup = window.open(`https://wa.me/91${cleanPhone}?text=${text}`, '_blank');
+      const rawPhone = (student as { phone?: string }).phone || cleanPhone;
+      const digits = rawPhone.replace(/\D/g, '');
+      const targetPhone = digits.length === 10 ? `91${digits}` : digits;
+      const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
       if (popup) popup.opener = null;
     }
     setFeedbackMsg(`Renewal WhatsApp message opened for ${studentName}.`);
@@ -193,9 +196,6 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
       className="space-y-6"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
-      data-route-name={_routeQuery.name}
-      data-route-phone={_routeQuery.phone}
-      data-route-smart-id={_routeQuery.smartId}
     >
       <ManagerFinanceRenewalsHeader
         renewalsTitle={tManagerUi('renewals')}
