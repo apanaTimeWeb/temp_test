@@ -89,7 +89,10 @@ export function AdminCommunicationComplaintDetailModal({
                 type="button"
                 onClick={() => {
                   const msg = encodeURIComponent(`Hello ${viewItem.student}, regarding your complaint "${viewItem.title}" at Smart Library:\n${viewItem.resolvedNote ? `Resolution: ${viewItem.resolvedNote}` : 'We are actively investigating and will resolve it shortly.'}\nThank you!`);
-                  window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                  const popup = window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                  if (popup) {
+                    popup.opener = null;
+                  }
                 }}
                 className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-success-bg bg-success-bg px-3.5 py-2 text-ui font-semibold text-success-text hover:bg-success hover:text-on-success transition-all"
               >
@@ -144,7 +147,10 @@ export function AdminCommunicationComplaintDetailModal({
                 disabled={!resolveNote.trim()}
                 onClick={() => {
                   const msg = encodeURIComponent(`Hello ${resolveItem.student}, good news! Your complaint regarding "${resolveItem.title}" has been resolved by Smart Library Admin:\n"${resolveNote}"\nThank you for your patience!`);
-                  window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                  const popup = window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                  if (popup) {
+                    popup.opener = null;
+                  }
                 }}
                 className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-success-bg bg-success-bg px-3 py-2 text-xs font-semibold text-success-text hover:bg-success hover:text-on-success transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Send resolution message on WhatsApp"

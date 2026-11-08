@@ -45,7 +45,10 @@ export default function AdminMembersEnquiriesBulkWhatsAppModal({
   if (!isOpen) return null;
 
   const sanitizePhone = (rawPhone: string): string => {
-    const digits = rawPhone.replace(/\D/g, '');
+    let digits = rawPhone.replace(/\D/g, '');
+    if (digits.length === 11 && digits.startsWith('0')) {
+      digits = digits.slice(1);
+    }
     if (digits.length === 10) return `91${digits}`;
     if (digits.length === 12 && digits.startsWith('91')) return digits;
     return digits;
@@ -56,7 +59,10 @@ export default function AdminMembersEnquiriesBulkWhatsAppModal({
     if (!phone) return;
     const personalized = template.replace(/\{name\}/gi, enq.name || 'Member');
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(personalized)}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const popup = window.open(url, '_blank', 'noopener,noreferrer');
+    if (popup) {
+      popup.opener = null;
+    }
     setOpenedIds((prev) => new Set(prev).add(enq.id));
   };
 

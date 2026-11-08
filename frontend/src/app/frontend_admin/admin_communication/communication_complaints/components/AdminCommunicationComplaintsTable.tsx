@@ -204,7 +204,10 @@ export function AdminCommunicationComplaintsTable({
                       type="button"
                       onClick={() => {
                         const msg = encodeURIComponent(`Hello ${c.student}, regarding your ticket "${c.title}" at Smart Library: We are contacting you to assist with your complaint.`);
-                        window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                        const popup = window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
+                        if (popup) {
+                          popup.opener = null;
+                        }
                       }}
                       className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors motion-safe:duration-base"
                       title="WhatsApp student"

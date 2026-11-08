@@ -72,7 +72,12 @@ export default function AdminEnquiriesEnquiryDetailPageView({ params }: AdminEnq
                     <Phone size={18} strokeWidth={2} aria-hidden="true" />
                     <span>+91 {maskPhone(enquiry.phone)}</span>
                     <a
-                      href={`https://wa.me/${enquiry.phone.replace(/\D/g, '').length === 10 ? `91${enquiry.phone.replace(/\D/g, '')}` : enquiry.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${enquiry.name}, greetings from Smart Library!`)}`}
+                      href={(() => {
+                        let digits = enquiry.phone.replace(/\D/g, '');
+                        if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+                        const phone = digits.length === 10 ? `91${digits}` : digits;
+                        return `https://wa.me/${phone}?text=${encodeURIComponent(`Hello ${enquiry.name}, greetings from Smart Library!`)}`;
+                      })()}
                       target="_blank"
                       rel="noopener noreferrer"
                       title="Chat on WhatsApp"
@@ -151,7 +156,12 @@ export default function AdminEnquiriesEnquiryDetailPageView({ params }: AdminEnq
             <div className="min-w-0 overflow-hidden rounded-xl border border-border bg-card shadow-card p-4 space-y-3">
               <h3 className="text-caption font-semibold uppercase tracking-wide text-text-secondary">{t('ACTIONS_TITLE')}</h3>
               <a
-                href={`https://wa.me/${enquiry.phone.replace(/\D/g, '').length === 10 ? `91${enquiry.phone.replace(/\D/g, '')}` : enquiry.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Hello ${enquiry.name}, greetings from Smart Library! We are reaching out regarding your enquiry.`)}`}
+                href={(() => {
+                  let digits = enquiry.phone.replace(/\D/g, '');
+                  if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+                  const phone = digits.length === 10 ? `91${digits}` : digits;
+                  return `https://wa.me/${phone}?text=${encodeURIComponent(`Hello ${enquiry.name}, greetings from Smart Library! We are reaching out regarding your enquiry.`)}`;
+                })()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-success-bg bg-success-bg px-4 py-2 text-body font-semibold text-success-text hover:bg-success hover:text-on-success transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"

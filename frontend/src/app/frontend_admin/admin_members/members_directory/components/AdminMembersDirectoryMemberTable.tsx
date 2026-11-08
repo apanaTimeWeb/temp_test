@@ -185,8 +185,12 @@ export default function AdminMembersMemberTable({
                         onQuickWhatsApp(member);
                       } else {
                         const digits = (member.phone || '').replace(/\D/g, '');
-                        const phone = digits.length === 10 ? `91${digits}` : digits;
-                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`Hello ${member.name}, greetings from Smart Library admin!`)}`, '_blank', 'noopener,noreferrer');
+                        const clean = digits.length === 11 && digits.startsWith('0') ? digits.slice(1) : digits;
+                        const phone = clean.length === 10 ? `91${clean}` : clean;
+                        const popup = window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`Hello ${member.name}, greetings from Smart Library admin!`)}`, '_blank', 'noopener,noreferrer');
+                        if (popup) {
+                          popup.opener = null;
+                        }
                       }
                     }}
                   >

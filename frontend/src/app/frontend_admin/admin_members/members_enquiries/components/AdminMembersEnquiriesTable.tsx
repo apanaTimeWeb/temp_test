@@ -83,9 +83,13 @@ export default function AdminEnquiriesTable({
       onQuickWhatsApp(enquiry);
     } else {
       const digits = enquiry.phone.replace(/\D/g, '');
-      const phone = digits.length === 10 ? `91${digits}` : digits;
+      const clean = digits.length === 11 && digits.startsWith('0') ? digits.slice(1) : digits;
+      const phone = clean.length === 10 ? `91${clean}` : clean;
       const text = encodeURIComponent(`Hello ${enquiry.name}, greetings from Smart Library! We are reaching out regarding your enquiry.`);
-      window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener,noreferrer');
+      const popup = window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener,noreferrer');
+      if (popup) {
+        popup.opener = null;
+      }
     }
   };
 

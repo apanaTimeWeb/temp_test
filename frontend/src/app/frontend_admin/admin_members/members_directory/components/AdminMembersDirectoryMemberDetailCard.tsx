@@ -166,16 +166,24 @@ export function AdminMembersDirectoryMemberDetailCard({
           </div>
 
           <div className="flex flex-wrap items-center gap-3 border-t border-border pt-4">
-            {member.phone && (
-              <a
-                href={`https://wa.me/${member.phone.replace(/[^0-9]/g, '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="admin-btn-ghost inline-flex min-h-10 items-center gap-1.5 text-success-text hover:text-success-text"
-              >
-                <MessageSquare size={16} aria-hidden="true" /> WhatsApp
-              </a>
-            )}
+            {member.phone && (() => {
+              let digits = member.phone.replace(/\D/g, '');
+              if (digits.length === 11 && digits.startsWith('0')) {
+                digits = digits.slice(1);
+              }
+              const waPhone = digits.length === 10 ? `91${digits}` : digits;
+              const waText = encodeURIComponent(`Hello ${member.name}, greetings from Smart Library admin!`);
+              return (
+                <a
+                  href={`https://wa.me/${waPhone}?text=${waText}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="admin-btn-ghost inline-flex min-h-10 items-center gap-1.5 text-success-text hover:text-success-text"
+                >
+                  <MessageSquare size={16} aria-hidden="true" /> WhatsApp
+                </a>
+              );
+            })()}
             {member.status === 'Active' && (
               <button
                 type="button"
@@ -183,6 +191,15 @@ export function AdminMembersDirectoryMemberDetailCard({
                 onClick={() => toast.info(`Member status change requested for ${member.name}`)}
               >
                 <ShieldAlert size={16} aria-hidden="true" /> Suspend
+              </button>
+            )}
+            {member.status === 'Suspended' && (
+              <button
+                type="button"
+                className="admin-btn-ghost inline-flex min-h-10 items-center gap-1.5 text-success-text hover:text-success-text"
+                onClick={() => toast.info(`Reactivation requested for ${member.name}`)}
+              >
+                <ShieldAlert size={16} aria-hidden="true" /> Reactivate
               </button>
             )}
           </div>

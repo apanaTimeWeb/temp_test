@@ -165,7 +165,8 @@ export function AdminStaffDirectoryManagerTable({ managers, filterStatus, tab, o
 
   const handleOpenDesk = (branchName: string) => {
     const branchParam = encodeURIComponent(branchName);
-    window.open(`/frontend_manager/manager_dashboard/dashboard_overview?branch=${branchParam}`, '_blank');
+    const popup = window.open(`/frontend_manager/manager_dashboard/dashboard_overview?branch=${branchParam}`, '_blank', 'noopener,noreferrer');
+    if (popup) popup.opener = null;
   };
 
   const tableContent = (
