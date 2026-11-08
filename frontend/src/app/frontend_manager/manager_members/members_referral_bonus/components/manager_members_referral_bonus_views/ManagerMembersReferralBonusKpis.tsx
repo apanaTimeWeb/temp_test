@@ -20,9 +20,16 @@ export function ManagerMembersReferralBonusKpis({
 }: ManagerMembersReferralBonusKpisProps) {
   const tManagerUi = useTranslations('manager.manager_referral_bonus.ui');
 
+  const parseBonusAmount = (val: string | number) => {
+    if (typeof val === 'number') return val;
+    const digits = String(val).replace(/[^0-9.]/g, '');
+    const num = parseFloat(digits);
+    return isNaN(num) ? 0 : Math.round(num);
+  };
+
   const totalBonusAmount = records
     .filter((r) => r.status === 'Credited')
-    .reduce((sum, r) => sum + (parseInt(r.bonus.replace(/[^0-9]/g, ''), 10) || 0), 0);
+    .reduce((sum, r) => sum + parseBonusAmount(r.bonus), 0);
 
   const pendingCount = records.filter((r) => r.status === 'Pending').length;
 

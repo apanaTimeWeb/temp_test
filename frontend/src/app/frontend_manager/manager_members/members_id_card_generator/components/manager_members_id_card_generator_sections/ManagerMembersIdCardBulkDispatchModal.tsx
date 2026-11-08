@@ -26,11 +26,12 @@ export function ManagerMembersIdCardBulkDispatchModal({
   if (!isOpen || students.length === 0) return null;
 
   const handleSendSingle = (student: ManagerStudent) => {
-    const cleanPhone = student.phone.replace(/\D/g, '');
-    const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+    const digits = student.phone.replace(/\D/g, '');
+    const displayPhone = digits.length > 10 && digits.startsWith('91') ? digits.slice(2) : digits;
+    const targetPhone = digits.length === 10 ? `91${digits}` : digits;
 
     const message = encodeURIComponent(
-      `Hello ${student.name},\nYour Central Library Smart ID Card is ready! 🪪\n\n` +
+      `Hello ${student.name},\nYour Library Smart ID Card is ready! 🪪\n\n` +
       `• Smart ID: ${student.smartId}\n` +
       `• Shift: ${student.shift}\n` +
       `• Assigned Seat: ${student.seat}\n` +
@@ -51,12 +52,12 @@ export function ManagerMembersIdCardBulkDispatchModal({
       return next;
     });
 
-    toast.success(`ID Card WhatsApp opened for ${student.name} (+91 ${cleanPhone})`);
+    toast.success(`ID Card WhatsApp opened for ${student.name} (+91 ${displayPhone})`);
   };
 
   const openedCount = openedKeys.size;
   const totalCount = students.length;
-  const progressPct = Math.round((openedCount / totalCount) * 100);
+  const progressPct = totalCount > 0 ? Math.round((openedCount / totalCount) * 100) : 0;
   const isComplete = openedCount === totalCount;
 
   return (
@@ -125,6 +126,7 @@ export function ManagerMembersIdCardBulkDispatchModal({
             <input
               id="id-card-custom-note"
               type="text"
+              aria-label="Instructions note appended to ID card message"
               value={customNote}
               onChange={(e) => setCustomNote(e.target.value)}
               className="w-full text-xs px-3 py-2 rounded-lg border border-border bg-surface text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
@@ -136,6 +138,8 @@ export function ManagerMembersIdCardBulkDispatchModal({
           <div className="border border-border rounded-xl divide-y divide-border overflow-hidden bg-surface">
             {students.map((student) => {
               const isOpened = openedKeys.has(student.smartId);
+              const digits = student.phone.replace(/\D/g, '');
+              const displayPhone = digits.length > 10 && digits.startsWith('91') ? digits.slice(2) : digits;
               return (
                 <div
                   key={student.smartId}
@@ -150,7 +154,7 @@ export function ManagerMembersIdCardBulkDispatchModal({
                         {student.name}
                       </p>
                       <p className="text-xs text-secondary mt-0.5">
-                        <span className="font-mono">{student.smartId}</span> • Seat: {student.seat} • Shift: {student.shift} • +91 {student.phone}
+                        <span className="font-mono">{student.smartId}</span> • Seat: {student.seat} • Shift: {student.shift} • +91 {displayPhone}
                       </p>
                     </div>
                   </div>
@@ -165,6 +169,7 @@ export function ManagerMembersIdCardBulkDispatchModal({
                       <button
                         type="button"
                         onClick={() => handleSendSingle(student)}
+                        data-testid="manager-id-card-bulk-send-btn"
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
                         title={`Send ID Card to ${student.name}`}
                       >

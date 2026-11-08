@@ -9,19 +9,31 @@ import { ManagerMembersReferralBonusTable, type ReferralSortField } from './Mana
 import { ManagerMembersReferralBonusAddModal } from '../manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusAddModal';
 import ManagerMembersReferralBonusTimeHorizonBar, { type ManagerReferralTimeHorizon } from './ManagerMembersReferralBonusTimeHorizonBar';
 import ManagerMembersReferralBonusKpis from './ManagerMembersReferralBonusKpis';
-
-const INITIAL_REFERRALS: ReferralRow[] = [
-  { id: 'REF-101', referrer: 'Amit Sharma (LIB-1042)', referred: 'Rohan Verma', date: '2026-04-12', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
-  { id: 'REF-102', referrer: 'Priya Patel (LIB-1088)', referred: 'Sneha Rao', date: '2026-04-14', status: 'Credited', bonus: '₹500', method: 'UPI Cash' },
-  { id: 'REF-103', referrer: 'Vikram Singh (LIB-1120)', referred: 'Karan Malhotra', date: '2026-04-15', status: 'Pending', bonus: '₹500', method: 'Fee Discount' },
-  { id: 'REF-104', referrer: 'Ananya Roy (LIB-1155)', referred: 'Pooja Iyer', date: '2026-03-29', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
-  { id: 'REF-105', referrer: 'Rahul Gupta (LIB-1190)', referred: 'Aditya Mehra', date: '2026-04-02', status: 'Pending', bonus: '₹500', method: 'UPI Cash' },
-  { id: 'REF-106', referrer: 'Neha Verma (LIB-1204)', referred: 'Siddharth Jain', date: '2026-04-10', status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
-];
+import { getInitialReferrals } from '@/app/frontend_manager/manager_members/members_referral_bonus/mocks/manager_members_referral_bonus_fixtures/ManagerMembersReferralBonusFixtures';
 
 export function ManagerMembersReferralBonusReferralsClient() {
   const tManagerUi = useTranslations('manager.manager_referral_bonus.ui');
-  const [records, setRecords] = useState<ReferralRow[]>(INITIAL_REFERRALS);
+  const [records, setRecords] = useState<ReferralRow[]>(() => {
+    if (typeof window === 'undefined') return getInitialReferrals();
+    try {
+      const stored = localStorage.getItem('manager_members_referral_records');
+      return stored ? JSON.parse(stored) : getInitialReferrals();
+    } catch {
+      return getInitialReferrals();
+    }
+  });
+
+  const updateRecords = (updater: (prev: ReferralRow[]) => ReferralRow[]) => {
+    setRecords((prev) => {
+      const next = updater(prev);
+      try {
+        localStorage.setItem('manager_members_referral_records', JSON.stringify(next));
+      } catch {
+        // Safe storage fallback
+      }
+      return next;
+    });
+  };
   const [timeHorizon, setTimeHorizon] = useState<ManagerReferralTimeHorizon>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
@@ -50,7 +62,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
 
   const timeFilteredRecords = useMemo(() => {
     if (timeHorizon === 'all') return records;
-    const now = new Date('2026-04-15T12:00:00Z');
+    const now = new Date();
     return records.filter((r) => {
       const recDate = new Date(r.date);
       if (isNaN(recDate.getTime())) return true;
@@ -110,7 +122,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   const handleApprove = (id: string) => {
-    setRecords((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'Credited' } : r)));
+    updateRecords((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'Credited' } : r)));
     setToastMsg(`Referral ${id} approved and bonus credited!`);
     setTimeout(() => setToastMsg(null), 3500);
   };
@@ -131,7 +143,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
   };
 
   const handleAddReferral = (newRecord: ReferralRow) => {
-    setRecords([newRecord, ...records]);
+    updateRecords((prev) => [newRecord, ...prev]);
     setToastMsg(`New referral for "${newRecord.referred}" recorded successfully!`);
     setTimeout(() => setToastMsg(null), 3500);
   };

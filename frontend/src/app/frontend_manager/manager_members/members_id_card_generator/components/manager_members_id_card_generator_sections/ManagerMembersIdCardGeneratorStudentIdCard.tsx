@@ -86,7 +86,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({ data }: Man
             <div className="mgr-idcard-logo-icon">📚</div>
             <div>
               <div className="mgr-idcard-logo-text">STUDY LIB OS</div>
-              <div className="mgr-idcard-branch-text font-semibold text-primary">📍 {data.branch || 'Central Library (Main Branch)'}</div>
+              <div className="mgr-idcard-branch-text font-semibold text-primary">📍 {data.branch || 'Central Library'}</div>
             </div>
           </div>
           <div className="mgr-idcard-header-right">
@@ -161,10 +161,28 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({ data }: Man
               <span className="mgr-idcard-barcode-sub font-mono text-[9px] text-secondary">Gate Turnstile Pass</span>
             </div>
             <div className="mgr-idcard-verification-note" role="status">
-              <span className="mgr-idcard-verification-title text-success flex items-center gap-1 font-bold">
-                <ShieldCheck size={13} className="text-success inline" /> Verified Active
-              </span>
-              <span className="mgr-idcard-verification-sub text-[10px] text-secondary">Authorized Member</span>
+              {data.status === 'Suspended' ? (
+                <>
+                  <span className="mgr-idcard-verification-title text-warning flex items-center gap-1 font-bold">
+                    <ShieldCheck size={13} className="text-warning inline" /> Suspended
+                  </span>
+                  <span className="mgr-idcard-verification-sub text-[10px] text-secondary">Under Review</span>
+                </>
+              ) : data.status === 'Expired' ? (
+                <>
+                  <span className="mgr-idcard-verification-title text-destructive flex items-center gap-1 font-bold">
+                    <ShieldCheck size={13} className="text-destructive inline" /> Expired
+                  </span>
+                  <span className="mgr-idcard-verification-sub text-[10px] text-secondary">Renewal Required</span>
+                </>
+              ) : (
+                <>
+                  <span className="mgr-idcard-verification-title text-success flex items-center gap-1 font-bold">
+                    <ShieldCheck size={13} className="text-success inline" /> Verified Active
+                  </span>
+                  <span className="mgr-idcard-verification-sub text-[10px] text-secondary">Authorized Member</span>
+                </>
+              )}
             </div>
           </div>
         </div>

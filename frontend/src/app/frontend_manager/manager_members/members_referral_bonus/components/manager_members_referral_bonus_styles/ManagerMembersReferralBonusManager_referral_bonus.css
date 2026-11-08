@@ -1,0 +1,23 @@
+/**
+ * manager_members_referral_bonus styling module
+ * Follows theme contract invariants and uses semantic design tokens.
+ */
+
+.mgr-referral-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6, 1.5rem);
+}
+
+.mgr-referral-kpi-card {
+  border-radius: var(--radius-xl, 0.75rem);
+  border: 1px solid var(--border);
+  background-color: var(--bg-card);
+  padding: 1rem;
+  transition: all var(--animate-duration-fast, 150ms) ease;
+}
+
+.mgr-referral-kpi-card:hover {
+  border-color: var(--primary);
+}
+

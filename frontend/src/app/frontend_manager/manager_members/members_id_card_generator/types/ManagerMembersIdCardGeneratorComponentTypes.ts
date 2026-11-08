@@ -16,6 +16,7 @@ export interface IdCardData {
   seat: string;
   locker: string;
   plan: string;
+  status?: string;
   joinDate?: string;
   expiryDate?: string;
   branch?: string;

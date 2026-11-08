@@ -11,7 +11,7 @@ import StudentIdCard, { type IdCardData } from '@/app/frontend_manager/manager_m
 import { useManagerIdCardGeneratorFormatting } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGeneratorFormatting';
 import { useManagerIdCardGenerator } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGenerator';
 import type { ManagerStudent } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorTypes';
-import {MANAGER_STUDENT_STATUS_ACTIVE, MANAGER_STUDENT_STATUS_SUSPENDED, MANAGER_MEMBERS_ID_CARD_GENERATOR_SEARCH_DEBOUNCE_MS} from '@/app/frontend_manager/manager_members/members_id_card_generator/constants/ManagerMembersIdCardGeneratorConstants';
+import { MANAGER_STUDENT_STATUS_ACTIVE, MANAGER_STUDENT_STATUS_SUSPENDED, MANAGER_STUDENT_STATUSES, MANAGER_STUDENT_SHIFTS, MANAGER_MEMBERS_ID_CARD_GENERATOR_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_members/members_id_card_generator/constants/ManagerMembersIdCardGeneratorConstants';
 import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import { ManagerMembersIdCardGeneratorEmptyState } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_empty_states/ManagerMembersIdCardGeneratorEmptyState';
 import { ManagerMembersIdCardBulkDispatchModal } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardBulkDispatchModal';
@@ -29,8 +29,8 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
   useEffect(() => {
     if (requestedId) setSelectedId(requestedId);
-    else if (students.length > 0 && !selectedId) setSelectedId(students[0].smartId);
-  }, [requestedId, students, selectedId]);
+    else if (students.length > 0) setSelectedId((current) => current || students[0].smartId);
+  }, [requestedId, students]);
   const selectStudent = (smartId: string) => {
     setSelectedId(smartId);
     const params = new URLSearchParams(searchParams.toString());
@@ -52,6 +52,10 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
     }, 300);
     return () => window.clearTimeout(timeout);
   }, [search]);
+
+  const shiftLabels: Record<string, string> = useMemo(() => ({
+    Morning: tManagerUi('shift_morning'), Afternoon: tManagerUi('shift_afternoon'), Evening: tManagerUi('shift_evening'), Night: tManagerUi('shift_night'), 'Full Day': tManagerUi('shift_full_day'),
+  }), [tManagerUi]);
 
   const filtered = useMemo(() => {
     const value = debouncedSearch.trim().toLowerCase();
@@ -79,53 +83,39 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const effectivePage = Math.min(page, totalPages - 1);
-  const paginatedStudents = useMemo(() => {
-    return filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
-  }, [filtered, effectivePage, pageSize]);
+  const paginatedStudents = useMemo(() => filtered.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize), [filtered, effectivePage, pageSize]);
   const selected = useMemo(() => students.find((student) => student.smartId === selectedId), [students, selectedId]);
-
-  const bulkStudents = useMemo(
-    () => students.filter((s) => bulkSelectedIds.includes(s.smartId)),
-    [students, bulkSelectedIds]
-  );
+  const bulkStudents = useMemo(() => students.filter((s) => bulkSelectedIds.includes(s.smartId)), [students, bulkSelectedIds]);
 
   const toggleSelectOne = (smartId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    setBulkSelectedIds((prev) =>
-      prev.includes(smartId) ? prev.filter((id) => id !== smartId) : [...prev, smartId]
-    );
+    setBulkSelectedIds((prev) => prev.includes(smartId) ? prev.filter((id) => id !== smartId) : [...prev, smartId]);
   };
 
   const toggleSelectAll = () => {
-    if (bulkSelectedIds.length === filtered.length) {
-      setBulkSelectedIds([]);
-    } else {
-      setBulkSelectedIds(filtered.map((s) => s.smartId));
-    }
+    if (bulkSelectedIds.length === filtered.length) setBulkSelectedIds([]);
+    else setBulkSelectedIds(filtered.map((s) => s.smartId));
   };
   const cardData: IdCardData | null = useMemo(() => {
     if (!selected) return null;
     return {
-      name: selected.name,
-      smartId: selected.smartId,
-      phone: selected.phone,
-      shift: selected.shift,
-      seat: selected.seat,
-      locker: '',
-      plan: selected.plan,
-      joinDate: formatDate(selected.joined),
-      branch: selected.branch || 'Central Library (Main Branch)',
-      college: (selected as unknown as { college?: string }).college,
+      name: selected.name, smartId: selected.smartId, phone: selected.phone, shift: selected.shift, seat: selected.seat,
+      locker: (selected as any).locker || '', plan: selected.plan, status: selected.status, joinDate: formatDate(selected.joined),
+      expiryDate: (selected as any).expiryDate, branch: selected.branch || 'Central Library', college: (selected as unknown as { college?: string }).college,
     };
   }, [selected, formatDate]);
 
   const handleShareWhatsApp = () => {
     if (!selected) return;
+    const digits = selected.phone.replace(/\D/g, '');
+    const clean10 = digits.length > 10 && digits.startsWith('91') ? digits.slice(2) : digits;
+    const targetPhone = digits.length === 10 ? `91${digits}` : digits;
     const msg = encodeURIComponent(
       `Hello ${selected.name},\nYour Library Smart ID Card is ready!\n\nSmart ID: ${selected.smartId}\nShift: ${selected.shift}\nAssigned Seat: ${selected.seat}\nPlan: ${selected.plan}\n\nPlease keep this card details handy while visiting the library.\n— Central Library Management`
     );
-    window.open(`https://wa.me/91${selected.phone}?text=${msg}`, '_blank');
-    toast.success(`Smart ID card WhatsApp link opened for ${selected.name} (+91 ${selected.phone})`);
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${msg}`, '_blank');
+    if (popup) popup.opener = null;
+    toast.success(`Smart ID card WhatsApp link opened for ${selected.name} (+91 ${clean10})`);
   };
 
   if (isError) return <div className="mgr-page"><div className="mgr-state-card mgr-state-card-error" role="alert"><p className="mgr-state-title">{tManagerUi('unable_to_load_students')}</p><p className="mgr-state-description">{tManagerUi('please_retry_from_the_students_directory')}</p><button type="button" className="mgr-btn-primary mgr-btn-sm mt-3" onClick={() => { void refetch(); }} disabled={isFetching}>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button></div></div>;
@@ -151,6 +141,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   <button
                     type="button"
                     onClick={() => setIsBulkModalOpen(true)}
+                    data-testid="manager-id-card-bulk-whatsapp-btn"
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
                     title="Send selected ID cards via WhatsApp"
                   >
@@ -174,7 +165,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                     onClick={toggleSelectAll}
                     className="px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-border bg-surface hover:bg-surface-hover text-secondary whitespace-nowrap transition-colors"
                   >
-                    {bulkSelectedIds.length === filtered.length ? 'Deselect All' : 'Select All'}
+                    {bulkSelectedIds.length === filtered.length ? 'Deselect All' : `Select All (${filtered.length})`}
                   </button>
                 )}
               </div>
@@ -183,28 +174,30 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               <div className="grid grid-cols-2 gap-2 mb-3">
                 <select
                   aria-label="Filter by Shift"
+                  data-testid="manager-id-card-shift-filter"
                   value={shiftFilter}
                   onChange={(e) => { setShiftFilter(e.target.value); setPage(0); }}
                   className="rounded-lg border border-border bg-surface px-2 py-1 text-xs text-primary font-medium"
                 >
-                  <option value="All">All Shifts</option>
-                  <option value="Morning">Morning</option>
-                  <option value="Afternoon">Afternoon</option>
-                  <option value="Evening">Evening</option>
-                  <option value="Night">Night</option>
-                  <option value="Full Day">Full Day</option>
+                  <option value="All">{tManagerUi('all_shifts')}</option>
+                  {MANAGER_STUDENT_SHIFTS.map((shift) => (
+                    <option key={shift} value={shift}>{shiftLabels[shift] ?? shift}</option>
+                  ))}
                 </select>
 
                 <select
                   aria-label="Filter by Status"
+                  data-testid="manager-id-card-status-filter"
                   value={statusFilter}
                   onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
                   className="rounded-lg border border-border bg-surface px-2 py-1 text-xs text-primary font-medium"
                 >
-                  <option value="All">All Status</option>
-                  <option value="Active">Active Only</option>
-                  <option value="Suspended">Suspended Only</option>
-                  <option value="Expired">Expired Only</option>
+                  <option value="All">{tManagerUi('all_status')}</option>
+                  {MANAGER_STUDENT_STATUSES.map((status) => (
+                    <option key={status} value={status}>
+                      {status === MANAGER_STUDENT_STATUS_ACTIVE ? tManagerUi('status_active') : status === MANAGER_STUDENT_STATUS_SUSPENDED ? tManagerUi('status_suspended') : tManagerUi('status_expired')}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -213,7 +206,6 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                 {isPending ? <div className="mgr-loading-state">{tManagerUi('loading_students_522ba5')}</div> : filtered.length === 0 ? <ManagerMembersIdCardGeneratorEmptyState className="mgr-empty-state"><div className="mgr-empty-icon"><Search size={36} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_students_found')}</p></ManagerMembersIdCardGeneratorEmptyState> : paginatedStudents.map((student: ManagerStudent) => {
                   const initials = student.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase();
                   const statusLabel = student.status === MANAGER_STUDENT_STATUS_ACTIVE ? tManagerUi('status_active') : student.status === MANAGER_STUDENT_STATUS_SUSPENDED ? tManagerUi('status_suspended') : tManagerUi('status_expired');
-                  const shiftLabels: Record<string, string> = { Morning: tManagerUi('shift_morning'), Afternoon: tManagerUi('shift_afternoon'), Evening: tManagerUi('shift_evening'), Night: tManagerUi('shift_night'), 'Full Day': tManagerUi('shift_full_day') };
                   const isChecked = bulkSelectedIds.includes(student.smartId);
                   return (
                     <div
@@ -222,7 +214,14 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                       className={`mgr-idcard-student-row flex items-center gap-2 cursor-pointer${student.smartId === selectedId ? ' mgr-idcard-student-row--active' : ''}${isChecked ? ' bg-primary-subtle' : ''}`}
                       role="button"
                       tabIndex={0}
-                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') selectStudent(student.smartId); }}
+                      aria-pressed={student.smartId === selectedId}
+                      onKeyDown={(e) => {
+                        if ((e.target as HTMLElement).tagName === 'INPUT') return;
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          selectStudent(student.smartId);
+                        }
+                      }}
                     >
                       <input
                         type="checkbox"
@@ -274,7 +273,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               )}
             </div>
           </div>
-          {selected && cardData && <div className="mgr-card mgr-idcard-actions-card"><div className="mgr-card-header"><h2 className="mgr-section-title">{tManagerUi('actions')}</h2></div><div className="mgr-card-body mgr-idcard-actions-body"><p className="mgr-input-hint" role="status" data-testid="manager-students-id-card-output-contract-warning">{tManagerUi('id_card_preview_only_contract_warning')}</p><button type="button" onClick={handleShareWhatsApp} title="Share ID Card via WhatsApp" className="mgr-btn-whatsapp cursor-pointer flex items-center justify-center gap-2"><MessageSquare size={18} strokeWidth={2} /> <span>Share via WhatsApp</span></button><button type="button" onClick={() => window.print()} title={tManagerUi('print_id_card')} className="mgr-btn-ghost mgr-btn-full" data-testid="manager-students-id-card-print"><Printer size={18} strokeWidth={2} /> {tManagerUi('print_id_card')}</button></div></div>}
+          {selected && cardData && <div className="mgr-card mgr-idcard-actions-card"><div className="mgr-card-header"><h2 className="mgr-section-title">{tManagerUi('actions')}</h2></div><div className="mgr-card-body mgr-idcard-actions-body"><p className="mgr-input-hint" role="status" data-testid="manager-students-id-card-output-contract-warning">{tManagerUi('id_card_preview_only_contract_warning')}</p><button type="button" onClick={handleShareWhatsApp} data-testid="manager-students-id-card-whatsapp-share" title="Share ID Card via WhatsApp" aria-label="Share ID Card via WhatsApp" className="mgr-btn-whatsapp cursor-pointer flex items-center justify-center gap-2"><MessageSquare size={18} strokeWidth={2} /> <span>Share via WhatsApp</span></button><button type="button" onClick={() => window.print()} title={tManagerUi('print_id_card')} aria-label={tManagerUi('print_id_card')} className="mgr-btn-ghost mgr-btn-full" data-testid="manager-students-id-card-print"><Printer size={18} strokeWidth={2} /> {tManagerUi('print_id_card')}</button></div></div>}
         </div>
         <div className="mgr-idcard-preview-panel">
           {cardData ? <><p className="mgr-page-subtitle mgr-idcard-preview-label">{tManagerUi('preview')} {selected?.name}</p><StudentIdCard data={cardData} /><p className="mgr-cell-sub mgr-idcard-preview-hint">{tManagerUi('use_preview_only_until_validity_and_verification_contract_is_supplied')}</p></> : <div className="mgr-card mgr-idcard-empty-card"><div className="mgr-empty-state"><div className="mgr-empty-icon"><IdCard size={40} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_student_selected')}</p><p className="mgr-empty-sub">{tManagerUi('search_and_select_a_student_to_preview_the_id_card')}</p></div></div>}
