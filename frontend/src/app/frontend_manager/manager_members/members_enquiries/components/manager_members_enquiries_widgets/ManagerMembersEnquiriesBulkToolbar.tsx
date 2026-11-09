@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckSquare, MessageCircle, X, Users, UserCheck, Flame, Sparkles } from 'lucide-react';
+import { CheckSquare, MessageCircle, X, Users, UserCheck, Flame, Sparkles, Trash2 } from 'lucide-react';
 import type { ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 
 export interface ManagerMembersEnquiriesBulkToolbarProps {
@@ -10,6 +10,7 @@ export interface ManagerMembersEnquiriesBulkToolbarProps {
   onSelectByStatus: (status: ManagerMembersEnquiriesEnquiryStatus) => void;
   onClearSelection: () => void;
   onOpenBulkWhatsApp: () => void;
+  onBulkDelete?: () => void;
   visitedCount: number;
   newCount: number;
   interestedCount: number;
@@ -22,6 +23,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
   onSelectByStatus,
   onClearSelection,
   onOpenBulkWhatsApp,
+  onBulkDelete,
   visitedCount,
   newCount,
   interestedCount,
@@ -109,8 +111,19 @@ export function ManagerMembersEnquiriesBulkToolbar({
         </div>
       </div>
 
-      {/* Right: Primary Action Button */}
-      <div className="flex items-center gap-2 shrink-0">
+      {/* Right: Primary Action Buttons */}
+      <div className="flex flex-wrap items-center gap-2 shrink-0">
+        {onBulkDelete && (
+          <button
+            type="button"
+            onClick={onBulkDelete}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground text-xs font-bold shadow-sm hover:shadow transition-all hover:scale-[1.02] cursor-pointer"
+            title="Delete selected leads"
+          >
+            <Trash2 size={15} />
+            <span>Delete Selected ({selectedCount})</span>
+          </button>
+        )}
         <button
           type="button"
           onClick={onOpenBulkWhatsApp}

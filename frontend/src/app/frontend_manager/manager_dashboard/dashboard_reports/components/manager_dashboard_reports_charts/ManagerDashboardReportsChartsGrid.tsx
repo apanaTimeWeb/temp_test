@@ -27,7 +27,7 @@ export function ManagerDashboardReportsChartsGrid({
       <div className="mgr-chart-grid mgr-section-gap">
         <ManagerDashboardReportsShiftOccupancyChart data={data.occupancyData} />
         <ManagerDashboardReportsGrowthChart data={data.growthData} />
-        <ManagerDashboardReportsAttendanceChart data={data.attendanceData} />
+        <ManagerDashboardReportsAttendanceChart data={data.attendanceData} dateRange={dateRange} />
         <ManagerDashboardReportsAbsenteesChart data={data.absenteesChartData} />
         <ManagerDashboardReportsComplaintsChart data={data.complaintsData} />
       </div>

@@ -2,13 +2,23 @@ import { z } from 'zod';
 
 export const ManagerMembersNewAdmissionAdmissionSchema = z.object({
   fullName: z.string().trim().min(2, 'Full name is required'),
-  phone: z.string().trim().min(10, 'Valid phone number required'),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^[6-9]\d{9}$/, 'Must be a valid 10-digit mobile number starting with 6-9'),
   email: z.string().trim().email('Valid email required').optional().or(z.literal('')),
   gender: z.string().min(1, 'Please select a gender'),
   dob: z.string().optional(),
   address: z.string().optional(),
   parentName: z.string().optional(),
-  parentPhone: z.string().optional(),
+  parentPhone: z
+    .string()
+    .trim()
+    .refine((val) => !val || /^[6-9]\d{9}$/.test(val), {
+      message: 'Parent phone must be a valid 10-digit mobile number',
+    })
+    .optional()
+    .or(z.literal('')),
   college: z.string().optional(),
   preparationFor: z.string().optional(),
   avatar: z.string().optional(),

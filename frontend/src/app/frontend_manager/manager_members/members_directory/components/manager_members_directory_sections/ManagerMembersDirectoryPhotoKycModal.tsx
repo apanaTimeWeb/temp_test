@@ -208,25 +208,6 @@ export function ManagerMembersDirectoryPhotoKycModal({
                   Preview
                 </button>
               </div>
-
-              <div className="p-3 rounded-xl border border-border bg-card flex items-center justify-between hover:border-primary transition-colors">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-primary">
-                    <FileText size={16} />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-primary">College / Institutional ID</p>
-                    <p className="text-[11px] text-secondary">COL-2024-91 · JPG</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedDocPreview('College / Institutional ID (#COL-2024-91)')}
-                  className="px-2 py-1 rounded-lg border border-border hover:bg-surface text-secondary hover:text-primary transition-colors"
-                >
-                  Preview
-                </button>
-              </div>
             </div>
           </div>
         </div>

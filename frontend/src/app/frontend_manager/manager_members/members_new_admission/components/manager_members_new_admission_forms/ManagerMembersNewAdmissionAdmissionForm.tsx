@@ -239,6 +239,8 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
               <ManagerMembersNewAdmissionAdmissionPaymentSection
                 register={register}
                 errors={errors}
+                setValue={setValue}
+                watch={watch}
                 planOptions={planOptions}
                 effectiveMonthlyRate={calcResult.effectiveMonthlyShiftFee}
               />

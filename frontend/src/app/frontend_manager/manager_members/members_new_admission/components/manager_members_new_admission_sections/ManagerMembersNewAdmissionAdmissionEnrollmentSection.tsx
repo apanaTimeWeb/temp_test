@@ -3,6 +3,12 @@
 import { useTranslations } from 'next-intl';
 import { Armchair, FileText, Layers, Lock, Clock, Check, IndianRupee } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
+import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
+import {
+  MANAGER_ADMISSION_FLOOR_OPTIONS,
+  MANAGER_ADMISSION_SEAT_OPTIONS,
+  MANAGER_ADMISSION_LOCKER_OPTIONS,
+} from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission_options';
 import type { ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 import { getLibraryPricingConfig, type LibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
 
@@ -19,6 +25,9 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
 }: ManagerMembersNewAdmissionAdmissionEnrollmentSectionProps) {
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
   const watchedShift = propWatchedShift ?? (watch ? watch('shift') : '');
+  const watchedFloor = watch ? watch('floor') : '';
+  const watchedSeat = watch ? watch('seat') : '';
+  const watchedLocker = watch ? watch('locker') : '';
   const [pricingConfig, setPricingConfig] = useState<LibraryPricingConfig>(() => getLibraryPricingConfig());
 
   useEffect(() => {
@@ -149,46 +158,41 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
           {/* Floor Selection */}
           <div className="mgr-form-field">
             <label className="mgr-label" htmlFor="admission-floor">Floor Allotment</label>
-            <div className="mgr-input-icon-wrap">
-              <Layers size={18} strokeWidth={2} className="mgr-input-icon" />
-              <select id="admission-floor" {...register('floor')} className="mgr-select mgr-input-with-icon">
-                <option value="">-- Select Floor (Optional) --</option>
-                <option value="1">1st Floor (General Study Hall)</option>
-                <option value="2">2nd Floor (Silent Zone / AC)</option>
-                <option value="3">3rd Floor (Reserved / Dedicated Cabin)</option>
-              </select>
-            </div>
+            <SearchableCombobox
+              id="admission-floor"
+              options={MANAGER_ADMISSION_FLOOR_OPTIONS}
+              value={watchedFloor}
+              onChange={(val) => setValue?.('floor', val, { shouldValidate: true, shouldDirty: true })}
+              placeholder="Select Floor (Optional)..."
+              searchPlaceholder="Search floor..."
+            />
           </div>
 
           {/* Seat Number Selection */}
           <div className="mgr-form-field">
             <label className="mgr-label mgr-label-required" htmlFor="admission-seat">{tManagerUi('seat_number')}</label>
-            <div className="mgr-input-icon-wrap">
-              <Armchair size={18} strokeWidth={2} className="mgr-input-icon" />
-              <select id="admission-seat" {...register('seat')} className={`mgr-select mgr-input-with-icon${errors.seat ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.seat)}>
-                <option value="">-- Select Available Seat --</option>
-                {Array.from({ length: 24 }, (_, i) => {
-                  const seatCode = `S-${String(i + 1).padStart(2, '0')}`;
-                  return <option key={seatCode} value={seatCode}>{seatCode} (Available)</option>;
-                })}
-              </select>
-            </div>
+            <SearchableCombobox
+              id="admission-seat"
+              options={MANAGER_ADMISSION_SEAT_OPTIONS}
+              value={watchedSeat}
+              onChange={(val) => setValue?.('seat', val, { shouldValidate: true, shouldDirty: true })}
+              placeholder="Search / Select Available Seat..."
+              searchPlaceholder="Search seat (e.g. S-01, S-12)..."
+            />
             {errors.seat && <p className="mgr-error" role="alert">{errors.seat.message}</p>}
           </div>
 
           {/* Locker Selection */}
           <div className="mgr-form-field">
             <label className="mgr-label" htmlFor="admission-locker">{tManagerUi('locker_optional')}</label>
-            <div className="mgr-input-icon-wrap">
-              <Lock size={18} strokeWidth={2} className="mgr-input-icon" />
-              <select id="admission-locker" {...register('locker')} className="mgr-select mgr-input-with-icon">
-                <option value="">No Locker Required</option>
-                {Array.from({ length: 12 }, (_, i) => {
-                  const lockerCode = `L-${String(i + 1).padStart(2, '0')}`;
-                  return <option key={lockerCode} value={lockerCode}>{lockerCode} (Available - ₹200/mo)</option>;
-                })}
-              </select>
-            </div>
+            <SearchableCombobox
+              id="admission-locker"
+              options={MANAGER_ADMISSION_LOCKER_OPTIONS}
+              value={watchedLocker}
+              onChange={(val) => setValue?.('locker', val, { shouldValidate: true, shouldDirty: true })}
+              placeholder="Select Locker (Optional)..."
+              searchPlaceholder="Search locker (e.g. L-01)..."
+            />
           </div>
 
           {/* Direct Shift Selector Fallback / Confirmation */}

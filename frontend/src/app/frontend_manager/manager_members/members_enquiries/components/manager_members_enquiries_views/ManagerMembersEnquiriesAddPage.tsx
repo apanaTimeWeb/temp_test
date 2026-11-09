@@ -56,24 +56,83 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
 
   return <>
     {unsavedConfirmDialog}
-<div className="crm-drawer-overlay" onClick={handleClose} aria-hidden="true" />
-    <aside ref={dialogRef} tabIndex={-1} className="crm-drawer" role="dialog" aria-labelledby="crm-new-enquiry-title" aria-modal="true"
-      data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}>
-      <div className="crm-drawer-header"><div className="crm-drawer-header-left"><div className="crm-drawer-icon"><PhoneCall size={18} aria-hidden="true" /></div><div><h2 id="crm-new-enquiry-title" className="crm-drawer-title">{tManagerUi('new_enquiry')}</h2><p className="crm-drawer-subtitle">{tManagerUi('capture_a_new_prospective_student')}</p></div></div><button type="button" className="crm-btn-icon" onClick={handleClose} title={tManagerUi('close')} aria-label={tManagerUi('close_drawer')}><X size={18} /></button></div>
-      <p className="crm-contract-warning" role="status" data-testid="manager-crm-create-contract-warning">{tManagerUi('crm_mutations_unavailable_host_contract')}</p>
-      {draftFeedback && <p className="crm-contract-warning" role="status" aria-live="polite" data-testid="manager-crm-create-draft-feedback">{draftFeedback}</p>}
-      <form onSubmit={onValidateDraft} noValidate>
-        <div className="crm-drawer-body"><div className="crm-form-stack">
-          <div className="crm-field"><label htmlFor="enq-name" className="crm-label crm-label--required">{tManagerUi('full_name')}</label><input id="enq-name" type="text" autoComplete="name" className={`crm-input${errors.name ? ' crm-input--error' : ''}`} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'enq-name-error' : undefined} {...register('name')} />{errors.name && <p id="enq-name-error" className="crm-error" role="alert">{errors.name.message}</p>}</div>
-          <div className="crm-field"><label htmlFor="enq-phone" className="crm-label crm-label--required">{tManagerUi('mobile_number')}</label><div className="crm-phone-wrap"><span className="crm-phone-prefix">+91</span><input id="enq-phone" type="tel" maxLength={10} autoComplete="tel-national" className={`crm-input crm-input-phone${errors.phone ? ' crm-input--error' : ''}`} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'enq-phone-error' : undefined} {...register('phone')} /></div>{errors.phone && <p id="enq-phone-error" className="crm-error" role="alert">{errors.phone.message}</p>}</div>
-          <div className="crm-field"><label htmlFor="enq-shift" className="crm-label">{tManagerUi('preferred_shift')} <span className="crm-label-optional">{tManagerUi('optional')}</span></label><select id="enq-shift" className="crm-select" {...register('preferredShift')}><option value="">{tManagerUi('select_a_shift')}</option>{MANAGER_CRM_SAMPLE_SHIFT_OPTIONS.map((shift) => <option key={shift.id} value={shift.name}>{shiftLabel(shift.name)} ({shiftTimeLabel(shift.time)})</option>)}</select></div>
-          <div className="crm-field"><label htmlFor="enq-source" className="crm-label">{tManagerUi('source')} <span className="crm-label-optional">{tManagerUi('optional')}</span></label><select id="enq-source" className="crm-select" {...register('source')}><option value="">{tManagerUi('how_did_they_find_us')}</option>{MANAGER_CRM_SAMPLE_SOURCE_OPTIONS.map((source) => <option key={source} value={source}>{sourceLabel(source)}</option>)}</select></div>
-          <div className="crm-field"><label htmlFor="enq-handled-by" className="crm-label">{tManagerUi('handled_by')} <span className="crm-label-optional">{tManagerUi('optional')}</span></label><select id="enq-handled-by" className="crm-select" {...register('handledBy')}><option value="">{tManagerUi('assign_a_staff_member')}</option>{MANAGER_CRM_SAMPLE_STAFF_OPTIONS.map((staff) => <option key={staff.id} value={staff.name}>{staff.name}</option>)}</select></div>
-          <div className="crm-field"><label htmlFor="enq-notes" className="crm-label">{tManagerUi('notes')} <span className="crm-label-optional">{tManagerUi('optional')}</span></label><textarea id="enq-notes" rows={3} className="crm-textarea" {...register('notes')} /></div>
-        </div></div>
-        <div className="crm-drawer-footer"><button type="button" className="crm-btn-ghost crm-btn-flex-1" onClick={handleClose}>{tManagerUi('cancel')}</button><button type="submit" className="crm-btn-primary crm-btn-flex-2 cursor-not-allowed opacity-60" disabled title={tManagerUi('crm_mutations_unavailable_host_contract')}><Save size={15} />{tManagerUi('crm_creation_unavailable')}</button></div>
-      </form>
-    </aside>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" onClick={handleClose} aria-hidden="true">
+      <div
+        ref={dialogRef as unknown as React.RefObject<HTMLDivElement>}
+        tabIndex={-1}
+        className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4 max-h-[90vh] flex flex-col pointer-events-auto"
+        role="dialog"
+        aria-labelledby="crm-new-enquiry-title"
+        aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
+        data-route-view={_routeQuery.view}
+        data-route-id={_routeQuery.id}
+      >
+        <div className="flex items-center justify-between border-b border-border pb-3 shrink-0">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-subtle text-primary flex items-center justify-center">
+              <PhoneCall size={20} aria-hidden="true" />
+            </div>
+            <div>
+              <h2 id="crm-new-enquiry-title" className="text-base font-bold text-primary">{tManagerUi('new_enquiry')}</h2>
+              <p className="text-xs text-secondary">{tManagerUi('capture_a_new_prospective_student')}</p>
+            </div>
+          </div>
+          <button type="button" className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-zebra cursor-pointer" onClick={handleClose} title={tManagerUi('close')} aria-label={tManagerUi('close_drawer')}>
+            <X size={18} />
+          </button>
+        </div>
+        <p className="crm-contract-warning text-xs p-2.5 rounded-xl bg-warning-bg border border-warning text-warning" role="status" data-testid="manager-crm-create-contract-warning">{tManagerUi('crm_mutations_unavailable_host_contract')}</p>
+        {draftFeedback && <p className="crm-contract-warning text-xs p-2.5 rounded-xl bg-warning-bg border border-warning text-warning" role="status" aria-live="polite" data-testid="manager-crm-create-draft-feedback">{draftFeedback}</p>}
+        <form onSubmit={onValidateDraft} noValidate className="flex-1 overflow-y-auto space-y-3 pr-1 text-xs">
+          <div className="space-y-3">
+            <div className="crm-field">
+              <label htmlFor="enq-name" className="crm-label crm-label--required font-semibold block mb-1">{tManagerUi('full_name')}</label>
+              <input id="enq-name" type="text" autoComplete="name" className={`mgr-input w-full${errors.name ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'enq-name-error' : undefined} {...register('name')} />
+              {errors.name && <p id="enq-name-error" className="crm-error text-danger mt-1" role="alert">{errors.name.message}</p>}
+            </div>
+            <div className="crm-field">
+              <label htmlFor="enq-phone" className="crm-label crm-label--required font-semibold block mb-1">{tManagerUi('mobile_number')}</label>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-2 rounded-xl bg-surface-zebra border border-border text-xs font-mono text-secondary">+91</span>
+                <input id="enq-phone" type="tel" maxLength={10} autoComplete="tel-national" className={`mgr-input flex-1 font-mono${errors.phone ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'enq-phone-error' : undefined} {...register('phone')} />
+              </div>
+              {errors.phone && <p id="enq-phone-error" className="crm-error text-danger mt-1" role="alert">{errors.phone.message}</p>}
+            </div>
+            <div className="crm-field">
+              <label htmlFor="enq-shift" className="crm-label font-semibold block mb-1">{tManagerUi('preferred_shift')} <span className="text-secondary font-normal">({tManagerUi('optional')})</span></label>
+              <select id="enq-shift" className="mgr-select w-full" {...register('preferredShift')}>
+                <option value="">{tManagerUi('select_a_shift')}</option>
+                {MANAGER_CRM_SAMPLE_SHIFT_OPTIONS.map((shift) => <option key={shift.id} value={shift.name}>{shiftLabel(shift.name)} ({shiftTimeLabel(shift.time)})</option>)}
+              </select>
+            </div>
+            <div className="crm-field">
+              <label htmlFor="enq-source" className="crm-label font-semibold block mb-1">{tManagerUi('source')} <span className="text-secondary font-normal">({tManagerUi('optional')})</span></label>
+              <select id="enq-source" className="mgr-select w-full" {...register('source')}>
+                <option value="">{tManagerUi('how_did_they_find_us')}</option>
+                {MANAGER_CRM_SAMPLE_SOURCE_OPTIONS.map((source) => <option key={source} value={source}>{sourceLabel(source)}</option>)}
+              </select>
+            </div>
+            <div className="crm-field">
+              <label htmlFor="enq-handled-by" className="crm-label font-semibold block mb-1">{tManagerUi('handled_by')} <span className="text-secondary font-normal">({tManagerUi('optional')})</span></label>
+              <select id="enq-handled-by" className="mgr-select w-full" {...register('handledBy')}>
+                <option value="">{tManagerUi('assign_a_staff_member')}</option>
+                {MANAGER_CRM_SAMPLE_STAFF_OPTIONS.map((staff) => <option key={staff.id} value={staff.name}>{staff.name}</option>)}
+              </select>
+            </div>
+            <div className="crm-field">
+              <label htmlFor="enq-notes" className="crm-label font-semibold block mb-1">{tManagerUi('notes')} <span className="text-secondary font-normal">({tManagerUi('optional')})</span></label>
+              <textarea id="enq-notes" rows={2} className="mgr-input w-full resize-none" {...register('notes')} />
+            </div>
+          </div>
+          <div className="flex items-center justify-end gap-2 pt-3 border-t border-border shrink-0">
+            <button type="button" className="px-4 py-2 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary hover:bg-surface-zebra transition-colors cursor-pointer" onClick={handleClose}>{tManagerUi('cancel')}</button>
+            <button type="submit" className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-primary text-primary-foreground cursor-not-allowed opacity-60" disabled title={tManagerUi('crm_mutations_unavailable_host_contract')}>
+              <Save size={14} />{tManagerUi('crm_creation_unavailable')}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </>;
 }

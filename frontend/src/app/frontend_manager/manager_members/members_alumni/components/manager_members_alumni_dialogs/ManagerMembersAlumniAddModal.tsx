@@ -61,7 +61,8 @@ export function ManagerMembersAlumniAddModal({
       toast.error('Please select an enrolled library student.');
       return;
     }
-    if (!phone.trim() || phone.trim().length < 10) {
+    const cleanPhone = phone.trim().replace(/\D/g, '').slice(0, 10);
+    if (cleanPhone.length !== 10) {
       toast.error('Valid 10-digit mobile number is required.');
       return;
     }
@@ -70,11 +71,10 @@ export function ManagerMembersAlumniAddModal({
       return;
     }
 
-    const cleanPhone = phone.trim().replace(/\D/g, '');
     const newRecord: MembersAlumniRow = {
       id: `ALM-${Date.now().toString().slice(-4)}`,
       name: name.trim(),
-      phone: cleanPhone.length === 10 ? cleanPhone : phone.trim(),
+      phone: cleanPhone,
       leftDate,
       duration: duration.trim() || '1 Year',
       exam: exam.trim(),
@@ -110,7 +110,7 @@ export function ManagerMembersAlumniAddModal({
         {/* Modal Form */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto space-y-4 pr-1 text-xs">
           {/* Step 1: Search & Pick Student */}
-          <div className="space-y-1.5 p-3 rounded-xl bg-surface border border-border">
+          <div className="space-y-1.5 p-3 rounded-xl bg-surface border border-border relative z-30">
             <label className="font-semibold text-primary block">
               Select Enrolled Library Member *
             </label>
@@ -137,13 +137,13 @@ export function ManagerMembersAlumniAddModal({
             {/* Student Name (Auto-populated) */}
             <div>
               <label className="font-semibold text-primary block mb-1">Student Full Name *</label>
-              <div className="relative">
-                <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+              <div className="mgr-input-icon-wrap">
+                <User size={16} className="mgr-input-icon text-secondary" />
                 <input
                   type="text"
                   required
                   readOnly={Boolean(selectedStudent)}
-                  className={`mgr-input pl-9 text-xs ${selectedStudent ? 'bg-surface cursor-not-allowed font-semibold' : ''}`}
+                  className={`mgr-input mgr-input-with-icon text-xs ${selectedStudent ? 'bg-surface cursor-not-allowed font-semibold' : ''}`}
                   placeholder="Select student above..."
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -153,17 +153,18 @@ export function ManagerMembersAlumniAddModal({
 
             {/* Phone (Auto-populated) */}
             <div>
-              <label className="font-semibold text-primary block mb-1">Contact Phone *</label>
-              <div className="relative">
-                <Phone size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+              <label className="font-semibold text-primary block mb-1">Contact Phone (10 Digits) *</label>
+              <div className="mgr-input-icon-wrap">
+                <Phone size={16} className="mgr-input-icon text-secondary" />
                 <input
                   type="tel"
                   required
+                  maxLength={10}
                   readOnly={Boolean(selectedStudent)}
-                  className={`mgr-input pl-9 text-xs font-mono ${selectedStudent ? 'bg-surface cursor-not-allowed font-semibold' : ''}`}
+                  className={`mgr-input mgr-input-with-icon text-xs font-mono ${selectedStudent ? 'bg-surface cursor-not-allowed font-semibold' : ''}`}
                   placeholder="9876543210"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                 />
               </div>
             </div>
@@ -171,12 +172,12 @@ export function ManagerMembersAlumniAddModal({
             {/* Exam / Achievement */}
             <div className="sm:col-span-2">
               <label className="font-semibold text-primary block mb-1">Qualified Exam / Achievement *</label>
-              <div className="relative">
-                <Award size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-primary" />
+              <div className="mgr-input-icon-wrap">
+                <Award size={16} className="mgr-input-icon text-primary" />
                 <input
                   type="text"
                   required
-                  className="mgr-input pl-9 text-xs"
+                  className="mgr-input mgr-input-with-icon text-xs"
                   placeholder="e.g. UPSC CSE 2026 (AIR 114) / SSC CGL / NEET PG / Judiciary"
                   value={exam}
                   onChange={(e) => setExam(e.target.value)}
@@ -187,11 +188,11 @@ export function ManagerMembersAlumniAddModal({
             {/* Designation / Rank */}
             <div>
               <label className="font-semibold text-primary block mb-1">Designation / Posting / Rank</label>
-              <div className="relative">
-                <Briefcase size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+              <div className="mgr-input-icon-wrap">
+                <Briefcase size={16} className="mgr-input-icon text-secondary" />
                 <input
                   type="text"
-                  className="mgr-input pl-9 text-xs"
+                  className="mgr-input mgr-input-with-icon text-xs"
                   placeholder="e.g. Assistant Commissioner / Bank PO"
                   value={designation}
                   onChange={(e) => setDesignation(e.target.value)}
@@ -228,11 +229,11 @@ export function ManagerMembersAlumniAddModal({
             {/* Exit / Qualification Date */}
             <div>
               <label className="font-semibold text-primary block mb-1">Achievement / Exit Date</label>
-              <div className="relative">
-                <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+              <div className="mgr-input-icon-wrap">
+                <Calendar size={16} className="mgr-input-icon text-secondary" />
                 <input
                   type="date"
-                  className="mgr-input pl-9 text-xs"
+                  className="mgr-input mgr-input-with-icon text-xs"
                   value={leftDate}
                   onChange={(e) => setLeftDate(e.target.value)}
                 />

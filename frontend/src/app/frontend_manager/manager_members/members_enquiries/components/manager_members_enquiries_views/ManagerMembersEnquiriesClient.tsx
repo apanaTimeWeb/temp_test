@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { RefreshCw } from 'lucide-react';
+import { toast } from 'sonner';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 import {
   useManagerMembersEnquiries,
@@ -53,6 +54,7 @@ export function ManagerMembersEnquiriesClient() {
     selectByStatus,
     selectAllFiltered,
     clearSelection,
+    deleteSelected,
   } = useManagerMembersEnquiries();
 
   const statusLabels = {
@@ -153,6 +155,11 @@ export function ManagerMembersEnquiriesClient() {
         onSelectByStatus={selectByStatus}
         onClearSelection={clearSelection}
         onOpenBulkWhatsApp={() => setBulkWhatsAppModalOpen(true)}
+        onBulkDelete={() => {
+          const count = selectedIds.length;
+          deleteSelected();
+          toast.success(`${count} lead(s) deleted successfully`);
+        }}
         visitedCount={stats.visited}
         newCount={stats.newLeads}
         interestedCount={stats.interested}

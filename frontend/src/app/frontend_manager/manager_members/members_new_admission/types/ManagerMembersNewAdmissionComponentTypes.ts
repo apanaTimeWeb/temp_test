@@ -29,6 +29,8 @@ export interface DynamicPlanOption {
 export interface ManagerMembersNewAdmissionAdmissionPaymentSectionProps {
   register: UseFormRegister<ManagerMembersNewAdmissionAdmissionFormValues>;
   errors: FieldErrors<ManagerMembersNewAdmissionAdmissionFormValues>;
+  setValue?: UseFormSetValue<ManagerMembersNewAdmissionAdmissionFormValues>;
+  watch?: UseFormWatch<ManagerMembersNewAdmissionAdmissionFormValues>;
   planOptions?: DynamicPlanOption[];
   effectiveMonthlyRate?: number;
 }

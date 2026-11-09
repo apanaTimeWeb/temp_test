@@ -13,6 +13,7 @@ import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/m
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 import { ManagerMembersDirectoryEditModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryEditModal';
 import { ManagerMembersDirectoryExtendedCards } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryExtendedCards';
+import { ManagerMembersDirectoryDocLightbox } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryDocLightbox';
 import {
   ManagerMembersDirectoryGraduateAlumniModal,
   type ManagerGraduateAlumniDetails,
@@ -27,6 +28,8 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
   const locale = useLocale();
   const [isEditModalOpen, setIsEditModalOpen] = useState(Boolean(initialEdit));
   const [isGraduateModalOpen, setIsGraduateModalOpen] = useState(false);
+  const [selectedDocPreview, setSelectedDocPreview] = useState<string | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
 
   const handleSaveMember = (updated: ManagerMembersDirectoryRecord) => {
     onUpdateMember?.(updated);
@@ -98,7 +101,11 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
         <div className="space-y-6">
           {/* Main Profile Header Card */}
           <div className="p-6 rounded-2xl bg-floating border border-border flex flex-col md:flex-row gap-8">
-            <div className="w-32 h-32 rounded-2xl bg-info-bg flex items-center justify-center shrink-0 border border-info">
+            <div
+              className="w-32 h-32 rounded-2xl bg-info-bg flex items-center justify-center shrink-0 border border-info cursor-pointer hover:opacity-90 transition-opacity"
+              onClick={() => setIsZoomed(true)}
+              title="Click to view enlarged photo"
+            >
               <Users size={48} className="text-info" />
             </div>
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -232,8 +239,8 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                       <div className="flex items-center gap-2">
                         <button
                           type="button"
-                          onClick={() => toast.info(`Viewing ${doc.type} (${doc.number || doc.fileName})`)}
-                          className="text-primary hover:text-info flex items-center gap-1 text-xs"
+                          onClick={() => setSelectedDocPreview(`${doc.type}: ${doc.number || doc.fileName || 'Verified Document'}`)}
+                          className="text-primary hover:text-info flex items-center gap-1 text-xs cursor-pointer font-medium"
                           title={tManagerUi('preview')}
                         >
                           <ExternalLink size={12} /> {tManagerUi('preview')}
@@ -261,6 +268,16 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
             onClose={() => setIsGraduateModalOpen(false)}
             member={member}
             onGraduate={handleGraduateMember}
+          />
+          <ManagerMembersDirectoryDocLightbox
+            isZoomed={isZoomed}
+            setIsZoomed={setIsZoomed}
+            selectedDocPreview={selectedDocPreview}
+            setSelectedDocPreview={setSelectedDocPreview}
+            mockPhotoUrl="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80"
+            memberName={member.name}
+            memberId={member.id}
+            memberJoinDate={member.joinDate}
           />
         </>
       )}

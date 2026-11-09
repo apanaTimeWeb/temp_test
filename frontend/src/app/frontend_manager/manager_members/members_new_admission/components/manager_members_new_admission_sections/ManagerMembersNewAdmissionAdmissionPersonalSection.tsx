@@ -1,10 +1,15 @@
 'use client';
 // RESPONSIBILITY: Render the members new admission admission personal section section of the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Award, BookOpen, Calendar, Camera, GraduationCap, Mail, MapPin, Phone, ShieldAlert, User, Building, HeartPulse, Activity, Accessibility } from 'lucide-react';
-import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
-import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
+import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
+import {
+  MANAGER_ADMISSION_GENDER_OPTIONS,
+  MANAGER_ADMISSION_PREPARATION_OPTIONS,
+  MANAGER_ADMISSION_BLOOD_GROUP_OPTIONS,
+  MANAGER_ADMISSION_REFERRAL_OPTIONS,
+} from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission_options';
 import type { ManagerMembersNewAdmissionAdmissionPersonalSectionProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 
 export type { ManagerMembersNewAdmissionAdmissionPersonalSectionProps };
@@ -18,32 +23,20 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
   const tManagerUi = useTranslations('manager.manager_new_admission.ui');
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const watchedReferredBy = watch ? watch('referredBy') : '';
-
-  const referralOptions: ComboboxOption[] = useMemo(() => {
-    return [
-      { value: 'Direct Walk-in', label: 'Direct Walk-in / Self (No Referral)', badge: 'Default' },
-      ...MANAGER_MEMBERS_DEMO_RECORDS.map((r) => ({
-        value: `${r.id} (${r.name})`,
-        label: `${r.name} (${r.id})`,
-        subLabel: `Phone: ${r.phone} · Seat: ${r.seat || 'General'}`,
-        badge: r.status,
-      })),
-    ];
-  }, []);
+  const watchedGender = watch ? watch('gender') : '';
+  const watchedPrep = watch ? watch('preparationFor') : '';
+  const watchedBloodGroup = watch ? watch('bloodGroup') : '';
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const res = event.target?.result as string;
-        setPhotoPreview(res);
-        if (setValue) {
-          setValue('photoUrl', res, { shouldDirty: true, shouldValidate: true });
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const res = event.target?.result as string;
+      setPhotoPreview(res);
+      setValue?.('photoUrl', res, { shouldDirty: true, shouldValidate: true });
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -90,7 +83,21 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             <label className="mgr-label mgr-label-required" htmlFor="admission-phone">{tManagerUi('phone_number')}</label>
             <div className="mgr-input-icon-wrap">
               <Phone size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-phone" {...register('phone')} type="tel" className={`mgr-input mgr-input-with-icon${errors.phone ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'admission-phone-error' : undefined} placeholder="9876543210" />
+              <input
+                id="admission-phone"
+                {...register('phone', {
+                  onChange: (e) => {
+                    const clean = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    e.target.value = clean;
+                  },
+                })}
+                type="tel"
+                maxLength={10}
+                className={`mgr-input mgr-input-with-icon${errors.phone ? ' mgr-input-error' : ''}`}
+                aria-invalid={Boolean(errors.phone)}
+                aria-describedby={errors.phone ? 'admission-phone-error' : undefined}
+                placeholder="10-digit mobile number"
+              />
             </div>
             {errors.phone && <p id="admission-phone-error" className="mgr-error" role="alert">{errors.phone.message}</p>}
           </div>
@@ -116,20 +123,18 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
           {/* Gender */}
           <div className="mgr-form-field">
             <label className="mgr-label mgr-label-required" htmlFor="admission-gender">Gender</label>
-            <select
+            <SearchableCombobox
               id="admission-gender"
-              {...register('gender')}
-              required
-              aria-required="true"
-              aria-invalid={Boolean(errors.gender)}
-              aria-describedby={errors.gender ? 'admission-gender-error' : undefined}
-              className={`mgr-select${errors.gender ? ' mgr-input-error' : ''}`}
-            >
-              <option value="">-- Select Gender --</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
+              options={MANAGER_ADMISSION_GENDER_OPTIONS}
+              value={watchedGender}
+              onChange={(val) => {
+                if (setValue) {
+                  setValue('gender', val, { shouldValidate: true, shouldDirty: true });
+                }
+              }}
+              placeholder="Select Gender..."
+              searchPlaceholder="Search gender..."
+            />
             {errors.gender && <p id="admission-gender-error" className="mgr-error" role="alert">{errors.gender.message}</p>}
           </div>
 
@@ -165,7 +170,19 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             <label className="mgr-label" htmlFor="admission-parent-phone">Parent / Guardian Phone</label>
             <div className="mgr-input-icon-wrap">
               <ShieldAlert size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-parent-phone" {...register('parentPhone')} type="tel" className="mgr-input mgr-input-with-icon" placeholder="Emergency contact number" />
+              <input
+                id="admission-parent-phone"
+                {...register('parentPhone', {
+                  onChange: (e) => {
+                    const clean = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    e.target.value = clean;
+                  },
+                })}
+                type="tel"
+                maxLength={10}
+                className="mgr-input mgr-input-with-icon"
+                placeholder="10-digit emergency number"
+              />
             </div>
           </div>
 
@@ -183,20 +200,18 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
           {/* Preparation For */}
           <div className="mgr-form-field">
             <label className="mgr-label" htmlFor="admission-preparation">Preparation For (Target Exam)</label>
-            <div className="mgr-input-icon-wrap">
-              <BookOpen size={18} strokeWidth={2} className="mgr-input-icon" />
-              <select id="admission-preparation" {...register('preparationFor')} className="mgr-select mgr-input-with-icon">
-                <option value="UPSC Civil Services">UPSC Civil Services</option>
-                <option value="State PSC">State PSC (BPSC/UPPSC/MPPSC)</option>
-                <option value="SSC & Banking">SSC / Banking Exams</option>
-                <option value="Medical Entrance (NEET/AIIMS)">Medical Entrance (NEET)</option>
-                <option value="Engineering Entrance (JEE/GATE)">Engineering Entrance (JEE/GATE)</option>
-                <option value="Chartered Accountancy (CA/CS)">Chartered Accountancy (CA/CS)</option>
-                <option value="Judiciary / Law Entrance (CLAT)">Judiciary / Law Entrance (CLAT)</option>
-                <option value="College Semester Studies">College Semester Studies</option>
-                <option value="Other Competitive Exams">Other Competitive Exams</option>
-              </select>
-            </div>
+            <SearchableCombobox
+              id="admission-preparation"
+              options={MANAGER_ADMISSION_PREPARATION_OPTIONS}
+              value={watchedPrep || 'UPSC Civil Services'}
+              onChange={(val) => {
+                if (setValue) {
+                  setValue('preparationFor', val, { shouldValidate: true, shouldDirty: true });
+                }
+              }}
+              placeholder="Search target exam..."
+              searchPlaceholder="Type exam name (UPSC, NEET, SSC)..."
+            />
           </div>
 
           {/* Library Branch (Locked to Manager's Assigned Branch) */}
@@ -221,20 +236,18 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
           {/* Blood Group */}
           <div className="mgr-form-field">
             <label className="mgr-label" htmlFor="admission-blood-group">Blood Group</label>
-            <div className="mgr-input-icon-wrap">
-              <HeartPulse size={18} strokeWidth={2} className="mgr-input-icon text-danger" />
-              <select id="admission-blood-group" {...register('bloodGroup')} className="mgr-select mgr-input-with-icon">
-                <option value="">-- Select Blood Group (Optional) --</option>
-                <option value="B+">B+ (Positive)</option>
-                <option value="A+">A+ (Positive)</option>
-                <option value="O+">O+ (Positive)</option>
-                <option value="AB+">AB+ (Positive)</option>
-                <option value="B-">B- (Negative)</option>
-                <option value="A-">A- (Negative)</option>
-                <option value="O-">O- (Negative)</option>
-                <option value="AB-">AB- (Negative)</option>
-              </select>
-            </div>
+            <SearchableCombobox
+              id="admission-blood-group"
+              options={MANAGER_ADMISSION_BLOOD_GROUP_OPTIONS}
+              value={watchedBloodGroup}
+              onChange={(val) => {
+                if (setValue) {
+                  setValue('bloodGroup', val, { shouldValidate: true, shouldDirty: true });
+                }
+              }}
+              placeholder="Select Blood Group..."
+              searchPlaceholder="Search blood group (e.g. B+, O+)..."
+            />
           </div>
 
           {/* Medical Issues (Optional) */}
@@ -262,7 +275,7 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
             </label>
             <SearchableCombobox
               id="admission-referred-by"
-              options={referralOptions}
+              options={MANAGER_ADMISSION_REFERRAL_OPTIONS}
               value={watchedReferredBy || 'Direct Walk-in'}
               onChange={(val) => {
                 if (setValue) {

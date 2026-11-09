@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchManagerMembersEnquiries } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.api';
 import { MANAGER_CRM_QUERY_KEYS } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.query_keys';
 import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
@@ -40,8 +40,9 @@ function parseEnquiryDateToMs(enquiry: ManagerMembersEnquiriesEnquiry): number |
 }
 
 export function useManagerMembersEnquiries() {
+  const queryClient = useQueryClient();
   const query = useQuery({ queryKey: MANAGER_CRM_QUERY_KEYS.enquiries(), queryFn: fetchManagerMembersEnquiries, staleTime: 30_000 });
-  const [view, setView] = useState<ManagerMembersEnquiriesBoardViewMode>('kanban');
+  const [view, setView] = useState<ManagerMembersEnquiriesBoardViewMode>('table');
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<ManagerMembersEnquiriesEnquiryStatus | 'All'>('All');
   const [timeHorizon, setTimeHorizon] = useState<ManagerCrmTimeHorizon>('all');
@@ -164,6 +165,16 @@ export function useManagerMembersEnquiries() {
     [query.data, selectedIds]
   );
 
+  const deleteSelected = (targetIds?: string[]) => {
+    const toDelete = targetIds ?? selectedIds;
+    if (toDelete.length === 0) return;
+    queryClient.setQueryData<ManagerMembersEnquiriesEnquiry[]>(
+      MANAGER_CRM_QUERY_KEYS.enquiries(),
+      (old) => (old ?? []).filter((e) => !toDelete.includes(e.id))
+    );
+    setSelectedIds((prev) => prev.filter((id) => !toDelete.includes(id)));
+  };
+
   const getCardsByStatus = (status: ManagerMembersEnquiriesEnquiryStatus): ManagerMembersEnquiriesEnquiry[] =>
     filtered.filter((enquiry) => enquiry.status === status);
 
@@ -194,5 +205,6 @@ export function useManagerMembersEnquiries() {
     selectByStatus,
     selectAllFiltered,
     clearSelection,
+    deleteSelected,
   };
 }

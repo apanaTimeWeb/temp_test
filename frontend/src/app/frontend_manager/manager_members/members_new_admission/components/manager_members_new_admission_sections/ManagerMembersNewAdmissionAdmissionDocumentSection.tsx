@@ -68,7 +68,7 @@ export function ManagerMembersNewAdmissionAdmissionDocumentSection({
       <div className="mgr-card-body">
         <div className="mgr-form-grid">
           <div className="mgr-form-field">
-            <label className="mgr-label mgr-label-required" htmlFor="admission-doc-type">Document Type</label>
+            <label className="mgr-label" htmlFor="admission-doc-type">Document Type</label>
             <div className="mgr-input-icon-wrap">
               <FileText size={18} strokeWidth={2} className="mgr-input-icon" />
               <select
@@ -77,17 +77,13 @@ export function ManagerMembersNewAdmissionAdmissionDocumentSection({
                 onChange={handleDocTypeChange}
                 className="mgr-select mgr-input-with-icon"
               >
-                <option value="Aadhaar Card">Aadhaar Card</option>
-                <option value="College / University ID">College / University ID</option>
-                <option value="Driving License">Driving License</option>
-                <option value="Passport">Passport</option>
-                <option value="Student Photo">Student Photo</option>
+                <option value="Aadhaar Card">Aadhaar Card (UIDAI)</option>
               </select>
             </div>
           </div>
 
           <div className="mgr-form-field">
-            <label className="mgr-label" htmlFor="admission-doc-number">Document Number / ID</label>
+            <label className="mgr-label" htmlFor="admission-doc-number">Aadhaar Number / ID</label>
             <input
               id="admission-doc-number"
               type="text"
@@ -100,7 +96,9 @@ export function ManagerMembersNewAdmissionAdmissionDocumentSection({
           </div>
 
           <div className="mgr-form-field mgr-form-field-full">
-            <label className="mgr-label" htmlFor="admission-doc-file">Upload Document File (PDF / JPG / PNG)</label>
+            <label className="mgr-label" htmlFor="admission-doc-file">
+              Upload Document File (PDF / JPG / PNG) <span className="text-secondary font-normal text-xs">(Optional)</span>
+            </label>
             <div className="flex items-center gap-3">
               <label
                 htmlFor="admission-doc-file"

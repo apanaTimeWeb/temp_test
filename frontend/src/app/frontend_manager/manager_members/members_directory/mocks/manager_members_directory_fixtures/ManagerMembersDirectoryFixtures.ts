@@ -19,7 +19,6 @@ export const MANAGER_MEMBERS_DEMO_RECORDS: ManagerMembersDirectoryRecord[] = [
     referredBy: 'LIB-005 (Vikas Mishra)',
     documents: [
       { id: 'DOC-101', type: 'Aadhaar Card', number: '•••• •••• 4821', status: 'Verified', fileName: 'aadhaar_front_back.pdf', uploadDate: '2026-01-10' },
-      { id: 'DOC-102', type: 'College / University ID', number: 'COL-2024-91', status: 'Verified', fileName: 'student_college_id.jpg', uploadDate: '2026-01-10' },
       { id: 'DOC-103', type: 'Student Photo', number: 'PHOTO-01', status: 'Verified', fileName: 'passport_photo.png', uploadDate: '2026-01-10' },
     ],
   },
