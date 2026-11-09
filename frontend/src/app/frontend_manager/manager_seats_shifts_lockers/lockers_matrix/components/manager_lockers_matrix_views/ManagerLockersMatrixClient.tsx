@@ -157,30 +157,10 @@ export function ManagerLockersMatrixClient() {
 
         <div className="ss-locker-stats">
           {[
-            {
-              labelKey: 'total_capacity',
-              value: String(stats.total),
-              border: 'ss-kpi-card__border-primary',
-              valueClass: 'ss-kpi-card__value--primary',
-            },
-            {
-              labelKey: 'available',
-              value: String(stats.available),
-              border: 'ss-kpi-card__border-success',
-              valueClass: 'ss-kpi-card__value--success',
-            },
-            {
-              labelKey: 'occupied',
-              value: String(stats.occupied),
-              border: 'ss-kpi-card__border-danger',
-              valueClass: 'ss-kpi-card__value--danger',
-            },
-            {
-              labelKey: 'service_required',
-              value: String(stats.service).padStart(2, '0'),
-              border: 'ss-kpi-card__border-warning',
-              valueClass: 'ss-kpi-card__value--warning',
-            },
+            { labelKey: 'total_capacity', value: String(stats.total), border: 'ss-kpi-card__border-primary', valueClass: 'ss-kpi-card__value--primary' },
+            { labelKey: 'available', value: String(stats.available), border: 'ss-kpi-card__border-success', valueClass: 'ss-kpi-card__value--success' },
+            { labelKey: 'occupied', value: String(stats.occupied), border: 'ss-kpi-card__border-danger', valueClass: 'ss-kpi-card__value--danger' },
+            { labelKey: 'service_required', value: String(stats.service).padStart(2, '0'), border: 'ss-kpi-card__border-warning', valueClass: 'ss-kpi-card__value--warning' },
           ].map(({ labelKey, value, border, valueClass }) => (
             <div key={labelKey} className={`ss-kpi-card ${border}`}>
               <span className="ss-kpi-card__label">{tManagerUi(labelKey)}</span>
@@ -289,18 +269,12 @@ export function ManagerLockersMatrixClient() {
       {/* Interactive Allotment Modal */}
       {assignTarget && (
         <ManagerLockersMatrixAllotModal
-          assignTarget={assignTarget}
-          dialogRef={dialogRef}
-          studentName={studentName}
-          setStudentName={setStudentName}
-          studentSmartId={studentSmartId}
-          setStudentSmartId={setStudentSmartId}
-          keyNumber={keyNumber}
-          setKeyNumber={setKeyNumber}
-          depositAmount={depositAmount}
-          setDepositAmount={setDepositAmount}
-          onClose={() => setAssignTarget(null)}
-          onSubmit={handleConfirmAssignment}
+          assignTarget={assignTarget} dialogRef={dialogRef}
+          studentName={studentName} setStudentName={setStudentName}
+          studentSmartId={studentSmartId} setStudentSmartId={setStudentSmartId}
+          keyNumber={keyNumber} setKeyNumber={setKeyNumber}
+          depositAmount={depositAmount} setDepositAmount={setDepositAmount}
+          onClose={() => setAssignTarget(null)} onSubmit={handleConfirmAssignment}
         />
       )}
     </>

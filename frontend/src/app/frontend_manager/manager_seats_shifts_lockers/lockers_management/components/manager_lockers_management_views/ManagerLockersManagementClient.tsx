@@ -135,9 +135,7 @@ export function ManagerLockersManagementClient() {
                 type="button"
                 onClick={() => setViewMode('grid')}
                 aria-pressed={viewMode === 'grid'}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                  viewMode === 'grid' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'}`}
               >
                 <LayoutGrid size={13} /> Grid View
               </button>
@@ -145,9 +143,7 @@ export function ManagerLockersManagementClient() {
                 type="button"
                 onClick={() => setViewMode('table')}
                 aria-pressed={viewMode === 'table'}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                  viewMode === 'table' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${viewMode === 'table' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'}`}
               >
                 <List size={13} /> Table View
               </button>
@@ -266,12 +262,7 @@ export function ManagerLockersManagementClient() {
             </div>
             <div className="ss-modal-footer">
               <button type="button" className="ss-btn-ghost" onClick={() => setShowAssign(null)}>{tManagerUi('cancel')}</button>
-              <button
-                type="button"
-                className="ss-btn-primary cursor-not-allowed"
-                disabled
-                title={tManagerUi('locker_assignment_unavailable_host_mutation_contract_not_e5fc07')}
-              >
+              <button type="button" className="ss-btn-primary cursor-not-allowed" disabled title={tManagerUi('locker_assignment_unavailable_host_mutation_contract_not_e5fc07')}>
                 <UserPlus size={14} /> {tManagerUi('assign_unavailable')}
               </button>
             </div>
@@ -291,10 +282,7 @@ export function ManagerLockersManagementClient() {
         <ManagerLockersManagementStudentModal
           locker={selectedLockerStudent}
           onClose={() => setSelectedLockerStudent(null)}
-          onVacate={(l) => {
-            setSelectedLockerStudent(null);
-            setFreeTarget(l);
-          }}
+          onVacate={(l) => { setSelectedLockerStudent(null); setFreeTarget(l); }}
         />
       )}
     </>
