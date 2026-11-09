@@ -92,18 +92,27 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
     return date;
   }, [date, todayStr, yesterdayStr]);
 
+  const escapeCsvCell = (val: unknown) => {
+    let str = String(val ?? '');
+    if (/^[\u0000-\u0020]*[=+\-@]/.test(str)) str = `'${str}`;
+    return `"${str.replace(/"/g, '""')}"`;
+  };
+
   const handleExportCsv = () => {
-    const headers = `Attendance Register Export - Date: ${dateLabel}\nSmart ID,Name,Shift,Status,In Time,Out Time\n`;
+    const headers = ['Smart ID', 'Name', 'Shift', 'Status', 'In Time', 'Out Time'].map(escapeCsvCell).join(',');
     const rows = filtered
-      .map((s) => `"${s.smartId}","${s.name}","${s.shift}","${s.status ?? 'unmarked'}","${s.inTime || ''}","${s.outTime || ''}"`)
-      .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+      .map((s) => [s.smartId, s.name, s.shift, s.status ?? 'unmarked', s.inTime || '', s.outTime || ''].map(escapeCsvCell).join(','))
+      .join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `attendance_register_${dateLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.hidden = true;
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(anchor);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('Attendance register exported to CSV');
   };
 

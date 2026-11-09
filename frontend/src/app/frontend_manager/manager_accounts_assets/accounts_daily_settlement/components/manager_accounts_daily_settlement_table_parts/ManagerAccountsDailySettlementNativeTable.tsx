@@ -127,7 +127,7 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
           <button
             type="button"
             className="mgr-btn-ghost mgr-btn-sm"
-            disabled={page <= 0}
+            disabled={effectivePage <= 0}
             onClick={() => setPage((current) => Math.max(0, current - 1))}
           >
             {labels?.previous ?? 'Previous page'}
@@ -138,7 +138,7 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
           <button
             type="button"
             className="mgr-btn-ghost mgr-btn-sm"
-            disabled={page >= pageCount - 1}
+            disabled={effectivePage >= pageCount - 1}
             onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
           >
             {labels?.next ?? 'Next page'}

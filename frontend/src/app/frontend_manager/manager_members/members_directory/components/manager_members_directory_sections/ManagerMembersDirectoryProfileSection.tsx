@@ -30,20 +30,21 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
 
   const handleWhatsAppMember = () => {
     if (!member) return;
-    const cleanPhone = member.phone.replace(/\D/g, '');
+    let cleanPhone = member.phone.replace(/\D/g, '');
+    if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const text = encodeURIComponent(
       `Hello ${member.name},\nThis is Central Library Management regarding your membership (${member.id} • ${member.type} Plan).\n` +
       `Assigned Seat: ${member.seat || 'General Study'} • Shift: ${member.shift || 'Morning'}.\n\n` +
       `How may we assist you today?\n— Central Library Administration`
     );
-    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
-    toast.success(`WhatsApp opened for ${member.name} (+91 ${cleanPhone})`);
+    toast.success(`WhatsApp opened for ${member.name} (+${targetPhone})`);
   };
 
   const membershipTypeLabels: Record<string, string> = { Basic: tManagerUi('basic'), Pro: tManagerUi('pro'), Enterprise: tManagerUi('enterprise') };
-  const memberStatusLabels: Record<string, string> = { Active: tManagerUi('member_status_active'), Expired: tManagerUi('member_status_expired'), Suspended: tManagerUi('member_status_suspended') };
+  const memberStatusLabels: Record<string, string> = { Active: tManagerUi('member_status_active'), Expired: tManagerUi('member_status_expired'), Suspended: tManagerUi('member_status_suspended'), Blocked: 'Blocked' };
   const membershipTypeLabel = member ? (membershipTypeLabels[member.type] ?? member.type) : '';
   const memberStatusLabel = member ? (memberStatusLabels[member.status] ?? member.status) : '';
   const displayDocuments = member?.documents && member.documents.length > 0 ? member.documents : [];
@@ -55,6 +56,7 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
         Active: { container: 'bg-success-bg border-success text-success', icon: <CheckCircle size={18} aria-hidden="true" /> },
         Expired: { container: 'bg-danger-bg border-danger text-danger', icon: <Clock size={18} aria-hidden="true" /> },
         Suspended: { container: 'bg-warning-bg border-warning text-warning', icon: <AlertTriangle size={18} aria-hidden="true" /> },
+        Blocked: { container: 'bg-danger-bg border-danger text-danger', icon: <AlertTriangle size={18} aria-hidden="true" /> },
       }[member.status] ?? { container: 'bg-card border-border text-primary', icon: <CheckCircle size={18} aria-hidden="true" /> }
     : { container: 'bg-card border-border text-primary', icon: <CheckCircle size={18} aria-hidden="true" /> };
 

@@ -127,18 +127,27 @@ export function ManagerMembersReferralBonusReferralsClient() {
     setTimeout(() => setToastMsg(null), 3500);
   };
 
+  const escapeCsvCell = (val: unknown) => {
+    let str = String(val ?? '');
+    if (/^[\u0000-\u0020]*[=+\-@]/.test(str)) str = `'${str}`;
+    return `"${str.replace(/"/g, '""')}"`;
+  };
+
   const handleExportCsv = () => {
-    const headers = 'Referral ID,Referrer,Referred Member,Date,Bonus Amount,Reward Method,Status\n';
+    const headers = ['Referral ID', 'Referrer', 'Referred Member', 'Date', 'Bonus Amount', 'Reward Method', 'Status'].map(escapeCsvCell).join(',');
     const rows = sortedRows
-      .map((r) => `"${r.id}","${r.referrer}","${r.referred}","${r.date}","${r.bonus}","${r.method}","${r.status}"`)
-      .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+      .map((r) => [r.id, r.referrer, r.referred, r.date, r.bonus, r.method, r.status].map(escapeCsvCell).join(','))
+      .join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `referrals_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.hidden = true;
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(anchor);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('Referrals exported to CSV successfully');
   };
 

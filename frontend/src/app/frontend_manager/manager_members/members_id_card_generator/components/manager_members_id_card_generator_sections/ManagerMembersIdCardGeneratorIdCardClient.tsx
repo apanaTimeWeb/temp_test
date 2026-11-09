@@ -100,20 +100,21 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
     if (!selected) return null;
     return {
       name: selected.name, smartId: selected.smartId, phone: selected.phone, shift: selected.shift, seat: selected.seat,
-      locker: (selected as any).locker || '', plan: selected.plan, status: selected.status, joinDate: formatDate(selected.joined),
+      locker: selected.locker || '', plan: selected.plan, status: selected.status, joinDate: formatDate(selected.joined),
       expiryDate: (selected as any).expiryDate, branch: selected.branch || 'Central Library', college: (selected as unknown as { college?: string }).college,
     };
   }, [selected, formatDate]);
 
   const handleShareWhatsApp = () => {
     if (!selected) return;
-    const digits = selected.phone.replace(/\D/g, '');
+    let digits = selected.phone.replace(/\D/g, '');
+    if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
     const clean10 = digits.length > 10 && digits.startsWith('91') ? digits.slice(2) : digits;
     const targetPhone = digits.length === 10 ? `91${digits}` : digits;
     const msg = encodeURIComponent(
       `Hello ${selected.name},\nYour Library Smart ID Card is ready!\n\nSmart ID: ${selected.smartId}\nShift: ${selected.shift}\nAssigned Seat: ${selected.seat}\nPlan: ${selected.plan}\n\nPlease keep this card details handy while visiting the library.\n— Central Library Management`
     );
-    const popup = window.open(`https://wa.me/${targetPhone}?text=${msg}`, '_blank');
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${msg}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
     toast.success(`Smart ID card WhatsApp link opened for ${selected.name} (+91 ${clean10})`);
   };

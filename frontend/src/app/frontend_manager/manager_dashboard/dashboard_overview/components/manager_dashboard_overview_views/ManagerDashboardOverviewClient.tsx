@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { ManagerDashboardOverviewHeaderBar, type DashboardTimeRange } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_sections/ManagerDashboardOverviewHeaderBar';
 import { ManagerDashboardOverviewLiveShiftBar } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_widgets/ManagerDashboardOverviewLiveShiftBar';
 import { ManagerDashboardOverviewKpiGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_sections/ManagerDashboardOverviewKpiGrid';
@@ -26,6 +27,8 @@ export type { DashboardTimeRange };
  */
 export function ManagerDashboardOverviewClient() {
   const tManagerUi = useTranslations('manager.manager_dashboard.ui');
+  const searchParams = useSearchParams();
+  const branchParam = searchParams?.get('branch') || undefined;
   const { data, isPending, isError, error, refetch, isFetching } = useManagerDashboardData();
   const [currentDateStr, setCurrentDateStr] = useState<string>('');
   const [timeRange, setTimeRange] = useState<DashboardTimeRange>('today');
@@ -115,6 +118,7 @@ export function ManagerDashboardOverviewClient() {
         onCustomStartDateChange={setCustomStartDate}
         customEndDate={customEndDate}
         onCustomEndDateChange={setCustomEndDate}
+        branchName={branchParam}
       />
 
       {/* Real-Time Live Shift Floor Monitor Bar */}

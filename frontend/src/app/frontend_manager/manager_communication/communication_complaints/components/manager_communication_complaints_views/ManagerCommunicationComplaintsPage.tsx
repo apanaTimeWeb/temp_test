@@ -61,8 +61,17 @@ export default function ManagerCommunicationComplaintsPage({
 
   const [sortField, setSortField] = useState<ComplaintSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [statusOverrides, setStatusOverrides] = useState<Record<string, ManagerCommunicationComplaintsComplaintStatus>>({});
 
-  const allComplaints = useMemo(() => [...localComplaints, ...complaints], [localComplaints, complaints]);
+  const handleStatusChange = useCallback((cid: string, newStatus: ManagerCommunicationComplaintsComplaintStatus) => {
+    setStatusOverrides((prev) => ({ ...prev, [cid]: newStatus }));
+    toast.success(`Complaint #${cid} marked as ${newStatus}`);
+  }, []);
+
+  const allComplaints = useMemo(() => {
+    const list = [...localComplaints, ...complaints];
+    return Object.keys(statusOverrides).length === 0 ? list : list.map((c) => (statusOverrides[c.id] ? { ...c, status: statusOverrides[c.id] } : c));
+  }, [localComplaints, complaints, statusOverrides]);
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -125,21 +134,29 @@ export default function ManagerCommunicationComplaintsPage({
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
+  const escapeCsvCell = (val: unknown) => {
+    let str = String(val ?? '');
+    if (/^[\u0000-\u0020]*[=+\-@]/.test(str)) str = `'${str}`;
+    return `"${str.replace(/"/g, '""')}"`;
+  };
+
   const handleExportCsv = () => {
-    const headers = 'ID,Title,Student,Description,Status,Date,Resolved By\n';
+    const headers = ['ID', 'Title', 'Student', 'Description', 'Status', 'Date', 'Resolved By'].map(escapeCsvCell).join(',');
     const rows = sortedComplaints
-      .map(
-        (c) =>
-          `"${c.id}","${c.title}","${c.student || 'Anonymous'}","${c.description.replace(/"/g, '""')}","${c.status}","${c.date}","${c.resolvedBy || ''}"`
+      .map((c) =>
+        [c.id, c.title, c.student || 'Anonymous', c.description, c.status, c.date, c.resolvedBy || ''].map(escapeCsvCell).join(',')
       )
-      .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+      .join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `complaints_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.hidden = true;
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(anchor);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('Complaints list exported to CSV successfully');
   };
 
@@ -248,6 +265,7 @@ export default function ManagerCommunicationComplaintsPage({
             sortField={sortField}
             sortDirection={sortDirection}
             toggleSort={toggleSort}
+            onStatusChange={handleStatusChange}
           />
         )}
       </div>

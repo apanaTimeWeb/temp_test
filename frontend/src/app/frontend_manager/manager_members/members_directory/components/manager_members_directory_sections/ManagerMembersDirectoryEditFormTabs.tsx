@@ -197,8 +197,8 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
         </div>
         <div>
           <label htmlFor="edit-member-status" className="block text-xs font-semibold text-secondary mb-1">Account Status</label>
-          <select id="edit-member-status" className={INPUT_CLS} value={formData.status} onChange={(e) => onChange('status', e.target.value as 'Active' | 'Expired' | 'Suspended')}>
-            <option value="Active">Active</option><option value="Expired">Expired</option><option value="Suspended">Suspended</option>
+          <select id="edit-member-status" className={INPUT_CLS} value={formData.status} onChange={(e) => onChange('status', e.target.value as 'Active' | 'Expired' | 'Suspended' | 'Blocked')}>
+            <option value="Active">Active</option><option value="Expired">Expired</option><option value="Suspended">Suspended</option><option value="Blocked">Blocked</option>
           </select>
         </div>
         <div>

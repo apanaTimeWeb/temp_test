@@ -67,6 +67,7 @@
         "member_status_active": "Active",
         "member_status_expired": "Expired",
         "member_status_suspended": "Suspended",
+        "member_status_blocked": "Blocked",
         "kpi_total_members": "Total Members",
         "tab_all_members": "All Members",
         "tab_active_members": "Active Members",

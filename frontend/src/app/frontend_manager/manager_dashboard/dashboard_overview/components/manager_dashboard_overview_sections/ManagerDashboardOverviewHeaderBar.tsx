@@ -17,6 +17,7 @@ export interface ManagerDashboardOverviewHeaderBarProps {
   onCustomStartDateChange: (val: string) => void;
   customEndDate: string;
   onCustomEndDateChange: (val: string) => void;
+  branchName?: string;
 }
 
 export function ManagerDashboardOverviewHeaderBar({
@@ -29,6 +30,7 @@ export function ManagerDashboardOverviewHeaderBar({
   onCustomStartDateChange,
   customEndDate,
   onCustomEndDateChange,
+  branchName,
 }: ManagerDashboardOverviewHeaderBarProps) {
   const tManagerUi = useTranslations('manager.manager_dashboard.ui');
 
@@ -44,7 +46,7 @@ export function ManagerDashboardOverviewHeaderBar({
             </span>
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-surface-highlight text-muted-foreground border border-border">
               <MapPin size={11} className="text-primary" />
-              Central Branch
+              {branchName || 'Central Branch'}
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { MessageCircle, X, Users, Sparkles, RotateCcw, CheckCircle, Info } from 'lucide-react';
 import type { ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 import { MANAGER_CRM_DEFAULT_WHATSAPP_TEMPLATES } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
@@ -23,6 +23,15 @@ export function ManagerMembersEnquiriesBulkWhatsAppModal({
   const [openedKeys, setOpenedKeys] = useState<Set<string>>(new Set());
   const [statusFilter, setStatusFilter] = useState<string>('All');
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   const filteredRecipients = useMemo(() => {
     if (statusFilter === 'All') return recipients;
     return recipients.filter((r) => r.status === statusFilter);
@@ -35,15 +44,17 @@ export function ManagerMembersEnquiriesBulkWhatsAppModal({
   };
 
   const handleSendOne = (recipient: ManagerMembersEnquiriesEnquiry) => {
-    const rawDigits = recipient.phone.replace(/\D/g, '');
+    let rawDigits = recipient.phone.replace(/\D/g, '');
     if (!rawDigits) return;
 
-    // Normalize phone number (prefix 91 for standard 10-digit Indian numbers)
+    if (rawDigits.length === 11 && rawDigits.startsWith('0')) {
+      rawDigits = rawDigits.slice(1);
+    }
     const formattedPhone = rawDigits.length === 10 ? `91${rawDigits}` : rawDigits;
     const body = personalize(template, recipient.name);
     const url = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(body)}`;
 
-    const win = window.open(url, '_blank');
+    const win = window.open(url, '_blank', 'noopener,noreferrer');
     if (win) {
       win.opener = null;
     }

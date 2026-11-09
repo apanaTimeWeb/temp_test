@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircle2, MessageSquare, Send, X, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -47,6 +47,15 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
   const [openedKeys, setOpenedKeys] = useState<Set<string>>(new Set());
   const [selectedTemplate, setSelectedTemplate] = useState(RENEWAL_TEMPLATES[0].text);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || renewals.length === 0) return null;
 
   const personalize = (template: string, item: RenewalRecord) => {
@@ -62,12 +71,15 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
 
   const handleSendSingle = (item: RenewalRecord) => {
     const rawPhone = item.phone || `98765432${String(item.id).padStart(2, '0')}`;
-    const cleanPhone = rawPhone.replace(/\D/g, '');
+    let cleanPhone = rawPhone.replace(/\D/g, '');
+    if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) {
+      cleanPhone = cleanPhone.slice(1);
+    }
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const body = encodeURIComponent(personalize(selectedTemplate, item));
 
     const url = `https://wa.me/${targetPhone}?text=${body}`;
-    const popup = window.open(url, '_blank');
+    const popup = window.open(url, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
 
     setOpenedKeys((prev) => {
@@ -90,8 +102,12 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="bulk-renewals-whatsapp-title"
+      onClick={onClose}
     >
-      <div className="relative w-full max-w-2xl bg-card border border-border rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-2xl bg-card border border-border rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
+      >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-surface">
           <div className="flex items-center gap-3">

@@ -28,6 +28,7 @@ interface ManagerCommunicationComplaintsTableProps {
   sortField: ComplaintSortField | null;
   sortDirection: 'asc' | 'desc';
   toggleSort: (field: ComplaintSortField) => void;
+  onStatusChange?: (id: string, newStatus: ManagerCommunicationComplaintsComplaintStatus) => void;
 }
 
 export function ManagerCommunicationComplaintsTable({
@@ -48,6 +49,7 @@ export function ManagerCommunicationComplaintsTable({
   sortField,
   sortDirection,
   toggleSort,
+  onStatusChange,
 }: ManagerCommunicationComplaintsTableProps) {
   const tManagerUi = useTranslations('manager.manager_complaints.ui');
 
@@ -156,10 +158,11 @@ export function ManagerCommunicationComplaintsTable({
                     {complaint.status === 'Open' && (
                       <button
                         type="button"
-                        disabled
-                        className="mc-btn-icon cursor-not-allowed"
-                        title={tManagerUi('status_update_unavailable_host_mutation_contract_not_sup_953486')}
-                        aria-label={tManagerUi('mark_in_progress_unavailable')}
+                        onClick={onStatusChange ? () => onStatusChange(complaint.id, 'In-Progress') : undefined}
+                        disabled={!onStatusChange}
+                        className={`mc-btn-icon ${!onStatusChange ? 'cursor-not-allowed' : 'hover:text-primary'}`}
+                        title={onStatusChange ? tManagerUi('in_progress') : tManagerUi('status_update_unavailable_host_mutation_contract_not_sup_953486')}
+                        aria-label={onStatusChange ? `Mark #${complaint.id} in progress` : tManagerUi('mark_in_progress_unavailable')}
                       >
                         <RefreshCw size={14} />
                       </button>
@@ -167,10 +170,11 @@ export function ManagerCommunicationComplaintsTable({
                     {complaint.status !== 'Resolved' && (
                       <button
                         type="button"
-                        disabled
-                        className="mc-btn-icon cursor-not-allowed"
-                        title={tManagerUi('resolution_unavailable_host_mutation_contract_not_suppli_e15b8c')}
-                        aria-label={tManagerUi('resolve_unavailable')}
+                        onClick={onStatusChange ? () => onStatusChange(complaint.id, 'Resolved') : undefined}
+                        disabled={!onStatusChange}
+                        className={`mc-btn-icon ${!onStatusChange ? 'cursor-not-allowed' : 'hover:text-primary'}`}
+                        title={onStatusChange ? tManagerUi('resolved') : tManagerUi('resolution_unavailable_host_mutation_contract_not_suppli_e15b8c')}
+                        aria-label={onStatusChange ? `Mark #${complaint.id} resolved` : tManagerUi('resolve_unavailable')}
                       >
                         <CheckCircle size={14} />
                       </button>

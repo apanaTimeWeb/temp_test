@@ -108,21 +108,29 @@ export function ManagerMembersAlumniClient() {
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
+  const escapeCsvCell = (val: unknown) => {
+    let str = String(val ?? '');
+    if (/^[\u0000-\u0020]*[=+\-@]/.test(str)) str = `'${str}`;
+    return `"${str.replace(/"/g, '""')}"`;
+  };
+
   const handleExportCsv = () => {
-    const headers = 'ID,Name,Phone,Exit Date,Duration,Target Exam / Achievement,Designation,Current Status,Testimonial\n';
+    const headers = ['ID', 'Name', 'Phone', 'Exit Date', 'Duration', 'Target Exam / Achievement', 'Designation', 'Current Status', 'Testimonial'].map(escapeCsvCell).join(',');
     const rows = filteredAlumni
-      .map(
-        (r) =>
-          `"${r.id}","${r.name}","${r.phone}","${r.leftDate}","${r.duration}","${r.exam}","${r.designation ?? ''}","${r.currentStatus}","${(r.testimonial ?? '').replace(/"/g, '""')}"`
+      .map((r) =>
+        [r.id, r.name, r.phone, r.leftDate, r.duration, r.exam, r.designation ?? '', r.currentStatus, r.testimonial ?? ''].map(escapeCsvCell).join(',')
       )
-      .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+      .join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `alumni_directory_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.hidden = true;
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(anchor);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const kpis = useMemo(() => {

@@ -5,7 +5,7 @@ export interface ManagerMembersDirectoryRecord {
   phone: string;
   email: string;
   type: string;
-  status: 'Active' | 'Expired' | 'Suspended';
+  status: 'Active' | 'Expired' | 'Suspended' | 'Blocked';
   joinDate: string;
   expiryDate: string;
   seat?: string;
@@ -34,7 +34,7 @@ export interface ManagerMembersDirectoryRecord {
   }[];
 }
 
-export type ManagerMembersDirectoryStatusLabelKey = 'member_status_active' | 'member_status_expired' | 'member_status_suspended';
+export type ManagerMembersDirectoryStatusLabelKey = 'member_status_active' | 'member_status_expired' | 'member_status_suspended' | 'member_status_blocked';
 
 export interface ManagerMembersDirectoryKpiSectionProps {
   totalMembers: number;

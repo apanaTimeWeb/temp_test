@@ -67,6 +67,7 @@
         "member_status_active": "सक्रिय",
         "member_status_expired": "समाप्त",
         "member_status_suspended": "निलंबित",
+        "member_status_blocked": "अवरोधित",
         "kpi_total_members": "कुल सदस्य",
         "tab_all_members": "सभी सदस्य",
         "tab_active_members": "सक्रिय सदस्य",

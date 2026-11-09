@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircle2, MessageSquare, Send, X, ExternalLink, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ManagerStudent } from '../../types/ManagerMembersIdCardGeneratorTypes';
@@ -23,10 +23,20 @@ export function ManagerMembersIdCardBulkDispatchModal({
     'Please present your digital ID details at the library reception upon arrival.'
   );
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || students.length === 0) return null;
 
   const handleSendSingle = (student: ManagerStudent) => {
-    const digits = student.phone.replace(/\D/g, '');
+    let digits = student.phone.replace(/\D/g, '');
+    if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
     const displayPhone = digits.length > 10 && digits.startsWith('91') ? digits.slice(2) : digits;
     const targetPhone = digits.length === 10 ? `91${digits}` : digits;
 
@@ -41,7 +51,7 @@ export function ManagerMembersIdCardBulkDispatchModal({
     );
 
     const url = `https://wa.me/${targetPhone}?text=${message}`;
-    const popup = window.open(url, '_blank');
+    const popup = window.open(url, '_blank', 'noopener,noreferrer');
     if (popup) {
       popup.opener = null;
     }
@@ -66,8 +76,12 @@ export function ManagerMembersIdCardBulkDispatchModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="bulk-id-card-title"
+      onClick={onClose}
     >
-      <div className="relative w-full max-w-2xl bg-card border border-border rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-2xl bg-card border border-border rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden"
+      >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-surface">
           <div className="flex items-center gap-3">

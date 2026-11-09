@@ -92,8 +92,13 @@ export function ManagerNavigationSidebarLogoutModal({
               try {
                 localStorage.removeItem('auth_token');
                 localStorage.removeItem('manager_session');
+                localStorage.removeItem('user');
+                localStorage.removeItem('token');
+                localStorage.removeItem('admin_user');
                 sessionStorage.clear();
-                document.cookie = 'auth_token=; Max-Age=0; path=/;';
+                document.cookie = 'auth_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+                document.cookie = 'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
+                document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
               } catch {
                 // ignore
               }

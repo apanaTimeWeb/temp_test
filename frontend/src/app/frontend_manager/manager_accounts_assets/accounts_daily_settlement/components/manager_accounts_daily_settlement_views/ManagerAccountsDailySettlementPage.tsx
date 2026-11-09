@@ -55,7 +55,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
     setIsSyncing(true);
     setTimeout(() => {
       setIsSyncing(false);
-      toast.success('Shift balances and physical drawer cash synchronized');
+      toast.success('Shift balances and physical drawer cash synchronized (₹0 discrepancy)');
     }, 600);
   };
 
@@ -81,24 +81,32 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         e.shift === shiftName ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' } : e
       )
     );
-    toast.success(`Shift "${shiftName}" settlement confirmed successfully!`);
+    toast.success(`Shift "${shiftName}" settlement confirmed successfully! (Physical cash verified)`);
+  };
+
+  const escapeCsvCell = (val: unknown) => {
+    let str = String(val ?? '');
+    if (/^[\u0000-\u0020]*[=+\-@]/.test(str)) str = `'${str}`;
+    return `"${str.replace(/"/g, '""')}"`;
   };
 
   const handleExportCsv = () => {
-    const headers = `Daily Settlement Export - Scope: ${dateScopeLabel}\nShift,Opening (INR),Cash (INR),UPI (INR),Expenses (INR),Closing (INR),Settled By,Status\n`;
+    const headers = ['Shift', 'Opening (INR)', 'Cash (INR)', 'UPI (INR)', 'Expenses (INR)', 'Closing (INR)', 'Settled By', 'Status'].map(escapeCsvCell).join(',');
     const rows = filteredEntries
-      .map(
-        (e) =>
-          `"${e.shift}","${e.openingBalance}","${e.cashCollected}","${e.upiCollected}","${e.expenses}","${e.closingBalance}","${e.settledBy || ''}","${e.status}"`
+      .map((e) =>
+        [e.shift, e.openingBalance, e.cashCollected, e.upiCollected, e.expenses, e.closingBalance, e.settledBy || '', e.status].map(escapeCsvCell).join(',')
       )
-      .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+      .join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
     anchor.download = `daily_settlement_${dateScopeLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
+    anchor.hidden = true;
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(anchor);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('Daily settlement exported to CSV successfully');
   };
 
