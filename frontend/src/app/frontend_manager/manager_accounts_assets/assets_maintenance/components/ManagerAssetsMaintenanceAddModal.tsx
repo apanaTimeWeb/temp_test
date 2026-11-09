@@ -100,7 +100,7 @@ export function ManagerAssetsMaintenanceAddModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-secondary block mb-1">Assigned Vendor / Tech</label>
+              <label className="text-xs font-semibold text-secondary block mb-1">Assigned Vendor / Tech (Optional)</label>
               <input
                 type="text"
                 placeholder="e.g. Daikin Care Services"
@@ -110,7 +110,7 @@ export function ManagerAssetsMaintenanceAddModal({
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-secondary block mb-1">Estimated Cost (₹)</label>
+              <label className="text-xs font-semibold text-secondary block mb-1">Estimated Cost (₹) (Optional)</label>
               <input
                 type="number"
                 min="0"
@@ -123,7 +123,7 @@ export function ManagerAssetsMaintenanceAddModal({
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-secondary block mb-1">Scheduled Date</label>
+            <label className="text-xs font-semibold text-secondary block mb-1">Scheduled Date (Optional)</label>
             <input
               type="date"
               className="mgr-input w-full text-xs"

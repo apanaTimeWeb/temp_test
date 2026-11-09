@@ -85,7 +85,7 @@ export function ManagerMembersGroupAdmissionCardView({
             </div>
 
             <div>
-              <label className="text-xs font-medium text-secondary block mb-1">Target Exam</label>
+              <label className="text-xs font-medium text-secondary block mb-1">Target Exam (Optional)</label>
               <input
                 type="text"
                 className="mgr-input text-xs"
@@ -126,7 +126,7 @@ export function ManagerMembersGroupAdmissionCardView({
             </div>
 
             <div>
-              <label className="text-xs font-medium text-secondary block mb-1">Date of Birth</label>
+              <label className="text-xs font-medium text-secondary block mb-1">Date of Birth (Optional)</label>
               <input
                 type="date"
                 className="mgr-input text-xs"
@@ -150,7 +150,7 @@ export function ManagerMembersGroupAdmissionCardView({
             </div>
 
             <div>
-              <label className="text-xs font-medium text-secondary block mb-1">College / Institute</label>
+              <label className="text-xs font-medium text-secondary block mb-1">College / Institute (Optional)</label>
               <input
                 type="text"
                 className="mgr-input text-xs"
@@ -161,7 +161,7 @@ export function ManagerMembersGroupAdmissionCardView({
             </div>
 
             <div>
-              <label className="text-xs font-medium text-secondary block mb-1">Guardian Full Name</label>
+              <label className="text-xs font-medium text-secondary block mb-1">Guardian Full Name (Optional)</label>
               <input
                 type="text"
                 className="mgr-input text-xs"
@@ -196,7 +196,7 @@ export function ManagerMembersGroupAdmissionCardView({
             </div>
 
             <div className="sm:col-span-2">
-              <label className="text-xs font-medium text-secondary block mb-1">Residential Address</label>
+              <label className="text-xs font-medium text-secondary block mb-1">Residential Address (Optional)</label>
               <input
                 type="text"
                 className="mgr-input text-xs"

@@ -168,7 +168,18 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
             <input id="rbg4-managercommunicationwhatsapplogspage-165" type="date" className="mc-input py-2 px-3 border rounded" value={dateTo} onChange={e => setDateTo(e.target.value)} />
           </div>
           <div className="mc-flex-1 flex flex-col flex-grow min-w-48">
-            <label className="mc-label text-xs mb-1 font-semibold text-secondary" htmlFor="rbg4-managercommunicationwhatsapplogspage-169">{tManagerUi('search')}</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="mc-label text-xs font-semibold text-secondary" htmlFor="rbg4-managercommunicationwhatsapplogspage-169">{tManagerUi('search')}</label>
+              {(typeFilter !== 'All' || statusFilter !== 'All' || dateFrom || dateTo || search) && (
+                <button
+                  type="button"
+                  onClick={() => { setTypeFilter('All'); setStatusFilter('All'); setDateFrom(''); setDateTo(''); setSearch(''); }}
+                  className="text-xs text-primary hover:underline font-medium"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
             <input id="rbg4-managercommunicationwhatsapplogspage-169" className="mc-input py-2 px-3 border rounded w-full" placeholder={tManagerUi('student_name_or_phone')} value={search} onChange={e => setSearch(e.target.value)} />
           </div>
         </div>

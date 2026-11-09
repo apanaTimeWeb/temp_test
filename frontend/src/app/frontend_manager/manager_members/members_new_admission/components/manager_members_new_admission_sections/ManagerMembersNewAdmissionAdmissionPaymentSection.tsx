@@ -69,7 +69,9 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
 
           {/* Coupon Code */}
           <div className="mgr-form-field">
-            <label className="mgr-label" htmlFor="admission-coupon">Coupon Code</label>
+            <label className="mgr-label" htmlFor="admission-coupon">
+              Coupon Code <span className="text-secondary font-normal text-xs">(Optional)</span>
+            </label>
             <div className="mgr-input-icon-wrap">
               <Tag size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
               <input id="admission-coupon" {...register('couponCode')} type="text" className="mgr-input mgr-input-with-icon uppercase" placeholder="e.g. WELCOME100 / FESTIVE" />
@@ -78,7 +80,9 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
 
           {/* Manual Discount */}
           <div className="mgr-form-field">
-            <label className="mgr-label" htmlFor="admission-discount">{tManagerUi('manual_discount')}</label>
+            <label className="mgr-label" htmlFor="admission-discount">
+              {tManagerUi('manual_discount')} <span className="text-secondary font-normal text-xs">(Optional)</span>
+            </label>
             <div className="mgr-input-icon-wrap">
               <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" />
               <input id="admission-discount" {...register('manualDiscount')} type="number" min="0" step="1" className="mgr-input mgr-input-with-icon" placeholder="0" />

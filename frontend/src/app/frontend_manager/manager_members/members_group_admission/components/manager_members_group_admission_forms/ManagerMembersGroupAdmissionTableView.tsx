@@ -47,10 +47,11 @@ export function ManagerMembersGroupAdmissionTableView({
               <td className="p-2">
                 <input
                   type="tel"
+                  maxLength={10}
                   className="mgr-input py-1 text-xs font-mono"
                   placeholder="9876543210"
                   value={row.phone}
-                  onChange={(e) => updateStudent(index, 'phone', e.target.value)}
+                  onChange={(e) => updateStudent(index, 'phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
                 />
               </td>
               <td className="p-2">

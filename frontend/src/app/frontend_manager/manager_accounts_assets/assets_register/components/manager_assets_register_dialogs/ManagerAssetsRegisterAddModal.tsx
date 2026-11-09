@@ -96,7 +96,7 @@ export function ManagerAssetsRegisterAddModal({
             <div>
               <label className="text-xs font-semibold text-primary block mb-1">Purchase Cost (INR) *</label>
               <div className="relative">
-                <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+                <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
                 <input
                   type="number"
                   required
@@ -112,7 +112,7 @@ export function ManagerAssetsRegisterAddModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Installation Location</label>
+              <label className="text-xs font-semibold text-primary block mb-1">Installation Location (Optional)</label>
               <input
                 type="text"
                 className="mgr-input text-xs"
@@ -122,7 +122,7 @@ export function ManagerAssetsRegisterAddModal({
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Purchase Date</label>
+              <label className="text-xs font-semibold text-primary block mb-1">Purchase Date (Optional)</label>
               <input
                 type="date"
                 className="mgr-input text-xs"
