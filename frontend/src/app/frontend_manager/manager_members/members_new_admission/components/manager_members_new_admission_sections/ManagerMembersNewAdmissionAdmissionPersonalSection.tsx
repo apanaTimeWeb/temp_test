@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Render the members new admission admission personal section section of the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { Award, BookOpen, Calendar, Camera, GraduationCap, Mail, MapPin, Phone, ShieldAlert, User, Building, HeartPulse, Activity, Accessibility } from 'lucide-react';
+import { Calendar, Camera, GraduationCap, Mail, MapPin, Phone, ShieldAlert, User, Building, Activity, Accessibility } from 'lucide-react';
 import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
 import {
   MANAGER_ADMISSION_GENDER_OPTIONS,

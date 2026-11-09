@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: Render the members new admission admission enrollment section with multi-shift support.
 import { useTranslations } from 'next-intl';
-import { Armchair, FileText, Layers, Lock, Clock, Check, IndianRupee } from 'lucide-react';
+import { FileText, Clock, Check, IndianRupee } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { SearchableCombobox } from '@/components/ui/combobox/SearchableCombobox';
 import {

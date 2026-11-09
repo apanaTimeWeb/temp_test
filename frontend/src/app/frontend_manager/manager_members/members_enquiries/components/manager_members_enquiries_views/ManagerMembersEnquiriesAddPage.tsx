@@ -78,7 +78,7 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
               <p className="text-xs text-secondary">{tManagerUi('capture_a_new_prospective_student')}</p>
             </div>
           </div>
-          <button type="button" className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-zebra cursor-pointer" onClick={handleClose} title={tManagerUi('close')} aria-label={tManagerUi('close_drawer')}>
+          <button type="button" className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-zebra cursor-pointer" onClick={handleClose} title={tManagerUi('close')} aria-label={tManagerUi('close')}>
             <X size={18} />
           </button>
         </div>

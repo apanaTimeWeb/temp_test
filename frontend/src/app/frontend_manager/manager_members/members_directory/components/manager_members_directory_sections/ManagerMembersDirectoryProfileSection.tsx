@@ -5,8 +5,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import {
-  Armchair, Award, CheckCircle, Clock, ExternalLink, FileText, GraduationCap,
-  Layers, Lock, Mail, MapPin, Pencil, Phone, Search, ShieldCheck, User, Users, ArrowLeft, MessageSquare, AlertTriangle
+  Award, CheckCircle, Clock, ExternalLink, FileText, GraduationCap,
+  Mail, MapPin, Pencil, Phone, Search, ShieldCheck, Users, ArrowLeft, MessageSquare, AlertTriangle
 } from 'lucide-react';
 
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
