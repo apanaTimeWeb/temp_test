@@ -21,11 +21,8 @@ import { ManagerAccountsExpensesCategoryReview } from '@/app/frontend_manager/ma
 export type ManagerExpensesTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
 const TIME_HORIZON_OPTIONS: Array<{ id: ManagerExpensesTimeHorizon; label: string }> = [
-  { id: 'all', label: 'All Time' },
-  { id: 'today', label: 'Today' },
-  { id: 'this_week', label: 'This Week' },
-  { id: 'this_month', label: 'This Month' },
-  { id: 'custom', label: 'Custom Range' },
+  { id: 'all', label: 'All Time' }, { id: 'today', label: 'Today' }, { id: 'this_week', label: 'This Week' },
+  { id: 'this_month', label: 'This Month' }, { id: 'custom', label: 'Custom Range' },
 ];
 
 export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccountsExpensesMainProps) {
@@ -116,20 +113,23 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
     }
   }, [timeHorizon, customStartDate, customEndDate]);
 
+  const escapeCsv = (v: unknown) => {
+    let s = String(v ?? '');
+    return /^[\u0000-\u0020]*[=+\-@]/.test(s) ? `'"${s.replace(/"/g, '""')}"` : `"${s.replace(/"/g, '""')}"`;
+  };
+
   const handleExportCsv = () => {
-    const headers = `Expense Ledger Export - Scope: ${timeHorizonLabel}\nDate,Description,Category,Amount (INR),Payment Mode,Paid By\n`;
-    const rows = searchedExpenses
-      .map(
-        (e) => `"${e.date}","${e.description}","${e.category}","${(e.amount / 100).toFixed(2)}","${e.mode}","${e.paidBy}"`
-      )
-      .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const h = ['Date', 'Description', 'Category', 'Amount (INR)', 'Payment Mode', 'Paid By'].map(escapeCsv).join(',');
+    const r = searchedExpenses.map((e) => [e.date, e.description, e.category, (e.amount / 100).toFixed(2), e.mode, e.paidBy].map(escapeCsv).join(',')).join('\r\n');
+    const blob = new Blob([`\uFEFF${h}\r\n${r}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `expenses_ledger_${timeHorizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
-    anchor.click();
-    URL.revokeObjectURL(url);
+    const a = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `expenses_ledger_${timeHorizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`,
+      hidden: true,
+    });
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('Expenses exported to CSV successfully');
   };
 

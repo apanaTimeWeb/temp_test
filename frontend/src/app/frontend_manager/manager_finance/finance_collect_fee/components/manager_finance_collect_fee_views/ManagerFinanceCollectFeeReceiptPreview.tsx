@@ -15,7 +15,8 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
 
   const handleSendReceiptWhatsApp = () => {
     if (!selectedStudent) return;
-    const cleanPhone = selectedStudent.phone.replace(/\D/g, '');
+    let cleanPhone = selectedStudent.phone.replace(/\D/g, '');
+    if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const formattedTotal = total > 0 ? formatCurrency(toMinorUnits(total)) : '₹0';
     const text = encodeURIComponent(
@@ -28,7 +29,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
       `• Verified By: ${collectedBy || 'Branch Manager'}\n\n` +
       `Knowledge is the best investment. Please preserve this receipt for your records.\n— Central Library Management`
     );
-    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
     toast.success(`WhatsApp receipt link opened for ${selectedStudent.name} (+91 ${cleanPhone})`);
   };

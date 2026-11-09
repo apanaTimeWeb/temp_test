@@ -169,37 +169,50 @@ export function useManagerFinanceFinesPaymentsPageData({
     toast.success('Receipts exported to CSV successfully');
   };
 
+  const escapeCsv = (val: unknown) => {
+    let s = String(val ?? '');
+    if (/^[\u0000-\u0020]*[=+\-@]/.test(s)) s = `'${s}`;
+    return `"${s.replace(/"/g, '""')}"`;
+  };
+
   const handleExportPendingFinesCsv = () => {
-    const headers = `Fines Export (${activeTab}) - Scope: ${timeHorizonLabel}\nFine ID,Member,Type,Amount,Date,Status\n`;
-    const rows = filteredPendingFines.map((f) => `"${f.id}","${f.member}","${f.type}","${f.amount}","${f.date}","${f.status}"`).join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const headers = ['Fine ID', 'Member', 'Type', 'Amount', 'Date', 'Status'].map(escapeCsv).join(',');
+    const rows = filteredPendingFines.map((f) => [f.id, f.member, f.type, f.amount, f.date, f.status].map(escapeCsv).join(',')).join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `fines_${activeTab}_${timeHorizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.hidden = true;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success(`Fines (${activeTab}) exported to CSV successfully`);
   };
 
   const handleExportHistoryCsv = () => {
-    const headers = `Payment History Export - Scope: ${timeHorizonLabel}\nReceipt,Member,Fine Type,Amount,Payment Mode,Date Time,Collected By\n`;
-    const rows = filteredHistoryRows.map((h) => `"${h.receipt || ''}","${h.member}","${h.type}","${h.amount}","${h.mode}","${h.date}","${h.collectedBy}"`).join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const headers = ['Receipt', 'Member', 'Fine Type', 'Amount', 'Payment Mode', 'Date Time', 'Collected By'].map(escapeCsv).join(',');
+    const rows = filteredHistoryRows.map((h) => [h.receipt || '', h.member, h.type, h.amount, h.mode, h.date, h.collectedBy].map(escapeCsv).join(',')).join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `payment_history_${timeHorizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.hidden = true;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('Payment history exported to CSV successfully');
   };
 
   const handleShareWhatsApp = (r: ManagerReceiptRecord) => {
     const text = encodeURIComponent(`Hello ${r.member}, your Library fee receipt #${r.receiptNumber} (${r.plan}) of ${formatCurrency(r.amount)} is confirmed. Txn ID: ${r.txnId}.`);
-    const digits = (r.phone || '').replace(/\D/g, '');
+    let digits = (r.phone || '').replace(/\D/g, '');
+    if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
     const targetPhone = digits.length === 10 ? `91${digits}` : digits;
-    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
     toast.success(`WhatsApp receipt link generated for ${r.member}`);
   };

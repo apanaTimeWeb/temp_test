@@ -169,9 +169,10 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
         }. Amount due: ₹${Math.round(student.due / 100)}. Please renew to maintain your seat access. — Central Library Administration`
       );
       const rawPhone = (student as { phone?: string }).phone || cleanPhone;
-      const digits = rawPhone.replace(/\D/g, '');
+      let digits = rawPhone.replace(/\D/g, '');
+      if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
       const targetPhone = digits.length === 10 ? `91${digits}` : digits;
-      const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+      const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
       if (popup) popup.opener = null;
     }
     setFeedbackMsg(`Renewal WhatsApp message opened for ${studentName}.`);

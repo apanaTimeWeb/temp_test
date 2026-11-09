@@ -92,18 +92,27 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
     setTimeout(() => setFeedbackToast(null), 4000);
   };
 
+  const escapeCsv = (v: unknown) => {
+    let s = String(v ?? '');
+    return /^[\u0000-\u0020]*[=+\-@]/.test(s) ? `'"${s.replace(/"/g, '""')}"` : `"${s.replace(/"/g, '""')}"`;
+  };
+
   const handleExportCsv = () => {
-    const headers = 'Asset Name,Category,Purchase Date,Value (INR),Location,Status\n';
+    const headers = ['Asset Name', 'Category', 'Purchase Date', 'Value (INR)', 'Location', 'Status'].map(escapeCsv).join(',');
     const rows = sortedRows
-      .map((a) => `"${a.name}","${a.category}","${a.purchaseDate}","${a.purchaseValue}","${a.location}","${a.status}"`)
-      .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+      .map((a) => [a.name, a.category, a.purchaseDate, a.purchaseValue, a.location, a.status].map(escapeCsv).join(','))
+      .join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `assets_register_${new Date().toISOString().slice(0, 10)}.csv`;
+    const anchor = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `assets_register_${new Date().toISOString().slice(0, 10)}.csv`,
+      hidden: true,
+    });
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(anchor);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   return (

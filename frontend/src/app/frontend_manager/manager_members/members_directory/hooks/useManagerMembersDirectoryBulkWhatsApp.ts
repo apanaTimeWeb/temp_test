@@ -41,12 +41,13 @@ export function useManagerMembersDirectoryBulkWhatsApp(
   }, []);
 
   const quickWhatsApp = useCallback((member: ManagerMembersDirectoryRecord) => {
-    const cleanPhone = member.phone.replace(/\D/g, '');
+    let cleanPhone = member.phone.replace(/\D/g, '');
+    if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const text = encodeURIComponent(
       `Hello ${member.name}, this is Central Library Management regarding your membership (${member.id} • ${member.type} Plan). How may we assist you today? — Central Library Administration`
     );
-    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
   }, []);
 

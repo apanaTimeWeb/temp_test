@@ -33,12 +33,13 @@ export default function ManagerAttendanceAbsenteeReportPage({ view, id, name, ph
   };
 
   const handleAlertWhatsApp = (item: ManagerAttendanceAbsenteeReportSampleAbsentee) => {
-    const cleanPhone = (item.parentPhone || '9876543210').replace(/\D/g, '');
+    let cleanPhone = (item.parentPhone || '9876543210').replace(/\D/g, '');
+    if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const text = encodeURIComponent(
       `Dear Parent / Student, this is an official attendance notice from Central Library. ${item.name} (${item.smartId}, ${item.shift} Shift) has been absent for ${item.daysAbsent} consecutive days. Last attended date: ${item.lastSeen}. Kindly ensure regular study attendance. — Central Library Administration`
     );
-    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
     setRowsList((prev) => prev.map((r) => r.smartId === item.smartId ? { ...r, notified: true } : r));
   };

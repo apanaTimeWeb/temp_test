@@ -81,18 +81,27 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
+  const escapeCsv = (v: unknown) => {
+    let s = String(v ?? '');
+    return /^[\u0000-\u0020]*[=+\-@]/.test(s) ? `'"${s.replace(/"/g, '""')}"` : `"${s.replace(/"/g, '""')}"`;
+  };
+
   const handleExportCsv = () => {
-    const headers = 'Student Name,Smart ID,Seat,Shift,Days Overdue,Suspended Since\n';
+    const headers = ['Student Name', 'Smart ID', 'Seat', 'Shift', 'Days Overdue', 'Suspended Since'].map(escapeCsv).join(',');
     const rows = sortedRows.map((s) =>
-      `"${s.studentName}","${s.smartId}","${s.seat}","${s.shift}","${s.daysOverdue}","${s.suspendedSince}"`
-    ).join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+      [s.studentName, s.smartId, s.seat, s.shift, s.daysOverdue, s.suspendedSince].map(escapeCsv).join(',')
+    ).join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `suspended_students_${new Date().toISOString().slice(0, 10)}.csv`;
+    const anchor = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `suspended_students_${new Date().toISOString().slice(0, 10)}.csv`,
+      hidden: true,
+    });
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(anchor);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('Suspended students list exported to CSV successfully');
   };
 

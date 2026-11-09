@@ -27,7 +27,8 @@ export function ManagerMembersNewAdmissionSuccessBanner({
 }: ManagerMembersNewAdmissionSuccessBannerProps) {
   const [showWhatsAppConfirm, setShowWhatsAppConfirm] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const cleanPhone = student.phone.replace(/\D/g, '');
+  let cleanPhone = student.phone.replace(/\D/g, '');
+  if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
 
   const handleConfirmSendWhatsApp = () => {
     setShowWhatsAppConfirm(false);
@@ -45,7 +46,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
 
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const url = `https://wa.me/${targetPhone}?text=${text}`;
-    const popup = window.open(url, '_blank');
+    const popup = window.open(url, '_blank', 'noopener,noreferrer');
     if (popup) {
       popup.opener = null;
     }

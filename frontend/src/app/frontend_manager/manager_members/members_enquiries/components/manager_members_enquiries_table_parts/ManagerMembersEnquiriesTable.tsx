@@ -116,12 +116,13 @@ export function ManagerMembersEnquiriesTable({
       onQuickWhatsApp(enq);
       return;
     }
-    const digits = enq.phone.replace(/\D/g, '');
+    let digits = enq.phone.replace(/\D/g, '');
+    if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
     const phone = digits.length === 10 ? `91${digits}` : digits;
     const text = encodeURIComponent(
       `Hello ${enq.name}, thank you for inquiring at Central Library! How can we assist you with seat booking today?`
     );
-    const win = window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+    const win = window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (win) win.opener = null;
   };
 

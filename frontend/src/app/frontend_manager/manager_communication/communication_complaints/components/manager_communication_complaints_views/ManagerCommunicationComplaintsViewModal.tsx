@@ -30,7 +30,8 @@ export function ManagerCommunicationComplaintsViewModal({
 
   const handleWhatsAppStudent = () => {
     const studentName = viewItem.student || 'Student';
-    const cleanPhone = (viewItem.phone || '9876543210').replace(/\D/g, '');
+    let cleanPhone = (viewItem.phone || '9876543210').replace(/\D/g, '');
+    if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const resolutionText = viewItem.resolvedNote ? `\n\nResolution: ${viewItem.resolvedNote}` : '';
     const text = encodeURIComponent(
@@ -38,7 +39,7 @@ export function ManagerCommunicationComplaintsViewModal({
       `Current Status: ${viewItem.status}${resolutionText}\n\n` +
       `Please let us know if you require any further assistance.\n— Central Library Administration`
     );
-    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+    const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
     toast.success(`WhatsApp opened for ${studentName} (+91 ${cleanPhone})`);
   };

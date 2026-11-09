@@ -77,18 +77,27 @@ export function ManagerMembersEnquiriesClient() {
     }
   }, [timeHorizon, customStartDate, customEndDate]);
 
+  const escapeCsv = (v: unknown) => {
+    let s = String(v ?? '');
+    return /^[\u0000-\u0020]*[=+\-@]/.test(s) ? `'"${s.replace(/"/g, '""')}"` : `"${s.replace(/"/g, '""')}"`;
+  };
+
   const handleExportCsv = () => {
-    const headers = `CRM Enquiries Export - Scope: ${horizonLabel}\nName,Phone,Shift,Status,Handled By,Date\n`;
+    const headers = ['Name', 'Phone', 'Shift', 'Status', 'Handled By', 'Date'].map(escapeCsv).join(',');
     const rows = filtered
-      .map((e) => `"${e.name}","${e.phone}","${e.shift}","${e.status}","${e.handledBy || ''}","${e.addedDate || ''}"`)
-      .join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+      .map((e) => [e.name, e.phone, e.shift, e.status, e.handledBy || '', e.addedDate || ''].map(escapeCsv).join(','))
+      .join('\r\n');
+    const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `crm_enquiries_${horizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
+    const anchor = Object.assign(document.createElement('a'), {
+      href: url,
+      download: `crm_enquiries_${horizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`,
+      hidden: true,
+    });
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(anchor);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const timeHorizonOptions: Array<{ id: ManagerCrmTimeHorizon; label: string }> = [
@@ -228,12 +237,13 @@ export function ManagerMembersEnquiriesClient() {
           onToggleSelectOne={toggleSelectOne}
           onToggleSelectAll={toggleSelectAll}
           onQuickWhatsApp={(enq) => {
-            const digits = enq.phone.replace(/\D/g, '');
+            let digits = enq.phone.replace(/\D/g, '');
+            if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
             const phone = digits.length === 10 ? `91${digits}` : digits;
             const text = encodeURIComponent(
               `Hello ${enq.name}, thank you for inquiring at Central Library! How can we assist you with seat booking today?`
             );
-            const w = window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+            const w = window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener,noreferrer');
             if (w) w.opener = null;
           }}
         />
