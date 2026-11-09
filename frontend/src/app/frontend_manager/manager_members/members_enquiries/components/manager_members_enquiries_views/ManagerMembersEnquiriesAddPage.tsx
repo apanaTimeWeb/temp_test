@@ -95,7 +95,20 @@ export default function ManagerMembersEnquiriesAddPage(_routeQuery: ManagerMembe
               <label htmlFor="enq-phone" className="crm-label crm-label--required font-semibold block mb-1">{tManagerUi('mobile_number')}</label>
               <div className="flex items-center gap-2">
                 <span className="px-3 py-2 rounded-xl bg-surface-zebra border border-border text-xs font-mono text-secondary">+91</span>
-                <input id="enq-phone" type="tel" maxLength={10} autoComplete="tel-national" className={`mgr-input flex-1 font-mono${errors.phone ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'enq-phone-error' : undefined} {...register('phone')} />
+                <input
+                  id="enq-phone"
+                  type="tel"
+                  maxLength={10}
+                  autoComplete="tel-national"
+                  className={`mgr-input flex-1 font-mono${errors.phone ? ' mgr-input-error' : ''}`}
+                  aria-invalid={Boolean(errors.phone)}
+                  aria-describedby={errors.phone ? 'enq-phone-error' : undefined}
+                  {...register('phone', {
+                    onChange: (e) => {
+                      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    },
+                  })}
+                />
               </div>
               {errors.phone && <p id="enq-phone-error" className="crm-error text-danger mt-1" role="alert">{errors.phone.message}</p>}
             </div>
