@@ -207,9 +207,9 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
               className="mgr-select text-xs py-1.5 px-3 min-w-[120px]"
             >
               <option value="all">All Overdue</option>
-              <option value="7">&gt; 7 Days</option>
-              <option value="14">&gt; 14 Days</option>
-              <option value="30">&gt; 30 Days</option>
+              <option value="7">{"> 7 Days"}</option>
+              <option value="14">{"> 14 Days"}</option>
+              <option value="30">{"> 30 Days"}</option>
             </select>
 
             {hasActiveFilters && (

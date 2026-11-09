@@ -72,7 +72,7 @@ export function ManagerDashboardOverviewBirthdayWidget() {
           </div>
           <div>
             <h3 className="font-bold text-foreground text-base sm:text-lg flex items-center gap-2">
-              Today&apos;s Birthday Celebrations
+              {"Today's Birthday Celebrations"}
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-success-bg text-success border border-border">
                 <Sparkles size={12} /> {TODAY_BIRTHDAYS.length} Celebrating Today
               </span>

@@ -62,7 +62,7 @@ export function AdminFinanceDashboardRecentPayments({
               <div className="p-8 text-center text-sm text-text-muted">
                 <p>{emptyText}</p>
                 <p className="mt-1 text-xs text-text-secondary">
-                  No transactions recorded for {periodLabel}. Switch to &apos;This Month&apos; to view all records.
+                  {"No transactions recorded for "}{periodLabel}{". Switch to 'This Month' to view all records."}
                 </p>
               </div>
             ) : (

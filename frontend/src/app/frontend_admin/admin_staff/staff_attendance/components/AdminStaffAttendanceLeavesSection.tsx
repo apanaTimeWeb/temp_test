@@ -135,7 +135,7 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
             </div>
 
             <p className="text-xs text-text-secondary bg-surface p-2 rounded-md border border-border">
-              &quot;{req.reason}&quot;
+              "{req.reason}"
             </p>
 
             {req.status === 'PENDING' && (

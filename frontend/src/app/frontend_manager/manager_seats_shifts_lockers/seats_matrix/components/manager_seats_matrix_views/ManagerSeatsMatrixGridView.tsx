@@ -103,7 +103,7 @@ export function ManagerSeatsMatrixGridView({
       {query && (
         <div className="mb-4 p-3 rounded-xl bg-primary-subtle border border-primary text-xs text-primary flex items-center justify-between">
           <span className="font-medium">
-            Search active: Matched <strong className="font-bold">{matchingSeats.length}</strong> seat(s) for &quot;{searchQuery}&quot;
+            Search active: Matched <strong className="font-bold">{matchingSeats.length}</strong> seat(s) for "{searchQuery}"
           </span>
           {matchingSeats.length > 0 && (
             <span className="text-[11px] text-secondary">

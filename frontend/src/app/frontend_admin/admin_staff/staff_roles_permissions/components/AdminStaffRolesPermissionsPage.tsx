@@ -122,7 +122,7 @@ export default function AdminStaffRolesPermissionsPage() {
           <AdminEmptyState showIcon={false} title={t('EMPTY_TITLE')} description={t('EMPTY_DESCRIPTION')} />
         ) : filteredPerms.length === 0 ? (
           <div className="rounded-lg border border-border bg-card p-8 text-center text-text-secondary">
-            No permissions found matching &quot;{searchQuery}&quot;.
+            No permissions found matching "{searchQuery}".
           </div>
         ) : (
           <AdminStaffRolesPermissionsMatrixTable modules={filteredPerms} demoMode={demoMode} onToggle={handleToggle} />

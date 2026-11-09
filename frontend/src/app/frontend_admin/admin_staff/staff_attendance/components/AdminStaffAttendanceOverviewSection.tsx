@@ -62,7 +62,7 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
             </div>
           </div>
           <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{kpis.lateCount}</p>
-          <span className="text-xs text-text-muted">&gt; 15 min punch-in</span>
+          <span className="text-xs text-text-muted">{">"} 15 min punch-in</span>
         </div>
 
         <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">

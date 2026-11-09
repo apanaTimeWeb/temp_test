@@ -131,7 +131,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
               </div>
             </div>
             <p className="text-xs text-secondary leading-relaxed">
-              Are you sure you want to send the digital admission slip &amp; ID card to{' '}
+              Are you sure you want to send the digital admission slip and ID card to{' '}
               <strong className="text-foreground">{student.fullName}</strong> at{' '}
               <strong className="text-foreground font-mono">+91 {cleanPhone}</strong>?
             </p>

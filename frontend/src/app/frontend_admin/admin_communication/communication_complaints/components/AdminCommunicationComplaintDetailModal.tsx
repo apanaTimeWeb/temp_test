@@ -126,7 +126,7 @@ export function AdminCommunicationComplaintDetailModal({
               <X size={18} strokeWidth={2} />
             </button>
             <DialogTitle className="mb-1.5 text-lg font-bold text-text-primary">{t('COMPLAINT_RESOLVE_TITLE')}</DialogTitle>
-            <DialogDescription className="mb-4 text-ui text-text-secondary">&quot;{resolveItem.title}&quot;</DialogDescription>
+            <DialogDescription className="mb-4 text-ui text-text-secondary">"{resolveItem.title}"</DialogDescription>
             <div>
               <label className="mb-1.5 block text-badge font-semibold uppercase tracking-[0.07em] text-text-primary" htmlFor="admin-communication-resolution-note">
                 {t('COMPLAINT_RESOLUTION_NOTE')} <span className="text-danger-text">*</span>
