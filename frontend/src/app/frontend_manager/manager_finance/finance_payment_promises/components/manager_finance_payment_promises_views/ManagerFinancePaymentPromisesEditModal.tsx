@@ -75,7 +75,9 @@ export default function ManagerFinancePaymentPromisesEditModal({
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-primary block mb-1">Remarks & Student Reason</label>
+            <label className="text-xs font-semibold text-primary block mb-1">
+              Remarks & Student Reason <span className="font-normal text-xs text-secondary">(Optional)</span>
+            </label>
             <textarea
               rows={2}
               className="mgr-input text-xs resize-none"

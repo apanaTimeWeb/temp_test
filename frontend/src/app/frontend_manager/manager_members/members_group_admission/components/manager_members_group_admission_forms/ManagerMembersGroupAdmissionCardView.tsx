@@ -44,11 +44,11 @@ export function ManagerMembersGroupAdmissionCardView({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
               <label className="text-xs font-medium text-secondary block mb-1">Full Name *</label>
-              <div className="relative">
-                <User size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary" />
+              <div className="mgr-input-icon-wrap">
+                <User size={15} className="mgr-input-icon text-secondary" />
                 <input
                   type="text"
-                  className="mgr-input pl-8 text-xs"
+                  className="mgr-input mgr-input-with-icon text-xs"
                   placeholder="e.g. Ramesh Kumar"
                   value={row.name}
                   onChange={(e) => updateStudent(index, 'name', e.target.value)}
@@ -58,14 +58,15 @@ export function ManagerMembersGroupAdmissionCardView({
 
             <div>
               <label className="text-xs font-medium text-secondary block mb-1">Mobile (WhatsApp) *</label>
-              <div className="relative">
-                <Phone size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary" />
+              <div className="mgr-input-icon-wrap">
+                <Phone size={15} className="mgr-input-icon text-secondary" />
                 <input
                   type="tel"
-                  className="mgr-input pl-8 text-xs font-mono"
-                  placeholder="9876543210"
+                  maxLength={10}
+                  className="mgr-input mgr-input-with-icon text-xs font-mono"
+                  placeholder="10-digit mobile"
                   value={row.phone}
-                  onChange={(e) => updateStudent(index, 'phone', e.target.value)}
+                  onChange={(e) => updateStudent(index, 'phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
                 />
               </div>
             </div>
@@ -174,10 +175,11 @@ export function ManagerMembersGroupAdmissionCardView({
               <label className="text-xs font-medium text-secondary block mb-1">Guardian Phone *</label>
               <input
                 type="tel"
+                maxLength={10}
                 className="mgr-input text-xs font-mono"
-                placeholder="Guardian mobile"
+                placeholder="10-digit mobile"
                 value={row.guardianPhone}
-                onChange={(e) => updateStudent(index, 'guardianPhone', e.target.value)}
+                onChange={(e) => updateStudent(index, 'guardianPhone', e.target.value.replace(/\D/g, '').slice(0, 10))}
               />
             </div>
 
@@ -190,8 +192,6 @@ export function ManagerMembersGroupAdmissionCardView({
               >
                 <option value="Cash">Cash Counter</option>
                 <option value="UPI">UPI / QR Code</option>
-                <option value="Card">Debit / Credit Card</option>
-                <option value="Net Banking">Net Banking</option>
               </select>
             </div>
 

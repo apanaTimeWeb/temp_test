@@ -68,11 +68,12 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
   };
 
   const handleTest = () => {
-    if (!testPhone.trim()) {
-      toast.error('Please enter a valid phone number.');
+    const clean = testPhone.replace(/\D/g, '');
+    if (clean.length !== 10 || !/^[6-9]\d{9}$/.test(clean)) {
+      toast.error('Please enter a valid 10-digit mobile number.');
       return;
     }
-    toast.success(`Test WhatsApp template message dispatched to ${testPhone.trim()}!`);
+    toast.success(`Test WhatsApp template message dispatched to +91 ${clean}!`);
     setShowTest(false);
     setTestPhone('');
   };
@@ -102,8 +103,11 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
             <p className="mc-modal-desc">{tManagerUi('enter_a_phone_number_to_send_a_test_version_of_this_temp_49ebdb')}</p>
             <div>
               <label className="mc-label" htmlFor="rbg4-managercommunicationwhatsapptemplatespage-76">{tManagerUi('phone_number')}</label>
-              <input id="rbg4-managercommunicationwhatsapptemplatespage-76" className="mc-input" placeholder="+91 9000000000"
-                value={testPhone} onChange={e => setTestPhone(e.target.value)} />
+              <input id="rbg4-managercommunicationwhatsapptemplatespage-76" className="mc-input" placeholder="9876543210"
+                type="tel"
+                inputMode="numeric"
+                maxLength={10}
+                value={testPhone} onChange={e => setTestPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} />
             </div>
             <div className="mc-modal-footer">
               <button type="button" onClick={() => setShowTest(false)} className="mc-btn-ghost">{tManagerUi('cancel')}</button>

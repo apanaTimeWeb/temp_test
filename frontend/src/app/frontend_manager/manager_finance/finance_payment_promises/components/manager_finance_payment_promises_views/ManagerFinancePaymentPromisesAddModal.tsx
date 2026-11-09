@@ -138,7 +138,9 @@ export function ManagerFinancePaymentPromisesAddModal({
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-primary block mb-1">Reason / Remarks</label>
+            <label className="text-xs font-semibold text-primary block mb-1">
+              Reason / Remarks <span className="font-normal text-xs text-secondary">(Optional)</span>
+            </label>
             <textarea
               rows={2}
               className="mgr-input text-xs resize-none"

@@ -68,7 +68,7 @@ export function ManagerMembersGroupAdmissionBulkModal({
       toast.error('Please select a valid CSV file with student records.');
       return;
     }
-    const invalidPhoneRows = parsedRows.filter((r) => r.phone.length < 10);
+    const invalidPhoneRows = parsedRows.filter((r) => r.phone.length !== 10 || !/^[6-9]\d{9}$/.test(r.phone));
     if (invalidPhoneRows.length > 0) {
       toast.error(`${invalidPhoneRows.length} student row(s) have invalid or missing 10-digit phone numbers.`);
       return;

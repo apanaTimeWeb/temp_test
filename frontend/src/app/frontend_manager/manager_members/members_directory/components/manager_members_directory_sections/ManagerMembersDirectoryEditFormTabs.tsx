@@ -38,8 +38,18 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
             <input id="edit-member-name" type="text" required aria-required="true" aria-describedby={errorId} className={INPUT_CLS} value={formData.name} onChange={(e) => onChange('name', e.target.value)} />
           </div>
           <div>
-            <label htmlFor="edit-member-phone" className="block text-xs font-semibold text-secondary mb-1">Phone Number *</label>
-            <input id="edit-member-phone" type="tel" required aria-required="true" aria-describedby={errorId} className={`${INPUT_CLS} font-mono`} value={formData.phone} onChange={(e) => onChange('phone', e.target.value)} />
+            <label htmlFor="edit-member-phone" className="block text-xs font-semibold text-secondary mb-1">Phone Number (10 Digits) *</label>
+            <input
+              id="edit-member-phone"
+              type="tel"
+              maxLength={10}
+              required
+              aria-required="true"
+              aria-describedby={errorId}
+              className={`${INPUT_CLS} font-mono`}
+              value={formData.phone}
+              onChange={(e) => onChange('phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+            />
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -165,8 +175,16 @@ export function ManagerMembersDirectoryEditFormTabs({ activeTab, formData, onCha
             <input id="edit-member-guardian" type="text" placeholder="Guardian Full Name" className={INPUT_CLS} value={formData.guardian || ''} onChange={(e) => onChange('guardian', e.target.value)} />
           </div>
           <div>
-            <label htmlFor="edit-member-emergency" className="block text-xs font-semibold text-secondary mb-1">Guardian Emergency Contact</label>
-            <input id="edit-member-emergency" type="tel" placeholder="10-digit mobile number" className={`${INPUT_CLS} font-mono`} value={formData.emergencyContact || ''} onChange={(e) => onChange('emergencyContact', e.target.value)} />
+            <label htmlFor="edit-member-emergency" className="block text-xs font-semibold text-secondary mb-1">Guardian Emergency Contact (Optional)</label>
+            <input
+              id="edit-member-emergency"
+              type="tel"
+              maxLength={10}
+              placeholder="10-digit mobile number"
+              className={`${INPUT_CLS} font-mono`}
+              value={formData.emergencyContact || ''}
+              onChange={(e) => onChange('emergencyContact', e.target.value.replace(/\D/g, '').slice(0, 10))}
+            />
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">

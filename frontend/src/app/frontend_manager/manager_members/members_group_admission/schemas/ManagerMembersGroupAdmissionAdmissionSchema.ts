@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const ManagerMembersGroupAdmissionAdmissionSchema = z.object({
   fullName: z.string().trim().min(2, 'Full name is required'),
-  phone: z.string().trim().min(10, 'Valid phone number required'),
+  phone: z.string().trim().regex(/^[6-9]\d{9}$/, 'Must be a valid 10-digit mobile number starting with 6-9'),
   shift: z.string().min(1, 'Select a shift'),
   seat: z.string().min(1, 'Select a seat'),
   locker: z.string().optional().or(z.literal('')),

@@ -25,7 +25,7 @@ export function ManagerMembersGroupAdmissionAdmissionPersonalSection({ register,
           </div>
           <div className="mgr-form-field">
             <label className="mgr-label mgr-label-required" htmlFor="admission-phone">{tManagerUi('phone_number')}</label>
-            <div className="mgr-input-icon-wrap"><Phone size={18} strokeWidth={2} className="mgr-input-icon" /><input id="admission-phone" {...register('phone')} type="tel" className={`mgr-input mgr-input-with-icon${errors.phone ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'admission-phone-error' : undefined} placeholder="9876543210" /></div>
+            <div className="mgr-input-icon-wrap"><Phone size={18} strokeWidth={2} className="mgr-input-icon" /><input id="admission-phone" {...register('phone', { onChange: (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10); } })} type="tel" maxLength={10} className={`mgr-input mgr-input-with-icon${errors.phone ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'admission-phone-error' : undefined} placeholder="10-digit mobile" /></div>
             {errors.phone && <p id="admission-phone-error" className="mgr-error" role="alert">{errors.phone.message}</p>}
           </div>
         </div>
