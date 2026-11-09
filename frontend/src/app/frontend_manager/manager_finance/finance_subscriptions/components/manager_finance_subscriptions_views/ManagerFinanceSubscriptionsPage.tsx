@@ -141,6 +141,9 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
           </p>
         </div>
         <div className="flex gap-2 flex-wrap items-center">
+          <button type="button" className="mgr-btn-outline text-xs flex items-center gap-1.5 opacity-60 cursor-not-allowed" disabled title={tManagerUi('renewal_unavailable')}>
+            <RefreshCw size={13} /> {tManagerUi('renewal_unavailable')}
+          </button>
           <button type="button" className="mgr-btn-outline text-xs flex items-center gap-1.5" onClick={handleExportCsv} title="Export CSV">
             <Download size={13} /> Export CSV
           </button>
