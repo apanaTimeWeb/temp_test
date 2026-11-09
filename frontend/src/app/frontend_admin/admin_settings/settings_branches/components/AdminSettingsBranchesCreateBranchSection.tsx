@@ -93,7 +93,22 @@ export function AdminSettingsBranchesCreateBranchSection({
           <div className="grid gap-1">
             <label className="grid gap-1 text-sm text-text-secondary" htmlFor="admin-branches-create-phone">
               <span className="flex items-center gap-2"><Phone size={16} aria-hidden="true" /> {t('FIELD_PHONE')}</span>
-              <input id="admin-branches-create-phone" className="min-h-11 rounded-md border border-border bg-input px-3 text-text-primary" type="tel" autoComplete="tel" maxLength={32} required {...form.register('phone')} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'admin-branches-create-phone-error' : undefined} />
+              <input
+                id="admin-branches-create-phone"
+                className="min-h-11 rounded-md border border-border bg-input px-3 text-text-primary font-mono"
+                type="tel"
+                autoComplete="tel"
+                maxLength={10}
+                placeholder="10-digit mobile"
+                required
+                {...form.register('phone', {
+                  onChange: (e) => {
+                    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                  },
+                })}
+                aria-invalid={Boolean(errors.phone)}
+                aria-describedby={errors.phone ? 'admin-branches-create-phone-error' : undefined}
+              />
             </label>
             {errors.phone && <p id="admin-branches-create-phone-error" className="text-sm text-danger-text" role="alert">{errors.phone.message}</p>}
           </div>

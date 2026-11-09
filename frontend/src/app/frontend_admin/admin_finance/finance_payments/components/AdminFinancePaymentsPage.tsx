@@ -27,28 +27,13 @@ const ADMIN_FINANCE_MODE_BADGE: Record<AdminFinancePayment['mode'], string> = {
 };
 
 function mapAdminFinancePayment(record: AdminFinancePaymentApiRecord): AdminFinancePayment {
-  const normalizedStatus = record.status?.trim().toLowerCase();
-  const status: AdminFinancePayment['status'] = normalizedStatus === 'completed' || normalizedStatus === 'valid' || normalizedStatus === 'paid'
-    ? 'valid'
-    : normalizedStatus === 'deleted' || normalizedStatus === 'void' || normalizedStatus === 'reversed'
-      ? 'deleted'
-      : 'unknown';
+  const norm = record.status?.trim().toLowerCase();
+  const status: AdminFinancePayment['status'] = ['completed', 'valid', 'paid'].includes(norm ?? '') ? 'valid' : ['deleted', 'void', 'reversed'].includes(norm ?? '') ? 'deleted' : 'unknown';
   return {
-    id: record.id,
-    receiptNumber: record.receiptNumber ?? '—',
-    date: record.date,
-    studentName: record.studentName,
-    smartId: record.smartId ?? '—',
-    amount: record.amount,
-    currencyCode: record.currencyCode,
-    amountUnit: record.amountUnit,
-    mode: record.mode ?? 'unknown',
-    txnId: record.txnId,
-    lateFee: record.lateFee,
-    receivedBy: record.receivedBy ?? '—',
-    status,
-    deletionReason: record.deletionReason,
-    branch: (record as Record<string, unknown>).branch as string | undefined,
+    id: record.id, receiptNumber: record.receiptNumber ?? '—', date: record.date, studentName: record.studentName,
+    smartId: record.smartId ?? '—', amount: record.amount, currencyCode: record.currencyCode, amountUnit: record.amountUnit,
+    mode: record.mode ?? 'unknown', txnId: record.txnId, lateFee: record.lateFee, receivedBy: record.receivedBy ?? '—',
+    status, deletionReason: record.deletionReason, branch: (record as Record<string, unknown>).branch as string | undefined,
   };
 }
 
@@ -103,6 +88,8 @@ export function AdminFinancePaymentsPage() {
 
     return branchMatch && modeMatch && deletedMatch && searchMatch && dateMatch;
   }), [allPayments, modeFilter, showDeleted, search, isAllBranches, selectedBranch, timeRange, customStartDate, customEndDate]);
+
+  const hasActiveFilters = search.trim() !== '' || modeFilter !== 'all' || showDeleted || timeRange !== 'all' || customStartDate !== '' || customEndDate !== '';
 
   const timeRangeLabel = useMemo(() => {
     return timeRange === 'all' ? 'All Time' : timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'this_month' ? 'This Month' : 'Custom Range';
@@ -250,6 +237,24 @@ export function AdminFinancePaymentsPage() {
           <input type="checkbox" checked={showDeleted} onChange={(event) => setShowDeleted(event.target.checked)} className="rounded" />
           {t('SHOW_DELETED')}
         </label>
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearch('');
+              setModeFilter('all');
+              setShowDeleted(false);
+              setTimeRange('all');
+              setCustomStartDate('');
+              setCustomEndDate('');
+              setUrlTablePage0(0);
+            }}
+            className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-elevated transition-colors"
+            title="Reset all filters"
+          >
+            Reset
+          </button>
+        )}
         <div className="ml-auto flex items-center gap-2">
           <span className="text-xs text-text-muted">Showing {visible.length} of {allPayments.length} ({timeRangeLabel})</span>
           <button

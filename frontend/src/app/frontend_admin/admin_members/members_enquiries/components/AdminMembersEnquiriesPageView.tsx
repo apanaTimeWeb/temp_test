@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import { Search, LayoutGrid, List, MoreHorizontal, PhoneCall, Upload, Download, Printer, MessageSquare, Send, Mail, CalendarDays, CheckCircle, Clock, Phone, User, Calendar, Users, TrendingUp, UserCheck, Target, XCircle } from 'lucide-react';
+import { Search, LayoutGrid, List, MoreHorizontal, PhoneCall, Upload, Download, Printer, MessageSquare, Send, Mail, CalendarDays, CheckCircle, Clock, Phone, User, Calendar, Users, TrendingUp, UserCheck, Target, XCircle, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ADMIN_ENQUIRIES_ENQUIRY_KANBAN_COLUMNS, ADMIN_ENQUIRIES_ENQUIRY_STATUS_FILTERS, ADMIN_ENQUIRIES_URLS, ADMIN_ENQUIRIES_ENQUIRY_DOT_CLASSES } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
 import useEnquiriesPage from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
@@ -20,12 +20,20 @@ type AdminCrmTimeRange = 'all' | 'today' | 'this_week' | 'this_month' | 'custom'
 export default function AdminEnquiriesPageView() {
   const t = useTranslations('ADMIN_ENQUIRIES');
   const model = useEnquiriesPage();
-  const { router, isDemoMode, view, setView, search, setSearch, statusFilter, setStatusFilter, filtered } = model;
+  const { router, isDemoMode, view, setView, search, setSearch, statusFilter, setStatusFilter, filtered, setEnquiries } = model;
   const [timeRange, setTimeRange] = useState<AdminCrmTimeRange>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
+
+  const handleDeleteSelected = () => {
+    if (selectedIds.length === 0) return;
+    const count = selectedIds.length;
+    setEnquiries((prev) => prev.filter((e) => !selectedIds.includes(e.id)));
+    setSelectedIds([]);
+    toast.success(`Successfully deleted ${count} enquiry lead${count > 1 ? 's' : ''}.`);
+  };
 
   if (!isFrontendDemoModeEnabled()) return <section className="space-y-3 rounded-lg border border-warning-bg bg-card p-6"><h1 className="text-section-title font-semibold text-text-primary">{t('CRM_UNAVAILABLE_TITLE')}</h1><p role="status" className="text-warning-text">{t('CRM_UNAVAILABLE_DESC')}</p></section>;
   const statusLabel = (status: string) => {
@@ -155,9 +163,19 @@ export default function AdminEnquiriesPageView() {
           </div>
           <div className="flex items-center gap-1.5">
             {selectedIds.length > 0 && (
-              <button type="button" onClick={clearSelection} className="inline-flex h-9 items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-text-secondary hover:bg-surface-elevated">
-                <XCircle size={13} /> Clear ({selectedIds.length})
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={handleDeleteSelected}
+                  className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-danger-bg bg-danger-bg px-2.5 py-1.5 text-xs font-semibold text-danger-text hover:bg-danger hover:text-on-danger transition-colors"
+                  title="Delete selected enquiries"
+                >
+                  <Trash2 size={13} /> Delete Selected ({selectedIds.length})
+                </button>
+                <button type="button" onClick={clearSelection} className="inline-flex h-9 items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-text-secondary hover:bg-surface-elevated">
+                  <XCircle size={13} /> Clear ({selectedIds.length})
+                </button>
+              </>
             )}
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-003" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-surface-elevated transition-colors disabled:cursor-not-allowed disabled:opacity-50" type="button" disabled title={t('IMPORT_TITLE')}><Upload size={14} strokeWidth={2}/> {t('IMPORT')}</button>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-004" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-surface-elevated transition-colors disabled:cursor-not-allowed disabled:opacity-50" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title={isDemoMode ? t('EXPORT_DEMO_TITLE') : t('EXPORT_LIVE_TITLE')} onClick={downloadCsv}><Download size={14} strokeWidth={2}/> {t('CSV')}</button>

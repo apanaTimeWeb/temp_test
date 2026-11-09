@@ -119,7 +119,20 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
         </div>
         <div className="grid gap-1 text-sm">
           <label htmlFor={`${prefix}-phone`}>{t('PHONE')}</label>
-          <input id={`${prefix}-phone`} className="admin-input" type="tel" autoComplete="tel" maxLength={32} aria-invalid={Boolean(errors.phone)} {...register('phone')} />
+          <input
+            id={`${prefix}-phone`}
+            className="admin-input font-mono"
+            type="tel"
+            autoComplete="tel"
+            maxLength={10}
+            placeholder="10-digit mobile"
+            aria-invalid={Boolean(errors.phone)}
+            {...register('phone', {
+              onChange: (e) => {
+                e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+              },
+            })}
+          />
           {errors.phone && <p className="text-sm text-danger-text" role="alert">{validationMessage(errors.phone.message)}</p>}
         </div>
         <div className="grid gap-1 text-sm">
@@ -129,21 +142,21 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
           {errors.plan && <p className="text-sm text-danger-text" role="alert">{validationMessage(errors.plan.message)}</p>}
         </div>
         <div className="grid gap-1 text-sm">
-          <label htmlFor={`${prefix}-seat`}>Seat No.</label>
+          <label htmlFor={`${prefix}-seat`}>Seat No. (Optional)</label>
           <input id={`${prefix}-seat`} className="admin-input" placeholder="e.g. S-12" maxLength={50} {...register('seat')} />
         </div>
         <div className="grid gap-1 text-sm">
-          <label htmlFor={`${prefix}-shift`}>Shift</label>
+          <label htmlFor={`${prefix}-shift`}>Shift (Optional)</label>
           <input id={`${prefix}-shift`} list={`shift-opts-${prefix}`} className="admin-input" placeholder="e.g. Morning (6AM - 12PM)" maxLength={100} {...register('shift')} />
           <datalist id={`shift-opts-${prefix}`}>{ADMIN_MEMBERS_SHIFT_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}</datalist>
         </div>
         <div className="grid gap-1 text-sm">
-          <label htmlFor={`${prefix}-branch`}>Branch</label>
+          <label htmlFor={`${prefix}-branch`}>Branch (Optional)</label>
           <input id={`${prefix}-branch`} list={`branch-opts-${prefix}`} className="admin-input" placeholder="e.g. Main Branch" maxLength={100} {...register('branch')} />
           <datalist id={`branch-opts-${prefix}`}>{branchOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}</datalist>
         </div>
         <div className="grid gap-1 text-sm">
-          <label htmlFor={`${prefix}-locker`}>Locker No.</label>
+          <label htmlFor={`${prefix}-locker`}>Locker No. (Optional)</label>
           <input id={`${prefix}-locker`} className="admin-input" placeholder="e.g. L-04" maxLength={50} {...register('locker')} />
         </div>
       </>

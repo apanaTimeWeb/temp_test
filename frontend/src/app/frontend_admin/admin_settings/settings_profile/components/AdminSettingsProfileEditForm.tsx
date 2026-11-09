@@ -43,7 +43,21 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
           </div>
           <div>
             <label htmlFor="admin-profile-edit-phone" className="mb-1 block text-sm font-medium text-text-secondary">{t('FIELD_PHONE')}</label>
-            <input id="admin-profile-edit-phone" type="tel" autoComplete="tel" className="admin-input w-full" {...register('phone')} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'admin-profile-edit-phone-error' : undefined} />
+            <input
+              id="admin-profile-edit-phone"
+              type="tel"
+              autoComplete="tel"
+              maxLength={10}
+              placeholder="10-digit mobile"
+              className="admin-input w-full font-mono"
+              {...register('phone', {
+                onChange: (e) => {
+                  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                },
+              })}
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={errors.phone ? 'admin-profile-edit-phone-error' : undefined}
+            />
             {errors.phone && <p id="admin-profile-edit-phone-error" className="mt-1 text-sm text-danger-text" role="alert">{t(getAdminProfileValidationMessageKey('phone', errors.phone.type))}</p>}
           </div>
         </div>
@@ -53,7 +67,9 @@ export default function AdminProfileEditForm({ onDirtyChange }: AdminSettingsPro
           {errors.email && <p id="admin-profile-edit-email-error" className="mt-1 text-sm text-danger-text" role="alert">{t(getAdminProfileValidationMessageKey('email', errors.email.type))}</p>}
         </div>
         <div>
-          <label htmlFor="admin-profile-edit-bio" className="mb-1 block text-sm font-medium text-text-secondary">{t('FIELD_BIO')}</label>
+          <label htmlFor="admin-profile-edit-bio" className="mb-1 block text-sm font-medium text-text-secondary">
+            {t('FIELD_BIO')} <span className="text-xs font-normal text-text-muted">(Optional)</span>
+          </label>
           <textarea id="admin-profile-edit-bio" rows={4} className="admin-input w-full" {...register('bio')} aria-invalid={Boolean(errors.bio)} aria-describedby={errors.bio ? 'admin-profile-edit-bio-error' : undefined} />
           {errors.bio && <p id="admin-profile-edit-bio-error" className="mt-1 text-sm text-danger-text" role="alert">{t(getAdminProfileValidationMessageKey('bio', errors.bio.type))}</p>}
         </div>

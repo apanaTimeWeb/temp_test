@@ -111,7 +111,23 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
           </div>
           <div>
             <label htmlFor="admin-staff-users-phone" className="admin-label">{t('PHONE')}</label>
-            <input id="admin-staff-users-phone" type="tel" inputMode="tel" autoComplete="tel" className="admin-input" required placeholder={t('PHONE_PLACEHOLDER')} {...form.register('phone')} aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'admin-staff-users-phone-error' : undefined} />
+            <input
+              id="admin-staff-users-phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              maxLength={10}
+              className="admin-input font-mono"
+              required
+              placeholder={t('PHONE_PLACEHOLDER')}
+              {...form.register('phone', {
+                onChange: (e) => {
+                  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                },
+              })}
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={errors.phone ? 'admin-staff-users-phone-error' : undefined}
+            />
             {errors.phone && <p id="admin-staff-users-phone-error" className="admin-error" role="alert">{errors.phone.message}</p>}
           </div>
         </div>

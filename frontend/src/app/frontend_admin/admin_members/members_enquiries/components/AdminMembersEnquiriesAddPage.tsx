@@ -112,10 +112,10 @@ export function AdminEnquiriesAddPage() {
   return (
     <>
       <Toaster position="bottom-right" richColors />
-      <div className="fixed inset-0 z-50 flex justify-end bg-overlay-backdrop backdrop-blur-xs motion-safe:transition-opacity" onClick={handleClose}>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay-backdrop backdrop-blur-sm motion-safe:transition-opacity animate-in fade-in" onClick={handleClose}>
         <aside
           ref={(node) => { drawerRef.current = node; }}
-          className="flex h-full w-full max-w-lg flex-col border-l border-border bg-overlay shadow-dialog"
+          className="flex max-h-[90vh] w-full max-w-lg flex-col rounded-2xl border border-border bg-card shadow-2xl overflow-hidden"
           role="dialog"
           aria-modal="true"
           aria-labelledby="enq-drawer-title"
@@ -175,7 +175,11 @@ export function AdminEnquiriesAddPage() {
                     maxLength={10}
                     placeholder={t('MOBILE_PLACEHOLDER')}
                     className={`min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary${errors.phone ? ' border-danger-text' : ''}`}
-                    {...register('phone')}
+                    {...register('phone', {
+                      onChange: (e) => {
+                        e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                      },
+                    })}
                     aria-invalid={Boolean(errors.phone)}
                     autoComplete="tel"
                   />

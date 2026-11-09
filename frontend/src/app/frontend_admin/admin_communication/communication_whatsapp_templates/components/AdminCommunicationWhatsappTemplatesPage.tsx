@@ -69,8 +69,16 @@ export function AdminCommunicationWhatsappTemplatesPage() {
             <DialogDescription className="mb-5 text-ui text-text-secondary">{t('WHATSAPP_TEST_DIALOG_DESCRIPTION')}</DialogDescription>
             <div>
               <label className="mb-1.5 block text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary" htmlFor="admin-communication-test-phone">{t('WHATSAPP_PHONE_LABEL')}</label>
-              <input id="admin-communication-test-phone" className="min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" type="tel" autoComplete="tel" placeholder={t('WHATSAPP_PHONE_PLACEHOLDER')}
-                value={testPhone} onChange={e => setTestPhone(e.target.value)} />
+              <input
+                id="admin-communication-test-phone"
+                className="min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-body text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 font-mono"
+                type="tel"
+                autoComplete="tel"
+                maxLength={10}
+                placeholder="10-digit mobile number"
+                value={testPhone}
+                onChange={e => setTestPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+              />
             </div>
             <div className="mt-6 flex flex-wrap justify-end gap-2.5 border-border pt-3">
               <button data-testid="admin_communication-page-control-002" type="button" onClick={() => setShowTest(false)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-ui font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base">{t('WHATSAPP_BUTTON_CANCEL')}</button>

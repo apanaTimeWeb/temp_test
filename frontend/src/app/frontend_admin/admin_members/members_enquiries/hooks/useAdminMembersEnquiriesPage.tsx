@@ -88,7 +88,7 @@ export default function useAdminEnquiriesPage() {
   const router = useRouter();
   const isDemoMode = isFrontendDemoModeEnabled();
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
-  const [view, setView] = useAdminApplicationInfrastructureUrlQueryState<'kanban' | 'table'>('displayMode', 'kanban', { validValues: ['kanban', 'table'] });
+  const [view, setView] = useAdminApplicationInfrastructureUrlQueryState<'kanban' | 'table'>('displayMode', 'table', { validValues: ['kanban', 'table'] });
   const [search, setSearch] = useAdminApplicationInfrastructureUrlQueryState<string>('search', '');
   const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('statusFilter', 'All', { validValues: ['All', 'New', 'Visited', 'Interested', 'Converted', 'Lost'] });
   const { selectedBranch, isAllBranches } = useAdminBranch();

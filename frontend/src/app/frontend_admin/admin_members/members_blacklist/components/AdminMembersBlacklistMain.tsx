@@ -202,7 +202,22 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
           </div>
           <div>
             <label htmlFor="admin-blacklist-phone" className="admin-label">{t('PHONE_LABEL')}</label>
-            <input id="admin-blacklist-phone" {...register('phone')} className="admin-input" aria-invalid={Boolean(errors.phone)} aria-describedby={errors.phone ? 'admin-blacklist-phone-error' : undefined} required inputMode="tel" autoComplete="tel" />
+            <input
+              id="admin-blacklist-phone"
+              {...register('phone', {
+                onChange: (e) => {
+                  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                },
+              })}
+              maxLength={10}
+              placeholder="10-digit mobile"
+              className="admin-input font-mono"
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={errors.phone ? 'admin-blacklist-phone-error' : undefined}
+              required
+              inputMode="tel"
+              autoComplete="tel"
+            />
             {errors.phone && <p id="admin-blacklist-phone-error" className="admin-error" role="alert">{errors.phone.message}</p>}
           </div>
           <div>
@@ -211,7 +226,9 @@ export function AdminBlacklistFormDialog({ open, onOpenChange, onSubmit, isDemoM
             {errors.reason && <p id="admin-blacklist-reason-error" className="admin-error" role="alert">{errors.reason.message}</p>}
           </div>
           <div>
-            <label htmlFor="admin-blacklist-seat" className="admin-label">{t('PREVIOUS_SEAT_LABEL')}</label>
+            <label htmlFor="admin-blacklist-seat" className="admin-label">
+              {t('PREVIOUS_SEAT_LABEL')} <span className="text-caption font-normal text-text-secondary">(Optional)</span>
+            </label>
             <input id="admin-blacklist-seat" {...register('previousSeat')} className="admin-input" />
           </div>
           <div className="flex justify-end gap-3 border-t border-border pt-4">

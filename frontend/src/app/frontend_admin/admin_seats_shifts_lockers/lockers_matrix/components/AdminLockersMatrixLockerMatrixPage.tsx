@@ -3,7 +3,7 @@
 
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
-import { KeyRound, Building2, ShieldAlert } from 'lucide-react';
+import { KeyRound, Building2, ShieldAlert, LayoutGrid, List } from 'lucide-react';
 import { useAdminLockersLockerMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/hooks/useAdminLockersMatrixLockerMatrix';
 import type { AdminLockersLockerMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
 import AdminLockersLockerMatrixStats from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/components/AdminLockersMatrixLockerMatrixStats';
@@ -25,6 +25,7 @@ export function AdminLockersLockerMatrixPage() {
   const t = useTranslations('ADMIN_LOCKERS');
   const { branches, selectedBranchId, selectedBranch, setSelectedBranchId, isAllBranches } = useAdminBranch();
   const [selectedLocker, setSelectedLocker] = useState<AdminLockersLockerMatrixViewModel | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
 
   const lockerMatrixQuery = useAdminLockersLockerMatrix();
   const lockers = lockerMatrixQuery.data ?? [];
@@ -52,9 +53,31 @@ export function AdminLockersLockerMatrixPage() {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-section-title font-semibold text-text-primary">
-            {selectedBranch ? `${selectedBranch.name} Locker Grid` : t('lockerMatrixTitle')}
+            {selectedBranch ? `${selectedBranch.name} Lockers` : t('lockerMatrixTitle')}
           </h1>
           <p className="text-xs text-text-secondary">{t('lockerMatrixSubtitle')}</p>
+        </div>
+        <div className="inline-flex items-center gap-1 bg-surface-muted p-1 rounded-xl border border-border">
+          <button
+            type="button"
+            onClick={() => setViewMode('grid')}
+            aria-pressed={viewMode === 'grid'}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              viewMode === 'grid' ? 'bg-primary text-primary-foreground shadow-xs' : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            <LayoutGrid size={14} /> Grid View
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('table')}
+            aria-pressed={viewMode === 'table'}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              viewMode === 'table' ? 'bg-primary text-primary-foreground shadow-xs' : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            <List size={14} /> Table View
+          </button>
         </div>
       </div>
 
@@ -126,7 +149,7 @@ export function AdminLockersLockerMatrixPage() {
           </div>
         ) : visibleLockers.length === 0 ? (
           <div className="py-12 text-center text-text-secondary">{t('noLockersFound')}</div>
-        ) : (
+        ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
             {visibleLockers.map(locker => (
               <button
@@ -142,6 +165,49 @@ export function AdminLockersLockerMatrixPage() {
                 <span>{locker.id}</span>
               </button>
             ))}
+          </div>
+        ) : (
+          <div className="border border-border rounded-xl overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-surface-highlight border-b border-border text-left font-bold text-text-secondary uppercase">
+                <tr>
+                  <th className="p-3">Locker No</th>
+                  <th className="p-3">Branch</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3">Assigned Student</th>
+                  <th className="p-3">Phone</th>
+                  <th className="p-3">Shift</th>
+                  <th className="p-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleLockers.map((locker) => (
+                  <tr key={locker.uuid ?? locker.id} className="border-b border-border last:border-0 hover:bg-surface-hover">
+                    <td className="p-3 font-mono font-bold text-primary flex items-center gap-1.5">
+                      <KeyRound size={13} className="text-secondary" /> #{locker.id}
+                    </td>
+                    <td className="p-3 text-text-secondary">{locker.branchName ?? selectedBranch?.name ?? 'Main Branch'}</td>
+                    <td className="p-3">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${ADMIN_LOCKER_MATRIX_STATUS_CLASS[locker.status] ?? ''}`}>
+                        {t(locker.status === 'free' ? 'statusFree' : locker.status === 'occupied' ? 'statusOccupied' : locker.status === 'maintenance' ? 'statusMaintenance' : 'statusUnknown')}
+                      </span>
+                    </td>
+                    <td className="p-3 font-medium text-text-primary">{locker.student ?? '— (Unallocated)'}</td>
+                    <td className="p-3 text-text-secondary font-mono">{locker.phone ?? '—'}</td>
+                    <td className="p-3 text-text-secondary">{locker.shift ?? '—'}</td>
+                    <td className="p-3 text-right">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedLocker(locker)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-border text-xs font-semibold text-text-primary hover:bg-surface-hover"
+                      >
+                        Inspect
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
