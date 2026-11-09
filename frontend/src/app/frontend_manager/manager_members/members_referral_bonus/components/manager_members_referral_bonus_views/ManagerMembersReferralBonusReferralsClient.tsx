@@ -1,8 +1,8 @@
 'use client';
 // RESPONSIBILITY: Orchestrate client-side view and local interactions for referral bonus management.
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Plus } from 'lucide-react';
+import { Download, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 import { ManagerMembersReferralBonusTable, type ReferralSortField } from './ManagerMembersReferralBonusTable';
@@ -34,6 +34,26 @@ export function ManagerMembersReferralBonusReferralsClient() {
       return next;
     });
   };
+
+  useEffect(() => {
+    const handleSync = () => {
+      try {
+        const stored = localStorage.getItem('manager_members_referral_records');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) setRecords(parsed);
+        }
+      } catch {
+        // Safe storage fallback
+      }
+    };
+    window.addEventListener('manager_referral_created', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('manager_referral_created', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
+  }, []);
   const [timeHorizon, setTimeHorizon] = useState<ManagerReferralTimeHorizon>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
@@ -165,7 +185,10 @@ export function ManagerMembersReferralBonusReferralsClient() {
           <h1 className="mgr-page-title">{tManagerUi('referral_program')}</h1>
           <p className="mgr-page-subtitle">Track student referrals, approve rewards, and disburse peer invite bonuses.</p>
         </div>
-        <div className="mgr-page-actions">
+        <div className="mgr-page-actions flex items-center gap-2">
+          <button type="button" onClick={handleExportCsv} className="mgr-btn-ghost flex items-center gap-1.5 text-xs">
+            <Download size={14} /> <span>Export CSV</span>
+          </button>
           <button type="button" onClick={() => setIsAddModalOpen(true)} className="mgr-btn-primary flex items-center gap-1.5 text-xs">
             <Plus size={15} /> <span>Add Referral</span>
           </button>

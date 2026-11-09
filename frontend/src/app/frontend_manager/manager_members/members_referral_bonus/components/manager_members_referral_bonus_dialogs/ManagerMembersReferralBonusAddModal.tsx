@@ -88,6 +88,12 @@ export function ManagerMembersReferralBonusAddModal({
             <X size={18} />
           </button>
         </div>
+        <div className="p-2.5 rounded-xl bg-surface-zebra border border-border text-[11px] text-secondary flex items-start gap-2">
+          <span className="text-primary font-bold">ℹ</span>
+          <span>
+            {"Referrals are automatically recorded when a new student declares their referrer on the New Admission Form. Use this form only for manual adjustments."}
+          </span>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           {/* Referrer Student Picker */}
           <div>

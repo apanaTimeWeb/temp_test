@@ -160,12 +160,29 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
         amountPaid: values.amountPaid,
       };
 
-      // BUG-03: Real local persistence across session
+      // Real local persistence across session
       try {
         const stored = JSON.parse(localStorage.getItem('manager_admitted_students') || '[]');
         localStorage.setItem('manager_admitted_students', JSON.stringify([studentData, ...stored]));
         sessionStorage.setItem(`admission_student_${generatedSmartId}`, JSON.stringify(studentData));
         window.dispatchEvent(new CustomEvent('manager_member_admitted', { detail: studentData }));
+
+        // Automatically record verified referral when newly admitted student declares a referrer
+        const refBy = values.referredBy?.trim();
+        if (refBy && refBy !== 'Direct Walk-in' && !refBy.toLowerCase().startsWith('direct walk-in')) {
+          const storedReferrals = JSON.parse(localStorage.getItem('manager_members_referral_records') || '[]');
+          const newRef = {
+            id: `REF-${Date.now().toString().slice(-4)}`,
+            referrer: refBy,
+            referred: `${values.fullName} (${generatedSmartId})`,
+            date: new Date().toISOString().slice(0, 10),
+            status: 'Pending',
+            bonus: '₹500',
+            method: 'Fee Discount',
+          };
+          localStorage.setItem('manager_members_referral_records', JSON.stringify([newRef, ...storedReferrals]));
+          window.dispatchEvent(new CustomEvent('manager_referral_created', { detail: newRef }));
+        }
       } catch {
         // Storage unavailable fallback
       }
