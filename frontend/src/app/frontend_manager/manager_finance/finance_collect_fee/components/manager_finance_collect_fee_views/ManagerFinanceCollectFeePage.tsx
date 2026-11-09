@@ -59,11 +59,13 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   // Guard contract: if (confirmed) router.push(`${next.pathname}${next.search}${next.hash}`);
   useManagerFinanceCollectFeeUnsavedChangesGuard({ isDirty: hasUnsavedCollectionDraft, confirm, router, tManagerUi });
 
-  const filteredStudents = MANAGER_FINANCE_COLLECT_FEE_STUDENTS.filter(s =>
-    debouncedSearch.length >= 2 &&
-    (s.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-      s.smartId.toLowerCase().includes(debouncedSearch.toLowerCase()))
-  );
+  const filteredStudents = MANAGER_FINANCE_COLLECT_FEE_STUDENTS.filter(s => {
+    if (!debouncedSearch.trim()) return true;
+    const q = debouncedSearch.toLowerCase().trim();
+    return s.name.toLowerCase().includes(q) ||
+      s.smartId.toLowerCase().includes(q) ||
+      s.phone.includes(q);
+  });
 
   function selectStudent(student: (typeof MANAGER_FINANCE_COLLECT_FEE_STUDENTS)[number]) {
     setSelectedStudent(student);
@@ -143,14 +145,15 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                 <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 fin-icon-muted" />
                 <input id="manager-collect-fee-student-search" className="fin-input fin-input--pl9" placeholder={tManagerUi('search_by_name_or_smart_id')} value={search}
                   role="combobox" aria-autocomplete="list" aria-haspopup="listbox"
-                  aria-expanded={showDropdown && debouncedSearch.length >= 2 && !selectedStudent}
-                  aria-controls={showDropdown && debouncedSearch.length >= 2 && !selectedStudent && filteredStudents.length > 0 ? "manager-collect-fee-student-options" : undefined}
+                  aria-expanded={showDropdown && !selectedStudent}
+                  aria-controls={showDropdown && !selectedStudent && filteredStudents.length > 0 ? "manager-collect-fee-student-options" : undefined}
                   aria-activedescendant={activeStudentIndex >= 0 && filteredStudents[activeStudentIndex] ? `manager-collect-fee-student-option-${filteredStudents[activeStudentIndex].id}` : undefined}
                   onKeyDown={handleStudentSearchKeyDown}
                   onChange={e => { setSearch(e.target.value); setSelectedStudent(null); setActiveStudentIndex(-1); setValue('member', '', { shouldDirty: true, shouldValidate: true }); setShowDropdown(true); }}
-                  onFocus={() => setShowDropdown(true)} />
+                  onFocus={() => setShowDropdown(true)}
+                  onBlur={() => setTimeout(() => setShowDropdown(false), 200)} />
               </div>
-              {showDropdown && debouncedSearch.length >= 2 && !selectedStudent && (filteredStudents.length === 0 ? (
+              {showDropdown && !selectedStudent && (filteredStudents.length === 0 ? (
                 <ManagerFinanceCollectFeeEmptyState className="fin-table-empty-cell">{tManagerUi('no_students_found')}</ManagerFinanceCollectFeeEmptyState>
               ) : (
                 <div id="manager-collect-fee-student-options" className="fin-dropdown-list" role="listbox" aria-label={tManagerUi('student')}>

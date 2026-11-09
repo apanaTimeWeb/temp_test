@@ -134,14 +134,23 @@ export function ManagerLockersMatrixClient() {
             <h1 className="ss-page-title">{tManagerUi('locker_matrix')}</h1>
             <p className="ss-page-subtitle">Interactive floor locker matrix with instant vacant locker allotment</p>
           </div>
-          <div className="ss-card ss-card--p-sm">
-            <div className="ss-legend-compact">
-              {LEGEND_ITEMS.map(({ cls, labelKey }) => (
-                <div key={labelKey} className="ss-legend-item">
-                  <span className={`ss-legend-dot ${cls}`} />
-                  <span className="ss-legend-label">{tManagerUi(labelKey)}</span>
-                </div>
-              ))}
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => router.push('/frontend_manager/manager_seats_shifts_lockers/lockers_management')}
+              className="mgr-btn-primary text-xs flex items-center gap-1.5 py-1.5 px-3 rounded-lg"
+            >
+              Unified Lockers View →
+            </button>
+            <div className="ss-card ss-card--p-sm">
+              <div className="ss-legend-compact">
+                {LEGEND_ITEMS.map(({ cls, labelKey }) => (
+                  <div key={labelKey} className="ss-legend-item">
+                    <span className={`ss-legend-dot ${cls}`} />
+                    <span className="ss-legend-label">{tManagerUi(labelKey)}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

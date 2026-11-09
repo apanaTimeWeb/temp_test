@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_trust_scores/hooks/ManagerFinanceTrustScoresDemoRepository';
 import { useManagerTrustScoresUrlFilters } from '@/app/frontend_manager/manager_finance/finance_trust_scores/hooks/useManagerFinanceTrustScoresUrlFilters';
-import { ShieldCheck, ShieldX, Users, Search } from 'lucide-react';
+import { ShieldCheck, ShieldX, Users, Search, X } from 'lucide-react';
 import type { ManagerFinanceTrustScoresRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_trust_scores/types/ManagerFinanceTrustScoresComponentTypes';
 import { ManagerFinanceTrustScoresTable, type TrustSortField } from './ManagerFinanceTrustScoresTable';
 
@@ -129,8 +129,8 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
         </div>
       </div>
 
-      <div className="fin-filter-bar flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[220px]">
+      <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
+        <div className="relative w-full sm:w-72">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
           <input
             type="search"
@@ -144,7 +144,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
           />
         </div>
         <select
-          className="fin-select w-40"
+          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[130px]"
           value={levelFilter}
           onChange={(e) => {
             setUrlFilter('level', e.target.value);
@@ -158,7 +158,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
           <option value="low">{tManagerUi('low_trust_056d0a')}</option>
         </select>
         <select
-          className="fin-select w-40"
+          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[130px]"
           value={shiftFilter}
           onChange={(e) => {
             setUrlFilter('shift', e.target.value);
@@ -173,6 +173,20 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
           <option value="Night">{tManagerUi('night')}</option>
           <option value="Full Day">{tManagerUi('full_day')}</option>
         </select>
+        {(levelFilter !== 'all' || shiftFilter !== 'all' || searchQuery.trim() !== '') && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchQuery('');
+              setUrlFilter('level', 'all');
+              setUrlFilter('shift', 'all');
+              setPage(0);
+            }}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+          >
+            <X size={12} /> Reset
+          </button>
+        )}
       </div>
 
       <ManagerFinanceTrustScoresTable

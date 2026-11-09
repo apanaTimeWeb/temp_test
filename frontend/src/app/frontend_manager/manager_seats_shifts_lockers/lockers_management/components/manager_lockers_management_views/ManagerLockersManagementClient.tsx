@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Search, UserPlus, Download } from 'lucide-react';
+import { Plus, Search, UserPlus, Download, LayoutGrid, List } from 'lucide-react';
 
 import { ManagerLockersManagementNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
 import { managerSeatsLockerDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/schemas/ManagerLockersManagementDraftSchemas';
@@ -17,10 +17,14 @@ import { getLockerColumns } from './ManagerLockersManagementColumns';
 import { ManagerLockersManagementVacateModal } from './ManagerLockersManagementVacateModal';
 import { ManagerLockersManagementAddModal } from './ManagerLockersManagementAddModal';
 import { ManagerLockersManagementToolbar } from './ManagerLockersManagementToolbar';
+import { ManagerLockersManagementGridView } from './ManagerLockersManagementGridView';
+import { ManagerLockersManagementStudentModal } from './ManagerLockersManagementStudentModal';
 
 export function ManagerLockersManagementClient() {
   const tManagerUi = useTranslations('manager.manager_lockers.ui');
   const [lockers, setLockers] = useState<Locker[]>([...MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_LOCKERS]);
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [selectedLockerStudent, setSelectedLockerStudent] = useState<Locker | null>(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [mainTableSearch, setMainTableSearch] = useState('');
   const [showAssign, setShowAssign] = useState<Locker | null>(null);
@@ -34,12 +38,8 @@ export function ManagerLockersManagementClient() {
 
   useManagerLockersDialogFocus(
     dialogRef,
-    () => {
-      setShowAddModal(false);
-      setShowAssign(null);
-      setFreeTarget(null);
-    },
-    activeDialog
+    () => { setShowAddModal(false); setShowAssign(null); setFreeTarget(null); setSelectedLockerStudent(null); },
+    activeDialog || Boolean(selectedLockerStudent)
   );
 
   const { watch, setValue, reset, clearErrors, formState } = useForm({
@@ -76,14 +76,7 @@ export function ManagerLockersManagementClient() {
       toast.error(`Locker ${id} already exists`);
       return;
     }
-    const newLocker: Locker = {
-      id,
-      lockerId: id,
-      status: 'Free',
-      assignedTo: '—',
-      studentId: '—',
-      assignedSince: '—',
-    };
+    const newLocker: Locker = { id, lockerId: id, status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' };
     setLockers((prev) => [newLocker, ...prev]);
     toast.success(`Locker ${id} added successfully`);
     setShowAddModal(false);
@@ -92,13 +85,7 @@ export function ManagerLockersManagementClient() {
 
   const handleExportCsv = () => {
     const headers = ['Locker ID', 'Status', 'Assigned To', 'Student ID', 'Assigned Since'];
-    const rows = filtered.map((l) => [
-      sanitizeManagerLockersCsvCell(l.lockerId),
-      sanitizeManagerLockersCsvCell(l.status),
-      sanitizeManagerLockersCsvCell(l.assignedTo),
-      sanitizeManagerLockersCsvCell(l.studentId ?? '—'),
-      sanitizeManagerLockersCsvCell(l.assignedSince),
-    ]);
+    const rows = filtered.map((l) => [sanitizeManagerLockersCsvCell(l.lockerId), sanitizeManagerLockersCsvCell(l.status), sanitizeManagerLockersCsvCell(l.assignedTo), sanitizeManagerLockersCsvCell(l.studentId ?? '—'), sanitizeManagerLockersCsvCell(l.assignedSince)]);
     const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -116,11 +103,7 @@ export function ManagerLockersManagementClient() {
     const q = mainTableSearch.trim().toLowerCase();
     return lockers.filter((l) => {
       const matchStatus = statusFilter === 'all' || l.status === statusFilter;
-      const matchQ =
-        !q ||
-        l.lockerId.toLowerCase().includes(q) ||
-        (l.assignedTo && l.assignedTo.toLowerCase().includes(q)) ||
-        (l.studentId && l.studentId.toLowerCase().includes(q));
+      const matchQ = !q || l.lockerId.toLowerCase().includes(q) || (l.assignedTo && l.assignedTo.toLowerCase().includes(q)) || (l.studentId && l.studentId.toLowerCase().includes(q));
       return matchStatus && matchQ;
     });
   }, [lockers, statusFilter, mainTableSearch]);
@@ -146,10 +129,33 @@ export function ManagerLockersManagementClient() {
               {tManagerUi('sample_data_only_writes_are_disabled_until_the_verified_8ca5b6')}
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center p-1 rounded-xl bg-surface border border-border">
+              <button
+                type="button"
+                onClick={() => setViewMode('grid')}
+                aria-pressed={viewMode === 'grid'}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                  viewMode === 'grid' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'
+                }`}
+              >
+                <LayoutGrid size={13} /> Grid View
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('table')}
+                aria-pressed={viewMode === 'table'}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                  viewMode === 'table' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'
+                }`}
+              >
+                <List size={13} /> Table View
+              </button>
+            </div>
+
             <button
               type="button"
-              className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors"
+              className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
               onClick={handleExportCsv}
             >
               <Download size={14} /> Export CSV
@@ -201,6 +207,12 @@ export function ManagerLockersManagementClient() {
               </button>
             )}
           </div>
+        ) : viewMode === 'grid' ? (
+          <ManagerLockersManagementGridView
+            lockers={filtered}
+            onSelectLocker={(l) => setSelectedLockerStudent(l)}
+            onShowAssign={(l) => setShowAssign(l)}
+          />
         ) : (
           <div className="ss-table-wrapper ss-grid-h-400">
             <ManagerLockersManagementNativeTable
@@ -215,12 +227,9 @@ export function ManagerLockersManagementClient() {
 
       {showAddModal && (
         <ManagerLockersManagementAddModal
-          dialogRef={dialogRef}
-          newLockerId={newLockerId}
-          addError={addError}
+          dialogRef={dialogRef} newLockerId={newLockerId} addError={addError}
           onLockerIdChange={(val) => setValue('lockerId', val, { shouldDirty: true, shouldValidate: true })}
-          onClose={() => setShowAddModal(false)}
-          onSubmit={handleAddLocker}
+          onClose={() => setShowAddModal(false)} onSubmit={handleAddLocker}
         />
       )}
 
@@ -256,17 +265,14 @@ export function ManagerLockersManagementClient() {
               </div>
             </div>
             <div className="ss-modal-footer">
-              <button type="button" className="ss-btn-ghost" onClick={() => setShowAssign(null)}>
-                {tManagerUi('cancel')}
-              </button>
+              <button type="button" className="ss-btn-ghost" onClick={() => setShowAssign(null)}>{tManagerUi('cancel')}</button>
               <button
                 type="button"
                 className="ss-btn-primary cursor-not-allowed"
                 disabled
                 title={tManagerUi('locker_assignment_unavailable_host_mutation_contract_not_e5fc07')}
               >
-                <UserPlus size={14} />
-                {tManagerUi('assign_unavailable')}
+                <UserPlus size={14} /> {tManagerUi('assign_unavailable')}
               </button>
             </div>
           </div>
@@ -275,14 +281,20 @@ export function ManagerLockersManagementClient() {
 
       {freeTarget && (
         <ManagerLockersManagementVacateModal
-          freeTarget={freeTarget}
-          dialogRef={dialogRef}
-          keyStatus={keyStatus}
-          setKeyStatus={setKeyStatus}
-          remarks={remarks}
-          setRemarks={setRemarks}
-          onClose={() => setFreeTarget(null)}
-          onConfirm={handleConfirmVacateLocker}
+          freeTarget={freeTarget} dialogRef={dialogRef} keyStatus={keyStatus}
+          setKeyStatus={setKeyStatus} remarks={remarks} setRemarks={setRemarks}
+          onClose={() => setFreeTarget(null)} onConfirm={handleConfirmVacateLocker}
+        />
+      )}
+
+      {selectedLockerStudent && (
+        <ManagerLockersManagementStudentModal
+          locker={selectedLockerStudent}
+          onClose={() => setSelectedLockerStudent(null)}
+          onVacate={(l) => {
+            setSelectedLockerStudent(null);
+            setFreeTarget(l);
+          }}
         />
       )}
     </>

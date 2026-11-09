@@ -68,27 +68,11 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
     setActionFeedback('Subscriptions CSV exported successfully.');
   };
 
-  const handlePrint = () => {
-    if (typeof window !== 'undefined') {
-      window.print();
-    }
-  };
-
-  const handleImport = () => {
-    setActionFeedback('Import preview active: Subscription template format verified.');
-  };
-
-  const handleWhatsApp = () => {
-    setActionFeedback('WhatsApp notification broadcast queued for active members.');
-  };
-
-  const handleTelegram = () => {
-    setActionFeedback('Telegram update dispatched to subscriptions channel.');
-  };
-
-  const handleEmail = () => {
-    setActionFeedback('Subscription summary invoice email dispatched.');
-  };
+  const handlePrint = () => { if (typeof window !== 'undefined') window.print(); };
+  const handleImport = () => setActionFeedback('Import preview active: Subscription template format verified.');
+  const handleWhatsApp = () => setActionFeedback('WhatsApp notification broadcast queued for active members.');
+  const handleTelegram = () => setActionFeedback('Telegram update dispatched to subscriptions channel.');
+  const handleEmail = () => setActionFeedback('Subscription summary invoice email dispatched.');
 
   useEffect(() => {
     setRows(
@@ -156,28 +140,27 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
             {tManagerUi('subscription_rows_and_amounts_are_illustrative_sample_da_4b9c16')}
           </p>
         </div>
-        <div className="flex gap-2 flex-wrap">
-          <button type="button" className="fin-btn fin-btn-secondary" disabled title={tManagerUi('renewal_unavailable')}>
-            <RefreshCw size={14} /> {tManagerUi('renewal_unavailable')}
+        <div className="flex gap-2 flex-wrap items-center">
+          <button type="button" className="mgr-btn-outline text-xs flex items-center gap-1.5" onClick={handleExportCsv} title="Export CSV">
+            <Download size={13} /> Export CSV
           </button>
-          <button type="button" className="fin-btn fin-btn-secondary" onClick={handleImport} title={tManagerUi('import')}>
-            <Upload size={14} /> {tManagerUi('import')}
+          <button type="button" className="mgr-btn-outline text-xs flex items-center gap-1.5" onClick={handlePrint} title="Print Subscription Summary">
+            <Printer size={13} /> Print
           </button>
-          <button type="button" className="fin-btn fin-btn-secondary" onClick={handleExportCsv} title="Export CSV">
-            <Download size={14} /> Export CSV
+          <button type="button" className="mgr-btn-outline text-xs flex items-center gap-1.5" onClick={handleImport} title={tManagerUi('import')}>
+            <Upload size={13} /> {tManagerUi('import')}
           </button>
-          <button type="button" className="fin-btn fin-btn-secondary" onClick={handlePrint} title="Print Subscription Summary">
-            <Printer size={14} /> Print
-          </button>
-          <button type="button" className="fin-btn fin-btn-secondary text-success" onClick={handleWhatsApp} title={tManagerUi('whatsapp')}>
-            <MessageSquare size={14} /> {tManagerUi('whatsapp')}
-          </button>
-          <button type="button" className="fin-btn fin-btn-secondary text-info" onClick={handleTelegram} title={tManagerUi('telegram')}>
-            <Send size={14} /> {tManagerUi('telegram')}
-          </button>
-          <button type="button" className="fin-btn fin-btn-secondary text-purple" onClick={handleEmail} title={tManagerUi('email')}>
-            <Mail size={14} /> {tManagerUi('email')}
-          </button>
+          <div className="flex items-center gap-1 pl-2 border-l border-border">
+            <button type="button" className="mgr-btn-ghost text-xs text-success p-2 rounded-lg" onClick={handleWhatsApp} title={tManagerUi('whatsapp')}>
+              <MessageSquare size={14} />
+            </button>
+            <button type="button" className="mgr-btn-ghost text-xs text-info p-2 rounded-lg" onClick={handleTelegram} title={tManagerUi('telegram')}>
+              <Send size={14} />
+            </button>
+            <button type="button" className="mgr-btn-ghost text-xs text-purple p-2 rounded-lg" onClick={handleEmail} title={tManagerUi('email')}>
+              <Mail size={14} />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -193,8 +176,8 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         </div>
       )}
 
-      <div className="fin-filter-bar flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[220px]">
+      <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
+        <div className="relative w-full sm:w-64">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
           <input
             type="search"
@@ -207,19 +190,34 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
             }}
           />
         </div>
-        <select className="fin-select w-40" value={statusFilter} onChange={(e) => setUrlFilter('status', e.target.value)} aria-label={tManagerUi('all_status')}>
+        <select
+          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[120px]"
+          value={statusFilter}
+          onChange={(e) => setUrlFilter('status', e.target.value)}
+          aria-label={tManagerUi('all_status')}
+        >
           <option value="all">{tManagerUi('all_status')}</option>
           <option value="active">{tManagerUi('active')}</option>
           <option value="expired">{tManagerUi('expired')}</option>
           <option value="suspended">{tManagerUi('suspended')}</option>
           <option value="cancelled">{tManagerUi('cancelled')}</option>
         </select>
-        <select className="fin-select w-40" value={planFilter} onChange={(e) => setUrlFilter('plan', e.target.value)} aria-label={tManagerUi('all_plans')}>
+        <select
+          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[120px]"
+          value={planFilter}
+          onChange={(e) => setUrlFilter('plan', e.target.value)}
+          aria-label={tManagerUi('all_plans')}
+        >
           <option value="all">{tManagerUi('all_plans')}</option>
           <option value="Basic Plan">{tManagerUi('basic_plan')}</option>
           <option value="Premium Plan">{tManagerUi('premium_plan')}</option>
         </select>
-        <select className="fin-select w-40" value={shiftFilter} onChange={(e) => setUrlFilter('shift', e.target.value)} aria-label={tManagerUi('all_shifts')}>
+        <select
+          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[120px]"
+          value={shiftFilter}
+          onChange={(e) => setUrlFilter('shift', e.target.value)}
+          aria-label={tManagerUi('all_shifts')}
+        >
           <option value="all">{tManagerUi('all_shifts')}</option>
           <option value="Morning">{tManagerUi('morning')}</option>
           <option value="Afternoon">{tManagerUi('afternoon')}</option>
@@ -227,31 +225,33 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
           <option value="Night">{tManagerUi('night')}</option>
           <option value="Full Day">{tManagerUi('full_day')}</option>
         </select>
+        {(statusFilter !== 'all' || planFilter !== 'all' || shiftFilter !== 'all' || searchQuery.trim() !== '') && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchQuery('');
+              setUrlFilter('status', 'all');
+              setUrlFilter('plan', 'all');
+              setUrlFilter('shift', 'all');
+              setPage(0);
+            }}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+          >
+            <X size={12} /> Reset
+          </button>
+        )}
       </div>
 
       <ManagerFinanceSubscriptionsTable
-        filteredRows={filteredRows}
-        paginated={paginated}
-        searchQuery={searchQuery}
-        totalRows={totalRows}
-        startItem={startItem}
-        endItem={endItem}
-        pageSize={pageSize}
-        effectivePage={effectivePage}
-        pageCount={pageCount}
-        onPageSizeChange={(sz) => {
-          setPageSize(sz);
-          setPage(0);
-        }}
+        filteredRows={filteredRows} paginated={paginated} searchQuery={searchQuery}
+        totalRows={totalRows} startItem={startItem} endItem={endItem} pageSize={pageSize}
+        effectivePage={effectivePage} pageCount={pageCount}
+        onPageSizeChange={(sz) => { setPageSize(sz); setPage(0); }}
         onPrevPage={() => setPage((c) => Math.max(0, c - 1))}
         onNextPage={() => setPage((c) => Math.min(pageCount - 1, c + 1))}
         onSelectSubscription={(s) => setSelectedSub(s)}
-        sortField={sortField}
-        sortDirection={sortDirection}
-        onToggleSort={toggleSort}
-        formatCurrency={formatCurrency}
-        formatDate={formatDate}
-        displayPlan={displayPlan}
+        sortField={sortField} sortDirection={sortDirection} onToggleSort={toggleSort}
+        formatCurrency={formatCurrency} formatDate={formatDate} displayPlan={displayPlan}
         labels={{
           student: tManagerUi('student'),
           smartId: tManagerUi('smart_id'),

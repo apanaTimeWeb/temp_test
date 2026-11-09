@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { useManagerSecurityDepositsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/useManagerFinanceSecurityDepositsUrlFilters';
 import { useManagerSecurityDepositsFormatting } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsFormattingHook';
-import { Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Search, ArrowUpDown, ArrowUp, ArrowDown, X } from 'lucide-react';
 import { MANAGER_FINANCE_SAMPLE_DEPOSITS } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 import type { ManagerFinanceSecurityDepositsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_security_deposits/types/ManagerFinanceSecurityDepositsComponentTypes';
@@ -183,19 +183,19 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[220px]">
+      <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
+        <div className="relative w-full sm:w-72">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
           <input
             type="search"
             placeholder="Search student or Smart ID..."
-            className="mgr-input pl-9 text-xs w-full"
+            className="mgr-input pl-8 text-xs w-full"
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
           />
         </div>
         <select
-          className="fin-select w-40 text-xs"
+          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[130px]"
           value={statusFilter}
           onChange={(e) => { setUrlFilter('status', e.target.value); setPage(0); }}
           aria-label={tManagerUi('all_status')}
@@ -205,6 +205,19 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
           <option value="refunded">{tManagerUi('refunded')}</option>
           <option value="forfeited">{tManagerUi('forfeited')}</option>
         </select>
+        {(statusFilter !== 'all' || searchQuery.trim() !== '') && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearchQuery('');
+              setUrlFilter('status', 'all');
+              setPage(0);
+            }}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+          >
+            <X size={12} /> Reset
+          </button>
+        )}
       </div>
 
       <ManagerFinanceSecurityDepositsTable

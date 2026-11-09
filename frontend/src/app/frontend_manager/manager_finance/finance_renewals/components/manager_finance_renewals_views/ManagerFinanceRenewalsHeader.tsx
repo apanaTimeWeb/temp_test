@@ -49,7 +49,7 @@ export default function ManagerFinanceRenewalsHeader({
           {sampleWarningText}
         </p>
       </div>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap items-center">
         <input
           type="file"
           ref={fileInputRef}
@@ -58,24 +58,26 @@ export default function ManagerFinanceRenewalsHeader({
           className="hidden"
           aria-label="Upload CSV renewals file"
         />
-        <button type="button" onClick={onImportClick} className="fin-btn fin-btn-secondary cursor-pointer hover:bg-surface-hover" title={importLabel}>
-          <Upload size={14} className="mr-1" /> {importLabel}
+        <button type="button" onClick={onImportClick} className="mgr-btn-outline text-xs flex items-center gap-1.5 cursor-pointer hover:bg-surface-hover" title={importLabel}>
+          <Upload size={13} /> {importLabel}
         </button>
-        <button type="button" onClick={onExportCsv} disabled={!hasVisibleRows} className="fin-btn fin-btn-secondary cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title="Export CSV">
-          <Download size={14} className="mr-1" /> Export CSV
+        <button type="button" onClick={onExportCsv} disabled={!hasVisibleRows} className="mgr-btn-outline text-xs flex items-center gap-1.5 cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title="Export CSV">
+          <Download size={13} /> Export CSV
         </button>
-        <button type="button" onClick={onPrint} disabled={!hasVisibleRows} className="fin-btn fin-btn-secondary cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title="Print Renewals" data-testid="manager-finance-renewals-print">
-          <Printer size={14} className="mr-1" /> Print
+        <button type="button" onClick={onPrint} disabled={!hasVisibleRows} className="mgr-btn-outline text-xs flex items-center gap-1.5 cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title="Print Renewals" data-testid="manager-finance-renewals-print">
+          <Printer size={13} /> Print
         </button>
-        <button type="button" onClick={onWhatsAppAll} disabled={!hasVisibleRows} className="fin-btn fin-btn-secondary text-success cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={waAllLabel}>
-          <MessageSquare size={14} className="mr-1" /> {waAllLabel}
-        </button>
-        <button type="button" onClick={onEmailAll} disabled={!hasVisibleRows} className="fin-btn fin-btn-secondary text-purple cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={emailAllLabel}>
-          <Mail size={14} className="mr-1" /> {emailAllLabel}
-        </button>
-        <button type="button" onClick={onRemindAll} disabled={!hasVisibleRows} className="fin-btn fin-btn-secondary cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={remindAllLabel}>
-          <Send size={14} className="mr-1 text-amber-500" /> {remindAllLabel}
-        </button>
+        <div className="flex items-center gap-1 pl-2 border-l border-border">
+          <button type="button" onClick={onWhatsAppAll} disabled={!hasVisibleRows} className="mgr-btn-ghost text-xs text-success p-2 rounded-lg cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={waAllLabel}>
+            <MessageSquare size={14} />
+          </button>
+          <button type="button" onClick={onEmailAll} disabled={!hasVisibleRows} className="mgr-btn-ghost text-xs text-purple p-2 rounded-lg cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={emailAllLabel}>
+            <Mail size={14} />
+          </button>
+          <button type="button" onClick={onRemindAll} disabled={!hasVisibleRows} className="mgr-btn-ghost text-xs text-amber-500 p-2 rounded-lg cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed" title={remindAllLabel}>
+            <Send size={14} />
+          </button>
+        </div>
       </div>
     </div>
   );

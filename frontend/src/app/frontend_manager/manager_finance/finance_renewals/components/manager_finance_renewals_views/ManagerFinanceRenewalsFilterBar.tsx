@@ -41,21 +41,22 @@ export default function ManagerFinanceRenewalsFilterBar({
   tManagerUi,
 }: ManagerFinanceRenewalsFilterBarProps) {
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+    <div className="space-y-3">
       <div className="flex gap-2 flex-wrap items-center">
         {MANAGER_FINANCE_RENEWAL_FILTERS.map((f) => (
           <button
             type="button"
             key={f.value}
             onClick={() => onFilterChange(f.value)}
-            className={filter === f.value ? 'fin-badge fin-badge--info cursor-pointer' : 'fin-badge fin-badge--neutral cursor-pointer'}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${filter === f.value ? 'bg-primary text-on-primary shadow-sm' : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'}`}
           >
             {f.emoji} {tManagerUi(f.labelKey)}
           </button>
         ))}
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="p-3 rounded-xl bg-surface border border-border flex flex-wrap items-center justify-between gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[260px]">
         <div className="relative w-full sm:w-56">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
           <input
@@ -71,7 +72,7 @@ export default function ManagerFinanceRenewalsFilterBar({
           aria-label="Filter by Shift"
           value={shiftFilter}
           onChange={(e) => onShiftFilterChange(e.target.value)}
-          className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
+          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[110px]"
         >
           <option value="all">All Shifts</option>
           <option value="Morning">Morning</option>
@@ -85,7 +86,7 @@ export default function ManagerFinanceRenewalsFilterBar({
           aria-label="Filter by Plan"
           value={planFilter}
           onChange={(e) => onPlanFilterChange(e.target.value)}
-          className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
+          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[110px]"
         >
           <option value="all">All Plans</option>
           <option value="Basic">Basic</option>
@@ -97,7 +98,7 @@ export default function ManagerFinanceRenewalsFilterBar({
           aria-label="Filter by Balance Due"
           value={dueFilter}
           onChange={(e) => onDueFilterChange(e.target.value)}
-          className="mgr-select text-xs py-1.5 px-3 min-w-[110px]"
+          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[110px]"
         >
           <option value="all">All Dues</option>
           <option value="due_only">Has Due Balance</option>
@@ -113,6 +114,7 @@ export default function ManagerFinanceRenewalsFilterBar({
             <X size={13} /> Reset
           </button>
         )}
+        </div>
 
         <span className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">
           {searchedCount} of {totalVisibleCount}

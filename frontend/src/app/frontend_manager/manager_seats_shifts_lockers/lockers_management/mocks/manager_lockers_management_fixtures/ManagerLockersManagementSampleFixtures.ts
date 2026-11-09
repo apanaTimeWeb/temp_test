@@ -17,10 +17,22 @@ export const MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_SHIFTS: ManagerLockersManagemen
 export const MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_LOCKERS: ManagerLockersManagementSampleLocker[] = [
   { id: '1', lockerId: 'A01', status: 'Occupied', assignedTo: 'Alex Chen', studentId: 'LIB-021', assignedSince: '2024-10-01' },
   { id: '2', lockerId: 'A02', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
-  { id: '3', lockerId: 'A05', status: 'Maintenance', assignedTo: '—', studentId: '—', assignedSince: '—' },
-  { id: '4', lockerId: 'B04', status: 'Occupied', assignedTo: 'Maria Vargas', studentId: 'LIB-055', assignedSince: '2024-09-15' },
-  { id: '5', lockerId: 'B06', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
-  { id: '6', lockerId: 'C10', status: 'Occupied', assignedTo: 'Ravi Kumar', studentId: 'LIB-099', assignedSince: '2024-10-10' },
+  { id: '3', lockerId: 'A03', status: 'Occupied', assignedTo: 'Pooja Verma', studentId: 'LIB-114', assignedSince: '2024-10-15' },
+  { id: '4', lockerId: 'A04', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '5', lockerId: 'A05', status: 'Maintenance', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '6', lockerId: 'A06', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '7', lockerId: 'B01', status: 'Occupied', assignedTo: 'Suresh Raina', studentId: 'LIB-180', assignedSince: '2024-09-20' },
+  { id: '8', lockerId: 'B02', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '9', lockerId: 'B03', status: 'Occupied', assignedTo: 'Neha Sharma', studentId: 'LIB-205', assignedSince: '2024-10-05' },
+  { id: '10', lockerId: 'B04', status: 'Occupied', assignedTo: 'Maria Vargas', studentId: 'LIB-055', assignedSince: '2024-09-15' },
+  { id: '11', lockerId: 'B05', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '12', lockerId: 'B06', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '13', lockerId: 'C01', status: 'Occupied', assignedTo: 'Aditya Roy', studentId: 'LIB-310', assignedSince: '2024-10-12' },
+  { id: '14', lockerId: 'C02', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '15', lockerId: 'C03', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '16', lockerId: 'C04', status: 'Maintenance', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '17', lockerId: 'C05', status: 'Free', assignedTo: '—', studentId: '—', assignedSince: '—' },
+  { id: '18', lockerId: 'C10', status: 'Occupied', assignedTo: 'Ravi Kumar', studentId: 'LIB-099', assignedSince: '2024-10-10' },
 ];
 
 export const MANAGER_SEATS_SHIFTS_LOCKERS_SAMPLE_SEATS: ManagerLockersManagementSampleSeat[] = [
