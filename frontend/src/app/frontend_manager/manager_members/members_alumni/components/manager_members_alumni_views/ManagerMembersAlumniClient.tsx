@@ -1,9 +1,8 @@
 'use client';
 // RESPONSIBILITY: Orchestrate the client-side view and local interactions for components. It does not own backend persistence or cross-feature business logic.
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Download, Plus } from 'lucide-react';
-import { ManagerMembersAlumniAddModal } from '@/app/frontend_manager/manager_members/members_alumni/components/manager_members_alumni_dialogs/ManagerMembersAlumniAddModal';
+import { Download } from 'lucide-react';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
 import {
   ManagerMembersAlumniTable,
@@ -37,7 +36,27 @@ export function ManagerMembersAlumniClient() {
     }
     return ALUMNI_RECORDS;
   });
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleAlumniSync = () => {
+      try {
+        const stored = localStorage.getItem('manager_alumni_records');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) setRecords(parsed);
+        }
+      } catch {
+        // storage fallback
+      }
+    };
+    window.addEventListener('manager_alumni_created', handleAlumniSync);
+    window.addEventListener('storage', handleAlumniSync);
+    return () => {
+      window.removeEventListener('manager_alumni_created', handleAlumniSync);
+      window.removeEventListener('storage', handleAlumniSync);
+    };
+  }, []);
+
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -171,11 +190,7 @@ export function ManagerMembersAlumniClient() {
           <p className="mgr-page-subtitle">Track and celebrate library alumni who have successfully qualified competitive examinations or transitioned to professional careers.</p>
         </div>
         <div className="mgr-page-actions flex items-center gap-2">
-          <button type="button" onClick={() => setIsAddModalOpen(true)} className="mgr-btn-primary flex items-center gap-1.5 text-xs">
-            <Plus size={15} />
-            <span>Add Alumni Record</span>
-          </button>
-          <button type="button" onClick={handleExportCsv} className="mgr-btn-ghost flex items-center gap-2 text-xs">
+          <button type="button" onClick={handleExportCsv} className="mgr-btn-primary flex items-center gap-2 text-xs">
             <Download size={15} />
             <span>Export CSV</span>
           </button>
@@ -254,25 +269,6 @@ export function ManagerMembersAlumniClient() {
         onPageSizeChange={(newSize) => {
           setPageSize(newSize);
           setPage(0);
-        }}
-      />
-
-      <ManagerMembersAlumniAddModal
-        isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
-        onAdd={(newAlumni) => {
-          setRecords((prev) => {
-            const updated = [newAlumni, ...prev];
-            try {
-              localStorage.setItem('manager_alumni_records', JSON.stringify(updated));
-              window.dispatchEvent(new CustomEvent('manager_alumni_created', { detail: newAlumni }));
-            } catch {
-              // storage fallback
-            }
-            return updated;
-          });
-          setToastMsg(`Alumni record for "${newAlumni.name}" added successfully!`);
-          setTimeout(() => setToastMsg(null), 4000);
         }}
       />
     </div>

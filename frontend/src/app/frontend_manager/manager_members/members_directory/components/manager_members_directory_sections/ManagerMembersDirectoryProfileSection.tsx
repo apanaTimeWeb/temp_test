@@ -13,6 +13,11 @@ import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/m
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 import { ManagerMembersDirectoryEditModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryEditModal';
 import { ManagerMembersDirectoryExtendedCards } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryExtendedCards';
+import {
+  ManagerMembersDirectoryGraduateAlumniModal,
+  type ManagerGraduateAlumniDetails,
+} from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryGraduateAlumniModal';
+import { graduateMemberToAlumni } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryGraduateAlumni';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 import type { ManagerMembersDirectoryProfileSectionProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
 export type { ManagerMembersDirectoryProfileSectionProps };
@@ -21,11 +26,20 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
   const locale = useLocale();
   const [isEditModalOpen, setIsEditModalOpen] = useState(Boolean(initialEdit));
+  const [isGraduateModalOpen, setIsGraduateModalOpen] = useState(false);
 
   const handleSaveMember = (updated: ManagerMembersDirectoryRecord) => {
     onUpdateMember?.(updated);
     setIsEditModalOpen(false);
     toast.success(`Profile for ${updated.name} (${updated.id}) updated successfully!`);
+  };
+
+  const handleGraduateMember = (
+    targetMember: ManagerMembersDirectoryRecord,
+    details: ManagerGraduateAlumniDetails
+  ) => {
+    graduateMemberToAlumni(targetMember, details, onUpdateMember);
+    setIsGraduateModalOpen(false);
   };
 
   const handleWhatsAppMember = () => {
@@ -109,6 +123,15 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                     >
                       <Pencil size={13} />
                       <span>Edit Profile</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsGraduateModalOpen(true)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-purple-600 hover:bg-purple-700 text-white shadow-sm transition-colors cursor-pointer"
+                      title="Graduate Member to Alumni Network"
+                    >
+                      <GraduationCap size={14} />
+                      <span>Convert to Alumni</span>
                     </button>
                   </div>
                 </div>
@@ -226,12 +249,20 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
       )}
 
       {member && (
-        <ManagerMembersDirectoryEditModal
-          member={member}
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          onSave={handleSaveMember}
-        />
+        <>
+          <ManagerMembersDirectoryEditModal
+            member={member}
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            onSave={handleSaveMember}
+          />
+          <ManagerMembersDirectoryGraduateAlumniModal
+            isOpen={isGraduateModalOpen}
+            onClose={() => setIsGraduateModalOpen(false)}
+            member={member}
+            onGraduate={handleGraduateMember}
+          />
+        </>
       )}
     </section>
   );
