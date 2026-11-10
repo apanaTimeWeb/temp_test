@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import type { ManagerFinanceCollectFeeReceiptPreviewProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 
 
-export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, modeLabels, amount, total, isSubmitting, isCollectAvailable, receiptNumber, collectedBy = 'Branch Manager Satyam', onCollect, onCancel }: ManagerFinanceCollectFeeReceiptPreviewProps) {
+export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, modeLabels, amount, total, isSubmitting, isCollectAvailable, receiptNumber, collectedBy = 'Branch Manager', onCollect, onCancel }: ManagerFinanceCollectFeeReceiptPreviewProps) {
   const tManagerUi = useTranslations('manager.manager_collect_fee.ui');
   const { formatCurrency, toMinorUnits, formatDate } = useManagerCollectFeeFormatting();
 
@@ -20,14 +20,14 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const formattedTotal = total > 0 ? formatCurrency(toMinorUnits(total)) : '₹0';
     const text = encodeURIComponent(
-      `Hello ${selectedStudent.name},\nThank you for your fee payment at Central Library! 🧾\n\n` +
+      `Hello ${selectedStudent.name},\nThank you for your fee payment at Library! 🧾\n\n` +
       `• Receipt No: ${receiptNumber}\n` +
       `• Smart ID: ${selectedStudent.smartId}\n` +
       `• Amount Paid: ${formattedTotal}\n` +
       `• Payment Mode: ${modeLabels[mode] || mode}\n` +
       `• Date: ${formatDate(new Date().toISOString())}\n` +
       `• Verified By: ${collectedBy || 'Branch Manager'}\n\n` +
-      `Knowledge is the best investment. Please preserve this receipt for your records.\n— Central Library Management`
+      `Knowledge is the best investment. Please preserve this receipt for your records.\n— Library Management`
     );
     const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
@@ -47,7 +47,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
                   <p className="fin-input-hint fin-text-warning" data-testid="manager-finance-receipt-preview-disclaimer" role="status">{tManagerUi('receipt_preview_not_proof_of_payment')}</p>
                   <div className="fin-receipt-id-box mt-6">
                     <p className="fin-receipt-id-label">{tManagerUi('receipt_number_37553f')}</p>
-                    <p className="fin-receipt-id-value">{receiptNumber}</p>
+                    <p className="fin-receipt-id-value" suppressHydrationWarning>{receiptNumber}</p>
                   </div>
                   <div className="space-y-3 text-left mb-6">
                     {[
@@ -56,11 +56,11 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
                       { label: tManagerUi('smart_id'), value: selectedStudent?.smartId || '—' },
                       { label: tManagerUi('phone_label'), value: selectedStudent ? `+91-${maskManagerCollectFeePhone(selectedStudent.phone)}` : '—' },
                       { label: tManagerUi('payment_mode_23b35c'), value: modeLabels[mode] },
-                      { label: tManagerUi('collected_by_898bb0') || 'Collected By', value: collectedBy || 'Branch Manager Satyam' },
+                      { label: tManagerUi('collected_by_898bb0') || 'Collected By', value: collectedBy || 'Branch Manager' },
                     ].map((row) => (
                       <div key={row.label} className="flex justify-between">
                         <span className="fin-receipt-row-label">{row.label}</span>
-                        <span className="fin-receipt-row-value">{row.value}</span>
+                        <span className="fin-receipt-row-value" suppressHydrationWarning>{row.value}</span>
                       </div>
                     ))}
                   </div>

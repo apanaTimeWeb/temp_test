@@ -69,8 +69,15 @@ export default function ManagerFinanceCollectFeeDiscountsSection({
       <div>
         <div className="flex items-center justify-between">
           <label className="fin-label" htmlFor="manager-collect-fee-late-fee">{lateFeeLabel}</label>
-          <label className="flex items-center gap-1 fin-text-xs cursor-pointer">
-            <input type="checkbox" checked={lateFeeOverride} onChange={(e) => onLateFeeOverrideChange(e.target.checked)} /> {overrideLabel}
+          <label className="flex items-center gap-1 fin-text-xs cursor-pointer" htmlFor="manager-collect-fee-late-fee-override">
+            <input
+              id="manager-collect-fee-late-fee-override"
+              name="lateFeeOverride"
+              type="checkbox"
+              checked={lateFeeOverride}
+              onChange={(e) => onLateFeeOverrideChange(e.target.checked)}
+            />
+            {overrideLabel}
           </label>
         </div>
         <input

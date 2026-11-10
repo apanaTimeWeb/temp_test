@@ -7,7 +7,7 @@ export const managerFinanceCollectFeeDraftSchema = z.object({
   mode: z.enum(['cash', 'upi', 'card', 'bank']),
   txnId: z.string(),
   couponCode: z.string(),
-  lateFee: z.string().trim().refine((value) => value === '' || (/^\d+(?:\.\d{1,2})?$/.test(value) && Number.isFinite(Number(value)) && Number(value) >= 0), 'enter_valid_amount'),
+  lateFee: z.string().trim().refine((value) => value === '' || (/^\d+(?:\.\d{1,2})?$/.test(value) && Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) <= 50000), 'enter_valid_amount'),
   monthsToRenew: z.string().min(1),
   remark: z.string().max(2000),
 }).superRefine((draft, context) => {

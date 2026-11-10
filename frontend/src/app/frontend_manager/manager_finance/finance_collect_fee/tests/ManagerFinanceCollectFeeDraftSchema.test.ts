@@ -16,4 +16,9 @@ describe('managerFinanceCollectFeeDraftSchema', () => {
     expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, mode: 'upi' }).success).toBe(false);
     expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, mode: 'upi', txnId: 'txn-demo' }).success).toBe(true);
   });
+  it('enforces maximum constraint on late fee', () => {
+    expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, lateFee: '500' }).success).toBe(true);
+    expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, lateFee: '50000' }).success).toBe(true);
+    expect(managerFinanceCollectFeeDraftSchema.safeParse({ ...validDraft, lateFee: '50001' }).success).toBe(false);
+  });
 });
