@@ -2,6 +2,10 @@
   "manager": {
     "manager_renewals": {
       "ui": {
+        "renewals": "नवीनीकरण",
+        "track_upcoming_and_overdue_membership_renewals": "आगामी और अतिदेय सदस्यता नवीनीकरण ट्रैक करें।",
+        "renewals_queue_displays_sample_membership_records_for_l_36ae94": "नवीनीकरण कतार लेआउट पूर्वावलोकन के लिए नमूना सदस्यता रिकॉर्ड प्रदर्शित करती है। सत्यापित बैकएंड अनुबंध प्रदान किए जाने तक परिवर्तन अक्षम हैं।",
+        "no_renewals_found": "कोई नवीनीकरण रिकॉर्ड नहीं मिला।",
         "auto_suspend_settings_cannot_be_saved_until_a_verified_b_2068b9": "सत्यापित बैकएंड कॉन्फ़िगरेशन कॉन्ट्रैक्ट मिलने तक स्वचालित निलंबन सेटिंग्स सहेजी नहीं जा सकतीं।",
         "days_before_suspend": "निलंबन से पहले के दिन",
         "currently_suspended": "वर्तमान में निलंबित",

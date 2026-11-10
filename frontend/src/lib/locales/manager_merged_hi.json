@@ -7707,7 +7707,11 @@
         "transaction_reference_required": "लेन-देन संदर्भ आवश्यक है।",
         "validation_field_required": "यह फ़ील्ड आवश्यक है।",
         "confirm_leave_with_unsaved_changes": "تغييرات تحصيل الرسوم غير محفوظة. هل تريد مغادرة الصفحة والتخلص منها؟",
-        "no_records_found": "कोई रिकॉर्ड उपलब्ध नहीं है।"
+        "no_records_found": "कोई रिकॉर्ड उपलब्ध नहीं है।",
+        "renewals": "नवीनीकरण",
+        "track_upcoming_and_overdue_membership_renewals": "आगामी और अतिदेय सदस्यता नवीनीकरण ट्रैक करें।",
+        "renewals_queue_displays_sample_membership_records_for_l_36ae94": "नवीनीकरण कतार लेआउट पूर्वावलोकन के लिए नमूना सदस्यता रिकॉर्ड प्रदर्शित करती है। सत्यापित बैकएंड अनुबंध प्रदान किए जाने तक परिवर्तन अक्षम हैं।",
+        "no_renewals_found": "कोई नवीनीकरण रिकॉर्ड नहीं मिला।"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",

@@ -7707,7 +7707,11 @@
         "transaction_reference_required": "Transaction reference required.",
         "validation_field_required": "This field is required.",
         "confirm_leave_with_unsaved_changes": "You have unsaved fee-collection changes. Leave this page and discard them?",
-        "no_records_found": "No records available."
+        "no_records_found": "No records available.",
+        "renewals": "Renewals",
+        "track_upcoming_and_overdue_membership_renewals": "Track upcoming and overdue membership renewals.",
+        "renewals_queue_displays_sample_membership_records_for_l_36ae94": "Renewals queue displays sample membership records for layout preview. Mutations are disabled until verified backend contract is supplied.",
+        "no_renewals_found": "No renewal records found."
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

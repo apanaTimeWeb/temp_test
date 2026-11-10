@@ -7,7 +7,8 @@ import { useManagerRenewalsUrlFilters } from '@/app/frontend_manager/manager_fin
 import ManagerFinanceRenewalsNativeTable from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
 import { exportManagerRenewalsCsv } from '@/app/frontend_manager/manager_finance/finance_renewals/utils/ManagerFinanceRenewalsCsv';
 import { useManagerRenewalsFormatting } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/ManagerFinanceRenewalsFormattingHook';
-import { CheckCircle, Search, X } from 'lucide-react';
+import { useManagerFinanceRenewalsConfirm } from '@/app/frontend_manager/manager_finance/finance_renewals/hooks/useManagerFinanceRenewalsConfirm';
+import { CheckCircle } from 'lucide-react';
 import { MANAGER_FINANCE_RENEWAL_FILTERS } from '@/app/frontend_manager/manager_finance/finance_renewals/constants/ManagerFinanceRenewalsRenewalConstants';
 import type { FilterType, ManagerFinanceRenewalsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_renewals/types/ManagerFinanceRenewalsComponentTypes';
 import ManagerFinanceRenewalsAlertBanner from './ManagerFinanceRenewalsAlertBanner';
@@ -21,6 +22,7 @@ const URL_FILTERS = { filter: { defaultValue: 'expiring_7', allowedValues: ['exp
 
 export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRenewalsRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_renewals.ui');
+  const { confirm, dialog: renewalsConfirmDialog } = useManagerFinanceRenewalsConfirm();
   const { formatCurrency, formatDate } = useManagerRenewalsFormatting();
   const { values: urlFilters, setValue: setUrlFilter } = useManagerRenewalsUrlFilters(URL_FILTERS);
   const filter = urlFilters.filter as FilterType;
@@ -36,16 +38,6 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const timeHorizonLabel = useMemo(() => {
-    switch (timeHorizon) {
-      case 'today': return 'Today';
-      case 'this_week': return 'This Week';
-      case 'this_month': return 'This Month';
-      case 'custom': return 'Custom Range';
-      default: return 'All Time';
-    }
-  }, [timeHorizon]);
 
   const horizonFiltered = useMemo(() => {
     return renewalsList.filter((r) => {
@@ -90,23 +82,8 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
     filter !== 'expiring_7'
   );
 
-  const translateShift = (value: string) => {
-    switch (value) {
-      case 'Morning': return tManagerUi('morning');
-      case 'Evening': return tManagerUi('evening');
-      case 'Full Day': return tManagerUi('full_day');
-      default: return value;
-    }
-  };
-
-  const translatePlanTier = (value: string) => {
-    switch (value) {
-      case 'Basic': return tManagerUi('basic_tier');
-      case 'Premium': return tManagerUi('premium_tier');
-      case 'Elite': return tManagerUi('elite_tier');
-      default: return value;
-    }
-  };
+  const translateShift = (v: string) => v === 'Morning' ? tManagerUi('morning') : v === 'Evening' ? tManagerUi('evening') : v === 'Full Day' ? tManagerUi('full_day') : v;
+  const translatePlanTier = (v: string) => v === 'Basic' ? tManagerUi('basic_tier') : v === 'Premium' ? tManagerUi('premium_tier') : v === 'Elite' ? tManagerUi('elite_tier') : v;
 
   const handleExportCsv = () => {
     exportManagerRenewalsCsv(visible, filter);
@@ -139,7 +116,13 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
     }
   };
 
-  const handleRenewStudent = (id: number | string, studentName: string) => {
+  const handleRenewStudent = async (id: number | string, studentName: string) => {
+    const confirmed = await confirm(
+      `Confirm subscription renewal: Extend subscription for ${studentName} by 30 days?`,
+      tManagerUi('cancel') || 'Cancel',
+      'Renew (+30 Days)'
+    );
+    if (!confirmed) return;
     setRenewalsList((prev) =>
       prev.map((item) => {
         if (String(item.id) === String(id)) {
@@ -164,9 +147,9 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
     if (student) {
       const cleanPhone = `98765432${String(student.id).padStart(2, '0')}`;
       const text = encodeURIComponent(
-        `Hello ${student.studentName}, your Central Library subscription (${student.smartId} • ${student.plan}) ${
+        `Hello ${student.studentName}, your Library subscription (${student.smartId} • ${student.plan}) ${
           student.daysLeft < 0 ? `expired ${Math.abs(student.daysLeft)} days ago` : `expires in ${student.daysLeft} days`
-        }. Amount due: ₹${Math.round(student.due / 100)}. Please renew to maintain your seat access. — Central Library Administration`
+        }. Amount due: ₹${Math.round(student.due / 100)}. Please renew to maintain your seat access. — Library Administration`
       );
       const rawPhone = (student as { phone?: string }).phone || cleanPhone;
       let digits = rawPhone.replace(/\D/g, '');
@@ -193,11 +176,13 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   );
 
   return (
-    <div
-      className="space-y-6"
-      data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}
-    >
+    <>
+      {renewalsConfirmDialog}
+      <div
+        className="space-y-6"
+        data-route-view={_routeQuery.view}
+        data-route-id={_routeQuery.id}
+      >
       <ManagerFinanceRenewalsHeader
         renewalsTitle={tManagerUi('renewals')}
         renewalsSubtitle={tManagerUi('track_upcoming_and_overdue_membership_renewals')}
@@ -292,5 +277,6 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
         onComplete={() => setIsBulkWhatsAppOpen(false)}
       />
     </div>
+    </>
   );
 }

@@ -26,15 +26,15 @@ interface ManagerFinanceRenewalsBulkWhatsAppModalProps {
 const RENEWAL_TEMPLATES = [
   {
     label: 'Upcoming (Friendly)',
-    text: 'Hello {name}, your Central Library subscription ({smartId} • {plan}) is expiring on {expiry} ({daysLeft} days left). Please renew timely to retain your seat. — Central Library Administration',
+    text: 'Hello {name}, your Library subscription ({smartId} • {plan}) is expiring on {expiry} ({daysLeft} days left). Please renew timely to retain your seat. — Library Administration',
   },
   {
     label: 'Critical Alert (1-3 Days)',
-    text: 'Urgent: Hello {name}, your Central Library access ({smartId}) will expire in {daysLeft} days. Renewal fee due: ₹{due}. Please renew today at the desk or online. — Central Library Administration',
+    text: 'Urgent: Hello {name}, your Library access ({smartId}) will expire in {daysLeft} days. Renewal fee due: ₹{due}. Please renew today at the desk or online. — Library Administration',
   },
   {
     label: 'Expired Notice',
-    text: 'Attention: Hello {name}, your library membership ({smartId}) expired on {expiry}. Pending renewal amount: ₹{due}. Kindly clear dues to avoid seat suspension. — Central Library Administration',
+    text: 'Attention: Hello {name}, your library membership ({smartId}) expired on {expiry}. Pending renewal amount: ₹{due}. Kindly clear dues to avoid seat suspension. — Library Administration',
   },
 ];
 
@@ -88,7 +88,8 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
       return next;
     });
 
-    toast.success(`Renewal reminder opened for ${item.studentName} (+91 ${cleanPhone})`);
+    const maskedPhone = cleanPhone.length >= 4 ? `${cleanPhone.slice(0, 2)}••••${cleanPhone.slice(-2)}` : '••••';
+    toast.success(`Renewal reminder opened for ${item.studentName} (+91 ${maskedPhone})`);
   };
 
   const openedCount = openedKeys.size;
@@ -131,7 +132,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-secondary hover:text-foreground hover:bg-surface-hover transition-colors"
+            className="p-1.5 rounded-lg text-secondary hover:text-foreground hover:bg-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="Close"
           >
             <X size={18} />
@@ -169,7 +170,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
                   type="button"
                   key={tmpl.label}
                   onClick={() => setSelectedTemplate(tmpl.text)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border transition-colors ${
+                  className={`px-2.5 py-1 text-xs rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                     selectedTemplate === tmpl.text
                       ? 'bg-primary text-on-primary border-primary font-semibold'
                       : 'bg-surface border-border text-secondary hover:text-foreground'
@@ -191,7 +192,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
               rows={3}
               value={selectedTemplate}
               onChange={(e) => setSelectedTemplate(e.target.value)}
-              className="w-full text-xs px-3 py-2 rounded-lg border border-border bg-surface text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+              className="w-full text-xs px-3 py-2 rounded-lg border border-border bg-surface text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             />
           </div>
 
@@ -228,7 +229,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
                       <button
                         type="button"
                         onClick={() => handleSendSingle(r)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                         title={`Send reminder to ${r.studentName}`}
                       >
                         <Send size={12} />
@@ -253,7 +254,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-secondary hover:text-foreground hover:bg-surface-hover transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-secondary hover:text-foreground hover:bg-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               Close
             </button>
@@ -261,7 +262,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
               <button
                 type="button"
                 onClick={onComplete}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
               >
                 All Done & Dismiss
               </button>

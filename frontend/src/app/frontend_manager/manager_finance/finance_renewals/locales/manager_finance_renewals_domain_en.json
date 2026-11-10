@@ -2,6 +2,10 @@
   "manager": {
     "manager_renewals": {
       "ui": {
+        "renewals": "Renewals",
+        "track_upcoming_and_overdue_membership_renewals": "Track upcoming and overdue membership renewals.",
+        "renewals_queue_displays_sample_membership_records_for_l_36ae94": "Renewals queue displays sample membership records for layout preview. Mutations are disabled until verified backend contract is supplied.",
+        "no_renewals_found": "No renewal records found.",
         "auto_suspend_settings_cannot_be_saved_until_a_verified_b_2068b9": "Auto-suspend settings cannot be saved until a verified backend configuration contract is supplied.",
         "days_before_suspend": "Days Before Suspend",
         "currently_suspended": "Currently Suspended",

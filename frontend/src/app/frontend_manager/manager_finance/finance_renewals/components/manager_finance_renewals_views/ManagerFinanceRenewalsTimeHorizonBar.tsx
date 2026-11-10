@@ -32,6 +32,8 @@ export default function ManagerFinanceRenewalsTimeHorizonBar({
   onCustomEndDateChange,
   activeCount,
 }: ManagerFinanceRenewalsTimeHorizonBarProps) {
+  const isInvalidDateRange = Boolean(customStartDate && customEndDate && customStartDate > customEndDate);
+
   return (
     <div className="rounded-xl border border-border bg-card p-3 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div className="flex items-center gap-2">
@@ -52,7 +54,7 @@ export default function ManagerFinanceRenewalsTimeHorizonBar({
               key={opt.id}
               type="button"
               onClick={() => onChangeTimeHorizon(opt.id)}
-              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
+              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                 timeHorizon === opt.id
                   ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
                   : 'text-secondary hover:text-primary'
@@ -66,24 +68,35 @@ export default function ManagerFinanceRenewalsTimeHorizonBar({
         {/* Custom Date Range Picker */}
         {timeHorizon === 'custom' && (
           <div className="flex items-center gap-2 flex-wrap text-xs bg-muted p-1.5 rounded-lg border border-border">
-            <label className="flex items-center gap-1 text-secondary">
+            <label className="flex items-center gap-1 text-secondary" htmlFor="manager-renewals-start-date">
               <span>From:</span>
               <input
+                id="manager-renewals-start-date"
                 type="date"
                 value={customStartDate}
+                aria-invalid={isInvalidDateRange}
+                aria-describedby={isInvalidDateRange ? "manager-renewals-date-error" : undefined}
                 onChange={(e) => onCustomStartDateChange(e.target.value)}
-                className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
+                className={`px-2 py-1 bg-card border rounded text-xs text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary ${isInvalidDateRange ? 'border-danger' : 'border-border'}`}
               />
             </label>
-            <label className="flex items-center gap-1 text-secondary">
+            <label className="flex items-center gap-1 text-secondary" htmlFor="manager-renewals-end-date">
               <span>To:</span>
               <input
+                id="manager-renewals-end-date"
                 type="date"
                 value={customEndDate}
+                aria-invalid={isInvalidDateRange}
+                aria-describedby={isInvalidDateRange ? "manager-renewals-date-error" : undefined}
                 onChange={(e) => onCustomEndDateChange(e.target.value)}
-                className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
+                className={`px-2 py-1 bg-card border rounded text-xs text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary ${isInvalidDateRange ? 'border-danger' : 'border-border'}`}
               />
             </label>
+            {isInvalidDateRange && (
+              <span id="manager-renewals-date-error" className="text-danger font-medium text-xs px-1" role="alert">
+                Start date must be before or equal to end date
+              </span>
+            )}
             {(customStartDate || customEndDate) && (
               <button
                 type="button"
@@ -91,7 +104,7 @@ export default function ManagerFinanceRenewalsTimeHorizonBar({
                   onCustomStartDateChange('');
                   onCustomEndDateChange('');
                 }}
-                className="p-1 text-secondary hover:text-danger"
+                className="p-1 text-secondary hover:text-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
                 title="Clear custom dates"
               >
                 <X size={13} />

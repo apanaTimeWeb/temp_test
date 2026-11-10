@@ -48,7 +48,7 @@ export default function ManagerFinanceRenewalsFilterBar({
             type="button"
             key={f.value}
             onClick={() => onFilterChange(f.value)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors ${filter === f.value ? 'bg-primary text-on-primary shadow-sm' : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'}`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${filter === f.value ? 'bg-primary text-on-primary shadow-sm' : 'bg-card border border-border text-secondary hover:text-primary hover:bg-surface-hover'}`}
           >
             {f.emoji} {tManagerUi(f.labelKey)}
           </button>
@@ -60,9 +60,12 @@ export default function ManagerFinanceRenewalsFilterBar({
         <div className="relative w-full sm:w-56">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
           <input
+            id="manager-renewals-search-input"
             type="search"
+            aria-label="Search student, smart ID, or plan"
+            aria-describedby="manager-renewals-search-count"
             placeholder="Search student, smart ID, or plan..."
-            className="mgr-input pl-8 text-xs w-full"
+            className="mgr-input pl-8 text-xs w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             value={searchQuery}
             onChange={(e) => onSearchQueryChange(e.target.value)}
           />
@@ -72,7 +75,7 @@ export default function ManagerFinanceRenewalsFilterBar({
           aria-label="Filter by Shift"
           value={shiftFilter}
           onChange={(e) => onShiftFilterChange(e.target.value)}
-          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[110px]"
+          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer min-w-[110px]"
         >
           <option value="all">All Shifts</option>
           <option value="Morning">Morning</option>
@@ -86,7 +89,7 @@ export default function ManagerFinanceRenewalsFilterBar({
           aria-label="Filter by Plan"
           value={planFilter}
           onChange={(e) => onPlanFilterChange(e.target.value)}
-          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[110px]"
+          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer min-w-[110px]"
         >
           <option value="all">All Plans</option>
           <option value="Basic">Basic</option>
@@ -98,7 +101,7 @@ export default function ManagerFinanceRenewalsFilterBar({
           aria-label="Filter by Balance Due"
           value={dueFilter}
           onChange={(e) => onDueFilterChange(e.target.value)}
-          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[110px]"
+          className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer min-w-[110px]"
         >
           <option value="all">All Dues</option>
           <option value="due_only">Has Due Balance</option>
@@ -108,7 +111,7 @@ export default function ManagerFinanceRenewalsFilterBar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             title="Reset all filters"
           >
             <X size={13} /> Reset
@@ -116,7 +119,7 @@ export default function ManagerFinanceRenewalsFilterBar({
         )}
         </div>
 
-        <span className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">
+        <span id="manager-renewals-search-count" className="mgr-badge mgr-badge--info font-mono text-xs shrink-0">
           {searchedCount} of {totalVisibleCount}
         </span>
       </div>
