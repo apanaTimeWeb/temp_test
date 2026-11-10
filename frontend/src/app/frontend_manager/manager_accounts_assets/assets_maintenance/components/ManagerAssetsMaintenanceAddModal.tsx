@@ -1,10 +1,16 @@
 'use client';
-import { useState, useMemo } from 'react';
+
+import { useMemo, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Wrench, X } from 'lucide-react';
-import { toast } from 'sonner';
 import type { MaintenanceLogItem } from './ManagerAssetsMaintenanceTable';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS } from '@/app/frontend_manager/manager_accounts_assets/assets_register/mocks/manager_assets_register_fixtures/ManagerAssetsRegisterAssetSampleFixtures';
+import {
+  managerAssetsMaintenanceOrderSchema,
+  type ManagerAssetsMaintenanceOrderFormData,
+} from '../schemas/ManagerAssetsMaintenanceSchema';
 
 interface ManagerAssetsMaintenanceAddModalProps {
   isOpen: boolean;
@@ -17,11 +23,37 @@ export function ManagerAssetsMaintenanceAddModal({
   onClose,
   onAddOrder,
 }: ManagerAssetsMaintenanceAddModalProps) {
-  const [assetName, setAssetName] = useState('');
-  const [issue, setIssue] = useState('');
-  const [vendor, setVendor] = useState('');
-  const [cost, setCost] = useState('');
-  const [scheduledDate, setScheduledDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ManagerAssetsMaintenanceOrderFormData>({
+    resolver: zodResolver(managerAssetsMaintenanceOrderSchema),
+    defaultValues: {
+      assetName: '',
+      issue: '',
+      vendor: '',
+      cost: 0,
+      scheduledDate: new Date().toISOString().slice(0, 10),
+    },
+  });
+
+  const selectedAssetName = watch('assetName');
+
+  useEffect(() => {
+    if (isOpen) {
+      reset({
+        assetName: '',
+        issue: '',
+        vendor: '',
+        cost: 0,
+        scheduledDate: new Date().toISOString().slice(0, 10),
+      });
+    }
+  }, [isOpen, reset]);
 
   const assetOptions: ComboboxOption[] = useMemo(() => {
     return MANAGER_ACCOUNTING_SAMPLE_ASSETS.map((a) => ({
@@ -34,116 +66,157 @@ export function ManagerAssetsMaintenanceAddModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!assetName.trim() || !issue.trim()) {
-      toast.error('Asset name and issue description are required.');
-      return;
-    }
+  const onValidSubmit = (data: ManagerAssetsMaintenanceOrderFormData) => {
     const newLog: MaintenanceLogItem = {
       id: Date.now(),
-      assetName: assetName.trim(),
-      issue: issue.trim(),
+      assetName: data.assetName.trim(),
+      issue: data.issue.trim(),
       reportedDate: new Date().toISOString().slice(0, 10),
-      scheduledDate,
-      vendor: vendor.trim() || 'Internal Technician',
-      cost: Number(cost) || 0,
+      scheduledDate: data.scheduledDate,
+      vendor: data.vendor?.trim() || 'Internal Technician',
+      cost: Number(data.cost) || 0,
       status: 'pending',
     };
     onAddOrder(newLog);
-    setAssetName('');
-    setIssue('');
-    setVendor('');
-    setCost('');
+    reset();
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-maintenance-title"
+    >
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-warning-bg text-warning border border-border flex items-center justify-center">
               <Wrench size={18} />
             </div>
-            <h2 className="text-base font-bold text-primary">Log Maintenance Request</h2>
+            <h2 id="add-maintenance-title" className="text-base font-bold text-primary">
+              Log Maintenance Request
+            </h2>
           </div>
-          <button type="button" onClick={onClose} className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-hover">
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-hover"
+            aria-label="Close dialog"
+          >
             <X size={18} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit(onValidSubmit)} className="space-y-3" noValidate>
           <div>
-            <label className="text-xs font-semibold text-secondary block mb-1">Select Registered Asset *</label>
+            <label htmlFor="assetName-combobox" className="text-xs font-semibold text-secondary block mb-1">
+              Select Registered Asset *
+            </label>
             <SearchableCombobox
+              id="assetName-combobox"
               options={assetOptions}
-              value={assetName}
-              onChange={(val) => setAssetName(val)}
+              value={selectedAssetName}
+              onChange={(val) => setValue('assetName', val, { shouldValidate: true })}
               placeholder="Search library assets (e.g. AC Unit, CCTV, Water Purifier)..."
               searchPlaceholder="Type asset name or category..."
               aria-label="Select registered library asset for maintenance"
             />
+            {errors.assetName && (
+              <p id="assetName-error" role="alert" className="text-danger text-[11px] mt-1 font-medium">
+                {errors.assetName.message}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-secondary block mb-1">Issue Description *</label>
+            <label htmlFor="maintenance-issue" className="text-xs font-semibold text-secondary block mb-1">
+              Issue Description *
+            </label>
             <textarea
-              required
+              id="maintenance-issue"
               rows={2}
               placeholder="Describe breakdown or routine servicing requirement..."
-              className="mgr-input w-full mt-1 text-xs"
-              value={issue}
-              onChange={(e) => setIssue(e.target.value)}
+              className={`mgr-input w-full mt-1 text-xs ${errors.issue ? 'border-danger' : ''}`}
+              aria-invalid={Boolean(errors.issue)}
+              aria-describedby={errors.issue ? 'issue-error' : undefined}
+              {...register('issue')}
             />
+            {errors.issue && (
+              <p id="issue-error" role="alert" className="text-danger text-[11px] mt-1 font-medium">
+                {errors.issue.message}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-secondary block mb-1">Assigned Vendor / Tech (Optional)</label>
+              <label htmlFor="maintenance-vendor" className="text-xs font-semibold text-secondary block mb-1">
+                Assigned Vendor (Optional)
+              </label>
               <input
+                id="maintenance-vendor"
                 type="text"
                 placeholder="e.g. Daikin Care Services"
                 className="mgr-input w-full text-xs"
-                value={vendor}
-                onChange={(e) => setVendor(e.target.value)}
+                {...register('vendor')}
               />
             </div>
             <div>
-              <label className="text-xs font-semibold text-secondary block mb-1">Estimated Cost (₹) (Optional)</label>
+              <label htmlFor="maintenance-cost" className="text-xs font-semibold text-secondary block mb-1">
+                Estimated Cost (₹) (Optional)
+              </label>
               <input
+                id="maintenance-cost"
                 type="number"
                 min="0"
+                step="any"
                 placeholder="e.g. 1500"
-                className="mgr-input w-full text-xs"
-                value={cost}
-                onChange={(e) => setCost(e.target.value)}
+                className={`mgr-input w-full text-xs ${errors.cost ? 'border-danger' : ''}`}
+                aria-invalid={Boolean(errors.cost)}
+                aria-describedby={errors.cost ? 'cost-error' : undefined}
+                {...register('cost')}
               />
+              {errors.cost && (
+                <p id="cost-error" role="alert" className="text-danger text-[11px] mt-1 font-medium">
+                  {errors.cost.message}
+                </p>
+              )}
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-secondary block mb-1">Scheduled Date (Optional)</label>
+            <label htmlFor="maintenance-scheduledDate" className="text-xs font-semibold text-secondary block mb-1">
+              Scheduled Date *
+            </label>
             <input
+              id="maintenance-scheduledDate"
               type="date"
-              className="mgr-input w-full text-xs"
-              value={scheduledDate}
-              onChange={(e) => setScheduledDate(e.target.value)}
+              className={`mgr-input w-full text-xs ${errors.scheduledDate ? 'border-danger' : ''}`}
+              aria-invalid={Boolean(errors.scheduledDate)}
+              aria-describedby={errors.scheduledDate ? 'scheduledDate-error' : undefined}
+              {...register('scheduledDate')}
             />
+            {errors.scheduledDate && (
+              <p id="scheduledDate-error" role="alert" className="text-danger text-[11px] mt-1 font-medium">
+                {errors.scheduledDate.message}
+              </p>
+            )}
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="mgr-btn-ghost text-xs"
+              className="mgr-btn-ghost text-xs cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              disabled={!assetName.trim()}
-              className="mgr-btn-primary text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSubmitting}
+              className="mgr-btn-primary text-xs cursor-pointer disabled:opacity-50"
             >
               Log Maintenance Order
             </button>
@@ -153,3 +226,5 @@ export function ManagerAssetsMaintenanceAddModal({
     </div>
   );
 }
+
+export default ManagerAssetsMaintenanceAddModal;

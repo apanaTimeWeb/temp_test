@@ -1,5 +1,5 @@
 'use client';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, Clock, Wrench, CheckCircle2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import ManagerAssetsMaintenanceEmptyState from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/components/ManagerAssetsMaintenanceEmptyState';
 
@@ -71,6 +71,7 @@ export function ManagerAssetsMaintenanceTable({
         <button
           type="button"
           onClick={() => onToggleSort(field)}
+          aria-pressed={isActive}
           className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
@@ -123,8 +124,31 @@ export function ManagerAssetsMaintenanceTable({
                 <td className="py-3 px-4 fin-cell-subtext">{l.vendor}</td>
                 <td className="py-3 px-4 text-right font-semibold fin-text-body">{formatCurrency(l.cost)}</td>
                 <td className="py-3 px-4">
-                  <span className={`fin-badge ${STATUS_BADGE[l.status]}`}>
-                    {l.status === 'pending' ? tManagerUi('pending') : l.status === 'in-progress' ? tManagerUi('in_progress') : l.status === 'completed' ? tManagerUi('completed') : l.status}
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                      l.status === 'pending'
+                        ? 'bg-warning-bg text-warning border border-border'
+                        : l.status === 'in-progress'
+                        ? 'bg-primary-subtle text-primary border border-border'
+                        : 'bg-success-bg text-success border border-border'
+                    }`}
+                  >
+                    {l.status === 'pending' ? (
+                      <>
+                        <Clock size={12} aria-hidden="true" />
+                        <span>{tManagerUi('pending')}</span>
+                      </>
+                    ) : l.status === 'in-progress' ? (
+                      <>
+                        <Wrench size={12} aria-hidden="true" />
+                        <span>{tManagerUi('in_progress')}</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 size={12} aria-hidden="true" />
+                        <span>{tManagerUi('completed')}</span>
+                      </>
+                    )}
                   </span>
                 </td>
                 <td className="py-3 px-4 text-right">
@@ -132,8 +156,8 @@ export function ManagerAssetsMaintenanceTable({
                     <button
                       type="button"
                       onClick={() => onUpdateStatus(l.id, l.status)}
-                      className="fin-badge fin-badge--success cursor-pointer hover:opacity-90"
-                      title="Advance maintenance status"
+                      className="px-2.5 py-1 rounded-lg bg-success hover:opacity-90 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                      title={l.status === 'pending' ? 'Start work on maintenance order' : 'Mark maintenance order as completed'}
                     >
                       {l.status === 'pending' ? 'Start Work' : 'Complete'}
                     </button>

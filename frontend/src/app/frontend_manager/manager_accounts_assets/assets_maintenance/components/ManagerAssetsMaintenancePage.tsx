@@ -12,6 +12,7 @@ import {
   type MaintenanceLogItem,
 } from './ManagerAssetsMaintenanceTable';
 import { ManagerAssetsMaintenanceAddModal } from './ManagerAssetsMaintenanceAddModal';
+import { ManagerAssetsMaintenanceConfirmModal } from './ManagerAssetsMaintenanceConfirmModal';
 
 // RESPONSIBILITY: Entry page for the manager_asset_maintenance module.
 // DATA FLOW: Next.js Router -> Page -> Components
@@ -29,16 +30,31 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
   const [sortField, setSortField] = useState<MaintenanceSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [pendingStatusTransition, setPendingStatusTransition] = useState<{
+    logItem: MaintenanceLogItem;
+    nextStatus: string;
+  } | null>(null);
 
   const handleCreateOrder = (newLog: MaintenanceLogItem) => {
     setLogsList([newLog, ...logsList]);
     toast.success(`Maintenance request for "${newLog.assetName}" logged successfully.`);
   };
 
-  const handleUpdateStatus = (logId: number, currentStatus: string) => {
+  const handleRequestUpdateStatus = (logId: number, currentStatus: string) => {
+    const logItem = logsList.find((l) => l.id === logId);
+    if (!logItem) return;
     const nextStatus = currentStatus === 'pending' ? 'in-progress' : 'completed';
-    setLogsList((prev) => prev.map((l) => (l.id === logId ? { ...l, status: nextStatus } : l)));
-    toast.success(`Work order status updated to ${nextStatus.toUpperCase()}!`);
+    setPendingStatusTransition({ logItem, nextStatus });
+  };
+
+  const handleConfirmUpdateStatus = () => {
+    if (!pendingStatusTransition) return;
+    const { logItem, nextStatus } = pendingStatusTransition;
+    setLogsList((prev) =>
+      prev.map((l) => (l.id === logItem.id ? { ...l, status: nextStatus as MaintenanceLogItem['status'] } : l))
+    );
+    toast.success(`Work order for "${logItem.assetName}" updated to ${nextStatus.toUpperCase()}!`);
+    setPendingStatusTransition(null);
   };
 
   const toggleSort = (field: MaintenanceSortField) => {
@@ -100,9 +116,18 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
     anchor.click();
     document.body.removeChild(anchor);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success('Maintenance register exported to CSV successfully.');
   };
 
   const totalCost = logsList.filter((l) => l.status === 'completed').reduce((s, l) => s + l.cost, 0);
+  const totalCount = logsList.length || 1;
+  const completedCount = logsList.filter((l) => l.status === 'completed').length;
+  const inProgressCount = logsList.filter((l) => l.status === 'in-progress').length;
+  const pendingCount = logsList.filter((l) => l.status === 'pending').length;
+  const completedPct = Math.round((completedCount / totalCount) * 100);
+  const inProgressPct = Math.round((inProgressCount / totalCount) * 100);
+  const pendingPct = Math.max(0, 100 - completedPct - inProgressPct);
+
   const totalRows = sortedRows.length;
   const pageCount = Math.max(1, Math.ceil(totalRows / pageSize));
   const effectivePage = Math.min(page, pageCount - 1);
@@ -159,14 +184,14 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
           <span className="text-xs text-secondary">{logsList.length} Total Service Tickets</span>
         </div>
         <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
-          <div className="w-[60%] bg-success h-full" title="Completed (60%)" />
-          <div className="w-[25%] bg-info h-full" title="In Progress (25%)" />
-          <div className="w-[15%] bg-warning h-full" title="Pending (15%)" />
+          <div style={{ width: `${completedPct}%` }} className="bg-success h-full transition-all duration-300" title={`Completed (${completedPct}%)`} />
+          <div style={{ width: `${inProgressPct}%` }} className="bg-info h-full transition-all duration-300" title={`In Progress (${inProgressPct}%)`} />
+          <div style={{ width: `${pendingPct}%` }} className="bg-warning h-full transition-all duration-300" title={`Pending (${pendingPct}%)`} />
         </div>
         <div className="flex flex-wrap gap-4 mt-3 text-xs text-secondary">
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-success" /> Completed (60%)</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-info" /> In Progress (25%)</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-warning" /> Pending (15%)</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-success" /> Completed ({completedPct}%)</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-info" /> In Progress ({inProgressPct}%)</span>
+          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-warning" /> Pending ({pendingPct}%)</span>
         </div>
       </div>
 
@@ -209,7 +234,7 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         sortDirection={sortDirection}
         onToggleSort={toggleSort}
         formatCurrency={formatManagerAssetMaintenanceCurrency}
-        onUpdateStatus={handleUpdateStatus}
+        onUpdateStatus={handleRequestUpdateStatus}
         page={page}
         pageSize={pageSize}
         pageCount={pageCount}
@@ -228,6 +253,14 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAddOrder={handleCreateOrder}
+      />
+
+      <ManagerAssetsMaintenanceConfirmModal
+        isOpen={Boolean(pendingStatusTransition)}
+        logItem={pendingStatusTransition?.logItem ?? null}
+        nextStatus={pendingStatusTransition?.nextStatus ?? null}
+        onConfirm={handleConfirmUpdateStatus}
+        onCancel={() => setPendingStatusTransition(null)}
       />
     </div>
   );
