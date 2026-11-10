@@ -10,7 +10,6 @@ import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES as MANAGER_ID_CARD_GENERATOR_R
 import { MANAGER_SEATS_MATRIX_ROUTES as MANAGER_SEAT_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
 import { MANAGER_SEATS_HISTORY_ROUTES as MANAGER_SEAT_HISTORY_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/config/manager_seats_history.url_config';
 import { MANAGER_LOCKERS_MANAGEMENT_ROUTES as MANAGER_LOCKERS_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/config/manager_lockers_management.url_config';
-import { MANAGER_LOCKERS_MATRIX_ROUTES as MANAGER_LOCKER_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_matrix/config/manager_lockers_matrix.url_config';
 import { MANAGER_FINANCE_COLLECT_FEE_ROUTES } from '@/app/frontend_manager/manager_finance/finance_collect_fee/config/manager_finance_collect_fee.url_config';
 import { MANAGER_FINANCE_SUBSCRIPTIONS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_subscriptions/config/manager_finance_subscriptions.url_config';
 import { MANAGER_FINANCE_RENEWALS_ROUTES } from '@/app/frontend_manager/manager_finance/finance_renewals/config/manager_finance_renewals.url_config';
@@ -148,7 +147,6 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_SEAT_MATRIX_ROUTES.root, icon: LayoutGrid, labelKey: 'nav_seat_matrix' },
   { kind: 'link', href: MANAGER_SEAT_HISTORY_ROUTES.root, icon: History, labelKey: 'nav_seat_history' },
   { kind: 'link', href: MANAGER_LOCKERS_ROUTES.root, icon: Lock, labelKey: 'nav_lockers' },
-  { kind: 'link', href: MANAGER_LOCKER_MATRIX_ROUTES.root, icon: LayoutGrid, labelKey: 'nav_locker_matrix' },
   { kind: 'group', labelKey: 'group_finance' },
   { kind: 'link', href: MANAGER_FINANCE_COLLECT_FEE_ROUTES.root, icon: IndianRupee, labelKey: 'nav_collect_fee' },
   { kind: 'link', href: MANAGER_FINANCE_SUBSCRIPTIONS_ROUTES.root, icon: FileText, labelKey: 'nav_subscriptions' },
