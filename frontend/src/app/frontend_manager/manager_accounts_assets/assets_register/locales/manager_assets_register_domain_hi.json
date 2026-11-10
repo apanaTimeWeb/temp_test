@@ -172,7 +172,7 @@
         "invalid_resource_description": "इस लिंक में मान्य रिकॉर्ड पहचानकर्ता नहीं है। सुविधा सूची पर लौटें और रिकॉर्ड फिर से खोलें।",
         "previous_page": "पिछला पृष्ठ",
         "next_page": "अगला पृष्ठ",
-        "confirm_leave_with_unsaved_changes": "لديك تغييرات غير محفوظة. هل تريد مغادرة الصفحة والتخلص منها؟"
+        "confirm_leave_with_unsaved_changes": "आपके पास बिना सहेजे परिवर्तन हैं। क्या आप इस पृष्ठ को छोड़ना चाहते हैं?"
       },
       "errors": {
         "GENERIC_TITLE": "कुछ गलत हुआ",
