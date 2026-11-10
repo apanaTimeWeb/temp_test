@@ -34,7 +34,7 @@ export function ManagerAccountsDailySettlementToolbar({
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-border pb-4">
       <div className="flex items-center gap-2 flex-wrap">
         <h2 className="text-base font-bold text-primary">Shift Settlements Register</h2>
-        <span className="mgr-badge mgr-badge--info text-xs font-mono">
+        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono font-medium bg-primary-subtle text-primary border border-border">
           Showing {filteredCount} of {totalCount} Shifts ({dateScopeLabel})
         </span>
       </div>

@@ -12,6 +12,7 @@ import { useManagerDailySettlementCurrencyFormatter } from '@/app/frontend_manag
 import { ManagerAccountsDailySettlementKpis } from './ManagerAccountsDailySettlementKpis';
 import { ManagerAccountsDailySettlementToolbar } from './ManagerAccountsDailySettlementToolbar';
 import ManagerAccountsDailySettlementTimeHorizonBar, { type ManagerDailySettlementTimeHorizon } from './ManagerAccountsDailySettlementTimeHorizonBar';
+import ManagerAccountsDailySettlementConfirmModal from '../manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementConfirmModal';
 
 function toLocalDateInputValue(date: Date): string {
   const year = date.getFullYear();
@@ -38,6 +39,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const [statusFilter, setStatusFilter] = useState('all');
   const [shiftFilter, setShiftFilter] = useState('all');
   const [isSyncing, setIsSyncing] = useState(false);
+  const [pendingSettlementShift, setPendingSettlementShift] = useState<string | null>(null);
 
   const dateScopeLabel = useMemo(() => {
     switch (timeHorizon) {
@@ -75,13 +77,20 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
 
   const hasActiveFilters = Boolean(searchQuery.trim() !== '' || statusFilter !== 'all' || shiftFilter !== 'all');
 
-  const handleSettleShift = (shiftName: string) => {
+  const handleRequestSettleShift = (shiftName: string) => {
+    setPendingSettlementShift(shiftName);
+  };
+
+  const handleConfirmSettleShift = () => {
+    if (!pendingSettlementShift) return;
+    const shiftToSettle = pendingSettlementShift;
     setEntries((prev) =>
       prev.map((e) =>
-        e.shift === shiftName ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' } : e
+        e.shift === shiftToSettle ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' } : e
       )
     );
-    toast.success(`Shift "${shiftName}" settlement confirmed successfully! (Physical cash verified)`);
+    toast.success(`Shift "${shiftToSettle}" settlement confirmed successfully! (Physical cash verified)`);
+    setPendingSettlementShift(null);
   };
 
   const escapeCsvCell = (val: unknown) => {
@@ -101,7 +110,8 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `daily_settlement_${dateScopeLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
+    const safeScope = dateScopeLabel.toLowerCase().replace(/[^a-z0-9_-]+/g, '_');
+    anchor.download = `daily_settlement_${safeScope}_${new Date().toISOString().slice(0, 10)}.csv`;
     anchor.hidden = true;
     document.body.appendChild(anchor);
     anchor.click();
@@ -132,7 +142,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
           action: tManagerUi('action'),
         },
         formatCurrency: formatManagerDailySettlementCurrency,
-        onSettleShift: handleSettleShift,
+        onSettleShift: handleRequestSettleShift,
       }),
     [tManagerUi, formatManagerDailySettlementCurrency]
   );
@@ -151,7 +161,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
                 Shift Balancing & Reconciliation
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
-                📍 Central Branch
+                📍 Assigned Branch Drawer
               </span>
             </div>
 
@@ -269,6 +279,13 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
           </div>
         )}
       </div>
+
+      <ManagerAccountsDailySettlementConfirmModal
+        isOpen={Boolean(pendingSettlementShift)}
+        shiftName={pendingSettlementShift}
+        onConfirm={handleConfirmSettleShift}
+        onCancel={() => setPendingSettlementShift(null)}
+      />
     </div>
   );
 }

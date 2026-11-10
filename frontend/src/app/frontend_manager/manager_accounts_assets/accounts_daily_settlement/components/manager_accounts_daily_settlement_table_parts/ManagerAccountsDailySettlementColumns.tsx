@@ -1,5 +1,5 @@
 'use client';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Clock } from 'lucide-react';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import type { NativeColumn, NativeCellParams } from './ManagerAccountsDailySettlementNativeTable';
 
@@ -95,9 +95,15 @@ export function createManagerAccountsDailySettlementColumns({
       field: 'settledBy',
       headerName: labels.settledBy,
       width: 150,
-      cellRenderer: (p: NativeCellParams) => (
-        <span className="text-secondary text-xs">{p.value || '—'}</span>
-      ),
+      cellRenderer: (p: NativeCellParams) => {
+        const val = typeof p.value === 'string' ? p.value.trim() : '';
+        const isMissing = !val || val === '—' || val === '-';
+        return (
+          <span className={isMissing ? 'text-secondary/50 italic text-xs' : 'text-secondary text-xs'}>
+            {isMissing ? '—' : val}
+          </span>
+        );
+      },
     },
     {
       field: 'status',
@@ -105,17 +111,23 @@ export function createManagerAccountsDailySettlementColumns({
       width: 120,
       cellRenderer: (p: NativeCellParams) => (
         <span
-          className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
             p.value === 'settled'
               ? 'bg-success-bg text-success border border-border'
               : 'bg-warning-bg text-warning border border-border'
           }`}
         >
-          {p.value === 'settled'
-            ? labels.completed
-            : p.value === 'pending'
-            ? labels.pending
-            : labels.status}
+          {p.value === 'settled' ? (
+            <>
+              <CheckCircle2 size={12} aria-hidden="true" />
+              <span>{labels.completed}</span>
+            </>
+          ) : (
+            <>
+              <Clock size={12} aria-hidden="true" />
+              <span>{p.value === 'pending' ? labels.pending : labels.status}</span>
+            </>
+          )}
         </span>
       ),
     },

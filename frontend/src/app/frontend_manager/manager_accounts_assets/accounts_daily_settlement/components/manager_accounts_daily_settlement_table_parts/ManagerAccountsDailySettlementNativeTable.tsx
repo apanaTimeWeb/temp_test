@@ -58,6 +58,7 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
                     type="button"
                     className={`group inline-flex items-center gap-1.5 ${isRightAligned ? 'justify-end w-full' : 'text-left'}`}
                     onClick={() => changeSort(String(column.field))}
+                    aria-pressed={sortField === column.field}
                     aria-label={`Sort by ${column.headerName ?? column.field}, currently ${sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'unsorted'}`}
                   >
                     <span>{column.headerName ?? column.field}</span>
@@ -106,11 +107,11 @@ export default function ManagerAccountsDailySettlementNativeTable<T extends obje
       </span>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
-          <label htmlFor={`rows-per-page-${sortField ?? 'daily-settlement'}`} className="text-xs text-secondary whitespace-nowrap">
+          <label htmlFor="rows-per-page-daily-settlement" className="text-xs text-secondary whitespace-nowrap">
             Rows per page:
           </label>
           <select
-            id={`rows-per-page-${sortField ?? 'daily-settlement'}`}
+            id="rows-per-page-daily-settlement"
             value={pageSize}
             onChange={(e) => {
               setPageSize(Number(e.target.value));
