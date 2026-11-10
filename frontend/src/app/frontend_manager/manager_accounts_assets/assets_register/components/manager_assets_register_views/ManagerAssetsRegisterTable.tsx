@@ -1,5 +1,5 @@
 'use client';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, Package, CheckCircle2, Wrench, Archive } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import { ManagerAssetsRegisterEmptyState } from '@/app/frontend_manager/manager_accounts_assets/assets_register/components/manager_assets_register_empty_states/ManagerAssetsRegisterEmptyState';
@@ -61,6 +61,7 @@ export function ManagerAssetsRegisterTable({
         <button
           type="button"
           onClick={() => onToggleSort(field)}
+          aria-pressed={isActive}
           className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
@@ -97,7 +98,9 @@ export function ManagerAssetsRegisterTable({
             <tr>
               <td colSpan={6}>
                 <ManagerAssetsRegisterEmptyState className="fin-empty-state">
-                  <div className="fin-empty-state__icon">🏷️</div>
+                  <div className="fin-empty-state__icon flex justify-center py-2">
+                    <Package size={36} className="text-secondary/60" aria-hidden="true" />
+                  </div>
                   <p className="fin-empty-state__title">
                     {searchQuery ? 'No assets matching your search query.' : tManagerUi('no_assets_found')}
                   </p>
@@ -109,7 +112,7 @@ export function ManagerAssetsRegisterTable({
               <tr
                 key={a.id}
                 className={`fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12 ${
-                  a.status === 'disposed' ? 'opacity-50' : ''
+                  a.status === 'disposed' ? 'opacity-60' : ''
                 }`}
               >
                 <td className="py-3 px-4 fin-cell-name font-semibold">{a.name}</td>
@@ -122,7 +125,32 @@ export function ManagerAssetsRegisterTable({
                 </td>
                 <td className="py-3 px-4 fin-cell-subtext">{a.location}</td>
                 <td className="py-3 px-4">
-                  <span className={`fin-badge ${STATUS_BADGE[a.status]}`}>{statusLabel(a.status)}</span>
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                      a.status === 'active'
+                        ? 'bg-success-bg text-success border border-border'
+                        : a.status === 'maintenance'
+                        ? 'bg-warning-bg text-warning border border-border'
+                        : 'bg-muted text-secondary border border-border'
+                    }`}
+                  >
+                    {a.status === 'active' ? (
+                      <>
+                        <CheckCircle2 size={12} aria-hidden="true" />
+                        <span>{statusLabel(a.status)}</span>
+                      </>
+                    ) : a.status === 'maintenance' ? (
+                      <>
+                        <Wrench size={12} aria-hidden="true" />
+                        <span>{statusLabel(a.status)}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Archive size={12} aria-hidden="true" />
+                        <span>{statusLabel(a.status)}</span>
+                      </>
+                    )}
+                  </span>
                 </td>
               </tr>
             ))

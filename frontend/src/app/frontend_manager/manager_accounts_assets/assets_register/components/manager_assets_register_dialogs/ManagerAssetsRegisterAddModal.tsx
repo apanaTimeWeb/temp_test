@@ -1,8 +1,14 @@
 'use client';
-import { useState } from 'react';
+
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ShieldCheck, X, IndianRupee, CheckCircle } from 'lucide-react';
-import { toast } from 'sonner';
 import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
+import {
+  managerAssetsRegisterAssetFormSchema,
+  type ManagerAssetsRegisterAssetFormData,
+} from '../../schemas/ManagerAssetsRegisterAssetFormSchema';
 
 interface ManagerAssetsRegisterAddModalProps {
   isOpen: boolean;
@@ -15,77 +21,111 @@ export function ManagerAssetsRegisterAddModal({
   onClose,
   onAddAsset,
 }: ManagerAssetsRegisterAddModalProps) {
-  const [assetName, setAssetName] = useState('');
-  const [assetCategory, setAssetCategory] = useState<string>('Appliance');
-  const [assetValue, setAssetValue] = useState('');
-  const [assetLocation, setAssetLocation] = useState('North Reading Hall (AC)');
-  const [assetDate, setAssetDate] = useState(() => new Date().toISOString().slice(0, 10));
-  const [assetStatus, setAssetStatus] = useState<ManagerAssetsRegisterAsset['status']>('active');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ManagerAssetsRegisterAssetFormData>({
+    resolver: zodResolver(managerAssetsRegisterAssetFormSchema),
+    defaultValues: {
+      name: '',
+      category: 'Appliance',
+      purchaseValue: 0,
+      location: 'North Reading Hall (AC)',
+      purchaseDate: new Date().toISOString().slice(0, 10),
+      status: 'active',
+    },
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      reset({
+        name: '',
+        category: 'Appliance',
+        purchaseValue: 0,
+        location: 'North Reading Hall (AC)',
+        purchaseDate: new Date().toISOString().slice(0, 10),
+        status: 'active',
+      });
+    }
+  }, [isOpen, reset]);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!assetName.trim()) {
-      toast.error('Asset name is required.');
-      return;
-    }
-    const val = Number(assetValue);
-    if (!val || val <= 0) {
-      toast.error('Valid purchase value is required.');
-      return;
-    }
-
+  const onValidSubmit = (data: ManagerAssetsRegisterAssetFormData) => {
+    const valInPaise = Math.round(Number(data.purchaseValue) * 100);
     const newAsset: ManagerAssetsRegisterAsset = {
       id: Date.now(),
-      name: assetName.trim(),
-      category: assetCategory,
-      purchaseDate: assetDate,
-      purchaseValue: Math.round(val * 100),
-      currentValue: Math.round(val * 100),
-      location: assetLocation.trim() || 'Floor 1',
-      status: assetStatus,
+      name: data.name.trim(),
+      category: data.category,
+      purchaseDate: data.purchaseDate,
+      purchaseValue: valInPaise,
+      currentValue: valInPaise,
+      location: data.location.trim() || 'Main Branch Hall',
+      status: data.status,
     };
 
     onAddAsset(newAsset);
-    setAssetName('');
-    setAssetValue('');
+    reset();
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-asset-title"
+    >
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">
             <ShieldCheck size={18} className="text-primary" />
-            <h2 className="text-base font-bold text-primary">Add Library Physical Asset</h2>
+            <h2 id="add-asset-title" className="text-base font-bold text-primary">
+              Add Library Physical Asset
+            </h2>
           </div>
-          <button type="button" onClick={onClose} className="text-secondary hover:text-primary">
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-secondary hover:text-primary p-1 rounded-lg hover:bg-surface-hover"
+            aria-label="Close dialog"
+          >
             <X size={18} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3.5">
+        <form onSubmit={handleSubmit(onValidSubmit)} className="space-y-3.5" noValidate>
           <div>
-            <label className="text-xs font-semibold text-primary block mb-1">Asset Name / Model *</label>
+            <label htmlFor="asset-name" className="text-xs font-semibold text-primary block mb-1">
+              Asset Name / Model *
+            </label>
             <input
+              id="asset-name"
               type="text"
-              required
-              className="mgr-input text-xs"
+              className={`mgr-input text-xs ${errors.name ? 'border-danger' : ''}`}
               placeholder="e.g. Daikin Inverter Split AC 1.5 Ton"
-              value={assetName}
-              onChange={(e) => setAssetName(e.target.value)}
+              aria-invalid={Boolean(errors.name)}
+              aria-describedby={errors.name ? 'asset-name-error' : undefined}
+              {...register('name')}
             />
+            {errors.name && (
+              <p id="asset-name-error" role="alert" className="text-danger text-[11px] mt-1 font-medium">
+                {errors.name.message}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Category *</label>
+              <label htmlFor="asset-category" className="text-xs font-semibold text-primary block mb-1">
+                Category *
+              </label>
               <select
+                id="asset-category"
                 className="mgr-select text-xs"
-                value={assetCategory}
-                onChange={(e) => setAssetCategory(e.target.value as ManagerAssetsRegisterAsset['category'])}
+                {...register('category')}
               >
                 <option value="Appliance">Appliance (AC, RO, Water Cooler)</option>
                 <option value="Electronics">Electronics (Inverter, Wi-Fi)</option>
@@ -94,61 +134,99 @@ export function ManagerAssetsRegisterAddModal({
               </select>
             </div>
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Purchase Cost (INR) *</label>
+              <label htmlFor="asset-value" className="text-xs font-semibold text-primary block mb-1">
+                Purchase Cost (INR) *
+              </label>
               <div className="relative">
                 <IndianRupee size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
                 <input
+                  id="asset-value"
                   type="number"
-                  required
-                  min="1"
-                  className="mgr-input pl-8 text-xs font-mono font-bold"
+                  step="0.01"
+                  min="0.01"
+                  className={`mgr-input pl-8 text-xs font-mono font-bold ${errors.purchaseValue ? 'border-danger' : ''}`}
                   placeholder="0.00"
-                  value={assetValue}
-                  onChange={(e) => setAssetValue(e.target.value)}
+                  aria-invalid={Boolean(errors.purchaseValue)}
+                  aria-describedby={errors.purchaseValue ? 'asset-value-error' : undefined}
+                  {...register('purchaseValue')}
                 />
               </div>
+              {errors.purchaseValue && (
+                <p id="asset-value-error" role="alert" className="text-danger text-[11px] mt-1 font-medium">
+                  {errors.purchaseValue.message}
+                </p>
+              )}
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Installation Location (Optional)</label>
+              <label htmlFor="asset-location" className="text-xs font-semibold text-primary block mb-1">
+                Installation Location *
+              </label>
               <input
+                id="asset-location"
                 type="text"
-                className="mgr-input text-xs"
+                className={`mgr-input text-xs ${errors.location ? 'border-danger' : ''}`}
                 placeholder="e.g. North Hall / 2nd Floor"
-                value={assetLocation}
-                onChange={(e) => setAssetLocation(e.target.value)}
+                aria-invalid={Boolean(errors.location)}
+                aria-describedby={errors.location ? 'asset-location-error' : undefined}
+                {...register('location')}
               />
+              {errors.location && (
+                <p id="asset-location-error" role="alert" className="text-danger text-[11px] mt-1 font-medium">
+                  {errors.location.message}
+                </p>
+              )}
             </div>
             <div>
-              <label className="text-xs font-semibold text-primary block mb-1">Purchase Date (Optional)</label>
+              <label htmlFor="asset-date" className="text-xs font-semibold text-primary block mb-1">
+                Purchase Date *
+              </label>
               <input
+                id="asset-date"
                 type="date"
-                className="mgr-input text-xs"
-                value={assetDate}
-                onChange={(e) => setAssetDate(e.target.value)}
+                className={`mgr-input text-xs ${errors.purchaseDate ? 'border-danger' : ''}`}
+                aria-invalid={Boolean(errors.purchaseDate)}
+                aria-describedby={errors.purchaseDate ? 'asset-date-error' : undefined}
+                {...register('purchaseDate')}
               />
+              {errors.purchaseDate && (
+                <p id="asset-date-error" role="alert" className="text-danger text-[11px] mt-1 font-medium">
+                  {errors.purchaseDate.message}
+                </p>
+              )}
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-primary block mb-1">Initial Condition Status</label>
+            <label htmlFor="asset-status" className="text-xs font-semibold text-primary block mb-1">
+              Initial Condition Status
+            </label>
             <select
+              id="asset-status"
               className="mgr-select text-xs"
-              value={assetStatus}
-              onChange={(e) => setAssetStatus(e.target.value as ManagerAssetsRegisterAsset['status'])}
+              {...register('status')}
             >
               <option value="active">Active & Operational</option>
               <option value="maintenance">Under Maintenance / AMC</option>
+              <option value="disposed">Disposed / Decommissioned</option>
             </select>
           </div>
 
           <div className="flex justify-end gap-2.5 pt-3 border-t border-border">
-            <button type="button" onClick={onClose} className="mgr-btn-ghost text-xs">
+            <button
+              type="button"
+              onClick={onClose}
+              className="mgr-btn-ghost text-xs cursor-pointer"
+            >
               Cancel
             </button>
-            <button type="submit" className="mgr-btn-primary text-xs flex items-center gap-1.5">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="mgr-btn-primary text-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            >
               <CheckCircle size={14} /> Register Asset
             </button>
           </div>
@@ -158,3 +236,4 @@ export function ManagerAssetsRegisterAddModal({
   );
 }
 
+export default ManagerAssetsRegisterAddModal;

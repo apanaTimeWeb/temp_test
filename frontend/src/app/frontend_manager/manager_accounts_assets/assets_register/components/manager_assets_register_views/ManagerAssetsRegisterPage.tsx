@@ -3,6 +3,7 @@ import type { ManagerAssetsRegisterMainProps } from '@/app/frontend_manager/mana
 import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { Plus, Search, Download } from 'lucide-react';
+import { toast } from 'sonner';
 import { useManagerAssetsCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterFormattingHook';
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS, type ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import {
@@ -10,6 +11,7 @@ import {
   type AssetSortField,
 } from './ManagerAssetsRegisterTable';
 import { ManagerAssetsRegisterAddModal } from '../manager_assets_register_dialogs/ManagerAssetsRegisterAddModal';
+import { ManagerAssetsRegisterConfirmModal } from '../manager_assets_register_dialogs/ManagerAssetsRegisterConfirmModal';
 
 export default function ManagerAssetsRegisterPage({ view, id, name, phone, smartId }: ManagerAssetsRegisterMainProps) {
   const tManagerUi = useTranslations('manager.manager_assets.ui');
@@ -21,7 +23,7 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
+  const [pendingNewAsset, setPendingNewAsset] = useState<ManagerAssetsRegisterAsset | null>(null);
   const [sortField, setSortField] = useState<AssetSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
@@ -86,11 +88,18 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
   const effectivePage = Math.min(page, pageCount - 1);
   const paginated = sortedRows.slice(effectivePage * pageSize, (effectivePage + 1) * pageSize);
 
-  const handleAddAsset = (newAsset: ManagerAssetsRegisterAsset) => {
-    setAssets([newAsset, ...assets]);
-    setFeedbackToast(`Asset "${newAsset.name}" successfully added to Library Register!`);
-    setTimeout(() => setFeedbackToast(null), 4000);
+  const handleRequestAddAsset = (newAsset: ManagerAssetsRegisterAsset) => {
+    setPendingNewAsset(newAsset);
   };
+
+  const handleConfirmAddAsset = () => {
+    if (!pendingNewAsset) return;
+    setAssets([pendingNewAsset, ...assets]);
+    toast.success(`Asset "${pendingNewAsset.name}" successfully added to Library Register!`);
+    setPendingNewAsset(null);
+  };
+
+  const totalBookValue = assets.filter((a) => a.status !== 'disposed').reduce((s, a) => s + a.currentValue, 0);
 
   const escapeCsv = (v: unknown) => {
     let s = String(v ?? '');
@@ -113,6 +122,7 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
     anchor.click();
     document.body.removeChild(anchor);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success('Assets register exported to CSV successfully.');
   };
 
   return (
@@ -145,14 +155,7 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
         </div>
       </div>
 
-      {feedbackToast && (
-        <div className="p-3 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center gap-2" role="status">
-          <span>✓</span>
-          <span>{feedbackToast}</span>
-        </div>
-      )}
-
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="fin-kpi-card">
           <p className="fin-kpi-label">{tManagerUi('total_assets')}</p>
           <p className="fin-kpi-value">{assets.length}</p>
@@ -164,6 +167,10 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
         <div className="fin-kpi-card">
           <p className="fin-kpi-label fin-text-muted">{tManagerUi('disposed')}</p>
           <p className="fin-kpi-value fin-text-muted">{assets.filter((a) => a.status === 'disposed').length}</p>
+        </div>
+        <div className="fin-kpi-card">
+          <p className="fin-kpi-label">Total Book Value</p>
+          <p className="fin-kpi-value font-mono font-bold text-primary">{formatManagerAssetsCurrency(totalBookValue)}</p>
         </div>
       </div>
 
@@ -219,7 +226,14 @@ export default function ManagerAssetsRegisterPage({ view, id, name, phone, smart
       <ManagerAssetsRegisterAddModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        onAddAsset={handleAddAsset}
+        onAddAsset={handleRequestAddAsset}
+      />
+
+      <ManagerAssetsRegisterConfirmModal
+        isOpen={Boolean(pendingNewAsset)}
+        assetData={pendingNewAsset}
+        onConfirm={handleConfirmAddAsset}
+        onCancel={() => setPendingNewAsset(null)}
       />
     </div>
   );
