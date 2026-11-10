@@ -8,7 +8,7 @@ export const MANAGER_SEATS_MATRIX_ROUTES = {
   seatMatrix: '/frontend_manager/manager_seats_shifts_lockers/seats_matrix',
   seatHistory: '/frontend_manager/manager_seats_shifts_lockers/seats_history',
   shiftMigration: '/frontend_manager/manager_seats_shifts_lockers/seats_matrix',
-  lockerMatrix: '/frontend_manager/manager_seats_shifts_lockers/lockers_matrix',
+  lockerMatrix: '/frontend_manager/manager_seats_shifts_lockers/lockers_management',
   allocations: '/frontend_manager/manager_seats_shifts_lockers/seats_matrix',
   lockersList: '/frontend_manager/manager_seats_shifts_lockers/lockers_management',
   ASSIGN_STUDENT: '/frontend_manager/manager_members/members_new_admission',
