@@ -69,7 +69,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
                     <p className="fin-receipt-total-amount">{total > 0 ? formatCurrency(toMinorUnits(total)) : formatCurrency(0)}</p>
                   </div>
                   <button type="button"
-                    className={`fin-receipt-paid-badge w-full border-0 motion-safe:transition-all motion-safe:duration-base ${(!isCollectAvailable || !selectedStudent || !amount || parseFloat(amount) <= 0 || isSubmitting) ? 'fin-receipt-paid-badge--disabled cursor-not-allowed' : 'bg-success text-on-success cursor-pointer'}`}
+                    className={`fin-receipt-paid-badge w-full border-0 motion-safe:transition-all motion-safe:duration-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success focus-visible:ring-offset-2 ${(!isCollectAvailable || !selectedStudent || !amount || parseFloat(amount) <= 0 || isSubmitting) ? 'fin-receipt-paid-badge--disabled cursor-not-allowed' : 'bg-success text-on-success cursor-pointer'}`}
                     data-testid="manager-finance-collect-submit"
                     onClick={onCollect}
                     disabled={!isCollectAvailable || !selectedStudent || !amount || parseFloat(amount) <= 0 || isSubmitting}
@@ -92,14 +92,20 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
                   <button
                     type="button"
                     onClick={handleSendReceiptWhatsApp}
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                     title="Send Fee Receipt via WhatsApp"
                   >
                     <MessageSquare size={15} />
                     <span>Send Receipt via WhatsApp</span>
                   </button>
                 )}
-                <button type="button" className="fin-receipt-btn-secondary flex items-center justify-center gap-2 w-full" onClick={onCancel}><X size={16} /> {tManagerUi('cancel')}</button>
+                <button
+                  type="button"
+                  className="fin-receipt-btn-secondary flex items-center justify-center gap-2 w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                  onClick={onCancel}
+                >
+                  <X size={16} /> {tManagerUi('cancel')}
+                </button>
               </div>
             </div>
           </div>

@@ -42,7 +42,7 @@ export default function ManagerFinanceCollectFeeDurationSelector({
               onToggleCustomDuration(true);
             }
           }}
-          className="text-xs text-primary font-medium hover:underline cursor-pointer"
+          className="text-xs text-primary font-medium hover:underline cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
         >
           {isCustomDuration ? 'Standard Cycle' : '+ Custom Duration'}
         </button>
@@ -50,7 +50,7 @@ export default function ManagerFinanceCollectFeeDurationSelector({
       {!isCustomDuration ? (
         <select
           id="rbg4-managerfinancecollectfeepage-128"
-          className="fin-select w-full mt-1"
+          className="fin-select w-full mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           value={monthsToRenew}
           onChange={(e) => {
             const val = e.target.value;
@@ -73,10 +73,12 @@ export default function ManagerFinanceCollectFeeDurationSelector({
       ) : (
         <div className="flex gap-2 mt-1 items-center">
           <input
+            id="manager-collect-fee-custom-duration"
+            name="customDurationMonths"
             type="number"
             min="1"
             max="36"
-            className="fin-input flex-1"
+            className="fin-input flex-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             placeholder="Enter custom months (e.g. 2, 4, 8, 18)"
             value={monthsToRenew}
             onChange={(e) => {

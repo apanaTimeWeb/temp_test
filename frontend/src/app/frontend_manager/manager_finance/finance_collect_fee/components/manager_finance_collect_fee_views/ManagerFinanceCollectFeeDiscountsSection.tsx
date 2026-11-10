@@ -51,12 +51,16 @@ export default function ManagerFinanceCollectFeeDiscountsSection({
         <div className="flex gap-2 mt-1">
           <input
             id="rbg4-managerfinancecollectfeepage-160"
-            className="fin-input flex-1"
+            className="fin-input flex-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             placeholder={enterCouponCodePlaceholder}
             value={couponCode}
             onChange={(e) => onCouponCodeChange(e.target.value)}
           />
-          <button type="button" className="fin-badge fin-badge--neutral cursor-pointer" onClick={onApplyCoupon}>
+          <button
+            type="button"
+            className="fin-badge fin-badge--neutral cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            onClick={onApplyCoupon}
+          >
             {applyLabel}
           </button>
         </div>
@@ -83,7 +87,7 @@ export default function ManagerFinanceCollectFeeDiscountsSection({
         <input
           id="manager-collect-fee-late-fee"
           type="number"
-          className="fin-input w-full mt-1"
+          className="fin-input w-full mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           value={lateFee}
           onChange={(e) => onLateFeeChange(e.target.value)}
           readOnly={!lateFeeOverride}
@@ -93,7 +97,7 @@ export default function ManagerFinanceCollectFeeDiscountsSection({
         <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-178">{remarkOptionalLabel}</label>
         <textarea
           id="rbg4-managerfinancecollectfeepage-178"
-          className="fin-textarea mt-1"
+          className="fin-textarea mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           rows={2}
           placeholder={anyNotesPlaceholder}
           value={remark}
