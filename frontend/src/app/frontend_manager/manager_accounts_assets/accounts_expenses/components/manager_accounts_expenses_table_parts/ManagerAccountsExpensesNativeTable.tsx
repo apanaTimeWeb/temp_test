@@ -49,6 +49,7 @@ export default function ManagerAccountsExpensesNativeTable<T extends object>({ r
                 className="group inline-flex items-center gap-1.5 text-left"
                 onClick={() => changeSort(String(column.field))}
                 aria-label={`Sort by ${column.headerName ?? column.field}, currently ${sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'unsorted'}`}
+                aria-pressed={sortField === column.field}
               >
                 <span>{column.headerName ?? column.field}</span>
                 {sortField === column.field ? (

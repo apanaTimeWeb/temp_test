@@ -13,3 +13,17 @@ export const managerAccountingExpenseDraftSchema = z.object({
 });
 
 export type ManagerAccountsExpensesExpenseDraft = z.infer<typeof managerAccountingExpenseDraftSchema>;
+
+export const managerAccountsExpensesAddExpenseModalSchema = z.object({
+  category: z.string().trim().min(1, 'Expense category is required.'),
+  description: z.string().trim().min(1, 'Expense description is required.'),
+  amount: z.string().trim().min(1, 'Amount is required.').refine((val) => {
+    const n = Number(val);
+    return Number.isFinite(n) && n > 0;
+  }, 'Valid positive expense amount is required.'),
+  mode: z.enum(['cash', 'upi', 'card', 'bank']),
+  paidBy: z.string().trim().default('Manager Counter'),
+  voucherNo: z.string().trim().optional().default(''),
+});
+
+export type ManagerAccountsExpensesAddExpenseModalFormData = z.infer<typeof managerAccountsExpensesAddExpenseModalSchema>;

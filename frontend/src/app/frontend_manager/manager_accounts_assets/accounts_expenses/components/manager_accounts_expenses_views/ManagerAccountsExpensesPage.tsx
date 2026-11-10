@@ -35,7 +35,6 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   const [searchQuery, setSearchQuery] = useState('');
   const [isCategoryReviewOpen, setIsCategoryReviewOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
-  const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
 
   const [timeHorizon, setTimeHorizon] = useState<ManagerExpensesTimeHorizon>('this_month');
@@ -135,8 +134,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
 
   const handleAddExpense = (newExpense: Expense, amt: number) => {
     setExpenses([newExpense, ...expenses]);
-    setFeedbackToast(`Expense of ₹${amt} for "${newExpense.description}" logged successfully!`);
-    setTimeout(() => setFeedbackToast(null), 4000);
+    toast.success(`Expense of ₹${amt.toLocaleString('en-IN')} for "${newExpense.description}" logged successfully!`);
   };
 
   const colDefs: NativeColumn<Expense>[] = createManagerExpensesExpenseColumnDefinitions(
@@ -175,7 +173,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
                 <Wallet size={12} /> Disbursement & Petty Cash
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
-                📍 Central Branch
+                📍 Assigned Branch Ledger
               </span>
             </div>
 
@@ -214,13 +212,6 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
           </div>
         </div>
       </div>
-
-      {feedbackToast && (
-        <div className="p-4 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center gap-2 shadow-sm" role="status">
-          <span>✓</span>
-          <span>{feedbackToast}</span>
-        </div>
-      )}
 
       {/* ── Main Global Time Horizon Filter Bar ── */}
       <ManagerAccountsExpensesTimeHorizonBar

@@ -51,37 +51,44 @@ export function ManagerAccountsExpensesTimeHorizonBar({
 
         {/* Custom Date Range Picker */}
         {timeHorizon === 'custom' && (
-          <div className="flex items-center gap-2 flex-wrap text-xs bg-muted p-1.5 rounded-lg border border-border">
-            <label className="flex items-center gap-1 text-secondary">
-              <span>From:</span>
-              <input
-                type="date"
-                value={customStartDate}
-                onChange={(e) => setCustomStartDate(e.target.value)}
-                className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
-              />
-            </label>
-            <label className="flex items-center gap-1 text-secondary">
-              <span>To:</span>
-              <input
-                type="date"
-                value={customEndDate}
-                onChange={(e) => setCustomEndDate(e.target.value)}
-                className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
-              />
-            </label>
-            {(customStartDate || customEndDate) && (
-              <button
-                type="button"
-                onClick={() => {
-                  setCustomStartDate('');
-                  setCustomEndDate('');
-                }}
-                className="p-1 text-secondary hover:text-destructive"
-                title="Clear custom dates"
-              >
-                <X size={13} />
-              </button>
+          <div className="flex flex-col gap-1 text-xs bg-muted p-1.5 rounded-lg border border-border">
+            <div className="flex items-center gap-2 flex-wrap">
+              <label className="flex items-center gap-1 text-secondary">
+                <span>From:</span>
+                <input
+                  type="date"
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                  className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
+                />
+              </label>
+              <label className="flex items-center gap-1 text-secondary">
+                <span>To:</span>
+                <input
+                  type="date"
+                  value={customEndDate}
+                  onChange={(e) => setCustomEndDate(e.target.value)}
+                  className="px-2 py-1 bg-card border border-border rounded text-xs text-primary outline-none focus:border-primary"
+                />
+              </label>
+              {(customStartDate || customEndDate) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCustomStartDate('');
+                    setCustomEndDate('');
+                  }}
+                  className="p-1 text-secondary hover:text-destructive"
+                  title="Clear custom dates"
+                >
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+            {customStartDate && customEndDate && customEndDate < customStartDate && (
+              <p className="text-[11px] text-destructive font-medium" role="alert">
+                End date cannot be earlier than start date
+              </p>
             )}
           </div>
         )}
