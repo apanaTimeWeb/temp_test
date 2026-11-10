@@ -241,13 +241,8 @@ export function AdminFinancePaymentsPage() {
           <button
             type="button"
             onClick={() => {
-              setSearch('');
-              setModeFilter('all');
-              setShowDeleted(false);
-              setTimeRange('all');
-              setCustomStartDate('');
-              setCustomEndDate('');
-              setUrlTablePage0(0);
+              setSearch(''); setModeFilter('all'); setShowDeleted(false);
+              setTimeRange('all'); setCustomStartDate(''); setCustomEndDate(''); setUrlTablePage0(0);
             }}
             className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-elevated transition-colors"
             title="Reset all filters"

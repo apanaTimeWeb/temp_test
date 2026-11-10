@@ -43,24 +43,12 @@ export function AdminMembersDirectoryMemberDetailCard({
   const [previewDoc, setPreviewDoc] = useState<{ type: string; number: string; fileName: string } | null>(null);
 
   const detailLabels = {
-    profile: t('DETAIL_PROFILE'),
-    attendance: t('DETAIL_ATTENDANCE'),
-    membership: t('DETAIL_MEMBERSHIP'),
-    renewalHistory: t('DETAIL_RENEWAL_HISTORY'),
-    paymentHistory: t('DETAIL_PAYMENT_HISTORY'),
-    lostHistory: t('DETAIL_LOST_HISTORY'),
-    activityHistory: t('DETAIL_ACTIVITY_HISTORY'),
-    documents: t('DETAIL_DOCUMENTS'),
+    profile: t('DETAIL_PROFILE'), attendance: t('DETAIL_ATTENDANCE'), membership: t('DETAIL_MEMBERSHIP'),
+    renewalHistory: t('DETAIL_RENEWAL_HISTORY'), paymentHistory: t('DETAIL_PAYMENT_HISTORY'),
+    lostHistory: t('DETAIL_LOST_HISTORY'), activityHistory: t('DETAIL_ACTIVITY_HISTORY'), documents: t('DETAIL_DOCUMENTS'),
   } as const;
 
-  const status = t(
-    ({
-      Active: 'STATUS_ACTIVE',
-      Expired: 'STATUS_EXPIRED',
-      Suspended: 'STATUS_SUSPENDED',
-      Blocked: 'STATUS_BLOCKED',
-    } as const)[member.status] ?? 'STATUS_UNKNOWN',
-  );
+  const status = t(({ Active: 'STATUS_ACTIVE', Expired: 'STATUS_EXPIRED', Suspended: 'STATUS_SUSPENDED', Blocked: 'STATUS_BLOCKED' } as const)[member.status] ?? 'STATUS_UNKNOWN');
 
   const expiryDate = formatAdminMembersDate(member.expiryDate, locale, t('UNKNOWN_DATE'));
   const initials = member.name.trim().slice(0, 2).toUpperCase() || 'ST';

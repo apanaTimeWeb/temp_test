@@ -6,7 +6,7 @@ import useAdminFinanceRefundsQuery from '@/app/frontend_admin/admin_finance/fina
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Building2, Search } from 'lucide-react';
+import { Building2, Search, RotateCcw } from 'lucide-react';
 import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
 import { formatAdminFinanceApiAmount } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
@@ -237,6 +237,20 @@ export function AdminFinanceRefundsPage() {
             <option value="processed">{t('PROCESSED')}</option>
             <option value="rejected">{t('REJECTED')}</option>
           </select>
+          {(search.trim() !== '' || statusFilter !== 'all' || timeRange !== 'this_month') && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearch('');
+                setStatusFilter('all');
+                setTimeRange('this_month');
+              }}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-text-secondary hover:text-text-primary hover:bg-surface-hover"
+            >
+              <RotateCcw size={14} />
+              <span>Reset</span>
+            </button>
+          )}
         </div>
       </div>
 
