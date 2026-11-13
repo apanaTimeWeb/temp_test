@@ -36,7 +36,7 @@ export function ManagerFinancePaymentPromisesKpis({
               {formatCurrency(totalAmount)}
             </div>
             <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-              [{timeHorizonLabel}]
+              {timeHorizonLabel}
             </span>
           </div>
           <p className="mt-1 text-xs text-secondary">{promises.length} promises in {timeHorizonLabel}</p>
@@ -57,7 +57,7 @@ export function ManagerFinancePaymentPromisesKpis({
               {pendingCount}
             </div>
             <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-warning-text border border-border">
-              [{timeHorizonLabel}]
+              {timeHorizonLabel}
             </span>
           </div>
           <p className="mt-1 text-xs text-secondary">Awaiting deadline maturity</p>
@@ -78,7 +78,7 @@ export function ManagerFinancePaymentPromisesKpis({
               {overdueCount}
             </div>
             <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-danger border border-border">
-              [{timeHorizonLabel}]
+              {timeHorizonLabel}
             </span>
           </div>
           <p className="mt-1 text-xs text-secondary">Follow-up action required</p>
@@ -99,7 +99,7 @@ export function ManagerFinancePaymentPromisesKpis({
               {fulfilledCount}
             </div>
             <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-success border border-border">
-              [{timeHorizonLabel}]
+              {timeHorizonLabel}
             </span>
           </div>
           <p className="mt-1 text-xs text-secondary">Dues cleared successfully</p>
@@ -108,5 +108,3 @@ export function ManagerFinancePaymentPromisesKpis({
     </div>
   );
 }
-
-export default ManagerFinancePaymentPromisesKpis;

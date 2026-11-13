@@ -17,7 +17,7 @@ export interface ManagerFinancePaymentPromisesTableProps {
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: PromiseSortField) => void;
   onMarkPaid: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
-  onOpenEdit: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
+  onOpenEdit: (p: ManagerFinancePaymentPromisesPaymentPromiseSample, mode?: 'edit' | 'details') => void;
   startItem: number;
   endItem: number;
   totalRows: number;
@@ -60,79 +60,115 @@ export default function ManagerFinancePaymentPromisesTable({
   onNextPage,
   labels,
 }: ManagerFinancePaymentPromisesTableProps) {
-  const renderSortableHeader = (field: PromiseSortField, label: string, align: 'left' | 'right' = 'left') => {
-    const isActive = sortField === field;
-    return (
-      <th
-        scope="col"
-        aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className={`py-3 px-4 ${align === 'right' ? 'text-right' : 'text-left'}`}
-      >
-        <button
-          type="button"
-          onClick={() => onToggleSort(field)}
-          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
-          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
-        >
-          <span>{label}</span>
-          {isActive ? (
-            sortDirection === 'asc' ? (
-              <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            ) : (
-              <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-            )
-          ) : (
-            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
-          )}
-        </button>
-      </th>
+  const renderSortIndicator = (field: PromiseSortField) => {
+    if (sortField !== field) {
+      return <ArrowUpDown size={12} className="opacity-40 text-secondary" />;
+    }
+    return sortDirection === 'asc' ? (
+      <ArrowUp size={12} className="text-primary font-bold" />
+    ) : (
+      <ArrowDown size={12} className="text-primary font-bold" />
     );
   };
 
   return (
-    <div className="fin-card overflow-x-auto">
-      <table className="w-full">
+    <div className="fin-table-container">
+      <table className="w-full text-left border-collapse" role="table">
         <thead>
-          <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-            {renderSortableHeader('studentName', labels.student, 'left')}
-            {renderSortableHeader('promisedAmount', labels.promisedInr, 'right')}
-            {renderSortableHeader('expectedDate', labels.expectedDate, 'left')}
-            {renderSortableHeader('daysUntilDue', labels.daysUntilSinceDue, 'left')}
-            {renderSortableHeader('timesChanged', labels.timesChanged, 'left')}
-            {renderSortableHeader('status', labels.status, 'left')}
-            <th scope="col" className="text-right py-3 px-4">{labels.actions}</th>
+          <tr className="border-b border-border bg-muted text-xs font-semibold text-secondary">
+            <th
+              className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+              onClick={() => onToggleSort('studentName')}
+              role="columnheader"
+            >
+              <div className="flex items-center gap-1.5">
+                <span>{labels.student}</span>
+                {renderSortIndicator('studentName')}
+              </div>
+            </th>
+            <th
+              className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none text-right"
+              onClick={() => onToggleSort('promisedAmount')}
+              role="columnheader"
+            >
+              <div className="flex items-center justify-end gap-1.5">
+                <span>{labels.promisedInr}</span>
+                {renderSortIndicator('promisedAmount')}
+              </div>
+            </th>
+            <th
+              className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+              onClick={() => onToggleSort('expectedDate')}
+              role="columnheader"
+            >
+              <div className="flex items-center gap-1.5">
+                <span>{labels.expectedDate}</span>
+                {renderSortIndicator('expectedDate')}
+              </div>
+            </th>
+            <th
+              className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+              onClick={() => onToggleSort('daysUntilDue')}
+              role="columnheader"
+            >
+              <div className="flex items-center gap-1.5">
+                <span>{labels.daysUntilSinceDue}</span>
+                {renderSortIndicator('daysUntilDue')}
+              </div>
+            </th>
+            <th
+              className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+              onClick={() => onToggleSort('timesChanged')}
+              role="columnheader"
+            >
+              <div className="flex items-center gap-1.5">
+                <span>{labels.timesChanged}</span>
+                {renderSortIndicator('timesChanged')}
+              </div>
+            </th>
+            <th
+              className="py-3 px-4 cursor-pointer hover:text-primary transition-colors select-none"
+              onClick={() => onToggleSort('status')}
+              role="columnheader"
+            >
+              <div className="flex items-center gap-1.5">
+                <span>{labels.status}</span>
+                {renderSortIndicator('status')}
+              </div>
+            </th>
+            <th className="py-3 px-4 text-right" role="columnheader">{labels.actions}</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-border text-xs">
           {filtered.length === 0 ? (
             <tr>
-              <td colSpan={7}>
-                <ManagerFinancePaymentPromisesEmptyState className="fin-empty-state">
-                  <div className="fin-empty-state__icon">🤝</div>
-                  <p className="fin-empty-state__title">{labels.noPromises}</p>
+              <td colSpan={7} className="p-0">
+                <ManagerFinancePaymentPromisesEmptyState>
+                  {labels.noPromises}
                 </ManagerFinancePaymentPromisesEmptyState>
               </td>
             </tr>
           ) : (
             paginated.map((p) => (
-              <tr
-                key={p.id}
-                className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12"
-              >
+              <tr key={p.id} className="hover:bg-muted/40 transition-colors">
                 <td className="py-3 px-4">
-                  <div className="fin-cell-name font-semibold">{p.studentName}</div>
-                  <div className="fin-cell-subtext font-mono">{p.smartId}</div>
+                  <div className="font-semibold text-primary">{p.studentName}</div>
+                  <div className="text-[11px] font-mono text-secondary">{p.smartId}</div>
                 </td>
-                <td className="py-3 px-4 text-right font-semibold fin-text-body">{formatCurrency(p.promisedAmount)}</td>
-                <td className="py-3 px-4 fin-cell-subtext">{formatDate(p.expectedDate)}</td>
+                <td className="py-3 px-4 text-right font-mono font-bold text-primary">
+                  {formatCurrency(p.promisedAmount)}
+                </td>
+                <td className="py-3 px-4 font-mono text-secondary">
+                  {formatDate(p.expectedDate)}
+                </td>
                 <td className="py-3 px-4">
                   <span
                     className={
                       p.daysUntilDue < 0
-                        ? 'fin-text-danger font-semibold'
-                        : p.daysUntilDue <= 3
-                          ? 'fin-text-warning'
-                          : 'fin-text-body'
+                        ? 'font-bold text-danger'
+                        : p.daysUntilDue <= 2
+                        ? 'font-semibold text-warning-text'
+                        : 'text-secondary'
                     }
                   >
                     {p.daysUntilDue < 0
@@ -160,32 +196,42 @@ export default function ManagerFinancePaymentPromisesTable({
                       <button
                         type="button"
                         onClick={() => onMarkPaid(p)}
-                        className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 flex items-center gap-1"
+                        className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-primary outline-none"
                         title="Mark payment promise as cleared"
                       >
                         <CheckCircle size={11} /> Mark Paid
                       </button>
                       <button
                         type="button"
-                        onClick={() => onOpenEdit(p)}
-                        className="fin-badge fin-badge--warning cursor-pointer hover:opacity-90 flex items-center gap-1"
+                        onClick={() => onOpenEdit(p, 'edit')}
+                        className="fin-badge fin-badge--warning cursor-pointer hover:opacity-90 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-primary outline-none"
                         title="Edit promise amount or extend expected date"
                       >
                         <CalendarPlus size={11} /> Edit / Extend
                       </button>
                       <button
                         type="button"
-                        onClick={() => onOpenEdit(p)}
-                        className="fin-badge fin-badge--neutral cursor-pointer hover:opacity-90 flex items-center gap-1"
+                        onClick={() => onOpenEdit(p, 'details')}
+                        className="fin-badge fin-badge--neutral cursor-pointer hover:opacity-90 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-primary outline-none"
                         title="View commitment details"
                       >
                         <Eye size={11} /> Details
                       </button>
                     </div>
                   ) : (
-                    <span className="fin-cell-subtext text-success font-medium">
-                      ✓ {labels.paidOn} {p.fulfilledDate ? formatDate(p.fulfilledDate) : '—'}
-                    </span>
+                    <div className="flex items-center justify-end gap-2">
+                      <span className="fin-cell-subtext text-success font-medium">
+                        ✓ {labels.paidOn} {p.fulfilledDate ? formatDate(p.fulfilledDate) : '—'}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => onOpenEdit(p, 'details')}
+                        className="fin-badge fin-badge--neutral cursor-pointer hover:opacity-90 flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-primary outline-none"
+                        title="View commitment details"
+                      >
+                        <Eye size={11} /> Details
+                      </button>
+                    </div>
                   )}
                 </td>
               </tr>
@@ -204,7 +250,7 @@ export default function ManagerFinancePaymentPromisesTable({
               type="button"
               disabled={effectivePage === 0}
               onClick={onPrevPage}
-              className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+              className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-primary outline-none"
             >
               Previous
             </button>
@@ -215,7 +261,7 @@ export default function ManagerFinancePaymentPromisesTable({
               type="button"
               disabled={effectivePage >= pageCount - 1}
               onClick={onNextPage}
-              className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+              className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-primary outline-none"
             >
               Next
             </button>
@@ -225,4 +271,3 @@ export default function ManagerFinancePaymentPromisesTable({
     </div>
   );
 }
-
