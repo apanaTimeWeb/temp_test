@@ -35,7 +35,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   const [showDropdown, setShowDropdown] = useState(false);
   const [activeStudentIndex, setActiveStudentIndex] = useState(-1);
   const [selectedStudent, setSelectedStudent] = useState<(typeof MANAGER_FINANCE_COLLECT_FEE_STUDENTS)[number] | null>(null);
-  const { watch, setValue, reset, handleSubmit, formState } = useForm<ManagerFinanceCollectFeeDraft>({
+  const { register, watch, setValue, reset, handleSubmit, formState } = useForm<ManagerFinanceCollectFeeDraft>({
     resolver: zodResolver(managerFinanceCollectFeeDraftSchema),
     defaultValues: { member: '', amount: '', mode: 'cash', txnId: '', couponCode: '', lateFee: '', monthsToRenew: '1', remark: '' },
     mode: 'onChange',
@@ -53,7 +53,15 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     setReceiptNumber(`REC-${Date.now().toString().slice(-6)}`);
   }, []);
 
-  const hasUnsavedCollectionDraft = Boolean(selectedStudent || formState.isDirty || amount || txnId || couponCode || lateFee || remark || monthsToRenew !== '1' || mode !== 'cash');
+  const hasUnsavedCollectionDraft = Boolean(
+    (selectedStudent && (amount || formState.isDirty)) ||
+    amount ||
+    txnId ||
+    couponCode ||
+    lateFee ||
+    remark ||
+    monthsToRenew !== '1'
+  );
   // Guard contract: if (confirmed) router.push(`${next.pathname}${next.search}${next.hash}`);
   useManagerFinanceCollectFeeUnsavedChangesGuard({ isDirty: hasUnsavedCollectionDraft, confirm, router, tManagerUi });
 
@@ -150,6 +158,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                   onFocus={() => setShowDropdown(true)}
                   onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
                 />
+                <input type="hidden" {...register('member')} value={selectedStudent ? String(selectedStudent.id) : ''} readOnly />
               </div>
               {showDropdown && !selectedStudent && (filteredStudents.length === 0 ? (
                 <ManagerFinanceCollectFeeEmptyState className="fin-table-empty-cell">{tManagerUi('no_students_found')}</ManagerFinanceCollectFeeEmptyState>
