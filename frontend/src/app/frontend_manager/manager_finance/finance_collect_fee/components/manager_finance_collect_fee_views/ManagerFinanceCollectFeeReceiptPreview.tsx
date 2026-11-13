@@ -31,7 +31,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
     );
     const popup = window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
-    toast.success(`WhatsApp receipt link opened for ${selectedStudent.name} (+91 ${cleanPhone})`);
+    toast.success(`WhatsApp receipt link opened for ${selectedStudent.name} (+91 ${maskManagerCollectFeePhone(cleanPhone)})`);
   };
   return (
 <div className="lg:col-span-2">
@@ -51,7 +51,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({ selectedStudent, mode, 
                   </div>
                   <div className="space-y-3 text-left mb-6">
                     {[
-                      { label: tManagerUi('date'), value: formatDate(new Date().toISOString()) },
+                      { label: tManagerUi('date'), value: formatDate(new Date().toISOString().slice(0, 10)) },
                       { label: tManagerUi('student'), value: selectedStudent?.name || '—' },
                       { label: tManagerUi('smart_id'), value: selectedStudent?.smartId || '—' },
                       { label: tManagerUi('phone_label'), value: selectedStudent ? `+91-${maskManagerCollectFeePhone(selectedStudent.phone)}` : '—' },

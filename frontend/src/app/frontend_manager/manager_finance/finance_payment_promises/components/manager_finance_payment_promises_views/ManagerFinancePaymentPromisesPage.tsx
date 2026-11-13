@@ -16,6 +16,7 @@ import { ManagerFinancePaymentPromisesKpis } from './ManagerFinancePaymentPromis
 export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFinancePaymentPromisesRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_payment_promises.ui');
   const { formatCurrency, formatDate } = useManagerPaymentPromisesFormatting();
+  // Formats Finance-facing dates: formatDate(p.expectedDate) and p.fulfilledDate ? formatDate(p.fulfilledDate) : '—'
   const { confirm, dialog: confirmDialog } = useManagerFinancePaymentPromisesConfirm();
 
   const [promisesList, setPromisesList] = useState<ManagerFinancePaymentPromisesPaymentPromiseSample[]>(

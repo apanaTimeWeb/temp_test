@@ -16,6 +16,13 @@ export interface ManagerFinanceCollectFeeDurationSelectorProps {
   label12MonthsAnnual: string;
 }
 
+const STANDARD_CYCLE_AMOUNTS: Record<string, number> = {
+  '1': 1200,
+  '3': 3400,
+  '6': 6500,
+  '12': 12000,
+};
+
 export default function ManagerFinanceCollectFeeDurationSelector({
   isCustomDuration,
   onToggleCustomDuration,
@@ -38,6 +45,7 @@ export default function ManagerFinanceCollectFeeDurationSelector({
             if (isCustomDuration) {
               onToggleCustomDuration(false);
               onMonthsToRenewChange('1');
+              onAmountChange(String(STANDARD_CYCLE_AMOUNTS['1']));
             } else {
               onToggleCustomDuration(true);
             }
@@ -58,8 +66,9 @@ export default function ManagerFinanceCollectFeeDurationSelector({
               onToggleCustomDuration(true);
             } else {
               onMonthsToRenewChange(val);
-              if (Number(val) > 0) {
-                onAmountChange(String(Number(val) * 1200));
+              const targetAmount = STANDARD_CYCLE_AMOUNTS[val] ?? (Number(val) > 0 ? Number(val) * 1200 : undefined);
+              if (targetAmount !== undefined) {
+                onAmountChange(String(targetAmount));
               }
             }
           }}
