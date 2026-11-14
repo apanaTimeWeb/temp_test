@@ -8,6 +8,7 @@ import {
   Clock,
   Phone,
   MessageSquare,
+  MessageCircle,
   FileText,
   ExternalLink,
   ZoomIn,
@@ -219,9 +220,9 @@ export function ManagerMembersDirectoryPhotoKycModal({
               <button
                 type="button"
                 onClick={() => onQuickWhatsApp(member)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 shadow-sm shadow-emerald-950/50 transition-all cursor-pointer"
               >
-                <MessageSquare size={14} /> Send WhatsApp
+                <MessageCircle size={14} /> Send WhatsApp
               </button>
             )}
           </div>
@@ -230,7 +231,7 @@ export function ManagerMembersDirectoryPhotoKycModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-2 text-xs font-semibold rounded-xl border border-border bg-surface hover:bg-surface-hover text-secondary transition-colors"
+              className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all cursor-pointer"
             >
               Close
             </button>
@@ -240,7 +241,7 @@ export function ManagerMembersDirectoryPhotoKycModal({
                 onClose();
                 onViewFullProfile(member.id);
               }}
-              className="mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5 text-xs font-semibold"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/50 transition-all cursor-pointer"
             >
               <ExternalLink size={13} /> View Full Profile
             </button>

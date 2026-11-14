@@ -65,10 +65,10 @@ export function ManagerMembersDirectoryStatusTabs({
         <button
           type="button"
           onClick={onExportCsv}
-          className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm active:scale-95 cursor-pointer"
           title="Export Filtered Students List as CSV"
         >
-          <Download size={14} />
+          <Download size={14} className="text-indigo-400" />
           <span>Export CSV</span>
         </button>
       </div>

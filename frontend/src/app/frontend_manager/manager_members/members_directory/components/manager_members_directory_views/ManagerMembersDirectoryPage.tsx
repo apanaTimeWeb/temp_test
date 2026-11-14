@@ -163,11 +163,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
     >
-      <ManagerMembersDirectoryHeader
-        totalCount={timeFilteredMembers.length}
-        timeHorizonLabel={timeHorizonLabel}
-        onExportCsv={handleExportCsv}
-      />
+      <ManagerMembersDirectoryHeader onExportCsv={handleExportCsv} />
 
       <ManagerMembersDirectoryTimeHorizonBar
         timeHorizon={timeHorizon}

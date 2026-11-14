@@ -40,7 +40,7 @@ export function useManagerMembersDirectoryTimeFilter(
       case 'this_week': return 'This Week';
       case 'this_month': return 'This Month';
       case 'custom': return customStartDate && customEndDate ? `${customStartDate} - ${customEndDate}` : 'Custom Range';
-      default: return 'All Members';
+      default: return 'All Time';
     }
   }, [timeHorizon, customStartDate, customEndDate]);
 

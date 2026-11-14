@@ -6,14 +6,10 @@ import { Users, UserPlus, Download } from 'lucide-react';
 import { MANAGER_MEMBERS_DIRECTORY_ROUTES } from '@/app/frontend_manager/manager_members/members_directory/config/manager_members_directory.url_config';
 
 export interface ManagerMembersDirectoryHeaderProps {
-  totalCount?: number;
-  timeHorizonLabel?: string;
   onExportCsv?: () => void;
 }
 
 export function ManagerMembersDirectoryHeader({
-  totalCount,
-  timeHorizonLabel,
   onExportCsv,
 }: ManagerMembersDirectoryHeaderProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
@@ -30,16 +26,11 @@ export function ManagerMembersDirectoryHeader({
             </span>
           </div>
 
-          <div className="flex items-baseline gap-3 flex-wrap">
+          <div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
               <Users className="text-indigo-400" size={26} />
               {tManagerUi('members_management')}
             </h1>
-            {totalCount !== undefined && (
-              <span className="text-xs px-2.5 py-1 rounded-lg bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 font-bold">
-                {totalCount} Members{timeHorizonLabel ? ` • ${timeHorizonLabel}` : ''}
-              </span>
-            )}
           </div>
 
           <p className="text-xs sm:text-sm text-slate-400">

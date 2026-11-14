@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 import {
   Award, CheckCircle, Clock, ExternalLink, FileText, GraduationCap,
-  Mail, MapPin, Pencil, Phone, Search, ShieldCheck, Users, ArrowLeft, MessageSquare, AlertTriangle
+  Mail, MapPin, Pencil, Phone, Search, ShieldCheck, Users, ArrowLeft, MessageSquare, MessageCircle, PhoneCall, AlertTriangle
 } from 'lucide-react';
 
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
@@ -85,7 +85,7 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
           <button
             type="button"
             onClick={onBack}
-            className="mgr-btn-secondary mgr-btn-sm inline-flex items-center gap-2 cursor-pointer font-semibold text-xs"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all cursor-pointer font-semibold text-xs shadow-sm"
           >
             <ArrowLeft size={14} />
             <span>Back to All Members</span>
@@ -95,7 +95,15 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
       <div className="flex flex-col sm:flex-row gap-4 mb-8">
         <label className="sr-only" htmlFor="manager-members-profile-search">{tManagerUi('member_id_or_name')}</label>
         <input id="manager-members-profile-search" type="search" className="mgr-input flex-1" placeholder={tManagerUi('enter_member_id_or_name_e_g_lib_001')} value={searchValue} onChange={(event) => onSearchChange(event.target.value)} />
-        <button type="button" className="mgr-btn-primary" onClick={() => onSearchChange(searchValue.trim())} aria-label={tManagerUi('search_member_profile')}><Search size={16} /> {tManagerUi('search')}</button>
+        <button
+          type="button"
+          className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/50 transition-all cursor-pointer"
+          onClick={() => onSearchChange(searchValue.trim())}
+          aria-label={tManagerUi('search_member_profile')}
+        >
+          <Search size={15} />
+          <span>{tManagerUi('search')}</span>
+        </button>
       </div>
       {!member ? <div className="mgr-empty-state"><p className="mgr-empty-title">{tManagerUi('no_matching_member')}</p><p className="mgr-empty-sub">{tManagerUi('try_a_member_id_or_name_from_the_directory')}</p></div> : (
         <div className="space-y-6">
@@ -112,29 +120,44 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
               <div>
                 <div className="flex items-start justify-between gap-3 mb-1">
                   <h3 className="text-2xl font-black text-primary">{member.name}</h3>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-2 flex-wrap shrink-0">
+                    {/* Call Button (Amber) */}
+                    <a
+                      href={`tel:${member.phone.replace(/\D/g, '')}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/35 hover:text-amber-200 shadow-sm shadow-amber-950/50 transition-all cursor-pointer"
+                      title={`Call ${member.name}`}
+                    >
+                      <PhoneCall size={13} />
+                      <span>Call</span>
+                    </a>
+
+                    {/* WhatsApp Button (Emerald) */}
                     <button
                       type="button"
                       onClick={handleWhatsAppMember}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 shadow-sm shadow-emerald-950/50 transition-all cursor-pointer"
                       title="Send WhatsApp message"
                     >
-                      <MessageSquare size={13} />
+                      <MessageCircle size={13} />
                       <span>WhatsApp</span>
                     </button>
+
+                    {/* Edit Profile Button (Sky Blue) */}
                     <button
                       type="button"
                       onClick={() => setIsEditModalOpen(true)}
-                      className="mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:bg-sky-500/35 hover:text-sky-200 shadow-sm shadow-sky-950/50 transition-all cursor-pointer"
                       title="Edit Member Profile"
                     >
                       <Pencil size={13} />
                       <span>Edit Profile</span>
                     </button>
+
+                    {/* Convert to Alumni Button (Purple) */}
                     <button
                       type="button"
                       onClick={() => setIsGraduateModalOpen(true)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-purple-600 hover:bg-purple-700 text-white shadow-sm transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-500/20 text-purple-400 border border-purple-500/40 hover:bg-purple-500/35 hover:text-purple-200 shadow-sm shadow-purple-950/50 transition-all cursor-pointer"
                       title="Graduate Member to Alumni Network"
                     >
                       <GraduationCap size={14} />

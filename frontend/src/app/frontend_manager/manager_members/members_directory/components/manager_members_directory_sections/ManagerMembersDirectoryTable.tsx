@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, ShieldCheck } from 'lucide-react';
+import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageCircle, PhoneCall, ShieldCheck } from 'lucide-react';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
@@ -229,36 +229,53 @@ export function ManagerMembersDirectoryTable({
                         {formatManagerMemberDirectoryCalendarDate(displayValue(member.expiryDate), locale)}
                       </td>
                       <td className="px-3 py-3 align-middle text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <button
-                            type="button"
-                            onClick={(e) => { e.stopPropagation(); setPreviewMember(member); }}
-                            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold bg-surface border border-border text-secondary hover:text-primary hover:border-primary transition-colors cursor-pointer"
-                            title={`Preview Photo & KYC for ${member.name}`}
+                        <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+                          {/* Call Button (Amber) */}
+                          <a
+                            href={`tel:${member.phone.replace(/\D/g, '')}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center justify-center min-h-8 min-w-8 px-2.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/35 hover:text-amber-200 transition-all cursor-pointer shadow-sm shadow-amber-950/50"
+                            title={`Call ${member.name}`}
+                            aria-label={`Call ${member.name}`}
                           >
-                            <ShieldCheck size={12} className="text-primary" />
-                            <span className="hidden md:inline">Photo & KYC</span>
-                          </button>
+                            <PhoneCall size={13} />
+                            <span className="hidden xl:inline text-xs font-semibold ml-1">Call</span>
+                          </a>
+
+                          {/* WhatsApp Button (Emerald) */}
                           {onQuickWhatsApp && (
                             <button
                               type="button"
                               onClick={(e) => { e.stopPropagation(); onQuickWhatsApp(member); }}
                               aria-label={`Send WhatsApp message to ${member.name}`}
-                              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                              className="inline-flex items-center justify-center min-h-8 min-w-8 px-2.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 transition-all cursor-pointer shadow-sm shadow-emerald-950/50"
                               title={`Send WhatsApp to ${member.name}`}
                             >
-                              <MessageSquare size={12} aria-hidden="true" />
-                              <span className="hidden sm:inline">WhatsApp</span>
+                              <MessageCircle size={13} />
+                              <span className="hidden sm:inline text-xs font-semibold ml-1">WhatsApp</span>
                             </button>
                           )}
+
+                          {/* Photo & KYC Button (Purple) */}
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); setPreviewMember(member); }}
+                            className="inline-flex items-center justify-center min-h-8 min-w-8 px-2.5 rounded-lg bg-purple-500/20 text-purple-400 border border-purple-500/40 hover:bg-purple-500/35 hover:text-purple-200 transition-all cursor-pointer shadow-sm shadow-purple-950/50"
+                            title={`Preview Photo & KYC for ${member.name}`}
+                          >
+                            <ShieldCheck size={13} />
+                            <span className="hidden md:inline text-xs font-semibold ml-1">KYC</span>
+                          </button>
+
+                          {/* View Profile Button (Sky Blue) */}
                           <button
                             type="button"
                             onClick={(e) => { e.stopPropagation(); onSelectMemberProfile(member.id); }}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-surface border border-border text-primary hover:bg-primary hover:text-on-primary transition-colors"
+                            className="inline-flex items-center justify-center min-h-8 min-w-8 px-2.5 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:bg-sky-500/35 hover:text-sky-200 transition-all cursor-pointer shadow-sm shadow-sky-950/50"
                             title={`View profile of ${member.name}`}
                           >
-                            <Eye size={13} aria-hidden="true" />
-                            <span>View Profile</span>
+                            <Eye size={13} />
+                            <span className="text-xs font-semibold ml-1">View</span>
                           </button>
                         </div>
                       </td>

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, X } from 'lucide-react';
+import { Search, X, RotateCcw } from 'lucide-react';
 import {
   MANAGER_MEMBERSHIP_TYPE_OPTIONS,
   MANAGER_MEMBERS_GENDER_OPTIONS,
@@ -119,10 +119,10 @@ export function ManagerMembersDirectoryFilterBar({
         <button
           type="button"
           onClick={onResetFilters}
-          className="flex items-center gap-1 px-2.5 py-2 rounded-lg text-xs font-bold text-danger hover:bg-danger-bg transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 hover:text-rose-100 transition-all cursor-pointer shadow-sm shadow-rose-950/40"
           title="Clear all active filters"
         >
-          <X size={13} />
+          <RotateCcw size={13} />
           <span>Reset</span>
         </button>
       )}
