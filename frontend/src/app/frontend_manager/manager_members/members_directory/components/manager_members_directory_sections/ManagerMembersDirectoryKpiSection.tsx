@@ -71,7 +71,7 @@ export function ManagerMembersDirectoryKpiSection({
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 mb-6 w-full max-w-full min-w-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5 mb-6 w-full max-w-full min-w-0 px-1 py-1">
       {kpis.map((kpi) => {
         const isSelected = activeTab === kpi.tab;
         return (
@@ -80,19 +80,19 @@ export function ManagerMembersDirectoryKpiSection({
             type="button"
             data-testid={`manager-kpi-card-${kpi.id}`}
             onClick={() => onSelectTab?.(kpi.tab)}
-            className={`rounded-2xl border bg-[#0c0f28]/95 p-4 sm:p-5 flex flex-col justify-between gap-3 text-left transition-all cursor-pointer shadow-md hover:border-indigo-400 hover:shadow-lg ${
+            className={`rounded-xl border bg-[#0c0f28]/95 p-3.5 sm:p-4 flex flex-col justify-between gap-2.5 text-left transition-all cursor-pointer shadow-md hover:border-indigo-400 hover:shadow-lg ${
               isSelected
-                ? 'ring-2 ring-indigo-500 border-indigo-400 bg-[#101438]/95'
-                : 'border-indigo-500/25'
+                ? 'border-2 border-indigo-400 bg-[#12163e] shadow-lg shadow-indigo-950/60'
+                : 'border border-indigo-500/25'
             }`}
             title={`Quick filter: ${kpi.label}`}
           >
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs font-bold text-slate-300 uppercase tracking-wider truncate">
+              <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider truncate">
                 {kpi.label}
               </span>
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-xs shrink-0 ${kpi.iconBg} ${kpi.iconColor}`}>
-                <kpi.icon size={18} />
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-xs shrink-0 ${kpi.iconBg} ${kpi.iconColor}`}>
+                <kpi.icon size={16} />
               </div>
             </div>
 
@@ -100,15 +100,15 @@ export function ManagerMembersDirectoryKpiSection({
               <div className="flex items-baseline justify-between gap-2">
                 <span
                   data-testid={kpi.id === 'total' ? 'manager-members-total-count' : `manager-members-${kpi.id}-count`}
-                  className={`text-2xl sm:text-3xl font-black tracking-tight ${kpi.valueColor}`}
+                  className={`text-xl sm:text-2xl font-black tracking-tight ${kpi.valueColor}`}
                 >
                   {kpi.value}
                 </span>
-                <span className={`text-[10px] sm:text-xs font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full whitespace-nowrap ${kpi.badgeStyle}`}>
+                <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full whitespace-nowrap ${kpi.badgeStyle}`}>
                   {kpi.badge}
                 </span>
               </div>
-              <p className="mt-1.5 text-xs text-slate-400 truncate">
+              <p className="mt-1 text-[11px] text-slate-400 truncate">
                 {kpi.subtext}
               </p>
             </div>

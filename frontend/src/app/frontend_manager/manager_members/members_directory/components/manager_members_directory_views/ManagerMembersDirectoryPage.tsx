@@ -43,7 +43,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
     setCustomEndDate,
     timeFilteredMembers,
     timeHorizonLabel,
-  } = useManagerMembersDirectoryTimeFilter(filteredMembers);
+  } = useManagerMembersDirectoryTimeFilter(members);
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -66,6 +66,25 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
 
   const multiFilteredMembers = useMemo(() => {
     return timeFilteredMembers.filter((m) => {
+      // 1. Status tab filter
+      if (activeTab === 'Active Members' && m.status !== 'Active') return false;
+      if (activeTab === 'Expired Members' && m.status !== 'Expired') return false;
+      if (activeTab === 'Suspended Members' && m.status !== 'Suspended') return false;
+
+      // 2. Search query filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matches =
+          m.name.toLowerCase().includes(q) ||
+          m.id.toLowerCase().includes(q) ||
+          (m.phone && m.phone.toLowerCase().includes(q)) ||
+          (m.email && m.email.toLowerCase().includes(q)) ||
+          (m.smartId && m.smartId.toLowerCase().includes(q)) ||
+          (m.seat && m.seat.toLowerCase().includes(q));
+        if (!matches) return false;
+      }
+
+      // 3. Dropdown filters
       if (planFilter !== 'all' && m.type !== planFilter) return false;
       if (shiftFilter !== 'all' && m.shift !== shiftFilter) return false;
       if (genderFilter !== 'all' && m.gender !== genderFilter) return false;
@@ -78,7 +97,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
       }
       return true;
     });
-  }, [timeFilteredMembers, planFilter, shiftFilter, genderFilter, expiryFilter]);
+  }, [timeFilteredMembers, activeTab, searchQuery, planFilter, shiftFilter, genderFilter, expiryFilter]);
 
   const hasActiveFilters =
     searchQuery.trim().length > 0 ||
@@ -189,7 +208,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
       />
 
       {/* ── Main Full-Width Content Card ── */}
-      <div className="mgr-card p-6 min-h-96 w-full shadow-card border border-border">
+      <div className="mgr-card p-3.5 sm:p-5 lg:p-6 min-h-96 w-full max-w-full min-w-0 shadow-card border border-border overflow-x-hidden">
         {/* GRIDS (All, Active, Expired, Suspended) */}
         {['All Members', 'Active Members', 'Expired Members', 'Suspended Members'].includes(activeTab) && (
           <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">

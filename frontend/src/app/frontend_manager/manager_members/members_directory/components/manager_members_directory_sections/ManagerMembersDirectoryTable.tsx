@@ -131,12 +131,12 @@ export function ManagerMembersDirectoryTable({
         onResetFilters={onResetFilters}
       />
 
-      <div className="flex-1 w-full overflow-x-auto">
+      <div className="flex-1 w-full max-w-full min-w-0 overflow-x-auto">
         {sortedMembers.length === 0 ? (
           <ManagerMembersDirectoryEmptyState />
         ) : (
           <>
-            <table className="mgr-table w-full">
+            <table className="mgr-table w-full min-w-[720px]">
               <thead>
                 <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
                   <th scope="col" className="w-10 px-3 py-3 align-middle text-left">
@@ -163,7 +163,7 @@ export function ManagerMembersDirectoryTable({
                   {renderSortableHeader('type', tManagerUi('plan'))}
                   {renderSortableHeader('status', tManagerUi('status'))}
                   {renderSortableHeader('expiryDate', tManagerUi('expiry_date'))}
-                  <th scope="col" className="px-3 py-3 text-right">
+                  <th scope="col" className="px-3 py-3 text-right whitespace-nowrap">
                     Actions
                   </th>
                 </tr>

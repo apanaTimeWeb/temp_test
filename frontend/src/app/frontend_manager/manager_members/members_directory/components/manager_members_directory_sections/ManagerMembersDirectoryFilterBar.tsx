@@ -40,9 +40,9 @@ export function ManagerMembersDirectoryFilterBar({
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
 
   return (
-    <div className="flex flex-wrap items-center gap-2.5 mb-5 p-3 rounded-xl bg-surface border border-border">
+    <div className="flex flex-wrap items-center gap-2.5 mb-5 p-3 rounded-xl bg-surface border border-border w-full max-w-full min-w-0">
       {/* Search Bar */}
-      <div className="relative flex-1 min-w-[220px]">
+      <div className="relative flex-1 min-w-[180px] w-full sm:w-auto">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
         <label htmlFor="manager-members-search" className="sr-only">
           {tManagerUi('search_by_name_or_id')}
@@ -62,7 +62,7 @@ export function ManagerMembersDirectoryFilterBar({
         aria-label="Filter by membership plan"
         value={planFilter}
         onChange={(e) => setPlanFilter(e.target.value)}
-        className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
+        className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer w-full sm:w-auto"
       >
         <option value="all">All Plans</option>
         {MANAGER_MEMBERSHIP_TYPE_OPTIONS.map((opt) => (
@@ -77,7 +77,7 @@ export function ManagerMembersDirectoryFilterBar({
         aria-label="Filter by shift"
         value={shiftFilter}
         onChange={(e) => setShiftFilter(e.target.value)}
-        className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
+        className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer w-full sm:w-auto"
       >
         <option value="all">All Shifts</option>
         <option value="Morning">Morning Shift</option>
@@ -92,7 +92,7 @@ export function ManagerMembersDirectoryFilterBar({
         aria-label="Filter by gender"
         value={genderFilter}
         onChange={(e) => setGenderFilter(e.target.value)}
-        className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
+        className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer w-full sm:w-auto"
       >
         <option value="all">All Genders</option>
         {MANAGER_MEMBERS_GENDER_OPTIONS.map((opt) => (
@@ -107,7 +107,7 @@ export function ManagerMembersDirectoryFilterBar({
         aria-label="Filter by validity expiration"
         value={expiryFilter}
         onChange={(e) => setExpiryFilter(e.target.value)}
-        className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer"
+        className="rounded-lg border border-border bg-card px-2.5 py-2 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer w-full sm:w-auto"
       >
         <option value="all">All Expiry Dates</option>
         <option value="7days">Expiring within 7 Days</option>
