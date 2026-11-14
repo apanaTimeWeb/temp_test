@@ -67,7 +67,7 @@ export function ManagerMembersNewAdmissionAdmissionSummary({
               <div className="mgr-summary-total-row"><span className="mgr-summary-total-label">{tManagerUi('total_payable')}</span><span className="mgr-summary-total-value">{formatCurrency(totalPayableMinor, currency)}</span></div>
               <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('paid_now')}</span><span className="mgr-text-success">{formatCurrency(amountPaidMinor, currency)}</span></div>
               {balanceMinor > 0 && <div className="mgr-summary-row"><span className="mgr-summary-label">{tManagerUi('balance_due')}</span><span className="mgr-text-danger">{formatCurrency(balanceMinor, currency)}</span></div>}
-            </> : <p className="mgr-input-hint" role="status">{tManagerUi('admission_unavailable_host_contract_not_supplied')}</p>}
+            </> : <p className="mgr-input-hint text-xs text-secondary mt-2" role="status">Select plan, shift, and seat to compute admission invoice</p>}
           </div>
           <div className="mgr-summary-actions">
             {/* Guard against raw window.confirm; cancel uses structured route navigation */}

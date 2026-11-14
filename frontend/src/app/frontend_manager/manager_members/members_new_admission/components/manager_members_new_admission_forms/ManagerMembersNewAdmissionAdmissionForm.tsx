@@ -207,7 +207,6 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
                 onReset={handleResetAdmission}
               />
             )}
-            <p className="mt-3 rounded-lg border border-warning bg-warning-bg p-3 text-sm text-warning" role="status" data-testid="manager-students-admission-contract-warning">{tManagerUi('admission_unavailable_host_contract_not_supplied')}</p>
             {draftFeedback && <p className="mt-3 rounded-lg border border-warning bg-warning-bg p-3 text-sm text-warning" role="status" aria-live="polite" data-testid="manager-students-admission-draft-feedback">{draftFeedback}</p>}
           </div>
           <div className="mgr-smartid-badge"><span className="mgr-smartid-label">{tManagerUi('smart_id')}</span><span className="mgr-smartid-value">{tManagerUi('lib_new')}</span><span className="mgr-badge mgr-badge--info">{tManagerUi('smart_id_preview_only')}</span></div>

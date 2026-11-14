@@ -60,10 +60,12 @@
     /* Manager Tokens */
     --mgr-primary: #6366f1;
     --mgr-primary-muted: rgba(99, 102, 241, 0.15);
-    --mgr-success: #10b981;
-    --mgr-warning: #f59e0b;
-    --mgr-danger: #ef4444;
+    --mgr-success: theme(--color-success);
+    --mgr-warning: theme(--color-warning);
+    --mgr-danger: theme(--color-danger);
     --mgr-info: #22d3ee;
+    --mgr-info-bg: theme(--color-info-bg);
+    --mgr-purple-text: theme(--color-purple-text);
     --mgr-text-primary: #ffffff;
     --mgr-text-secondary: #94a3b8;
     --mgr-bg-page: #030712;
