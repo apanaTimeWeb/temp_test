@@ -933,9 +933,15 @@
 
 .mgr-header-left { gap: 20px; min-width: 0; }
 .mgr-header-right { gap: 12px; }
-.mgr-header-titles { flex-direction: column; align-items: flex-start; min-width: 160px; gap: 2px; }
-.mgr-header-branch-name { gap: 8px; font-size: 16px; font-weight: 700; color: theme(--color-text-primary); }
-.mgr-header-time { gap: 6px; font-size: 12px; color: theme(--color-text-secondary); }
+.mgr-header-titles { flex-direction: column; align-items: flex-start; min-width: 180px; gap: 3px; }
+.mgr-header-branch-pill { display: flex; align-items: center; gap: 7px; }
+.mgr-header-branch-icon { color: #6366f1; flex-shrink: 0; }
+.mgr-header-branch-name { font-size: 14px; font-weight: 700; color: theme(--color-text-primary); }
+.mgr-header-branch-badge { font-size: 10px; font-weight: 600; color: #22d3ee; background: rgba(34, 211, 238, 0.12); border: 1px solid rgba(34, 211, 238, 0.25); border-radius: 4px; padding: 1px 5px; }
+.mgr-header-datetime { display: flex; align-items: center; gap: 6px; font-size: 12px; color: theme(--color-text-secondary); }
+.mgr-header-date, .mgr-header-time { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: theme(--color-text-secondary); font-variant-numeric: tabular-nums; }
+.mgr-header-date svg, .mgr-header-time svg { color: #a78bfa; flex-shrink: 0; }
+.mgr-header-datetime-separator { color: rgba(99, 102, 241, 0.4); font-size: 10px; }
 .mgr-header-right > a,
 .mgr-mobile-menu-btn,
 .mgr-help-btn,

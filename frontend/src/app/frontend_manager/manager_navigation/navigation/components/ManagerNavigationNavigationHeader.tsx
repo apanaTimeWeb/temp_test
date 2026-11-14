@@ -4,7 +4,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 
 import Link from 'next/link';
-import { Bell, ChevronDown, Clock, HelpCircle, LogOut, Menu, ShieldCheck, User } from 'lucide-react';
+import { Bell, Building2, Calendar, ChevronDown, Clock, HelpCircle, LogOut, Menu, User } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
@@ -56,6 +56,7 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
 
   const hour = time?.getHours() ?? -1;
   const greeting = hour < 0 ? tManagerUi('greeting_welcome') : hour < 12 ? tManagerUi('greeting_good_morning') : hour < 17 ? tManagerUi('greeting_good_afternoon') : hour < 21 ? tManagerUi('greeting_good_evening') : tManagerUi('greeting_good_night');
+  const currentShift = hour < 0 ? 'General Shift' : hour >= 6 && hour < 14 ? 'Morning Shift' : hour >= 14 && hour < 22 ? 'Evening Shift' : 'Night Shift';
 
   return (
     <header className={`mgr-header${collapsed ? ' mgr-header-collapsed' : ''}`} data-testid="manager-header">
@@ -64,18 +65,25 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
           <Menu size={18} strokeWidth={2} />
         </button>
         <div className="mgr-header-titles">
-          <span className="mgr-header-branch-name">
-            <ShieldCheck size={18} strokeWidth={2} aria-hidden="true" />
-            {tManagerUi('library_os')}
-          </span>
+          <div className="mgr-header-branch-pill">
+            <Building2 size={16} className="mgr-header-branch-icon" aria-hidden="true" />
+            <span className="mgr-header-branch-name">{tManagerUi('central_library') || 'Central Library'}</span>
+            <span className="mgr-header-branch-badge">Main Branch</span>
+          </div>
           {time && (
-            <span className="mgr-header-time">
-              <Clock size={14} strokeWidth={2} aria-hidden="true" />
-              {time.toLocaleTimeString(dateTimeLocale, { hour: '2-digit', minute: '2-digit' })}
-            </span>
+            <div className="mgr-header-datetime">
+              <span className="mgr-header-date">
+                <Calendar size={13} strokeWidth={2} aria-hidden="true" />
+                {time.toLocaleDateString(dateTimeLocale, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
+              </span>
+              <span className="mgr-header-datetime-separator" aria-hidden="true">•</span>
+              <span className="mgr-header-time">
+                <Clock size={13} strokeWidth={2} aria-hidden="true" />
+                {time.toLocaleTimeString(dateTimeLocale, { hour: '2-digit', minute: '2-digit', hour12: true })}
+              </span>
+            </div>
           )}
         </div>
-
       </div>
 
       <div className="mgr-header-right">
@@ -127,9 +135,9 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
                   <User size={20} strokeWidth={2.2} />
                 </div>
                 <div className="mgr-profile-dropdown-meta">
-                  <p className="mgr-profile-dropdown-name">{tManagerUi('manager')}</p>
-                  <p className="mgr-profile-dropdown-email">{tManagerUi('manager_library_com')}</p>
-                  <span className="mgr-profile-dropdown-badge">Library Ops & Shifts</span>
+                  <p className="mgr-profile-dropdown-name">{tManagerUi('manager') || 'Branch Manager'}</p>
+                  <p className="mgr-profile-dropdown-email">{tManagerUi('manager_library_com') || 'manager@library.com'}</p>
+                  <span className="mgr-profile-dropdown-badge">Branch Operations Lead</span>
                 </div>
               </div>
 
@@ -138,7 +146,7 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
               <div className="mgr-profile-dropdown-body">
                 <div className="mgr-profile-dropdown-status">
                   <span className="mgr-status-pulse-dot" aria-hidden="true" />
-                  <span>Branch Shift Active • Online</span>
+                  <span>On Duty • {currentShift} Active</span>
                 </div>
               </div>
 
