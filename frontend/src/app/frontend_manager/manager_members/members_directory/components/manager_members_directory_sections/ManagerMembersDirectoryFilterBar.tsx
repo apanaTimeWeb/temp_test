@@ -44,19 +44,30 @@ export function ManagerMembersDirectoryFilterBar({
   return (
     <div className="flex flex-wrap items-center gap-2.5 mb-5 p-3 rounded-xl bg-surface border border-border w-full max-w-full min-w-0">
       {/* Search Bar */}
-      <div className="relative flex-1 min-w-[180px] w-full sm:w-auto">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+      <div className="relative flex-1 min-w-[200px] w-full sm:w-auto">
+        <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none z-10" />
         <label htmlFor="manager-members-search" className="sr-only">
           {tManagerUi('search_by_name_or_id')}
         </label>
         <input
           id="manager-members-search"
           type="search"
-          className="mgr-input pl-9 text-xs w-full"
+          className="mgr-input !pl-10 text-xs w-full"
+          style={{ paddingLeft: '2.5rem' }}
           placeholder="Search by name, ID, phone, email, seat..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={() => setSearchQuery('')}
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors cursor-pointer p-0.5"
+            title="Clear search"
+          >
+            <X size={13} />
+          </button>
+        )}
       </div>
 
       {/* Plan Filter */}

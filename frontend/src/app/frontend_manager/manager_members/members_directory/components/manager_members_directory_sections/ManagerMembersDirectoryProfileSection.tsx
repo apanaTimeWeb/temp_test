@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 import {
   Award, CheckCircle, Clock, ExternalLink, FileText, GraduationCap,
-  Mail, MapPin, Pencil, Phone, Search, ShieldCheck, Users, ArrowLeft, MessageSquare, MessageCircle, PhoneCall, AlertTriangle
+  Mail, MapPin, Pencil, Phone, Search, ShieldCheck, Users, ArrowLeft, MessageSquare, MessageCircle, PhoneCall, AlertTriangle, X
 } from 'lucide-react';
 
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
@@ -94,7 +94,28 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
       </div>
       <div className="flex flex-col sm:flex-row gap-3 mb-8">
         <label className="sr-only" htmlFor="manager-members-profile-search">{tManagerUi('member_id_or_name')}</label>
-        <input id="manager-members-profile-search" type="search" className="mgr-input flex-1 min-w-0" placeholder={tManagerUi('enter_member_id_or_name_e_g_lib_001')} value={searchValue} onChange={(event) => onSearchChange(event.target.value)} />
+        <div className="relative flex-1 min-w-0">
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none z-10" />
+          <input
+            id="manager-members-profile-search"
+            type="search"
+            className="mgr-input !pl-10 text-xs sm:text-sm w-full"
+            style={{ paddingLeft: '2.5rem' }}
+            placeholder={tManagerUi('enter_member_id_or_name_e_g_lib_001')}
+            value={searchValue}
+            onChange={(event) => onSearchChange(event.target.value)}
+          />
+          {searchValue && (
+            <button
+              type="button"
+              onClick={() => onSearchChange('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors cursor-pointer p-0.5"
+              title="Clear search"
+            >
+              <X size={13} />
+            </button>
+          )}
+        </div>
         <button
           type="button"
           className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/50 transition-all cursor-pointer shrink-0"
