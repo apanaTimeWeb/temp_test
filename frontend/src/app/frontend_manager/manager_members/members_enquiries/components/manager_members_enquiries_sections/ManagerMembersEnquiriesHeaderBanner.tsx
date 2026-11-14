@@ -33,19 +33,14 @@ export function ManagerMembersEnquiriesHeaderBanner({
     <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         {/* Left: Titles & Meta Chips */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <div className="flex items-center gap-2 flex-wrap text-xs">
-            <span className="font-semibold text-primary uppercase tracking-wider">{tManagerUi('crm_to_enquiries')}</span>
-            <span className="text-border">•</span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-warning-bg text-warning border border-border">
-              <Target size={12} />
-              Lead Intelligence Pipeline
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
-              📍 Central Branch
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Active Enquiries
             </span>
             {selectedCount > 0 && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-bold bg-success-bg text-success border border-border animate-in fade-in">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 animate-in fade-in">
                 ✓ {selectedCount} Selected
               </span>
             )}
@@ -53,15 +48,15 @@ export function ManagerMembersEnquiriesHeaderBanner({
 
           <div className="flex items-baseline gap-3 flex-wrap">
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-              {tManagerUi('enquiry_pipeline')}
+              Student Enquiries
             </h1>
-            <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-              {filteredCount} Leads • Scope: {horizonLabel}
+            <span className="text-xs px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-bold">
+              {filteredCount} Enquiries • {horizonLabel}
             </span>
           </div>
 
-          <p className="text-sm text-muted-foreground">
-            {tManagerUi('track_every_prospect_from_enquiry_to_admission')}
+          <p className="text-xs sm:text-sm text-muted-foreground">
+            Manage incoming student enquiries, seat requirement follow-ups, and admissions.
           </p>
         </div>
 
@@ -150,4 +145,3 @@ export function ManagerMembersEnquiriesHeaderBanner({
     </div>
   );
 }
-
