@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Target, RefreshCw, LayoutGrid, List, Plus, MessageCircle } from 'lucide-react';
+import { RefreshCw, LayoutGrid, List, Plus, MessageCircle } from 'lucide-react';
 import type { ManagerMembersEnquiriesBoardViewMode } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 
 export interface ManagerMembersEnquiriesHeaderBannerProps {
