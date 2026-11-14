@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { BarChart3, Clock, CalendarRange, RotateCw, Download, MapPin, Sparkles } from 'lucide-react';
+import { BarChart3, Clock, CalendarRange, RotateCw, Download, Sparkles } from 'lucide-react';
 import { ManagerDashboardReportsKpiGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_sections/ManagerDashboardReportsKpiGrid';
 import { ManagerDashboardReportsChartsGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_charts/ManagerDashboardReportsChartsGrid';
 import { ManagerDashboardReportsTablesGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsTablesGrid';
@@ -114,21 +114,16 @@ export default function ManagerDashboardReportsPage() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="mgr-breadcrumb">{tManagerUi('manager_reports')}</span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-primary-subtle text-primary border border-border">
-                <BarChart3 size={11} />
-                Analytics Engine
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-surface-highlight text-muted-foreground border border-border">
-                <MapPin size={11} className="text-primary" />
-                Central Branch
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live Analytics Active
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-              {tManagerUi('reports')}
+              Branch Performance & Reports
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              {tManagerUi('operational_overview_finance_reports_blocked')}
+              Shift-wise attendance trends, student retention, and branch operational performance.
             </p>
           </div>
 
