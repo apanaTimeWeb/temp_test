@@ -933,15 +933,11 @@
 
 .mgr-header-left { gap: 20px; min-width: 0; }
 .mgr-header-right { gap: 12px; }
-.mgr-header-titles { flex-direction: column; align-items: flex-start; min-width: 180px; gap: 3px; }
+.mgr-header-titles { display: flex; align-items: center; }
 .mgr-header-branch-pill { display: flex; align-items: center; gap: 7px; }
 .mgr-header-branch-icon { color: #6366f1; flex-shrink: 0; }
 .mgr-header-branch-name { font-size: 14px; font-weight: 700; color: theme(--color-text-primary); }
 .mgr-header-branch-badge { font-size: 10px; font-weight: 600; color: #22d3ee; background: rgba(34, 211, 238, 0.12); border: 1px solid rgba(34, 211, 238, 0.25); border-radius: 4px; padding: 1px 5px; }
-.mgr-header-datetime { display: flex; align-items: center; gap: 6px; font-size: 12px; color: theme(--color-text-secondary); }
-.mgr-header-date, .mgr-header-time { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: theme(--color-text-secondary); font-variant-numeric: tabular-nums; }
-.mgr-header-date svg, .mgr-header-time svg { color: #a78bfa; flex-shrink: 0; }
-.mgr-header-datetime-separator { color: rgba(99, 102, 241, 0.4); font-size: 10px; }
 .mgr-header-right > a,
 .mgr-mobile-menu-btn,
 .mgr-help-btn,
@@ -1255,20 +1251,31 @@
 .mgr-profile-dropdown-divider {
   height: 1px;
   background: rgba(99, 102, 241, 0.15);
-  margin: 2px 0;
+  margin: 4px 0;
 }
 
-.mgr-profile-dropdown-body {
-  padding: 4px 8px;
+.mgr-profile-dropdown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 6px 8px;
 }
 
-.mgr-profile-dropdown-status {
+.mgr-profile-info-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  color: #10b981;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.mgr-profile-info-label {
+  color: theme(--color-text-secondary);
   font-weight: 500;
+}
+
+.mgr-profile-info-value {
+  color: theme(--color-text-primary);
+  font-weight: 600;
 }
 
 .mgr-status-pulse-dot {

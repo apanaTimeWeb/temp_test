@@ -114,7 +114,7 @@ export function ManagerNavigationSidebarLogoutModal({
 
         <div className="mgr-logout-session-pill">
           <span className="mgr-logout-session-dot" aria-hidden="true" />
-          <span>Account: <strong>manager@library.com</strong> (Manager)</span>
+          <span>Account: <strong>Ram</strong> (manager@library.com) • Manager</span>
         </div>
 
         <div className="mgr-logout-modal-actions">
