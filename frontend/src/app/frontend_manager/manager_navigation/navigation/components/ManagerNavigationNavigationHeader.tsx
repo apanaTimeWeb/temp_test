@@ -56,10 +56,10 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
 
   const hour = time?.getHours() ?? -1;
   const greeting = hour < 0 ? tManagerUi('greeting_welcome') : hour < 12 ? tManagerUi('greeting_good_morning') : hour < 17 ? tManagerUi('greeting_good_afternoon') : hour < 21 ? tManagerUi('greeting_good_evening') : tManagerUi('greeting_good_night');
-  const currentShift = hour < 0 ? 'General Shift' : hour >= 6 && hour < 14 ? 'Morning Shift' : hour >= 14 && hour < 22 ? 'Evening Shift' : 'Night Shift';
 
   return (
-    <header className={`mgr-header${collapsed ? ' mgr-header-collapsed' : ''}`} data-testid="manager-header">
+    <>
+      <header className={`mgr-header${collapsed ? ' mgr-header-collapsed' : ''}`} data-testid="manager-header">
       <div className="mgr-header-left">
         <button type="button" className="mgr-mobile-menu-btn" data-testid="manager-mobile-menu-open" onClick={onMobileOpen} aria-label={tManagerUi('open_menu')}>
           <Menu size={18} strokeWidth={2} />
@@ -135,9 +135,9 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
                   <User size={20} strokeWidth={2.2} />
                 </div>
                 <div className="mgr-profile-dropdown-meta">
-                  <p className="mgr-profile-dropdown-name">{tManagerUi('manager') || 'Branch Manager'}</p>
-                  <p className="mgr-profile-dropdown-email">{tManagerUi('manager_library_com') || 'manager@library.com'}</p>
-                  <span className="mgr-profile-dropdown-badge">Branch Operations Lead</span>
+                  <p className="mgr-profile-dropdown-name">{tManagerUi('manager')}</p>
+                  <p className="mgr-profile-dropdown-email">{tManagerUi('manager_library_com')}</p>
+                  <span className="mgr-profile-dropdown-badge">{tManagerUi('manager')}</span>
                 </div>
               </div>
 
@@ -146,7 +146,7 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
               <div className="mgr-profile-dropdown-body">
                 <div className="mgr-profile-dropdown-status">
                   <span className="mgr-status-pulse-dot" aria-hidden="true" />
-                  <span>On Duty • {currentShift} Active</span>
+                  <span>Online</span>
                 </div>
               </div>
 
@@ -175,11 +175,12 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
           )}
         </div>
       </div>
-
-      <ManagerNavigationSidebarLogoutModal
-        isOpen={showLogoutModal}
-        onClose={() => setShowLogoutModal(false)}
-      />
     </header>
-  );
+
+    <ManagerNavigationSidebarLogoutModal
+      isOpen={showLogoutModal}
+      onClose={() => setShowLogoutModal(false)}
+    />
+  </>
+);
 }

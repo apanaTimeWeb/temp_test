@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { LogOut } from 'lucide-react';
 
@@ -15,6 +16,11 @@ export function ManagerNavigationSidebarLogoutModal({
 }: ManagerNavigationSidebarLogoutModalProps) {
   const tManagerUi = useTranslations('manager.manager_navigation.ui');
   const logoutDialogRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -56,7 +62,7 @@ export function ManagerNavigationSidebarLogoutModal({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const handleConfirmLogout = () => {
     try {
@@ -77,12 +83,16 @@ export function ManagerNavigationSidebarLogoutModal({
     window.location.href = '/auth/login';
   };
 
-  return (
-    <div className="mgr-modal-overlay" role="presentation" onMouseDown={onClose}>
+  const modalContent = (
+    <div
+      className="mgr-logout-modal-overlay"
+      role="presentation"
+      onMouseDown={onClose}
+    >
       <div
         ref={logoutDialogRef}
         tabIndex={-1}
-        className="mgr-modal mgr-logout-modal mgr-logout-modal--enhanced"
+        className="mgr-logout-modal-card"
         role="dialog"
         data-testid="manager-logout-dialog"
         aria-modal="true"
@@ -104,13 +114,13 @@ export function ManagerNavigationSidebarLogoutModal({
 
         <div className="mgr-logout-session-pill">
           <span className="mgr-logout-session-dot" aria-hidden="true" />
-          <span>Active Session: <strong>manager@library.com</strong></span>
+          <span>Account: <strong>manager@library.com</strong> (Manager)</span>
         </div>
 
-        <div className="mgr-modal-footer">
+        <div className="mgr-logout-modal-actions">
           <button
             type="button"
-            className="mgr-btn-ghost mgr-logout-cancel-btn"
+            className="mgr-logout-cancel-btn"
             data-testid="manager-logout-cancel"
             onClick={onClose}
           >
@@ -118,7 +128,7 @@ export function ManagerNavigationSidebarLogoutModal({
           </button>
           <button
             type="button"
-            className="mgr-btn-danger mgr-logout-confirm-btn"
+            className="mgr-logout-confirm-btn"
             data-testid="manager-logout-confirm"
             onClick={handleConfirmLogout}
           >
@@ -129,5 +139,7 @@ export function ManagerNavigationSidebarLogoutModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
 
