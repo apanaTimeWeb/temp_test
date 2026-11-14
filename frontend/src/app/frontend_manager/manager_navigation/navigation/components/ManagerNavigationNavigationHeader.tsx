@@ -135,18 +135,14 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
                   <User size={20} strokeWidth={2.2} />
                 </div>
                 <div className="mgr-profile-dropdown-meta">
-                  <p className="mgr-profile-dropdown-name">{tManagerUi('manager')}</p>
+                  <div className="mgr-profile-dropdown-name-row">
+                    <p className="mgr-profile-dropdown-name">{tManagerUi('manager')}</p>
+                    <span className="mgr-profile-status-pill">
+                      <span className="mgr-status-pulse-dot" aria-hidden="true" />
+                      Active
+                    </span>
+                  </div>
                   <p className="mgr-profile-dropdown-email">{tManagerUi('manager_library_com')}</p>
-                  <span className="mgr-profile-dropdown-badge">{tManagerUi('manager')}</span>
-                </div>
-              </div>
-
-              <div className="mgr-profile-dropdown-divider" />
-
-              <div className="mgr-profile-dropdown-body">
-                <div className="mgr-profile-dropdown-status">
-                  <span className="mgr-status-pulse-dot" aria-hidden="true" />
-                  <span>Online</span>
                 </div>
               </div>
 
