@@ -12,7 +12,6 @@ import {
   type MemberSortField,
 } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryTable';
 import ManagerMembersDirectoryTimeHorizonBar, { type ManagerMembersTimeHorizon } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryTimeHorizonBar';
-import ManagerMembersDirectoryStatusTabs from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryStatusTabs';
 import { ManagerMembersDirectoryBulkToolbar } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryBulkToolbar';
 import { ManagerMembersDirectoryBulkWhatsAppModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryBulkWhatsAppModal';
 import { useManagerMembersDirectoryBulkWhatsApp } from '@/app/frontend_manager/manager_members/members_directory/hooks/useManagerMembersDirectoryBulkWhatsApp';
@@ -212,16 +211,6 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
         {/* GRIDS (All, Active, Expired, Suspended) */}
         {['All Members', 'Active Members', 'Expired Members', 'Suspended Members'].includes(activeTab) && (
           <div className="motion-safe:transition-all motion-safe:duration-base h-full flex flex-col">
-            <ManagerMembersDirectoryStatusTabs
-              activeTab={activeTab}
-              onSelectTab={(tab) => {
-                setActiveTab(tab);
-                setPage(0);
-              }}
-              members={timeFilteredMembers}
-              onExportCsv={handleExportCsv}
-            />
-
             {/* Table and Filter Bar */}
             <ManagerMembersDirectoryTable
               sortedMembers={sortedMembers}
@@ -239,6 +228,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
               setExpiryFilter={(val) => { setExpiryFilter(val); setPage(0); }}
               hasActiveFilters={hasActiveFilters}
               onResetFilters={handleResetFilters}
+              onExportCsv={handleExportCsv}
               sortField={sortField}
               sortDirection={sortDirection}
               onToggleSort={toggleSort}

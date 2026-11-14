@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Users, X } from 'lucide-react';
+import { Calendar, X } from 'lucide-react';
 
 export type ManagerMembersTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -35,12 +35,9 @@ export function ManagerMembersDirectoryTimeHorizonBar({
   return (
     <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-3.5 sm:p-4 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
       <div className="flex items-center gap-2">
-        <Users size={16} className="text-indigo-400 shrink-0" />
+        <Calendar size={16} className="text-indigo-400 shrink-0" />
         <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-          Registration Horizon:
-        </span>
-        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-          {activeCount} Students
+          Filter by Join Date:
         </span>
       </div>
 

@@ -30,6 +30,7 @@ interface ManagerMembersDirectoryTableProps {
   setExpiryFilter: (val: string) => void;
   hasActiveFilters: boolean;
   onResetFilters: () => void;
+  onExportCsv?: () => void;
   sortField: MemberSortField | null;
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: MemberSortField) => void;
@@ -63,6 +64,7 @@ export function ManagerMembersDirectoryTable({
   setExpiryFilter,
   hasActiveFilters,
   onResetFilters,
+  onExportCsv,
   sortField,
   sortDirection,
   onToggleSort,
@@ -129,6 +131,7 @@ export function ManagerMembersDirectoryTable({
         setExpiryFilter={setExpiryFilter}
         hasActiveFilters={hasActiveFilters}
         onResetFilters={onResetFilters}
+        onExportCsv={onExportCsv}
       />
 
       <div className="flex-1 w-full max-w-full min-w-0 overflow-x-auto">

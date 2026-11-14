@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, X, RotateCcw } from 'lucide-react';
+import { Search, X, RotateCcw, Download } from 'lucide-react';
 import {
   MANAGER_MEMBERSHIP_TYPE_OPTIONS,
   MANAGER_MEMBERS_GENDER_OPTIONS,
@@ -21,6 +21,7 @@ export interface ManagerMembersDirectoryFilterBarProps {
   setExpiryFilter: (val: string) => void;
   hasActiveFilters: boolean;
   onResetFilters: () => void;
+  onExportCsv?: () => void;
 }
 
 export function ManagerMembersDirectoryFilterBar({
@@ -36,6 +37,7 @@ export function ManagerMembersDirectoryFilterBar({
   setExpiryFilter,
   hasActiveFilters,
   onResetFilters,
+  onExportCsv,
 }: ManagerMembersDirectoryFilterBarProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
 
@@ -114,18 +116,32 @@ export function ManagerMembersDirectoryFilterBar({
         <option value="30days">Expiring within 30 Days</option>
       </select>
 
-      {/* Reset Filters CTA */}
-      {hasActiveFilters && (
-        <button
-          type="button"
-          onClick={onResetFilters}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 hover:text-rose-100 transition-all cursor-pointer shadow-sm shadow-rose-950/40"
-          title="Clear all active filters"
-        >
-          <RotateCcw size={13} />
-          <span>Reset</span>
-        </button>
-      )}
+      {/* Action buttons (Reset & Export CSV) */}
+      <div className="flex items-center gap-2 sm:ml-auto">
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={onResetFilters}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 hover:text-rose-100 transition-all cursor-pointer shadow-sm shadow-rose-950/40"
+            title="Clear all active filters"
+          >
+            <RotateCcw size={13} />
+            <span>Reset</span>
+          </button>
+        )}
+
+        {onExportCsv && (
+          <button
+            type="button"
+            onClick={onExportCsv}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm active:scale-95 cursor-pointer"
+            title="Export Filtered Students List as CSV"
+          >
+            <Download size={14} className="text-indigo-400" />
+            <span>Export CSV</span>
+          </button>
+        )}
+      </div>
     </div>
   );
 }
