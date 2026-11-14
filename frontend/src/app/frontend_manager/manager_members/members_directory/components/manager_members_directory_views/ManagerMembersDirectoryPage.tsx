@@ -159,18 +159,15 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
 
   return (
     <div
-      className="mgr-page-animate relative pb-12"
+      className="mgr-page-animate relative pb-12 w-full max-w-full min-w-0 overflow-x-hidden"
       data-route-view={_routeQuery.view}
       data-route-id={_routeQuery.id}
     >
-      <ManagerMembersDirectoryHeader />
-      <p
-        role="status"
-        data-testid="manager-members-demo-mode-banner"
-        className="mb-5 rounded-xl border border-warning bg-warning-bg px-4 py-3 text-sm text-warning"
-      >
-        {tManagerUi('demo_mode_existing_members_are_sample_records_new_member_014d0f')}
-      </p>
+      <ManagerMembersDirectoryHeader
+        totalCount={timeFilteredMembers.length}
+        timeHorizonLabel={timeHorizonLabel}
+        onExportCsv={handleExportCsv}
+      />
 
       <ManagerMembersDirectoryTimeHorizonBar
         timeHorizon={timeHorizon}
