@@ -237,7 +237,11 @@
     display: block;
     margin-bottom: 6px;
   }
-  .mgr-label-required::after { content: " *"; color: theme(--color-danger); }
+  .mgr-label-required::after {
+    content: " *";
+    color: #ef4444 !important;
+    font-weight: 700;
+  }
 
   .mgr-error {
     font-size: 12px;

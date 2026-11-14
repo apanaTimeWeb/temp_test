@@ -70,17 +70,28 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
         <div className="mgr-form-grid">
           {/* Full Name */}
           <div className="mgr-form-field mgr-form-field-full">
-            <label className="mgr-label mgr-label-required" htmlFor="admission-full-name">{tManagerUi('full_name')}</label>
+            <label className="mgr-label mgr-label-required" htmlFor="admission-full-name">
+              {tManagerUi('full_name')}
+            </label>
             <div className="mgr-input-icon-wrap">
               <User size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-full-name" {...register('fullName')} className={`mgr-input mgr-input-with-icon${errors.fullName ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? 'admission-full-name-error' : undefined} placeholder={tManagerUi('enter_student_full_name')} />
+              <input
+                id="admission-full-name"
+                {...register('fullName')}
+                className={`mgr-input mgr-input-with-icon${errors.fullName ? ' mgr-input-error' : ''}`}
+                aria-invalid={Boolean(errors.fullName)}
+                aria-describedby={errors.fullName ? 'admission-full-name-error' : undefined}
+                placeholder={tManagerUi('enter_student_full_name')}
+              />
             </div>
-            {errors.fullName && <p id="admission-full-name-error" className="mgr-error" role="alert">{errors.fullName.message}</p>}
+            {errors.fullName && <p id="admission-full-name-error" className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.fullName.message}</p>}
           </div>
 
           {/* Phone Number */}
           <div className="mgr-form-field">
-            <label className="mgr-label mgr-label-required" htmlFor="admission-phone">{tManagerUi('phone_number')}</label>
+            <label className="mgr-label mgr-label-required" htmlFor="admission-phone">
+              {tManagerUi('phone_number')}
+            </label>
             <div className="mgr-input-icon-wrap">
               <Phone size={18} strokeWidth={2} className="mgr-input-icon" />
               <input
@@ -89,8 +100,19 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
                   onChange: (e) => {
                     const clean = e.target.value.replace(/\D/g, '').slice(0, 10);
                     e.target.value = clean;
+                    if (setValue) {
+                      setValue('phone', clean, { shouldValidate: true, shouldDirty: true });
+                    }
                   },
                 })}
+                onKeyDown={(e) => {
+                  if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'Home', 'End'].includes(e.key)) return;
+                  if (e.ctrlKey || e.metaKey) return;
+                  if (!/^\d$/.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                inputMode="numeric"
                 type="tel"
                 maxLength={10}
                 className={`mgr-input mgr-input-with-icon${errors.phone ? ' mgr-input-error' : ''}`}
@@ -99,12 +121,14 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
                 placeholder="10-digit mobile number"
               />
             </div>
-            {errors.phone && <p id="admission-phone-error" className="mgr-error" role="alert">{errors.phone.message}</p>}
+            {errors.phone && <p id="admission-phone-error" className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.phone.message}</p>}
           </div>
 
           {/* Email Address */}
           <div className="mgr-form-field">
-            <label className="mgr-label" htmlFor="admission-email">Email Address</label>
+            <label className="mgr-label" htmlFor="admission-email">
+              Email Address <span className="text-secondary font-normal text-xs">(Optional)</span>
+            </label>
             <div className="mgr-input-icon-wrap">
               <Mail size={18} strokeWidth={2} className="mgr-input-icon" />
               <input
@@ -117,12 +141,14 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
                 placeholder="student@example.com"
               />
             </div>
-            {errors.email && <p id="admission-email-error" className="mgr-error" role="alert">{errors.email.message}</p>}
+            {errors.email && <p id="admission-email-error" className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.email.message}</p>}
           </div>
 
           {/* Gender */}
           <div className="mgr-form-field">
-            <label className="mgr-label mgr-label-required" htmlFor="admission-gender">Gender</label>
+            <label className="mgr-label mgr-label-required" htmlFor="admission-gender">
+              Gender
+            </label>
             <SearchableCombobox
               id="admission-gender"
               options={MANAGER_ADMISSION_GENDER_OPTIONS}
@@ -135,16 +161,25 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
               placeholder="Select Gender..."
               searchPlaceholder="Search gender..."
             />
-            {errors.gender && <p id="admission-gender-error" className="mgr-error" role="alert">{errors.gender.message}</p>}
+            {errors.gender && <p id="admission-gender-error" className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.gender.message}</p>}
           </div>
 
           {/* Date of Birth */}
           <div className="mgr-form-field">
-            <label className="mgr-label" htmlFor="admission-dob">Date of Birth</label>
+            <label className="mgr-label" htmlFor="admission-dob">
+              Date of Birth <span className="text-secondary font-normal text-xs">(Optional)</span>
+            </label>
             <div className="mgr-input-icon-wrap">
               <Calendar size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-dob" {...register('dob')} type="date" className="mgr-input mgr-input-with-icon" />
+              <input
+                id="admission-dob"
+                {...register('dob')}
+                type="date"
+                max={new Date().toISOString().split('T')[0]}
+                className={`mgr-input mgr-input-with-icon${errors.dob ? ' mgr-input-error' : ''}`}
+              />
             </div>
+            {errors.dob && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.dob.message}</p>}
           </div>
 
           {/* Full Address */}
@@ -167,7 +202,9 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
 
           {/* Guardian Phone */}
           <div className="mgr-form-field">
-            <label className="mgr-label" htmlFor="admission-parent-phone">Parent / Guardian Phone</label>
+            <label className="mgr-label" htmlFor="admission-parent-phone">
+              Parent / Guardian Phone <span className="text-secondary font-normal text-xs">(Optional)</span>
+            </label>
             <div className="mgr-input-icon-wrap">
               <ShieldAlert size={18} strokeWidth={2} className="mgr-input-icon" />
               <input
@@ -176,14 +213,25 @@ export function ManagerMembersNewAdmissionAdmissionPersonalSection({
                   onChange: (e) => {
                     const clean = e.target.value.replace(/\D/g, '').slice(0, 10);
                     e.target.value = clean;
+                    if (setValue) {
+                      setValue('parentPhone', clean, { shouldValidate: true, shouldDirty: true });
+                    }
                   },
                 })}
+                onKeyDown={(e) => {
+                  if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'Home', 'End'].includes(e.key)) return;
+                  if (e.ctrlKey || e.metaKey) return;
+                  if (!/^\d$/.test(e.key)) e.preventDefault();
+                }}
+                inputMode="numeric"
                 type="tel"
                 maxLength={10}
-                className="mgr-input mgr-input-with-icon"
+                className={`mgr-input mgr-input-with-icon${errors.parentPhone ? ' mgr-input-error' : ''}`}
+                aria-invalid={Boolean(errors.parentPhone)}
                 placeholder="10-digit emergency number"
               />
             </div>
+            {errors.parentPhone && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.parentPhone.message}</p>}
           </div>
 
           {/* College / University (Optional) */}

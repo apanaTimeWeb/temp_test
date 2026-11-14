@@ -55,7 +55,9 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
         <div className="mgr-form-grid">
           {/* Subscription Plan */}
           <div className="mgr-form-field">
-            <label className="mgr-label mgr-label-required" htmlFor="admission-plan">{tManagerUi('subscription_plan')}</label>
+            <label className="mgr-label mgr-label-required" htmlFor="admission-plan">
+              {tManagerUi('subscription_plan')}
+            </label>
             <SearchableCombobox
               id="admission-plan"
               options={comboboxPlanOptions}
@@ -64,7 +66,7 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
               placeholder="Select Subscription Duration..."
               searchPlaceholder="Search plans..."
             />
-            {errors.plan && <p className="mgr-error" role="alert">{errors.plan.message}</p>}
+            {errors.plan && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.plan.message}</p>}
           </div>
 
           {/* Coupon Code */}
@@ -85,14 +87,27 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             </label>
             <div className="mgr-input-icon-wrap">
               <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-discount" {...register('manualDiscount')} type="number" min="0" step="1" className="mgr-input mgr-input-with-icon" placeholder="0" />
+              <input
+                id="admission-discount"
+                {...register('manualDiscount')}
+                type="number"
+                min="0"
+                step="1"
+                onKeyDown={(e) => {
+                  if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault();
+                }}
+                className="mgr-input mgr-input-with-icon"
+                placeholder="0"
+              />
             </div>
-            {errors.manualDiscount && <p className="mgr-error" role="alert">{errors.manualDiscount.message}</p>}
+            {errors.manualDiscount && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.manualDiscount.message}</p>}
           </div>
 
           {/* Payment Mode */}
           <div className="mgr-form-field">
-            <label className="mgr-label mgr-label-required" htmlFor="admission-payment-mode">{tManagerUi('payment_mode_23b35c')}</label>
+            <label className="mgr-label mgr-label-required" htmlFor="admission-payment-mode">
+              {tManagerUi('payment_mode_23b35c')}
+            </label>
             <SearchableCombobox
               id="admission-payment-mode"
               options={MANAGER_ADMISSION_PAYMENT_MODE_OPTIONS}
@@ -101,17 +116,32 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
               placeholder="Select Payment Mode..."
               searchPlaceholder="Cash or UPI..."
             />
-            {errors.paymentMode && <p className="mgr-error" role="alert">{errors.paymentMode.message}</p>}
+            {errors.paymentMode && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.paymentMode.message}</p>}
           </div>
 
           {/* Amount Paid Now */}
           <div className="mgr-form-field">
-            <label className="mgr-label mgr-label-required" htmlFor="admission-amount">{tManagerUi('amount_paid_now')}</label>
+            <label className="mgr-label mgr-label-required" htmlFor="admission-amount">
+              {tManagerUi('amount_paid_now')}
+            </label>
             <div className="mgr-input-icon-wrap">
               <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon" />
-              <input id="admission-amount" {...register('amountPaid')} type="number" min="1" step="1" className={`mgr-input mgr-input-with-icon${errors.amountPaid ? ' mgr-input-error' : ''}`} aria-invalid={Boolean(errors.amountPaid)} placeholder="1000" />
+              <input
+                id="admission-amount"
+                {...register('amountPaid')}
+                type="number"
+                min="1"
+                step="1"
+                inputMode="numeric"
+                onKeyDown={(e) => {
+                  if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault();
+                }}
+                className={`mgr-input mgr-input-with-icon${errors.amountPaid ? ' mgr-input-error' : ''}`}
+                aria-invalid={Boolean(errors.amountPaid)}
+                placeholder="1000"
+              />
             </div>
-            {errors.amountPaid && <p className="mgr-error" role="alert">{errors.amountPaid.message}</p>}
+            {errors.amountPaid && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.amountPaid.message}</p>}
           </div>
 
           {/* Remarks */}

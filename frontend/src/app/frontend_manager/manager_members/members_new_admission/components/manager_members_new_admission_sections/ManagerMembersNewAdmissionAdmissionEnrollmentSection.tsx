@@ -135,14 +135,14 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
           </div>
 
           {selectedShifts.length > 0 && (
-            <div className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs">
-              <span className="text-secondary font-medium">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-lg border border-border bg-card px-3 py-2 text-xs min-w-0 w-full">
+              <span className="text-secondary font-medium min-w-0 break-words">
                 Selected: <strong className="text-primary">{selectedShifts.join(' + ')}</strong>
                 {selectedShifts.length > 1 && !selectedShifts.includes('Full Day') ? (
                   <span className="ml-1 text-success-text font-bold">({pricingConfig.multiShiftDiscountPercent}% Combo Discount Applies)</span>
                 ) : null}
               </span>
-              <span className="font-bold text-primary flex items-center gap-1">
+              <span className="font-bold text-primary flex items-center gap-1 shrink-0 self-start sm:self-auto">
                 <IndianRupee size={12} />
                 <span>Base: ₹{currentTotalMonthlyShiftRate} / mo</span>
               </span>
@@ -170,7 +170,9 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
 
           {/* Seat Number Selection */}
           <div className="mgr-form-field">
-            <label className="mgr-label mgr-label-required" htmlFor="admission-seat">{tManagerUi('seat_number')}</label>
+            <label className="mgr-label mgr-label-required" htmlFor="admission-seat">
+              {tManagerUi('seat_number')}
+            </label>
             <SearchableCombobox
               id="admission-seat"
               options={MANAGER_ADMISSION_SEAT_OPTIONS}
@@ -179,7 +181,7 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
               placeholder="Search / Select Available Seat..."
               searchPlaceholder="Search seat (e.g. S-01, S-12)..."
             />
-            {errors.seat && <p className="mgr-error" role="alert">{errors.seat.message}</p>}
+            {errors.seat && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.seat.message}</p>}
           </div>
 
           {/* Locker Selection */}

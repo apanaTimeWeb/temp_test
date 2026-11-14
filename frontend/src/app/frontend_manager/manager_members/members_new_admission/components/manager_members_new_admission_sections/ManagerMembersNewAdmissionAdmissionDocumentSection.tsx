@@ -95,14 +95,14 @@ export function ManagerMembersNewAdmissionAdmissionDocumentSection({
             />
           </div>
 
-          <div className="mgr-form-field mgr-form-field-full">
+          <div className="mgr-form-field mgr-form-field-full min-w-0">
             <label className="mgr-label" htmlFor="admission-doc-file">
               Upload Document File (PDF / JPG / PNG) <span className="text-secondary font-normal text-xs">(Optional)</span>
             </label>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 min-w-0">
               <label
                 htmlFor="admission-doc-file"
-                className="mgr-btn-ghost cursor-pointer flex items-center gap-2 border border-border px-4 py-2 rounded-lg text-sm font-medium hover:bg-card"
+                className="mgr-btn-ghost cursor-pointer flex items-center justify-center gap-2 border border-border px-4 py-2 rounded-lg text-sm font-medium hover:bg-card shrink-0"
               >
                 <Upload size={16} />
                 <span>Choose File</span>
@@ -115,11 +115,12 @@ export function ManagerMembersNewAdmissionAdmissionDocumentSection({
                 className="sr-only"
               />
               {selectedFileName ? (
-                <span className="flex items-center gap-1.5 text-xs text-success font-medium">
-                  <CheckCircle2 size={14} /> {selectedFileName}
+                <span className="flex items-center gap-1.5 text-xs text-success font-medium min-w-0 truncate">
+                  <CheckCircle2 size={14} className="shrink-0" />
+                  <span className="truncate">{selectedFileName}</span>
                 </span>
               ) : (
-                <span className="text-xs text-secondary">No file selected (Optional during initial draft)</span>
+                <span className="text-xs text-secondary truncate">No file selected (Optional during initial draft)</span>
               )}
             </div>
             <p className="text-xs text-secondary mt-1">Uploaded document will be accessible in student profile and Document Vault.</p>
