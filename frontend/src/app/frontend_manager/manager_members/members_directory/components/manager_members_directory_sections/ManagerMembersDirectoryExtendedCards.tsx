@@ -14,100 +14,106 @@ export function ManagerMembersDirectoryExtendedCards({
   onEdit,
 }: ManagerMembersDirectoryExtendedCardsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 min-w-0 w-full max-w-full">
       {/* Seat & Shift Details */}
-      <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
-        <div className="flex items-center justify-between border-b border-border pb-2">
-          <h4 className="font-bold text-primary flex items-center gap-2 text-sm">
-            <Armchair size={16} className="text-primary" /> Seat & Shift Allotment
+      <div className="p-4 sm:p-5 rounded-2xl bg-card border border-border space-y-3 min-w-0 shadow-sm">
+        <div className="flex items-center justify-between border-b border-border pb-2 gap-2">
+          <h4 className="font-bold text-primary flex items-center gap-2 text-sm truncate">
+            <Armchair size={16} className="text-indigo-400 shrink-0" />
+            <span className="truncate">Seat & Shift Allotment</span>
           </h4>
           <button
             type="button"
             onClick={onEdit}
-            className="text-xs text-info hover:text-info-hover font-semibold inline-flex items-center gap-1 cursor-pointer"
+            className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold inline-flex items-center gap-1 cursor-pointer shrink-0"
             title="Change Seat, Shift, or Locker"
           >
-            <Pencil size={11} /> Edit
+            <Pencil size={11} />
+            <span>Edit</span>
           </button>
         </div>
-        <div className="space-y-2 text-xs">
-          <div className="flex justify-between items-center">
-            <span className="text-secondary flex items-center gap-1.5"><Armchair size={14} /> Assigned Seat:</span>
-            <span className="font-bold text-primary bg-primary-subtle px-2 py-0.5 rounded">{member.seat || 'Unassigned'}</span>
+        <div className="space-y-2.5 text-xs">
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary flex items-center gap-1.5 shrink-0"><Armchair size={14} className="text-indigo-400" /> Assigned Seat:</span>
+            <span className="font-bold text-primary bg-indigo-500/15 border border-indigo-500/30 px-2 py-0.5 rounded text-right truncate">{member.seat || 'Unassigned'}</span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-secondary flex items-center gap-1.5"><Clock size={14} /> Shift Timing:</span>
-            <span className="font-semibold text-primary">{member.shift || 'Not Selected'}</span>
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary flex items-center gap-1.5 shrink-0"><Clock size={14} className="text-amber-400" /> Shift Timing:</span>
+            <span className="font-semibold text-primary text-right truncate">{member.shift || 'Not Selected'}</span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-secondary flex items-center gap-1.5"><Layers size={14} /> Floor:</span>
-            <span className="font-medium text-primary">{member.floor || 'Unallocated'}</span>
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary flex items-center gap-1.5 shrink-0"><Layers size={14} className="text-sky-400" /> Floor:</span>
+            <span className="font-medium text-primary text-right truncate">{member.floor || 'Unallocated'}</span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-secondary flex items-center gap-1.5"><Lock size={14} /> Locker:</span>
-            <span className="font-medium text-primary">{member.locker || 'None'}</span>
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary flex items-center gap-1.5 shrink-0"><Lock size={14} className="text-purple-400" /> Locker:</span>
+            <span className="font-medium text-primary text-right truncate">{member.locker || 'None'}</span>
           </div>
         </div>
       </div>
 
       {/* Parent & Guardian Information */}
-      <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
-        <div className="flex items-center justify-between border-b border-border pb-2">
-          <h4 className="font-bold text-primary flex items-center gap-2 text-sm">
-            <User size={16} className="text-info" /> Guardian & Family Info
+      <div className="p-4 sm:p-5 rounded-2xl bg-card border border-border space-y-3 min-w-0 shadow-sm">
+        <div className="flex items-center justify-between border-b border-border pb-2 gap-2">
+          <h4 className="font-bold text-primary flex items-center gap-2 text-sm truncate">
+            <User size={16} className="text-sky-400 shrink-0" />
+            <span className="truncate">Guardian & Family Info</span>
           </h4>
           <button
             type="button"
             onClick={onEdit}
-            className="text-xs text-info hover:text-info-hover font-semibold inline-flex items-center gap-1 cursor-pointer"
+            className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold inline-flex items-center gap-1 cursor-pointer shrink-0"
             title="Edit Guardian Details"
           >
-            <Pencil size={11} /> Edit
+            <Pencil size={11} />
+            <span>Edit</span>
           </button>
         </div>
-        <div className="space-y-2 text-xs">
-          <div className="flex justify-between items-center">
-            <span className="text-secondary">Parent / Guardian:</span>
-            <span className="font-bold text-primary">{member.guardian || 'Not Provided'}</span>
+        <div className="space-y-2.5 text-xs">
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary shrink-0">Parent / Guardian:</span>
+            <span className="font-bold text-primary text-right truncate" title={member.guardian}>{member.guardian || 'Not Provided'}</span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-secondary">Guardian Contact:</span>
-            <span className="font-mono text-primary">{member.emergencyContact || 'Not Provided'}</span>
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary shrink-0">Guardian Contact:</span>
+            <span className="font-mono text-primary text-right truncate">{member.emergencyContact || 'Not Provided'}</span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-secondary">Gender:</span>
-            <span className="font-medium text-primary">{member.gender || 'Not Specified'}</span>
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary shrink-0">Gender:</span>
+            <span className="font-medium text-primary text-right truncate">{member.gender || 'Not Specified'}</span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-secondary">Date of Birth:</span>
-            <span className="font-medium text-primary">{member.dob || 'Not Provided'}</span>
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary shrink-0">Date of Birth:</span>
+            <span className="font-medium text-primary text-right truncate">{member.dob || 'Not Provided'}</span>
           </div>
         </div>
       </div>
 
       {/* Academic & Goal Preparation */}
-      <div className="p-5 rounded-2xl bg-card border border-border space-y-3">
-        <div className="flex items-center justify-between border-b border-border pb-2">
-          <h4 className="font-bold text-primary flex items-center gap-2 text-sm">
-            <GraduationCap size={16} className="text-success" /> Academic & Target Goal
+      <div className="p-4 sm:p-5 rounded-2xl bg-card border border-border space-y-3 min-w-0 md:col-span-2 lg:col-span-1 shadow-sm">
+        <div className="flex items-center justify-between border-b border-border pb-2 gap-2">
+          <h4 className="font-bold text-primary flex items-center gap-2 text-sm truncate">
+            <GraduationCap size={16} className="text-emerald-400 shrink-0" />
+            <span className="truncate">Academic & Target Goal</span>
           </h4>
           <button
             type="button"
             onClick={onEdit}
-            className="text-xs text-info hover:text-info-hover font-semibold inline-flex items-center gap-1 cursor-pointer"
+            className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold inline-flex items-center gap-1 cursor-pointer shrink-0"
             title="Edit Academic Goal"
           >
-            <Pencil size={11} /> Edit
+            <Pencil size={11} />
+            <span>Edit</span>
           </button>
         </div>
-        <div className="space-y-2 text-xs">
-          <div className="flex justify-between items-center">
-            <span className="text-secondary">Target Preparation:</span>
-            <span className="font-bold text-success bg-success-bg px-2 py-0.5 rounded">{member.preparationFor || 'General Study'}</span>
+        <div className="space-y-2.5 text-xs">
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary shrink-0">Target Preparation:</span>
+            <span className="font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded text-right truncate" title={member.preparationFor}>{member.preparationFor || 'General Study'}</span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-secondary">Course / Stream:</span>
-            <span className="font-medium text-primary">{member.department || 'General Studies & Research'}</span>
+          <div className="flex justify-between items-center gap-2 min-w-0">
+            <span className="text-secondary shrink-0">Course / Stream:</span>
+            <span className="font-medium text-primary text-right truncate" title={member.department}>{member.department || 'General Studies & Research'}</span>
           </div>
         </div>
       </div>
