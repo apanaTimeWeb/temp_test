@@ -1,0 +1,10 @@
+// FLOW: Feature preview/test -> superadmin_support/support_complaints/mocks/fixtures/SuperadminSupportComplaintsComplaintMockFixtures.ts -> typed local fixtures -> screen rendering or assertions.
+/** Responsibility: Superadmin Communication Complaint Fixtures; supplies module-owned mock fixtures or handler behavior only. */
+import type { SuperadminSupportComplaint } from '@/app/frontend_superadmin/superadmin_support/support_complaints/types/SuperadminSupportComplaintsTypes';
+
+export const SUPERADMIN_SUPPORT_COMPLAINT_PREVIEW_FIXTURES: SuperadminSupportComplaint[] = [
+  { id: '1', title: 'AC not cooling',     student: 'Rahul Sharma', isAnonymous: false, description: 'The AC in Zone A has not been cooling properly for the past 3 days. Very uncomfortable to study.', status: 'Open',        date: '2026-04-10', resolvedBy: '—', resolvedDate: '—', resolvedNote: '' },
+  { id: '2', title: 'WiFi very slow',     student: 'Anonymous',    isAnonymous: true,  description: 'Internet speed is extremely slow during evening hours. Cannot load study materials.',              status: 'In-Progress', date: '2026-04-09', resolvedBy: 'Admin', resolvedDate: '—', resolvedNote: '' },
+  { id: '3', title: 'Locker door broken', student: 'Priya Verma',  isAnonymous: false, description: 'Locker door hinge is broken. Cannot lock properly.',                                               status: 'Resolved',    date: '2026-04-07', resolvedBy: 'Staff Ravi', resolvedDate: '2026-04-08', resolvedNote: 'Hinge replaced.' },
+  { id: '4', title: 'Noise from outside', student: 'Anonymous',    isAnonymous: true,  description: 'Construction noise from outside is very disturbing during morning hours.',                         status: 'Open',        date: '2026-04-11', resolvedBy: '—', resolvedDate: '—', resolvedNote: '' },
+];

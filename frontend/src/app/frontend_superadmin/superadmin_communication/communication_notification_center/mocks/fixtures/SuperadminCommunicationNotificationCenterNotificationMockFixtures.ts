@@ -1,0 +1,12 @@
+// RESPONSIBILITY: Define local sample fixtures for communication notification center; sample data does not represent live customer or backend records.
+// FLOW: Feature preview/test -> superadmin_communication/communication_notification_center/mocks/fixtures/SuperadminCommunicationNotificationCenterNotificationMockFixtures.ts -> typed local fixtures -> screen rendering or assertions.
+import { SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES as __SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES } from "@/app/frontend_superadmin/superadmin_communication/communication_notification_center/config/superadmin_communication_notification_center.url_config";
+import type { SuperadminCommunicationNotification } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
+
+/** Synthetic preview notifications for routes implemented in this source package; no live business event is asserted. */
+export const SUPERADMIN_COMMUNICATION_SAMPLE_NOTIFICATIONS: SuperadminCommunicationNotification[] = [
+  { id: 'sample-notification-1', category: 'Finance', icon: '💰', titleKey: 'NOTIFICATION_SAMPLE_TITLE_SUBSCRIPTIONS', descriptionKey: 'NOTIFICATION_SAMPLE_DESC_SUBSCRIPTIONS', timeKey: 'NOTIFICATION_TIME_2H_AGO', priority: 'High', link: __SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES.SUPERADMIN_COMMUNICATION_URLS.FINANCE_RENEWALS_PAGE, read: false },
+  { id: 'sample-notification-3', category: 'Finance', icon: '🤝', titleKey: 'NOTIFICATION_SAMPLE_TITLE_PAYMENT_PROMISE', descriptionKey: 'NOTIFICATION_SAMPLE_DESC_PAYMENT_PROMISE', timeKey: 'NOTIFICATION_TIME_4H_AGO', priority: 'High', link: __SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES.SUPERADMIN_COMMUNICATION_URLS.PAYMENT_PROMISES_PAGE, read: false },
+  { id: 'sample-notification-4', category: 'Operations', icon: '🪑', titleKey: 'NOTIFICATION_SAMPLE_TITLE_MAINTENANCE', descriptionKey: 'NOTIFICATION_SAMPLE_DESC_MAINTENANCE', timeKey: 'NOTIFICATION_TIME_1D_AGO', priority: 'Medium', link: __SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES.SUPERADMIN_COMMUNICATION_URLS.ASSET_MAINTENANCE_PAGE, read: false },
+  { id: 'sample-notification-6', category: 'Finance', icon: '⏰', titleKey: 'NOTIFICATION_SAMPLE_TITLE_LATE_FEES', descriptionKey: 'NOTIFICATION_SAMPLE_DESC_LATE_FEES', timeKey: 'NOTIFICATION_TIME_2D_AGO', priority: 'Medium', link: __SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES.SUPERADMIN_COMMUNICATION_URLS.LATE_FEES_PAGE, read: true },
+];

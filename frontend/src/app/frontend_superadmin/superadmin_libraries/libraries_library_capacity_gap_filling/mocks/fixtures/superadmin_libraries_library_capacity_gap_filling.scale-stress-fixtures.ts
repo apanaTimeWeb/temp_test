@@ -1,0 +1,23 @@
+// RESPONSIBILITY: Define deterministic local scale tiers derived from the capacity-gap sample fixture.
+import { SUPERADMIN_SYSTEM_SAMPLE_SEAT_GAPS as MODULE_SCALE_FIXTURE_SOURCE } from '@/app/frontend_superadmin/superadmin_libraries/libraries_library_capacity_gap_filling/mocks/fixtures/SuperadminLibrariesOverviewLibraryCapacityGapFillingMockFixtures';
+
+type FixtureRecord = Record<string, unknown>;
+function withDeterministicIdentity(record: FixtureRecord, index: number): FixtureRecord {
+  const copy: FixtureRecord = { ...record };
+  const identityKey = ['id', 'key', 'code', 'reference', 'receiptNumber', 'invoiceNumber'].find((key) => key in copy);
+  const key = identityKey ?? '__scaleFixtureIndex';
+  const current = copy[key];
+  copy[key] = identityKey && typeof current === 'number' ? current * 1000 + index : `${String(current ?? 'scale')}-${String(index).padStart(4, '0')}`;
+  return copy;
+}
+
+/** Derives scale copies from immutable input records; the original sample data is never mutated. */
+export function createSuperadminLibraryCapacityGapFillingScaleTier(records: readonly FixtureRecord[], count: number): readonly FixtureRecord[] {
+  if (records.length === 0 || count <= 0) return [];
+  return Array.from({ length: count }, (_, index) => withDeterministicIdentity(records[index % records.length], index + 1));
+}
+
+const sourceRecords = MODULE_SCALE_FIXTURE_SOURCE as unknown as readonly FixtureRecord[];
+export const MOCK_SCALE_TIER_1_SMALL = createSuperadminLibraryCapacityGapFillingScaleTier(sourceRecords, 10);
+export const MOCK_SCALE_TIER_2_STANDARD = createSuperadminLibraryCapacityGapFillingScaleTier(sourceRecords, 100);
+export const MOCK_SCALE_TIER_3_STRESS = createSuperadminLibraryCapacityGapFillingScaleTier(sourceRecords, 500);

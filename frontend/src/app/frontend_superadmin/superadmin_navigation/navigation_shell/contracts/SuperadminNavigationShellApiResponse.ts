@@ -1,0 +1,53 @@
+// RESPONSIBILITY: Declare host boundary contracts for navigation shell; ambient stubs provide no runtime implementation or authorization.
+// FLOW: TypeScript/static validation -> superadmin_navigation/navigation_shell/contracts/SuperadminNavigationShellApiResponse.ts -> compile-time host boundary -> feature source.
+/**
+ * Canonical API gateway envelope for the isolated Superadmin web role.
+ * Names and field semantics match the supplied architecture contract exactly.
+ */
+export interface ValidationErrorItem {
+  /** Exact DTO field name, using dot notation for nested fields. */
+  field: string;
+  /** Human-readable field validation message. */
+  message: string;
+}
+
+/** Pagination metadata for a successful paginated API response. */
+export interface PaginationMeta {
+  /** Total records matching the request query. */
+  total: number;
+  /** One-based current page. */
+  page: number;
+  /** Requested page size. */
+  limit: number;
+  /** Total pages, equal to Math.ceil(total / limit). */
+  totalPages: number;
+  /** Whether a following page exists. */
+  hasNextPage: boolean;
+  /** Whether a preceding page exists. */
+  hasPrevPage: boolean;
+}
+
+/** Successful API response; payload data is guaranteed to be non-null. */
+export interface ApiSuccess<T> {
+  success: true;
+  message: string;
+  data: T;
+  meta?: PaginationMeta;
+  requestId: string;
+}
+
+/** Failed API response; the payload is explicitly null and carries stable diagnostics. */
+export interface ApiFailure {
+  success: false;
+  message: string;
+  data: null;
+  error?: string;
+  errorCode: string;
+  statusCode: number;
+  requestId: string;
+  validationErrors?: ValidationErrorItem[];
+}
+
+/** Canonical discriminated union for API gateway responses consumed by the Superadmin role. */
+export type ApiResponse<T> = ApiSuccess<T> | ApiFailure;
+
