@@ -4,11 +4,12 @@
 import { useLocale, useTranslations } from 'next-intl';
 
 import Link from 'next/link';
-import { Bell, Clock, HelpCircle, Menu, ShieldCheck, User } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Bell, ChevronDown, Clock, HelpCircle, LogOut, Menu, ShieldCheck, User } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
 import type { ManagerNavigationHeaderProps } from '@/app/frontend_manager/manager_navigation/navigation/types/ManagerNavigationNavigationComponentTypes';
+import { ManagerNavigationSidebarLogoutModal } from './ManagerNavigationSidebarLogoutModal';
 export type { ManagerNavigationHeaderProps };
 
 
@@ -18,6 +19,21 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
   const locale = useLocale();
   const dateTimeLocale = locale === 'hi' ? 'hi-IN' : 'en-IN';
   const [time, setTime] = useState<Date | null>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    if (!isProfileOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isProfileOpen]);
 
 // Dependency rationale: the clock interval is mount-scoped and is cleaned up on unmount.
   useEffect(() => {
@@ -71,16 +87,91 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
           <Bell size={18} strokeWidth={2} />
           <span className="mgr-bell-dot" aria-hidden="true" />
         </Link>
-        <div className="mgr-avatar-wrapper">
-          <div className="mgr-avatar mgr-avatar-header" aria-hidden="true">
-            <User size={18} strokeWidth={2} />
-          </div>
-          <div className="mgr-avatar-details">
-            <span>{greeting}</span>
-            <strong>{tManagerUi('manager')}</strong>
-          </div>
+        <div
+          ref={profileMenuRef}
+          className="mgr-avatar-container"
+          onMouseEnter={() => setIsProfileOpen(true)}
+          onMouseLeave={() => setIsProfileOpen(false)}
+        >
+          <button
+            type="button"
+            className="mgr-avatar-wrapper"
+            onClick={() => setIsProfileOpen((prev) => !prev)}
+            aria-expanded={isProfileOpen}
+            aria-haspopup="true"
+            aria-label={tManagerUi('manager_account_menu') || 'Manager account menu'}
+            data-testid="manager-account-menu-trigger"
+          >
+            <div className="mgr-avatar mgr-avatar-header" aria-hidden="true">
+              <User size={18} strokeWidth={2} />
+            </div>
+            <div className="mgr-avatar-details">
+              <span>{greeting}</span>
+              <strong>{tManagerUi('manager')}</strong>
+            </div>
+            <ChevronDown
+              size={13}
+              className={`mgr-avatar-chevron ${isProfileOpen ? 'mgr-avatar-chevron--open' : ''}`}
+              aria-hidden="true"
+            />
+          </button>
+
+          {isProfileOpen && (
+            <div
+              className="mgr-profile-dropdown"
+              role="menu"
+              aria-label={tManagerUi('manager_account_menu') || 'Manager account menu'}
+            >
+              <div className="mgr-profile-dropdown-header">
+                <div className="mgr-profile-dropdown-avatar" aria-hidden="true">
+                  <User size={20} strokeWidth={2.2} />
+                </div>
+                <div className="mgr-profile-dropdown-meta">
+                  <p className="mgr-profile-dropdown-name">{tManagerUi('manager')}</p>
+                  <p className="mgr-profile-dropdown-email">{tManagerUi('manager_library_com')}</p>
+                  <span className="mgr-profile-dropdown-badge">Library Ops & Shifts</span>
+                </div>
+              </div>
+
+              <div className="mgr-profile-dropdown-divider" />
+
+              <div className="mgr-profile-dropdown-body">
+                <div className="mgr-profile-dropdown-status">
+                  <span className="mgr-status-pulse-dot" aria-hidden="true" />
+                  <span>Branch Shift Active • Online</span>
+                </div>
+              </div>
+
+              <div className="mgr-profile-dropdown-divider" />
+
+              <div className="mgr-profile-dropdown-footer">
+                <button
+                  type="button"
+                  className="mgr-profile-logout-btn"
+                  onClick={() => {
+                    setIsProfileOpen(false);
+                    setShowLogoutModal(true);
+                  }}
+                  data-testid="manager-logout-open"
+                >
+                  <div className="mgr-profile-logout-icon" aria-hidden="true">
+                    <LogOut size={16} strokeWidth={2} />
+                  </div>
+                  <div className="mgr-profile-logout-text">
+                    <span className="mgr-profile-logout-label">{tManagerUi('log_out') || 'Log out'}</span>
+                    <span className="mgr-profile-logout-sub">Sign out of portal</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      <ManagerNavigationSidebarLogoutModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+      />
     </header>
   );
 }

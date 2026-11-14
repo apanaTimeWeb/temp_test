@@ -5,12 +5,11 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { BookOpen, LogOut, Menu, Search, X } from 'lucide-react';
+import { BookOpen, Menu, Search, X } from 'lucide-react';
 
 import { MANAGER_NAVIGATION_HREFS, MANAGER_NAVIGATION_ITEMS } from '@/app/frontend_manager/manager_navigation/navigation/constants/ManagerNavigationNavigationConstants';
 import { MANAGER_NAVIGATION_NAVIGATION_ROUTES } from '@/app/frontend_manager/manager_navigation/navigation/config/manager_navigation_navigation.url_config';
 import type { ManagerNavigationSidebarProps } from '@/app/frontend_manager/manager_navigation/navigation/types/ManagerNavigationNavigationComponentTypes';
-import { ManagerNavigationSidebarLogoutModal } from './ManagerNavigationSidebarLogoutModal';
 import { ManagerNavigationSidebarSearch } from './ManagerNavigationSidebarSearch';
 import { ManagerNavigationSidebarNavSection } from './ManagerNavigationSidebarNavSection';
 
@@ -29,7 +28,6 @@ export default function ManagerNavigationSidebar({
   };
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [showLogout, setShowLogout] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<string[]>(() =>
     MANAGER_NAVIGATION_ITEMS.filter((item) => item.kind === 'group').map((item) => item.labelKey)
   );
@@ -266,30 +264,7 @@ export default function ManagerNavigationSidebar({
             })
           )}
         </nav>
-
-        {(!collapsed || mobileOpen) && (
-          <div className="mgr-sidebar-footer">
-            <div className="mgr-avatar" aria-hidden="true">
-              {tManagerUi('mg')}
-            </div>
-            <div className="mgr-sidebar-user-info">
-              <p className="mgr-sidebar-user-name">{tManagerUi('manager')}</p>
-              <p className="mgr-sidebar-user-email">{tManagerUi('manager_library_com')}</p>
-            </div>
-            <button
-              type="button"
-              className="mgr-logout-btn"
-              aria-label={tManagerUi('log_out')}
-              data-testid="manager-logout-open"
-              onClick={() => setShowLogout(true)}
-            >
-              <LogOut size={18} strokeWidth={2} />
-            </button>
-          </div>
-        )}
       </aside>
-
-      <ManagerNavigationSidebarLogoutModal isOpen={showLogout} onClose={() => setShowLogout(false)} />
     </>
   );
 }
