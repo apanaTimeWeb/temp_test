@@ -133,7 +133,7 @@ export function ManagerMembersEnquiriesClient() {
   const hasActiveFilters = Boolean(search || statusFilter !== 'All' || timeHorizon !== 'all');
 
   return (
-    <div className="crm-page space-y-6">
+    <div className="crm-page w-full max-w-full min-w-0 space-y-5 overflow-x-hidden">
       {/* ── Executive Header Banner ── */}
       <ManagerMembersEnquiriesHeaderBanner
         filteredCount={filtered.length}

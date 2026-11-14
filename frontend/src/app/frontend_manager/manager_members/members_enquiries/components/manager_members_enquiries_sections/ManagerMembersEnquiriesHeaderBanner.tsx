@@ -30,7 +30,7 @@ export function ManagerMembersEnquiriesHeaderBanner({
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
 
   return (
-    <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-5 sm:p-6 shadow-md transition-all">
+    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-4 sm:p-6 shadow-md transition-all">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         {/* Left: Titles & Meta Chips */}
         <div className="space-y-1.5">

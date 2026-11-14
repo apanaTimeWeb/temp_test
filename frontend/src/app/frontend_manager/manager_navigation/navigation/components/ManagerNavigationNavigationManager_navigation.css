@@ -547,9 +547,9 @@
 
   /* ═══════════════ SHELL LAYOUT ═══════════════ */
 
-  .mgr-shell-flex  { display: flex; min-height: 100vh; }
-  .mgr-main-offset { flex: 1; min-height: 100vh; transition: margin-left theme(--animate-duration-slow); }
-  .mgr-shell-content { padding: 24px; padding-top: 88px; }
+  .mgr-shell-flex  { display: flex; min-height: 100vh; width: 100%; max-width: 100vw; overflow-x: hidden; }
+  .mgr-main-offset { flex: 1; min-height: 100vh; min-width: 0; max-width: 100%; width: 100%; box-sizing: border-box; transition: margin-left theme(--animate-duration-slow); }
+  .mgr-shell-content { padding: 24px; padding-top: 88px; min-width: 0; max-width: 100%; width: 100%; box-sizing: border-box; overflow-x: hidden; }
 
 
   /* ═══════════════ HEADER ═══════════════ */
@@ -880,13 +880,13 @@
 @media (max-width: 767px) {
   .mgr-sidebar { transform: translateX(-100%); width: 240px !important; }
   .mgr-sidebar.mgr-sidebar-mobile-open { transform: translateX(0); box-shadow: theme(--shadow-dialog); }
-  .mgr-main-offset { margin-left: 0 !important; }
+  .mgr-main-offset { margin-left: 0 !important; width: 100% !important; max-width: 100vw !important; min-width: 0 !important; overflow-x: hidden !important; }
   .mgr-header { left: 0 !important; padding: 0 12px; gap: 8px; justify-content: space-between; }
   .mgr-mobile-menu-btn { display: flex; }
   .mgr-header-titles, .mgr-help-btn, .mgr-avatar-details { display: none !important; }
   .mgr-header-middle { padding: 0 8px !important; }
   .mgr-avatar-wrapper { padding: 0 !important; border: none !important; background: transparent !important; }
-  .mgr-shell-content { padding: 12px; padding-top: 76px; }
+  .mgr-shell-content { padding: 12px; padding-top: 76px; width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; overflow-x: hidden !important; }
   .mgr-page-title  { font-size: 18px; }
   .mgr-kpi-value   { font-size: 22px; }
   .mgr-kpi-card    { padding: 14px; }

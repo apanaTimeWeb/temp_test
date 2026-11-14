@@ -22,7 +22,7 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
   setCustomEndDate,
 }: ManagerMembersEnquiriesTimeHorizonBarProps) {
   return (
-    <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-3.5 sm:p-4 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3">
+    <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-3.5 sm:p-4 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3">
       <div className="flex items-center gap-2">
         <Calendar size={16} className="text-indigo-400 shrink-0" />
         <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -30,15 +30,15 @@ export function ManagerMembersEnquiriesTimeHorizonBar({
         </span>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
         {/* Segmented Time Horizon Pills */}
-        <div className="inline-flex bg-[#060818] p-1 rounded-xl border border-indigo-500/25 flex-wrap gap-1">
+        <div className="inline-flex flex-wrap bg-[#060818] p-1 rounded-xl border border-indigo-500/25 gap-1 w-full sm:w-auto">
           {timeHorizonOptions.map((opt) => (
             <button
               key={opt.id}
               type="button"
               onClick={() => setTimeHorizon(opt.id)}
-              className={`min-h-8 px-3 py-1 text-xs font-semibold rounded-lg motion-safe:transition-all cursor-pointer ${
+              className={`min-h-8 flex-1 sm:flex-initial text-center px-2.5 sm:px-3 py-1 text-xs font-semibold rounded-lg motion-safe:transition-all cursor-pointer whitespace-nowrap ${
                 timeHorizon === opt.id
                   ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm shadow-indigo-950/50'
                   : 'text-slate-300 hover:text-white hover:bg-indigo-500/15'
