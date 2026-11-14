@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckSquare, MessageCircle, X, Users, UserCheck, Flame, Sparkles, Trash2 } from 'lucide-react';
+import { CheckSquare, MessageCircle, X, Users, UserCheck, Flame, UserPlus, Trash2 } from 'lucide-react';
 import type { ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 
 export interface ManagerMembersEnquiriesBulkToolbarProps {
@@ -76,11 +76,11 @@ export function ManagerMembersEnquiriesBulkToolbar({
             <button
               type="button"
               onClick={() => onSelectByStatus('New')}
-              className="px-2.5 py-1 rounded-lg border border-amber-500/25 bg-[#060818] hover:bg-amber-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg border border-sky-500/25 bg-[#060818] hover:bg-sky-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
               title="Select all new leads"
             >
               <span className="flex items-center gap-1.5">
-                <Sparkles size={12} className="text-amber-400" />
+                <UserPlus size={12} className="text-sky-400" />
                 New ({newCount})
               </span>
             </button>

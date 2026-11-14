@@ -32,10 +32,10 @@ export function ManagerMembersEnquiriesToolbar({
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
 
   return (
-    <div className="flex flex-wrap gap-3 items-center justify-between p-3.5 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 backdrop-blur-md shadow-lg shadow-black/30">
-      <div className="flex flex-wrap items-center gap-3 flex-grow max-w-xl">
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3.5 p-3.5 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 backdrop-blur-md shadow-lg shadow-black/30">
+      <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-0">
         {/* Search Input */}
-        <div className="relative flex-grow min-w-[220px]">
+        <div className="relative flex-1 min-w-[200px] sm:min-w-[240px]">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
           <input
             type="text"
@@ -49,7 +49,7 @@ export function ManagerMembersEnquiriesToolbar({
             <button
               type="button"
               onClick={() => setSearch('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-400 p-0.5 rounded transition-colors"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-400 p-0.5 rounded transition-colors cursor-pointer"
               title="Clear search"
             >
               <X size={14} />
@@ -88,13 +88,13 @@ export function ManagerMembersEnquiriesToolbar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="text-xs font-bold text-indigo-400 hover:text-indigo-300 hover:underline px-2 py-1 transition-colors"
+            className="text-xs font-bold text-indigo-400 hover:text-indigo-300 hover:underline px-2 py-1 transition-colors shrink-0 cursor-pointer"
           >
             Reset Filters
           </button>
         )}
 
-        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-300 px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 shrink-0">
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-300 px-2.5 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 shrink-0 whitespace-nowrap">
           <Users size={12} className="text-indigo-400" />
           Showing {filteredCount} leads ({horizonLabel})
         </span>
@@ -104,7 +104,7 @@ export function ManagerMembersEnquiriesToolbar({
       <button
         type="button"
         onClick={onExportCsv}
-        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-bold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm shrink-0 cursor-pointer"
+        className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-bold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm shrink-0 cursor-pointer w-full sm:w-auto"
         title="Export CRM Enquiries as CSV"
       >
         <Download size={14} className="text-indigo-400" />

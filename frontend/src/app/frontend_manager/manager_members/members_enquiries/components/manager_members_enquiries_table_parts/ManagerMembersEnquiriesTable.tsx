@@ -18,7 +18,7 @@ import {
   Sunset,
   Moon,
   Clock,
-  Sparkles,
+  UserPlus,
   MapPin,
   Flame,
   CheckCircle2,
@@ -211,7 +211,7 @@ export function ManagerMembersEnquiriesTable({
       case 'New':
         return (
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30">
-            <Sparkles size={11} className="text-sky-400" />
+            <UserPlus size={11} className="text-sky-400" />
             {label}
           </span>
         );
