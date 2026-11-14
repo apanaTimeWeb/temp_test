@@ -114,8 +114,8 @@ export function ManagerMembersNewAdmissionAdmissionEnrollmentSection({
                   onClick={() => handleToggleShift(shift.id)}
                   aria-pressed={isSelected}
                   className={`p-3 rounded-xl border text-left flex flex-col justify-between motion-safe:transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 outline-none cursor-pointer ${isSelected
-                      ? 'border-primary bg-primary-subtle shadow-sm ring-1 ring-primary'
-                      : 'border-border bg-card hover:bg-floating'
+                    ? 'border-primary bg-primary-subtle shadow-sm ring-1 ring-primary'
+                    : 'border-border bg-card hover:bg-floating'
                     }`}
                 >
                   <div className="flex items-center justify-between w-full mb-1">
