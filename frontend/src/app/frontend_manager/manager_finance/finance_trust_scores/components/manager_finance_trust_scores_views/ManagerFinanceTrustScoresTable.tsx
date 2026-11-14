@@ -29,13 +29,27 @@ const BADGE_ICON: Record<string, typeof ShieldCheck> = {
 };
 
 function TrustGauge({ score }: { score: number }) {
-  const colorClass = score >= 70 ? 'text-success' : score >= 40 ? 'text-warning' : 'text-danger';
+  const colorText = score >= 70 ? 'text-success' : score >= 40 ? 'text-warning' : 'text-danger';
+  const colorBg = score >= 70 ? 'bg-success' : score >= 40 ? 'bg-warning' : 'bg-danger';
+  const label = score >= 70 ? 'Reliable' : score >= 40 ? 'Moderate' : 'Low';
+  const clampedScore = Math.min(100, Math.max(0, score));
+
   return (
-    <div className="flex items-center gap-2">
-      <div className="fin-trust-track">
-        <div className={`fin-trust-fill mgr-progress-w-${Math.min(100, Math.round(score / 5) * 5)} ${colorClass}`} />
+    <div className="flex items-center gap-2" title={`Trust Score: ${score}/100 (${label})`}>
+      <div
+        className="fin-trust-track"
+        role="progressbar"
+        aria-valuenow={score}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`Trust score: ${score} out of 100, ${label}`}
+      >
+        <div
+          className={`fin-trust-fill motion-safe:transition-all motion-safe:duration-normal ${colorBg}`}
+          style={{ width: `${clampedScore}%` }}
+        />
       </div>
-      <span className={`text-sm font-semibold ${colorClass}`}>{score}</span>
+      <span className={`text-sm font-semibold ${colorText}`}>{score}</span>
     </div>
   );
 }
@@ -182,9 +196,10 @@ export function ManagerFinanceTrustScoresTable({
               </label>
               <select
                 id="rows-per-page-finance-trust-scores"
+                name="pageSize"
                 value={pageSize}
                 onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+                className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -194,19 +209,21 @@ export function ManagerFinanceTrustScoresTable({
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="mgr-btn-ghost mgr-btn-sm"
+                className="mgr-btn-ghost mgr-btn-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-40 disabled:cursor-not-allowed"
                 disabled={effectivePage <= 0}
+                aria-disabled={effectivePage <= 0}
                 onClick={() => onPageChange(Math.max(0, effectivePage - 1))}
               >
                 Previous
               </button>
-              <span className="text-xs text-secondary px-1">
+              <span className="text-xs text-secondary px-1" aria-current="page">
                 Page {effectivePage + 1} of {pageCount}
               </span>
               <button
                 type="button"
-                className="mgr-btn-ghost mgr-btn-sm"
+                className="mgr-btn-ghost mgr-btn-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-40 disabled:cursor-not-allowed"
                 disabled={effectivePage >= pageCount - 1}
+                aria-disabled={effectivePage >= pageCount - 1}
                 onClick={() => onPageChange(Math.min(pageCount - 1, effectivePage + 1))}
               >
                 Next

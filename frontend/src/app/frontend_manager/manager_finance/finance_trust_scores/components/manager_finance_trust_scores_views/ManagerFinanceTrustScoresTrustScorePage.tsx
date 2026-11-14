@@ -133,9 +133,12 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
         <div className="relative w-full sm:w-72">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
           <input
+            id="trust-scores-search-input"
+            name="searchQuery"
             type="search"
             placeholder="Search student or smart ID..."
-            className="mgr-input pl-8 text-xs w-full"
+            aria-label={tManagerUi('search_by_name_or_smart_id') || 'Search student or smart ID'}
+            className="mgr-input pl-8 text-xs w-full focus-visible:ring-2 focus-visible:ring-primary outline-none"
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
@@ -144,7 +147,9 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
           />
         </div>
         <select
-          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[130px]"
+          id="trust-scores-level-filter"
+          name="levelFilter"
+          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer min-w-[130px] outline-none"
           value={levelFilter}
           onChange={(e) => {
             setUrlFilter('level', e.target.value);
@@ -158,7 +163,9 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
           <option value="low">{tManagerUi('low_trust_056d0a')}</option>
         </select>
         <select
-          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[130px]"
+          id="trust-scores-shift-filter"
+          name="shiftFilter"
+          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer min-w-[130px] outline-none"
           value={shiftFilter}
           onChange={(e) => {
             setUrlFilter('shift', e.target.value);
@@ -182,7 +189,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
               setUrlFilter('shift', 'all');
               setPage(0);
             }}
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
           >
             <X size={12} /> Reset
           </button>
@@ -198,7 +205,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
         sortField={sortField}
         sortDirection={sortDirection}
         onToggleSort={toggleSort}
-        page={page}
+        page={effectivePage}
         pageSize={pageSize}
         pageCount={pageCount}
         onPageChange={setPage}
