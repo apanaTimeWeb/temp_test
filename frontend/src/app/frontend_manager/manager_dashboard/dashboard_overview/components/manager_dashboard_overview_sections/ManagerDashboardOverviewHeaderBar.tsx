@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { TrendingUp, RotateCw, Calendar, Clock, CalendarRange } from 'lucide-react';
+import { TrendingUp, RotateCw, Clock, CalendarRange } from 'lucide-react';
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
 
 export type DashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
@@ -53,12 +53,6 @@ export function ManagerDashboardOverviewHeaderBar({
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-          {currentDateStr && (
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-muted text-xs text-secondary font-medium">
-              <Calendar size={13} className="text-primary" />
-              <span>{currentDateStr}</span>
-            </div>
-          )}
           <button
             type="button"
             onClick={onRefresh}
