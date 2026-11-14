@@ -108,13 +108,15 @@ export function ManagerNavigationSidebarLogoutModal({
             Sign Out of Manager Portal
           </h2>
           <p className="mgr-modal-desc" role="status">
-            Are you sure you want to end your manager session? You will be safely signed out and returned to the sign-in screen.
+            Are you sure you want to sign out of your manager account?
           </p>
         </div>
 
-        <div className="mgr-logout-session-pill">
-          <span className="mgr-logout-session-dot" aria-hidden="true" />
-          <span>Account: <strong>Ram</strong> (manager@library.com) • Manager</span>
+        <div className="mgr-logout-user-card">
+          <span className="mgr-logout-user-card-label">SIGNED IN AS</span>
+          <p className="mgr-logout-user-card-name">Ram</p>
+          <p className="mgr-logout-user-card-email">manager@library.com</p>
+          <span className="mgr-logout-user-card-role">Manager</span>
         </div>
 
         <div className="mgr-logout-modal-actions">

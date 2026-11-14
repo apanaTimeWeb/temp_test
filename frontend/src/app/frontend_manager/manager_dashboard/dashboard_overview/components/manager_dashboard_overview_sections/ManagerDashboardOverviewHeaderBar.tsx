@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { TrendingUp, RotateCw, Calendar, MapPin, Clock, CalendarRange } from 'lucide-react';
+import { TrendingUp, RotateCw, Calendar, Clock, CalendarRange } from 'lucide-react';
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
 
 export type DashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
@@ -39,21 +39,16 @@ export function ManagerDashboardOverviewHeaderBar({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="mgr-breadcrumb">{tManagerUi('manager_dashboard_8ccadd')}</span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-success-bg text-success border border-border">
-              <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-              Shift Operational
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-surface-highlight text-muted-foreground border border-border">
-              <MapPin size={11} className="text-primary" />
-              {branchName || 'Central Branch'}
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Live Operations Active
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
-            {tManagerUi('manager_dashboard')}
+            Daily Operations Overview
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            {tManagerUi('good_morning_manager_aaj_ka_quick_overview')}
+            Welcome back, Ram — here is today&apos;s real-time summary of seats, attendance, and fee collections.
           </p>
         </div>
 
