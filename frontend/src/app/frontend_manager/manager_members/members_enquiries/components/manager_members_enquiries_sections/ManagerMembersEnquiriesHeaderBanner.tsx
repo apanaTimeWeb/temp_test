@@ -30,12 +30,12 @@ export function ManagerMembersEnquiriesHeaderBanner({
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all">
+    <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-5 sm:p-6 shadow-md transition-all">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         {/* Left: Titles & Meta Chips */}
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 flex-wrap text-xs">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Active Enquiries
             </span>
@@ -47,15 +47,15 @@ export function ManagerMembersEnquiriesHeaderBanner({
           </div>
 
           <div className="flex items-baseline gap-3 flex-wrap">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
               Student Enquiries
             </h1>
-            <span className="text-xs px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-bold">
+            <span className="text-xs px-2.5 py-1 rounded-lg bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 font-bold">
               {filteredCount} Enquiries • {horizonLabel}
             </span>
           </div>
 
-          <p className="text-xs sm:text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-slate-400">
             Manage incoming student enquiries, seat requirement follow-ups, and admissions.
           </p>
         </div>
@@ -67,7 +67,7 @@ export function ManagerMembersEnquiriesHeaderBanner({
             <button
               type="button"
               onClick={onOpenBulkWhatsApp}
-              className="inline-flex items-center gap-1.5 min-h-11 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-all hover:scale-[1.02] cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-11 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer"
               title="Dispatch WhatsApp Queue to selected leads"
             >
               <MessageCircle size={15} />
@@ -81,20 +81,20 @@ export function ManagerMembersEnquiriesHeaderBanner({
             onClick={onRefresh}
             disabled={isFetching}
             title="Refresh CRM Pipeline"
-            className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-foreground hover:border-border hover:bg-surface-hover motion-safe:transition-all shadow-xs active:scale-95 disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60 cursor-pointer"
           >
-            <RefreshCw size={14} className={isFetching ? 'animate-spin text-primary' : ''} />
+            <RefreshCw size={14} className={isFetching ? 'animate-spin text-indigo-400' : 'text-indigo-400'} />
             <span className="hidden sm:inline">{isFetching ? 'Syncing...' : 'Sync Pipeline'}</span>
           </button>
 
           {/* View Mode Toggle */}
-          <div className="inline-flex bg-muted p-1 rounded-xl border border-border">
+          <div className="inline-flex bg-[#060818] p-1 rounded-xl border border-indigo-500/25">
             <button
               type="button"
-              className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 motion-safe:transition-all ${
+              className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 motion-safe:transition-all cursor-pointer ${
                 view === 'kanban'
-                  ? 'bg-card text-foreground shadow-xs font-semibold'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
               onClick={() => onViewChange('kanban')}
               title={tManagerUi('kanban_view')}
@@ -106,10 +106,10 @@ export function ManagerMembersEnquiriesHeaderBanner({
             </button>
             <button
               type="button"
-              className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-medium inline-flex items-center gap-1.5 motion-safe:transition-all ${
+              className={`min-h-9 min-w-9 px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 motion-safe:transition-all cursor-pointer ${
                 view === 'table'
-                  ? 'bg-card text-foreground shadow-xs font-semibold'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
               }`}
               onClick={() => onViewChange('table')}
               title={tManagerUi('table_view')}
@@ -124,23 +124,13 @@ export function ManagerMembersEnquiriesHeaderBanner({
           {/* Add Enquiry Primary CTA */}
           <button
             type="button"
-            className="mgr-btn-primary min-h-11 px-4 rounded-xl shadow-xs inline-flex items-center gap-2 text-sm font-semibold"
+            className="min-h-11 px-5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold text-sm shadow-lg shadow-indigo-950/50 inline-flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02] active:scale-95"
             onClick={onAddEnquiry}
           >
             <Plus size={16} />
             <span>{tManagerUi('add_enquiry')}</span>
           </button>
         </div>
-      </div>
-
-      {/* Contract Warning Banner */}
-      <div
-        className="crm-contract-warning mt-4 flex items-center justify-between text-xs"
-        role="status"
-        data-testid="manager-crm-pipeline-contract-warning"
-      >
-        <span>{tManagerUi('crm_mutations_unavailable_host_contract')}</span>
-        <span className="hidden sm:inline font-mono text-[10px] text-muted-foreground">LIVE MOCK PIPELINE ACTIVE</span>
       </div>
     </div>
   );

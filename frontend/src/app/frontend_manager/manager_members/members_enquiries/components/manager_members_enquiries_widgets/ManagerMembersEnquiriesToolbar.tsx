@@ -1,5 +1,5 @@
 'use client';
-import { Search, Filter, X, Download } from 'lucide-react';
+import { Search, Filter, X, Download, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 import type { ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
@@ -32,14 +32,14 @@ export function ManagerMembersEnquiriesToolbar({
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
 
   return (
-    <div className="flex flex-wrap gap-3 items-center justify-between bg-card p-3 rounded-xl border border-border">
+    <div className="flex flex-wrap gap-3 items-center justify-between p-3.5 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 backdrop-blur-md shadow-lg shadow-black/30">
       <div className="flex flex-wrap items-center gap-3 flex-grow max-w-xl">
         {/* Search Input */}
-        <div className="relative flex-grow min-w-[200px]">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+        <div className="relative flex-grow min-w-[220px]">
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
           <input
             type="text"
-            className="w-full pl-9 pr-8 py-2 bg-muted border border-border rounded-lg text-sm text-primary outline-none focus:border-primary focus:bg-card motion-safe:transition-all"
+            className="w-full pl-9 pr-8 py-2 bg-[#060818] border border-indigo-500/25 rounded-xl text-sm text-slate-100 placeholder:text-slate-400 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/30 transition-all"
             placeholder={tManagerUi('search_by_name_or_phone')}
             aria-label={tManagerUi('search_by_name_or_phone')}
             value={search}
@@ -49,7 +49,7 @@ export function ManagerMembersEnquiriesToolbar({
             <button
               type="button"
               onClick={() => setSearch('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-400 p-0.5 rounded transition-colors"
               title="Clear search"
             >
               <X size={14} />
@@ -59,9 +59,9 @@ export function ManagerMembersEnquiriesToolbar({
 
         {/* Status Dropdown Filter */}
         <div className="flex items-center gap-1.5 shrink-0">
-          <Filter size={14} className="text-secondary shrink-0" />
+          <Filter size={14} className="text-indigo-400 shrink-0" />
           <select
-            className="min-h-10 py-1.5 px-3 bg-muted border border-border rounded-lg text-xs font-medium text-primary outline-none focus:border-primary focus:bg-card motion-safe:transition-all cursor-pointer"
+            className="min-h-10 py-1.5 px-3 bg-[#060818] border border-indigo-500/25 rounded-xl text-xs font-semibold text-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/30 transition-all cursor-pointer"
             aria-label={tManagerUi('status')}
             value={statusFilter}
             onChange={(event) => {
@@ -74,9 +74,9 @@ export function ManagerMembersEnquiriesToolbar({
               }
             }}
           >
-            <option value="All">{tManagerUi('all_statuses')}</option>
+            <option value="All" className="bg-[#0b0c20] text-slate-200">{tManagerUi('all_statuses')}</option>
             {MANAGER_CRM_STATUS_OPTIONS.map((status) => (
-              <option key={status} value={status}>
+              <option key={status} value={status} className="bg-[#0b0c20] text-slate-200">
                 {statusLabels[status]}
               </option>
             ))}
@@ -88,13 +88,14 @@ export function ManagerMembersEnquiriesToolbar({
           <button
             type="button"
             onClick={onResetFilters}
-            className="text-xs font-semibold text-primary hover:underline px-2 py-1"
+            className="text-xs font-bold text-indigo-400 hover:text-indigo-300 hover:underline px-2 py-1 transition-colors"
           >
             Reset Filters
           </button>
         )}
 
-        <span className="text-xs font-semibold text-secondary px-1 shrink-0">
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-300 px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 shrink-0">
+          <Users size={12} className="text-indigo-400" />
           Showing {filteredCount} leads ({horizonLabel})
         </span>
       </div>
@@ -103,13 +104,12 @@ export function ManagerMembersEnquiriesToolbar({
       <button
         type="button"
         onClick={onExportCsv}
-        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm shrink-0"
+        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-bold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm shrink-0 cursor-pointer"
         title="Export CRM Enquiries as CSV"
       >
-        <Download size={14} />
+        <Download size={14} className="text-indigo-400" />
         <span>Export CSV</span>
       </button>
     </div>
   );
 }
-

@@ -4,12 +4,31 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState, useMemo, type KeyboardEvent, type MouseEvent } from 'react';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
-import { Eye, CheckCircle, XCircle, PhoneCall, Plus, ArrowUpDown, ArrowUp, ArrowDown, MessageCircle } from 'lucide-react';
+import {
+  Eye,
+  CheckCircle,
+  XCircle,
+  PhoneCall,
+  Plus,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  MessageCircle,
+  Sun,
+  Sunset,
+  Moon,
+  Clock,
+  Sparkles,
+  MapPin,
+  Flame,
+  CheckCircle2,
+  User,
+  Calendar,
+} from 'lucide-react';
 import { formatManagerEnquiriesDisplayDate, maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
-import { MANAGER_CRM_STATUS_BADGE } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 import { ManagerMembersEnquiriesMobileCards } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesMobileCards';
 import type { ManagerMembersEnquiriesTableProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
-import type { ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
+import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 
 export function ManagerMembersEnquiriesTable({
   filtered,
@@ -21,8 +40,21 @@ export function ManagerMembersEnquiriesTable({
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
   const locale = useLocale();
   const router = useRouter();
-  const statusLabels = { New: tManagerUi('new'), Visited: tManagerUi('visited'), Interested: tManagerUi('interested'), Converted: tManagerUi('converted'), Lost: tManagerUi('lost') };
-  const shiftLabels: Record<string, string> = { Morning: tManagerUi('shift_morning'), Afternoon: tManagerUi('shift_afternoon'), Evening: tManagerUi('shift_evening'), Night: tManagerUi('shift_night'), 'Full Day': tManagerUi('shift_full_day'), 'Not specified': tManagerUi('not_specified') };
+  const statusLabels: Record<ManagerMembersEnquiriesEnquiryStatus, string> = {
+    New: tManagerUi('new'),
+    Visited: tManagerUi('visited'),
+    Interested: tManagerUi('interested'),
+    Converted: tManagerUi('converted'),
+    Lost: tManagerUi('lost'),
+  };
+  const shiftLabels: Record<string, string> = {
+    Morning: tManagerUi('shift_morning'),
+    Afternoon: tManagerUi('shift_afternoon'),
+    Evening: tManagerUi('shift_evening'),
+    Night: tManagerUi('shift_night'),
+    'Full Day': tManagerUi('shift_full_day'),
+    'Not specified': tManagerUi('not_specified'),
+  };
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -53,15 +85,17 @@ export function ManagerMembersEnquiriesTable({
 
   if (filtered.length === 0) {
     return (
-      <div className="crm-card crm-card--flush">
-        <div className="crm-empty-state bg-card border border-border rounded-lg p-12 text-center">
-          <PhoneCall size={40} className="text-secondary mx-auto mb-4" />
-          <p className="text-primary font-semibold text-lg mb-2">{tManagerUi('no_enquiries_found')}</p>
-          <p className="text-secondary text-sm mb-6">{tManagerUi('try_a_different_search_or_status_filter')}</p>
-          <button type="button" className="mgr-btn-primary" onClick={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}>
-            <Plus size={15} /> {tManagerUi('add_enquiry')}
-          </button>
-        </div>
+      <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-12 text-center shadow-xl">
+        <PhoneCall size={44} className="text-indigo-400 mx-auto mb-4 opacity-80" />
+        <p className="text-white font-bold text-lg mb-2">{tManagerUi('no_enquiries_found')}</p>
+        <p className="text-slate-400 text-sm mb-6">{tManagerUi('try_a_different_search_or_status_filter')}</p>
+        <button
+          type="button"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold text-sm shadow-lg shadow-indigo-950/50 transition-all cursor-pointer"
+          onClick={() => router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADD)}
+        >
+          <Plus size={16} /> {tManagerUi('add_enquiry')}
+        </button>
       </div>
     );
   }
@@ -77,18 +111,22 @@ export function ManagerMembersEnquiriesTable({
   const renderSortableHeader = (field: EnqSortField, label: string) => {
     const isActive = sortField === field;
     return (
-      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3">
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3.5">
         <button
           type="button"
           onClick={() => toggleSort(field)}
-          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          className="group inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-400 rounded px-1 -mx-1 transition-colors"
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
           <span>{label}</span>
           {isActive ? (
-            sortDirection === 'asc' ? <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" /> : <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+            sortDirection === 'asc' ? (
+              <ArrowUp size={14} className="text-indigo-400 font-bold shrink-0" aria-hidden="true" />
+            ) : (
+              <ArrowDown size={14} className="text-indigo-400 font-bold shrink-0" aria-hidden="true" />
+            )
           ) : (
-            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-indigo-400/40 group-hover:text-indigo-300 transition-colors shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
@@ -126,8 +164,90 @@ export function ManagerMembersEnquiriesTable({
     if (win) win.opener = null;
   };
 
+  const renderShiftBadge = (shift: string) => {
+    const label = shiftLabels[shift] ?? shift;
+    switch (shift) {
+      case 'Morning':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+            <Sun size={12} className="text-amber-400" />
+            {label}
+          </span>
+        );
+      case 'Afternoon':
+      case 'Evening':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+            <Sunset size={12} className="text-indigo-400" />
+            {label}
+          </span>
+        );
+      case 'Night':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30">
+            <Moon size={12} className="text-purple-400" />
+            {label}
+          </span>
+        );
+      case 'Full Day':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+            <Clock size={12} className="text-cyan-400" />
+            {label}
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-500/15 text-slate-300 border border-slate-500/30">
+            {label}
+          </span>
+        );
+    }
+  };
+
+  const renderStatusBadge = (status: ManagerMembersEnquiriesEnquiryStatus) => {
+    const label = statusLabels[status];
+    switch (status) {
+      case 'New':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30">
+            <Sparkles size={11} className="text-sky-400" />
+            {label}
+          </span>
+        );
+      case 'Visited':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+            <MapPin size={11} className="text-amber-400" />
+            {label}
+          </span>
+        );
+      case 'Interested':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30">
+            <Flame size={11} className="text-purple-400" />
+            {label}
+          </span>
+        );
+      case 'Converted':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+            <CheckCircle2 size={11} className="text-emerald-400" />
+            {label}
+          </span>
+        );
+      case 'Lost':
+        return (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
+            <XCircle size={11} className="text-rose-400" />
+            {label}
+          </span>
+        );
+    }
+  };
+
   return (
-    <div className="crm-card crm-card--flush">
+    <div className="rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 backdrop-blur-md overflow-hidden shadow-xl">
       {/* Mobile Card List View */}
       <ManagerMembersEnquiriesMobileCards
         paginated={paginated}
@@ -147,31 +267,34 @@ export function ManagerMembersEnquiriesTable({
       <div className="crm-table-wrap overflow-x-auto">
         <table className="crm-table w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-border bg-surface-highlight text-secondary text-xs uppercase font-semibold">
-              <th className="p-3 w-10 text-center">
+            <tr className="border-b border-indigo-500/25 bg-[#07091c] text-indigo-300 text-xs uppercase font-bold tracking-wider">
+              <th className="p-3.5 w-10 text-center">
                 {onToggleSelectAll && (
                   <input
                     type="checkbox"
                     checked={isAllSelected}
                     onChange={onToggleSelectAll}
                     aria-label="Select all enquiries"
-                    className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                    className="rounded border-indigo-500/40 bg-[#07091c] text-indigo-500 focus:ring-indigo-400 h-4 w-4 cursor-pointer"
                   />
                 )}
               </th>
-              <th className="p-3 w-10">#</th>
+              <th className="p-3.5 w-14 text-xs font-bold uppercase tracking-wider text-slate-300 whitespace-nowrap">
+                Sr. No.
+              </th>
               {renderSortableHeader('name', tManagerUi('name'))}
               {renderSortableHeader('phone', tManagerUi('phone'))}
               {renderSortableHeader('shift', tManagerUi('shift'))}
               {renderSortableHeader('status', tManagerUi('status'))}
               {renderSortableHeader('handledBy', tManagerUi('handled_by'))}
               {renderSortableHeader('addedDate', tManagerUi('date_added'))}
-              <th className="p-3">{tManagerUi('actions')}</th>
+              <th className="p-3.5 text-xs font-bold uppercase tracking-wider text-slate-300">{tManagerUi('actions')}</th>
             </tr>
           </thead>
           <tbody>
             {paginated.map((enq, idx) => {
               const isSelected = selectedIds.includes(enq.id);
+              const cleanDigits = enq.phone.replace(/\D/g, '');
               return (
                 <tr
                   key={enq.id}
@@ -180,55 +303,108 @@ export function ManagerMembersEnquiriesTable({
                   tabIndex={0}
                   role="link"
                   aria-label={`${tManagerUi('view_details')}: ${enq.name}`}
-                  className={`border-b border-border last:border-0 h-12 cursor-pointer motion-safe:transition-colors ${
+                  className={`border-b border-indigo-500/15 last:border-0 h-14 cursor-pointer motion-safe:transition-colors ${
                     isSelected
-                      ? 'bg-primary-subtle text-foreground'
-                      : 'hover:bg-surface-hover even:bg-surface-zebra'
+                      ? 'bg-indigo-500/20 text-white'
+                      : 'hover:bg-indigo-500/10 even:bg-[#080a20]/60 odd:bg-transparent text-slate-200'
                   }`}
                 >
-                  <td className="p-3 w-10 text-center" onClick={(e) => e.stopPropagation()}>
+                  <td className="p-3.5 w-10 text-center" onClick={(e) => e.stopPropagation()}>
                     {onToggleSelectOne && (
                       <input
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => onToggleSelectOne(enq.id)}
                         aria-label={`Select ${enq.name}`}
-                        className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                        className="rounded border-indigo-500/40 bg-[#07091c] text-indigo-500 focus:ring-indigo-400 h-4 w-4 cursor-pointer"
                       />
                     )}
                   </td>
-                  <td className="p-3 text-secondary">{effectivePage * pageSize + idx + 1}</td>
-                  <td className="p-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-floating flex items-center justify-center text-xs font-bold text-secondary">
+                  <td className="p-3.5 text-slate-400 font-semibold text-xs">
+                    {effectivePage * pageSize + idx + 1}
+                  </td>
+                  <td className="p-3.5">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500/30 to-purple-500/30 border border-indigo-500/35 flex items-center justify-center text-xs font-bold text-indigo-300 shrink-0">
                         {enq.avatar}
                       </div>
-                      <span className="font-medium text-primary">{enq.name}</span>
+                      <span className="font-semibold text-slate-100">{enq.name}</span>
                     </div>
                   </td>
-                  <td className="p-3 font-mono text-sm text-secondary">{maskManagerEnquiriesPhone(enq.phone)}</td>
-                  <td className="p-3"><span className="mgr-badge mgr-badge--info">{shiftLabels[enq.shift] ?? enq.shift}</span></td>
-                  <td className="p-3"><span className={`mgr-badge ${MANAGER_CRM_STATUS_BADGE[enq.status]}`}>{statusLabels[enq.status]}</span></td>
-                  <td className="p-3 text-secondary">{enq.handledBy === 'Unassigned' ? tManagerUi('unassigned') : enq.handledBy}</td>
-                  <td className="p-3 text-secondary">{formatManagerEnquiriesDisplayDate(enq.addedDate, locale, { today: tManagerUi('today'), yesterday: tManagerUi('yesterday') })}</td>
-                  <td className="p-3">
-                    <div className="flex items-center gap-1.5">
+                  <td className="p-3.5 font-mono text-sm text-slate-300">
+                    {maskManagerEnquiriesPhone(enq.phone)}
+                  </td>
+                  <td className="p-3.5">{renderShiftBadge(enq.shift)}</td>
+                  <td className="p-3.5">{renderStatusBadge(enq.status)}</td>
+                  <td className="p-3.5 text-slate-300 text-xs">
+                    <div className="inline-flex items-center gap-1.5">
+                      <User size={13} className="text-indigo-400" />
+                      <span>{enq.handledBy === 'Unassigned' ? tManagerUi('unassigned') : enq.handledBy}</span>
+                    </div>
+                  </td>
+                  <td className="p-3.5 text-slate-300 text-xs">
+                    <div className="inline-flex items-center gap-1.5">
+                      <Calendar size={13} className="text-slate-400" />
+                      <span>{formatManagerEnquiriesDisplayDate(enq.addedDate, locale, { today: tManagerUi('today'), yesterday: tManagerUi('yesterday') })}</span>
+                    </div>
+                  </td>
+                  <td className="p-3.5">
+                    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                      {/* 1. WhatsApp Button (Vibrant Emerald Green) */}
                       <button
                         type="button"
-                        className="mgr-btn-icon text-emerald-600 hover:text-emerald-700 hover:bg-success-bg"
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 hover:border-emerald-400 hover:scale-105 active:scale-95 shadow-sm shadow-emerald-950/50 transition-all cursor-pointer"
                         aria-label={`WhatsApp ${enq.name}`}
                         title={`WhatsApp chat with ${enq.name}`}
                         onClick={(e) => handleSendWhatsApp(e, enq)}
                       >
                         <MessageCircle size={15} />
                       </button>
-                      <button type="button" className="mgr-btn-icon" aria-label={tManagerUi('view_details')} title={tManagerUi('view_details')} onClick={(e) => { e.stopPropagation(); router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.DETAIL(enq.id)); }}>
+
+                      {/* 2. Direct Phone Call Button (Vibrant Amber / Gold) */}
+                      <a
+                        href={`tel:${cleanDigits}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/35 hover:text-amber-200 hover:border-amber-400 hover:scale-105 active:scale-95 shadow-sm shadow-amber-950/50 transition-all cursor-pointer"
+                        aria-label={`Call ${enq.name}`}
+                        title={`Call ${enq.name} (${enq.phone})`}
+                      >
+                        <PhoneCall size={14} />
+                      </a>
+
+                      {/* 3. View Details Button (Vibrant Sky Blue / Cyan) */}
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/40 hover:bg-sky-500/35 hover:text-sky-200 hover:border-sky-400 hover:scale-105 active:scale-95 shadow-sm shadow-sky-950/50 transition-all cursor-pointer"
+                        aria-label={tManagerUi('view_details')}
+                        title={tManagerUi('view_details')}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.DETAIL(enq.id));
+                        }}
+                      >
                         <Eye size={14} />
                       </button>
-                      <button type="button" className="mgr-btn-icon text-success" aria-label={tManagerUi('convert_to_admission')} title={tManagerUi('convert_to_admission')} onClick={handleQuickConvert}>
+
+                      {/* 4. Convert to Admission Button (Vibrant Indigo / Violet) */}
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 hover:bg-indigo-500/35 hover:text-indigo-200 hover:border-indigo-400 hover:scale-105 active:scale-95 shadow-sm shadow-indigo-950/50 transition-all cursor-pointer"
+                        aria-label={tManagerUi('convert_to_admission')}
+                        title={tManagerUi('convert_to_admission')}
+                        onClick={handleQuickConvert}
+                      >
                         <CheckCircle size={14} />
                       </button>
-                      <button type="button" className="mgr-btn-icon text-danger cursor-not-allowed" title={tManagerUi('crm_mutations_unavailable_host_contract')} aria-label={tManagerUi('crm_mark_lost_unavailable')} disabled>
+
+                      {/* 5. Mark Lost Button (Vibrant Rose / Red) */}
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-500/35 hover:text-rose-200 hover:border-rose-400 hover:scale-105 active:scale-95 shadow-sm shadow-rose-950/50 transition-all cursor-pointer opacity-80 hover:opacity-100"
+                        title={tManagerUi('crm_mutations_unavailable_host_contract')}
+                        aria-label={tManagerUi('crm_mark_lost_unavailable')}
+                        disabled
+                      >
                         <XCircle size={14} />
                       </button>
                     </div>
@@ -241,13 +417,13 @@ export function ManagerMembersEnquiriesTable({
       </div>
 
       {/* Pagination Footer */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-3 py-3 text-sm text-secondary">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-indigo-500/20 bg-[#07091c] px-4 py-3 text-sm text-slate-300">
         <span>
           Showing {startItem}–{endItem} of {totalRows} results
         </span>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1.5">
-            <label htmlFor="rows-per-page-members-enquiries" className="text-xs text-secondary whitespace-nowrap">
+            <label htmlFor="rows-per-page-members-enquiries" className="text-xs text-slate-400 whitespace-nowrap">
               Rows per page:
             </label>
             <select
@@ -257,28 +433,28 @@ export function ManagerMembersEnquiriesTable({
                 setPageSize(Number(e.target.value));
                 setPage(0);
               }}
-              className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
+              className="rounded-lg border border-indigo-500/30 bg-[#060818] px-2 py-1 text-xs text-slate-200 outline-none focus:border-indigo-400 cursor-pointer"
             >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
+              <option value={10} className="bg-[#0b0c20]">10</option>
+              <option value={25} className="bg-[#0b0c20]">25</option>
+              <option value={50} className="bg-[#0b0c20]">50</option>
             </select>
           </div>
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="mgr-btn-ghost mgr-btn-sm"
+              className="px-3 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               disabled={effectivePage <= 0}
               onClick={() => setPage((current) => Math.max(0, current - 1))}
             >
               Previous
             </button>
-            <span className="text-xs text-secondary px-1">
+            <span className="text-xs text-slate-400 px-1 font-medium">
               Page {effectivePage + 1} of {pageCount}
             </span>
             <button
               type="button"
-              className="mgr-btn-ghost mgr-btn-sm"
+              className="px-3 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               disabled={effectivePage >= pageCount - 1}
               onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
             >

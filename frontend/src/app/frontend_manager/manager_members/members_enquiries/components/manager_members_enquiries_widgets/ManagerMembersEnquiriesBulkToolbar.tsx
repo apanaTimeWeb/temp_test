@@ -33,27 +33,27 @@ export function ManagerMembersEnquiriesBulkToolbar({
   return (
     <div
       aria-label="Bulk Lead Actions Toolbar"
-      className="p-3.5 sm:p-4 rounded-2xl bg-card border-2 border-emerald-500 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-200"
+      className="p-3.5 sm:p-4 rounded-2xl bg-[#0c0f28]/98 border border-emerald-500/40 shadow-xl shadow-black/40 flex flex-col md:flex-row md:items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-200"
     >
       {/* Left: Selection Counter & Quick Filter Chips */}
       <div className="flex flex-wrap items-center gap-2">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-success-bg text-success border border-border text-xs font-bold">
-          <CheckSquare size={14} />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-xs font-bold">
+          <CheckSquare size={14} className="text-emerald-400" />
           <span>{selectedCount} Leads Selected</span>
         </div>
 
-        <span className="text-muted-foreground text-xs hidden sm:inline">•</span>
+        <span className="text-slate-500 text-xs hidden sm:inline">•</span>
 
         {/* Quick selection chips */}
         <div className="flex flex-wrap items-center gap-1.5 text-xs">
           <button
             type="button"
             onClick={onSelectAllFiltered}
-            className="px-2.5 py-1 rounded-lg border border-border bg-surface-highlight hover:bg-surface-hover text-foreground font-medium transition-colors cursor-pointer"
+            className="px-2.5 py-1 rounded-lg border border-indigo-500/25 bg-[#060818] hover:bg-indigo-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
             title="Select all current filtered leads"
           >
-            <span className="flex items-center gap-1">
-              <Users size={12} className="text-primary" />
+            <span className="flex items-center gap-1.5">
+              <Users size={12} className="text-indigo-400" />
               All Filtered ({totalFilteredCount})
             </span>
           </button>
@@ -62,11 +62,11 @@ export function ManagerMembersEnquiriesBulkToolbar({
             <button
               type="button"
               onClick={() => onSelectByStatus('Visited')}
-              className="px-2.5 py-1 rounded-lg border border-border bg-surface-highlight hover:bg-surface-hover text-foreground font-medium transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg border border-cyan-500/25 bg-[#060818] hover:bg-cyan-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
               title="Select all leads who visited"
             >
-              <span className="flex items-center gap-1">
-                <UserCheck size={12} className="text-info" />
+              <span className="flex items-center gap-1.5">
+                <UserCheck size={12} className="text-cyan-400" />
                 Visited ({visitedCount})
               </span>
             </button>
@@ -76,11 +76,11 @@ export function ManagerMembersEnquiriesBulkToolbar({
             <button
               type="button"
               onClick={() => onSelectByStatus('New')}
-              className="px-2.5 py-1 rounded-lg border border-border bg-surface-highlight hover:bg-surface-hover text-foreground font-medium transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg border border-amber-500/25 bg-[#060818] hover:bg-amber-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
               title="Select all new leads"
             >
-              <span className="flex items-center gap-1">
-                <Sparkles size={12} className="text-warning" />
+              <span className="flex items-center gap-1.5">
+                <Sparkles size={12} className="text-amber-400" />
                 New ({newCount})
               </span>
             </button>
@@ -90,11 +90,11 @@ export function ManagerMembersEnquiriesBulkToolbar({
             <button
               type="button"
               onClick={() => onSelectByStatus('Interested')}
-              className="px-2.5 py-1 rounded-lg border border-border bg-surface-highlight hover:bg-surface-hover text-foreground font-medium transition-colors cursor-pointer"
+              className="px-2.5 py-1 rounded-lg border border-purple-500/25 bg-[#060818] hover:bg-purple-500/15 text-slate-200 font-medium transition-colors cursor-pointer"
               title="Select all interested leads"
             >
-              <span className="flex items-center gap-1">
-                <Flame size={12} className="text-danger" />
+              <span className="flex items-center gap-1.5">
+                <Flame size={12} className="text-purple-400" />
                 Interested ({interestedCount})
               </span>
             </button>
@@ -103,7 +103,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
           <button
             type="button"
             onClick={onClearSelection}
-            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground hover:underline px-2 py-1 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1 text-xs text-rose-400 hover:text-rose-300 hover:underline px-2 py-1 transition-colors cursor-pointer"
           >
             <X size={12} />
             <span>Clear</span>
@@ -117,7 +117,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
           <button
             type="button"
             onClick={onBulkDelete}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground text-xs font-bold shadow-sm hover:shadow transition-all hover:scale-[1.02] cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md shadow-rose-950/40 transition-all hover:scale-[1.02] cursor-pointer"
             title="Delete selected leads"
           >
             <Trash2 size={15} />
@@ -127,7 +127,7 @@ export function ManagerMembersEnquiriesBulkToolbar({
         <button
           type="button"
           onClick={onOpenBulkWhatsApp}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-sm hover:shadow transition-all hover:scale-[1.02] cursor-pointer"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer"
         >
           <MessageCircle size={16} />
           <span>Launch WhatsApp Queue ({selectedCount})</span>

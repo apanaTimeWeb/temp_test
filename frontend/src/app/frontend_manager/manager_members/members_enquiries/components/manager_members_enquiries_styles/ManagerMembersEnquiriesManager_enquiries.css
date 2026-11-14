@@ -1858,3 +1858,48 @@
   outline-offset: 2px;
 }
 
+/* ── Dark Aurora Glassmorphism Overrides ── */
+.crm-theme,
+.crm-page {
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+
+.crm-theme .crm-card,
+.crm-theme .crm-card--flush {
+  background-color: rgba(12, 15, 40, 0.95) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.crm-theme .crm-kanban-col {
+  background-color: rgba(8, 10, 28, 0.8) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 12px !important;
+}
+
+.crm-theme .crm-kanban-card {
+  background-color: rgba(12, 15, 40, 0.95) !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.crm-theme .crm-table-wrap {
+  background-color: transparent !important;
+}
+
+.crm-theme .crm-table thead tr {
+  background-color: #07091c !important;
+  border-color: rgba(99, 102, 241, 0.25) !important;
+}
+
+.crm-theme .crm-table tbody tr {
+  border-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+.crm-theme .crm-table tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.1) !important;
+}
+
+

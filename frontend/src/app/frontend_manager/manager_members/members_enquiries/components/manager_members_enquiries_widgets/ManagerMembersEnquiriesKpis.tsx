@@ -1,5 +1,5 @@
 'use client';
-import { Users, Sparkles, PhoneCall, CheckCircle2 } from 'lucide-react';
+import { Users, Sparkles, Clock, GraduationCap } from 'lucide-react';
 
 interface ManagerMembersEnquiriesKpisProps {
   stats: {
@@ -18,87 +18,86 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* KPI 1: Total Enquiries */}
-      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary hover:shadow-sm">
+      <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-4.5 transition-all hover:border-indigo-400 hover:shadow-lg shadow-md">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-secondary uppercase tracking-wider">Total Leads</span>
-          <div className="w-9 h-9 rounded-lg bg-warning-bg text-warning border border-border flex items-center justify-center">
+          <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">Total Leads</span>
+          <div className="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center shadow-xs">
             <Users size={18} />
           </div>
         </div>
         <div className="mt-3">
           <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-primary">{stats.total}</div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-              [{horizonLabel}]
+            <div className="text-2xl font-black tracking-tight text-white">{stats.total}</div>
+            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+              {horizonLabel}
             </span>
           </div>
-          <p className="mt-1 text-xs text-secondary flex items-center gap-1">
-            <span>All enquiries in {horizonLabel}</span>
+          <p className="mt-1 text-xs text-slate-400 flex items-center gap-1">
+            <span>All prospect leads</span>
           </p>
         </div>
       </div>
 
       {/* KPI 2: New Prospects */}
-      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary hover:shadow-sm">
+      <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-4.5 transition-all hover:border-indigo-400 hover:shadow-lg shadow-md">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-secondary uppercase tracking-wider">New Leads</span>
-          <div className="w-9 h-9 rounded-lg bg-primary-subtle text-primary border border-border flex items-center justify-center">
+          <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">New Leads</span>
+          <div className="w-9 h-9 rounded-xl bg-sky-500/15 text-sky-400 border border-sky-500/30 flex items-center justify-center shadow-xs">
             <Sparkles size={18} />
           </div>
         </div>
         <div className="mt-3">
           <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-primary">{stats.newLeads}</div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-              [{horizonLabel}]
+            <div className="text-2xl font-black tracking-tight text-white">{stats.newLeads}</div>
+            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+              {horizonLabel}
             </span>
           </div>
-          <p className="mt-1 text-xs text-secondary">Awaiting response ({horizonLabel})</p>
+          <p className="mt-1 text-xs text-slate-400">Awaiting initial follow-up</p>
         </div>
       </div>
 
       {/* KPI 3: Active Pipeline (Visited + Interested) */}
-      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary hover:shadow-sm">
+      <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-4.5 transition-all hover:border-indigo-400 hover:shadow-lg shadow-md">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-secondary uppercase tracking-wider">In Pipeline</span>
-          <div className="w-9 h-9 rounded-lg bg-muted text-secondary border border-border flex items-center justify-center">
-            <PhoneCall size={18} />
+          <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">In Pipeline</span>
+          <div className="w-9 h-9 rounded-xl bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shadow-xs">
+            <Clock size={18} />
           </div>
         </div>
         <div className="mt-3">
           <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-secondary">{stats.activePipeline}</div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-              [{horizonLabel}]
+            <div className="text-2xl font-black tracking-tight text-white">{stats.activePipeline}</div>
+            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+              {horizonLabel}
             </span>
           </div>
-          <p className="mt-1 text-xs text-secondary">
-            {stats.visited} visited · {stats.interested} interested ({horizonLabel})
+          <p className="mt-1 text-xs text-slate-400">
+            {stats.visited} visited · {stats.interested} interested
           </p>
         </div>
       </div>
 
       {/* KPI 4: Admissions Converted */}
-      <div className="rounded-xl border border-border bg-card p-4 transition-all hover:border-primary hover:shadow-sm">
+      <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-4.5 transition-all hover:border-indigo-400 hover:shadow-lg shadow-md">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-secondary uppercase tracking-wider">Admitted / Won</span>
-          <div className="w-9 h-9 rounded-lg bg-success-bg text-success border border-border flex items-center justify-center">
-            <CheckCircle2 size={18} />
+          <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">Admitted / Won</span>
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shadow-xs">
+            <GraduationCap size={18} />
           </div>
         </div>
         <div className="mt-3">
           <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-success">{stats.converted}</div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-              [{horizonLabel}]
+            <div className="text-2xl font-black tracking-tight text-emerald-400">{stats.converted}</div>
+            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              {stats.conversionRate}% Rate
             </span>
           </div>
-          <p className="mt-1 text-xs text-secondary">
-            <span className="font-semibold text-success">{stats.conversionRate}%</span> conversion rate ({horizonLabel})
+          <p className="mt-1 text-xs text-slate-400">
+            Converted to library memberships
           </p>
         </div>
       </div>
     </div>
   );
 }
-
