@@ -163,7 +163,7 @@ export function ManagerMembersIdCardBulkDispatchModal({
                     <div className="w-8 h-8 rounded-lg bg-surface-highlight border border-border flex items-center justify-center font-bold text-xs text-primary shrink-0">
                       {student.name.slice(0, 2).toUpperCase()}
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-bold text-foreground leading-tight">
                         {student.name}
                       </p>
@@ -173,7 +173,7 @@ export function ManagerMembersIdCardBulkDispatchModal({
                     </div>
                   </div>
 
-                  <div>
+                  <div className="shrink-0">
                     {isOpened ? (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white shadow-sm">
                         <CheckCircle2 size={13} />
