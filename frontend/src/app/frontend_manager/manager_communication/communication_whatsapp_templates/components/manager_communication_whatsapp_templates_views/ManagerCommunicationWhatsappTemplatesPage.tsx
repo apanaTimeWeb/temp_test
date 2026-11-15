@@ -194,22 +194,11 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-secondary uppercase tracking-wider mb-1.5">
-            <span>{tManagerUi('communication')}</span>
-            <ChevronRight size={12} />
-            <span className="text-primary font-bold">WhatsApp Templates</span>
-          </div>
-          <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight">
-              {tManagerUi('whatsapp_templates')}
-            </h1>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              Automated Dispatch Active
-            </span>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight">
+            {tManagerUi('whatsapp_templates')}
+          </h1>
           <p className="text-xs sm:text-sm text-secondary mt-1">
-            {tManagerUi('customize_automated_message_templates_sent_to_students')}
+            Customize message templates sent to students.
           </p>
         </div>
 
@@ -450,9 +439,8 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
               >
                 {tManagerUi('preview_sample_values')}
               </p>
-              <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Live WhatsApp Rendering
+              <span className="text-xs text-secondary">
+                WhatsApp Preview
               </span>
             </div>
 
@@ -475,10 +463,9 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
                         ✓
                       </span>
                     </div>
-                    <p className="text-[10px] text-emerald-400">Official Business Account</p>
+                    <p className="text-[10px] text-slate-400">Official Business Account</p>
                   </div>
                 </div>
-                <span className="text-[11px] text-slate-400 font-mono">Automated Dispatch</span>
               </div>
 
               {/* WhatsApp Chat Canvas */}
