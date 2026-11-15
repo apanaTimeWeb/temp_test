@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { User, Armchair, Sparkles } from 'lucide-react';
+import { User, Armchair, Sparkles, Clock, Info } from 'lucide-react';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 import { LEGEND_ITEMS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
 
@@ -67,34 +67,97 @@ export function ManagerSeatsMatrixGridView({
 
   return (
     <>
-      {/* ── Top Legend & Shift LED Explainer ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 p-4 bg-card border border-border rounded-xl">
-        <div className="flex flex-wrap items-center gap-5 text-xs text-secondary font-medium">
-          {LEGEND_ITEMS.map(({ cls, labelKey }) => (
-            <div key={labelKey} className="flex items-center gap-2">
-              <span
-                className={`w-3 h-3 rounded-full shrink-0 ${
-                  cls === 'ss-legend-dot--success'
-                    ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
-                    : cls === 'ss-legend-dot--danger'
-                    ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]'
-                    : cls === 'ss-legend-dot--warning'
-                    ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
-                    : 'bg-slate-400 border border-border'
-                }`}
-              />
-              <span className="text-primary font-semibold">{tManagerUi(labelKey)}</span>
+      {/* ── Top Legend & 4-Shift Allocation Guide ── */}
+      <div className="mb-6 p-4 sm:p-5 bg-card border border-border rounded-2xl shadow-sm space-y-4">
+        {/* Tier 1: Overall Desk Status + Shift Status Indicators */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3.5 border-b border-border/70">
+          {/* Section A: Overall Desk Status */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5 shrink-0">
+              <Armchair size={14} className="text-primary" /> Seat Status:
+            </span>
+            <div className="flex flex-wrap items-center gap-4 text-xs font-medium">
+              {LEGEND_ITEMS.map(({ cls, labelKey }) => (
+                <div key={labelKey} className="flex items-center gap-2">
+                  <span
+                    className={`w-3 h-3 rounded-full shrink-0 ${
+                      cls === 'ss-legend-dot--success'
+                        ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
+                        : cls === 'ss-legend-dot--danger'
+                        ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]'
+                        : cls === 'ss-legend-dot--warning'
+                        ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
+                        : 'bg-slate-400 border border-border'
+                    }`}
+                  />
+                  <span className="text-primary font-semibold">{tManagerUi(labelKey)}</span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Section B: Shift Indicator Color Logic */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5 shrink-0">
+              <Clock size={13} className="text-primary" /> Shift LED Colors:
+            </span>
+            <div className="flex items-center gap-2 text-xs font-semibold">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-500">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
+                Green = Vacant (खाली / Available)
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-500">
+                <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.8)]" />
+                Red = Booked (आवंटित / Occupied)
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* 4-Shift Glowing LED Guide */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface border border-border text-xs">
-          <Sparkles size={14} className="text-primary shrink-0" />
-          <span className="font-semibold text-primary">Shift LEDs:</span>
-          <div className="flex items-center gap-1.5 text-[10px] font-mono">
-            <span className="px-1 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-500">M/A/E/N = Vacant</span>
-            <span className="px-1 py-0.5 rounded bg-danger text-white">M/A/E/N = Booked</span>
+        {/* Tier 2: 4 Shifts (M, A, E, N) Meaning & Practical Hint */}
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 text-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5 shrink-0">
+              <Sparkles size={13} className="text-primary" /> 4 Daily Shifts (M/A/E/N):
+            </span>
+            <div className="flex flex-wrap items-center gap-2 font-medium">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-border">
+                <span className="w-5 h-5 rounded font-mono font-bold text-[11px] flex items-center justify-center bg-primary/10 text-primary border border-primary/20">
+                  M
+                </span>
+                <span className="text-primary font-semibold">Morning</span>
+                <span className="text-[11px] text-secondary">(सुबह)</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-border">
+                <span className="w-5 h-5 rounded font-mono font-bold text-[11px] flex items-center justify-center bg-primary/10 text-primary border border-primary/20">
+                  A
+                </span>
+                <span className="text-primary font-semibold">Afternoon</span>
+                <span className="text-[11px] text-secondary">(दोपहर)</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-border">
+                <span className="w-5 h-5 rounded font-mono font-bold text-[11px] flex items-center justify-center bg-primary/10 text-primary border border-primary/20">
+                  E
+                </span>
+                <span className="text-primary font-semibold">Evening</span>
+                <span className="text-[11px] text-secondary">(शाम)</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-border">
+                <span className="w-5 h-5 rounded font-mono font-bold text-[11px] flex items-center justify-center bg-primary/10 text-primary border border-primary/20">
+                  N
+                </span>
+                <span className="text-primary font-semibold">Night</span>
+                <span className="text-[11px] text-secondary">(रात)</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-[11px] text-secondary flex items-center gap-1.5 shrink-0 bg-surface/60 px-3 py-1 rounded-lg border border-border/50">
+            <Info size={13} className="text-primary shrink-0" />
+            <span>Ek physical desk ko alag-alag shift me multiple students allot kiye jaa sakte hain. Click seat to manage.</span>
           </div>
         </div>
       </div>
@@ -194,47 +257,38 @@ export function ManagerSeatsMatrixGridView({
                   )}
 
                   {/* 4 Shift Glowing LED Indicators (M, A, E, N) */}
-                  <div className="flex items-center justify-center gap-1 w-full pt-1 border-t border-border">
-                    <span
-                      title={`Morning Shift: ${shiftDots.morning ? 'Booked' : 'Vacant'}`}
-                      className={`text-[9px] font-mono font-bold px-1 rounded transition-colors ${
-                        shiftDots.morning
-                          ? 'bg-danger text-white shadow-[0_0_6px_rgba(239,68,68,0.8)]'
-                          : 'bg-emerald-950 text-emerald-400 border border-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]'
-                      }`}
-                    >
-                      M
-                    </span>
-                    <span
-                      title={`Afternoon Shift: ${shiftDots.afternoon ? 'Booked' : 'Vacant'}`}
-                      className={`text-[9px] font-mono font-bold px-1 rounded transition-colors ${
-                        shiftDots.afternoon
-                          ? 'bg-danger text-white shadow-[0_0_6px_rgba(239,68,68,0.8)]'
-                          : 'bg-emerald-950 text-emerald-400 border border-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]'
-                      }`}
-                    >
-                      A
-                    </span>
-                    <span
-                      title={`Evening Shift: ${shiftDots.evening ? 'Booked' : 'Vacant'}`}
-                      className={`text-[9px] font-mono font-bold px-1 rounded transition-colors ${
-                        shiftDots.evening
-                          ? 'bg-danger text-white shadow-[0_0_6px_rgba(239,68,68,0.8)]'
-                          : 'bg-emerald-950 text-emerald-400 border border-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]'
-                      }`}
-                    >
-                      E
-                    </span>
-                    <span
-                      title={`Night Shift: ${shiftDots.night ? 'Booked' : 'Vacant'}`}
-                      className={`text-[9px] font-mono font-bold px-1 rounded transition-colors ${
-                        shiftDots.night
-                          ? 'bg-danger text-white shadow-[0_0_6px_rgba(239,68,68,0.8)]'
-                          : 'bg-emerald-950 text-emerald-400 border border-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]'
-                      }`}
-                    >
-                      N
-                    </span>
+                  <div className="flex items-center justify-center gap-1 w-full pt-1 border-t border-border/70">
+                    {(['morning', 'afternoon', 'evening', 'night'] as const).map((shiftKey) => {
+                      const letter = shiftKey[0].toUpperCase();
+                      const isBooked = shiftDots[shiftKey];
+                      const isMaint = seat.status === 'maintenance';
+                      const shiftHindi =
+                        shiftKey === 'morning' ? 'सुबह' : shiftKey === 'afternoon' ? 'दोपहर' : shiftKey === 'evening' ? 'शाम' : 'रात';
+                      const shiftTitleName =
+                        shiftKey === 'morning' ? 'Morning' : shiftKey === 'afternoon' ? 'Afternoon' : shiftKey === 'evening' ? 'Evening' : 'Night';
+
+                      return (
+                        <span
+                          key={shiftKey}
+                          title={
+                            isMaint
+                              ? `${shiftTitleName} Shift (${shiftHindi}): Seat Under Maintenance`
+                              : isBooked
+                              ? `${shiftTitleName} Shift (${shiftHindi}): Booked / Occupied`
+                              : `${shiftTitleName} Shift (${shiftHindi}): Vacant / Free (Available)`
+                          }
+                          className={`text-[9px] font-mono font-bold w-4 h-4 rounded flex items-center justify-center transition-all ${
+                            isMaint
+                              ? 'bg-secondary/15 text-secondary border border-border opacity-50'
+                              : isBooked
+                              ? 'bg-rose-500 text-white shadow-[0_0_6px_rgba(244,63,94,0.7)]'
+                              : 'bg-emerald-500 text-white shadow-[0_0_6px_rgba(16,185,129,0.5)]'
+                          }`}
+                        >
+                          {letter}
+                        </span>
+                      );
+                    })}
                   </div>
                 </button>
               );
