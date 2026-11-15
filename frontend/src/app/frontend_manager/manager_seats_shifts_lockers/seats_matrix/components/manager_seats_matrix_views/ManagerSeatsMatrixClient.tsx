@@ -39,7 +39,7 @@ export function ManagerSeatsMatrixClient() {
     addSeat,
   } = useManagerSeatsMatrix();
 
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [genderFilter, setGenderFilter] = useState<'all' | 'Male' | 'Female'>('all');

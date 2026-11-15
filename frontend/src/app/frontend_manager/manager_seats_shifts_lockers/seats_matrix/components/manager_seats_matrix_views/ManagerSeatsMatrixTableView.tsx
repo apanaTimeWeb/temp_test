@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 
-export type SeatSortField = 'id' | 'wing' | 'shift' | 'status' | 'student';
+export type SeatSortField = 'id' | 'wing' | 'shift' | 'status' | 'student' | 'studentGender';
 
 interface ManagerSeatsMatrixTableViewProps {
   filteredTableSeats: SeatData[];
@@ -95,18 +95,19 @@ export function ManagerSeatsMatrixTableView({
         <table className="mgr-table w-full text-left text-sm">
           <thead>
             <tr className="border-b border-border bg-floating text-secondary text-xs uppercase font-semibold">
-              {renderSortableHeader('id', 'Seat ID', 'w-2/12')}
+              {renderSortableHeader('id', 'Seat ID', 'w-1/12')}
               {renderSortableHeader('wing', 'Wing / Zone', 'w-2/12')}
               {renderSortableHeader('shift', 'Shift', 'w-2/12')}
               {renderSortableHeader('status', 'Status', 'w-2/12')}
-              {renderSortableHeader('student', 'Assigned Student', 'w-3/12')}
+              {renderSortableHeader('student', 'Assigned Student', 'w-2/12')}
+              {renderSortableHeader('studentGender', 'Gender', 'w-2/12')}
               <th className="py-3 px-4 w-1/12 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {paginatedTableSeats.length === 0 ? (
               <tr>
-                <td colSpan={6} className="py-8 text-center text-secondary">
+                <td colSpan={7} className="py-8 text-center text-secondary">
                   No seats matching current criteria.
                 </td>
               </tr>
@@ -144,24 +145,26 @@ export function ManagerSeatsMatrixTableView({
                   <td className="py-3 px-4">
                     {seat.student ? (
                       <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-semibold text-primary block leading-tight">{seat.student}</span>
-                          {seat.studentGender && (
-                            <span
-                              className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                                seat.studentGender === 'Female'
-                                  ? 'bg-primary-subtle text-primary'
-                                  : 'bg-muted text-secondary'
-                              }`}
-                            >
-                              {seat.studentGender === 'Female' ? '👩 F' : '👨 M'}
-                            </span>
-                          )}
-                        </div>
+                        <span className="font-semibold text-primary block leading-tight">{seat.student}</span>
                         <span className="text-xs text-secondary font-mono">{seat.smartId || '—'}</span>
                       </div>
                     ) : (
                       <span className="text-secondary text-xs italic">— Unassigned —</span>
+                    )}
+                  </td>
+                  <td className="py-3 px-4">
+                    {seat.student && seat.studentGender ? (
+                      <span
+                        className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-0.5 rounded-full font-semibold border ${
+                          seat.studentGender === 'Female'
+                            ? 'bg-primary-subtle text-primary border-primary/20'
+                            : 'bg-surface text-secondary border-border'
+                        }`}
+                      >
+                        {seat.studentGender === 'Female' ? '👩 Female' : '👨 Male'}
+                      </span>
+                    ) : (
+                      <span className="text-secondary text-xs">—</span>
                     )}
                   </td>
                   <td className="py-3 px-4 text-right">
