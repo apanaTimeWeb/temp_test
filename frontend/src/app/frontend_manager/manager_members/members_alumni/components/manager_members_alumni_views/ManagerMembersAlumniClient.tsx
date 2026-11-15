@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 // RESPONSIBILITY: Orchestrate the client-side view and local interactions for components. It does not own backend persistence or cross-feature business logic.
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';

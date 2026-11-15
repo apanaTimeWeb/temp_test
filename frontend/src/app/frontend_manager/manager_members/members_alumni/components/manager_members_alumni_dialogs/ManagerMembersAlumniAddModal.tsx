@@ -6,6 +6,7 @@ import {
   Award,
   Briefcase,
   Calendar,
+  Check,
   CheckCircle2,
   Clock,
   GraduationCap,
@@ -13,7 +14,6 @@ import {
   Quote,
   User,
   X,
-  Check,
 } from 'lucide-react';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
@@ -122,6 +122,7 @@ export function ManagerMembersAlumniAddModal({
     };
 
     onAdd(newRecord);
+    toast.success(`Alumni record created for ${trimmedName} (${trimmedExam})`);
     handleResetForm();
     onClose();
   };
