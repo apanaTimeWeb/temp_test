@@ -51,6 +51,9 @@ export function ManagerAssetsMaintenanceConfirmModal({
       aria-labelledby="maintenance-confirm-title"
       aria-describedby="maintenance-confirm-desc"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onCancel();
+      }}
     >
       <div className="relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4">
         <button

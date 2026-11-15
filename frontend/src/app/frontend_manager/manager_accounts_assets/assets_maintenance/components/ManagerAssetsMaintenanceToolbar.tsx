@@ -169,8 +169,8 @@ export function ManagerAssetsMaintenanceToolbar({
           )}
         </div>
 
-        {/* Priority Filter */}
-        <div className="flex items-center gap-2">
+        {/* Priority & Type Filters */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
           <select
             value={priorityFilter}
             onChange={(e) => onPriorityChange(e.target.value)}

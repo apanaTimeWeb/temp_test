@@ -77,7 +77,19 @@ export function ManagerAssetsMaintenanceAddModal({
         maintenanceType: 'preventive',
       });
     }
-  }, [isOpen, reset]);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, reset, onClose]);
 
   const assetOptions: ComboboxOption[] = useMemo(() => {
     return MANAGER_ACCOUNTING_SAMPLE_ASSETS.map((a) => ({
@@ -117,6 +129,9 @@ export function ManagerAssetsMaintenanceAddModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="add-maintenance-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
     >
       <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}

@@ -15,6 +15,7 @@ import {
   AlertCircle,
   IndianRupee,
   Layers,
+  Trash2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -61,6 +62,7 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
     logItem: MaintenanceLogItem;
     nextStatus: string;
   } | null>(null);
+  const [pendingDeleteItem, setPendingDeleteItem] = useState<MaintenanceLogItem | null>(null);
 
   const handleCreateOrder = (newLog: MaintenanceLogItem) => {
     setLogsList((prev) => [newLog, ...prev]);
@@ -409,7 +411,10 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         formatCurrency={formatManagerAssetMaintenanceCurrency}
         onUpdateStatus={handleRequestUpdateStatus}
         onViewDetails={(item) => setSelectedDetailsItem(item)}
-        onDeleteLog={handleDeleteLog}
+        onDeleteLog={(id) => {
+          const item = logsList.find((l) => l.id === id);
+          if (item) setPendingDeleteItem(item);
+        }}
         page={page}
         pageSize={pageSize}
         pageCount={pageCount}
@@ -442,6 +447,62 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         onClose={() => setSelectedDetailsItem(null)}
         onAdvanceStatus={handleRequestUpdateStatus}
       />
+
+      {/* Delete Confirmation Dialog */}
+      {pendingDeleteItem && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-confirm-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setPendingDeleteItem(null);
+          }}
+        >
+          <div className="relative w-full max-w-sm rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/15 text-rose-500 border border-rose-500/30 flex items-center justify-center shrink-0">
+                <Trash2 size={20} />
+              </div>
+              <div>
+                <h3 id="delete-confirm-title" className="text-sm font-bold text-primary">
+                  Delete Maintenance Ticket
+                </h3>
+                <p className="text-xs text-secondary mt-0.5 truncate max-w-[200px]">
+                  #{pendingDeleteItem.id} — {pendingDeleteItem.assetName}
+                </p>
+              </div>
+            </div>
+            <p className="text-xs text-secondary leading-relaxed">
+              Are you sure you want to remove this maintenance ticket? This action will remove it from the active service register.
+            </p>
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-border">
+              <button
+                type="button"
+                onClick={() => setPendingDeleteItem(null)}
+                className="px-3.5 py-1.5 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  handleDeleteLog(pendingDeleteItem.id);
+                  setPendingDeleteItem(null);
+                }}
+                style={{
+                  boxShadow: '0 0 16px rgba(239, 68, 68, 0.45)',
+                  backgroundColor: '#ef4444',
+                  borderColor: '#f87171',
+                }}
+                className="px-4 py-1.5 rounded-xl text-white text-xs font-semibold border hover:opacity-95 transition-all cursor-pointer"
+              >
+                Delete Ticket
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
