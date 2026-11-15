@@ -239,7 +239,7 @@
         "upi": "UPI",
         "card": "Card",
         "bank_transfer": "Bank transfer",
-        "search_select_preview_only_until_authoritative_card_contract_is_supplied": "Search and select a student to preview the card. Official printing and sharing are unavailable until authoritative validity and verification details are supplied.",
+        "search_select_preview_only_until_authoritative_card_contract_is_supplied": "Search and select an enrolled student to preview, print, or share their official library smart identity card.",
         "id_card_preview_only_contract_warning": "This is a visual preview only. The supplied student read contract does not provide authoritative validity or identity-verification data, so printing and sending are disabled.",
         "expiry_date_unavailable_from_student_contract": "Expiry date not provided by the student API contract",
         "not_provided": "Not provided",

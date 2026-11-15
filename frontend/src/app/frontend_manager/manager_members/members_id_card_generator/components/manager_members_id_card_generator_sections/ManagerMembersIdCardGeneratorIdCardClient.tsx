@@ -3,16 +3,14 @@
 import { useTranslations } from 'next-intl';
 
 import { useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, CheckCircle2, IdCard, MessageSquare, Printer, Search } from 'lucide-react';
+import { CheckCircle2, IdCard, MessageSquare, Printer, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import StudentIdCard, { type IdCardData } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCard';
 import { useManagerIdCardGeneratorFormatting } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGeneratorFormatting';
 import { useManagerIdCardGenerator } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGenerator';
 import type { ManagerStudent } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorTypes';
 import { MANAGER_STUDENT_STATUS_ACTIVE, MANAGER_STUDENT_STATUS_SUSPENDED, MANAGER_STUDENT_STATUSES, MANAGER_STUDENT_SHIFTS, MANAGER_MEMBERS_ID_CARD_GENERATOR_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_members/members_id_card_generator/constants/ManagerMembersIdCardGeneratorConstants';
-import { MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES } from '@/app/frontend_manager/manager_members/members_id_card_generator/config/manager_members_id_card_generator.url_config';
 import { ManagerMembersIdCardGeneratorEmptyState } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_empty_states/ManagerMembersIdCardGeneratorEmptyState';
 import { ManagerMembersIdCardBulkDispatchModal } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardBulkDispatchModal';
 
@@ -125,9 +123,6 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
     <div className="mgr-page">
       <div className="mgr-page-header">
         <div>
-          <Link href={MANAGER_MEMBERS_ID_CARD_GENERATOR_ROUTES.LIST} className="mgr-back-link">
-            <ArrowLeft size={18} strokeWidth={2} /> {tManagerUi('back_to_students_6de7b0')}
-          </Link>
           <h1 className="mgr-page-title">{tManagerUi('id_card_generator')}</h1>
           <p className="mgr-page-subtitle">{tManagerUi('search_select_preview_only_until_authoritative_card_contract_is_supplied')}</p>
         </div>
