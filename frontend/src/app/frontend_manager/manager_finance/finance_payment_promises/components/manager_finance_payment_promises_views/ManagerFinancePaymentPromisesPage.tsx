@@ -123,9 +123,8 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     setTimeout(() => setFeedbackToast(null), 4000);
   };
 
-  const handleOpenEdit = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample, mode: 'edit' | 'details' = 'edit') => {
+  const handleOpenEdit = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
     setSelectedPromise(promise);
-    setEditModalMode(mode);
     setEditAmount(String(promise.promisedAmount >= 1000 ? Math.round(promise.promisedAmount / 100) : promise.promisedAmount));
     setEditDate(promise.expectedDate);
     setEditRemarks(promise.remarks || '');
@@ -172,7 +171,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         <button
           type="button"
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-primary hover:bg-primary-hover text-white shadow-xs transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          className="mgr-btn-primary text-xs flex items-center gap-1.5 py-2 px-3.5 shadow-sm focus-visible:ring-2 focus-visible:ring-primary outline-none"
         >
           <Plus size={14} /> Record Payment Promise
         </button>
@@ -272,7 +271,6 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
 
       <ManagerFinancePaymentPromisesEditModal
         promise={selectedPromise}
-        mode={editModalMode}
         formatCurrency={formatCurrency}
         onClose={() => setSelectedPromise(null)}
         editAmount={editAmount}
@@ -282,7 +280,6 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         editRemarks={editRemarks}
         onEditRemarksChange={setEditRemarks}
         onSavePromise={handleSavePromise}
-        onSwitchToEdit={() => setEditModalMode('edit')}
       />
 
       <ManagerFinancePaymentPromisesAddModal

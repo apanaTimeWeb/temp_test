@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle, CalendarPlus, Eye, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { CheckCircle, Edit3, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_STATUS_BADGE } from '@/app/frontend_manager/manager_finance/finance_payment_promises/constants/ManagerFinancePaymentPromisesPaymentPromiseConstants';
 import { ManagerFinancePaymentPromisesEmptyState } from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/manager_finance_payment_promises_empty_states/ManagerFinancePaymentPromisesEmptyState';
@@ -17,7 +17,7 @@ export interface ManagerFinancePaymentPromisesTableProps {
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: PromiseSortField) => void;
   onMarkPaid: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
-  onOpenEdit: (p: ManagerFinancePaymentPromisesPaymentPromiseSample, mode?: 'edit' | 'details') => void;
+  onOpenEdit: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
   startItem: number;
   endItem: number;
   totalRows: number;
@@ -206,19 +206,11 @@ export default function ManagerFinancePaymentPromisesTable({
                         </button>
                         <button
                           type="button"
-                          onClick={() => onOpenEdit(p, 'edit')}
+                          onClick={() => onOpenEdit(p)}
                           className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
-                          title="Edit promise amount or extend expected date"
+                          title="Edit promise amount or expected date"
                         >
-                          <CalendarPlus size={11} /> Edit / Extend
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => onOpenEdit(p, 'details')}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
-                          title="View commitment details"
-                        >
-                          <Eye size={11} /> Details
+                          <Edit3 size={11} /> Edit
                         </button>
                       </div>
                     ) : (
@@ -226,14 +218,6 @@ export default function ManagerFinancePaymentPromisesTable({
                         <span className="fin-cell-subtext text-success font-medium">
                           ✓ {labels.paidOn} {p.fulfilledDate ? formatDate(p.fulfilledDate) : '—'}
                         </span>
-                        <button
-                          type="button"
-                          onClick={() => onOpenEdit(p, 'details')}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
-                          title="View commitment details"
-                        >
-                          <Eye size={11} /> Details
-                        </button>
                       </div>
                     )}
                   </td>
