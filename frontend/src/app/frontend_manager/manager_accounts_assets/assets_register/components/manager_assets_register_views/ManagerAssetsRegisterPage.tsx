@@ -103,6 +103,9 @@ export default function ManagerAssetsRegisterPage({
     setAssets((prev) =>
       prev.map((a) => (a.id === targetAsset.id ? { ...a, status: nextStatus } : a))
     );
+    if (selectedDetailsAsset && selectedDetailsAsset.id === targetAsset.id) {
+      setSelectedDetailsAsset({ ...selectedDetailsAsset, status: nextStatus });
+    }
     toast.success(
       `Asset "${targetAsset.name}" moved to ${nextStatus === 'active' ? 'ACTIVE & OPERATIONAL' : 'UNDER MAINTENANCE'}!`
     );

@@ -169,7 +169,7 @@ export function ManagerAssetsRegisterToolbar({
         </div>
 
         {/* Category Dropdown Filter */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <select
             value={categoryFilter}
             onChange={(e) => onCategoryChange(e.target.value)}
