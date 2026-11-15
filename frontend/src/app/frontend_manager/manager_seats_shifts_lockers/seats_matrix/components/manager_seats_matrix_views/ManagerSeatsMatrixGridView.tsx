@@ -69,7 +69,7 @@ export function ManagerSeatsMatrixGridView({
   return (
     <>
       {/* ── Top Legend & 4-Shift Allocation Guide ── */}
-      <div className="mb-6 p-4 sm:p-5 bg-card border border-border rounded-2xl shadow-sm space-y-4">
+      <div className="p-3.5 sm:p-4 bg-card border border-border rounded-2xl shadow-sm space-y-3.5">
         {/* Tier 1: Overall Desk Status + Shift Status Indicators */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3.5 border-b border-border/70">
           {/* Section A: Overall Desk Status */}
@@ -165,7 +165,7 @@ export function ManagerSeatsMatrixGridView({
 
       {/* Matching Search Alert Banner */}
       {query && (
-        <div className="mb-4 p-3 rounded-xl bg-primary-subtle border border-primary text-xs text-primary flex items-center justify-between">
+        <div className="my-3 p-3 rounded-xl bg-primary-subtle border border-primary text-xs text-primary flex items-center justify-between">
           <span className="font-medium">
             Search active: Matched <strong className="font-bold">{matchingSeats.length}</strong> seat(s) for "{searchQuery}"
           </span>
@@ -178,7 +178,7 @@ export function ManagerSeatsMatrixGridView({
       )}
 
       {/* Grid Container */}
-      <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 shadow-sm">
+      <div className="bg-card border border-border rounded-2xl p-3.5 sm:p-5 shadow-sm">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 border-b border-border pb-4">
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-primary flex items-center gap-2">

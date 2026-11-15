@@ -161,7 +161,7 @@ export function ManagerSeatsMatrixClient() {
   }
 
   return (
-    <div className="ss-page space-y-5">
+    <div className="ss-page !p-0 space-y-4 w-full min-w-0">
       {/* ── Top Unified Control Center (Clean 2-Tier Toolbar) ── */}
       <div className="flex flex-col gap-4 p-4 rounded-2xl bg-card border border-border shadow-sm">
         {/* Tier 1: Title, Hall Indicator, View Mode & Action Buttons */}

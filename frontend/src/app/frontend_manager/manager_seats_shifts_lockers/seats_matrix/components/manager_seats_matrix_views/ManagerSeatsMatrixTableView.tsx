@@ -80,7 +80,7 @@ export function ManagerSeatsMatrixTableView({
   };
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
+    <div className="bg-card border border-border rounded-2xl p-3.5 sm:p-5 space-y-4 shadow-sm">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-border pb-4">
         <div>
           <h2 className="text-lg sm:text-xl font-bold text-primary">Seat Directory & Roster Table</h2>
@@ -121,27 +121,26 @@ export function ManagerSeatsMatrixTableView({
                   <td className="py-3 px-4 text-xs">{shiftLabel(seat.shift)}</td>
                   <td className="py-3 px-4">
                     <span
-                      className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
-                        seat.status === 'free'
-                          ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                          : seat.status === 'occupied'
+                      className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${seat.status === 'free'
+                        ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                        : seat.status === 'occupied'
                           ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
                           : seat.status === 'expiring'
-                          ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                          : seat.status === 'maintenance'
-                          ? 'bg-secondary/15 text-secondary border border-border'
-                          : 'bg-floating text-secondary border border-border'
-                      }`}
+                            ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                            : seat.status === 'maintenance'
+                              ? 'bg-secondary/15 text-secondary border border-border'
+                              : 'bg-floating text-secondary border border-border'
+                        }`}
                     >
                       {seat.status === 'free'
                         ? tManagerUi('available')
                         : seat.status === 'occupied'
-                        ? tManagerUi('occupied')
-                        : seat.status === 'expiring'
-                        ? tManagerUi('expiring_soon')
-                        : seat.status === 'maintenance'
-                        ? tManagerUi('maintenance')
-                        : 'Unknown'}
+                          ? tManagerUi('occupied')
+                          : seat.status === 'expiring'
+                            ? tManagerUi('expiring_soon')
+                            : seat.status === 'maintenance'
+                              ? tManagerUi('maintenance')
+                              : 'Unknown'}
                     </span>
                   </td>
                   <td className="py-3 px-4">
@@ -176,11 +175,10 @@ export function ManagerSeatsMatrixTableView({
                   <td className="py-3 px-4">
                     {seat.student && seat.studentGender ? (
                       <span
-                        className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-0.5 rounded-full font-semibold border ${
-                          seat.studentGender === 'Female'
-                            ? 'bg-primary-subtle text-primary border-primary/20'
-                            : 'bg-surface text-secondary border-border'
-                        }`}
+                        className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-0.5 rounded-full font-semibold border ${seat.studentGender === 'Female'
+                          ? 'bg-primary-subtle text-primary border-primary/20'
+                          : 'bg-surface text-secondary border-border'
+                          }`}
                       >
                         {seat.studentGender === 'Female' ? '👩 Female' : '👨 Male'}
                       </span>
