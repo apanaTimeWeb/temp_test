@@ -1,7 +1,8 @@
 'use client';
+
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import { RefreshCw, Scale } from 'lucide-react';
+import { RefreshCw, Scale, Printer, Download, Eye, CheckCircle2, Clock } from 'lucide-react';
 import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
@@ -13,6 +14,7 @@ import { ManagerAccountsDailySettlementKpis } from './ManagerAccountsDailySettle
 import { ManagerAccountsDailySettlementToolbar } from './ManagerAccountsDailySettlementToolbar';
 import ManagerAccountsDailySettlementTimeHorizonBar, { type ManagerDailySettlementTimeHorizon } from './ManagerAccountsDailySettlementTimeHorizonBar';
 import ManagerAccountsDailySettlementConfirmModal from '../manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementConfirmModal';
+import { ManagerAccountsDailySettlementDetailsModal } from './ManagerAccountsDailySettlementDetailsModal';
 
 function toLocalDateInputValue(date: Date): string {
   const year = date.getFullYear();
@@ -40,6 +42,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const [shiftFilter, setShiftFilter] = useState('all');
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingSettlementShift, setPendingSettlementShift] = useState<string | null>(null);
+  const [selectedAuditEntry, setSelectedAuditEntry] = useState<Entry | null>(null);
 
   const dateScopeLabel = useMemo(() => {
     switch (timeHorizon) {
@@ -77,6 +80,9 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
 
   const hasActiveFilters = Boolean(searchQuery.trim() !== '' || statusFilter !== 'all' || shiftFilter !== 'all');
 
+  const settledCount = entries.filter((e) => e.status.toLowerCase() === 'settled').length;
+  const pendingCount = entries.filter((e) => e.status.toLowerCase() === 'pending').length;
+
   const handleRequestSettleShift = (shiftName: string) => {
     setPendingSettlementShift(shiftName);
   };
@@ -89,6 +95,9 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         e.shift === shiftToSettle ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' } : e
       )
     );
+    if (selectedAuditEntry && selectedAuditEntry.shift === shiftToSettle) {
+      setSelectedAuditEntry({ ...selectedAuditEntry, status: 'settled', settledBy: 'Branch Manager Satyam' });
+    }
     toast.success(`Shift "${shiftToSettle}" settlement confirmed successfully! (Physical cash verified)`);
     setPendingSettlementShift(null);
   };
@@ -100,12 +109,36 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   };
 
   const handleExportCsv = () => {
-    const headers = ['Shift', 'Opening (INR)', 'Cash (INR)', 'UPI (INR)', 'Expenses (INR)', 'Closing (INR)', 'Settled By', 'Status'].map(escapeCsvCell).join(',');
+    const headers = [
+      'Shift',
+      'Opening (INR)',
+      'Cash (INR)',
+      'UPI (INR)',
+      'Expenses (INR)',
+      'Closing (INR)',
+      'Settled By',
+      'Status',
+    ]
+      .map(escapeCsvCell)
+      .join(',');
+
     const rows = filteredEntries
       .map((e) =>
-        [e.shift, e.openingBalance, e.cashCollected, e.upiCollected, e.expenses, e.closingBalance, e.settledBy || '', e.status].map(escapeCsvCell).join(',')
+        [
+          e.shift,
+          (e.openingBalance / 100).toFixed(2),
+          (e.cashCollected / 100).toFixed(2),
+          (e.upiCollected / 100).toFixed(2),
+          (e.expenses / 100).toFixed(2),
+          (e.closingBalance / 100).toFixed(2),
+          e.settledBy || '',
+          e.status,
+        ]
+          .map(escapeCsvCell)
+          .join(',')
       )
       .join('\r\n');
+
     const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
@@ -143,6 +176,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         },
         formatCurrency: formatManagerDailySettlementCurrency,
         onSettleShift: handleRequestSettleShift,
+        onViewDetails: (entry) => setSelectedAuditEntry(entry),
       }),
     [tManagerUi, formatManagerDailySettlementCurrency]
   );
@@ -179,22 +213,42 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             </p>
           </div>
 
-          {/* Header Actions */}
+          {/* Header Action Buttons: Print Report, Sync Balances, Export CSV */}
           <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+              title="Print Daily Settlement Report"
+            >
+              <Printer size={14} />
+              <span>Print Report</span>
+            </button>
+
             <button
               type="button"
               onClick={handleSyncBalances}
               disabled={isSyncing}
-              className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60"
               title="Sync Drawer Balances"
             >
               <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
               <span>{isSyncing ? 'Syncing...' : 'Sync Balances'}</span>
             </button>
+
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer"
+              title="Export Daily Settlement as CSV"
+            >
+              <Download size={14} />
+              <span>Export CSV</span>
+            </button>
           </div>
         </div>
 
-        {/* Contract Warning Banner */}
+        {/* Contract Warning Banner (Preserved) */}
         <p
           className="mt-4 rounded-xl border border-border bg-warning-bg p-3 text-xs text-warning leading-relaxed"
           data-testid="manager-accounting-settlement-contract-warning"
@@ -204,7 +258,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         </p>
       </div>
 
-      {/* ── Specific Date Navigator Bar ── */}
+      {/* ── Specific Date Navigator Bar with Glowing Halos ── */}
       <ManagerAccountsDailySettlementTimeHorizonBar
         timeHorizon={timeHorizon}
         onChangeTimeHorizon={setTimeHorizon}
@@ -213,7 +267,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         sampleDateLabel={tManagerUi('sample_settlement_date')}
       />
 
-      {/* ── Executive Reconciliation KPI Summary Cards ── */}
+      {/* ── Executive Reconciliation KPI Summary Cards (Clean Display Cards, NOT Interlinked Toggle Buttons) ── */}
       <ManagerAccountsDailySettlementKpis
         totalCash={totalCash}
         totalUpi={totalUpi}
@@ -229,8 +283,8 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         }}
       />
 
-      {/* ── Table Container with Toolbar ── */}
-      <div className="fin-card p-5 space-y-4 rounded-2xl border border-border bg-card shadow-sm">
+      {/* ── Table Container with Multi-Filter Toolbar ── */}
+      <div className="fin-card p-4 sm:p-5 space-y-4 rounded-2xl border border-border bg-card shadow-sm">
         <ManagerAccountsDailySettlementToolbar
           filteredCount={filteredEntries.length}
           totalCount={entries.length}
@@ -248,6 +302,11 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             setShiftFilter('all');
           }}
           onExportCsv={handleExportCsv}
+          counts={{
+            all: entries.length,
+            settled: settledCount,
+            pending: pendingCount,
+          }}
         />
 
         {filteredEntries.length === 0 ? (
@@ -269,7 +328,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             )}
           </div>
         ) : (
-          <div className="mgr-table-wrapper h-80">
+          <div className="mgr-table-wrapper">
             <ManagerAccountsDailySettlementNativeTable
               getRowKey={(row) => String(row.id)}
               rows={filteredEntries}
@@ -280,11 +339,22 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         )}
       </div>
 
+      {/* ── Confirm Shift Settlement Modal ── */}
       <ManagerAccountsDailySettlementConfirmModal
         isOpen={Boolean(pendingSettlementShift)}
         shiftName={pendingSettlementShift}
         onConfirm={handleConfirmSettleShift}
         onCancel={() => setPendingSettlementShift(null)}
+      />
+
+      {/* ── Shift Reconciliation Audit Details Modal ── */}
+      <ManagerAccountsDailySettlementDetailsModal
+        isOpen={Boolean(selectedAuditEntry)}
+        entry={selectedAuditEntry}
+        dateScopeLabel={dateScopeLabel}
+        formatCurrency={formatManagerDailySettlementCurrency}
+        onClose={() => setSelectedAuditEntry(null)}
+        onSettleShift={handleRequestSettleShift}
       />
     </div>
   );

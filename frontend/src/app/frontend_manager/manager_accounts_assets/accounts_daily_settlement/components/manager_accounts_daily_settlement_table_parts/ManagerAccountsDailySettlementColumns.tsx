@@ -1,5 +1,5 @@
 'use client';
-import { CheckCircle2, Clock } from 'lucide-react';
+import { CheckCircle2, Clock, Eye } from 'lucide-react';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import type { NativeColumn, NativeCellParams } from './ManagerAccountsDailySettlementNativeTable';
 
@@ -19,27 +19,29 @@ interface CreateDailySettlementColumnsOptions {
   };
   formatCurrency: (val: number) => string;
   onSettleShift: (shiftName: string) => void;
+  onViewDetails?: (entry: Entry) => void;
 }
 
 export function createManagerAccountsDailySettlementColumns({
   labels,
   formatCurrency,
   onSettleShift,
+  onViewDetails,
 }: CreateDailySettlementColumnsOptions): NativeColumn<Entry>[] {
   return [
     {
       field: 'shift',
       headerName: labels.shift,
       flex: 1,
-      minWidth: 180,
+      minWidth: 170,
       cellRenderer: (p: NativeCellParams) => (
-        <span className="font-semibold text-primary text-xs">{p.value}</span>
+        <span className="font-bold text-primary text-xs">{p.value}</span>
       ),
     },
     {
       field: 'openingBalance',
       headerName: labels.opening,
-      width: 130,
+      width: 120,
       cellStyle: { textAlign: 'right' },
       cellRenderer: (p: NativeCellParams) => (
         <span className="text-secondary text-xs font-mono">
@@ -53,7 +55,7 @@ export function createManagerAccountsDailySettlementColumns({
       width: 120,
       cellStyle: { textAlign: 'right' },
       cellRenderer: (p: NativeCellParams) => (
-        <span className="text-success font-bold text-xs font-mono">
+        <span className="text-emerald-400 font-bold text-xs font-mono">
           {formatCurrency(Number(p.value ?? 0))}
         </span>
       ),
@@ -64,7 +66,7 @@ export function createManagerAccountsDailySettlementColumns({
       width: 120,
       cellStyle: { textAlign: 'right' },
       cellRenderer: (p: NativeCellParams) => (
-        <span className="text-primary font-bold text-xs font-mono">
+        <span className="text-indigo-400 font-bold text-xs font-mono">
           {formatCurrency(Number(p.value ?? 0))}
         </span>
       ),
@@ -72,10 +74,10 @@ export function createManagerAccountsDailySettlementColumns({
     {
       field: 'expenses',
       headerName: labels.expenses,
-      width: 130,
+      width: 120,
       cellStyle: { textAlign: 'right' },
       cellRenderer: (p: NativeCellParams) => (
-        <span className="text-danger font-bold text-xs font-mono">
+        <span className="text-rose-400 font-bold text-xs font-mono">
           {formatCurrency(Number(p.value ?? 0))}
         </span>
       ),
@@ -99,7 +101,7 @@ export function createManagerAccountsDailySettlementColumns({
         const val = typeof p.value === 'string' ? p.value.trim() : '';
         const isMissing = !val || val === '—' || val === '-';
         return (
-          <span className={isMissing ? 'text-secondary/50 italic text-xs' : 'text-secondary text-xs'}>
+          <span className={isMissing ? 'text-secondary/50 italic text-xs' : 'text-secondary text-xs font-medium'}>
             {isMissing ? '—' : val}
           </span>
         );
@@ -108,13 +110,13 @@ export function createManagerAccountsDailySettlementColumns({
     {
       field: 'status',
       headerName: labels.status,
-      width: 120,
+      width: 130,
       cellRenderer: (p: NativeCellParams) => (
         <span
           className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
             p.value === 'settled'
-              ? 'bg-success-bg text-success border border-border'
-              : 'bg-warning-bg text-warning border border-border'
+              ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+              : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
           }`}
         >
           {p.value === 'settled' ? (
@@ -133,34 +135,46 @@ export function createManagerAccountsDailySettlementColumns({
     },
     {
       headerName: labels.action,
-      width: 130,
+      width: 160,
       sortable: false,
       cellStyle: { textAlign: 'right' },
       cellRenderer: (params: NativeCellParams<Entry>) => {
-        if (params.data?.status === 'pending') {
-          const shiftName = params.data.shift;
-          return (
-            <div className="h-full flex justify-end items-center">
+        const entry = params.data;
+        if (!entry) return null;
+        const isPending = entry.status === 'pending';
+
+        return (
+          <div className="h-full flex justify-end items-center gap-1.5">
+            {onViewDetails && (
               <button
                 type="button"
-                onClick={() => onSettleShift(shiftName)}
-                className="px-2.5 py-1 rounded-lg bg-success hover:opacity-90 text-white text-xs font-semibold shadow-sm transition-colors cursor-pointer"
-                title={`Settle shift ${shiftName}`}
+                onClick={() => onViewDetails(entry)}
+                className="p-1.5 rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/15 transition-colors cursor-pointer"
+                title={`View ${entry.shift} audit details`}
+                aria-label={`View audit details for ${entry.shift}`}
+              >
+                <Eye size={15} />
+              </button>
+            )}
+
+            {isPending ? (
+              <button
+                type="button"
+                onClick={() => onSettleShift(entry.shift)}
+                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                title={`Settle shift ${entry.shift}`}
               >
                 Settle Shift
               </button>
-            </div>
-          );
-        }
-        return (
-          <div className="h-full flex justify-end items-center">
-            <span className="inline-flex items-center gap-1 text-xs text-success font-semibold">
-              <CheckCircle2 size={13} /> Verified
-            </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-semibold px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                <CheckCircle2 size={12} /> Verified
+              </span>
+            )}
           </div>
         );
       },
     },
   ];
 }
-
+export default createManagerAccountsDailySettlementColumns;
