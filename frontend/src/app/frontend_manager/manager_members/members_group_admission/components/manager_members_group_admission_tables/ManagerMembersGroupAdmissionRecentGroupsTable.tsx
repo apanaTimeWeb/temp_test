@@ -1,5 +1,5 @@
 'use client';
-import { ArrowUpDown, ArrowUp, ArrowDown, Search } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export type GroupSortField = 'batchId' | 'batchName' | 'date' | 'count' | 'shift' | 'status';
@@ -168,20 +168,22 @@ export function ManagerMembersGroupAdmissionRecentGroupsTable({
                 type="button"
                 disabled={effectivePage === 0}
                 onClick={() => onPageChange(effectivePage - 1)}
-                className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+                className="mgr-btn mgr-btn-secondary py-1 px-2.5 text-xs flex items-center gap-1 disabled:opacity-40"
               >
-                Previous
+                <ChevronLeft size={14} className="text-secondary" />
+                <span>Previous</span>
               </button>
-              <span className="text-xs">
+              <span className="text-xs font-medium text-primary">
                 Page {effectivePage + 1} of {pageCount}
               </span>
               <button
                 type="button"
                 disabled={effectivePage >= pageCount - 1}
                 onClick={() => onPageChange(effectivePage + 1)}
-                className="mgr-btn mgr-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+                className="mgr-btn mgr-btn-secondary py-1 px-2.5 text-xs flex items-center gap-1 disabled:opacity-40"
               >
-                Next
+                <span>Next</span>
+                <ChevronRight size={14} className="text-secondary" />
               </button>
             </div>
           </div>

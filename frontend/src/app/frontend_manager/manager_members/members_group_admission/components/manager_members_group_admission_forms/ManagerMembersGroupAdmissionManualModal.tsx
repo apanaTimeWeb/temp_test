@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Users2, X, Plus, CheckCircle2, LayoutList, SlidersHorizontal } from 'lucide-react';
+import { Users2, X, Plus, CheckCircle2, LayoutList, SlidersHorizontal, Users } from 'lucide-react';
 import { ManagerMembersGroupAdmissionCardView } from './ManagerMembersGroupAdmissionCardView';
 import { ManagerMembersGroupAdmissionTableView } from './ManagerMembersGroupAdmissionTableView';
 
@@ -206,14 +206,17 @@ export function ManagerMembersGroupAdmissionManualModal({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0 bg-surface-highlight p-3 sm:p-3.5 rounded-xl border border-border">
           <div className="sm:col-span-2">
             <label className="text-xs font-semibold text-primary block mb-1">Group / Coaching Batch Reference</label>
-            <input
-              type="text"
-              maxLength={80}
-              className="mgr-input text-xs"
-              placeholder="e.g. Drishti IAS Prelims Batch / SSC CGL Study Circle"
-              value={batchName}
-              onChange={(e) => setBatchName(e.target.value.slice(0, 80))}
-            />
+            <div className="mgr-input-icon-wrap">
+              <Users size={15} className="mgr-input-icon text-primary" />
+              <input
+                type="text"
+                maxLength={80}
+                className="mgr-input mgr-input-with-icon text-xs"
+                placeholder="e.g. Drishti IAS Prelims Batch / SSC CGL Study Circle"
+                value={batchName}
+                onChange={(e) => setBatchName(e.target.value.slice(0, 80))}
+              />
+            </div>
           </div>
           <div>
             <label className="text-xs font-semibold text-primary block mb-1">Total Members Enrolling</label>

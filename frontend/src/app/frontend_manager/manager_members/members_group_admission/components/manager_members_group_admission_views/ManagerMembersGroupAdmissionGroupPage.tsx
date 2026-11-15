@@ -155,11 +155,11 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
         </div>
         <div className="mgr-page-actions flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
           <button type="button" className="mgr-btn-ghost flex items-center justify-center gap-2 flex-1 sm:flex-initial" onClick={downloadTemplate}>
-            <Download size={16} />
+            <Download size={16} className="text-primary shrink-0" />
             <span>{tManagerUi('download_csv_template')}</span>
           </button>
           <button type="button" onClick={() => setShowManualModal(true)} className="mgr-btn-primary flex items-center justify-center gap-2 flex-1 sm:flex-initial">
-            <Plus size={16} />
+            <Plus size={16} className="text-on-primary shrink-0" />
             <span>New Group Admission</span>
           </button>
         </div>
@@ -170,14 +170,14 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
         {/* Bulk Upload Card */}
         <div className="mgr-card p-4 sm:p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-primary bg-floating hover:border-primary transition-all">
           <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary-subtle flex items-center justify-center text-primary mb-1">
-            <Upload size={28} />
+            <Upload size={28} className="text-primary" />
           </div>
           <div>
             <h3 className="text-primary font-bold text-base sm:text-lg mb-1">{tManagerUi('bulk_upload_excel_csv')}</h3>
             <p className="text-secondary text-xs sm:text-sm max-w-sm">Upload bulk student records in CSV or Excel format to register multiple candidates at once.</p>
           </div>
           <button type="button" onClick={() => setShowBulkModal(true)} className="mgr-btn-primary mt-2 flex items-center justify-center gap-2 w-full sm:w-auto">
-            <FileSpreadsheet size={16} />
+            <FileSpreadsheet size={16} className="text-on-primary shrink-0" />
             <span>Upload CSV File</span>
           </button>
         </div>
@@ -185,14 +185,14 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
         {/* Manual Group Entry Card */}
         <div className="mgr-card p-4 sm:p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-border bg-floating hover:border-success transition-all">
           <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-success-bg flex items-center justify-center text-success mb-1">
-            <Users2 size={28} />
+            <Users2 size={28} className="text-success" />
           </div>
           <div>
             <h3 className="text-primary font-bold text-base sm:text-lg mb-1">{tManagerUi('manual_group_entry')}</h3>
             <p className="text-secondary text-xs sm:text-sm max-w-sm">Enter student details manually in an interactive batch spreadsheet and register together.</p>
           </div>
           <button type="button" onClick={() => setShowManualModal(true)} className="mgr-btn-primary mt-2 flex items-center justify-center gap-2 w-full sm:w-auto">
-            <Plus size={16} />
+            <Plus size={16} className="text-on-primary shrink-0" />
             <span>Start Manual Entry</span>
           </button>
         </div>

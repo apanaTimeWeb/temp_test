@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { FileSpreadsheet, X, Upload, CheckCircle2 } from 'lucide-react';
+import { FileSpreadsheet, X, Upload, CheckCircle2, Users } from 'lucide-react';
 import type { RecentGroupAdmission } from '../manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
 
 interface GroupStudentEntry {
@@ -137,15 +137,18 @@ export function ManagerMembersGroupAdmissionBulkModal({
           <label className="mgr-label text-xs" htmlFor="bulk-batch-name">
             Batch / Group Name
           </label>
-          <input
-            id="bulk-batch-name"
-            type="text"
-            maxLength={80}
-            className="mgr-input text-xs"
-            placeholder="e.g. UPSC Morning Batch A"
-            value={batchName}
-            onChange={(e) => setBatchName(e.target.value.slice(0, 80))}
-          />
+          <div className="mgr-input-icon-wrap">
+            <Users size={15} className="mgr-input-icon text-primary" />
+            <input
+              id="bulk-batch-name"
+              type="text"
+              maxLength={80}
+              className="mgr-input mgr-input-with-icon text-xs"
+              placeholder="e.g. UPSC Morning Batch A"
+              value={batchName}
+              onChange={(e) => setBatchName(e.target.value.slice(0, 80))}
+            />
+          </div>
         </div>
 
         <div className="border-2 border-dashed border-border rounded-xl p-4 sm:p-6 text-center bg-floating">
