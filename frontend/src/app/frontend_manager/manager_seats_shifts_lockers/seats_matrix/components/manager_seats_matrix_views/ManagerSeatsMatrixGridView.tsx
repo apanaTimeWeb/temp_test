@@ -257,47 +257,42 @@ export function ManagerSeatsMatrixGridView({
                   )}
 
                   {/* 4 Shift Slot Indicators (M, A, E, N) */}
-                  <div className="flex items-center justify-between w-full px-0.5 pt-1 border-t border-border/70">
-                    <span className="text-[8px] font-bold text-secondary uppercase tracking-tight">
-                      Shift:
-                    </span>
-                    <div className="flex items-center gap-0.5">
-                      {(['morning', 'afternoon', 'evening', 'night'] as const).map((shiftKey) => {
-                        const letter = shiftKey[0].toUpperCase();
-                        const isBooked = shiftDots[shiftKey];
-                        const isMaint = seat.status === 'maintenance';
-                        const shiftTitleName =
-                          shiftKey === 'morning'
-                            ? 'Morning (06:00-12:00)'
-                            : shiftKey === 'afternoon'
-                            ? 'Afternoon (12:00-16:00)'
-                            : shiftKey === 'evening'
-                            ? 'Evening (16:00-20:00)'
-                            : 'Night (20:00-06:00)';
+                  <div className="flex items-center justify-center gap-1 w-full pt-1 border-t border-border/70">
+                    {(['morning', 'afternoon', 'evening', 'night'] as const).map((shiftKey) => {
+                      const letter = shiftKey[0].toUpperCase();
+                      const isBooked = shiftDots[shiftKey];
+                      const isMaint = seat.status === 'maintenance';
+                      const shiftTitleName =
+                        shiftKey === 'morning'
+                          ? 'Morning (06:00-12:00)'
+                          : shiftKey === 'afternoon'
+                          ? 'Afternoon (12:00-16:00)'
+                          : shiftKey === 'evening'
+                          ? 'Evening (16:00-20:00)'
+                          : 'Night (20:00-06:00)';
 
-                        return (
-                          <span
-                            key={shiftKey}
-                            title={
-                              isMaint
-                                ? `${shiftTitleName}: Seat Under Maintenance`
-                                : isBooked
-                                ? `${shiftTitleName}: Booked (Occupied)`
-                                : `${shiftTitleName}: Vacant (Available to book)`
-                            }
-                            className={`text-[9px] font-mono font-bold w-3.5 h-3.5 rounded flex items-center justify-center transition-all ${
-                              isMaint
-                                ? 'bg-secondary/15 text-secondary border border-border opacity-50'
-                                : isBooked
-                                ? 'bg-rose-500 text-white shadow-[0_0_6px_rgba(244,63,94,0.7)]'
-                                : 'bg-emerald-500 text-white shadow-[0_0_6px_rgba(16,185,129,0.5)]'
-                            }`}
-                          >
-                            {letter}
-                          </span>
-                        );
-                      })}
-                    </div>
+                      return (
+                        <span
+                          key={shiftKey}
+                          title={
+                            isMaint
+                              ? `${shiftTitleName}: Seat Under Maintenance`
+                              : isBooked
+                              ? `${shiftTitleName}: Booked (Occupied)`
+                              : `${shiftTitleName}: Vacant (Available to book)`
+                          }
+                          className={`text-[9px] font-mono font-bold w-4 h-4 rounded flex items-center justify-center transition-all ${
+                            isMaint
+                              ? 'bg-secondary/15 text-secondary border border-border opacity-50'
+                              : isBooked
+                              ? 'bg-rose-500 text-white shadow-[0_0_6px_rgba(244,63,94,0.7)]'
+                              : 'bg-emerald-500 text-white shadow-[0_0_6px_rgba(16,185,129,0.5)]'
+                          }`}
+                        >
+                          {letter}
+                        </span>
+                      );
+                    })}
                   </div>
                 </button>
               );
