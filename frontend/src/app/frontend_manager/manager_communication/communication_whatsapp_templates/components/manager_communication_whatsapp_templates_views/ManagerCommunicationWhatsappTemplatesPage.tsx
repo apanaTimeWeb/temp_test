@@ -1,26 +1,117 @@
 'use client';
-import { MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_TEMPLATES, type Template } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDemoRepository';
-import { MANAGER_COMMUNICATION_TEMPLATE_VARIABLES } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/constants/ManagerCommunicationWhatsappTemplatesConstants';
-import { useTranslations } from 'next-intl';
 
-import { useState, useRef } from 'react';
-import { useManagerWhatsappTemplatesDialogFocus } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDialogFocus';
-import { ChevronRight, X, Send, Save, CheckCircle2 } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import {
+  Sparkles,
+  Coins,
+  RotateCcw,
+  Receipt,
+  Megaphone,
+  UserX,
+  Handshake,
+  Send,
+  Save,
+  CheckCircle2,
+  AlertCircle,
+  X,
+  ChevronRight,
+  CheckCheck,
+  Smartphone,
+} from 'lucide-react';
+
+import {
+  MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_TEMPLATES,
+  type Template,
+} from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDemoRepository';
+import { MANAGER_COMMUNICATION_TEMPLATE_VARIABLES } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/constants/ManagerCommunicationWhatsappTemplatesConstants';
+import { useManagerWhatsappTemplatesDialogFocus } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDialogFocus';
 import type { ManagerCommunicationWhatsappTemplatesRouteQueryProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/types/ManagerCommunicationWhatsappTemplatesComponentTypes';
 
-
-
-
 const VARS = MANAGER_COMMUNICATION_TEMPLATE_VARIABLES;
-
 const INIT = MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_TEMPLATES;
-
 const MAX_CHARS = 1024;
 
+interface TemplateMeta {
+  icon: React.ReactNode;
+  conditionTag: string;
+  conditionDesc: string;
+  badge: string;
+  iconBox: string;
+  accentBorder: string;
+  ring: string;
+}
+
+const TEMPLATE_CONFIGS: Record<string, TemplateMeta> = {
+  welcome: {
+    icon: <Sparkles size={16} />,
+    conditionTag: 'Onboarding',
+    conditionDesc: 'Fires on new admission & seat allocation',
+    badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25',
+    iconBox: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25',
+    accentBorder: 'border-l-4 border-l-emerald-500',
+    ring: 'ring-emerald-500/20 border-emerald-500/40',
+  },
+  fee_reminder: {
+    icon: <Coins size={16} />,
+    conditionTag: 'Fee Due',
+    conditionDesc: 'Fires 3 days before fee due date',
+    badge: 'bg-amber-500/10 text-amber-400 border-amber-500/25',
+    iconBox: 'bg-amber-500/10 text-amber-400 border-amber-500/25',
+    accentBorder: 'border-l-4 border-l-amber-500',
+    ring: 'ring-amber-500/20 border-amber-500/40',
+  },
+  renewal: {
+    icon: <RotateCcw size={16} />,
+    conditionTag: 'Plan Expiry',
+    conditionDesc: 'Fires when membership tenure is expiring',
+    badge: 'bg-purple-500/10 text-purple-400 border-purple-500/25',
+    iconBox: 'bg-purple-500/10 text-purple-400 border-purple-500/25',
+    accentBorder: 'border-l-4 border-l-purple-500',
+    ring: 'ring-purple-500/20 border-purple-500/40',
+  },
+  receipt: {
+    icon: <Receipt size={16} />,
+    conditionTag: 'Transaction',
+    conditionDesc: 'Fires instantly upon fee or fine payment',
+    badge: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/25',
+    iconBox: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/25',
+    accentBorder: 'border-l-4 border-l-cyan-500',
+    ring: 'ring-cyan-500/20 border-cyan-500/40',
+  },
+  notice: {
+    icon: <Megaphone size={16} />,
+    conditionTag: 'Broadcast',
+    conditionDesc: 'Fires on general announcements or branch notices',
+    badge: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/25',
+    iconBox: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/25',
+    accentBorder: 'border-l-4 border-l-indigo-500',
+    ring: 'ring-indigo-500/20 border-indigo-500/40',
+  },
+  absentee: {
+    icon: <UserX size={16} />,
+    conditionTag: 'Attendance',
+    conditionDesc: 'Fires to parent when student is absent 3+ days',
+    badge: 'bg-rose-500/10 text-rose-400 border-rose-500/25',
+    iconBox: 'bg-rose-500/10 text-rose-400 border-rose-500/25',
+    accentBorder: 'border-l-4 border-l-rose-500',
+    ring: 'ring-rose-500/20 border-rose-500/40',
+  },
+  ptp: {
+    icon: <Handshake size={16} />,
+    conditionTag: 'Promise to Pay',
+    conditionDesc: 'Fires on promised commitment date arrival',
+    badge: 'bg-orange-500/10 text-orange-400 border-orange-500/25',
+    iconBox: 'bg-orange-500/10 text-orange-400 border-orange-500/25',
+    accentBorder: 'border-l-4 border-l-orange-500',
+    ring: 'ring-orange-500/20 border-orange-500/40',
+  },
+};
 
 export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: ManagerCommunicationWhatsappTemplatesRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_whatsapp_templates.ui');
+
   const templateLabel = (template: Template) => {
     switch (template.id) {
       case 'welcome': return tManagerUi('template_label_welcome_message');
@@ -33,30 +124,37 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
       default: return template.label;
     }
   };
+
   const [templates, setTemplates] = useState<Template[]>(INIT);
-  const [activeId, setActiveId]   = useState('welcome');
-  const [showTest, setShowTest]   = useState(false);
+  const [activeId, setActiveId] = useState('welcome');
+  const [showTest, setShowTest] = useState(false);
   const [testPhone, setTestPhone] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   useManagerWhatsappTemplatesDialogFocus(dialogRef, () => setShowTest(false), showTest);
 
-  const active    = templates.find(t => t.id === activeId)!;
+  const active = templates.find((t) => t.id === activeId) || templates[0];
   const charCount = active.body.length;
-
+  const activeConfig = TEMPLATE_CONFIGS[active.id] || TEMPLATE_CONFIGS.welcome;
 
   const updateBody = (body: string) =>
-    setTemplates(prev => prev.map(t => t.id === activeId ? { ...t, body } : t));
+    setTemplates((prev) => prev.map((t) => (t.id === activeId ? { ...t, body } : t)));
 
   const insertVar = (v: string) => {
     const el = textareaRef.current;
-    if (!el) { if (active.body.length + v.length <= MAX_CHARS) updateBody(active.body + v); return; }
+    if (!el) {
+      if (active.body.length + v.length <= MAX_CHARS) updateBody(active.body + v);
+      return;
+    }
     const start = el.selectionStart;
-    const end   = el.selectionEnd;
+    const end = el.selectionEnd;
     const nextBody = active.body.slice(0, start) + v + active.body.slice(end);
     if (nextBody.length > MAX_CHARS) return;
     updateBody(nextBody);
-    setTimeout(() => { el.focus(); el.setSelectionRange(start + v.length, start + v.length); }, 0);
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(start + v.length, start + v.length);
+    }, 0);
   };
 
   const [toastFeedback, setToastFeedback] = useState<string | null>(null);
@@ -80,172 +178,412 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
 
   const preview = active.body
     .replace(/{name}/g, 'Rahul Sharma')
-    .replace(/{amount}/g, '1000')
+    .replace(/{amount}/g, '₹1,000')
     .replace(/{duedate}/g, '15-Apr-2026')
-    .replace(/{planname}/g, 'Monthly')
+    .replace(/{planname}/g, 'Monthly Plan')
     .replace(/{libraryname}/g, 'Library OS')
-    .replace(/{phone}/g, '+91 9000000000')
+    .replace(/{phone}/g, '+91 98765 43210')
     .replace(/{seat}/g, 'S-03');
 
   return (
-    <div className="mc-page"
+    <div
+      className="mgr-page-animate relative pb-12 space-y-6 max-w-7xl mx-auto"
       data-route-view={_routeQuery.view}
-      data-route-id={_routeQuery.id}>
-<p role="status" className="mc-input-hint mc-text-warning mb-4" data-testid="manager-communication-template-contract-warning">{tManagerUi('template_edits_are_draft_only_saving_templates_and_sendi_b21f71')}</p>
-<p role="status" className="mc-input-hint mb-4">{tManagerUi('template_bodies_are_sample_english_copy')}</p>
-
-      {/* Test Message Modal */}
-      {showTest && (
-        <div className="mc-overlay">
-          <div ref={dialogRef} tabIndex={-1} className="mc-modal mc-modal--sm" role="dialog" aria-modal="true" aria-labelledby="manager-wa-test-title">
-            <button type="button" onClick={() => setShowTest(false)} className="mc-modal-close" aria-label={tManagerUi('close')}><X size={16} /></button>
-            <h2 id="manager-wa-test-title" className="mc-modal-title">{tManagerUi('send_test_message')}</h2>
-            <p className="mc-modal-desc">{tManagerUi('enter_a_phone_number_to_send_a_test_version_of_this_temp_49ebdb')}</p>
-            <div>
-              <label className="mc-label" htmlFor="rbg4-managercommunicationwhatsapptemplatespage-76">{tManagerUi('phone_number')}</label>
-              <input id="rbg4-managercommunicationwhatsapptemplatespage-76" className="mc-input" placeholder="9876543210"
-                type="tel"
-                inputMode="numeric"
-                maxLength={10}
-                value={testPhone} onChange={e => setTestPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} />
-            </div>
-            <div className="mc-modal-footer">
-              <button type="button" onClick={() => setShowTest(false)} className="mc-btn-ghost">{tManagerUi('cancel')}</button>
-              <button type="button" onClick={handleTest} className="mc-btn-primary flex items-center gap-1.5">
-                <Send size={14} /> {tManagerUi('send_test')}
-              </button>
-            </div>
+      data-route-id={_routeQuery.id}
+    >
+      {/* Header Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-semibold text-secondary uppercase tracking-wider mb-1.5">
+            <span>{tManagerUi('communication')}</span>
+            <ChevronRight size={12} />
+            <span className="text-primary font-bold">WhatsApp Templates</span>
           </div>
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight">
+              {tManagerUi('whatsapp_templates')}
+            </h1>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Automated Dispatch Active
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-secondary mt-1">
+            {tManagerUi('customize_automated_message_templates_sent_to_students')}
+          </p>
+        </div>
+
+        {/* Quick Actions in Header */}
+        <div className="flex items-center gap-2.5 self-start sm:self-center">
+          <button
+            type="button"
+            onClick={() => setShowTest(true)}
+            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-3.5 rounded-xl cursor-pointer hover:bg-surface-hover transition-colors"
+          >
+            <Send size={14} className="text-secondary" />
+            <span>{tManagerUi('send_test')}</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            className="mgr-btn-primary inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl shadow-sm cursor-pointer"
+          >
+            <Save size={14} />
+            <span>Save Template</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Contract Notice Alert */}
+      <div
+        className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-start gap-3"
+        role="status"
+        data-testid="manager-communication-template-contract-warning"
+      >
+        <AlertCircle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+        <div className="text-xs text-amber-300/90 leading-relaxed space-y-0.5">
+          <p>{tManagerUi('template_edits_are_draft_only_saving_templates_and_sendi_b21f71')}</p>
+          <p className="text-secondary opacity-80">{tManagerUi('template_bodies_are_sample_english_copy')}</p>
+        </div>
+      </div>
+
+      {toastFeedback && (
+        <div
+          className="flex items-center gap-2 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-semibold motion-safe:animate-fade-in"
+          role="status"
+        >
+          <CheckCircle2 size={16} className="shrink-0" />
+          <span>{toastFeedback}</span>
         </div>
       )}
 
-      <div className="mb-8">
-        <div className="mc-breadcrumb">
-          <span>{tManagerUi('communication')}</span><ChevronRight size={12} /><span>{tManagerUi('whatsapp_templates_e0bade')}</span>
+      {/* Master-Detail Layout: Left Conditions Sidebar + Right Editor & Preview */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column: Template Conditions Sidebar (4 of 12 columns) */}
+        <div className="lg:col-span-4 xl:col-span-4 space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-secondary">
+              Trigger Conditions ({templates.length})
+            </span>
+            <span className="text-[11px] text-secondary">Select to customize</span>
+          </div>
+
+          <div className="space-y-2">
+            {templates.map((t) => {
+              const config = TEMPLATE_CONFIGS[t.id] || TEMPLATE_CONFIGS.welcome;
+              const isActive = activeId === t.id;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setActiveId(t.id)}
+                  aria-pressed={isActive}
+                  className={`w-full p-3.5 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between border ${
+                    isActive
+                      ? `bg-card ${config.accentBorder} shadow-md ring-1 ${config.ring}`
+                      : 'bg-card/70 border-border hover:bg-card hover:border-border-focus'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${config.iconBox}`}
+                    >
+                      {config.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-xs sm:text-sm font-bold text-primary truncate">
+                          {templateLabel(t)}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-secondary truncate mt-0.5">
+                        {config.conditionDesc}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                    <span
+                      className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${config.badge}`}
+                    >
+                      {config.conditionTag}
+                    </span>
+                    <ChevronRight
+                      size={14}
+                      className={isActive ? 'text-primary' : 'text-secondary/40'}
+                    />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
-        <h1 className="mc-page-title">{tManagerUi('whatsapp_templates')}</h1>
-        <p className="mc-page-subtitle">{tManagerUi('customize_automated_message_templates_sent_to_students')}</p>
-      </div>
 
-      <div className="flex flex-col gap-6">
-        {/* Top Filter Bar */}
-        <div className="mc-tpl-topbar flex flex-wrap gap-3">
-          {templates.map(t => (
-            <button key={t.id} type="button" onClick={() => setActiveId(t.id)}
-              aria-pressed={activeId === t.id}
-              className={`mc-tpl-item w-auto px-4 py-2 rounded-full${activeId === t.id ? ' mc-tpl-item--active' : ''}`}>
-              <span aria-hidden="true">{t.icon}</span> {templateLabel(t)}
-            </button>
-          ))}
-        </div>
+        {/* Right Column: Template Editor & Live Preview (8 of 12 columns) */}
+        <div className="lg:col-span-8 xl:col-span-8 space-y-6">
+          {/* Editor Card */}
+          <div className="mgr-card p-6 border border-border space-y-5 shadow-sm">
+            {/* Active Template Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${activeConfig.iconBox}`}
+                >
+                  {activeConfig.icon}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-base sm:text-lg font-bold text-primary">
+                      {templateLabel(active)}
+                    </h2>
+                    <span
+                      className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${activeConfig.badge}`}
+                    >
+                      {activeConfig.conditionTag}
+                    </span>
+                  </div>
+                  <p className="text-xs text-secondary mt-0.5">
+                    {activeConfig.conditionDesc}
+                  </p>
+                </div>
+              </div>
 
-        {toastFeedback && (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-success-bg border border-border text-success text-sm font-semibold" role="status">
-            <CheckCircle2 size={16} />
-            <span>{toastFeedback}</span>
-          </div>
-        )}
+              <div className="flex items-center gap-2 self-start sm:self-center">
+                <span className="text-xs text-secondary">
+                  {tManagerUi('edit_the_message_body_use_variable_chips_to_personalize')}
+                </span>
+              </div>
+            </div>
 
-        {/* Right Editor */}
-        <div className="mc-card mc-flex-1">
-          <div className="mc-card-header">
-            <h2 className="mc-card-title">{active.icon} {templateLabel(active)}</h2>
-            <p className="mc-card-desc">{tManagerUi('edit_the_message_body_use_variable_chips_to_personalize')}</p>
-          </div>
+            {/* Message Body Field */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="whatsapp-template-body-input"
+                  className="text-xs font-semibold text-primary"
+                >
+                  {tManagerUi('message_body')}
+                </label>
+                <span
+                  className={`text-xs font-mono font-medium ${
+                    charCount > MAX_CHARS * 0.9 ? 'text-amber-400 font-bold' : 'text-secondary'
+                  }`}
+                >
+                  {charCount} / {MAX_CHARS} {tManagerUi('characters')}
+                </span>
+              </div>
+              <textarea
+                id="whatsapp-template-body-input"
+                ref={textareaRef}
+                className="mgr-input h-36 text-sm leading-relaxed rounded-xl font-sans resize-none py-3 px-3.5 w-full bg-surface/50 border border-border focus:border-primary"
+                rows={5}
+                value={active.body}
+                onChange={(e) => updateBody(e.target.value)}
+                maxLength={MAX_CHARS}
+                placeholder="Type WhatsApp message template body..."
+              />
+            </div>
 
-          <div>
-            <label className="mc-label" htmlFor="rbg4-managercommunicationwhatsapptemplatespage-118">{tManagerUi('message_body')}</label>
-            <textarea id="rbg4-managercommunicationwhatsapptemplatespage-118"
-              ref={textareaRef}
-              className="mc-textarea"
-              rows={8}
-              value={active.body}
-              onChange={e => updateBody(e.target.value)}
-              maxLength={MAX_CHARS}
-            />
-            <p className={`mc-char-count${charCount > MAX_CHARS * 0.9 ? ' mc-char-count--warn' : ''}`}>
-              {charCount} / {MAX_CHARS} {tManagerUi('characters')}
-            </p>
-          </div>
+            {/* Variable Chips Inserter */}
+            <div className="space-y-2 pt-1">
+              <div className="flex items-center justify-between">
+                <p
+                  className="text-xs font-semibold text-primary"
+                  id="manager-whatsapp-template-variables-label"
+                >
+                  {tManagerUi('insert_variable')}
+                </p>
+                <span className="text-[11px] text-secondary">Click any chip to insert at cursor</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {VARS.map((v) => (
+                  <button
+                    type="button"
+                    key={v}
+                    onClick={() => insertVar(v)}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 transition-colors cursor-pointer"
+                    title={`Click to insert ${v}`}
+                  >
+                    <span>+</span>
+                    <span>{v}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
 
-          <div className="mc-tpl-section">
-            <p className="mc-label" id="manager-whatsapp-template-variables-label">{tManagerUi('insert_variable')}</p>
-            <div className="mc-tpl-var-row">
-              {VARS.map(v => (
-                <button type="button" key={v} onClick={() => insertVar(v)} className="mc-var-chip">{v}</button>
-              ))}
+            {/* Info Tip */}
+            <div className="p-3.5 rounded-xl bg-surface-highlight border border-border text-xs text-secondary leading-relaxed">
+              <span>{tManagerUi('use_variables_to_personalize_messages_e_g')}</span>{' '}
+              <span className="font-mono text-primary font-medium">
+                "{tManagerUi('hi')} &#123;name&#125;, {tManagerUi('your_fee_of')} &#123;amount&#125;{' '}
+                {tManagerUi('is_due_on')} &#123;duedate&#125;."
+              </span>
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="pt-4 border-t border-border flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowTest(true)}
+                className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-4 rounded-xl cursor-pointer hover:bg-surface-hover transition-colors"
+              >
+                <Send size={13} className="text-secondary" />
+                <span>{tManagerUi('send_test')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                className="mgr-btn-primary inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-5 rounded-xl shadow-sm cursor-pointer"
+              >
+                <Save size={13} />
+                <span>Save Template</span>
+              </button>
             </div>
           </div>
 
-          <div className="mc-info-box mc-tpl-section">
-            {tManagerUi('use_variables_to_personalize_messages_e_g')} <em>{tManagerUi('hi')} {'{'}{tManagerUi('name')}{'}'} {tManagerUi('your_fee_of')} {'{'}{tManagerUi('amount')}{'}'} {tManagerUi('is_due_on')} {'{'}{tManagerUi('duedate')}{'}'} {tManagerUi('label')}</em>
-          </div>
+          {/* Live WhatsApp Chat Bubble Preview */}
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between px-1">
+              <p
+                className="text-xs font-bold uppercase tracking-wider text-secondary"
+                id="manager-whatsapp-template-preview-label"
+              >
+                {tManagerUi('preview_sample_values')}
+              </p>
+              <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live WhatsApp Rendering
+              </span>
+            </div>
 
-          <div className="mc-tpl-section">
-            <p className="mc-label" id="manager-whatsapp-template-preview-label">{tManagerUi('preview_sample_values')}</p>
-            <div className="mc-tpl-preview">{preview}</div>
-          </div>
+            <div className="rounded-2xl border border-border bg-[#0b141a] overflow-hidden shadow-md">
+              {/* WhatsApp Business Header */}
+              <div className="bg-[#202c33] px-4 py-3 flex items-center justify-between border-b border-[#2a3942]">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xs shadow-xs">
+                    LO
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs sm:text-sm font-semibold text-slate-100">
+                        Library OS Official
+                      </span>
+                      <span
+                        className="w-3.5 h-3.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold"
+                        title="Verified Business"
+                      >
+                        ✓
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-emerald-400">Official Business Account</p>
+                  </div>
+                </div>
+                <span className="text-[11px] text-slate-400 font-mono">Automated Dispatch</span>
+              </div>
 
-          <div className="mc-card-footer mc-card-footer--end">
-            <button type="button" onClick={() => setShowTest(true)} className="mc-btn-ghost flex items-center gap-1.5">{tManagerUi('send_test')}</button>
-            <button type="button" onClick={handleSave} className="mc-btn-primary flex items-center gap-1.5">
-              <Save size={14} /> Save Template
-            </button>
+              {/* WhatsApp Chat Canvas */}
+              <div className="p-4 sm:p-6 bg-[#0b141a] min-h-[150px] flex flex-col justify-end">
+                {/* Outgoing WhatsApp Bubble */}
+                <div className="max-w-md ml-auto bg-[#005c4b] text-slate-100 p-3.5 rounded-2xl rounded-tr-xs shadow-sm space-y-1.5 border border-[#005c4b]/50">
+                  <p className="text-xs sm:text-sm whitespace-pre-wrap leading-relaxed select-text font-normal">
+                    {preview}
+                  </p>
+                  <div className="flex items-center justify-end gap-1 text-[10px] text-emerald-200/80 pt-0.5">
+                    <span>10:45 AM</span>
+                    <CheckCheck size={14} className="text-[#53bdeb]" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Test Message Modal */}
       {showTest && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" onClick={() => setShowTest(false)}>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4"
+          onClick={() => setShowTest(false)}
+        >
           <div
             ref={dialogRef}
             tabIndex={-1}
             role="dialog"
             aria-modal="true"
-            aria-labelledby="test-whatsapp-title"
-            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4"
+            aria-labelledby="manager-wa-test-title"
+            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-border pb-3">
-              <div className="flex items-center gap-2">
-                <Send size={18} className="text-primary" />
-                <h3 id="test-whatsapp-title" className="text-base font-bold text-primary">Dispatch Test WhatsApp</h3>
+            <div className="flex items-center justify-between border-b border-border pb-3.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                  <Smartphone size={16} />
+                </div>
+                <div>
+                  <h2 id="manager-wa-test-title" className="text-base font-bold text-primary">
+                    {tManagerUi('send_test_message')}
+                  </h2>
+                  <p className="text-[11px] text-secondary">
+                    {templateLabel(active)}
+                  </p>
+                </div>
               </div>
-              <button type="button" onClick={() => setShowTest(false)} className="text-secondary hover:text-primary">
-                <X size={18} />
+              <button
+                type="button"
+                onClick={() => setShowTest(false)}
+                className="p-1 rounded-lg hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+                aria-label={tManagerUi('close')}
+              >
+                <X size={16} />
               </button>
             </div>
 
-            <p className="text-xs text-secondary">
-              Send sample message with filled tags to a verified test mobile number.
+            <p className="text-xs text-secondary leading-relaxed">
+              {tManagerUi('enter_a_phone_number_to_send_a_test_version_of_this_temp_49ebdb')}
             </p>
 
             <div>
-              <label htmlFor="test-phone-input" className="text-xs font-semibold text-primary block mb-1">
-                Recipient Mobile (+91) *
+              <label htmlFor="test-phone-number-input" className="text-xs font-semibold text-primary block mb-1.5">
+                {tManagerUi('phone_number')} (+91) *
               </label>
               <input
-                id="test-phone-input"
+                id="test-phone-number-input"
+                className="mgr-input h-11 text-sm font-mono w-full rounded-xl px-3.5"
+                placeholder="9876543210"
                 type="tel"
-                placeholder="e.g. 9876543210"
+                inputMode="numeric"
+                maxLength={10}
                 value={testPhone}
-                onChange={(e) => setTestPhone(e.target.value)}
-                className="mgr-input text-xs w-full font-mono"
+                onChange={(e) => setTestPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                 autoFocus
               />
             </div>
 
-            <div className="p-3 rounded-xl bg-surface-highlight border border-border text-xs text-secondary space-y-1">
-              <span className="font-semibold text-primary block">Preview Output:</span>
-              <p className="line-clamp-3 italic">{preview}</p>
+            {/* Preview Box Inside Modal */}
+            <div className="p-3.5 rounded-xl bg-surface-highlight border border-border text-xs text-secondary space-y-1">
+              <span className="font-semibold text-primary block text-[11px] uppercase tracking-wider">
+                Message Preview:
+              </span>
+              <p className="line-clamp-3 text-xs leading-relaxed italic text-secondary">
+                {preview}
+              </p>
             </div>
 
-            <div className="flex gap-3 pt-2">
-              <button type="button" onClick={() => setShowTest(false)} className="mgr-btn-ghost flex-1 text-xs">
-                Cancel
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowTest(false)}
+                className="mgr-btn-secondary text-xs h-10 px-4 rounded-xl cursor-pointer"
+              >
+                {tManagerUi('cancel')}
               </button>
-              <button type="button" onClick={handleTest} className="mgr-btn-primary flex-1 text-xs flex items-center justify-center gap-1.5">
-                <Send size={13} /> Send Test WhatsApp
+              <button
+                type="button"
+                onClick={handleTest}
+                className="mgr-btn-primary text-xs h-10 px-5 rounded-xl inline-flex items-center gap-1.5 cursor-pointer shadow-sm"
+              >
+                <Send size={14} />
+                <span>{tManagerUi('send_test')}</span>
               </button>
             </div>
           </div>
