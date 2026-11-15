@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { User, UserPlus, Wrench, CheckCircle, LogOut } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import type { SeatData, ShiftType } from '../../types/ManagerSeatsMatrixTypes';
-import { SHIFT_BADGE } from '../../constants/ManagerSeatsMatrixConstants';
+import { SHIFT_BADGE, REGISTERED_STUDENT_CANDIDATES } from '../../constants/ManagerSeatsMatrixConstants';
 import { MANAGER_SEATS_MATRIX_ROUTES } from '../../config/manager_seats_matrix.url_config';
 import { ManagerSeatsMatrixStudentProfileModal } from './ManagerSeatsMatrixStudentProfileModal';
 
@@ -41,6 +42,28 @@ export function ManagerSeatsMatrixModalActionsTab({
 }: ManagerSeatsMatrixModalActionsTabProps) {
   const tManagerUi = useTranslations('manager.manager_seat_matrix.ui');
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [allocationMode, setAllocationMode] = useState<'registered' | 'custom'>('registered');
+
+  const studentOptions: ComboboxOption[] = useMemo(() => {
+    return REGISTERED_STUDENT_CANDIDATES.map((student) => ({
+      value: student.name,
+      label: student.name,
+      subLabel: `${student.smartId} · ${student.exam}`,
+      badge: `${student.preferredShift} Shift`,
+    }));
+  }, []);
+
+  const selectedCandidate = useMemo(() => {
+    return REGISTERED_STUDENT_CANDIDATES.find((s) => s.name === studentName);
+  }, [studentName]);
+
+  const handleSelectCandidate = (val: string) => {
+    setStudentName(val);
+    const found = REGISTERED_STUDENT_CANDIDATES.find((s) => s.name === val);
+    if (found) {
+      setStudentShift(found.preferredShift);
+    }
+  };
 
   if (selectedSeat.status === 'free') {
     return (
@@ -64,26 +87,83 @@ export function ManagerSeatsMatrixModalActionsTab({
         </div>
 
         {isAssigning ? (
-          <form onSubmit={handleQuickAssign} className="p-4 rounded-xl bg-surface border border-border space-y-3">
-            <h4 className="text-xs font-bold text-primary uppercase tracking-wider">Quick Allocate Student</h4>
-            <div>
-              <label htmlFor="quick-student-name" className="text-xs font-semibold text-secondary uppercase block mb-1">
-                Student Full Name
-              </label>
-              <input
-                id="quick-student-name"
-                type="text"
-                required
-                value={studentName}
-                onChange={(e) => setStudentName(e.target.value)}
-                placeholder="Enter student name (e.g. Rahul Sharma)"
-                className="mgr-input text-xs w-full h-9 rounded-xl border border-border bg-card px-3 text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
-                autoFocus
-              />
+          <form onSubmit={handleQuickAssign} className="p-4 rounded-xl bg-surface border border-border space-y-3.5">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold text-primary uppercase tracking-wider">Quick Allocate Student</h4>
+              <div className="flex items-center gap-1 p-0.5 rounded-lg bg-card border border-border text-[11px]">
+                <button
+                  type="button"
+                  onClick={() => setAllocationMode('registered')}
+                  className={`px-2 py-0.5 rounded font-semibold transition-colors cursor-pointer ${
+                    allocationMode === 'registered' ? 'bg-primary-subtle text-primary font-bold' : 'text-secondary hover:text-primary'
+                  }`}
+                >
+                  Student List
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAllocationMode('custom')}
+                  className={`px-2 py-0.5 rounded font-semibold transition-colors cursor-pointer ${
+                    allocationMode === 'custom' ? 'bg-primary-subtle text-primary font-bold' : 'text-secondary hover:text-primary'
+                  }`}
+                >
+                  + New Walk-in
+                </button>
+              </div>
             </div>
+
+            {allocationMode === 'registered' ? (
+              <div>
+                <label className="text-xs font-semibold text-secondary uppercase block mb-1">
+                  Select Registered Student (Searchable)
+                </label>
+                <SearchableCombobox
+                  options={studentOptions}
+                  value={studentName}
+                  onChange={handleSelectCandidate}
+                  placeholder="Select student from directory..."
+                  searchPlaceholder="Type student name, smart ID, or exam..."
+                  countLabel="students"
+                />
+
+                {selectedCandidate && (
+                  <div className="mt-2.5 p-2.5 rounded-xl bg-card border border-border flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-primary-subtle text-primary font-bold flex items-center justify-center text-xs">
+                        {selectedCandidate.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
+                      </div>
+                      <div>
+                        <p className="font-bold text-primary">{selectedCandidate.name}</p>
+                        <p className="text-[11px] text-secondary font-mono">{selectedCandidate.smartId} · {selectedCandidate.exam}</p>
+                      </div>
+                    </div>
+                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                      {selectedCandidate.gender}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <label htmlFor="quick-student-name" className="text-xs font-semibold text-secondary uppercase block mb-1">
+                  New / Walk-in Student Full Name
+                </label>
+                <input
+                  id="quick-student-name"
+                  type="text"
+                  required
+                  value={studentName}
+                  onChange={(e) => setStudentName(e.target.value)}
+                  placeholder="Enter full name (e.g. Vikram Malhotra)"
+                  className="mgr-input text-xs w-full h-10 rounded-xl border border-border bg-card px-3 text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
+                  autoFocus
+                />
+              </div>
+            )}
+
             <div>
               <label htmlFor="quick-student-shift" className="text-xs font-semibold text-secondary uppercase block mb-1">
-                Preferred Shift
+                Preferred Shift Slot
               </label>
               <select
                 id="quick-student-shift"
@@ -91,24 +171,29 @@ export function ManagerSeatsMatrixModalActionsTab({
                 onChange={(e) => setStudentShift(e.target.value as ShiftType)}
                 className="mgr-select text-xs w-full h-9 rounded-xl border border-border bg-card px-3 text-primary cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
               >
-                <option value="Morning">Morning</option>
-                <option value="Afternoon">Afternoon</option>
-                <option value="Evening">Evening</option>
-                <option value="Night">Night</option>
-                <option value="Full Day">Full Day</option>
+                <option value="Morning">Morning (06:00 AM – 12:00 PM)</option>
+                <option value="Afternoon">Afternoon (12:00 PM – 04:00 PM)</option>
+                <option value="Evening">Evening (04:00 PM – 08:00 PM)</option>
+                <option value="Night">Night (08:00 PM – 06:00 AM)</option>
+                <option value="Full Day">Full Day (24 Hours All Access)</option>
               </select>
             </div>
+
             <div className="flex gap-2.5 pt-2">
               <button
                 type="button"
                 className="mgr-btn-ghost flex-1 h-9 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
-                onClick={() => setIsAssigning(false)}
+                onClick={() => {
+                  setIsAssigning(false);
+                  setStudentName('');
+                }}
               >
                 {tManagerUi('close')}
               </button>
               <button
                 type="submit"
-                className="mgr-btn-primary flex-1 h-9 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+                disabled={!studentName.trim()}
+                className="mgr-btn-primary flex-1 h-9 text-xs font-bold rounded-xl transition-colors cursor-pointer disabled:opacity-40"
               >
                 Confirm Allocation
               </button>

@@ -8,6 +8,7 @@ import { CheckCircle, Settings, History, Layers, Armchair, X } from 'lucide-reac
 import { useManagerSeatMatrixDialogFocus } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/ManagerSeatsMatrixDialogFocus';
 import type { ManagerSeatsMatrixModalProps } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixComponentTypes';
 import type { ShiftType } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
+import { REGISTERED_STUDENT_CANDIDATES } from '../../constants/ManagerSeatsMatrixConstants';
 import { ManagerSeatsMatrixModalActionsTab } from './ManagerSeatsMatrixModalActionsTab';
 import { ManagerSeatsMatrixModalConfigTab } from './ManagerSeatsMatrixModalConfigTab';
 import { ManagerSeatsMatrixModalHistoryTab } from './ManagerSeatsMatrixModalHistoryTab';
@@ -38,12 +39,20 @@ export function ManagerSeatsMatrixModal({ selectedSeat, onClose, onUpdateSeat }:
   const handleQuickAssign = (e: React.FormEvent) => {
     e.preventDefault();
     if (!studentName.trim()) return;
-    const generatedId = `SM-${Math.floor(1000 + Math.random() * 9000)}`;
+    const candidate = REGISTERED_STUDENT_CANDIDATES.find((s) => s.name === studentName.trim());
+    const studentSmartId = candidate ? candidate.smartId : `SM-${Math.floor(1000 + Math.random() * 9000)}`;
+    const studentGender = candidate
+      ? candidate.gender
+      : /priya|neha|ritu|pooja|shweta|anita|kavita|sunita|sneha|aditi/i.test(studentName)
+      ? 'Female'
+      : 'Male';
+
     if (onUpdateSeat) {
       onUpdateSeat(selectedSeat.id, {
         status: 'occupied',
         student: studentName.trim(),
-        smartId: generatedId,
+        smartId: studentSmartId,
+        studentGender,
         shift: studentShift,
         expiry: '2026-12-31',
       });
