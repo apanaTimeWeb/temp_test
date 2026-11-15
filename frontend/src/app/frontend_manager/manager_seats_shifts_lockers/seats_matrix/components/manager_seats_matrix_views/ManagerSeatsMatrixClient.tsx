@@ -1,7 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
-import { Search, LayoutGrid, List, Plus, Download, Armchair } from 'lucide-react';
+import { Search, LayoutGrid, List, Plus, Download, Armchair, X, RotateCcw } from 'lucide-react';
 import { toast } from 'sonner';
 import { sanitizeManagerSeatMatrixCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixCsv';
 import { useManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/useManagerSeatsMatrixSeatMatrix';
@@ -66,12 +66,33 @@ export function ManagerSeatsMatrixClient() {
 
   // Filtered seats for Grid View
   const visibleGridSeats = useMemo(() => {
-    if (genderFilter === 'all') return visible;
-    return visible.filter((seat) => {
-      if (seat.status === 'free') return true;
-      return seat.studentGender === genderFilter;
-    });
-  }, [visible, genderFilter]);
+    let result = visible;
+    if (genderFilter !== 'all') {
+      result = result.filter((seat) => {
+        if (seat.status === 'free') return true;
+        return seat.studentGender === genderFilter;
+      });
+    }
+    if (statusFilter !== 'all') {
+      result = result.filter((seat) => seat.status === statusFilter);
+    }
+    return result;
+  }, [visible, genderFilter, statusFilter]);
+
+  const isFiltered = Boolean(
+    searchQuery.trim() !== '' ||
+    statusFilter !== 'all' ||
+    genderFilter !== 'all' ||
+    activeTab !== 'all'
+  );
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setStatusFilter('all');
+    setGenderFilter('all');
+    setActiveTab('all');
+    setPage(0);
+  };
 
   const toggleSort = (field: SeatSortField) => {
     setPage(0);
@@ -195,32 +216,48 @@ export function ManagerSeatsMatrixClient() {
           </div>
         </div>
 
-        {/* Tier 2: Search Box + Shift Tabs + Gender Filter */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        {/* Tier 2: Unified Search & Filter Controls Row */}
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
           {/* Universal Student / Seat Search */}
-          <div className="relative min-w-[240px] flex-1 max-w-sm">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <div className="mgr-input-icon-wrap relative flex-1 min-w-[240px]">
+            <Search size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
             <input
               type="search"
-              placeholder="Search student, seat #, or Smart ID (e.g. Rahul, S-12)..."
+              aria-label={tManagerUi('search_by_seat_branch_or_student')}
+              placeholder={tManagerUi('search_by_seat_branch_or_student')}
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
                 setPage(0);
               }}
-              className="mgr-input pl-8 py-1.5 text-xs w-full"
+              className="mgr-input mgr-input-with-icon !pl-10 pr-9 text-xs w-full h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setPage(0);
+                }}
+                aria-label="Clear search"
+                title="Clear search"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-danger hover:opacity-80 rounded-full transition-colors cursor-pointer"
+              >
+                <X size={14} className="shrink-0 text-danger" />
+              </button>
+            )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          {/* Filter Controls Row */}
+          <div className="flex flex-wrap items-center gap-2.5">
             {/* Shift Filter Pills */}
-            <div className="flex items-center p-1 rounded-xl bg-surface border border-border">
+            <div className="flex items-center p-1 rounded-xl bg-surface border border-border overflow-x-auto max-w-full h-9 shrink-0">
               {SHIFT_TABS.map(({ value, labelKey }) => (
                 <button
                   type="button"
                   key={value}
                   onClick={() => { setActiveTab(value); setPage(0); }}
-                  className={`px-2.5 py-1 text-xs font-medium rounded-lg transition-colors ${
+                  className={`px-2.5 py-1 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                     activeTab === value ? 'bg-card text-primary font-bold shadow-sm' : 'text-secondary hover:text-primary'
                   }`}
                 >
@@ -229,17 +266,45 @@ export function ManagerSeatsMatrixClient() {
               ))}
             </div>
 
-            {/* Gender Selector */}
+            {/* Status Filter Dropdown */}
+            <select
+              aria-label="Filter seats by status"
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
+              className="bg-surface text-primary text-xs font-semibold px-3 h-9 rounded-xl border border-border hover:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer shrink-0"
+            >
+              <option value="all">⚡ All Statuses</option>
+              <option value="free">🟢 Available (Free)</option>
+              <option value="occupied">🔴 Occupied</option>
+              <option value="expiring">🟡 Expiring Soon</option>
+              <option value="maintenance">⚪ Maintenance</option>
+            </select>
+
+            {/* Gender Selector Dropdown */}
             <select
               aria-label="Filter seats by gender"
               value={genderFilter}
               onChange={(e) => { setGenderFilter(e.target.value as 'all' | 'Male' | 'Female'); setPage(0); }}
-              className="bg-surface text-primary text-xs font-semibold px-2.5 py-1.5 rounded-xl border border-border focus:ring-1 focus:ring-primary shadow-xs"
+              className="bg-surface text-primary text-xs font-semibold px-3 h-9 rounded-xl border border-border hover:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer shrink-0"
             >
               <option value="all">👥 All Genders</option>
               <option value="Male">👨 Male Students</option>
               <option value="Female">👩 Female Students</option>
             </select>
+
+            {/* Reset Filters Button */}
+            {isFiltered && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 h-9 rounded-xl border border-danger/30 bg-danger-bg text-danger hover:bg-danger/20 transition-colors cursor-pointer shrink-0"
+                title="Reset all filters"
+                aria-label="Reset all filters"
+              >
+                <RotateCcw size={13} className="shrink-0 text-danger" />
+                <span>Reset</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

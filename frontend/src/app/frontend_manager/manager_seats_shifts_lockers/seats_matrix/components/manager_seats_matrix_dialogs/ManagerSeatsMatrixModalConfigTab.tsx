@@ -34,7 +34,7 @@ export function ManagerSeatsMatrixModalConfigTab({
           id="seat-config-wing"
           value={configuredWing}
           onChange={(e) => setConfiguredWing(e.target.value)}
-          className="mgr-select w-full"
+          className="mgr-select text-xs w-full h-9 rounded-xl border border-border bg-surface px-3 text-primary cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
         >
           <option value="Ground Floor — AC Silent Reading Hall">Ground Floor — AC Silent Reading Hall</option>
           <option value="Ground Floor — Discussion & Group Area">Ground Floor — Discussion & Group Area</option>
@@ -45,36 +45,43 @@ export function ManagerSeatsMatrixModalConfigTab({
         </select>
       </div>
 
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-floating border border-border">
+      <div className="flex items-center gap-3 p-3.5 rounded-xl bg-surface border border-border">
         <input
           id="seat-config-socket"
           type="checkbox"
           checked={hasSocket}
           onChange={(e) => setHasSocket(e.target.checked)}
-          className="rounded border-border text-primary focus:ring-primary h-4 w-4"
+          className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
         />
-        <label htmlFor="seat-config-socket" className="text-sm font-medium text-primary flex items-center gap-2 cursor-pointer">
-          <Zap size={16} className="text-warning" />
-          Dedicated Electrical Power Socket Available
+        <label htmlFor="seat-config-socket" className="text-xs font-medium text-primary flex items-center gap-2 cursor-pointer select-none">
+          <Zap size={15} className="text-warning shrink-0" />
+          <span>Dedicated Electrical Power Socket Available</span>
         </label>
       </div>
 
-      <div className="p-3 rounded-xl bg-card border border-border text-xs space-y-1.5">
-        <p className="font-semibold text-primary">Physical Desk Specifications</p>
+      <div className="p-3.5 rounded-xl bg-surface border border-border text-xs space-y-1.5">
+        <p className="font-bold text-primary">Physical Desk Specifications</p>
         <p className="text-secondary">
           • Seat Numbering: <span className="font-mono font-bold text-primary">{selectedSeat.id}</span>
         </p>
-        <p className="text-secondary">• Desk Type: Standard Study Carrel with Partition</p>
+        <p className="text-secondary">• Desk Type: Standard Study Carrel with Privacy Partition</p>
         <p className="text-secondary">
-          • Status: <span className="capitalize font-semibold text-primary">{selectedSeat.status}</span>
+          • Current Status: <span className="capitalize font-semibold text-primary">{selectedSeat.status}</span>
         </p>
       </div>
 
-      <div className="flex gap-3 pt-2">
-        <button type="button" className="mgr-btn-ghost flex-1" onClick={onBack}>
-          Back
+      <div className="flex gap-2.5 pt-2">
+        <button
+          type="button"
+          className="mgr-btn-ghost flex-1 h-9 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+          onClick={onBack}
+        >
+          Back to Actions
         </button>
-        <button type="submit" className="mgr-btn-primary flex-1">
+        <button
+          type="submit"
+          className="mgr-btn-primary flex-1 h-9 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+        >
           Save Configuration
         </button>
       </div>

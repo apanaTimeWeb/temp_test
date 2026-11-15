@@ -42,19 +42,31 @@ export function ManagerSeatsMatrixModalActionsTab({
 
   if (selectedSeat.status === 'free') {
     return (
-      <>
-        <div className="ss-occupied-header__row mb-4 flex justify-between items-center">
-          <span className="ss-badge ss-badge--success">{tManagerUi('free')}</span>
-          <span className="ss-occupied-header__seat text-lg font-bold">
-            {tManagerUi('seat_b90b32')} {selectedSeat.id}
-          </span>
+      <div className="space-y-4">
+        {/* Vacant Info Card */}
+        <div className="p-4 rounded-xl bg-surface border border-border flex items-start gap-3">
+          <div className="w-10 h-10 rounded-xl bg-success-bg text-success flex items-center justify-center shrink-0">
+            <CheckCircle size={20} className="text-success" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-sm font-bold text-primary">Seat Available for Allocation</h3>
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-success-bg text-success border border-success/30 shrink-0">
+                {tManagerUi('free')}
+              </span>
+            </div>
+            <p className="text-xs text-secondary mt-1">
+              {tManagerUi('this_seat_is_available_for_assignment')}
+            </p>
+          </div>
         </div>
 
         {isAssigning ? (
-          <form onSubmit={handleQuickAssign} className="space-y-4 mb-4">
+          <form onSubmit={handleQuickAssign} className="p-4 rounded-xl bg-surface border border-border space-y-3">
+            <h4 className="text-xs font-bold text-primary uppercase tracking-wider">Quick Allocate Student</h4>
             <div>
               <label htmlFor="quick-student-name" className="text-xs font-semibold text-secondary uppercase block mb-1">
-                Student Name
+                Student Full Name
               </label>
               <input
                 id="quick-student-name"
@@ -62,20 +74,20 @@ export function ManagerSeatsMatrixModalActionsTab({
                 required
                 value={studentName}
                 onChange={(e) => setStudentName(e.target.value)}
-                placeholder="Enter student name"
-                className="mgr-input w-full"
+                placeholder="Enter student name (e.g. Rahul Sharma)"
+                className="mgr-input text-xs w-full h-9 rounded-xl border border-border bg-card px-3 text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
                 autoFocus
               />
             </div>
             <div>
               <label htmlFor="quick-student-shift" className="text-xs font-semibold text-secondary uppercase block mb-1">
-                Shift
+                Preferred Shift
               </label>
               <select
                 id="quick-student-shift"
                 value={studentShift}
                 onChange={(e) => setStudentShift(e.target.value as ShiftType)}
-                className="mgr-select w-full"
+                className="mgr-select text-xs w-full h-9 rounded-xl border border-border bg-card px-3 text-primary cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
               >
                 <option value="Morning">Morning</option>
                 <option value="Afternoon">Afternoon</option>
@@ -84,152 +96,185 @@ export function ManagerSeatsMatrixModalActionsTab({
                 <option value="Full Day">Full Day</option>
               </select>
             </div>
-            <div className="flex gap-2">
-              <button type="button" className="mgr-btn-ghost flex-1" onClick={() => setIsAssigning(false)}>
+            <div className="flex gap-2.5 pt-2">
+              <button
+                type="button"
+                className="mgr-btn-ghost flex-1 h-9 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+                onClick={() => setIsAssigning(false)}
+              >
                 {tManagerUi('close')}
               </button>
-              <button type="submit" className="mgr-btn-primary flex-1">
+              <button
+                type="submit"
+                className="mgr-btn-primary flex-1 h-9 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+              >
                 Confirm Allocation
               </button>
             </div>
           </form>
         ) : (
-          <>
-            <p className="ss-text-secondary ss-text-caption mb-6">
-              {tManagerUi('this_seat_is_available_for_assignment')}
-            </p>
-            <div className="space-y-3">
-              <div className="flex gap-3">
-                <button type="button" className="mgr-btn-ghost flex-1" onClick={onClose}>
-                  {tManagerUi('close')}
-                </button>
-                <button
-                  type="button"
-                  className="mgr-btn-primary flex-1 flex items-center justify-center gap-2"
-                  onClick={() => setIsAssigning(true)}
-                >
-                  <UserPlus size={15} /> Quick Allocate
-                </button>
-              </div>
-              <div className="flex gap-2 pt-2 border-t border-border">
-                <button
-                  type="button"
-                  className="mgr-btn-ghost flex-1 text-xs text-secondary flex items-center justify-center gap-1.5"
-                  onClick={() =>
-                    router.push(
-                      `${MANAGER_SEATS_MATRIX_ROUTES.ASSIGN_STUDENT}?seat=${encodeURIComponent(selectedSeat.id)}`
-                    )
-                  }
-                >
-                  <UserPlus size={13} /> {tManagerUi('assign_student')} (Form)
-                </button>
-                <button
-                  type="button"
-                  className="mgr-btn-ghost flex-1 text-xs text-warning flex items-center justify-center gap-1.5"
-                  onClick={handleToggleMaintenance}
-                >
-                  <Wrench size={13} /> Mark Maintenance
-                </button>
-              </div>
+          <div className="space-y-3">
+            <div className="flex gap-2.5">
+              <button
+                type="button"
+                className="mgr-btn-primary flex-1 h-9 text-xs font-semibold flex items-center justify-center gap-1.5 rounded-xl transition-colors cursor-pointer"
+                onClick={() => setIsAssigning(true)}
+              >
+                <UserPlus size={15} /> Quick Allocate
+              </button>
+              <button
+                type="button"
+                className="mgr-btn-ghost text-xs font-semibold px-4 h-9 rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+                onClick={onClose}
+              >
+                {tManagerUi('close')}
+              </button>
             </div>
-          </>
+            <div className="flex gap-2.5 pt-2 border-t border-border">
+              <button
+                type="button"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold h-9 px-3 rounded-xl border border-border bg-surface text-secondary hover:text-primary hover:border-primary transition-colors cursor-pointer"
+                onClick={() =>
+                  router.push(
+                    `${MANAGER_SEATS_MATRIX_ROUTES.ASSIGN_STUDENT}?seat=${encodeURIComponent(selectedSeat.id)}`
+                  )
+                }
+              >
+                <UserPlus size={13} /> {tManagerUi('assign_student')} (Form)
+              </button>
+              <button
+                type="button"
+                className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold h-9 px-3 rounded-xl border border-warning/30 bg-warning-bg text-warning hover:bg-warning/20 transition-colors cursor-pointer"
+                onClick={handleToggleMaintenance}
+              >
+                <Wrench size={13} /> Mark Maintenance
+              </button>
+            </div>
+          </div>
         )}
-      </>
+      </div>
     );
   }
 
   if (selectedSeat.status === 'unknown') {
     return (
-      <>
-        <div className="ss-occupied-header__row mb-4 flex justify-between items-center">
-          <span className="mgr-badge bg-floating text-secondary">{tManagerUi('unknown_status')}</span>
-          <span className="ss-occupied-header__seat text-lg font-bold">
-            {tManagerUi('seat_b90b32')} {selectedSeat.id}
-          </span>
+      <div className="space-y-4">
+        <div className="p-4 rounded-xl bg-surface border border-border flex items-center justify-between">
+          <span className="text-xs font-semibold text-secondary">{tManagerUi('unknown_status')}</span>
+          <span className="text-xs font-bold text-primary">{tManagerUi('seat_b90b32')} {selectedSeat.id}</span>
         </div>
-        <p className="ss-text-secondary ss-text-caption mb-6">{tManagerUi('unknown_status')}</p>
-        <div className="ss-modal-footer flex">
-          <button type="button" className="mgr-btn-ghost w-full" onClick={onClose}>
-            {tManagerUi('close')}
-          </button>
-        </div>
-      </>
+        <button
+          type="button"
+          className="mgr-btn-ghost w-full h-9 text-xs font-semibold rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+          onClick={onClose}
+        >
+          {tManagerUi('close')}
+        </button>
+      </div>
     );
   }
 
   if (selectedSeat.status === 'maintenance') {
     return (
-      <>
-        <div className="ss-occupied-header__row mb-4 flex justify-between items-center">
-          <span className="mgr-badge bg-floating text-secondary">{tManagerUi('maintenance')}</span>
-          <span className="ss-occupied-header__seat text-lg font-bold">
-            {tManagerUi('seat_b90b32')} {selectedSeat.id}
-          </span>
+      <div className="space-y-4">
+        {/* Maintenance Info Card */}
+        <div className="p-4 rounded-xl bg-surface border border-border flex items-start gap-3">
+          <div className="w-10 h-10 rounded-xl bg-warning-bg text-warning flex items-center justify-center shrink-0">
+            <Wrench size={20} className="text-warning" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-sm font-bold text-primary">Seat Under Maintenance</h3>
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-warning-bg text-warning border border-warning/30 shrink-0">
+                {tManagerUi('maintenance')}
+              </span>
+            </div>
+            <p className="text-xs text-secondary mt-1">
+              {tManagerUi('this_seat_is_under_maintenance_and_unavailable')}
+            </p>
+          </div>
         </div>
-        <p className="ss-text-secondary ss-text-caption mb-6">
-          {tManagerUi('this_seat_is_under_maintenance_and_unavailable')}
-        </p>
-        <div className="ss-modal-footer flex gap-3">
-          <button type="button" className="mgr-btn-ghost flex-1" onClick={onClose}>
-            {tManagerUi('close')}
-          </button>
+
+        <div className="flex gap-2.5 pt-2">
           <button
             type="button"
-            className="mgr-btn-primary flex-1 flex items-center justify-center gap-2"
+            className="mgr-btn-primary flex-1 h-9 text-xs font-semibold flex items-center justify-center gap-1.5 rounded-xl transition-colors cursor-pointer"
             onClick={handleToggleMaintenance}
           >
             <CheckCircle size={15} /> Mark Available
           </button>
+          <button
+            type="button"
+            className="mgr-btn-ghost text-xs font-semibold px-4 h-9 rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+            onClick={onClose}
+          >
+            {tManagerUi('close')}
+          </button>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
-      <div className="ss-occupied-header -m-6 mb-6 p-6 bg-floating rounded-t-xl">
-        <div className="ss-occupied-header__row flex justify-between items-center mb-4">
+    <div className="space-y-4">
+      {/* Student Profile Card */}
+      <div className="p-4 rounded-xl bg-surface border border-border space-y-3">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-primary-subtle text-primary border border-border flex items-center justify-center shrink-0 font-bold text-sm">
+            {selectedSeat.student ? (
+              selectedSeat.student
+                .split(' ')
+                .map((n) => n[0])
+                .slice(0, 2)
+                .join('')
+                .toUpperCase()
+            ) : (
+              <User size={22} className="text-primary" />
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold text-primary truncate">{selectedSeat.student}</h3>
+            <p className="text-xs text-secondary font-mono flex items-center gap-1.5 mt-0.5">
+              <span>Smart ID:</span>
+              <strong className="text-primary">{selectedSeat.smartId || '—'}</strong>
+            </p>
+          </div>
           <span
-            className={`mgr-badge ${
-              selectedSeat.status === 'expiring' ? 'mgr-badge--warning' : 'mgr-badge--danger'
+            className={`px-2.5 py-1 rounded-full text-xs font-semibold shrink-0 ${
+              selectedSeat.status === 'expiring'
+                ? 'bg-warning-bg text-warning border border-warning/30'
+                : 'bg-danger-bg text-danger border border-danger/30'
             }`}
           >
             {selectedSeat.status === 'expiring' ? tManagerUi('expiring_soon') : tManagerUi('occupied')}
           </span>
-          <span className="ss-occupied-header__seat font-bold">
-            {tManagerUi('seat_b90b32')} {selectedSeat.id}
-          </span>
         </div>
-        <div className="ss-occupied-avatar-wrap flex flex-col items-center">
-          <div className="w-16 h-16 rounded-full bg-card flex items-center justify-center mb-3">
-            <User size={32} className="text-secondary" />
+
+        {/* 2-column Detail Specs */}
+        <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-border text-xs">
+          <div className="p-2.5 rounded-lg bg-card border border-border">
+            <span className="text-[11px] text-secondary uppercase font-semibold block mb-0.5">
+              {tManagerUi('shift_469d5b')}
+            </span>
+            <span className="font-semibold text-primary">{shiftLabel}</span>
           </div>
-          <h3 className="text-primary font-semibold text-lg">{selectedSeat.student}</h3>
-          <p className="text-secondary text-sm">{selectedSeat.smartId}</p>
+          <div className="p-2.5 rounded-lg bg-card border border-border">
+            <span className="text-[11px] text-secondary uppercase font-semibold block mb-0.5">
+              {tManagerUi('expires')}
+            </span>
+            <span className={`font-semibold ${selectedSeat.status === 'expiring' ? 'text-danger font-bold' : 'text-primary'}`}>
+              {selectedSeat.expiry || 'Active'}
+            </span>
+          </div>
         </div>
       </div>
-      <div className="ss-detail-grid grid grid-cols-2 gap-4">
-        <div className="ss-detail-cell bg-floating p-3 rounded-lg">
-          <p className="text-secondary text-xs uppercase mb-1">{tManagerUi('shift_469d5b')}</p>
-          <span className={SHIFT_BADGE[selectedSeat.shift ?? ''] ?? 'mgr-badge bg-floating'}>
-            {shiftLabel}
-          </span>
-        </div>
-        <div className="ss-detail-cell bg-floating p-3 rounded-lg">
-          <p className="text-secondary text-xs uppercase mb-1">{tManagerUi('expires')}</p>
-          <p className={`font-semibold ${selectedSeat.status === 'expiring' ? 'text-danger' : 'text-primary'}`}>
-            {selectedSeat.expiry}
-          </p>
-        </div>
-      </div>
-      <div className="ss-modal-footer flex flex-col gap-3 mt-6">
-        <div className="flex gap-3">
-          <button type="button" className="mgr-btn-ghost flex-1" onClick={onClose}>
-            {tManagerUi('close')}
-          </button>
+
+      {/* Action Buttons */}
+      <div className="space-y-2.5 pt-1">
+        <div className="flex gap-2.5">
           <button
             type="button"
-            className="mgr-btn-primary flex-1"
+            className="mgr-btn-primary flex-1 h-9 text-xs font-semibold flex items-center justify-center gap-1.5 rounded-xl transition-colors cursor-pointer disabled:opacity-50"
             disabled={!selectedSeat.smartId}
             title={
               !selectedSeat.smartId
@@ -242,26 +287,38 @@ export function ManagerSeatsMatrixModalActionsTab({
               }
             }}
           >
-            {tManagerUi('view_full_profile')}
+            <User size={14} />
+            <span>{tManagerUi('view_full_profile')}</span>
+          </button>
+          <button
+            type="button"
+            className="mgr-btn-ghost text-xs font-semibold px-4 h-9 rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+            onClick={onClose}
+          >
+            {tManagerUi('close')}
           </button>
         </div>
-        <div className="flex gap-2 pt-2 border-t border-border">
+
+        {/* Danger & Maintenance Controls */}
+        <div className="flex gap-2.5 pt-2 border-t border-border">
           <button
             type="button"
-            className="mgr-btn-ghost flex-1 text-xs text-danger flex items-center justify-center gap-1.5"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold h-9 px-3 rounded-xl border border-danger/30 bg-danger-bg text-danger hover:bg-danger/20 transition-colors cursor-pointer"
             onClick={handleVacateSeat}
           >
-            <LogOut size={13} /> Vacate Seat
+            <LogOut size={13} />
+            <span>Vacate Seat</span>
           </button>
           <button
             type="button"
-            className="mgr-btn-ghost flex-1 text-xs text-warning flex items-center justify-center gap-1.5"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-semibold h-9 px-3 rounded-xl border border-warning/30 bg-warning-bg text-warning hover:bg-warning/20 transition-colors cursor-pointer"
             onClick={handleToggleMaintenance}
           >
-            <Wrench size={13} /> Maintenance
+            <Wrench size={13} />
+            <span>Mark Maintenance</span>
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

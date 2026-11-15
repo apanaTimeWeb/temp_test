@@ -41,16 +41,24 @@ export function ManagerSeatsMatrixAddModal({
   };
 
   return (
-    <div className="ss-modal-overlay flex items-center justify-center fixed inset-0 z-50 bg-overlay-backdrop" onClick={onClose}>
-      <div className="bg-card p-6 rounded-xl shadow-xl w-full max-w-md border border-border" onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-lg font-bold text-primary mb-4">Add New Library Desk / Seat</h3>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-3 sm:p-4 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-md rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-2xl space-y-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h3 className="text-base sm:text-lg font-bold text-primary">Add New Library Desk / Seat</h3>
         {addFeedback && (
-          <div className="mb-4 p-3 bg-success-bg border border-border text-success text-sm rounded-lg flex items-center gap-2">
-            <CheckCircle size={16} />
+          <div className="p-3 bg-success-bg border border-success/30 text-success text-xs font-semibold rounded-xl flex items-center gap-2">
+            <CheckCircle size={16} className="text-success shrink-0" />
             <span>{addFeedback}</span>
           </div>
         )}
-        <form onSubmit={handleCreateSeat} className="space-y-4">
+        <form onSubmit={handleCreateSeat} className="space-y-4 text-xs">
           <div>
             <label htmlFor="new-seat-id" className="text-xs font-semibold text-secondary uppercase block mb-1">
               Seat Number / Code
@@ -62,7 +70,7 @@ export function ManagerSeatsMatrixAddModal({
               placeholder="e.g. A-21, B-05"
               value={newSeatLabel}
               onChange={(e) => setNewSeatLabel(e.target.value)}
-              className="mgr-input w-full"
+              className="mgr-input text-xs w-full h-9 rounded-xl border border-border bg-surface px-3 text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
               autoFocus
             />
           </div>
@@ -74,7 +82,7 @@ export function ManagerSeatsMatrixAddModal({
               id="new-seat-wing"
               value={newSeatWing}
               onChange={(e) => setNewSeatWing(e.target.value)}
-              className="mgr-select w-full"
+              className="mgr-select text-xs w-full h-9 rounded-xl border border-border bg-surface px-3 text-primary cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary"
             >
               <option value="Ground Floor — AC Silent Reading Hall">Ground Floor — AC Silent Reading Hall</option>
               <option value="Ground Floor — Discussion & Group Area">Ground Floor — Discussion & Group Area</option>
@@ -84,11 +92,18 @@ export function ManagerSeatsMatrixAddModal({
               <option value="2nd Floor — Group Study & Discussion Room">2nd Floor — Group Study & Discussion Room</option>
             </select>
           </div>
-          <div className="flex gap-3 pt-2">
-            <button type="button" className="mgr-btn-ghost flex-1" onClick={onClose}>
+          <div className="flex gap-2.5 pt-2">
+            <button
+              type="button"
+              className="mgr-btn-ghost flex-1 h-9 text-xs font-semibold rounded-xl border border-danger/30 bg-danger-bg text-danger hover:bg-danger/20 transition-colors cursor-pointer"
+              onClick={onClose}
+            >
               Cancel
             </button>
-            <button type="submit" className="mgr-btn-primary flex-1">
+            <button
+              type="submit"
+              className="mgr-btn-primary flex-1 h-9 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+            >
               Create Seat
             </button>
           </div>

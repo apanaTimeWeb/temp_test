@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown, Search } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, Search, X } from 'lucide-react';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 
 export type SeatSortField = 'id' | 'wing' | 'shift' | 'status' | 'student';
@@ -86,35 +86,48 @@ export function ManagerSeatsMatrixTableView({
             Unified tabular seat registry with instant allocation & maintenance controls
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-          <div className="relative flex-1 sm:w-56">
-            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+          <div className="mgr-input-icon-wrap relative flex-1 sm:w-64 min-w-[200px]">
+            <Search size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
             <input
               type="search"
-              placeholder="Filter seats or students..."
+              aria-label={tManagerUi('search_by_seat_branch_or_student')}
+              placeholder={tManagerUi('search_by_seat_branch_or_student')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="mgr-input pl-9 w-full text-xs"
+              className="mgr-input mgr-input-with-icon !pl-10 pr-9 text-xs w-full h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                aria-label="Clear search"
+                title="Clear search"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-danger hover:opacity-80 rounded-full transition-colors cursor-pointer"
+              >
+                <X size={14} className="shrink-0 text-danger" />
+              </button>
+            )}
           </div>
           <select
+            aria-label="Table status filter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="mgr-select text-xs"
+            className="bg-surface text-primary text-xs font-semibold px-3 h-9 rounded-xl border border-border hover:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer shrink-0"
           >
-            <option value="all">All Statuses</option>
-            <option value="free">Available (Free)</option>
-            <option value="occupied">Occupied</option>
-            <option value="expiring">Expiring Soon</option>
-            <option value="maintenance">Maintenance</option>
+            <option value="all">⚡ All Statuses</option>
+            <option value="free">🟢 Available (Free)</option>
+            <option value="occupied">🔴 Occupied</option>
+            <option value="expiring">🟡 Expiring Soon</option>
+            <option value="maintenance">⚪ Maintenance</option>
           </select>
           <select
             aria-label="Table gender filter"
             value={genderFilter}
             onChange={(e) => setGenderFilter(e.target.value as 'all' | 'Male' | 'Female')}
-            className="mgr-select text-xs"
+            className="bg-surface text-primary text-xs font-semibold px-3 h-9 rounded-xl border border-border hover:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer shrink-0"
           >
-            <option value="all">All Genders</option>
+            <option value="all">👥 All Genders</option>
             <option value="Male">👨 Male</option>
             <option value="Female">👩 Female</option>
           </select>
