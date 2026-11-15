@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { Gift, X, CheckCircle2, AlertCircle, IndianRupee } from 'lucide-react';
+import { Gift, CheckCircle2, AlertCircle, IndianRupee } from 'lucide-react';
 import { toast } from 'sonner';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_REFERRAL_MEMBER_CANDIDATES } from '@/app/frontend_manager/manager_members/members_referral_bonus/mocks/manager_members_referral_bonus_fixtures/ManagerMembersReferralBonusFixtures';
@@ -101,14 +101,6 @@ export function ManagerMembersReferralBonusAddModal({
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="p-1.5 text-danger hover:opacity-80 rounded-lg hover:bg-danger-bg transition-colors"
-            aria-label="Close dialog"
-          >
-            <X size={20} className="shrink-0 text-danger" />
-          </button>
         </div>
 
         {/* Info Banner */}
@@ -195,10 +187,9 @@ export function ManagerMembersReferralBonusAddModal({
             <button
               type="button"
               onClick={onClose}
-              className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center gap-1.5 text-xs h-9 px-4 w-full sm:w-auto font-semibold transition-colors"
+              className="inline-flex items-center justify-center text-xs h-9 px-4 w-full sm:w-auto font-semibold rounded-xl bg-danger-bg text-danger border border-danger/40 hover:bg-danger/25 hover:border-danger transition-colors cursor-pointer"
             >
-              <X size={15} className="text-danger shrink-0" />
-              <span>Cancel</span>
+              Cancel
             </button>
             <button
               type="submit"
