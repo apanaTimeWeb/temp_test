@@ -38,6 +38,7 @@ export interface ManagerFinanceSubscriptionsTableProps {
   onPrevPage: () => void;
   onNextPage: () => void;
   onSelectSubscription: (sub: (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0]) => void;
+  onRenewSubscription?: (sub: (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0]) => void;
   formatCurrency: (amount: number) => string;
   formatDate: (date: string) => string;
   displayPlan: (val: string) => string;
@@ -82,6 +83,7 @@ export default function ManagerFinanceSubscriptionsTable({
   onPrevPage,
   onNextPage,
   onSelectSubscription,
+  onRenewSubscription,
   formatCurrency,
   formatDate,
   displayPlan,
@@ -171,18 +173,18 @@ export default function ManagerFinanceSubscriptionsTable({
                   <span className={STATUS_BADGE[s.status] || 'fin-badge fin-badge--neutral'}>{labels.translateStatus(s.status)}</span>
                 </td>
                 <td className="py-3 px-4">
-                  <div className="flex items-center justify-end gap-2">
+                  <div className="flex items-center justify-end gap-1.5">
                     <button
                       type="button"
-                      className="fin-badge fin-badge--neutral cursor-not-allowed"
-                      disabled
-                      title={labels.renewalUnavailableHint}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 cursor-pointer transition-colors shadow-xs"
+                      onClick={() => (onRenewSubscription ? onRenewSubscription(s) : onSelectSubscription(s))}
+                      title={`Renew subscription plan for ${s.studentName}`}
                     >
-                      <RefreshCw size={11} /> {labels.renewalUnavailable}
+                      <RefreshCw size={11} /> Renew
                     </button>
                     <button
                       type="button"
-                      className="fin-badge fin-badge--info cursor-pointer flex items-center gap-1 hover:opacity-90"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 cursor-pointer transition-colors shadow-xs"
                       onClick={() => onSelectSubscription(s)}
                       title="View Subscription Details"
                     >

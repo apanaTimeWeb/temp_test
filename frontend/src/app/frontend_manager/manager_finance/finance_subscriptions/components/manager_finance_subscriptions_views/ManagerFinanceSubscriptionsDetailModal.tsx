@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
-import { X, AlertCircle, ArrowUpRight, Clock } from 'lucide-react';
+import { X, AlertCircle, ArrowUpRight, Clock, RefreshCw } from 'lucide-react';
 import type { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
 
 const STATUS_BADGE: Record<string, string> = {
@@ -15,6 +15,7 @@ const STATUS_BADGE: Record<string, string> = {
 export interface ManagerFinanceSubscriptionsDetailModalProps {
   subscription: (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0] | null;
   onClose: () => void;
+  onRenewClick?: (sub: (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0]) => void;
   formatDate: (date: string) => string;
   formatCurrency: (amount: number) => string;
 }
@@ -22,6 +23,7 @@ export interface ManagerFinanceSubscriptionsDetailModalProps {
 export default function ManagerFinanceSubscriptionsDetailModal({
   subscription,
   onClose,
+  onRenewClick,
   formatDate,
   formatCurrency,
 }: ManagerFinanceSubscriptionsDetailModalProps) {
@@ -118,8 +120,21 @@ export default function ManagerFinanceSubscriptionsDetailModal({
             <span className={`font-bold text-sm ${subscription.due > 0 ? 'text-danger' : 'text-primary'}`}>{formatCurrency(subscription.due)}</span>
           </div>
         </div>
-        <div className="flex justify-end gap-2 pt-3 border-t border-border">
-          <button type="button" onClick={onClose} className="mgr-btn-ghost mgr-btn-sm">
+        <div className="flex justify-between items-center pt-3 border-t border-border">
+          {onRenewClick && (
+            <button
+              type="button"
+              onClick={() => {
+                const target = subscription;
+                onClose();
+                onRenewClick(target);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer transition-colors"
+            >
+              <RefreshCw size={13} /> Renew This Plan
+            </button>
+          )}
+          <button type="button" onClick={onClose} className="mgr-btn-ghost mgr-btn-sm ml-auto">
             Close
           </button>
         </div>
