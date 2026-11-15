@@ -83,7 +83,7 @@ export function ManagerAttendanceDailyTable({
           <span>
             Showing {startItem}–{endItem} of {totalRows} student records
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="flex items-center gap-1.5">
               <label htmlFor="daily-att-rows-per-page" className="text-xs text-secondary whitespace-nowrap">
                 Rows per page:
@@ -95,7 +95,7 @@ export function ManagerAttendanceDailyTable({
                   setPageSize(Number(e.target.value));
                   setPage(0);
                 }}
-                className="rounded-lg border border-border bg-card px-2 py-1 text-xs text-primary outline-none"
+                className="rounded-lg border border-border bg-card px-2 py-1 text-xs text-primary outline-none cursor-pointer"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -107,18 +107,18 @@ export function ManagerAttendanceDailyTable({
                 type="button"
                 disabled={effectivePage === 0}
                 onClick={() => setPage(effectivePage - 1)}
-                className="px-3 py-1 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary disabled:opacity-40"
+                className="px-3 py-1 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary disabled:opacity-40 cursor-pointer active:scale-95 transition-all shadow-2xs"
               >
                 Previous
               </button>
-              <span className="text-xs font-medium">
+              <span className="text-xs font-medium whitespace-nowrap">
                 Page {effectivePage + 1} of {pageCount}
               </span>
               <button
                 type="button"
                 disabled={effectivePage >= pageCount - 1}
                 onClick={() => setPage(effectivePage + 1)}
-                className="px-3 py-1 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary disabled:opacity-40"
+                className="px-3 py-1 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary disabled:opacity-40 cursor-pointer active:scale-95 transition-all shadow-2xs"
               >
                 Next
               </button>

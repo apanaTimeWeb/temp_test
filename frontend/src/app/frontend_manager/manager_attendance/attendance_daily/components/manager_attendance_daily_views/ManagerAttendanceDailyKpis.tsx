@@ -31,94 +31,85 @@ export function ManagerAttendanceDailyKpis({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Total Students */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
-            {tManagerUi('total_students')}
+      <div className="p-5 rounded-2xl bg-card border border-border shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+        <div className="flex justify-between items-start mb-3">
+          <div className="p-2.5 rounded-xl border border-blue-500/20 bg-blue-500/10 text-blue-600 dark:text-blue-400">
+            <Users size={18} />
+          </div>
+          <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border border-blue-500/20 bg-blue-500/10 text-blue-600 dark:text-blue-400">
+            Enrolled Roster
           </span>
-          <div className="w-10 h-10 rounded-xl bg-warning-bg text-warning border border-border flex items-center justify-center">
-            <Users size={20} />
-          </div>
         </div>
-        <div className="mt-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-primary">{filtered.length}</div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-              [{dateLabel}]
-            </span>
-          </div>
+        <div>
+          <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">
+            {tManagerUi('total_students')}
+          </p>
+          <h3 className="text-2xl font-black text-primary tracking-tight">{filtered.length}</h3>
           <p className="mt-1 text-xs text-secondary">
-            {shiftLabel(shift)} shift ({dateLabel})
+            {shiftLabel(shift)} shift · {dateLabel}
           </p>
         </div>
       </div>
 
       {/* Present */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
-            {tManagerUi('present')}
+      <div className="p-5 rounded-2xl bg-card border border-border shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+        <div className="flex justify-between items-start mb-3">
+          <div className="p-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <UserCheck size={18} />
+          </div>
+          <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            Active Present
           </span>
-          <div className="w-10 h-10 rounded-xl bg-success-bg text-success border border-border flex items-center justify-center">
-            <UserCheck size={20} />
-          </div>
         </div>
-        <div className="mt-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-success">{present}</div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-success border border-border">
-              [{dateLabel}]
-            </span>
-          </div>
+        <div>
+          <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">
+            {tManagerUi('present')}
+          </p>
+          <h3 className="text-2xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight">{present}</h3>
           <p className="mt-1 text-xs text-secondary">
-            {filtered.length ? Math.round((present / filtered.length) * 100) : 0}
-            {tManagerUi('rate')} attendance rate ({dateLabel})
+            {filtered.length ? Math.round((present / filtered.length) * 100) : 0}% attendance rate
           </p>
         </div>
       </div>
 
       {/* Absent */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
-            {tManagerUi('absent')}
+      <div className="p-5 rounded-2xl bg-card border border-border shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+        <div className="flex justify-between items-start mb-3">
+          <div className="p-2.5 rounded-xl border border-rose-500/20 bg-rose-500/10 text-rose-600 dark:text-rose-400">
+            <UserX size={18} />
+          </div>
+          <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border border-rose-500/20 bg-rose-500/10 text-rose-600 dark:text-rose-400">
+            Critical Absentees
           </span>
-          <div className="w-10 h-10 rounded-xl bg-danger-bg text-danger border border-border flex items-center justify-center">
-            <UserX size={20} />
-          </div>
         </div>
-        <div className="mt-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-danger">{absent}</div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-danger border border-border">
-              [{dateLabel}]
-            </span>
-          </div>
+        <div>
+          <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">
+            {tManagerUi('absent')}
+          </p>
+          <h3 className="text-2xl font-black text-rose-600 dark:text-rose-400 tracking-tight">{absent}</h3>
           <p className="mt-1 text-xs text-secondary">
-            {filtered.filter((s) => s.consecutiveAbsent >= 3).length} {tManagerUi('need_alerts')} ({dateLabel})
+            {filtered.filter((s) => s.consecutiveAbsent >= 3).length} {tManagerUi('need_alerts')}
           </p>
         </div>
       </div>
 
       {/* Late */}
-      <div className="rounded-2xl border border-border bg-card p-5 transition-all hover:border-primary hover:shadow-md">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-secondary uppercase tracking-wider">
-            {tManagerUi('late')}
+      <div className="p-5 rounded-2xl bg-card border border-border shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+        <div className="flex justify-between items-start mb-3">
+          <div className="p-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            <Clock size={18} />
+          </div>
+          <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400">
+            Delayed Check-in
           </span>
-          <div className="w-10 h-10 rounded-xl bg-warning-bg text-warning border border-border flex items-center justify-center">
-            <Clock size={20} />
-          </div>
         </div>
-        <div className="mt-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-warning">{late}</div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-warning border border-border">
-              [{dateLabel}]
-            </span>
-          </div>
+        <div>
+          <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">
+            {tManagerUi('late')}
+          </p>
+          <h3 className="text-2xl font-black text-amber-600 dark:text-amber-400 tracking-tight">{late}</h3>
           <p className="mt-1 text-xs text-secondary">
-            {marked}/{filtered.length} {tManagerUi('marked')} ({dateLabel})
+            {marked}/{filtered.length} {tManagerUi('marked')}
           </p>
         </div>
       </div>

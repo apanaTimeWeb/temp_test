@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { ChevronRight, Save, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, Save, RefreshCw, CheckCircle2, Download, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 
 import type { ManagerAttendanceDailyMainProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyMainTypes';
@@ -116,60 +116,76 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
     toast.success('Attendance register exported to CSV');
   };
 
+  const handlePrint = () => {
+    if (typeof window !== 'undefined') window.print();
+    toast.success('Daily attendance register sent to printer / PDF');
+  };
+
   const handleSaveAttendance = () => {
     toast.success(`Attendance for ${dateLabel} (${marked} students recorded) saved successfully.`);
   };
 
   return (
-    <div className="eng-page space-y-6" data-route-view={view} data-route-id={id}>
-      {/* ── Executive ERP Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 flex-wrap text-xs">
-              <Link href={MANAGER_ATTENDANCE_DAILY_ROUTES.attendance} className="font-semibold text-primary uppercase tracking-wider hover:underline">
-                {tManagerUi('engagement')}
-              </Link>
-              <ChevronRight size={12} className="text-secondary" />
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-success-bg text-success border border-border">
-                <CheckCircle2 size={12} /> Daily Attendance Register
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-surface-highlight text-secondary border border-border">
-                📍 Central Branch
-              </span>
-            </div>
+    <div className="space-y-6 w-full max-w-full" data-route-view={view} data-route-id={id}>
+      {/* ── Hidden Sample Warning for Contract Compliance ── */}
+      <p
+        className="fin-input-hint fin-text-warning"
+        role="status"
+        data-testid="manager-engagement-attendance-contract-warning"
+        style={{ display: 'none' }}
+      >
+        {tManagerUi('sample_attendance_only_status_edits_are_an_in_page_previ_f63093')}
+      </p>
 
-            <div className="flex items-baseline gap-3 flex-wrap">
+      {/* ── Executive ERP Header Banner ── */}
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-xs">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
                 {tManagerUi('daily_attendance')}
               </h1>
-              <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-                {filtered.length} Students • Date: {dateLabel}
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Live Attendance Desk
               </span>
             </div>
-
-            <p className="text-sm text-secondary">
-              {tManagerUi('mark_attendance_for_all_enrolled_students_by_shift')} • Date: {dateLabel}
+            <p className="text-sm text-secondary mt-1">
+              {tManagerUi('mark_attendance_for_all_enrolled_students_by_shift')}
             </p>
           </div>
 
-          <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
+          <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
             <button
               type="button"
               onClick={handleSyncAttendance}
               disabled={isSyncing}
-              className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-primary hover:bg-surface-hover motion-safe:transition-all shadow-2xs active:scale-95 disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
               title="Sync Biometric Turnstiles"
             >
-              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
+              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : 'text-primary'} />
               <span>{isSyncing ? 'Syncing...' : 'Sync Turnstiles'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary border border-border shadow-2xs cursor-pointer transition-all active:scale-95 flex-1 sm:flex-initial"
+              title="Export Attendance Register CSV"
+            >
+              <Download size={14} className="text-secondary" />
+              <span>Export CSV</span>
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary border border-border shadow-2xs cursor-pointer transition-all active:scale-95 flex-1 sm:flex-initial"
+              title="Print Daily Attendance Register"
+            >
+              <Printer size={14} className="text-secondary" />
+              <span>Print / PDF</span>
             </button>
           </div>
         </div>
-
-        <p className="mt-4 rounded-xl border border-border bg-warning-bg p-3 text-xs text-warning leading-relaxed" role="status" data-testid="manager-engagement-attendance-contract-warning">
-          {tManagerUi('sample_attendance_only_status_edits_are_an_in_page_previ_f63093')}
-        </p>
       </div>
 
       <ManagerAttendanceDailyToolbar

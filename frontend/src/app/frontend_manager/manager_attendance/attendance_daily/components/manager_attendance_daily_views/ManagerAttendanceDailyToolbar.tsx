@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, Download, Calendar } from 'lucide-react';
+import { Search, Download, Calendar, X } from 'lucide-react';
 
 interface ManagerAttendanceDailyToolbarProps {
   date: string;
@@ -109,21 +109,34 @@ export function ManagerAttendanceDailyToolbar({
       {/* ── Filters & Search Toolbar ── */}
       <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-2 flex-1">
+          <div className="flex flex-wrap items-center gap-2.5 flex-1">
             {/* Search */}
             <div className="relative flex-1 min-w-[200px] max-w-sm">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
               <input
                 id="daily-att-search"
-                type="search"
+                type="text"
                 placeholder="Search student name or smart ID..."
-                className="w-full pl-9 pr-3 py-1.5 bg-muted border border-border rounded-lg text-xs text-primary outline-none focus:border-primary focus:bg-card"
+                className="w-full pl-9 pr-8 py-1.5 bg-muted border border-border rounded-lg text-xs text-primary outline-none focus:border-primary focus:bg-card"
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
                   onResetPage();
                 }}
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    onResetPage();
+                  }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary cursor-pointer p-0.5"
+                  title="Clear search"
+                >
+                  <X size={13} />
+                </button>
+              )}
             </div>
 
             {/* Shift Selector */}
@@ -147,7 +160,7 @@ export function ManagerAttendanceDailyToolbar({
             </div>
 
             {/* Status Counter Badges */}
-            <div className="flex items-center gap-1.5 text-xs">
+            <div className="flex flex-wrap items-center gap-1.5 text-xs">
               <span className="px-2 py-0.5 rounded-full font-bold bg-success-bg text-success border border-border">
                 {present} {tManagerUi('present')}
               </span>
@@ -158,7 +171,7 @@ export function ManagerAttendanceDailyToolbar({
                 {late} {tManagerUi('late')}
               </span>
               <span className="text-xs font-semibold text-secondary px-1 shrink-0">
-                Showing {startItem}-{endItem} of {totalRows} students ({dateLabel})
+                Showing {startItem}–{endItem} of {totalRows} students
               </span>
             </div>
           </div>
@@ -167,7 +180,7 @@ export function ManagerAttendanceDailyToolbar({
           <button
             type="button"
             onClick={onExportCsv}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm shrink-0"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-primary hover:bg-surface-hover motion-safe:transition-all shadow-2xs shrink-0 cursor-pointer active:scale-95"
             title="Export Attendance Register as CSV"
           >
             <Download size={13} />
