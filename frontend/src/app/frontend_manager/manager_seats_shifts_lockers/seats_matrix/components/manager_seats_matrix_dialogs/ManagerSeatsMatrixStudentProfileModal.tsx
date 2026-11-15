@@ -17,8 +17,8 @@ import {
   Lock,
   Sparkles,
 } from 'lucide-react';
-import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
-import { MANAGER_SEATS_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
+import type { SeatData } from '../../types/ManagerSeatsMatrixTypes';
+import { MANAGER_SEATS_MATRIX_ROUTES } from '../../config/manager_seats_matrix.url_config';
 
 interface ManagerSeatsMatrixStudentProfileModalProps {
   isOpen: boolean;
