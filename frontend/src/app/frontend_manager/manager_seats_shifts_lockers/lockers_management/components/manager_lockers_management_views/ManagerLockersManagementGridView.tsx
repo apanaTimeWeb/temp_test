@@ -31,15 +31,15 @@ export function ManagerLockersManagementGridView({
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-surface border border-border text-xs">
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-1.5 font-medium text-secondary">
-            <span className="w-2.5 h-2.5 rounded-full bg-success" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
             <span>Available (Free)</span>
           </div>
           <div className="flex items-center gap-1.5 font-medium text-secondary">
-            <span className="w-2.5 h-2.5 rounded-full bg-primary" />
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
             <span>Occupied (Click for Student Detail)</span>
           </div>
           <div className="flex items-center gap-1.5 font-medium text-secondary">
-            <span className="w-2.5 h-2.5 rounded-full bg-warning" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
             <span>Under Maintenance</span>
           </div>
         </div>
@@ -79,10 +79,10 @@ export function ManagerLockersManagementGridView({
               }}
               className={`group relative flex flex-col justify-between p-3.5 rounded-2xl border transition-all cursor-pointer select-none text-left focus:outline-none focus:ring-2 focus:ring-primary ${
                 isOccupied
-                  ? 'bg-card border-primary/30 hover:border-primary shadow-xs hover:shadow-md'
+                  ? 'bg-card border-rose-500/30 hover:border-rose-500 hover:bg-rose-500/5 shadow-xs hover:shadow-md'
                   : isFree
-                  ? 'bg-card border-success/30 hover:border-success hover:bg-success/5 shadow-xs'
-                  : 'bg-card border-warning/30 hover:border-warning opacity-80'
+                  ? 'bg-card border-emerald-500/30 hover:border-emerald-500 hover:bg-emerald-500/5 shadow-xs'
+                  : 'bg-card border-amber-500/30 hover:border-amber-500 hover:bg-amber-500/5 opacity-80'
               }`}
             >
               {/* Locker Top: ID & Status Badge */}
@@ -91,10 +91,10 @@ export function ManagerLockersManagementGridView({
                   <div
                     className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono font-bold text-xs ${
                       isOccupied
-                        ? 'bg-primary-subtle text-primary'
+                        ? 'bg-rose-500/10 text-rose-600'
                         : isFree
-                        ? 'bg-success-subtle text-success'
-                        : 'bg-warning-subtle text-warning'
+                        ? 'bg-emerald-500/10 text-emerald-600'
+                        : 'bg-amber-500/10 text-amber-600'
                     }`}
                   >
                     <DoorClosed size={14} />
@@ -106,7 +106,7 @@ export function ManagerLockersManagementGridView({
 
                 <span
                   className={`w-2 h-2 rounded-full shrink-0 mt-1 ${
-                    isOccupied ? 'bg-primary' : isFree ? 'bg-success' : 'bg-warning'
+                    isOccupied ? 'bg-rose-500' : isFree ? 'bg-emerald-500' : 'bg-amber-500'
                   }`}
                   title={locker.status}
                 />
@@ -116,35 +116,35 @@ export function ManagerLockersManagementGridView({
               <div className="space-y-1">
                 {isOccupied ? (
                   <>
-                    <div className="flex items-center gap-1 text-xs font-semibold text-primary truncate">
-                      <User size={12} className="shrink-0 text-primary" />
+                    <div className="flex items-center gap-1 text-xs font-semibold text-rose-600 truncate">
+                      <User size={12} className="shrink-0 text-rose-600" />
                       <span className="truncate">{locker.assignedTo}</span>
                     </div>
                     <div className="text-[10px] text-secondary font-mono truncate">
                       {locker.studentId && locker.studentId !== '—' ? locker.studentId : 'Assigned'}
                     </div>
-                    <div className="pt-1.5 text-[10px] font-medium text-primary group-hover:underline flex items-center gap-1">
+                    <div className="pt-1.5 text-[10px] font-medium text-rose-600 group-hover:underline flex items-center gap-1">
                       <span>View details</span>
                       <span aria-hidden="true">→</span>
                     </div>
                   </>
                 ) : isFree ? (
                   <>
-                    <div className="flex items-center gap-1 text-xs font-medium text-success">
+                    <div className="flex items-center gap-1 text-xs font-medium text-emerald-600">
                       <CheckCircle2 size={12} className="shrink-0" />
                       <span>Available</span>
                     </div>
                     <div className="text-[10px] text-secondary font-mono">
                       Key: #{locker.lockerId}
                     </div>
-                    <div className="pt-1.5 text-[10px] font-medium text-success group-hover:underline flex items-center gap-1">
+                    <div className="pt-1.5 text-[10px] font-medium text-emerald-600 group-hover:underline flex items-center gap-1">
                       <span>Allot Locker</span>
                       <span aria-hidden="true">+</span>
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="flex items-center gap-1 text-xs font-medium text-warning">
+                    <div className="flex items-center gap-1 text-xs font-medium text-amber-600">
                       <AlertTriangle size={12} className="shrink-0" />
                       <span>Maintenance</span>
                     </div>

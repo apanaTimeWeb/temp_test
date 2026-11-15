@@ -23,13 +23,49 @@ export function ManagerLockersManagementToolbar({
 }: ManagerLockersManagementToolbarProps) {
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-0.5">
-      {/* Interactive Status KPI Counter Pills */}
+      {/* Interactive Status KPI Counter Pills with Semantic Color Active States */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
         {([
-          { id: 'all', label: tManagerUi('all_statuses'), count: lockers.length },
-          { id: 'Free', label: tManagerUi('free'), count: lockers.filter((l) => l.status === 'Free').length },
-          { id: 'Occupied', label: tManagerUi('occupied'), count: lockers.filter((l) => l.status === 'Occupied').length },
-          { id: 'Maintenance', label: tManagerUi('maintenance'), count: lockers.filter((l) => l.status === 'Maintenance').length },
+          {
+            id: 'all',
+            label: tManagerUi('all_statuses'),
+            count: lockers.length,
+            activeClass: 'bg-primary text-on-primary ring-1 ring-primary shadow-xs',
+            activeBadge: 'bg-white/25 text-on-primary',
+            inactiveClass: 'bg-surface border border-border text-secondary hover:text-primary hover:bg-surface-hover',
+            inactiveBadge: 'bg-surface-highlight text-secondary',
+            dotColor: null,
+          },
+          {
+            id: 'Free',
+            label: tManagerUi('free'),
+            count: lockers.filter((l) => l.status === 'Free').length,
+            activeClass: 'bg-emerald-600 text-white ring-1 ring-emerald-600 shadow-xs hover:bg-emerald-700',
+            activeBadge: 'bg-white/25 text-white',
+            inactiveClass: 'bg-surface border border-border text-secondary hover:text-emerald-600 hover:border-emerald-500/40 hover:bg-emerald-500/5',
+            inactiveBadge: 'bg-emerald-500/10 text-emerald-600',
+            dotColor: 'bg-emerald-500',
+          },
+          {
+            id: 'Occupied',
+            label: tManagerUi('occupied'),
+            count: lockers.filter((l) => l.status === 'Occupied').length,
+            activeClass: 'bg-rose-600 text-white ring-1 ring-rose-600 shadow-xs hover:bg-rose-700',
+            activeBadge: 'bg-white/25 text-white',
+            inactiveClass: 'bg-surface border border-border text-secondary hover:text-rose-600 hover:border-rose-500/40 hover:bg-rose-500/5',
+            inactiveBadge: 'bg-rose-500/10 text-rose-600',
+            dotColor: 'bg-rose-500',
+          },
+          {
+            id: 'Maintenance',
+            label: tManagerUi('maintenance'),
+            count: lockers.filter((l) => l.status === 'Maintenance').length,
+            activeClass: 'bg-amber-600 text-white ring-1 ring-amber-600 shadow-xs hover:bg-amber-700',
+            activeBadge: 'bg-white/25 text-white',
+            inactiveClass: 'bg-surface border border-border text-secondary hover:text-amber-600 hover:border-amber-500/40 hover:bg-amber-500/5',
+            inactiveBadge: 'bg-amber-500/10 text-amber-600',
+            dotColor: 'bg-amber-500',
+          },
         ] as const).map((tab) => {
           const isActive = statusFilter === tab.id;
           return (
@@ -38,16 +74,17 @@ export function ManagerLockersManagementToolbar({
               type="button"
               onClick={() => setStatusFilter(tab.id)}
               aria-pressed={isActive}
-              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
-                isActive
-                  ? 'bg-primary text-on-primary shadow-sm ring-1 ring-primary'
-                  : 'bg-surface border border-border text-secondary hover:text-primary hover:bg-surface-hover'
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
+                isActive ? tab.activeClass : tab.inactiveClass
               }`}
             >
+              {tab.dotColor && !isActive && (
+                <span className={`w-2 h-2 rounded-full ${tab.dotColor} shrink-0`} />
+              )}
               <span>{tab.label}</span>
               <span
                 className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                  isActive ? 'bg-primary-subtle text-on-primary' : 'bg-surface-highlight text-secondary'
+                  isActive ? tab.activeBadge : tab.inactiveBadge
                 }`}
               >
                 {tab.count}
