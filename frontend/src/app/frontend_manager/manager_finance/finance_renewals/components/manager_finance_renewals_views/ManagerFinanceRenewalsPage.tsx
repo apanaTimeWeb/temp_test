@@ -101,7 +101,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   };
 
   const handleRemindAll = () => {
-    setFeedbackMsg(`Omnichannel renewal alerts scheduled for ${searchedRenewals.length} members.`);
+    setFeedbackMsg(`SMS renewal alerts dispatched to all ${searchedRenewals.length} displayed members.`);
   };
 
   const handleImportClick = () => {

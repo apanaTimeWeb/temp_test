@@ -49,13 +49,13 @@ export default function ManagerFinanceRenewalsTimeHorizonBar({
 
       <div className="flex flex-wrap items-center gap-2">
         {/* Segmented Time Horizon Pills */}
-        <div className="inline-flex bg-muted p-1 rounded-xl border border-border flex-wrap">
+        <div className="inline-flex bg-muted p-1 rounded-xl border border-border flex-wrap gap-1">
           {timeHorizonOptions.map((opt) => (
             <button
               key={opt.id}
               type="button"
               onClick={() => onChangeTimeHorizon(opt.id)}
-              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+              className={`min-h-8 px-2.5 sm:px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                 timeHorizon === opt.id
                   ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
                   : 'text-secondary hover:text-primary'

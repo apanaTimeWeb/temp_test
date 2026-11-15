@@ -81,7 +81,7 @@ export default function ManagerFinanceRenewalsNativeTable<T extends object>({ ro
           ? (labels as any).range(rows.length === 0 ? 0 : effectivePage * pageSize + 1, Math.min((effectivePage + 1) * pageSize, rows.length), rows.length)
           : `Showing ${rows.length === 0 ? 0 : effectivePage * pageSize + 1}–${Math.min((effectivePage + 1) * pageSize, rows.length)} of ${rows.length} results`}
       </span>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4 flex-wrap justify-center sm:justify-end">
         <div className="flex items-center gap-1.5">
           <label htmlFor="rows-per-page-managerfinancerenewalsnativetable" className="text-xs text-secondary whitespace-nowrap">
             Rows per page:

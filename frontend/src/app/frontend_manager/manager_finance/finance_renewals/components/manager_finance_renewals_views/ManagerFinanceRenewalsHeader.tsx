@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Upload, Download, Printer, MessageSquare, Mail, Send } from 'lucide-react';
+import { Upload, Download, Printer, MessageCircle, Mail, Smartphone } from 'lucide-react';
 
 export interface ManagerFinanceRenewalsHeaderProps {
   renewalsTitle: string;
@@ -104,27 +104,30 @@ export default function ManagerFinanceRenewalsHeader({
             onClick={onWhatsAppAll}
             disabled={!hasVisibleRows}
             className="p-2 rounded-xl border border-border bg-card hover:bg-emerald-500/10 text-[#25D366] transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
-            title={waAllLabel}
+            title="Send WhatsApp to All (WhatsApp All)"
+            aria-label="Send WhatsApp to All"
           >
-            <MessageSquare size={14} />
+            <MessageCircle size={15} />
           </button>
           <button
             type="button"
             onClick={onEmailAll}
             disabled={!hasVisibleRows}
             className="p-2 rounded-xl border border-border bg-card hover:bg-purple-500/10 text-purple-600 dark:text-purple-400 transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
-            title={emailAllLabel}
+            title="Send Email to All (Email All)"
+            aria-label="Send Email to All"
           >
-            <Mail size={14} />
+            <Mail size={15} />
           </button>
           <button
             type="button"
             onClick={onRemindAll}
             disabled={!hasVisibleRows}
-            className="p-2 rounded-xl border border-border bg-card hover:bg-amber-500/10 text-amber-500 transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
-            title={remindAllLabel}
+            className="p-2 rounded-xl border border-border bg-card hover:bg-amber-500/10 text-amber-500 dark:text-amber-400 transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
+            title="Send SMS to All (SMS All)"
+            aria-label="Send SMS to All"
           >
-            <Send size={14} />
+            <Smartphone size={15} />
           </button>
         </div>
       </div>
