@@ -39,10 +39,11 @@ export default function ManagerFinanceRenewalsTimeHorizonBar({
       <div className="flex items-center gap-2">
         <Clock size={16} className="text-primary shrink-0" />
         <span className="text-xs font-bold uppercase tracking-wider text-secondary">
-          Renewals Time Horizon:
+          Renewal Period:
         </span>
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary-subtle text-primary border border-border">
-          {activeCount} Records
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          {activeCount} {activeCount === 1 ? 'Renewal Due' : 'Renewals Due'}
         </span>
       </div>
 
