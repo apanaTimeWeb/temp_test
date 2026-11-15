@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { UserPlus, X, Search, Check, Key, ShieldCheck, User, DoorClosed } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { UserPlus, X, Search, Check, Key, ShieldCheck, User, DoorClosed, ChevronDown } from 'lucide-react';
 import type { ManagerLockersManagementSampleLocker as Locker } from '../../mocks/manager_lockers_management_fixtures/ManagerLockersManagementSampleFixtures';
 
-const SAMPLE_DIRECTORY_STUDENTS = [
+const ALL_STUDENTS = [
   { name: 'Aarav Sharma', smartId: 'LIB-101', exam: 'UPSC CSE', plan: 'Full Day' },
   { name: 'Ananya Patel', smartId: 'LIB-102', exam: 'NEET Pre-Med', plan: 'Morning Shift' },
   { name: 'Rohan Verma', smartId: 'LIB-103', exam: 'JEE Advanced', plan: 'Evening Shift' },
@@ -13,6 +13,10 @@ const SAMPLE_DIRECTORY_STUDENTS = [
   { name: 'Sneha Joshi', smartId: 'LIB-106', exam: 'SSC CGL', plan: 'Evening Shift' },
   { name: 'Vikram Malhotra', smartId: 'LIB-107', exam: 'State PSC', plan: 'Full Day' },
   { name: 'Neha Choudhary', smartId: 'LIB-108', exam: 'CLAT Pre-Law', plan: 'Morning Shift' },
+  { name: 'Aditya Nair', smartId: 'LIB-109', exam: 'CAT / MBA', plan: 'Evening Shift' },
+  { name: 'Kavita Reddy', smartId: 'LIB-110', exam: 'Banking PO', plan: 'Full Day' },
+  { name: 'Manish Tiwari', smartId: 'LIB-111', exam: 'UPSC CSE', plan: 'Morning Shift' },
+  { name: 'Pooja Deshmukh', smartId: 'LIB-112', exam: 'CDS / NDA', plan: 'Full Day' },
 ];
 
 export interface ManagerLockersManagementAssignModalProps {
@@ -28,17 +32,24 @@ export function ManagerLockersManagementAssignModal({
   onClose,
   onAssign,
 }: ManagerLockersManagementAssignModalProps) {
-  const [mode, setMode] = useState<'directory' | 'custom'>('directory');
+  const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStudent, setSelectedStudent] = useState<typeof SAMPLE_DIRECTORY_STUDENTS[0] | null>(
-    SAMPLE_DIRECTORY_STUDENTS[0]
-  );
-  const [customName, setCustomName] = useState('');
-  const [customSmartId, setCustomSmartId] = useState('');
+  const [selectedStudent, setSelectedStudent] = useState<typeof ALL_STUDENTS[0] | null>(null);
   const [depositCollected, setDepositCollected] = useState(true);
   const [keyHandedOver, setKeyHandedOver] = useState(true);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const filteredStudents = SAMPLE_DIRECTORY_STUDENTS.filter(
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const filteredStudents = ALL_STUDENTS.filter(
     (s) =>
       s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       s.smartId.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -47,17 +58,21 @@ export function ManagerLockersManagementAssignModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (mode === 'directory') {
-      if (!selectedStudent) return;
-      onAssign(selectedStudent.name, selectedStudent.smartId);
-    } else {
-      if (!customName.trim()) return;
-      const sId = customSmartId.trim() || `LIB-${Math.floor(100 + Math.random() * 900)}`;
-      onAssign(customName.trim(), sId);
-    }
+    if (!selectedStudent) return;
+    onAssign(selectedStudent.name, selectedStudent.smartId);
   };
 
-  const isSubmitDisabled = mode === 'directory' ? !selectedStudent : !customName.trim();
+  const handleSelectStudent = (student: typeof ALL_STUDENTS[0]) => {
+    setSelectedStudent(student);
+    setSearchTerm('');
+    setIsOpen(false);
+  };
+
+  const handleClearSelected = () => {
+    setSelectedStudent(null);
+    setSearchTerm('');
+    setIsOpen(true);
+  };
 
   return (
     <div
@@ -89,7 +104,7 @@ export function ManagerLockersManagementAssignModal({
                 </span>
               </div>
               <p className="text-xs text-secondary mt-0.5">
-                Assign this locker and issue key to an active library member
+                Select student from directory to assign locker and issue physical key
               </p>
             </div>
           </div>
@@ -129,66 +144,66 @@ export function ManagerLockersManagementAssignModal({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Student Mode Selector */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-secondary uppercase tracking-wider">
-                Select Member <span className="text-danger">*</span>
-              </label>
-              <div className="flex items-center p-0.5 rounded-lg bg-surface border border-border text-xs">
-                <button
-                  type="button"
-                  onClick={() => setMode('directory')}
-                  className={`px-2.5 py-1 rounded-md font-semibold transition-colors cursor-pointer ${
-                    mode === 'directory'
-                      ? 'bg-primary text-on-primary shadow-xs'
-                      : 'text-secondary hover:text-primary'
-                  }`}
-                >
-                  Member Directory
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode('custom')}
-                  className={`px-2.5 py-1 rounded-md font-semibold transition-colors cursor-pointer ${
-                    mode === 'custom'
-                      ? 'bg-primary text-on-primary shadow-xs'
-                      : 'text-secondary hover:text-primary'
-                  }`}
-                >
-                  + Direct Entry
-                </button>
+          {/* Single Option: Searchable Student Dropdown */}
+          <div className="space-y-2" ref={dropdownRef}>
+            <label className="text-xs font-semibold text-secondary uppercase tracking-wider block">
+              Select Student <span className="text-danger">*</span>
+            </label>
+
+            {/* Dropdown Input Container */}
+            <div className="relative">
+              <Search
+                size={15}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
+              />
+              <input
+                type="text"
+                value={selectedStudent ? selectedStudent.name : searchTerm}
+                onChange={(e) => {
+                  if (selectedStudent) setSelectedStudent(null);
+                  setSearchTerm(e.target.value);
+                  setIsOpen(true);
+                }}
+                onFocus={() => setIsOpen(true)}
+                placeholder="Search student by name, Smart ID, or exam..."
+                className="mgr-input !pl-10 !pr-10 text-xs w-full h-10 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+              />
+
+              <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                {selectedStudent || searchTerm ? (
+                  <button
+                    type="button"
+                    onClick={handleClearSelected}
+                    className="p-1 text-secondary hover:text-primary rounded-md cursor-pointer transition-colors"
+                    title="Clear selection"
+                  >
+                    <X size={14} />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIsOpen((prev) => !prev)}
+                    className="p-1 text-secondary hover:text-primary rounded-md cursor-pointer transition-colors"
+                  >
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                )}
               </div>
-            </div>
 
-            {mode === 'directory' ? (
-              <div className="space-y-2.5">
-                {/* Search in Directory */}
-                <div className="relative">
-                  <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
-                  <input
-                    type="search"
-                    placeholder="Search by student name, smart ID, or exam..."
-                    className="mgr-input !pl-10 !pr-8 text-xs w-full h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                  {searchTerm && (
-                    <button
-                      type="button"
-                      onClick={() => setSearchTerm('')}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 cursor-pointer"
-                    >
-                      <X size={12} />
-                    </button>
-                  )}
-                </div>
+              {/* Floating Dropdown List of All Students */}
+              {isOpen && (
+                <div className="absolute z-50 left-0 right-0 mt-1 max-h-60 overflow-y-auto rounded-xl border border-border bg-card shadow-2xl p-1.5 space-y-1 animate-in fade-in-50 zoom-in-95">
+                  <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-secondary flex items-center justify-between border-b border-border pb-1 mb-1">
+                    <span>Student Directory</span>
+                    <span>{filteredStudents.length} Students</span>
+                  </div>
 
-                {/* Candidate List */}
-                <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                   {filteredStudents.length === 0 ? (
                     <div className="py-4 text-center text-xs text-secondary">
-                      No matching student found. Try switching to Direct Entry.
+                      No matching student found.
                     </div>
                   ) : (
                     filteredStudents.map((student) => {
@@ -196,23 +211,24 @@ export function ManagerLockersManagementAssignModal({
                       return (
                         <div
                           key={student.smartId}
-                          role="button"
+                          role="option"
+                          aria-selected={isSelected}
                           tabIndex={0}
-                          onClick={() => setSelectedStudent(student)}
+                          onClick={() => handleSelectStudent(student)}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter' || e.key === ' ') {
                               e.preventDefault();
-                              setSelectedStudent(student);
+                              handleSelectStudent(student);
                             }
                           }}
-                          className={`flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer text-left ${
+                          className={`flex items-center justify-between p-2.5 rounded-lg border transition-all cursor-pointer text-left ${
                             isSelected
-                              ? 'border-primary bg-primary/5 ring-1 ring-primary'
-                              : 'border-border bg-surface hover:bg-surface-hover'
+                              ? 'border-primary bg-primary/10 ring-1 ring-primary'
+                              : 'border-transparent hover:bg-surface-hover hover:border-border'
                           }`}
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0">
                               {student.name.charAt(0)}
                             </div>
                             <div className="min-w-0">
@@ -222,58 +238,50 @@ export function ManagerLockersManagementAssignModal({
                               </p>
                             </div>
                           </div>
-                          {isSelected && (
-                            <span className="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0">
-                              <Check size={12} />
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-surface text-secondary border border-border">
+                              {student.plan}
                             </span>
-                          )}
+                            {isSelected && (
+                              <span className="w-5 h-5 rounded-full bg-primary text-on-primary flex items-center justify-center">
+                                <Check size={12} />
+                              </span>
+                            )}
+                          </div>
                         </div>
                       );
                     })
                   )}
                 </div>
+              )}
+            </div>
 
-                {/* Selected Student Highlight */}
-                {selectedStudent && (
-                  <div className="p-2.5 rounded-xl bg-card border border-primary/30 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <User size={14} className="text-primary" />
-                      <div>
-                        <span className="font-bold text-primary">{selectedStudent.name}</span>
-                        <span className="text-[11px] text-secondary font-mono ml-2">
-                          ({selectedStudent.smartId})
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-primary-subtle text-primary">
-                      {selectedStudent.plan}
-                    </span>
+            {/* Selected Student Confirmation Pill */}
+            {selectedStudent && (
+              <div className="p-3 rounded-xl bg-surface border border-primary/30 flex items-center justify-between text-xs animate-in fade-in">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-primary/15 text-primary flex items-center justify-center font-bold text-xs">
+                    {selectedStudent.name.charAt(0)}
                   </div>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-secondary">Student Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Enter student full name"
-                    value={customName}
-                    onChange={(e) => setCustomName(e.target.value)}
-                    className="mgr-input text-xs w-full h-9 rounded-xl"
-                  />
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-primary">{selectedStudent.name}</span>
+                      <span className="text-[10px] font-mono font-semibold px-1.5 py-0.2 rounded bg-primary-subtle text-primary">
+                        {selectedStudent.smartId}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-secondary mt-0.5">
+                      Target Exam: {selectedStudent.exam} · Plan: {selectedStudent.plan}
+                    </p>
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <label className="text-[11px] font-semibold text-secondary">Smart ID / Registration No</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. LIB-204 (Auto-generated if blank)"
-                    value={customSmartId}
-                    onChange={(e) => setCustomSmartId(e.target.value)}
-                    className="mgr-input text-xs w-full h-9 font-mono rounded-xl"
-                  />
-                </div>
+                <button
+                  type="button"
+                  onClick={handleClearSelected}
+                  className="text-xs text-secondary hover:text-primary underline cursor-pointer"
+                >
+                  Change
+                </button>
               </div>
             )}
           </div>
@@ -315,9 +323,9 @@ export function ManagerLockersManagementAssignModal({
             </button>
             <button
               type="submit"
-              disabled={isSubmitDisabled}
+              disabled={!selectedStudent}
               className={`mgr-btn-primary flex items-center gap-1.5 text-xs px-4 py-2 rounded-xl font-semibold shadow-xs ${
-                isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                !selectedStudent ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
               }`}
             >
               <UserPlus size={14} />
