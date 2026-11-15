@@ -176,14 +176,14 @@ export function ManagerSeatsMatrixClient() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {/* View Mode Toggle */}
             <div className="flex items-center p-1 rounded-xl bg-surface border border-border">
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
                 aria-pressed={viewMode === 'grid'}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                   viewMode === 'grid' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'
                 }`}
               >
@@ -193,7 +193,7 @@ export function ManagerSeatsMatrixClient() {
                 type="button"
                 onClick={() => setViewMode('table')}
                 aria-pressed={viewMode === 'table'}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                   viewMode === 'table' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'
                 }`}
               >
@@ -204,7 +204,7 @@ export function ManagerSeatsMatrixClient() {
             <button
               type="button"
               onClick={handleExportCsv}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-xl border border-border bg-surface hover:bg-surface-hover text-secondary hover:text-primary transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-xl border border-border bg-surface hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
             >
               <Download size={13} /> Export CSV
             </button>
@@ -212,7 +212,7 @@ export function ManagerSeatsMatrixClient() {
             <button
               type="button"
               onClick={() => setIsAddModalOpen(true)}
-              className="mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5 text-xs font-bold"
+              className="mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5 text-xs font-bold cursor-pointer"
             >
               <Plus size={14} /> Add Seat
             </button>
@@ -222,7 +222,7 @@ export function ManagerSeatsMatrixClient() {
         {/* Tier 2: Unified Search & Filter Controls Row */}
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
           {/* Universal Student / Seat Search */}
-          <div className="mgr-input-icon-wrap relative flex-1 min-w-[240px]">
+          <div className="mgr-input-icon-wrap relative flex-1 min-w-0 sm:min-w-[240px]">
             <Search size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
             <input
               type="search"

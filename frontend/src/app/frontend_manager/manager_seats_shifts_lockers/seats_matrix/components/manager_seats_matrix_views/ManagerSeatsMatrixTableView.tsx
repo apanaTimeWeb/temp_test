@@ -80,10 +80,10 @@ export function ManagerSeatsMatrixTableView({
   };
 
   return (
-    <div className="bg-card border border-border rounded-xl p-6 space-y-4">
+    <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 space-y-4 shadow-sm">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-border pb-4">
         <div>
-          <h2 className="text-xl font-bold text-primary">Seat Directory & Roster Table</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-primary">Seat Directory & Roster Table</h2>
           <p className="text-xs text-secondary mt-0.5">
             Unified tabular seat registry with instant allocation & maintenance controls
           </p>
@@ -93,8 +93,8 @@ export function ManagerSeatsMatrixTableView({
         </span>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="mgr-table w-full text-left text-sm">
+      <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+        <table className="mgr-table min-w-[680px] w-full text-left text-sm">
           <thead>
             <tr className="border-b border-border bg-floating text-secondary text-xs uppercase font-semibold">
               {renderSortableHeader('id', 'Seat ID', 'w-1/12')}

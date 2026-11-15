@@ -178,17 +178,17 @@ export function ManagerSeatsMatrixGridView({
       )}
 
       {/* Grid Container */}
-      <div className="bg-card border border-border rounded-2xl p-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-6 border-b border-border pb-4">
+      <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 shadow-sm">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 border-b border-border pb-4">
           <div>
-            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
-              <Armchair size={22} className="text-primary" /> {tManagerUi('a_wing_floor_plan')}
+            <h2 className="text-lg sm:text-xl font-bold text-primary flex items-center gap-2">
+              <Armchair size={22} className="text-primary shrink-0" /> {tManagerUi('a_wing_floor_plan')}
             </h2>
             <p className="text-xs text-secondary mt-0.5">
               Ground Floor — AC Silent Reading Hall (Interactive Multi-Shift Grid)
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold px-3 py-1 rounded-full bg-surface text-primary border border-border">
               {visibleGridSeats.length} {visibleGridSeats.length === 1 ? 'seat' : 'seats'}
             </span>
@@ -214,7 +214,7 @@ export function ManagerSeatsMatrixGridView({
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
+          <div className="grid grid-cols-2 min-[420px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2.5 sm:gap-3">
             {visibleGridSeats.map((seat) => {
               const shiftDots = computeShiftOccupancy(seat);
               const isMatch =
