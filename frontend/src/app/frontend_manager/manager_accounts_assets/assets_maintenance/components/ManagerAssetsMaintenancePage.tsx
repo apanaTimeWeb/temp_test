@@ -1,42 +1,69 @@
 'use client';
+
 import type { ManagerAssetsMaintenanceMainProps } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/types/ManagerAssetsMaintenanceTypes';
 import { getManagerAssetsMaintenanceSampleLogs } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/mocks/ManagerAssetsMaintenanceRepository';
 import { useTranslations } from 'next-intl';
 import { useManagerAssetsMaintenanceCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/assets_maintenance/hooks/useManagerAssetsMaintenanceAssetMaintenanceCurrencyFormatter';
 import { useState, useMemo } from 'react';
-import { Search, Plus, Download } from 'lucide-react';
+import {
+  Plus,
+  Download,
+  Printer,
+  Wrench,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  IndianRupee,
+  Layers,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import {
   ManagerAssetsMaintenanceTable,
   type MaintenanceSortField,
   type MaintenanceLogItem,
+  type MaintenancePriority,
+  type MaintenanceType,
 } from './ManagerAssetsMaintenanceTable';
+import { ManagerAssetsMaintenanceToolbar } from './ManagerAssetsMaintenanceToolbar';
 import { ManagerAssetsMaintenanceAddModal } from './ManagerAssetsMaintenanceAddModal';
 import { ManagerAssetsMaintenanceConfirmModal } from './ManagerAssetsMaintenanceConfirmModal';
+import { ManagerAssetsMaintenanceDetailsModal } from './ManagerAssetsMaintenanceDetailsModal';
 
-// RESPONSIBILITY: Entry page for the manager_asset_maintenance module.
+// Entry page for the manager_asset_maintenance module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-const MOCK = getManagerAssetsMaintenanceSampleLogs();
+const INITIAL_LOGS: MaintenanceLogItem[] = (
+  getManagerAssetsMaintenanceSampleLogs() as MaintenanceLogItem[]
+).map((log, idx) => ({
+  ...log,
+  priority: (['urgent', 'routine', 'emergency', 'routine', 'routine'][idx] || 'routine') as MaintenancePriority,
+  type: (['preventive', 'breakdown', 'breakdown', 'preventive', 'preventive'][idx] || 'preventive') as MaintenanceType,
+}));
 
 export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssetsMaintenanceMainProps) {
   const tManagerUi = useTranslations('manager.manager_assets_maintenance.ui');
   const formatManagerAssetMaintenanceCurrency = useManagerAssetsMaintenanceCurrencyFormatter();
-  const [logsList, setLogsList] = useState<MaintenanceLogItem[]>(MOCK as MaintenanceLogItem[]);
+
+  const [logsList, setLogsList] = useState<MaintenanceLogItem[]>(INITIAL_LOGS);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [priorityFilter, setPriorityFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [sortField, setSortField] = useState<MaintenanceSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  // Modals state
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedDetailsItem, setSelectedDetailsItem] = useState<MaintenanceLogItem | null>(null);
   const [pendingStatusTransition, setPendingStatusTransition] = useState<{
     logItem: MaintenanceLogItem;
     nextStatus: string;
   } | null>(null);
 
   const handleCreateOrder = (newLog: MaintenanceLogItem) => {
-    setLogsList([newLog, ...logsList]);
+    setLogsList((prev) => [newLog, ...prev]);
     toast.success(`Maintenance request for "${newLog.assetName}" logged successfully.`);
   };
 
@@ -51,10 +78,28 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
     if (!pendingStatusTransition) return;
     const { logItem, nextStatus } = pendingStatusTransition;
     setLogsList((prev) =>
-      prev.map((l) => (l.id === logItem.id ? { ...l, status: nextStatus as MaintenanceLogItem['status'] } : l))
+      prev.map((l) =>
+        l.id === logItem.id ? { ...l, status: nextStatus as MaintenanceLogItem['status'] } : l
+      )
     );
     toast.success(`Work order for "${logItem.assetName}" updated to ${nextStatus.toUpperCase()}!`);
     setPendingStatusTransition(null);
+  };
+
+  const handleDeleteLog = (logId: number) => {
+    const target = logsList.find((l) => l.id === logId);
+    if (!target) return;
+    setLogsList((prev) => prev.filter((l) => l.id !== logId));
+    toast.success(`Maintenance record for "${target.assetName}" has been removed.`);
+  };
+
+  const handleResetFilters = () => {
+    setStatusFilter('all');
+    setPriorityFilter('all');
+    setTypeFilter('all');
+    setSearchQuery('');
+    setPage(0);
+    toast.info('Filters have been reset to default.');
   };
 
   const toggleSort = (field: MaintenanceSortField) => {
@@ -74,23 +119,29 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
     const q = searchQuery.trim().toLowerCase();
     return logsList.filter((l) => {
       const matchStatus = statusFilter === 'all' || l.status === statusFilter;
+      const matchPriority = priorityFilter === 'all' || l.priority === priorityFilter;
+      const matchType = typeFilter === 'all' || l.type === typeFilter;
       const matchQ =
         !q ||
         l.assetName.toLowerCase().includes(q) ||
         l.issue.toLowerCase().includes(q) ||
         l.vendor.toLowerCase().includes(q);
-      return matchStatus && matchQ;
+      return matchStatus && matchPriority && matchType && matchQ;
     });
-  }, [logsList, statusFilter, searchQuery]);
+  }, [logsList, statusFilter, priorityFilter, typeFilter, searchQuery]);
 
   const sortedRows = useMemo(() => {
     if (!sortField) return visible;
     return [...visible].sort((a, b) => {
       const aVal = a[sortField];
       const bVal = b[sortField];
-      const cmp = typeof aVal === 'number' && typeof bVal === 'number'
-        ? aVal - bVal
-        : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      const cmp =
+        typeof aVal === 'number' && typeof bVal === 'number'
+          ? aVal - bVal
+          : String(aVal ?? '').localeCompare(String(bVal ?? ''), undefined, {
+              numeric: true,
+              sensitivity: 'base',
+            });
       return sortDirection === 'asc' ? cmp : -cmp;
     });
   }, [visible, sortField, sortDirection]);
@@ -101,10 +152,40 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
   };
 
   const handleExportCsv = () => {
-    const headers = ['Asset Name', 'Issue', 'Reported Date', 'Scheduled Date', 'Vendor', 'Cost (INR)', 'Status'].map(escapeCsv).join(',');
+    const headers = [
+      'Ticket ID',
+      'Asset Name',
+      'Priority',
+      'Type',
+      'Issue',
+      'Reported Date',
+      'Scheduled Date',
+      'Vendor',
+      'Cost (INR)',
+      'Status',
+    ]
+      .map(escapeCsv)
+      .join(',');
+
     const rows = sortedRows
-      .map((l) => [l.assetName, l.issue, l.reportedDate, l.scheduledDate, l.vendor, l.cost, l.status].map(escapeCsv).join(','))
+      .map((l) =>
+        [
+          l.id,
+          l.assetName,
+          l.priority || 'routine',
+          l.type || 'preventive',
+          l.issue,
+          l.reportedDate,
+          l.scheduledDate,
+          l.vendor,
+          (l.cost / 100).toFixed(2),
+          l.status,
+        ]
+          .map(escapeCsv)
+          .join(',')
+      )
       .join('\r\n');
+
     const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const anchor = Object.assign(document.createElement('a'), {
@@ -135,96 +216,188 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
 
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id}>
-      <div className="flex items-center justify-between">
+      {/* Header with Title and Action Buttons */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="fin-page-title">{tManagerUi('asset_maintenance')}</h1>
-          <p className="fin-page-subtitle">{tManagerUi('review_the_sample_maintenance_register_updates_are_unava_163c7f')}</p>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-primary">
+            {tManagerUi('asset_maintenance')}
+          </h1>
+          <p className="text-xs sm:text-sm text-secondary mt-1">
+            Schedule, monitor, and resolve society maintenance tickets and vendor work orders.
+          </p>
         </div>
-        <div className="flex items-center gap-2">
+
+        {/* Action Buttons: Print, Export CSV, Add Modal */}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+            title="Print Maintenance Register"
+          >
+            <Printer size={14} />
+            <span>Print Report</span>
+          </button>
+
           <button
             type="button"
             onClick={handleExportCsv}
-            className="mgr-btn-ghost flex items-center gap-1.5 text-xs font-semibold"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
             title="Export Maintenance Register as CSV"
           >
-            <Download size={14} /> Export CSV
+            <Download size={14} />
+            <span>Export CSV</span>
           </button>
+
           <button
             type="button"
             onClick={() => setIsAddModalOpen(true)}
-            className="mgr-btn-primary flex items-center gap-1.5 text-xs font-semibold"
+            style={{
+              boxShadow: '0 0 16px rgba(99, 102, 241, 0.4)',
+              backgroundColor: '#6366f1',
+              borderColor: '#818cf8',
+            }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-white border hover:opacity-95 transition-all cursor-pointer"
           >
-            <Plus size={14} /> Log Maintenance Request
+            <Plus size={14} />
+            <span>Log Maintenance Request</span>
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="fin-kpi-card fin-kpi-card--warning">
-          <p className="fin-kpi-label fin-kpi-label--warning">{tManagerUi('pending')}</p>
-          <p className="fin-kpi-value fin-kpi-value--warning">{logsList.filter((l) => l.status === 'pending').length}</p>
+      {/* KPI Overview Summary Cards (Clean Display Cards, NOT Interlinked Toggle Buttons) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Total Tickets Overview */}
+        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center justify-between">
+          <div>
+            <p className="text-xs font-semibold text-secondary uppercase tracking-wider">
+              Total Work Orders
+            </p>
+            <p className="text-2xl font-bold text-primary mt-1">{logsList.length}</p>
+            <span className="text-[11px] text-secondary font-medium">Registered service logs</span>
+          </div>
+          <div className="w-11 h-11 rounded-xl bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0">
+            <Layers size={22} />
+          </div>
         </div>
-        <div className="fin-kpi-card">
-          <p className="fin-kpi-label fin-text-info">{tManagerUi('in_progress')}</p>
-          <p className="fin-kpi-value fin-text-info">{logsList.filter((l) => l.status === 'in-progress').length}</p>
+
+        {/* Pending Tickets Overview */}
+        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center justify-between">
+          <div>
+            <p className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
+              {tManagerUi('pending')}
+            </p>
+            <p className="text-2xl font-bold text-amber-400 mt-1">{pendingCount}</p>
+            <span className="text-[11px] text-secondary font-medium">Awaiting service start</span>
+          </div>
+          <div className="w-11 h-11 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
+            <Clock size={22} />
+          </div>
         </div>
-        <div className="fin-kpi-card">
-          <p className="fin-kpi-label fin-text-success">{tManagerUi('completed')}</p>
-          <p className="fin-kpi-value fin-text-success">{logsList.filter((l) => l.status === 'completed').length}</p>
+
+        {/* In-Progress Tickets Overview */}
+        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center justify-between">
+          <div>
+            <p className="text-xs font-semibold text-sky-400 uppercase tracking-wider">
+              {tManagerUi('in_progress')}
+            </p>
+            <p className="text-2xl font-bold text-sky-400 mt-1">{inProgressCount}</p>
+            <span className="text-[11px] text-secondary font-medium">Under active technician repair</span>
+          </div>
+          <div className="w-11 h-11 rounded-xl bg-sky-500/15 text-sky-400 border border-sky-500/30 flex items-center justify-center shrink-0">
+            <Wrench size={22} />
+          </div>
         </div>
-        <div className="fin-kpi-card fin-kpi-card--danger">
-          <p className="fin-kpi-label fin-kpi-label--danger">{tManagerUi('total_cost')}</p>
-          <p className="fin-kpi-value fin-kpi-value--danger">{formatManagerAssetMaintenanceCurrency(totalCost)}</p>
+
+        {/* Completed & Cost Overview */}
+        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center justify-between">
+          <div>
+            <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+              {tManagerUi('completed')} ({completedCount})
+            </p>
+            <p className="text-2xl font-bold text-emerald-400 mt-1">
+              {formatManagerAssetMaintenanceCurrency(totalCost)}
+            </p>
+            <span className="text-[11px] text-secondary font-medium">Total settled repair cost</span>
+          </div>
+          <div className="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
+            <CheckCircle2 size={22} />
+          </div>
         </div>
       </div>
 
-      <div className="fin-card p-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-semibold text-primary">Maintenance Work Orders & Status Resolution</h3>
-          <span className="text-xs text-secondary">{logsList.length} Total Service Tickets</span>
+      {/* Progress Resolution Visualizer */}
+      <div className="p-4 rounded-2xl bg-card border border-border shadow-xs space-y-2.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+          <h3 className="text-xs sm:text-sm font-semibold text-primary">
+            Maintenance Work Orders & Status Resolution
+          </h3>
+          <span className="text-xs text-secondary font-medium">
+            {logsList.length} Total Service Tickets Recorded
+          </span>
         </div>
         <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-surface-highlight">
-          <div style={{ width: `${completedPct}%` }} className="bg-success h-full transition-all duration-300" title={`Completed (${completedPct}%)`} />
-          <div style={{ width: `${inProgressPct}%` }} className="bg-info h-full transition-all duration-300" title={`In Progress (${inProgressPct}%)`} />
-          <div style={{ width: `${pendingPct}%` }} className="bg-warning h-full transition-all duration-300" title={`Pending (${pendingPct}%)`} />
-        </div>
-        <div className="flex flex-wrap gap-4 mt-3 text-xs text-secondary">
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-success" /> Completed ({completedPct}%)</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-info" /> In Progress ({inProgressPct}%)</span>
-          <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-warning" /> Pending ({pendingPct}%)</span>
-        </div>
-      </div>
-
-      <div className="fin-filter-bar flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[200px]">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-          <input
-            type="search"
-            placeholder="Search asset, issue, or vendor..."
-            className="mgr-input pl-8 text-xs w-full"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setPage(0);
-            }}
+          <div
+            style={{ width: `${completedPct}%` }}
+            className="bg-emerald-500 h-full transition-all duration-300"
+            title={`Completed (${completedPct}%)`}
+          />
+          <div
+            style={{ width: `${inProgressPct}%` }}
+            className="bg-sky-500 h-full transition-all duration-300"
+            title={`In Progress (${inProgressPct}%)`}
+          />
+          <div
+            style={{ width: `${pendingPct}%` }}
+            className="bg-amber-500 h-full transition-all duration-300"
+            title={`Pending (${pendingPct}%)`}
           />
         </div>
-        <select
-          className="fin-select w-44"
-          value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setPage(0);
-          }}
-          aria-label={tManagerUi('all_status')}
-        >
-          <option value="all">{tManagerUi('all_status')}</option>
-          <option value="pending">{tManagerUi('pending')}</option>
-          <option value="in-progress">{tManagerUi('in_progress')}</option>
-          <option value="completed">{tManagerUi('completed')}</option>
-        </select>
+        <div className="flex flex-wrap gap-4 text-xs text-secondary pt-1">
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Completed ({completedPct}%)
+          </span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-sky-500" /> In Progress ({inProgressPct}%)
+          </span>
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Pending ({pendingPct}%)
+          </span>
+        </div>
       </div>
 
+      {/* Interactive Toolbar with Glowing Filter Pills and Non-overlapping Search */}
+      <ManagerAssetsMaintenanceToolbar
+        statusFilter={statusFilter}
+        onStatusChange={(newStatus) => {
+          setStatusFilter(newStatus);
+          setPage(0);
+        }}
+        searchQuery={searchQuery}
+        onSearchChange={(newQuery) => {
+          setSearchQuery(newQuery);
+          setPage(0);
+        }}
+        priorityFilter={priorityFilter}
+        onPriorityChange={(newPriority) => {
+          setPriorityFilter(newPriority);
+          setPage(0);
+        }}
+        typeFilter={typeFilter}
+        onTypeChange={(newType) => {
+          setTypeFilter(newType);
+          setPage(0);
+        }}
+        counts={{
+          all: logsList.length,
+          pending: pendingCount,
+          inProgress: inProgressCount,
+          completed: completedCount,
+        }}
+        onResetFilters={handleResetFilters}
+      />
+
+      {/* Maintenance Records Table */}
       <ManagerAssetsMaintenanceTable
         paginated={paginated}
         totalRows={totalRows}
@@ -235,6 +408,8 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         onToggleSort={toggleSort}
         formatCurrency={formatManagerAssetMaintenanceCurrency}
         onUpdateStatus={handleRequestUpdateStatus}
+        onViewDetails={(item) => setSelectedDetailsItem(item)}
+        onDeleteLog={handleDeleteLog}
         page={page}
         pageSize={pageSize}
         pageCount={pageCount}
@@ -245,10 +420,7 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         }}
       />
 
-      <p className="fin-input-hint fin-text-warning" role="status" data-testid="manager-accounting-maintenance-contract-warning">
-        {tManagerUi('sample_data_only_creating_maintenance_logs_or_completing_cfeb24')}
-      </p>
-
+      {/* Modals */}
       <ManagerAssetsMaintenanceAddModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
@@ -261,6 +433,14 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         nextStatus={pendingStatusTransition?.nextStatus ?? null}
         onConfirm={handleConfirmUpdateStatus}
         onCancel={() => setPendingStatusTransition(null)}
+      />
+
+      <ManagerAssetsMaintenanceDetailsModal
+        isOpen={Boolean(selectedDetailsItem)}
+        logItem={selectedDetailsItem}
+        formatCurrency={formatManagerAssetMaintenanceCurrency}
+        onClose={() => setSelectedDetailsItem(null)}
+        onAdvanceStatus={handleRequestUpdateStatus}
       />
     </div>
   );

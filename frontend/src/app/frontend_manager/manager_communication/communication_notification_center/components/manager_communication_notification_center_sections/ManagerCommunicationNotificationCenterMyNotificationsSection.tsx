@@ -27,6 +27,9 @@ interface SystemNotificationItem {
   badgeClass: string;
   iconBox: string;
   activeFill: string;
+  activeBg?: string;
+  activeBorder?: string;
+  activeGlow?: string;
   tag: string;
   category: 'admissions' | 'maintenance' | 'security';
   isRead: boolean;
