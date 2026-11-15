@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Bell, RotateCcw, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { MessageCircle, RotateCcw, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
 import { ManagerFinanceAutoSuspendEmptyState } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/components/manager_finance_auto_suspend_empty_states/ManagerFinanceAutoSuspendEmptyState';
 
@@ -25,6 +25,7 @@ export interface ManagerFinanceAutoSuspendTableProps {
   onNextPage: () => void;
   onSendReminder: (student: SuspendedStudent) => void;
   onRestoreStudent: (student: SuspendedStudent) => void;
+  remindedStudents?: Record<number, string>;
   shiftLabels: Record<string, string>;
   labels: {
     student: string;
@@ -58,6 +59,7 @@ export default function ManagerFinanceAutoSuspendTable({
   onNextPage,
   onSendReminder,
   onRestoreStudent,
+  remindedStudents = {},
   shiftLabels,
   labels,
 }: ManagerFinanceAutoSuspendTableProps) {
@@ -141,11 +143,15 @@ export default function ManagerFinanceAutoSuspendTable({
                     <button
                       type="button"
                       onClick={() => onSendReminder(s)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
-                      title={`Send reminder to ${s.studentName}`}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95 ${
+                        remindedStudents[s.id]
+                          ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                          : 'border-emerald-500/20 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                      }`}
+                      title={remindedStudents[s.id] ? `WhatsApp notice sent at ${remindedStudents[s.id]}` : `Send WhatsApp notice to ${s.studentName}`}
                     >
-                      <Bell size={13} className="text-amber-500" />
-                      <span>{labels.sendReminder}</span>
+                      <MessageCircle size={13} className="text-emerald-500" />
+                      <span>{remindedStudents[s.id] ? 'Reminded ✓' : 'WhatsApp'}</span>
                     </button>
                     <button
                       type="button"

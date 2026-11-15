@@ -8,19 +8,27 @@ import type { ManagerFinanceAutoSuspendConfig as Config, ManagerFinanceAutoSuspe
 import { Settings, Ban, RotateCcw, UserCheck, ShieldAlert, Search, X, Download, Printer } from 'lucide-react';
 import type { ManagerFinanceAutoSuspendRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendComponentTypes';
 import ManagerFinanceAutoSuspendTable, { type SuspendSortField } from './ManagerFinanceAutoSuspendTable';
+import ManagerFinanceAutoSuspendWhatsAppModal from './ManagerFinanceAutoSuspendWhatsAppModal';
 
 export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanceAutoSuspendRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_auto_suspend.ui');
   const config: Config = MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG;
   const [suspended, setSuspended] = useState<SuspendedStudent[]>([...MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS]);
+  const [selectedWhatsAppStudent, setSelectedWhatsAppStudent] = useState<SuspendedStudent | null>(null);
+  const [remindedStudents, setRemindedStudents] = useState<Record<number, string>>({});
 
   const handleRestoreStudent = (student: SuspendedStudent) => {
     setSuspended((prev) => prev.filter((item) => item.id !== student.id));
     toast.success(`Student ${student.studentName} (${student.smartId}) restored and dues cleared!`);
   };
 
-  const handleSendReminder = (student: SuspendedStudent) => {
-    toast.success(`Overdue reminder dispatched to ${student.studentName} for Seat ${student.seat}!`);
+  const handleOpenWhatsAppReminder = (student: SuspendedStudent) => {
+    setSelectedWhatsAppStudent(student);
+  };
+
+  const handleWhatsAppSentSuccess = (studentId: number) => {
+    const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    setRemindedStudents((prev) => ({ ...prev, [studentId]: timeStr }));
   };
 
   const handlePrint = () => {
@@ -366,8 +374,9 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
             }}
             onPrevPage={() => setPage((c) => Math.max(0, c - 1))}
             onNextPage={() => setPage((c) => Math.min(pageCount - 1, c + 1))}
-            onSendReminder={handleSendReminder}
+            onSendReminder={handleOpenWhatsAppReminder}
             onRestoreStudent={handleRestoreStudent}
+            remindedStudents={remindedStudents}
             shiftLabels={shiftLabels}
             labels={{
               student: tManagerUi('student'),
@@ -384,6 +393,14 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
           />
         </div>
       </div>
+
+      {/* WhatsApp Overdue Reminder Modal */}
+      <ManagerFinanceAutoSuspendWhatsAppModal
+        isOpen={Boolean(selectedWhatsAppStudent)}
+        student={selectedWhatsAppStudent}
+        onClose={() => setSelectedWhatsAppStudent(null)}
+        onSentSuccess={handleWhatsAppSentSuccess}
+      />
     </div>
   );
 }
