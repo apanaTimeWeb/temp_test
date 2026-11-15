@@ -1,5 +1,19 @@
 'use client';
-import { Trash2, User, Phone } from 'lucide-react';
+import {
+  Trash2,
+  User,
+  Phone,
+  GraduationCap,
+  Calendar,
+  Building2,
+  UserCheck,
+  ShieldCheck,
+  MapPin,
+  Clock,
+  CreditCard,
+  Wallet,
+  Droplet,
+} from 'lucide-react';
 import type { GroupStudentEntry } from './ManagerMembersGroupAdmissionManualModal';
 
 interface ManagerMembersGroupAdmissionCardViewProps {
@@ -22,7 +36,7 @@ export function ManagerMembersGroupAdmissionCardView({
       {manualRows.map((row, index) => (
         <div
           key={row.id}
-          className="p-4 rounded-xl border border-border bg-card shadow-xs space-y-3 relative hover:border-primary transition-colors"
+          className="p-3.5 sm:p-4 rounded-xl border border-border bg-card shadow-xs space-y-3 relative hover:border-primary transition-colors"
         >
           <div className="flex items-center justify-between border-b border-border pb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-2">
@@ -35,25 +49,36 @@ export function ManagerMembersGroupAdmissionCardView({
               type="button"
               onClick={() => removeStudent(index)}
               disabled={manualRows.length <= 1}
-              className="text-danger hover:text-danger-text text-xs flex items-center gap-1 disabled:opacity-30"
+              className="text-danger hover:text-danger-text text-xs flex items-center gap-1.5 disabled:opacity-30 p-1 rounded transition-colors"
             >
-              <Trash2 size={14} /> Remove Form
+              <Trash2 size={14} className="text-danger shrink-0" />
+              <span>Remove Form</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5">
             <div>
               <label className="text-xs font-medium text-secondary block mb-1">Full Name *</label>
               <div className="mgr-input-icon-wrap">
                 <User size={15} className="mgr-input-icon text-secondary" />
                 <input
                   type="text"
+                  maxLength={50}
                   className="mgr-input mgr-input-with-icon text-xs"
                   placeholder="e.g. Ramesh Kumar"
                   value={row.name}
-                  onChange={(e) => updateStudent(index, 'name', e.target.value)}
+                  onChange={(e) =>
+                    updateStudent(
+                      index,
+                      'name',
+                      e.target.value.replace(/[^a-zA-Z\s.-]/g, '').slice(0, 50)
+                    )
+                  }
                 />
               </div>
+              {row.name.length > 0 && row.name.trim().length < 2 && (
+                <p className="text-[11px] text-danger mt-1">Min 2 letters required</p>
+              )}
             </div>
 
             <div>
@@ -62,13 +87,25 @@ export function ManagerMembersGroupAdmissionCardView({
                 <Phone size={15} className="mgr-input-icon text-secondary" />
                 <input
                   type="tel"
+                  inputMode="numeric"
+                  pattern="[6-9][0-9]{9}"
                   maxLength={10}
                   className="mgr-input mgr-input-with-icon text-xs font-mono"
-                  placeholder="10-digit mobile"
+                  placeholder="10-digit mobile (6-9)"
                   value={row.phone}
-                  onChange={(e) => updateStudent(index, 'phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                  onChange={(e) =>
+                    updateStudent(index, 'phone', e.target.value.replace(/\D/g, '').slice(0, 10))
+                  }
                 />
               </div>
+              {row.phone.length > 0 && !/^[6-9]/.test(row.phone) && (
+                <p className="text-[11px] text-danger mt-1">Must start with 6, 7, 8, or 9</p>
+              )}
+              {row.phone.length > 0 && /^[6-9]/.test(row.phone) && row.phone.length < 10 && (
+                <p className="text-[11px] text-danger mt-1">
+                  {10 - row.phone.length} more digit(s) needed (10 total)
+                </p>
+              )}
             </div>
 
             <div>
@@ -88,10 +125,11 @@ export function ManagerMembersGroupAdmissionCardView({
               <label className="text-xs font-medium text-secondary block mb-1">Target Exam (Optional)</label>
               <input
                 type="text"
+                maxLength={60}
                 className="mgr-input text-xs"
                 placeholder="e.g. UPSC / NEET"
                 value={row.preparationFor}
-                onChange={(e) => updateStudent(index, 'preparationFor', e.target.value)}
+                onChange={(e) => updateStudent(index, 'preparationFor', e.target.value.slice(0, 60))}
               />
             </div>
 
@@ -129,6 +167,8 @@ export function ManagerMembersGroupAdmissionCardView({
               <label className="text-xs font-medium text-secondary block mb-1">Date of Birth (Optional)</label>
               <input
                 type="date"
+                max={new Date().toISOString().split('T')[0]}
+                min="1950-01-01"
                 className="mgr-input text-xs"
                 value={row.dob || ''}
                 onChange={(e) => updateStudent(index, 'dob', e.target.value)}
@@ -153,10 +193,11 @@ export function ManagerMembersGroupAdmissionCardView({
               <label className="text-xs font-medium text-secondary block mb-1">College / Institute (Optional)</label>
               <input
                 type="text"
+                maxLength={80}
                 className="mgr-input text-xs"
                 placeholder="e.g. Delhi University"
                 value={row.college || ''}
-                onChange={(e) => updateStudent(index, 'college', e.target.value)}
+                onChange={(e) => updateStudent(index, 'college', e.target.value.slice(0, 80))}
               />
             </div>
 
@@ -164,10 +205,17 @@ export function ManagerMembersGroupAdmissionCardView({
               <label className="text-xs font-medium text-secondary block mb-1">Guardian Full Name (Optional)</label>
               <input
                 type="text"
+                maxLength={50}
                 className="mgr-input text-xs"
                 placeholder="Father / Mother Name"
                 value={row.guardianName || ''}
-                onChange={(e) => updateStudent(index, 'guardianName', e.target.value)}
+                onChange={(e) =>
+                  updateStudent(
+                    index,
+                    'guardianName',
+                    e.target.value.replace(/[^a-zA-Z\s.-]/g, '').slice(0, 50)
+                  )
+                }
               />
             </div>
 
@@ -175,12 +223,34 @@ export function ManagerMembersGroupAdmissionCardView({
               <label className="text-xs font-medium text-secondary block mb-1">Guardian Phone *</label>
               <input
                 type="tel"
+                inputMode="numeric"
+                pattern="[6-9][0-9]{9}"
                 maxLength={10}
-                className="mgr-input text-xs font-mono"
-                placeholder="10-digit mobile"
+                className={`mgr-input text-xs font-mono ${
+                  row.guardianPhone.length > 0 &&
+                  (!/^[6-9]/.test(row.guardianPhone) ||
+                    row.guardianPhone.length < 10 ||
+                    (row.guardianPhone === row.phone && row.phone.length === 10))
+                    ? 'border-danger focus:border-danger'
+                    : ''
+                }`}
+                placeholder="10-digit mobile (6-9)"
                 value={row.guardianPhone}
-                onChange={(e) => updateStudent(index, 'guardianPhone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                onChange={(e) =>
+                  updateStudent(index, 'guardianPhone', e.target.value.replace(/\D/g, '').slice(0, 10))
+                }
               />
+              {row.guardianPhone.length > 0 && !/^[6-9]/.test(row.guardianPhone) && (
+                <p className="text-[11px] text-danger mt-1">Must start with 6, 7, 8, or 9</p>
+              )}
+              {row.guardianPhone.length > 0 && /^[6-9]/.test(row.guardianPhone) && row.guardianPhone.length < 10 && (
+                <p className="text-[11px] text-danger mt-1">
+                  {10 - row.guardianPhone.length} more digit(s) needed
+                </p>
+              )}
+              {row.guardianPhone.length === 10 && row.phone.length === 10 && row.guardianPhone === row.phone && (
+                <p className="text-[11px] text-danger mt-1">Guardian number cannot be same as student mobile</p>
+              )}
             </div>
 
             <div>
@@ -199,10 +269,11 @@ export function ManagerMembersGroupAdmissionCardView({
               <label className="text-xs font-medium text-secondary block mb-1">Residential Address (Optional)</label>
               <input
                 type="text"
+                maxLength={150}
                 className="mgr-input text-xs"
                 placeholder="Flat / Room, Street, Landmark, City"
                 value={row.address || ''}
-                onChange={(e) => updateStudent(index, 'address', e.target.value)}
+                onChange={(e) => updateStudent(index, 'address', e.target.value.slice(0, 150))}
               />
             </div>
           </div>

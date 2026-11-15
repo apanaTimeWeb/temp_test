@@ -108,27 +108,74 @@ export function ManagerMembersGroupAdmissionManualModal({
   };
 
   const handleConfirm = () => {
-    const valid = manualRows.filter((r) => r.name.trim().length > 0 && r.phone.trim().length >= 10);
-    if (valid.length === 0) {
-      toast.error('Please fill at least one student name and a valid 10-digit phone number.');
+    if (manualRows.length === 0) {
+      toast.error('At least one student application is required.');
       return;
     }
-    onConfirm(batchName.trim() || 'Co-Study Group Batch', valid);
+
+    const seenPhones = new Set<string>();
+
+    for (let i = 0; i < manualRows.length; i++) {
+      const row = manualRows[i];
+      if (!row) continue;
+      const rowNum = i + 1;
+      const trimmedName = row.name.trim();
+
+      if (!trimmedName || trimmedName.length < 2) {
+        toast.error(`Student #${rowNum}: Please enter a valid full name (minimum 2 letters).`);
+        return;
+      }
+
+      const phone = row.phone.trim();
+      if (!phone || phone.length !== 10 || !/^[6-9]\d{9}$/.test(phone)) {
+        toast.error(
+          `Student #${rowNum} (${trimmedName}): Mobile number must be exactly 10 digits starting with 6, 7, 8, or 9.`
+        );
+        return;
+      }
+
+      if (seenPhones.has(phone)) {
+        toast.error(
+          `Duplicate mobile number detected: Student #${rowNum} has the same phone number (${phone}) as another student in this batch.`
+        );
+        return;
+      }
+      seenPhones.add(phone);
+
+      const guardianPhone = row.guardianPhone.trim();
+      if (guardianPhone.length > 0) {
+        if (guardianPhone.length !== 10 || !/^[6-9]\d{9}$/.test(guardianPhone)) {
+          toast.error(
+            `Student #${rowNum} (${trimmedName}): Guardian phone must be a valid 10-digit number starting with 6, 7, 8, or 9.`
+          );
+          return;
+        }
+
+        if (guardianPhone === phone) {
+          toast.error(
+            `Student #${rowNum} (${trimmedName}): Guardian phone cannot be the same as the student's mobile number.`
+          );
+          return;
+        }
+      }
+    }
+
+    onConfirm(batchName.trim() || 'Co-Study Group Batch', manualRows);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
-      <div className="w-full max-w-4xl rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-5 max-h-[92vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-2 sm:p-4" role="dialog" aria-modal="true">
+      <div className="w-full max-w-4xl rounded-2xl border border-border bg-card p-3.5 sm:p-5 md:p-6 shadow-dialog space-y-4 max-h-[94vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-border pb-3 shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-3 shrink-0">
           <div>
-            <h2 className="text-xl font-bold text-primary flex items-center gap-2">
-              <Users2 size={22} className="text-primary" />
+            <h2 className="text-lg sm:text-xl font-bold text-primary flex items-center gap-2">
+              <Users2 size={22} className="text-primary shrink-0" />
               <span>Manual Group Admission Application</span>
             </h2>
             <p className="text-xs text-secondary mt-0.5">Physical admission form simulation for batch/group enrollments</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-3">
             <div className="flex bg-floating p-1 rounded-lg border border-border text-xs">
               <button
                 type="button"
@@ -149,22 +196,23 @@ export function ManagerMembersGroupAdmissionManualModal({
                 <SlidersHorizontal size={13} /> Compact Roster
               </button>
             </div>
-            <button type="button" onClick={onClose} className="text-secondary hover:text-primary" aria-label="Close modal">
+            <button type="button" onClick={onClose} className="text-secondary hover:text-primary p-1 rounded" aria-label="Close modal">
               <X size={20} />
             </button>
           </div>
         </div>
 
         {/* Batch Info */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0 bg-surface-highlight p-3.5 rounded-xl border border-border">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 shrink-0 bg-surface-highlight p-3 sm:p-3.5 rounded-xl border border-border">
           <div className="sm:col-span-2">
             <label className="text-xs font-semibold text-primary block mb-1">Group / Coaching Batch Reference</label>
             <input
               type="text"
+              maxLength={80}
               className="mgr-input text-xs"
               placeholder="e.g. Drishti IAS Prelims Batch / SSC CGL Study Circle"
               value={batchName}
-              onChange={(e) => setBatchName(e.target.value)}
+              onChange={(e) => setBatchName(e.target.value.slice(0, 80))}
             />
           </div>
           <div>
@@ -198,15 +246,15 @@ export function ManagerMembersGroupAdmissionManualModal({
         </div>
 
         {/* Footer */}
-        <div className="flex justify-between items-center shrink-0 pt-3 border-t border-border">
-          <button type="button" onClick={addStudent} className="mgr-btn-ghost flex items-center gap-1.5 text-xs font-semibold">
+        <div className="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3 shrink-0 pt-3 border-t border-border">
+          <button type="button" onClick={addStudent} className="mgr-btn-ghost flex items-center justify-center gap-1.5 text-xs font-semibold py-2">
             <Plus size={15} /> Add Another Student Application
           </button>
-          <div className="flex gap-3">
-            <button type="button" onClick={onClose} className="mgr-btn-ghost text-xs">
+          <div className="flex gap-2 sm:gap-3">
+            <button type="button" onClick={onClose} className="mgr-btn-ghost text-xs flex-1 sm:flex-initial py-2 px-3">
               Cancel
             </button>
-            <button type="button" onClick={handleConfirm} className="mgr-btn-primary flex items-center gap-2 text-xs">
+            <button type="button" onClick={handleConfirm} className="mgr-btn-primary flex items-center justify-center gap-2 text-xs flex-1 sm:flex-initial py-2 px-3">
               <CheckCircle2 size={16} /> Complete & Register Group ({manualRows.length})
             </button>
           </div>

@@ -70,5 +70,124 @@ describe('Manager Members Group Admission Audit Regression Tests', () => {
     const content = readFileSync(urlConfigPath, 'utf8');
     expect(content).not.toContain('COLLECT_FEE_FOR_STUDENT');
   });
+
+  it('validates negative scenarios: rejects invalid phone, negative discount, negative amount, and invalid names', () => {
+    // Phone with letters
+    expect(
+      ManagerMembersGroupAdmissionAdmissionSchema.safeParse({
+        fullName: 'Rahul Sharma',
+        phone: '98765abcd0',
+        shift: 'Morning',
+        seat: 'S-01',
+        plan: 'Pro Monthly',
+        manualDiscount: '0',
+        amountPaid: '1500',
+      }).success
+    ).toBe(false);
+
+    // Phone with 9 digits (too short)
+    expect(
+      ManagerMembersGroupAdmissionAdmissionSchema.safeParse({
+        fullName: 'Rahul Sharma',
+        phone: '987654321',
+        shift: 'Morning',
+        seat: 'S-01',
+        plan: 'Pro Monthly',
+        manualDiscount: '0',
+        amountPaid: '1500',
+      }).success
+    ).toBe(false);
+
+    // Phone starting with 5 (invalid Indian mobile)
+    expect(
+      ManagerMembersGroupAdmissionAdmissionSchema.safeParse({
+        fullName: 'Rahul Sharma',
+        phone: '5876543210',
+        shift: 'Morning',
+        seat: 'S-01',
+        plan: 'Pro Monthly',
+        manualDiscount: '0',
+        amountPaid: '1500',
+      }).success
+    ).toBe(false);
+
+    // Negative manual discount
+    expect(
+      ManagerMembersGroupAdmissionAdmissionSchema.safeParse({
+        fullName: 'Rahul Sharma',
+        phone: '9876543210',
+        shift: 'Morning',
+        seat: 'S-01',
+        plan: 'Pro Monthly',
+        manualDiscount: '-100',
+        amountPaid: '1500',
+      }).success
+    ).toBe(false);
+
+    // Negative / zero amount paid
+    expect(
+      ManagerMembersGroupAdmissionAdmissionSchema.safeParse({
+        fullName: 'Rahul Sharma',
+        phone: '9876543210',
+        shift: 'Morning',
+        seat: 'S-01',
+        plan: 'Pro Monthly',
+        manualDiscount: '0',
+        amountPaid: '-500',
+      }).success
+    ).toBe(false);
+
+    // Invalid full name with numbers
+    expect(
+      ManagerMembersGroupAdmissionAdmissionSchema.safeParse({
+        fullName: 'Rahul123',
+        phone: '9876543210',
+        shift: 'Morning',
+        seat: 'S-01',
+        plan: 'Pro Monthly',
+        manualDiscount: '0',
+        amountPaid: '1500',
+      }).success
+    ).toBe(false);
+  });
+
+  it('ensures mobile input fields restrict input to digits only with maxLength 10 and numeric keypad', () => {
+    const cardViewContent = readFileSync(
+      join(__dirname, '../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionCardView.tsx'),
+      'utf8'
+    );
+    expect(cardViewContent).toContain('inputMode="numeric"');
+    expect(cardViewContent).toContain('maxLength={10}');
+    expect(cardViewContent).toContain('.replace(/\\D/g, \'\').slice(0, 10)');
+
+    const tableViewContent = readFileSync(
+      join(__dirname, '../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionTableView.tsx'),
+      'utf8'
+    );
+    expect(tableViewContent).toContain('inputMode="numeric"');
+    expect(tableViewContent).toContain('maxLength={10}');
+    expect(tableViewContent).toContain('.replace(/\\D/g, \'\').slice(0, 10)');
+  });
+
+  it('ensures responsive classes exist for mobile, tablet, and laptop views', () => {
+    const groupPageContent = readFileSync(
+      join(__dirname, '../components/manager_members_group_admission_views/ManagerMembersGroupAdmissionGroupPage.tsx'),
+      'utf8'
+    );
+    expect(groupPageContent).toContain('grid-cols-1 md:grid-cols-2');
+
+    const manualModalContent = readFileSync(
+      join(__dirname, '../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionManualModal.tsx'),
+      'utf8'
+    );
+    expect(manualModalContent).toContain('grid-cols-1 sm:grid-cols-3');
+
+    const tableViewContent = readFileSync(
+      join(__dirname, '../components/manager_members_group_admission_forms/ManagerMembersGroupAdmissionTableView.tsx'),
+      'utf8'
+    );
+    expect(tableViewContent).toContain('overflow-x-auto');
+    expect(tableViewContent).toContain('min-w-[720px]');
+  });
 });
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const ManagerMembersGroupAdmissionAdmissionSchema = z.object({
-  fullName: z.string().trim().min(2, 'Full name is required'),
+  fullName: z.string().trim().min(2, 'Full name is required').max(50, 'Full name cannot exceed 50 characters').regex(/^[a-zA-Z\s.-]+$/, 'Full name can only contain letters, spaces, hyphens, and periods'),
   phone: z.string().trim().regex(/^[6-9]\d{9}$/, 'Must be a valid 10-digit mobile number starting with 6-9'),
   shift: z.string().min(1, 'Select a shift'),
   seat: z.string().min(1, 'Select a seat'),

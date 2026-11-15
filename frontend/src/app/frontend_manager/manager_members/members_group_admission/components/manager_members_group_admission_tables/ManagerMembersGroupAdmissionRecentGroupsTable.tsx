@@ -82,25 +82,26 @@ export function ManagerMembersGroupAdmissionRecentGroupsTable({
   };
 
   return (
-    <div className="mgr-card p-6 mt-8">
+    <div className="mgr-card p-4 sm:p-6 mt-6 sm:mt-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
         <div>
-          <h3 className="font-bold text-lg text-primary">{tManagerUi('recent_group_admissions')}</h3>
+          <h3 className="font-bold text-base sm:text-lg text-primary">{tManagerUi('recent_group_admissions')}</h3>
           <span className="text-xs text-secondary">{recentGroups.length} batches enrolled</span>
         </div>
-        <div className="relative w-full sm:w-64">
+        <div className="relative w-full sm:w-72">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
           <input
             type="search"
+            maxLength={80}
             placeholder="Search batch name, ID, or shift..."
             className="mgr-input pl-8 text-xs w-full"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value.slice(0, 80))}
           />
         </div>
       </div>
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto w-full">
+        <table className="w-full text-xs sm:text-sm min-w-[640px]">
           <thead>
             <tr className="border-b border-border bg-surface-highlight text-xs text-secondary uppercase font-semibold text-left">
               {renderSortableHeader('batchId', 'Batch ID')}
@@ -142,11 +143,11 @@ export function ManagerMembersGroupAdmissionRecentGroupsTable({
         </table>
       </div>
       {totalRows > 0 && (
-        <div className="border-t border-border mt-4 pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-secondary">
+        <div className="border-t border-border mt-4 pt-3 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-secondary">
           <span>
             Showing {startItem}–{endItem} of {totalRows} batch records
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <div className="flex items-center gap-1.5">
               <label htmlFor="group-admissions-rows-per-page" className="text-xs text-secondary whitespace-nowrap">
                 Rows per page:

@@ -145,7 +145,7 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
       
       
     >
-      <div className="mgr-page-header">
+      <div className="mgr-page-header flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <Link href={MANAGER_MEMBERS_GROUP_ADMISSION_ROUTES.LIST} className="mgr-back-link">
             {tManagerUi('back_to_students')}
@@ -153,12 +153,12 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
           <h1 className="mgr-page-title">{tManagerUi('group_admission')}</h1>
           <p className="mgr-page-subtitle">Batch admission for study groups, coaching batches, and institution groups with special group pricing.</p>
         </div>
-        <div className="mgr-page-actions">
-          <button type="button" className="mgr-btn-ghost flex items-center gap-2" onClick={downloadTemplate}>
+        <div className="mgr-page-actions flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          <button type="button" className="mgr-btn-ghost flex items-center justify-center gap-2 flex-1 sm:flex-initial" onClick={downloadTemplate}>
             <Download size={16} />
             <span>{tManagerUi('download_csv_template')}</span>
           </button>
-          <button type="button" onClick={() => setShowManualModal(true)} className="mgr-btn-primary flex items-center gap-2">
+          <button type="button" onClick={() => setShowManualModal(true)} className="mgr-btn-primary flex items-center justify-center gap-2 flex-1 sm:flex-initial">
             <Plus size={16} />
             <span>New Group Admission</span>
           </button>
@@ -166,32 +166,32 @@ export default function ManagerMembersGroupAdmissionGroupPage(_routeQuery: Manag
       </div>
 
       {/* Action Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Bulk Upload Card */}
-        <div className="mgr-card p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-primary bg-floating hover:border-primary transition-all">
-          <div className="w-16 h-16 rounded-full bg-primary-subtle flex items-center justify-center text-primary mb-1">
+        <div className="mgr-card p-4 sm:p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-primary bg-floating hover:border-primary transition-all">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary-subtle flex items-center justify-center text-primary mb-1">
             <Upload size={28} />
           </div>
           <div>
-            <h3 className="text-primary font-bold text-lg mb-1">{tManagerUi('bulk_upload_excel_csv')}</h3>
-            <p className="text-secondary text-sm max-w-sm">Upload bulk student records in CSV or Excel format to register multiple candidates at once.</p>
+            <h3 className="text-primary font-bold text-base sm:text-lg mb-1">{tManagerUi('bulk_upload_excel_csv')}</h3>
+            <p className="text-secondary text-xs sm:text-sm max-w-sm">Upload bulk student records in CSV or Excel format to register multiple candidates at once.</p>
           </div>
-          <button type="button" onClick={() => setShowBulkModal(true)} className="mgr-btn-primary mt-2 flex items-center gap-2">
+          <button type="button" onClick={() => setShowBulkModal(true)} className="mgr-btn-primary mt-2 flex items-center justify-center gap-2 w-full sm:w-auto">
             <FileSpreadsheet size={16} />
             <span>Upload CSV File</span>
           </button>
         </div>
 
         {/* Manual Group Entry Card */}
-        <div className="mgr-card p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-border bg-floating hover:border-success transition-all">
-          <div className="w-16 h-16 rounded-full bg-success-bg flex items-center justify-center text-success mb-1">
+        <div className="mgr-card p-4 sm:p-6 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-border bg-floating hover:border-success transition-all">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-success-bg flex items-center justify-center text-success mb-1">
             <Users2 size={28} />
           </div>
           <div>
-            <h3 className="text-primary font-bold text-lg mb-1">{tManagerUi('manual_group_entry')}</h3>
-            <p className="text-secondary text-sm max-w-sm">Enter student details manually in an interactive batch spreadsheet and register together.</p>
+            <h3 className="text-primary font-bold text-base sm:text-lg mb-1">{tManagerUi('manual_group_entry')}</h3>
+            <p className="text-secondary text-xs sm:text-sm max-w-sm">Enter student details manually in an interactive batch spreadsheet and register together.</p>
           </div>
-          <button type="button" onClick={() => setShowManualModal(true)} className="mgr-btn-primary mt-2 flex items-center gap-2">
+          <button type="button" onClick={() => setShowManualModal(true)} className="mgr-btn-primary mt-2 flex items-center justify-center gap-2 w-full sm:w-auto">
             <Plus size={16} />
             <span>Start Manual Entry</span>
           </button>
