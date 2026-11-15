@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown, Search, X } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 
 export type SeatSortField = 'id' | 'wing' | 'shift' | 'status' | 'student';
@@ -8,12 +8,12 @@ export type SeatSortField = 'id' | 'wing' | 'shift' | 'status' | 'student';
 interface ManagerSeatsMatrixTableViewProps {
   filteredTableSeats: SeatData[];
   paginatedTableSeats: SeatData[];
-  searchQuery: string;
-  setSearchQuery: (val: string) => void;
-  statusFilter: string;
-  setStatusFilter: (val: string) => void;
-  genderFilter: 'all' | 'Male' | 'Female';
-  setGenderFilter: (val: 'all' | 'Male' | 'Female') => void;
+  searchQuery?: string;
+  setSearchQuery?: (val: string) => void;
+  statusFilter?: string;
+  setStatusFilter?: (val: string) => void;
+  genderFilter?: 'all' | 'Male' | 'Female';
+  setGenderFilter?: (val: 'all' | 'Male' | 'Female') => void;
   sortField: SeatSortField | null;
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: SeatSortField) => void;
@@ -79,59 +79,16 @@ export function ManagerSeatsMatrixTableView({
 
   return (
     <div className="bg-card border border-border rounded-xl p-6 space-y-4">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-border pb-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-border pb-4">
         <div>
           <h2 className="text-xl font-bold text-primary">Seat Directory & Roster Table</h2>
           <p className="text-xs text-secondary mt-0.5">
             Unified tabular seat registry with instant allocation & maintenance controls
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-          <div className="mgr-input-icon-wrap relative flex-1 sm:w-64 min-w-[200px]">
-            <Search size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
-            <input
-              type="search"
-              aria-label={tManagerUi('search_by_seat_branch_or_student')}
-              placeholder={tManagerUi('search_by_seat_branch_or_student')}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="mgr-input mgr-input-with-icon !pl-10 pr-9 text-xs w-full h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
-                title="Clear search"
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-danger hover:opacity-80 rounded-full transition-colors cursor-pointer"
-              >
-                <X size={14} className="shrink-0 text-danger" />
-              </button>
-            )}
-          </div>
-          <select
-            aria-label="Table status filter"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-surface text-primary text-xs font-semibold px-3 h-9 rounded-xl border border-border hover:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer shrink-0"
-          >
-            <option value="all">⚡ All Statuses</option>
-            <option value="free">🟢 Available (Free)</option>
-            <option value="occupied">🔴 Occupied</option>
-            <option value="expiring">🟡 Expiring Soon</option>
-            <option value="maintenance">⚪ Maintenance</option>
-          </select>
-          <select
-            aria-label="Table gender filter"
-            value={genderFilter}
-            onChange={(e) => setGenderFilter(e.target.value as 'all' | 'Male' | 'Female')}
-            className="bg-surface text-primary text-xs font-semibold px-3 h-9 rounded-xl border border-border hover:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer shrink-0"
-          >
-            <option value="all">👥 All Genders</option>
-            <option value="Male">👨 Male</option>
-            <option value="Female">👩 Female</option>
-          </select>
-        </div>
+        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-surface border border-border text-secondary shrink-0">
+          {filteredTableSeats.length} seats registered
+        </span>
       </div>
 
       <div className="overflow-x-auto">
@@ -161,16 +118,16 @@ export function ManagerSeatsMatrixTableView({
                   <td className="py-3 px-4 text-xs">{shiftLabel(seat.shift)}</td>
                   <td className="py-3 px-4">
                     <span
-                      className={`text-xs px-2.5 py-0.5 rounded-full font-semibold border border-border ${
+                      className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
                         seat.status === 'free'
-                          ? 'bg-success-bg text-success'
+                          ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
                           : seat.status === 'occupied'
-                          ? 'bg-danger-bg text-danger'
+                          ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
                           : seat.status === 'expiring'
-                          ? 'bg-warning-bg text-warning'
+                          ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
                           : seat.status === 'maintenance'
-                          ? 'bg-warning-bg text-warning'
-                          : 'bg-floating text-secondary'
+                          ? 'bg-secondary/15 text-secondary border border-border'
+                          : 'bg-floating text-secondary border border-border'
                       }`}
                     >
                       {seat.status === 'free'

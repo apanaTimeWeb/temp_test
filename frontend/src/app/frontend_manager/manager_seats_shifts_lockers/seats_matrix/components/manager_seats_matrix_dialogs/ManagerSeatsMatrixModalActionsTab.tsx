@@ -51,7 +51,7 @@ export function ManagerSeatsMatrixModalActionsTab({
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
               <h3 className="text-sm font-bold text-primary">Seat Available for Allocation</h3>
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-success-bg text-success border border-success/30 shrink-0">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
                 {tManagerUi('free')}
               </span>
             </div>
@@ -185,7 +185,7 @@ export function ManagerSeatsMatrixModalActionsTab({
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
               <h3 className="text-sm font-bold text-primary">Seat Under Maintenance</h3>
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-warning-bg text-warning border border-warning/30 shrink-0">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-secondary/15 text-secondary border border-border shrink-0">
                 {tManagerUi('maintenance')}
               </span>
             </div>
@@ -242,8 +242,8 @@ export function ManagerSeatsMatrixModalActionsTab({
           <span
             className={`px-2.5 py-1 rounded-full text-xs font-semibold shrink-0 ${
               selectedSeat.status === 'expiring'
-                ? 'bg-warning-bg text-warning border border-warning/30'
-                : 'bg-danger-bg text-danger border border-danger/30'
+                ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
             }`}
           >
             {selectedSeat.status === 'expiring' ? tManagerUi('expiring_soon') : tManagerUi('occupied')}

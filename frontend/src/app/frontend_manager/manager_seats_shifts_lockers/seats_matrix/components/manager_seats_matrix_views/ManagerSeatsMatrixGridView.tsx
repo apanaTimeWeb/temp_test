@@ -69,21 +69,21 @@ export function ManagerSeatsMatrixGridView({
     <>
       {/* ── Top Legend & Shift LED Explainer ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 p-4 bg-card border border-border rounded-xl">
-        <div className="flex flex-wrap items-center gap-5 text-xs text-secondary">
+        <div className="flex flex-wrap items-center gap-5 text-xs text-secondary font-medium">
           {LEGEND_ITEMS.map(({ cls, labelKey }) => (
             <div key={labelKey} className="flex items-center gap-2">
               <span
-                className={`w-2.5 h-2.5 rounded-full ${
+                className={`w-3 h-3 rounded-full shrink-0 ${
                   cls === 'ss-legend-dot--success'
-                    ? 'bg-success'
+                    ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]'
                     : cls === 'ss-legend-dot--danger'
-                    ? 'bg-danger'
+                    ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]'
                     : cls === 'ss-legend-dot--warning'
-                    ? 'bg-warning'
-                    : 'bg-surface-highlight'
+                    ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.6)]'
+                    : 'bg-slate-400 border border-border'
                 }`}
               />
-              <span>{tManagerUi(labelKey)}</span>
+              <span className="text-primary font-semibold">{tManagerUi(labelKey)}</span>
             </div>
           ))}
         </div>
@@ -158,12 +158,12 @@ export function ManagerSeatsMatrixGridView({
                       : 'hover:scale-105 active:scale-95'
                   } ${
                     seat.status === 'free'
-                      ? 'bg-floating border border-success text-success hover:bg-success hover:text-white'
+                      ? 'bg-surface border border-emerald-500/70 text-emerald-400 hover:bg-emerald-500/15 hover:border-emerald-400 hover:shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                       : seat.status === 'occupied'
-                      ? 'bg-floating border border-danger text-primary'
+                      ? 'bg-surface border border-rose-500/70 text-rose-400 hover:bg-rose-500/15 hover:border-rose-400 hover:shadow-[0_0_12px_rgba(244,63,94,0.3)]'
                       : seat.status === 'expiring'
-                      ? 'bg-floating border border-warning text-warning'
-                      : 'bg-floating border border-border text-secondary opacity-50 cursor-not-allowed'
+                      ? 'bg-surface border border-amber-400 text-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.2)] hover:bg-amber-500/15 hover:border-amber-300 hover:shadow-[0_0_14px_rgba(251,191,36,0.4)]'
+                      : 'bg-floating/50 border border-dashed border-border text-secondary opacity-60 hover:opacity-90'
                   }`}
                   title={
                     seat.student
@@ -174,17 +174,23 @@ export function ManagerSeatsMatrixGridView({
                   }
                 >
                   {/* Seat Identifier */}
-                  <span className="font-mono text-xs font-bold tracking-wider">
+                  <span className="font-mono text-xs font-bold tracking-wider text-primary">
                     S-{seat.id}
                   </span>
 
-                  {/* Student Name Preview if Occupied */}
+                  {/* Student Name Preview if Occupied or Status Label */}
                   {seat.student ? (
-                    <span className="text-[10px] text-secondary truncate max-w-full font-normal leading-none px-1">
+                    <span
+                      className={`text-[10px] truncate max-w-full leading-none px-1 ${
+                        seat.status === 'expiring' ? 'text-amber-400 font-bold' : 'text-secondary font-medium'
+                      }`}
+                    >
                       {seat.student.split(' ')[0]}
                     </span>
+                  ) : seat.status === 'maintenance' ? (
+                    <span className="text-[10px] text-secondary italic">Maint.</span>
                   ) : (
-                    <span className="text-[10px] text-success font-medium">Free</span>
+                    <span className="text-[10px] text-emerald-400 font-bold">Free</span>
                   )}
 
                   {/* 4 Shift Glowing LED Indicators (M, A, E, N) */}

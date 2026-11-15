@@ -129,14 +129,14 @@ export function ManagerSeatsMatrixModal({ selectedSeat, onClose, onUpdateSeat }:
                   {tManagerUi('seat_b90b32')} {selectedSeat.id}
                 </h2>
                 <span
-                  className={`px-2 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
                     selectedSeat.status === 'free'
-                      ? 'bg-success-bg text-success border border-success/30'
+                      ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
                       : selectedSeat.status === 'occupied'
-                      ? 'bg-danger-bg text-danger border border-danger/30'
+                      ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
                       : selectedSeat.status === 'expiring'
-                      ? 'bg-warning-bg text-warning border border-warning/30'
-                      : 'bg-floating text-secondary border border-border'
+                      ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                      : 'bg-secondary/15 text-secondary border border-border'
                   }`}
                 >
                   {selectedSeat.status}
