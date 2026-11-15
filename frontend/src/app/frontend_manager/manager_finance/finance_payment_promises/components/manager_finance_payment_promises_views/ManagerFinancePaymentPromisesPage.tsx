@@ -125,6 +125,15 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
 
   const handleOpenEdit = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
     setSelectedPromise(promise);
+    setEditModalMode('edit');
+    setEditAmount(String(promise.promisedAmount >= 1000 ? Math.round(promise.promisedAmount / 100) : promise.promisedAmount));
+    setEditDate(promise.expectedDate);
+    setEditRemarks(promise.remarks || '');
+  };
+
+  const handleOpenView = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
+    setSelectedPromise(promise);
+    setEditModalMode('details');
     setEditAmount(String(promise.promisedAmount >= 1000 ? Math.round(promise.promisedAmount / 100) : promise.promisedAmount));
     setEditDate(promise.expectedDate);
     setEditRemarks(promise.remarks || '');
@@ -249,7 +258,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
       <ManagerFinancePaymentPromisesTable
         filtered={filtered} paginated={paginated} formatCurrency={formatCurrency} formatDate={formatDate}
         sortField={sortField} sortDirection={sortDirection} onToggleSort={toggleSort}
-        onMarkPaid={handleMarkPaid} onOpenEdit={handleOpenEdit}
+        onMarkPaid={handleMarkPaid} onOpenEdit={handleOpenEdit} onOpenView={handleOpenView}
         startItem={startItem} endItem={endItem} totalRows={totalRows}
         effectivePage={effectivePage} pageCount={pageCount}
         onPrevPage={() => setPage(effectivePage - 1)} onNextPage={() => setPage(effectivePage + 1)}
@@ -271,6 +280,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
 
       <ManagerFinancePaymentPromisesEditModal
         promise={selectedPromise}
+        mode={editModalMode}
         formatCurrency={formatCurrency}
         onClose={() => setSelectedPromise(null)}
         editAmount={editAmount}
@@ -280,6 +290,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         editRemarks={editRemarks}
         onEditRemarksChange={setEditRemarks}
         onSavePromise={handleSavePromise}
+        onSwitchToEdit={() => setEditModalMode('edit')}
       />
 
       <ManagerFinancePaymentPromisesAddModal
