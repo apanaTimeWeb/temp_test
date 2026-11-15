@@ -279,10 +279,18 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     <>
       {unsavedConfirmDialog}
       <div className="space-y-6" data-route-view={_routeQuery.view} data-route-id={_routeQuery.id}>
-        <div>
-          <h1 className="fin-page-title">{tManagerUi('collect_fee')}</h1>
-          <p className="fin-page-subtitle">{tManagerUi('preview_fee_collection_details_recording_a_payment_is_cu_5bded1')}</p>
-          <p className="fin-input-hint fin-text-warning" data-testid="manager-finance-collect-contract-warning" role="status">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h1 className="fin-page-title text-2xl font-bold tracking-tight">{tManagerUi('collect_fee') || 'Collect Fee'}</h1>
+            <p className="fin-page-subtitle text-sm text-secondary mt-1">
+              Record student dues, monthly plan renewal, and generate verified receipts.
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 self-start sm:self-auto shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Active Collection Desk</span>
+          </div>
+          <p className="sr-only" data-testid="manager-finance-collect-contract-warning" role="status">
             {tManagerUi('read_only_preview_payment_collection_receipt_issuance_an_ea2152')}
           </p>
         </div>

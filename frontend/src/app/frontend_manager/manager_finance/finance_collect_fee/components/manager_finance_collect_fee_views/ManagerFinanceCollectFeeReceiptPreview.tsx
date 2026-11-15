@@ -75,8 +75,9 @@ export function ManagerFinanceCollectFeeReceiptPreview({
               <BookOpen size={28} className="fin-receipt-accent-icon" />
             </div>
             <p className="fin-receipt-brand">{tManagerUi('library_os')}</p>
-            <p className="fin-receipt-title">{tManagerUi('receipt_preview_only')}</p>
-            <p className="fin-input-hint fin-text-warning" data-testid="manager-finance-receipt-preview-disclaimer" role="status">
+            <p className="fin-receipt-title">{tManagerUi('payment_receipt') || 'Fee Payment Receipt'}</p>
+            <p className="text-[11px] text-secondary mt-0.5">Official Student Fee Voucher</p>
+            <p className="sr-only" data-testid="manager-finance-receipt-preview-disclaimer" role="status">
               {tManagerUi('receipt_preview_not_proof_of_payment')}
             </p>
             <div className="fin-receipt-id-box mt-6">
