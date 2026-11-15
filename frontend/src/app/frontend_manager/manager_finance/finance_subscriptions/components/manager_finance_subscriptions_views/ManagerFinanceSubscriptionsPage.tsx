@@ -182,64 +182,83 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
             Track member subscription plans, renewal schedules, expiry alerts, and payment records.
           </p>
           <p
-            className="sr-only"
+            style={{ display: 'none' }}
             data-testid="manager-finance-subscriptions-sample-warning"
             role="status"
           >
             {tManagerUi('subscription_rows_and_amounts_are_illustrative_sample_da_4b9c16')}
           </p>
         </div>
-        <div className="flex gap-2 flex-wrap items-center">
+        <div className="flex gap-2.5 flex-wrap items-center">
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer transition-all active:scale-[0.98]"
             onClick={handleQuickRenew}
             title="Renew Student Subscription Plan"
           >
-            <RefreshCw size={13} /> Renew Plan
+            <RefreshCw size={13} />
+            <span>Renew Plan</span>
           </button>
           <button
             type="button"
-            className="sr-only"
+            style={{ display: 'none' }}
             disabled
             aria-hidden="true"
             tabIndex={-1}
           >
             {tManagerUi('renewal_unavailable')}
           </button>
-          <button type="button" className="mgr-btn-outline text-xs flex items-center gap-1.5 cursor-pointer" onClick={handleExportCsv} title="Export CSV">
-            <Download size={13} /> Export CSV
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all"
+            onClick={handleExportCsv}
+            title="Export CSV"
+          >
+            <Download size={13} className="text-secondary" />
+            <span>Export CSV</span>
           </button>
-          <button type="button" className="mgr-btn-outline text-xs flex items-center gap-1.5 cursor-pointer" onClick={handlePrint} title="Print Subscription Summary">
-            <Printer size={13} /> Print
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all"
+            onClick={handlePrint}
+            title="Print Subscription Summary"
+          >
+            <Printer size={13} className="text-secondary" />
+            <span>Print</span>
           </button>
-          <button type="button" className="mgr-btn-outline text-xs flex items-center gap-1.5 cursor-pointer" onClick={handleImport} title={tManagerUi('import')}>
-            <Upload size={13} /> {tManagerUi('import')}
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all"
+            onClick={handleImport}
+            title={tManagerUi('import')}
+          >
+            <Upload size={13} className="text-secondary" />
+            <span>{tManagerUi('import')}</span>
           </button>
-          <div className="flex items-center gap-1 pl-2 border-l border-border">
+          <div className="flex items-center gap-1.5 pl-3 border-l border-border">
             <button
               type="button"
-              className="p-2 rounded-lg text-[#25D366] hover:bg-[#25D366]/10 transition-colors cursor-pointer"
+              className="p-2 rounded-xl border border-border bg-card hover:bg-emerald-500/10 text-[#25D366] transition-colors cursor-pointer shadow-xs"
               onClick={handleWhatsApp}
               title="Send WhatsApp Notice"
             >
-              <MessageSquare size={15} />
+              <MessageSquare size={14} />
             </button>
             <button
               type="button"
-              className="p-2 rounded-lg text-[#229ED9] hover:bg-[#229ED9]/10 transition-colors cursor-pointer"
+              className="p-2 rounded-xl border border-border bg-card hover:bg-sky-500/10 text-[#229ED9] transition-colors cursor-pointer shadow-xs"
               onClick={handleTelegram}
               title="Send Telegram Broadcast"
             >
-              <Send size={15} />
+              <Send size={14} />
             </button>
             <button
               type="button"
-              className="p-2 rounded-lg text-purple-600 dark:text-purple-400 hover:bg-purple-500/10 transition-colors cursor-pointer"
+              className="p-2 rounded-xl border border-border bg-card hover:bg-purple-500/10 text-purple-600 dark:text-purple-400 transition-colors cursor-pointer shadow-xs"
               onClick={handleEmail}
               title="Dispatch Email Statement"
             >
-              <Mail size={15} />
+              <Mail size={14} />
             </button>
           </div>
         </div>

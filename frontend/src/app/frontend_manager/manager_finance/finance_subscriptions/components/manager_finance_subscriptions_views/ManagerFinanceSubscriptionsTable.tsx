@@ -222,7 +222,7 @@ export default function ManagerFinanceSubscriptionsTable({
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="mgr-btn-ghost mgr-btn-sm"
+                className="px-2.5 py-1 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
                 disabled={effectivePage <= 0}
                 onClick={onPrevPage}
               >
@@ -233,7 +233,7 @@ export default function ManagerFinanceSubscriptionsTable({
               </span>
               <button
                 type="button"
-                className="mgr-btn-ghost mgr-btn-sm"
+                className="px-2.5 py-1 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
                 disabled={effectivePage >= pageCount - 1}
                 onClick={onNextPage}
               >
