@@ -29,6 +29,8 @@ export const managerAssetsMaintenanceOrderSchema = z.object({
     .trim()
     .min(1, 'Scheduled date is required.')
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Scheduled date must be in YYYY-MM-DD format.'),
+  priority: z.enum(['routine', 'urgent', 'emergency']).optional().default('routine'),
+  maintenanceType: z.enum(['preventive', 'breakdown', 'inspection']).optional().default('preventive'),
 });
 
 export type ManagerAssetsMaintenanceOrderFormData = z.infer<typeof managerAssetsMaintenanceOrderSchema>;
