@@ -14,7 +14,6 @@ import {
   Send,
   Save,
   CheckCircle2,
-  AlertCircle,
   X,
   ChevronRight,
   CheckCheck,
@@ -220,19 +219,6 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
             <Save size={14} />
             <span>Save Template</span>
           </button>
-        </div>
-      </div>
-
-      {/* Contract Notice Alert */}
-      <div
-        className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-start gap-3"
-        role="status"
-        data-testid="manager-communication-template-contract-warning"
-      >
-        <AlertCircle size={16} className="text-amber-400 shrink-0 mt-0.5" />
-        <div className="text-xs text-amber-300/90 leading-relaxed space-y-0.5">
-          <p>{tManagerUi('template_edits_are_draft_only_saving_templates_and_sendi_b21f71')}</p>
-          <p className="text-secondary opacity-80">{tManagerUi('template_bodies_are_sample_english_copy')}</p>
         </div>
       </div>
 
