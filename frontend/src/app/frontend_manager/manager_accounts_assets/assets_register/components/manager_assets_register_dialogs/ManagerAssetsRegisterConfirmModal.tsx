@@ -45,48 +45,57 @@ export function ManagerAssetsRegisterConfirmModal({
       aria-modal="true"
       aria-labelledby="asset-register-confirm-title"
       aria-describedby="asset-register-confirm-desc"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onCancel();
+      }}
     >
-      <div className="relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in-95 duration-150">
+      <div className="relative w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4">
         <button
           type="button"
           onClick={onCancel}
-          className="absolute right-4 top-4 p-1 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover transition-colors"
+          className="absolute right-4 top-4 p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover transition-colors"
           aria-label="Close dialog"
         >
           <X size={18} />
         </button>
 
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary-subtle text-primary border border-border flex items-center justify-center shrink-0">
-            <ShieldCheck size={20} />
+          <div className="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
+            <ShieldCheck size={22} />
           </div>
           <div>
             <h2 id="asset-register-confirm-title" className="text-base font-bold text-primary">
               Confirm Asset Registration
             </h2>
-            <p className="text-xs text-secondary">
+            <p className="text-xs text-secondary mt-0.5">
               Category: <span className="font-semibold text-primary">{assetData.category}</span>
             </p>
           </div>
         </div>
 
-        <div id="asset-register-confirm-desc" className="mt-4 text-xs text-secondary space-y-2 leading-relaxed">
+        <div id="asset-register-confirm-desc" className="mt-3 text-xs text-secondary space-y-2.5 leading-relaxed">
           <p>
             Are you sure you want to register{' '}
             <strong className="text-primary font-semibold">{assetData.name}</strong> into the branch asset register?
           </p>
-          <div className="p-3 rounded-xl bg-muted border border-border text-[11px] space-y-1">
-            <p><span className="text-secondary font-medium">Location:</span> <span className="text-primary font-semibold">{assetData.location}</span></p>
-            <p><span className="text-secondary font-medium">Initial Status:</span> <span className="text-primary font-semibold uppercase">{assetData.status}</span></p>
+          <div className="p-3 rounded-xl bg-surface-highlight/70 border border-border text-[11px] space-y-1">
+            <p>
+              <span className="text-secondary font-medium">Location:</span>{' '}
+              <span className="text-primary font-semibold">{assetData.location}</span>
+            </p>
+            <p>
+              <span className="text-secondary font-medium">Initial Status:</span>{' '}
+              <span className="text-primary font-semibold uppercase">{assetData.status}</span>
+            </p>
           </div>
         </div>
 
-        <div className="mt-6 flex items-center justify-end gap-2.5">
+        <div className="mt-6 flex items-center justify-end gap-2.5 pt-3 border-t border-border">
           <button
             type="button"
             onClick={onCancel}
-            className="px-3.5 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+            className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -94,7 +103,12 @@ export function ManagerAssetsRegisterConfirmModal({
             ref={confirmBtnRef}
             type="button"
             onClick={onConfirm}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-white text-xs font-semibold hover:opacity-90 shadow-sm transition-all cursor-pointer"
+            style={{
+              boxShadow: '0 0 16px rgba(16, 185, 129, 0.45)',
+              backgroundColor: '#10b981',
+              borderColor: '#34d399',
+            }}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold hover:opacity-95 transition-all cursor-pointer border"
           >
             <CheckCircle2 size={14} />
             Confirm & Register
@@ -106,4 +120,3 @@ export function ManagerAssetsRegisterConfirmModal({
 }
 
 export default ManagerAssetsRegisterConfirmModal;
-
