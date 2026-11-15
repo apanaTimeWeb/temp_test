@@ -5,11 +5,21 @@ import { CheckCircle, AlertTriangle, AlertCircle, ArrowRight } from 'lucide-reac
 import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
 import type { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
 
+'use client';
+
+import React from 'react';
+import { CheckCircle, AlertTriangle, AlertCircle, ArrowRight, Check } from 'lucide-react';
+import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
+import type { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
+import type { ManagerFinanceCollectionType } from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
+
 export interface ManagerFinanceCollectFeeStudentInfoProps {
   selectedStudent: (typeof MANAGER_FINANCE_COLLECT_FEE_STUDENTS)[number] | null;
   dueAmountText: string;
   formatCurrency: (n: number) => string;
   onAutofillDue?: (dueAmountInMajorUnits: number) => void;
+  onSelectCollectionType?: (type: ManagerFinanceCollectionType) => void;
+  activeCollectionType?: ManagerFinanceCollectionType;
 }
 
 export default function ManagerFinanceCollectFeeStudentInfo({
@@ -17,6 +27,8 @@ export default function ManagerFinanceCollectFeeStudentInfo({
   dueAmountText,
   formatCurrency,
   onAutofillDue,
+  onSelectCollectionType,
+  activeCollectionType,
 }: ManagerFinanceCollectFeeStudentInfoProps) {
   if (!selectedStudent) return null;
 
@@ -76,20 +88,85 @@ export default function ManagerFinanceCollectFeeStudentInfo({
         </div>
       )}
 
-      {selectedStudent.dueAmount > 0 && (
-        <div className="fin-badge fin-badge--danger w-full justify-between py-2 px-3 flex items-center">
-          <span className="font-medium">
-            {dueAmountText} {formatCurrency(selectedStudent.dueAmount)}
+      {selectedStudent.dueAmount > 0 ? (
+        <div className="p-3 rounded-lg border border-red-500/30 bg-red-500/5 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-danger flex items-center gap-1.5">
+              <AlertTriangle size={14} />
+              <span>{dueAmountText} {formatCurrency(selectedStudent.dueAmount)}</span>
+            </span>
+            <span className="text-[11px] text-secondary">Unpaid backlog</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            {onSelectCollectionType && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => onSelectCollectionType('dues')}
+                  className={`text-xs px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors flex items-center gap-1 ${
+                    activeCollectionType === 'dues'
+                      ? 'bg-danger text-on-danger font-semibold shadow-xs'
+                      : 'bg-card border border-border hover:bg-muted text-text-primary'
+                  }`}
+                  title="Auto-fetch and clear the full pending due amount"
+                >
+                  {activeCollectionType === 'dues' && <Check size={12} />}
+                  <span>Clear Full Due (₹{dueMajorUnits})</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSelectCollectionType('partial')}
+                  className={`text-xs px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors flex items-center gap-1 ${
+                    activeCollectionType === 'partial'
+                      ? 'bg-amber-600 text-white font-semibold shadow-xs'
+                      : 'bg-card border border-border hover:bg-muted text-text-primary'
+                  }`}
+                  title="Make a partial payment toward this due"
+                >
+                  {activeCollectionType === 'partial' && <Check size={12} />}
+                  <span>Pay Partial</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSelectCollectionType('monthly')}
+                  className={`text-xs px-2.5 py-1 rounded-md font-medium cursor-pointer transition-colors flex items-center gap-1 ${
+                    activeCollectionType === 'monthly'
+                      ? 'bg-primary text-on-primary font-semibold shadow-xs'
+                      : 'bg-card border border-border hover:bg-muted text-text-primary'
+                  }`}
+                  title="Pay for next month renewal (₹1,200)"
+                >
+                  {activeCollectionType === 'monthly' && <Check size={12} />}
+                  <span>1-Month Renewal (₹1,200)</span>
+                </button>
+              </>
+            )}
+            {!onSelectCollectionType && onAutofillDue && (
+              <button
+                type="button"
+                onClick={() => onAutofillDue(dueMajorUnits)}
+                className="text-xs bg-danger text-on-danger hover:bg-danger/90 px-2.5 py-1 rounded-md font-semibold cursor-pointer inline-flex items-center gap-1 transition-colors"
+                title="Click to autofill this outstanding due into the payment amount"
+              >
+                <span>Pay Full Due (₹{dueMajorUnits})</span>
+                <ArrowRight size={12} />
+              </button>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="p-2.5 rounded-lg border border-emerald-500/30 bg-emerald-500/5 flex items-center justify-between text-xs text-emerald-700 dark:text-emerald-400">
+          <span className="font-medium flex items-center gap-1.5">
+            <CheckCircle size={14} />
+            <span>All past dues cleared (Dues: ₹0.00)</span>
           </span>
-          {onAutofillDue && (
+          {onSelectCollectionType && activeCollectionType !== 'monthly' && (
             <button
               type="button"
-              onClick={() => onAutofillDue(dueMajorUnits)}
-              className="text-xs bg-danger text-on-danger hover:bg-danger/90 px-2.5 py-1 rounded-md font-semibold cursor-pointer inline-flex items-center gap-1 transition-colors"
-              title="Click to autofill this outstanding due into the payment amount"
+              onClick={() => onSelectCollectionType('monthly')}
+              className="font-semibold underline cursor-pointer hover:opacity-80"
             >
-              <span>Pay Full Due (₹{dueMajorUnits})</span>
-              <ArrowRight size={12} />
+              Collect Monthly Renewal (₹1,200)
             </button>
           )}
         </div>

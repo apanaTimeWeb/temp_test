@@ -28,6 +28,7 @@ export interface ManagerFinanceCollectFeeReceiptPreviewProps {
   receiptNumber: string;
   collectedBy?: string;
   feeCategory?: string;
+  collectionTypeLabel?: string;
   billingMonth?: string;
   billingPeriod?: string;
   nextDueDate?: string;

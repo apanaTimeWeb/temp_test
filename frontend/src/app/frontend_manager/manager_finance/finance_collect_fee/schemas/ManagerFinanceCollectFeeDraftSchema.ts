@@ -11,6 +11,7 @@ export const managerFinanceCollectFeeDraftSchema = z.object({
   monthsToRenew: z.string().min(1),
   remark: z.string().max(2000),
   feeCategory: z.string().optional().default('seat_fee'),
+  collectionType: z.enum(['monthly', 'dues', 'fine', 'partial', 'locker']).optional().default('monthly'),
   billingMonth: z.string().optional().default(''),
   paymentDate: z.string().optional().default(''),
 }).superRefine((draft, context) => {

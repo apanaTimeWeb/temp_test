@@ -20,6 +20,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({
   receiptNumber,
   collectedBy = 'Branch Manager',
   feeCategory = 'Seat Monthly Fee',
+  collectionTypeLabel = 'Monthly Fee / Renewal',
   billingMonth,
   billingPeriod,
   nextDueDate,
@@ -45,8 +46,9 @@ export function ManagerFinanceCollectFeeReceiptPreview({
       `Thank you for your fee payment at Library! 🧾\n\n` +
       `• Receipt No: ${receiptNumber}\n` +
       `• Smart ID: ${selectedStudent.smartId}\n` +
+      `• Collection Purpose: ${collectionTypeLabel}\n` +
       `• Fee Category: ${feeCategory}\n` +
-      `• Billing Cycle: ${billingPeriod || billingMonth || 'Current Cycle'}\n` +
+      (billingPeriod || billingMonth ? `• Billing Cycle: ${billingPeriod || billingMonth}\n` : '') +
       (nextDueDate ? `• Next Due Date: ${nextDueDate}\n` : '') +
       `• Amount Paid: ${formattedTotal}\n` +
       `• Payment Mode: ${modeLabels[mode] || mode}${txnId ? ` (Ref: ${txnId})` : ''}\n` +
@@ -81,8 +83,19 @@ export function ManagerFinanceCollectFeeReceiptPreview({
                 { label: tManagerUi('student'), value: selectedStudent?.name || '—' },
                 { label: tManagerUi('smart_id'), value: selectedStudent?.smartId || '—' },
                 { label: tManagerUi('phone_label'), value: selectedStudent ? `+91-${maskManagerCollectFeePhone(selectedStudent.phone)}` : '—' },
+                { label: 'Purpose', value: collectionTypeLabel },
                 { label: 'Fee Category', value: feeCategory },
-                { label: 'Billing Period', value: billingPeriod || billingMonth || '—' },
+                ...(billingPeriod || billingMonth ? [{ label: 'Billing Period', value: billingPeriod || billingMonth || '—' }] : []),
+                ...(nextDueDate ? [{ label: 'Next Due Date', value: nextDueDate }] : []),
+                { label: tManagerUi('payment_mode_23b35c'), value: `${modeLabels[mode]}${txnId ? ` (${txnId})` : ''}` },
+                { label: tManagerUi('collected_by_898bb0') || 'Collected By', value: collectedBy || 'Branch Manager' },
+              ].map((row) => (
+                <div key={row.label} className="flex justify-between items-baseline gap-2">
+                  <span className="fin-receipt-row-label shrink-0">{row.label}</span>
+                  <span className="fin-receipt-row-value text-right truncate max-w-[170px]" suppressHydrationWarning title={row.value}>{row.value}</span>
+                </div>
+              ))}
+            </div>
                 ...(nextDueDate ? [{ label: 'Next Due Date', value: nextDueDate }] : []),
                 { label: tManagerUi('payment_mode_23b35c'), value: `${modeLabels[mode]}${txnId ? ` (${txnId})` : ''}` },
                 { label: tManagerUi('collected_by_898bb0') || 'Collected By', value: collectedBy || 'Branch Manager' },

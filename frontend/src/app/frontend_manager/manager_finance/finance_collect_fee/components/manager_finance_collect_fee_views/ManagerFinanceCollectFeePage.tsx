@@ -9,14 +9,20 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerFinanceCollectFeeDraftSchema, type ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
 import { toast } from 'sonner';
-import { Search, IndianRupee, UserCheck, Calendar, Tag, AlertTriangle } from 'lucide-react';
+import { Search, IndianRupee, UserCheck, Calendar, Tag, AlertTriangle, AlertCircle, CheckCircle, Scale, PieChart, Archive, Plus } from 'lucide-react';
 import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview';
 import ManagerFinanceCollectFeeDurationSelector from './ManagerFinanceCollectFeeDurationSelector';
 import ManagerFinanceCollectFeeDiscountsSection from './ManagerFinanceCollectFeeDiscountsSection';
 import ManagerFinanceCollectFeeStudentInfo from './ManagerFinanceCollectFeeStudentInfo';
 import { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
 import type { ManagerFinanceCollectFeeMode } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
-import { MANAGER_FINANCE_COLLECT_FEE_MODES, MANAGER_FINANCE_FEE_CATEGORIES } from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
+import {
+  MANAGER_FINANCE_COLLECT_FEE_MODES,
+  MANAGER_FINANCE_FEE_CATEGORIES,
+  MANAGER_FINANCE_COLLECTION_TYPES,
+  STANDARD_CYCLE_AMOUNTS,
+  type ManagerFinanceCollectionType,
+} from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
 import { calculateBillingCycleInfo, getAvailableBillingMonths } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
 import { ManagerFinanceCollectFeeEmptyState } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_empty_states/ManagerFinanceCollectFeeEmptyState';
 import type { ManagerFinanceCollectFeeRouteQueryProps, ManagerFinanceCollectFeeContractStatus } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeComponentTypes';
@@ -54,13 +60,14 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
       monthsToRenew: '1',
       remark: '',
       feeCategory: 'seat_fee',
+      collectionType: 'monthly',
       billingMonth: currentYearMonth,
       paymentDate: todayDateStr,
     },
     mode: 'onChange',
   });
 
-  const { amount, mode, txnId, couponCode, lateFee, monthsToRenew, remark, feeCategory, billingMonth, paymentDate } = watch();
+  const { amount, mode, txnId, couponCode, lateFee, monthsToRenew, remark, feeCategory, billingMonth, paymentDate, collectionType } = watch();
   const setDraftValue = (k: keyof ManagerFinanceCollectFeeDraft, v: string) => setValue(k, v as never, { shouldDirty: true, shouldValidate: true });
 
   const [couponDiscount, setCouponDiscount] = useState(0);
@@ -82,6 +89,10 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     return MANAGER_FINANCE_FEE_CATEGORIES.find((c) => c.id === (feeCategory || 'seat_fee')) || MANAGER_FINANCE_FEE_CATEGORIES[0];
   }, [feeCategory]);
 
+  const activeCollectionOption = useMemo(() => {
+    return MANAGER_FINANCE_COLLECTION_TYPES.find((c) => c.id === (collectionType || 'monthly')) || MANAGER_FINANCE_COLLECTION_TYPES[0];
+  }, [collectionType]);
+
   const hasUnsavedCollectionDraft = Boolean(
     (selectedStudent && (amount || formState.isDirty)) ||
     amount ||
@@ -90,7 +101,8 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     lateFee ||
     remark ||
     monthsToRenew !== '1' ||
-    feeCategory !== 'seat_fee'
+    feeCategory !== 'seat_fee' ||
+    collectionType !== 'monthly'
   );
   // Guard contract: if (confirmed) router.push(`${next.pathname}${next.search}${next.hash}`);
   useManagerFinanceCollectFeeUnsavedChangesGuard({ isDirty: hasUnsavedCollectionDraft, confirm, router, tManagerUi });
@@ -101,17 +113,56 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     return s.name.toLowerCase().includes(q) || s.smartId.toLowerCase().includes(q) || s.phone.includes(q);
   });
 
+  /**
+   * Intelligently applies collection type and auto-populates amounts and cycles
+   */
+  function applyCollectionType(type: ManagerFinanceCollectionType, student = selectedStudent, duration = monthsToRenew) {
+    setDraftValue('collectionType', type);
+
+    if (type === 'dues') {
+      // DUES COLLECTION: Auto-fetch student's exact pending due
+      const dueMajor = student && student.dueAmount > 0 ? student.dueAmount / 100 : 0;
+      setDraftValue('amount', dueMajor > 0 ? String(dueMajor) : '0');
+      setDraftValue('feeCategory', 'seat_fee');
+      setDraftValue('lateFee', '');
+    } else if (type === 'monthly') {
+      // MONTHLY FEE / RENEWAL: Auto-fetch plan cycle rate
+      const cycleAmt = STANDARD_CYCLE_AMOUNTS[duration] ?? (Number(duration) > 0 ? Number(duration) * 1200 : 1200);
+      setDraftValue('amount', String(cycleAmt));
+      setDraftValue('feeCategory', 'seat_fee');
+      setDraftValue('lateFee', '');
+    } else if (type === 'fine') {
+      // FINE / PENALTY ONLY: Auto-fetch standard fine
+      setDraftValue('amount', '200');
+      setDraftValue('feeCategory', 'fine');
+      setDraftValue('lateFee', '200');
+    } else if (type === 'partial') {
+      // PARTIAL PAYMENT: Auto-suggest 50% of outstanding due or monthly fee
+      const targetMajor = student && student.dueAmount > 0 ? student.dueAmount / 100 : 1200;
+      const half = Math.round(targetMajor / 2);
+      setDraftValue('amount', String(half));
+      setDraftValue('feeCategory', 'seat_fee');
+    } else if (type === 'locker') {
+      // LOCKER ALLOCATION: Auto-fetch locker fee
+      setDraftValue('amount', '400');
+      setDraftValue('feeCategory', 'locker_fee');
+      setDraftValue('lateFee', '');
+    }
+  }
+
   function selectStudent(student: (typeof MANAGER_FINANCE_COLLECT_FEE_STUDENTS)[number]) {
     setSelectedStudent(student);
     setSearch(student.name);
     setShowDropdown(false);
     setActiveStudentIndex(-1);
     setValue('member', String(student.id), { shouldDirty: true, shouldValidate: true });
-    setDraftValue('lateFee', '');
+
+    // Condition: If student has pending dues, auto-select 'dues' and auto-fetch pending due amount!
+    // If student has 0 dues, auto-select 'monthly' fee and auto-fetch standard cycle amount!
     if (student.dueAmount > 0) {
-      setDraftValue('amount', String(student.dueAmount / 100));
+      applyCollectionType('dues', student);
     } else {
-      setDraftValue('amount', String(activeCategory.defaultAmount));
+      applyCollectionType('monthly', student);
     }
   }
 
@@ -134,12 +185,12 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     }
   }
 
-  function handleCategoryChange(catId: string) {
-    setDraftValue('feeCategory', catId);
-    const cat = MANAGER_FINANCE_FEE_CATEGORIES.find((c) => c.id === catId);
-    if (cat && cat.defaultAmount > 0) {
-      if (!amount || amount === '0' || amount === '1200' || amount === '400' || amount === '500' || amount === '1000' || amount === '200') {
-        setDraftValue('amount', String(cat.defaultAmount));
+  function handleDurationChange(newDuration: string) {
+    setDraftValue('monthsToRenew', newDuration);
+    if ((collectionType || 'monthly') === 'monthly') {
+      const cycleAmt = STANDARD_CYCLE_AMOUNTS[newDuration] ?? (Number(newDuration) > 0 ? Number(newDuration) * 1200 : undefined);
+      if (cycleAmt !== undefined) {
+        setDraftValue('amount', String(cycleAmt));
       }
     }
   }
@@ -162,6 +213,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   // Financial reconciliation: dues vs payment
   const studentDuePaise = selectedStudent?.dueAmount ?? 0;
   const studentDueMajor = studentDuePaise / 100;
+  const targetReconciliationAmount = studentDueMajor > 0 ? studentDueMajor : (STANDARD_CYCLE_AMOUNTS[monthsToRenew] || 1200);
   const isPartialPayment = studentDuePaise > 0 && total > 0 && total < studentDueMajor;
   const isFullPayment = studentDuePaise > 0 && total === studentDueMajor;
   const isAdvancePayment = studentDuePaise > 0 && total > studentDueMajor;
@@ -180,6 +232,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
       monthsToRenew: '1',
       remark: '',
       feeCategory: 'seat_fee',
+      collectionType: 'monthly',
       billingMonth: currentYearMonth,
       paymentDate: todayDateStr,
     });
@@ -207,9 +260,9 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   const handleCollect = handleSubmit(async (_draft) => {
     if (isSubmitDisabled) return;
     const studentName = selectedStudent?.name || 'Selected Student';
-    const catName = activeCategory.name;
+    const purposeName = activeCollectionOption.label;
     const confirmed = await confirm(
-      `Confirm fee collection: Collect ₹${total} (${catName} for ${billingCycleInfo.billingMonth}) from ${studentName}? This will record the payment and verify receipt.`,
+      `Confirm fee collection: Collect ₹${total} (${purposeName}) from ${studentName}? This will record the payment and verify receipt.`,
       tManagerUi('cancel') || 'Cancel',
       `${tManagerUi('collect_fee') || 'Collect Fee'} (₹${total})`
     );
@@ -217,7 +270,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
-      toast.success(`${tManagerUi('collect_fee')}: ₹${total} for ${studentName} recorded successfully!`, { id: 'manager-finance-collect-fee-success' });
+      toast.success(`${tManagerUi('collect_fee')}: ₹${total} (${purposeName}) for ${studentName} recorded successfully!`, { id: 'manager-finance-collect-fee-success' });
       resetForm();
     }, 250);
   });
@@ -236,7 +289,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 fin-collect-fee-grid">
           <div className="lg:col-span-3 space-y-4">
-            {/* Student Search & Details Card */}
+            {/* 1. Student Search & Details Card */}
             <div className="fin-card p-6 space-y-3">
               <label className="fin-section-label" htmlFor="manager-collect-fee-student-search">{tManagerUi('student')} <span className="fin-text-danger">*</span></label>
               <div className="relative">
@@ -280,69 +333,174 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                 selectedStudent={selectedStudent}
                 dueAmountText={`${tManagerUi('due_amount')} `}
                 formatCurrency={formatCurrency}
-                onAutofillDue={(dueMajor) => setDraftValue('amount', String(dueMajor))}
+                onSelectCollectionType={(type) => applyCollectionType(type)}
+                activeCollectionType={collectionType as ManagerFinanceCollectionType}
               />
             </div>
 
-            {/* Collection Category & Billing Cycle Card */}
+            {/* 2. Collection Type Selector Card (What are you collecting?) */}
             <div className="fin-card p-6 space-y-4">
-              <p className="fin-section-label">Fee Classification & Cycle</p>
-              
-              {/* Category Selector */}
-              <div>
-                <label className="fin-label flex items-center gap-1.5" htmlFor="manager-collect-fee-category-group">
-                  <Tag size={13} className="fin-icon-muted" />
-                  <span>Fee Category / Purpose</span>
-                  <span className="fin-text-danger">*</span>
-                </label>
-                <div id="manager-collect-fee-category-group" className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-1.5" role="radiogroup" aria-label="Fee Category">
-                  {MANAGER_FINANCE_FEE_CATEGORIES.map((cat) => {
-                    const isSelected = (feeCategory || 'seat_fee') === cat.id;
-                    return (
-                      <button
-                        type="button"
-                        key={cat.id}
-                        role="radio"
-                        aria-checked={isSelected}
-                        onClick={() => handleCategoryChange(cat.id)}
-                        className={`p-2 rounded-lg border text-left transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                          isSelected
-                            ? 'border-primary bg-primary/10 text-primary font-semibold shadow-xs'
-                            : 'border-border bg-card hover:bg-muted/50 text-text-primary'
-                        }`}
-                      >
-                        <div className="text-xs font-semibold leading-tight">{cat.name}</div>
-                        <div className="text-[10px] text-secondary mt-0.5 truncate">{cat.description}</div>
-                      </button>
-                    );
-                  })}
-                </div>
+              <div className="flex items-center justify-between">
+                <p className="fin-section-label">What are you collecting today?</p>
+                {selectedStudent && (
+                  <span className="text-xs text-primary font-medium">
+                    Auto-fetch active for {selectedStudent.name}
+                  </span>
+                )}
               </div>
 
-              {/* Billing Month & Duration Selector */}
-              <ManagerFinanceCollectFeeDurationSelector
-                isCustomDuration={isCustomDuration}
-                onToggleCustomDuration={setIsCustomDuration}
-                monthsToRenew={monthsToRenew}
-                onMonthsToRenewChange={(val) => setDraftValue('monthsToRenew', val)}
-                onAmountChange={(val) => setDraftValue('amount', val)}
-                labelMonthPayingForCycle={tManagerUi('months_paying_for_cycle')}
-                label1Month={tManagerUi('label_1_month')}
-                label3MonthsQuarterly={tManagerUi('label_3_months_quarterly')}
-                label6MonthsHalfYearly={tManagerUi('label_6_months_half_yearly')}
-                label12MonthsAnnual={tManagerUi('label_12_months_annual')}
-                billingMonth={billingMonth}
-                onBillingMonthChange={(val) => setDraftValue('billingMonth', val)}
-                availableMonths={availableMonths}
-                coverageLabel={billingCycleInfo.coverageLabel}
-                nextDueDateFormatted={billingCycleInfo.nextDueDateFormatted}
-                customMonthsError={customMonthsError}
-              />
+              {/* 5 Clear Options */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5" role="radiogroup" aria-label="Collection Option">
+                {MANAGER_FINANCE_COLLECTION_TYPES.map((opt) => {
+                  const isSelected = (collectionType || 'monthly') === opt.id;
+                  const isDuesOption = opt.id === 'dues';
+                  const studentHasDues = selectedStudent && selectedStudent.dueAmount > 0;
+                  return (
+                    <button
+                      type="button"
+                      key={opt.id}
+                      role="radio"
+                      aria-checked={isSelected}
+                      onClick={() => applyCollectionType(opt.id)}
+                      className={`p-3 rounded-xl border text-left transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                        isSelected
+                          ? 'border-primary bg-primary/10 shadow-sm ring-1 ring-primary/40'
+                          : 'border-border bg-card hover:bg-muted/50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-1">
+                        <span className={`text-xs font-bold leading-tight ${isSelected ? 'text-primary' : 'text-text-primary'}`}>
+                          {opt.label}
+                        </span>
+                        {isDuesOption && studentHasDues && (
+                          <span className="fin-badge fin-badge--danger text-[9px] px-1 py-0">
+                            ₹{studentDueMajor}
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[11px] text-secondary mt-1 leading-snug">
+                        {opt.description}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Auto-Fetch Feedback Alert Banner */}
+              <div className="text-xs p-3 rounded-lg border bg-muted/30 border-border space-y-1">
+                {collectionType === 'dues' && (
+                  studentDueMajor > 0 ? (
+                    <div className="text-emerald-700 dark:text-emerald-400 font-medium flex items-center gap-1.5">
+                      <CheckCircle size={14} className="shrink-0" />
+                      <span>Auto-fetched Full Due: <strong>{formatCurrency(studentDuePaise)}</strong> has been populated in the amount field to settle all past dues.</span>
+                    </div>
+                  ) : (
+                    <div className="text-secondary flex items-center gap-1.5">
+                      <AlertCircle size={14} className="shrink-0 text-amber-500" />
+                      <span>Student has <strong>₹0.00 outstanding dues</strong>. Selecting <strong>Monthly Fee (Renewal)</strong> or <strong>Late Fine</strong> is recommended.</span>
+                    </div>
+                  )
+                )}
+
+                {collectionType === 'monthly' && (
+                  <div className="space-y-1">
+                    <div className="text-text-primary font-medium flex items-center gap-1.5">
+                      <Calendar size={14} className="shrink-0 text-primary" />
+                      <span>Auto-fetched Plan Cycle Rate: <strong>₹{STANDARD_CYCLE_AMOUNTS[monthsToRenew] || 1200}</strong> for {monthsToRenew} Month(s).</span>
+                    </div>
+                    {studentDueMajor > 0 && (
+                      <div className="flex items-center justify-between text-danger font-medium pt-1 border-t border-border/60">
+                        <span>Student also has {formatCurrency(studentDuePaise)} previous dues.</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const cycleAmt = STANDARD_CYCLE_AMOUNTS[monthsToRenew] || 1200;
+                            setDraftValue('amount', String(cycleAmt + studentDueMajor));
+                          }}
+                          className="underline hover:opacity-80 text-xs font-semibold cursor-pointer"
+                        >
+                          + Add Past Dues (+₹{studentDueMajor})
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {collectionType === 'fine' && (
+                  <div className="text-text-primary font-medium flex items-center gap-1.5">
+                    <Scale size={14} className="shrink-0 text-amber-500" />
+                    <span>Auto-fetched Overdue Fine: <strong>₹200.00</strong>. This records late fee clearance only and will not extend desk validity.</span>
+                  </div>
+                )}
+
+                {collectionType === 'partial' && (
+                  <div className="space-y-2">
+                    <div className="text-amber-700 dark:text-amber-400 font-medium flex items-center gap-1.5">
+                      <PieChart size={14} className="shrink-0" />
+                      <span>Partial Payment Mode Active: Settle part of the target amount (Target: ₹{targetReconciliationAmount}).</span>
+                    </div>
+                    {/* Quick Partial Chips */}
+                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                      <span className="text-[11px] text-secondary">Quick amounts:</span>
+                      {[500, 1000, 1500, Math.round(targetReconciliationAmount / 2)].filter((v, idx, arr) => v > 0 && arr.indexOf(v) === idx).map((chipVal) => (
+                        <button
+                          type="button"
+                          key={`chip-${chipVal}`}
+                          onClick={() => setDraftValue('amount', String(chipVal))}
+                          className={`text-xs px-2 py-0.5 rounded border transition-colors cursor-pointer ${
+                            amount === String(chipVal)
+                              ? 'bg-primary text-on-primary font-semibold border-primary'
+                              : 'bg-card border-border hover:bg-muted text-text-primary'
+                          }`}
+                        >
+                          ₹{chipVal}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {collectionType === 'locker' && (
+                  <div className="text-text-primary font-medium flex items-center gap-1.5">
+                    <Archive size={14} className="shrink-0 text-purple-500" />
+                    <span>Auto-fetched Locker Fee: <strong>₹400.00</strong> for monthly locker allocation.</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Show Duration & Billing Month selector ONLY when relevant (Monthly or Locker) */}
+              {(collectionType === 'monthly' || collectionType === 'locker') && (
+                <div className="pt-2 border-t border-border/70">
+                  <ManagerFinanceCollectFeeDurationSelector
+                    isCustomDuration={isCustomDuration}
+                    onToggleCustomDuration={setIsCustomDuration}
+                    monthsToRenew={monthsToRenew}
+                    onMonthsToRenewChange={handleDurationChange}
+                    onAmountChange={(val) => setDraftValue('amount', val)}
+                    labelMonthPayingForCycle={tManagerUi('months_paying_for_cycle')}
+                    label1Month={tManagerUi('label_1_month')}
+                    label3MonthsQuarterly={tManagerUi('label_3_months_quarterly')}
+                    label6MonthsHalfYearly={tManagerUi('label_6_months_half_yearly')}
+                    label12MonthsAnnual={tManagerUi('label_12_months_annual')}
+                    billingMonth={billingMonth}
+                    onBillingMonthChange={(val) => setDraftValue('billingMonth', val)}
+                    availableMonths={availableMonths}
+                    coverageLabel={billingCycleInfo.coverageLabel}
+                    nextDueDateFormatted={billingCycleInfo.nextDueDateFormatted}
+                    customMonthsError={customMonthsError}
+                  />
+                </div>
+              )}
             </div>
 
-            {/* Payment Details Card */}
+            {/* 3. Payment Details Card */}
             <div className="fin-card p-6 space-y-4">
-              <p className="fin-section-label">{tManagerUi('payment_details')}</p>
+              <div className="flex items-center justify-between">
+                <p className="fin-section-label">{tManagerUi('payment_details')}</p>
+                <span className="text-xs text-secondary font-medium">
+                  Mode: <strong className="text-text-primary">{activeCollectionOption.label}</strong>
+                </span>
+              </div>
               
               {/* Payment Date & Amount Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -370,9 +528,14 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                 </div>
 
                 <div>
-                  <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-137">
-                    {tManagerUi('amount_43dc85')} <span className="fin-text-danger">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-137">
+                      {tManagerUi('amount_43dc85')} <span className="fin-text-danger">*</span>
+                    </label>
+                    <span className="text-[10px] text-primary font-medium">
+                      {collectionType === 'dues' ? 'Auto-filled Due' : collectionType === 'monthly' ? 'Auto-filled Cycle' : collectionType === 'fine' ? 'Auto-filled Fine' : 'Amount'}
+                    </span>
+                  </div>
                   <div className="relative mt-1">
                     <IndianRupee size={14} className="absolute left-3 top-1/2 -translate-y-1/2 fin-icon-muted" />
                     <input
@@ -403,11 +566,11 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                 </div>
               </div>
 
-              {/* Payment Reconciliation Feedback (Partial / Full / Advance) */}
-              {selectedStudent && selectedStudent.dueAmount > 0 && total > 0 && (
+              {/* Dynamic Payment Reconciliation Feedback */}
+              {selectedStudent && (studentDueMajor > 0 || total > 0) && (
                 <div className="p-3 rounded-lg border text-xs space-y-1.5 transition-colors bg-card border-border">
                   <div className="flex justify-between items-center text-secondary">
-                    <span>Outstanding Due: <span className="font-semibold text-danger">{formatCurrency(studentDuePaise)}</span></span>
+                    <span>Target Due / Fee: <span className="font-semibold text-danger">{formatCurrency(studentDuePaise > 0 ? studentDuePaise : toMinorUnits(targetReconciliationAmount))}</span></span>
                     <span>Amount Paying: <span className="font-semibold text-text-primary">₹{total}</span></span>
                   </div>
                   {isPartialPayment && (
@@ -417,8 +580,9 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                     </div>
                   )}
                   {isFullPayment && (
-                    <div className="text-emerald-700 dark:text-emerald-400 font-medium">
-                      ✓ Full Settlement: Total pending dues will be completely cleared.
+                    <div className="text-emerald-700 dark:text-emerald-400 font-medium flex items-center gap-1.5">
+                      <CheckCircle size={13} className="shrink-0" />
+                      <span>✓ Full Settlement: Total pending dues of {formatCurrency(studentDuePaise)} will be completely cleared.</span>
                     </div>
                   )}
                   {isAdvancePayment && (
@@ -511,7 +675,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                   <span>
                     {isSubmitting
                       ? 'Recording Fee Collection...'
-                      : `Collect Fee (${formatCurrency(toMinorUnits(total))}) & Print Receipt`}
+                      : `Collect ${activeCollectionOption.label} (${formatCurrency(toMinorUnits(total))}) & Print Receipt`}
                   </span>
                 </button>
               </div>
@@ -527,9 +691,10 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
             total={total}
             collectedBy={collectedBy}
             feeCategory={activeCategory.name}
-            billingMonth={billingCycleInfo.billingMonth}
-            billingPeriod={billingCycleInfo.coverageLabel}
-            nextDueDate={billingCycleInfo.nextDueDateFormatted}
+            collectionTypeLabel={activeCollectionOption.label}
+            billingMonth={collectionType === 'monthly' || collectionType === 'locker' ? billingCycleInfo.billingMonth : undefined}
+            billingPeriod={collectionType === 'monthly' || collectionType === 'locker' ? billingCycleInfo.coverageLabel : collectionType === 'dues' ? 'Outstanding Dues Clearance' : collectionType === 'fine' ? 'Late Penalty Clearance' : 'Partial Payment'}
+            nextDueDate={collectionType === 'monthly' || collectionType === 'locker' ? billingCycleInfo.nextDueDateFormatted : undefined}
             balanceRemaining={remainingDuePaise}
             paymentDate={paymentDate}
             txnId={txnId}

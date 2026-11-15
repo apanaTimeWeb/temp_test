@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
+import { STANDARD_CYCLE_AMOUNTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/constants/ManagerFinanceCollectFeeConstants';
 import { Calendar, Clock } from 'lucide-react';
 
 export interface ManagerFinanceCollectFeeDurationSelectorProps {
@@ -22,13 +23,6 @@ export interface ManagerFinanceCollectFeeDurationSelectorProps {
   nextDueDateFormatted?: string;
   customMonthsError?: string;
 }
-
-const STANDARD_CYCLE_AMOUNTS: Record<string, number> = {
-  '1': 1200,
-  '3': 3400,
-  '6': 6500,
-  '12': 12000,
-};
 
 export default function ManagerFinanceCollectFeeDurationSelector({
   isCustomDuration,
