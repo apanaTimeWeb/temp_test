@@ -49,48 +49,46 @@ export function ManagerSeatsMatrixClient() {
   const [sortField, setSortField] = useState<SeatSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-  // Filtered seats for Table View
-  const filteredTableSeats = useMemo(() => {
+  // Unified filtered seats for BOTH Table View and Grid View
+  const filteredSeats = useMemo(() => {
     return visible.filter((seat) => {
+      // 1. Search Query filter (ID, Student Name, Smart ID, Shift)
+      const q = searchQuery.trim().toLowerCase();
       const matchesSearch =
-        searchQuery.trim() === '' ||
-        seat.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (seat.student && seat.student.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (seat.smartId && seat.smartId.toLowerCase().includes(searchQuery.toLowerCase()));
+        q === '' ||
+        seat.id.toLowerCase().includes(q) ||
+        `s-${seat.id}`.toLowerCase().includes(q) ||
+        (seat.student && seat.student.toLowerCase().includes(q)) ||
+        (seat.smartId && seat.smartId.toLowerCase().includes(q)) ||
+        (seat.shift && seat.shift.toLowerCase().includes(q));
 
+      // 2. Status filter
       const matchesStatus = statusFilter === 'all' || seat.status === statusFilter;
-      const matchesGender = genderFilter === 'all' || (seat.student ? seat.studentGender === genderFilter : true);
+
+      // 3. Gender filter
+      const matchesGender =
+        genderFilter === 'all' ||
+        (statusFilter === 'free' ? true : seat.student ? seat.studentGender === genderFilter : false);
+
       return matchesSearch && matchesStatus && matchesGender;
     });
   }, [visible, searchQuery, statusFilter, genderFilter]);
 
-  // Filtered seats for Grid View
-  const visibleGridSeats = useMemo(() => {
-    let result = visible;
-    if (genderFilter !== 'all') {
-      result = result.filter((seat) => {
-        if (seat.status === 'free') return true;
-        return seat.studentGender === genderFilter;
-      });
-    }
-    if (statusFilter !== 'all') {
-      result = result.filter((seat) => seat.status === statusFilter);
-    }
-    return result;
-  }, [visible, genderFilter, statusFilter]);
+  const filteredTableSeats = filteredSeats;
+  const visibleGridSeats = filteredSeats;
 
   const isFiltered = Boolean(
     searchQuery.trim() !== '' ||
     statusFilter !== 'all' ||
     genderFilter !== 'all' ||
-    activeTab !== 'all'
+    activeTab !== 'All'
   );
 
   const handleResetFilters = () => {
     setSearchQuery('');
     setStatusFilter('all');
     setGenderFilter('all');
-    setActiveTab('all');
+    setActiveTab('All');
     setPage(0);
   };
 

@@ -23,12 +23,13 @@ interface ShiftOccupancy {
 }
 
 function computeShiftOccupancy(seat: SeatData): ShiftOccupancy {
-  if (seat.status === 'free' || seat.status === 'maintenance') {
+  // A seat can ONLY have booked shifts if it actually has an allocated student AND is occupied or expiring
+  if ((seat.status !== 'occupied' && seat.status !== 'expiring') || !seat.student) {
     return { morning: false, afternoon: false, evening: false, night: false };
   }
 
   const shiftStr = (seat.shift || '').toLowerCase();
-  if (shiftStr.includes('full') || seat.status === 'occupied' && !seat.shift) {
+  if (shiftStr.includes('full') || !seat.shift) {
     return { morning: true, afternoon: true, evening: true, night: true };
   }
 
@@ -187,14 +188,30 @@ export function ManagerSeatsMatrixGridView({
               Ground Floor — AC Silent Reading Hall (Interactive Multi-Shift Grid)
             </p>
           </div>
-          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-success-bg text-success border border-border">
-            {isPending ? '…' : freeCount} {tManagerUi('seats_free_41c53c')}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-surface text-primary border border-border">
+              {visibleGridSeats.length} {visibleGridSeats.length === 1 ? 'seat' : 'seats'}
+            </span>
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
+              {visibleGridSeats.filter((s) => s.status === 'free').length} Free
+            </span>
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/15 text-rose-500 border border-rose-500/30">
+              {visibleGridSeats.filter((s) => s.status === 'occupied' || s.status === 'expiring').length} Booked
+            </span>
+          </div>
         </div>
 
         {isPending ? (
           <div className="flex items-center justify-center py-24 text-secondary text-sm">
             {tManagerUi('loading_seat_matrix')}
+          </div>
+        ) : visibleGridSeats.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center space-y-2">
+            <Armchair size={36} className="text-secondary opacity-40" />
+            <p className="text-sm font-semibold text-primary">No seats found matching active filters</p>
+            <p className="text-xs text-secondary">
+              Try adjusting your search query, shift, status, or gender filters.
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
@@ -211,7 +228,6 @@ export function ManagerSeatsMatrixGridView({
                 <button
                   type="button"
                   key={seat.uuid || seat.id}
-                  disabled={seat.status === 'unknown'}
                   onClick={() => onSelectSeat(seat)}
                   className={`h-20 rounded-xl p-2 flex flex-col items-center justify-between text-xs font-semibold motion-safe:transition-all cursor-pointer relative group ${
                     isMatch
@@ -252,6 +268,8 @@ export function ManagerSeatsMatrixGridView({
                     </span>
                   ) : seat.status === 'maintenance' ? (
                     <span className="text-[10px] text-secondary italic">Maint.</span>
+                  ) : seat.status === 'unknown' ? (
+                    <span className="text-[10px] text-secondary italic">Unknown</span>
                   ) : (
                     <span className="text-[10px] text-emerald-400 font-bold">Free</span>
                   )}
