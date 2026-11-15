@@ -212,8 +212,7 @@ export function ManagerMembersAlumniTable({
                 {renderSortableHeader('id', 'Alumni ID')}
                 {renderSortableHeader('name', 'Student Name')}
                 {renderSortableHeader('phone', 'Contact Phone')}
-                {renderSortableHeader('exam', 'Qualified Exam')}
-                <th scope="col" className="py-3 px-4 text-left align-middle whitespace-nowrap">Designation</th>
+                {renderSortableHeader('exam', 'Qualified Exam & Designation')}
                 {renderSortableHeader('leftDate', 'Exit Date')}
                 {renderSortableHeader('duration', 'Tenure')}
                 <th scope="col" className="py-3 px-4 text-left align-middle whitespace-nowrap">Junior Advice</th>
@@ -224,7 +223,7 @@ export function ManagerMembersAlumniTable({
             <tbody>
               {filteredAlumni.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="py-12 text-center text-secondary text-xs sm:text-sm align-middle">
+                  <td colSpan={9} className="py-12 text-center text-secondary text-xs sm:text-sm align-middle">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <GraduationCap size={36} className="text-primary shrink-0" />
                       <p className="font-medium">No alumni records matching the selected search query and filters.</p>
@@ -265,27 +264,23 @@ export function ManagerMembersAlumniTable({
                       </span>
                     </td>
 
-                    {/* Column 4: Qualified Exam */}
-                    <td className="py-3 px-4 font-semibold text-success text-xs align-middle whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5">
-                        <Award size={13} className="text-success shrink-0" />
-                        <span>{alumnus.exam}</span>
-                      </span>
-                    </td>
-
-                    {/* Column 5: Designation / Post */}
-                    <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
-                      {alumnus.designation ? (
-                        <span className="inline-flex items-center gap-1.5">
-                          <Briefcase size={13} className="text-info shrink-0" />
-                          <span>{alumnus.designation}</span>
+                    {/* Column 4: Merged Qualified Exam & Designation */}
+                    <td className="py-3 px-4 align-middle whitespace-nowrap">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="font-semibold text-success text-xs inline-flex items-center gap-1.5">
+                          <Award size={13} className="text-success shrink-0" />
+                          <span>{alumnus.exam}</span>
                         </span>
-                      ) : (
-                        <span className="opacity-40">—</span>
-                      )}
+                        {alumnus.designation ? (
+                          <span className="text-[11px] text-secondary inline-flex items-center gap-1">
+                            <Briefcase size={12} className="text-info shrink-0" />
+                            <span>{alumnus.designation}</span>
+                          </span>
+                        ) : null}
+                      </div>
                     </td>
 
-                    {/* Column 6: Exit Date */}
+                    {/* Column 5: Exit Date */}
                     <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
                       <span className="inline-flex items-center gap-1.5">
                         <Calendar size={13} className="text-primary shrink-0" />
@@ -293,7 +288,7 @@ export function ManagerMembersAlumniTable({
                       </span>
                     </td>
 
-                    {/* Column 7: Tenure / Duration */}
+                    {/* Column 6: Tenure / Duration */}
                     <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
                       <span className="inline-flex items-center gap-1.5">
                         <Clock size={13} className="text-warning shrink-0" />
@@ -301,7 +296,7 @@ export function ManagerMembersAlumniTable({
                       </span>
                     </td>
 
-                    {/* Column 8: Junior Advice / Review */}
+                    {/* Column 7: Junior Advice / Review */}
                     <td className="py-3 px-4 align-middle max-w-[200px] lg:max-w-[260px]">
                       {alumnus.testimonial ? (
                         <div className="flex items-start gap-1.5 text-xs text-secondary italic" title={alumnus.testimonial}>
@@ -313,7 +308,7 @@ export function ManagerMembersAlumniTable({
                       )}
                     </td>
 
-                    {/* Column 9: Status Badge */}
+                    {/* Column 8: Status Badge */}
                     <td className="py-3 px-4 align-middle whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
@@ -331,7 +326,7 @@ export function ManagerMembersAlumniTable({
                       </span>
                     </td>
 
-                    {/* Column 10: Action Button */}
+                    {/* Column 9: Action Button */}
                     <td className="py-3 px-4 text-right align-middle whitespace-nowrap">
                       {onDeleteAlumni && (
                         <button
