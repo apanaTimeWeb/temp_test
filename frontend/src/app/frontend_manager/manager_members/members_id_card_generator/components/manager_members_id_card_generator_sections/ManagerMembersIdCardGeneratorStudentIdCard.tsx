@@ -16,7 +16,8 @@ function ManagerMembersIdCardGeneratorBarcodeStripes({ id }: { id: string }) {
   return (
     <svg width="110" height="36" viewBox="0 0 110 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       {bars.reduce<{ x: number; elements: ReactElement[] }>((result, bar, index) => {
-        const element = <rect key={`${id}-barcode-stripe-${index}`} x={result.x} y="0" width={bar.width} height="36" className={index % 5 === 0 ? 'mgr-barcode-primary' : index % 3 === 0 ? 'mgr-barcode-secondary' : 'mgr-barcode-muted'} rx="0.5" />;
+        const fill = index % 5 === 0 ? '#38bdf8' : index % 3 === 0 ? '#a78bfa' : '#f1f5f9';
+        const element = <rect key={`${id}-barcode-stripe-${index}`} x={result.x} y="0" width={bar.width} height="36" fill={fill} rx="0.5" />;
         return { x: result.x + bar.width + bar.gap, elements: [...result.elements, element] };
       }, { x: 0, elements: [] }).elements}
     </svg>
@@ -27,29 +28,29 @@ function ManagerMembersIdCardGeneratorQrSvg({ code }: { code: string }) {
   return (
     <svg width="46" height="46" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="rounded-md" aria-label={`QR access token for ${code}`}>
       {/* Background card */}
-      <rect width="44" height="44" rx="4" fill="currentColor" className="text-floating" />
+      <rect width="44" height="44" rx="4" fill="#FFFFFF" />
       {/* Top Left Finder */}
-      <rect x="4" y="4" width="12" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary" />
-      <rect x="7.5" y="7.5" width="5" height="5" rx="1" fill="currentColor" className="text-primary" />
+      <rect x="4" y="4" width="12" height="12" rx="2" fill="none" stroke="#0F172A" strokeWidth="2.5" />
+      <rect x="7.5" y="7.5" width="5" height="5" rx="1" fill="#0F172A" />
       {/* Top Right Finder */}
-      <rect x="28" y="4" width="12" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary" />
-      <rect x="31.5" y="7.5" width="5" height="5" rx="1" fill="currentColor" className="text-primary" />
+      <rect x="28" y="4" width="12" height="12" rx="2" fill="none" stroke="#0F172A" strokeWidth="2.5" />
+      <rect x="31.5" y="7.5" width="5" height="5" rx="1" fill="#0F172A" />
       {/* Bottom Left Finder */}
-      <rect x="4" y="28" width="12" height="12" rx="2" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary" />
-      <rect x="7.5" y="31.5" width="5" height="5" rx="1" fill="currentColor" className="text-primary" />
+      <rect x="4" y="28" width="12" height="12" rx="2" fill="none" stroke="#0F172A" strokeWidth="2.5" />
+      <rect x="7.5" y="31.5" width="5" height="5" rx="1" fill="#0F172A" />
       {/* Data Pixels */}
-      <rect x="20" y="6" width="3" height="3" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="20" y="12" width="3" height="3" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="6" y="20" width="3" height="3" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="12" y="20" width="3" height="3" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="18" y="18" width="8" height="8" rx="1.5" fill="currentColor" className="text-primary" />
-      <rect x="28" y="20" width="4" height="4" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="34" y="24" width="4" height="4" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="20" y="28" width="3" height="3" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="28" y="30" width="4" height="4" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="36" y="32" width="4" height="4" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="22" y="36" width="4" height="4" rx="0.5" fill="currentColor" className="text-primary" />
-      <rect x="30" y="36" width="4" height="4" rx="0.5" fill="currentColor" className="text-primary" />
+      <rect x="20" y="6" width="3" height="3" rx="0.5" fill="#0F172A" />
+      <rect x="20" y="12" width="3" height="3" rx="0.5" fill="#0F172A" />
+      <rect x="6" y="20" width="3" height="3" rx="0.5" fill="#0F172A" />
+      <rect x="12" y="20" width="3" height="3" rx="0.5" fill="#0F172A" />
+      <rect x="18" y="18" width="8" height="8" rx="1.5" fill="#0F172A" />
+      <rect x="28" y="20" width="4" height="4" rx="0.5" fill="#0F172A" />
+      <rect x="34" y="24" width="4" height="4" rx="0.5" fill="#0F172A" />
+      <rect x="20" y="28" width="3" height="3" rx="0.5" fill="#0F172A" />
+      <rect x="28" y="30" width="4" height="4" rx="0.5" fill="#0F172A" />
+      <rect x="36" y="32" width="4" height="4" rx="0.5" fill="#0F172A" />
+      <rect x="22" y="36" width="4" height="4" rx="0.5" fill="#0F172A" />
+      <rect x="30" y="36" width="4" height="4" rx="0.5" fill="#0F172A" />
     </svg>
   );
 }
@@ -86,7 +87,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({ data }: Man
             <div className="mgr-idcard-logo-icon">📚</div>
             <div>
               <div className="mgr-idcard-logo-text">STUDY LIB OS</div>
-              <div className="mgr-idcard-branch-text font-semibold text-primary">📍 {data.branch || 'Central Library'}</div>
+              <div className="mgr-idcard-branch-text font-semibold">📍 {data.branch || 'Central Library'}</div>
             </div>
           </div>
           <div className="mgr-idcard-header-right">
@@ -153,7 +154,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({ data }: Man
               <div className="mgr-idcard-qr flex items-center justify-center p-0.5" role="img" aria-label={`QR access verification for ${data.smartId}`}>
                 <ManagerMembersIdCardGeneratorQrSvg code={data.smartId} />
               </div>
-              <span className="mgr-idcard-qr-label text-[10px] uppercase font-bold tracking-wider text-primary">Scan to Verify</span>
+              <span className="mgr-idcard-qr-label text-[10px] uppercase font-bold tracking-wider">Scan to Verify</span>
             </div>
             <div className="mgr-idcard-barcode-wrap">
               <ManagerMembersIdCardGeneratorBarcodeStripes id={data.smartId} />

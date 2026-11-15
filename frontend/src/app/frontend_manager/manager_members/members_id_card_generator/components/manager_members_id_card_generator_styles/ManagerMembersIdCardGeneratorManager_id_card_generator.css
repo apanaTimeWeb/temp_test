@@ -3,95 +3,96 @@
 
   .mgr-students-theme .mgr-idcard-wrap {
     perspective: 1200px; width: 380px; flex-shrink: 0;
-    filter: drop-shadow(0 20px 60px color-mix(in srgb, theme(--color-primary) 25%, transparent));
+    filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.6));
   }
 
   .mgr-students-theme .mgr-idcard-holo-lines {
     position: absolute; inset: 0;
-    background: theme(--color-surface-highlight);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
     pointer-events: none; z-index: 1; border-radius: 18px;
   }
   .mgr-students-theme .mgr-idcard-header {
-    background: theme(--color-primary);
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
     padding: 14px 18px 12px; display: flex; align-items: center;
     justify-content: space-between; position: relative; z-index: 2;
-    border-bottom: 2px solid color-mix(in srgb, theme(--color-text-primary) 15%, transparent);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
   }
   .mgr-students-theme .mgr-idcard-header::after {
     content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-    background: theme(--color-border);
+    background: rgba(255, 255, 255, 0.1);
   }
   .mgr-students-theme .mgr-idcard-header-left  { display: flex; align-items: center; gap: 10px; }
   .mgr-students-theme .mgr-idcard-header-right { display: flex; align-items: center; gap: 8px; }
-  .mgr-students-theme .mgr-idcard-logo-icon    { font-size: 22px; filter: drop-shadow(0 2px 4px color-mix(in srgb, theme(--color-page) 40%, transparent)); }
-  .mgr-students-theme .mgr-idcard-logo-text    { font-size: 12px; font-weight: 800; color: theme(--color-on-primary); letter-spacing: 0.1em; line-height: 1.2; text-shadow: 0 1px 3px color-mix(in srgb, theme(--color-page) 30%, transparent); }
-  .mgr-students-theme .mgr-idcard-branch-text  { font-size: 9px; color: color-mix(in srgb, theme(--color-text-primary) 70%, transparent); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1px; }
+  .mgr-students-theme .mgr-idcard-logo-icon    { font-size: 22px; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)); }
+  .mgr-students-theme .mgr-idcard-logo-text    { font-size: 13px; font-weight: 800; color: #FFFFFF !important; letter-spacing: 0.1em; line-height: 1.2; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+  .mgr-students-theme .mgr-idcard-branch-text  { font-size: 10px; color: #FDE047 !important; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 1px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
   .mgr-students-theme .mgr-idcard-header-chip  {
-    background: color-mix(in srgb, theme(--color-text-primary) 25%, transparent); border: 1px solid color-mix(in srgb, theme(--color-text-primary) 40%, transparent);
-    border-radius: 5px; padding: 3px 9px; font-size: 8px; font-weight: 800;
-    color: theme(--color-on-primary); letter-spacing: 0.12em; text-transform: uppercase; backdrop-filter: blur(4px);
+    background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px; padding: 3px 9px; font-size: 8px; font-weight: 800;
+    color: #FFFFFF !important; letter-spacing: 0.12em; text-transform: uppercase; backdrop-filter: blur(4px);
   }
   .mgr-students-theme .mgr-idcard-body         { padding: 18px 18px 14px; position: relative; z-index: 2; }
   .mgr-students-theme .mgr-idcard-profile-row  { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 14px; }
   .mgr-students-theme .mgr-idcard-photo {
     width: 76px; height: 76px; border-radius: 14px;
-    border: 2.5px solid color-mix(in srgb, theme(--color-primary) 60%, transparent);
+    background: #27272a;
+    border: 2px solid #3b82f6;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; position: relative; overflow: hidden;
-    box-shadow: 0 4px 16px color-mix(in srgb, theme(--color-page) 40%, transparent), inset 0 1px 0 color-mix(in srgb, theme(--color-text-primary) 10%, transparent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
-  .mgr-students-theme .mgr-idcard-photo-initials { font-size: 26px; font-weight: 800; position: relative; z-index: 1; letter-spacing: -0.02em; }
+  .mgr-students-theme .mgr-idcard-photo-initials { font-size: 26px; font-weight: 800; color: #60a5fa !important; position: relative; z-index: 1; letter-spacing: -0.02em; }
   .mgr-students-theme .mgr-idcard-chip {
     position: absolute; bottom: 5px; right: 5px; width: 18px; height: 13px;
-    background: theme(--color-primary);
+    background: #eab308;
     border-radius: 2px; display: flex; flex-direction: column;
     justify-content: center; align-items: center; gap: 2px; padding: 2px;
   }
-  .mgr-students-theme .mgr-idcard-chip-line    { width: 100%; height: 1.5px; background: color-mix(in srgb, theme(--color-page) 40%, transparent); border-radius: 1px; }
+  .mgr-students-theme .mgr-idcard-chip-line    { width: 100%; height: 1.5px; background: #854d0e; border-radius: 1px; }
   .mgr-students-theme .mgr-idcard-identity     { flex: 1; min-width: 0; }
-  .mgr-students-theme .mgr-idcard-name         { font-size: 18px; font-weight: 800; color: theme(--color-on-primary); line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; text-shadow: 0 1px 6px color-mix(in srgb, theme(--color-page) 30%, transparent); }
-  .mgr-students-theme .mgr-idcard-smartid      { font-size: 11px; font-weight: 700; color: theme(--color-info-text); font-family: 'Courier New', monospace; letter-spacing: 0.1em; background: theme(--color-primary-subtle); border: 1px solid theme(--color-border); border-radius: 5px; padding: 2px 8px; display: inline-block; margin-bottom: 5px; }
-  .mgr-students-theme .mgr-idcard-college-name { font-size: 10px; color: theme(--color-text-secondary); margin: 0 0 4px; }
-  .mgr-students-theme .mgr-idcard-phone-row    { font-size: 11px; color: theme(--color-text-secondary); display: flex; align-items: center; gap: 4px; margin: 0; }
+  .mgr-students-theme .mgr-idcard-name         { font-size: 19px; font-weight: 800; color: #FFFFFF !important; line-height: 1.2; margin: 0 0 6px; letter-spacing: -0.01em; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
+  .mgr-students-theme .mgr-idcard-smartid      { font-size: 11px; font-weight: 700; color: #FACC15 !important; font-family: 'Courier New', monospace; letter-spacing: 0.1em; background: #27272a; border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 5px; padding: 2px 8px; display: inline-block; margin-bottom: 5px; }
+  .mgr-students-theme .mgr-idcard-college-name { font-size: 11px; color: #D4D4D8 !important; margin: 0 0 4px; font-weight: 500; }
+  .mgr-students-theme .mgr-idcard-phone-row    { font-size: 11px; color: #A1A1AA !important; display: flex; align-items: center; gap: 4px; margin: 0; font-weight: 500; }
   .mgr-students-theme .mgr-idcard-color-bar    { display: flex; height: 3px; border-radius: 2px; overflow: hidden; margin-bottom: 14px; gap: 2px; }
-  .mgr-students-theme .mgr-idcard-color-seg    { flex: 1; border-radius: 2px; opacity: 0.85; }
+  .mgr-students-theme .mgr-idcard-color-seg    { flex: 1; border-radius: 2px; opacity: 0.9; }
   .mgr-students-theme .mgr-idcard-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .mgr-students-theme .mgr-idcard-detail-item  { background: color-mix(in srgb, theme(--color-text-primary) 4%, transparent); border: 1px solid color-mix(in srgb, theme(--color-text-primary) 8%, transparent); border-top-width: 2px; border-radius: 10px; padding: 8px 10px; backdrop-filter: blur(4px); }
-  .mgr-students-theme .mgr-idcard-detail-label { font-size: 8px; font-weight: 700; color: theme(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
-  .mgr-students-theme .mgr-idcard-detail-value { font-size: 13px; font-weight: 700; color: theme(--color-on-primary); letter-spacing: 0.02em; }
-  .mgr-students-theme .mgr-idcard-validity-row { display: flex; align-items: center; justify-content: space-between; background: color-mix(in srgb, theme(--color-primary) 10%, transparent); border: 1px solid color-mix(in srgb, theme(--color-primary) 25%, transparent); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; }
-  .mgr-students-theme .mgr-idcard-validity-label { font-size: 8px; color: theme(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 3px; }
-  .mgr-students-theme .mgr-idcard-validity-value { font-size: 12px; font-weight: 700; color: theme(--color-primary); }
-  .mgr-students-theme .mgr-idcard-validity-value--expiry { color: theme(--color-warning-text); }
-  .mgr-students-theme .mgr-idcard-validity-sep   { font-size: 12px; color: theme(--color-text-disabled); }
+  .mgr-students-theme .mgr-idcard-detail-item  { background: #27272a; border: 1px solid rgba(255, 255, 255, 0.08); border-top-width: 2.5px; border-radius: 10px; padding: 8px 10px; }
+  .mgr-students-theme .mgr-idcard-detail-label { font-size: 8.5px; font-weight: 700; color: #94A3B8 !important; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+  .mgr-students-theme .mgr-idcard-detail-value { font-size: 13px; font-weight: 700; color: #FFFFFF !important; letter-spacing: 0.02em; }
+  .mgr-students-theme .mgr-idcard-validity-row { display: flex; align-items: center; justify-content: space-between; background: #27272a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; }
+  .mgr-students-theme .mgr-idcard-validity-label { font-size: 8.5px; color: #94A3B8 !important; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; margin-bottom: 3px; }
+  .mgr-students-theme .mgr-idcard-validity-value { font-size: 12px; font-weight: 700; color: #38BDF8 !important; }
+  .mgr-students-theme .mgr-idcard-validity-value--expiry { color: #FBBF24 !important; }
+  .mgr-students-theme .mgr-idcard-validity-sep   { font-size: 11px; color: #64748B; }
   .mgr-students-theme .mgr-idcard-validity-right { text-align: right; }
   .mgr-students-theme .mgr-idcard-bottom-row     { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
   .mgr-students-theme .mgr-idcard-qr-wrap        { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .mgr-students-theme .mgr-idcard-qr-label       { font-size: 7px; color: color-mix(in srgb, theme(--color-text-primary) 40%, transparent); text-transform: uppercase; letter-spacing: 0.08em; }
-  .mgr-students-theme .mgr-idcard-qr             { width: 52px; height: 52px; background: theme(--color-text-primary); border-radius: 7px; padding: 4px; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); gap: 1.5px; box-shadow: 0 2px 8px color-mix(in srgb, theme(--color-page) 40%, transparent); }
-  .mgr-students-theme .mgr-idcard-qr--unavailable { display: flex; align-items: center; justify-content: center; color: theme(--color-text-secondary); background: theme(--color-card); border: 1px dashed theme(--color-border); box-shadow: none; }
-  .mgr-students-theme .mgr-idcard-verification-note { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; max-width: 110px; min-height: 52px; padding: 6px; border: 1px dashed theme(--color-border); border-radius: 8px; background: theme(--color-card); text-align: center; }
-  .mgr-students-theme .mgr-idcard-verification-title { font-size: 8px; font-weight: 800; color: theme(--color-text-secondary); letter-spacing: 0.06em; text-transform: uppercase; }
-  .mgr-students-theme .mgr-idcard-verification-sub { font-size: 7px; color: theme(--color-text-secondary); }
+  .mgr-students-theme .mgr-idcard-qr-label       { font-size: 8.5px; color: #94A3B8 !important; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+  .mgr-students-theme .mgr-idcard-qr             { width: 52px; height: 52px; background: #FFFFFF; border-radius: 7px; padding: 3px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); }
+  .mgr-students-theme .mgr-idcard-qr--unavailable { display: flex; align-items: center; justify-content: center; color: #94A3B8; background: #27272a; border: 1px dashed rgba(255, 255, 255, 0.2); box-shadow: none; }
+  .mgr-students-theme .mgr-idcard-verification-note { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; max-width: 110px; min-height: 52px; padding: 6px 8px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: #27272a; text-align: center; }
+  .mgr-students-theme .mgr-idcard-verification-title { font-size: 9px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+  .mgr-students-theme .mgr-idcard-verification-sub { font-size: 8px; color: #94A3B8 !important; font-weight: 500; }
   .mgr-students-theme .mgr-idcard-qr-cell        { border-radius: 1px; }
-  .mgr-students-theme .mgr-idcard-qr-cell.on     { background: theme(--color-page); }
+  .mgr-students-theme .mgr-idcard-qr-cell.on     { background: #0F172A; }
   .mgr-students-theme .mgr-idcard-qr-cell.off    { background: transparent; }
   .mgr-students-theme .mgr-idcard-barcode-wrap   { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-  .mgr-students-theme .mgr-idcard-barcode-id     { font-size: 11px; font-weight: 900; font-family: 'Courier New', monospace; color: theme(--color-info-text); letter-spacing: 0.06em; }
-  .mgr-students-theme .mgr-idcard-barcode-sub    { font-size: 8px; color: color-mix(in srgb, theme(--color-text-primary) 35%, transparent); text-transform: uppercase; letter-spacing: 0.08em; }
-  .mgr-students-theme .mgr-idcard-tamper-seal    { display: flex; flex-direction: column; align-items: center; gap: 2px; background: theme(--color-success-bg); border: 1px solid theme(--color-success); border-radius: 8px; padding: 6px 8px; }
-  .mgr-students-theme .mgr-idcard-tamper-text    { font-size: 8px; font-weight: 800; color: theme(--color-success-text); letter-spacing: 0.1em; text-transform: uppercase; }
-  .mgr-students-theme .mgr-idcard-tamper-sub     { font-size: 7px; color: theme(--color-success-text); letter-spacing: 0.04em; white-space: nowrap; }
+  .mgr-students-theme .mgr-idcard-barcode-id     { font-size: 11px; font-weight: 900; font-family: 'Courier New', monospace; color: #FFFFFF !important; letter-spacing: 0.08em; }
+  .mgr-students-theme .mgr-idcard-barcode-sub    { font-size: 8.5px; color: #94A3B8 !important; text-transform: uppercase; letter-spacing: 0.08em; }
+  .mgr-students-theme .mgr-idcard-tamper-seal    { display: flex; flex-direction: column; align-items: center; gap: 2px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 8px; padding: 6px 8px; }
+  .mgr-students-theme .mgr-idcard-tamper-text    { font-size: 8px; font-weight: 800; color: #34d399; letter-spacing: 0.1em; text-transform: uppercase; }
+  .mgr-students-theme .mgr-idcard-tamper-sub     { font-size: 7px; color: #34d399; letter-spacing: 0.04em; white-space: nowrap; }
   .mgr-students-theme .mgr-idcard-stripe {
     height: 8px;
-    background: theme(--color-primary);
+    background: linear-gradient(90deg, #2563eb, #7c3aed, #059669, #e11d48, #2563eb);
     background-size: 200% 100%;
     animation: mgr-stripe-scroll 3s linear infinite;
     position: relative; z-index: 2;
   }
-  .mgr-students-theme .mgr-idcard-arrow   { color: theme(--color-text-disabled); font-size: 14px; }
+  .mgr-students-theme .mgr-idcard-arrow   { color: #64748B; font-size: 14px; }
   .mgr-students-theme .mgr-idcard-college { margin-top: 3px; }
-  .mgr-students-theme .mgr-idcard-phone   { font-size: 11px; color: theme(--color-text-secondary); display: flex; align-items: center; gap: 4px; }
+  .mgr-students-theme .mgr-idcard-phone   { font-size: 11px; color: #A1A1AA; display: flex; align-items: center; gap: 4px; }
 
   .mgr-students-theme .mgr-idcard-page-layout { display: grid; grid-template-columns: 1fr 400px; gap: 24px; align-items: start; }
 
@@ -130,24 +131,23 @@
 .mgr-students-theme .mgr-idcard-actions-card,
 .mgr-students-theme .mgr-idcard-student-list { display: none !important; }
   }
-.mgr-students-theme .mgr-idcard-photo--primary { background: theme(--color-primary-subtle); border-color: theme(--color-primary); }
-.mgr-students-theme .mgr-idcard-photo-initials { color: theme(--color-primary); }
-.mgr-students-theme .mgr-idcard-color-seg--primary { background: theme(--color-primary); }
-.mgr-students-theme .mgr-idcard-color-seg--secondary { background: theme(--color-purple-text); }
-.mgr-students-theme .mgr-idcard-color-seg--info { background: theme(--color-info); }
-.mgr-students-theme .mgr-idcard-color-seg--success { background: theme(--color-success); }
-.mgr-students-theme .mgr-idcard-detail-item--primary { border-top-color: theme(--color-primary); }
-.mgr-students-theme .mgr-idcard-detail-item--secondary { border-top-color: theme(--color-purple-text); }
-.mgr-students-theme .mgr-idcard-detail-item--info { border-top-color: theme(--color-info); }
-.mgr-students-theme .mgr-idcard-detail-item--success { border-top-color: theme(--color-success); }
-.mgr-students-theme .mgr-idcard-muted-icon { color: theme(--color-text-secondary); }
-.mgr-students-theme .mgr-idcard-success-icon { color: theme(--color-success-text); }
+.mgr-students-theme .mgr-idcard-photo--primary { background: #27272a; border-color: #3b82f6; }
+.mgr-students-theme .mgr-idcard-photo-initials { color: #60a5fa !important; }
+.mgr-students-theme .mgr-idcard-color-seg--primary { background: #3b82f6; }
+.mgr-students-theme .mgr-idcard-color-seg--secondary { background: #a855f7; }
+.mgr-students-theme .mgr-idcard-color-seg--info { background: #38bdf8; }
+.mgr-students-theme .mgr-idcard-color-seg--success { background: #10b981; }
+.mgr-students-theme .mgr-idcard-detail-item--primary { border-top-color: #3b82f6; }
+.mgr-students-theme .mgr-idcard-detail-item--secondary { border-top-color: #a855f7; }
+.mgr-students-theme .mgr-idcard-detail-item--info { border-top-color: #facc15; }
+.mgr-students-theme .mgr-idcard-detail-item--success { border-top-color: #10b981; }
+.mgr-students-theme .mgr-idcard-muted-icon { color: rgba(255, 255, 255, 0.9); }
+.mgr-students-theme .mgr-idcard-success-icon { color: #34d399; }
   .mgr-students-theme .mgr-idcard {
     width: 380px; border-radius: 18px; overflow: hidden;
-    background: theme(--color-card);
-    border: 1px solid color-mix(in srgb, theme(--color-primary) 40%, transparent);
-    box-shadow: 0 0 0 1px color-mix(in srgb, theme(--color-primary) 15%, transparent), 0 25px 70px color-mix(in srgb, theme(--color-page) 70%, transparent),
-      0 0 100px color-mix(in srgb, theme(--color-primary) 10%, transparent) inset, inset 0 1px 0 color-mix(in srgb, theme(--color-text-primary) 8%, transparent);
+    background: #18181b;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 25px 70px rgba(0, 0, 0, 0.7);
     position: relative; font-family: 'Inter', sans-serif; transition: transform theme(--animate-duration-slow) ease;
   }
   .mgr-students-theme .mgr-idcard:hover { transform: perspective(1000px) rotateY(-2deg) rotateX(1deg); }
@@ -263,9 +263,9 @@
 .mgr-admission-summary-card { position: sticky; top: 80px; }
 .mgr-success-heading-group { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .mgr-success-info-value--mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-.mgr-barcode-primary { fill: theme(--color-primary); }
-.mgr-barcode-secondary { fill: theme(--color-purple-text); }
-.mgr-barcode-muted { fill: theme(--color-text-secondary); }
+.mgr-barcode-primary { fill: #38bdf8; }
+.mgr-barcode-secondary { fill: #a78bfa; }
+.mgr-barcode-muted { fill: #f1f5f9; }
 @media (max-width: 767px) {.mgr-admission-layout { grid-template-columns: 1fr; } .mgr-admission-summary-card { position: static; }}
 .mgr-success-close { min-width: 44px; min-height: 44px; }
 
