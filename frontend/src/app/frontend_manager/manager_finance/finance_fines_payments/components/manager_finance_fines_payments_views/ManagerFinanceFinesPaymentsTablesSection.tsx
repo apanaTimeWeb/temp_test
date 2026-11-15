@@ -74,15 +74,25 @@ export default function ManagerFinanceFinesPaymentsTablesSection({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="relative w-full sm:w-60">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <div className="relative w-full sm:w-64">
+              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
               <input
-                type="search"
+                type="text"
                 placeholder="Search fine ID, member, or type..."
-                className="mgr-input pl-8 text-xs w-full"
+                className="mgr-input !pl-10 !pr-9 text-xs w-full"
                 value={tableSearchQuery}
                 onChange={(e) => onTableSearchQueryChange(e.target.value)}
               />
+              {tableSearchQuery && (
+                <button
+                  type="button"
+                  onClick={() => onTableSearchQueryChange('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary cursor-pointer p-0.5"
+                  title="Clear search"
+                >
+                  <X size={13} />
+                </button>
+              )}
             </div>
 
             <select
@@ -146,15 +156,25 @@ export default function ManagerFinanceFinesPaymentsTablesSection({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="relative w-full sm:w-60">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <div className="relative w-full sm:w-64">
+              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
               <input
-                type="search"
+                type="text"
                 placeholder="Search receipt, member, or collector..."
-                className="mgr-input pl-8 text-xs w-full"
+                className="mgr-input !pl-10 !pr-9 text-xs w-full"
                 value={tableSearchQuery}
                 onChange={(e) => onTableSearchQueryChange(e.target.value)}
               />
+              {tableSearchQuery && (
+                <button
+                  type="button"
+                  onClick={() => onTableSearchQueryChange('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary cursor-pointer p-0.5"
+                  title="Clear search"
+                >
+                  <X size={13} />
+                </button>
+              )}
             </div>
 
             <select
@@ -218,15 +238,25 @@ export default function ManagerFinanceFinesPaymentsTablesSection({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="relative w-full sm:w-60">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+            <div className="relative w-full sm:w-64">
+              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
               <input
-                type="search"
+                type="text"
                 placeholder="Search txn ID, receipt, member, plan..."
-                className="mgr-input pl-8 text-xs w-full"
+                className="mgr-input !pl-10 !pr-9 text-xs w-full"
                 value={tableSearchQuery}
                 onChange={(e) => onTableSearchQueryChange(e.target.value)}
               />
+              {tableSearchQuery && (
+                <button
+                  type="button"
+                  onClick={() => onTableSearchQueryChange('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary cursor-pointer p-0.5"
+                  title="Clear search"
+                >
+                  <X size={13} />
+                </button>
+              )}
             </div>
 
             <select

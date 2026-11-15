@@ -148,6 +148,8 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
         finesPaymentsTitle={tManagerUi('fines_payments')}
         scopeDescription={tManagerUi('manage_fine_collections_view_pending_dues_and_request_re_7b6cc6')}
         warningNotice={tManagerUi('this_page_displays_sample_financial_records_for_layout_r_04f8ef')}
+        onExportCsv={handleExportReceiptsCsv}
+        onPrint={() => window.print()}
       />
 
       <ManagerFinanceFinesPaymentsTimeHorizonBar
@@ -162,6 +164,7 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-border">
         {TABS.map((tab) => {
           const isActive = activeTab === tab.id;
+          const isRefundTab = tab.id === 'refundRequests';
           const count =
             tab.id === 'pending'
               ? MANAGER_FINANCE_SAMPLE_PENDING_FINES.filter((f) => f.status === 'Pending').length
@@ -186,6 +189,7 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                 handleResetFilters();
               }}
               aria-pressed={isActive}
+              title={isRefundTab ? 'Opens Security Deposits & Caution Money Refund Desk' : undefined}
               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
                 isActive
                   ? 'bg-primary text-on-primary shadow-sm ring-1 ring-primary'
@@ -194,6 +198,12 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
             >
               <tab.icon size={15} className={isActive ? 'text-on-primary' : 'text-secondary'} />
               <span>{tManagerUi(tab.labelKey)}</span>
+              {isRefundTab && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-normal bg-muted text-secondary border border-border flex items-center gap-0.5">
+                  <span>↗</span>
+                  <span>Deposits</span>
+                </span>
+              )}
               {count !== null && (
                 <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-black text-primary' : 'bg-muted text-secondary'}`}>
                   {count}

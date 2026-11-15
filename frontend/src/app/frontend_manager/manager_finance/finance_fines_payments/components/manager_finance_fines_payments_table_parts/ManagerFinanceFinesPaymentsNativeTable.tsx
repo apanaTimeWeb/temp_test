@@ -39,8 +39,8 @@ export default function ManagerFinanceFinesPaymentsNativeTable<T extends object>
     setPage(0);
   };
   return <div className="w-full min-w-0">
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-left" aria-rowcount={rows.length + 1}>
+    <div className="overflow-x-auto scrollbar-thin">
+      <table className="w-full min-w-[850px] border-collapse text-left" aria-rowcount={rows.length + 1}>
         <thead><tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
           {columns.map((column, index) => <th key={column.field ?? column.headerName ?? JSON.stringify(column)} scope="col" aria-sort={sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-3 py-3 font-semibold whitespace-nowrap">
             {column.field && column.sortable !== false ? (

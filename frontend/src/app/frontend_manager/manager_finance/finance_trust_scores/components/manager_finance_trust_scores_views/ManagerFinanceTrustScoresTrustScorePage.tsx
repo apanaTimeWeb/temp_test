@@ -203,7 +203,7 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
                 High Risk
               </span>
             </div>
-            <p className="mt-1 text-xs text-secondary">Score below 40 threshold · Requires advance deposit</p>
+            <p className="mt-1 text-xs text-secondary">Low reliability profiles · Requires advance deposit</p>
           </div>
         </div>
 

@@ -45,35 +45,54 @@ export default function ManagerFinanceFinesPaymentsDashboardTab({
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {kpis.map((kpi) => (
-          <button
-            key={kpi.labelKey}
-            type="button"
-            onClick={() => onSelectKpi(kpi.targetTab, kpi.filterType)}
-            className="p-5 rounded-2xl bg-card border border-border hover:border-primary hover:shadow-md hover:-translate-y-0.5 motion-safe:transition-all text-left cursor-pointer group flex flex-col justify-between"
-          >
-            <div className="flex justify-between items-start mb-3">
-              <div className={`p-2.5 rounded-xl border ${kpi.bg} ${kpi.color}`}>
-                <kpi.icon size={20} />
-              </div>
-              <span className="text-xs text-secondary group-hover:text-primary font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                View list <ArrowRight size={13} />
-              </span>
-            </div>
-            <div>
-              <div className="flex items-center justify-between gap-2 mb-1">
-                <p className="text-xs font-semibold text-secondary uppercase tracking-wider">
-                  {getKpiLabel(kpi.labelKey)}
-                </p>
-                <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
-                  [{timeHorizonLabel}]
+        {kpis.map((kpi) => {
+          const badgeConfig = (() => {
+            switch (kpi.id) {
+              case 'todaysCollection':
+                return { label: 'Realized', cls: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' };
+              case 'totalPending':
+                return { label: 'Unsettled Dues', cls: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20' };
+              case 'overdueFines':
+                return { label: 'Critical Follow-up', cls: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20' };
+              case 'lostBookCharges':
+                return { label: 'Book Replacement', cls: 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20' };
+              case 'damageCharges':
+                return { label: 'Property Restitution', cls: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20' };
+              default:
+                return { label: timeHorizonLabel, cls: 'bg-surface-highlight text-primary border-border' };
+            }
+          })();
+
+          return (
+            <button
+              key={kpi.labelKey}
+              type="button"
+              onClick={() => onSelectKpi(kpi.targetTab, kpi.filterType)}
+              className="p-5 rounded-2xl bg-card border border-border hover:border-primary hover:shadow-md hover:-translate-y-0.5 motion-safe:transition-all text-left cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="flex justify-between items-start mb-3">
+                <div className={`p-2.5 rounded-xl border ${kpi.bg} ${kpi.color}`}>
+                  <kpi.icon size={20} />
+                </div>
+                <span className="text-xs text-secondary group-hover:text-primary font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                  View list <ArrowRight size={13} />
                 </span>
               </div>
-              <h3 className="text-2xl font-black text-primary tracking-tight">{kpi.value}</h3>
-              <p className="text-[11px] text-secondary mt-1">{kpi.subtitle} ({timeHorizonLabel})</p>
-            </div>
-          </button>
-        ))}
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <p className="text-xs font-semibold text-secondary uppercase tracking-wider">
+                    {getKpiLabel(kpi.labelKey)}
+                  </p>
+                  <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${badgeConfig.cls}`}>
+                    {badgeConfig.label}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black text-primary tracking-tight">{kpi.value}</h3>
+                <p className="text-[11px] text-secondary mt-1">{kpi.subtitle} ({timeHorizonLabel})</p>
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       {/* Supplementary Financial Overview Widget: Payment Method Distribution */}
