@@ -14,6 +14,11 @@ import {
   AlertCircle,
   Clock,
   Filter,
+  Eye,
+  RotateCcw,
+  Copy,
+  Send,
+  Sparkles,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -22,6 +27,7 @@ import ManagerCommunicationNotificationCenterNativeTable, {
   type NativeCellParams,
 } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_table_parts/ManagerCommunicationNotificationCenterNativeTable';
 import { MANAGER_COMMUNICATION_SAMPLE_NOTIFICATION_HISTORY } from '@/app/frontend_manager/manager_communication/communication_notification_center/hooks/ManagerCommunicationNotificationCenterDemoRepository';
+import type { ManagerCommunicationNotificationCenterNotificationHistoryRow } from '@/app/frontend_manager/manager_communication/communication_notification_center/mocks/manager_communication_notification_center_fixtures/ManagerCommunicationNotificationCenterOperationalSampleFixtures';
 
 export function ManagerCommunicationNotificationCenterNotificationHistorySection() {
   const tManagerUi = useTranslations('manager.manager_notification_center.ui');
@@ -29,6 +35,8 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
   const [channelFilter, setChannelFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [inspectingRow, setInspectingRow] =
+    useState<ManagerCommunicationNotificationCenterNotificationHistoryRow | null>(null);
 
   const filteredHistory = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -54,6 +62,7 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
     setChannelFilter('all');
     setStatusFilter('all');
     setTypeFilter('all');
+    toast.info('Filters reset to default');
   };
 
   const handleExportCsv = () => {
@@ -74,6 +83,44 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
   const handlePrint = () => {
     window.print();
   };
+
+  const handleResend = (row: ManagerCommunicationNotificationCenterNotificationHistoryRow, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    toast.success(`Resending notification to ${row.recipient} via ${row.channel}... Dispatched!`);
+  };
+
+  const CHANNEL_BUTTONS = [
+    { id: 'all', label: 'All Channels', activeClass: 'bg-card text-primary border-primary ring-1 ring-primary/20' },
+    {
+      id: 'WhatsApp',
+      label: '📱 WhatsApp',
+      activeClass: 'bg-emerald-500/15 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30 font-bold',
+    },
+    {
+      id: 'SMS',
+      label: '💬 SMS',
+      activeClass: 'bg-amber-500/15 border-amber-500 text-amber-300 ring-2 ring-amber-500/30 font-bold',
+    },
+    {
+      id: 'Email',
+      label: '✉️ Email',
+      activeClass: 'bg-sky-500/15 border-sky-500 text-sky-300 ring-2 ring-sky-500/30 font-bold',
+    },
+  ];
+
+  const STATUS_BUTTONS = [
+    { id: 'all', label: 'All Status', activeClass: 'bg-card text-primary border-primary ring-1 ring-primary/20' },
+    {
+      id: 'Delivered',
+      label: '🟢 Delivered',
+      activeClass: 'bg-emerald-500/15 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30 font-bold',
+    },
+    {
+      id: 'Failed',
+      label: '🔴 Failed',
+      activeClass: 'bg-rose-500/15 border-rose-500 text-rose-300 ring-2 ring-rose-500/30 font-bold',
+    },
+  ];
 
   const columnDefs: NativeColumn[] = useMemo(() => {
     const typeLabels: Record<string, string> = {
@@ -120,7 +167,7 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
       {
         field: 'channel',
         headerName: tManagerUi('channel'),
-        width: 120,
+        width: 125,
         cellRenderer: (p: NativeCellParams) => {
           if (p.value === 'Email') {
             return (
@@ -174,6 +221,40 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
             </span>
           ),
       },
+      {
+        field: 'actions' as any,
+        headerName: 'Actions',
+        width: 130,
+        cellRenderer: (p: NativeCellParams) => {
+          const row = p.data as ManagerCommunicationNotificationCenterNotificationHistoryRow;
+          return (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setInspectingRow(row);
+                }}
+                className="p-1.5 rounded-lg border border-border bg-card/60 text-secondary hover:text-primary hover:border-border-focus hover:bg-surface-hover transition-colors cursor-pointer"
+                title="View notification details"
+                aria-label="View details"
+              >
+                <Eye size={13} />
+              </button>
+
+              <button
+                type="button"
+                onClick={(e) => handleResend(row, e)}
+                className="p-1.5 rounded-lg border border-border bg-card/60 text-secondary hover:text-indigo-400 hover:border-indigo-500/30 hover:bg-indigo-500/10 transition-colors cursor-pointer"
+                title="Resend this message"
+                aria-label="Resend notification"
+              >
+                <RotateCcw size={13} />
+              </button>
+            </div>
+          );
+        },
+      },
     ];
   }, [tManagerUi]);
 
@@ -214,86 +295,115 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
         </div>
       </div>
 
-      {/* Multi-Filter Toolbar */}
-      <div className="p-3.5 sm:p-4 rounded-xl bg-surface/40 border border-border flex flex-col md:flex-row flex-wrap items-stretch md:items-center gap-3">
-        {/* Search Box with Guaranteed Non-Overlapping Padding */}
-        <div className="relative flex-1 min-w-[200px] flex items-center">
-          <Search
-            size={15}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none z-10"
-          />
-          <input
-            type="search"
-            placeholder="Search recipient, type, or channel..."
-            className="mgr-input mgr-input-with-icon h-10 !pl-10 text-xs sm:text-sm w-full rounded-xl bg-surface/60 border border-border focus:border-primary"
-            style={{ paddingLeft: '2.6rem', paddingRight: searchQuery ? '2.25rem' : '1rem' }}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md z-10 cursor-pointer"
-              aria-label="Clear search"
+      {/* Multi-Filter Toolbar with Interactive Color-Filled Filter Buttons */}
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-surface/40 border border-border flex flex-col gap-3">
+        {/* Top Row: Non-Overlapping Search Box & Quick Type Dropdown */}
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+          {/* Search Box with Guaranteed Non-Overlapping Padding */}
+          <div className="relative flex-1 min-w-[200px] flex items-center">
+            <Search
+              size={15}
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none z-10"
+            />
+            <input
+              type="search"
+              placeholder="Search recipient, type, or channel..."
+              className="mgr-input mgr-input-with-icon h-10 !pl-10 text-xs sm:text-sm w-full rounded-xl bg-surface/60 border border-border focus:border-primary"
+              style={{ paddingLeft: '2.6rem', paddingRight: searchQuery ? '2.25rem' : '1rem' }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md z-10 cursor-pointer"
+                aria-label="Clear search"
+              >
+                <X size={13} />
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <select
+              aria-label="Filter by Message Type"
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="mgr-select h-10 text-xs sm:text-sm py-1.5 px-3 min-w-[150px] rounded-xl bg-surface/60 border border-border focus:border-primary cursor-pointer"
             >
-              <X size={13} />
-            </button>
-          )}
+              <option value="all">All Message Types</option>
+              <option value="Due reminder">🪙 Due reminder</option>
+              <option value="Overdue reminder">⚠️ Overdue reminder</option>
+              <option value="Membership expiry reminder">🔄 Expiry reminder</option>
+              <option value="Reservation ready">🪑 Reservation ready</option>
+              <option value="Manual member notification">💬 Manual notification</option>
+              <option value="Announcement">📢 Announcement</option>
+            </select>
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="inline-flex items-center justify-center gap-1.5 h-10 px-3.5 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-rose-400 hover:border-rose-500/30 hover:bg-rose-500/10 cursor-pointer transition-colors"
+                title="Reset all filters"
+              >
+                <X size={13} />
+                <span>Reset</span>
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Dropdowns */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full md:w-auto">
-          <select
-            aria-label="Filter by Channel"
-            value={channelFilter}
-            onChange={(e) => setChannelFilter(e.target.value)}
-            className="mgr-select h-10 text-xs sm:text-sm py-1.5 px-3 min-w-[120px] rounded-xl bg-surface/60 border border-border focus:border-primary cursor-pointer"
-          >
-            <option value="all">All Channels</option>
-            <option value="WhatsApp">📱 WhatsApp</option>
-            <option value="SMS">💬 SMS</option>
-            <option value="Email">✉️ Email</option>
-          </select>
+        {/* Bottom Row: Clickable Channel & Status Box Pills (Filled with Color When Clicked) */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-border/50">
+          {/* Channel Selector Pills */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[11px] font-semibold text-secondary flex items-center gap-1 mr-1">
+              <Filter size={11} />
+              <span>Channel:</span>
+            </span>
+            {CHANNEL_BUTTONS.map((ch) => {
+              const isSelected = channelFilter === ch.id;
+              return (
+                <button
+                  key={ch.id}
+                  type="button"
+                  onClick={() => setChannelFilter(ch.id)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
+                    isSelected
+                      ? ch.activeClass
+                      : 'bg-card/60 border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
+                  }`}
+                >
+                  <span>{ch.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
-          <select
-            aria-label="Filter by Status"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="mgr-select h-10 text-xs sm:text-sm py-1.5 px-3 min-w-[110px] rounded-xl bg-surface/60 border border-border focus:border-primary cursor-pointer"
-          >
-            <option value="all">All Status</option>
-            <option value="Delivered">🟢 Delivered</option>
-            <option value="Failed">🔴 Failed</option>
-          </select>
-
-          <select
-            aria-label="Filter by Message Type"
-            value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="mgr-select h-10 text-xs sm:text-sm py-1.5 px-3 min-w-[130px] rounded-xl bg-surface/60 border border-border focus:border-primary cursor-pointer"
-          >
-            <option value="all">All Types</option>
-            <option value="Due reminder">Due reminder</option>
-            <option value="Overdue reminder">Overdue reminder</option>
-            <option value="Membership expiry reminder">Expiry reminder</option>
-            <option value="Reservation ready">Reservation ready</option>
-            <option value="Manual member notification">Manual notification</option>
-            <option value="Announcement">Announcement</option>
-          </select>
+          {/* Status Selector Pills */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[11px] font-semibold text-secondary mr-1">Status:</span>
+            {STATUS_BUTTONS.map((st) => {
+              const isSelected = statusFilter === st.id;
+              return (
+                <button
+                  key={st.id}
+                  type="button"
+                  onClick={() => setStatusFilter(st.id)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
+                    isSelected
+                      ? st.activeClass
+                      : 'bg-card/60 border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
+                  }`}
+                >
+                  <span>{st.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-
-        {hasActiveFilters && (
-          <button
-            type="button"
-            onClick={handleResetFilters}
-            className="inline-flex items-center justify-center gap-1 h-10 px-3.5 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
-            title="Reset filters"
-          >
-            <X size={13} />
-            <span>Reset</span>
-          </button>
-        )}
       </div>
 
       {/* Table Card */}
@@ -308,6 +418,126 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
           }}
         />
       </div>
+
+      {/* Interactive Modal: Inspect Notification Slip & Re-dispatch */}
+      {inspectingRow && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in"
+        >
+          <div className="relative w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-5">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between pb-3 border-b border-border">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                    Dispatch Log #{inspectingRow.id}
+                  </span>
+                  <span
+                    className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+                      inspectingRow.status === 'Delivered'
+                        ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                        : 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+                    }`}
+                  >
+                    {inspectingRow.status}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-primary">Notification Details</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setInspectingRow(null)}
+                className="p-1.5 rounded-lg border border-border text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
+                aria-label="Close dialog"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Modal Content Details */}
+            <div className="space-y-3.5 text-xs sm:text-sm">
+              <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-surface/50 border border-border">
+                <div>
+                  <span className="text-[11px] text-secondary font-semibold">Recipient</span>
+                  <p className="font-bold text-primary mt-0.5">{inspectingRow.recipient}</p>
+                </div>
+                <div>
+                  <span className="text-[11px] text-secondary font-semibold">Channel</span>
+                  <p className="font-bold text-primary mt-0.5 flex items-center gap-1.5">
+                    {inspectingRow.channel === 'WhatsApp' && (
+                      <Smartphone size={13} className="text-emerald-400" />
+                    )}
+                    {inspectingRow.channel === 'SMS' && (
+                      <MessageSquare size={13} className="text-amber-400" />
+                    )}
+                    {inspectingRow.channel === 'Email' && (
+                      <Mail size={13} className="text-sky-400" />
+                    )}
+                    <span>{inspectingRow.channel}</span>
+                  </p>
+                </div>
+                <div>
+                  <span className="text-[11px] text-secondary font-semibold">Message Type</span>
+                  <p className="font-medium text-secondary mt-0.5">{inspectingRow.type}</p>
+                </div>
+                <div>
+                  <span className="text-[11px] text-secondary font-semibold">Timestamp</span>
+                  <p className="font-mono text-secondary mt-0.5">{inspectingRow.date}</p>
+                </div>
+              </div>
+
+              {/* Sample Message Body Box */}
+              <div className="p-3.5 rounded-xl bg-surface/30 border border-border space-y-1.5">
+                <span className="text-[11px] font-semibold text-secondary">Dispatched Message Body</span>
+                <p className="text-xs sm:text-sm text-primary leading-relaxed bg-card p-3 rounded-lg border border-border/70 font-mono">
+                  {`Hello ${inspectingRow.recipient.split(' ')[0]}, your library ${inspectingRow.type.toLowerCase()} notice has been recorded in the system. Ref #${inspectingRow.id} on ${inspectingRow.date}.`}
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Action Buttons */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-border">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `Recipient: ${inspectingRow.recipient}\nType: ${inspectingRow.type}\nChannel: ${inspectingRow.channel}\nDate: ${inspectingRow.date}\nStatus: ${inspectingRow.status}`
+                    );
+                    toast.success('Notification summary copied to clipboard');
+                  }}
+                  className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+                >
+                  <Copy size={12} />
+                  <span>Copy</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+                >
+                  <Printer size={12} />
+                  <span>Print Slip</span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleResend(inspectingRow)}
+                  className="mgr-btn-primary inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-4 rounded-xl bg-primary text-primary-foreground hover:opacity-95 transition-all cursor-pointer shadow-xs"
+                >
+                  <Send size={12} />
+                  <span>Resend Now</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

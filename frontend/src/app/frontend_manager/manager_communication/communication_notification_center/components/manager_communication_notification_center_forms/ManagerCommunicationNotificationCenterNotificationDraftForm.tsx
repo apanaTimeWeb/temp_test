@@ -13,6 +13,12 @@ import {
   Smartphone,
   MessageSquare,
   Sparkles,
+  Mail,
+  RotateCcw,
+  Check,
+  Megaphone,
+  CreditCard,
+  CalendarClock,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -47,8 +53,86 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
   });
 
   const selectedNotificationChannel = useWatch({ control, name: 'channel' });
+  const selectedNotificationType = useWatch({ control, name: 'type' });
   const recipientValue = watch('recipient');
   const messageValue = watch('message') || '';
+
+  const CHANNELS = [
+    {
+      id: 'WhatsApp',
+      label: 'WhatsApp',
+      icon: Smartphone,
+      subtitle: 'Instant delivery (High read rate)',
+      activeBox: 'border-emerald-500 bg-emerald-500/15 text-emerald-300 ring-2 ring-emerald-500/30',
+      activeIcon: 'text-emerald-400',
+      badge: 'Popular',
+      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+    },
+    {
+      id: 'SMS',
+      label: 'SMS Text',
+      icon: MessageSquare,
+      subtitle: 'Carrier text message',
+      activeBox: 'border-amber-500 bg-amber-500/15 text-amber-300 ring-2 ring-amber-500/30',
+      activeIcon: 'text-amber-400',
+      badge: 'Direct',
+      badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    },
+    {
+      id: 'Email',
+      label: 'Email',
+      icon: Mail,
+      subtitle: 'Formal letter dispatch',
+      activeBox: 'border-sky-500 bg-sky-500/15 text-sky-300 ring-2 ring-sky-500/30',
+      activeIcon: 'text-sky-400',
+      badge: 'Official',
+      badgeColor: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+    },
+  ];
+
+  const QUICK_TEMPLATES = [
+    {
+      name: 'Fee Due Reminder',
+      icon: CreditCard,
+      type: 'Due reminder',
+      channel: 'SMS' as const,
+      text: 'Dear Student, your monthly library subscription fee is due. Please settle your dues at the reception or via the student app to avoid seat lock.',
+      badgeStyle: 'hover:border-amber-500/40 hover:bg-amber-500/10 text-amber-300',
+    },
+    {
+      name: 'Seat Renewal Notice',
+      icon: CalendarClock,
+      type: 'Membership expiry reminder',
+      channel: 'WhatsApp' as const,
+      text: 'Hello! Your assigned reading seat reservation expires in 3 days. Renew your membership now to retain your favorite dedicated desk.',
+      badgeStyle: 'hover:border-emerald-500/40 hover:bg-emerald-500/10 text-emerald-300',
+    },
+    {
+      name: 'Library Announcement',
+      icon: Megaphone,
+      type: 'Manual member notification',
+      channel: 'Email' as const,
+      text: 'Notice to all students: The study hall air conditioning maintenance is scheduled tonight from 11 PM to 2 AM. Study halls will remain open with secondary ventilation.',
+      badgeStyle: 'hover:border-sky-500/40 hover:bg-sky-500/10 text-sky-300',
+    },
+  ];
+
+  const handleApplyTemplate = (tmpl: (typeof QUICK_TEMPLATES)[0]) => {
+    setValue('type', tmpl.type as any, { shouldValidate: true, shouldDirty: true });
+    setValue('channel', tmpl.channel, { shouldValidate: true, shouldDirty: true });
+    setValue('message', tmpl.text, { shouldValidate: true, shouldDirty: true });
+    toast.success(`Applied template: "${tmpl.name}"`);
+  };
+
+  const handleClearForm = () => {
+    reset({
+      recipient: '',
+      type: 'Manual member notification',
+      channel: 'Email',
+      message: '',
+    });
+    toast.info('Form cleared');
+  };
 
   const recipientOptions: ComboboxOption[] = useMemo(() => {
     const broadcast: ComboboxOption = {
@@ -140,38 +224,37 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
           {notificationFieldError('recipient')}
         </div>
 
-        {/* Row 2: Type and Channel */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-          {/* Message Type */}
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="manager-notification-type"
-              className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary"
-            >
-              <span className="w-5 h-5 rounded-md bg-amber-500/10 border border-amber-500/25 text-amber-400 flex items-center justify-center shrink-0">
-                <Layers size={12} />
-              </span>
-              <span>{tManagerUi('message_type')}</span>
-              <span className="text-rose-400 font-bold">*</span>
-            </label>
-            <select
-              id="manager-notification-type"
-              className="mgr-select h-11 text-xs sm:text-sm font-medium rounded-xl bg-surface/60 border border-border focus:border-primary px-3.5"
-              {...register('type')}
-              aria-invalid={Boolean(notificationErrors.type)}
-              aria-describedby={notificationErrors.type ? 'manager-notification-type-error' : undefined}
-            >
-              <option value="Due reminder">🪙 {tManagerUi('due_reminder')}</option>
-              <option value="Overdue reminder">⚠️ {tManagerUi('overdue_reminder')}</option>
-              <option value="Reservation ready">🪑 {tManagerUi('reservation_ready')}</option>
-              <option value="Membership expiry reminder">🔄 {tManagerUi('membership_expiry_reminder')}</option>
-              <option value="Manual member notification">💬 {tManagerUi('manual_member_notification')}</option>
-            </select>
-            {notificationFieldError('type')}
-          </div>
+        {/* Row 2: Type Selection */}
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="manager-notification-type"
+            className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary"
+          >
+            <span className="w-5 h-5 rounded-md bg-amber-500/10 border border-amber-500/25 text-amber-400 flex items-center justify-center shrink-0">
+              <Layers size={12} />
+            </span>
+            <span>{tManagerUi('message_type')}</span>
+            <span className="text-rose-400 font-bold">*</span>
+          </label>
+          <select
+            id="manager-notification-type"
+            className="mgr-select h-11 text-xs sm:text-sm font-medium rounded-xl bg-surface/60 border border-border focus:border-primary px-3.5"
+            {...register('type')}
+            aria-invalid={Boolean(notificationErrors.type)}
+            aria-describedby={notificationErrors.type ? 'manager-notification-type-error' : undefined}
+          >
+            <option value="Due reminder">🪙 {tManagerUi('due_reminder')}</option>
+            <option value="Overdue reminder">⚠️ {tManagerUi('overdue_reminder')}</option>
+            <option value="Reservation ready">🪑 {tManagerUi('reservation_ready')}</option>
+            <option value="Membership expiry reminder">🔄 {tManagerUi('membership_expiry_reminder')}</option>
+            <option value="Manual member notification">💬 {tManagerUi('manual_member_notification')}</option>
+          </select>
+          {notificationFieldError('type')}
+        </div>
 
-          {/* Message Channel */}
-          <div className="flex flex-col gap-1.5">
+        {/* Row 3: Interactive Channel Selection Boxes (Color Fills On Click) */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
             <label
               htmlFor="manager-notification-channel"
               className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary"
@@ -182,33 +265,94 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
               <span>{tManagerUi('message_channel')}</span>
               <span className="text-rose-400 font-bold">*</span>
             </label>
-            <select
-              id="manager-notification-channel"
-              className="mgr-select h-11 text-xs sm:text-sm font-medium rounded-xl bg-surface/60 border border-border focus:border-primary px-3.5"
-              {...register('channel')}
-              aria-invalid={Boolean(notificationErrors.channel)}
-              aria-describedby={notificationErrors.channel ? 'manager-notification-channel-error' : undefined}
-            >
-              <option value="Email">✉️ {tManagerUi('email')}</option>
-              <option value="SMS">💬 {tManagerUi('sms')}</option>
-              <option value="WhatsApp">📱 {tManagerUi('whatsapp_requires_integration')}</option>
-            </select>
-            {notificationFieldError('channel')}
+            <span className="text-[11px] text-secondary">
+              Click a box to select dispatch route
+            </span>
           </div>
+
+          {/* 3 Clickable Channel Cards with Vibrant Color Fills */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {CHANNELS.map((ch) => {
+              const isSelected = selectedNotificationChannel === ch.id;
+              return (
+                <button
+                  key={ch.id}
+                  type="button"
+                  onClick={() => {
+                    setValue('channel', ch.id as any, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    });
+                  }}
+                  className={`relative flex flex-col p-3.5 rounded-2xl border text-left cursor-pointer transition-all ${
+                    isSelected
+                      ? ch.activeBox
+                      : 'bg-card/60 border-border text-secondary hover:border-border-focus hover:bg-card hover:text-primary'
+                  }`}
+                  aria-pressed={isSelected}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <ch.icon
+                        size={17}
+                        className={isSelected ? ch.activeIcon : 'text-secondary'}
+                      />
+                      <span className="font-bold text-xs sm:text-sm text-primary">
+                        {ch.label}
+                      </span>
+                    </div>
+                    {isSelected ? (
+                      <span className="w-5 h-5 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center shrink-0">
+                        <Check size={11} className="text-primary font-bold" />
+                      </span>
+                    ) : (
+                      <span className="w-5 h-5 rounded-full border border-border shrink-0" />
+                    )}
+                  </div>
+                  <p className="text-[11px] text-secondary leading-snug">
+                    {ch.subtitle}
+                  </p>
+                  <span
+                    className={`mt-2 self-start text-[10px] font-bold px-1.5 py-0.5 rounded-md border ${
+                      isSelected
+                        ? ch.badgeColor
+                        : 'bg-surface/50 border-border text-secondary/70'
+                    }`}
+                  >
+                    {ch.badge}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Synced Fallback Input For Form Registration */}
+          <select
+            id="manager-notification-channel"
+            className="sr-only"
+            tabIndex={-1}
+            aria-hidden="true"
+            {...register('channel')}
+          >
+            <option value="Email">Email</option>
+            <option value="SMS">SMS</option>
+            <option value="WhatsApp">WhatsApp</option>
+          </select>
+          {notificationFieldError('channel')}
         </div>
 
         {selectedNotificationChannel === 'WhatsApp' && (
-          <div className="p-3.5 bg-amber-500/10 border border-amber-500/25 rounded-xl flex gap-3 text-amber-300 text-xs sm:text-sm">
-            <AlertTriangle size={16} className="shrink-0 mt-0.5 text-amber-400" aria-hidden="true" />
+          <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/25 rounded-xl flex gap-3 text-emerald-300 text-xs sm:text-sm">
+            <Smartphone size={16} className="shrink-0 mt-0.5 text-emerald-400" aria-hidden="true" />
             <p className="leading-relaxed">
-              {tManagerUi('whatsapp_integration_must_be_configured_and_active_in_th_48cc4c')}
+              WhatsApp dispatch will use the verified student mobile number with instant two-way delivery report.
             </p>
           </div>
         )}
 
-        {/* Message Content */}
-        <div className="flex flex-col gap-1.5">
-          <div className="flex items-center justify-between">
+        {/* Message Content with One-Click Template Chips */}
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <label
               htmlFor="manager-notification-message"
               className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary"
@@ -223,6 +367,27 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
               {messageValue.length} / 1000 characters
             </span>
           </div>
+
+          {/* Clickable Quick Templates (Auto-fills Message Box) */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[11px] font-semibold text-secondary flex items-center gap-1">
+              <Sparkles size={11} className="text-amber-400" />
+              <span>Quick templates:</span>
+            </span>
+            {QUICK_TEMPLATES.map((tmpl) => (
+              <button
+                key={tmpl.name}
+                type="button"
+                onClick={() => handleApplyTemplate(tmpl)}
+                className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-lg border border-border bg-card/60 transition-all cursor-pointer ${tmpl.badgeStyle}`}
+                title="Click to fill template"
+              >
+                <tmpl.icon size={12} />
+                <span>{tmpl.name}</span>
+              </button>
+            ))}
+          </div>
+
           <textarea
             id="manager-notification-message"
             required
@@ -237,11 +402,20 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
           {notificationFieldError('message')}
         </div>
 
-        {/* Action Button */}
-        <div className="pt-3 border-t border-border flex justify-end">
+        {/* Action Buttons: Reset & Submit */}
+        <div className="pt-3 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={handleClearForm}
+            className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold h-11 px-5 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-all cursor-pointer w-full sm:w-auto"
+          >
+            <RotateCcw size={14} />
+            <span>Clear Form</span>
+          </button>
+
           <button
             type="submit"
-            className="mgr-btn-primary inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold h-11 px-8 rounded-xl shadow-md cursor-pointer transition-all w-full sm:w-auto"
+            className="mgr-btn-primary inline-flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold h-11 px-8 rounded-xl shadow-md cursor-pointer transition-all w-full sm:w-auto bg-primary text-primary-foreground hover:opacity-95"
           >
             <Send size={15} aria-hidden="true" />
             <span>Send Notification</span>
