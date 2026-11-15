@@ -22,6 +22,7 @@ export interface SearchableComboboxProps {
   className?: string;
   id?: string;
   'aria-label'?: string;
+  countLabel?: string;
 }
 
 export function SearchableCombobox({
@@ -35,6 +36,7 @@ export function SearchableCombobox({
   className = '',
   id,
   'aria-label': ariaLabel,
+  countLabel = 'students',
 }: SearchableComboboxProps) {
   const generatedId = useId();
   const comboboxId = id || generatedId;
@@ -204,8 +206,8 @@ export function SearchableCombobox({
           style={{ backgroundColor: 'var(--color-bg-card, #111111)' }}
         >
           {/* Search Box Header */}
-          <div className="p-2 border-b border-border bg-card">
-            <div className="relative flex items-center w-full">
+          <div className="p-2 border-b border-border bg-card flex items-center gap-2">
+            <div className="relative flex items-center flex-1 min-w-0">
               <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
               <input
                 ref={searchInputRef}
@@ -229,6 +231,9 @@ export function SearchableCombobox({
                 </button>
               )}
             </div>
+            <span className="text-[10px] text-secondary whitespace-nowrap bg-surface-highlight px-2 py-1 rounded-md border border-border font-medium shrink-0">
+              {filteredOptions.length} {filteredOptions.length === 1 ? (countLabel === 'students' ? 'student' : countLabel) : countLabel}
+            </span>
           </div>
 
           {/* Options List */}
