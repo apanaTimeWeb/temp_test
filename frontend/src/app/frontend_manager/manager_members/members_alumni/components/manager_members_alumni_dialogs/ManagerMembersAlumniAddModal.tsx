@@ -13,7 +13,6 @@ import {
   Phone,
   Quote,
   User,
-  X,
 } from 'lucide-react';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
@@ -192,14 +191,6 @@ export function ManagerMembersAlumniAddModal({
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={handleClose}
-            className="p-1.5 text-secondary hover:text-primary rounded-lg hover:bg-surface-zebra transition-colors cursor-pointer"
-            aria-label="Close modal"
-          >
-            <X size={20} className="shrink-0" />
-          </button>
         </div>
 
         {/* Modal Form */}
@@ -373,12 +364,12 @@ export function ManagerMembersAlumniAddModal({
             </div>
           </div>
 
-          {/* Form Actions - Exactly One Cancel Button */}
+          {/* Form Actions - Clear Colored Cancel Button & Primary Save Button */}
           <div className="flex flex-col-reverse sm:flex-row justify-end items-center gap-2 sm:gap-3 pt-4 border-t border-border">
             <button
               type="button"
               onClick={handleClose}
-              className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center text-xs h-9 px-4 w-full sm:w-auto font-semibold transition-colors cursor-pointer"
+              className="inline-flex items-center justify-center text-xs h-9 px-4 w-full sm:w-auto font-semibold rounded-xl bg-danger-bg text-danger border border-danger/40 hover:bg-danger/25 hover:border-danger transition-colors cursor-pointer"
             >
               Cancel
             </button>
