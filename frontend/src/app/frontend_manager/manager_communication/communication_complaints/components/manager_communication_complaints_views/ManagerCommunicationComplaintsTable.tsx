@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Eye, RefreshCw, CheckCircle, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Eye, RefreshCw, CheckCircle, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
 import type {
   ManagerCommunicationComplaintsComplaint,
   ManagerCommunicationComplaintsComplaintStatus,
@@ -145,40 +145,66 @@ export function ManagerCommunicationComplaintsTable({
                   {complaint.resolvedDate ? formatDate(complaint.resolvedDate) : '—'}
                 </td>
                 <td className="px-3 py-3 align-middle">
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1.5">
+                    {/* View Details */}
                     <button
                       type="button"
                       onClick={() => onViewItem(complaint)}
-                      className="mc-btn-icon"
+                      className="p-1.5 rounded-lg border border-border bg-card/60 text-secondary hover:text-primary hover:border-border-focus hover:bg-surface-hover transition-colors cursor-pointer"
                       title={tManagerUi('view')}
                       aria-label={tManagerUi('view_complaint')}
                     >
-                      <Eye size={14} />
+                      <Eye size={13} />
                     </button>
+
+                    {/* Mark In-Progress */}
                     {complaint.status === 'Open' && (
                       <button
                         type="button"
                         onClick={onStatusChange ? () => onStatusChange(complaint.id, 'In-Progress') : undefined}
                         disabled={!onStatusChange}
-                        className={`mc-btn-icon ${!onStatusChange ? 'cursor-not-allowed' : 'hover:text-primary'}`}
-                        title={onStatusChange ? tManagerUi('in_progress') : tManagerUi('status_update_unavailable_host_mutation_contract_not_sup_953486')}
-                        aria-label={onStatusChange ? `Mark #${complaint.id} in progress` : tManagerUi('mark_in_progress_unavailable')}
+                        className="p-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors cursor-pointer"
+                        title="Mark as In-Progress"
+                        aria-label={`Mark #${complaint.id} in progress`}
                       >
-                        <RefreshCw size={14} />
+                        <RefreshCw size={13} />
                       </button>
                     )}
+
+                    {/* Mark Resolved */}
                     {complaint.status !== 'Resolved' && (
                       <button
                         type="button"
                         onClick={onStatusChange ? () => onStatusChange(complaint.id, 'Resolved') : undefined}
                         disabled={!onStatusChange}
-                        className={`mc-btn-icon ${!onStatusChange ? 'cursor-not-allowed' : 'hover:text-primary'}`}
-                        title={onStatusChange ? tManagerUi('resolved') : tManagerUi('resolution_unavailable_host_mutation_contract_not_suppli_e15b8c')}
-                        aria-label={onStatusChange ? `Mark #${complaint.id} resolved` : tManagerUi('resolve_unavailable')}
+                        className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer"
+                        title="Mark as Resolved"
+                        aria-label={`Mark #${complaint.id} resolved`}
                       >
-                        <CheckCircle size={14} />
+                        <CheckCircle size={13} />
                       </button>
                     )}
+
+                    {/* WhatsApp Student Direct Action */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const studentName = complaint.student || 'Student';
+                        let cleanPhone = (complaint.phone || '9876543210').replace(/\D/g, '');
+                        if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
+                        const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+                        const text = encodeURIComponent(
+                          `Hello ${studentName},\nRegarding your query #${complaint.id} ("${complaint.title}") at Central Library:\nCurrent status is: ${complaint.status}.\n— Central Library Team`
+                        );
+                        window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
+                      }}
+                      className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer"
+                      title="WhatsApp Student"
+                      aria-label={`WhatsApp student for complaint #${complaint.id}`}
+                    >
+                      <MessageSquare size={13} />
+                    </button>
                   </div>
                 </td>
               </tr>

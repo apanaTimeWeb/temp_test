@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { X, MessageSquare } from 'lucide-react';
+import { X, MessageSquare, Printer, Copy, User, Calendar, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 import type {
   ManagerCommunicationComplaintsComplaint,
@@ -44,59 +44,136 @@ export function ManagerCommunicationComplaintsViewModal({
     toast.success(`WhatsApp opened for ${studentName} (+91 ${cleanPhone})`);
   };
 
+  const handleCopyDetails = () => {
+    navigator.clipboard.writeText(
+      `Complaint #${viewItem.id}\nTitle: ${viewItem.title}\nStudent: ${viewItem.student || 'Anonymous'}\nStatus: ${viewItem.status}\nDate: ${viewItem.date}\nDescription: ${viewItem.description}`
+    );
+    toast.success('Complaint summary copied to clipboard');
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
-    <div className="mc-overlay">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="complaint-view-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in"
+    >
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className="mc-modal mc-modal--md bg-card"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="complaint-view-title"
+        className="relative w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-5"
       >
-        <button
-          type="button"
-          onClick={onClose}
-          className="mc-modal-close"
-          aria-label={tManagerUi('close_complaint')}
-        >
-          <X size={16} />
-        </button>
-        <p id="complaint-view-title" className="mc-modal-title">
-          {viewItem.title}
-        </p>
-        <div className="mc-modal-badge-row">
-          {statusBadge(viewItem.status)}
-          <span className="mc-badge mc-badge--outline">
-            {formatKnownIsoCalendarDate(viewItem.date, locale)}
-          </span>
-        </div>
-        <p className="mc-complaint-by">
-          {tManagerUi('by')} <span>{viewItem.student ?? '—'}</span>
-        </p>
-        <p className="mc-complaint-desc">{viewItem.description}</p>
-        {viewItem.resolvedNote && (
-          <div className="mc-info-box mt-4">
-            <strong>{tManagerUi('resolution')}</strong> {viewItem.resolvedNote}
-            {viewItem.resolvedBy ? ` — ${viewItem.resolvedBy}` : ''}
-            {viewItem.resolvedDate
-              ? ` ${tManagerUi('on')} ${formatKnownIsoCalendarDate(viewItem.resolvedDate, locale)}`
-              : ''}
+        {/* Header */}
+        <div className="flex items-start justify-between pb-3 border-b border-border">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                Ticket #{viewItem.id}
+              </span>
+              {statusBadge(viewItem.status)}
+            </div>
+            <h3 id="complaint-view-title" className="text-lg font-bold text-primary">
+              {viewItem.title}
+            </h3>
           </div>
-        )}
-        <div className="mc-modal-footer flex items-center justify-between">
           <button
             type="button"
-            onClick={handleWhatsAppStudent}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
-            title="Send resolution update via WhatsApp"
+            onClick={onClose}
+            className="p-1.5 rounded-lg border border-border text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
+            aria-label={tManagerUi('close_complaint')}
           >
-            <MessageSquare size={13} />
-            <span>WhatsApp Student</span>
+            <X size={16} />
           </button>
-          <button type="button" onClick={onClose} className="mc-btn-ghost">
-            {tManagerUi('close')}
-          </button>
+        </div>
+
+        {/* Content Details */}
+        <div className="space-y-3.5 text-xs sm:text-sm">
+          <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-surface/50 border border-border">
+            <div className="flex items-center gap-2">
+              <User size={14} className="text-secondary shrink-0" />
+              <div>
+                <span className="text-[11px] text-secondary font-semibold block">Student</span>
+                <p className="font-bold text-primary truncate">{viewItem.student ?? 'Anonymous'}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar size={14} className="text-secondary shrink-0" />
+              <div>
+                <span className="text-[11px] text-secondary font-semibold block">Date Lodged</span>
+                <p className="font-mono text-secondary">{formatKnownIsoCalendarDate(viewItem.date, locale)}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-surface/30 border border-border space-y-1.5">
+            <span className="text-[11px] font-semibold text-secondary">Complaint Description</span>
+            <p className="text-xs sm:text-sm text-primary leading-relaxed bg-card p-3 rounded-lg border border-border/70">
+              {viewItem.description}
+            </p>
+          </div>
+
+          {viewItem.resolvedNote && (
+            <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 space-y-1">
+              <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-xs">
+                <CheckCircle2 size={13} />
+                <span>{tManagerUi('resolution')}</span>
+              </div>
+              <p className="text-xs text-emerald-300 leading-relaxed">
+                {viewItem.resolvedNote}
+              </p>
+              {viewItem.resolvedBy && (
+                <span className="text-[11px] text-emerald-400/80 block mt-1">
+                  Resolved by {viewItem.resolvedBy}
+                  {viewItem.resolvedDate ? ` on ${formatKnownIsoCalendarDate(viewItem.resolvedDate, locale)}` : ''}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer Actions */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-border">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleCopyDetails}
+              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+            >
+              <Copy size={12} />
+              <span>Copy</span>
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-3 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+            >
+              <Printer size={12} />
+              <span>Print Slip</span>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleWhatsAppStudent}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors cursor-pointer"
+              title="Send resolution update via WhatsApp"
+            >
+              <MessageSquare size={13} />
+              <span>WhatsApp Student</span>
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-3 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary transition-colors cursor-pointer"
+            >
+              {tManagerUi('close')}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -2,7 +2,22 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { ChevronRight, X, RefreshCw, CheckCircle, MessageSquarePlus, ShieldCheck, Search, Download } from 'lucide-react';
+import {
+  ChevronRight,
+  X,
+  RefreshCw,
+  CheckCircle,
+  MessageSquarePlus,
+  ShieldCheck,
+  Search,
+  Download,
+  Printer,
+  AlertCircle,
+  Clock,
+  CheckCircle2,
+  Layers,
+  MessageSquare,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 import type { ManagerCommunicationComplaintsMainProps } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsMainTypes';
@@ -73,6 +88,15 @@ export default function ManagerCommunicationComplaintsPage({
     return Object.keys(statusOverrides).length === 0 ? list : list.map((c) => (statusOverrides[c.id] ? { ...c, status: statusOverrides[c.id] } : c));
   }, [localComplaints, complaints, statusOverrides]);
 
+  const stats = useMemo(() => {
+    const total = allComplaints.length;
+    const openCount = allComplaints.filter((c) => c.status === 'Open').length;
+    const inProgressCount = allComplaints.filter((c) => c.status === 'In-Progress').length;
+    const resolvedCount = allComplaints.filter((c) => c.status === 'Resolved').length;
+    const resolutionRate = total > 0 ? Math.round((resolvedCount / total) * 100) : 0;
+    return { total, openCount, inProgressCount, resolvedCount, resolutionRate };
+  }, [allComplaints]);
+
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const base = tab === 'All' ? allComplaints : allComplaints.filter((c) => c.status === tab);
@@ -100,11 +124,20 @@ export default function ManagerCommunicationComplaintsPage({
 
   const statusBadge = (status: ManagerCommunicationComplaintsComplaintStatus) =>
     status === 'Open' ? (
-      <span className="mc-badge mc-badge--danger">{tManagerUi('open')}</span>
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
+        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+        <span>{tManagerUi('open')}</span>
+      </span>
     ) : status === 'In-Progress' ? (
-      <span className="mc-badge mc-badge--warning">{tManagerUi('in_progress')}</span>
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">
+        <Clock size={11} className="text-amber-400" />
+        <span>{tManagerUi('in_progress')}</span>
+      </span>
     ) : (
-      <span className="mc-badge mc-badge--success">{tManagerUi('resolved')}</span>
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+        <CheckCircle2 size={11} className="text-emerald-400" />
+        <span>{tManagerUi('resolved')}</span>
+      </span>
     );
 
   const toggleSort = (field: ComplaintSortField) => {
@@ -160,35 +193,147 @@ export default function ManagerCommunicationComplaintsPage({
     toast.success('Complaints list exported to CSV successfully');
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div
-      className="mc-page"
+      className="mc-page space-y-6"
       data-route-view={view}
       data-route-id={id}
     >
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
         <div>
-          <div className="mc-breadcrumb">
-            <span>{tManagerUi('communication')}</span>
-            <ChevronRight size={12} />
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight flex items-center gap-2.5">
+            <span className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center shrink-0">
+              <MessageSquare size={20} />
+            </span>
             <span>{tManagerUi('complaints')}</span>
-          </div>
-          <h1 className="mc-page-title">{tManagerUi('complaints')}</h1>
-          <p className="mc-page-subtitle">
-            {tManagerUi('review_complaints_from_the_host_read_api_creating_changi_87c22f')}
-          </p>
-          <p className="mc-input-hint text-secondary flex items-center gap-1.5 mt-1" role="status">
-            <ShieldCheck size={14} className="text-primary" />
-            <span>Live Help Desk · Track, resolve and escalate student issues in real time.</span>
+          </h1>
+          <p className="text-xs sm:text-sm text-secondary mt-1">
+            Track, investigate, and resolve student complaints and facility maintenance requests in real-time.
           </p>
         </div>
+
+        <div className="flex items-center gap-2.5 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-3.5 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-colors cursor-pointer"
+            title="Print complaints summary"
+          >
+            <Printer size={14} />
+            <span>Print Report</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="mgr-btn-primary inline-flex items-center gap-2 text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl shadow-md cursor-pointer transition-all bg-primary text-primary-foreground hover:opacity-95"
+          >
+            <MessageSquarePlus size={16} />
+            <span>Lodge Complaint</span>
+          </button>
+        </div>
+      </div>
+
+      {/* 4 Interactive KPI Metric Cards (Click-to-Filter & Color-Fill) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        {/* Card 1: Total Complaints */}
         <button
           type="button"
-          onClick={() => setIsAddModalOpen(true)}
-          className="mgr-btn-primary flex items-center gap-1.5"
+          onClick={() => {
+            setTab('All');
+            setPage(0);
+          }}
+          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            tab === 'All'
+              ? 'bg-indigo-500/10 border-indigo-500/50 ring-2 ring-indigo-500/30 shadow-xs'
+              : 'bg-card border-border hover:border-border-focus'
+          }`}
         >
-          <MessageSquarePlus size={15} />
-          <span>Lodge Complaint</span>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold text-secondary">Total Lodged</span>
+            <span className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center">
+              <Layers size={14} />
+            </span>
+          </div>
+          <div className="text-2xl font-black text-primary">{stats.total}</div>
+          <p className="text-[11px] text-secondary mt-0.5">All tickets in system</p>
+        </button>
+
+        {/* Card 2: Open / Unresolved */}
+        <button
+          type="button"
+          onClick={() => {
+            setTab('Open');
+            setPage(0);
+          }}
+          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            tab === 'Open'
+              ? 'bg-rose-500/10 border-rose-500/50 ring-2 ring-rose-500/30 shadow-xs'
+              : 'bg-card border-border hover:border-border-focus'
+          }`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold text-secondary">Pending Open</span>
+            <span className="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center">
+              <AlertCircle size={14} />
+            </span>
+          </div>
+          <div className="text-2xl font-black text-rose-400 flex items-center gap-1.5">
+            <span>{stats.openCount}</span>
+            {stats.openCount > 0 && <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
+          </div>
+          <p className="text-[11px] text-secondary mt-0.5">Needs immediate review</p>
+        </button>
+
+        {/* Card 3: In-Progress */}
+        <button
+          type="button"
+          onClick={() => {
+            setTab('In-Progress');
+            setPage(0);
+          }}
+          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            tab === 'In-Progress'
+              ? 'bg-amber-500/10 border-amber-500/50 ring-2 ring-amber-500/30 shadow-xs'
+              : 'bg-card border-border hover:border-border-focus'
+          }`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold text-secondary">In-Progress</span>
+            <span className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center">
+              <Clock size={14} />
+            </span>
+          </div>
+          <div className="text-2xl font-black text-amber-400">{stats.inProgressCount}</div>
+          <p className="text-[11px] text-secondary mt-0.5">Under investigation</p>
+        </button>
+
+        {/* Card 4: Resolved */}
+        <button
+          type="button"
+          onClick={() => {
+            setTab('Resolved');
+            setPage(0);
+          }}
+          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+            tab === 'Resolved'
+              ? 'bg-emerald-500/10 border-emerald-500/50 ring-2 ring-emerald-500/30 shadow-xs'
+              : 'bg-card border-border hover:border-border-focus'
+          }`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold text-secondary">Resolved</span>
+            <span className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
+              <CheckCircle2 size={14} />
+            </span>
+          </div>
+          <div className="text-2xl font-black text-emerald-400">{stats.resolvedCount}</div>
+          <p className="text-[11px] text-secondary mt-0.5">{stats.resolutionRate}% resolution rate</p>
         </button>
       </div>
 

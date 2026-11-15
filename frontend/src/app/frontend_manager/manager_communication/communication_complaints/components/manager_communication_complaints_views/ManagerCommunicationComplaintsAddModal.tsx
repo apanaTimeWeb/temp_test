@@ -145,32 +145,56 @@ export default function ManagerCommunicationComplaintsAddModal({
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="font-semibold text-primary block mb-1">Issue Category *</label>
-              <select
-                className="mgr-select text-xs"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
+          <div className="space-y-1">
+            <label className="font-semibold text-primary block">Priority Level</label>
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setPriority('Normal')}
+                className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-center justify-between ${
+                  priority === 'Normal'
+                    ? 'bg-emerald-500/15 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30 shadow-xs'
+                    : 'bg-card/60 border-border text-secondary hover:border-border-focus hover:text-primary'
+                }`}
+                aria-pressed={priority === 'Normal'}
               >
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="font-semibold text-primary block mb-1">Priority Level</label>
-              <select
-                className="mgr-select text-xs font-semibold"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value as 'Normal' | 'Urgent')}
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  <span className="font-bold text-xs">Normal Priority</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setPriority('Urgent')}
+                className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-center justify-between ${
+                  priority === 'Urgent'
+                    ? 'bg-rose-500/15 border-rose-500 text-rose-300 ring-2 ring-rose-500/30 shadow-xs'
+                    : 'bg-card/60 border-border text-secondary hover:border-border-focus hover:text-primary'
+                }`}
+                aria-pressed={priority === 'Urgent'}
               >
-                <option value="Normal">🟢 Normal Priority</option>
-                <option value="Urgent">🔴 Urgent Priority</option>
-              </select>
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+                  <span className="font-bold text-xs">Urgent Priority</span>
+                </div>
+              </button>
             </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="font-semibold text-primary block">Issue Category *</label>
+            <select
+              className="mgr-select text-xs w-full"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
