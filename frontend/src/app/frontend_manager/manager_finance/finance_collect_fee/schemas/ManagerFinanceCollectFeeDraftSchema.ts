@@ -10,6 +10,9 @@ export const managerFinanceCollectFeeDraftSchema = z.object({
   lateFee: z.string().trim().refine((value) => value === '' || (/^\d+(?:\.\d{1,2})?$/.test(value) && Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) <= 50000), 'enter_valid_amount'),
   monthsToRenew: z.string().min(1),
   remark: z.string().max(2000),
+  feeCategory: z.string().optional().default('seat_fee'),
+  billingMonth: z.string().optional().default(''),
+  paymentDate: z.string().optional().default(''),
 }).superRefine((draft, context) => {
   if (draft.mode !== 'cash' && !draft.txnId.trim()) {
     context.addIssue({ code: 'custom', path: ['txnId'], message: 'transaction_reference_required' });
