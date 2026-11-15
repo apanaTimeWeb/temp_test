@@ -40,64 +40,66 @@ export function ManagerSeatsHistoryNativeTable<T extends object>({ rows, columns
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
   return (
-    <div className="ss-table-wrapper overflow-x-auto">
-      <table className="ss-table w-full" aria-label={label}>
-        <thead>
-          <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
-            {columns.map((column, index) => {
-              const field = column.field == null ? undefined : String(column.field);
-              const isActive = sortField === field;
-              return (
-                <th
-                  scope="col"
-                  key={`${column.headerName}-${index}`}
-                  aria-sort={field && isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-                  className="px-3 py-3 font-semibold whitespace-nowrap"
-                >
-                  {field ? (
-                    <button
-                      type="button"
-                      onClick={() => changeSort(field)}
-                      className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
-                      aria-label={`Sort by ${column.headerName ?? field}, currently ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'unsorted'}`}
-                    >
-                      <span>{column.headerName}</span>
-                      {isActive ? (
-                        sortDirection === 'asc' ? (
-                          <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-                        ) : (
-                          <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
-                        )
-                      ) : (
-                        <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
-                      )}
-                    </button>
-                  ) : (
-                    column.headerName
-                  )}
-                </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {visibleRows.map((row, rowIndex) => (
-            <tr key={getRowKey(row, effectivePage * pageSize + rowIndex)} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12">
-              {columns.map((column, columnIndex) => {
+    <div className="w-full">
+      <div className="overflow-x-auto -mx-3.5 sm:mx-0 px-3.5 sm:px-0">
+        <table className="ss-table min-w-[760px] w-full text-left" aria-label={label}>
+          <thead>
+            <tr className="border-b border-border bg-floating text-xs uppercase text-secondary font-semibold">
+              {columns.map((column, index) => {
                 const field = column.field == null ? undefined : String(column.field);
-                const value = field ? (row as unknown as Record<string, unknown>)[field] : undefined;
-                const params: ManagerSeatsHistoryNativeCellParams<T> = { value, data: row };
-                let content: ReactNode = displayValue(value);
-                if (column.cellRenderer) content = createElement(column.cellRenderer, params);
-                else if (column.valueFormatter) content = column.valueFormatter(params);
-                return <td key={`${column.headerName}-${columnIndex}`} className="px-3 py-3 align-middle text-sm">{content}</td>;
+                const isActive = sortField === field;
+                return (
+                  <th
+                    scope="col"
+                    key={`${column.headerName}-${index}`}
+                    aria-sort={field && isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
+                    className="px-3.5 py-3 font-semibold whitespace-nowrap text-xs"
+                  >
+                    {field ? (
+                      <button
+                        type="button"
+                        onClick={() => changeSort(field)}
+                        className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 cursor-pointer"
+                        aria-label={`Sort by ${column.headerName ?? field}, currently ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'unsorted'}`}
+                      >
+                        <span>{column.headerName}</span>
+                        {isActive ? (
+                          sortDirection === 'asc' ? (
+                            <ArrowUp size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                          ) : (
+                            <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
+                          )
+                        ) : (
+                          <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+                        )}
+                      </button>
+                    ) : (
+                      column.headerName
+                    )}
+                  </th>
+                );
               })}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {visibleRows.map((row, rowIndex) => (
+              <tr key={getRowKey(row, effectivePage * pageSize + rowIndex)} className="border-b border-border last:border-0 hover:bg-surface-hover transition-colors h-11">
+                {columns.map((column, columnIndex) => {
+                  const field = column.field == null ? undefined : String(column.field);
+                  const value = field ? (row as unknown as Record<string, unknown>)[field] : undefined;
+                  const params: ManagerSeatsHistoryNativeCellParams<T> = { value, data: row };
+                  let content: ReactNode = displayValue(value);
+                  if (column.cellRenderer) content = createElement(column.cellRenderer, params);
+                  else if (column.valueFormatter) content = column.valueFormatter(params);
+                  return <td key={`${column.headerName}-${columnIndex}`} className="px-3.5 py-2.5 align-middle text-xs">{content}</td>;
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-3 py-3 text-sm text-secondary">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border pt-3.5 text-xs text-secondary">
         <span>
           Showing {startItem}–{endItem} of {totalRows} results
         </span>
