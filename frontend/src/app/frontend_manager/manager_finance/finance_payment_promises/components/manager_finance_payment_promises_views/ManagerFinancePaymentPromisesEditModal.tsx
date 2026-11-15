@@ -160,7 +160,7 @@ export default function ManagerFinancePaymentPromisesEditModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="mgr-btn-ghost text-xs focus-visible:ring-2 focus-visible:ring-primary"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
               >
                 Close
               </button>
@@ -168,7 +168,7 @@ export default function ManagerFinancePaymentPromisesEditModal({
                 <button
                   type="button"
                   onClick={onSwitchToEdit}
-                  className="mgr-btn-primary text-xs flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-primary"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-primary hover:bg-primary-hover text-white shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
                 >
                   <Edit3 size={13} /> Edit / Extend
                 </button>
@@ -250,13 +250,13 @@ export default function ManagerFinancePaymentPromisesEditModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="mgr-btn-ghost text-xs focus-visible:ring-2 focus-visible:ring-primary"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="mgr-btn-primary text-xs flex items-center gap-1.5 focus-visible:ring-2 focus-visible:ring-primary"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-primary hover:bg-primary-hover text-white shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
               >
                 <CheckCircle size={14} /> Save Commitment
               </button>

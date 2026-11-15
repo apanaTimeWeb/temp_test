@@ -172,7 +172,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         <button
           type="button"
           onClick={() => setIsAddModalOpen(true)}
-          className="mgr-btn-primary text-xs flex items-center gap-1.5 py-2 px-3.5 shadow-sm focus-visible:ring-2 focus-visible:ring-primary outline-none"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-primary hover:bg-primary-hover text-white shadow-xs transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           <Plus size={14} /> Record Payment Promise
         </button>
@@ -240,9 +240,9 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
           <button
             type="button"
             onClick={() => { setSearchQuery(''); setStatusFilter('all'); setPage(0); }}
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-colors"
           >
-            <X size={12} /> Reset
+            <X size={13} /> Reset
           </button>
         )}
       </div>
