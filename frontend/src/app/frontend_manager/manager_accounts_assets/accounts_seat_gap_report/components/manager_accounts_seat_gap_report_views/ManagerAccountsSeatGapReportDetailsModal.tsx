@@ -165,7 +165,7 @@ export function ManagerAccountsSeatGapReportDetailsModal({
           <button
             type="button"
             onClick={() => window.print()}
-            className="mgr-btn-ghost flex items-center justify-center gap-1.5 text-xs font-semibold py-2"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
           >
             <Printer size={14} /> Print Seat Audit
           </button>
@@ -174,7 +174,7 @@ export function ManagerAccountsSeatGapReportDetailsModal({
             <button
               type="button"
               onClick={onClose}
-              className="mgr-btn-ghost text-xs px-3.5 py-2 font-medium"
+              className="px-4 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
             >
               Close
             </button>

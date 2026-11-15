@@ -472,7 +472,7 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
 
                       {/* Floor */}
                       <td className="py-3 px-4 text-xs text-secondary">
-                        Floor {r.floor}
+                        {r.floor.toLowerCase().includes('floor') ? r.floor : `${r.floor} Floor`}
                       </td>
 
                       {/* Last Occupied Date */}

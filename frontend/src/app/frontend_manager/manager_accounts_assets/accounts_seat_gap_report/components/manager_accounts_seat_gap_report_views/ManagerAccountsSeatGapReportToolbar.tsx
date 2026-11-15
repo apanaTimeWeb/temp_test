@@ -192,7 +192,7 @@ export function ManagerAccountsSeatGapReportToolbar({
             <option value="all">All Floors</option>
             {floors.map((f) => (
               <option key={f} value={f}>
-                Floor: {f}
+                {f.toLowerCase().includes('floor') ? f : `${f} Floor`}
               </option>
             ))}
           </select>
