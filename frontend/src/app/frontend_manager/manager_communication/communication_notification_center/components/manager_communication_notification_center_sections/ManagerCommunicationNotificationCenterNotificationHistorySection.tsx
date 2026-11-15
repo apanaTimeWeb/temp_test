@@ -90,35 +90,64 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
   };
 
   const CHANNEL_BUTTONS = [
-    { id: 'all', label: 'All Channels', activeClass: 'bg-card text-primary border-primary ring-1 ring-primary/20' },
+    {
+      id: 'all',
+      label: 'All Channels',
+      activeBg: 'rgba(99, 102, 241, 0.22)',
+      activeBorder: '#6366f1',
+      activeText: '#e0e7ff',
+      activeGlow: '0 0 14px rgba(99, 102, 241, 0.45)',
+    },
     {
       id: 'WhatsApp',
       label: '📱 WhatsApp',
-      activeClass: 'bg-emerald-500/15 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30 font-bold',
+      activeBg: 'rgba(16, 185, 129, 0.25)',
+      activeBorder: '#10b981',
+      activeText: '#d1fae5',
+      activeGlow: '0 0 16px rgba(16, 185, 129, 0.5)',
     },
     {
       id: 'SMS',
       label: '💬 SMS',
-      activeClass: 'bg-amber-500/15 border-amber-500 text-amber-300 ring-2 ring-amber-500/30 font-bold',
+      activeBg: 'rgba(245, 158, 11, 0.25)',
+      activeBorder: '#f59e0b',
+      activeText: '#fef3c7',
+      activeGlow: '0 0 16px rgba(245, 158, 11, 0.5)',
     },
     {
       id: 'Email',
       label: '✉️ Email',
-      activeClass: 'bg-sky-500/15 border-sky-500 text-sky-300 ring-2 ring-sky-500/30 font-bold',
+      activeBg: 'rgba(14, 165, 233, 0.25)',
+      activeBorder: '#0ea5e9',
+      activeText: '#e0f2fe',
+      activeGlow: '0 0 16px rgba(14, 165, 233, 0.5)',
     },
   ];
 
   const STATUS_BUTTONS = [
-    { id: 'all', label: 'All Status', activeClass: 'bg-card text-primary border-primary ring-1 ring-primary/20' },
+    {
+      id: 'all',
+      label: 'All Status',
+      activeBg: 'rgba(99, 102, 241, 0.22)',
+      activeBorder: '#6366f1',
+      activeText: '#e0e7ff',
+      activeGlow: '0 0 14px rgba(99, 102, 241, 0.45)',
+    },
     {
       id: 'Delivered',
       label: '🟢 Delivered',
-      activeClass: 'bg-emerald-500/15 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30 font-bold',
+      activeBg: 'rgba(16, 185, 129, 0.25)',
+      activeBorder: '#10b981',
+      activeText: '#d1fae5',
+      activeGlow: '0 0 16px rgba(16, 185, 129, 0.5)',
     },
     {
       id: 'Failed',
       label: '🔴 Failed',
-      activeClass: 'bg-rose-500/15 border-rose-500 text-rose-300 ring-2 ring-rose-500/30 font-bold',
+      activeBg: 'rgba(244, 63, 94, 0.25)',
+      activeBorder: '#f43f5e',
+      activeText: '#ffe4e6',
+      activeGlow: '0 0 16px rgba(244, 63, 94, 0.5)',
     },
   ];
 
@@ -370,9 +399,19 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
                   key={ch.id}
                   type="button"
                   onClick={() => setChannelFilter(ch.id)}
+                  style={
+                    isSelected
+                      ? {
+                          backgroundColor: ch.activeBg,
+                          borderColor: ch.activeBorder,
+                          color: ch.activeText,
+                          boxShadow: ch.activeGlow,
+                        }
+                      : undefined
+                  }
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
                     isSelected
-                      ? ch.activeClass
+                      ? 'font-bold'
                       : 'bg-card/60 border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
                   }`}
                 >
@@ -392,9 +431,19 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
                   key={st.id}
                   type="button"
                   onClick={() => setStatusFilter(st.id)}
+                  style={
+                    isSelected
+                      ? {
+                          backgroundColor: st.activeBg,
+                          borderColor: st.activeBorder,
+                          color: st.activeText,
+                          boxShadow: st.activeGlow,
+                        }
+                      : undefined
+                  }
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
                     isSelected
-                      ? st.activeClass
+                      ? 'font-bold'
                       : 'bg-card/60 border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
                   }`}
                 >

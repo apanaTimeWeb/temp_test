@@ -221,18 +221,37 @@ export function ManagerCommunicationNotificationCenterMyNotificationsSection() {
               key={cat.id}
               type="button"
               onClick={() => setActiveCategory(cat.id)}
+              style={
+                isSelected
+                  ? {
+                      backgroundColor: cat.activeBg,
+                      borderColor: cat.activeBorder,
+                      color: cat.activeText,
+                      boxShadow: cat.activeGlow,
+                    }
+                  : undefined
+              }
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
                 isSelected
-                  ? cat.activeStyle
+                  ? 'font-bold'
                   : 'bg-card/60 border-border text-secondary hover:text-primary hover:bg-card hover:border-border-focus'
               }`}
             >
               <span>{cat.label}</span>
               {typeof cat.count === 'number' && (
                 <span
+                  style={
+                    isSelected
+                      ? {
+                          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                          color: '#ffffff',
+                          borderColor: cat.activeBorder,
+                        }
+                      : undefined
+                  }
                   className={`text-[10px] px-1.5 py-0.2 rounded-full border ${
                     isSelected
-                      ? 'bg-primary/20 border-primary/30 text-primary'
+                      ? ''
                       : 'bg-surface border-border text-secondary'
                   }`}
                 >
@@ -261,6 +280,15 @@ export function ManagerCommunicationNotificationCenterMyNotificationsSection() {
               <article
                 key={notification.id}
                 onClick={() => handleCardClick(notification.id)}
+                style={
+                  isSelected
+                    ? {
+                        backgroundColor: notification.activeBg,
+                        borderColor: notification.activeBorder,
+                        boxShadow: notification.activeGlow,
+                      }
+                    : undefined
+                }
                 className={`relative flex flex-col p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer ${
                   notification.borderClass
                 } ${
