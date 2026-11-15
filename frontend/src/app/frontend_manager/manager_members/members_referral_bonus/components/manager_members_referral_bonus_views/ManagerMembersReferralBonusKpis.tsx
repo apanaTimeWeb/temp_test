@@ -55,7 +55,9 @@ export function ManagerMembersReferralBonusKpis({
           </div>
         </div>
         <div className="mt-3">
-          <p className="text-2xl sm:text-3xl font-extrabold text-primary">{records.length}</p>
+          <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-primary">
+            {records.length}
+          </p>
         </div>
         <div className="mt-3 pt-2.5 border-t border-border/60 flex items-center justify-between text-xs">
           {statusFilter === 'All' ? (
@@ -97,7 +99,9 @@ export function ManagerMembersReferralBonusKpis({
           </div>
         </div>
         <div className="mt-3">
-          <p className="text-2xl sm:text-3xl font-extrabold text-warning">{pendingCount}</p>
+          <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-warning">
+            {pendingCount}
+          </p>
         </div>
         <div className="mt-3 pt-2.5 border-t border-border/60 flex items-center justify-between text-xs">
           {statusFilter === 'Pending' ? (
@@ -139,7 +143,7 @@ export function ManagerMembersReferralBonusKpis({
           </div>
         </div>
         <div className="mt-3">
-          <p className="text-2xl sm:text-3xl font-extrabold text-success">
+          <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-success">
             ₹{totalBonusAmount.toLocaleString('en-IN')}
           </p>
         </div>

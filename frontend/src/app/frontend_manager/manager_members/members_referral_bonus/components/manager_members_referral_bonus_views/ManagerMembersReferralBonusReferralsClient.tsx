@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Orchestrate client-side view and local interactions for referral bonus management.
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { CheckCircle2, Download, Plus, X } from 'lucide-react';
+import { CheckCircle2, Download, Plus, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 import { ManagerMembersReferralBonusTable, type ReferralSortField } from './ManagerMembersReferralBonusTable';
@@ -13,15 +13,10 @@ import { getInitialReferrals } from '@/app/frontend_manager/manager_members/memb
 
 export function ManagerMembersReferralBonusReferralsClient() {
   const tManagerUi = useTranslations('manager.manager_referral_bonus.ui');
-  const [records, setRecords] = useState<ReferralRow[]>(() => {
-    if (typeof window === 'undefined') return getInitialReferrals();
-    try {
-      const stored = localStorage.getItem('manager_members_referral_records');
-      return stored ? JSON.parse(stored) : getInitialReferrals();
-    } catch {
-      return getInitialReferrals();
-    }
-  });
+
+  // Hydration-safe initial state: Server & Client start with identical fixtures
+  const [records, setRecords] = useState<ReferralRow[]>(getInitialReferrals);
+  const [deleteTarget, setDeleteTarget] = useState<ReferralRow | null>(null);
 
   const updateRecords = (updater: (prev: ReferralRow[]) => ReferralRow[]) => {
     setRecords((prev) => {
@@ -36,6 +31,19 @@ export function ManagerMembersReferralBonusReferralsClient() {
   };
 
   useEffect(() => {
+    // Sync with localStorage on client mount after hydration is complete
+    try {
+      const stored = localStorage.getItem('manager_members_referral_records');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setRecords(parsed);
+        }
+      }
+    } catch {
+      // Safe storage fallback
+    }
+
     const handleSync = () => {
       try {
         const stored = localStorage.getItem('manager_members_referral_records');
@@ -151,10 +159,15 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const handleDeleteReferral = (id: string) => {
     const target = records.find((r) => r.id === id);
     if (!target) return;
-    const ok = window.confirm(`Are you sure you want to remove referral ${id} (${target.referred})?`);
-    if (!ok) return;
+    setDeleteTarget(target);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteTarget) return;
+    const { id, referred } = deleteTarget;
+    setDeleteTarget(null);
     updateRecords((prev) => prev.filter((r) => r.id !== id));
-    setToastMsg(`Referral record ${id} removed successfully.`);
+    setToastMsg(`Referral record ${id} (${referred}) removed successfully.`);
     setTimeout(() => setToastMsg(null), 3500);
   };
 
@@ -165,8 +178,8 @@ export function ManagerMembersReferralBonusReferralsClient() {
   };
 
   const handleExportCsv = () => {
-    const headers = ['Referral ID', 'Referrer', 'Referred Member', 'Date', 'Bonus Amount', 'Reward Method', 'Status'].map(escapeCsvCell).join(',');
-    const rows = sortedRows
+    const headers = ['Ref ID', 'Referrer (Existing Student)', 'Referred Student (New)', 'Date', 'Bonus Amount', 'Payout Method', 'Status'].map(escapeCsvCell).join(',');
+    const rows = filteredRows
       .map((r) => [r.id, r.referrer, r.referred, r.date, r.bonus, r.method, r.status].map(escapeCsvCell).join(','))
       .join('\r\n');
     const blob = new Blob([`\uFEFF${headers}\r\n${rows}`], { type: 'text/csv;charset=utf-8' });
@@ -179,12 +192,12 @@ export function ManagerMembersReferralBonusReferralsClient() {
     anchor.click();
     document.body.removeChild(anchor);
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    toast.success('Referrals exported to CSV successfully');
   };
 
-  const handleAddReferral = (newRecord: ReferralRow) => {
-    updateRecords((prev) => [newRecord, ...prev]);
-    setToastMsg(`New referral for "${newRecord.referred}" recorded successfully!`);
+  const handleAddReferral = (newRow: ReferralRow) => {
+    updateRecords((prev) => [newRow, ...prev]);
+    toast.success(`Referral added for ${newRow.referred}`);
+    setToastMsg(`Referral ${newRow.id} created successfully.`);
     setTimeout(() => setToastMsg(null), 3500);
   };
 
@@ -227,7 +240,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
           <button
             type="button"
             onClick={() => setToastMsg(null)}
-            className="p-1 text-danger hover:opacity-80 rounded-lg transition-colors"
+            className="p-1 text-danger hover:opacity-80 rounded-lg transition-colors cursor-pointer"
             aria-label="Dismiss message"
           >
             <X size={14} className="shrink-0 text-danger" />
@@ -310,7 +323,48 @@ export function ManagerMembersReferralBonusReferralsClient() {
         onAddReferral={handleAddReferral}
         nextId={`REF-${100 + records.length + 1}`}
       />
+
+      {/* Centered Professional Mini Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-referral-dialog-title"
+        >
+          <div className="w-full max-w-sm bg-card border border-border rounded-2xl p-5 sm:p-6 shadow-2xl animate-in zoom-in-95 flex flex-col items-center text-center">
+            <div className="w-12 h-12 rounded-full bg-danger-bg text-danger border border-border flex items-center justify-center mb-3.5 shrink-0">
+              <Trash2 size={22} className="text-danger shrink-0" />
+            </div>
+            <h3 id="delete-referral-dialog-title" className="text-base font-bold text-primary">
+              Remove Referral Record?
+            </h3>
+            <p className="text-xs text-secondary mt-1.5 leading-relaxed">
+              Are you sure you want to remove referral <strong className="text-primary font-semibold">{deleteTarget.id}</strong> for <strong className="text-primary font-semibold">{deleteTarget.referred}</strong>? This action cannot be undone.
+            </p>
+            <div className="grid grid-cols-2 gap-2.5 w-full mt-5">
+              <button
+                type="button"
+                onClick={() => setDeleteTarget(null)}
+                className="mgr-btn mgr-btn-secondary text-xs h-9 px-3 rounded-lg font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <X size={14} className="text-secondary shrink-0" />
+                <span>Cancel</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="inline-flex items-center justify-center gap-1.5 text-xs h-9 px-3 rounded-lg font-semibold bg-danger text-white hover:bg-danger/90 transition-colors shadow-sm cursor-pointer"
+              >
+                <Trash2 size={14} className="text-white shrink-0" />
+                <span>Delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
 export default ManagerMembersReferralBonusReferralsClient;
