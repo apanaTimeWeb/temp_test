@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { toast } from 'sonner';
 import {
   Award,
@@ -8,15 +8,14 @@ import {
   Calendar,
   Check,
   CheckCircle2,
-  ChevronDown,
   Clock,
   GraduationCap,
   Phone,
   Quote,
-  Search,
   User,
   X,
 } from 'lucide-react';
+import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
 
@@ -32,10 +31,6 @@ export function ManagerMembersAlumniAddModal({
   onAdd,
 }: ManagerMembersAlumniAddModalProps) {
   const [selectedStudentId, setSelectedStudentId] = useState('');
-  const [isStudentPickerOpen, setIsStudentPickerOpen] = useState(false);
-  const [studentSearch, setStudentSearch] = useState('');
-  const studentDropdownRef = useRef<HTMLDivElement>(null);
-
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [exam, setExam] = useState('');
@@ -45,18 +40,18 @@ export function ManagerMembersAlumniAddModal({
   const [designation, setDesignation] = useState('');
   const [testimonial, setTestimonial] = useState('');
 
-  // Close student dropdown on outside click
+  // Close modal on Escape key press
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (studentDropdownRef.current && !studentDropdownRef.current.contains(event.target as Node)) {
-        setIsStudentPickerOpen(false);
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleResetForm();
+        onClose();
       }
-    }
-    if (isStudentPickerOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [isStudentPickerOpen]);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
 
   // Load enrolled members with localStorage fallback to fixtures
   const availableStudents = useMemo(() => {
@@ -74,17 +69,14 @@ export function ManagerMembersAlumniAddModal({
     return MANAGER_MEMBERS_DEMO_RECORDS;
   }, []);
 
-  const filteredStudents = useMemo(() => {
-    const q = studentSearch.trim().toLowerCase();
-    if (!q) return availableStudents;
-    return availableStudents.filter(
-      (s) =>
-        s.name.toLowerCase().includes(q) ||
-        s.id.toLowerCase().includes(q) ||
-        s.phone.includes(q) ||
-        (s.department && s.department.toLowerCase().includes(q))
-    );
-  }, [availableStudents, studentSearch]);
+  const studentOptions: ComboboxOption[] = useMemo(() => {
+    return availableStudents.map((s) => ({
+      value: s.id,
+      label: `${s.name} (${s.id})`,
+      subLabel: `Phone: ${s.phone} · Target: ${s.department || s.preparationFor || 'Competitive Exams'}`,
+      badge: s.status,
+    }));
+  }, [availableStudents]);
 
   const selectedStudent = useMemo(() => {
     return availableStudents.find((s) => s.id === selectedStudentId);
@@ -92,6 +84,12 @@ export function ManagerMembersAlumniAddModal({
 
   const handleSelectStudent = (studentId: string) => {
     setSelectedStudentId(studentId);
+    if (!studentId) {
+      setName('');
+      setPhone('');
+      setExam('');
+      return;
+    }
     const found = availableStudents.find((s) => s.id === studentId);
     if (found) {
       setName(found.name);
@@ -111,8 +109,6 @@ export function ManagerMembersAlumniAddModal({
 
   const handleResetForm = () => {
     setSelectedStudentId('');
-    setIsStudentPickerOpen(false);
-    setStudentSearch('');
     setName('');
     setPhone('');
     setExam('');
@@ -199,145 +195,32 @@ export function ManagerMembersAlumniAddModal({
           <button
             type="button"
             onClick={handleClose}
-            className="p-1.5 text-danger hover:opacity-80 rounded-lg hover:bg-danger-bg transition-colors cursor-pointer"
+            className="p-1.5 text-secondary hover:text-primary rounded-lg hover:bg-surface-zebra transition-colors cursor-pointer"
             aria-label="Close modal"
           >
-            <X size={20} className="shrink-0 text-danger" />
+            <X size={20} className="shrink-0" />
           </button>
         </div>
 
         {/* Modal Form */}
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto space-y-4 pr-1 text-xs">
-          {/* Step 1: Search & Pick Student */}
-          <div className="space-y-1.5 p-3 sm:p-3.5 rounded-xl bg-surface border border-border relative z-30">
+          {/* Step 1: Standard Searchable Combobox with unified icon and placeholder */}
+          <div className="space-y-1.5 p-3 sm:p-3.5 rounded-xl bg-surface border border-border">
             <label className="font-semibold text-primary block">
-              Select Enrolled Library Member (Optional)
+              Select Student (Enrolled Library Member)
             </label>
-
-            {/* Opaque Searchable Combobox Trigger */}
-            <div className="relative" ref={studentDropdownRef}>
-              <button
-                type="button"
-                onClick={() => setIsStudentPickerOpen((prev) => !prev)}
-                className="w-full flex items-center justify-between gap-2 p-2.5 rounded-xl border border-border bg-[#18181b] hover:border-primary/50 text-left transition-colors cursor-pointer text-xs"
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <Search size={15} className="text-primary shrink-0" />
-                  {selectedStudent ? (
-                    <span className="font-semibold text-primary truncate">
-                      {selectedStudent.name} ({selectedStudent.id}) · {selectedStudent.phone}
-                    </span>
-                  ) : (
-                    <span className="text-secondary truncate">
-                      Click to search or pick student (e.g. Rahul, LIB-001)...
-                    </span>
-                  )}
-                </div>
-                <ChevronDown
-                  size={15}
-                  className={`text-secondary shrink-0 transition-transform duration-200 ${
-                    isStudentPickerOpen ? 'rotate-180 text-primary' : ''
-                  }`}
-                />
-              </button>
-
-              {/* 100% Solid Opaque Popover - Zero see-through overlap */}
-              {isStudentPickerOpen && (
-                <div
-                  className="absolute left-0 right-0 top-full mt-1.5 z-50 rounded-xl border-2 border-primary/40 shadow-2xl overflow-hidden"
-                  style={{ backgroundColor: '#18181b' }}
-                >
-                  {/* Search Filter Box */}
-                  <div className="p-2.5 border-b border-border bg-[#222225] flex items-center gap-2">
-                    <Search size={14} className="text-primary shrink-0" />
-                    <input
-                      autoFocus
-                      type="text"
-                      value={studentSearch}
-                      onChange={(e) => setStudentSearch(e.target.value)}
-                      placeholder="Type name, phone, or Smart ID to filter..."
-                      className="w-full bg-transparent text-xs text-primary placeholder:text-secondary outline-none"
-                    />
-                    {studentSearch && (
-                      <button
-                        type="button"
-                        onClick={() => setStudentSearch('')}
-                        className="p-1 text-secondary hover:text-danger rounded cursor-pointer"
-                        title="Clear search"
-                      >
-                        <X size={13} />
-                      </button>
-                    )}
-                    <span className="text-[10px] text-secondary whitespace-nowrap bg-surface-highlight px-2 py-0.5 rounded-full border border-border font-medium shrink-0">
-                      {filteredStudents.length} {filteredStudents.length === 1 ? 'student' : 'students'}
-                    </span>
-                  </div>
-
-                  {/* Scrollable Students List */}
-                  <ul className="max-h-56 overflow-y-auto p-1.5 space-y-1 text-xs">
-                    {filteredStudents.length === 0 ? (
-                      <li className="p-4 text-center text-secondary text-xs">
-                        No enrolled students found matching &quot;{studentSearch}&quot;. You can enter details manually below.
-                      </li>
-                    ) : (
-                      filteredStudents.map((s) => {
-                        const isSelected = selectedStudentId === s.id;
-                        return (
-                          <li
-                            key={s.id}
-                            onClick={() => {
-                              handleSelectStudent(s.id);
-                              setIsStudentPickerOpen(false);
-                              setStudentSearch('');
-                            }}
-                            className={`flex items-center justify-between gap-3 p-2.5 rounded-lg cursor-pointer transition-colors border ${
-                              isSelected
-                                ? 'bg-primary-subtle text-primary border-primary/40 font-semibold'
-                                : 'hover:bg-surface-hover text-primary border-transparent'
-                            }`}
-                          >
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              <div className="w-8 h-8 rounded-lg bg-surface border border-border flex items-center justify-center shrink-0 text-primary font-bold text-xs">
-                                {s.name.slice(0, 2).toUpperCase()}
-                              </div>
-                              <div className="flex flex-col min-w-0">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className="font-bold text-primary text-xs">{s.name}</span>
-                                  <span className="font-mono text-[10px] font-bold text-primary bg-primary-subtle px-1.5 py-0.5 rounded border border-border">
-                                    {s.id}
-                                  </span>
-                                  <span
-                                    className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
-                                      s.status === 'Active' ? 'bg-success-bg text-success' : 'bg-warning-bg text-warning'
-                                    }`}
-                                  >
-                                    {s.status}
-                                  </span>
-                                </div>
-                                <span className="text-[11px] text-secondary mt-0.5 truncate">
-                                  Phone: +91 {s.phone} · Target: {s.department || s.preparationFor || 'Competitive Exams'}
-                                </span>
-                              </div>
-                            </div>
-                            {isSelected ? (
-                              <Check size={16} className="text-success font-bold shrink-0" />
-                            ) : (
-                              <span className="text-[10px] font-semibold text-secondary hover:text-primary shrink-0">
-                                Select
-                              </span>
-                            )}
-                          </li>
-                        );
-                      })
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
+            <SearchableCombobox
+              options={studentOptions}
+              value={selectedStudentId}
+              onChange={handleSelectStudent}
+              aria-label="Select Student"
+              placeholder="Select student (e.g. Rahul, LIB-001)..."
+              searchPlaceholder="Type student name, phone, or Smart ID..."
+            />
 
             {/* Selected Student Banner */}
             {selectedStudent && (
-              <div className="mt-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 rounded-xl bg-success-bg text-success border border-border font-medium">
+              <div className="mt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2.5 rounded-xl bg-success-bg text-success border border-border font-medium">
                 <span className="flex items-center gap-1.5 text-xs truncate">
                   <Check size={14} className="text-success shrink-0" />
                   <span>Selected: <strong>{selectedStudent.name}</strong> ({selectedStudent.id})</span>
@@ -490,14 +373,14 @@ export function ManagerMembersAlumniAddModal({
             </div>
           </div>
 
+          {/* Form Actions - Exactly One Cancel Button */}
           <div className="flex flex-col-reverse sm:flex-row justify-end items-center gap-2 sm:gap-3 pt-4 border-t border-border">
             <button
               type="button"
               onClick={handleClose}
-              className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center gap-1.5 text-xs h-9 px-4 w-full sm:w-auto font-semibold transition-colors cursor-pointer"
+              className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center text-xs h-9 px-4 w-full sm:w-auto font-semibold transition-colors cursor-pointer"
             >
-              <X size={15} className="text-danger shrink-0" />
-              <span>Cancel</span>
+              Cancel
             </button>
             <button
               type="submit"

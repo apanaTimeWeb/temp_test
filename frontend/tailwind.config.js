@@ -12,6 +12,7 @@ module.exports = {
         card: 'var(--color-bg-card, #111111)',
         input: 'var(--color-bg-input, #1A1A1A)',
         border: 'var(--color-border, #27272A)',
+        popover: 'var(--color-bg-card, #111111)',
         primary: {
           DEFAULT: 'var(--color-primary, #FACC15)',
           hover: 'var(--color-primary-hover, #EAB308)',

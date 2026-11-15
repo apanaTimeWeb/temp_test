@@ -200,31 +200,35 @@ export function SearchableCombobox({
       {isOpen && (
         <div
           role="presentation"
-          className="absolute z-50 left-0 right-0 mt-1.5 rounded-xl border border-border bg-popover shadow-dialog overflow-hidden"
+          className="absolute z-50 left-0 right-0 mt-1.5 rounded-xl border border-border bg-card shadow-dialog overflow-hidden"
+          style={{ backgroundColor: 'var(--color-bg-card, #111111)' }}
         >
           {/* Search Box Header */}
-          <div className="p-2 border-b border-border bg-surface flex items-center gap-2">
-            <Search size={14} className="text-secondary shrink-0 ml-1" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setHighlightedIndex(0);
-              }}
-              placeholder={searchPlaceholder}
-              className="w-full bg-transparent text-xs text-primary placeholder:text-secondary outline-none py-1"
-            />
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch('')}
-                className="text-secondary hover:text-primary p-0.5"
-              >
-                <X size={12} />
-              </button>
-            )}
+          <div className="p-2 border-b border-border bg-card">
+            <div className="relative flex items-center w-full">
+              <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setHighlightedIndex(0);
+                }}
+                placeholder={searchPlaceholder}
+                className="w-full bg-input border border-border rounded-lg pl-8 pr-7 py-1.5 text-xs text-primary placeholder:text-secondary focus:outline-none focus:border-primary transition-colors"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch('')}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded cursor-pointer"
+                  title="Clear search"
+                >
+                  <X size={13} />
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Options List */}
