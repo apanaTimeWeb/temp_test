@@ -153,12 +153,6 @@ export function ManagerCommunicationComplaintsToolbar({
             );
           })}
         </div>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
 
         {/* Action Controls: Export CSV */}
         <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
