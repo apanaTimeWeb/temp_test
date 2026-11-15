@@ -160,7 +160,13 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     <div className="space-y-6" data-route-view={_routeQuery.view} data-route-id={_routeQuery.id}>
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="fin-page-title">{tManagerUi('payment_promises')}</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="fin-page-title">{tManagerUi('payment_promises')}</h1>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Active Promises Desk
+            </span>
+          </div>
           <p className="fin-page-subtitle">{tManagerUi('track_and_manage_student_payment_commitments')}</p>
         </div>
         <button
@@ -172,7 +178,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         </button>
       </div>
 
-      <div className="p-3 rounded-xl bg-muted border border-border text-xs text-secondary flex items-center justify-between" role="status">
+      <div style={{ display: 'none' }} role="status">
         <span>Sample payment promise records displayed under current contract preview.</span>
         <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">
           Direct Sync Unavailable
@@ -199,14 +205,24 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
 
       <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
         <div className="relative w-full sm:w-72">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
           <input
-            id="promises-search-input" name="searchQuery" type="search"
+            id="promises-search-input" name="searchQuery" type="text"
             placeholder="Search student name or Smart ID..."
-            className="mgr-input pl-8 text-xs w-full focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            className="mgr-input !pl-10 !pr-9 text-xs w-full focus-visible:ring-2 focus-visible:ring-primary outline-none"
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
           />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => { setSearchQuery(''); setPage(0); }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded cursor-pointer"
+              title="Clear search"
+            >
+              <X size={13} />
+            </button>
+          )}
         </div>
         <select
           id="promises-status-filter" name="statusFilter"
