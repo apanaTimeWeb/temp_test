@@ -285,7 +285,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
           </div>
           <div className="mt-2">
             <span className="text-xl font-bold text-primary">{metrics.total}</span>
-            <span className="text-[11px] text-secondary ml-1.5">members</span>
+            <span className="text-[11px] text-secondary ml-1.5">total enrolled</span>
           </div>
         </div>
 
@@ -298,7 +298,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
             <span className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
               {metrics.active}
             </span>
-            <span className="text-[11px] text-secondary ml-1.5">running</span>
+            <span className="text-[11px] text-secondary ml-1.5">active now</span>
           </div>
         </div>
 
@@ -311,7 +311,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
             <span className="text-xl font-bold text-amber-600 dark:text-amber-400">
               {metrics.expiringSoon}
             </span>
-            <span className="text-[11px] text-secondary ml-1.5">≤ 15 days</span>
+            <span className="text-[11px] text-secondary ml-1.5">within 15 days</span>
           </div>
         </div>
 
@@ -324,7 +324,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
             <span className="text-xl font-bold text-rose-600 dark:text-rose-400">
               {metrics.expiredOrSuspended}
             </span>
-            <span className="text-[11px] text-secondary ml-1.5">expired/hold</span>
+            <span className="text-[11px] text-secondary ml-1.5">expired or hold</span>
           </div>
         </div>
 
@@ -338,7 +338,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
               {formatCurrency(metrics.totalDuesMinor)}
             </span>
             <span className="text-[11px] text-rose-500 block font-medium mt-0.5">
-              {metrics.countWithDues} students with dues
+              {metrics.countWithDues} students pending
             </span>
           </div>
         </div>

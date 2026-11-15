@@ -101,7 +101,9 @@ export default function ManagerFinanceSubscriptionsDetailModal({
           </div>
           <div className="p-3 rounded-xl bg-floating border border-border">
             <span className="text-secondary block">End Date</span>
-            <span className="font-semibold text-primary">{formatDate(subscription.endDate)} ({subscription.daysLeft} days left)</span>
+            <span className="font-semibold text-primary">
+              {formatDate(subscription.endDate)} ({subscription.daysLeft < 0 ? `${Math.abs(subscription.daysLeft)} days overdue` : `${subscription.daysLeft} days remaining`})
+            </span>
           </div>
           <div className="p-3 rounded-xl bg-floating border border-border">
             <span className="text-secondary block">Base / Plan Fee</span>
@@ -109,7 +111,7 @@ export default function ManagerFinanceSubscriptionsDetailModal({
           </div>
           <div className="p-3 rounded-xl bg-floating border border-border">
             <span className="text-secondary block">Discount Applied</span>
-            <span className="font-semibold text-warning">− {formatCurrency(subscription.discount)}</span>
+            <span className="font-semibold text-warning">- {formatCurrency(subscription.discount)}</span>
           </div>
           <div className="p-3 rounded-xl bg-floating border border-border">
             <span className="text-secondary block">Total Paid</span>

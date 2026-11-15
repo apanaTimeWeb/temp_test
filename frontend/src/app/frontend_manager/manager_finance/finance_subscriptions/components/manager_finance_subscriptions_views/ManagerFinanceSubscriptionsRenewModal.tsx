@@ -163,7 +163,7 @@ export default function ManagerFinanceSubscriptionsRenewModal({
               {formatDate(subscription.endDate)}
             </span>
             <span className={`text-[10px] block font-medium ${isExpired ? 'text-rose-500' : 'text-emerald-500'}`}>
-              {isExpired ? `Expired (${Math.abs(subscription.daysLeft)}d ago)` : `${subscription.daysLeft} days left`}
+              {isExpired ? `Expired ${Math.abs(subscription.daysLeft)} days ago` : `${subscription.daysLeft} days remaining`}
             </span>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function ManagerFinanceSubscriptionsRenewModal({
                       </span>
                     )}
                     <span className="text-sm block">{dur.label}</span>
-                    <span className="text-[10px] opacity-75 block">+{dur.months * 30} days</span>
+                    <span className="text-[10px] opacity-75 block">Valid for {dur.months * 30} days</span>
                   </button>
                 );
               })}
@@ -261,7 +261,7 @@ export default function ManagerFinanceSubscriptionsRenewModal({
             {discountMinor > 0 && (
               <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-medium">
                 <span>Discount ({selectedDuration.discountPercent}% Off):</span>
-                <span>− {formatCurrency(discountMinor)}</span>
+                <span>- {formatCurrency(discountMinor)}</span>
               </div>
             )}
             <div className="flex justify-between font-bold text-sm text-primary pt-2 border-t border-border">
