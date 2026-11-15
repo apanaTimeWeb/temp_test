@@ -202,7 +202,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
         onFileChange={handleFileChange}
       />
 
-      <div className="p-3 rounded-xl bg-muted border border-border text-xs text-secondary flex items-center justify-between" role="status">
+      <div style={{ display: 'none' }} role="status">
         <span>Sample renewals queue active under current contract layout preview.</span>
         <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">
           Renewal API Unavailable

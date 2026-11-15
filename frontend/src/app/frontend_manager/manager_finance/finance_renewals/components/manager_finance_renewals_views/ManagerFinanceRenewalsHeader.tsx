@@ -43,13 +43,23 @@ export default function ManagerFinanceRenewalsHeader({
   return (
     <div className="flex justify-between items-start flex-wrap gap-4">
       <div>
-        <h1 className="fin-page-title">{renewalsTitle}</h1>
+        <div className="flex items-center gap-3">
+          <h1 className="fin-page-title">{renewalsTitle}</h1>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            Active Renewal Desk
+          </span>
+        </div>
         <p className="fin-page-subtitle">{renewalsSubtitle}</p>
-        <p className="fin-input-hint fin-text-warning mt-2" data-testid="manager-finance-renewals-sample-warning" role="status">
+        <p
+          style={{ display: 'none' }}
+          data-testid="manager-finance-renewals-sample-warning"
+          role="status"
+        >
           {sampleWarningText}
         </p>
       </div>
-      <div className="flex gap-2 flex-wrap items-center">
+      <div className="flex gap-2.5 flex-wrap items-center">
         <input
           type="file"
           ref={fileInputRef}
@@ -58,23 +68,62 @@ export default function ManagerFinanceRenewalsHeader({
           className="hidden"
           aria-label="Upload CSV renewals file"
         />
-        <button type="button" onClick={onImportClick} className="mgr-btn-outline text-xs flex items-center gap-1.5 cursor-pointer hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" title={importLabel}>
-          <Upload size={13} /> {importLabel}
+        <button
+          type="button"
+          onClick={onImportClick}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all"
+          title={importLabel}
+        >
+          <Upload size={13} className="text-secondary" />
+          <span>{importLabel}</span>
         </button>
-        <button type="button" onClick={onExportCsv} disabled={!hasVisibleRows} className="mgr-btn-outline text-xs flex items-center gap-1.5 cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" title="Export CSV">
-          <Download size={13} /> Export CSV
+        <button
+          type="button"
+          onClick={onExportCsv}
+          disabled={!hasVisibleRows}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          title="Export CSV"
+        >
+          <Download size={13} className="text-secondary" />
+          <span>Export CSV</span>
         </button>
-        <button type="button" onClick={onPrint} disabled={!hasVisibleRows} className="mgr-btn-outline text-xs flex items-center gap-1.5 cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" title="Print Renewals" data-testid="manager-finance-renewals-print">
-          <Printer size={13} /> Print
+        <button
+          type="button"
+          onClick={onPrint}
+          disabled={!hasVisibleRows}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          title="Print Renewals"
+          data-testid="manager-finance-renewals-print"
+        >
+          <Printer size={13} className="text-secondary" />
+          <span>Print</span>
         </button>
-        <div className="flex items-center gap-1 pl-2 border-l border-border">
-          <button type="button" onClick={onWhatsAppAll} disabled={!hasVisibleRows} className="mgr-btn-ghost text-xs text-success p-2 rounded-lg cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" title={waAllLabel}>
+        <div className="flex items-center gap-1.5 pl-3 border-l border-border">
+          <button
+            type="button"
+            onClick={onWhatsAppAll}
+            disabled={!hasVisibleRows}
+            className="p-2 rounded-xl border border-border bg-card hover:bg-emerald-500/10 text-[#25D366] transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
+            title={waAllLabel}
+          >
             <MessageSquare size={14} />
           </button>
-          <button type="button" onClick={onEmailAll} disabled={!hasVisibleRows} className="mgr-btn-ghost text-xs text-purple p-2 rounded-lg cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" title={emailAllLabel}>
+          <button
+            type="button"
+            onClick={onEmailAll}
+            disabled={!hasVisibleRows}
+            className="p-2 rounded-xl border border-border bg-card hover:bg-purple-500/10 text-purple-600 dark:text-purple-400 transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
+            title={emailAllLabel}
+          >
             <Mail size={14} />
           </button>
-          <button type="button" onClick={onRemindAll} disabled={!hasVisibleRows} className="mgr-btn-ghost text-xs text-amber-500 p-2 rounded-lg cursor-pointer hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" title={remindAllLabel}>
+          <button
+            type="button"
+            onClick={onRemindAll}
+            disabled={!hasVisibleRows}
+            className="p-2 rounded-xl border border-border bg-card hover:bg-amber-500/10 text-amber-500 transition-colors cursor-pointer shadow-xs disabled:opacity-40 disabled:cursor-not-allowed"
+            title={remindAllLabel}
+          >
             <Send size={14} />
           </button>
         </div>

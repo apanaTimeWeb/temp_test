@@ -58,17 +58,27 @@ export default function ManagerFinanceRenewalsFilterBar({
       <div className="p-3 rounded-xl bg-surface border border-border flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[260px]">
         <div className="relative w-full sm:w-56">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
           <input
             id="manager-renewals-search-input"
-            type="search"
+            type="text"
             aria-label="Search student, smart ID, or plan"
             aria-describedby="manager-renewals-search-count"
             placeholder="Search student, smart ID, or plan..."
-            className="mgr-input pl-8 text-xs w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="mgr-input !pl-10 !pr-9 text-xs w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             value={searchQuery}
             onChange={(e) => onSearchQueryChange(e.target.value)}
           />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => onSearchQueryChange('')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded cursor-pointer"
+              title="Clear search"
+            >
+              <X size={13} />
+            </button>
+          )}
         </div>
 
         <select

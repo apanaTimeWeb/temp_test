@@ -40,7 +40,7 @@ export default function ManagerFinanceRenewalsNativeTable<T extends object>({ ro
   };
   return <div className="w-full min-w-0">
     <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-left" aria-rowcount={rows.length + 1}>
+      <table className="w-full min-w-[950px] border-collapse text-left" aria-rowcount={rows.length + 1}>
         <thead><tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
           {columns.map((column, index) => <th key={column.field ?? column.headerName ?? JSON.stringify(column)} scope="col" aria-sort={sortField === column.field ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="px-3 py-3 font-semibold whitespace-nowrap">
             {column.field && column.sortable !== false ? (
@@ -103,7 +103,7 @@ export default function ManagerFinanceRenewalsNativeTable<T extends object>({ ro
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="mgr-btn-ghost mgr-btn-sm"
+            className="px-2.5 py-1 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
             disabled={page <= 0}
             onClick={() => setPage((current) => Math.max(0, current - 1))}
           >
@@ -114,7 +114,7 @@ export default function ManagerFinanceRenewalsNativeTable<T extends object>({ ro
           </span>
           <button
             type="button"
-            className="mgr-btn-ghost mgr-btn-sm"
+            className="px-2.5 py-1 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
             disabled={page >= pageCount - 1}
             onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
           >

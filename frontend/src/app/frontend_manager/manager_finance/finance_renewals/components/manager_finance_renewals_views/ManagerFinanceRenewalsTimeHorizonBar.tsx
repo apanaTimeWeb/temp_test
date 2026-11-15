@@ -17,9 +17,9 @@ export interface ManagerFinanceRenewalsTimeHorizonBarProps {
 
 const timeHorizonOptions: Array<{ id: ManagerRenewalsTimeHorizon; label: string }> = [
   { id: 'all', label: 'All Time' },
-  { id: 'today', label: 'Today (≤ 0 Days)' },
-  { id: 'this_week', label: 'This Week (≤ 7 Days)' },
-  { id: 'this_month', label: 'This Month (≤ 30 Days)' },
+  { id: 'today', label: 'Due Today' },
+  { id: 'this_week', label: 'This Week (7 Days)' },
+  { id: 'this_month', label: 'This Month (30 Days)' },
   { id: 'custom', label: 'Custom Range' },
 ];
 

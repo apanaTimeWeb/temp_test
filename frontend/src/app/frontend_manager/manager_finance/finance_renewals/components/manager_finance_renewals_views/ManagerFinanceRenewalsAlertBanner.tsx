@@ -31,7 +31,7 @@ export default function ManagerFinanceRenewalsAlertBanner({
           </h3>
           <p className="text-xs text-secondary mt-0.5">
             <strong className="text-danger">{expiredCount} subscriptions already expired</strong> ·{' '}
-            <strong className="text-warning">{expiringCount} members have ≤ 3 days remaining</strong>. Send reminders to safeguard seat renewals.
+            <strong className="text-warning">{expiringCount} members expiring within 3 days</strong>. Send reminders to safeguard seat renewals.
           </p>
         </div>
       </div>
