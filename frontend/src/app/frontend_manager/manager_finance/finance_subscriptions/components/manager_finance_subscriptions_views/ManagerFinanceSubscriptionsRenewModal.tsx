@@ -116,7 +116,7 @@ export default function ManagerFinanceSubscriptionsRenewModal({
       aria-labelledby="renew-subscription-modal-title"
     >
       <div
-        className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4 max-h-[90vh] overflow-y-auto"
+        className="w-full max-w-lg rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-dialog space-y-4 max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -145,21 +145,21 @@ export default function ManagerFinanceSubscriptionsRenewModal({
         </div>
 
         {/* Student Profile Card */}
-        <div className="p-3.5 rounded-xl bg-surface border border-border flex items-center justify-between gap-3">
+        <div className="p-3.5 rounded-xl bg-surface border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+            <div className="w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm shrink-0">
               <User size={18} />
             </div>
-            <div>
-              <h4 className="text-sm font-bold text-primary">{subscription.studentName}</h4>
-              <p className="text-xs text-secondary font-mono">
+            <div className="min-w-0">
+              <h4 className="text-sm font-bold text-primary truncate">{subscription.studentName}</h4>
+              <p className="text-xs text-secondary font-mono truncate">
                 {subscription.smartId} • {subscription.plan} • {subscription.shift}
               </p>
             </div>
           </div>
-          <div className="text-right">
+          <div className="text-left sm:text-right shrink-0">
             <span className="text-[11px] text-secondary block">Current Expiry</span>
-            <span className="text-xs font-semibold text-primary">
+            <span className="text-xs font-semibold text-primary block">
               {formatDate(subscription.endDate)}
             </span>
             <span className={`text-[10px] block font-medium ${isExpired ? 'text-rose-500' : 'text-emerald-500'}`}>

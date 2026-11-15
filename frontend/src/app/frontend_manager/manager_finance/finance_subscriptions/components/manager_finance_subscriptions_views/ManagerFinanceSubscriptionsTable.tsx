@@ -203,7 +203,7 @@ export default function ManagerFinanceSubscriptionsTable({
           <span>
             Showing {startItem}–{endItem} of {totalRows} results
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap justify-center sm:justify-end">
             <div className="flex items-center gap-1.5">
               <label htmlFor="rows-per-page-finance-subscriptions" className="text-xs text-secondary whitespace-nowrap">
                 Rows per page:

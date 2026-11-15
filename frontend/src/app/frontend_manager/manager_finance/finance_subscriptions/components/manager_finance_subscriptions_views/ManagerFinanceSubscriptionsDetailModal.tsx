@@ -40,7 +40,7 @@ export default function ManagerFinanceSubscriptionsDetailModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" onClick={onClose} role="dialog" aria-modal="true">
-      <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-dialog space-y-4 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center border-b border-border pb-3">
           <div>
             <h3 className="text-xl font-bold text-primary">{subscription.studentName}</h3>
@@ -53,7 +53,7 @@ export default function ManagerFinanceSubscriptionsDetailModal({
 
         {/* Due Warning Banner if student has pending dues */}
         {subscription.due > 0 && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs flex items-center justify-between gap-2">
+          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <AlertCircle size={16} className="shrink-0" />
               <span>
