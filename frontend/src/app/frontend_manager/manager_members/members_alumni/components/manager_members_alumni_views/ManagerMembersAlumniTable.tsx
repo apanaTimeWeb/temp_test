@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import {
   ArrowUpDown,
   ArrowUp,
@@ -98,7 +98,7 @@ export function ManagerMembersAlumniTable({
               <ArrowDown size={14} className="text-primary font-bold shrink-0" aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown size={14} className="text-secondary opacity-40 group-hover:opacity-100 transition-colors shrink-0" aria-hidden="true" />
+            <ArrowUpDown size={14} className="text-primary/70 group-hover:text-primary transition-colors shrink-0" aria-hidden="true" />
           )}
         </button>
       </th>
@@ -107,12 +107,12 @@ export function ManagerMembersAlumniTable({
 
   return (
     <>
-      {/* Filter & Search Bar - Pixel-perfect aligned heights & responsive grid */}
+      {/* Filter & Search Bar - Icons colored by default */}
       <div className="mgr-card p-3 sm:p-4 mb-6">
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
-          {/* Search Box - zero icon overlap with !pl-10 and centered icon */}
+          {/* Search Box - zero icon overlap with !pl-10 and vibrant primary search icon */}
           <div className="mgr-input-icon-wrap relative flex-1 min-w-0">
-            <Search size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+            <Search size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
             <input
               type="search"
               maxLength={80}
@@ -126,11 +126,11 @@ export function ManagerMembersAlumniTable({
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-full transition-colors"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-danger hover:opacity-80 rounded-full transition-colors"
                 title="Clear search"
                 aria-label="Clear search"
               >
-                <X size={14} className="shrink-0" />
+                <X size={14} className="shrink-0 text-danger" />
               </button>
             )}
           </div>
@@ -192,10 +192,10 @@ export function ManagerMembersAlumniTable({
                 type="button"
                 data-testid="manager-alumni-reset-filters"
                 onClick={onResetFilters}
-                className="inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer shrink-0 col-span-full lg:col-auto w-full lg:w-auto transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-lg border border-border text-xs font-semibold text-danger hover:bg-danger-bg cursor-pointer shrink-0 col-span-full lg:col-auto w-full lg:w-auto transition-colors"
                 title="Reset all filters"
               >
-                <X size={13} className="text-secondary shrink-0" />
+                <X size={14} className="text-danger shrink-0" />
                 <span>Reset</span>
               </button>
             )}
@@ -225,7 +225,7 @@ export function ManagerMembersAlumniTable({
                 <tr>
                   <td colSpan={9} className="py-12 text-center text-secondary text-xs sm:text-sm align-middle">
                     <div className="flex flex-col items-center justify-center gap-2">
-                      <GraduationCap size={36} className="text-secondary opacity-40" />
+                      <GraduationCap size={36} className="text-primary shrink-0" />
                       <p className="font-medium">No alumni records matching the selected search query and filters.</p>
                       {hasActiveFilters && (
                         <button
@@ -246,7 +246,7 @@ export function ManagerMembersAlumniTable({
                     <td className="py-3 px-4 font-semibold text-primary align-middle whitespace-nowrap">{alumnus.name}</td>
                     <td className="py-3 px-4 font-mono text-secondary text-xs align-middle whitespace-nowrap">
                       <span className="inline-flex items-center gap-1.5">
-                        <Phone size={12} className="text-secondary shrink-0" />
+                        <Phone size={13} className="text-info shrink-0" />
                         {alumnus.phone.replace(/\D/g, '').length === 10
                           ? `+91 ${alumnus.phone.replace(/\D/g, '').slice(0, 5)} ${alumnus.phone.replace(/\D/g, '').slice(5)}`
                           : alumnus.phone}
@@ -254,24 +254,24 @@ export function ManagerMembersAlumniTable({
                     </td>
                     <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
                       <span className="inline-flex items-center gap-1.5">
-                        <Calendar size={12} className="text-secondary shrink-0" />
+                        <Calendar size={13} className="text-primary shrink-0" />
                         {alumnus.leftDate}
                       </span>
                     </td>
                     <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
                       <span className="inline-flex items-center gap-1.5">
-                        <Clock size={12} className="text-secondary shrink-0" />
+                        <Clock size={13} className="text-warning shrink-0" />
                         {alumnus.duration}
                       </span>
                     </td>
                     <td className="py-3 px-4 align-middle">
                       <div className="space-y-0.5">
                         <span className="font-semibold text-success flex items-center gap-1.5">
-                          <Award size={14} className="text-success shrink-0" /> {alumnus.exam}
+                          <Award size={15} className="text-success shrink-0" /> {alumnus.exam}
                         </span>
                         {alumnus.designation ? (
                           <span className="text-xs text-secondary flex items-center gap-1">
-                            <Briefcase size={12} className="text-secondary shrink-0" /> {alumnus.designation}
+                            <Briefcase size={13} className="text-info shrink-0" /> {alumnus.designation}
                           </span>
                         ) : null}
                       </div>
@@ -279,7 +279,7 @@ export function ManagerMembersAlumniTable({
                     <td className="py-3 px-4 max-w-xs align-middle">
                       {alumnus.testimonial ? (
                         <div className="flex items-start gap-1 text-xs text-secondary italic">
-                          <Quote size={12} className="text-secondary shrink-0 mt-0.5 opacity-60" />
+                          <Quote size={13} className="text-primary shrink-0 mt-0.5" />
                           <p className="line-clamp-2" title={alumnus.testimonial}>
                             {alumnus.testimonial}
                           </p>
@@ -290,7 +290,7 @@ export function ManagerMembersAlumniTable({
                     </td>
                     <td className="py-3 px-4 align-middle whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                           alumnus.currentStatus === 'Cleared Exam'
                             ? 'bg-success-bg text-success'
                             : alumnus.currentStatus === 'Employed'
@@ -298,9 +298,9 @@ export function ManagerMembersAlumniTable({
                               : 'bg-warning-bg text-warning'
                         }`}
                       >
-                        {alumnus.currentStatus === 'Cleared Exam' && <CheckCircle2 size={12} className="shrink-0" />}
-                        {alumnus.currentStatus === 'Employed' && <Briefcase size={12} className="shrink-0" />}
-                        {alumnus.currentStatus === 'Higher Studies' && <GraduationCap size={12} className="shrink-0" />}
+                        {alumnus.currentStatus === 'Cleared Exam' && <CheckCircle2 size={13} className="shrink-0 text-success" />}
+                        {alumnus.currentStatus === 'Employed' && <Briefcase size={13} className="shrink-0 text-info" />}
+                        {alumnus.currentStatus === 'Higher Studies' && <GraduationCap size={13} className="shrink-0 text-warning" />}
                         <span>{alumnus.currentStatus}</span>
                       </span>
                     </td>
@@ -309,11 +309,11 @@ export function ManagerMembersAlumniTable({
                         <button
                           type="button"
                           onClick={() => onDeleteAlumni(alumnus.id)}
-                          className="inline-flex items-center justify-center p-1.5 rounded-lg border border-border text-secondary hover:text-danger hover:border-danger hover:bg-danger-bg transition-colors"
+                          className="inline-flex items-center justify-center p-1.5 rounded-lg border border-border text-danger hover:border-danger hover:bg-danger-bg transition-colors"
                           title={`Remove ${alumnus.name} from directory`}
                           aria-label={`Remove ${alumnus.name}`}
                         >
-                          <Trash2 size={14} className="shrink-0" />
+                          <Trash2 size={15} className="shrink-0 text-danger" />
                         </button>
                       )}
                     </td>
@@ -352,7 +352,7 @@ export function ManagerMembersAlumniTable({
                   onClick={() => onPageChange(effectivePage - 1)}
                   className="mgr-btn mgr-btn-secondary h-8 px-3 text-xs disabled:opacity-40 inline-flex items-center gap-1.5"
                 >
-                  <ChevronLeft size={14} className="shrink-0 text-secondary" />
+                  <ChevronLeft size={15} className="shrink-0 text-primary" />
                   <span>Previous</span>
                 </button>
                 <span className="text-xs whitespace-nowrap px-1">
@@ -366,7 +366,7 @@ export function ManagerMembersAlumniTable({
                   className="mgr-btn mgr-btn-secondary h-8 px-3 text-xs disabled:opacity-40 inline-flex items-center gap-1.5"
                 >
                   <span>Next</span>
-                  <ChevronRight size={14} className="shrink-0 text-secondary" />
+                  <ChevronRight size={15} className="shrink-0 text-primary" />
                 </button>
               </div>
             </div>

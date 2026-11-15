@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 // RESPONSIBILITY: Orchestrate the client-side view and local interactions for components. It does not own backend persistence or cross-feature business logic.
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
@@ -220,28 +220,29 @@ export function ManagerMembersAlumniClient() {
 
   return (
     <div className="mgr-page">
-      <div className="mgr-page-header flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Page Header with colored action icons */}
+      <div className="mgr-page-header flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="mgr-page-title text-xl sm:text-2xl font-bold text-primary">{tManagerUi('alumni_directory')}</h1>
           <p className="mgr-page-subtitle text-xs sm:text-sm text-secondary mt-1">
             Track and celebrate library alumni who have successfully qualified competitive examinations or transitioned to professional careers.
           </p>
         </div>
-        <div className="mgr-page-actions flex flex-wrap items-center gap-2">
+        <div className="mgr-page-actions flex flex-wrap items-center gap-2.5">
           <button
             type="button"
             onClick={() => setIsAddModalOpen(true)}
-            className="mgr-btn-primary flex items-center justify-center gap-2 text-xs py-2 px-3.5"
+            className="mgr-btn-primary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold w-full sm:w-auto transition-colors"
           >
-            <Plus size={15} className="shrink-0 text-on-primary" />
+            <Plus size={16} className="shrink-0 text-on-primary" />
             <span>Add Alumni</span>
           </button>
           <button
             type="button"
             onClick={handleExportCsv}
-            className="mgr-btn mgr-btn-secondary flex items-center justify-center gap-2 text-xs py-2 px-3.5"
+            className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold w-full sm:w-auto transition-colors"
           >
-            <Download size={15} className="shrink-0 text-secondary" />
+            <Download size={16} className="shrink-0 text-primary" />
             <span>Export CSV</span>
           </button>
         </div>
@@ -256,49 +257,49 @@ export function ManagerMembersAlumniClient() {
           <button
             type="button"
             onClick={() => setToastMsg(null)}
-            className="p-1 text-secondary hover:text-primary rounded-lg transition-colors"
+            className="p-1 text-danger hover:opacity-80 rounded-lg transition-colors"
             aria-label="Dismiss message"
           >
-            <X size={14} className="shrink-0" />
+            <X size={14} className="shrink-0 text-danger" />
           </button>
         </div>
       )}
 
-      {/* KPI Cards - Fully responsive grid with dedicated icons & colors */}
+      {/* KPI Cards - Vibrant themed icon colors by default */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <div className="mgr-card p-4 flex items-center justify-between">
-          <div>
+          <div className="space-y-1">
             <span className="text-xs text-secondary font-medium">Total Alumni Network</span>
-            <p className="text-2xl font-bold text-primary mt-1">{records.length}</p>
+            <p className="text-2xl font-bold text-primary tracking-tight">{records.length}</p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-primary-subtle text-primary flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-primary-subtle text-primary flex items-center justify-center shrink-0">
             <Users size={20} className="text-primary" />
           </div>
         </div>
         <div className="mgr-card p-4 flex items-center justify-between">
-          <div>
+          <div className="space-y-1">
             <span className="text-xs text-secondary font-medium">Exam Success Rate</span>
-            <p className="text-2xl font-bold text-success mt-1">{kpis.successRate}</p>
+            <p className="text-2xl font-bold text-success tracking-tight">{kpis.successRate}</p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-success-bg text-success flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-success-bg text-success flex items-center justify-center shrink-0">
             <Award size={20} className="text-success" />
           </div>
         </div>
         <div className="mgr-card p-4 flex items-center justify-between">
-          <div>
+          <div className="space-y-1">
             <span className="text-xs text-secondary font-medium">Govt / PSU Officers</span>
-            <p className="text-2xl font-bold text-info mt-1">{kpis.officersPercent}</p>
+            <p className="text-2xl font-bold text-info tracking-tight">{kpis.officersPercent}</p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-info-bg text-info flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-info-bg text-info flex items-center justify-center shrink-0">
             <Building2 size={20} className="text-info" />
           </div>
         </div>
         <div className="mgr-card p-4 flex items-center justify-between">
-          <div>
+          <div className="space-y-1">
             <span className="text-xs text-secondary font-medium">Average Tenure</span>
-            <p className="text-2xl font-bold text-warning mt-1">{kpis.avgTenure}</p>
+            <p className="text-2xl font-bold text-warning tracking-tight">{kpis.avgTenure}</p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-warning-bg text-warning flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-warning-bg text-warning flex items-center justify-center shrink-0">
             <Clock size={20} className="text-warning" />
           </div>
         </div>

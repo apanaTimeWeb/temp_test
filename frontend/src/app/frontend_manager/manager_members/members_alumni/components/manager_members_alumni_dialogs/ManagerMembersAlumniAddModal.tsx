@@ -1,8 +1,20 @@
-﻿'use client';
+'use client';
 
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import { Award, Briefcase, Calendar, CheckCircle2, Clock, GraduationCap, Phone, User, X, Check } from 'lucide-react';
+import {
+  Award,
+  Briefcase,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  GraduationCap,
+  Phone,
+  Quote,
+  User,
+  X,
+  Check,
+} from 'lucide-react';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
@@ -140,10 +152,10 @@ export function ManagerMembersAlumniAddModal({
           <button
             type="button"
             onClick={handleClose}
-            className="p-1.5 text-secondary hover:text-primary rounded-lg hover:bg-surface-hover transition-colors"
+            className="p-1.5 text-danger hover:opacity-80 rounded-lg hover:bg-danger-bg transition-colors"
             aria-label="Close modal"
           >
-            <X size={20} className="shrink-0" />
+            <X size={20} className="shrink-0 text-danger" />
           </button>
         </div>
 
@@ -179,13 +191,13 @@ export function ManagerMembersAlumniAddModal({
             <div>
               <label className="font-semibold text-primary block mb-1">Student Full Name *</label>
               <div className="mgr-input-icon-wrap relative">
-                <User size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+                <User size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
                 <input
                   type="text"
                   required
                   maxLength={80}
                   readOnly={Boolean(selectedStudent)}
-                  className={`mgr-input mgr-input-with-icon !pl-10 text-xs w-full ${selectedStudent ? 'bg-surface cursor-not-allowed font-semibold' : ''}`}
+                  className={`mgr-input mgr-input-with-icon !pl-10 text-xs w-full h-9 ${selectedStudent ? 'bg-surface cursor-not-allowed font-semibold' : ''}`}
                   placeholder={selectedStudent ? '' : 'Type student full name...'}
                   value={name}
                   onChange={(e) => setName(e.target.value.slice(0, 80))}
@@ -197,7 +209,7 @@ export function ManagerMembersAlumniAddModal({
             <div>
               <label className="font-semibold text-primary block mb-1">Contact Phone (10 Digits) *</label>
               <div className="mgr-input-icon-wrap relative">
-                <Phone size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+                <Phone size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-info pointer-events-none" />
                 <input
                   type="tel"
                   inputMode="numeric"
@@ -205,7 +217,7 @@ export function ManagerMembersAlumniAddModal({
                   maxLength={10}
                   pattern="[6-9][0-9]{9}"
                   readOnly={Boolean(selectedStudent)}
-                  className={`mgr-input mgr-input-with-icon !pl-10 text-xs font-mono w-full ${selectedStudent ? 'bg-surface cursor-not-allowed font-semibold' : ''}`}
+                  className={`mgr-input mgr-input-with-icon !pl-10 text-xs font-mono w-full h-9 ${selectedStudent ? 'bg-surface cursor-not-allowed font-semibold' : ''}`}
                   placeholder="9876543210"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
@@ -217,12 +229,12 @@ export function ManagerMembersAlumniAddModal({
             <div className="sm:col-span-2">
               <label className="font-semibold text-primary block mb-1">Qualified Exam / Achievement *</label>
               <div className="mgr-input-icon-wrap relative">
-                <Award size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
+                <Award size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-success pointer-events-none" />
                 <input
                   type="text"
                   required
                   maxLength={100}
-                  className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full"
+                  className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full h-9"
                   placeholder="e.g. UPSC CSE 2026 (AIR 114) / SSC CGL / NEET PG / Judiciary"
                   value={exam}
                   onChange={(e) => setExam(e.target.value.slice(0, 100))}
@@ -234,11 +246,11 @@ export function ManagerMembersAlumniAddModal({
             <div>
               <label className="font-semibold text-primary block mb-1">Designation / Posting / Rank</label>
               <div className="mgr-input-icon-wrap relative">
-                <Briefcase size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+                <Briefcase size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-info pointer-events-none" />
                 <input
                   type="text"
                   maxLength={80}
-                  className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full"
+                  className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full h-9"
                   placeholder="e.g. Assistant Commissioner / Bank PO"
                   value={designation}
                   onChange={(e) => setDesignation(e.target.value.slice(0, 80))}
@@ -249,26 +261,29 @@ export function ManagerMembersAlumniAddModal({
             {/* Current Status */}
             <div>
               <label className="font-semibold text-primary block mb-1">Milestone Category</label>
-              <select
-                className="mgr-select text-xs w-full"
-                value={currentStatus}
-                onChange={(e) => setCurrentStatus(e.target.value as MembersAlumniRow['currentStatus'])}
-              >
-                <option value="Cleared Exam">Cleared Exam (Rank Holder)</option>
-                <option value="Employed">Employed in Govt / PSU / Corporate</option>
-                <option value="Higher Studies">Higher Studies (Masters / Ph.D.)</option>
-              </select>
+              <div className="mgr-input-icon-wrap relative">
+                <GraduationCap size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-warning pointer-events-none" />
+                <select
+                  className="mgr-select !pl-10 text-xs w-full h-9"
+                  value={currentStatus}
+                  onChange={(e) => setCurrentStatus(e.target.value as MembersAlumniRow['currentStatus'])}
+                >
+                  <option value="Cleared Exam">Cleared Exam (Rank Holder)</option>
+                  <option value="Employed">Employed in Govt / PSU / Corporate</option>
+                  <option value="Higher Studies">Higher Studies (Masters / Ph.D.)</option>
+                </select>
+              </div>
             </div>
 
             {/* Duration at Library */}
             <div>
               <label className="font-semibold text-primary block mb-1">Study Tenure at Library</label>
               <div className="mgr-input-icon-wrap relative">
-                <Clock size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+                <Clock size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-warning pointer-events-none" />
                 <input
                   type="text"
                   maxLength={40}
-                  className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full"
+                  className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full h-9"
                   placeholder="e.g. 14 Months"
                   value={duration}
                   onChange={(e) => setDuration(e.target.value.slice(0, 40))}
@@ -280,10 +295,10 @@ export function ManagerMembersAlumniAddModal({
             <div>
               <label className="font-semibold text-primary block mb-1">Achievement / Exit Date</label>
               <div className="mgr-input-icon-wrap relative">
-                <Calendar size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+                <Calendar size={16} className="mgr-input-icon absolute left-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
                 <input
                   type="date"
-                  className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full"
+                  className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full h-9"
                   value={leftDate}
                   onChange={(e) => setLeftDate(e.target.value)}
                 />
@@ -292,7 +307,10 @@ export function ManagerMembersAlumniAddModal({
 
             {/* Testimonial / Advice for Juniors */}
             <div className="sm:col-span-2">
-              <label className="font-semibold text-primary block mb-1">Advice / Testimonial for Library Juniors</label>
+              <label className="font-semibold text-primary flex items-center gap-1.5 mb-1">
+                <Quote size={13} className="text-primary shrink-0" />
+                <span>Advice / Testimonial for Library Juniors</span>
+              </label>
               <textarea
                 rows={2}
                 maxLength={500}
@@ -304,18 +322,18 @@ export function ManagerMembersAlumniAddModal({
             </div>
           </div>
 
-          <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3 pt-4 border-t border-border">
+          <div className="flex flex-col-reverse sm:flex-row justify-end items-center gap-2 sm:gap-3 pt-4 border-t border-border">
             <button
               type="button"
               onClick={handleClose}
-              className="mgr-btn mgr-btn-secondary flex items-center justify-center gap-1.5 text-xs py-2 px-4 w-full sm:w-auto"
+              className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center gap-1.5 text-xs h-9 px-4 w-full sm:w-auto font-semibold transition-colors"
             >
-              <X size={15} className="text-secondary shrink-0" />
+              <X size={15} className="text-danger shrink-0" />
               <span>Cancel</span>
             </button>
             <button
               type="submit"
-              className="mgr-btn-primary flex items-center justify-center gap-2 text-xs py-2 px-5 w-full sm:w-auto"
+              className="mgr-btn-primary inline-flex items-center justify-center gap-2 text-xs h-9 px-5 w-full sm:w-auto font-semibold transition-colors"
             >
               <CheckCircle2 size={16} className="text-on-primary shrink-0" />
               <span>Save Alumni Record</span>
