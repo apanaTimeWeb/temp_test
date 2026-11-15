@@ -185,16 +185,18 @@ export function ManagerMembersReferralBonusTable({
         </div>
       </div>
 
-      {/* Referrals Table - Compact layout fitting single screen view without horizontal scroll */}
+      {/* Referrals Table - Separate distinct columns */}
       <div className="mgr-card overflow-hidden">
         <div className="overflow-x-auto w-full">
           <table className="w-full text-xs sm:text-sm">
             <thead>
               <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold text-left">
-                {renderSortableHeader('id', 'Ref ID & Date')}
+                {renderSortableHeader('id', tManagerUi('ref_id'))}
                 {renderSortableHeader('referrer', tManagerUi('referrer_existing'))}
                 {renderSortableHeader('referred', tManagerUi('referred_student'))}
-                {renderSortableHeader('bonus', 'Bonus & Method')}
+                {renderSortableHeader('date', tManagerUi('date'))}
+                {renderSortableHeader('bonus', tManagerUi('bonus'))}
+                {renderSortableHeader('method', tManagerUi('payout_method'))}
                 {renderSortableHeader('status', tManagerUi('status'))}
                 <th scope="col" className="py-3 px-4 text-right align-middle whitespace-nowrap">Actions</th>
               </tr>
@@ -202,7 +204,7 @@ export function ManagerMembersReferralBonusTable({
             <tbody>
               {filteredRows.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-secondary text-xs sm:text-sm align-middle">
+                  <td colSpan={8} className="py-12 text-center text-secondary text-xs sm:text-sm align-middle">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <Gift size={36} className="text-primary shrink-0" />
                       <p className="font-medium">No referral records matching the search criteria.</p>
@@ -221,39 +223,43 @@ export function ManagerMembersReferralBonusTable({
               ) : (
                 paginatedRows.map((r) => (
                   <tr key={r.id} className="border-b border-border last:border-0 hover:bg-surface-hover transition-colors">
-                    {/* Col 1: Combined Referral ID + Date */}
-                    <td className="py-3 px-4 align-middle whitespace-nowrap">
-                      <div className="flex flex-col gap-0.5">
-                        <span className="font-mono font-bold text-primary text-xs">{r.id}</span>
-                        <span className="text-xs text-secondary inline-flex items-center gap-1">
-                          <Calendar size={12} className="text-primary shrink-0" />
-                          <span>{r.date}</span>
-                        </span>
-                      </div>
+                    {/* Column 1: Referral ID */}
+                    <td className="py-3 px-4 font-mono font-bold text-primary text-xs align-middle whitespace-nowrap">
+                      {r.id}
                     </td>
 
-                    {/* Col 2: Referrer (Existing Student) */}
-                    <td className="py-3 px-4 font-semibold text-primary text-xs align-middle">
+                    {/* Column 2: Referrer (Existing Student) */}
+                    <td className="py-3 px-4 font-semibold text-primary text-xs align-middle whitespace-nowrap">
                       {r.referrer}
                     </td>
 
-                    {/* Col 3: Referred Student (New) */}
-                    <td className="py-3 px-4 text-primary text-xs align-middle">
+                    {/* Column 3: Referred Student (New) */}
+                    <td className="py-3 px-4 text-primary text-xs align-middle whitespace-nowrap">
                       {r.referred}
                     </td>
 
-                    {/* Col 4: Combined Bonus Amount + Reward Method */}
-                    <td className="py-3 px-4 align-middle whitespace-nowrap">
-                      <div className="flex flex-col gap-0.5">
-                        <span className="font-bold text-success text-xs font-mono">{r.bonus}</span>
-                        <span className="text-[11px] text-secondary inline-flex items-center gap-1">
-                          <Gift size={11} className="text-warning shrink-0" />
-                          <span>{r.method}</span>
-                        </span>
-                      </div>
+                    {/* Column 4: Date */}
+                    <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Calendar size={13} className="text-primary shrink-0" />
+                        <span>{r.date}</span>
+                      </span>
                     </td>
 
-                    {/* Col 5: Status Badge */}
+                    {/* Column 5: Bonus Amount */}
+                    <td className="py-3 px-4 font-bold text-success text-xs font-mono align-middle whitespace-nowrap">
+                      {r.bonus}
+                    </td>
+
+                    {/* Column 6: Payout Method */}
+                    <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Gift size={13} className="text-warning shrink-0" />
+                        <span>{r.method}</span>
+                      </span>
+                    </td>
+
+                    {/* Column 7: Status Badge */}
                     <td className="py-3 px-4 align-middle whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
@@ -269,7 +275,7 @@ export function ManagerMembersReferralBonusTable({
                       </span>
                     </td>
 
-                    {/* Col 6: Actions (Approve + Delete) - Visible in single screen view */}
+                    {/* Column 8: Actions (Approve + Delete) */}
                     <td className="py-3 px-4 text-right align-middle whitespace-nowrap">
                       <div className="inline-flex items-center gap-1.5 justify-end">
                         {r.status === 'Pending' ? (

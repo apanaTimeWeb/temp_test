@@ -203,15 +203,19 @@ export function ManagerMembersAlumniTable({
         </div>
       </div>
 
-      {/* Alumni Records Table - Compact 6-column layout fitting single view without horizontal scroll */}
+      {/* Alumni Records Table - Separate distinct columns */}
       <div className="mgr-card overflow-hidden">
         <div className="overflow-x-auto w-full">
           <table className="w-full text-xs sm:text-sm" data-testid="manager-alumni-table">
             <thead>
               <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold text-left">
-                {renderSortableHeader('name', 'Alumni Member')}
-                {renderSortableHeader('exam', 'Exam & Achievement')}
-                {renderSortableHeader('leftDate', 'Tenure & Exit')}
+                {renderSortableHeader('id', 'Alumni ID')}
+                {renderSortableHeader('name', 'Student Name')}
+                {renderSortableHeader('phone', 'Contact Phone')}
+                {renderSortableHeader('exam', 'Qualified Exam')}
+                <th scope="col" className="py-3 px-4 text-left align-middle whitespace-nowrap">Designation</th>
+                {renderSortableHeader('leftDate', 'Exit Date')}
+                {renderSortableHeader('duration', 'Tenure')}
                 <th scope="col" className="py-3 px-4 text-left align-middle whitespace-nowrap">Junior Advice</th>
                 {renderSortableHeader('currentStatus', 'Status')}
                 <th scope="col" className="py-3 px-4 text-right align-middle whitespace-nowrap">Actions</th>
@@ -220,7 +224,7 @@ export function ManagerMembersAlumniTable({
             <tbody>
               {filteredAlumni.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-secondary text-xs sm:text-sm align-middle">
+                  <td colSpan={10} className="py-12 text-center text-secondary text-xs sm:text-sm align-middle">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <GraduationCap size={36} className="text-primary shrink-0" />
                       <p className="font-medium">No alumni records matching the selected search query and filters.</p>
@@ -239,61 +243,69 @@ export function ManagerMembersAlumniTable({
               ) : (
                 paginatedAlumni.map((alumnus) => (
                   <tr key={alumnus.id} className="border-b border-border last:border-0 hover:bg-surface-hover transition-colors">
-                    {/* Column 1: Combined Student Name + ID Badge + Contact Phone */}
-                    <td className="py-3 px-4 align-middle">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-primary">{alumnus.name}</span>
-                          <span className="font-mono text-[10px] font-bold text-primary bg-primary-subtle px-1.5 py-0.5 rounded border border-border">
-                            {alumnus.id}
-                          </span>
-                        </div>
-                        <span className="font-mono text-secondary text-xs inline-flex items-center gap-1.5">
-                          <Phone size={12} className="text-info shrink-0" />
-                          <span>
-                            {alumnus.phone.replace(/\D/g, '').length === 10
-                              ? `+91 ${alumnus.phone.replace(/\D/g, '').slice(0, 5)} ${alumnus.phone.replace(/\D/g, '').slice(5)}`
-                              : alumnus.phone}
-                          </span>
-                        </span>
-                      </div>
+                    {/* Column 1: Alumni ID */}
+                    <td className="py-3 px-4 font-mono font-bold text-primary text-xs align-middle whitespace-nowrap">
+                      {alumnus.id}
                     </td>
 
-                    {/* Column 2: Qualified Exam + Rank / Designation */}
-                    <td className="py-3 px-4 align-middle">
-                      <div className="flex flex-col gap-0.5">
-                        <span className="font-semibold text-success flex items-center gap-1.5">
-                          <Award size={14} className="text-success shrink-0" />
-                          <span>{alumnus.exam}</span>
-                        </span>
-                        {alumnus.designation ? (
-                          <span className="text-xs text-secondary flex items-center gap-1">
-                            <Briefcase size={12} className="text-info shrink-0" />
-                            <span>{alumnus.designation}</span>
-                          </span>
-                        ) : null}
-                      </div>
+                    {/* Column 2: Student Name */}
+                    <td className="py-3 px-4 font-semibold text-primary text-xs align-middle whitespace-nowrap">
+                      {alumnus.name}
                     </td>
 
-                    {/* Column 3: Combined Exit Date + Study Tenure */}
-                    <td className="py-3 px-4 align-middle whitespace-nowrap">
-                      <div className="flex flex-col gap-0.5">
-                        <span className="text-xs text-primary font-medium flex items-center gap-1.5">
-                          <Calendar size={12} className="text-primary shrink-0" />
-                          <span>{alumnus.leftDate}</span>
+                    {/* Column 3: Contact Phone */}
+                    <td className="py-3 px-4 font-mono text-secondary text-xs align-middle whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Phone size={13} className="text-info shrink-0" />
+                        <span>
+                          {alumnus.phone.replace(/\D/g, '').length === 10
+                            ? `+91 ${alumnus.phone.replace(/\D/g, '').slice(0, 5)} ${alumnus.phone.replace(/\D/g, '').slice(5)}`
+                            : alumnus.phone}
                         </span>
-                        <span className="text-xs text-secondary flex items-center gap-1.5">
-                          <Clock size={12} className="text-warning shrink-0" />
-                          <span>{alumnus.duration}</span>
-                        </span>
-                      </div>
+                      </span>
                     </td>
 
-                    {/* Column 4: Junior Advice / Review */}
+                    {/* Column 4: Qualified Exam */}
+                    <td className="py-3 px-4 font-semibold text-success text-xs align-middle whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Award size={13} className="text-success shrink-0" />
+                        <span>{alumnus.exam}</span>
+                      </span>
+                    </td>
+
+                    {/* Column 5: Designation / Post */}
+                    <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
+                      {alumnus.designation ? (
+                        <span className="inline-flex items-center gap-1.5">
+                          <Briefcase size={13} className="text-info shrink-0" />
+                          <span>{alumnus.designation}</span>
+                        </span>
+                      ) : (
+                        <span className="opacity-40">—</span>
+                      )}
+                    </td>
+
+                    {/* Column 6: Exit Date */}
+                    <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Calendar size={13} className="text-primary shrink-0" />
+                        <span>{alumnus.leftDate}</span>
+                      </span>
+                    </td>
+
+                    {/* Column 7: Tenure / Duration */}
+                    <td className="py-3 px-4 text-secondary text-xs align-middle whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1.5">
+                        <Clock size={13} className="text-warning shrink-0" />
+                        <span>{alumnus.duration}</span>
+                      </span>
+                    </td>
+
+                    {/* Column 8: Junior Advice / Review */}
                     <td className="py-3 px-4 align-middle max-w-[200px] lg:max-w-[260px]">
                       {alumnus.testimonial ? (
                         <div className="flex items-start gap-1.5 text-xs text-secondary italic" title={alumnus.testimonial}>
-                          <Quote size={12} className="text-primary shrink-0 mt-0.5" />
+                          <Quote size={13} className="text-primary shrink-0 mt-0.5" />
                           <span className="line-clamp-2 leading-relaxed">{alumnus.testimonial}</span>
                         </div>
                       ) : (
@@ -301,7 +313,7 @@ export function ManagerMembersAlumniTable({
                       )}
                     </td>
 
-                    {/* Column 5: Status Badge */}
+                    {/* Column 9: Status Badge */}
                     <td className="py-3 px-4 align-middle whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
@@ -319,7 +331,7 @@ export function ManagerMembersAlumniTable({
                       </span>
                     </td>
 
-                    {/* Column 6: Action Button - Visible in single screen view without scroll */}
+                    {/* Column 10: Action Button */}
                     <td className="py-3 px-4 text-right align-middle whitespace-nowrap">
                       {onDeleteAlumni && (
                         <button

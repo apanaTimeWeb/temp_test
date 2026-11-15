@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Gift, X } from 'lucide-react';
+import { CalendarRange, X } from 'lucide-react';
 
 export type ManagerReferralTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -12,7 +12,7 @@ export interface ManagerMembersReferralBonusTimeHorizonBarProps {
   onCustomStartDateChange: (date: string) => void;
   customEndDate: string;
   onCustomEndDateChange: (date: string) => void;
-  activeCount: number;
+  activeCount?: number;
 }
 
 const timeHorizonOptions: Array<{ id: ManagerReferralTimeHorizon; label: string }> = [
@@ -30,17 +30,13 @@ export function ManagerMembersReferralBonusTimeHorizonBar({
   onCustomStartDateChange,
   customEndDate,
   onCustomEndDateChange,
-  activeCount,
 }: ManagerMembersReferralBonusTimeHorizonBarProps) {
   return (
-    <div className="rounded-xl border border-border bg-card p-3 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
+    <div className="rounded-xl border border-border bg-card p-3 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
       <div className="flex items-center gap-2">
-        <Gift size={16} className="text-primary shrink-0" />
+        <CalendarRange size={16} className="text-primary shrink-0" />
         <span className="text-xs font-bold uppercase tracking-wider text-secondary">
-          Referral Horizon:
-        </span>
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary-subtle text-primary border border-border">
-          {activeCount} Referrals
+          Filter by Date:
         </span>
       </div>
 
@@ -51,11 +47,10 @@ export function ManagerMembersReferralBonusTimeHorizonBar({
               key={opt.id}
               type="button"
               onClick={() => onChangeTimeHorizon(opt.id)}
-              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
-                timeHorizon === opt.id
-                  ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
-                  : 'text-secondary hover:text-primary'
-              }`}
+              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${timeHorizon === opt.id
+                ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
+                : 'text-secondary hover:text-primary'
+                }`}
             >
               {opt.label}
             </button>
