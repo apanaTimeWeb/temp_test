@@ -185,7 +185,6 @@ export function ManagerMembersAlumniClient() {
     <div className="mgr-page">
       <div className="mgr-page-header">
         <div>
-          <div className="mgr-breadcrumb">{tManagerUi('students_alumni')}</div>
           <h1 className="mgr-page-title">{tManagerUi('alumni_directory')}</h1>
           <p className="mgr-page-subtitle">Track and celebrate library alumni who have successfully qualified competitive examinations or transitioned to professional careers.</p>
         </div>
