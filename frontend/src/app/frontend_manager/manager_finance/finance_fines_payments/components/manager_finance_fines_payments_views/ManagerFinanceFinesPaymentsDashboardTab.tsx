@@ -145,7 +145,7 @@ export default function ManagerFinanceFinesPaymentsDashboardTab({
               Audit & Settlement Status
             </h3>
             <p className="text-xs text-secondary leading-relaxed">
-              All fine receipts and late penalties generated in Central Branch are balanced automatically against the daily settlement vault at end of day (10:00 PM).
+              All fine receipts and late penalties generated across the branch are balanced automatically against the daily settlement vault at end of day (10:00 PM).
             </p>
           </div>
           <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-xs">

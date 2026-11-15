@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { DollarSign, RefreshCw, Receipt, Download, Printer } from 'lucide-react';
+import { RefreshCw, Receipt, Download, Printer } from 'lucide-react';
 
 export interface ManagerFinanceFinesPaymentsHeaderBannerProps {
-  receiptsCount: number;
-  timeHorizonLabel: string;
+  receiptsCount?: number;
+  timeHorizonLabel?: string;
   isSyncing: boolean;
   onSyncLedger: () => void;
   onViewReceipts: () => void;
-  financeLabel: string;
+  financeLabel?: string;
   finesPaymentsTitle: string;
   scopeDescription: string;
   warningNotice: string;
@@ -18,12 +18,9 @@ export interface ManagerFinanceFinesPaymentsHeaderBannerProps {
 }
 
 export default function ManagerFinanceFinesPaymentsHeaderBanner({
-  receiptsCount,
-  timeHorizonLabel,
   isSyncing,
   onSyncLedger,
   onViewReceipts,
-  financeLabel,
   finesPaymentsTitle,
   scopeDescription,
   warningNotice,
@@ -33,29 +30,14 @@ export default function ManagerFinanceFinesPaymentsHeaderBanner({
   return (
     <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 flex-wrap text-xs">
-            <span className="font-semibold text-primary uppercase tracking-wider">{financeLabel}</span>
-            <span className="text-border">•</span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-success-bg text-success border border-border">
-              <DollarSign size={12} />
-              Financial Treasury & Fines
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
-              📍 Central Branch
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Active Treasury Desk
-            </span>
-          </div>
-
-          <div className="flex items-baseline gap-3 flex-wrap">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary flex items-center gap-2.5">
               <span>{finesPaymentsTitle}</span>
             </h1>
-            <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-              {receiptsCount} Receipts • {timeHorizonLabel}
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Active Treasury Desk
             </span>
           </div>
 
