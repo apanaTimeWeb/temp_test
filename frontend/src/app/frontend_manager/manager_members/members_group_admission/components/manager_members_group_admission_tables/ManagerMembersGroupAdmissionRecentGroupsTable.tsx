@@ -88,13 +88,13 @@ export function ManagerMembersGroupAdmissionRecentGroupsTable({
           <h3 className="font-bold text-base sm:text-lg text-primary">{tManagerUi('recent_group_admissions')}</h3>
           <span className="text-xs text-secondary">{recentGroups.length} batches enrolled</span>
         </div>
-        <div className="relative w-full sm:w-72">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+        <div className="mgr-input-icon-wrap w-full sm:w-72">
+          <Search size={15} className="mgr-input-icon text-secondary pointer-events-none" />
           <input
             type="search"
             maxLength={80}
             placeholder="Search batch name, ID, or shift..."
-            className="mgr-input pl-8 text-xs w-full"
+            className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value.slice(0, 80))}
           />
