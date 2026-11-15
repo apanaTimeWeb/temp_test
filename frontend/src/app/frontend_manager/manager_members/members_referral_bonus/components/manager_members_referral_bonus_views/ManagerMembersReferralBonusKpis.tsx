@@ -14,7 +14,7 @@ export interface ManagerMembersReferralBonusKpisProps {
 
 export function ManagerMembersReferralBonusKpis({
   records,
-  timeHorizonLabel,
+  timeHorizonLabel = 'All Time',
   statusFilter,
   onSelectStatusFilter,
 }: ManagerMembersReferralBonusKpisProps) {
@@ -32,132 +32,123 @@ export function ManagerMembersReferralBonusKpis({
     .reduce((sum, r) => sum + parseBonusAmount(r.bonus), 0);
 
   const pendingCount = records.filter((r) => r.status === 'Pending').length;
+  const creditedCount = records.filter((r) => r.status === 'Credited').length;
 
-  const isAllActive = statusFilter === 'All';
-  const isPendingActive = statusFilter === 'Pending';
-  const isCreditedActive = statusFilter === 'Credited';
+  const kpis = [
+    {
+      id: 'total',
+      status: 'All' as const,
+      label: tManagerUi('total_referrals'),
+      value: records.length,
+      icon: Users,
+      iconColor: 'text-indigo-400',
+      iconBg: 'bg-indigo-500/15 border border-indigo-500/30',
+      valueColor: 'text-white',
+      badge: timeHorizonLabel || 'All Time',
+      badgeStyle: 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/30',
+      subtext: 'All referral records',
+      activeBorder: 'border-2 border-indigo-400 shadow-xl shadow-indigo-500/35 bg-gradient-to-br from-indigo-950/90 via-[#0e1138] to-[#0c0f28]',
+      activeTopBar: 'bg-indigo-400 shadow-[0_0_14px_rgba(99,102,241,1)]',
+      activeTag: 'bg-indigo-500/30 text-indigo-300 border border-indigo-400/50',
+    },
+    {
+      id: 'pending',
+      status: 'Pending' as const,
+      label: tManagerUi('pending_approvals'),
+      value: pendingCount,
+      icon: Clock,
+      iconColor: 'text-amber-400',
+      iconBg: 'bg-amber-500/15 border border-amber-500/30',
+      valueColor: pendingCount > 0 ? 'text-amber-400' : 'text-white',
+      badge: `${pendingCount} Pending`,
+      badgeStyle: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
+      subtext: 'Needs manager review',
+      activeBorder: 'border-2 border-amber-400 shadow-xl shadow-amber-500/35 bg-gradient-to-br from-amber-950/90 via-[#261708] to-[#0c0f28]',
+      activeTopBar: 'bg-amber-400 shadow-[0_0_14px_rgba(245,158,11,1)]',
+      activeTag: 'bg-amber-500/30 text-amber-300 border border-amber-400/50',
+    },
+    {
+      id: 'credited',
+      status: 'Credited' as const,
+      label: tManagerUi('total_bonus_distributed'),
+      value: `₹${totalBonusAmount.toLocaleString('en-IN')}`,
+      icon: DollarSign,
+      iconColor: 'text-emerald-400',
+      iconBg: 'bg-emerald-500/15 border border-emerald-500/30',
+      valueColor: 'text-emerald-400',
+      badge: `${creditedCount} Credited`,
+      badgeStyle: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
+      subtext: 'Successfully disbursed',
+      activeBorder: 'border-2 border-emerald-400 shadow-xl shadow-emerald-500/35 bg-gradient-to-br from-emerald-950/90 via-[#082218] to-[#0c0f28]',
+      activeTopBar: 'bg-emerald-400 shadow-[0_0_14px_rgba(16,185,129,1)]',
+      activeTag: 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/50',
+    },
+  ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
-      {/* 1. Total Referrals Card (Filters table to All) */}
-      <button
-        type="button"
-        onClick={() => onSelectStatusFilter('All')}
-        aria-pressed={isAllActive}
-        className={`mgr-card p-4 sm:p-5 text-left cursor-pointer transition-all rounded-xl relative overflow-hidden ${
-          isAllActive
-            ? '!border-2 !border-primary bg-primary-subtle/30 shadow-md ring-2 ring-primary/20'
-            : 'border border-border bg-card hover:border-primary/50 hover:bg-surface-hover/60'
-        }`}
-      >
-        {/* Prominent top edge color bar */}
-        <div
-          className={`absolute top-0 left-0 right-0 h-1.5 transition-colors ${
-            isAllActive ? 'bg-primary' : 'bg-transparent'
-          }`}
-        />
-
-        <div className="flex items-center justify-between">
-          <span className={`text-xs font-semibold uppercase tracking-wider ${isAllActive ? 'text-primary' : 'text-secondary'}`}>
-            {tManagerUi('total_referrals')}
-          </span>
-          <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-              isAllActive
-                ? 'bg-primary text-on-primary shadow-xs'
-                : 'bg-primary-subtle text-primary border border-border'
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-3.5 mb-6 w-full max-w-full min-w-0 px-1 py-1">
+      {kpis.map((kpi) => {
+        const isSelected = statusFilter === kpi.status;
+        return (
+          <button
+            key={kpi.id}
+            type="button"
+            data-testid={`manager-referral-kpi-${kpi.id}`}
+            onClick={() => {
+              if (kpi.status === 'All') {
+                onSelectStatusFilter('All');
+              } else {
+                onSelectStatusFilter(isSelected ? 'All' : kpi.status);
+              }
+            }}
+            aria-pressed={isSelected}
+            className={`relative overflow-hidden rounded-xl p-3.5 sm:p-4 flex flex-col justify-between gap-2.5 text-left transition-all cursor-pointer ${
+              isSelected
+                ? `${kpi.activeBorder} scale-[1.01] -translate-y-0.5 z-10 opacity-100`
+                : 'border border-indigo-500/20 bg-[#0c0f28]/95 hover:border-indigo-400/50 hover:bg-[#101438] opacity-80 hover:opacity-100 shadow-md'
             }`}
+            title={`Filter by: ${kpi.label}`}
           >
-            <Users size={20} className={isAllActive ? 'text-on-primary' : 'text-primary'} />
-          </div>
-        </div>
+            {/* Top glowing accent bar when selected */}
+            {isSelected && (
+              <div className={`absolute top-0 left-0 right-0 h-1 ${kpi.activeTopBar}`} />
+            )}
 
-        <div className="mt-3">
-          <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-primary">
-            {records.length}
-          </p>
-        </div>
-      </button>
+            <div className="flex items-center justify-between gap-2 min-w-0">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className={`text-[11px] font-bold uppercase tracking-wider truncate ${isSelected ? 'text-white' : 'text-slate-300'}`}>
+                  {kpi.label}
+                </span>
+                {isSelected && (
+                  <span className={`text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full shrink-0 ${kpi.activeTag}`}>
+                    Active
+                  </span>
+                )}
+              </div>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-xs shrink-0 ${kpi.iconBg} ${kpi.iconColor}`}>
+                <kpi.icon size={16} />
+              </div>
+            </div>
 
-      {/* 2. Pending Approvals Card (Filters table to Pending) */}
-      <button
-        type="button"
-        onClick={() => onSelectStatusFilter(isPendingActive ? 'All' : 'Pending')}
-        aria-pressed={isPendingActive}
-        className={`mgr-card p-4 sm:p-5 text-left cursor-pointer transition-all rounded-xl relative overflow-hidden ${
-          isPendingActive
-            ? '!border-2 !border-warning bg-warning-bg/40 shadow-md ring-2 ring-warning/20'
-            : 'border border-border bg-card hover:border-warning/50 hover:bg-surface-hover/60'
-        }`}
-      >
-        {/* Prominent top edge color bar */}
-        <div
-          className={`absolute top-0 left-0 right-0 h-1.5 transition-colors ${
-            isPendingActive ? 'bg-warning' : 'bg-transparent'
-          }`}
-        />
-
-        <div className="flex items-center justify-between">
-          <span className={`text-xs font-semibold uppercase tracking-wider ${isPendingActive ? 'text-warning' : 'text-secondary'}`}>
-            {tManagerUi('pending_approvals')}
-          </span>
-          <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-              isPendingActive
-                ? 'bg-warning text-white shadow-xs'
-                : 'bg-warning-bg text-warning border border-border'
-            }`}
-          >
-            <Clock size={20} className={isPendingActive ? 'text-white' : 'text-warning'} />
-          </div>
-        </div>
-
-        <div className="mt-3">
-          <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-warning">
-            {pendingCount}
-          </p>
-        </div>
-      </button>
-
-      {/* 3. Total Bonus Distributed Card (Filters table to Credited) */}
-      <button
-        type="button"
-        onClick={() => onSelectStatusFilter(isCreditedActive ? 'All' : 'Credited')}
-        aria-pressed={isCreditedActive}
-        className={`mgr-card p-4 sm:p-5 text-left cursor-pointer transition-all rounded-xl relative overflow-hidden ${
-          isCreditedActive
-            ? '!border-2 !border-success bg-success-bg/40 shadow-md ring-2 ring-success/20'
-            : 'border border-border bg-card hover:border-success/50 hover:bg-surface-hover/60'
-        }`}
-      >
-        {/* Prominent top edge color bar */}
-        <div
-          className={`absolute top-0 left-0 right-0 h-1.5 transition-colors ${
-            isCreditedActive ? 'bg-success' : 'bg-transparent'
-          }`}
-        />
-
-        <div className="flex items-center justify-between">
-          <span className={`text-xs font-semibold uppercase tracking-wider ${isCreditedActive ? 'text-success' : 'text-secondary'}`}>
-            {tManagerUi('total_bonus_distributed')}
-          </span>
-          <div
-            className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
-              isCreditedActive
-                ? 'bg-success text-white shadow-xs'
-                : 'bg-success-bg text-success border border-border'
-            }`}
-          >
-            <DollarSign size={20} className={isCreditedActive ? 'text-white' : 'text-success'} />
-          </div>
-        </div>
-
-        <div className="mt-3">
-          <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-success">
-            ₹{totalBonusAmount.toLocaleString('en-IN')}
-          </p>
-        </div>
-      </button>
+            <div>
+              <div className="flex items-baseline justify-between gap-2">
+                <span
+                  suppressHydrationWarning
+                  className={`text-xl sm:text-2xl font-black tracking-tight ${kpi.valueColor}`}
+                >
+                  {kpi.value}
+                </span>
+                <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full whitespace-nowrap ${kpi.badgeStyle}`}>
+                  {kpi.badge}
+                </span>
+              </div>
+              <p className={`mt-1 text-[11px] truncate ${isSelected ? 'text-slate-300 font-medium' : 'text-slate-400'}`}>
+                {kpi.subtext}
+              </p>
+            </div>
+          </button>
+        );
+      })}
     </div>
   );
 }
