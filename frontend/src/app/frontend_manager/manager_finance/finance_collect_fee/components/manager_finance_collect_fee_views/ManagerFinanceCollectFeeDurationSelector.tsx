@@ -46,7 +46,7 @@ export default function ManagerFinanceCollectFeeDurationSelector({
     <div className="space-y-3">
       {availableMonths.length > 0 && onBillingMonthChange && (
         <div>
-          <label className="fin-label flex items-center justify-between" htmlFor="manager-collect-fee-billing-month">
+          <label className="fin-label flex flex-wrap items-center justify-between gap-1" htmlFor="manager-collect-fee-billing-month">
             <span className="flex items-center gap-1.5 font-medium">
               <Calendar size={13} className="fin-icon-muted" />
               <span>Billing Month / Cycle Start</span>
@@ -70,7 +70,7 @@ export default function ManagerFinanceCollectFeeDurationSelector({
       )}
 
       <div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-1">
           <label className="fin-label" htmlFor="rbg4-managerfinancecollectfeepage-128">
             {labelMonthPayingForCycle} <span className="fin-text-danger">*</span>
           </label>
@@ -148,20 +148,20 @@ export default function ManagerFinanceCollectFeeDurationSelector({
       </div>
 
       {(coverageLabel || nextDueDateFormatted) && (
-        <div className="bg-muted/40 border border-border/80 rounded-lg p-2.5 text-xs space-y-1">
+        <div className="bg-muted/40 border border-border/80 rounded-lg p-2.5 text-xs space-y-1.5">
           {coverageLabel && (
-            <div className="flex items-center justify-between">
-              <span className="text-secondary font-medium">Billing Period:</span>
-              <span className="font-semibold text-text-primary">{coverageLabel}</span>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-2">
+              <span className="text-secondary font-medium shrink-0">Billing Period:</span>
+              <span className="font-semibold text-text-primary break-words text-left sm:text-right">{coverageLabel}</span>
             </div>
           )}
           {nextDueDateFormatted && (
-            <div className="flex items-center justify-between">
-              <span className="text-secondary font-medium flex items-center gap-1">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-2">
+              <span className="text-secondary font-medium flex items-center gap-1 shrink-0">
                 <Clock size={11} className="text-primary" />
                 <span>Next Due Date:</span>
               </span>
-              <span className="font-semibold text-primary">{nextDueDateFormatted}</span>
+              <span className="font-semibold text-primary text-left sm:text-right">{nextDueDateFormatted}</span>
             </div>
           )}
         </div>

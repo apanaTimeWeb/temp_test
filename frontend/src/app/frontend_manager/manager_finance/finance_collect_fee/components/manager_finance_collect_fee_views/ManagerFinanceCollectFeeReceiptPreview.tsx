@@ -62,8 +62,8 @@ export function ManagerFinanceCollectFeeReceiptPreview({
   };
 
   return (
-    <div className="lg:col-span-2">
-      <div className="fin-receipt-preview" data-testid="manager-finance-collect-preview">
+    <div className="lg:col-span-2 flex flex-col items-center lg:items-start w-full">
+      <div className="fin-receipt-preview w-full max-w-[340px] mx-auto lg:mx-0" data-testid="manager-finance-collect-preview">
         <div className="fin-receipt-thermal">
           <div className="fin-receipt-zigzag fin-receipt-zigzag--top">
             {Array.from({ length: 20 }, (_, i) => `receipt-top-tooth-${i + 1}`).map((dotId) => (

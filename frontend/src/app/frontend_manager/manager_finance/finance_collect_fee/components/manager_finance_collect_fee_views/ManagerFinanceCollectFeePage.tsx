@@ -350,7 +350,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
               </div>
 
               {/* 5 Clear Options */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5" role="radiogroup" aria-label="Collection Option">
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5" role="radiogroup" aria-label="Collection Option">
                 {MANAGER_FINANCE_COLLECTION_TYPES.map((opt) => {
                   const isSelected = (collectionType || 'monthly') === opt.id;
                   const isDuesOption = opt.id === 'dues';
