@@ -23,6 +23,7 @@ interface ManagerSeatsMatrixModalActionsTabProps {
   onClose: () => void;
   router: { push: (url: string) => void };
   shiftLabel: string;
+  onOpenStudentProfile?: (seat: SeatData) => void;
 }
 
 export function ManagerSeatsMatrixModalActionsTab({
@@ -39,6 +40,7 @@ export function ManagerSeatsMatrixModalActionsTab({
   onClose,
   router,
   shiftLabel,
+  onOpenStudentProfile,
 }: ManagerSeatsMatrixModalActionsTabProps) {
   const tManagerUi = useTranslations('manager.manager_seat_matrix.ui');
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -363,7 +365,13 @@ export function ManagerSeatsMatrixModalActionsTab({
             type="button"
             className="mgr-btn-primary flex-1 h-9 text-xs font-semibold flex items-center justify-center gap-1.5 rounded-xl transition-colors cursor-pointer disabled:opacity-50"
             disabled={!selectedSeat.student}
-            onClick={() => setIsProfileModalOpen(true)}
+            onClick={() => {
+              if (onOpenStudentProfile) {
+                onOpenStudentProfile(selectedSeat);
+              } else {
+                setIsProfileModalOpen(true);
+              }
+            }}
           >
             <User size={14} />
             <span>{tManagerUi('view_full_profile')}</span>
@@ -398,16 +406,18 @@ export function ManagerSeatsMatrixModalActionsTab({
         </div>
       </div>
 
-      {/* Student Profile Popup Modal */}
-      <ManagerSeatsMatrixStudentProfileModal
-        isOpen={isProfileModalOpen}
-        seat={selectedSeat}
-        onClose={() => setIsProfileModalOpen(false)}
-        onNavigateToDirectory={(smartId) => {
-          setIsProfileModalOpen(false);
-          router.push(MANAGER_SEATS_MATRIX_ROUTES.STUDENTS_FILTER_BY_SMART_ID(smartId));
-        }}
-      />
+      {/* Fallback Student Profile Popup Modal if not hoisted */}
+      {!onOpenStudentProfile && (
+        <ManagerSeatsMatrixStudentProfileModal
+          isOpen={isProfileModalOpen}
+          seat={selectedSeat}
+          onClose={() => setIsProfileModalOpen(false)}
+          onNavigateToDirectory={(smartId) => {
+            setIsProfileModalOpen(false);
+            router.push(MANAGER_SEATS_MATRIX_ROUTES.STUDENTS_FILTER_BY_SMART_ID(smartId));
+          }}
+        />
+      )}
     </div>
   );
 }

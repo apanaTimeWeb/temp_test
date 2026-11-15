@@ -7,6 +7,7 @@ export interface ManagerSeatsMatrixModalProps {
   selectedSeat: SeatData | null;
   onClose: () => void;
   onUpdateSeat?: (seatId: string, updates: Partial<SeatData>) => void;
+  onOpenStudentProfile?: (seat: SeatData) => void;
 }
 
 export interface ManagerSeatsMatrixErrorFallbackProps {

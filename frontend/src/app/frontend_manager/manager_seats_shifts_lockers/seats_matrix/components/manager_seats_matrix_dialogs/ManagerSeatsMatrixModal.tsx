@@ -13,7 +13,12 @@ import { ManagerSeatsMatrixModalActionsTab } from './ManagerSeatsMatrixModalActi
 import { ManagerSeatsMatrixModalConfigTab } from './ManagerSeatsMatrixModalConfigTab';
 import { ManagerSeatsMatrixModalHistoryTab } from './ManagerSeatsMatrixModalHistoryTab';
 
-export function ManagerSeatsMatrixModal({ selectedSeat, onClose, onUpdateSeat }: ManagerSeatsMatrixModalProps) {
+export function ManagerSeatsMatrixModal({
+  selectedSeat,
+  onClose,
+  onUpdateSeat,
+  onOpenStudentProfile,
+}: ManagerSeatsMatrixModalProps) {
   const tManagerUi = useTranslations('manager.manager_seat_matrix.ui');
   const router = useRouter();
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -233,6 +238,7 @@ export function ManagerSeatsMatrixModal({ selectedSeat, onClose, onUpdateSeat }:
               onClose={onClose}
               router={router}
               shiftLabel={shiftLabel}
+              onOpenStudentProfile={onOpenStudentProfile}
             />
           )}
 

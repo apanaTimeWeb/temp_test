@@ -1,12 +1,15 @@
 'use client';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Search, LayoutGrid, List, Plus, Download, Armchair, X, RotateCcw } from 'lucide-react';
 import { toast } from 'sonner';
 import { sanitizeManagerSeatMatrixCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixCsv';
 import { useManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/useManagerSeatsMatrixSeatMatrix';
 import { SHIFT_TABS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
+import { MANAGER_SEATS_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
 import { ManagerSeatsMatrixModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModal';
+import { ManagerSeatsMatrixStudentProfileModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixStudentProfileModal';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 import { ManagerSeatsMatrixGridView } from './ManagerSeatsMatrixGridView';
 import { ManagerSeatsMatrixTableView, type SeatSortField } from './ManagerSeatsMatrixTableView';
@@ -39,6 +42,8 @@ export function ManagerSeatsMatrixClient() {
     addSeat,
   } = useManagerSeatsMatrix();
 
+  const router = useRouter();
+  const [profileSeat, setProfileSeat] = useState<SeatData | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -331,6 +336,7 @@ export function ManagerSeatsMatrixClient() {
           sortDirection={sortDirection}
           onToggleSort={toggleSort}
           onSelectSeat={setSelectedSeat}
+          onViewStudentProfile={setProfileSeat}
           shiftLabel={shiftLabel}
           page={page}
           pageSize={pageSize}
@@ -347,10 +353,26 @@ export function ManagerSeatsMatrixClient() {
         onAddSeat={addSeat}
       />
 
+      {/* Seat Manage Modal */}
       <ManagerSeatsMatrixModal
         selectedSeat={selectedSeat}
         onClose={() => setSelectedSeat(null)}
         onUpdateSeat={updateSeat}
+        onOpenStudentProfile={(seat) => {
+          setSelectedSeat(null);
+          setProfileSeat(seat);
+        }}
+      />
+
+      {/* Direct Student Profile & KYC Popup */}
+      <ManagerSeatsMatrixStudentProfileModal
+        isOpen={Boolean(profileSeat)}
+        seat={profileSeat}
+        onClose={() => setProfileSeat(null)}
+        onNavigateToDirectory={(smartId) => {
+          setProfileSeat(null);
+          router.push(MANAGER_SEATS_MATRIX_ROUTES.STUDENTS_FILTER_BY_SMART_ID(smartId));
+        }}
       />
     </div>
   );

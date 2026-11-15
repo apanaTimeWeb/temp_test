@@ -1,6 +1,6 @@
 'use client';
 import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, ShieldCheck } from 'lucide-react';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 
 export type SeatSortField = 'id' | 'wing' | 'shift' | 'status' | 'student' | 'studentGender';
@@ -18,6 +18,7 @@ interface ManagerSeatsMatrixTableViewProps {
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: SeatSortField) => void;
   onSelectSeat: (seat: SeatData) => void;
+  onViewStudentProfile?: (seat: SeatData) => void;
   shiftLabel: (val?: string) => string;
   page: number;
   pageSize: number;
@@ -39,6 +40,7 @@ export function ManagerSeatsMatrixTableView({
   sortDirection,
   onToggleSort,
   onSelectSeat,
+  onViewStudentProfile,
   shiftLabel,
   page,
   pageSize,
@@ -144,9 +146,28 @@ export function ManagerSeatsMatrixTableView({
                   </td>
                   <td className="py-3 px-4">
                     {seat.student ? (
-                      <div>
-                        <span className="font-semibold text-primary block leading-tight">{seat.student}</span>
-                        <span className="text-xs text-secondary font-mono">{seat.smartId || '—'}</span>
+                      <div className="flex items-center justify-between group max-w-[200px]">
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() => (onViewStudentProfile ? onViewStudentProfile(seat) : onSelectSeat(seat))}
+                            className="font-semibold text-primary block leading-tight hover:text-indigo-400 hover:underline text-left cursor-pointer transition-colors"
+                            title={`Preview Profile & KYC of ${seat.student}`}
+                          >
+                            {seat.student}
+                          </button>
+                          <span className="text-xs text-secondary font-mono">{seat.smartId || '—'}</span>
+                        </div>
+                        {onViewStudentProfile && (
+                          <button
+                            type="button"
+                            onClick={() => onViewStudentProfile(seat)}
+                            title={`Directly View Profile & KYC of ${seat.student}`}
+                            className="opacity-70 group-hover:opacity-100 p-1 rounded-md text-indigo-400 hover:bg-indigo-500/15 hover:text-indigo-300 transition-all cursor-pointer ml-1.5 shrink-0"
+                          >
+                            <ShieldCheck size={14} />
+                          </button>
+                        )}
                       </div>
                     ) : (
                       <span className="text-secondary text-xs italic">— Unassigned —</span>
@@ -168,13 +189,26 @@ export function ManagerSeatsMatrixTableView({
                     )}
                   </td>
                   <td className="py-3 px-4 text-right">
-                    <button
-                      type="button"
-                      onClick={() => onSelectSeat(seat)}
-                      className="mgr-btn-ghost text-xs px-2.5 py-1 text-primary hover:text-info"
-                    >
-                      Manage
-                    </button>
+                    <div className="inline-flex items-center gap-1.5 justify-end">
+                      {seat.student && onViewStudentProfile && (
+                        <button
+                          type="button"
+                          onClick={() => onViewStudentProfile(seat)}
+                          className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-lg text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/15 border border-indigo-500/20 transition-all cursor-pointer"
+                          title={`Direct Profile & KYC of ${seat.student}`}
+                        >
+                          <ShieldCheck size={12} />
+                          <span className="hidden sm:inline">Profile</span>
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => onSelectSeat(seat)}
+                        className="mgr-btn-ghost text-xs px-2.5 py-1 text-primary hover:text-info cursor-pointer"
+                      >
+                        Manage
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
