@@ -38,41 +38,61 @@ export function ManagerCommunicationComplaintsToolbar({
   const TAB_CONFIG: Record<
     string,
     {
-      activeClass: string;
-      badgeActive: string;
       icon: typeof Layers;
       iconClass: string;
+      activeBg: string;
+      activeBorder: string;
+      activeText: string;
+      activeGlow: string;
+      badgeBg: string;
+      badgeText: string;
     }
   > = {
     All: {
-      activeClass: 'bg-indigo-500/15 border-indigo-500 text-indigo-300 ring-2 ring-indigo-500/30 shadow-xs font-bold',
-      badgeActive: 'bg-indigo-500/25 border-indigo-500/40 text-indigo-200',
       icon: Layers,
       iconClass: 'text-indigo-400',
+      activeBg: 'rgba(99, 102, 241, 0.24)',
+      activeBorder: '#6366f1',
+      activeText: '#e0e7ff',
+      activeGlow: '0 0 14px rgba(99, 102, 241, 0.45)',
+      badgeBg: 'rgba(99, 102, 241, 0.45)',
+      badgeText: '#ffffff',
     },
     Open: {
-      activeClass: 'bg-rose-500/15 border-rose-500 text-rose-300 ring-2 ring-rose-500/30 shadow-xs font-bold',
-      badgeActive: 'bg-rose-500/25 border-rose-500/40 text-rose-200',
       icon: AlertCircle,
       iconClass: 'text-rose-400',
+      activeBg: 'rgba(244, 63, 94, 0.25)',
+      activeBorder: '#f43f5e',
+      activeText: '#ffe4e6',
+      activeGlow: '0 0 16px rgba(244, 63, 94, 0.5)',
+      badgeBg: 'rgba(244, 63, 94, 0.5)',
+      badgeText: '#ffffff',
     },
     'In-Progress': {
-      activeClass: 'bg-amber-500/15 border-amber-500 text-amber-300 ring-2 ring-amber-500/30 shadow-xs font-bold',
-      badgeActive: 'bg-amber-500/25 border-amber-500/40 text-amber-200',
       icon: Clock,
       iconClass: 'text-amber-400',
+      activeBg: 'rgba(245, 158, 11, 0.25)',
+      activeBorder: '#f59e0b',
+      activeText: '#fef3c7',
+      activeGlow: '0 0 16px rgba(245, 158, 11, 0.5)',
+      badgeBg: 'rgba(245, 158, 11, 0.5)',
+      badgeText: '#ffffff',
     },
     Resolved: {
-      activeClass: 'bg-emerald-500/15 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30 shadow-xs font-bold',
-      badgeActive: 'bg-emerald-500/25 border-emerald-500/40 text-emerald-200',
       icon: CheckCircle2,
       iconClass: 'text-emerald-400',
+      activeBg: 'rgba(16, 185, 129, 0.25)',
+      activeBorder: '#10b981',
+      activeText: '#d1fae5',
+      activeGlow: '0 0 16px rgba(16, 185, 129, 0.5)',
+      badgeBg: 'rgba(16, 185, 129, 0.5)',
+      badgeText: '#ffffff',
     },
   };
 
   return (
     <div className="flex flex-col gap-3.5 mb-5 p-3.5 sm:p-4 rounded-2xl bg-card border border-border shadow-xs">
-      {/* Top Row: Segmented Status Pills with Visual Color Fill When Clicked */}
+      {/* Top Row: Segmented Status Pills with Visual Glowing Color Fill When Clicked */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/60">
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
           {MANAGER_COMMUNICATION_COMPLAINT_TABS.map((item) => {
@@ -89,9 +109,19 @@ export function ManagerCommunicationComplaintsToolbar({
                   setTab(item);
                   onResetPage();
                 }}
+                style={
+                  isActive
+                    ? {
+                        backgroundColor: config.activeBg,
+                        borderColor: config.activeBorder,
+                        color: config.activeText,
+                        boxShadow: config.activeGlow,
+                      }
+                    : undefined
+                }
                 className={`group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer border ${
                   isActive
-                    ? config.activeClass
+                    ? 'font-bold'
                     : 'bg-card/60 border-border text-secondary hover:text-primary hover:bg-surface-hover hover:border-border-focus'
                 }`}
                 aria-pressed={isActive}
@@ -102,12 +132,27 @@ export function ManagerCommunicationComplaintsToolbar({
                 />
                 <span>{item}</span>
                 <span
+                  style={
+                    isActive
+                      ? {
+                          backgroundColor: config.badgeBg,
+                          color: config.badgeText,
+                          borderColor: config.activeBorder,
+                        }
+                      : undefined
+                  }
                   className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold border transition-colors ${
                     isActive
-                      ? config.badgeActive
+                      ? ''
                       : 'bg-surface border-border text-secondary group-hover:text-primary'
                   }`}
                 >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
                   {count}
                 </span>
               </button>

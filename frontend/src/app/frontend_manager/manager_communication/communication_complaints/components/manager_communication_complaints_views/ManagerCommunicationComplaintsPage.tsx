@@ -239,102 +239,68 @@ export default function ManagerCommunicationComplaintsPage({
         </div>
       </div>
 
-      {/* 4 Interactive KPI Metric Cards (Click-to-Filter & Color-Fill) */}
+      {/* 4 KPI Metric Summary Cards (Clean Overview Metric Cards - Not Interlinked Filter Buttons) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Card 1: Total Complaints */}
-        <button
-          type="button"
-          onClick={() => {
-            setTab('All');
-            setPage(0);
-          }}
-          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-            tab === 'All'
-              ? 'bg-indigo-500/10 border-indigo-500/50 ring-2 ring-indigo-500/30 shadow-xs'
-              : 'bg-card border-border hover:border-border-focus'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-secondary">Total Lodged</span>
-            <span className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center">
-              <Layers size={14} />
+        <div className="mgr-card p-4 rounded-2xl border border-border flex items-center gap-3.5 shadow-xs bg-card">
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center border border-indigo-500/30 shrink-0">
+            <Layers size={20} />
+          </div>
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+              Total Lodged
+            </span>
+            <span className="text-xl sm:text-2xl font-black text-primary">
+              {stats.total}
             </span>
           </div>
-          <div className="text-2xl font-black text-primary">{stats.total}</div>
-          <p className="text-[11px] text-secondary mt-0.5">All tickets in system</p>
-        </button>
+        </div>
 
         {/* Card 2: Open / Unresolved */}
-        <button
-          type="button"
-          onClick={() => {
-            setTab('Open');
-            setPage(0);
-          }}
-          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-            tab === 'Open'
-              ? 'bg-rose-500/10 border-rose-500/50 ring-2 ring-rose-500/30 shadow-xs'
-              : 'bg-card border-border hover:border-border-focus'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-secondary">Pending Open</span>
-            <span className="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center">
-              <AlertCircle size={14} />
+        <div className="mgr-card p-4 rounded-2xl border border-border flex items-center gap-3.5 shadow-xs bg-card">
+          <div className="w-10 h-10 rounded-xl bg-rose-500/15 text-rose-400 flex items-center justify-center border border-rose-500/30 shrink-0">
+            <AlertCircle size={20} />
+          </div>
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block flex items-center gap-1.5">
+              <span>Pending Open</span>
+              {stats.openCount > 0 && <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
+            </span>
+            <span className="text-xl sm:text-2xl font-black text-rose-400">
+              {stats.openCount}
             </span>
           </div>
-          <div className="text-2xl font-black text-rose-400 flex items-center gap-1.5">
-            <span>{stats.openCount}</span>
-            {stats.openCount > 0 && <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
-          </div>
-          <p className="text-[11px] text-secondary mt-0.5">Needs immediate review</p>
-        </button>
+        </div>
 
         {/* Card 3: In-Progress */}
-        <button
-          type="button"
-          onClick={() => {
-            setTab('In-Progress');
-            setPage(0);
-          }}
-          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-            tab === 'In-Progress'
-              ? 'bg-amber-500/10 border-amber-500/50 ring-2 ring-amber-500/30 shadow-xs'
-              : 'bg-card border-border hover:border-border-focus'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-secondary">In-Progress</span>
-            <span className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center">
-              <Clock size={14} />
+        <div className="mgr-card p-4 rounded-2xl border border-border flex items-center gap-3.5 shadow-xs bg-card">
+          <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center border border-amber-500/30 shrink-0">
+            <Clock size={20} />
+          </div>
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+              In-Progress
+            </span>
+            <span className="text-xl sm:text-2xl font-black text-amber-400">
+              {stats.inProgressCount}
             </span>
           </div>
-          <div className="text-2xl font-black text-amber-400">{stats.inProgressCount}</div>
-          <p className="text-[11px] text-secondary mt-0.5">Under investigation</p>
-        </button>
+        </div>
 
         {/* Card 4: Resolved */}
-        <button
-          type="button"
-          onClick={() => {
-            setTab('Resolved');
-            setPage(0);
-          }}
-          className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
-            tab === 'Resolved'
-              ? 'bg-emerald-500/10 border-emerald-500/50 ring-2 ring-emerald-500/30 shadow-xs'
-              : 'bg-card border-border hover:border-border-focus'
-          }`}
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-secondary">Resolved</span>
-            <span className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-              <CheckCircle2 size={14} />
+        <div className="mgr-card p-4 rounded-2xl border border-border flex items-center gap-3.5 shadow-xs bg-card">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center border border-emerald-500/30 shrink-0">
+            <CheckCircle2 size={20} />
+          </div>
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+              Resolved ({stats.resolutionRate}%)
+            </span>
+            <span className="text-xl sm:text-2xl font-black text-emerald-400">
+              {stats.resolvedCount}
             </span>
           </div>
-          <div className="text-2xl font-black text-emerald-400">{stats.resolvedCount}</div>
-          <p className="text-[11px] text-secondary mt-0.5">{stats.resolutionRate}% resolution rate</p>
-        </button>
+        </div>
       </div>
 
       {toastMessage && (

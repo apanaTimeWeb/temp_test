@@ -63,30 +63,42 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
       label: 'WhatsApp',
       icon: Smartphone,
       subtitle: 'Instant delivery (High read rate)',
-      activeBox: 'border-emerald-500 bg-emerald-500/15 text-emerald-300 ring-2 ring-emerald-500/30',
+      activeBg: 'rgba(16, 185, 129, 0.22)',
+      activeBorder: '#10b981',
+      activeGlow: '0 0 14px rgba(16, 185, 129, 0.45)',
+      activeColor: '#d1fae5',
+      activeBox: 'border-emerald-500 font-bold',
       activeIcon: 'text-emerald-400',
       badge: 'Popular',
-      badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+      badgeColor: 'bg-emerald-500/30 text-emerald-200 border-emerald-500/40',
     },
     {
       id: 'SMS',
       label: 'SMS Text',
       icon: MessageSquare,
       subtitle: 'Carrier text message',
-      activeBox: 'border-amber-500 bg-amber-500/15 text-amber-300 ring-2 ring-amber-500/30',
+      activeBg: 'rgba(245, 158, 11, 0.22)',
+      activeBorder: '#f59e0b',
+      activeGlow: '0 0 14px rgba(245, 158, 11, 0.45)',
+      activeColor: '#fef3c7',
+      activeBox: 'border-amber-500 font-bold',
       activeIcon: 'text-amber-400',
       badge: 'Direct',
-      badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+      badgeColor: 'bg-amber-500/30 text-amber-200 border-amber-500/40',
     },
     {
       id: 'Email',
       label: 'Email',
       icon: Mail,
       subtitle: 'Formal letter dispatch',
-      activeBox: 'border-sky-500 bg-sky-500/15 text-sky-300 ring-2 ring-sky-500/30',
+      activeBg: 'rgba(14, 165, 233, 0.22)',
+      activeBorder: '#0ea5e9',
+      activeGlow: '0 0 14px rgba(14, 165, 233, 0.45)',
+      activeColor: '#e0f2fe',
+      activeBox: 'border-sky-500 font-bold',
       activeIcon: 'text-sky-400',
       badge: 'Official',
-      badgeColor: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+      badgeColor: 'bg-sky-500/30 text-sky-200 border-sky-500/40',
     },
   ];
 
@@ -284,6 +296,16 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
                       shouldDirty: true,
                     });
                   }}
+                  style={
+                    isSelected
+                      ? {
+                          backgroundColor: ch.activeBg,
+                          borderColor: ch.activeBorder,
+                          boxShadow: ch.activeGlow,
+                          color: ch.activeColor,
+                        }
+                      : undefined
+                  }
                   className={`relative flex flex-col p-3.5 rounded-2xl border text-left cursor-pointer transition-all ${
                     isSelected
                       ? ch.activeBox

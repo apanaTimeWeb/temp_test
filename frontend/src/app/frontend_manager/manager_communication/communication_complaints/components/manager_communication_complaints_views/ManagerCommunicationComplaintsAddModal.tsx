@@ -151,9 +151,19 @@ export default function ManagerCommunicationComplaintsAddModal({
               <button
                 type="button"
                 onClick={() => setPriority('Normal')}
+                style={
+                  priority === 'Normal'
+                    ? {
+                        backgroundColor: 'rgba(16, 185, 129, 0.25)',
+                        borderColor: '#10b981',
+                        color: '#d1fae5',
+                        boxShadow: '0 0 14px rgba(16, 185, 129, 0.45)',
+                      }
+                    : undefined
+                }
                 className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-center justify-between ${
                   priority === 'Normal'
-                    ? 'bg-emerald-500/15 border-emerald-500 text-emerald-300 ring-2 ring-emerald-500/30 shadow-xs'
+                    ? 'font-bold'
                     : 'bg-card/60 border-border text-secondary hover:border-border-focus hover:text-primary'
                 }`}
                 aria-pressed={priority === 'Normal'}
@@ -167,9 +177,19 @@ export default function ManagerCommunicationComplaintsAddModal({
               <button
                 type="button"
                 onClick={() => setPriority('Urgent')}
+                style={
+                  priority === 'Urgent'
+                    ? {
+                        backgroundColor: 'rgba(244, 63, 94, 0.25)',
+                        borderColor: '#f43f5e',
+                        color: '#ffe4e6',
+                        boxShadow: '0 0 14px rgba(244, 63, 94, 0.45)',
+                      }
+                    : undefined
+                }
                 className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-center justify-between ${
                   priority === 'Urgent'
-                    ? 'bg-rose-500/15 border-rose-500 text-rose-300 ring-2 ring-rose-500/30 shadow-xs'
+                    ? 'font-bold'
                     : 'bg-card/60 border-border text-secondary hover:border-border-focus hover:text-primary'
                 }`}
                 aria-pressed={priority === 'Urgent'}
