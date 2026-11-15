@@ -1,13 +1,6 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle, AlertTriangle, AlertCircle, ArrowRight } from 'lucide-react';
-import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
-import type { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
-
-'use client';
-
-import React from 'react';
 import { CheckCircle, AlertTriangle, AlertCircle, ArrowRight, Check } from 'lucide-react';
 import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finance/finance_collect_fee/utils/ManagerFinanceCollectFeeUtilities';
 import type { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
@@ -174,4 +167,3 @@ export default function ManagerFinanceCollectFeeStudentInfo({
     </div>
   );
 }
-
