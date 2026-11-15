@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Plus } from 'lucide-react';
+import { Plus, LifeBuoy, ArrowLeft, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useManagerHelpSupportPageState } from '@/app/frontend_manager/manager_settings/settings_help_support/hooks/useManagerSettingsHelpSupportPageState';
@@ -178,6 +178,7 @@ export default function ManagerSettingsHelpSupportPage() {
             <ManagerSettingsHelpSupportTicketsTable
               filteredTickets={filteredTickets}
               paginatedTickets={paginatedTickets}
+              totalAllTicketsCount={myTickets.length}
               searchQuery={searchQuery}
               setSearchQuery={(q) => {
                 setSearchQuery(q);
@@ -217,22 +218,47 @@ export default function ManagerSettingsHelpSupportPage() {
           )}
 
           {ticketTab === 'Create Ticket' && (
-            <div className="mgr-card p-6 md:p-8 max-w-3xl">
-              <p
-                className="mb-4 text-sm text-warning"
-                data-testid="manager-support-ticket-contract-warning"
-                role="status"
-              >
-                {tManagerUi('ticket_creation_is_unavailable_no_authoritative_support_0ec10c')}
-              </p>
-              <h2 className="text-xl font-bold text-primary mb-2">
-                {tManagerUi('raise_a_support_ticket')}
-              </h2>
-              <p className="text-sm text-secondary mb-8">
-                {tManagerUi('draft_the_issue_details_below_submission_is_disabled_unt_ab6ecc')}
-              </p>
+            <div className="w-full max-w-4xl mx-auto">
+              <div className="mgr-card p-6 sm:p-8 border border-border shadow-md">
+                <div
+                  className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-start gap-3"
+                  data-testid="manager-support-ticket-contract-warning"
+                  role="status"
+                >
+                  <AlertCircle size={18} className="text-amber-400 shrink-0 mt-0.5" />
+                  <p className="text-xs sm:text-sm font-medium text-amber-300/90 leading-relaxed">
+                    {tManagerUi('ticket_creation_is_unavailable_no_authoritative_support_0ec10c')}
+                  </p>
+                </div>
 
-              <ManagerSettingsHelpSupportTicketForm onCancel={() => setTicketTab('My Tickets')} />
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-5 border-b border-border">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-11 h-11 rounded-xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center text-indigo-400 shrink-0 shadow-xs">
+                      <LifeBuoy size={22} />
+                    </div>
+                    <div>
+                      <h2 className="text-lg sm:text-xl font-bold text-primary">
+                        {tManagerUi('raise_a_support_ticket')}
+                      </h2>
+                      <p className="text-xs sm:text-sm text-secondary mt-0.5">
+                        {tManagerUi('draft_the_issue_details_below_submission_is_disabled_unt_ab6ecc')}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setTicketTab('My Tickets')}
+                    className="mgr-btn-outline text-xs sm:text-sm inline-flex items-center gap-1.5 shrink-0 self-start sm:self-auto py-2 px-3.5 rounded-lg hover:bg-surface-hover transition-colors cursor-pointer"
+                    title="Back to tickets list"
+                  >
+                    <ArrowLeft size={14} />
+                    <span>{tManagerUi('my_tickets')}</span>
+                  </button>
+                </div>
+
+                <ManagerSettingsHelpSupportTicketForm onCancel={() => setTicketTab('My Tickets')} />
+              </div>
             </div>
           )}
         </div>

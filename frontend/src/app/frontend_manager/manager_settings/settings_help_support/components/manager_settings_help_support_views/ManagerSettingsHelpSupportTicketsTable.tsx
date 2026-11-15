@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown, Clock, CheckCircle } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, Clock, CheckCircle, RotateCcw, AlertCircle } from 'lucide-react';
 import { ManagerSettingsHelpSupportEmptyState } from '../ManagerSettingsHelpSupportEmptyState';
 import { formatManagerHelpSupportCalendarDate } from '../../utils/ManagerSettingsHelpSupportDateFormatting';
 import { ManagerSettingsHelpSupportTicketsToolbar } from './ManagerSettingsHelpSupportTicketsToolbar';
@@ -21,6 +21,7 @@ export type TicketSortField = 'id' | 'subject' | 'category' | 'priority' | 'stat
 interface ManagerSettingsHelpSupportTicketsTableProps {
   filteredTickets: ManagerSettingsHelpSupportTicketItem[];
   paginatedTickets: ManagerSettingsHelpSupportTicketItem[];
+  totalAllTicketsCount?: number;
   searchQuery: string;
   setSearchQuery: (val: string) => void;
   categoryFilter: string;
@@ -49,6 +50,7 @@ interface ManagerSettingsHelpSupportTicketsTableProps {
 export function ManagerSettingsHelpSupportTicketsTable({
   filteredTickets,
   paginatedTickets,
+  totalAllTicketsCount,
   searchQuery,
   setSearchQuery,
   categoryFilter,
@@ -101,7 +103,7 @@ export function ManagerSettingsHelpSupportTicketsTable({
           ) : (
             <ArrowUpDown
               size={14}
-              className="text-secondary group-hover:text-secondary transition-colors shrink-0"
+              className="text-secondary/50 group-hover:text-secondary transition-colors shrink-0"
               aria-hidden="true"
             />
           )}
@@ -110,10 +112,46 @@ export function ManagerSettingsHelpSupportTicketsTable({
     );
   };
 
+  const renderStatus = (status: string) => {
+    if (status === 'Open') {
+      return (
+        <div className="flex items-center gap-1.5 text-sm">
+          <Clock size={14} className="text-warning shrink-0" />
+          <span className="text-warning font-medium">{tManagerUi('ticket_status_open')}</span>
+        </div>
+      );
+    }
+    if (status === 'In Progress') {
+      return (
+        <div className="flex items-center gap-1.5 text-sm">
+          <Clock size={14} className="text-info shrink-0" />
+          <span className="text-info font-medium">{status}</span>
+        </div>
+      );
+    }
+    if (status === 'Resolved') {
+      return (
+        <div className="flex items-center gap-1.5 text-sm">
+          <CheckCircle size={14} className="text-success shrink-0" />
+          <span className="text-success font-medium">{status}</span>
+        </div>
+      );
+    }
+    return (
+      <div className="flex items-center gap-1.5 text-sm">
+        <CheckCircle size={14} className="text-success shrink-0" />
+        <span className="text-success font-medium">
+          {status === 'Closed' ? tManagerUi('ticket_status_closed') : status}
+        </span>
+      </div>
+    );
+  };
+
   return (
     <div className="mgr-card p-0 overflow-hidden">
       <ManagerSettingsHelpSupportTicketsToolbar
         totalTicketsCount={filteredTickets.length}
+        totalAllTicketsCount={totalAllTicketsCount}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         categoryFilter={categoryFilter}
@@ -144,12 +182,29 @@ export function ManagerSettingsHelpSupportTicketsTable({
               <tr>
                 <td colSpan={6}>
                   <ManagerSettingsHelpSupportEmptyState
-                    className="p-8 text-center text-secondary"
+                    className="p-10 text-center text-secondary"
                     testId="manager-help-support-tickets-empty"
                   >
-                    {searchQuery
-                      ? 'No tickets found matching your search query.'
-                      : tManagerUi('no_tickets_found')}
+                    <div className="flex flex-col items-center justify-center gap-2.5 max-w-sm mx-auto">
+                      <div className="w-10 h-10 rounded-full bg-surface-highlight flex items-center justify-center text-secondary mb-1">
+                        <AlertCircle size={20} />
+                      </div>
+                      <p className="text-sm font-medium text-primary">
+                        {searchQuery
+                          ? 'No tickets found matching your search query.'
+                          : tManagerUi('no_tickets_found')}
+                      </p>
+                      {hasActiveFilters && (
+                        <button
+                          type="button"
+                          onClick={onResetFilters}
+                          className="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border text-xs font-semibold text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+                        >
+                          <RotateCcw size={12} />
+                          <span>Reset all filters</span>
+                        </button>
+                      )}
+                    </div>
                   </ManagerSettingsHelpSupportEmptyState>
                 </td>
               </tr>
@@ -159,8 +214,8 @@ export function ManagerSettingsHelpSupportTicketsTable({
                   key={t.id}
                   className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12 motion-safe:transition-colors"
                 >
-                  <td className="p-4 text-sm font-medium text-primary">{t.id}</td>
-                  <td className="p-4 text-sm text-primary">{t.subject}</td>
+                  <td className="p-4 text-sm font-mono font-medium text-primary">{t.id}</td>
+                  <td className="p-4 text-sm font-medium text-primary">{t.subject}</td>
                   <td className="p-4 text-sm text-secondary">
                     {t.category === 'Finance'
                       ? tManagerUi('ticket_category_finance')
@@ -187,23 +242,8 @@ export function ManagerSettingsHelpSupportTicketsTable({
                         : t.priority}
                     </span>
                   </td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-1.5 text-sm">
-                      {t.status === 'Open' ? (
-                        <Clock size={14} className="text-warning" />
-                      ) : (
-                        <CheckCircle size={14} className="text-success" />
-                      )}
-                      <span className={t.status === 'Open' ? 'text-warning' : 'text-success'}>
-                        {t.status === 'Open'
-                          ? tManagerUi('ticket_status_open')
-                          : t.status === 'Closed'
-                          ? tManagerUi('ticket_status_closed')
-                          : t.status}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="p-4 text-sm text-secondary">
+                  <td className="p-4">{renderStatus(t.status)}</td>
+                  <td className="p-4 text-sm text-secondary font-mono">
                     {formatManagerHelpSupportCalendarDate(t.date, locale)}
                   </td>
                 </tr>
