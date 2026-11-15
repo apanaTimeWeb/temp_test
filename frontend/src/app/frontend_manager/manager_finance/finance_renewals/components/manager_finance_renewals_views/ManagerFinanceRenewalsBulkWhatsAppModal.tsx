@@ -125,7 +125,7 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
                 </span>
               </div>
               <p className="text-xs text-secondary mt-0.5">
-                Dispatch renewal notices without popup blocking or account ban risks
+                Send personalized WhatsApp renewal alerts and payment reminders directly to members.
               </p>
             </div>
           </div>
@@ -140,9 +140,9 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto space-y-4 flex-1">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-4 flex-1">
           {/* Progress */}
-          <div className="p-3.5 rounded-xl bg-surface border border-border flex items-center justify-between">
+          <div className="p-3.5 rounded-xl bg-surface border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <span className="text-xs font-semibold text-secondary uppercase tracking-wider block">
                 Dispatch Progress
@@ -151,11 +151,26 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
                 {openedCount} of {totalCount} Reminders Dispatched ({progressPct}%)
               </span>
             </div>
-            <div className="w-32 bg-surface-highlight rounded-full h-2.5 overflow-hidden border border-border">
-              <div
-                className="bg-emerald-600 h-2.5 rounded-full transition-all duration-300"
-                style={{ width: `${progressPct}%` }}
-              />
+            <div className="flex items-center gap-3">
+              <div className="w-28 sm:w-36 bg-surface-highlight rounded-full h-2.5 overflow-hidden border border-border">
+                <div
+                  className="bg-emerald-600 h-2.5 rounded-full transition-all duration-300"
+                  style={{ width: `${progressPct}%` }}
+                />
+              </div>
+              {!isComplete && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const nextUnsent = renewals.find((r) => !openedKeys.has(String(r.id)));
+                    if (nextUnsent) handleSendSingle(nextUnsent);
+                  }}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-xs cursor-pointer transition-colors shrink-0"
+                  title="Dispatch next reminder in queue"
+                >
+                  <Send size={11} /> Next
+                </button>
+              )}
             </div>
           </div>
 
@@ -170,10 +185,10 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
                   type="button"
                   key={tmpl.label}
                   onClick={() => setSelectedTemplate(tmpl.text)}
-                  className={`px-2.5 py-1 text-xs rounded-lg border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+                  className={`px-3 py-1.5 text-xs rounded-xl border transition-colors cursor-pointer ${
                     selectedTemplate === tmpl.text
-                      ? 'bg-primary text-on-primary border-primary font-semibold'
-                      : 'bg-surface border-border text-secondary hover:text-foreground'
+                      ? 'bg-primary text-on-primary border-primary font-bold shadow-xs'
+                      : 'bg-card border-border text-secondary hover:text-foreground hover:bg-surface-hover'
                   }`}
                 >
                   {tmpl.label}
@@ -185,14 +200,14 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
           {/* Template textarea */}
           <div>
             <label htmlFor="renewals-template" className="text-xs font-semibold text-secondary block mb-1">
-              Message Template:
+              Message Template Preview:
             </label>
             <textarea
               id="renewals-template"
               rows={3}
               value={selectedTemplate}
               onChange={(e) => setSelectedTemplate(e.target.value)}
-              className="w-full text-xs px-3 py-2 rounded-lg border border-border bg-surface text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="w-full text-xs px-3 py-2 rounded-xl border border-border bg-card text-foreground focus:outline-none focus:ring-1 focus:ring-primary shadow-xs"
             />
           </div>
 
@@ -204,32 +219,47 @@ export function ManagerFinanceRenewalsBulkWhatsAppModal({
               return (
                 <div
                   key={r.id}
-                  className="p-3 flex items-center justify-between gap-3 hover:bg-surface-hover transition-colors"
+                  className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-surface-hover transition-colors"
                 >
-                  <div>
-                    <p className="text-sm font-bold text-foreground leading-tight">
-                      {r.studentName}
-                    </p>
-                    <p className="text-xs text-secondary mt-0.5">
-                      <span className="font-mono">{r.smartId}</span> • {r.plan} • {r.shift} •{' '}
-                      <span className={isExpired ? 'text-red-500 font-semibold' : 'text-amber-500 font-semibold'}>
-                        {isExpired ? `Expired ${Math.abs(r.daysLeft)}d ago` : `Expires in ${r.daysLeft}d`}
-                      </span>{' '}
-                      • Due: ₹{Math.round(r.due / 100)}
-                    </p>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-sm font-bold text-foreground">
+                        {r.studentName}
+                      </p>
+                      <span className="font-mono text-xs px-2 py-0.5 rounded bg-muted text-secondary">
+                        {r.smartId}
+                      </span>
+                      <span className="text-xs text-secondary">
+                        {r.plan} • {r.shift}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1.5 flex-wrap text-xs">
+                      <span
+                        className={`px-2 py-0.5 rounded-md font-semibold text-[11px] border ${
+                          isExpired
+                            ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20'
+                            : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                        }`}
+                      >
+                        {isExpired ? `Expired ${Math.abs(r.daysLeft)} days ago` : `Expires in ${r.daysLeft} days`}
+                      </span>
+                      <span className="font-semibold text-primary">
+                        Due: ₹{Math.round(r.due / 100).toLocaleString('en-IN')}
+                      </span>
+                    </div>
                   </div>
 
-                  <div>
+                  <div className="shrink-0 self-end sm:self-auto">
                     {isOpened ? (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white shadow-sm">
+                      <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                         <CheckCircle2 size={13} />
-                        <span>Opened</span>
+                        <span>Sent</span>
                       </span>
                     ) : (
                       <button
                         type="button"
                         onClick={() => handleSendSingle(r)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-xs transition-colors cursor-pointer"
                         title={`Send reminder to ${r.studentName}`}
                       >
                         <Send size={12} />
