@@ -127,7 +127,7 @@ export function ManagerFinancePaymentPromisesAddModal({
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4"
+        className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-dialog space-y-4 max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div className="flex items-center gap-2">

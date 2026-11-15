@@ -4,8 +4,9 @@ import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { useManagerPaymentPromisesFormatting } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesFormattingHook';
 import { useManagerFinancePaymentPromisesConfirm } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/useManagerFinancePaymentPromisesConfirm';
-import { Search, Plus, X } from 'lucide-react';
+import { Search, Plus, X, Download, Printer } from 'lucide-react';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES, type ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
+import { sanitizeManagerPaymentPromisesCsvCell } from '@/app/frontend_manager/manager_finance/finance_payment_promises/utils/ManagerFinancePaymentPromisesCsv';
 import type { ManagerFinancePaymentPromisesRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesComponentTypes';
 import ManagerFinancePaymentPromisesEditModal from './ManagerFinancePaymentPromisesEditModal';
 import { ManagerFinancePaymentPromisesAddModal } from './ManagerFinancePaymentPromisesAddModal';
@@ -158,6 +159,42 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     setTimeout(() => setFeedbackToast(null), 4000);
   };
 
+  const handleExportCsv = () => {
+    const headers = ['Student Name', 'Smart ID', 'Phone', 'Promised Amount (INR)', 'Expected Date', 'Days Until Due', 'Status', 'Times Changed', 'Fulfilled Date', 'Remarks'];
+    const csvLines = [headers.join(',')];
+    for (const p of filtered) {
+      csvLines.push([
+        sanitizeManagerPaymentPromisesCsvCell(p.studentName),
+        sanitizeManagerPaymentPromisesCsvCell(p.smartId),
+        sanitizeManagerPaymentPromisesCsvCell(p.phone),
+        sanitizeManagerPaymentPromisesCsvCell(String(p.promisedAmount >= 1000 ? Math.round(p.promisedAmount / 100) : p.promisedAmount)),
+        sanitizeManagerPaymentPromisesCsvCell(p.expectedDate),
+        sanitizeManagerPaymentPromisesCsvCell(String(p.daysUntilDue)),
+        sanitizeManagerPaymentPromisesCsvCell(p.status),
+        sanitizeManagerPaymentPromisesCsvCell(String(p.timesChanged)),
+        sanitizeManagerPaymentPromisesCsvCell(p.fulfilledDate || '—'),
+        sanitizeManagerPaymentPromisesCsvCell(p.remarks || ''),
+      ].join(','));
+    }
+    const blob = new Blob([csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `payment_promises_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setFeedbackToast(`Exported ${filtered.length} payment promises to CSV.`);
+    setTimeout(() => setFeedbackToast(null), 4000);
+  };
+
+  const handlePrint = () => {
+    if (typeof window !== 'undefined') window.print();
+    setFeedbackToast('Payment promises summary report sent to printer / PDF.');
+    setTimeout(() => setFeedbackToast(null), 4000);
+  };
+
   const handleAddNewPromise = (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
     setPromisesList([p, ...promisesList]);
     setFeedbackToast(`Payment commitment recorded for ${p.studentName} (${formatCurrency(p.promisedAmount)}) due on ${p.expectedDate}!`);
@@ -168,7 +205,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
     <div className="space-y-6" data-route-view={_routeQuery.view} data-route-id={_routeQuery.id}>
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
             <h1 className="fin-page-title">{tManagerUi('payment_promises')}</h1>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -177,13 +214,33 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
           </div>
           <p className="fin-page-subtitle">{tManagerUi('track_and_manage_student_payment_commitments')}</p>
         </div>
-        <button
-          type="button"
-          onClick={() => setIsAddModalOpen(true)}
-          className="mgr-btn-primary text-xs flex items-center gap-1.5 py-2 px-3.5 shadow-sm focus-visible:ring-2 focus-visible:ring-primary outline-none"
-        >
-          <Plus size={14} /> Record Payment Promise
-        </button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            title="Export filtered payment promises to CSV spreadsheet"
+          >
+            <Download size={13} className="text-secondary" />
+            <span>Export CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            title="Print or Save as PDF"
+          >
+            <Printer size={13} className="text-secondary" />
+            <span>Print / PDF</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="mgr-btn-primary text-xs flex items-center gap-1.5 py-2 px-3.5 shadow-sm focus-visible:ring-2 focus-visible:ring-primary outline-none"
+          >
+            <Plus size={14} /> Record Payment Promise
+          </button>
+        </div>
       </div>
 
       <div style={{ display: 'none' }} role="status">
@@ -234,7 +291,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         </div>
         <select
           id="promises-status-filter" name="statusFilter"
-          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer min-w-[140px] outline-none"
+          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer w-full sm:w-auto min-w-[140px] outline-none"
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
           aria-label={tManagerUi('all_status')}
@@ -248,7 +305,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
           <button
             type="button"
             onClick={() => { setSearchQuery(''); setStatusFilter('all'); setPage(0); }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-colors"
+            className="w-full sm:w-auto justify-center inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition-colors"
           >
             <X size={13} /> Reset
           </button>

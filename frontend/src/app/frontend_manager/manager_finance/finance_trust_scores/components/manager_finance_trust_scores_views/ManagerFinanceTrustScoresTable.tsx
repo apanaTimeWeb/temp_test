@@ -35,9 +35,9 @@ function TrustGauge({ score }: { score: number }) {
   const clampedScore = Math.min(100, Math.max(0, score));
 
   return (
-    <div className="flex items-center gap-2" title={`Trust Score: ${score}/100 (${label})`}>
+    <div className="flex items-center gap-2.5 min-w-[110px]" title={`Trust Score: ${score}/100 (${label})`}>
       <div
-        className="fin-trust-track"
+        className="fin-trust-track flex-1"
         role="progressbar"
         aria-valuenow={score}
         aria-valuemin={0}
@@ -49,7 +49,7 @@ function TrustGauge({ score }: { score: number }) {
           style={{ width: `${clampedScore}%` }}
         />
       </div>
-      <span className={`text-sm font-semibold ${colorText}`}>{score}</span>
+      <span className={`text-xs font-bold ${colorText} shrink-0 w-7 text-right`}>{score}</span>
     </div>
   );
 }
@@ -121,7 +121,7 @@ export function ManagerFinanceTrustScoresTable({
 
   return (
     <div className="fin-card overflow-x-auto">
-      <table className="w-full">
+      <table className="w-full min-w-[850px]">
         <thead>
           <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
             {renderSortableHeader('rank', tManagerUi('rank'), 'left')}
@@ -153,7 +153,7 @@ export function ManagerFinanceTrustScoresTable({
                 <tr key={s.smartId} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12">
                   <td className="py-3 px-4 fin-mono">#{s.rank}</td>
                   <td className="py-3 px-4">
-                    <div className="fin-cell-name">{s.studentName}</div>
+                    <div className="fin-cell-name font-medium">{s.studentName}</div>
                     <div className="fin-cell-subtext">{s.smartId}</div>
                   </td>
                   <td className="py-3 px-4">
@@ -185,11 +185,11 @@ export function ManagerFinanceTrustScoresTable({
       </table>
 
       {totalRows > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
-          <span>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-xs sm:text-sm text-secondary">
+          <span className="text-xs text-center sm:text-left">
             Showing {startItem}–{endItem} of {totalRows} results
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center sm:justify-end gap-3 sm:gap-4 flex-wrap w-full sm:w-auto">
             <div className="flex items-center gap-1.5">
               <label htmlFor="rows-per-page-finance-trust-scores" className="text-xs text-secondary whitespace-nowrap">
                 Rows per page:
@@ -199,7 +199,7 @@ export function ManagerFinanceTrustScoresTable({
                 name="pageSize"
                 value={pageSize}
                 onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+                className="rounded-lg border border-border bg-card px-2 py-1 text-xs text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer shadow-xs"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -209,7 +209,7 @@ export function ManagerFinanceTrustScoresTable({
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="mgr-btn-ghost mgr-btn-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-40 disabled:cursor-not-allowed"
+                className="mgr-btn-ghost mgr-btn-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-40 disabled:cursor-not-allowed text-xs"
                 disabled={effectivePage <= 0}
                 aria-disabled={effectivePage <= 0}
                 onClick={() => onPageChange(Math.max(0, effectivePage - 1))}
@@ -221,7 +221,7 @@ export function ManagerFinanceTrustScoresTable({
               </span>
               <button
                 type="button"
-                className="mgr-btn-ghost mgr-btn-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-40 disabled:cursor-not-allowed"
+                className="mgr-btn-ghost mgr-btn-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-40 disabled:cursor-not-allowed text-xs"
                 disabled={effectivePage >= pageCount - 1}
                 aria-disabled={effectivePage >= pageCount - 1}
                 onClick={() => onPageChange(Math.min(pageCount - 1, effectivePage + 1))}

@@ -368,7 +368,7 @@
         "student_reliability_rankings_based_on_payment_promise_hi_3c43fe": "भुगतान वादों के इतिहास पर आधारित छात्र विश्वसनीयता रैंकिंग।",
         "student_names_and_trust_scores_are_illustrative_sample_d_0de711": "छात्रों के नाम और विश्वास स्कोर केवल नमूना डेटा हैं, वास्तविक छात्रों के बारे में निर्णय नहीं। सत्यापित डेटा कॉन्ट्रैक्ट और स्वीकृत स्कोरिंग नियम मिलने तक उत्पादन स्कोरिंग उपलब्ध नहीं है।",
         "scored_students": "स्कोर वाले छात्र",
-        "low_trust_less_than_40": "🔴 कम विश्वास (<40)",
+        "low_trust_less_than_40": "कम विश्वास (40 से कम)",
         "average_trust_score": "औसत विश्वास स्कोर",
         "all_levels": "सभी स्तर",
         "reliable": "विश्वसनीय",
