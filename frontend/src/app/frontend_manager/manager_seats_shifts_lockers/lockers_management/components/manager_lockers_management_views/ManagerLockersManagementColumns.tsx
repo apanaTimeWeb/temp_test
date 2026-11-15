@@ -19,7 +19,11 @@ const STATUS_CLASS: Record<LockerStatus, string> = {
 };
 
 export function LockerIdCell(props: { value?: any }) {
-  return <span className="ss-table__seat-no">{String(props.value ?? '')}</span>;
+  return (
+    <span className="font-mono font-bold text-xs text-primary bg-surface px-2 py-0.5 rounded-md border border-border">
+      {String(props.value ?? '')}
+    </span>
+  );
 }
 
 export function LockerStatusCell(props: { value?: any }) {
@@ -69,12 +73,14 @@ interface GetLockerColumnsOptions {
   tManagerUi: (key: string, values?: any) => string;
   onShowAssign: (locker: Locker) => void;
   onSetFreeTarget: (locker: Locker) => void;
+  onSelectLocker?: (locker: Locker) => void;
 }
 
 export function getLockerColumns({
   tManagerUi,
   onShowAssign,
   onSetFreeTarget,
+  onSelectLocker,
 }: GetLockerColumnsOptions): ColDef<Locker>[] {
   return [
     { field: 'lockerId', headerName: tManagerUi('locker'), flex: 1, cellRenderer: LockerIdCell },
@@ -89,44 +95,52 @@ export function getLockerColumns({
     },
     {
       headerName: tManagerUi('actions'),
-      flex: 1.2,
+      flex: 1.5,
       sortable: false,
       cellRenderer: (props: ICellRendererParams) => {
         const data = props.data as Locker;
         return (
-          <div className="ss-cell-actions">
+          <div className="flex items-center gap-1.5">
             {data.status === 'Free' && (
               <button
                 type="button"
-                className="ss-btn-icon"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-primary text-on-primary hover:bg-primary-hover transition-colors cursor-pointer shadow-xs"
                 aria-label={tManagerUi('assign_student')}
-                title={tManagerUi('assign_student')}
+                title="Allot Locker to Student"
                 onClick={() => onShowAssign(data)}
               >
                 <UserPlus size={13} />
+                <span>Allot</span>
               </button>
             )}
             {data.status === 'Occupied' && (
-              <button
-                type="button"
-                className="ss-btn-icon"
-                aria-label={tManagerUi('free_locker')}
-                title={tManagerUi('free_locker')}
-                onClick={() => onSetFreeTarget(data)}
-              >
-                <Unlock size={13} />
-              </button>
+              <div className="flex items-center gap-1.5">
+                {onSelectLocker && (
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border border-border text-primary hover:bg-surface-hover transition-colors cursor-pointer"
+                    title="View Student Details"
+                    onClick={() => onSelectLocker(data)}
+                  >
+                    <span>Details</span>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-danger-subtle text-danger hover:bg-danger hover:text-white transition-colors cursor-pointer"
+                  aria-label={tManagerUi('free_locker')}
+                  title="Vacate and Refund Locker"
+                  onClick={() => onSetFreeTarget(data)}
+                >
+                  <Unlock size={13} />
+                  <span>Vacate</span>
+                </button>
+              </div>
             )}
-            {data.status !== 'Maintenance' && (
-              <button
-                type="button"
-                className="ss-btn-icon cursor-not-allowed"
-                aria-label={tManagerUi('maintenance_update_unavailable_host_mutation_contract_no_d2475a')}
-                title={tManagerUi('maintenance_update_unavailable_host_mutation_contract_no_d2475a')}
-                disabled
-              >
-                <Wrench size={13} />
-              </button>
+            {data.status === 'Maintenance' && (
+              <span className="text-[11px] font-medium text-warning px-2 py-0.5 rounded-full bg-warning-subtle">
+                In Service
+              </span>
             )}
           </div>
         );

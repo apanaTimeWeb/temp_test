@@ -58,12 +58,12 @@ export function ManagerLockersManagementToolbar({
       </div>
 
       <div className="flex flex-wrap items-center gap-2.5">
-        <div className="relative flex-1 sm:w-64 min-w-[200px]">
+        <div className="relative flex-1 sm:w-72 min-w-[220px]">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
           <input
             type="search"
-            placeholder="Search locker, student, or ID..."
-            className="mgr-input pl-8 pr-7 text-xs w-full h-8 rounded-lg"
+            placeholder="Search locker ID, student name, or Smart ID..."
+            className="mgr-input pl-9 pr-8 text-xs w-full h-9 rounded-xl"
             value={mainTableSearch}
             onChange={(e) => setMainTableSearch(e.target.value)}
           />
@@ -71,10 +71,10 @@ export function ManagerLockersManagementToolbar({
             <button
               type="button"
               onClick={() => setMainTableSearch('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded cursor-pointer"
               title="Clear search"
             >
-              <X size={12} />
+              <X size={13} />
             </button>
           )}
         </div>
@@ -82,7 +82,7 @@ export function ManagerLockersManagementToolbar({
         <div className="relative w-36">
           <select
             aria-label={tManagerUi('filter_by_status')}
-            className="mgr-input text-xs w-full h-8 pr-7 appearance-none cursor-pointer rounded-lg"
+            className="mgr-input text-xs w-full h-9 pr-8 appearance-none cursor-pointer rounded-xl bg-surface"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -91,7 +91,7 @@ export function ManagerLockersManagementToolbar({
             <option value="Occupied">{tManagerUi('occupied')}</option>
             <option value="Maintenance">{tManagerUi('maintenance')}</option>
           </select>
-          <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+          <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
         </div>
 
         {(statusFilter !== 'all' || mainTableSearch.trim() !== '') && (
@@ -101,10 +101,11 @@ export function ManagerLockersManagementToolbar({
               setStatusFilter('all');
               setMainTableSearch('');
             }}
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer h-9"
             title="Reset filters"
           >
-            <RotateCcw size={12} /> Reset
+            <RotateCcw size={13} />
+            <span>Reset</span>
           </button>
         )}
       </div>
