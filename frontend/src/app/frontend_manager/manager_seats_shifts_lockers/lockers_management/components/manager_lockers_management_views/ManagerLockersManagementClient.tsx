@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Search, UserPlus, Download, LayoutGrid, List } from 'lucide-react';
+import { Plus, Search, UserPlus, Download, LayoutGrid, List, DoorClosed } from 'lucide-react';
 
 import { ManagerLockersManagementNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
 import { managerSeatsLockerDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/schemas/ManagerLockersManagementDraftSchemas';
@@ -120,65 +120,83 @@ export function ManagerLockersManagementClient() {
 
   return (
     <>
-      <div className="ss-page">
-        <div className="ss-page-header">
-          <div>
-            <h1 className="ss-page-title">{tManagerUi('lockers')}</h1>
-            <p className="ss-page-subtitle">{tManagerUi('manage_locker_assignments_and_availability')}</p>
-            <p className="ss-page-subtitle" role="status" data-testid="manager-seats-contract-warning">
-              {tManagerUi('sample_data_only_writes_are_disabled_until_the_verified_8ca5b6')}
-            </p>
-          </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="flex items-center p-1 rounded-xl bg-surface border border-border">
-              <button
-                type="button"
-                onClick={() => setViewMode('grid')}
-                aria-pressed={viewMode === 'grid'}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'}`}
-              >
-                <LayoutGrid size={13} /> Grid View
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('table')}
-                aria-pressed={viewMode === 'table'}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${viewMode === 'table' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'}`}
-              >
-                <List size={13} /> Table View
-              </button>
+      <div className="ss-page !p-0 space-y-4 w-full min-w-0">
+        {/* ── Top Unified Control Center (2-Tier Toolbar) ── */}
+        <div className="bg-card border border-border rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
+          {/* Tier 1: Title, Dynamic Count Badge, View Mode Switcher & Actions */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-3.5">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <DoorClosed size={20} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-base sm:text-lg font-bold text-primary">Lockers Management</h1>
+                  <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">
+                    {filtered.length} {filtered.length === 1 ? 'Locker' : 'Lockers'}
+                  </span>
+                </div>
+                <p className="text-xs text-secondary mt-0.5">
+                  Manage locker allocations, key handovers, security deposits, and real-time availability
+                </p>
+                <p className="sr-only" role="status" data-testid="manager-seats-contract-warning">
+                  {tManagerUi('sample_data_only_writes_are_disabled_until_the_verified_8ca5b6')}
+                </p>
+              </div>
             </div>
 
-            <button
-              type="button"
-              className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
-              onClick={handleExportCsv}
-            >
-              <Download size={14} /> Export CSV
-            </button>
-            <button
-              type="button"
-              className="ss-btn-primary ss-btn-start"
-              onClick={() => {
-                reset({ lockerId: '' });
-                clearErrors();
-                setShowAddModal(true);
-              }}
-            >
-              <Plus size={16} />
-              {tManagerUi('add_locker')}
-            </button>
-          </div>
-        </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center p-1 rounded-xl bg-surface border border-border">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('grid')}
+                  aria-pressed={viewMode === 'grid'}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'}`}
+                >
+                  <LayoutGrid size={13} /> Grid View
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('table')}
+                  aria-pressed={viewMode === 'table'}
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${viewMode === 'table' ? 'bg-primary text-on-primary shadow-sm' : 'text-secondary hover:text-primary'}`}
+                >
+                  <List size={13} /> Table View
+                </button>
+              </div>
 
-        <ManagerLockersManagementToolbar
-          lockers={lockers}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          mainTableSearch={mainTableSearch}
-          setMainTableSearch={setMainTableSearch}
-          tManagerUi={tManagerUi}
-        />
+              <button
+                type="button"
+                className="mgr-btn-outline flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg border border-border bg-card hover:bg-surface-highlight transition-colors cursor-pointer"
+                onClick={handleExportCsv}
+              >
+                <Download size={14} /> Export CSV
+              </button>
+              <button
+                type="button"
+                className="ss-btn-primary ss-btn-start flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3.5 rounded-lg"
+                onClick={() => {
+                  reset({ lockerId: '' });
+                  clearErrors();
+                  setShowAddModal(true);
+                }}
+              >
+                <Plus size={15} />
+                {tManagerUi('add_locker')}
+              </button>
+            </div>
+          </div>
+
+          {/* Tier 2: Filter Toolbar */}
+          <ManagerLockersManagementToolbar
+            lockers={lockers}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            mainTableSearch={mainTableSearch}
+            setMainTableSearch={setMainTableSearch}
+            tManagerUi={tManagerUi}
+          />
+        </div>
 
         {filtered.length === 0 ? (
           <div className="ss-empty-state" role="status">
@@ -210,13 +228,15 @@ export function ManagerLockersManagementClient() {
             onShowAssign={(l) => setShowAssign(l)}
           />
         ) : (
-          <div className="ss-table-wrapper ss-grid-h-400">
-            <ManagerLockersManagementNativeTable
-              rows={filtered}
-              columns={colDefs}
-              label={tManagerUi('lockers')}
-              getRowKey={(row) => String(row.lockerId)}
-            />
+          <div className="bg-card border border-border rounded-2xl p-3.5 sm:p-5 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto -mx-3.5 sm:mx-0 px-3.5 sm:px-0">
+              <ManagerLockersManagementNativeTable
+                rows={filtered}
+                columns={colDefs}
+                label={tManagerUi('lockers')}
+                getRowKey={(row) => String(row.lockerId)}
+              />
+            </div>
           </div>
         )}
       </div>
