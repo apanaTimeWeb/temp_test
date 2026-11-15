@@ -14,6 +14,9 @@ const nextConfig = {
     buildActivity: true,
     buildActivityPosition: 'bottom-left',
   },
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@tanstack/react-query'],
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
