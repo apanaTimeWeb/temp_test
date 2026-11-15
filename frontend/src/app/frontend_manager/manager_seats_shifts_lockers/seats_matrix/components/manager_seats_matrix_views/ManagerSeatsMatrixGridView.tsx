@@ -74,7 +74,7 @@ export function ManagerSeatsMatrixGridView({
           {/* Section A: Overall Desk Status */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5 shrink-0">
-              <Armchair size={14} className="text-primary" /> Seat Status:
+              <Armchair size={14} className="text-primary" /> Desk Status:
             </span>
             <div className="flex flex-wrap items-center gap-4 text-xs font-medium">
               {LEGEND_ITEMS.map(({ cls, labelKey }) => (
@@ -104,11 +104,11 @@ export function ManagerSeatsMatrixGridView({
             <div className="flex items-center gap-2 text-xs font-semibold">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-500">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]" />
-                Green = Vacant (खाली / Available)
+                Green = Vacant (Available)
               </span>
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-500">
                 <span className="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.8)]" />
-                Red = Booked (आवंटित / Occupied)
+                Red = Booked (Occupied)
               </span>
             </div>
           </div>
@@ -126,7 +126,7 @@ export function ManagerSeatsMatrixGridView({
                   M
                 </span>
                 <span className="text-primary font-semibold">Morning</span>
-                <span className="text-[11px] text-secondary">(सुबह)</span>
+                <span className="text-[10px] text-secondary font-mono">06:00–12:00</span>
               </div>
 
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-border">
@@ -134,7 +134,7 @@ export function ManagerSeatsMatrixGridView({
                   A
                 </span>
                 <span className="text-primary font-semibold">Afternoon</span>
-                <span className="text-[11px] text-secondary">(दोपहर)</span>
+                <span className="text-[10px] text-secondary font-mono">12:00–16:00</span>
               </div>
 
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-border">
@@ -142,7 +142,7 @@ export function ManagerSeatsMatrixGridView({
                   E
                 </span>
                 <span className="text-primary font-semibold">Evening</span>
-                <span className="text-[11px] text-secondary">(शाम)</span>
+                <span className="text-[10px] text-secondary font-mono">16:00–20:00</span>
               </div>
 
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface border border-border">
@@ -150,14 +150,14 @@ export function ManagerSeatsMatrixGridView({
                   N
                 </span>
                 <span className="text-primary font-semibold">Night</span>
-                <span className="text-[11px] text-secondary">(रात)</span>
+                <span className="text-[10px] text-secondary font-mono">20:00–06:00</span>
               </div>
             </div>
           </div>
 
           <div className="text-[11px] text-secondary flex items-center gap-1.5 shrink-0 bg-surface/60 px-3 py-1 rounded-lg border border-border/50">
             <Info size={13} className="text-primary shrink-0" />
-            <span>Ek physical desk ko alag-alag shift me multiple students allot kiye jaa sakte hain. Click seat to manage.</span>
+            <span>Each desk supports 4 daily shifts. Green LED = shift is vacant; Red LED = shift is booked.</span>
           </div>
         </div>
       </div>
@@ -256,39 +256,48 @@ export function ManagerSeatsMatrixGridView({
                     <span className="text-[10px] text-emerald-400 font-bold">Free</span>
                   )}
 
-                  {/* 4 Shift Glowing LED Indicators (M, A, E, N) */}
-                  <div className="flex items-center justify-center gap-1 w-full pt-1 border-t border-border/70">
-                    {(['morning', 'afternoon', 'evening', 'night'] as const).map((shiftKey) => {
-                      const letter = shiftKey[0].toUpperCase();
-                      const isBooked = shiftDots[shiftKey];
-                      const isMaint = seat.status === 'maintenance';
-                      const shiftHindi =
-                        shiftKey === 'morning' ? 'सुबह' : shiftKey === 'afternoon' ? 'दोपहर' : shiftKey === 'evening' ? 'शाम' : 'रात';
-                      const shiftTitleName =
-                        shiftKey === 'morning' ? 'Morning' : shiftKey === 'afternoon' ? 'Afternoon' : shiftKey === 'evening' ? 'Evening' : 'Night';
+                  {/* 4 Shift Slot Indicators (M, A, E, N) */}
+                  <div className="flex items-center justify-between w-full px-0.5 pt-1 border-t border-border/70">
+                    <span className="text-[8px] font-bold text-secondary uppercase tracking-tight">
+                      Shift:
+                    </span>
+                    <div className="flex items-center gap-0.5">
+                      {(['morning', 'afternoon', 'evening', 'night'] as const).map((shiftKey) => {
+                        const letter = shiftKey[0].toUpperCase();
+                        const isBooked = shiftDots[shiftKey];
+                        const isMaint = seat.status === 'maintenance';
+                        const shiftTitleName =
+                          shiftKey === 'morning'
+                            ? 'Morning (06:00-12:00)'
+                            : shiftKey === 'afternoon'
+                            ? 'Afternoon (12:00-16:00)'
+                            : shiftKey === 'evening'
+                            ? 'Evening (16:00-20:00)'
+                            : 'Night (20:00-06:00)';
 
-                      return (
-                        <span
-                          key={shiftKey}
-                          title={
-                            isMaint
-                              ? `${shiftTitleName} Shift (${shiftHindi}): Seat Under Maintenance`
-                              : isBooked
-                              ? `${shiftTitleName} Shift (${shiftHindi}): Booked / Occupied`
-                              : `${shiftTitleName} Shift (${shiftHindi}): Vacant / Free (Available)`
-                          }
-                          className={`text-[9px] font-mono font-bold w-4 h-4 rounded flex items-center justify-center transition-all ${
-                            isMaint
-                              ? 'bg-secondary/15 text-secondary border border-border opacity-50'
-                              : isBooked
-                              ? 'bg-rose-500 text-white shadow-[0_0_6px_rgba(244,63,94,0.7)]'
-                              : 'bg-emerald-500 text-white shadow-[0_0_6px_rgba(16,185,129,0.5)]'
-                          }`}
-                        >
-                          {letter}
-                        </span>
-                      );
-                    })}
+                        return (
+                          <span
+                            key={shiftKey}
+                            title={
+                              isMaint
+                                ? `${shiftTitleName}: Seat Under Maintenance`
+                                : isBooked
+                                ? `${shiftTitleName}: Booked (Occupied)`
+                                : `${shiftTitleName}: Vacant (Available to book)`
+                            }
+                            className={`text-[9px] font-mono font-bold w-3.5 h-3.5 rounded flex items-center justify-center transition-all ${
+                              isMaint
+                                ? 'bg-secondary/15 text-secondary border border-border opacity-50'
+                                : isBooked
+                                ? 'bg-rose-500 text-white shadow-[0_0_6px_rgba(244,63,94,0.7)]'
+                                : 'bg-emerald-500 text-white shadow-[0_0_6px_rgba(16,185,129,0.5)]'
+                            }`}
+                          >
+                            {letter}
+                          </span>
+                        );
+                      })}
+                    </div>
                   </div>
                 </button>
               );
