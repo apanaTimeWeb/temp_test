@@ -103,28 +103,28 @@ export default function ManagerFinanceFinesPaymentsReceiptModal({
               <button
                 type="button"
                 onClick={() => onPrint(receipt)}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-primary transition-colors cursor-pointer"
+                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-primary transition-colors cursor-pointer active:scale-95 shadow-2xs"
               >
                 <Printer size={14} /> Print
               </button>
               <button
                 type="button"
                 onClick={() => onShareWhatsApp(receipt)}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors cursor-pointer active:scale-95 shadow-2xs"
               >
                 <MessageSquare size={14} /> WhatsApp
               </button>
               <button
                 type="button"
                 onClick={() => onShareEmail(receipt)}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-purple hover:bg-purple-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold transition-colors cursor-pointer active:scale-95 shadow-2xs"
               >
                 <Mail size={14} /> Email
               </button>
               <button
                 type="button"
                 onClick={() => onShareSms(receipt)}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors cursor-pointer active:scale-95 shadow-2xs"
               >
                 <Smartphone size={14} /> SMS
               </button>

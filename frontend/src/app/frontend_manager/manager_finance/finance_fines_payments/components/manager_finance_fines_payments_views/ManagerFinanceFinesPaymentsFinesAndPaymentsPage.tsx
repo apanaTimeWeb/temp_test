@@ -54,7 +54,6 @@ const TABS = [
   { id: 'paid', labelKey: 'paid_fines_tab', icon: CheckCircle },
   { id: 'partiallyPaid', labelKey: 'partially_paid_tab', icon: RotateCcw },
   { id: 'receipts', labelKey: 'receipts_tab', icon: Receipt },
-  { id: 'refundRequests', labelKey: 'refund_requests_tab', icon: RotateCcw },
 ] as const;
 
 export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQuery: ManagerFinanceFinesPaymentsRouteQueryProps) {
@@ -164,7 +163,6 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-border">
         {TABS.map((tab) => {
           const isActive = activeTab === tab.id;
-          const isRefundTab = tab.id === 'refundRequests';
           const count =
             tab.id === 'pending'
               ? MANAGER_FINANCE_SAMPLE_PENDING_FINES.filter((f) => f.status === 'Pending').length
@@ -218,16 +216,6 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
                     ? 'bg-white text-blue-700 shadow-xs'
                     : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20',
                 };
-              case 'refundRequests':
-                return {
-                  btn: isActive
-                    ? 'bg-purple-600 text-white shadow-md ring-1 ring-purple-600'
-                    : 'bg-card border border-border text-secondary hover:text-purple-600 hover:border-purple-300 dark:hover:border-purple-800 hover:bg-purple-500/5',
-                  icon: isActive ? 'text-white' : 'text-purple-500',
-                  badge: isActive
-                    ? 'bg-white text-purple-700 shadow-xs'
-                    : 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20',
-                };
               default:
                 return {
                   btn: isActive
@@ -246,25 +234,14 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
               key={tab.id}
               type="button"
               onClick={() => {
-                if (tab.id === 'refundRequests') {
-                  router.push(MANAGER_FINANCE_FINES_PAYMENTS_ROUTES.REFUNDS);
-                  return;
-                }
                 setActiveTab(tab.id);
                 handleResetFilters();
               }}
               aria-pressed={isActive}
-              title={isRefundTab ? 'Opens Security Deposits & Caution Money Refund Desk' : undefined}
               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${tabStyle.btn}`}
             >
               <tab.icon size={15} className={tabStyle.icon} />
               <span>{tManagerUi(tab.labelKey)}</span>
-              {isRefundTab && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-normal bg-muted text-secondary border border-border flex items-center gap-0.5">
-                  <span>↗</span>
-                  <span>Deposits</span>
-                </span>
-              )}
               {count !== null && (
                 <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${tabStyle.badge}`}>
                   {count}
