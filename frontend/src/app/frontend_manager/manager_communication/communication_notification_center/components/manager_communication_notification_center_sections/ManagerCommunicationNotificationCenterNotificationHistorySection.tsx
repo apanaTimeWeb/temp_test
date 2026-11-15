@@ -83,12 +83,13 @@ export function ManagerCommunicationNotificationCenterNotificationHistorySection
         
         {/* Multi-Filter Toolbar */}
         <div className="flex flex-wrap items-center gap-2">
-          <div className="relative w-full sm:w-56">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <div className="relative w-full sm:w-56 flex items-center">
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none z-10" />
             <input
               type="search"
               placeholder="Search recipient, type, or channel..."
-              className="mgr-input pl-8 text-xs w-full"
+              className="mgr-input mgr-input-with-icon !pl-10 text-xs w-full"
+              style={{ paddingLeft: '2.5rem' }}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

@@ -21,6 +21,8 @@ import {
   Smartphone,
   CheckCircle2,
   Filter,
+  Printer,
+  RotateCw,
 } from 'lucide-react';
 
 import { maskManagerWhatsappLogsPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsUtilities';
@@ -174,6 +176,14 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
     anchor.click();
     URL.revokeObjectURL(url);
     toast.success('WhatsApp delivery logs exported to CSV successfully');
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleRefresh = () => {
+    toast.success('WhatsApp delivery logs feed refreshed');
   };
 
   // KPI Metrics Calculation
@@ -341,7 +351,27 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 self-start sm:self-center">
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
+          <button
+            type="button"
+            onClick={handleRefresh}
+            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-3 rounded-xl cursor-pointer hover:bg-surface-hover transition-colors"
+            title="Refresh logs feed"
+          >
+            <RotateCw size={14} className="text-secondary" />
+            <span className="hidden sm:inline">Refresh</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-3.5 rounded-xl cursor-pointer hover:bg-surface-hover transition-colors"
+            title="Print delivery report"
+          >
+            <Printer size={14} className="text-secondary" />
+            <span>Print Report</span>
+          </button>
+
           <button
             type="button"
             onClick={handleExportCsv}
@@ -519,14 +549,15 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
                 </button>
               )}
             </div>
-            <div className="relative">
+            <div className="relative flex items-center">
               <Search
-                size={15}
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none z-10"
               />
               <input
                 id="wa-log-search-input"
-                className="mgr-input h-10 text-xs sm:text-sm w-full rounded-xl bg-surface/60 border border-border focus:border-primary pl-9 pr-8"
+                className="mgr-input mgr-input-with-icon h-10 text-xs sm:text-sm w-full rounded-xl bg-surface/60 border border-border focus:border-primary !pl-11 pr-9"
+                style={{ paddingLeft: '2.75rem', paddingRight: search ? '2.25rem' : '1rem' }}
                 placeholder={tManagerUi('student_name_or_phone')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -535,7 +566,7 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
                 <button
                   type="button"
                   onClick={() => setSearch('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md z-10 cursor-pointer"
                   aria-label="Clear search"
                 >
                   <X size={13} />

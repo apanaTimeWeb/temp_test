@@ -1,7 +1,8 @@
 'use client';
 
 import { useRef } from 'react';
-import { X, Smartphone, CheckCheck, Check, Clock, AlertCircle } from 'lucide-react';
+import { toast } from 'sonner';
+import { X, Smartphone, CheckCheck, Check, Clock, AlertCircle, Copy, Printer } from 'lucide-react';
 import { maskManagerWhatsappLogsPhone } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/utils/ManagerCommunicationWhatsappLogsUtilities';
 import { useManagerWhatsappLogsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/hooks/ManagerCommunicationWhatsappLogsDialogFocus';
 import type { ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialogProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_logs/types/ManagerCommunicationWhatsappLogsComponentTypes';
@@ -98,9 +99,23 @@ export function ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog({
 
         {/* Message WhatsApp Bubble View */}
         <div className="space-y-1.5">
-          <label className="text-xs font-bold text-primary uppercase tracking-wider block">
-            {labels.messageContent}
-          </label>
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold text-primary uppercase tracking-wider block">
+              {labels.messageContent}
+            </label>
+            <button
+              type="button"
+              onClick={() => {
+                void navigator.clipboard?.writeText(log.message);
+                toast.success('Message content copied to clipboard');
+              }}
+              className="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary hover:text-primary transition-colors cursor-pointer"
+              title="Copy message to clipboard"
+            >
+              <Copy size={12} />
+              <span>Copy</span>
+            </button>
+          </div>
           <div className="rounded-xl border border-border bg-[#0b141a] p-3.5 sm:p-4">
             <div className="max-w-md ml-auto bg-[#005c4b] text-slate-100 p-3.5 rounded-2xl rounded-tr-xs shadow-md space-y-1.5 border border-[#005c4b]/50">
               <p className="text-xs sm:text-sm whitespace-pre-wrap break-words leading-relaxed select-text font-normal">
@@ -131,11 +146,20 @@ export function ManagerCommunicationWhatsappLogsWhatsappLogDetailsDialog({
         )}
 
         {/* Footer */}
-        <div className="pt-2 border-t border-border flex justify-end">
+        <div className="pt-3 border-t border-border flex flex-col-reverse sm:flex-row items-center justify-between gap-2.5">
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="mgr-btn-outline text-xs sm:text-sm h-10 px-4 rounded-xl inline-flex items-center gap-1.5 cursor-pointer w-full sm:w-auto justify-center hover:bg-surface-hover transition-colors"
+            title="Print message receipt"
+          >
+            <Printer size={14} className="text-secondary" />
+            <span>Print Message</span>
+          </button>
           <button
             type="button"
             onClick={onClose}
-            className="mgr-btn-secondary text-xs sm:text-sm h-10 px-5 rounded-xl cursor-pointer"
+            className="mgr-btn-secondary text-xs sm:text-sm h-10 px-5 rounded-xl cursor-pointer w-full sm:w-auto"
           >
             {labels.close}
           </button>
