@@ -281,7 +281,7 @@ export default function ManagerSettingsBranchInfoPage() {
             </div>
 
             {/* 4 Multi-Color Parameter Chips */}
-            <div className="grid grid-cols-2 gap-2.5 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
               {/* Branch Code (Amber) */}
               <div className="p-2.5 rounded-lg bg-amber-500/5 border border-amber-500/20 flex flex-col justify-between">
                 <span className="text-[10px] text-amber-300/80 font-medium">Branch Code</span>
@@ -393,19 +393,19 @@ export default function ManagerSettingsBranchInfoPage() {
 
             <div className="space-y-2 text-xs">
               {/* Branch Desk Phone (Sky Blue) */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-sky-500/5 border border-sky-500/20">
-                <div className="flex items-center gap-2.5">
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-sky-500/5 border border-sky-500/20 gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-md bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0">
                     <Phone size={13} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-[10px] text-slate-400 block">Branch Contact</span>
-                    <span className="font-mono font-bold text-white text-xs">{branchData.phone}</span>
+                    <span className="font-mono font-bold text-white text-xs truncate block">{branchData.phone}</span>
                   </div>
                 </div>
                 <a
                   href={`tel:${branchData.phone.replace(/\D/g, '')}`}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 text-[11px] font-semibold transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 text-[11px] font-semibold transition-all shrink-0 cursor-pointer"
                 >
                   <span>Call</span>
                   <ArrowUpRight size={11} />
@@ -413,7 +413,7 @@ export default function ManagerSettingsBranchInfoPage() {
               </div>
 
               {/* Branch Desk Email (Indigo) */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-indigo-500/5 border border-indigo-500/20">
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-indigo-500/5 border border-indigo-500/20 gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-md bg-indigo-500/15 text-indigo-400 flex items-center justify-center shrink-0">
                     <Mail size={13} />
@@ -433,19 +433,19 @@ export default function ManagerSettingsBranchInfoPage() {
               </div>
 
               {/* Student Support Phone Helpline (Rose / Warm) */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-rose-500/5 border border-rose-500/20">
-                <div className="flex items-center gap-2.5">
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-rose-500/5 border border-rose-500/20 gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-md bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0">
                     <PhoneCall size={13} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <span className="text-[10px] text-rose-300/80 font-medium block">Helpline / Support</span>
-                    <span className="font-mono font-bold text-white text-xs">{branchData.supportPhone}</span>
+                    <span className="font-mono font-bold text-white text-xs truncate block">{branchData.supportPhone}</span>
                   </div>
                 </div>
                 <a
                   href={`tel:${branchData.supportPhone.replace(/\D/g, '')}`}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-[11px] font-semibold transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-[11px] font-semibold transition-all shrink-0 cursor-pointer"
                 >
                   <span>Help</span>
                   <ArrowUpRight size={11} />
@@ -453,7 +453,7 @@ export default function ManagerSettingsBranchInfoPage() {
               </div>
 
               {/* Student Support Email Helpdesk (Teal / Emerald) */}
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-teal-500/5 border border-teal-500/20">
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-teal-500/5 border border-teal-500/20 gap-2">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <div className="w-7 h-7 rounded-md bg-teal-500/15 text-teal-400 flex items-center justify-center shrink-0">
                     <LifeBuoy size={13} />
