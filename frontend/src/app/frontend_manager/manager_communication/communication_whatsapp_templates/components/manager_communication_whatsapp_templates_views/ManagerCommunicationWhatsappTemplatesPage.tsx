@@ -32,6 +32,58 @@ const VARS = MANAGER_COMMUNICATION_TEMPLATE_VARIABLES;
 const INIT = MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_TEMPLATES;
 const MAX_CHARS = 1024;
 
+const VARIABLE_CHIP_CONFIGS: Record<string, { bg: string; text: string; border: string; hover: string; title: string }> = {
+  '{name}': {
+    bg: 'bg-emerald-500/10',
+    text: 'text-emerald-400',
+    border: 'border-emerald-500/30',
+    hover: 'hover:bg-emerald-500/20 hover:border-emerald-500/50',
+    title: 'Student Full Name',
+  },
+  '{amount}': {
+    bg: 'bg-amber-500/10',
+    text: 'text-amber-400',
+    border: 'border-amber-500/30',
+    hover: 'hover:bg-amber-500/20 hover:border-amber-500/50',
+    title: 'Payable / Due Amount',
+  },
+  '{duedate}': {
+    bg: 'bg-rose-500/10',
+    text: 'text-rose-400',
+    border: 'border-rose-500/30',
+    hover: 'hover:bg-rose-500/20 hover:border-rose-500/50',
+    title: 'Payment / Renewal Due Date',
+  },
+  '{planname}': {
+    bg: 'bg-purple-500/10',
+    text: 'text-purple-400',
+    border: 'border-purple-500/30',
+    hover: 'hover:bg-purple-500/20 hover:border-purple-500/50',
+    title: 'Membership Plan Name',
+  },
+  '{libraryname}': {
+    bg: 'bg-indigo-500/10',
+    text: 'text-indigo-400',
+    border: 'border-indigo-500/30',
+    hover: 'hover:bg-indigo-500/20 hover:border-indigo-500/50',
+    title: 'Branch / Library Name',
+  },
+  '{phone}': {
+    bg: 'bg-cyan-500/10',
+    text: 'text-cyan-400',
+    border: 'border-cyan-500/30',
+    hover: 'hover:bg-cyan-500/20 hover:border-cyan-500/50',
+    title: 'Student / Parent Contact',
+  },
+  '{seat}': {
+    bg: 'bg-sky-500/10',
+    text: 'text-sky-400',
+    border: 'border-sky-500/30',
+    hover: 'hover:bg-sky-500/20 hover:border-sky-500/50',
+    title: 'Assigned Seat Number',
+  },
+};
+
 interface TemplateMeta {
   icon: React.ReactNode;
   conditionTag: string;
@@ -202,19 +254,19 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
         </div>
 
         {/* Quick Actions in Header */}
-        <div className="flex items-center gap-2.5 self-start sm:self-center">
+        <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-center w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setShowTest(true)}
-            className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-3.5 rounded-xl cursor-pointer hover:bg-surface-hover transition-colors"
+            className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 transition-all flex-1 sm:flex-initial"
           >
-            <Send size={14} className="text-secondary" />
+            <Send size={14} className="text-emerald-400" />
             <span>{tManagerUi('send_test')}</span>
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="mgr-btn-primary inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-4 rounded-xl shadow-sm cursor-pointer"
+            className="mgr-btn-primary inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-5 rounded-xl shadow-sm cursor-pointer transition-all flex-1 sm:flex-initial"
           >
             <Save size={14} />
             <span>Save Template</span>
@@ -243,7 +295,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
             <span className="text-[11px] text-secondary">Select to customize</span>
           </div>
 
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2.5">
             {templates.map((t) => {
               const config = TEMPLATE_CONFIGS[t.id] || TEMPLATE_CONFIGS.welcome;
               const isActive = activeId === t.id;
@@ -253,21 +305,21 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
                   type="button"
                   onClick={() => setActiveId(t.id)}
                   aria-pressed={isActive}
-                  className={`w-full p-3.5 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between border ${
+                  className={`w-full p-3 sm:p-3.5 rounded-xl text-left transition-all duration-150 cursor-pointer flex items-center justify-between border ${
                     isActive
-                      ? `bg-card ${config.accentBorder} shadow-md ring-1 ${config.ring}`
+                      ? `bg-surface-highlight/80 ${config.accentBorder} shadow-md ring-1 ${config.ring}`
                       : 'bg-card/70 border-border hover:bg-card hover:border-border-focus'
-                  }`}
+                  } active:scale-[0.99]`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
-                      className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${config.iconBox}`}
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border shadow-xs ${config.iconBox}`}
                     >
                       {config.icon}
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-xs sm:text-sm font-bold text-primary truncate">
+                        <span className={`text-xs sm:text-sm font-bold truncate ${isActive ? 'text-primary' : 'text-primary/90'}`}>
                           {templateLabel(t)}
                         </span>
                       </div>
@@ -371,18 +423,27 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
                 <span className="text-[11px] text-secondary">Click any chip to insert at cursor</span>
               </div>
               <div className="flex flex-wrap gap-2">
-                {VARS.map((v) => (
-                  <button
-                    type="button"
-                    key={v}
-                    onClick={() => insertVar(v)}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 hover:border-primary/40 transition-colors cursor-pointer"
-                    title={`Click to insert ${v}`}
-                  >
-                    <span>+</span>
-                    <span>{v}</span>
-                  </button>
-                ))}
+                {VARS.map((v) => {
+                  const style = VARIABLE_CHIP_CONFIGS[v] || {
+                    bg: 'bg-primary/10',
+                    text: 'text-primary',
+                    border: 'border-primary/25',
+                    hover: 'hover:bg-primary/20 hover:border-primary/40',
+                    title: v,
+                  };
+                  return (
+                    <button
+                      type="button"
+                      key={v}
+                      onClick={() => insertVar(v)}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all duration-150 cursor-pointer shadow-xs border ${style.bg} ${style.text} ${style.border} ${style.hover} active:scale-95`}
+                      title={`Click to insert ${v} (${style.title})`}
+                    >
+                      <span className="font-bold opacity-80">+</span>
+                      <span>{v}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -396,19 +457,19 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
             </div>
 
             {/* Footer Buttons */}
-            <div className="pt-4 border-t border-border flex items-center justify-end gap-3">
+            <div className="pt-4 border-t border-border flex flex-col-reverse sm:flex-row items-center justify-end gap-3">
               <button
                 type="button"
                 onClick={() => setShowTest(true)}
-                className="mgr-btn-outline inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-4 rounded-xl cursor-pointer hover:bg-surface-hover transition-colors"
+                className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl cursor-pointer hover:bg-emerald-500/10 hover:text-emerald-400 hover:border-emerald-500/30 transition-all w-full sm:w-auto"
               >
-                <Send size={13} className="text-secondary" />
+                <Send size={13} className="text-emerald-400" />
                 <span>{tManagerUi('send_test')}</span>
               </button>
               <button
                 type="button"
                 onClick={handleSave}
-                className="mgr-btn-primary inline-flex items-center gap-1.5 text-xs font-semibold py-2 px-5 rounded-xl shadow-sm cursor-pointer"
+                className="mgr-btn-primary inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2.5 px-6 rounded-xl shadow-sm cursor-pointer transition-all w-full sm:w-auto"
               >
                 <Save size={13} />
                 <span>Save Template</span>
@@ -455,10 +516,10 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
               </div>
 
               {/* WhatsApp Chat Canvas */}
-              <div className="p-4 sm:p-6 bg-[#0b141a] min-h-[150px] flex flex-col justify-end">
+              <div className="p-3 sm:p-5 md:p-6 bg-[#0b141a] min-h-[140px] sm:min-h-[160px] flex flex-col justify-end">
                 {/* Outgoing WhatsApp Bubble */}
-                <div className="max-w-md ml-auto bg-[#005c4b] text-slate-100 p-3.5 rounded-2xl rounded-tr-xs shadow-sm space-y-1.5 border border-[#005c4b]/50">
-                  <p className="text-xs sm:text-sm whitespace-pre-wrap leading-relaxed select-text font-normal">
+                <div className="max-w-[92%] sm:max-w-md ml-auto bg-[#005c4b] text-slate-100 p-3 sm:p-4 rounded-2xl rounded-tr-xs shadow-md space-y-1.5 border border-[#005c4b]/50">
+                  <p className="text-xs sm:text-sm whitespace-pre-wrap break-words leading-relaxed select-text font-normal">
                     {preview}
                   </p>
                   <div className="flex items-center justify-end gap-1 text-[10px] text-emerald-200/80 pt-0.5">
@@ -484,7 +545,7 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
             role="dialog"
             aria-modal="true"
             aria-labelledby="manager-wa-test-title"
-            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4"
+            className="w-full max-w-md rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-2xl space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between border-b border-border pb-3.5">
@@ -542,18 +603,18 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-2">
+            <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5 sm:gap-3 pt-3 border-t border-border">
               <button
                 type="button"
                 onClick={() => setShowTest(false)}
-                className="mgr-btn-secondary text-xs h-10 px-4 rounded-xl cursor-pointer"
+                className="mgr-btn-secondary text-xs sm:text-sm h-10 px-4 rounded-xl cursor-pointer w-full sm:w-auto"
               >
                 {tManagerUi('cancel')}
               </button>
               <button
                 type="button"
                 onClick={handleTest}
-                className="mgr-btn-primary text-xs h-10 px-5 rounded-xl inline-flex items-center gap-1.5 cursor-pointer shadow-sm"
+                className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold h-10 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-md cursor-pointer transition-colors w-full sm:w-auto"
               >
                 <Send size={14} />
                 <span>{tManagerUi('send_test')}</span>
