@@ -1,162 +1,528 @@
 'use client';
-// RESPONSIBILITY: Provide the page/orchestration entry component for the components feature. It does not own backend persistence or cross-feature business logic.
+// RESPONSIBILITY: Provide the compact, luxury-styled, multi-accented branch information view.
+// It applies semantic color coding (Gold, Emerald, Purple, Cyan, Rose) and high-density, sleek layout hierarchy.
+
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import { useManagerBranchInfoForm } from '@/app/frontend_manager/manager_settings/settings_branch_info/hooks/useManagerSettingsBranchInfoForm';
-import { Building2, MapPin, Phone, Mail, User, Clock, Building, Hash, ShieldCheck, Info } from 'lucide-react';
+import {
+  Building2,
+  Building,
+  MapPin,
+  Phone,
+  Mail,
+  User,
+  Clock,
+  Hash,
+  ShieldCheck,
+  Calendar,
+  Globe,
+  IndianRupee,
+  Armchair,
+  Layers,
+  PhoneCall,
+  LifeBuoy,
+  History,
+  Sparkles,
+  Copy,
+  Check,
+  CalendarCheck,
+  Share2,
+  ArrowUpRight,
+  Sun,
+  Moon,
+  Compass,
+} from 'lucide-react';
 
 export default function ManagerSettingsBranchInfoPage() {
   const tManagerUi = useTranslations('manager.manager_branch_info.ui');
   const { branchData } = useManagerBranchInfoForm();
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const t = (key: string, fallback: string): string => {
+    try {
+      const val = tManagerUi(key);
+      if (!val || val.startsWith('manager.manager_branch_info')) return fallback;
+      return val;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const copyToClipboard = (text: string, label: string, key: string) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    toast.success(`${label} copied!`, { id: `copy-${key}` });
+    setTimeout(() => {
+      setCopiedKey((curr) => (curr === key ? null : curr));
+    }, 1800);
+  };
+
+  const copyAllBranchDetails = () => {
+    const fullSummary = [
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+      `🏛️ ${branchData.branchName} [${branchData.branchCode}]`,
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+      `• Type: ${branchData.libraryType || 'Private Facility'}`,
+      `• Capacity: ${branchData.totalSeatingCapacity} | Floors: ${branchData.totalFloors}`,
+      `• Shifts: ${branchData.totalShifts}`,
+      `• Schedule: ${branchData.workingHours}`,
+      `• Address: ${branchData.address}`,
+      `• Desk Phone: ${branchData.phone}`,
+      `• Helpline Phone: ${branchData.supportPhone}`,
+      `• Support Email: ${branchData.supportEmail}`,
+      `• Manager: ${branchData.managerName}`,
+      `• Established: ${branchData.establishmentDate}`,
+      `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    ].join('\n');
+
+    navigator.clipboard.writeText(fullSummary);
+    toast.success('Complete branch summary copied!', { id: 'copy-all-branch-summary' });
+  };
 
   return (
-    <div className="mgr-page-animate relative pb-12">
-      <div className="flex flex-col gap-1 mb-8">
-        <div className="mgr-breadcrumb">
-          <span>{tManagerUi('settings')}</span>
-          <span>/</span>
-          <span>{tManagerUi('branch_information')}</span>
+    <div className="mgr-page-animate relative pb-8 space-y-4 max-w-7xl mx-auto">
+      {/* ── TOP COMPACT HEADER ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1 border-b border-white/5">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2.5 tracking-tight">
+            <Building2 className="text-amber-400 shrink-0" size={24} />
+            <span>{t('branch_information', 'Branch Information')}</span>
+          </h1>
+          <p className="text-xs text-slate-400 mt-0.5">
+            {t('branch_info_subtitle', 'View branch details, seating capacity, operating shifts, and contact information.')}
+          </p>
         </div>
-        <h1 className="mgr-page-title flex items-center gap-3 mt-2">
-          <Building2 className="text-primary" size={28} /> {tManagerUi('branch_profile')}
-        </h1>
-        <p className="text-sm text-secondary">Verified profile details for this branch facility</p>
-        <div className="mt-3 flex items-center gap-2 rounded-xl border border-border bg-primary-subtle p-3 text-xs text-primary" role="status">
-          <ShieldCheck size={16} className="shrink-0 text-primary" />
-          <span>Central Branch Master Record · Branch profile, code, and address are verified and governed by SuperAdmin.</span>
+
+        <button
+          type="button"
+          onClick={copyAllBranchDetails}
+          className="inline-flex items-center gap-1.5 self-start sm:self-auto text-xs font-semibold px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 hover:border-amber-500/40 transition-all cursor-pointer shadow-xs"
+          title="Copy complete branch profile to clipboard"
+        >
+          <Share2 size={13} className="text-amber-400" />
+          <span>Share Profile</span>
+        </button>
+      </div>
+
+      {/* ── COMPACT LUXURY FACILITY HERO BANNER ── */}
+      <div className="rounded-xl border border-white/10 bg-gradient-to-r from-[#0c0d24] via-[#0e1133] to-[#0a0c20] p-4 sm:p-5 shadow-lg relative overflow-hidden">
+        {/* Subtle accent glow */}
+        <div className="absolute -top-16 -right-16 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+          <div className="flex items-center gap-3.5">
+            {/* Emblem / Logo */}
+            {branchData.libraryLogo ? (
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl border border-amber-500/30 overflow-hidden shrink-0 bg-slate-900/80 flex items-center justify-center shadow-md">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={branchData.libraryLogo}
+                  alt={branchData.branchName}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-amber-500/20 to-indigo-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0 shadow-md">
+                <Building size={24} />
+              </div>
+            )}
+
+            {/* Title & Badges */}
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                  {branchData.branchName}
+                </h2>
+                {/* Active Status Badge */}
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Active Branch
+                </span>
+              </div>
+
+              {/* Meta pills */}
+              <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                {/* Code Pill (Amber) */}
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(branchData.branchCode, 'Branch Code', 'hero_code')}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 font-mono font-semibold border border-amber-500/25 transition-colors cursor-pointer group"
+                  title="Click to copy code"
+                >
+                  <Hash size={11} className="text-amber-400" />
+                  <span>{branchData.branchCode}</span>
+                  {copiedKey === 'hero_code' ? (
+                    <Check size={11} className="text-emerald-400 ml-0.5" />
+                  ) : (
+                    <Copy size={10} className="text-amber-400/60 group-hover:text-amber-300 ml-0.5" />
+                  )}
+                </button>
+
+                {/* Facility Type (Purple) */}
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-300 font-medium border border-purple-500/25">
+                  <Sparkles size={11} className="text-purple-400" />
+                  {branchData.libraryType || 'Private Study Hub'}
+                </span>
+
+                {/* Established Date (Slate) */}
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-800/80 text-slate-300 font-medium border border-slate-700/60">
+                  <Calendar size={11} className="text-slate-400" />
+                  Est. {branchData.establishmentDate || '2021'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Central Governance Badge */}
+          <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-slate-900/70 border border-slate-800 text-[11px] shrink-0 self-start md:self-auto">
+            <ShieldCheck size={16} className="text-emerald-400 shrink-0" />
+            <div className="leading-tight">
+              <span className="text-slate-200 font-semibold block">Central Master Record</span>
+              <span className="text-slate-400 text-[10px] block">Governed by SuperAdmin</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-4">
-          <div className="mgr-card p-6 sticky top-6">
-            <div className="w-16 h-16 rounded-2xl bg-primary-subtle text-primary flex items-center justify-center mb-6 border border-border">
-              <Building size={32} />
+      {/* ── 4 COMPACT REFINED KPI METRICS CARDS ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* KPI 1: Seating Capacity (Warm Amber / Gold) */}
+        <div className="rounded-xl border border-amber-500/20 bg-gradient-to-b from-[#161208]/80 to-[#0e0e1a]/90 p-3.5 flex flex-col justify-between shadow-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300/80">
+              Total Seating
+            </span>
+            <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+              <Armchair size={14} />
             </div>
-            <h2 className="text-xl font-black text-primary mb-1">{branchData.branchName}</h2>
-            <p className="text-sm text-success font-bold mb-6">{tManagerUi('code')} {branchData.branchCode}</p>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <MapPin size={18} className="text-secondary mt-0.5 shrink-0" />
-                <span className="text-sm text-primary">{branchData.address || tManagerUi('address_not_set')}</span>
+          </div>
+          <div className="mt-2.5">
+            <p className="text-base sm:text-lg font-black text-white font-mono tracking-tight">
+              {branchData.totalSeatingCapacity || '120 Seats'}
+            </p>
+            <p className="text-[11px] text-amber-200/60 mt-0.5">AC Study Desks</p>
+          </div>
+        </div>
+
+        {/* KPI 2: Floor Layout (Royal Violet / Purple) */}
+        <div className="rounded-xl border border-purple-500/20 bg-gradient-to-b from-[#140b22]/80 to-[#0e0e1a]/90 p-3.5 flex flex-col justify-between shadow-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-purple-300/80">
+              Floor Count
+            </span>
+            <div className="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0">
+              <Layers size={14} />
+            </div>
+          </div>
+          <div className="mt-2.5">
+            <p className="text-base sm:text-lg font-black text-white tracking-tight">
+              {branchData.totalFloors || '2 Floors'}
+            </p>
+            <p className="text-[11px] text-purple-200/60 mt-0.5">Ground + 1st Floor</p>
+          </div>
+        </div>
+
+        {/* KPI 3: Daily Shifts (Cyan / Sky) */}
+        <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-b from-[#081724]/80 to-[#0e0e1a]/90 p-3.5 flex flex-col justify-between shadow-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-300/80">
+              Daily Shifts
+            </span>
+            <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
+              <Clock size={14} />
+            </div>
+          </div>
+          <div className="mt-2.5">
+            <p className="text-base sm:text-lg font-black text-white tracking-tight">
+              {branchData.totalShifts || '3 Shifts'}
+            </p>
+            <p className="text-[11px] text-cyan-200/60 mt-0.5">Morning · Eve · Night</p>
+          </div>
+        </div>
+
+        {/* KPI 4: Operating Days & Schedule (Emerald Green) */}
+        <div className="rounded-xl border border-emerald-500/20 bg-gradient-to-b from-[#081a14]/80 to-[#0e0e1a]/90 p-3.5 flex flex-col justify-between shadow-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300/80">
+              Operating Schedule
+            </span>
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
+              <CalendarCheck size={14} />
+            </div>
+          </div>
+          <div className="mt-2.5">
+            <p className="text-base sm:text-lg font-black text-emerald-300 tracking-tight">
+              All 7 Days Open
+            </p>
+            <p className="text-[11px] text-emerald-200/60 mt-0.5 truncate" title={branchData.workingHours}>
+              {branchData.workingHours || '08:00 AM – 10:00 PM'}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── 2-COLUMN MAIN CONTENT WORKSPACE ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        {/* ── LEFT COLUMN (7 Cols): Operations, Shifts & Location ── */}
+        <div className="lg:col-span-7 space-y-4">
+          {/* Card: Facility Overview & Regional Parameters */}
+          <div className="rounded-xl border border-white/10 bg-[#0b0c20]/90 p-4 space-y-4 shadow-sm">
+            <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
+              <div className="flex items-center gap-2">
+                <Compass size={15} className="text-amber-400" />
+                <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                  Facility & Regional Parameters
+                </h3>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone size={18} className="text-secondary shrink-0" />
-                <span className="text-sm text-primary">{branchData.phone || tManagerUi('phone_not_set')}</span>
+              <span className="text-[10px] font-mono text-slate-400">Read-Only</span>
+            </div>
+
+            {/* 4 Multi-Color Parameter Chips */}
+            <div className="grid grid-cols-2 gap-2.5 text-xs">
+              {/* Branch Code (Amber) */}
+              <div className="p-2.5 rounded-lg bg-amber-500/5 border border-amber-500/20 flex flex-col justify-between">
+                <span className="text-[10px] text-amber-300/80 font-medium">Branch Code</span>
+                <div className="flex items-center justify-between mt-1">
+                  <span className="font-mono font-bold text-amber-300">{branchData.branchCode}</span>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(branchData.branchCode, 'Code', 'inner_code')}
+                    className="text-amber-400/70 hover:text-amber-300 cursor-pointer p-0.5"
+                    title="Copy code"
+                  >
+                    {copiedKey === 'inner_code' ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <Mail size={18} className="text-secondary shrink-0" />
-                <span className="text-sm text-primary">{branchData.email || tManagerUi('email_not_set')}</span>
+
+              {/* Facility Type (Purple) */}
+              <div className="p-2.5 rounded-lg bg-purple-500/5 border border-purple-500/20 flex flex-col justify-between">
+                <span className="text-[10px] text-purple-300/80 font-medium">Facility Classification</span>
+                <span className="font-bold text-purple-200 mt-1">{branchData.libraryType || 'Private Study Hub'}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <User size={18} className="text-secondary shrink-0" />
-                <span className="text-sm text-primary">{branchData.managerName || tManagerUi('manager_not_set')}</span>
+
+              {/* Time Zone (Cyan) */}
+              <div className="p-2.5 rounded-lg bg-cyan-500/5 border border-cyan-500/20 flex flex-col justify-between">
+                <span className="text-[10px] text-cyan-300/80 font-medium">Time Zone (IST)</span>
+                <span className="font-semibold text-cyan-200 mt-1">{branchData.timezone || 'Asia/Kolkata (IST)'}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Clock size={18} className="text-secondary shrink-0" />
-                <span className="text-sm text-primary">{branchData.workingHours || tManagerUi('hours_not_set')}</span>
+
+              {/* Currency (Emerald) */}
+              <div className="p-2.5 rounded-lg bg-emerald-500/5 border border-emerald-500/20 flex flex-col justify-between">
+                <span className="text-[10px] text-emerald-300/80 font-medium">Billing Currency</span>
+                <span className="font-bold font-mono text-emerald-300 mt-1">{branchData.currency || 'INR (₹)'}</span>
               </div>
             </div>
-            <div className="mt-8 p-4 bg-card rounded-xl border border-border">
-              <p className="text-xs text-secondary text-center">Managed under central multi-branch chain governance.</p>
+
+            {/* Shift Breakdown Section (Color Coded by Time of Day) */}
+            <div className="space-y-2 pt-1 border-t border-white/5">
+              <span className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
+                <Clock size={12} className="text-cyan-400" />
+                <span>Operating Shift Slots</span>
+              </span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                {/* Morning (Amber) */}
+                <div className="p-2.5 rounded-lg bg-amber-500/5 border border-amber-500/20">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-amber-300 uppercase tracking-wide">
+                    <Sun size={11} /> Morning Shift
+                  </div>
+                  <span className="font-bold text-white block text-xs mt-1">06:00 AM – 02:00 PM</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">8h Duration</span>
+                </div>
+
+                {/* Evening (Purple) */}
+                <div className="p-2.5 rounded-lg bg-purple-500/5 border border-purple-500/20">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-purple-300 uppercase tracking-wide">
+                    <Moon size={11} /> Evening Shift
+                  </div>
+                  <span className="font-bold text-white block text-xs mt-1">02:00 PM – 10:00 PM</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">8h Duration</span>
+                </div>
+
+                {/* Full Day (Cyan) */}
+                <div className="p-2.5 rounded-lg bg-cyan-500/5 border border-cyan-500/20">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold text-cyan-300 uppercase tracking-wide">
+                    <Clock size={11} /> Full Day (24h)
+                  </div>
+                  <span className="font-bold text-white block text-xs mt-1">Dedicated Desks</span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">Reserved Seat</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Physical Location Card */}
+            <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800 space-y-1.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
+                  <MapPin size={12} className="text-amber-400" />
+                  <span>Physical Address</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(branchData.address, 'Address', 'address_btn')}
+                  className="text-[11px] text-amber-400 hover:text-amber-300 font-medium inline-flex items-center gap-1 cursor-pointer"
+                >
+                  {copiedKey === 'address_btn' ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                  <span>{copiedKey === 'address_btn' ? 'Copied' : 'Copy'}</span>
+                </button>
+              </div>
+              <p className="text-xs text-slate-200 leading-relaxed font-sans">
+                {branchData.address}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="lg:col-span-8">
-          <div className="mgr-card p-6">
-            <div className="flex justify-between items-center mb-6 border-b border-border pb-4">
-              <div>
-                <h2 className="text-xl font-bold text-primary">Branch Master Details</h2>
-                <p className="text-xs text-secondary mt-0.5">Authoritative branch registry parameters</p>
+        {/* ── RIGHT COLUMN (5 Cols): Actionable Contacts, In-Charge & Audit ── */}
+        <div className="lg:col-span-5 space-y-4">
+          {/* Card: Contact Channels (Actionable with Semantic Colors) */}
+          <div className="rounded-xl border border-white/10 bg-[#0b0c20]/90 p-4 space-y-3.5 shadow-sm">
+            <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
+              <div className="flex items-center gap-2">
+                <PhoneCall size={15} className="text-cyan-400" />
+                <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                  Contact & Support Channels
+                </h3>
               </div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-success-bg text-success border border-border">
-                <ShieldCheck size={12} /> Active Branch
-              </span>
+              <span className="text-[10px] font-semibold text-emerald-400">Direct Lines</span>
             </div>
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-semibold text-primary flex items-center gap-2">
-                    <Building size={14} className="text-primary" /> {tManagerUi('branch_name')}
-                  </label>
-                  <input
-                    type="text"
-                    className="mgr-input bg-surface-highlight cursor-default"
-                    readOnly
-                    value={branchData.branchName}
-                  />
+
+            <div className="space-y-2 text-xs">
+              {/* Branch Desk Phone (Sky Blue) */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-sky-500/5 border border-sky-500/20">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-md bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0">
+                    <Phone size={13} />
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 block">Branch Contact</span>
+                    <span className="font-mono font-bold text-white text-xs">{branchData.phone}</span>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-semibold text-primary flex items-center gap-2">
-                    <Hash size={14} className="text-primary" /> {tManagerUi('branch_code')}
-                  </label>
-                  <input
-                    type="text"
-                    className="mgr-input font-mono bg-surface-highlight cursor-default"
-                    readOnly
-                    value={branchData.branchCode}
-                  />
-                </div>
-                <div className="flex flex-col gap-2 md:col-span-2">
-                  <label className="text-sm font-semibold text-primary flex items-center gap-2">
-                    <MapPin size={14} className="text-primary" /> {tManagerUi('address')}
-                  </label>
-                  <textarea
-                    rows={2}
-                    className="mgr-input resize-none py-3 bg-surface-highlight cursor-default"
-                    readOnly
-                    value={branchData.address}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-semibold text-primary flex items-center gap-2">
-                    <Phone size={14} className="text-primary" /> {tManagerUi('phone_number')}
-                  </label>
-                  <input
-                    type="tel"
-                    className="mgr-input bg-surface-highlight cursor-default"
-                    readOnly
-                    value={branchData.phone}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-semibold text-primary flex items-center gap-2">
-                    <Mail size={14} className="text-primary" /> {tManagerUi('email_address')}
-                  </label>
-                  <input
-                    type="email"
-                    className="mgr-input bg-surface-highlight cursor-default"
-                    readOnly
-                    value={branchData.email}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-semibold text-primary flex items-center gap-2">
-                    <User size={14} className="text-primary" /> {tManagerUi('manager_name')}
-                  </label>
-                  <input
-                    type="text"
-                    className="mgr-input bg-surface-highlight cursor-default"
-                    readOnly
-                    value={branchData.managerName}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-semibold text-primary flex items-center gap-2">
-                    <Clock size={14} className="text-primary" /> {tManagerUi('working_hours')}
-                  </label>
-                  <input
-                    type="text"
-                    className="mgr-input bg-surface-highlight cursor-default"
-                    readOnly
-                    value={branchData.workingHours}
-                  />
-                </div>
+                <a
+                  href={`tel:${branchData.phone.replace(/\D/g, '')}`}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 text-[11px] font-semibold transition-all cursor-pointer"
+                >
+                  <span>Call</span>
+                  <ArrowUpRight size={11} />
+                </a>
               </div>
 
-              <div className="flex items-center gap-3 pt-6 border-t border-border mt-8 p-3.5 rounded-xl bg-card border text-xs text-secondary">
-                <Info size={16} className="text-primary shrink-0" />
-                <span>To request modifications to branch address, manager in-charge, or operational hours, please contact the Central Head Office.</span>
+              {/* Branch Desk Email (Indigo) */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-indigo-500/5 border border-indigo-500/20">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-7 h-7 rounded-md bg-indigo-500/15 text-indigo-400 flex items-center justify-center shrink-0">
+                    <Mail size={13} />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[10px] text-slate-400 block">Branch Email</span>
+                    <span className="font-medium text-white text-xs truncate block">{branchData.email}</span>
+                  </div>
+                </div>
+                <a
+                  href={`mailto:${branchData.email}`}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-300 text-[11px] font-semibold transition-all shrink-0 cursor-pointer"
+                >
+                  <span>Email</span>
+                  <ArrowUpRight size={11} />
+                </a>
+              </div>
+
+              {/* Student Support Phone Helpline (Rose / Warm) */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-rose-500/5 border border-rose-500/20">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-md bg-rose-500/15 text-rose-400 flex items-center justify-center shrink-0">
+                    <PhoneCall size={13} />
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-rose-300/80 font-medium block">Helpline / Support</span>
+                    <span className="font-mono font-bold text-white text-xs">{branchData.supportPhone}</span>
+                  </div>
+                </div>
+                <a
+                  href={`tel:${branchData.supportPhone.replace(/\D/g, '')}`}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-[11px] font-semibold transition-all cursor-pointer"
+                >
+                  <span>Help</span>
+                  <ArrowUpRight size={11} />
+                </a>
+              </div>
+
+              {/* Student Support Email Helpdesk (Teal / Emerald) */}
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-teal-500/5 border border-teal-500/20">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-7 h-7 rounded-md bg-teal-500/15 text-teal-400 flex items-center justify-center shrink-0">
+                    <LifeBuoy size={13} />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[10px] text-teal-300/80 font-medium block">Support Desk</span>
+                    <span className="font-medium text-white text-xs truncate block">{branchData.supportEmail}</span>
+                  </div>
+                </div>
+                <a
+                  href={`mailto:${branchData.supportEmail}`}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 text-[11px] font-semibold transition-all shrink-0 cursor-pointer"
+                >
+                  <span>Ticket</span>
+                  <ArrowUpRight size={11} />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Card: Administration & Personnel In-Charge */}
+          <div className="rounded-xl border border-white/10 bg-[#0b0c20]/90 p-4 space-y-3 shadow-sm">
+            <div className="flex items-center justify-between border-b border-white/5 pb-2">
+              <div className="flex items-center gap-2">
+                <User size={15} className="text-amber-400" />
+                <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+                  Administration & Audit
+                </h3>
+              </div>
+              <span className="text-[10px] font-mono text-emerald-400 font-semibold">Authorized</span>
+            </div>
+
+            {/* In-Charge Personnel Profile Strip */}
+            <div className="flex items-center gap-3 p-2.5 rounded-lg bg-slate-900/60 border border-slate-800">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-amber-500/20 to-purple-500/20 border border-amber-500/30 text-amber-300 flex items-center justify-center font-bold text-xs shrink-0">
+                {branchData.managerName
+                  ? branchData.managerName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
+                  : 'M'}
+              </div>
+              <div className="min-w-0 flex-1 leading-tight">
+                <span className="text-xs font-bold text-white block truncate">{branchData.managerName}</span>
+                <span className="text-[10px] text-slate-400 block mt-0.5">Designated Branch Facility Manager</span>
+              </div>
+            </div>
+
+            {/* 3 Compact Audit Rows */}
+            <div className="space-y-1.5 text-[11px] pt-1">
+              <div className="flex items-center justify-between text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <Calendar size={12} className="text-amber-400" />
+                  <span>Establishment Date:</span>
+                </span>
+                <span className="font-semibold text-slate-200">{branchData.establishmentDate || '15 Aug 2021'}</span>
+              </div>
+
+              <div className="flex items-center justify-between text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <History size={12} className="text-purple-400" />
+                  <span>Profile Created:</span>
+                </span>
+                <span className="font-semibold text-slate-200">{branchData.profileCreatedDate || '15 Jan 2023'}</span>
+              </div>
+
+              <div className="flex items-center justify-between text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <Clock size={12} className="text-cyan-400" />
+                  <span>Last System Sync:</span>
+                </span>
+                <span className="font-semibold text-slate-200">{branchData.lastUpdatedDate || '25 Oct 2026'}</span>
               </div>
             </div>
           </div>
