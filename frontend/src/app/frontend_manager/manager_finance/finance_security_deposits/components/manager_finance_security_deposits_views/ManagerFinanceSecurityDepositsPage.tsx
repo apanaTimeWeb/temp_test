@@ -4,9 +4,10 @@ import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
 import { useManagerSecurityDepositsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/useManagerFinanceSecurityDepositsUrlFilters';
 import { useManagerSecurityDepositsFormatting } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsFormattingHook';
-import { Search, ArrowUpDown, ArrowUp, ArrowDown, X } from 'lucide-react';
+import { Search, ArrowUpDown, ArrowUp, ArrowDown, X, Download, Printer } from 'lucide-react';
 import { MANAGER_FINANCE_SAMPLE_DEPOSITS } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
+import { sanitizeManagerSecurityDepositsCsvCell } from '@/app/frontend_manager/manager_finance/finance_security_deposits/utils/ManagerFinanceSecurityDepositsCsv';
 import type { ManagerFinanceSecurityDepositsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_security_deposits/types/ManagerFinanceSecurityDepositsComponentTypes';
 import ManagerFinanceSecurityDepositsRefundModal from './ManagerFinanceSecurityDepositsRefundModal';
 import ManagerFinanceSecurityDepositsDeductionModal from './ManagerFinanceSecurityDepositsDeductionModal';
@@ -152,11 +153,74 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
     setTimeout(() => setToastMessage(null), 4000);
   };
 
+  const handleExportCsv = () => {
+    const headers = ['Student Name', 'Smart ID', 'Deposit Amount (INR)', 'Status', 'Collected By', 'Collected Date', 'Deduction Amount (INR)', 'Deduction Reason', 'Refunded Date'];
+    const csvLines = [headers.join(',')];
+    for (const d of filtered) {
+      csvLines.push([
+        sanitizeManagerSecurityDepositsCsvCell(d.studentName),
+        sanitizeManagerSecurityDepositsCsvCell(d.smartId),
+        sanitizeManagerSecurityDepositsCsvCell(String(d.depositAmount)),
+        sanitizeManagerSecurityDepositsCsvCell(d.status),
+        sanitizeManagerSecurityDepositsCsvCell(d.collectedBy),
+        sanitizeManagerSecurityDepositsCsvCell(d.collectedDate),
+        sanitizeManagerSecurityDepositsCsvCell(String(d.deductionAmount || 0)),
+        sanitizeManagerSecurityDepositsCsvCell(d.deductionReason || '—'),
+        sanitizeManagerSecurityDepositsCsvCell(d.refundedDate || '—'),
+      ].join(','));
+    }
+    const blob = new Blob([csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `security_deposits_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setToastMessage(`Exported ${filtered.length} deposit records to CSV.`);
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  const handlePrint = () => {
+    if (typeof window !== 'undefined') window.print();
+    setToastMessage('Security deposits summary report sent to printer / PDF.');
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
   return (
     <div className="space-y-6" data-route-view={_routeQuery.view} data-route-id={_routeQuery.id}>
-      <div>
-        <h1 className="fin-page-title">{tManagerUi('security_deposits')}</h1>
-        <p className="fin-page-subtitle">{tManagerUi('review_student_security_deposit_records')}</p>
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+            <h1 className="fin-page-title">{tManagerUi('security_deposits')}</h1>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Active Deposits Desk
+            </span>
+          </div>
+          <p className="fin-page-subtitle">{tManagerUi('review_student_security_deposit_records')}</p>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            title="Export filtered security deposits to CSV spreadsheet"
+          >
+            <Download size={13} className="text-secondary" />
+            <span>Export CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-card hover:bg-surface-hover text-primary border border-border shadow-xs cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none"
+            title="Print or Save as PDF"
+          >
+            <Printer size={13} className="text-secondary" />
+            <span>Print / PDF</span>
+          </button>
+        </div>
       </div>
 
       <ManagerFinanceSecurityDepositsTimeHorizonBar
@@ -171,7 +235,7 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
 
       <ManagerFinanceSecurityDepositsKpis deposits={timeFilteredDeposits} timeHorizonLabel={timeHorizonLabel} />
 
-      <div className="p-3 rounded-xl bg-muted border border-border text-xs text-secondary flex items-center justify-between" role="status">
+      <div style={{ display: 'none' }} role="status">
         <span>Sample security deposit records loaded for preview under active contract.</span>
         <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">Export Unavailable</button>
       </div>
@@ -185,17 +249,36 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
 
       <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
         <div className="relative w-full sm:w-72">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
           <input
+            id="security-deposits-search-input"
+            name="searchQuery"
             type="search"
             placeholder="Search student or Smart ID..."
-            className="mgr-input pl-8 text-xs w-full"
+            aria-label="Search student or Smart ID"
+            className="mgr-input !pl-10 !pr-9 text-xs w-full focus-visible:ring-2 focus-visible:ring-primary outline-none"
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
           />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setPage(0);
+              }}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded-full hover:bg-surface-hover transition-colors"
+              title="Clear search"
+              aria-label="Clear search"
+            >
+              <X size={13} />
+            </button>
+          )}
         </div>
         <select
-          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[130px]"
+          id="security-deposits-status-filter"
+          name="statusFilter"
+          className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-primary hover:border-primary focus-visible:ring-2 focus-visible:ring-primary shadow-xs cursor-pointer w-full sm:w-auto min-w-[130px] outline-none"
           value={statusFilter}
           onChange={(e) => { setUrlFilter('status', e.target.value); setPage(0); }}
           aria-label={tManagerUi('all_status')}
@@ -213,9 +296,9 @@ export default function ManagerFinanceSecurityDepositsPage(_routeQuery: ManagerF
               setUrlFilter('status', 'all');
               setPage(0);
             }}
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer"
+            className="w-full sm:w-auto justify-center inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer focus-visible:ring-2 focus-visible:ring-primary shadow-xs outline-none transition-colors"
           >
-            <X size={12} /> Reset
+            <X size={13} /> Reset Filters
           </button>
         )}
       </div>

@@ -59,7 +59,7 @@ export default function ManagerFinanceSecurityDepositsTable({
 }: ManagerFinanceSecurityDepositsTableProps) {
   return (
     <div className="fin-card overflow-x-auto">
-      <table className="w-full">
+      <table className="w-full min-w-[950px]">
         <thead>
           <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
             {renderSortableHeader('studentName', labels.student, 'left')}
@@ -136,27 +136,27 @@ export default function ManagerFinanceSecurityDepositsTable({
       </table>
 
       {filtered.length > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
-          <span>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-xs sm:text-sm text-secondary">
+          <span className="text-xs text-center sm:text-left">
             Showing {startItem}–{endItem} of {totalRows} deposit records
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center sm:justify-end gap-2 flex-wrap">
             <button
               type="button"
               disabled={effectivePage === 0}
               onClick={onPrevPage}
-              className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+              className="px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
             >
               Previous
             </button>
-            <span className="text-xs">
+            <span className="text-xs px-1">
               Page {effectivePage + 1} of {pageCount}
             </span>
             <button
               type="button"
               disabled={effectivePage >= pageCount - 1}
               onClick={onNextPage}
-              className="fin-btn fin-btn-secondary py-1 px-3 text-xs disabled:opacity-40"
+              className="px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-medium text-secondary hover:text-primary hover:bg-surface-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
             >
               Next
             </button>

@@ -37,22 +37,23 @@ export default function ManagerFinanceSecurityDepositsTimeHorizonBar({
       <div className="flex items-center gap-2">
         <Clock size={16} className="text-primary shrink-0" />
         <span className="text-xs font-bold uppercase tracking-wider text-secondary">
-          Deposits Time Horizon:
+          Collection Date:
         </span>
-        <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary-subtle text-primary border border-border">
-          {activeCount} Records
+        <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+          {activeCount} {activeCount === 1 ? 'Student Deposit' : 'Student Deposits'}
         </span>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
         {/* Segmented Time Horizon Pills */}
-        <div className="inline-flex bg-muted p-1 rounded-xl border border-border flex-wrap">
+        <div className="inline-flex bg-muted p-1 rounded-xl border border-border flex-wrap gap-1">
           {timeHorizonOptions.map((opt) => (
             <button
               key={opt.id}
               type="button"
               onClick={() => onChangeTimeHorizon(opt.id)}
-              className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
+              className={`min-h-8 px-2.5 sm:px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none ${
                 timeHorizon === opt.id
                   ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
                   : 'text-secondary hover:text-primary'
