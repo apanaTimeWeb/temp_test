@@ -165,11 +165,11 @@ export function ManagerLockersManagementAssignModal({
               <div className="space-y-2.5">
                 {/* Search in Directory */}
                 <div className="relative">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+                  <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
                   <input
                     type="search"
                     placeholder="Search by student name, smart ID, or exam..."
-                    className="mgr-input pl-8 pr-7 text-xs w-full h-9 rounded-xl"
+                    className="mgr-input !pl-10 !pr-8 text-xs w-full h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />

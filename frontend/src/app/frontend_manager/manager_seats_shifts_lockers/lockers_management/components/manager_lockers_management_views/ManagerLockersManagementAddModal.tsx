@@ -78,12 +78,12 @@ export function ManagerLockersManagementAddModal({
             </label>
             <div className="relative">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none">
-                <Key size={14} />
+                <Key size={15} />
               </div>
               <input
                 id="rbg4-managerseatsshiftslockerslockersclient-153"
                 autoFocus
-                className={`mgr-input pl-9 pr-3 text-xs w-full uppercase font-mono tracking-wider h-9 rounded-xl ${
+                className={`mgr-input !pl-10 pr-3 text-xs w-full uppercase font-mono tracking-wider h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary ${
                   addError ? 'border-danger focus:ring-danger' : ''
                 }`}
                 placeholder="e.g. L-105, D-01"

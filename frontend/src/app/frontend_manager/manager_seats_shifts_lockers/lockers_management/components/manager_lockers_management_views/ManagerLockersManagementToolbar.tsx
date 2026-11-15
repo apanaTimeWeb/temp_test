@@ -74,18 +74,16 @@ export function ManagerLockersManagementToolbar({
               type="button"
               onClick={() => setStatusFilter(tab.id)}
               aria-pressed={isActive}
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${
-                isActive ? tab.activeClass : tab.inactiveClass
-              }`}
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap motion-safe:transition-all cursor-pointer ${isActive ? tab.activeClass : tab.inactiveClass
+                }`}
             >
               {tab.dotColor && !isActive && (
                 <span className={`w-2 h-2 rounded-full ${tab.dotColor} shrink-0`} />
               )}
               <span>{tab.label}</span>
               <span
-                className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
-                  isActive ? tab.activeBadge : tab.inactiveBadge
-                }`}
+                className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${isActive ? tab.activeBadge : tab.inactiveBadge
+                  }`}
               >
                 {tab.count}
               </span>
@@ -96,11 +94,11 @@ export function ManagerLockersManagementToolbar({
 
       <div className="flex flex-wrap items-center gap-2.5">
         <div className="relative flex-1 sm:w-72 min-w-[220px]">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
           <input
             type="search"
             placeholder="Search locker ID, student name, or Smart ID..."
-            className="mgr-input pl-9 pr-8 text-xs w-full h-9 rounded-xl"
+            className="mgr-input !pl-10 !pr-9 text-xs w-full h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
             value={mainTableSearch}
             onChange={(e) => setMainTableSearch(e.target.value)}
           />
