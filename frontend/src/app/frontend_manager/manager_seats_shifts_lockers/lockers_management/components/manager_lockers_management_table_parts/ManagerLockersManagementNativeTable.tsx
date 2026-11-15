@@ -41,7 +41,7 @@ export function ManagerLockersManagementNativeTable<T extends object>({ rows, co
 
   return (
     <div className="ss-table-wrapper overflow-x-auto">
-      <table className="ss-table w-full" aria-label={label}>
+      <table className="ss-table w-full min-w-[640px]" aria-label={label}>
         <thead>
           <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
             {columns.map((column, index) => {

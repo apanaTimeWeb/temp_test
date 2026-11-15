@@ -33,7 +33,7 @@ export function ManagerLockersManagementVacateModal({
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className="ss-modal max-w-lg"
+        className="ss-modal max-w-lg max-h-[92vh] overflow-y-auto"
         role="dialog"
         aria-modal="true"
         aria-labelledby="ss-locker-free-title"
