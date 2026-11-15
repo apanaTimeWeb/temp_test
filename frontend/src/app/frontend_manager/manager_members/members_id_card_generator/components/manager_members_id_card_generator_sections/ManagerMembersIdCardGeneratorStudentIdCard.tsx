@@ -26,31 +26,73 @@ function ManagerMembersIdCardGeneratorBarcodeStripes({ id }: { id: string }) {
 
 function ManagerMembersIdCardGeneratorQrSvg({ code }: { code: string }) {
   return (
-    <svg width="46" height="46" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="rounded-md" aria-label={`QR access token for ${code}`}>
+    <svg width="100%" height="100%" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" className="block" aria-label={`QR access token for ${code}`}>
       {/* Background card */}
-      <rect width="44" height="44" rx="4" fill="#FFFFFF" />
-      {/* Top Left Finder */}
-      <rect x="4" y="4" width="12" height="12" rx="2" fill="none" stroke="#0F172A" strokeWidth="2.5" />
-      <rect x="7.5" y="7.5" width="5" height="5" rx="1" fill="#0F172A" />
-      {/* Top Right Finder */}
-      <rect x="28" y="4" width="12" height="12" rx="2" fill="none" stroke="#0F172A" strokeWidth="2.5" />
-      <rect x="31.5" y="7.5" width="5" height="5" rx="1" fill="#0F172A" />
-      {/* Bottom Left Finder */}
-      <rect x="4" y="28" width="12" height="12" rx="2" fill="none" stroke="#0F172A" strokeWidth="2.5" />
-      <rect x="7.5" y="31.5" width="5" height="5" rx="1" fill="#0F172A" />
-      {/* Data Pixels */}
-      <rect x="20" y="6" width="3" height="3" rx="0.5" fill="#0F172A" />
-      <rect x="20" y="12" width="3" height="3" rx="0.5" fill="#0F172A" />
-      <rect x="6" y="20" width="3" height="3" rx="0.5" fill="#0F172A" />
-      <rect x="12" y="20" width="3" height="3" rx="0.5" fill="#0F172A" />
-      <rect x="18" y="18" width="8" height="8" rx="1.5" fill="#0F172A" />
-      <rect x="28" y="20" width="4" height="4" rx="0.5" fill="#0F172A" />
-      <rect x="34" y="24" width="4" height="4" rx="0.5" fill="#0F172A" />
-      <rect x="20" y="28" width="3" height="3" rx="0.5" fill="#0F172A" />
-      <rect x="28" y="30" width="4" height="4" rx="0.5" fill="#0F172A" />
-      <rect x="36" y="32" width="4" height="4" rx="0.5" fill="#0F172A" />
-      <rect x="22" y="36" width="4" height="4" rx="0.5" fill="#0F172A" />
-      <rect x="30" y="36" width="4" height="4" rx="0.5" fill="#0F172A" />
+      <rect width="25" height="25" rx="2" fill="#FFFFFF" />
+
+      {/* Top Left Finder Pattern (7x7 at x:2..9, y:2..9) */}
+      <rect x="2" y="2" width="7" height="7" fill="#0F172A" rx="1.2" />
+      <rect x="3" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
+      <rect x="4" y="4" width="3" height="3" fill="#0F172A" rx="0.6" />
+
+      {/* Top Right Finder Pattern (7x7 at x:16..23, y:2..9) */}
+      <rect x="16" y="2" width="7" height="7" fill="#0F172A" rx="1.2" />
+      <rect x="17" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
+      <rect x="18" y="4" width="3" height="3" fill="#0F172A" rx="0.6" />
+
+      {/* Bottom Left Finder Pattern (7x7 at x:2..9, y:16..23) */}
+      <rect x="2" y="16" width="7" height="7" fill="#0F172A" rx="1.2" />
+      <rect x="3" y="17" width="5" height="5" fill="#FFFFFF" rx="0.5" />
+      <rect x="4" y="18" width="3" height="3" fill="#0F172A" rx="0.6" />
+
+      {/* Timing Patterns */}
+      <rect x="10" y="4" width="1" height="1" fill="#0F172A" />
+      <rect x="12" y="4" width="1" height="1" fill="#0F172A" />
+      <rect x="14" y="4" width="1" height="1" fill="#0F172A" />
+      <rect x="4" y="10" width="1" height="1" fill="#0F172A" />
+      <rect x="4" y="12" width="1" height="1" fill="#0F172A" />
+      <rect x="4" y="14" width="1" height="1" fill="#0F172A" />
+
+      {/* Format & Data Modules */}
+      <rect x="10" y="2" width="1" height="1" fill="#0F172A" />
+      <rect x="10" y="6" width="1" height="1" fill="#0F172A" />
+      <rect x="14" y="2" width="1" height="1" fill="#0F172A" />
+      <rect x="14" y="6" width="1" height="1" fill="#0F172A" />
+      <rect x="2" y="10" width="1" height="1" fill="#0F172A" />
+      <rect x="6" y="10" width="1" height="1" fill="#0F172A" />
+      <rect x="2" y="14" width="1" height="1" fill="#0F172A" />
+      <rect x="6" y="14" width="1" height="1" fill="#0F172A" />
+
+      {/* Center & Grid Content */}
+      <rect x="10" y="10" width="2" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="13" y="10" width="2" height="1" fill="#0F172A" rx="0.3" />
+      <rect x="16" y="10" width="1" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="18" y="10" width="2" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="21" y="10" width="2" height="1" fill="#0F172A" rx="0.3" />
+
+      <rect x="10" y="13" width="2" height="1" fill="#0F172A" rx="0.3" />
+      <rect x="13" y="12" width="2" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="16" y="13" width="2" height="1" fill="#0F172A" rx="0.3" />
+      <rect x="19" y="13" width="1" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="21" y="12" width="2" height="2" fill="#0F172A" rx="0.3" />
+
+      <rect x="10" y="15" width="1" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="12" y="15" width="2" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="15" y="15" width="2" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="18" y="16" width="2" height="1" fill="#0F172A" rx="0.3" />
+      <rect x="21" y="15" width="2" height="2" fill="#0F172A" rx="0.3" />
+
+      {/* Bottom Right Alignment Structure */}
+      <rect x="10" y="18" width="2" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="13" y="18" width="2" height="1" fill="#0F172A" rx="0.3" />
+      <rect x="16" y="17" width="2" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="19" y="18" width="4" height="4" fill="#0F172A" rx="0.8" />
+      <rect x="20" y="19" width="2" height="2" fill="#FFFFFF" rx="0.3" />
+
+      <rect x="10" y="21" width="1" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="12" y="21" width="2" height="1" fill="#0F172A" rx="0.3" />
+      <rect x="15" y="20" width="2" height="2" fill="#0F172A" rx="0.3" />
+      <rect x="18" y="21" width="1" height="2" fill="#0F172A" rx="0.3" />
     </svg>
   );
 }
@@ -151,15 +193,15 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({ data }: Man
           </div>
           <div className="mgr-idcard-bottom-row">
             <div className="mgr-idcard-qr-wrap">
-              <div className="mgr-idcard-qr flex items-center justify-center p-0.5" role="img" aria-label={`QR access verification for ${data.smartId}`}>
+              <div className="mgr-idcard-qr" role="img" aria-label={`QR access verification for ${data.smartId}`}>
                 <ManagerMembersIdCardGeneratorQrSvg code={data.smartId} />
               </div>
-              <span className="mgr-idcard-qr-label text-[10px] uppercase font-bold tracking-wider">Scan to Verify</span>
+              <span className="mgr-idcard-qr-label">Scan to Verify</span>
             </div>
             <div className="mgr-idcard-barcode-wrap">
               <ManagerMembersIdCardGeneratorBarcodeStripes id={data.smartId} />
               <span className="mgr-idcard-barcode-id">{data.smartId}</span>
-              <span className="mgr-idcard-barcode-sub font-mono text-[9px] text-secondary">Gate Turnstile Pass</span>
+              <span className="mgr-idcard-barcode-sub font-mono text-[9px]">Gate Turnstile Pass</span>
             </div>
             <div className="mgr-idcard-verification-note" role="status">
               {data.status === 'Suspended' ? (
@@ -167,21 +209,21 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({ data }: Man
                   <span className="mgr-idcard-verification-title text-warning flex items-center gap-1 font-bold">
                     <ShieldCheck size={13} className="text-warning inline" /> Suspended
                   </span>
-                  <span className="mgr-idcard-verification-sub text-[10px] text-secondary">Under Review</span>
+                  <span className="mgr-idcard-verification-sub text-[10px]">Under Review</span>
                 </>
               ) : data.status === 'Expired' ? (
                 <>
                   <span className="mgr-idcard-verification-title text-destructive flex items-center gap-1 font-bold">
                     <ShieldCheck size={13} className="text-destructive inline" /> Expired
                   </span>
-                  <span className="mgr-idcard-verification-sub text-[10px] text-secondary">Renewal Required</span>
+                  <span className="mgr-idcard-verification-sub text-[10px]">Renewal Required</span>
                 </>
               ) : (
                 <>
                   <span className="mgr-idcard-verification-title text-success flex items-center gap-1 font-bold">
                     <ShieldCheck size={13} className="text-success inline" /> Verified Active
                   </span>
-                  <span className="mgr-idcard-verification-sub text-[10px] text-secondary">Authorized Member</span>
+                  <span className="mgr-idcard-verification-sub text-[10px]">Authorized Member</span>
                 </>
               )}
             </div>
