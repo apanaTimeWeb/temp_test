@@ -92,9 +92,9 @@ export default function ManagerFinanceAutoSuspendTable({
 
   return (
     <>
-      <table className="w-full">
+      <table className="w-full min-w-[850px]">
         <thead>
-          <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
+          <tr className="border-b border-border bg-surface-highlight text-xs uppercase text-secondary font-semibold">
             {renderSortableHeader('studentName', labels.student)}
             {renderSortableHeader('seat', labels.seat)}
             {renderSortableHeader('shift', labels.shift)}
@@ -118,37 +118,43 @@ export default function ManagerFinanceAutoSuspendTable({
             </tr>
           ) : (
             paginated.map((s) => (
-              <tr key={s.id} className="fin-table-hover-row fin-table-row border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12">
+              <tr key={s.id} className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra/30 h-14 transition-colors">
                 <td className="py-3 px-4">
-                  <div className="fin-cell-name">{s.studentName}</div>
-                  <div className="fin-cell-subtext">{s.smartId}</div>
+                  <div className="font-semibold text-primary text-sm">{s.studentName}</div>
+                  <div className="text-xs text-secondary font-mono">{s.smartId}</div>
                 </td>
-                <td className="py-3 px-4 fin-text-body">{s.seat}</td>
+                <td className="py-3 px-4 font-medium text-primary text-sm">{s.seat}</td>
                 <td className="py-3 px-4">
-                  <span className="fin-badge fin-badge--neutral">{shiftLabels[s.shift] ?? s.shift}</span>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-surface border border-border text-secondary">
+                    {shiftLabels[s.shift] ?? s.shift}
+                  </span>
                 </td>
-                <td className="py-3 px-4 fin-cell-subtext">—</td>
+                <td className="py-3 px-4 text-xs text-secondary">—</td>
                 <td className="py-3 px-4">
-                  <span className="fin-text-danger font-semibold">{s.daysOverdue}{labels.daysSuffix}</span>
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                    {s.daysOverdue}{labels.daysSuffix}
+                  </span>
                 </td>
-                <td className="py-3 px-4 fin-cell-subtext">{s.suspendedSince}</td>
+                <td className="py-3 px-4 text-xs text-secondary">{s.suspendedSince}</td>
                 <td className="py-3 px-4">
                   <div className="flex items-center justify-end gap-2">
                     <button
                       type="button"
                       onClick={() => onSendReminder(s)}
-                      className="fin-badge fin-badge--neutral cursor-pointer hover:opacity-80 transition-opacity"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-surface-hover hover:border-primary text-secondary hover:text-primary text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
                       title={`Send reminder to ${s.studentName}`}
                     >
-                      <Bell size={11} /> {labels.sendReminder}
+                      <Bell size={13} className="text-amber-500" />
+                      <span>{labels.sendReminder}</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => onRestoreStudent(s)}
-                      className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 transition-opacity"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 hover:bg-emerald-600 hover:text-white text-emerald-600 dark:text-emerald-400 text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
                       title={`Manually restore ${s.studentName}`}
                     >
-                      <RotateCcw size={11} /> Restore
+                      <RotateCcw size={13} />
+                      <span>Restore</span>
                     </button>
                   </div>
                 </td>
@@ -160,10 +166,10 @@ export default function ManagerFinanceAutoSuspendTable({
 
       {totalRows > 0 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
-          <span>
+          <span className="text-xs sm:text-sm text-center sm:text-left">
             Showing {startItem}–{endItem} of {totalRows} results
           </span>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto">
             <div className="flex items-center gap-1.5">
               <label htmlFor="rows-per-page-finance-auto-suspend" className="text-xs text-secondary whitespace-nowrap">
                 Rows per page:
@@ -188,7 +194,7 @@ export default function ManagerFinanceAutoSuspendTable({
               >
                 Previous
               </button>
-              <span className="text-xs text-secondary px-1">
+              <span className="text-xs text-secondary px-1 whitespace-nowrap">
                 Page {effectivePage + 1} of {pageCount}
               </span>
               <button
