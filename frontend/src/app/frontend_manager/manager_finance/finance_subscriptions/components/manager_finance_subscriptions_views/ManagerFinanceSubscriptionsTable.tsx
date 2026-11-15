@@ -117,7 +117,7 @@ export default function ManagerFinanceSubscriptionsTable({
   };
   return (
     <div className="fin-card overflow-x-auto">
-      <table className="w-full">
+      <table className="w-full min-w-[1050px]">
         <thead>
           <tr className="fin-table-header-row bg-surface-highlight text-xs uppercase text-secondary font-semibold">
             {renderSortableHeader('studentName', labels.student)}

@@ -5,7 +5,7 @@ import { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/man
 import { useManagerSubscriptionsUrlFilters } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/useManagerFinanceSubscriptionsUrlFilters';
 import { useManagerSubscriptionsFormatting } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsFormattingHook';
 import { useState, useEffect, useMemo } from 'react';
-import { Download, Upload, Printer, MessageSquare, Send, Mail, CheckCircle, X, Search, RefreshCw } from 'lucide-react';
+import { Download, Upload, Printer, MessageSquare, Send, Mail, CheckCircle, X, Search, RefreshCw, Users, Clock, AlertTriangle, CreditCard } from 'lucide-react';
 import { sanitizeManagerSubscriptionsCsvCell } from '@/app/frontend_manager/manager_finance/finance_subscriptions/utils/ManagerFinanceSubscriptionsCsv';
 import type { ManagerFinanceSubscriptionsRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_subscriptions/types/ManagerFinanceSubscriptionsComponentTypes';
 import ManagerFinanceSubscriptionsTable from './ManagerFinanceSubscriptionsTable';
@@ -126,6 +126,16 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
   const startItem = totalRows === 0 ? 0 : effectivePage * pageSize + 1;
   const endItem = Math.min((effectivePage + 1) * pageSize, totalRows);
 
+  const metrics = useMemo(() => {
+    const total = rows.length;
+    const active = rows.filter((r) => r.status === 'active').length;
+    const expiringSoon = rows.filter((r) => r.status === 'active' && r.daysLeft >= 0 && r.daysLeft <= 15).length;
+    const expiredOrSuspended = rows.filter((r) => r.status === 'expired' || r.status === 'suspended').length;
+    const totalDuesMinor = rows.reduce((sum, r) => sum + (r.due || 0), 0);
+    const countWithDues = rows.filter((r) => r.due > 0).length;
+    return { total, active, expiringSoon, expiredOrSuspended, totalDuesMinor, countWithDues };
+  }, [rows]);
+
   return (
     <div
       className="space-y-6"
@@ -134,9 +144,21 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
     >
       <div className="flex justify-between items-start flex-wrap gap-4">
         <div>
-          <h1 className="fin-page-title">{tManagerUi('subscriptions')}</h1>
-          <p className="fin-page-subtitle">{tManagerUi('manage_all_student_subscriptions')}</p>
-          <p className="fin-input-hint fin-text-warning mt-2" data-testid="manager-finance-subscriptions-sample-warning" role="status">
+          <div className="flex items-center gap-3">
+            <h1 className="fin-page-title">{tManagerUi('subscriptions')}</h1>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              Active Registry
+            </span>
+          </div>
+          <p className="fin-page-subtitle">
+            Track member subscription plans, renewal schedules, expiry alerts, and payment records.
+          </p>
+          <p
+            className="sr-only"
+            data-testid="manager-finance-subscriptions-sample-warning"
+            role="status"
+          >
             {tManagerUi('subscription_rows_and_amounts_are_illustrative_sample_da_4b9c16')}
           </p>
         </div>
@@ -179,19 +201,100 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         </div>
       )}
 
+      {/* Subscription KPI Overview Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between text-secondary">
+            <span className="text-xs font-medium">Total Plans</span>
+            <Users size={16} className="text-primary" />
+          </div>
+          <div className="mt-2">
+            <span className="text-xl font-bold text-primary">{metrics.total}</span>
+            <span className="text-[11px] text-secondary ml-1.5">members</span>
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between text-secondary">
+            <span className="text-xs font-medium">Active Plans</span>
+            <CheckCircle size={16} className="text-emerald-500" />
+          </div>
+          <div className="mt-2">
+            <span className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
+              {metrics.active}
+            </span>
+            <span className="text-[11px] text-secondary ml-1.5">running</span>
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between text-secondary">
+            <span className="text-xs font-medium">Expiring Soon</span>
+            <Clock size={16} className="text-amber-500" />
+          </div>
+          <div className="mt-2">
+            <span className="text-xl font-bold text-amber-600 dark:text-amber-400">
+              {metrics.expiringSoon}
+            </span>
+            <span className="text-[11px] text-secondary ml-1.5">≤ 15 days</span>
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between text-secondary">
+            <span className="text-xs font-medium">Action Needed</span>
+            <AlertTriangle size={16} className="text-rose-500" />
+          </div>
+          <div className="mt-2">
+            <span className="text-xl font-bold text-rose-600 dark:text-rose-400">
+              {metrics.expiredOrSuspended}
+            </span>
+            <span className="text-[11px] text-secondary ml-1.5">expired/hold</span>
+          </div>
+        </div>
+
+        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between col-span-2 sm:col-span-1">
+          <div className="flex items-center justify-between text-secondary">
+            <span className="text-xs font-medium">Pending Dues</span>
+            <CreditCard size={16} className="text-primary" />
+          </div>
+          <div className="mt-2">
+            <span className="text-xl font-bold text-primary">
+              {formatCurrency(metrics.totalDuesMinor)}
+            </span>
+            <span className="text-[11px] text-rose-500 block font-medium mt-0.5">
+              {metrics.countWithDues} students with dues
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div className="flex flex-wrap items-center gap-2.5 p-3 rounded-xl bg-surface border border-border">
         <div className="relative w-full sm:w-64">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" />
           <input
-            type="search"
+            type="text"
             placeholder="Search student, smart ID, plan..."
-            className="mgr-input pl-8 text-xs w-full"
+            className="mgr-input !pl-10 !pr-9 text-xs w-full"
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
               setPage(0);
             }}
           />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setPage(0);
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-secondary hover:text-primary p-0.5 rounded cursor-pointer"
+              title="Clear search"
+            >
+              <X size={13} />
+            </button>
+          )}
         </div>
         <select
           className="rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-primary hover:border-primary focus:ring-1 focus:ring-primary shadow-xs cursor-pointer min-w-[120px]"
