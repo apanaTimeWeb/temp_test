@@ -45,7 +45,7 @@ export function ManagerMembersReferralBonusTimeHorizonBar({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <div className="inline-flex bg-muted p-1 rounded-xl border border-border flex-wrap">
+        <div className="inline-flex bg-muted p-1 rounded-xl border border-border flex-wrap gap-1">
           {timeHorizonOptions.map((opt) => (
             <button
               key={opt.id}
@@ -89,10 +89,10 @@ export function ManagerMembersReferralBonusTimeHorizonBar({
                   onCustomStartDateChange('');
                   onCustomEndDateChange('');
                 }}
-                className="p-1 text-secondary hover:text-danger"
+                className="p-1 text-danger hover:opacity-80 transition-opacity"
                 title="Clear custom dates"
               >
-                <X size={13} />
+                <X size={14} className="text-danger shrink-0" />
               </button>
             )}
           </div>
@@ -102,4 +102,3 @@ export function ManagerMembersReferralBonusTimeHorizonBar({
   );
 }
 export default ManagerMembersReferralBonusTimeHorizonBar;
-

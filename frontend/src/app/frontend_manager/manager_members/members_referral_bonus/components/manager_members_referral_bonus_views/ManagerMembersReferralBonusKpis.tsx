@@ -34,7 +34,7 @@ export function ManagerMembersReferralBonusKpis({
   const pendingCount = records.filter((r) => r.status === 'Pending').length;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
       <button
         type="button"
         onClick={() => onSelectStatusFilter('All')}
@@ -44,8 +44,8 @@ export function ManagerMembersReferralBonusKpis({
       >
         <div className="flex items-center justify-between">
           <span className="text-xs text-secondary font-medium">{tManagerUi('total_referrals')}</span>
-          <div className="w-8 h-8 rounded-lg bg-primary-subtle text-primary flex items-center justify-center">
-            <Users size={16} />
+          <div className="w-10 h-10 rounded-xl bg-primary-subtle text-primary flex items-center justify-center shrink-0">
+            <Users size={20} className="text-primary" />
           </div>
         </div>
         <div className="flex items-baseline justify-between mt-2">
@@ -65,8 +65,8 @@ export function ManagerMembersReferralBonusKpis({
       >
         <div className="flex items-center justify-between">
           <span className="text-xs text-secondary font-medium">{tManagerUi('pending_approvals')}</span>
-          <div className="w-8 h-8 rounded-lg bg-warning-bg text-warning border border-border flex items-center justify-center">
-            <Clock size={16} />
+          <div className="w-10 h-10 rounded-xl bg-warning-bg text-warning border border-border flex items-center justify-center shrink-0">
+            <Clock size={20} className="text-warning" />
           </div>
         </div>
         <div className="flex items-baseline justify-between mt-2">
@@ -86,8 +86,8 @@ export function ManagerMembersReferralBonusKpis({
       >
         <div className="flex items-center justify-between">
           <span className="text-xs text-secondary font-medium">{tManagerUi('total_bonus_distributed')}</span>
-          <div className="w-8 h-8 rounded-lg bg-success-bg text-success border border-border flex items-center justify-center">
-            <DollarSign size={16} />
+          <div className="w-10 h-10 rounded-xl bg-success-bg text-success border border-border flex items-center justify-center shrink-0">
+            <DollarSign size={20} className="text-success" />
           </div>
         </div>
         <div className="flex items-baseline justify-between mt-2">
@@ -101,4 +101,3 @@ export function ManagerMembersReferralBonusKpis({
   );
 }
 export default ManagerMembersReferralBonusKpis;
-

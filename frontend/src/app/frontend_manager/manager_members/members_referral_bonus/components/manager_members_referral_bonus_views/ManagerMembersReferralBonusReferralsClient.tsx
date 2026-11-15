@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Orchestrate client-side view and local interactions for referral bonus management.
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Download, Plus } from 'lucide-react';
+import { CheckCircle2, Download, Plus, X } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 import { ManagerMembersReferralBonusTable, type ReferralSortField } from './ManagerMembersReferralBonusTable';
@@ -54,6 +54,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
       window.removeEventListener('storage', handleSync);
     };
   }, []);
+
   const [timeHorizon, setTimeHorizon] = useState<ManagerReferralTimeHorizon>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
@@ -114,7 +115,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
 
   const filteredRows = useMemo(() => {
     return timeFilteredRecords.filter((r) => {
-      const q = searchQuery.toLowerCase();
+      const q = searchQuery.toLowerCase().trim();
       const matchQ = !q || r.referrer.toLowerCase().includes(q) || r.referred.toLowerCase().includes(q) || r.id.toLowerCase().includes(q);
       const matchS = statusFilter === 'All' || r.status === statusFilter;
       const matchM = methodFilter === 'All' || r.method.toLowerCase() === methodFilter.toLowerCase();
@@ -144,6 +145,16 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const handleApprove = (id: string) => {
     updateRecords((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'Credited' } : r)));
     setToastMsg(`Referral ${id} approved and bonus credited!`);
+    setTimeout(() => setToastMsg(null), 3500);
+  };
+
+  const handleDeleteReferral = (id: string) => {
+    const target = records.find((r) => r.id === id);
+    if (!target) return;
+    const ok = window.confirm(`Are you sure you want to remove referral ${id} (${target.referred})?`);
+    if (!ok) return;
+    updateRecords((prev) => prev.filter((r) => r.id !== id));
+    setToastMsg(`Referral record ${id} removed successfully.`);
     setTimeout(() => setToastMsg(null), 3500);
   };
 
@@ -179,25 +190,48 @@ export function ManagerMembersReferralBonusReferralsClient() {
 
   return (
     <div className="mgr-page">
-      <div className="mgr-page-header">
+      {/* Header section with uniform buttons and colorful icons */}
+      <div className="mgr-page-header flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <div className="mgr-breadcrumb">{tManagerUi('students_referrals')}</div>
-          <h1 className="mgr-page-title">{tManagerUi('referral_program')}</h1>
-          <p className="mgr-page-subtitle">Track student referrals, approve rewards, and disburse peer invite bonuses.</p>
+          <h1 className="mgr-page-title text-xl sm:text-2xl font-bold text-primary">{tManagerUi('referral_program')}</h1>
+          <p className="mgr-page-subtitle text-xs sm:text-sm text-secondary mt-1">
+            Track student referrals, approve rewards, and disburse peer invite bonuses.
+          </p>
         </div>
-        <div className="mgr-page-actions flex items-center gap-2">
-          <button type="button" onClick={handleExportCsv} className="mgr-btn-ghost flex items-center gap-1.5 text-xs">
-            <Download size={14} /> <span>Export CSV</span>
+        <div className="mgr-page-actions flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="mgr-btn-primary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold w-full sm:w-auto transition-colors"
+          >
+            <Plus size={16} className="shrink-0 text-on-primary" />
+            <span>Add Referral</span>
           </button>
-          <button type="button" onClick={() => setIsAddModalOpen(true)} className="mgr-btn-primary flex items-center gap-1.5 text-xs">
-            <Plus size={15} /> <span>Add Referral</span>
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="mgr-btn mgr-btn-secondary inline-flex items-center justify-center gap-2 text-xs h-9 px-4 rounded-lg font-semibold w-full sm:w-auto transition-colors"
+          >
+            <Download size={16} className="shrink-0 text-primary" />
+            <span>Export CSV</span>
           </button>
         </div>
       </div>
 
       {toastMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center gap-2" role="status">
-          <span>✓</span> <span>{toastMsg}</span>
+        <div className="mb-4 p-3 rounded-xl bg-success-bg border border-border text-success text-xs font-semibold flex items-center justify-between gap-2" role="status">
+          <span className="flex items-center gap-2">
+            <CheckCircle2 size={16} className="text-success shrink-0" />
+            <span>{toastMsg}</span>
+          </span>
+          <button
+            type="button"
+            onClick={() => setToastMsg(null)}
+            className="p-1 text-danger hover:opacity-80 rounded-lg transition-colors"
+            aria-label="Dismiss message"
+          >
+            <X size={14} className="shrink-0 text-danger" />
+          </button>
         </div>
       )}
 
@@ -255,6 +289,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
         sortDirection={sortDirection}
         onToggleSort={toggleSort}
         onApprove={handleApprove}
+        onDeleteReferral={handleDeleteReferral}
         onExportCsv={handleExportCsv}
         page={page}
         pageSize={pageSize}
