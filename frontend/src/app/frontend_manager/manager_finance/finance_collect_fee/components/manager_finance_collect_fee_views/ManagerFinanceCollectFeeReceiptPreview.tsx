@@ -8,7 +8,6 @@ import { AlertCircle, BookOpen, CheckCircle, X, MessageSquare } from 'lucide-rea
 import { toast } from 'sonner';
 import type { ManagerFinanceCollectFeeReceiptPreviewProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 
-
 export function ManagerFinanceCollectFeeReceiptPreview({
   selectedStudent,
   mode,
@@ -61,18 +60,25 @@ export function ManagerFinanceCollectFeeReceiptPreview({
     if (popup) popup.opener = null;
     toast.success(`WhatsApp receipt link opened for ${selectedStudent.name} (+91 ${maskManagerCollectFeePhone(cleanPhone)})`);
   };
+
   return (
     <div className="lg:col-span-2">
       <div className="fin-receipt-preview" data-testid="manager-finance-collect-preview">
         <div className="fin-receipt-thermal">
           <div className="fin-receipt-zigzag fin-receipt-zigzag--top">
-            {Array.from({ length: 20 }, (_, i) => `receipt-top-tooth-${i + 1}`).map((dotId) => <div key={dotId} className="fin-receipt-zigzag-dot" />)}
+            {Array.from({ length: 20 }, (_, i) => `receipt-top-tooth-${i + 1}`).map((dotId) => (
+              <div key={dotId} className="fin-receipt-zigzag-dot" />
+            ))}
           </div>
           <div className="fin-receipt-body">
-            <div className="fin-receipt-logo-circle"><BookOpen size={28} className="fin-receipt-accent-icon" /></div>
+            <div className="fin-receipt-logo-circle">
+              <BookOpen size={28} className="fin-receipt-accent-icon" />
+            </div>
             <p className="fin-receipt-brand">{tManagerUi('library_os')}</p>
             <p className="fin-receipt-title">{tManagerUi('receipt_preview_only')}</p>
-            <p className="fin-input-hint fin-text-warning" data-testid="manager-finance-receipt-preview-disclaimer" role="status">{tManagerUi('receipt_preview_not_proof_of_payment')}</p>
+            <p className="fin-input-hint fin-text-warning" data-testid="manager-finance-receipt-preview-disclaimer" role="status">
+              {tManagerUi('receipt_preview_not_proof_of_payment')}
+            </p>
             <div className="fin-receipt-id-box mt-6">
               <p className="fin-receipt-id-label">{tManagerUi('receipt_number_37553f')}</p>
               <p className="fin-receipt-id-value" suppressHydrationWarning>{receiptNumber}</p>
@@ -92,17 +98,9 @@ export function ManagerFinanceCollectFeeReceiptPreview({
               ].map((row) => (
                 <div key={row.label} className="flex justify-between items-baseline gap-2">
                   <span className="fin-receipt-row-label shrink-0">{row.label}</span>
-                  <span className="fin-receipt-row-value text-right truncate max-w-[170px]" suppressHydrationWarning title={row.value}>{row.value}</span>
-                </div>
-              ))}
-            </div>
-                ...(nextDueDate ? [{ label: 'Next Due Date', value: nextDueDate }] : []),
-                { label: tManagerUi('payment_mode_23b35c'), value: `${modeLabels[mode]}${txnId ? ` (${txnId})` : ''}` },
-                { label: tManagerUi('collected_by_898bb0') || 'Collected By', value: collectedBy || 'Branch Manager' },
-              ].map((row) => (
-                <div key={row.label} className="flex justify-between items-baseline gap-2">
-                  <span className="fin-receipt-row-label shrink-0">{row.label}</span>
-                  <span className="fin-receipt-row-value text-right truncate max-w-[170px]" suppressHydrationWarning title={row.value}>{row.value}</span>
+                  <span className="fin-receipt-row-value text-right truncate max-w-[170px]" suppressHydrationWarning title={row.value}>
+                    {row.value}
+                  </span>
                 </div>
               ))}
             </div>
@@ -119,23 +117,36 @@ export function ManagerFinanceCollectFeeReceiptPreview({
                 ✓ Full Paid for Billing Period
               </div>
             ) : null}
-            <button type="button"
-              className={`fin-receipt-paid-badge w-full border-0 motion-safe:transition-all motion-safe:duration-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success focus-visible:ring-offset-2 ${(!isCollectAvailable || !selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim()) || isSubmitting) ? 'fin-receipt-paid-badge--disabled cursor-not-allowed' : 'bg-success text-on-success cursor-pointer'}`}
+            <button
+              type="button"
+              className={`fin-receipt-paid-badge w-full border-0 motion-safe:transition-all motion-safe:duration-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success focus-visible:ring-offset-2 ${
+                (!isCollectAvailable || !selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim()) || isSubmitting)
+                  ? 'fin-receipt-paid-badge--disabled cursor-not-allowed'
+                  : 'bg-success text-on-success cursor-pointer'
+              }`}
               data-testid="manager-finance-collect-submit"
               onClick={onCollect}
               disabled={!isCollectAvailable || !selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim()) || isSubmitting}
             >
-              {isCollectAvailable ? <CheckCircle size={16} className={(!selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim()) || isSubmitting) ? 'text-secondary' : 'text-on-success'} /> : <AlertCircle size={16} className="text-secondary" />}
+              {isCollectAvailable ? (
+                <CheckCircle size={16} className={(!selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim()) || isSubmitting) ? 'text-secondary' : 'text-on-success'} />
+              ) : (
+                <AlertCircle size={16} className="text-secondary" />
+              )}
               <span className={`fin-receipt-paid-text ${(!isCollectAvailable || !selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim()) || isSubmitting) ? 'text-secondary' : 'text-on-success'}`}>
                 {isSubmitting ? tManagerUi('processing_272bc0') : isCollectAvailable ? tManagerUi('received_by_manager') : tManagerUi('collection_unavailable')}
               </span>
             </button>
-            <p className="fin-input-hint text-secondary text-center text-xs" role="status">Official fee collection receipt verified by Branch Manager</p>
+            <p className="fin-input-hint text-secondary text-center text-xs" role="status">
+              Official fee collection receipt verified by Branch Manager
+            </p>
             <p className="fin-receipt-footer-quote">{tManagerUi('knowledge_is_the_best_investment')}</p>
             <p className="fin-receipt-footer-thanks">{tManagerUi('thank_you_see_you_again')}</p>
           </div>
           <div className="fin-receipt-zigzag fin-receipt-zigzag--bottom">
-            {Array.from({ length: 20 }, (_, i) => `receipt-bottom-tooth-${i + 1}`).map((dotId) => <div key={dotId} className="fin-receipt-zigzag-dot" />)}
+            {Array.from({ length: 20 }, (_, i) => `receipt-bottom-tooth-${i + 1}`).map((dotId) => (
+              <div key={dotId} className="fin-receipt-zigzag-dot" />
+            ))}
           </div>
         </div>
         <div className="space-y-3 mt-4">
@@ -160,7 +171,5 @@ export function ManagerFinanceCollectFeeReceiptPreview({
         </div>
       </div>
     </div>
-  );
-}
   );
 }
