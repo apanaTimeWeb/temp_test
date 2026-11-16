@@ -66,20 +66,19 @@ export function ManagerDashboardOverviewKpiGrid({
     switch (title) {
       case 'Total Students':
       case 'Total Members':
-        return `${MANAGER_DASHBOARD_OVERVIEW_ROUTES.STUDENTS}?tab=All+Members`;
       case 'Active Students':
       case 'Active Members':
-        return `${MANAGER_DASHBOARD_OVERVIEW_ROUTES.STUDENTS}?tab=Active+Members`;
+        return MANAGER_DASHBOARD_OVERVIEW_ROUTES.STUDENTS;
       case 'Expiring Members':
       case 'Expiring Soon':
       case 'Renewals Due':
-        return `${MANAGER_DASHBOARD_OVERVIEW_ROUTES.STUDENTS}?tab=Expired+Members&expiry=7days`;
+        return MANAGER_DASHBOARD_OVERVIEW_ROUTES.FINANCE_RENEWALS;
       case 'Attendance Today':
       case 'Today Attendance':
         return MANAGER_DASHBOARD_OVERVIEW_ROUTES.ENGAGEMENT_ATTENDANCE;
       case 'New Enquiries':
       case 'New Inquiries':
-        return `${MANAGER_DASHBOARD_OVERVIEW_ROUTES.CRM_ENQUIRIES}?status=New`;
+        return MANAGER_DASHBOARD_OVERVIEW_ROUTES.CRM_ENQUIRIES;
       case 'Occupied Seats':
       case 'Seats Occupied':
         return '/frontend_manager/manager_seats_shifts_lockers/seats_matrix';

@@ -49,7 +49,7 @@ export default function ManagerMembersDirectoryPage(_routeQuery: ManagerMembersD
   const [planFilter, setPlanFilter] = useState('all');
   const [shiftFilter, setShiftFilter] = useState('all');
   const [genderFilter, setGenderFilter] = useState('all');
-  const [expiryFilter, setExpiryFilter] = useState(_routeQuery.expiry || 'all');
+  const [expiryFilter, setExpiryFilter] = useState('all');
   const [sortField, setSortField] = useState<MemberSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
