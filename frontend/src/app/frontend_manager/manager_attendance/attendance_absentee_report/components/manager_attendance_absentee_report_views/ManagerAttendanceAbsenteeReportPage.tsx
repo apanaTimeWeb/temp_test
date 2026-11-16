@@ -43,6 +43,12 @@ const THRESHOLD_OPTIONS = [
   { id: 'all', label: 'Show All' },
 ];
 
+const ALERT_STATUS_OPTIONS = [
+  { id: 'all', label: 'All Statuses' },
+  { id: 'pending', label: 'Pending Alert' },
+  { id: 'notified', label: 'Notified' },
+] as const;
+
 export default function ManagerAttendanceAbsenteeReportPage({
   view,
   id,
@@ -85,6 +91,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
   const [customEndDate, setCustomEndDate] = useState('');
   const [threshold, setThreshold] = useState('3');
   const [shift, setShift] = useState('All');
+  const [alertStatusFilter, setAlertStatusFilter] = useState<'all' | 'pending' | 'notified'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const shiftLabels: Record<string, string> = {
@@ -109,6 +116,26 @@ export default function ManagerAttendanceAbsenteeReportPage({
       setSelectedAbsentee({ ...selectedAbsentee, notified: true });
     }
     toast.success(`WhatsApp notice dispatched for ${item.name}`);
+  };
+
+  const handleMarkExcused = (smartId: string, reason: string) => {
+    setRowsList((prev) =>
+      prev.map((r) => (r.smartId === smartId ? { ...r, excused: true, leaveReason: reason } : r))
+    );
+    if (selectedAbsentee && selectedAbsentee.smartId === smartId) {
+      setSelectedAbsentee({ ...selectedAbsentee, excused: true, leaveReason: reason });
+    }
+    toast.success(`Absence for ${smartId} marked as Excused Leave (${reason})`);
+  };
+
+  const handleRevokeExcused = (smartId: string) => {
+    setRowsList((prev) =>
+      prev.map((r) => (r.smartId === smartId ? { ...r, excused: false, leaveReason: undefined } : r))
+    );
+    if (selectedAbsentee && selectedAbsentee.smartId === smartId) {
+      setSelectedAbsentee({ ...selectedAbsentee, excused: false, leaveReason: undefined });
+    }
+    toast.info(`Excused status revoked for ${smartId}`);
   };
 
   const timeFilteredRows = useMemo(() => {
@@ -139,15 +166,18 @@ export default function ManagerAttendanceAbsenteeReportPage({
     return timeFilteredRows.filter((r) => {
       const matchThr = r.daysAbsent >= thr;
       const matchShift = shift === 'All' || r.shift === shift;
+      const matchAlertStatus =
+        alertStatusFilter === 'all' ||
+        (alertStatusFilter === 'notified' ? r.notified : !r.notified);
       const matchQ =
         !q ||
         r.name.toLowerCase().includes(q) ||
         r.smartId.toLowerCase().includes(q) ||
         (r.parentPhone && r.parentPhone.includes(q)) ||
         (r.parentEmail && r.parentEmail.toLowerCase().includes(q));
-      return matchThr && matchShift && matchQ;
+      return matchThr && matchShift && matchAlertStatus && matchQ;
     });
-  }, [timeFilteredRows, threshold, shift, searchQuery]);
+  }, [timeFilteredRows, threshold, shift, alertStatusFilter, searchQuery]);
 
   const critical = filtered.filter((r) => r.daysAbsent >= 7);
   const moderate = filtered.filter((r) => r.daysAbsent >= 3 && r.daysAbsent < 7);
@@ -158,6 +188,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
       shift !== 'All' ||
       threshold !== '3' ||
       timeHorizon !== 'all' ||
+      alertStatusFilter !== 'all' ||
       customStartDate !== '' ||
       customEndDate !== ''
   );
@@ -167,6 +198,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
     setShift('All');
     setThreshold('3');
     setTimeHorizon('all');
+    setAlertStatusFilter('all');
     setCustomStartDate('');
     setCustomEndDate('');
     toast.info('Absentee filters reset to default.');
@@ -187,6 +219,8 @@ export default function ManagerAttendanceAbsenteeReportPage({
       'Parent Phone',
       'Parent Email',
       'Alert Status',
+      'Excused Status',
+      'Leave Reason',
     ]
       .map(escapeCsv)
       .join(',');
@@ -202,6 +236,8 @@ export default function ManagerAttendanceAbsenteeReportPage({
           item.parentPhone,
           item.parentEmail,
           item.notified ? 'Notified' : 'Pending Alert',
+          item.excused ? 'Excused Leave' : 'Unexcused',
+          item.leaveReason || '',
         ]
           .map(escapeCsv)
           .join(',')
@@ -391,9 +427,9 @@ export default function ManagerAttendanceAbsenteeReportPage({
 
       {/* ── Toolbar: Non-overlapping Search, Shift Filter & Thresholds ── */}
       <div className="flex flex-col gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-card border border-border shadow-xs">
-        {/* Top Row: Shift Pills with Glowing Halos */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/70">
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+        {/* Top Row: Shift Pills & Alert Status Filter with Glowing Halos */}
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 pb-3 border-b border-border/70">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 xl:pb-0 scrollbar-none">
             <span className="text-xs font-semibold text-secondary shrink-0 mr-1">Shift:</span>
             {SHIFT_OPTIONS.map((opt) => {
               const isActive = shift === opt.id;
@@ -424,17 +460,60 @@ export default function ManagerAttendanceAbsenteeReportPage({
             })}
           </div>
 
-          {hasActiveFilters && (
-            <button
-              type="button"
-              onClick={handleResetFilters}
-              className="self-end sm:self-auto inline-flex items-center gap-1.5 text-xs text-secondary hover:text-danger hover:bg-danger/10 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer shrink-0"
-              title="Reset all active filters"
-            >
-              <RotateCcw size={12} />
-              <span>Reset Filters</span>
-            </button>
-          )}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 xl:pb-0 scrollbar-none shrink-0">
+            <span className="text-xs font-semibold text-secondary shrink-0 mr-1">Alert:</span>
+            {ALERT_STATUS_OPTIONS.map((opt) => {
+              const isActive = alertStatusFilter === opt.id;
+              const glowColor =
+                opt.id === 'pending'
+                  ? 'rgba(245, 158, 11, 0.45)'
+                  : opt.id === 'notified'
+                  ? 'rgba(16, 185, 129, 0.45)'
+                  : 'rgba(99, 102, 241, 0.45)';
+              const bgActive =
+                opt.id === 'pending'
+                  ? '#d97706'
+                  : opt.id === 'notified'
+                  ? '#059669'
+                  : '#6366f1';
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setAlertStatusFilter(opt.id)}
+                  style={
+                    isActive
+                      ? {
+                          boxShadow: `0 0 16px ${glowColor}`,
+                          backgroundColor: bgActive,
+                          borderColor: bgActive,
+                          color: '#ffffff',
+                        }
+                      : undefined
+                  }
+                  className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    isActive
+                      ? 'border shadow-sm font-bold'
+                      : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="inline-flex items-center gap-1.5 text-xs text-secondary hover:text-danger hover:bg-danger/10 px-2.5 py-1.5 rounded-lg transition-colors cursor-pointer shrink-0 ml-1"
+                title="Reset all active filters"
+              >
+                <RotateCcw size={12} />
+                <span>Reset Filters</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Bottom Row: Non-Overlapping Search & Threshold Controls */}
@@ -539,6 +618,8 @@ export default function ManagerAttendanceAbsenteeReportPage({
         absentee={selectedAbsentee}
         onClose={() => setSelectedAbsentee(null)}
         onSendWhatsApp={handleAlertWhatsApp}
+        onMarkExcused={handleMarkExcused}
+        onRevokeExcused={handleRevokeExcused}
       />
 
       {/* ── Bulk WhatsApp Notice Modal ── */}

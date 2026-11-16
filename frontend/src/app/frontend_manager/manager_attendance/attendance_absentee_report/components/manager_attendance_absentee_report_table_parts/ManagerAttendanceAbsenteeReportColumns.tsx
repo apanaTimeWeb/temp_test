@@ -27,28 +27,44 @@ export function createManagerAbsenteeReportAbsenteeColumns(
     { field: 'smartId', headerName: labels.smartId, width: 120, cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => <span className="eng-td-mono">{params.value}</span> },
     { field: 'shift', headerName: labels.shift, width: 120, cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => <span className="eng-badge eng-badge--ghost mt-2 inline-block">{shiftLabels[String(params.value)] ?? params.value}</span> },
     {
-      field: 'daysAbsent', headerName: labels.daysAbsent, width: 140,
-      cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => (
-        <span className={`eng-badge ${badgeClass(Number(params.value))} eng-badge--lg mt-2 inline-block`}>
-          {params.value} {labels.days}
-        </span>
-      ),
+      field: 'daysAbsent', headerName: labels.daysAbsent, width: 150,
+      cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => {
+        if (params.data?.excused) {
+          return (
+            <div className="flex flex-col gap-0.5 mt-1.5">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30 w-fit">
+                Excused Leave
+              </span>
+              <span className="text-[10px] text-secondary truncate max-w-[130px]" title={params.data.leaveReason}>
+                {params.data.leaveReason || 'Approved'} ({params.value} {labels.days})
+              </span>
+            </div>
+          );
+        }
+        return (
+          <span className={`eng-badge ${badgeClass(Number(params.value))} eng-badge--lg mt-2 inline-block`}>
+            {params.value} {labels.days}
+          </span>
+        );
+      },
     },
     { field: 'lastSeen', headerName: labels.lastSeen, width: 130, cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => <span className="eng-td-muted">{formatManagerAbsenteeReportCalendarDate(String(params.value ?? ''), labels.locale)}</span> },
     {
       field: 'parentPhone', headerName: labels.parentContact, width: 220,
       cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => (
         <div className="eng-td-contact flex flex-col justify-center h-full space-y-1">
-          <span className="eng-td-mono flex items-center text-xs"><Phone size={10} className="mr-1" aria-hidden="true"/> {params.value}</span>
-          <span className="eng-td-muted flex items-center text-xs"><Mail size={10} className="mr-1" aria-hidden="true"/> {params.data?.parentEmail ?? ''}</span>
+          <span className="eng-td-mono flex items-center text-xs"><Phone size={10} className="mr-1 text-emerald-400" aria-hidden="true"/> {params.value}</span>
+          <span className="eng-td-muted flex items-center text-xs"><Mail size={10} className="mr-1 text-sky-400" aria-hidden="true"/> {params.data?.parentEmail ?? ''}</span>
         </div>
       ),
     },
     {
-      headerName: labels.actions, width: 160, sortable: false,
+      headerName: labels.actions, width: 180, sortable: false,
       cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => {
         const item = params.data;
         if (!item) return null;
+        const cleanPhone = (item.parentPhone || '').replace(/\D/g, '');
+
         return (
           <div className="eng-row-actions h-full flex items-center gap-1.5 justify-end">
             {onViewDetails && (
@@ -61,6 +77,17 @@ export function createManagerAbsenteeReportAbsenteeColumns(
               >
                 <Eye size={15} />
               </button>
+            )}
+
+            {cleanPhone && (
+              <a
+                href={`tel:${cleanPhone}`}
+                className="p-1.5 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/15 transition-colors cursor-pointer"
+                title={`Call parent (+91 ${cleanPhone})`}
+                aria-label={`Call parent (+91 ${cleanPhone})`}
+              >
+                <Phone size={14} />
+              </a>
             )}
 
             {item.notified ? (

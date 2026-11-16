@@ -1,7 +1,18 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { X, User, Phone, Mail, Calendar, AlertTriangle, ShieldCheck, MessageSquare, Printer } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  X,
+  Phone,
+  Mail,
+  Calendar,
+  AlertTriangle,
+  ShieldCheck,
+  MessageSquare,
+  Printer,
+  CheckCircle2,
+  FileText,
+} from 'lucide-react';
 import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '../../hooks/ManagerAttendanceAbsenteeReportDemoRepository';
 
 export interface ManagerAttendanceAbsenteeDetailsModalProps {
@@ -9,16 +20,34 @@ export interface ManagerAttendanceAbsenteeDetailsModalProps {
   absentee: ManagerAttendanceAbsenteeReportSampleAbsentee | null;
   onClose: () => void;
   onSendWhatsApp: (item: ManagerAttendanceAbsenteeReportSampleAbsentee) => void;
+  onMarkExcused?: (smartId: string, reason: string) => void;
+  onRevokeExcused?: (smartId: string) => void;
 }
+
+const LEAVE_PRESETS = [
+  'Medical Leave / Health Illness',
+  'College / Competitive Exam',
+  'Family Emergency',
+  'Out of Station Travel',
+  'Official Leave Request Approved',
+];
 
 export function ManagerAttendanceAbsenteeDetailsModal({
   isOpen,
   absentee,
   onClose,
   onSendWhatsApp,
+  onMarkExcused,
+  onRevokeExcused,
 }: ManagerAttendanceAbsenteeDetailsModalProps) {
+  const [selectedReason, setSelectedReason] = useState(LEAVE_PRESETS[0]);
+  const [isAddingLeave, setIsAddingLeave] = useState(false);
+
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      setIsAddingLeave(false);
+      return;
+    }
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -32,6 +61,7 @@ export function ManagerAttendanceAbsenteeDetailsModal({
   if (!isOpen || !absentee) return null;
 
   const isCritical = absentee.daysAbsent >= 7;
+  const cleanPhone = (absentee.parentPhone || '').replace(/\D/g, '');
 
   return (
     <div
@@ -49,7 +79,9 @@ export function ManagerAttendanceAbsenteeDetailsModal({
           <div className="flex items-center gap-3">
             <div
               className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 border ${
-                isCritical
+                absentee.excused
+                  ? 'bg-blue-500/15 text-blue-400 border-blue-500/30'
+                  : isCritical
                   ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
                   : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
               }`}
@@ -64,6 +96,11 @@ export function ManagerAttendanceAbsenteeDetailsModal({
                 <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-primary-subtle text-primary border border-primary/20">
                   {absentee.shift} Shift
                 </span>
+                {absentee.excused && (
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                    Excused Leave
+                  </span>
+                )}
               </div>
               <h2 id="absentee-details-modal-title" className="text-base font-bold text-primary mt-1">
                 {absentee.name}
@@ -83,19 +120,33 @@ export function ManagerAttendanceAbsenteeDetailsModal({
         {/* Severity Banner */}
         <div
           className={`p-4 rounded-xl border flex items-center justify-between ${
-            isCritical
+            absentee.excused
+              ? 'bg-blue-500/10 border-blue-500/25 text-blue-400'
+              : isCritical
               ? 'bg-rose-500/10 border-rose-500/25 text-rose-400'
               : 'bg-amber-500/10 border-amber-500/25 text-amber-400'
           }`}
         >
           <div className="flex items-center gap-2.5">
-            <AlertTriangle size={20} className="shrink-0" />
+            {absentee.excused ? (
+              <CheckCircle2 size={20} className="shrink-0 text-blue-400" />
+            ) : (
+              <AlertTriangle size={20} className="shrink-0" />
+            )}
             <div>
               <span className="text-xs font-bold uppercase tracking-wider block">
-                {isCritical ? 'Critical Unexcused Absence' : 'Attendance Concern'}
+                {absentee.excused
+                  ? 'Official Excused Absence'
+                  : isCritical
+                  ? 'Critical Unexcused Absence'
+                  : 'Attendance Concern'}
               </span>
               <span className="text-[11px] text-secondary">
-                {isCritical ? 'Immediate seat re-allocation risk' : 'Counseling & notification recommended'}
+                {absentee.excused
+                  ? `Reason: ${absentee.leaveReason || 'Authorized Leave'}`
+                  : isCritical
+                  ? 'Immediate seat re-allocation risk'
+                  : 'Counseling & notification recommended'}
               </span>
             </div>
           </div>
@@ -127,7 +178,18 @@ export function ManagerAttendanceAbsenteeDetailsModal({
             <span className="text-[11px] text-secondary flex items-center gap-1.5 font-medium">
               <Phone size={12} className="text-indigo-400" /> Parent Contact
             </span>
-            <p className="font-semibold font-mono text-primary">{absentee.parentPhone || '—'}</p>
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-semibold font-mono text-primary">{absentee.parentPhone || '—'}</span>
+              {cleanPhone && (
+                <a
+                  href={`tel:${cleanPhone}`}
+                  className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition-colors cursor-pointer"
+                  title="Direct Call"
+                >
+                  <Phone size={10} /> Call
+                </a>
+              )}
+            </div>
           </div>
 
           <div className="p-3 rounded-xl bg-surface-highlight/40 border border-border/80 space-y-1">
@@ -140,23 +202,90 @@ export function ManagerAttendanceAbsenteeDetailsModal({
           </div>
         </div>
 
-        {/* Official Protocol Advisory */}
-        <div className="p-3 rounded-xl bg-surface-highlight/40 border border-border text-[11px] text-secondary leading-relaxed flex items-start gap-2">
-          <ShieldCheck size={16} className="text-primary shrink-0 mt-0.5" />
-          <span>
-            Library regulations require 3+ day consecutive absence notifications. For 7+ days, seat reservation is subject to forfeiture without verified leave approval.
-          </span>
+        {/* Leave Excusal & Administrative Remarks Section */}
+        <div className="p-3.5 rounded-xl bg-surface-highlight/40 border border-border space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-primary flex items-center gap-1.5">
+              <FileText size={13} className="text-primary" />
+              Administrative Leave Approval
+            </span>
+            {absentee.excused ? (
+              <button
+                type="button"
+                onClick={() => onRevokeExcused?.(absentee.smartId)}
+                className="text-[11px] text-rose-400 hover:underline cursor-pointer"
+              >
+                Revoke Excused Status
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsAddingLeave((prev) => !prev)}
+                className="text-[11px] text-primary hover:underline cursor-pointer"
+              >
+                {isAddingLeave ? 'Cancel' : '+ Mark as Excused Leave'}
+              </button>
+            )}
+          </div>
+
+          {absentee.excused ? (
+            <p className="text-[11px] text-secondary">
+              This absence is recorded as approved ({absentee.leaveReason || 'Leave Approved'}). Seat reservation will be protected against unexcused forfeiture.
+            </p>
+          ) : isAddingLeave ? (
+            <div className="space-y-2 pt-1">
+              <label htmlFor="leave-reason-select" className="text-[11px] text-secondary block">
+                Select Leave Justification / Note:
+              </label>
+              <select
+                id="leave-reason-select"
+                value={selectedReason}
+                onChange={(e) => setSelectedReason(e.target.value)}
+                className="w-full text-xs px-3 py-1.5 rounded-lg bg-card border border-border text-primary cursor-pointer outline-none focus:border-primary"
+              >
+                {LEAVE_PRESETS.map((preset) => (
+                  <option key={preset} value={preset}>
+                    {preset}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={() => {
+                  onMarkExcused?.(absentee.smartId, selectedReason);
+                  setIsAddingLeave(false);
+                }}
+                className="w-full text-xs py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors cursor-pointer"
+              >
+                Approve & Mark Excused
+              </button>
+            </div>
+          ) : (
+            <p className="text-[11px] text-secondary">
+              Unexcused absences exceeding 7 days trigger seat vacancy warnings according to library regulations.
+            </p>
+          )}
         </div>
 
         {/* Footer Actions */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-3 border-t border-border">
-          <button
-            type="button"
-            onClick={() => window.print()}
-            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
-          >
-            <Printer size={14} /> Print Notice
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+            >
+              <Printer size={14} /> Print Notice
+            </button>
+            {cleanPhone && (
+              <a
+                href={`tel:${cleanPhone}`}
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer shadow-xs"
+              >
+                <Phone size={14} /> Call Parent
+              </a>
+            )}
+          </div>
 
           <div className="flex items-center gap-2 justify-end">
             <button

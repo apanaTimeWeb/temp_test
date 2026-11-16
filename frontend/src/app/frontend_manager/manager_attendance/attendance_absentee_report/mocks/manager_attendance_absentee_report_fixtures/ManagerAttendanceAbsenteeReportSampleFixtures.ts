@@ -13,7 +13,20 @@ export const MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE: readonly ManagerAttendanceAbs
   { id:'7', smartId:'SL-007', name:'Arjun Mehta', initials:'AM', shift:'Morning', consecutiveAbsent:2, status:null, inTime:'', outTime:'' },
   { id:'8', smartId:'SL-008', name:'Nisha Gupta', initials:'NG', shift:'Evening', consecutiveAbsent:0, status:null, inTime:'18:00', outTime:'22:00' },
 ];
-export type ManagerAttendanceAbsenteeReportSampleAbsentee = { id:string; name:string; initials:string; smartId:string; shift:string; daysAbsent:number; lastSeen:string; parentPhone:string; parentEmail:string; notified:boolean };
+export type ManagerAttendanceAbsenteeReportSampleAbsentee = {
+  id: string;
+  name: string;
+  initials: string;
+  smartId: string;
+  shift: string;
+  daysAbsent: number;
+  lastSeen: string;
+  parentPhone: string;
+  parentEmail: string;
+  notified: boolean;
+  excused?: boolean;
+  leaveReason?: string;
+};
 export const MANAGER_ENGAGEMENT_SAMPLE_ABSENTEES: readonly ManagerAttendanceAbsenteeReportSampleAbsentee[] = [
   { id:'1', name:'Priya Verma', initials:'PV', smartId:'SL-002', shift:'Morning', daysAbsent:4, lastSeen:'2026-04-08', parentPhone:'+91 98••••1234', parentEmail:'parent1@email.com', notified:false },
   { id:'2', name:'Sneha Patel', initials:'SP', smartId:'SL-004', shift:'Morning', daysAbsent:8, lastSeen:'2026-04-04', parentPhone:'+91 97••••5678', parentEmail:'parent2@email.com', notified:false },
