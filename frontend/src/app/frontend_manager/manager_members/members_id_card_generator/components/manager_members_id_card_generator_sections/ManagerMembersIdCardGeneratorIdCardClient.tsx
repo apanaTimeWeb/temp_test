@@ -312,40 +312,38 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                 </div>
                 <div className="flex items-center gap-2">
                   {/* Zoom Scale Selector */}
-                  {printLayout === 'pvc_single' && (
-                    <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-card border border-border text-[10px] font-semibold text-secondary">
-                      <button
-                        type="button"
-                        onClick={() => setPreviewScale('100')}
-                        className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                          previewScale === '100' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
-                        }`}
-                        title="100% 1:1 Physical Print Size (85.60 mm × 53.98 mm)"
-                      >
-                        100%
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPreviewScale('133')}
-                        className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                          previewScale === '133' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
-                        }`}
-                        title="133% HD Studio Size"
-                      >
-                        HD
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPreviewScale('150')}
-                        className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                          previewScale === '150' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
-                        }`}
-                        title="150% Studio Ultra Size"
-                      >
-                        150%
-                      </button>
-                    </div>
-                  )}
+                  <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-card border border-border text-[10px] font-semibold text-secondary">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewScale('100')}
+                      className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                        previewScale === '100' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
+                      }`}
+                      title="100% 1:1 Physical Print Size (85.60 mm × 53.98 mm)"
+                    >
+                      100%
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewScale('133')}
+                      className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                        previewScale === '133' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
+                      }`}
+                      title="133% HD Studio Size"
+                    >
+                      HD
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewScale('150')}
+                      className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                        previewScale === '150' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
+                      }`}
+                      title="150% Studio Ultra Size"
+                    >
+                      150%
+                    </button>
+                  </div>
 
                   <span className="text-[11px] font-bold text-secondary bg-surface px-2.5 py-1 rounded-full border border-border">
                     PVC CR-80
