@@ -25,8 +25,9 @@ import {
   User,
   Calendar,
 } from 'lucide-react';
-import { formatManagerEnquiriesDisplayDate, maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { formatManagerEnquiriesDisplayDate, maskManagerEnquiriesPhone, getManagerEnquiriesDemoPassWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import { ManagerMembersEnquiriesMobileCards } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesMobileCards';
+import { ManagerMembersEnquiriesLostReasonModal } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesLostReasonModal';
 import type { ManagerMembersEnquiriesTableProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 import type { ManagerMembersEnquiriesEnquiry, ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 
@@ -36,6 +37,7 @@ export function ManagerMembersEnquiriesTable({
   onToggleSelectOne,
   onToggleSelectAll,
   onQuickWhatsApp,
+  onMarkLost,
 }: ManagerMembersEnquiriesTableProps) {
   const tManagerUi = useTranslations('manager.manager_enquiries.ui');
   const locale = useLocale();
@@ -58,6 +60,7 @@ export function ManagerMembersEnquiriesTable({
 
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [lostModalEnquiry, setLostModalEnquiry] = useState<ManagerMembersEnquiriesEnquiry | null>(null);
 
   type EnqSortField = 'name' | 'phone' | 'shift' | 'status' | 'handledBy' | 'addedDate';
   const [sortField, setSortField] = useState<EnqSortField | null>(null);
@@ -147,16 +150,15 @@ export function ManagerMembersEnquiriesTable({
     e.stopPropagation();
     if (enq) {
       try {
-        sessionStorage.setItem(
-          'manager_pending_enquiry_conversion',
-          JSON.stringify({
-            enquiryId: enq.id,
-            name: enq.name,
-            phone: enq.phone,
-            shift: enq.shift,
-            source: enq.source,
-          })
-        );
+        const payload = JSON.stringify({
+          enquiryId: enq.id,
+          name: enq.name,
+          phone: enq.phone,
+          shift: enq.shift,
+          source: enq.source,
+        });
+        sessionStorage.setItem('manager_pending_enquiry_conversion', payload);
+        sessionStorage.setItem('enquiry_conversion_prefill', payload);
       } catch {
         // Storage fallback
       }
@@ -172,13 +174,8 @@ export function ManagerMembersEnquiriesTable({
       onQuickWhatsApp(enq);
       return;
     }
-    let digits = enq.phone.replace(/\D/g, '');
-    if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
-    const phone = digits.length === 10 ? `91${digits}` : digits;
-    const text = encodeURIComponent(
-      `Hello ${enq.name}, thank you for inquiring at Central Library! How can we assist you with seat booking today?`
-    );
-    const win = window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener,noreferrer');
+    const url = getManagerEnquiriesDemoPassWhatsAppUrl(enq);
+    const win = window.open(url, '_blank', 'noopener,noreferrer');
     if (win) win.opener = null;
   };
 
@@ -274,8 +271,9 @@ export function ManagerMembersEnquiriesTable({
         selectedIds={selectedIds}
         onToggleSelectOne={onToggleSelectOne}
         onOpenDetails={openDetails}
-        onQuickConvert={handleQuickConvert}
+        onQuickConvert={(e, enq) => handleQuickConvert(e, enq)}
         onSendWhatsApp={handleSendWhatsApp}
+        onMarkLost={(enq) => setLostModalEnquiry(enq)}
         shiftLabels={shiftLabels}
         statusLabels={statusLabels}
         locale={locale}
@@ -418,10 +416,18 @@ export function ManagerMembersEnquiriesTable({
                       {/* 5. Mark Lost Button (Vibrant Rose / Red) */}
                       <button
                         type="button"
-                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-500/35 hover:text-rose-200 hover:border-rose-400 hover:scale-105 active:scale-95 shadow-sm shadow-rose-950/50 transition-all cursor-pointer opacity-80 hover:opacity-100"
-                        title={tManagerUi('crm_mutations_unavailable_host_contract')}
-                        aria-label={tManagerUi('crm_mark_lost_unavailable')}
-                        disabled
+                        className={`inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/40 transition-all shadow-sm shadow-rose-950/50 ${
+                          enq.status === 'Lost'
+                            ? 'opacity-40 cursor-not-allowed'
+                            : 'hover:bg-rose-500/35 hover:text-rose-200 hover:border-rose-400 hover:scale-105 active:scale-95 cursor-pointer opacity-80 hover:opacity-100'
+                        }`}
+                        title={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost (ड्रॉप कारण चुनें)'}
+                        aria-label={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost'}
+                        disabled={enq.status === 'Lost'}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setLostModalEnquiry(enq);
+                        }}
                       >
                         <XCircle size={14} />
                       </button>
@@ -481,6 +487,17 @@ export function ManagerMembersEnquiriesTable({
           </div>
         </div>
       </div>
+      {/* Lost Reason Modal */}
+      <ManagerMembersEnquiriesLostReasonModal
+        isOpen={Boolean(lostModalEnquiry)}
+        onClose={() => setLostModalEnquiry(null)}
+        enquiry={lostModalEnquiry}
+        onConfirm={(reason, notes) => {
+          if (lostModalEnquiry && onMarkLost) {
+            onMarkLost(lostModalEnquiry.id, reason, notes);
+          }
+        }}
+      />
     </div>
   );
 }

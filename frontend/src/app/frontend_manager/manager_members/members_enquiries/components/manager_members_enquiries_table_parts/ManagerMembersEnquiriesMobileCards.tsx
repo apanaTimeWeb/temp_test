@@ -29,8 +29,9 @@ export interface ManagerMembersEnquiriesMobileCardsProps {
   selectedIds: string[];
   onToggleSelectOne?: (id: string) => void;
   onOpenDetails: (id: string) => void;
-  onQuickConvert: (e: MouseEvent) => void;
+  onQuickConvert: (e: MouseEvent, enq?: ManagerMembersEnquiriesEnquiry) => void;
   onSendWhatsApp: (e: MouseEvent, enq: ManagerMembersEnquiriesEnquiry) => void;
+  onMarkLost?: (enq: ManagerMembersEnquiriesEnquiry) => void;
   shiftLabels: Record<string, string>;
   statusLabels: Record<string, string>;
   locale: string;
@@ -45,6 +46,7 @@ export function ManagerMembersEnquiriesMobileCards({
   onOpenDetails,
   onQuickConvert,
   onSendWhatsApp,
+  onMarkLost,
   shiftLabels,
   statusLabels,
   locale,
@@ -229,18 +231,26 @@ export function ManagerMembersEnquiriesMobileCards({
                 className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 hover:bg-indigo-500/35 hover:text-indigo-200 transition-all cursor-pointer shadow-sm shadow-indigo-950/50"
                 aria-label={tManagerUi('convert_to_admission')}
                 title={tManagerUi('convert_to_admission')}
-                onClick={onQuickConvert}
+                onClick={(e) => onQuickConvert(e, enq)}
               >
                 <CheckCircle size={14} />
               </button>
 
-              {/* Close Button (Rose) */}
+              {/* Close / Mark Lost Button (Rose) */}
               <button
                 type="button"
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/40 opacity-80 cursor-not-allowed transition-all shadow-sm shadow-rose-950/50"
-                aria-label={tManagerUi('crm_mark_lost_unavailable')}
-                title={tManagerUi('crm_mutations_unavailable_host_contract')}
-                disabled
+                className={`inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/40 transition-all shadow-sm shadow-rose-950/50 ${
+                  enq.status === 'Lost'
+                    ? 'opacity-40 cursor-not-allowed'
+                    : 'hover:bg-rose-500/35 hover:text-rose-200 cursor-pointer opacity-90 hover:opacity-100'
+                }`}
+                aria-label={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost'}
+                title={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost (ड्रॉप कारण चुनें)'}
+                disabled={enq.status === 'Lost'}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onMarkLost?.(enq);
+                }}
               >
                 <XCircle size={14} />
               </button>

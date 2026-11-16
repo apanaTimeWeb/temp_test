@@ -79,6 +79,7 @@ export interface ManagerMembersEnquiriesTableProps {
   onToggleSelectOne?: (id: string) => void;
   onToggleSelectAll?: () => void;
   onQuickWhatsApp?: (enquiry: ManagerMembersEnquiriesEnquiry) => void;
+  onMarkLost?: (id: string, reason: string, notes?: string) => void;
 }
 
 export type ManagerMembersEnquiriesAddPageRouteProps = {
@@ -104,6 +105,9 @@ export interface ManagerMembersEnquiriesEnquiryActionsPanelProps {
   convertLabel: string;
   alreadyLostLabel: string;
   markLostUnavailableLabel: string;
+  onMarkLost?: () => void;
+  onSendDemoPass?: () => void;
+  onSendLocation?: () => void;
 }
 
 export interface ManagerMembersEnquiriesInfoItemProps {

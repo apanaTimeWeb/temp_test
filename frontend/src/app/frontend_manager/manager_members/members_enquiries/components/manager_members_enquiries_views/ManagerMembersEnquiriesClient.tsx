@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
+import { getManagerEnquiriesDemoPassWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import {
   useManagerMembersEnquiries,
   type ManagerCrmTimeHorizon,
@@ -55,6 +56,7 @@ export function ManagerMembersEnquiriesClient() {
     selectAllFiltered,
     clearSelection,
     deleteSelected,
+    markEnquiryAsLost,
   } = useManagerMembersEnquiries();
 
   const statusLabels = {
@@ -244,14 +246,13 @@ export function ManagerMembersEnquiriesClient() {
           onToggleSelectOne={toggleSelectOne}
           onToggleSelectAll={toggleSelectAll}
           onQuickWhatsApp={(enq) => {
-            let digits = enq.phone.replace(/\D/g, '');
-            if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
-            const phone = digits.length === 10 ? `91${digits}` : digits;
-            const text = encodeURIComponent(
-              `Hello ${enq.name}, thank you for inquiring at Central Library! How can we assist you with seat booking today?`
-            );
-            const w = window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener,noreferrer');
+            const url = getManagerEnquiriesDemoPassWhatsAppUrl(enq);
+            const w = window.open(url, '_blank', 'noopener,noreferrer');
             if (w) w.opener = null;
+          }}
+          onMarkLost={(id, reason, notes) => {
+            markEnquiryAsLost(id, reason, notes);
+            toast.success('Enquiry marked as Lost');
           }}
         />
       )}

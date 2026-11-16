@@ -175,6 +175,39 @@ export function useManagerMembersEnquiries() {
     setSelectedIds((prev) => prev.filter((id) => !toDelete.includes(id)));
   };
 
+  const markEnquiryAsLost = (id: string, reason: string, notes?: string) => {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const remarkText = notes
+      ? `Marked as Lost | Reason: ${reason} | Note: ${notes}`
+      : `Marked as Lost | Reason: ${reason}`;
+    const newFollowUp = {
+      id: `lost-${Date.now()}`,
+      date: todayStr,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      remark: remarkText,
+      by: 'Manager (Desk)',
+    };
+    queryClient.setQueryData<ManagerMembersEnquiriesEnquiry[]>(
+      MANAGER_CRM_QUERY_KEYS.enquiries(),
+      (old) =>
+        (old ?? []).map((e) => {
+          if (e.id !== id) return e;
+          return {
+            ...e,
+            status: 'Lost',
+            lostReason: reason,
+            lostDate: todayStr,
+            followUps: [newFollowUp, ...(e.followUps || [])],
+          };
+        })
+    );
+    try {
+      sessionStorage.setItem(`manager_crm_lost_${id}`, JSON.stringify({ reason, notes, date: todayStr }));
+    } catch {
+      // Storage fallback
+    }
+  };
+
   const getCardsByStatus = (status: ManagerMembersEnquiriesEnquiryStatus): ManagerMembersEnquiriesEnquiry[] =>
     filtered.filter((enquiry) => enquiry.status === status);
 
@@ -206,5 +239,6 @@ export function useManagerMembersEnquiries() {
     selectAllFiltered,
     clearSelection,
     deleteSelected,
+    markEnquiryAsLost,
   };
 }

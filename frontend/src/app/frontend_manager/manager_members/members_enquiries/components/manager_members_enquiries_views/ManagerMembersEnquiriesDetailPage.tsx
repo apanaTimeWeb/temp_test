@@ -14,12 +14,14 @@ import { fetchManagerEnquiriesEnquiryById } from '@/app/frontend_manager/manager
 import { MANAGER_CRM_QUERY_KEYS } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.query_keys';
 import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
 import { managerCrmFollowUpDraftSchema, type ManagerMembersEnquiriesFollowUpFormData } from '@/app/frontend_manager/manager_members/members_enquiries/schemas/ManagerMembersEnquiriesSchema';
-import { getManagerEnquiriesLocalDateInputMinimum } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { getManagerEnquiriesLocalDateInputMinimum, getManagerEnquiriesDemoPassWhatsAppUrl, getManagerEnquiriesLocationWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import { ManagerMembersEnquiriesFollowUpFormPanel } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_forms/ManagerMembersEnquiriesFollowUpFormPanel';
 import { ManagerMembersEnquiriesActivityTimeline } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesActivityTimeline';
 import { ManagerMembersEnquiriesEnquiryProfileCard } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_sections/ManagerMembersEnquiriesEnquiryProfileCard';
 import { ManagerMembersEnquiriesEnquiryActionsPanel } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesEnquiryActionsPanel';
+import { ManagerMembersEnquiriesLostReasonModal } from '@/app/frontend_manager/manager_members/members_enquiries/components/manager_members_enquiries_widgets/ManagerMembersEnquiriesLostReasonModal';
 import type { ManagerMembersEnquiriesDetailPageProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
+import type { ManagerMembersEnquiriesEnquiryStatus } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 export type { ManagerMembersEnquiriesDetailPageProps };
 
 
@@ -33,6 +35,8 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
   const router = useRouter();
   const { confirm, dialog: unsavedConfirmDialog } = useManagerMembersEnquiriesConfirm();
   const [followUpDirty, setFollowUpDirty] = useState(false);
+  const [isLostModalOpen, setIsLostModalOpen] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState<ManagerMembersEnquiriesEnquiryStatus | null>(null);
   const navigateWithUnsavedChanges = (href: string) => {
     if (!followUpDirty) { router.push(href); return; }
     void confirm(tManagerUi('confirm_leave_with_unsaved_changes'), tManagerUi('cancel'), tManagerUi('continue')).then((confirmed) => {
@@ -75,22 +79,49 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
   if (enquiryQuery.isError) return <div className="crm-page crm-empty-state crm-not-found" role="alert"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('unable_to_load_enquiry')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-primary crm-mt-12" onClick={() => { void enquiryQuery.refetch(); }} disabled={enquiryQuery.isFetching}>{enquiryQuery.isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
   if (!enquiry) return <div className="crm-page crm-empty-state crm-not-found"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('enquiry_not_found')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
 
+  const effectiveStatus = currentStatus ?? enquiry.status;
+
   const handleConvert = () => {
     try {
-      sessionStorage.setItem(
-        'manager_pending_enquiry_conversion',
-        JSON.stringify({
-          enquiryId: enquiry.id,
-          name: enquiry.name,
-          phone: enquiry.phone,
-          shift: enquiry.shift,
-          source: enquiry.source,
-        })
-      );
+      const payload = JSON.stringify({
+        enquiryId: enquiry.id,
+        name: enquiry.name,
+        phone: enquiry.phone,
+        shift: enquiry.shift,
+        source: enquiry.source,
+      });
+      sessionStorage.setItem('manager_pending_enquiry_conversion', payload);
+      sessionStorage.setItem('enquiry_conversion_prefill', payload);
     } catch {
       // Storage fallback
     }
     navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADMISSION_CONVERSION(enquiry.id));
+  };
+
+  const handleConfirmLost = (reason: string, notes?: string) => {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const remarkText = notes
+      ? `Marked as Lost | Reason: ${reason} | Note: ${notes}`
+      : `Marked as Lost | Reason: ${reason}`;
+    handleAddFollowUp({ date: todayStr, remark: remarkText });
+    setCurrentStatus('Lost');
+    try {
+      sessionStorage.setItem(`manager_crm_lost_${id}`, JSON.stringify({ reason, notes, date: todayStr }));
+    } catch {
+      // Storage fallback
+    }
+  };
+
+  const handleSendDemoPass = () => {
+    const url = getManagerEnquiriesDemoPassWhatsAppUrl(enquiry);
+    const win = window.open(url, '_blank', 'noopener,noreferrer');
+    if (win) win.opener = null;
+  };
+
+  const handleSendLocation = () => {
+    const url = getManagerEnquiriesLocationWhatsAppUrl(enquiry);
+    const win = window.open(url, '_blank', 'noopener,noreferrer');
+    if (win) win.opener = null;
   };
   const nextFollowUpLabel = enquiry.isOverdue ? tManagerUi('overdue') : enquiry.isToday ? tManagerUi('today') : enquiry.isUpcoming ? tManagerUi('upcoming') : tManagerUi('not_scheduled');
   const nextFollowUpClass = enquiry.isOverdue ? 'crm-followup-date-overdue' : enquiry.isToday ? 'crm-followup-date-today' : 'crm-followup-date-upcoming';
@@ -105,7 +136,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
           <ManagerMembersEnquiriesEnquiryProfileCard
             enquiry={enquiry}
             locale={locale}
-            statusLabel={statusLabels[enquiry.status]}
+            statusLabel={statusLabels[effectiveStatus]}
             sourceFieldLabel={tManagerUi('source')}
             sourceLabel={sourceLabels[enquiry.source] ?? enquiry.source}
             shiftFieldLabel={tManagerUi('preferred_shift')}
@@ -131,7 +162,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
         </div>
         <div className="crm-detail-right">
           <ManagerMembersEnquiriesEnquiryActionsPanel
-            status={enquiry.status}
+            status={effectiveStatus}
             statusOptions={MANAGER_CRM_STATUS_OPTIONS}
             statusLabels={statusLabels}
             unavailableMessage={tManagerUi('crm_mutations_unavailable_host_contract')}
@@ -143,6 +174,9 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
             convertLabel={tManagerUi('convert_to_admission')}
             alreadyLostLabel={tManagerUi('already_marked_lost')}
             markLostUnavailableLabel={tManagerUi('crm_mark_lost_unavailable')}
+            onMarkLost={() => setIsLostModalOpen(true)}
+            onSendDemoPass={handleSendDemoPass}
+            onSendLocation={handleSendLocation}
           />
           <ManagerMembersEnquiriesFollowUpFormPanel
             onDirtyChange={setFollowUpDirty}
@@ -163,5 +197,11 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
         </div>
       </div>
     </div>
+    <ManagerMembersEnquiriesLostReasonModal
+      isOpen={isLostModalOpen}
+      onClose={() => setIsLostModalOpen(false)}
+      enquiry={enquiry}
+      onConfirm={handleConfirmLost}
+    />
   </>;
 }

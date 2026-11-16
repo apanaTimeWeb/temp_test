@@ -2,7 +2,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 
 import { PhoneCall, CalendarDays, CheckCircle, User, Clock, MessageCircle, Sun, Sunset, Moon } from 'lucide-react';
-import { formatManagerEnquiriesDisplayDate, maskManagerEnquiriesPhone } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
+import { formatManagerEnquiriesDisplayDate, maskManagerEnquiriesPhone, getManagerEnquiriesDemoPassWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import type { ManagerMembersEnquiriesKanbanCardProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 
 export function ManagerMembersEnquiriesKanbanCard({ enq, colClass, onClick }: ManagerMembersEnquiriesKanbanCardProps) {
@@ -19,13 +19,8 @@ export function ManagerMembersEnquiriesKanbanCard({ enq, colClass, onClick }: Ma
 
   const handleWhatsApp = (e: React.MouseEvent) => {
     e.stopPropagation();
-    let digits = enq.phone.replace(/\D/g, '');
-    if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
-    const phone = digits.length === 10 ? `91${digits}` : digits;
-    const text = encodeURIComponent(
-      `Hello ${enq.name}, thank you for inquiring at Central Library! How can we assist you with seat booking today?`
-    );
-    const win = window.open(`https://wa.me/${phone}?text=${text}`, '_blank', 'noopener,noreferrer');
+    const url = getManagerEnquiriesDemoPassWhatsAppUrl(enq);
+    const win = window.open(url, '_blank', 'noopener,noreferrer');
     if (win) win.opener = null;
   };
 

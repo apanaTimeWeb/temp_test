@@ -1,5 +1,5 @@
 'use client';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle, MapPin, Ticket } from 'lucide-react';
 import type { ManagerMembersEnquiriesEnquiryActionsPanelProps } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 
 export function ManagerMembersEnquiriesEnquiryActionsPanel({
@@ -15,6 +15,9 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
   convertLabel,
   alreadyLostLabel,
   markLostUnavailableLabel,
+  onMarkLost,
+  onSendDemoPass,
+  onSendLocation,
 }: ManagerMembersEnquiriesEnquiryActionsPanelProps) {
   return (
     <>
@@ -39,6 +42,8 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
 
       <section className="crm-card crm-form-stack rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 p-5 shadow-lg flex flex-col gap-3" aria-labelledby="crm-detail-actions-title">
         <h2 id="crm-detail-actions-title" className="crm-section-label text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">{actionsLabel}</h2>
+        
+        {/* 1. Convert to Admission */}
         <button
           type="button"
           className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all hover:scale-[1.01] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
@@ -48,15 +53,58 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
           <CheckCircle size={16} className="text-white" aria-hidden="true" />
           {status === 'Converted' ? alreadyConvertedLabel : convertLabel}
         </button>
-        <button
-          type="button"
-          className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400 font-bold text-xs opacity-75 cursor-not-allowed"
-          disabled
-          title={unavailableMessage}
-        >
-          <XCircle size={15} className="text-rose-400" aria-hidden="true" />
-          {status === 'Lost' ? alreadyLostLabel : markLostUnavailableLabel}
-        </button>
+
+        {/* 2. 1-Click WhatsApp 1-Day Demo Pass */}
+        {onSendDemoPass && (
+          <button
+            type="button"
+            className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition-all hover:scale-[1.01] cursor-pointer"
+            onClick={onSendDemoPass}
+          >
+            <Ticket size={15} className="text-emerald-200" aria-hidden="true" />
+            1-Click WhatsApp Demo Pass (फ्री ट्रायल)
+          </button>
+        )}
+
+        {/* 3. 1-Click WhatsApp Location & Timings Pin */}
+        {onSendLocation && (
+          <button
+            type="button"
+            className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-indigo-500/15 border border-indigo-500/35 hover:bg-indigo-500/25 text-indigo-300 hover:text-white font-bold text-xs transition-all cursor-pointer"
+            onClick={onSendLocation}
+          >
+            <MapPin size={15} className="text-indigo-400" aria-hidden="true" />
+            Send Location Pin & Timings (WhatsApp)
+          </button>
+        )}
+
+        {/* 4. Mark as Lost Button */}
+        {onMarkLost ? (
+          <button
+            type="button"
+            className={`inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border text-xs font-bold transition-all ${
+              status === 'Lost'
+                ? 'bg-rose-500/10 border-rose-500/20 text-rose-400 opacity-50 cursor-not-allowed'
+                : 'bg-rose-500/15 border-rose-500/35 text-rose-400 hover:bg-rose-500/25 hover:border-rose-500/50 hover:text-rose-300 cursor-pointer'
+            }`}
+            disabled={status === 'Lost'}
+            onClick={onMarkLost}
+            title={status === 'Lost' ? alreadyLostLabel : 'Mark Enquiry as Lost (वजह दर्ज करें)'}
+          >
+            <XCircle size={15} className="text-rose-400" aria-hidden="true" />
+            {status === 'Lost' ? alreadyLostLabel : 'Mark as Lost (ड्रॉप कारण दर्ज करें)'}
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400 font-bold text-xs opacity-75 cursor-not-allowed"
+            disabled
+            title={unavailableMessage}
+          >
+            <XCircle size={15} className="text-rose-400" aria-hidden="true" />
+            {status === 'Lost' ? alreadyLostLabel : markLostUnavailableLabel}
+          </button>
+        )}
       </section>
     </>
   );

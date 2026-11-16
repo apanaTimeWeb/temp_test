@@ -28,6 +28,16 @@ export const MANAGER_CRM_DOT_CLASS: Record<ManagerMembersEnquiriesEnquiryStatus,
 
 export const MANAGER_CRM_DEFAULT_WHATSAPP_TEMPLATES = [
   {
+    id: 'demo_pass',
+    label: '🎟️ 1-Day Demo Pass',
+    text: '🎟️ *CENTRAL LIBRARY — 1-DAY FREE TRIAL DEMO PASS*\n\nHello *{name}*,\nThank you for reaching out to Central Library! We are pleased to offer you a complimentary *1-Day Free Study Pass*.\n\n🏢 *Amenities:* Silent AC Hall, Ergonomic Desks, 5G Wi-Fi, RO Water, Power Sockets.\n📍 *Map Pin:* https://maps.google.com/?q=Central+Library+Study+Center\n⏰ *Timings:* 06:00 AM – 10:00 PM\n\nShow this pass at our reception desk upon arrival!',
+  },
+  {
+    id: 'location_pin',
+    label: '📍 Location & Timings',
+    text: '📍 *CENTRAL LIBRARY — LOCATION & DIRECTIONS*\n\nHello *{name}*,\nHere is the exact location and timings for Central Library:\n🗺️ *Google Maps Pin:* https://maps.google.com/?q=Central+Library+Study+Center\n🏢 *Address:* Main Road, Near Metro Gate #2, Central Market\n⏰ *Timings:* 06:00 AM – 10:00 PM (Open 7 Days)\n\nLooking forward to welcoming you!',
+  },
+  {
     id: 'demo_session',
     label: 'Free Demo Invite',
     text: 'Hello {name}, thank you for inquiring about seat booking at Central Library! We have study slots available in your preferred shift. Would you like to visit today for a free demo session?',
