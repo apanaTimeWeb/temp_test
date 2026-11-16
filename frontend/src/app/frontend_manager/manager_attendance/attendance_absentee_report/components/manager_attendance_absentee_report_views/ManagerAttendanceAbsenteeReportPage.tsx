@@ -4,12 +4,9 @@ import type { ManagerAttendanceAbsenteeReportMainProps } from '@/app/frontend_ma
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import ManagerAttendanceAbsenteeReportNativeTable from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportNativeTable';
-import { MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/config/manager_attendance_absentee_report.url_config';
 import { useManagerAbsenteeReportDemoData } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/useManagerAttendanceAbsenteeReportDemoData';
 import { useState, useMemo } from 'react';
-import Link from 'next/link';
 import {
-  ChevronRight,
   Send,
   Search,
   MessageSquare,
@@ -253,14 +250,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
   );
 
   return (
-    <div className="eng-page space-y-6" data-route-view={view} data-route-id={id}>
-      {/* ── Breadcrumb ── */}
-      <div className="eng-breadcrumb">
-        <Link href={MANAGER_ATTENDANCE_ABSENTEE_REPORT_ROUTES.attendance}>{tManagerUi('engagement')}</Link>
-        <ChevronRight size={12} className="eng-breadcrumb-sep" />
-        <span>{tManagerUi('absentee_report')}</span>
-      </div>
-
+    <div className="space-y-6" data-route-view={view} data-route-id={id}>
       {/* ── Clean Executive Page Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -274,13 +264,6 @@ export default function ManagerAttendanceAbsenteeReportPage({
           </div>
           <p className="text-xs sm:text-sm text-secondary mt-1">
             {tManagerUi('students_with_consecutive_absences_requiring_attention')}
-          </p>
-          <p
-            className="eng-input-hint eng-text-warning text-[11px] mt-1"
-            data-testid="manager-engagement-absentee-contract-warning"
-            role="status"
-          >
-            {tManagerUi('student_contact_rows_are_sample_data_individual_and_bulk_64dbd3')}
           </p>
         </div>
 

@@ -66,7 +66,7 @@ export function ManagerAttendanceAbsenteeTimeHorizonBar({
   activeCount,
 }: ManagerAttendanceAbsenteeTimeHorizonBarProps) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-3.5 sm:p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 mb-6">
+    <div className="rounded-2xl border border-border bg-card p-3.5 sm:p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
       <div className="flex items-center gap-2.5">
         <div className="w-8 h-8 rounded-lg bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0">
           <Calendar size={16} />
