@@ -17,12 +17,20 @@ import StudentIdCard, {
   type IdCardSide,
 } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCard';
 import { ManagerMembersIdCardGeneratorStudentIdCardBack } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardBack';
+import ManagerMembersIdCardGeneratorStudentIdCardQuarterly from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardQuarterly';
+import { ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack';
 import { useManagerIdCardGeneratorFormatting } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGeneratorFormatting';
 import { useManagerIdCardGenerator } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGenerator';
 import type { ManagerStudent } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorTypes';
 import { MANAGER_STUDENT_STATUS_ACTIVE, MANAGER_STUDENT_STATUS_SUSPENDED, MANAGER_STUDENT_STATUSES, MANAGER_STUDENT_SHIFTS, MANAGER_MEMBERS_ID_CARD_GENERATOR_SEARCH_DEBOUNCE_MS } from '@/app/frontend_manager/manager_members/members_id_card_generator/constants/ManagerMembersIdCardGeneratorConstants';
 import { ManagerMembersIdCardGeneratorEmptyState } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_empty_states/ManagerMembersIdCardGeneratorEmptyState';
 import { ManagerMembersIdCardBulkDispatchModal } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardBulkDispatchModal';
+
+function isQuarterlyPlan(plan?: string): boolean {
+  if (!plan) return false;
+  const p = plan.trim().toLowerCase();
+  return p.includes('quarter') || p === 'qtr';
+}
 
 export function ManagerMembersIdCardGeneratorIdCardClient() {
   const tManagerUi = useTranslations('manager.manager_id_card_generator.ui');
@@ -259,7 +267,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                       <div className="mgr-avatar-sm shrink-0">{initials}</div>
                       <div className="mgr-idcard-student-info flex-1 min-w-0">
                         <p className="mgr-cell-name truncate">{student.name}</p>
-                        <p className="mgr-cell-sub truncate">{student.smartId} · {shiftLabels[student.shift] ?? student.shift} · {student.seat}</p>
+                        <p className="mgr-cell-sub truncate">{student.smartId} · {student.plan} · {shiftLabels[student.shift] ?? student.shift} · {student.seat}</p>
                       </div>
                       <span className={`shrink-0 ${student.status === MANAGER_STUDENT_STATUS_ACTIVE ? 'mgr-badge mgr-badge--success' : student.status === MANAGER_STUDENT_STATUS_SUSPENDED ? 'mgr-badge mgr-badge--warning' : 'mgr-badge mgr-badge--danger'} hidden xs:inline-flex`}>{statusLabel}</span>
                     </div>
@@ -306,6 +314,9 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <p className="mgr-page-subtitle mgr-idcard-preview-label mb-0 font-bold">{tManagerUi('preview')} {selected?.name}</p>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isQuarterlyPlan(cardData.plan) ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-primary/10 text-primary border border-primary/20'}`}>
+                    {cardData.plan || 'Monthly'}
+                  </span>
                   <span className="text-[10px] font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full hidden sm:inline-block">
                     85.60 mm × 53.98 mm (8.56 cm × 5.4 cm)
                   </span>
@@ -350,7 +361,21 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
 
               <div className="w-full">
                 <div className="mgr-idcard-workbench">
-                  <StudentIdCard data={cardData} side={cardSide} scale={previewScale} onSideChange={setCardSide} />
+                  {isQuarterlyPlan(cardData.plan) ? (
+                    <ManagerMembersIdCardGeneratorStudentIdCardQuarterly
+                      data={cardData}
+                      side={cardSide}
+                      scale={previewScale}
+                      onSideChange={setCardSide}
+                    />
+                  ) : (
+                    <StudentIdCard
+                      data={cardData}
+                      side={cardSide}
+                      scale={previewScale}
+                      onSideChange={setCardSide}
+                    />
+                  )}
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-secondary mt-2 px-1 no-print">
                   <span className="flex items-center gap-1.5 flex-wrap">
@@ -400,13 +425,22 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   {bulkStudents.length > 0 ? (
                     bulkStudents.map((student) => {
                       const data = getStudentCardData(student);
+                      const isQtr = isQuarterlyPlan(data.plan);
                       return (
                         <React.Fragment key={`print-duplex-${student.smartId}`}>
                           <div className="break-after-page">
-                            <StudentIdCard data={data} side="front" />
+                            {isQtr ? (
+                              <ManagerMembersIdCardGeneratorStudentIdCardQuarterly data={data} side="front" />
+                            ) : (
+                              <StudentIdCard data={data} side="front" />
+                            )}
                           </div>
                           <div className="break-after-page">
-                            <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />
+                            {isQtr ? (
+                              <ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack data={data} />
+                            ) : (
+                              <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />
+                            )}
                           </div>
                         </React.Fragment>
                       );
@@ -414,10 +448,18 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   ) : (
                     <>
                       <div className="break-after-page">
-                        <StudentIdCard data={cardData} side="front" />
+                        {isQuarterlyPlan(cardData.plan) ? (
+                          <ManagerMembersIdCardGeneratorStudentIdCardQuarterly data={cardData} side="front" />
+                        ) : (
+                          <StudentIdCard data={cardData} side="front" />
+                        )}
                       </div>
                       <div className="break-after-page">
-                        <ManagerMembersIdCardGeneratorStudentIdCardBack data={cardData} />
+                        {isQuarterlyPlan(cardData.plan) ? (
+                          <ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack data={cardData} />
+                        ) : (
+                          <ManagerMembersIdCardGeneratorStudentIdCardBack data={cardData} />
+                        )}
                       </div>
                     </>
                   )}
