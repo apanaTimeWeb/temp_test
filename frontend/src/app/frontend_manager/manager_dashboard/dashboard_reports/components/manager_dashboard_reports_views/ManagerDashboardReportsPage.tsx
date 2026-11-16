@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { BarChart3, Clock, CalendarRange, RotateCw, Download, Sparkles } from 'lucide-react';
+import { BarChart3, Clock, CalendarRange, RotateCw, Download, Sparkles, Printer } from 'lucide-react';
 import { ManagerDashboardReportsKpiGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_sections/ManagerDashboardReportsKpiGrid';
 import { ManagerDashboardReportsChartsGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_charts/ManagerDashboardReportsChartsGrid';
 import { ManagerDashboardReportsTablesGrid } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsTablesGrid';
@@ -21,15 +21,83 @@ export default function ManagerDashboardReportsPage() {
 
   const activeDateScope = isCustomMode ? 'Custom Range' : dateRange;
 
+  const handlePrint = () => {
+    if (typeof window !== 'undefined') {
+      window.print();
+    }
+  };
+
   const handleExportCsv = () => {
     if (!query.data) return;
-    const headers = `Report Scope: ${activeDateScope}\nReport Metric,Value,Trend\n`;
-    const rows = query.data.kpiCards.map((c) => `"${c.title}","${c.value}","${c.trend || ''}"`).join('\n');
-    const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8' });
+    const generatedOn = new Date().toLocaleString('en-IN');
+    const sections: string[] = [];
+
+    // Header & Summary
+    sections.push(`"CENTRAL LIBRARY MANAGEMENT — BRANCH PERFORMANCE REPORT"`);
+    sections.push(`"Report Date Scope","${activeDateScope}"`);
+    sections.push(`"Report Generated At","${generatedOn}"`);
+    sections.push(``);
+
+    // Section 1: Executive KPI Summary
+    sections.push(`"--- 1. EXECUTIVE KPI SUMMARY ---"`);
+    sections.push(`"Metric","Value","Trend / Trajectory"`);
+    query.data.kpiCards.forEach((c) => {
+      sections.push(`"${c.title}","${c.value}","${c.trend || 'N/A'}"`);
+    });
+    sections.push(``);
+
+    // Section 2: Shift-wise Profitability & Revenue Breakdown
+    if (query.data.shiftProfitabilityRows && query.data.shiftProfitabilityRows.length > 0) {
+      sections.push(`"--- 2. SHIFT-WISE REVENUE & PROFITABILITY BREAKDOWN ---"`);
+      sections.push(`"Shift Name","Hours","Enrolled Students","Monthly Fee Rate (INR)","Gross Revenue (INR)","Collection Rate","Profitability Margin"`);
+      let totalRev = 0;
+      let totalStudents = 0;
+      query.data.shiftProfitabilityRows.forEach((r) => {
+        totalRev += r.grossRevenue;
+        totalStudents += r.studentsCount;
+        sections.push(`"${r.shift}","${r.timing}","${r.studentsCount}","${r.monthlyRate}","${r.grossRevenue}","${r.collectionRate}","${r.marginRating}"`);
+      });
+      sections.push(`"TOTAL SUMMARY","All Shifts","${totalStudents}","—","${totalRev}","—","High"`);
+      sections.push(``);
+    }
+
+    // Section 3: Shift Occupancy
+    sections.push(`"--- 3. SHIFT OCCUPANCY UTILIZATION ---"`);
+    sections.push(`"Shift","Occupancy Rate"`);
+    query.data.occupancyData.forEach((s) => {
+      sections.push(`"${s.name}","${s.value}%"`);
+    });
+    sections.push(``);
+
+    // Section 4: Daily Attendance Averages
+    sections.push(`"--- 4. DAILY ATTENDANCE AVERAGE ---"`);
+    sections.push(`"Day","Average Attendance %"`);
+    query.data.attendanceData.forEach((a) => {
+      sections.push(`"${a.day}","${a.avg}%"`);
+    });
+    sections.push(``);
+
+    // Section 5: Absentee Log
+    sections.push(`"--- 5. STUDENT ABSENTEE DETAILS ---"`);
+    sections.push(`"Student Name","Smart ID","Shift","Days Absent","Last Present Date"`);
+    query.data.absenteeRows.forEach((ab) => {
+      sections.push(`"${ab.name}","${ab.smartId}","${ab.shift}","${ab.daysAbsent}","${ab.lastPresent}"`);
+    });
+    sections.push(``);
+
+    // Section 6: Lockers
+    sections.push(`"--- 6. LOCKER UTILIZATION ---"`);
+    sections.push(`"Locker Type","Occupied","Total","Occupancy %"`);
+    query.data.lockerRows.forEach((l) => {
+      sections.push(`"${l.type}","${l.occupied}","${l.total}","${l.pct}"`);
+    });
+
+    const csvContent = sections.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `manager_reports_${activeDateScope.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `library_owner_report_${activeDateScope.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -127,7 +195,7 @@ export default function ManagerDashboardReportsPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0 mgr-reports-no-print">
             <button
               type="button"
               onClick={() => void query.refetch()}
@@ -141,10 +209,20 @@ export default function ManagerDashboardReportsPage() {
             <button
               type="button"
               onClick={handleExportCsv}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-card border border-border hover:border-primary text-foreground text-xs font-bold hover:bg-surface-hover shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-card border border-border hover:border-primary text-foreground text-xs font-bold hover:bg-surface-hover shadow-xs transition-all cursor-pointer"
+              title="Download comprehensive multi-table spreadsheet (.csv)"
             >
               <Download size={14} className="text-primary" />
               <span>Export CSV</span>
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white text-xs font-bold shadow-sm shadow-indigo-950/40 transition-all cursor-pointer"
+              title="Print formatted executive summary or Save as PDF"
+            >
+              <Printer size={14} />
+              <span>Print / Export PDF</span>
             </button>
           </div>
         </div>

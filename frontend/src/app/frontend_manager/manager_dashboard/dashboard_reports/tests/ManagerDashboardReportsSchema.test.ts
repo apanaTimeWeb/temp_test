@@ -25,6 +25,12 @@ describe('managerReportsSchema', () => {
     expect(parsed.seatRows.length).toBeGreaterThan(0);
     expect(parsed.lockerRows.length).toBeGreaterThan(0);
     expect(parsed.maintenanceRows.length).toBeGreaterThan(0);
+    expect(parsed.shiftProfitabilityRows).toBeDefined();
+    expect(parsed.shiftProfitabilityRows?.length).toBe(5);
+    const morningShift = parsed.shiftProfitabilityRows?.find((s) => s.shift === 'Morning Shift');
+    expect(morningShift?.grossRevenue).toBe(25200);
+    const eveningShift = parsed.shiftProfitabilityRows?.find((s) => s.shift === 'Evening Shift');
+    expect(eveningShift?.grossRevenue).toBe(32200);
     expect(parsed.kpiCards.every((card) => card.trend === 'Synthetic sample')).toBe(true);
   });
   it('rejects responses with missing required report collections', () => {

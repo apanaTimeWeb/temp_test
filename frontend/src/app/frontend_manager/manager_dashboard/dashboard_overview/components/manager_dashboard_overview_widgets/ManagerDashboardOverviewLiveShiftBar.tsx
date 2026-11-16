@@ -54,18 +54,25 @@ export function ManagerDashboardOverviewLiveShiftBar({
 
         {/* Center / Right: Live Floor Counters & Overstay */}
         <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-          {/* Hall Occupancy Counter */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-surface-highlight border border-border">
-            <Users size={16} className="text-primary shrink-0" />
+          {/* Real-time Hall Headcount Counter */}
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-surface-highlight border border-border shadow-xs">
+            <div className="relative">
+              <Users size={18} className="text-primary shrink-0" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-500" />
+            </div>
             <div className="text-xs">
               <div className="flex items-center gap-1 font-bold text-foreground">
-                <span>{activeOccupancy}</span>
+                <span className="text-sm font-extrabold text-primary">{activeOccupancy}</span>
                 <span className="text-muted-foreground font-normal">/ {totalCapacity}</span>
-                <span className="text-[10px] font-semibold text-primary ml-1">
-                  ({occupancyPercentage}%)
+                <span className="text-[10px] font-semibold text-emerald-400 ml-1">
+                  ({occupancyPercentage}% Occupied)
                 </span>
               </div>
-              <p className="text-[10px] text-muted-foreground">In Hall Now</p>
+              <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                <span className="font-semibold text-foreground">Live In Hall</span>
+                <span>• Floor 1: 24 · Floor 2: 14</span>
+              </p>
             </div>
           </div>
 

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { TrendingUp, RotateCw, Clock, CalendarRange } from 'lucide-react';
+import { TrendingUp, RotateCw, Clock, CalendarRange, UserPlus, PhoneCall, IndianRupee, QrCode, Armchair, Users } from 'lucide-react';
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
 
 export type DashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
@@ -18,6 +18,8 @@ export interface ManagerDashboardOverviewHeaderBarProps {
   customEndDate: string;
   onCustomEndDateChange: (val: string) => void;
   branchName?: string;
+  liveHeadcount?: number;
+  totalCapacity?: number;
 }
 
 export function ManagerDashboardOverviewHeaderBar({
@@ -31,11 +33,14 @@ export function ManagerDashboardOverviewHeaderBar({
   customEndDate,
   onCustomEndDateChange,
   branchName,
+  liveHeadcount = 42,
+  totalCapacity = 60,
 }: ManagerDashboardOverviewHeaderBarProps) {
   const tManagerUi = useTranslations('manager.manager_dashboard.ui');
+  const occupancyPct = Math.round((liveHeadcount / totalCapacity) * 100);
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all">
+    <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all space-y-4">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="space-y-1.5">
           <div className="flex flex-wrap items-center gap-2">
@@ -43,12 +48,20 @@ export function ManagerDashboardOverviewHeaderBar({
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Live Operations Active
             </span>
+            {/* Real-Time Live Headcount Badge */}
+            <span
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30"
+              title="Real-time inside library study hall"
+            >
+              <Users size={12} className="text-indigo-400" />
+              <span>In Hall Now: <strong>{liveHeadcount}</strong> Students ({occupancyPct}% Full)</span>
+            </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
             Daily Operations Overview
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            Welcome back, Ram — here is today&apos;s real-time summary of seats, attendance, and fee collections.
+            Welcome back, Ram — real-time monitoring of study hall occupancy, student check-ins, and fee collections.
           </p>
         </div>
 
@@ -73,8 +86,52 @@ export function ManagerDashboardOverviewHeaderBar({
         </div>
       </div>
 
+      {/* One-Click Quick Action Buttons Strip */}
+      <div className="pt-3 border-t border-border flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground mr-1">
+            Quick Actions:
+          </span>
+          <Link
+            href="/frontend_manager/manager_members/members_new_admission"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white text-xs font-bold shadow-sm shadow-indigo-950/40 transition-all hover:scale-[1.02] cursor-pointer"
+          >
+            <UserPlus size={13} />
+            <span>+ New Admission</span>
+          </Link>
+          <Link
+            href="/frontend_manager/manager_members/members_enquiries?view=add"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/15 text-sky-300 border border-sky-500/30 hover:bg-sky-500/25 text-xs font-semibold transition-all cursor-pointer"
+          >
+            <PhoneCall size={13} />
+            <span>+ New Enquiry</span>
+          </Link>
+          <Link
+            href={MANAGER_DASHBOARD_OVERVIEW_ROUTES.FINANCE_COLLECT_FEE}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 text-xs font-semibold transition-all cursor-pointer"
+          >
+            <IndianRupee size={13} />
+            <span>Collect Fee</span>
+          </Link>
+          <Link
+            href={MANAGER_DASHBOARD_OVERVIEW_ROUTES.ENGAGEMENT_QR_SCANNER}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25 text-xs font-semibold transition-all cursor-pointer"
+          >
+            <QrCode size={13} />
+            <span>Scan QR / Attendance</span>
+          </Link>
+          <Link
+            href="/frontend_manager/manager_seats_shifts_lockers/seats_matrix"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-highlight border border-border text-foreground hover:border-primary text-xs font-semibold transition-all cursor-pointer"
+          >
+            <Armchair size={13} />
+            <span>Seat Matrix</span>
+          </Link>
+        </div>
+      </div>
+
       {/* Global Time Horizon Filter Bar */}
-      <div className="mt-5 pt-4 border-t border-border flex flex-wrap items-center justify-between gap-3">
+      <div className="pt-3 border-t border-border flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2.5">
           <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
             <Clock size={13} className="text-primary" />

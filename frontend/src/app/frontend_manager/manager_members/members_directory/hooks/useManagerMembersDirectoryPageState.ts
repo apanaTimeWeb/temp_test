@@ -6,7 +6,18 @@ import { MANAGER_MEMBERS_DIRECTORY_SEARCH_DEBOUNCE_MS } from '@/app/frontend_man
 /** DATA FLOW: Feature-owned inputs/state -> hook result for its caller; no backend/API flow is inferred without source evidence. */
 
 /** Owns the member-directory filters and query-driven profile selection state. */
-export type ManagerMembersDirectoryRouteIntent = { view?: string; id?: string; name?: string; phone?: string; smartId?: string; seat?: string };
+export type ManagerMembersDirectoryRouteIntent = {
+  view?: string;
+  id?: string;
+  name?: string;
+  phone?: string;
+  smartId?: string;
+  seat?: string;
+  tab?: string;
+  status?: string;
+  filter?: string;
+  expiry?: string;
+};
 
 function resolveProfileQuery(intent: ManagerMembersDirectoryRouteIntent): string {
   return (intent.id ?? intent.smartId ?? intent.name ?? intent.phone ?? '').trim();
@@ -14,7 +25,18 @@ function resolveProfileQuery(intent: ManagerMembersDirectoryRouteIntent): string
 
 export function useManagerMemberDirectoryPageState(routeIntent: ManagerMembersDirectoryRouteIntent = {}) {
   const hasProfileIntent = routeIntent.view === 'profile' || routeIntent.view === 'edit';
-  const [activeTab, setActiveTab] = useState<ManagerMembersDirectoryTab>(hasProfileIntent ? 'Member Profile' : 'All Members');
+  const initialTab: ManagerMembersDirectoryTab = useMemo(() => {
+    if (hasProfileIntent) return 'Member Profile';
+    const tabParam = routeIntent.tab;
+    const statusParam = routeIntent.status?.toLowerCase();
+    const filterParam = routeIntent.filter?.toLowerCase();
+    if (tabParam === 'Active Members' || statusParam === 'active') return 'Active Members';
+    if (tabParam === 'Expired Members' || statusParam === 'expired' || filterParam === 'expiring') return 'Expired Members';
+    if (tabParam === 'Suspended Members' || statusParam === 'suspended') return 'Suspended Members';
+    return 'All Members';
+  }, [hasProfileIntent, routeIntent.tab, routeIntent.status, routeIntent.filter]);
+
+  const [activeTab, setActiveTab] = useState<ManagerMembersDirectoryTab>(initialTab);
   const [searchQuery, setSearchQuery] = useState(routeIntent.seat ? routeIntent.seat.trim() : '');
   const [profileSearch, setProfileSearch] = useState(hasProfileIntent ? resolveProfileQuery(routeIntent) : 'LIB-001');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(searchQuery);
@@ -38,11 +60,31 @@ export function useManagerMemberDirectoryPageState(routeIntent: ManagerMembersDi
     } else if (routeIntent.view === 'profile' || routeIntent.view === 'edit') {
       setActiveTab('Member Profile');
       setProfileSearch(resolveProfileQuery(routeIntent));
-    } else if (routeIntent.view === undefined) {
+    } else if (routeIntent.tab === 'Active Members' || routeIntent.status?.toLowerCase() === 'active') {
+      setActiveTab('Active Members');
+    } else if (
+      routeIntent.tab === 'Expired Members' ||
+      routeIntent.status?.toLowerCase() === 'expired' ||
+      routeIntent.filter?.toLowerCase() === 'expiring'
+    ) {
+      setActiveTab('Expired Members');
+    } else if (routeIntent.tab === 'Suspended Members' || routeIntent.status?.toLowerCase() === 'suspended') {
+      setActiveTab('Suspended Members');
+    } else if (routeIntent.view === undefined && !routeIntent.tab && !routeIntent.status && !routeIntent.filter) {
       setActiveTab('All Members');
       setProfileSearch('LIB-001');
     }
-  }, [routeIntent.view, routeIntent.id, routeIntent.name, routeIntent.phone, routeIntent.smartId, routeIntent.seat]);
+  }, [
+    routeIntent.view,
+    routeIntent.id,
+    routeIntent.name,
+    routeIntent.phone,
+    routeIntent.smartId,
+    routeIntent.seat,
+    routeIntent.tab,
+    routeIntent.status,
+    routeIntent.filter,
+  ]);
   const [members, setMembers] = useState<ManagerMembersDirectoryRecord[]>(() => getManagerMemberDirectoryDemoRecords());
 
   const updateMember = (updatedMember: ManagerMembersDirectoryRecord) => {

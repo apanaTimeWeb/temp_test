@@ -27,4 +27,20 @@ describe('ManagerDashboardOverviewDataSchema', () => {
     expect(result.actionItems[0].countClass).toBe('mgr-badge mgr-badge--danger');
     expect(result.actionItems[0].href).toBe('/frontend_manager/manager_finance/finance_collect_fee');
   });
+
+  it('validates deep-link destinations for action items and renewal routes', () => {
+    const result = ManagerDashboardOverviewDataSchema.parse({
+      kpiData: [],
+      seatData: [],
+      actionItems: [
+        { title: 'Renewals due', count: '6' },
+        { title: 'New enquiries', count: '5' },
+      ],
+      recentAdmissions: [],
+      recentEnquiries: [],
+    });
+    expect(result.actionItems[0].href).toBe('/frontend_manager/manager_finance/finance_renewals');
+    expect(result.actionItems[0].showRenew).toBe(true);
+    expect(result.actionItems[1].href).toBe('/frontend_manager/manager_members/members_enquiries');
+  });
 });

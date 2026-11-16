@@ -3,8 +3,16 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { formatManagerReportsCalendarDate, formatManagerReportsMonth } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsDateFormatting';
 import { useMemo } from 'react';
-import { ManagerDashboardReportsTableCard } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsTableCard';
-import type { ManagerDashboardReportsData, ManagerDashboardReportsTableAbsenteeRow, ManagerDashboardReportsConversionRow, ManagerDashboardReportsSeatRow, ManagerDashboardReportsLockerRow, ManagerDashboardReportsMaintenanceRow } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import { ManagerDashboardReportsTableCard } from '@/app/frontend_manager/manager_dashboard\dashboard_reports\components\manager_dashboard_reports_table_parts\ManagerDashboardReportsTableCard';
+import type {
+  ManagerDashboardReportsData,
+  ManagerDashboardReportsTableAbsenteeRow,
+  ManagerDashboardReportsConversionRow,
+  ManagerDashboardReportsSeatRow,
+  ManagerDashboardReportsLockerRow,
+  ManagerDashboardReportsMaintenanceRow,
+  ManagerDashboardReportsShiftProfitabilityRow,
+} from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
 import type { NativeColumn } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsNativeTable';
 
 export function ManagerDashboardReportsTablesGrid({
@@ -87,8 +95,67 @@ export function ManagerDashboardReportsTablesGrid({
     [tManagerUi, locale]
   );
 
+  const profitabilityColumns = useMemo<NativeColumn<ManagerDashboardReportsShiftProfitabilityRow>[]>(
+    () => [
+      { field: 'shift', headerName: 'Shift Tier', cellClass: 'mgr-cell-primary font-bold' },
+      { field: 'timing', headerName: 'Shift Hours', cellClass: 'mgr-cell-secondary font-mono' },
+      { field: 'studentsCount', headerName: 'Students Enrolled' },
+      {
+        field: 'monthlyRate',
+        headerName: 'Monthly Fee',
+        cellRenderer: (p) => `₹${Number(p.value).toLocaleString('en-IN')}`,
+      },
+      {
+        field: 'grossRevenue',
+        headerName: 'Gross Monthly Revenue',
+        cellClass: 'mgr-cell-success font-extrabold',
+        cellRenderer: (p) => `₹${Number(p.value).toLocaleString('en-IN')}`,
+      },
+      {
+        field: 'collectionRate',
+        headerName: 'Collection Rate',
+        cellRenderer: (p) => (
+          <span className="font-semibold text-emerald-400">
+            {String(p.value)}
+          </span>
+        ),
+      },
+      {
+        field: 'marginRating',
+        headerName: 'Profitability Margin',
+        cellRenderer: (p) => {
+          const val = String(p.value);
+          const colorClass =
+            val === 'High'
+              ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+              : val === 'Good'
+              ? 'bg-sky-500/15 text-sky-400 border-sky-500/30'
+              : 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+          return (
+            <span className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-bold border ${colorClass}`}>
+              {val} Margin
+            </span>
+          );
+        },
+      },
+    ],
+    []
+  );
+
   return (
     <div className="mgr-reports-table-grid">
+      {data.shiftProfitabilityRows && data.shiftProfitabilityRows.length > 0 && (
+        <div className="mgr-reports-table-full">
+          <ManagerDashboardReportsTableCard<ManagerDashboardReportsShiftProfitabilityRow>
+            title={`Shift-wise Profitability & Revenue Breakdown (Morning vs Evening vs Night) [${dateRange}]`}
+            emptyMessage={tManagerUi('no_report_data_available')}
+            rows={data.shiftProfitabilityRows}
+            columns={profitabilityColumns}
+            getRowKey={(row: ManagerDashboardReportsShiftProfitabilityRow) => row.shift}
+            height={280}
+          />
+        </div>
+      )}
       <ManagerDashboardReportsTableCard<ManagerDashboardReportsTableAbsenteeRow>
         title={`${tManagerUi('absentee_report')} [${dateRange}]`}
         emptyMessage={tManagerUi('no_report_data_available')}

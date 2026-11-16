@@ -119,6 +119,8 @@ export function ManagerDashboardOverviewClient() {
         customEndDate={customEndDate}
         onCustomEndDateChange={setCustomEndDate}
         branchName={branchParam}
+        liveHeadcount={38}
+        totalCapacity={60}
       />
 
       {/* Real-Time Live Shift Floor Monitor Bar */}
