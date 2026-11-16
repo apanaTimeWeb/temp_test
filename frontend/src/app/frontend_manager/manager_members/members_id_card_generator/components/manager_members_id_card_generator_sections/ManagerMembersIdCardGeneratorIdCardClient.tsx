@@ -159,9 +159,9 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
       <div className="mgr-idcard-page-layout">
         <div>
           <div className="mgr-card">
-            <div className="mgr-card-header flex items-center justify-between">
+            <div className="mgr-card-header flex flex-wrap items-center justify-between gap-2">
               <h2 className="mgr-section-title"><IdCard size={18} strokeWidth={2} /> {tManagerUi('select_student')}</h2>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 {bulkSelectedIds.length > 0 && (
                   <button
                     type="button"
@@ -178,7 +178,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               </div>
             </div>
             <div className="mgr-card-body">
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mb-2">
                 <div className="mgr-input-icon-wrap flex-1">
                   <Search size={16} strokeWidth={2} className="mgr-input-icon" />
                   <label className="sr-only" htmlFor="manager-id-card-search">{tManagerUi('search_students')}</label>
@@ -196,13 +196,13 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               </div>
 
               {/* Multi-Dimensional Filter Bar: Shift & Status */}
-              <div className="grid grid-cols-2 gap-2 mb-3">
+              <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 mb-3">
                 <select
                   aria-label="Filter by Shift"
                   data-testid="manager-id-card-shift-filter"
                   value={shiftFilter}
                   onChange={(e) => { setShiftFilter(e.target.value); setPage(0); }}
-                  className="rounded-lg border border-border bg-surface px-2 py-1 text-xs text-primary font-medium"
+                  className="w-full rounded-lg border border-border bg-surface px-2 py-1.5 text-xs text-primary font-medium"
                 >
                   <option value="All">{tManagerUi('all_shifts')}</option>
                   {MANAGER_STUDENT_SHIFTS.map((shift) => (
@@ -215,7 +215,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   data-testid="manager-id-card-status-filter"
                   value={statusFilter}
                   onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
-                  className="rounded-lg border border-border bg-surface px-2 py-1 text-xs text-primary font-medium"
+                  className="w-full rounded-lg border border-border bg-surface px-2 py-1.5 text-xs text-primary font-medium"
                 >
                   <option value="All">{tManagerUi('all_status')}</option>
                   {MANAGER_STUDENT_STATUSES.map((status) => (
@@ -261,7 +261,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                         <p className="mgr-cell-name truncate">{student.name}</p>
                         <p className="mgr-cell-sub truncate">{student.smartId} · {shiftLabels[student.shift] ?? student.shift} · {student.seat}</p>
                       </div>
-                      <span className={`shrink-0 ${student.status === MANAGER_STUDENT_STATUS_ACTIVE ? 'mgr-badge mgr-badge--success' : student.status === MANAGER_STUDENT_STATUS_SUSPENDED ? 'mgr-badge mgr-badge--warning' : 'mgr-badge mgr-badge--danger'}`}>{statusLabel}</span>
+                      <span className={`shrink-0 ${student.status === MANAGER_STUDENT_STATUS_ACTIVE ? 'mgr-badge mgr-badge--success' : student.status === MANAGER_STUDENT_STATUS_SUSPENDED ? 'mgr-badge mgr-badge--warning' : 'mgr-badge mgr-badge--danger'} hidden xs:inline-flex`}>{statusLabel}</span>
                     </div>
                   );
                 })}
@@ -269,7 +269,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
 
               {/* ID Card List Pagination Footer */}
               {filtered.length > pageSize && (
-                <div className="flex items-center justify-between border-t border-border pt-3 mt-3 text-xs text-secondary">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3 mt-3 text-xs text-secondary">
                   <span>
                     {effectivePage * pageSize + 1}–{Math.min((effectivePage + 1) * pageSize, filtered.length)} of {filtered.length}
                   </span>
@@ -302,23 +302,22 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
         <div className="mgr-idcard-preview-panel">
           {cardData ? (
             <>
-              <div className="flex items-center justify-between w-full no-print bg-surface p-2.5 rounded-xl border border-border">
+              <div className="flex flex-wrap items-center justify-between gap-2 w-full no-print bg-surface p-2.5 rounded-xl border border-border">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <p className="mgr-page-subtitle mgr-idcard-preview-label mb-0 font-bold">{tManagerUi('preview')} {selected?.name}</p>
-                  <span className="text-[10px] font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full hidden sm:inline-block">
                     85.60 mm × 53.98 mm (8.56 cm × 5.4 cm)
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   {/* Zoom Scale Selector */}
                   <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-card border border-border text-[10px] font-semibold text-secondary">
                     <button
                       type="button"
                       onClick={() => setPreviewScale('100')}
-                      className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                        previewScale === '100' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
-                      }`}
+                      className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${previewScale === '100' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
+                        }`}
                       title="100% 1:1 Physical Print Size (85.60 mm × 53.98 mm)"
                     >
                       100%
@@ -326,9 +325,8 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                     <button
                       type="button"
                       onClick={() => setPreviewScale('133')}
-                      className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                        previewScale === '133' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
-                      }`}
+                      className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${previewScale === '133' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
+                        }`}
                       title="133% HD Studio Size"
                     >
                       HD
@@ -336,9 +334,8 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                     <button
                       type="button"
                       onClick={() => setPreviewScale('150')}
-                      className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
-                        previewScale === '150' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
-                      }`}
+                      className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${previewScale === '150' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
+                        }`}
                       title="150% Studio Ultra Size"
                     >
                       150%
@@ -355,19 +352,19 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                 <div className="mgr-idcard-workbench">
                   <StudentIdCard data={cardData} side={cardSide} scale={previewScale} onSideChange={setCardSide} />
                 </div>
-                <div className="flex items-center justify-between text-[11px] text-secondary mt-2 px-1 no-print">
-                  <span className="flex items-center gap-1.5">
+                <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-secondary mt-2 px-1 no-print">
+                  <span className="flex items-center gap-1.5 flex-wrap">
                     <span>Standard ISO/IEC 7810 ID-1 PVC Format</span>
-                    <span>·</span>
+                    <span className="hidden sm:inline">·</span>
                     <span className="font-mono font-medium text-foreground">85.60 mm × 53.98 mm (8.56 cm × 5.4 cm)</span>
                   </span>
-                  <span className="text-secondary/80">Corner Radius: 3.18 mm</span>
+                  <span className="text-secondary/80 hidden sm:inline">Corner Radius: 3.18 mm</span>
                 </div>
               </div>
 
 
               {/* Actions Bar merged directly below card preview */}
-              <div className="w-full no-print p-2 rounded-xl bg-surface border border-border shadow-xs mt-3 flex items-center justify-end gap-2">
+              <div className="w-full no-print p-2 rounded-xl bg-surface border border-border shadow-xs mt-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-center sm:justify-end gap-2">
                 <button
                   type="button"
                   onClick={handleShareWhatsApp}

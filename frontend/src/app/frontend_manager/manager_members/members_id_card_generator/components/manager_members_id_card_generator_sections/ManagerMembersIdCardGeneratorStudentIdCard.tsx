@@ -170,8 +170,8 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
       data.status === 'Suspended'
         ? 'Under Review'
         : data.status === 'Expired'
-        ? 'Renewal Required'
-        : 'Authorized Member';
+          ? 'Renewal Required'
+          : 'Authorized Member';
 
     return (
       <div
@@ -300,18 +300,17 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
   };
 
   return (
-    <div className="flex flex-col items-center w-full">
+    <div className="flex flex-col items-center w-full overflow-x-auto">
       {/* Side Toggle Control */}
-      <div className="flex items-center justify-center gap-1 p-1 rounded-xl bg-surface border border-border mb-3 no-print">
+      <div className="flex flex-wrap items-center justify-center gap-1 p-1 rounded-xl bg-surface border border-border mb-3 no-print w-full sm:w-auto">
         <button
           type="button"
           onClick={() => handleSideSelect('front')}
           data-testid="id-card-side-front-btn"
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
-            currentSide === 'front'
+          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'front'
               ? 'bg-primary text-primary-foreground shadow-sm'
               : 'text-secondary hover:text-foreground'
-          }`}
+            }`}
         >
           <CreditCard size={13} />
           <span>Front Side</span>
@@ -320,11 +319,10 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
           type="button"
           onClick={() => handleSideSelect('back')}
           data-testid="id-card-side-back-btn"
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
-            currentSide === 'back'
+          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'back'
               ? 'bg-primary text-primary-foreground shadow-sm'
               : 'text-secondary hover:text-foreground'
-          }`}
+            }`}
         >
           <RotateCw size={13} />
           <span>Back Side</span>
@@ -333,11 +331,10 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
           type="button"
           onClick={() => handleSideSelect('both')}
           data-testid="id-card-side-both-btn"
-          className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${
-            currentSide === 'both'
+          className={`flex-1 sm:flex-none justify-center px-3 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5 ${currentSide === 'both'
               ? 'bg-primary text-primary-foreground shadow-sm'
               : 'text-secondary hover:text-foreground'
-          }`}
+            }`}
         >
           <span>Both Sides</span>
         </button>
@@ -369,12 +366,12 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
       )}
 
       {currentSide === 'both' && (
-        <div className="flex flex-wrap items-start justify-center gap-8 w-full">
+        <div className="flex flex-col lg:flex-row flex-wrap items-center lg:items-start justify-center gap-4 sm:gap-8 w-full">
           <div className="flex flex-col items-center">
             <div className="side-label no-print">
               <span className="dot" />
               <span>Front Side</span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold ml-2">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold ml-2 hidden sm:inline-block">
                 85.60 × 53.98 mm
               </span>
             </div>
@@ -386,7 +383,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
             <div className="side-label no-print">
               <span className="dot" style={{ background: '#10b981', boxShadow: '0 0 8px #10b981' }} />
               <span>Back Side</span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold ml-2">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold ml-2 hidden sm:inline-block">
                 85.60 × 53.98 mm
               </span>
             </div>
