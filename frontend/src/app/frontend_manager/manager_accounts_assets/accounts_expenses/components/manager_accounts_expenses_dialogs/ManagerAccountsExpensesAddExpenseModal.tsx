@@ -1,8 +1,9 @@
 'use client';
+
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { X, CheckCircle, Receipt } from 'lucide-react';
+import { X, CheckCircle, Receipt, Wallet, Smartphone, CreditCard, Building } from 'lucide-react';
 import type { Expense } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
 import { MANAGER_ACCOUNTING_EXPENSE_CATEGORIES as CATEGORIES } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/constants/ManagerAccountsExpensesConstants';
 import {
@@ -16,6 +17,53 @@ interface ManagerAccountsExpensesAddExpenseModalProps {
   onAddExpense: (expense: Expense, amount: number) => void;
 }
 
+const PAYMENT_MODES = [
+  {
+    id: 'cash',
+    label: 'Cash (Counter)',
+    icon: Wallet,
+    activeStyle: {
+      boxShadow: '0 0 14px rgba(16, 185, 129, 0.45)',
+      backgroundColor: '#10b981',
+      borderColor: '#34d399',
+      color: '#ffffff',
+    },
+  },
+  {
+    id: 'upi',
+    label: 'UPI / QR',
+    icon: Smartphone,
+    activeStyle: {
+      boxShadow: '0 0 14px rgba(14, 165, 233, 0.45)',
+      backgroundColor: '#0ea5e9',
+      borderColor: '#38bdf8',
+      color: '#ffffff',
+    },
+  },
+  {
+    id: 'card',
+    label: 'Card (POS)',
+    icon: CreditCard,
+    activeStyle: {
+      boxShadow: '0 0 14px rgba(168, 85, 247, 0.45)',
+      backgroundColor: '#a855f7',
+      borderColor: '#c084fc',
+      color: '#ffffff',
+    },
+  },
+  {
+    id: 'bank',
+    label: 'Bank Transfer',
+    icon: Building,
+    activeStyle: {
+      boxShadow: '0 0 14px rgba(245, 158, 11, 0.45)',
+      backgroundColor: '#f59e0b',
+      borderColor: '#fbbf24',
+      color: '#000000',
+    },
+  },
+];
+
 export function ManagerAccountsExpensesAddExpenseModal({
   isOpen,
   onClose,
@@ -25,6 +73,8 @@ export function ManagerAccountsExpensesAddExpenseModal({
     register,
     handleSubmit,
     reset,
+    control,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ManagerAccountsExpensesAddExpenseModalFormData>({
     resolver: zodResolver(managerAccountsExpensesAddExpenseModalSchema),
@@ -38,11 +88,22 @@ export function ManagerAccountsExpensesAddExpenseModal({
     },
   });
 
+  const selectedMode = useWatch({ control, name: 'mode' });
+
   useEffect(() => {
     if (!isOpen) {
       reset();
+      return;
     }
-  }, [isOpen, reset]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, reset, onClose]);
 
   if (!isOpen) return null;
 
@@ -52,7 +113,9 @@ export function ManagerAccountsExpensesAddExpenseModal({
       id: Date.now(),
       date: new Date().toISOString().slice(0, 10),
       category: data.category,
-      description: data.voucherNo?.trim() ? `${data.description.trim()} (Bill #${data.voucherNo.trim()})` : data.description.trim(),
+      description: data.voucherNo?.trim()
+        ? `${data.description.trim()} (Bill #${data.voucherNo.trim()})`
+        : data.description.trim(),
       amount: Math.round(amt * 100),
       mode: data.mode,
       paidBy: data.paidBy?.trim() || 'Manager Counter',
@@ -64,24 +127,39 @@ export function ManagerAccountsExpensesAddExpenseModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop backdrop-blur-xs p-4">
-      <div className="bg-card border border-border rounded-2xl shadow-2xl max-w-md w-full overflow-hidden motion-safe:animate-scale-up" role="dialog" aria-modal="true" aria-labelledby="modal-add-expense-title">
-        <div className="flex items-center justify-between p-5 border-b border-border bg-muted">
-          <div className="flex items-center gap-2">
-            <Receipt className="text-primary" size={18} />
-            <h3 id="modal-add-expense-title" className="font-bold text-primary text-base">Record Operational Expense</h3>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-add-expense-title"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="bg-card border border-border rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-150">
+        <div className="flex items-center justify-between p-5 border-b border-border bg-surface-highlight/70">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-primary/15 text-primary border border-primary/25 flex items-center justify-center">
+              <Receipt size={18} />
+            </div>
+            <div>
+              <h3 id="modal-add-expense-title" className="font-bold text-primary text-base">
+                Record Operational Expense
+              </h3>
+              <p className="text-[11px] text-secondary">Log branch disbursement voucher into general ledger</p>
+            </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-secondary hover:text-primary cursor-pointer"
+            className="p-1.5 rounded-lg text-secondary hover:text-primary hover:bg-surface-hover cursor-pointer transition-colors"
             aria-label="Close dialog"
           >
             <X size={18} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4" noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} className="p-5 sm:p-6 space-y-4" noValidate>
           <div>
             <label htmlFor="expense-category-select" className="text-xs font-semibold text-secondary block mb-1">
               Expense Category <span className="text-destructive">*</span>
@@ -89,7 +167,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
             <select
               id="expense-category-select"
               {...register('category')}
-              className="w-full px-3 py-2 bg-card border border-border rounded-lg text-xs text-primary outline-none focus:border-primary"
+              className="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs text-primary outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer"
             >
               {CATEGORIES.map((c) => (
                 <option key={c} value={c}>
@@ -97,7 +175,11 @@ export function ManagerAccountsExpensesAddExpenseModal({
                 </option>
               ))}
             </select>
-            {errors.category && <p className="text-xs text-destructive mt-1" role="alert">{errors.category.message}</p>}
+            {errors.category && (
+              <p className="text-xs text-destructive mt-1" role="alert">
+                {errors.category.message}
+              </p>
+            )}
           </div>
 
           <div>
@@ -107,21 +189,25 @@ export function ManagerAccountsExpensesAddExpenseModal({
             <input
               id="expense-description-input"
               type="text"
-              placeholder="e.g. Broadband recharge, RO filter service, Printing..."
+              placeholder="e.g. Broadband recharge, RO filter service, Study hall cleaning..."
               {...register('description')}
               aria-invalid={Boolean(errors.description)}
-              className="w-full px-3 py-2 bg-card border border-border rounded-lg text-xs text-primary outline-none focus:border-primary"
+              className="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs text-primary outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
-            {errors.description && <p className="text-xs text-destructive mt-1" role="alert">{errors.description.message}</p>}
+            {errors.description && (
+              <p className="text-xs text-destructive mt-1" role="alert">
+                {errors.description.message}
+              </p>
+            )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label htmlFor="expense-amount-input" className="text-xs font-semibold text-secondary block mb-1">
                 Amount (INR) <span className="text-destructive">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary">₹</span>
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-secondary">₹</span>
                 <input
                   id="expense-amount-input"
                   type="number"
@@ -130,28 +216,16 @@ export function ManagerAccountsExpensesAddExpenseModal({
                   placeholder="0.00"
                   {...register('amount')}
                   aria-invalid={Boolean(errors.amount)}
-                  className="w-full pl-7 pr-3 py-2 bg-card border border-border rounded-lg text-xs text-primary outline-none focus:border-primary font-bold"
+                  className="w-full pl-8 pr-3.5 py-2.5 bg-card border border-border rounded-xl text-xs text-primary outline-none focus:border-primary font-bold font-mono"
                 />
               </div>
-              {errors.amount && <p className="text-xs text-destructive mt-1" role="alert">{errors.amount.message}</p>}
+              {errors.amount && (
+                <p className="text-xs text-destructive mt-1" role="alert">
+                  {errors.amount.message}
+                </p>
+              )}
             </div>
 
-            <div>
-              <label htmlFor="expense-mode-select" className="text-xs font-semibold text-secondary block mb-1">Payment Mode</label>
-              <select
-                id="expense-mode-select"
-                {...register('mode')}
-                className="w-full px-3 py-2 bg-card border border-border rounded-lg text-xs text-primary outline-none focus:border-primary uppercase"
-              >
-                <option value="cash">Cash (Counter)</option>
-                <option value="upi">UPI / QR</option>
-                <option value="card">Card (POS)</option>
-                <option value="bank">Bank Transfer</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="expense-voucher-input" className="text-xs font-semibold text-secondary block mb-1">
                 Bill / Voucher # <span className="font-normal text-xs text-secondary">(Optional)</span>
@@ -159,36 +233,70 @@ export function ManagerAccountsExpensesAddExpenseModal({
               <input
                 id="expense-voucher-input"
                 type="text"
-                placeholder="Optional voucher no."
+                placeholder="e.g. V-9901, REC-441"
                 {...register('voucherNo')}
-                className="w-full px-3 py-2 bg-card border border-border rounded-lg text-xs text-primary outline-none focus:border-primary"
-              />
-            </div>
-            <div>
-              <label htmlFor="expense-paidby-input" className="text-xs font-semibold text-secondary block mb-1">Paid By (Disbursed by)</label>
-              <input
-                id="expense-paidby-input"
-                type="text"
-                {...register('paidBy')}
-                className="w-full px-3 py-2 bg-card border border-border rounded-lg text-xs text-primary outline-none focus:border-primary"
+                className="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs text-primary outline-none focus:border-primary"
               />
             </div>
           </div>
 
-          <div className="pt-3 border-t border-border flex justify-end gap-2">
+          {/* Interactive Payment Mode Selection Tiles (Glowing on Click) */}
+          <div>
+            <label className="text-xs font-semibold text-secondary block mb-1.5">
+              Payment Mode <span className="text-destructive">*</span>
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {PAYMENT_MODES.map((mode) => {
+                const Icon = mode.icon;
+                const isSelected = selectedMode === mode.id;
+                return (
+                  <button
+                    key={mode.id}
+                    type="button"
+                    onClick={() => setValue('mode', mode.id as any, { shouldValidate: true })}
+                    style={isSelected ? mode.activeStyle : undefined}
+                    className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                      isSelected
+                        ? 'border shadow-sm font-bold'
+                        : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border-border/80'
+                    }`}
+                  >
+                    <Icon size={16} className="mb-1" />
+                    <span>{mode.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="expense-paidby-input" className="text-xs font-semibold text-secondary block mb-1">
+              Disbursed By (Staff / Manager Name)
+            </label>
+            <input
+              id="expense-paidby-input"
+              type="text"
+              placeholder="e.g. Branch Manager Satyam"
+              {...register('paidBy')}
+              className="w-full px-3.5 py-2.5 bg-card border border-border rounded-xl text-xs text-primary outline-none focus:border-primary"
+            />
+          </div>
+
+          <div className="pt-3 border-t border-border flex justify-end gap-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-border bg-card hover:bg-surface-hover text-xs font-semibold text-secondary hover:text-primary cursor-pointer shadow-xs transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mgr-btn-primary px-4 py-2 rounded-xl text-xs font-semibold shadow-sm inline-flex items-center gap-1.5"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
             >
-              <CheckCircle size={14} /> Record Expense
+              <CheckCircle size={14} />
+              <span>Record Expense</span>
             </button>
           </div>
         </form>
@@ -196,3 +304,5 @@ export function ManagerAccountsExpensesAddExpenseModal({
     </div>
   );
 }
+
+export default ManagerAccountsExpensesAddExpenseModal;
