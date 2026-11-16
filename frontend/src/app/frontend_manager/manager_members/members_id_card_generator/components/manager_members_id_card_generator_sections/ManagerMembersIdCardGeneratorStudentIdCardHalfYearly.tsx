@@ -265,14 +265,14 @@ export default function ManagerMembersIdCardGeneratorStudentIdCardHalfYearly({
 
       {currentSide === 'front' && (
         <div className="flex flex-col items-center">
-          <div className="side-label no-print"><span className="dot" style={{ background: '#d4af37', boxShadow: '0 0 10px #d4af37' }} />Front Side</div>
+          <div className="side-label no-print"><span className="dot" style={{ background: '#10b981', boxShadow: '0 0 10px #10b981' }} />Front Side</div>
           <div className={`mgr-idcard-wrap ${scaleClass}`}>{renderFront()}</div>
         </div>
       )}
 
       {currentSide === 'back' && (
         <div className="flex flex-col items-center">
-          <div className="side-label no-print"><span className="dot" style={{ background: '#d4af37', boxShadow: '0 0 10px #d4af37' }} />Back Side</div>
+          <div className="side-label no-print"><span className="dot" style={{ background: '#10b981', boxShadow: '0 0 10px #10b981' }} />Back Side</div>
           <div className={`mgr-idcard-wrap ${scaleClass}`}>
             <ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack data={data} />
           </div>
@@ -283,7 +283,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCardHalfYearly({
         <div className="flex flex-col lg:flex-row flex-wrap items-center lg:items-start justify-center gap-4 sm:gap-8 w-full">
           <div className="flex flex-col items-center">
             <div className="side-label no-print">
-              <span className="dot" style={{ background: '#d4af37', boxShadow: '0 0 10px #d4af37' }} />
+              <span className="dot" style={{ background: '#10b981', boxShadow: '0 0 10px #10b981' }} />
               <span>Front Side</span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold ml-2 hidden sm:inline-block">85.60 × 53.98 mm</span>
             </div>

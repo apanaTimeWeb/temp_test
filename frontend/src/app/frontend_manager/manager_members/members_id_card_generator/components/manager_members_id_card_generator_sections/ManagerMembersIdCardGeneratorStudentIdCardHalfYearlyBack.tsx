@@ -132,8 +132,8 @@ export function ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack({
           <div className="hy-back-serial">S/N {serial}</div>
         </div>
         <div className="hy-tier-badge">
-          <span className="hy-tier-crown">👑</span>
-          <span className="hy-tier-label">GOLD</span>
+          <span className="hy-tier-crown">💎</span>
+          <span className="hy-tier-label">EMERALD</span>
         </div>
       </div>
 

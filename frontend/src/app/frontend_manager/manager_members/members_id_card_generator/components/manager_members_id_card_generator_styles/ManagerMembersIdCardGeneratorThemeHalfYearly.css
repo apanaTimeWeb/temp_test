@@ -11,8 +11,8 @@
     transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.3, 1), box-shadow 0.4s;
     box-shadow:
       0 40px 100px -25px rgba(0, 0, 0, 0.85),
-      0 20px 50px -20px rgba(212, 175, 55, 0.15),
-      0 0 0 1px rgba(212, 175, 55, 0.25),
+      0 20px 50px -20px rgba(16, 185, 129, 0.15),
+      0 0 0 1px rgba(16, 185, 129, 0.25),
       inset 0 1px 0 rgba(255, 255, 255, 0.12);
     isolation: isolate;
     box-sizing: border-box;
@@ -22,8 +22,8 @@
   .hy-card:hover {
     box-shadow:
       0 50px 120px -25px rgba(0, 0, 0, 0.9),
-      0 25px 70px -20px rgba(212, 175, 55, 0.35),
-      0 0 0 1px rgba(212, 175, 55, 0.5),
+      0 25px 70px -20px rgba(16, 185, 129, 0.35),
+      0 0 0 1px rgba(16, 185, 129, 0.5),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
   .mgr-students-theme .hy-card::before,
@@ -63,7 +63,7 @@
     z-index: 1;
     opacity: 0.12;
     background-image:
-      repeating-linear-gradient(45deg, transparent 0, transparent 3px, rgba(212, 175, 55, 0.4) 3px, rgba(212, 175, 55, 0.4) 4px),
+      repeating-linear-gradient(45deg, transparent 0, transparent 3px, rgba(16, 185, 129, 0.4) 3px, rgba(16, 185, 129, 0.4) 4px),
       repeating-linear-gradient(-45deg, transparent 0, transparent 5px, rgba(34, 211, 238, 0.3) 5px, rgba(34, 211, 238, 0.3) 6px),
       repeating-linear-gradient(90deg, transparent 0, transparent 7px, rgba(167, 139, 250, 0.25) 7px, rgba(167, 139, 250, 0.25) 8px);
   }
@@ -72,10 +72,10 @@
   .mgr-students-theme .hy-card-front,
   .hy-card-front {
     background:
-      radial-gradient(ellipse 550px 220px at 12% 0%, rgba(212, 175, 55, 0.22), transparent 55%),
+      radial-gradient(ellipse 550px 220px at 12% 0%, rgba(16, 185, 129, 0.22), transparent 55%),
       radial-gradient(ellipse 450px 220px at 92% 100%, rgba(20, 184, 166, 0.18), transparent 55%),
       radial-gradient(ellipse 350px 180px at 50% 45%, rgba(167, 139, 250, 0.06), transparent 60%),
-      linear-gradient(135deg, #05080f 0%, #0a0f1a 35%, #131b2e 65%, #0a0f1a 100%) !important;
+      linear-gradient(135deg, #020d09 0%, #041c14 35%, #073324 65%, #041c14 100%) !important;
     display: flex !important;
     flex-direction: column !important;
     padding: 0 !important;
@@ -89,7 +89,7 @@
     z-index: 3;
     flex-shrink: 0;
     height: 40px;
-    background: linear-gradient(90deg, #8a6d1f 0%, #d4af37 12%, #f4d35e 24%, #fffbe6 36%, #f4d35e 48%, #d4af37 60%, #f4d35e 72%, #fffbe6 84%, #d4af37 96%, #8a6d1f 100%);
+    background: linear-gradient(90deg, #064e3b 0%, #10b981 12%, #34d399 24%, #ecfdf5 36%, #34d399 48%, #10b981 60%, #34d399 72%, #ecfdf5 84%, #10b981 96%, #064e3b 100%);
     padding: 0 14px;
     display: flex;
     justify-content: space-between;
@@ -123,7 +123,7 @@
     width: 24px;
     height: 24px;
     border-radius: 6px;
-    background: linear-gradient(135deg, #05080f, #131b2e);
+    background: linear-gradient(135deg, #020d09, #073324);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -143,14 +143,14 @@
     font-size: 11px;
     font-weight: 900;
     letter-spacing: 0.16em;
-    color: #0a0f1a;
+    color: #041c14;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
   }
   .mgr-students-theme .hy-foil-branch,
   .hy-foil-branch {
     font-size: 6.5px;
     font-weight: 800;
-    color: #422006;
+    color: #022c22;
     margin-top: 2px;
     letter-spacing: 0.06em;
   }
@@ -170,7 +170,7 @@
     height: 20px;
     border-radius: 3px;
     position: relative;
-    background: linear-gradient(135deg, #f4d35e 0%, #d4af37 20%, #f4d35e 40%, #8a6d1f 60%, #d4af37 80%, #f4d35e 100%);
+    background: linear-gradient(135deg, #34d399 0%, #10b981 20%, #34d399 40%, #064e3b 60%, #10b981 80%, #34d399 100%);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -1px 0 rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
   }
@@ -180,15 +180,15 @@
     position: absolute;
     inset: 2px;
     background:
-      linear-gradient(90deg, transparent 33%, #8a6d1f 33%, #8a6d1f 35%, transparent 35%),
-      linear-gradient(90deg, transparent 65%, #8a6d1f 65%, #8a6d1f 67%, transparent 67%),
-      linear-gradient(0deg, transparent 45%, #8a6d1f 45%, #8a6d1f 55%, transparent 55%);
+      linear-gradient(90deg, transparent 33%, #064e3b 33%, #064e3b 35%, transparent 35%),
+      linear-gradient(90deg, transparent 65%, #064e3b 65%, #064e3b 67%, transparent 67%),
+      linear-gradient(0deg, transparent 45%, #064e3b 45%, #064e3b 55%, transparent 55%);
     border-radius: 2px;
   }
 
   .mgr-students-theme .hy-foil-nfc,
   .hy-foil-nfc {
-    color: #0a0f1a;
+    color: #041c14;
     opacity: 0.75;
     transform: rotate(90deg);
   }
@@ -199,8 +199,8 @@
     letter-spacing: 0.18em;
     padding: 3px 8px;
     border-radius: 3px;
-    background: linear-gradient(135deg, #0a0f1a, #131b2e);
-    color: #f4d35e;
+    background: linear-gradient(135deg, #041c14, #073324);
+    color: #34d399;
     text-transform: uppercase;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(244, 211, 94, 0.3);
@@ -244,7 +244,7 @@
     position: absolute;
     inset: -2px;
     border-radius: 12px;
-    background: conic-gradient(from 45deg, #d4af37, #f43f5e, #22d3ee, #14b8a6, #a78bfa, #d4af37);
+    background: conic-gradient(from 45deg, #10b981, #f43f5e, #22d3ee, #14b8a6, #a78bfa, #10b981);
     z-index: 0;
     animation: hy-photo-ring 8s linear infinite;
   }
@@ -279,7 +279,7 @@
     border-radius: 50%;
     background: #10b981;
     z-index: 2;
-    box-shadow: 0 0 0 2px #0a0f1a, 0 0 10px #10b981;
+    box-shadow: 0 0 0 2px #041c14, 0 0 10px #10b981;
     animation: hy-live 2s ease-in-out infinite;
   }
   @keyframes hy-live {
@@ -305,7 +305,7 @@
     text-shadow:
       -0.5px 0 0 rgba(244, 63, 94, 0.5),
       0.5px 0 0 rgba(34, 211, 238, 0.5),
-      0 0 16px rgba(212, 175, 55, 0.25);
+      0 0 16px rgba(16, 185, 129, 0.25);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -319,9 +319,9 @@
     letter-spacing: 0.1em;
     padding: 2px 7px;
     border-radius: 3px;
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(212, 175, 55, 0.08));
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(16, 185, 129, 0.08));
     border: 1px solid rgba(244, 211, 94, 0.5);
-    color: #f4d35e;
+    color: #34d399;
     margin-bottom: 2px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
     white-space: nowrap;
@@ -382,7 +382,7 @@
     z-index: 1;
     font-size: 15px;
     font-weight: 900;
-    color: #05080f;
+    color: #020d09;
     text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
     transform: rotate(-20deg);
     opacity: 0.9;
@@ -405,7 +405,7 @@
     position: relative;
     overflow: hidden;
   }
-  .mgr-students-theme .hy-ac1, .hy-ac1 { background: linear-gradient(90deg, #d4af37, #f4d35e); }
+  .mgr-students-theme .hy-ac1, .hy-ac1 { background: linear-gradient(90deg, #10b981, #34d399); }
   .mgr-students-theme .hy-ac2, .hy-ac2 { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
   .mgr-students-theme .hy-ac3, .hy-ac3 { background: linear-gradient(90deg, #22d3ee, #06b6d4); }
   .mgr-students-theme .hy-ac4, .hy-ac4 { background: linear-gradient(90deg, #10b981, #059669); }
@@ -423,7 +423,7 @@
     padding: 4px 6px;
     border-radius: 6px;
     background: linear-gradient(135deg, rgba(19, 27, 46, 0.85), rgba(10, 15, 26, 0.9));
-    border: 1px solid rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.15);
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(6px);
@@ -460,7 +460,7 @@
     text-overflow: ellipsis;
     line-height: 1.1;
   }
-  .mgr-students-theme .hy-d-shift, .hy-d-shift { --hyc: #f4d35e; }
+  .mgr-students-theme .hy-d-shift, .hy-d-shift { --hyc: #34d399; }
   .mgr-students-theme .hy-d-seat, .hy-d-seat { --hyc: #a78bfa; }
   .mgr-students-theme .hy-d-plan, .hy-d-plan { --hyc: #22d3ee; }
   .mgr-students-theme .hy-d-locker, .hy-d-locker { --hyc: #10b981; }
@@ -475,8 +475,8 @@
     padding: 4px 10px;
     border-radius: 6px;
     flex-shrink: 0;
-    background: linear-gradient(90deg, rgba(212, 175, 55, 0.1), rgba(19, 27, 46, 0.7), rgba(212, 175, 55, 0.1));
-    border: 1px solid rgba(212, 175, 55, 0.25);
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(19, 27, 46, 0.7), rgba(16, 185, 129, 0.1));
+    border: 1px solid rgba(16, 185, 129, 0.25);
     position: relative;
     overflow: hidden;
   }
@@ -509,12 +509,12 @@
   }
   .mgr-students-theme .hy-validity-expiry,
   .hy-validity-expiry {
-    color: #f4d35e !important;
+    color: #34d399 !important;
     text-shadow: 0 0 8px rgba(244, 211, 94, 0.5);
   }
   .mgr-students-theme .hy-validity-arrow,
   .hy-validity-arrow {
-    color: #d4af37;
+    color: #10b981;
     font-size: 10px;
     opacity: 0.8;
   }
@@ -530,7 +530,7 @@
     padding: 5px 7px;
     border-radius: 7px;
     background: linear-gradient(135deg, rgba(10, 15, 26, 0.7), rgba(19, 27, 46, 0.5));
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.2);
     height: 42px;
     box-sizing: border-box;
   }
@@ -542,7 +542,7 @@
     background: #fff;
     border-radius: 4px;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(16, 185, 129, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -583,7 +583,7 @@
     align-items: flex-end;
     gap: 1px;
     padding-left: 8px;
-    border-left: 1px solid rgba(212, 175, 55, 0.2);
+    border-left: 1px solid rgba(16, 185, 129, 0.2);
     flex-shrink: 0;
   }
   .mgr-students-theme .hy-status-badge,
@@ -639,7 +639,7 @@
     height: 2px;
     z-index: 5;
     background: repeating-linear-gradient(90deg,
-      rgba(212, 175, 55, 0.7) 0, rgba(212, 175, 55, 0.7) 1px, transparent 1px, transparent 2px,
+      rgba(16, 185, 129, 0.7) 0, rgba(16, 185, 129, 0.7) 1px, transparent 1px, transparent 2px,
       rgba(34, 211, 238, 0.6) 2px, rgba(34, 211, 238, 0.6) 3px, transparent 3px, transparent 4px,
       rgba(167, 139, 250, 0.5) 4px, rgba(167, 139, 250, 0.5) 5px, transparent 5px, transparent 6px);
   }
@@ -648,13 +648,13 @@
   .mgr-students-theme .hy-card-back,
   .hy-card-back {
     background:
-      radial-gradient(ellipse 450px 220px at 100% 0%, rgba(212, 175, 55, 0.2), transparent 55%),
+      radial-gradient(ellipse 450px 220px at 100% 0%, rgba(16, 185, 129, 0.2), transparent 55%),
       radial-gradient(ellipse 450px 220px at 0% 100%, rgba(167, 139, 250, 0.16), transparent 55%),
-      linear-gradient(135deg, #05080f 0%, #0a0f1a 45%, #131b2e 100%) !important;
+      linear-gradient(135deg, #020d09 0%, #041c14 45%, #073324 100%) !important;
     display: flex !important;
     flex-direction: column !important;
     color: #e2e8f0 !important;
-    border: 1px solid rgba(212, 175, 55, 0.25) !important;
+    border: 1px solid rgba(16, 185, 129, 0.25) !important;
     height: 278px !important;
     max-height: 278px !important;
     overflow: hidden !important;
@@ -677,7 +677,7 @@
     z-index: 2;
     margin-top: 12px;
     flex-shrink: 0;
-    background: linear-gradient(180deg, #000 0%, #1a1f2e 25%, #05080f 50%, #1a1f2e 75%, #000 100%);
+    background: linear-gradient(180deg, #000 0%, #1a1f2e 25%, #020d09 50%, #1a1f2e 75%, #000 100%);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.8);
     box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.7), inset 0 -2px 6px rgba(0, 0, 0, 0.7);
@@ -690,7 +690,7 @@
     font-size: 6px;
     font-weight: 900;
     letter-spacing: 0.35em;
-    color: rgba(212, 175, 55, 0.5);
+    color: rgba(16, 185, 129, 0.5);
     text-transform: uppercase;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.8);
   }
@@ -731,7 +731,7 @@
     font-size: 6.5px;
     font-weight: 900;
     letter-spacing: 0.12em;
-    color: #05080f;
+    color: #020d09;
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
     transform: rotate(-45deg);
   }
@@ -757,7 +757,7 @@
     font-size: 10px;
     font-weight: 900;
     letter-spacing: 0.18em;
-    background: linear-gradient(90deg, #d4af37 0%, #f4d35e 50%, #d4af37 100%);
+    background: linear-gradient(90deg, #10b981 0%, #34d399 50%, #10b981 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -779,8 +779,8 @@
     gap: 0;
     padding: 4px 11px;
     border-radius: 5px;
-    background: linear-gradient(135deg, #8a6d1f, #d4af37 30%, #f4d35e 50%, #d4af37 70%, #8a6d1f);
-    box-shadow: 0 3px 10px rgba(212, 175, 55, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, #064e3b, #10b981 30%, #34d399 50%, #10b981 70%, #064e3b);
+    box-shadow: 0 3px 10px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     position: relative;
     overflow: hidden;
   }
@@ -796,7 +796,7 @@
     font-size: 7.5px;
     font-weight: 900;
     letter-spacing: 0.16em;
-    color: #0a0f1a;
+    color: #041c14;
     position: relative;
     z-index: 1;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -864,7 +864,7 @@
     padding: 6px 9px;
     border-radius: 6px;
     background: linear-gradient(135deg, rgba(19, 27, 46, 0.85), rgba(10, 15, 26, 0.9));
-    border: 1px solid rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.15);
     backdrop-filter: blur(6px);
     position: relative;
     overflow: hidden;
@@ -889,7 +889,7 @@
     font-weight: 900;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #f4d35e;
+    color: #34d399;
     margin-bottom: 3px;
   }
   .mgr-students-theme .hy-back-card-title-cyan,
@@ -918,7 +918,7 @@
   .mgr-students-theme .hy-rules-list li::before,
   .hy-rules-list li::before {
     content: '▸';
-    color: #d4af37;
+    color: #10b981;
     font-weight: 900;
     flex-shrink: 0;
     font-size: 7px;
@@ -936,7 +936,7 @@
     align-items: center;
     font-size: 7px;
     padding: 2px 0;
-    border-bottom: 1px dashed rgba(212, 175, 55, 0.15);
+    border-bottom: 1px dashed rgba(16, 185, 129, 0.15);
   }
   .mgr-students-theme .hy-contact-row:last-child,
   .hy-contact-row:last-child {
@@ -982,7 +982,7 @@
     padding: 2px;
     background: #fff;
     border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(16, 185, 129, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -997,7 +997,7 @@
   .hy-lost-title {
     font-size: 6.5px;
     font-weight: 900;
-    color: #f4d35e;
+    color: #34d399;
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
@@ -1031,7 +1031,7 @@
     transform: translate(-50%, -50%) rotate(-20deg);
     font-size: 120px;
     font-weight: 900;
-    color: rgba(212, 175, 55, 0.035);
+    color: rgba(16, 185, 129, 0.035);
     pointer-events: none;
     z-index: 0;
     letter-spacing: 0.08em;
@@ -1046,7 +1046,7 @@
     height: 2px;
     z-index: 5;
     background: repeating-linear-gradient(90deg,
-      rgba(212, 175, 55, 0.6) 0, rgba(212, 175, 55, 0.6) 1px, transparent 1px, transparent 2px,
+      rgba(16, 185, 129, 0.6) 0, rgba(16, 185, 129, 0.6) 1px, transparent 1px, transparent 2px,
       rgba(34, 211, 238, 0.5) 2px, rgba(34, 211, 238, 0.5) 3px, transparent 3px, transparent 4px);
   }
 }

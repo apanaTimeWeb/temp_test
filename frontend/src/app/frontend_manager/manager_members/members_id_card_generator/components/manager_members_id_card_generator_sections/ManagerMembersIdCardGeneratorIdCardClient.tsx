@@ -333,7 +333,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                     if (theme === 'quarterly') {
                       badgeClass = 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
                     } else if (theme === 'half-yearly') {
-                      badgeClass = 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30';
+                      badgeClass = 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
                     } else if (theme === 'full-year') {
                       badgeClass = 'bg-amber-200/20 text-[#f5ebd7] border border-amber-200/30';
                     }
