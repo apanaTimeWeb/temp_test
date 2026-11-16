@@ -159,15 +159,13 @@ describe('Print Stylesheet and Layout Integrity', () => {
     expect(cssContent).toContain('print-color-adjust: exact');
   });
 
-  it('verifies client orchestrator contains layout selector and retains WhatsApp and Print', () => {
+  it('verifies client orchestrator retains WhatsApp, Print, and duplex PVC print output', () => {
     expect(clientPath).toBeDefined();
     const clientContent = readFileSync(clientPath!, 'utf8');
 
-    // Layout Selector
-    expect(clientContent).toContain('manager-id-card-layout-select');
-    expect(clientContent).toContain('pvc_single');
-    expect(clientContent).toContain('a4_sheet_8');
-    expect(clientContent).toContain('a4_sheet_10');
+    // Default PVC print mode & duplex output
+    expect(clientContent).toContain('print-mode-pvc_single');
+    expect(clientContent).toContain('print-duplex');
 
     // Unremoved Existing Features
     expect(clientContent).toContain('manager-students-id-card-whatsapp-share');
