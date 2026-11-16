@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageCircle, PhoneCall, ShieldCheck } from 'lucide-react';
+import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageCircle, PhoneCall, ShieldCheck, IndianRupee } from 'lucide-react';
 import { displayValue } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDisplayValue';
 import { formatManagerMemberDirectoryCalendarDate } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryDateFormatting';
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
@@ -85,6 +85,25 @@ export function ManagerMembersDirectoryTable({
   const locale = useLocale();
   const effectivePage = Math.min(page, pageCount - 1);
   const [previewMember, setPreviewMember] = useState<ManagerMembersDirectoryRecord | null>(null);
+
+  const handleQuickCollectFee = (e: React.MouseEvent, m: ManagerMembersDirectoryRecord) => {
+    e.stopPropagation();
+    const prefillData = {
+      memberId: m.id,
+      memberName: m.name,
+      phone: m.phone,
+      seat: m.seat || '',
+      shift: m.shift || '',
+      plan: m.type || '',
+      expiryDate: m.expiryDate || '',
+    };
+    try {
+      sessionStorage.setItem('manager_pending_fee_collection', JSON.stringify(prefillData));
+      sessionStorage.setItem('enquiry_conversion_prefill', JSON.stringify(prefillData));
+      localStorage.setItem('manager_pending_fee_collection', JSON.stringify(prefillData));
+    } catch (_) {}
+    window.location.href = `/frontend_manager/manager_finance/finance_collect_fee?studentId=${encodeURIComponent(m.id)}&name=${encodeURIComponent(m.name)}&phone=${encodeURIComponent(m.phone)}&seat=${encodeURIComponent(m.seat || '')}&shift=${encodeURIComponent(m.shift || '')}&plan=${encodeURIComponent(m.type || '')}`;
+  };
 
   const renderSortableHeader = (field: MemberSortField, label: string) => {
     const isActive = sortField === field;
@@ -233,6 +252,18 @@ export function ManagerMembersDirectoryTable({
                       </td>
                       <td className="px-3 py-3 align-middle text-right">
                         <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+                          {/* Quick Collect Fee Button (Emerald) */}
+                          <button
+                            type="button"
+                            onClick={(e) => handleQuickCollectFee(e, member)}
+                            className="inline-flex items-center justify-center min-h-8 min-w-8 px-2.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/35 hover:text-emerald-200 transition-all cursor-pointer shadow-sm shadow-emerald-950/50"
+                            title={`Collect Fee / Renew Plan for ${member.name}`}
+                            aria-label={`Collect Fee for ${member.name}`}
+                          >
+                            <IndianRupee size={13} />
+                            <span className="hidden lg:inline text-xs font-semibold ml-1">Fee</span>
+                          </button>
+
                           {/* Call Button (Amber) */}
                           <a
                             href={`tel:${member.phone.replace(/\D/g, '')}`}

@@ -1,3 +1,14 @@
+export interface ManagerMembersDirectoryLeaveDetails {
+  startDate: string;
+  endDate: string;
+  days: number;
+  reason: string;
+  notes?: string;
+  approvedAt?: string;
+  extendExpiry?: boolean;
+  releaseSeatBuffer?: boolean;
+}
+
 export interface ManagerMembersDirectoryRecord {
   id: string;
   smartId?: string;
@@ -5,7 +16,7 @@ export interface ManagerMembersDirectoryRecord {
   phone: string;
   email: string;
   type: string;
-  status: 'Active' | 'Expired' | 'Suspended' | 'Blocked';
+  status: 'Active' | 'Expired' | 'Suspended' | 'Blocked' | 'On Leave';
   joinDate: string;
   expiryDate: string;
   seat?: string;
@@ -24,6 +35,8 @@ export interface ManagerMembersDirectoryRecord {
   emergencyContact?: string;
   referralPoints?: number;
   referredBy?: string;
+  isFrozen?: boolean;
+  leaveDetails?: ManagerMembersDirectoryLeaveDetails;
   documents?: {
     id: string;
     type: string;
@@ -34,7 +47,12 @@ export interface ManagerMembersDirectoryRecord {
   }[];
 }
 
-export type ManagerMembersDirectoryStatusLabelKey = 'member_status_active' | 'member_status_expired' | 'member_status_suspended' | 'member_status_blocked';
+export type ManagerMembersDirectoryStatusLabelKey =
+  | 'member_status_active'
+  | 'member_status_expired'
+  | 'member_status_suspended'
+  | 'member_status_blocked'
+  | 'member_status_on_leave';
 
 export interface ManagerMembersDirectoryKpiSectionProps {
   totalMembers: number;

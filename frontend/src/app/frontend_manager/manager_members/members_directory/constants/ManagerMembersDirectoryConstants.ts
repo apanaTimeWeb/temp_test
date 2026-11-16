@@ -28,6 +28,7 @@ export const MANAGER_MEMBERS_STATUS_BADGES = {
   Expired: { className: 'mgr-badge--danger', labelKey: 'member_status_expired' },
   Suspended: { className: 'mgr-badge--warning', labelKey: 'member_status_suspended' },
   Blocked: { className: 'mgr-badge--danger', labelKey: 'member_status_blocked' },
+  'On Leave': { className: 'mgr-badge--info', labelKey: 'member_status_on_leave' },
 } as const satisfies Record<ManagerMembersDirectoryRecord['status'], { className: string; labelKey: ManagerMembersDirectoryStatusLabelKey }>;
 
 export const MANAGER_MEMBERS_DIRECTORY_SEARCH_DEBOUNCE_MS = 300;

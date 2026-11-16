@@ -1,12 +1,14 @@
 'use client';
 // RESPONSIBILITY: Render the members directory profile section section of the components feature. It does not own backend persistence or cross-feature business logic.
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import {
   Award, CheckCircle, Clock, ExternalLink, FileText, GraduationCap,
-  Mail, MapPin, Pencil, Phone, Search, ShieldCheck, Users, ArrowLeft, MessageSquare, MessageCircle, PhoneCall, AlertTriangle, X
+  Mail, MapPin, Pencil, Phone, Search, ShieldCheck, Users, ArrowLeft, MessageSquare, MessageCircle, PhoneCall, AlertTriangle, X,
+  IndianRupee, PauseCircle, PlayCircle
 } from 'lucide-react';
 
 import { maskManagerMemberPhone } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryPrivacy';
@@ -18,18 +20,87 @@ import {
   ManagerMembersDirectoryGraduateAlumniModal,
   type ManagerGraduateAlumniDetails,
 } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryGraduateAlumniModal';
+import { ManagerMembersDirectoryFreezeModal } from '@/app/frontend_manager/manager_members/members_directory/components/manager_members_directory_sections/ManagerMembersDirectoryFreezeModal';
 import { graduateMemberToAlumni } from '@/app/frontend_manager/manager_members/members_directory/utils/ManagerMembersDirectoryGraduateAlumni';
-import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import type { ManagerMembersDirectoryRecord, ManagerMembersDirectoryLeaveDetails } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 import type { ManagerMembersDirectoryProfileSectionProps } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryComponentTypes';
 export type { ManagerMembersDirectoryProfileSectionProps };
 
 export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchChange, member, onUpdateMember, initialEdit, onBack }: ManagerMembersDirectoryProfileSectionProps) {
   const tManagerUi = useTranslations('manager.manager_member_directory.ui');
   const locale = useLocale();
+  const router = useRouter();
   const [isEditModalOpen, setIsEditModalOpen] = useState(Boolean(initialEdit));
   const [isGraduateModalOpen, setIsGraduateModalOpen] = useState(false);
+  const [isFreezeModalOpen, setIsFreezeModalOpen] = useState(false);
   const [selectedDocPreview, setSelectedDocPreview] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
+
+  const isFrozen = Boolean(member?.isFrozen || member?.status === 'On Leave');
+
+  const handleCollectFee = () => {
+    if (!member) return;
+    const prefillData = {
+      memberId: member.id,
+      memberName: member.name,
+      phone: member.phone,
+      seat: member.seat || '',
+      shift: member.shift || '',
+      plan: member.type || '',
+      expiryDate: member.expiryDate || '',
+    };
+    try {
+      sessionStorage.setItem('manager_pending_fee_collection', JSON.stringify(prefillData));
+      sessionStorage.setItem('enquiry_conversion_prefill', JSON.stringify(prefillData));
+      localStorage.setItem('manager_pending_fee_collection', JSON.stringify(prefillData));
+    } catch (_) {}
+    const params = new URLSearchParams({
+      studentId: member.id,
+      name: member.name,
+      phone: member.phone,
+      seat: member.seat || '',
+      shift: member.shift || '',
+      plan: member.type || '',
+    });
+    router.push(`/frontend_manager/manager_finance/finance_collect_fee?${params.toString()}`);
+  };
+
+  const handleConfirmFreeze = (details: ManagerMembersDirectoryLeaveDetails) => {
+    if (!member) return;
+    let newExpiry = member.expiryDate;
+    if (details.extendExpiry && member.expiryDate) {
+      try {
+        const cur = new Date(member.expiryDate);
+        if (!isNaN(cur.getTime())) {
+          cur.setDate(cur.getDate() + details.days);
+          newExpiry = cur.toISOString().slice(0, 10);
+        }
+      } catch (_) {}
+    }
+
+    const updated: ManagerMembersDirectoryRecord = {
+      ...member,
+      status: 'On Leave',
+      isFrozen: true,
+      leaveDetails: details,
+      expiryDate: newExpiry,
+    };
+    onUpdateMember?.(updated);
+    toast.success(
+      `Membership paused for ${member.name} (${details.days} days leave registered). Plan expiry extended to ${newExpiry}!`
+    );
+  };
+
+  const handleResumeMember = () => {
+    if (!member) return;
+    const updated: ManagerMembersDirectoryRecord = {
+      ...member,
+      status: 'Active',
+      isFrozen: false,
+    };
+    onUpdateMember?.(updated);
+    toast.success(`Membership resumed for ${member.name}. Student status is now Active!`);
+  };
 
   const handleSaveMember = (updated: ManagerMembersDirectoryRecord) => {
     onUpdateMember?.(updated);
@@ -61,7 +132,13 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
   };
 
   const membershipTypeLabels: Record<string, string> = { Basic: tManagerUi('basic'), Pro: tManagerUi('pro'), Enterprise: tManagerUi('enterprise') };
-  const memberStatusLabels: Record<string, string> = { Active: tManagerUi('member_status_active'), Expired: tManagerUi('member_status_expired'), Suspended: tManagerUi('member_status_suspended'), Blocked: 'Blocked' };
+  const memberStatusLabels: Record<string, string> = {
+    Active: tManagerUi('member_status_active'),
+    Expired: tManagerUi('member_status_expired'),
+    Suspended: tManagerUi('member_status_suspended'),
+    Blocked: 'Blocked',
+    'On Leave': tManagerUi('member_status_on_leave') || 'On Leave',
+  };
   const membershipTypeLabel = member ? (membershipTypeLabels[member.type] ?? member.type) : '';
   const memberStatusLabel = member ? (memberStatusLabels[member.status] ?? member.status) : '';
   const displayDocuments = member?.documents && member.documents.length > 0 ? member.documents : [];
@@ -74,6 +151,7 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
         Expired: { container: 'bg-rose-500/15 border-rose-500/30 text-rose-400', icon: <Clock size={13} aria-hidden="true" /> },
         Suspended: { container: 'bg-amber-500/15 border-amber-500/30 text-amber-400', icon: <AlertTriangle size={13} aria-hidden="true" /> },
         Blocked: { container: 'bg-rose-500/15 border-rose-500/30 text-rose-400', icon: <AlertTriangle size={13} aria-hidden="true" /> },
+        'On Leave': { container: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-300', icon: <PauseCircle size={13} aria-hidden="true" /> },
       }[member.status] ?? { container: 'bg-card border-border text-primary', icon: <CheckCircle size={13} aria-hidden="true" /> }
     : { container: 'bg-card border-border text-primary', icon: <CheckCircle size={13} aria-hidden="true" /> };
 
@@ -162,6 +240,40 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
 
               {/* Action Buttons Bar - cleanly wrapped, never collides with columns */}
               <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap shrink-0">
+                {/* Direct Collect Fee / Renew Button (Vibrant Emerald) */}
+                <button
+                  type="button"
+                  onClick={handleCollectFee}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-md shadow-emerald-950/40 transition-all cursor-pointer hover:scale-[1.02]"
+                  title={`Direct Collect Fee or Renew Plan for ${member.name}`}
+                >
+                  <IndianRupee size={13} />
+                  <span>Collect Fee</span>
+                </button>
+
+                {/* Leave / Freeze / Resume Button */}
+                {isFrozen ? (
+                  <button
+                    type="button"
+                    onClick={handleResumeMember}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-500/35 hover:text-white shadow-sm shadow-cyan-950/50 transition-all cursor-pointer"
+                    title="Resume active membership"
+                  >
+                    <PlayCircle size={13} />
+                    <span>Resume Membership</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setIsFreezeModalOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/35 hover:text-white shadow-sm shadow-amber-950/50 transition-all cursor-pointer"
+                    title="Pause / Freeze Membership for student on leave"
+                  >
+                    <PauseCircle size={13} />
+                    <span>Freeze / Apply Leave</span>
+                  </button>
+                )}
+
                 {/* Call Button (Amber) */}
                 <a
                   href={`tel:${member.phone.replace(/\D/g, '')}`}
@@ -206,6 +318,52 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
                 </button>
               </div>
             </div>
+
+            {/* Active Leave & Membership Freeze Banner */}
+            {isFrozen && (
+              <div className="p-4 rounded-xl bg-gradient-to-r from-cyan-950/70 via-cyan-900/50 to-[#0c0f28] border border-cyan-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 flex items-center justify-center shrink-0 mt-0.5">
+                    <PauseCircle size={22} />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-bold text-cyan-200 text-sm">
+                        Membership Currently Paused / Frozen
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                        {member.leaveDetails?.days || 15} Days Leave
+                      </span>
+                    </div>
+                    <p className="text-slate-300 mt-1">
+                      <span className="text-slate-400">Duration: </span>
+                      <span className="font-semibold text-white">
+                        {member.leaveDetails?.startDate || 'Today'} to {member.leaveDetails?.endDate || '15 days'}
+                      </span>
+                      <span className="mx-2 text-slate-500">•</span>
+                      <span className="text-slate-400">Reason: </span>
+                      <span className="font-semibold text-cyan-200">
+                        {member.leaveDetails?.reason || 'Home visit / Exams'}
+                      </span>
+                    </p>
+                    {member.leaveDetails?.notes && (
+                      <p className="text-slate-400 text-[11px] mt-0.5 italic">
+                        Remarks: &quot;{member.leaveDetails.notes}&quot;
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleResumeMember}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-500 hover:from-cyan-500 hover:to-teal-400 text-white font-bold text-xs shadow-md shadow-cyan-950/50 transition-all cursor-pointer shrink-0 self-start sm:self-auto"
+                >
+                  <PlayCircle size={14} />
+                  <span>Resume / Unfreeze Now</span>
+                </button>
+              </div>
+            )}
 
             {/* Inner Details Grid: 2 columns on lg, 1 column on mobile/tablet */}
             <div className="pt-5 border-t border-border/70 grid grid-cols-1 lg:grid-cols-2 gap-5 min-w-0">
@@ -353,6 +511,12 @@ export function ManagerMembersDirectoryProfileSection({ searchValue, onSearchCha
             onClose={() => setIsGraduateModalOpen(false)}
             member={member}
             onGraduate={handleGraduateMember}
+          />
+          <ManagerMembersDirectoryFreezeModal
+            isOpen={isFreezeModalOpen}
+            onClose={() => setIsFreezeModalOpen(false)}
+            member={member}
+            onConfirmFreeze={handleConfirmFreeze}
           />
           <ManagerMembersDirectoryDocLightbox
             isZoomed={isZoomed}
