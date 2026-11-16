@@ -13,8 +13,10 @@ import {
   CreditCard,
   Wallet,
   Droplet,
+  Armchair,
 } from 'lucide-react';
 import type { GroupStudentEntry } from './ManagerMembersGroupAdmissionManualModal';
+import { ALL_SEAT_OPTIONS, isAdjacentSeat } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
 
 interface ManagerMembersGroupAdmissionCardViewProps {
   manualRows: GroupStudentEntry[];
@@ -166,6 +168,32 @@ export function ManagerMembersGroupAdmissionCardView({
                   {planOptions.map((opt) => (
                     <option key={opt} value={opt}>
                       {opt}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-medium text-secondary">Assigned Seat *</label>
+                {index > 0 && isAdjacentSeat(row.seatPreference, manualRows[index - 1]?.seatPreference || '') && (
+                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-1.5 py-0.2 rounded">
+                    Adjacent Pair
+                  </span>
+                )}
+              </div>
+              <div className="mgr-input-icon-wrap">
+                <Armchair size={15} className="mgr-input-icon text-primary" />
+                <select
+                  className="mgr-select mgr-input-with-icon text-xs font-mono font-medium"
+                  value={row.seatPreference || `S-${String(index + 1).padStart(2, '0')}`}
+                  onChange={(e) => updateStudent(index, 'seatPreference', e.target.value)}
+                >
+                  <option value="Any Seat">Any Available Seat</option>
+                  {ALL_SEAT_OPTIONS.map((st) => (
+                    <option key={st} value={st}>
+                      {st}
                     </option>
                   ))}
                 </select>

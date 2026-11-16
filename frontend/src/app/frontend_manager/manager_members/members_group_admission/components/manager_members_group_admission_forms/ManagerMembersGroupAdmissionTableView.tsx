@@ -1,6 +1,7 @@
 'use client';
 import { Trash2 } from 'lucide-react';
 import type { GroupStudentEntry } from './ManagerMembersGroupAdmissionManualModal';
+import { ALL_SEAT_OPTIONS } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
 
 interface ManagerMembersGroupAdmissionTableViewProps {
   manualRows: GroupStudentEntry[];
@@ -28,6 +29,7 @@ export function ManagerMembersGroupAdmissionTableView({
             <th className="p-2.5 min-w-[100px]">Gender</th>
             <th className="p-2.5 min-w-[160px]">Shift</th>
             <th className="p-2.5 min-w-[150px]">Plan</th>
+            <th className="p-2.5 min-w-[120px]">Assigned Seat</th>
             <th className="p-2.5 text-center w-16">Action</th>
           </tr>
         </thead>
@@ -113,6 +115,20 @@ export function ManagerMembersGroupAdmissionTableView({
                     {planOptions.map((opt) => (
                       <option key={opt} value={opt}>
                         {opt}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td className="p-2">
+                  <select
+                    className="mgr-select py-1.5 text-xs font-mono font-medium"
+                    value={row.seatPreference || `S-${String(index + 1).padStart(2, '0')}`}
+                    onChange={(e) => updateStudent(index, 'seatPreference', e.target.value)}
+                  >
+                    <option value="Any Seat">Any Seat</option>
+                    {ALL_SEAT_OPTIONS.map((st) => (
+                      <option key={st} value={st}>
+                        {st}
                       </option>
                     ))}
                   </select>

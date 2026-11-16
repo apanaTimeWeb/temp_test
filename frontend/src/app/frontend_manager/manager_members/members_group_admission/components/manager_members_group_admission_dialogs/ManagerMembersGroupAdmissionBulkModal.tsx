@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { FileSpreadsheet, X, Upload, CheckCircle2, Users } from 'lucide-react';
+import { FileSpreadsheet, X, Upload, CheckCircle2, Users, Armchair, Sparkles } from 'lucide-react';
 import type { RecentGroupAdmission } from '../manager_members_group_admission_tables/ManagerMembersGroupAdmissionRecentGroupsTable';
+import { autoAllocateAdjacentSeats } from '@/app/frontend_manager/manager_members/members_group_admission/utils/ManagerMembersGroupAdmissionAdjacentSeats';
 
 interface GroupStudentEntry {
   id: string;
@@ -11,6 +12,7 @@ interface GroupStudentEntry {
   email: string;
   plan: string;
   shift: string;
+  seat?: string;
 }
 
 interface ManagerMembersGroupAdmissionBulkModalProps {
@@ -51,6 +53,8 @@ export function ManagerMembersGroupAdmissionBulkModal({
       const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
       const rows: GroupStudentEntry[] = [];
       const startIndex = lines[0]?.toLowerCase().includes('name') ? 1 : 0;
+      const totalCandidates = Math.max(1, lines.length - startIndex);
+      const adjacentSeats = autoAllocateAdjacentSeats(totalCandidates, 'row-a');
       for (let i = startIndex; i < lines.length; i++) {
         const parts = lines[i]?.split(',').map((p) => p.trim());
         if (parts && parts[0]) {
@@ -62,6 +66,7 @@ export function ManagerMembersGroupAdmissionBulkModal({
             email: (parts[2] || '').slice(0, 80),
             plan: parts[3] || 'Pro Monthly',
             shift: parts[4] || 'Morning',
+            seat: adjacentSeats[rows.length] || `S-${String(rows.length + 1).padStart(2, '0')}`,
           });
         }
       }
@@ -175,6 +180,7 @@ export function ManagerMembersGroupAdmissionBulkModal({
                     <th className="p-2">Phone</th>
                     <th className="p-2">Email</th>
                     <th className="p-2">Shift</th>
+                    <th className="p-2">Assigned Adjacent Seat</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -184,6 +190,11 @@ export function ManagerMembersGroupAdmissionBulkModal({
                       <td className="p-2 font-mono">{row.phone}</td>
                       <td className="p-2">{row.email}</td>
                       <td className="p-2">{row.shift}</td>
+                      <td className="p-2 font-mono text-indigo-400 font-bold flex items-center gap-1.5">
+                        <Armchair size={13} className="text-indigo-400" />
+                        <span>{row.seat || `S-${String(idx + 1).padStart(2, '0')}`}</span>
+                        {idx > 0 && <span className="text-[10px] text-emerald-400 font-sans font-normal">(Adjacent)</span>}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
