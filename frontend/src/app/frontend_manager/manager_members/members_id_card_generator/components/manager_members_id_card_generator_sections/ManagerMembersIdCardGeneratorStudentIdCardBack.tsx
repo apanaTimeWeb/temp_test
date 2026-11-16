@@ -10,11 +10,11 @@ export interface ManagerMembersIdCardGeneratorStudentIdCardBackProps {
 }
 
 export const DEFAULT_LIBRARY_RULES = [
-  'Maintain strict silence inside reading halls and study zones.',
-  'ID card is mandatory for entry turnstiles and counter verification.',
-  'Mobile phones must remain in silent mode at all times.',
-  'Outside food, drinks, smoking, and seat reservation prohibited.',
-  'Non-transferable. Report lost cards immediately to library desk.',
+  'Strict silence in study zones',
+  'ID card mandatory for entry',
+  'Keep mobile phones on silent',
+  'No outside food or drinks',
+  'Non-transferable smart pass',
 ];
 
 const DEFAULT_RULES = DEFAULT_LIBRARY_RULES;
@@ -112,78 +112,82 @@ export function ManagerMembersIdCardGeneratorStudentIdCardBack({
         </div>
       </div>
 
-      {/* Back Card Body */}
-      <div className="mgr-idcard-body mgr-idcard-back-body flex flex-col justify-between">
-        {/* Section 1: Library Rules */}
-        <div>
-          <div className="flex items-center gap-1.5 mb-0.5 pb-0.5 border-b border-white/10">
-            <FileText size={10} className="text-sky-400 shrink-0" />
-            <span className="text-[8px] font-bold text-slate-300 uppercase tracking-wider">
-              General Library Rules & Code of Conduct
-            </span>
-          </div>
-          <ol className="space-y-0.5 text-[7px] text-slate-300 leading-tight pl-3.5 list-decimal font-medium">
-            {rules.slice(0, 5).map((rule, idx) => (
-              <li key={idx} className="marker:text-sky-400 marker:font-bold">
-                {rule}
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        {/* Section 2: Wi-Fi Access QR & Emergency Contacts */}
-        <div className="grid grid-cols-2 gap-1.5 my-0.5">
-          {/* Wi-Fi QR Box (Scan to Connect) */}
-          <div className="p-1 rounded-md bg-zinc-800/80 border border-white/10 flex items-center justify-between gap-1.5">
-            <div className="flex flex-col justify-between h-full min-w-0 pr-0.5">
-              <div className="flex items-center gap-1 text-sky-400 mb-0.5">
-                <Wifi size={10} className="shrink-0" />
-                <span className="text-[7.5px] font-extrabold uppercase tracking-wider text-white truncate">Study Wi-Fi</span>
+      {/* Back Card Body - Balanced 2-Column Layout */}
+      <div className="mgr-idcard-body mgr-idcard-back-body flex flex-col justify-between flex-1">
+        {/* Main 2-column Content Grid */}
+        <div className="grid grid-cols-2 gap-2 flex-1 my-0.5 items-stretch">
+          {/* Column 1: Library Rules & Emergency Desk */}
+          <div className="p-1.5 rounded-lg bg-zinc-800/80 border border-white/10 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-1.5 mb-1 pb-1 border-b border-white/10">
+                <FileText size={10} className="text-sky-400 shrink-0" />
+                <span className="text-[7.5px] font-bold text-slate-200 uppercase tracking-wider">
+                  General Library Rules &amp; Code of Conduct
+                </span>
               </div>
-              <div className="space-y-0.5 text-[6.5px] leading-tight text-slate-300">
-                <div className="font-bold text-sky-300">Scan to Connect</div>
-                <div className="text-slate-400 text-[5.5px]">Instant Access QR</div>
-              </div>
-              {/* Visually hidden for screen readers & test assertions */}
-              <span className="sr-only">Central_Library_5G</span>
-              <span className="sr-only">Study@Silent2026</span>
+              <ol className="space-y-0.5 text-[6.5px] text-slate-300 leading-snug pl-3 list-decimal font-medium">
+                {rules.slice(0, 5).map((rule, idx) => (
+                  <li key={idx} className="marker:text-sky-400 marker:font-bold">
+                    {rule}
+                  </li>
+                ))}
+              </ol>
             </div>
-            <div className="w-[34px] h-[34px] bg-white p-0.5 rounded shrink-0 shadow-sm flex items-center justify-center">
+
+            {/* Emergency & Support Contacts */}
+            <div className="pt-1 mt-1 border-t border-white/10">
+              <div className="flex items-center gap-1 text-emerald-400 mb-0.5">
+                <Phone size={8} />
+                <span className="text-[6.5px] font-extrabold uppercase tracking-wider text-white">Emergency Desk</span>
+              </div>
+              <div className="flex items-center justify-between text-[6px] text-slate-300">
+                <span>Desk: <strong className="text-slate-200">{helpdeskPhone}</strong></span>
+                <span>Emg: <strong className="text-rose-300">{emergencyPhone}</strong></span>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 2: Prominent Dedicated Wi-Fi Hotspot Pass */}
+          <div className="p-1.5 rounded-lg bg-zinc-800/80 border border-sky-500/30 flex flex-col items-center justify-between text-center relative overflow-hidden">
+            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-sky-400 to-transparent" />
+            
+            <div className="flex items-center gap-1 text-sky-400 mb-0.5">
+              <Wifi size={10} />
+              <span className="text-[7.5px] font-extrabold uppercase tracking-wider text-white">Study Wi-Fi</span>
+            </div>
+
+            {/* Prominent High-Contrast Wi-Fi QR */}
+            <div className="w-[52px] h-[52px] bg-white p-1 rounded-md shadow-md flex items-center justify-center my-0.5">
               <WifiQrSvgBack ssid={wifiSsid} password={wifiPassword} />
             </div>
-          </div>
 
-          {/* Emergency & Helpdesk Box */}
-          <div className="p-1 rounded-md bg-zinc-800/80 border border-white/10 flex flex-col justify-between">
-            <div className="flex items-center gap-1 text-emerald-400 mb-0.5">
-              <Phone size={10} />
-              <span className="text-[7.5px] font-extrabold uppercase tracking-wider text-white">Emergency Desk</span>
+            <div className="leading-tight">
+              <div className="text-[7px] font-bold text-sky-300 tracking-wide">Scan to Connect</div>
+              <div className="text-[5.5px] text-slate-400">High-Speed Student 5G</div>
             </div>
-            <div className="space-y-0.5 text-[7px] leading-tight">
-              <div className="text-slate-400 text-[6px] uppercase">Front Desk:</div>
-              <div className="font-semibold text-slate-200 truncate">{helpdeskPhone}</div>
-              <div className="text-slate-400 text-[6px] uppercase mt-0.5">Emergency:</div>
-              <div className="font-bold text-rose-300 truncate">{emergencyPhone}</div>
-            </div>
+
+            {/* Accessibility & test assertion hidden nodes */}
+            <span className="sr-only">Central_Library_5G</span>
+            <span className="sr-only">Study@Silent2026</span>
           </div>
         </div>
 
         {/* Section 3: Official Seal & Authorized Signatory */}
-        <div className="pt-0.5 border-t border-white/10 flex items-center justify-between gap-2 text-slate-400">
+        <div className="pt-1 border-t border-white/10 flex items-center justify-between gap-2 text-slate-400">
           <div className="flex items-center gap-1.5">
-            <div className="w-6 h-6 rounded-full border border-emerald-500/40 bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0 shadow-sm">
-              <ShieldCheck size={12} />
+            <div className="w-5 h-5 rounded-full border border-emerald-500/40 bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0 shadow-sm">
+              <ShieldCheck size={11} />
             </div>
             <div className="leading-tight">
-              <div className="text-[7.5px] font-extrabold uppercase text-emerald-300">Official Seal</div>
-              <div className="text-[6px] text-slate-400">Study Lib OS Verified</div>
+              <div className="text-[7px] font-extrabold uppercase text-emerald-300">Official Seal</div>
+              <div className="text-[5.5px] text-slate-400">Study Lib OS Verified</div>
             </div>
           </div>
 
           <div className="text-right leading-tight">
             <div className="w-16 border-b border-dashed border-slate-500 mb-0.5 ml-auto" />
-            <div className="text-[7.5px] font-bold uppercase text-slate-300 tracking-wider">Authorized Signatory</div>
-            <div className="text-[6px] text-slate-500 font-mono">#{data.smartId} · Seat {data.seat}</div>
+            <div className="text-[7px] font-bold uppercase text-slate-300 tracking-wider">Authorized Signatory</div>
+            <div className="text-[5.5px] text-slate-500 font-mono">#{data.smartId} · Seat {data.seat}</div>
           </div>
         </div>
       </div>

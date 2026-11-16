@@ -48,13 +48,15 @@ function FyQrSvgBack({ code }: { code: string }) {
   );
 }
 
-const DEFAULT_RULES = [
-  'Maintain strict silence inside reading halls and study zones.',
-  'ID card is mandatory for entry turnstiles and counter verification.',
-  'Mobile phones must remain in silent mode at all times.',
-  'Outside food, drinks, smoking, and seat reservation prohibited.',
-  'Non-transferable. Report lost cards immediately to library desk.',
+export const DEFAULT_LIBRARY_RULES = [
+  'Strict silence in study zones',
+  'ID card mandatory for entry',
+  'Keep mobile phones on silent',
+  'No outside food or drinks',
+  'Non-transferable smart pass',
 ];
+
+const DEFAULT_RULES = DEFAULT_LIBRARY_RULES;
 
 function FyWifiQrSvgBack({ ssid, password }: { ssid?: string; password?: string }) {
   const wifiPayload = `WIFI:S:${ssid || 'Library_5G'};T:WPA;P:${password || 'study2026'};;`;
@@ -154,39 +156,29 @@ export function ManagerMembersIdCardGeneratorStudentIdCardFullYearBack({
             ))}
           </ul>
         </div>
-        <div className="fy-back-card">
-          <div className="fy-back-card-title fy-back-card-title-cyan">📞 Emergency &amp; Support</div>
-          <div className="fy-contact-list">
-            <div className="fy-contact-row">
-              <span className="fy-contact-lbl">Helpline</span>
-              <span className="fy-contact-val">{helpdeskPhone}</span>
-            </div>
-            <div className="fy-contact-row">
-              <span className="fy-contact-lbl">Email</span>
-              <span className="fy-contact-val">help@lib.os</span>
-            </div>
-            <div className="fy-contact-row">
-              <span className="fy-contact-lbl">Network</span>
-              <span className="fy-contact-val">Scan Wi-Fi QR</span>
-            </div>
-            <div className="fy-contact-row">
-              <span className="fy-contact-lbl">Batch</span>
-              <span className="fy-contact-val">{batch}</span>
-            </div>
+        {/* Right Card: High-Speed Study Wi-Fi Pass */}
+        <div className="fy-back-card flex flex-col justify-between items-center text-center">
+          <div className="fy-back-card-title fy-back-card-title-cyan w-full justify-center">
+            <span>📶</span>
+            <span>Study Wi-Fi Pass</span>
+          </div>
+          <div className="w-[44px] h-[44px] p-1 bg-white rounded-md shadow-md flex items-center justify-center my-0.5">
+            <FyWifiQrSvgBack ssid={wifiSsid} password={(data as any).wifiPassword} />
+          </div>
+          <div className="flex flex-col items-center gap-0.5 leading-tight">
+            <span className="text-[6.5px] font-bold text-sky-300">Scan to Auto-Connect</span>
+            <span className="text-[5.5px] text-slate-400 font-mono">Helpline: {helpdeskPhone}</span>
           </div>
         </div>
       </div>
 
-      {/* Back Bottom (Wi-Fi Quick Connect QR) */}
+      {/* Back Bottom Footer */}
       <div className="fy-back-bottom">
-        <div className="fy-lost-qr-wrap">
-          <div className="fy-lost-qr">
-            <FyWifiQrSvgBack ssid={wifiSsid} password={(data as any).wifiPassword} />
-          </div>
-          <div className="fy-lost-label">
-            <div className="fy-lost-title">📶 Wi-Fi Access</div>
-            <div className="fy-lost-sub">Scan to connect instantly</div>
-          </div>
+        <div className="flex items-center gap-2 text-[6.5px] text-slate-400">
+          <span className="font-semibold text-slate-300">Desk:</span>
+          <span className="font-mono text-emerald-300">{helpdeskPhone}</span>
+          <span className="text-slate-600">·</span>
+          <span>help@lib.os</span>
         </div>
         <div className="fy-copyright">
           <div><strong>© 2024 STUDY LIB OS</strong></div>
