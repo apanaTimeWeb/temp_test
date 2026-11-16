@@ -12,13 +12,11 @@ import { ManagerDashboardOverviewSeatMatrix } from '@/app/frontend_manager/manag
 import { ManagerDashboardOverviewActionItems } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_widgets/ManagerDashboardOverviewActionItems';
 import { ManagerDashboardOverviewBirthdayWidget } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_widgets/ManagerDashboardOverviewBirthdayWidget';
 import { ManagerDashboardOverviewRecentActivity } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_sections/ManagerDashboardOverviewRecentActivity';
-import { ManagerDashboardOverviewQuickLinks } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_sections/ManagerDashboardOverviewQuickLinks';
 import { ManagerDashboardOverviewLoadingState } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_states/ManagerDashboardOverviewLoadingState';
 import { ManagerDashboardOverviewErrorState } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/components/manager_dashboard_overview_states/ManagerDashboardOverviewErrorState';
 import { useManagerDashboardData } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/hooks/useManagerDashboardOverviewData';
 import { ManagerDashboardOverviewContractBlockedError } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/api/manager_dashboard_overview.api';
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
-import { MANAGER_DASHBOARD_QUICK_LINKS } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/constants/ManagerDashboardOverviewQuickLinksConstants';
 
 export type { DashboardTimeRange };
 
@@ -183,9 +181,6 @@ export function ManagerDashboardOverviewClient() {
         enquiriesHref={MANAGER_DASHBOARD_OVERVIEW_ROUTES.CRM_ENQUIRIES}
         timeRangeLabel={timeRangeLabel}
       />
-
-      {/* Quick Access Navigation Tiles */}
-      <ManagerDashboardOverviewQuickLinks links={MANAGER_DASHBOARD_QUICK_LINKS} />
     </div>
   );
 }

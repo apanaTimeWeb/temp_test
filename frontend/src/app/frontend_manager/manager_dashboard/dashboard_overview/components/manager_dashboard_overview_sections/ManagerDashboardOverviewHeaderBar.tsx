@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { TrendingUp, RotateCw, Clock, CalendarRange, UserPlus, PhoneCall, IndianRupee, QrCode, Armchair, Users } from 'lucide-react';
+import { TrendingUp, RotateCw, Clock, CalendarRange, UserPlus, PhoneCall, IndianRupee, QrCode, Users } from 'lucide-react';
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
 
 export type DashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
@@ -119,13 +119,6 @@ export function ManagerDashboardOverviewHeaderBar({
           >
             <QrCode size={13} />
             <span>Scan QR / Attendance</span>
-          </Link>
-          <Link
-            href="/frontend_manager/manager_seats_shifts_lockers/seats_matrix"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-highlight border border-border text-foreground hover:border-primary text-xs font-semibold transition-all cursor-pointer"
-          >
-            <Armchair size={13} />
-            <span>Seat Matrix</span>
           </Link>
         </div>
       </div>

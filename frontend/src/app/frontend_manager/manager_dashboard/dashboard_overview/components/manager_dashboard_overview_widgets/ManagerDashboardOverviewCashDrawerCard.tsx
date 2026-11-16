@@ -94,20 +94,14 @@ export function ManagerDashboardOverviewCashDrawerCard({
       </div>
 
       {/* Action Footer */}
-      <div className="pt-3 border-t border-border flex flex-wrap items-center justify-between gap-2.5">
+      <div className="pt-3 border-t border-border flex items-center justify-between gap-2.5">
+        <span className="text-xs text-muted-foreground">Register closing & cash handover</span>
         <Link
           href="/frontend_manager/manager_accounts_assets/accounts_daily_settlement"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary-hover transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-bold text-primary hover:text-primary-hover hover:border-primary transition-all cursor-pointer shadow-xs"
         >
           <span>Open Daily Settlement</span>
           <ArrowUpRight size={13} />
-        </Link>
-
-        <Link
-          href="/frontend_manager/manager_finance/finance_collect_fee"
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-colors"
-        >
-          <span>+ Collect Fee</span>
         </Link>
       </div>
     </section>

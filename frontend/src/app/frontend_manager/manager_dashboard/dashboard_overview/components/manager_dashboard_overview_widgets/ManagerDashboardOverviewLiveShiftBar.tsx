@@ -98,15 +98,6 @@ export function ManagerDashboardOverviewLiveShiftBar({
               <span>No Overstay Violations</span>
             </div>
           )}
-
-          {/* Shift Matrix CTA */}
-          <Link
-            href="/frontend_manager/manager_seats_shifts_lockers/seats_matrix"
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary transition-all cursor-pointer shadow-xs shrink-0"
-          >
-            <span>Floor Matrix</span>
-            <ArrowRight size={13} className="text-primary" />
-          </Link>
         </div>
       </div>
     </section>
