@@ -146,10 +146,10 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
     toast.success(`Smart ID card WhatsApp link opened for ${selected.name} (+91 ${clean10})`);
   };
 
-  if (isError) return <div className="mgr-page"><div className="mgr-state-card mgr-state-card-error" role="alert"><p className="mgr-state-title">{tManagerUi('unable_to_load_students')}</p><p className="mgr-state-description">{tManagerUi('please_retry_from_the_students_directory')}</p><button type="button" className="mgr-btn-primary mgr-btn-sm mt-3" onClick={() => { void refetch(); }} disabled={isFetching}>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button></div></div>;
+  if (isError) return <div className="mgr-page mgr-students-theme"><div className="mgr-state-card mgr-state-card-error" role="alert"><p className="mgr-state-title">{tManagerUi('unable_to_load_students')}</p><p className="mgr-state-description">{tManagerUi('please_retry_from_the_students_directory')}</p><button type="button" className="mgr-btn-primary mgr-btn-sm mt-3" onClick={() => { void refetch(); }} disabled={isFetching}>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button></div></div>;
 
   return (
-    <div className="mgr-page">
+    <div className="mgr-page mgr-students-theme">
       <div className="mgr-page-header">
         <div>
           <h1 className="mgr-page-title">{tManagerUi('id_card_generator')}</h1>
@@ -363,15 +363,15 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               </div>
 
 
-              {/* Actions Bar merged directly below card preview */}
-              <div className="w-full no-print p-2 rounded-xl bg-surface border border-border shadow-xs mt-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-center sm:justify-end gap-2">
+              {/* Actions Bar merged directly below card preview - compact standard buttons */}
+              <div className="w-full no-print mt-3 flex items-center justify-center sm:justify-end gap-2.5 flex-wrap">
                 <button
                   type="button"
                   onClick={handleShareWhatsApp}
                   data-testid="manager-students-id-card-whatsapp-share"
                   title="Share ID Card via WhatsApp"
                   aria-label="Share ID Card via WhatsApp"
-                  className="mgr-btn-whatsapp cursor-pointer inline-flex items-center justify-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-lg shrink-0"
+                  className="mgr-btn-compact-wa"
                 >
                   <MessageSquare size={13} strokeWidth={2} />
                   <span>Share via WhatsApp</span>
@@ -382,7 +382,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   onClick={() => window.print()}
                   title={tManagerUi('print_id_card')}
                   aria-label={tManagerUi('print_id_card')}
-                  className="mgr-btn-primary cursor-pointer inline-flex items-center justify-center gap-1.5 px-3.5 py-1 text-xs font-bold rounded-lg shadow-xs shrink-0"
+                  className="mgr-btn-compact-print"
                   data-testid="manager-students-id-card-print"
                 >
                   <Printer size={13} strokeWidth={2} />
