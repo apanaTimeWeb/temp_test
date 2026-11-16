@@ -66,6 +66,9 @@ export const ManagerMembersNewAdmissionAdmissionSchema = z.object({
   paymentMode: z.string().min(1, 'Payment mode is required'),
   remarks: z.string().optional(),
   referredBy: z.string().optional(),
+  paymentType: z.enum(['full', 'partial']).optional(),
+  promiseDueDate: z.string().optional(),
+  promiseRemarks: z.string().optional(),
   documents: z.array(z.object({
     id: z.string(),
     type: z.string(),

@@ -14,6 +14,11 @@ export interface AdmittedStudentInfo {
   plan: string;
   paymentMode: string;
   amountPaid: string;
+  totalPayable?: string;
+  balanceDue?: string;
+  isPartialPayment?: boolean;
+  promiseDueDate?: string;
+  securityDeposit?: string;
 }
 
 interface ManagerMembersNewAdmissionSuccessBannerProps {
@@ -32,6 +37,16 @@ export function ManagerMembersNewAdmissionSuccessBanner({
 
   const handleConfirmSendWhatsApp = () => {
     setShowWhatsAppConfirm(false);
+    const isPartial = student.isPartialPayment && Number(student.balanceDue) > 0;
+    const depositText = student.securityDeposit && Number(student.securityDeposit) > 0
+      ? `• Refundable Security Deposit: ₹${Number(student.securityDeposit).toLocaleString('en-IN')} (Held securely in student account)\n`
+      : '';
+    const paymentBreakdown = isPartial
+      ? `• Total Fees: ₹${(Number(student.totalPayable) || (Number(student.amountPaid) + Number(student.balanceDue))).toLocaleString('en-IN')}\n` +
+        `• Amount Paid Today (Token): ₹${Number(student.amountPaid).toLocaleString('en-IN')} (${student.paymentMode})\n` +
+        `• Remaining Balance Due: ₹${Number(student.balanceDue).toLocaleString('en-IN')}${student.promiseDueDate ? ` (Promised Due Date: ${student.promiseDueDate})` : ''}\n`
+      : `• Total Fees Paid: ₹${Number(student.amountPaid).toLocaleString('en-IN')} (${student.paymentMode})\n`;
+
     const text = encodeURIComponent(
       `Hello ${student.fullName}, welcome to Central Library! 🎓\n\n` +
       `Your admission is successfully confirmed:\n` +
@@ -39,8 +54,9 @@ export function ManagerMembersNewAdmissionSuccessBanner({
       `• Assigned Seat: ${student.seat || 'General Study'}\n` +
       `• Shift: ${student.shift}\n` +
       `• Plan: ${student.plan}\n` +
-      `• Payment Mode: ${student.paymentMode}\n\n` +
-      `Your digital ID card has been generated. Please keep these details handy during your library visits.\n\n` +
+      paymentBreakdown +
+      depositText +
+      `\nYour digital ID card has been generated. Please keep these details handy during your library visits.\n\n` +
       `— Central Library Administration`
     );
 
@@ -61,7 +77,7 @@ export function ManagerMembersNewAdmissionSuccessBanner({
   return (
     <>
       <div
-        className="mt-4 p-5 rounded-2xl bg-success-bg border border-success text-card-foreground shadow-sm animate-in fade-in slide-in-from-top-2"
+        className="mt-4 p-5 rounded-2xl bg-success-bg border border-success text-card-foreground shadow-sm animate-in fade-in slide-in-from-top-2 space-y-3"
         role="status"
         data-testid="manager-admission-success-banner"
       >
@@ -115,6 +131,34 @@ export function ManagerMembersNewAdmissionSuccessBanner({
             </button>
           </div>
         </div>
+
+        {/* Partial Payment / Auto Payment Promise Notification */}
+        {student.isPartialPayment && Number(student.balanceDue) > 0 && (
+          <div className="p-3 rounded-xl bg-amber-500/15 border border-amber-500/35 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-amber-200">
+            <div className="flex items-center gap-2">
+              <AlertCircle size={16} className="text-amber-400 shrink-0" />
+              <span>
+                Token advance of <strong>₹{Number(student.amountPaid).toLocaleString('en-IN')}</strong> received. Balance of <strong>₹{Number(student.balanceDue).toLocaleString('en-IN')}</strong> auto-scheduled in Payment Promises for <strong>{student.promiseDueDate || '7 days'}</strong>.
+              </span>
+            </div>
+            <Link
+              href={`/frontend_manager/manager_finance/finance_payment_promises?smartId=${encodeURIComponent(student.smartId)}`}
+              className="inline-flex items-center gap-1 font-bold text-amber-300 hover:text-amber-100 underline shrink-0"
+            >
+              View in Payment Promises →
+            </Link>
+          </div>
+        )}
+
+        {/* Refundable Security Deposit Tag */}
+        {student.securityDeposit && Number(student.securityDeposit) > 0 && (
+          <div className="text-xs text-indigo-300 flex items-center gap-2 px-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />
+            <span>
+              Refundable Security Deposit of <strong>₹{Number(student.securityDeposit).toLocaleString('en-IN')}</strong> recorded in Security Deposits ledger.
+            </span>
+          </div>
+        )}
       </div>
 
       {/* WhatsApp Confirmation Dialog (BUG-18) */}

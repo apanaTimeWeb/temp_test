@@ -69,6 +69,7 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const watchedDiscount = watch('manualDiscount');
   const watchedRegFee = watch('registrationFee');
   const watchedSecDeposit = watch('securityDeposit');
+  const watchedPaymentType = watch('paymentType');
 
   const selectedShifts = useMemo(() => {
     if (!watchedShift) return [];
@@ -163,10 +164,10 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   }, [watchedPlan, planOptions, setValue]);
 
   useEffect(() => {
-    if (calcResult.finalPayable > 0) {
+    if (watchedPaymentType !== 'partial' && calcResult.finalPayable > 0) {
       setValue('amountPaid', String(calcResult.finalPayable), { shouldValidate: true });
     }
-  }, [calcResult.finalPayable, setValue]);
+  }, [calcResult.finalPayable, watchedPaymentType, setValue]);
 
   const baseAmountMinor = calcResult.grossTenureFee * 100;
   const discountMinor = (calcResult.tenureDiscountAmount + calcResult.manualDiscountAmount) * 100;
@@ -185,6 +186,13 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
       setIsSubmitting(false);
       // BUG-02: Structured, collision-free Smart ID format
       const generatedSmartId = `LIB-${Date.now().toString().slice(-4)}`;
+      const finalPayable = calcResult.finalPayable;
+      const amountPaidNum = Number(values.amountPaid) || finalPayable;
+      const balanceDue = Math.max(0, finalPayable - amountPaidNum);
+      const isPartial = balanceDue > 0;
+      const secDepositNum = Number(values.securityDeposit) || 0;
+      const expectedDueDate = values.promiseDueDate || new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+
       const studentData: AdmittedStudentInfo = {
         fullName: values.fullName,
         phone: values.phone,
@@ -194,6 +202,11 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
         plan: values.plan,
         paymentMode: values.paymentMode,
         amountPaid: values.amountPaid,
+        totalPayable: String(finalPayable),
+        balanceDue: String(balanceDue),
+        isPartialPayment: isPartial,
+        promiseDueDate: isPartial ? expectedDueDate : undefined,
+        securityDeposit: secDepositNum > 0 ? String(secDepositNum) : undefined,
       };
 
       // Real local persistence across session
@@ -202,6 +215,45 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
         localStorage.setItem('manager_admitted_students', JSON.stringify([studentData, ...stored]));
         sessionStorage.setItem(`admission_student_${generatedSmartId}`, JSON.stringify(studentData));
         window.dispatchEvent(new CustomEvent('manager_member_admitted', { detail: studentData }));
+
+        // Auto-create Payment Promise if partial payment with balance due
+        if (isPartial) {
+          const promiseRecord = {
+            id: Date.now(),
+            studentName: values.fullName,
+            smartId: generatedSmartId,
+            phone: values.phone,
+            promisedAmount: balanceDue * 100, // minor units matching finance_payment_promises
+            expectedDate: expectedDueDate,
+            daysUntilDue: Math.ceil((new Date(expectedDueDate).getTime() - Date.now()) / (1000 * 3600 * 24)),
+            timesChanged: 0,
+            status: 'pending',
+            remarks: values.promiseRemarks?.trim() || `Admission Token Advance: Paid ₹${amountPaidNum} of ₹${finalPayable}. Balance ₹${balanceDue} promised.`,
+          };
+          const storedPromises = JSON.parse(localStorage.getItem('manager_finance_payment_promises_records') || '[]');
+          localStorage.setItem('manager_finance_payment_promises_records', JSON.stringify([promiseRecord, ...storedPromises]));
+          sessionStorage.setItem('manager_latest_payment_promise', JSON.stringify(promiseRecord));
+          window.dispatchEvent(new CustomEvent('manager_payment_promise_created', { detail: promiseRecord }));
+        }
+
+        // Auto-create Security Deposit record if refundable security deposit is collected
+        if (secDepositNum > 0) {
+          const depositRecord = {
+            id: Date.now(),
+            studentName: values.fullName,
+            smartId: generatedSmartId,
+            phone: values.phone,
+            depositAmount: secDepositNum * 100, // minor units matching finance_security_deposits
+            status: 'held',
+            collectedDate: new Date().toISOString().slice(0, 10),
+            collectedBy: 'Front Desk Admission',
+            receiptNumber: `DEP-${generatedSmartId}`,
+            notes: `Collected at admission. Plan: ${values.plan}, Seat: ${values.seat || 'General'}.`,
+          };
+          const storedDeposits = JSON.parse(localStorage.getItem('manager_finance_security_deposits_records') || '[]');
+          localStorage.setItem('manager_finance_security_deposits_records', JSON.stringify([depositRecord, ...storedDeposits]));
+          window.dispatchEvent(new CustomEvent('manager_security_deposit_collected', { detail: depositRecord }));
+        }
 
         // Automatically record verified referral when newly admitted student declares a referrer
         const refBy = values.referredBy?.trim();
@@ -224,7 +276,10 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
       }
 
       setAdmittedStudent(studentData);
-      setDraftFeedback(`Admission registered successfully for ${values.fullName}! Assigned Seat: ${values.seat || 'General'}, Shift: ${values.shift}, Plan: ${values.plan}, Mode: ${values.paymentMode}.`);
+      const feedbackText = isPartial
+        ? `Admission registered successfully for ${values.fullName}! Token Advance: ₹${amountPaidNum}, Balance Due: ₹${balanceDue} (Auto-created Payment Promise scheduled for ${expectedDueDate}).`
+        : `Admission registered successfully for ${values.fullName}! Assigned Seat: ${values.seat || 'General'}, Shift: ${values.shift}, Plan: ${values.plan}, Mode: ${values.paymentMode}.`;
+      setDraftFeedback(feedbackText);
     }, 500);
   });
 
@@ -303,6 +358,8 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
                 watch={watch}
                 planOptions={planOptions}
                 effectiveMonthlyRate={calcResult.effectiveMonthlyShiftFee}
+                finalPayable={calcResult.finalPayable}
+                watchedLocker={watchedLocker}
               />
             </div>
             <ManagerMembersNewAdmissionAdmissionSummary

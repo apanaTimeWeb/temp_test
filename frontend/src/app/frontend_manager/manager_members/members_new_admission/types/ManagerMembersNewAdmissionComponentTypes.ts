@@ -33,6 +33,8 @@ export interface ManagerMembersNewAdmissionAdmissionPaymentSectionProps {
   watch?: UseFormWatch<ManagerMembersNewAdmissionAdmissionFormValues>;
   planOptions?: DynamicPlanOption[];
   effectiveMonthlyRate?: number;
+  finalPayable?: number;
+  watchedLocker?: string;
 }
 
 export interface ManagerMembersNewAdmissionAdmissionPersonalSectionProps {
