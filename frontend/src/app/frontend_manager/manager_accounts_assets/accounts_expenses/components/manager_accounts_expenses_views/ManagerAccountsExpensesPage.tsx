@@ -1,11 +1,12 @@
 'use client';
+
 import type { ManagerAccountsExpensesMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesMainTypes';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useManagerExpensesCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/hooks/ManagerAccountsExpensesFormattingHook';
 import type { NativeColumn } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_table_parts/ManagerAccountsExpensesNativeTable';
 import { useState, useMemo, useCallback } from 'react';
-import { Plus, RefreshCw, Wallet } from 'lucide-react';
+import { Plus, RefreshCw, Wallet, Printer, Download } from 'lucide-react';
 import ManagerAccountsExpensesExpenseSummaryCards from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseSummaryCards';
 import ManagerAccountsExpensesExpenseCategoryFilter from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseCategoryFilter';
 import ManagerAccountsExpensesExpenseLedger from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_widgets/ManagerAccountsExpensesExpenseLedger';
@@ -17,12 +18,16 @@ import { ManagerAccountsExpensesTimeHorizonBar } from '@/app/frontend_manager/ma
 import { ManagerAccountsExpensesToolbar } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesToolbar';
 import { ManagerAccountsExpensesAddExpenseModal } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_dialogs/ManagerAccountsExpensesAddExpenseModal';
 import { ManagerAccountsExpensesCategoryReview } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesCategoryReview';
+import { ManagerAccountsExpensesDetailsModal } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_dialogs/ManagerAccountsExpensesDetailsModal';
 
 export type ManagerExpensesTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
 const TIME_HORIZON_OPTIONS: Array<{ id: ManagerExpensesTimeHorizon; label: string }> = [
-  { id: 'all', label: 'All Time' }, { id: 'today', label: 'Today' }, { id: 'this_week', label: 'This Week' },
-  { id: 'this_month', label: 'This Month' }, { id: 'custom', label: 'Custom Range' },
+  { id: 'all', label: 'All Time' },
+  { id: 'today', label: 'Today' },
+  { id: 'this_week', label: 'This Week' },
+  { id: 'this_month', label: 'This Month' },
+  { id: 'custom', label: 'Custom Range' },
 ];
 
 export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccountsExpensesMainProps) {
@@ -36,6 +41,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   const [isCategoryReviewOpen, setIsCategoryReviewOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
 
   const [timeHorizon, setTimeHorizon] = useState<ManagerExpensesTimeHorizon>('this_month');
   const [customStartDate, setCustomStartDate] = useState('');
@@ -119,7 +125,9 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
 
   const handleExportCsv = () => {
     const h = ['Date', 'Description', 'Category', 'Amount (INR)', 'Payment Mode', 'Paid By'].map(escapeCsv).join(',');
-    const r = searchedExpenses.map((e) => [e.date, e.description, e.category, (e.amount / 100).toFixed(2), e.mode, e.paidBy].map(escapeCsv).join(',')).join('\r\n');
+    const r = searchedExpenses
+      .map((e) => [e.date, e.description, e.category, (e.amount / 100).toFixed(2), e.mode, e.paidBy].map(escapeCsv).join(','))
+      .join('\r\n');
     const blob = new Blob([`\uFEFF${h}\r\n${r}`], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = Object.assign(document.createElement('a'), {
@@ -127,7 +135,9 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
       download: `expenses_ledger_${timeHorizonLabel.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${new Date().toISOString().slice(0, 10)}.csv`,
       hidden: true,
     });
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success('Expenses exported to CSV successfully');
   };
@@ -137,18 +147,33 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
     toast.success(`Expense of ₹${amt.toLocaleString('en-IN')} for "${newExpense.description}" logged successfully!`);
   };
 
-  const colDefs: NativeColumn<Expense>[] = createManagerExpensesExpenseColumnDefinitions(
-    {
-      date: tManagerUi('date'),
-      category: tManagerUi('category'),
-      description: tManagerUi('description'),
-      amount: tManagerUi('amount_inr'),
-      mode: tManagerUi('mode'),
-      paidBy: tManagerUi('paid_by'),
-      actions: tManagerUi('actions'),
-      deleteUnavailable: tManagerUi('delete_unavailable_verified_backend_mutation_contract_no_e31d2b'),
-    },
-    formatManagerExpensesCurrency
+  const handleDeleteExpense = (idToDelete: number) => {
+    const target = expenses.find((e) => e.id === idToDelete);
+    setExpenses((prev) => prev.filter((e) => e.id !== idToDelete));
+    if (selectedExpense && selectedExpense.id === idToDelete) {
+      setSelectedExpense(null);
+    }
+    toast.success(`Expense voucher for "${target?.description || idToDelete}" deleted successfully.`);
+  };
+
+  const colDefs: NativeColumn<Expense>[] = useMemo(
+    () =>
+      createManagerExpensesExpenseColumnDefinitions(
+        {
+          date: tManagerUi('date'),
+          category: tManagerUi('category'),
+          description: tManagerUi('description'),
+          amount: tManagerUi('amount_inr'),
+          mode: tManagerUi('mode'),
+          paidBy: tManagerUi('paid_by'),
+          actions: tManagerUi('actions'),
+          deleteUnavailable: tManagerUi('delete_unavailable_verified_backend_mutation_contract_no_e31d2b'),
+        },
+        formatManagerExpensesCurrency,
+        (expense) => setSelectedExpense(expense),
+        (idToDelete) => handleDeleteExpense(idToDelete)
+      ),
+    [tManagerUi, formatManagerExpensesCurrency]
   );
 
   const handleResetFilters = () => {
@@ -158,6 +183,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
     setTimeHorizon('all');
     setCustomStartDate('');
     setCustomEndDate('');
+    toast.info('Filters have been reset to default.');
   };
 
   return (
@@ -190,21 +216,34 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
           </div>
 
           <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
+            {/* Print Report Button */}
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+              title="Print Expense Ledger"
+            >
+              <Printer size={14} />
+              <span>Print Ledger</span>
+            </button>
+
+            {/* Sync Journal Button */}
             <button
               type="button"
               onClick={handleSyncExpenses}
               disabled={isSyncing}
-              className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60"
               title="Sync Expense Ledger"
             >
               <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
               <span>{isSyncing ? 'Syncing...' : 'Sync Journal'}</span>
             </button>
 
+            {/* Add Expense Button */}
             <button
               type="button"
               onClick={() => setIsAddExpenseOpen(true)}
-              className="mgr-btn-primary min-h-11 px-4 rounded-xl shadow-sm inline-flex items-center gap-2 text-sm font-semibold"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
             >
               <Plus size={16} />
               <span>Add Operational Expense</span>
@@ -213,7 +252,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         </div>
       </div>
 
-      {/* ── Main Global Time Horizon Filter Bar ── */}
+      {/* ── Main Global Time Horizon Filter Bar with Glowing Halos ── */}
       <ManagerAccountsExpensesTimeHorizonBar
         timeHorizon={timeHorizon}
         setTimeHorizon={setTimeHorizon}
@@ -224,7 +263,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         setCustomEndDate={setCustomEndDate}
       />
 
-      {/* ── Executive Expense Summary KPI Cards ── */}
+      {/* ── Executive Expense Summary KPI Cards (Clean Display Cards, NOT Interlinked Toggle Buttons) ── */}
       <ManagerAccountsExpensesExpenseSummaryCards
         expenses={expenses}
         visibleExpenses={visible}
@@ -238,7 +277,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         timeHorizonLabel={timeHorizonLabel}
       />
 
-      {/* ── Category Filter Pills ── */}
+      {/* ── Category Filter Pills with Glowing Halos ── */}
       <ManagerAccountsExpensesExpenseCategoryFilter
         categories={CATEGORIES}
         value={catFilter}
@@ -258,7 +297,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         onClose={() => setIsCategoryReviewOpen(false)}
       />
 
-      {/* ── Toolbar: Search, Mode Filter & CSV Export ── */}
+      {/* ── Toolbar: Non-overlapping Search, Payment Mode Filter & CSV Export ── */}
       <ManagerAccountsExpensesToolbar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -274,7 +313,11 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
 
       {/* ── Native Table Ledger ── */}
       <ManagerAccountsExpensesExpenseLedger
-        emptyMessage={hasActiveFilters ? `No expenses recorded for ${timeHorizonLabel} matching the selected criteria.` : tManagerUi('no_matching_expenses_found')}
+        emptyMessage={
+          hasActiveFilters
+            ? `No expenses recorded for ${timeHorizonLabel} matching the selected criteria.`
+            : tManagerUi('no_matching_expenses_found')
+        }
         rows={searchedExpenses}
         columnDefs={colDefs}
       />
@@ -284,6 +327,15 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         isOpen={isAddExpenseOpen}
         onClose={() => setIsAddExpenseOpen(false)}
         onAddExpense={handleAddExpense}
+      />
+
+      {/* ── Expense Voucher Audit Details Modal ── */}
+      <ManagerAccountsExpensesDetailsModal
+        isOpen={Boolean(selectedExpense)}
+        expense={selectedExpense}
+        formatCurrency={formatManagerExpensesCurrency}
+        onClose={() => setSelectedExpense(null)}
+        onDeleteExpense={handleDeleteExpense}
       />
     </div>
   );

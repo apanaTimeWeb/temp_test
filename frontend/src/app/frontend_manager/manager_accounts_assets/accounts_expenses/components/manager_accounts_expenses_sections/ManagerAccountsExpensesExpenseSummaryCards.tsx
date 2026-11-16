@@ -28,13 +28,8 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
         <div className="mt-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-rose-400 font-mono">
-              {formatCurrency(totalOutflow)}
-            </div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-rose-400 border border-border">
-              [All Time]
-            </span>
+          <div className="text-2xl font-bold tracking-tight text-rose-400 font-mono">
+            {formatCurrency(totalOutflow)}
           </div>
           <p className="mt-1 text-xs text-secondary">Cumulative recorded outflow</p>
         </div>
@@ -51,15 +46,10 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
         <div className="mt-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-amber-400 font-mono">
-              {formatCurrency(activeHorizonOutflow)}
-            </div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-amber-400 border border-border">
-              [{timeHorizonLabel}]
-            </span>
+          <div className="text-2xl font-bold tracking-tight text-amber-400 font-mono">
+            {formatCurrency(activeHorizonOutflow)}
           </div>
-          <p className="mt-1 text-xs text-secondary">Filtered time horizon spend ({timeHorizonLabel})</p>
+          <p className="mt-1 text-xs text-secondary">Filtered period spend</p>
         </div>
       </div>
 
@@ -74,15 +64,10 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
         <div className="mt-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-indigo-400 font-mono">
-              {totalEntries}
-            </div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-indigo-400 border border-border">
-              [{timeHorizonLabel}]
-            </span>
+          <div className="text-2xl font-bold tracking-tight text-indigo-400 font-mono">
+            {totalEntries}
           </div>
-          <p className="mt-1 text-xs text-secondary">Disbursement vouchers ({timeHorizonLabel})</p>
+          <p className="mt-1 text-xs text-secondary">Disbursement vouchers</p>
         </div>
       </div>
 
@@ -97,15 +82,10 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
         <div className="mt-3">
-          <div className="flex items-center justify-between gap-2">
-            <div className="text-2xl font-bold tracking-tight text-sky-400 font-mono">
-              {distinctCategories}
-            </div>
-            <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-sky-400 border border-border">
-              [{timeHorizonLabel}]
-            </span>
+          <div className="text-2xl font-bold tracking-tight text-sky-400 font-mono">
+            {distinctCategories}
           </div>
-          <p className="mt-1 text-xs text-secondary">Active budget heads ({timeHorizonLabel})</p>
+          <p className="mt-1 text-xs text-secondary">Active budget categories</p>
         </div>
       </div>
     </div>
