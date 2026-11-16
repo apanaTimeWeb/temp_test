@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { formatManagerReportsCalendarDate, formatManagerReportsMonth } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/utils/ManagerDashboardReportsDateFormatting';
 import { useMemo } from 'react';
-import { ManagerDashboardReportsTableCard } from '@/app/frontend_manager/manager_dashboard\dashboard_reports\components\manager_dashboard_reports_table_parts\ManagerDashboardReportsTableCard';
+import { ManagerDashboardReportsTableCard } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/components/manager_dashboard_reports_table_parts/ManagerDashboardReportsTableCard';
 import type {
   ManagerDashboardReportsData,
   ManagerDashboardReportsTableAbsenteeRow,
