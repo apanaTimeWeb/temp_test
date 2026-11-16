@@ -132,24 +132,24 @@ export function ManagerAccountsDailySettlementToolbar({
       {/* Bottom Row: Non-Overlapping Search & Secondary Filters */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search Input with Guaranteed Non-Overlapping Icon & Clear Button */}
-        <div className="relative flex-1">
-          <Search
-            size={15}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
-          />
+        <div className="relative flex-1 flex items-center">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search shift name or settled by manager..."
-            style={{ paddingLeft: '2.6rem', paddingRight: '2.25rem' }}
+            style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
             className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+          />
+          <Search
+            size={16}
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none z-10"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md hover:bg-surface-hover transition-colors cursor-pointer"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md hover:bg-surface-hover transition-colors cursor-pointer z-10"
               title="Clear search"
             >
               <X size={14} />
