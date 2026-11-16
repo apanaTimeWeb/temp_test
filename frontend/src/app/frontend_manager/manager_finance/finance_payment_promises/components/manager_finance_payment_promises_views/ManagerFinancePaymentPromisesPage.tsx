@@ -2,9 +2,10 @@
 
 import { useTranslations } from 'next-intl';
 import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { useManagerPaymentPromisesFormatting } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/ManagerFinancePaymentPromisesFormattingHook';
 import { useManagerFinancePaymentPromisesConfirm } from '@/app/frontend_manager/manager_finance/finance_payment_promises/hooks/useManagerFinancePaymentPromisesConfirm';
-import { Search, Plus, X, Download, Printer } from 'lucide-react';
+import { Search, Plus, X, Download, Printer, BellRing } from 'lucide-react';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_SAMPLE_FIXTURES, type ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import { sanitizeManagerPaymentPromisesCsvCell } from '@/app/frontend_manager/manager_finance/finance_payment_promises/utils/ManagerFinancePaymentPromisesCsv';
 import type { ManagerFinancePaymentPromisesRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_payment_promises/types/ManagerFinancePaymentPromisesComponentTypes';
@@ -15,6 +16,7 @@ import ManagerFinancePaymentPromisesTimeHorizonBar, { type ManagerPromisesTimeHo
 import { ManagerFinancePaymentPromisesKpis } from './ManagerFinancePaymentPromisesKpis';
 
 export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFinancePaymentPromisesRouteQueryProps) {
+  const router = useRouter();
   const tManagerUi = useTranslations('manager.manager_payment_promises.ui');
   const { formatCurrency, formatDate } = useManagerPaymentPromisesFormatting();
   // Formats Finance-facing dates: formatDate(p.expectedDate) and p.fulfilledDate ? formatDate(p.fulfilledDate) : '—'
@@ -28,6 +30,22 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
   const [timeHorizon, setTimeHorizon] = useState<ManagerPromisesTimeHorizon>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
+
+  const todayDateStr = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const dueTodayPromises = useMemo(
+    () => promisesList.filter((p) => p.status !== 'fulfilled' && (p.expectedDate === todayDateStr || p.daysUntilDue <= 0)),
+    [promisesList, todayDateStr]
+  );
+  const dueTodayTotal = useMemo(
+    () => dueTodayPromises.reduce((sum, p) => sum + p.promisedAmount, 0),
+    [dueTodayPromises]
+  );
+
+  const handleCollectThisAmount = (promise: ManagerFinancePaymentPromisesPaymentPromiseSample) => {
+    const majorAmount = promise.promisedAmount / 100;
+    const targetUrl = `/frontend_manager/manager_finance/finance_collect_fee?id=${promise.id}&name=${encodeURIComponent(promise.studentName)}&smartId=${encodeURIComponent(promise.smartId)}&amount=${majorAmount}&promiseId=${promise.id}`;
+    router.push(targetUrl);
+  };
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [feedbackToast, setFeedbackToast] = useState<string | null>(null);
@@ -243,6 +261,40 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
         </div>
       </div>
 
+      {dueTodayPromises.length > 0 && (
+        <div
+          className="p-4 rounded-xl border-2 border-rose-500/40 bg-rose-500/10 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-pulse"
+          data-testid="manager-finance-due-date-alert-banner"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+              <BellRing size={20} className="animate-bounce" />
+            </div>
+            <div>
+              <h3 className="text-sm font-black text-rose-700 dark:text-rose-400 flex items-center gap-2">
+                <span>Critical Due Date Alert</span>
+                <span className="px-2 py-0.5 rounded-full text-[11px] bg-rose-600 text-white font-bold">
+                  {dueTodayPromises.length} Promises Due Today / Overdue
+                </span>
+              </h3>
+              <p className="text-xs text-secondary mt-0.5">
+                Total <strong className="text-rose-600 dark:text-rose-400 font-bold">{formatCurrency(dueTodayTotal)}</strong> committed by students for payment on or before today. Collect now to prevent unauthorized study access.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              data-testid="manager-finance-filter-due-today-btn"
+              onClick={() => setTimeHorizon('today')}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <span>Filter Due Today ({dueTodayPromises.length})</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div style={{ display: 'none' }} role="status">
         <span>Sample payment promise records displayed under current contract preview.</span>
         <button type="button" disabled className="mgr-btn-outline text-xs opacity-50 cursor-not-allowed">
@@ -315,7 +367,7 @@ export default function ManagerFinancePaymentPromisesPage(_routeQuery: ManagerFi
       <ManagerFinancePaymentPromisesTable
         filtered={filtered} paginated={paginated} formatCurrency={formatCurrency} formatDate={formatDate}
         sortField={sortField} sortDirection={sortDirection} onToggleSort={toggleSort}
-        onMarkPaid={handleMarkPaid} onOpenEdit={handleOpenEdit} onOpenView={handleOpenView}
+        onMarkPaid={handleMarkPaid} onCollectAmount={handleCollectThisAmount} onOpenEdit={handleOpenEdit} onOpenView={handleOpenView}
         startItem={startItem} endItem={endItem} totalRows={totalRows}
         effectivePage={effectivePage} pageCount={pageCount}
         onPrevPage={() => setPage(effectivePage - 1)} onNextPage={() => setPage(effectivePage + 1)}

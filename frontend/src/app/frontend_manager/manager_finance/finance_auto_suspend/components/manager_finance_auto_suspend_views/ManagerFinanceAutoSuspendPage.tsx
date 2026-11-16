@@ -5,10 +5,11 @@ import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { MANAGER_FINANCE_SAMPLE_AUTO_SUSPEND_CONFIG, MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/hooks/ManagerFinanceAutoSuspendDemoRepository';
 import type { ManagerFinanceAutoSuspendConfig as Config, ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
-import { Settings, Ban, RotateCcw, UserCheck, ShieldAlert, Search, X, Download, Printer } from 'lucide-react';
+import { Settings, Ban, RotateCcw, UserCheck, ShieldAlert, Search, X, Download, Printer, QrCode } from 'lucide-react';
 import type { ManagerFinanceAutoSuspendRouteQueryProps } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendComponentTypes';
 import ManagerFinanceAutoSuspendTable, { type SuspendSortField } from './ManagerFinanceAutoSuspendTable';
 import ManagerFinanceAutoSuspendWhatsAppModal from './ManagerFinanceAutoSuspendWhatsAppModal';
+import ManagerFinanceAutoSuspendKioskModal from './ManagerFinanceAutoSuspendKioskModal';
 
 export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanceAutoSuspendRouteQueryProps) {
   const tManagerUi = useTranslations('manager.manager_auto_suspend.ui');
@@ -16,6 +17,8 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
   const [suspended, setSuspended] = useState<SuspendedStudent[]>([...MANAGER_FINANCE_SAMPLE_SUSPENDED_STUDENTS]);
   const [selectedWhatsAppStudent, setSelectedWhatsAppStudent] = useState<SuspendedStudent | null>(null);
   const [remindedStudents, setRemindedStudents] = useState<Record<number, string>>({});
+  const [isKioskModalOpen, setIsKioskModalOpen] = useState(false);
+  const [kioskInitialStudent, setKioskInitialStudent] = useState<SuspendedStudent | null>(null);
 
   const handleRestoreStudent = (student: SuspendedStudent) => {
     setSuspended((prev) => prev.filter((item) => item.id !== student.id));
@@ -182,6 +185,19 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
         </div>
 
         <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+          <button
+            type="button"
+            data-testid="open-gate-kiosk-simulator-btn"
+            onClick={() => {
+              setKioskInitialStudent(suspended[0] || null);
+              setIsKioskModalOpen(true);
+            }}
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-colors cursor-pointer active:scale-95 flex-1 sm:flex-initial"
+            title="Simulate Entrance Gate Turnstile QR Kiosk Scanner"
+          >
+            <QrCode size={14} />
+            <span>Test Gate QR Kiosk</span>
+          </button>
           <button
             type="button"
             onClick={handleExportCsv}
@@ -376,6 +392,10 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
             onNextPage={() => setPage((c) => Math.min(pageCount - 1, c + 1))}
             onSendReminder={handleOpenWhatsAppReminder}
             onRestoreStudent={handleRestoreStudent}
+            onTestKioskScan={(s) => {
+              setKioskInitialStudent(s);
+              setIsKioskModalOpen(true);
+            }}
             remindedStudents={remindedStudents}
             shiftLabels={shiftLabels}
             labels={{
@@ -400,6 +420,14 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
         student={selectedWhatsAppStudent}
         onClose={() => setSelectedWhatsAppStudent(null)}
         onSentSuccess={handleWhatsAppSentSuccess}
+      />
+
+      {/* Gate QR Kiosk Simulator Modal */}
+      <ManagerFinanceAutoSuspendKioskModal
+        isOpen={isKioskModalOpen}
+        onClose={() => setIsKioskModalOpen(false)}
+        suspendedStudents={suspended}
+        initialStudent={kioskInitialStudent}
       />
     </div>
   );

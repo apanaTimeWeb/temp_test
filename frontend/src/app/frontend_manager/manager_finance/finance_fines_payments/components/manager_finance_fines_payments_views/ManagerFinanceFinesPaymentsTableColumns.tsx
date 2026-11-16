@@ -20,18 +20,20 @@ export interface UseTableColumnsParams {
 export function buildPendingCols(
   formatCurrency: (amount: number) => string,
   translateFineType: (val: unknown) => string,
-  tManagerUi: (k: string) => string
+  tManagerUi: (k: string) => string,
+  onAddToRenewal?: (fine: { id: string; member: string; amount: number }) => void,
+  renewalAddedIds: Set<string> = new Set()
 ): NativeColumn[] {
   return [
-    { field: 'id', headerName: tManagerUi('fine_id'), width: 120 },
+    { field: 'id', headerName: tManagerUi('fine_id'), width: 110 },
     { field: 'member', headerName: tManagerUi('member_6853c9'), flex: 1 },
     { field: 'type', headerName: tManagerUi('type'), flex: 1, valueFormatter: (p) => translateFineType(p.value) },
-    { field: 'amount', headerName: tManagerUi('amount_43dc85'), width: 120, valueFormatter: (p: NativeCellParams) => formatCurrency(Number(p.value ?? 0)) },
-    { field: 'date', headerName: tManagerUi('date'), width: 150 },
+    { field: 'amount', headerName: tManagerUi('amount_43dc85'), width: 110, valueFormatter: (p: NativeCellParams) => formatCurrency(Number(p.value ?? 0)) },
+    { field: 'date', headerName: tManagerUi('date'), width: 130 },
     {
       field: 'status',
       headerName: tManagerUi('status'),
-      width: 150,
+      width: 140,
       cellRenderer: (p: NativeCellParams) => {
         const isPending = p.value === 'Pending';
         const label = isPending ? tManagerUi('status_pending') : p.value === 'Partially Paid' ? tManagerUi('status_partially_paid') : String(p.value ?? '');
@@ -44,6 +46,34 @@ export function buildPendingCols(
             <span className={`w-1.5 h-1.5 rounded-full ${isPending ? 'bg-rose-500' : 'bg-amber-500'}`} />
             {label}
           </span>
+        );
+      },
+    },
+    {
+      headerName: 'Renewal Bill Action',
+      width: 200,
+      sortable: false,
+      cellRenderer: (p: NativeCellParams) => {
+        const row = p.data as { id: string; member: string; amount: number };
+        const isAdded = renewalAddedIds.has(row.id);
+        return (
+          <div className="flex items-center gap-1.5 h-full">
+            {isAdded ? (
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-md">
+                ✓ Added to Next Renewal
+              </span>
+            ) : (
+              <button
+                type="button"
+                data-testid={`add-to-renewal-btn-${row.id}`}
+                onClick={() => onAddToRenewal && onAddToRenewal(row)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 transition-colors cursor-pointer"
+                title={`Auto-add fine to next renewal bill for ${row.member}`}
+              >
+                + Add to Next Renewal
+              </button>
+            )}
+          </div>
         );
       },
     },

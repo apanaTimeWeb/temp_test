@@ -464,13 +464,6 @@ export default function ManagerAttendanceAbsenteeReportPage({
           </div>
         </div>
       </div>
-            <div className="text-2xl font-bold tracking-tight text-emerald-400 font-mono">
-              {notifiedCount}
-            </div>
-            <p className="mt-1 text-xs text-secondary">Of {filtered.length} total filtered absentees</p>
-          </div>
-        </div>
-      </div>
 
       {/* ── Toolbar: Non-overlapping Search, Shift Filter & Thresholds ── */}
       <div className="flex flex-col gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-card border border-border shadow-xs">

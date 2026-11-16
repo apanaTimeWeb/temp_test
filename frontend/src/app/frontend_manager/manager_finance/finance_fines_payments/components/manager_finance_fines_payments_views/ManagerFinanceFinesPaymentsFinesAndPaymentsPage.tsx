@@ -107,7 +107,23 @@ export default function ManagerFinanceFinesPaymentsFinesAndPaymentsPage(_routeQu
     }, 600);
   };
 
-  const pendingCols = useMemo(() => buildPendingCols(formatCurrency, translateFineType, tManagerUi), [formatCurrency, translateFineType, tManagerUi]);
+  const [renewalAddedFines, setRenewalAddedFines] = useState<Set<string>>(new Set());
+
+  const handleAddToRenewal = (fine: { id: string; member: string; amount: number }) => {
+    setRenewalAddedFines((prev) => {
+      const next = new Set(prev);
+      next.add(fine.id);
+      return next;
+    });
+    toast.success(
+      `Fine ${fine.id} (${formatCurrency(fine.amount)}) attached! Will be auto-added to next renewal bill for ${fine.member}.`
+    );
+  };
+
+  const pendingCols = useMemo(
+    () => buildPendingCols(formatCurrency, translateFineType, tManagerUi, handleAddToRenewal, renewalAddedFines),
+    [formatCurrency, translateFineType, tManagerUi, renewalAddedFines]
+  );
   const historyCols = useMemo(() => buildHistoryCols(formatCurrency, translateFineType, translatePaymentMode, tManagerUi), [formatCurrency, translateFineType, translatePaymentMode, tManagerUi]);
   const receiptsCols = useMemo(() => buildReceiptsCols({
     formatCurrency,

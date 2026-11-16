@@ -109,11 +109,12 @@ export default function ManagerFinanceSecurityDepositsTable({
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         type="button"
+                        data-testid={`refund-deposit-btn-${d.id}`}
                         onClick={() => onOpenRefund(d)}
                         className="fin-badge fin-badge--success cursor-pointer hover:opacity-90 flex items-center gap-1"
-                        title="Process deposit return to student"
+                        title="Process mandatory exit clearance and deposit return to student"
                       >
-                        <Undo2 size={11} /> Refund
+                        <Undo2 size={11} /> Exit Clearance & Refund
                       </button>
                       <button
                         type="button"

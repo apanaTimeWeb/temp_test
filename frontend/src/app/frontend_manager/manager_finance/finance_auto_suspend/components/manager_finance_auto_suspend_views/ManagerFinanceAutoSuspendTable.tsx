@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MessageCircle, RotateCcw, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { MessageCircle, RotateCcw, ArrowUpDown, ArrowUp, ArrowDown, QrCode } from 'lucide-react';
 import type { ManagerFinanceAutoSuspendSuspendedStudent as SuspendedStudent } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/types/ManagerFinanceAutoSuspendTypes';
 import { ManagerFinanceAutoSuspendEmptyState } from '@/app/frontend_manager/manager_finance/finance_auto_suspend/components/manager_finance_auto_suspend_empty_states/ManagerFinanceAutoSuspendEmptyState';
 
@@ -25,6 +25,7 @@ export interface ManagerFinanceAutoSuspendTableProps {
   onNextPage: () => void;
   onSendReminder: (student: SuspendedStudent) => void;
   onRestoreStudent: (student: SuspendedStudent) => void;
+  onTestKioskScan?: (student: SuspendedStudent) => void;
   remindedStudents?: Record<number, string>;
   shiftLabels: Record<string, string>;
   labels: {
@@ -59,6 +60,7 @@ export default function ManagerFinanceAutoSuspendTable({
   onNextPage,
   onSendReminder,
   onRestoreStudent,
+  onTestKioskScan,
   remindedStudents = {},
   shiftLabels,
   labels,
@@ -140,6 +142,18 @@ export default function ManagerFinanceAutoSuspendTable({
                 <td className="py-3 px-4 text-xs text-secondary">{s.suspendedSince}</td>
                 <td className="py-3 px-4">
                   <div className="flex items-center justify-end gap-2">
+                    {onTestKioskScan && (
+                      <button
+                        type="button"
+                        data-testid={`test-gate-btn-${s.id}`}
+                        onClick={() => onTestKioskScan(s)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/20 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-semibold transition-all cursor-pointer shadow-2xs active:scale-95"
+                        title={`Test Gate Kiosk scan for ${s.studentName}`}
+                      >
+                        <QrCode size={13} />
+                        <span>Test Gate</span>
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => onSendReminder(s)}

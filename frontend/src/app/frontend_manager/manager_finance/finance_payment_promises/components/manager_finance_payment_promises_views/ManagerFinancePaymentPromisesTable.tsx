@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CheckCircle, Edit3, Eye, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { CheckCircle, Edit3, Eye, ArrowUpDown, ArrowUp, ArrowDown, IndianRupee } from 'lucide-react';
 import type { ManagerFinancePaymentPromisesPaymentPromiseSample } from '@/app/frontend_manager/manager_finance/finance_payment_promises/mocks/manager_finance_payment_promises_fixtures/ManagerFinancePaymentPromisesPaymentPromiseSampleFixtures';
 import { MANAGER_FINANCE_PAYMENT_PROMISE_STATUS_BADGE } from '@/app/frontend_manager/manager_finance/finance_payment_promises/constants/ManagerFinancePaymentPromisesPaymentPromiseConstants';
 import { ManagerFinancePaymentPromisesEmptyState } from '@/app/frontend_manager/manager_finance/finance_payment_promises/components/manager_finance_payment_promises_empty_states/ManagerFinancePaymentPromisesEmptyState';
@@ -17,6 +17,7 @@ export interface ManagerFinancePaymentPromisesTableProps {
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: PromiseSortField) => void;
   onMarkPaid: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
+  onCollectAmount?: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
   onOpenEdit: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
   onOpenView: (p: ManagerFinancePaymentPromisesPaymentPromiseSample) => void;
   startItem: number;
@@ -51,6 +52,7 @@ export default function ManagerFinancePaymentPromisesTable({
   sortDirection,
   onToggleSort,
   onMarkPaid,
+  onCollectAmount,
   onOpenEdit,
   onOpenView,
   startItem,
@@ -197,7 +199,18 @@ export default function ManagerFinancePaymentPromisesTable({
                   </td>
                   <td className="py-3 px-4">
                     {p.status !== 'fulfilled' ? (
-                      <div className="flex items-center justify-end gap-1.5">
+                      <div className="flex items-center justify-end gap-1.5 flex-wrap">
+                        {onCollectAmount && (
+                          <button
+                            type="button"
+                            data-testid={`collect-amount-btn-${p.id}`}
+                            onClick={() => onCollectAmount(p)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg bg-primary text-on-primary hover:opacity-90 shadow-xs transition-opacity cursor-pointer focus-visible:ring-2 focus-visible:ring-primary outline-none"
+                            title={`Open Fee Counter pre-filled with ${p.studentName} and ₹${p.promisedAmount / 100}`}
+                          >
+                            <IndianRupee size={11} /> Collect
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={() => onMarkPaid(p)}
