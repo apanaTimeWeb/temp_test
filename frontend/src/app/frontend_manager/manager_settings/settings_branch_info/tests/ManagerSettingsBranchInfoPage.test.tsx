@@ -4,6 +4,7 @@ import React from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import ManagerSettingsBranchInfoPage from '@/app/frontend_manager/manager_settings/settings_branch_info/components/manager_settings_branch_info_views/ManagerSettingsBranchInfoPage';
 import messagesEn from '@/app/frontend_manager/manager_settings/settings_branch_info/locales/manager_settings_branch_info_domain_en.json';
+import messagesHi from '@/app/frontend_manager/manager_settings/settings_branch_info/locales/manager_settings_branch_info_domain_hi.json';
 
 vi.mock('sonner', () => ({
   toast: {
@@ -102,5 +103,17 @@ describe('ManagerSettingsBranchInfoPage Integration', () => {
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
       expect.stringContaining('StudyHub@2026')
     );
+  });
+
+  it('renders correctly in Hindi locale with localized labels', () => {
+    render(
+      <NextIntlClientProvider locale="hi" messages={messagesHi}>
+        <ManagerSettingsBranchInfoPage />
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.getByText('शाखा की जानकारी')).toBeInTheDocument();
+    expect(screen.getByText('छात्र वाई-फ़ाई कनेक्ट')).toBeInTheDocument();
+    expect(screen.getByText('डेस्क स्टैंडी प्रिंट करें')).toBeInTheDocument();
   });
 });
