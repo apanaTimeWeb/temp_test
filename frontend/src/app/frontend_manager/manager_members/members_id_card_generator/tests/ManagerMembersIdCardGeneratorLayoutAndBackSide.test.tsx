@@ -129,6 +129,11 @@ describe('Print Stylesheet and Layout Integrity', () => {
     join(process.cwd(), 'frontend/src/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_styles/ManagerMembersIdCardGeneratorManager_id_card_generator.css'),
   ].find(existsSync);
 
+  const clientPath = [
+    join(process.cwd(), 'src/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorIdCardClient.tsx'),
+    join(process.cwd(), 'frontend/src/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorIdCardClient.tsx'),
+  ].find(existsSync);
+
   it('contains dedicated print media rules for single PVC card and A4 paper sheet', () => {
     expect(cssPath).toBeDefined();
     const cssContent = readFileSync(cssPath!, 'utf8');
@@ -152,5 +157,29 @@ describe('Print Stylesheet and Layout Integrity', () => {
     // Exact color preservation
     expect(cssContent).toContain('-webkit-print-color-adjust: exact');
     expect(cssContent).toContain('print-color-adjust: exact');
+  });
+
+  it('verifies client orchestrator contains layout selector, card side selector, and retains WhatsApp and Print', () => {
+    expect(clientPath).toBeDefined();
+    const clientContent = readFileSync(clientPath!, 'utf8');
+
+    // Layout Selector
+    expect(clientContent).toContain('manager-id-card-layout-select');
+    expect(clientContent).toContain('pvc_single');
+    expect(clientContent).toContain('a4_sheet_8');
+    expect(clientContent).toContain('a4_sheet_10');
+
+    // Card Side Selector
+    expect(clientContent).toContain('manager-id-card-side-select');
+    expect(clientContent).toContain('manager-id-card-side-front-btn');
+    expect(clientContent).toContain('manager-id-card-side-back-btn');
+    expect(clientContent).toContain('manager-id-card-side-both-btn');
+
+    // Unremoved Existing Features
+    expect(clientContent).toContain('manager-students-id-card-whatsapp-share');
+    expect(clientContent).toContain('manager-students-id-card-print');
+    expect(clientContent).toContain('manager-id-card-bulk-whatsapp-btn');
+    expect(clientContent).toContain('manager-id-card-shift-filter');
+    expect(clientContent).toContain('manager-id-card-status-filter');
   });
 });
