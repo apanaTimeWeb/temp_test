@@ -22,7 +22,7 @@ describe('ManagerAccountsDailySettlementDenominationAndHandoverModal', () => {
     expenses: 50000,
     closingBalance: 800000, // ₹8,000 expected
     status: 'pending',
-    settledBy: null,
+    settledBy: undefined,
   };
 
   beforeEach(() => {

@@ -31,7 +31,6 @@ describe('Module 18: Fines & Penalties - Auto-Add Fine to Next Renewal Bill', ()
     const rendered = actionCol?.cellRenderer?.({
       value: undefined,
       data: sampleRow,
-      column: actionCol,
     });
 
     render(<div>{rendered}</div>);
@@ -68,7 +67,6 @@ describe('Module 18: Fines & Penalties - Auto-Add Fine to Next Renewal Bill', ()
     const rendered = actionCol?.cellRenderer?.({
       value: undefined,
       data: sampleRow,
-      column: actionCol,
     });
 
     render(<div>{rendered}</div>);

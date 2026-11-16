@@ -6,6 +6,7 @@ export type ManagerFinancePaymentPromisesPaymentPromiseSample = {
   id: number;
   studentName: string;
   smartId: string;
+  phone?: string;
   promisedAmount: number;
   expectedDate: string;
   daysUntilDue: number;

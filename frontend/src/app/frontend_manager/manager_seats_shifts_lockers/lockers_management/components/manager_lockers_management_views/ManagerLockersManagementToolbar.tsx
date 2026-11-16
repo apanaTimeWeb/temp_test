@@ -61,8 +61,8 @@ export function ManagerLockersManagementToolbar({
             label: 'Expired Plan',
             count: lockers.filter(
               (l) =>
-                l.status === 'Expired' ||
-                ((l.status === 'Occupied' || l.status === 'Expired') &&
+                (l.status as string) === 'Expired' ||
+                (((l.status as string) === 'Occupied' || (l.status as string) === 'Expired') &&
                   Boolean(l.expiryDate && new Date(l.expiryDate) < new Date()))
             ).length,
             activeClass: 'bg-amber-600 text-white ring-1 ring-amber-600 shadow-xs hover:bg-amber-700',
