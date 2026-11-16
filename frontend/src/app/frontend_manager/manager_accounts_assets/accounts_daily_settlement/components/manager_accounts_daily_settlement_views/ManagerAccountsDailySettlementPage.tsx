@@ -189,19 +189,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
       {/* ── Executive Header Banner ── */}
       <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 flex-wrap text-xs">
-              <span className="font-semibold text-primary uppercase tracking-wider">Treasury Operations</span>
-              <span className="text-border">•</span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-success-bg text-success border border-border">
-                <Scale size={12} />
-                Shift Balancing & Reconciliation
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
-                📍 Assigned Branch Drawer
-              </span>
-            </div>
-
+          <div className="space-y-1.5">
             <div className="flex items-baseline gap-3 flex-wrap">
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
                 {tManagerUi('daily_settlement')}
