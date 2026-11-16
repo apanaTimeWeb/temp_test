@@ -32,6 +32,7 @@ import { MANAGER_COMMUNICATION_WHATSAPP_LOGS_ROUTES as MANAGER_WHATSAPP_LOGS_ROU
 import { MANAGER_COMMUNICATION_WHATSAPP_TEMPLATES_ROUTES as MANAGER_WHATSAPP_TEMPLATES_ROUTES } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/config/manager_communication_whatsapp_templates.url_config';
 import { MANAGER_SETTINGS_HELP_SUPPORT_ROUTES as MANAGER_HELP_SUPPORT_ROUTES } from '@/app/frontend_manager/manager_settings/settings_help_support/config/manager_settings_help_support.url_config';
 import { MANAGER_SETTINGS_BRANCH_INFO_ROUTES as MANAGER_BRANCH_INFO_ROUTES } from '@/app/frontend_manager/manager_settings/settings_branch_info/config/manager_settings_branch_info.url_config';
+import { MANAGER_SETTINGS_SECURITY_ROUTES as MANAGER_SECURITY_ROUTES } from '@/app/frontend_manager/manager_settings/settings_security/config/manager_settings_security.url_config';
 import {
   AlertCircle,
   BadgeAlert,
@@ -122,6 +123,7 @@ export type ManagerNavigationLabelKey =
   | 'nav_seat_matrix'
   | 'nav_seats'
   | 'nav_security_deposits'
+  | 'nav_security_settings'
   | 'nav_shift_migration'
   | 'nav_shifts'
   | 'nav_subscriptions'
@@ -178,6 +180,7 @@ export const MANAGER_NAVIGATION_ITEMS: readonly ManagerNavigationItem[] = [
   { kind: 'link', href: MANAGER_HELP_SUPPORT_ROUTES.root, icon: LifeBuoy, labelKey: 'nav_help_support' },
   { kind: 'group', labelKey: 'group_settings' },
   { kind: 'link', href: MANAGER_BRANCH_INFO_ROUTES.root, icon: Building2, labelKey: 'nav_branch_info' },
+  { kind: 'link', href: MANAGER_SECURITY_ROUTES.root, icon: ShieldCheck, labelKey: 'nav_security_settings' },
 ];
 
 export const MANAGER_NAVIGATION_HREFS = MANAGER_NAVIGATION_ITEMS.filter(

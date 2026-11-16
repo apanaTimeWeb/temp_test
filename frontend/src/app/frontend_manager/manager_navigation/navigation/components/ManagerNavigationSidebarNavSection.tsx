@@ -74,6 +74,7 @@ const NAV_ICON_COLORS: Record<string, { iconColor: string; bg: string }> = {
   // Support & Settings
   nav_help_support: { iconColor: '#38bdf8', bg: 'rgba(56, 189, 248, 0.14)' },    // Sky
   nav_branch_info: { iconColor: '#818cf8', bg: 'rgba(129, 140, 248, 0.14)' },     // Indigo
+  nav_security_settings: { iconColor: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' },// Emerald Shield
 };
 
 const DEFAULT_ICON_COLOR = { iconColor: '#818cf8', bg: 'rgba(129, 140, 248, 0.14)' };

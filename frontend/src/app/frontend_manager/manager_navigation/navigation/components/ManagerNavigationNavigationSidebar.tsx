@@ -23,6 +23,7 @@ export default function ManagerNavigationSidebar({
     const text = tManagerUi(key);
     if (!text || text.startsWith('manager.manager_nav')) {
       if (key === 'nav_help_support' || key === 'group_help_support') return 'Help & Support';
+      if (key === 'nav_security_settings') return 'Security';
     }
     return text;
   };
