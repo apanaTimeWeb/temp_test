@@ -82,7 +82,9 @@ export function ManagerSettingsBranchInfoWifiModal({
 
   const copyToClipboard = (text: string, label: string, key: string) => {
     if (!text) return;
-    navigator.clipboard.writeText(text);
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+    }
     setCopiedKey(key);
     toast.success(`${label} copied!`, { id: `wifi-copy-${key}` });
     setTimeout(() => {
@@ -104,7 +106,9 @@ export function ManagerSettingsBranchInfoWifiModal({
       `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
     ].join('\n');
 
-    navigator.clipboard.writeText(text);
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+    }
     toast.success('Wi-Fi connection details copied for students!', { id: 'copy-wifi-share' });
   };
 

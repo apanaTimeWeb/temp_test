@@ -90,7 +90,9 @@ export default function ManagerSettingsBranchInfoPage() {
 
   const copyToClipboard = (text: string, label: string, key: string) => {
     if (!text) return;
-    navigator.clipboard.writeText(text);
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+    }
     setCopiedKey(key);
     toast.success(`${label} copied!`, { id: `copy-${key}` });
     setTimeout(() => {
@@ -118,7 +120,9 @@ export default function ManagerSettingsBranchInfoPage() {
       `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
     ].join('\n');
 
-    navigator.clipboard.writeText(fullSummary);
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(fullSummary);
+    }
     toast.success('Complete branch summary copied!', { id: 'copy-all-branch-summary' });
   };
 
