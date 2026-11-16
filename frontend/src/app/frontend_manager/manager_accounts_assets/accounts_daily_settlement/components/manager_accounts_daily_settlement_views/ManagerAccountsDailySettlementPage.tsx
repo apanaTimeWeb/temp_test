@@ -216,12 +216,12 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             </p>
           </div>
 
-          {/* Header Action Buttons: Print Report, Sync Balances, Export CSV */}
-          <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
+          {/* Header Action Buttons in One Professional Single-Line Row */}
+          <div className="flex items-center gap-2 flex-nowrap overflow-x-auto shrink-0 max-w-full py-1">
             <button
               type="button"
               onClick={() => window.print()}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-all cursor-pointer shadow-xs whitespace-nowrap shrink-0"
               title="Print Daily Settlement Report"
             >
               <Printer size={14} />
@@ -232,7 +232,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
               type="button"
               onClick={handleSyncBalances}
               disabled={isSyncing}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60 whitespace-nowrap shrink-0"
               title="Sync Drawer Balances"
             >
               <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
@@ -242,7 +242,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             <button
               type="button"
               onClick={handleExportCsv}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
               title="Export Daily Settlement as CSV"
             >
               <Download size={14} />
@@ -255,10 +255,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
                 setActiveDenominationEntry(filteredEntries[0] || entries[0] || null);
                 setIsDenominationModalOpen(true);
               }}
-              style={{
-                boxShadow: '0 0 16px rgba(16, 185, 129, 0.4)',
-              }}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm hover:shadow-emerald-500/25 transition-all cursor-pointer whitespace-nowrap shrink-0"
               title="Currency Denomination Counter & Owner Handover Receipt"
             >
               <Coins size={14} />

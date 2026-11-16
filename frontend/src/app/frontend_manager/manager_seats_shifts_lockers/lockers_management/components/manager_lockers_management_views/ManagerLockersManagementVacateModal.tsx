@@ -46,7 +46,7 @@ export function ManagerLockersManagementVacateModal({
           </h2>
         </div>
         <p className="ss-modal-desc">
-          Locker <strong>{freeTarget.lockerId}</strong> · Currently assigned to{' '}
+          Locker <strong>{freeTarget.lockerId}</strong> (Key Tag: <strong className="font-mono">{freeTarget.keyNumber || `KEY-${freeTarget.lockerId}`}</strong>) · Currently assigned to{' '}
           <strong>{freeTarget.assignedTo}</strong>
         </p>
 

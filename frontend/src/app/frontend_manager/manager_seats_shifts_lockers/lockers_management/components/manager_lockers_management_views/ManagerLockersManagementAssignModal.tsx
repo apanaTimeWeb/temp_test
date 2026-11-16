@@ -23,7 +23,7 @@ export interface ManagerLockersManagementAssignModalProps {
   locker: Locker;
   dialogRef: React.Ref<HTMLDivElement>;
   onClose: () => void;
-  onAssign: (studentName: string, studentId: string) => void;
+  onAssign: (studentName: string, studentId: string, keyNumber?: string, expiryDate?: string) => void;
 }
 
 export function ManagerLockersManagementAssignModal({
@@ -35,6 +35,12 @@ export function ManagerLockersManagementAssignModal({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStudent, setSelectedStudent] = useState<typeof ALL_STUDENTS[0] | null>(null);
+  const [keyNumber, setKeyNumber] = useState<string>(locker.keyNumber || `KEY-${locker.lockerId}`);
+  const [expiryDate, setExpiryDate] = useState<string>(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() + 1);
+    return d.toISOString().slice(0, 10);
+  });
   const [depositCollected, setDepositCollected] = useState(true);
   const [keyHandedOver, setKeyHandedOver] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -59,7 +65,7 @@ export function ManagerLockersManagementAssignModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedStudent) return;
-    onAssign(selectedStudent.name, selectedStudent.smartId);
+    onAssign(selectedStudent.name, selectedStudent.smartId, keyNumber, expiryDate);
   };
 
   const handleSelectStudent = (student: typeof ALL_STUDENTS[0]) => {
@@ -286,6 +292,45 @@ export function ManagerLockersManagementAssignModal({
             )}
           </div>
 
+          {/* Key Number & Library Seat Plan Auto-Link */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-xl bg-surface border border-border text-xs">
+            <div className="space-y-1">
+              <label htmlFor="assign-key-number" className="text-[11px] font-bold text-secondary uppercase tracking-wider block">
+                Physical Key Number
+              </label>
+              <div className="relative">
+                <Key size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-secondary" />
+                <input
+                  id="assign-key-number"
+                  data-testid="manager-assign-key-number-input"
+                  type="text"
+                  value={keyNumber}
+                  onChange={(e) => setKeyNumber(e.target.value)}
+                  className="w-full h-9 pl-7 pr-2.5 rounded-lg border border-border bg-card text-primary font-mono text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                  placeholder={`KEY-${locker.lockerId}`}
+                  required
+                />
+              </div>
+              <p className="text-[10px] text-secondary">Numbered tag physically stamped on brass key.</p>
+            </div>
+
+            <div className="space-y-1">
+              <label htmlFor="assign-expiry-date" className="text-[11px] font-bold text-secondary uppercase tracking-wider block">
+                Linked Plan Expiry Date
+              </label>
+              <input
+                id="assign-expiry-date"
+                data-testid="manager-assign-expiry-date-input"
+                type="date"
+                value={expiryDate}
+                onChange={(e) => setExpiryDate(e.target.value)}
+                className="w-full h-9 px-2.5 rounded-lg border border-border bg-card text-primary text-xs focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+                required
+              />
+              <p className="text-[10px] text-secondary">Auto-links locker tenure with student seat plan.</p>
+            </div>
+          </div>
+
           {/* Acknowledgements */}
           <div className="p-3 rounded-xl bg-surface border border-border space-y-2 text-xs">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -307,7 +352,7 @@ export function ManagerLockersManagementAssignModal({
                 className="rounded border-border text-primary focus:ring-primary w-4 h-4 cursor-pointer"
               />
               <span className="text-primary font-medium">
-                Physical key KEY-{locker.lockerId} handed over to student
+                Physical key {keyNumber} handed over to student
               </span>
             </label>
           </div>

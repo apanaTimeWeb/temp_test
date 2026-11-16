@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Search, UserPlus, Download, LayoutGrid, List, DoorClosed } from 'lucide-react';
+import { Plus, Search, UserPlus, Download, LayoutGrid, List, DoorClosed, AlertTriangle, KeyRound } from 'lucide-react';
 
 import { ManagerLockersManagementNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/components/manager_lockers_management_table_parts/ManagerLockersManagementNativeTable';
 import { managerSeatsLockerDraftSchema } from '@/app/frontend_manager/manager_seats_shifts_lockers/lockers_management/schemas/ManagerLockersManagementDraftSchemas';
@@ -20,6 +20,7 @@ import { ManagerLockersManagementToolbar } from './ManagerLockersManagementToolb
 import { ManagerLockersManagementGridView } from './ManagerLockersManagementGridView';
 import { ManagerLockersManagementStudentModal } from './ManagerLockersManagementStudentModal';
 import { ManagerLockersManagementAssignModal } from './ManagerLockersManagementAssignModal';
+import { ManagerLockersManagementLostKeyModal } from './ManagerLockersManagementLostKeyModal';
 
 export function ManagerLockersManagementClient() {
   const tManagerUi = useTranslations('manager.manager_lockers.ui');
@@ -31,6 +32,7 @@ export function ManagerLockersManagementClient() {
   const [showAssign, setShowAssign] = useState<Locker | null>(null);
   const [assignSearch, setAssignSearch] = useState('');
   const [freeTarget, setFreeTarget] = useState<Locker | null>(null);
+  const [lostKeyTarget, setLostKeyTarget] = useState<Locker | null>(null);
   const [keyStatus, setKeyStatus] = useState<'returned' | 'lost'>('returned');
   const [remarks, setRemarks] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -39,8 +41,8 @@ export function ManagerLockersManagementClient() {
 
   useManagerLockersDialogFocus(
     dialogRef,
-    () => { setShowAddModal(false); setShowAssign(null); setFreeTarget(null); setSelectedLockerStudent(null); },
-    activeDialog || Boolean(selectedLockerStudent)
+    () => { setShowAddModal(false); setShowAssign(null); setFreeTarget(null); setSelectedLockerStudent(null); setLostKeyTarget(null); },
+    activeDialog || Boolean(selectedLockerStudent) || Boolean(lostKeyTarget)
   );
 
   const { watch, setValue, reset, clearErrors, formState } = useForm({
@@ -51,7 +53,7 @@ export function ManagerLockersManagementClient() {
   const newLockerId = watch('lockerId');
   const addError = formState.errors.lockerId?.message;
 
-  const handleAssignLocker = (studentName: string, studentId: string) => {
+  const handleAssignLocker = (studentName: string, studentId: string, keyNumber?: string, expiryDate?: string) => {
     if (!showAssign) return;
     setLockers((prev) =>
       prev.map((l) =>
@@ -62,12 +64,46 @@ export function ManagerLockersManagementClient() {
               assignedTo: studentName,
               studentId: studentId || `LIB-${Math.floor(100 + Math.random() * 900)}`,
               assignedSince: new Date().toISOString().slice(0, 10),
+              keyNumber: keyNumber || l.keyNumber || `KEY-${showAssign.lockerId}`,
+              expiryDate: expiryDate || l.expiryDate,
+              lostKeyReported: false,
+              lostKeyFine: undefined,
             }
           : l
       )
     );
     toast.success(`Locker #${showAssign.lockerId} successfully allotted to ${studentName}`);
     setShowAssign(null);
+  };
+
+  const handleConfirmLostKey = (lockerId: string, fineAmount: number, deductFromDeposit: boolean, vacateNow: boolean) => {
+    setLockers((prev) =>
+      prev.map((l) => {
+        if (l.lockerId !== lockerId) return l;
+        if (vacateNow) {
+          return {
+            ...l,
+            status: 'Free' as const,
+            assignedTo: '—',
+            studentId: '—',
+            assignedSince: '—',
+            lostKeyReported: false,
+            lostKeyFine: undefined,
+          };
+        }
+        return {
+          ...l,
+          lostKeyReported: true,
+          lostKeyFine: fineAmount,
+        };
+      })
+    );
+    toast.success(
+      vacateNow
+        ? `Locker #${lockerId} vacated. ₹${fineAmount} lost key fine processed (Net refund: ₹${500 - fineAmount}).`
+        : `Lost key penalty of ₹${fineAmount} recorded on Locker #${lockerId}.`
+    );
+    setLostKeyTarget(null);
   };
 
   const handleConfirmVacateLocker = () => {
@@ -119,11 +155,34 @@ export function ManagerLockersManagementClient() {
     toast.success('Lockers exported successfully');
   };
 
+  const expiredLockersCount = useMemo(
+    () =>
+      lockers.filter(
+        (l) =>
+          (l.status === 'Occupied' || l.status === 'Expired') &&
+          Boolean(l.expiryDate && new Date(l.expiryDate) < new Date())
+      ).length,
+    [lockers]
+  );
+
   const filtered = useMemo(() => {
     const q = mainTableSearch.trim().toLowerCase();
     return lockers.filter((l) => {
-      const matchStatus = statusFilter === 'all' || l.status === statusFilter;
-      const matchQ = !q || l.lockerId.toLowerCase().includes(q) || (l.assignedTo && l.assignedTo.toLowerCase().includes(q)) || (l.studentId && l.studentId.toLowerCase().includes(q));
+      const isExpired =
+        (l.status === 'Occupied' || l.status === 'Expired') &&
+        Boolean(l.expiryDate && new Date(l.expiryDate) < new Date());
+      let matchStatus = true;
+      if (statusFilter === 'Expired') {
+        matchStatus = isExpired || l.status === 'Expired';
+      } else if (statusFilter !== 'all') {
+        matchStatus = l.status === statusFilter;
+      }
+      const matchQ =
+        !q ||
+        l.lockerId.toLowerCase().includes(q) ||
+        (l.assignedTo && l.assignedTo.toLowerCase().includes(q)) ||
+        (l.studentId && l.studentId.toLowerCase().includes(q)) ||
+        (l.keyNumber && l.keyNumber.toLowerCase().includes(q));
       return matchStatus && matchQ;
     });
   }, [lockers, statusFilter, mainTableSearch]);
@@ -135,6 +194,7 @@ export function ManagerLockersManagementClient() {
         onShowAssign: setShowAssign,
         onSetFreeTarget: setFreeTarget,
         onSelectLocker: (l) => setSelectedLockerStudent(l),
+        onReportLostKey: (l) => setLostKeyTarget(l),
       }),
     [tManagerUi]
   );
@@ -217,6 +277,26 @@ export function ManagerLockersManagementClient() {
             setMainTableSearch={setMainTableSearch}
             tManagerUi={tManagerUi}
           />
+
+          {/* Expired Seat Plan Alert Banner */}
+          {expiredLockersCount > 0 && statusFilter !== 'Expired' && (
+            <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 animate-in fade-in">
+              <div className="flex items-center gap-2">
+                <AlertTriangle size={16} className="text-amber-400 shrink-0" />
+                <span>
+                  <strong>{expiredLockersCount} Locker(s) with Expired Seat Plans:</strong> Student library tenures have ended, but physical keys are unreturned.
+                </span>
+              </div>
+              <button
+                type="button"
+                data-testid="manager-filter-expired-lockers-btn"
+                onClick={() => setStatusFilter('Expired')}
+                className="px-3 py-1 rounded-lg text-xs font-bold bg-amber-500 text-black hover:bg-amber-400 transition-colors cursor-pointer shrink-0"
+              >
+                View Expired Lockers
+              </button>
+            </div>
+          )}
         </div>
 
         {filtered.length === 0 ? (
@@ -301,6 +381,16 @@ export function ManagerLockersManagementClient() {
           locker={selectedLockerStudent}
           onClose={() => setSelectedLockerStudent(null)}
           onVacate={(l) => { setSelectedLockerStudent(null); setFreeTarget(l); }}
+          onReportLostKey={(l) => { setSelectedLockerStudent(null); setLostKeyTarget(l); }}
+        />
+      )}
+
+      {lostKeyTarget && (
+        <ManagerLockersManagementLostKeyModal
+          isOpen={Boolean(lostKeyTarget)}
+          locker={lostKeyTarget}
+          onClose={() => setLostKeyTarget(null)}
+          onConfirmLostKey={handleConfirmLostKey}
         />
       )}
     </>

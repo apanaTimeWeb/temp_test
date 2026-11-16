@@ -57,6 +57,21 @@ export function ManagerLockersManagementToolbar({
             dotColor: 'bg-rose-500',
           },
           {
+            id: 'Expired',
+            label: 'Expired Plan',
+            count: lockers.filter(
+              (l) =>
+                l.status === 'Expired' ||
+                ((l.status === 'Occupied' || l.status === 'Expired') &&
+                  Boolean(l.expiryDate && new Date(l.expiryDate) < new Date()))
+            ).length,
+            activeClass: 'bg-amber-600 text-white ring-1 ring-amber-600 shadow-xs hover:bg-amber-700',
+            activeBadge: 'bg-white/25 text-white',
+            inactiveClass: 'bg-surface border border-border text-secondary hover:text-amber-500 hover:border-amber-500/40 hover:bg-amber-500/5',
+            inactiveBadge: 'bg-amber-500/10 text-amber-500',
+            dotColor: 'bg-amber-500',
+          },
+          {
             id: 'Maintenance',
             label: tManagerUi('maintenance'),
             count: lockers.filter((l) => l.status === 'Maintenance').length,
