@@ -10,6 +10,7 @@ import {
   Grid,
   IdCard,
   Layers,
+  Maximize2,
   MessageSquare,
   Printer,
   RotateCw,
@@ -44,6 +45,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   const [printLayout, setPrintLayout] = useState<IdCardPrintLayout>('pvc_single');
   const [cardSide, setCardSide] = useState<IdCardSide>('front');
   const [tileAllSlots, setTileAllSlots] = useState(true);
+  const [isPopPreviewOpen, setIsPopPreviewOpen] = useState(false);
   useEffect(() => {
     if (requestedId) setSelectedId(requestedId);
     else if (students.length > 0) setSelectedId((current) => current || students[0].smartId);
@@ -420,6 +422,19 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   <MessageSquare size={18} strokeWidth={2} /> <span>Share via WhatsApp</span>
                 </button>
 
+                {/* Pop-up Preview Button */}
+                <button
+                  type="button"
+                  onClick={() => setIsPopPreviewOpen(true)}
+                  data-testid="manager-students-id-card-popup-preview"
+                  title="Open Pop-up Preview (85.60 mm × 53.98 mm)"
+                  aria-label="Open Pop-up Preview"
+                  className="mgr-btn-ghost mgr-btn-full flex items-center justify-center gap-2 font-bold cursor-pointer text-xs py-2 rounded-lg border border-border bg-surface hover:bg-surface-hover text-foreground transition-colors"
+                >
+                  <Maximize2 size={16} strokeWidth={2} />
+                  <span>Pop-up Preview (CR-80)</span>
+                </button>
+
                 {/* Print Button */}
                 <button
                   type="button"
@@ -446,10 +461,26 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
           {cardData ? (
             <>
               <div className="flex items-center justify-between w-full no-print">
-                <p className="mgr-page-subtitle mgr-idcard-preview-label mb-0">{tManagerUi('preview')} {selected?.name}</p>
-                <span className="text-[11px] font-bold text-secondary bg-surface px-2.5 py-1 rounded-full border border-border">
-                  {printLayout === 'pvc_single' ? 'PVC CR-80' : `A4 Sheet (${a4Capacity} Cards)`}
-                </span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="mgr-page-subtitle mgr-idcard-preview-label mb-0">{tManagerUi('preview')} {selected?.name}</p>
+                  <span className="text-[10px] font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full">
+                    85.60 mm × 53.98 mm (8.56 cm × 5.4 cm)
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsPopPreviewOpen(true)}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-surface hover:bg-surface-hover text-foreground transition-colors cursor-pointer"
+                    title="Pop-up Full Card Preview"
+                  >
+                    <Maximize2 size={13} />
+                    <span>Pop-up Preview</span>
+                  </button>
+                  <span className="text-[11px] font-bold text-secondary bg-surface px-2.5 py-1 rounded-full border border-border">
+                    {printLayout === 'pvc_single' ? 'PVC CR-80' : `A4 Sheet (${a4Capacity} Cards)`}
+                  </span>
+                </div>
               </div>
 
               {printLayout === 'pvc_single' ? (
@@ -514,7 +545,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                                 <Scissors size={9} />
                                 <span>Cut #{idx + 1}</span>
                               </div>
-                              <div className="transform origin-top-left scale-[0.72] w-[380px] -mb-[85px]">
+                              <div className="flex items-center justify-center p-1">
                                 <StudentIdCard data={card} side="front" />
                               </div>
                             </div>
@@ -547,7 +578,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                                 <Scissors size={9} />
                                 <span>Back #{idx + 1}</span>
                               </div>
-                              <div className="transform origin-top-left scale-[0.72] w-[380px] -mb-[85px]">
+                              <div className="flex items-center justify-center p-1">
                                 <ManagerMembersIdCardGeneratorStudentIdCardBack data={card} />
                               </div>
                             </div>
@@ -627,6 +658,69 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
           setBulkSelectedIds([]);
         }}
       />
+
+      {/* Dedicated Pop-up Preview Modal (CR-80: 85.60 mm × 53.98 mm) */}
+      {isPopPreviewOpen && cardData && (
+        <div
+          className="mgr-idcard-modal-overlay no-print"
+          onClick={() => setIsPopPreviewOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          data-testid="idcard-popup-preview-modal"
+        >
+          <div className="mgr-idcard-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between pb-3 mb-4 border-b border-border">
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-base font-bold text-foreground">Smart ID Card Pop-up Preview</h3>
+                  <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+                    CR-80: 85.60 mm × 53.98 mm (8.56 cm × 5.4 cm)
+                  </span>
+                </div>
+                <p className="text-xs text-secondary mt-0.5">
+                  Standard ISO/IEC 7810 ID-1 PVC format · {selected?.name} (#{selected?.smartId})
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer"
+                >
+                  <Printer size={14} />
+                  <span>Print ID Card</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsPopPreviewOpen(false)}
+                  className="p-1.5 rounded-lg border border-border hover:bg-surface text-secondary hover:text-foreground transition-colors cursor-pointer"
+                  aria-label="Close Preview"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Pop-up Card Presentation */}
+            <div className="py-4 flex justify-center w-full">
+              <StudentIdCard data={cardData} side={cardSide} onSideChange={setCardSide} />
+            </div>
+
+            <div className="flex items-center justify-between pt-3 mt-4 border-t border-border text-xs text-secondary">
+              <span className="flex items-center gap-1.5 font-medium">
+                <span>Calibrated standard CR-80 card dimensions: 85.60 mm × 53.98 mm (8.56 cm × 5.4 cm)</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsPopPreviewOpen(false)}
+                className="px-3 py-1 text-xs rounded-md border border-border bg-surface text-foreground font-semibold hover:bg-surface-hover cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

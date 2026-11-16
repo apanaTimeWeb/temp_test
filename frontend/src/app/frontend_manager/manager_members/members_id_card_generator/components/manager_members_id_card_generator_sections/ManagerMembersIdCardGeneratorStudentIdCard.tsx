@@ -20,7 +20,7 @@ function ManagerMembersIdCardGeneratorBarcodeStripes({ id }: { id: string }) {
     bars.push({ width: (code % 3) + 1, gap: (code % 2) + 1 });
   }
   return (
-    <svg width="110" height="36" viewBox="0 0 110 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <svg width="75" height="18" viewBox="0 0 110 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
       {bars.reduce<{ x: number; elements: ReactElement[] }>((result, bar, index) => {
         const fill = index % 5 === 0 ? '#38bdf8' : index % 3 === 0 ? '#a78bfa' : '#f1f5f9';
         const element = <rect key={`${id}-barcode-stripe-${index}`} x={result.x} y="0" width={bar.width} height="36" fill={fill} rx="0.5" />;
@@ -312,18 +312,26 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
       )}
 
       {currentSide === 'both' && (
-        <div className="flex flex-col xl:flex-row items-center justify-center gap-5 w-full">
-          <div className="mgr-idcard-wrap">
-            <div className="text-center text-[11px] font-bold text-secondary uppercase tracking-wider mb-1.5 no-print">
-              Front Side
+        <div className="flex flex-wrap items-start justify-center gap-6 w-full">
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-secondary uppercase tracking-wider mb-2 no-print">
+              <CreditCard size={13} className="text-primary" />
+              <span>Front Side</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface border border-border text-primary font-medium">85.60 × 53.98 mm</span>
             </div>
-            {renderFrontCard()}
+            <div className="mgr-idcard-wrap">
+              {renderFrontCard()}
+            </div>
           </div>
-          <div className="mgr-idcard-wrap">
-            <div className="text-center text-[11px] font-bold text-secondary uppercase tracking-wider mb-1.5 no-print">
-              Back Side (Rules & Wi-Fi)
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-secondary uppercase tracking-wider mb-2 no-print">
+              <RotateCw size={13} className="text-primary" />
+              <span>Back Side (Rules & Wi-Fi)</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface border border-border text-primary font-medium">85.60 × 53.98 mm</span>
             </div>
-            <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />
+            <div className="mgr-idcard-wrap">
+              <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />
+            </div>
           </div>
         </div>
       )}

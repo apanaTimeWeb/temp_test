@@ -182,4 +182,22 @@ describe('Print Stylesheet and Layout Integrity', () => {
     expect(clientContent).toContain('manager-id-card-shift-filter');
     expect(clientContent).toContain('manager-id-card-status-filter');
   });
+
+  it('verifies strict CR-80 physical dimensions (85.60 mm × 53.98 mm) and Pop-up Preview modal integration', () => {
+    expect(cssPath).toBeDefined();
+    const cssContent = readFileSync(cssPath!, 'utf8');
+
+    // Strict 85.60 mm x 53.98 mm dimensions on preview and print
+    expect(cssContent).toContain('85.60mm');
+    expect(cssContent).toContain('53.98mm');
+    expect(cssContent).toContain('3.18mm');
+    expect(cssContent).toContain('grid-template-columns: 360px 1fr');
+    expect(cssContent).toContain('.mgr-idcard-modal-overlay');
+
+    expect(clientPath).toBeDefined();
+    const clientContent = readFileSync(clientPath!, 'utf8');
+    expect(clientContent).toContain('manager-students-id-card-popup-preview');
+    expect(clientContent).toContain('idcard-popup-preview-modal');
+    expect(clientContent).toContain('85.60 mm × 53.98 mm');
+  });
 });
