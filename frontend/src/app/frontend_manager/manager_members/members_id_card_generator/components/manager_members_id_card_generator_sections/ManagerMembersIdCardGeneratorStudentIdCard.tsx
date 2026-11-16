@@ -68,6 +68,7 @@ function ManagerMembersIdCardGeneratorQrSvg({ code }: { code: string }) {
       viewBox="0 0 25 25"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
       aria-label={`QR for ${safeCode}`}
       className="w-full h-full block"
     >
