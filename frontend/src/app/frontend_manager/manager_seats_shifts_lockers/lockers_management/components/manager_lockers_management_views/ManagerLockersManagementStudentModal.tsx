@@ -195,12 +195,6 @@ export function ManagerLockersManagementStudentModal({
             </div>
           </div>
         ) : (
-              >
-                Vacate Locker
-              </button>
-            </div>
-          </div>
-        ) : (
           <div className="py-6 text-center space-y-3">
             <p className="text-xs text-secondary">
               This locker is currently {locker.status.toLowerCase()} and has no active student assignment.

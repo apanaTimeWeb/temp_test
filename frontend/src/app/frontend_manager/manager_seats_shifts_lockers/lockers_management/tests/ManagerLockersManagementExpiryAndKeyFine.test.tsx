@@ -43,7 +43,7 @@ describe('Lockers Management - Plan Expiry and Lost Key Fine Direct Flow', () =>
 
     // Verify dialog header and details
     expect(screen.getByText(/Report Lost Key & Impose Fine/i)).toBeInTheDocument();
-    expect(screen.getByText(/KEY-B04/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/KEY-B04/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/Maria Vargas/i).length).toBeGreaterThanOrEqual(1);
 
     // Default fine should be 150

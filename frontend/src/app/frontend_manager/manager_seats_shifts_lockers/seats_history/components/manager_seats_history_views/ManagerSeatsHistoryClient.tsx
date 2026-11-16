@@ -506,7 +506,6 @@ export function ManagerSeatsHistoryClient() {
           </div>
         )}
       </div>
-      </div>
 
       {/* ── Table Card Presentation ── */}
       {historyQuery.isError ? (
