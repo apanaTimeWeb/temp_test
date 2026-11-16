@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Undo2, X, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Undo2, X, CheckCircle, ShieldCheck } from 'lucide-react';
 import type { ManagerFinanceSecurityDepositsSampleDeposit } from '@/app/frontend_manager/manager_finance/finance_security_deposits/hooks/ManagerFinanceSecurityDepositsDemoRepository';
 
 export interface ManagerFinanceSecurityDepositsRefundModalProps {
@@ -23,7 +23,21 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
   onRefundRefChange,
   onConfirmRefund,
 }: ManagerFinanceSecurityDepositsRefundModalProps) {
+  const [checklist, setChecklist] = useState({
+    lockerKeyReturned: true,
+    idCardReturned: true,
+    assetsReturned: true,
+    deskInspected: true,
+    duesCleared: true,
+  });
+
   if (!refundTarget) return null;
+
+  const allCleared = Object.values(checklist).every(Boolean);
+
+  const toggleCheck = (key: keyof typeof checklist) => {
+    setChecklist((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-overlay-backdrop p-4" role="dialog" aria-modal="true">
@@ -56,6 +70,83 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
               <span>Net Refund Payable:</span>
               <span>₹{refundTarget.depositAmount - (refundTarget.deductionAmount || 0)}</span>
             </div>
+          </div>
+
+          {/* No-Dues Clearance Checklist */}
+          <div className="p-3.5 bg-surface rounded-xl border border-border space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5">
+                <ShieldCheck size={14} className="text-indigo-400" />
+                <span>No-Dues Clearance Checklist</span>
+              </span>
+              <span
+                className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${
+                  allCleared
+                    ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                    : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                }`}
+              >
+                {allCleared ? '✓ All Items Cleared' : '⚠ Action Required'}
+              </span>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <label className="flex items-center gap-2 cursor-pointer text-primary hover:text-primary select-none">
+                <input
+                  type="checkbox"
+                  checked={checklist.lockerKeyReturned}
+                  onChange={() => toggleCheck('lockerKeyReturned')}
+                  className="rounded text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5"
+                />
+                <span>Locker Key surrendered & tested (or no locker allotted)</span>
+              </label>
+
+              <label className="flex items-center gap-2 cursor-pointer text-primary hover:text-primary select-none">
+                <input
+                  type="checkbox"
+                  checked={checklist.idCardReturned}
+                  onChange={() => toggleCheck('idCardReturned')}
+                  className="rounded text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5"
+                />
+                <span>Physical RFID / Smart ID Card returned to desk</span>
+              </label>
+
+              <label className="flex items-center gap-2 cursor-pointer text-primary hover:text-primary select-none">
+                <input
+                  type="checkbox"
+                  checked={checklist.assetsReturned}
+                  onChange={() => toggleCheck('assetsReturned')}
+                  className="rounded text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5"
+                />
+                <span>Library study materials & borrowed books returned</span>
+              </label>
+
+              <label className="flex items-center gap-2 cursor-pointer text-primary hover:text-primary select-none">
+                <input
+                  type="checkbox"
+                  checked={checklist.deskInspected}
+                  onChange={() => toggleCheck('deskInspected')}
+                  className="rounded text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5"
+                />
+                <span>Seat & study cubicle inspected (No physical damage/graffiti)</span>
+              </label>
+
+              <label className="flex items-center gap-2 cursor-pointer text-primary hover:text-primary select-none">
+                <input
+                  type="checkbox"
+                  checked={checklist.duesCleared}
+                  onChange={() => toggleCheck('duesCleared')}
+                  className="rounded text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5"
+                />
+                <span>All monthly subscription fees and pending fines cleared</span>
+              </label>
+            </div>
+
+            {!allCleared && (
+              <p className="text-[11px] text-amber-400 bg-amber-500/10 border border-amber-500/20 p-2 rounded-lg">
+                Please verify all clearance items with student before releasing security deposit funds.
+              </p>
+            )}
           </div>
 
           <div>
@@ -99,7 +190,14 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
             <button type="button" onClick={onClose} className="mgr-btn-ghost text-xs">
               Cancel
             </button>
-            <button type="submit" className="mgr-btn-primary text-xs flex items-center gap-1.5">
+            <button
+              type="submit"
+              disabled={!allCleared}
+              className={`mgr-btn-primary text-xs flex items-center gap-1.5 transition-opacity ${
+                !allCleared ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              title={!allCleared ? 'Please verify all clearance items with student before releasing refund' : undefined}
+            >
               <CheckCircle size={14} /> Confirm & Release Refund
             </button>
           </div>

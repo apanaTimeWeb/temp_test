@@ -75,6 +75,45 @@ describe('Manager Members New Admission Audit Regression Tests', () => {
     expect(multiShiftFee.finalPayable).toBe(1260);
   });
 
+  it('calculates multi-head composite billing including registration fee and security deposit', () => {
+    const compositeFee = calculateAdmissionFee({
+      selectedShifts: ['Morning'],
+      planDurationKey: '1_month',
+      hasLocker: true,
+      registrationFee: 200,
+      securityDeposit: 500,
+    });
+    // Shift: 700 + Locker: 300 + Reg Fee: 200 + Sec Deposit: 500 = 1700
+    expect(compositeFee.grossTenureFee).toBe(1000); // 700 shift + 300 locker
+    expect(compositeFee.registrationFeeAmount).toBe(200);
+    expect(compositeFee.securityDepositAmount).toBe(500);
+    expect(compositeFee.finalPayable).toBe(1700);
+
+    const regBreakdown = compositeFee.breakdown.find((b) => b.label.includes('Registration Fee'));
+    const secBreakdown = compositeFee.breakdown.find((b) => b.label.includes('Security Deposit'));
+    expect(regBreakdown).toBeDefined();
+    expect(regBreakdown?.amount).toBe(200);
+    expect(secBreakdown).toBeDefined();
+    expect(secBreakdown?.amount).toBe(500);
+  });
+
+  it('accepts admission form values with registration fee and security deposit', () => {
+    const validCompositeData = {
+      fullName: 'Vikram Malhotra',
+      phone: '9876543210',
+      gender: 'Male',
+      shift: 'Morning',
+      seat: 'S-02',
+      plan: '1 Month',
+      registrationFee: '200',
+      securityDeposit: '500',
+      amountPaid: '1700',
+      paymentMode: 'Cash',
+    };
+    const result = ManagerMembersNewAdmissionAdmissionSchema.safeParse(validCompositeData);
+    expect(result.success).toBe(true);
+  });
+
   it('BUG-01: ensures no PII is exposed in DOM data attributes in ManagerMembersNewAdmissionMain.tsx', () => {
     const mainPath = join(__dirname, '../components/ManagerMembersNewAdmissionMain.tsx');
     const content = readFileSync(mainPath, 'utf8');

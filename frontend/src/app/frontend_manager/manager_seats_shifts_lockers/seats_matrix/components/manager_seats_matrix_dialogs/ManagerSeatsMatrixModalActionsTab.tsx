@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { User, UserPlus, Wrench, CheckCircle, LogOut } from 'lucide-react';
+import { User, UserPlus, Wrench, CheckCircle, LogOut, Layers } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import type { SeatData, ShiftType } from '../../types/ManagerSeatsMatrixTypes';
@@ -357,6 +357,110 @@ export function ManagerSeatsMatrixModalActionsTab({
           </div>
         </div>
       </div>
+
+      {/* Shift Sharing & Time-slot Availability Breakdown */}
+      {(() => {
+        const getShiftStatus = (shiftName: 'Morning' | 'Afternoon' | 'Evening' | 'Night') => {
+          const alloc = selectedSeat.shiftAllocations?.[shiftName];
+          if (alloc) {
+            return {
+              isBooked: true,
+              label: alloc.student || 'Occupied',
+            };
+          }
+          const isBooked = Boolean(selectedSeat.shift?.includes(shiftName) || selectedSeat.shift === 'Full Day');
+          return {
+            isBooked,
+            label: isBooked ? (selectedSeat.student || 'Occupied') : 'Available for Booking',
+          };
+        };
+
+        const morning = getShiftStatus('Morning');
+        const afternoon = getShiftStatus('Afternoon');
+        const evening = getShiftStatus('Evening');
+        const night = getShiftStatus('Night');
+
+        return (
+          <div className="p-3.5 rounded-xl bg-card border border-border space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-secondary flex items-center gap-1.5">
+                <Layers size={13} className="text-indigo-400" />
+                <span>Shift Sharing Roster (Seat {selectedSeat.id})</span>
+              </span>
+              <span className="text-[11px] font-semibold text-emerald-400">Multi-Shift Enabled</span>
+            </div>
+            <div className="space-y-1.5 text-xs">
+              {/* Morning Shift */}
+              <div className="flex items-center justify-between p-2 rounded-lg bg-surface border border-border/70">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
+                  <span className="font-semibold text-primary">Morning (06:00 AM – 02:00 PM)</span>
+                </div>
+                <span
+                  className={`font-mono text-[11px] px-2 py-0.5 rounded font-semibold ${
+                    morning.isBooked
+                      ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                      : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                  }`}
+                >
+                  {morning.label}
+                </span>
+              </div>
+
+              {/* Afternoon Shift */}
+              <div className="flex items-center justify-between p-2 rounded-lg bg-surface border border-border/70">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-sky-400 shrink-0" />
+                  <span className="font-semibold text-primary">Afternoon (11:00 AM – 04:00 PM)</span>
+                </div>
+                <span
+                  className={`font-mono text-[11px] px-2 py-0.5 rounded font-semibold ${
+                    afternoon.isBooked
+                      ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                      : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                  }`}
+                >
+                  {afternoon.label}
+                </span>
+              </div>
+
+              {/* Evening Shift */}
+              <div className="flex items-center justify-between p-2 rounded-lg bg-surface border border-border/70">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-indigo-400 shrink-0" />
+                  <span className="font-semibold text-primary">Evening (02:00 PM – 10:00 PM)</span>
+                </div>
+                <span
+                  className={`font-mono text-[11px] px-2 py-0.5 rounded font-semibold ${
+                    evening.isBooked
+                      ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                      : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                  }`}
+                >
+                  {evening.label}
+                </span>
+              </div>
+
+              {/* Night Shift */}
+              <div className="flex items-center justify-between p-2 rounded-lg bg-surface border border-border/70">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-purple-400 shrink-0" />
+                  <span className="font-semibold text-primary">Night (10:00 PM – 06:00 AM)</span>
+                </div>
+                <span
+                  className={`font-mono text-[11px] px-2 py-0.5 rounded font-semibold ${
+                    night.isBooked
+                      ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                      : 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                  }`}
+                >
+                  {night.label}
+                </span>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Action Buttons */}
       <div className="space-y-2.5 pt-1">

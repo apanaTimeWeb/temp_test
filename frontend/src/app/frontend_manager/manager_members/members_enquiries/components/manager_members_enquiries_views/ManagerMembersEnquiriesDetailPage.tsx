@@ -75,7 +75,23 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
   if (enquiryQuery.isError) return <div className="crm-page crm-empty-state crm-not-found" role="alert"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('unable_to_load_enquiry')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-primary crm-mt-12" onClick={() => { void enquiryQuery.refetch(); }} disabled={enquiryQuery.isFetching}>{enquiryQuery.isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
   if (!enquiry) return <div className="crm-page crm-empty-state crm-not-found"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('enquiry_not_found')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
 
-  const handleConvert = () => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADMISSION_CONVERSION());
+  const handleConvert = () => {
+    try {
+      sessionStorage.setItem(
+        'manager_pending_enquiry_conversion',
+        JSON.stringify({
+          enquiryId: enquiry.id,
+          name: enquiry.name,
+          phone: enquiry.phone,
+          shift: enquiry.shift,
+          source: enquiry.source,
+        })
+      );
+    } catch {
+      // Storage fallback
+    }
+    navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADMISSION_CONVERSION(enquiry.id));
+  };
   const nextFollowUpLabel = enquiry.isOverdue ? tManagerUi('overdue') : enquiry.isToday ? tManagerUi('today') : enquiry.isUpcoming ? tManagerUi('upcoming') : tManagerUi('not_scheduled');
   const nextFollowUpClass = enquiry.isOverdue ? 'crm-followup-date-overdue' : enquiry.isToday ? 'crm-followup-date-today' : 'crm-followup-date-upcoming';
 

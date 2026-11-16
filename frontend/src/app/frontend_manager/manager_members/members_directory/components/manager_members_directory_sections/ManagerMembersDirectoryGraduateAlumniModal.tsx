@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { GraduationCap, Award, Calendar, Clock, Armchair, X, Check } from 'lucide-react';
+import { GraduationCap, Award, Calendar, Clock, Armchair, X, Check, ShieldCheck } from 'lucide-react';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
 
 export interface ManagerGraduateAlumniDetails {
@@ -239,6 +239,24 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
               />
             </div>
           )}
+
+          {/* Exit Clearance & No-Dues Verification */}
+          <div className="p-3 rounded-xl bg-surface border border-border flex items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2.5">
+              <ShieldCheck size={16} className="text-emerald-500 shrink-0" />
+              <div>
+                <span className="font-semibold text-primary block">
+                  Verify No-Dues & Deposit Clearance
+                </span>
+                <span className="text-[11px] text-secondary block">
+                  Ensure locker key is returned and security deposit is settled at the accounts desk
+                </span>
+              </div>
+            </div>
+            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
+              Clearance Verified
+            </span>
+          </div>
 
           {/* Footer Actions */}
           <div className="flex items-center justify-end gap-2 pt-3 border-t border-border shrink-0">

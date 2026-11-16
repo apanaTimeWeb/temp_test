@@ -35,6 +35,8 @@ export function useManagerNewAdmissionAdmission() {
       seat: '',
       locker: '',
       plan: '',
+      registrationFee: '',
+      securityDeposit: '',
       couponCode: '',
       manualDiscount: '',
       amountPaid: '',

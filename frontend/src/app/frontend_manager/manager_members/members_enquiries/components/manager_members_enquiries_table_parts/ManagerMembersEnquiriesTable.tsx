@@ -143,8 +143,26 @@ export function ManagerMembersEnquiriesTable({
     }
   };
 
-  const handleQuickConvert = (e: MouseEvent) => {
+  const handleQuickConvert = (e: MouseEvent, enq?: ManagerMembersEnquiriesEnquiry) => {
     e.stopPropagation();
+    if (enq) {
+      try {
+        sessionStorage.setItem(
+          'manager_pending_enquiry_conversion',
+          JSON.stringify({
+            enquiryId: enq.id,
+            name: enq.name,
+            phone: enq.phone,
+            shift: enq.shift,
+            source: enq.source,
+          })
+        );
+      } catch {
+        // Storage fallback
+      }
+      router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADMISSION_CONVERSION(enq.id));
+      return;
+    }
     router.push(MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADMISSION_CONVERSION());
   };
 
@@ -392,7 +410,7 @@ export function ManagerMembersEnquiriesTable({
                         className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 hover:bg-indigo-500/35 hover:text-indigo-200 hover:border-indigo-400 hover:scale-105 active:scale-95 shadow-sm shadow-indigo-950/50 transition-all cursor-pointer"
                         aria-label={tManagerUi('convert_to_admission')}
                         title={tManagerUi('convert_to_admission')}
-                        onClick={handleQuickConvert}
+                        onClick={(e) => handleQuickConvert(e, enq)}
                       >
                         <CheckCircle size={14} />
                       </button>

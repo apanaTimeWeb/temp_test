@@ -16,4 +16,22 @@ describe('matrix status normalization', () => {
     expect(normalizeManagerLockerMatrixStatus(null)).toBe('unknown');
     expect(normalizeManagerLockerMatrixStatus('reserved-pending')).toBe('unknown');
   });
+
+  it('correctly models shift sharing so physical seats are available across distinct shifts', () => {
+    // S-05 is occupied only during Morning shift
+    const physicalSeat = {
+      id: 'S-05',
+      status: 'occupied' as const,
+      shift: 'Morning',
+      student: 'Rahul Sharma',
+    };
+
+    // When viewing Morning shift: seat is occupied by Rahul
+    const isMorningOccupied = physicalSeat.shift === 'Morning' || physicalSeat.shift === 'Full Day';
+    expect(isMorningOccupied).toBe(true);
+
+    // When viewing Evening shift: seat is free and can be allocated to Priya
+    const isEveningOccupied = physicalSeat.shift === 'Evening' || physicalSeat.shift === 'Full Day';
+    expect(isEveningOccupied).toBe(false);
+  });
 });

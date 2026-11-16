@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Sparkles, X } from 'lucide-react';
 import { ManagerMembersNewAdmissionAdmissionEnrollmentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionEnrollmentSection';
 import { ManagerMembersNewAdmissionAdmissionDocumentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionDocumentSection';
 import { ManagerMembersNewAdmissionAdmissionPaymentSection } from '@/app/frontend_manager/manager_members/members_new_admission/components/manager_members_new_admission_sections/ManagerMembersNewAdmissionAdmissionPaymentSection';
@@ -31,6 +31,29 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const router = useRouter();
   useManagerMembersNewAdmissionUnsavedChangesGuard({ isDirty, confirm, router, tManagerUi, replayAnchorOnConfirm: true });
 
+  const [conversionOrigin, setConversionOrigin] = useState<{ enquiryId: string; name: string } | null>(null);
+
+  useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem('manager_pending_enquiry_conversion');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.name) setValue('fullName', parsed.name, { shouldValidate: true, shouldDirty: true });
+        if (parsed.phone) setValue('phone', parsed.phone, { shouldValidate: true, shouldDirty: true });
+        if (parsed.shift && parsed.shift !== 'Not specified') {
+          setValue('shift', parsed.shift, { shouldValidate: true, shouldDirty: true });
+        }
+        if (parsed.notes) {
+          setValue('remarks', `Converted from Enquiry: ${parsed.notes}`, { shouldValidate: false, shouldDirty: true });
+        }
+        setConversionOrigin({ enquiryId: parsed.enquiryId || 'ENQ', name: parsed.name });
+        sessionStorage.removeItem('manager_pending_enquiry_conversion');
+      }
+    } catch {
+      // Storage fallback
+    }
+  }, [setValue]);
+
   useEffect(() => {
     const handlePriceUpdate = () => setPricingConfig(getLibraryPricingConfig());
     window.addEventListener('library_pricing_updated', handlePriceUpdate);
@@ -44,6 +67,8 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
   const watchedLocker = watch('locker');
   const watchedAmountPaid = watch('amountPaid');
   const watchedDiscount = watch('manualDiscount');
+  const watchedRegFee = watch('registrationFee');
+  const watchedSecDeposit = watch('securityDeposit');
 
   const selectedShifts = useMemo(() => {
     if (!watchedShift) return [];
@@ -111,10 +136,21 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
         floor: watchedFloor,
         hasLocker: Boolean(watchedLocker),
         manualDiscount: Number(watchedDiscount) || 0,
+        registrationFee: Number(watchedRegFee) || 0,
+        securityDeposit: Number(watchedSecDeposit) || 0,
       },
       pricingConfig
     );
-  }, [selectedShifts, watchedPlan, watchedFloor, watchedLocker, watchedDiscount, pricingConfig]);
+  }, [
+    selectedShifts,
+    watchedPlan,
+    watchedFloor,
+    watchedLocker,
+    watchedDiscount,
+    watchedRegFee,
+    watchedSecDeposit,
+    pricingConfig,
+  ]);
 
   // Sync default plan and auto-fill amountPaid
   useEffect(() => {
@@ -211,6 +247,24 @@ export default function ManagerMembersNewAdmissionAdmissionForm() {
               />
             )}
             {draftFeedback && <p className="mt-3 rounded-lg border border-warning bg-warning-bg p-3 text-sm text-warning" role="status" aria-live="polite" data-testid="manager-students-admission-draft-feedback">{draftFeedback}</p>}
+            {conversionOrigin && (
+              <div className="mt-3 p-3.5 rounded-xl bg-indigo-500/15 border border-indigo-500/35 flex items-center justify-between text-xs text-indigo-300">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-indigo-400 shrink-0" />
+                  <span>
+                    Converted from Enquiry <strong>#{conversionOrigin.enquiryId}</strong>: Information pre-filled for <strong>{conversionOrigin.name}</strong>.
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setConversionOrigin(null)}
+                  className="text-secondary hover:text-primary transition-colors cursor-pointer p-1"
+                  aria-label="Dismiss banner"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            )}
           </div>
           <div className="mgr-smartid-badge self-start sm:self-auto shrink-0 flex items-center gap-2 p-2.5 sm:p-3 rounded-xl bg-card border border-border shadow-xs">
             <span className="mgr-smartid-label text-xs text-secondary font-medium uppercase tracking-wider">{tManagerUi('smart_id')}</span>

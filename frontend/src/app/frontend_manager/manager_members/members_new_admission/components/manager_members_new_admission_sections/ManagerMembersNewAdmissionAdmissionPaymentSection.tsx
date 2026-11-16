@@ -69,6 +69,93 @@ export function ManagerMembersNewAdmissionAdmissionPaymentSection({
             {errors.plan && <p className="mgr-error text-rose-400 text-xs mt-1" role="alert">{errors.plan.message}</p>}
           </div>
 
+          {/* One-Time Registration Fee */}
+          <div className="mgr-form-field">
+            <div className="flex items-center justify-between mb-1">
+              <label className="mgr-label !mb-0" htmlFor="admission-reg-fee">
+                Registration Fee <span className="text-secondary font-normal text-xs">(One-Time)</span>
+              </label>
+              <div className="flex items-center gap-1.5 text-[11px]">
+                <button
+                  type="button"
+                  onClick={() => setValue?.('registrationFee', '200', { shouldValidate: true, shouldDirty: true })}
+                  className="px-1.5 py-0.5 rounded bg-surface border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+                >
+                  ₹200 Standard
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setValue?.('registrationFee', '0', { shouldValidate: true, shouldDirty: true })}
+                  className="px-1.5 py-0.5 rounded bg-surface border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+                >
+                  ₹0 Waived
+                </button>
+              </div>
+            </div>
+            <div className="mgr-input-icon-wrap">
+              <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
+              <input
+                id="admission-reg-fee"
+                {...register('registrationFee')}
+                type="number"
+                min="0"
+                step="1"
+                onKeyDown={(e) => {
+                  if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault();
+                }}
+                className="mgr-input mgr-input-with-icon"
+                placeholder="200"
+              />
+            </div>
+          </div>
+
+          {/* Refundable Security Deposit */}
+          <div className="mgr-form-field">
+            <div className="flex items-center justify-between mb-1">
+              <label className="mgr-label !mb-0" htmlFor="admission-security-deposit">
+                Security Deposit <span className="text-secondary font-normal text-xs">(Refundable)</span>
+              </label>
+              <div className="flex items-center gap-1.5 text-[11px]">
+                <button
+                  type="button"
+                  onClick={() => setValue?.('securityDeposit', '500', { shouldValidate: true, shouldDirty: true })}
+                  className="px-1.5 py-0.5 rounded bg-surface border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+                >
+                  ₹500 Standard
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setValue?.('securityDeposit', '1000', { shouldValidate: true, shouldDirty: true })}
+                  className="px-1.5 py-0.5 rounded bg-surface border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+                >
+                  ₹1000 Locker+Seat
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setValue?.('securityDeposit', '0', { shouldValidate: true, shouldDirty: true })}
+                  className="px-1.5 py-0.5 rounded bg-surface border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
+                >
+                  ₹0 None
+                </button>
+              </div>
+            </div>
+            <div className="mgr-input-icon-wrap">
+              <IndianRupee size={18} strokeWidth={2} className="mgr-input-icon text-secondary" />
+              <input
+                id="admission-security-deposit"
+                {...register('securityDeposit')}
+                type="number"
+                min="0"
+                step="1"
+                onKeyDown={(e) => {
+                  if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault();
+                }}
+                className="mgr-input mgr-input-with-icon"
+                placeholder="500"
+              />
+            </div>
+          </div>
+
           {/* Coupon Code */}
           <div className="mgr-form-field">
             <label className="mgr-label" htmlFor="admission-coupon">

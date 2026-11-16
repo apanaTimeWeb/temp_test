@@ -28,6 +28,8 @@ export interface LibraryPricingConfig {
   lockerMonthlyFee: number;
   reservedSeatMonthlyFee: number;
   multiShiftDiscountPercent: number;
+  defaultRegistrationFee: number;
+  defaultSecurityDeposit: number;
 }
 
 export const DEFAULT_LIBRARY_PRICING_CONFIG: LibraryPricingConfig = {
@@ -47,6 +49,8 @@ export const DEFAULT_LIBRARY_PRICING_CONFIG: LibraryPricingConfig = {
   lockerMonthlyFee: 200,
   reservedSeatMonthlyFee: 200,
   multiShiftDiscountPercent: 10,
+  defaultRegistrationFee: 200,
+  defaultSecurityDeposit: 500,
 };
 
 const STORAGE_KEY = 'LIBRARY_OS_PRICING_CONFIG_V1';
@@ -83,6 +87,8 @@ export interface CalculationInput {
   floor?: string;
   hasLocker?: boolean;
   manualDiscount?: number;
+  registrationFee?: number;
+  securityDeposit?: number;
 }
 
 export interface BreakdownItem {
@@ -103,6 +109,8 @@ export interface CalculationResult {
   grossTenureFee: number;
   tenureDiscountPercent: number;
   tenureDiscountAmount: number;
+  registrationFeeAmount: number;
+  securityDepositAmount: number;
   netBeforeManualDiscount: number;
   manualDiscountAmount: number;
   finalPayable: number;
@@ -163,8 +171,13 @@ export function calculateAdmissionFee(
   const tenureDiscountAmount =
     tenureDiscountPercent > 0 ? Math.round((grossTenureFee * tenureDiscountPercent) / 100) : 0;
   const netBeforeManualDiscount = Math.max(0, grossTenureFee - tenureDiscountAmount);
+  const registrationFeeAmount = Math.max(0, input.registrationFee ?? 0);
+  const securityDepositAmount = Math.max(0, input.securityDeposit ?? 0);
   const manualDiscountAmount = Math.max(0, manualDiscount);
-  const finalPayable = Math.max(0, netBeforeManualDiscount - manualDiscountAmount);
+  const finalPayable = Math.max(
+    0,
+    netBeforeManualDiscount + registrationFeeAmount + securityDepositAmount - manualDiscountAmount
+  );
 
   // 5. Build human-readable itemized breakdown
   const breakdown: BreakdownItem[] = [];
@@ -191,6 +204,18 @@ export function calculateAdmissionFee(
     breakdown.push({
       label: `Personal Locker Allotment × ${durationMonths} mo`,
       amount: monthlyLockerFee * durationMonths,
+    });
+  }
+  if (registrationFeeAmount > 0) {
+    breakdown.push({
+      label: 'One-Time Admission Registration Fee',
+      amount: registrationFeeAmount,
+    });
+  }
+  if (securityDepositAmount > 0) {
+    breakdown.push({
+      label: 'Refundable Security Deposit (Locker/Seat)',
+      amount: securityDepositAmount,
     });
   }
   if (tenureDiscountAmount > 0) {
@@ -220,6 +245,8 @@ export function calculateAdmissionFee(
     grossTenureFee,
     tenureDiscountPercent,
     tenureDiscountAmount,
+    registrationFeeAmount,
+    securityDepositAmount,
     netBeforeManualDiscount,
     manualDiscountAmount,
     finalPayable,

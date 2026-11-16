@@ -39,6 +39,8 @@ export const ManagerMembersNewAdmissionAdmissionSchema = z.object({
   seat: z.string().min(1, 'Select a seat'),
   locker: z.string().optional(),
   plan: z.string().min(1, 'Select a plan'),
+  registrationFee: z.string().optional(),
+  securityDeposit: z.string().optional(),
   couponCode: z.string().optional(),
   manualDiscount: z
     .string()

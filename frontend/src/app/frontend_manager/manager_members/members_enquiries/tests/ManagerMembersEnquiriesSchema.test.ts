@@ -18,7 +18,7 @@ describe('CRM local draft schemas', () => {
 describe('CRM admission conversion route privacy', () => {
   it('does not serialize names or phone numbers into the destination URL', () => {
     const destination = MANAGER_MEMBERS_ENQUIRIES_ROUTES.ADMISSION_CONVERSION();
-    expect(destination).toBe('/frontend_manager/manager_members/members_directory?view=new');
+    expect(destination).toBe('/frontend_manager/manager_members/members_new_admission');
     expect(destination).not.toContain('phone');
     expect(destination).not.toContain('name=');
   });
