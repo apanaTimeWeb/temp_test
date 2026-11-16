@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { CheckCircle2, MessageSquare, Send, X, ExternalLink, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, MessageSquare, Send, X, ExternalLink, ShieldCheck, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ManagerStudent } from '../../types/ManagerMembersIdCardGeneratorTypes';
 
@@ -206,6 +206,16 @@ export function ManagerMembersIdCardBulkDispatchModal({
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => window.print()}
+              data-testid="manager-id-card-bulk-print-btn"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-surface border border-border text-foreground hover:bg-surface-hover shadow-sm transition-colors cursor-pointer"
+              title="Print all selected students' ID cards"
+            >
+              <Printer size={13} />
+              <span>Print All Cards</span>
+            </button>
             <button
               type="button"
               onClick={onClose}

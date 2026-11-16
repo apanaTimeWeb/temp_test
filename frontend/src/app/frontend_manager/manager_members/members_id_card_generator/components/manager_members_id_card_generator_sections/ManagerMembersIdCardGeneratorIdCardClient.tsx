@@ -4,9 +4,25 @@ import { useTranslations } from 'next-intl';
 
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { CheckCircle2, IdCard, MessageSquare, Printer, Search } from 'lucide-react';
+import {
+  CheckCircle2,
+  CreditCard,
+  Grid,
+  IdCard,
+  Layers,
+  MessageSquare,
+  Printer,
+  RotateCw,
+  Scissors,
+  Search,
+} from 'lucide-react';
 import { toast } from 'sonner';
-import StudentIdCard, { type IdCardData } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCard';
+import StudentIdCard, {
+  type IdCardData,
+  type IdCardSide,
+  type IdCardPrintLayout,
+} from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCard';
+import { ManagerMembersIdCardGeneratorStudentIdCardBack } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardBack';
 import { useManagerIdCardGeneratorFormatting } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGeneratorFormatting';
 import { useManagerIdCardGenerator } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGenerator';
 import type { ManagerStudent } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorTypes';
@@ -25,6 +41,9 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   const [selectedId, setSelectedId] = useState(requestedId);
   const [bulkSelectedIds, setBulkSelectedIds] = useState<string[]>([]);
   const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+  const [printLayout, setPrintLayout] = useState<IdCardPrintLayout>('pvc_single');
+  const [cardSide, setCardSide] = useState<IdCardSide>('front');
+  const [tileAllSlots, setTileAllSlots] = useState(true);
   useEffect(() => {
     if (requestedId) setSelectedId(requestedId);
     else if (students.length > 0) setSelectedId((current) => current || students[0].smartId);
@@ -94,14 +113,43 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
     if (bulkSelectedIds.length === filtered.length) setBulkSelectedIds([]);
     else setBulkSelectedIds(filtered.map((s) => s.smartId));
   };
+  const getStudentCardData = useMemo(() => {
+    return (s: ManagerStudent): IdCardData => ({
+      name: s.name,
+      smartId: s.smartId,
+      phone: s.phone,
+      shift: s.shift,
+      seat: s.seat,
+      locker: s.locker || '',
+      plan: s.plan,
+      status: s.status,
+      joinDate: formatDate(s.joined),
+      expiryDate: (s as any).expiryDate,
+      branch: s.branch || 'Central Library',
+      college: (s as unknown as { college?: string }).college,
+      wifiSsid: 'Central_Library_5G',
+      wifiPassword: 'Study@Silent2026',
+      emergencyPhone: '+91 98765 00000',
+      helpdeskPhone: '+91 98765 43210',
+    });
+  }, [formatDate]);
+
   const cardData: IdCardData | null = useMemo(() => {
     if (!selected) return null;
-    return {
-      name: selected.name, smartId: selected.smartId, phone: selected.phone, shift: selected.shift, seat: selected.seat,
-      locker: selected.locker || '', plan: selected.plan, status: selected.status, joinDate: formatDate(selected.joined),
-      expiryDate: (selected as any).expiryDate, branch: selected.branch || 'Central Library', college: (selected as unknown as { college?: string }).college,
-    };
-  }, [selected, formatDate]);
+    return getStudentCardData(selected);
+  }, [selected, getStudentCardData]);
+
+  const a4Capacity = printLayout === 'a4_sheet_8' ? 8 : 10;
+  const a4Cards: IdCardData[] = useMemo(() => {
+    if (bulkStudents.length > 0) {
+      return bulkStudents.slice(0, a4Capacity).map(getStudentCardData);
+    }
+    if (!cardData) return [];
+    if (tileAllSlots) {
+      return Array.from({ length: a4Capacity }, () => cardData);
+    }
+    return [cardData];
+  }, [bulkStudents, a4Capacity, cardData, tileAllSlots, getStudentCardData]);
 
   const handleShareWhatsApp = () => {
     if (!selected) return;
@@ -269,10 +317,304 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               )}
             </div>
           </div>
-          {selected && cardData && <div className="mgr-card mgr-idcard-actions-card"><div className="mgr-card-header"><h2 className="mgr-section-title">{tManagerUi('actions')}</h2></div><div className="mgr-card-body mgr-idcard-actions-body"><p className="mgr-input-hint" role="status" data-testid="manager-students-id-card-output-contract-warning">{tManagerUi('id_card_preview_only_contract_warning')}</p><button type="button" onClick={handleShareWhatsApp} data-testid="manager-students-id-card-whatsapp-share" title="Share ID Card via WhatsApp" aria-label="Share ID Card via WhatsApp" className="mgr-btn-whatsapp cursor-pointer flex items-center justify-center gap-2"><MessageSquare size={18} strokeWidth={2} /> <span>Share via WhatsApp</span></button><button type="button" onClick={() => window.print()} title={tManagerUi('print_id_card')} aria-label={tManagerUi('print_id_card')} className="mgr-btn-ghost mgr-btn-full" data-testid="manager-students-id-card-print"><Printer size={18} strokeWidth={2} /> {tManagerUi('print_id_card')}</button></div></div>}
+          {selected && cardData && (
+            <div className="mgr-card mgr-idcard-actions-card">
+              <div className="mgr-card-header">
+                <h2 className="mgr-section-title">{tManagerUi('actions')}</h2>
+              </div>
+              <div className="mgr-card-body mgr-idcard-actions-body">
+                <p className="mgr-input-hint" role="status" data-testid="manager-students-id-card-output-contract-warning">
+                  {tManagerUi('id_card_preview_only_contract_warning')}
+                </p>
+
+                {/* Print Layout Selector */}
+                <div className="space-y-1.5 p-3 rounded-xl bg-surface border border-border">
+                  <label
+                    htmlFor="manager-id-card-layout-select"
+                    className="text-xs font-bold text-foreground flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <Layers size={13} className="text-primary" />
+                      <span>Print Format / Layout</span>
+                    </span>
+                    <span className="text-[10px] text-primary font-mono font-bold uppercase">
+                      {printLayout === 'pvc_single' ? 'CR-80 Thermal' : printLayout === 'a4_sheet_8' ? 'A4 (2x4 Grid)' : 'A4 (2x5 Grid)'}
+                    </span>
+                  </label>
+                  <select
+                    id="manager-id-card-layout-select"
+                    data-testid="manager-id-card-layout-select"
+                    value={printLayout}
+                    onChange={(e) => setPrintLayout(e.target.value as IdCardPrintLayout)}
+                    className="w-full text-xs py-1.5 px-2.5 rounded-lg border border-border bg-card text-foreground font-medium focus:ring-1 focus:ring-primary focus:outline-none"
+                  >
+                    <option value="pvc_single">Single PVC Card (CR-80 / Thermal)</option>
+                    <option value="a4_sheet_8">A4 Paper Sheet (8 Cards - 2×4 Grid)</option>
+                    <option value="a4_sheet_10">A4 Paper Sheet (10 Cards - 2×5 Grid)</option>
+                  </select>
+                  <p className="text-[10px] text-secondary leading-tight">
+                    {printLayout === 'pvc_single'
+                      ? 'Calibrated for CR-80 PVC thermal card printers (85.6mm × 54mm).'
+                      : printLayout === 'a4_sheet_8'
+                      ? 'Standard A4 sheet with 8 card slots (2×4) & scissor cut guides for lamination.'
+                      : 'Compact A4 sheet with 10 card slots (2×5) & scissor cut guides.'}
+                  </p>
+                </div>
+
+                {/* Card Side to Print Selector */}
+                <div className="space-y-1.5 p-3 rounded-xl bg-surface border border-border">
+                  <label
+                    className="text-xs font-bold text-foreground flex items-center justify-between"
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <RotateCw size={13} className="text-primary" />
+                      <span>Card Side to Print</span>
+                    </span>
+                    <span className="text-[10px] text-secondary font-semibold capitalize">
+                      {cardSide === 'both' ? 'Both (Duplex)' : `${cardSide} only`}
+                    </span>
+                  </label>
+                  <div className="grid grid-cols-3 gap-1 p-0.5 rounded-lg bg-card border border-border text-xs" data-testid="manager-id-card-side-select">
+                    <button
+                      type="button"
+                      onClick={() => setCardSide('front')}
+                      data-testid="manager-id-card-side-front-btn"
+                      className={`py-1 px-1.5 rounded-md font-semibold text-[11px] transition-colors cursor-pointer text-center ${
+                        cardSide === 'front' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'
+                      }`}
+                    >
+                      Front
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCardSide('back')}
+                      data-testid="manager-id-card-side-back-btn"
+                      className={`py-1 px-1.5 rounded-md font-semibold text-[11px] transition-colors cursor-pointer text-center ${
+                        cardSide === 'back' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'
+                      }`}
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCardSide('both')}
+                      data-testid="manager-id-card-side-both-btn"
+                      className={`py-1 px-1.5 rounded-md font-semibold text-[11px] transition-colors cursor-pointer text-center ${
+                        cardSide === 'both' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'
+                      }`}
+                    >
+                      Both
+                    </button>
+                  </div>
+                </div>
+
+                {/* WhatsApp Share Button */}
+                <button
+                  type="button"
+                  onClick={handleShareWhatsApp}
+                  data-testid="manager-students-id-card-whatsapp-share"
+                  title="Share ID Card via WhatsApp"
+                  aria-label="Share ID Card via WhatsApp"
+                  className="mgr-btn-whatsapp cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <MessageSquare size={18} strokeWidth={2} /> <span>Share via WhatsApp</span>
+                </button>
+
+                {/* Print Button */}
+                <button
+                  type="button"
+                  onClick={() => window.print()}
+                  title={tManagerUi('print_id_card')}
+                  aria-label={tManagerUi('print_id_card')}
+                  className="mgr-btn-ghost mgr-btn-full flex items-center justify-center gap-2 font-bold cursor-pointer"
+                  data-testid="manager-students-id-card-print"
+                >
+                  <Printer size={18} strokeWidth={2} />
+                  <span>
+                    {bulkSelectedIds.length > 1
+                      ? `Print ${bulkSelectedIds.length} Selected Cards`
+                      : printLayout === 'pvc_single'
+                      ? `${tManagerUi('print_id_card')} (PVC)`
+                      : `Print A4 Sheet (${printLayout === 'a4_sheet_8' ? '8' : '10'} Cards)`}
+                  </span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
         <div className="mgr-idcard-preview-panel">
-          {cardData ? <><p className="mgr-page-subtitle mgr-idcard-preview-label">{tManagerUi('preview')} {selected?.name}</p><StudentIdCard data={cardData} /><p className="mgr-cell-sub mgr-idcard-preview-hint">{tManagerUi('use_preview_only_until_validity_and_verification_contract_is_supplied')}</p></> : <div className="mgr-card mgr-idcard-empty-card"><div className="mgr-empty-state"><div className="mgr-empty-icon"><IdCard size={40} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_student_selected')}</p><p className="mgr-empty-sub">{tManagerUi('search_and_select_a_student_to_preview_the_id_card')}</p></div></div>}
+          {cardData ? (
+            <>
+              <div className="flex items-center justify-between w-full no-print">
+                <p className="mgr-page-subtitle mgr-idcard-preview-label mb-0">{tManagerUi('preview')} {selected?.name}</p>
+                <span className="text-[11px] font-bold text-secondary bg-surface px-2.5 py-1 rounded-full border border-border">
+                  {printLayout === 'pvc_single' ? 'PVC CR-80' : `A4 Sheet (${a4Capacity} Cards)`}
+                </span>
+              </div>
+
+              {printLayout === 'pvc_single' ? (
+                <StudentIdCard data={cardData} side={cardSide} onSideChange={setCardSide} />
+              ) : (
+                /* A4 Sheet Grid Preview */
+                <div className="w-full space-y-4">
+                  <div className="p-3.5 rounded-xl bg-surface border border-border space-y-2 no-print">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs font-bold text-foreground">
+                        <Grid size={15} className="text-primary" />
+                        <span>A4 Paper Sheet Layout Preview</span>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                          {a4Capacity} Cards (2×{a4Capacity / 2})
+                        </span>
+                      </div>
+                      <span className="text-[11px] text-secondary">210mm × 297mm Standard A4</span>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1 border-t border-border/60 text-xs">
+                      <div className="flex items-center gap-1.5 text-secondary text-[11px]">
+                        <Scissors size={13} className="text-amber-500 shrink-0" />
+                        <span>Dashed lines indicate cut guides for paper trimming & lamination.</span>
+                      </div>
+                      {bulkStudents.length === 0 && (
+                        <label className="flex items-center gap-1.5 text-xs text-foreground cursor-pointer font-medium select-none">
+                          <input
+                            type="checkbox"
+                            checked={tileAllSlots}
+                            onChange={(e) => setTileAllSlots(e.target.checked)}
+                            className="rounded border-border text-primary focus:ring-primary h-3.5 w-3.5"
+                          />
+                          <span>Tile all {a4Capacity} slots</span>
+                        </label>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Screen Sheet Representation */}
+                  <div className="mgr-a4-preview-sheet space-y-6">
+                    {/* Sheet 1: Front Sides or Selected Single Side */}
+                    {(cardSide === 'front' || cardSide === 'both') && (
+                      <div>
+                        <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 text-xs text-slate-700">
+                          <span className="font-bold flex items-center gap-1.5">
+                            <span className="w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold">1</span>
+                            <span>Front Sides Sheet (Cut & Laminate)</span>
+                          </span>
+                          <span className="text-[11px] font-mono text-slate-500">{a4Cards.length} Cards Loaded</span>
+                        </div>
+                        <div
+                          className={`grid grid-cols-2 gap-3 justify-center ${
+                            printLayout === 'a4_sheet_8' ? 'mgr-a4-sheet-grid-8' : 'mgr-a4-sheet-grid-10'
+                          }`}
+                        >
+                          {a4Cards.map((card, idx) => (
+                            <div
+                              key={`front-slot-${idx}-${card.smartId}`}
+                              className="mgr-a4-sheet-cell-preview relative p-1 rounded-xl"
+                            >
+                              <div className="mgr-a4-cut-tag flex items-center gap-0.5">
+                                <Scissors size={9} />
+                                <span>Cut #{idx + 1}</span>
+                              </div>
+                              <div className="transform origin-top-left scale-[0.72] w-[380px] -mb-[85px]">
+                                <StudentIdCard data={card} side="front" />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Sheet 2: Back Sides (Rules, Wi-Fi, Contacts) */}
+                    {(cardSide === 'back' || cardSide === 'both') && (
+                      <div>
+                        <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 text-xs text-slate-700">
+                          <span className="font-bold flex items-center gap-1.5">
+                            <span className="w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold">{cardSide === 'both' ? '2' : '1'}</span>
+                            <span>Back Sides Sheet (Rules, Wi-Fi & Contacts)</span>
+                          </span>
+                          <span className="text-[11px] font-mono text-slate-500">Duplex Alignment Mirror</span>
+                        </div>
+                        <div
+                          className={`grid grid-cols-2 gap-3 justify-center ${
+                            printLayout === 'a4_sheet_8' ? 'mgr-a4-sheet-grid-8' : 'mgr-a4-sheet-grid-10'
+                          }`}
+                        >
+                          {a4Cards.map((card, idx) => (
+                            <div
+                              key={`back-slot-${idx}-${card.smartId}`}
+                              className="mgr-a4-sheet-cell-preview relative p-1 rounded-xl"
+                            >
+                              <div className="mgr-a4-cut-tag flex items-center gap-0.5">
+                                <Scissors size={9} />
+                                <span>Back #{idx + 1}</span>
+                              </div>
+                              <div className="transform origin-top-left scale-[0.72] w-[380px] -mb-[85px]">
+                                <ManagerMembersIdCardGeneratorStudentIdCardBack data={card} />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Hidden on screen, visible on print container with calibrated print media styles */}
+              <div className={`hidden print:block mgr-print-container print-mode-${printLayout}`}>
+                {printLayout === 'pvc_single' ? (
+                  <div>
+                    {(cardSide === 'front' || cardSide === 'both') && (
+                      <div className="break-after-page">
+                        <StudentIdCard data={cardData} side="front" />
+                      </div>
+                    )}
+                    {(cardSide === 'back' || cardSide === 'both') && (
+                      <div className="break-after-page">
+                        <ManagerMembersIdCardGeneratorStudentIdCardBack data={cardData} />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    {(cardSide === 'front' || cardSide === 'both') && (
+                      <div className="break-after-page">
+                        <div className="mgr-a4-sheet-grid">
+                          {a4Cards.map((card, idx) => (
+                            <div key={`print-front-${idx}`} className="mgr-a4-print-cell">
+                              <StudentIdCard data={card} side="front" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {(cardSide === 'back' || cardSide === 'both') && (
+                      <div className="break-after-page">
+                        <div className="mgr-a4-sheet-grid">
+                          {a4Cards.map((card, idx) => (
+                            <div key={`print-back-${idx}`} className="mgr-a4-print-cell">
+                              <ManagerMembersIdCardGeneratorStudentIdCardBack data={card} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <p className="mgr-cell-sub mgr-idcard-preview-hint no-print">
+                {tManagerUi('use_preview_only_until_validity_and_verification_contract_is_supplied')}
+              </p>
+            </>
+          ) : (
+            <div className="mgr-card mgr-idcard-empty-card">
+              <div className="mgr-empty-state">
+                <div className="mgr-empty-icon"><IdCard size={40} strokeWidth={2} /></div>
+                <p className="mgr-empty-title">{tManagerUi('no_student_selected')}</p>
+                <p className="mgr-empty-sub">{tManagerUi('search_and_select_a_student_to_preview_the_id_card')}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

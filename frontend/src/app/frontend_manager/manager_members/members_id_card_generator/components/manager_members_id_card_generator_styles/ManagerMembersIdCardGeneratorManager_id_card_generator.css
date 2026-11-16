@@ -123,26 +123,165 @@
   .mgr-students-theme .mgr-idcard-preview-label  { margin-bottom: 8px; text-align: center; }
   .mgr-students-theme .mgr-idcard-preview-hint   { text-align: center; margin-top: 8px; }
   .mgr-students-theme .mgr-idcard-empty-card     { width: 100%; }
-  @media print {
-  .mgr-students-theme .mgr-idcard-stripe { animation: none !important; background-position: 0% 50% !important; }
-  }
-  @media print {
 
-  .mgr-students-theme .mgr-idcard-body::before {
-    content: 'Library OS • VERIFIED • Library OS • VERIFIED';
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(-35deg);
-    font-size: 9px; font-weight: 700; color: color-mix(in srgb, theme(--color-primary) 7%, transparent);
-    white-space: nowrap; pointer-events: none; letter-spacing: 0.15em;
-    z-index: 0; width: 200%; text-align: center;
-  }
-  }
   @media print {
+    .mgr-students-theme .mgr-idcard-stripe { animation: none !important; background-position: 0% 50% !important; }
+  }
 
-  .mgr-students-theme .mgr-idcard-preview-label,
-.mgr-students-theme .mgr-idcard-preview-hint,
-.mgr-students-theme .mgr-idcard-actions-card,
-.mgr-students-theme .mgr-idcard-student-list { display: none !important; }
+  @media print {
+    .mgr-students-theme .mgr-idcard-body::before {
+      content: 'Library OS • VERIFIED • Library OS • VERIFIED';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(-35deg);
+      font-size: 9px; font-weight: 700; color: color-mix(in srgb, theme(--color-primary) 7%, transparent);
+      white-space: nowrap; pointer-events: none; letter-spacing: 0.15em;
+      z-index: 0; width: 200%; text-align: center;
+    }
+  }
+
+  @media print {
+    @page {
+      margin: 0;
+      size: auto;
+    }
+    html, body {
+      background: #FFFFFF !important;
+      color: #000000 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .no-print,
+    .mgr-page-header,
+    .mgr-idcard-preview-label,
+    .mgr-idcard-preview-hint,
+    .mgr-idcard-actions-card,
+    .mgr-idcard-student-list,
+    .mgr-card:not(.mgr-print-container),
+    .mgr-idcard-page-layout > div:first-child {
+      display: none !important;
+    }
+    .mgr-students-theme .mgr-idcard-page-layout {
+      display: block !important;
+      grid-template-columns: 1fr !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .mgr-students-theme .mgr-idcard-preview-panel {
+      width: 100% !important;
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .mgr-students-theme .mgr-idcard-wrap {
+      perspective: none !important;
+      filter: none !important;
+      width: auto !important;
+      margin: 0 auto !important;
+    }
+    .mgr-students-theme .mgr-idcard {
+      box-shadow: none !important;
+      transform: none !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Layout Mode 1: Single PVC Card (CR-80 Thermal) */
+    .print-mode-pvc_single .mgr-idcard {
+      width: 85.6mm !important;
+      max-width: 85.6mm !important;
+      height: 53.98mm !important;
+      max-height: 53.98mm !important;
+      margin: 0 auto !important;
+      page-break-after: always !important;
+      break-after: page !important;
+      border-radius: 3.18mm !important;
+    }
+
+    /* Layout Mode 2: A4 Paper Sheet (8 Cards - 2x4 Grid) */
+    .print-mode-a4_sheet_8 {
+      width: 210mm !important;
+      padding: 8mm 6mm !important;
+      margin: 0 auto !important;
+      box-sizing: border-box !important;
+    }
+    .print-mode-a4_sheet_8 .mgr-a4-sheet-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 85.6mm) !important;
+      grid-auto-rows: 54mm !important;
+      gap: 4mm 6mm !important;
+      justify-content: center !important;
+      page-break-inside: avoid !important;
+    }
+
+    /* Layout Mode 3: A4 Paper Sheet (10 Cards - 2x5 Grid) */
+    .print-mode-a4_sheet_10 {
+      width: 210mm !important;
+      padding: 5mm 6mm !important;
+      margin: 0 auto !important;
+      box-sizing: border-box !important;
+    }
+    .print-mode-a4_sheet_10 .mgr-a4-sheet-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 85.6mm) !important;
+      grid-auto-rows: 54mm !important;
+      gap: 2mm 5mm !important;
+      justify-content: center !important;
+      page-break-inside: avoid !important;
+    }
+
+    /* Common A4 Card Cell in Print */
+    .mgr-a4-print-cell {
+      width: 85.6mm !important;
+      height: 54mm !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      border: 1px dashed #94a3b8 !important; /* Cut guides for lamination */
+      border-radius: 3.18mm !important;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+    }
+    .mgr-a4-print-cell .mgr-idcard {
+      width: 100% !important;
+      height: 100% !important;
+      border-radius: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  /* A4 Screen Preview Styles */
+  .mgr-students-theme .mgr-a4-preview-sheet {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid theme(--color-border);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .mgr-students-theme .mgr-a4-sheet-cell-preview {
+    border: 1.5px dashed #94a3b8;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    background: #18181b;
+  }
+  .mgr-students-theme .mgr-a4-cut-tag {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 8px;
+    font-weight: 700;
+    color: #cbd5e1;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 1px 4px;
+    border-radius: 3px;
+    z-index: 10;
   }
 .mgr-students-theme .mgr-idcard-photo--primary { background: #27272a; border-color: #3b82f6; }
 .mgr-students-theme .mgr-idcard-photo-initials { color: #60a5fa !important; }

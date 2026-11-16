@@ -8,6 +8,9 @@ export interface ManagerMembersIdCardGeneratorErrorFallbackProps {
   onRetry: () => void;
 }
 
+export type IdCardSide = 'front' | 'back' | 'both';
+export type IdCardPrintLayout = 'pvc_single' | 'a4_sheet_8' | 'a4_sheet_10';
+
 export interface IdCardData {
   name: string;
   smartId: string;
@@ -21,9 +24,19 @@ export interface IdCardData {
   expiryDate?: string;
   branch?: string;
   college?: string;
+  wifiSsid?: string;
+  wifiPassword?: string;
+  emergencyPhone?: string;
+  helpdeskPhone?: string;
+  rules?: string[];
 }
 
-export interface ManagerMembersIdCardGeneratorStudentIdCardProps { data: IdCardData; }
+export interface ManagerMembersIdCardGeneratorStudentIdCardProps {
+  data: IdCardData;
+  side?: IdCardSide;
+  printLayout?: IdCardPrintLayout;
+  onSideChange?: (side: IdCardSide) => void;
+}
 
 export interface ManagerMembersIdCardGeneratorErrorBoundaryProps {
   children: ReactNode;
