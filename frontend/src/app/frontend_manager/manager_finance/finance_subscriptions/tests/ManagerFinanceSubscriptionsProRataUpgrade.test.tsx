@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import React from 'react';
 import ManagerFinanceSubscriptionsUpgradeModal from '../components/manager_finance_subscriptions_views/ManagerFinanceSubscriptionsUpgradeModal';
 
@@ -64,11 +64,15 @@ describe('Module 14: Subscriptions - Pro-Rata Plan Upgrade Calculator', () => {
 
     // Click 24 Hours option
     const unlimitedBtn = screen.getByText('24 Hours');
-    fireEvent.click(unlimitedBtn);
+    await act(async () => {
+      fireEvent.click(unlimitedBtn);
+    });
 
     // Confirm upgrade
     const confirmBtn = screen.getByTestId('confirm-pro-rata-upgrade-btn');
-    fireEvent.click(confirmBtn);
+    await act(async () => {
+      fireEvent.click(confirmBtn);
+    });
 
     await vi.waitFor(() => {
       expect(handleConfirm).toHaveBeenCalledWith(

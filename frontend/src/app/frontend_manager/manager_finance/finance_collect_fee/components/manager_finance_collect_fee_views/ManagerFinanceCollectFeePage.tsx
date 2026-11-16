@@ -136,12 +136,28 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
         setSelectedStudent(matched);
         setSearch(matched.name);
         setValue('member', String(matched.id));
+      } else if (_routeQuery.name) {
+        const fallbackStudent = {
+          id: Number(_routeQuery.id) || 999,
+          name: _routeQuery.name,
+          smartId: _routeQuery.smartId || 'STU-PROMISE',
+          phone: _routeQuery.phone || '9876543210',
+          status: 'active' as const,
+          dueAmount: Number(_routeQuery.amount) ? Number(_routeQuery.amount) * 100 : 0,
+          plan: 'Regular Seat Plan',
+          shift: 'General',
+          seat: 'Desk S-01',
+          validUpto: todayDateStr,
+        };
+        setSelectedStudent(fallbackStudent);
+        setSearch(_routeQuery.name);
+        setValue('member', String(fallbackStudent.id));
       }
     }
     if (_routeQuery.amount) {
       setDraftValue('amount', _routeQuery.amount);
     }
-  }, [_routeQuery.id, _routeQuery.name, _routeQuery.smartId, _routeQuery.amount]);
+  }, [_routeQuery.id, _routeQuery.name, _routeQuery.smartId, _routeQuery.amount, _routeQuery.phone, todayDateStr]);
 
   const billingCycleInfo = useMemo(() => {
     return calculateBillingCycleInfo(billingMonth || currentYearMonth, Number(monthsToRenew) || 1);

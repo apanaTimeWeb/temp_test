@@ -73,14 +73,15 @@ export default function ManagerFinanceSubscriptionsUpgradeModal({
   const handleUpgrade = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
       onConfirmUpgrade(subscription.id, targetOption.name, targetOption.shift, netProRataPayable);
       toast.success(
         `Plan upgraded for ${subscription.studentName}: ${targetOption.name} activated! Pro-rata collected: ₹${netProRataPayable}`
       );
       onClose();
-    }, 200);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

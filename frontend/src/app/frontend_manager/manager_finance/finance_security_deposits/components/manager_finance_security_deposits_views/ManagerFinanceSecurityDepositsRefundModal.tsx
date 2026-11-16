@@ -222,18 +222,16 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
               <button
                 type="button"
                 onClick={() => onRefundModeChange('upi')}
-                className={`py-2 text-xs font-semibold rounded-lg border text-center transition-colors ${
-                  refundMode === 'upi' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
-                }`}
+                className={`py-2 text-xs font-semibold rounded-lg border text-center transition-colors ${refundMode === 'upi' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
+                  }`}
               >
                 UPI Transfer
               </button>
               <button
                 type="button"
                 onClick={() => onRefundModeChange('cash')}
-                className={`py-2 text-xs font-semibold rounded-lg border text-center transition-colors ${
-                  refundMode === 'cash' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
-                }`}
+                className={`py-2 text-xs font-semibold rounded-lg border text-center transition-colors ${refundMode === 'cash' ? 'bg-primary text-on-primary border-primary' : 'bg-card text-secondary border-border'
+                  }`}
               >
                 Cash from Counter
               </button>
@@ -261,9 +259,8 @@ export default function ManagerFinanceSecurityDepositsRefundModal({
               type="submit"
               disabled={!allCleared}
               data-testid="confirm-deposit-refund-btn"
-              className={`mgr-btn-primary text-xs flex items-center gap-1.5 transition-opacity ${
-                !allCleared ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+              className={`mgr-btn-primary text-xs flex items-center gap-1.5 transition-opacity ${!allCleared ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               title={!allCleared ? 'Please verify all clearance items with student before releasing refund' : undefined}
             >
               <CheckCircle size={14} /> Confirm & Release Refund
