@@ -83,11 +83,12 @@ describe('Manager Members New Admission Audit Regression Tests', () => {
       registrationFee: 200,
       securityDeposit: 500,
     });
-    // Shift: 700 + Locker: 300 + Reg Fee: 200 + Sec Deposit: 500 = 1700
-    expect(compositeFee.grossTenureFee).toBe(1000); // 700 shift + 300 locker
+    // Shift: 700 + Locker: 200 = 900 grossTenureFee
+    // Gross: 900 + Reg Fee: 200 + Sec Deposit: 500 = 1600 finalPayable
+    expect(compositeFee.grossTenureFee).toBe(900); // 700 shift + 200 locker
     expect(compositeFee.registrationFeeAmount).toBe(200);
     expect(compositeFee.securityDepositAmount).toBe(500);
-    expect(compositeFee.finalPayable).toBe(1700);
+    expect(compositeFee.finalPayable).toBe(1600);
 
     const regBreakdown = compositeFee.breakdown.find((b) => b.label.includes('Registration Fee'));
     const secBreakdown = compositeFee.breakdown.find((b) => b.label.includes('Security Deposit'));
