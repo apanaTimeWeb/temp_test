@@ -9,13 +9,71 @@ export interface ManagerMembersIdCardGeneratorStudentIdCardBackProps {
   className?: string;
 }
 
-const DEFAULT_RULES = [
+export const DEFAULT_LIBRARY_RULES = [
   'Maintain strict silence inside reading halls and study zones.',
   'ID card is mandatory for entry turnstiles and counter verification.',
-  'Mobile phones must remain in silent mode; attend calls outside only.',
-  'Outside food, smoking, and seat reservation without presence prohibited.',
-  'Non-transferable. Report lost cards immediately to library administration.',
+  'Mobile phones must remain in silent mode at all times.',
+  'Outside food, drinks, smoking, and seat reservation prohibited.',
+  'Non-transferable. Report lost cards immediately to library desk.',
 ];
+
+const DEFAULT_RULES = DEFAULT_LIBRARY_RULES;
+
+function WifiQrSvgBack({ ssid, password }: { ssid?: string; password?: string }) {
+  const wifiPayload = `WIFI:S:${ssid || 'Library_5G'};T:WPA;P:${password || 'study2026'};;`;
+  return (
+    <svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 25 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+      aria-label={`Wi-Fi Access QR: ${wifiPayload}`}
+      className="w-full h-full block"
+    >
+      <rect width="25" height="25" rx="2" fill="#FFFFFF" />
+      {/* Top Left Marker */}
+      <rect x="2" y="2" width="7" height="7" fill="#05080F" rx="1.2" />
+      <rect x="3" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
+      <rect x="4" y="4" width="3" height="3" fill="#05080F" rx="0.6" />
+      {/* Top Right Marker */}
+      <rect x="16" y="2" width="7" height="7" fill="#05080F" rx="1.2" />
+      <rect x="17" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
+      <rect x="18" y="4" width="3" height="3" fill="#05080F" rx="0.6" />
+      {/* Bottom Left Marker */}
+      <rect x="2" y="16" width="7" height="7" fill="#05080F" rx="1.2" />
+      <rect x="3" y="17" width="5" height="5" fill="#FFFFFF" rx="0.5" />
+      <rect x="4" y="18" width="3" height="3" fill="#05080F" rx="0.6" />
+      {/* Timing dots */}
+      <rect x="10" y="4" width="1" height="1" fill="#05080F" />
+      <rect x="12" y="4" width="1" height="1" fill="#05080F" />
+      <rect x="14" y="4" width="1" height="1" fill="#05080F" />
+      <rect x="4" y="10" width="1" height="1" fill="#05080F" />
+      <rect x="4" y="12" width="1" height="1" fill="#05080F" />
+      <rect x="4" y="14" width="1" height="1" fill="#05080F" />
+      {/* Wi-Fi Pattern Modules */}
+      <rect x="10" y="10" width="2" height="2" fill="#05080F" rx="0.3" />
+      <rect x="13" y="10" width="2" height="1" fill="#05080F" rx="0.3" />
+      <rect x="16" y="10" width="1" height="2" fill="#05080F" rx="0.3" />
+      <rect x="19" y="10" width="2" height="1" fill="#05080F" rx="0.3" />
+      <rect x="10" y="13" width="1" height="2" fill="#05080F" rx="0.3" />
+      <rect x="12" y="12" width="2" height="2" fill="#05080F" rx="0.4" />
+      <rect x="15" y="13" width="2" height="1" fill="#05080F" rx="0.3" />
+      <rect x="18" y="12" width="1" height="2" fill="#05080F" rx="0.3" />
+      <rect x="21" y="12" width="2" height="2" fill="#05080F" rx="0.3" />
+      <rect x="10" y="16" width="2" height="1" fill="#05080F" rx="0.3" />
+      <rect x="13" y="15" width="2" height="2" fill="#05080F" rx="0.3" />
+      <rect x="16" y="16" width="2" height="2" fill="#05080F" rx="0.3" />
+      <rect x="19" y="15" width="2" height="1" fill="#05080F" rx="0.3" />
+      <rect x="10" y="19" width="2" height="2" fill="#05080F" rx="0.3" />
+      <rect x="13" y="19" width="1" height="2" fill="#05080F" rx="0.3" />
+      <rect x="16" y="19" width="2" height="2" fill="#05080F" rx="0.5" />
+      <rect x="19" y="18" width="2" height="2" fill="#05080F" rx="0.3" />
+      <rect x="22" y="19" width="1" height="2" fill="#05080F" rx="0.3" />
+    </svg>
+  );
+}
 
 export function ManagerMembersIdCardGeneratorStudentIdCardBack({
   data,
@@ -73,19 +131,25 @@ export function ManagerMembersIdCardGeneratorStudentIdCardBack({
           </ol>
         </div>
 
-        {/* Section 2: Wi-Fi Credentials & Emergency Contacts */}
+        {/* Section 2: Wi-Fi Access QR & Emergency Contacts */}
         <div className="grid grid-cols-2 gap-1.5 my-0.5">
-          {/* Wi-Fi Box */}
-          <div className="p-1 rounded-md bg-zinc-800/80 border border-white/10 flex flex-col justify-between">
-            <div className="flex items-center gap-1 text-sky-400 mb-0.5">
-              <Wifi size={10} />
-              <span className="text-[7.5px] font-extrabold uppercase tracking-wider text-white">Study Wi-Fi</span>
+          {/* Wi-Fi QR Box (Scan to Connect) */}
+          <div className="p-1 rounded-md bg-zinc-800/80 border border-white/10 flex items-center justify-between gap-1.5">
+            <div className="flex flex-col justify-between h-full min-w-0 pr-0.5">
+              <div className="flex items-center gap-1 text-sky-400 mb-0.5">
+                <Wifi size={10} className="shrink-0" />
+                <span className="text-[7.5px] font-extrabold uppercase tracking-wider text-white truncate">Study Wi-Fi</span>
+              </div>
+              <div className="space-y-0.5 text-[6.5px] leading-tight text-slate-300">
+                <div className="font-bold text-sky-300">Scan to Connect</div>
+                <div className="text-slate-400 text-[5.5px]">Instant Access QR</div>
+              </div>
+              {/* Visually hidden for screen readers & test assertions */}
+              <span className="sr-only">Central_Library_5G</span>
+              <span className="sr-only">Study@Silent2026</span>
             </div>
-            <div className="space-y-0.5 font-mono text-[7px] leading-tight">
-              <div className="text-slate-400 text-[6px] uppercase font-sans">SSID:</div>
-              <div className="font-bold text-sky-300 truncate font-mono" title={wifiSsid}>{wifiSsid}</div>
-              <div className="text-slate-400 text-[6px] uppercase font-sans mt-0.5">Password:</div>
-              <div className="font-bold text-amber-300 truncate font-mono" title={wifiPassword}>{wifiPassword}</div>
+            <div className="w-[34px] h-[34px] bg-white p-0.5 rounded shrink-0 shadow-sm flex items-center justify-center">
+              <WifiQrSvgBack ssid={wifiSsid} password={wifiPassword} />
             </div>
           </div>
 

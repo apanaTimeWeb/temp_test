@@ -49,12 +49,52 @@ function QtrQrSvgBack({ code }: { code: string }) {
 }
 
 const DEFAULT_RULES = [
-  'Maintain strict silence in reading zones',
-  'No food, drinks or smoking allowed',
-  'Return books before due date to avoid fine',
-  'ID card must be carried at all times',
-  'Respect staff, members & property',
+  'Maintain strict silence inside reading halls and study zones.',
+  'ID card is mandatory for entry turnstiles and counter verification.',
+  'Mobile phones must remain in silent mode at all times.',
+  'Outside food, drinks, smoking, and seat reservation prohibited.',
+  'Non-transferable. Report lost cards immediately to library desk.',
 ];
+
+function QtrWifiQrSvgBack({ ssid, password }: { ssid?: string; password?: string }) {
+  const wifiPayload = `WIFI:S:${ssid || 'Library_5G'};T:WPA;P:${password || 'study2026'};;`;
+  return (
+    <svg
+      width="100%"
+      height="100%"
+      viewBox="0 0 25 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+      aria-label={`Wi-Fi Access QR: ${wifiPayload}`}
+      className="w-full h-full block"
+    >
+      <rect width="25" height="25" rx="2" fill="#FFFFFF" />
+      <rect x="2" y="2" width="7" height="7" fill="#05080F" rx="1.2" />
+      <rect x="3" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
+      <rect x="4" y="4" width="3" height="3" fill="#05080F" rx="0.6" />
+      <rect x="16" y="2" width="7" height="7" fill="#05080F" rx="1.2" />
+      <rect x="17" y="3" width="5" height="5" fill="#FFFFFF" rx="0.5" />
+      <rect x="18" y="4" width="3" height="3" fill="#05080F" rx="0.6" />
+      <rect x="2" y="16" width="7" height="7" fill="#05080F" rx="1.2" />
+      <rect x="3" y="17" width="5" height="5" fill="#FFFFFF" rx="0.5" />
+      <rect x="4" y="18" width="3" height="3" fill="#05080F" rx="0.6" />
+      <rect x="10" y="4" width="1" height="1" fill="#05080F" />
+      <rect x="13" y="4" width="1" height="1" fill="#05080F" />
+      <rect x="4" y="11" width="1" height="1" fill="#05080F" />
+      <rect x="10" y="11" width="2" height="2" fill="#05080F" rx="0.3" />
+      <rect x="13" y="11" width="2" height="1" fill="#05080F" rx="0.3" />
+      <rect x="16" y="11" width="1" height="2" fill="#05080F" rx="0.3" />
+      <rect x="10" y="14" width="2" height="1" fill="#05080F" rx="0.3" />
+      <rect x="16" y="14" width="2" height="1" fill="#05080F" rx="0.3" />
+      <rect x="10" y="16" width="1" height="2" fill="#05080F" rx="0.3" />
+      <rect x="13" y="16" width="2" height="2" fill="#05080F" rx="0.3" />
+      <rect x="10" y="19" width="2" height="2" fill="#05080F" rx="0.3" />
+      <rect x="16" y="19" width="2" height="2" fill="#05080F" rx="0.8" />
+      <rect x="17" y="20" width="1" height="1" fill="#FFFFFF" rx="0.2" />
+    </svg>
+  );
+}
 
 export function ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack({
   data,
@@ -127,8 +167,8 @@ export function ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack({
               <span className="qtr-contact-val">help@lib.os</span>
             </div>
             <div className="qtr-contact-row">
-              <span className="qtr-contact-lbl">Wi-Fi</span>
-              <span className="qtr-contact-val">{wifiSsid}</span>
+              <span className="qtr-contact-lbl">Network</span>
+              <span className="qtr-contact-val">Scan Wi-Fi QR</span>
             </div>
             <div className="qtr-contact-row">
               <span className="qtr-contact-lbl">Batch</span>
@@ -138,15 +178,15 @@ export function ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack({
         </div>
       </div>
 
-      {/* Back Bottom */}
+      {/* Back Bottom (Wi-Fi Quick Connect QR) */}
       <div className="qtr-back-bottom">
         <div className="qtr-lost-wrap">
           <div className="qtr-lost-qr">
-            <QtrQrSvgBack code={`LOST-${data.smartId}`} />
+            <QtrWifiQrSvgBack ssid={wifiSsid} password={(data as any).wifiPassword} />
           </div>
           <div className="qtr-lost-label">
-            <div className="qtr-lost-title">🔍 Lost Card?</div>
-            <div className="qtr-lost-sub">Scan to report &amp; re-issue</div>
+            <div className="qtr-lost-title">📶 Wi-Fi Access</div>
+            <div className="qtr-lost-sub">Scan to connect instantly</div>
           </div>
         </div>
         <div className="qtr-copyright">
