@@ -83,12 +83,14 @@ export function ManagerAccountsExpensesAddExpenseModal({
       description: '',
       amount: '',
       mode: 'cash',
+      source: 'petty_cash',
       paidBy: 'Manager Counter',
       voucherNo: '',
     },
   });
 
   const selectedMode = useWatch({ control, name: 'mode' });
+  const selectedSource = useWatch({ control, name: 'source' }) || (selectedMode === 'cash' ? 'petty_cash' : 'bank_direct');
 
   useEffect(() => {
     if (!isOpen) {
@@ -118,6 +120,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
         : data.description.trim(),
       amount: Math.round(amt * 100),
       mode: data.mode,
+      source: (data as any).source || (data.mode === 'cash' ? 'petty_cash' : 'bank_direct'),
       paidBy: data.paidBy?.trim() || 'Manager Counter',
     };
 
@@ -240,6 +243,59 @@ export function ManagerAccountsExpensesAddExpenseModal({
             </div>
           </div>
 
+          {/* Expense Fund Source: Petty Cash Float vs Bank Expense */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs font-semibold text-secondary">
+                Expense Fund Source (खर्च का स्रोत) <span className="text-destructive">*</span>
+              </label>
+              <span className="text-[11px] text-secondary">Separates counter cash float from bank</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setValue('source', 'petty_cash');
+                  if (selectedMode !== 'cash') setValue('mode', 'cash');
+                }}
+                className={`flex items-center gap-2.5 p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer text-left ${
+                  selectedSource === 'petty_cash'
+                    ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-400 shadow-sm'
+                    : 'border-border bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover'
+                }`}
+              >
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                  <Wallet size={16} />
+                </div>
+                <div>
+                  <p className="font-bold">Petty Cash Float (गल्ला)</p>
+                  <p className="text-[10px] opacity-80">Counter cash drawer spend</p>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setValue('source', 'bank_direct');
+                  if (selectedMode === 'cash') setValue('mode', 'bank');
+                }}
+                className={`flex items-center gap-2.5 p-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer text-left ${
+                  selectedSource === 'bank_direct'
+                    ? 'border-sky-500/50 bg-sky-500/15 text-sky-400 shadow-sm'
+                    : 'border-border bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover'
+                }`}
+              >
+                <div className="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0">
+                  <Building size={16} />
+                </div>
+                <div>
+                  <p className="font-bold">Bank / Owner Account</p>
+                  <p className="text-[10px] opacity-80">Direct bank/UPI/Owner outflow</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
           {/* Interactive Payment Mode Selection Tiles (Glowing on Click) */}
           <div>
             <label className="text-xs font-semibold text-secondary block mb-1.5">
@@ -253,7 +309,14 @@ export function ManagerAccountsExpensesAddExpenseModal({
                   <button
                     key={mode.id}
                     type="button"
-                    onClick={() => setValue('mode', mode.id as any, { shouldValidate: true })}
+                    onClick={() => {
+                      setValue('mode', mode.id as any, { shouldValidate: true });
+                      if (mode.id === 'cash') {
+                        setValue('source', 'petty_cash');
+                      } else {
+                        setValue('source', 'bank_direct');
+                      }
+                    }}
                     style={isSelected ? mode.activeStyle : undefined}
                     className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                       isSelected

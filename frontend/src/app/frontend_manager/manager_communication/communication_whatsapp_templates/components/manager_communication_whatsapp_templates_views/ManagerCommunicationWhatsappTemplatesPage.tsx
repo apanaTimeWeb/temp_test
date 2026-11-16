@@ -27,6 +27,7 @@ import {
 import { MANAGER_COMMUNICATION_TEMPLATE_VARIABLES } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/constants/ManagerCommunicationWhatsappTemplatesConstants';
 import { useManagerWhatsappTemplatesDialogFocus } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/hooks/ManagerCommunicationWhatsappTemplatesDialogFocus';
 import type { ManagerCommunicationWhatsappTemplatesRouteQueryProps } from '@/app/frontend_manager/manager_communication/communication_whatsapp_templates/types/ManagerCommunicationWhatsappTemplatesComponentTypes';
+import { ManagerCommunicationWhatsappTemplatesVariablePreview } from './ManagerCommunicationWhatsappTemplatesVariablePreview';
 
 const VARS = MANAGER_COMMUNICATION_TEMPLATE_VARIABLES;
 const INIT = MANAGER_COMMUNICATION_SAMPLE_WHATSAPP_TEMPLATES;
@@ -228,13 +229,13 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
   };
 
   const preview = active.body
-    .replace(/{name}/g, 'Rahul Sharma')
-    .replace(/{amount}/g, '₹1,000')
-    .replace(/{duedate}/g, '15-Apr-2026')
-    .replace(/{planname}/g, 'Monthly Plan')
-    .replace(/{libraryname}/g, 'Library OS')
-    .replace(/{phone}/g, '+91 98765 43210')
-    .replace(/{seat}/g, 'S-03');
+    .replace(/{(?:name|student_name|student)}/g, 'Rahul Sharma')
+    .replace(/{(?:amount|fee|fees)}/g, '₹1,000')
+    .replace(/{(?:duedate|due_date|date)}/g, '15-Apr-2026')
+    .replace(/{(?:planname|plan)}/g, 'Monthly Plan')
+    .replace(/{(?:libraryname|branch)}/g, 'Library OS')
+    .replace(/{(?:phone|mobile)}/g, '+91 98765 43210')
+    .replace(/{(?:seat|seat_no)}/g, 'S-03');
 
   return (
     <div
@@ -477,59 +478,11 @@ export default function ManagerCommunicationWhatsappTemplatesPage(_routeQuery: M
             </div>
           </div>
 
-          {/* Live WhatsApp Chat Bubble Preview */}
-          <div className="space-y-2.5">
-            <div className="flex items-center justify-between px-1">
-              <p
-                className="text-xs font-bold uppercase tracking-wider text-secondary"
-                id="manager-whatsapp-template-preview-label"
-              >
-                {tManagerUi('preview_sample_values')}
-              </p>
-              <span className="text-xs text-secondary">
-                WhatsApp Preview
-              </span>
-            </div>
-
-            <div className="rounded-2xl border border-border bg-[#0b141a] overflow-hidden shadow-md">
-              {/* WhatsApp Business Header */}
-              <div className="bg-[#202c33] px-4 py-3 flex items-center justify-between border-b border-[#2a3942]">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xs shadow-xs">
-                    LO
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs sm:text-sm font-semibold text-slate-100">
-                        Library OS Official
-                      </span>
-                      <span
-                        className="w-3.5 h-3.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold"
-                        title="Verified Business"
-                      >
-                        ✓
-                      </span>
-                    </div>
-                    <p className="text-[10px] text-slate-400">Official Business Account</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* WhatsApp Chat Canvas */}
-              <div className="p-3 sm:p-5 md:p-6 bg-[#0b141a] min-h-[140px] sm:min-h-[160px] flex flex-col justify-end">
-                {/* Outgoing WhatsApp Bubble */}
-                <div className="max-w-[92%] sm:max-w-md ml-auto bg-[#005c4b] text-slate-100 p-3 sm:p-4 rounded-2xl rounded-tr-xs shadow-md space-y-1.5 border border-[#005c4b]/50">
-                  <p className="text-xs sm:text-sm whitespace-pre-wrap break-words leading-relaxed select-text font-normal">
-                    {preview}
-                  </p>
-                  <div className="flex items-center justify-end gap-1 text-[10px] text-emerald-200/80 pt-0.5">
-                    <span>10:45 AM</span>
-                    <CheckCheck size={14} className="text-[#53bdeb]" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Live WhatsApp Chat Bubble Preview with Multi-Profile Tester & Integrity Diagnostics */}
+          <ManagerCommunicationWhatsappTemplatesVariablePreview
+            body={active.body}
+            onUpdateBody={updateBody}
+          />
         </div>
       </div>
 

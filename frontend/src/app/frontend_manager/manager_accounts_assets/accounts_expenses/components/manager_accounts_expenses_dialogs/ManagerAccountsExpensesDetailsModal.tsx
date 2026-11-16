@@ -75,17 +75,27 @@ export function ManagerAccountsExpensesDetailsModal({
         </div>
 
         {/* Amount Banner */}
-        <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 flex items-center justify-between">
-          <div>
-            <span className="text-xs text-rose-300 font-semibold uppercase tracking-wider block">
-              Disbursed Amount
-            </span>
-            <span className="text-[11px] text-secondary">Paid out of branch petty drawer</span>
-          </div>
-          <span className="text-2xl font-black font-mono text-rose-400">
-            {formatCurrency(expense.amount)}
-          </span>
-        </div>
+        {(() => {
+          const isPetty = expense.source === 'petty_cash' || (!expense.source && expense.mode === 'cash');
+          return (
+            <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/25 flex items-center justify-between">
+              <div>
+                <span className="text-xs text-rose-300 font-semibold uppercase tracking-wider block">
+                  Disbursed Amount
+                </span>
+                <span className="text-[11px] font-medium text-secondary">
+                  Fund Source:{' '}
+                  <strong className={isPetty ? 'text-emerald-400' : 'text-sky-400'}>
+                    {isPetty ? 'Petty Cash Float (गल्ला नकद)' : 'Bank / Owner Account (मालिक खाता)'}
+                  </strong>
+                </span>
+              </div>
+              <span className="text-2xl font-black font-mono text-rose-400">
+                {formatCurrency(expense.amount)}
+              </span>
+            </div>
+          );
+        })()}
 
         {/* Voucher Fields Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">

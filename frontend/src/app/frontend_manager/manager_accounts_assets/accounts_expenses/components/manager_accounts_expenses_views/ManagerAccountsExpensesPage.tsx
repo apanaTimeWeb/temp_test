@@ -119,7 +119,10 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
         e.description.toLowerCase().includes(q) ||
         e.category.toLowerCase().includes(q) ||
         e.paidBy.toLowerCase().includes(q) ||
-        e.mode.toLowerCase().includes(q);
+        e.mode.toLowerCase().includes(q) ||
+        (e.source && e.source.toLowerCase().includes(q)) ||
+        (q === 'petty' && (e.source === 'petty_cash' || (!e.source && e.mode === 'cash'))) ||
+        (q === 'bank' && (e.source === 'bank_direct' || (!e.source && e.mode !== 'cash')));
       return matchMode && matchQ;
     });
   }, [visible, modeFilter, searchQuery]);

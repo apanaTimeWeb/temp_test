@@ -22,6 +22,7 @@ export const managerAccountsExpensesAddExpenseModalSchema = z.object({
     return Number.isFinite(n) && n > 0;
   }, 'Valid positive expense amount is required.'),
   mode: z.enum(['cash', 'upi', 'card', 'bank']),
+  source: z.enum(['petty_cash', 'bank_direct']).optional().default('petty_cash'),
   paidBy: z.string().trim().default('Manager Counter'),
   voucherNo: z.string().trim().optional().default(''),
 });

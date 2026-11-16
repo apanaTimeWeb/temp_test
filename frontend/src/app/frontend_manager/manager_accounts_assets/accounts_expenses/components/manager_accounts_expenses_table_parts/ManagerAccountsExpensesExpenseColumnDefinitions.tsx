@@ -61,14 +61,20 @@ export function createManagerExpensesExpenseColumnDefinitions(
     {
       field: 'mode',
       headerName: labels.mode,
-      width: 110,
+      width: 140,
       cellRenderer: (params: NativeCellParams<ManagerAccountsExpensesExpenseSample>) => {
         const mode = (params.value as PaymentMode) || 'cash';
         const badgeClass = MODE_BADGE[mode] || 'bg-muted text-secondary border border-border';
+        const isPettyCash = params.data?.source === 'petty_cash' || (!params.data?.source && mode === 'cash');
         return (
-          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${badgeClass}`}>
-            {mode}
-          </span>
+          <div className="flex flex-col gap-0.5">
+            <span className={`inline-flex items-center w-fit px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${badgeClass}`}>
+              {mode}
+            </span>
+            <span className={`text-[10px] font-medium ${isPettyCash ? 'text-emerald-400' : 'text-sky-400'}`}>
+              {isPettyCash ? '• Petty Cash (गल्ला)' : '• Bank / Owner'}
+            </span>
+          </div>
         );
       },
     },
