@@ -36,6 +36,7 @@ export interface ManagerMembersIdCardGeneratorStudentIdCardProps {
   side?: IdCardSide;
   printLayout?: IdCardPrintLayout;
   onSideChange?: (side: IdCardSide) => void;
+  scale?: '100' | '133' | '150';
 }
 
 export interface ManagerMembersIdCardGeneratorErrorBoundaryProps {

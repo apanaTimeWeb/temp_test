@@ -107,6 +107,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
   data,
   side = 'front',
   onSideChange,
+  scale = '133',
 }: ManagerMembersIdCardGeneratorStudentIdCardProps) {
   const [internalSide, setInternalSide] = useState<IdCardSide>(side);
 
@@ -300,36 +301,40 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
 
       {/* Render Cards according to currentSide */}
       {currentSide === 'front' && (
-        <div className="mgr-idcard-wrap">
+        <div className={`mgr-idcard-wrap ${scale === '100' ? 'mgr-scale-100' : scale === '150' ? 'mgr-scale-150' : 'mgr-scale-133'}`}>
           {renderFrontCard()}
         </div>
       )}
 
       {currentSide === 'back' && (
-        <div className="mgr-idcard-wrap">
+        <div className={`mgr-idcard-wrap ${scale === '100' ? 'mgr-scale-100' : scale === '150' ? 'mgr-scale-150' : 'mgr-scale-133'}`}>
           <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />
         </div>
       )}
 
       {currentSide === 'both' && (
-        <div className="flex flex-wrap items-start justify-center gap-6 w-full">
+        <div className="flex flex-wrap items-start justify-center gap-8 w-full">
           <div className="flex flex-col items-center">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-secondary uppercase tracking-wider mb-2 no-print">
-              <CreditCard size={13} className="text-primary" />
+            <div className="flex items-center gap-2 text-xs font-bold text-secondary uppercase tracking-wider mb-2.5 no-print">
+              <span className="w-2 h-2 rounded-full bg-sky-400 inline-block shadow-sm shadow-sky-400/50" />
               <span>Front Side</span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface border border-border text-primary font-medium">85.60 × 53.98 mm</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold">
+                85.60 × 53.98 mm
+              </span>
             </div>
-            <div className="mgr-idcard-wrap">
+            <div className={`mgr-idcard-wrap ${scale === '100' ? 'mgr-scale-100' : scale === '150' ? 'mgr-scale-150' : 'mgr-scale-133'}`}>
               {renderFrontCard()}
             </div>
           </div>
           <div className="flex flex-col items-center">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-secondary uppercase tracking-wider mb-2 no-print">
-              <RotateCw size={13} className="text-primary" />
+            <div className="flex items-center gap-2 text-xs font-bold text-secondary uppercase tracking-wider mb-2.5 no-print">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block shadow-sm shadow-emerald-400/50" />
               <span>Back Side (Rules & Wi-Fi)</span>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface border border-border text-primary font-medium">85.60 × 53.98 mm</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-surface border border-border text-primary font-semibold">
+                85.60 × 53.98 mm
+              </span>
             </div>
-            <div className="mgr-idcard-wrap">
+            <div className={`mgr-idcard-wrap ${scale === '100' ? 'mgr-scale-100' : scale === '150' ? 'mgr-scale-150' : 'mgr-scale-133'}`}>
               <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />
             </div>
           </div>

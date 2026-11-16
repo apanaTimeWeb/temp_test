@@ -46,6 +46,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
   const [cardSide, setCardSide] = useState<IdCardSide>('front');
   const [tileAllSlots, setTileAllSlots] = useState(true);
   const [isPopPreviewOpen, setIsPopPreviewOpen] = useState(false);
+  const [previewScale, setPreviewScale] = useState<'100' | '133' | '150'>('133');
   useEffect(() => {
     if (requestedId) setSelectedId(requestedId);
     else if (students.length > 0) setSelectedId((current) => current || students[0].smartId);
@@ -460,18 +461,55 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
         <div className="mgr-idcard-preview-panel">
           {cardData ? (
             <>
-              <div className="flex items-center justify-between w-full no-print">
+              <div className="flex items-center justify-between w-full no-print bg-surface p-2.5 rounded-xl border border-border">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <p className="mgr-page-subtitle mgr-idcard-preview-label mb-0">{tManagerUi('preview')} {selected?.name}</p>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <p className="mgr-page-subtitle mgr-idcard-preview-label mb-0 font-bold">{tManagerUi('preview')} {selected?.name}</p>
                   <span className="text-[10px] font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full">
                     85.60 mm × 53.98 mm (8.56 cm × 5.4 cm)
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
+                  {/* Zoom Scale Selector */}
+                  {printLayout === 'pvc_single' && (
+                    <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-card border border-border text-[10px] font-semibold text-secondary">
+                      <button
+                        type="button"
+                        onClick={() => setPreviewScale('100')}
+                        className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                          previewScale === '100' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
+                        }`}
+                        title="100% 1:1 Physical Print Size (85.60 mm × 53.98 mm)"
+                      >
+                        100%
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPreviewScale('133')}
+                        className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                          previewScale === '133' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
+                        }`}
+                        title="133% HD Studio Size"
+                      >
+                        HD
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPreviewScale('150')}
+                        className={`px-2 py-0.5 rounded transition-colors cursor-pointer ${
+                          previewScale === '150' ? 'bg-primary text-primary-foreground font-bold shadow-xs' : 'hover:text-foreground'
+                        }`}
+                        title="150% Studio Ultra Size"
+                      >
+                        150%
+                      </button>
+                    </div>
+                  )}
+
                   <button
                     type="button"
                     onClick={() => setIsPopPreviewOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-surface hover:bg-surface-hover text-foreground transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg border border-border bg-surface hover:bg-surface-hover text-foreground transition-colors cursor-pointer shadow-2xs"
                     title="Pop-up Full Card Preview"
                   >
                     <Maximize2 size={13} />
@@ -484,7 +522,19 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               </div>
 
               {printLayout === 'pvc_single' ? (
-                <StudentIdCard data={cardData} side={cardSide} onSideChange={setCardSide} />
+                <div className="w-full">
+                  <div className="mgr-idcard-workbench">
+                    <StudentIdCard data={cardData} side={cardSide} scale={previewScale} onSideChange={setCardSide} />
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-secondary mt-2 px-1 no-print">
+                    <span className="flex items-center gap-1.5">
+                      <span>Standard ISO/IEC 7810 ID-1 PVC Format</span>
+                      <span>·</span>
+                      <span className="font-mono font-medium text-foreground">85.60 mm × 53.98 mm (8.56 cm × 5.4 cm)</span>
+                    </span>
+                    <span className="text-secondary/80">Corner Radius: 3.18 mm</span>
+                  </div>
+                </div>
               ) : (
                 /* A4 Sheet Grid Preview */
                 <div className="w-full space-y-4">
@@ -703,7 +753,9 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
 
             {/* Pop-up Card Presentation */}
             <div className="py-4 flex justify-center w-full">
-              <StudentIdCard data={cardData} side={cardSide} onSideChange={setCardSide} />
+              <div className="mgr-idcard-workbench">
+                <StudentIdCard data={cardData} side={cardSide} scale={previewScale} onSideChange={setCardSide} />
+              </div>
             </div>
 
             <div className="flex items-center justify-between pt-3 mt-4 border-t border-border text-xs text-secondary">
