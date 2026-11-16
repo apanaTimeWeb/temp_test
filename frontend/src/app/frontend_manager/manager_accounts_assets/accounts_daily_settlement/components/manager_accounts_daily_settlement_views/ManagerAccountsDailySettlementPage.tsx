@@ -247,15 +247,6 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
             </button>
           </div>
         </div>
-
-        {/* Contract Warning Banner (Preserved) */}
-        <p
-          className="mt-4 rounded-xl border border-border bg-warning-bg p-3 text-xs text-warning leading-relaxed"
-          data-testid="manager-accounting-settlement-contract-warning"
-          role="status"
-        >
-          {tManagerUi('shift_balances_and_statuses_are_sample_records_settlemen_26c33a')}
-        </p>
       </div>
 
       {/* ── Specific Date Navigator Bar with Glowing Halos ── */}
@@ -317,15 +308,20 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
                 ? 'No settlement entries matching your search query.'
                 : `No settlement entries recorded for ${dateScopeLabel}.`}
             </p>
-            {timeHorizon !== 'all' && (
+            {hasActiveFilters || timeHorizon !== 'all' ? (
               <button
                 type="button"
-                onClick={() => setTimeHorizon('all')}
-                className="mt-2 px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
+                onClick={() => {
+                  setSearchQuery('');
+                  setStatusFilter('all');
+                  setShiftFilter('all');
+                  setTimeHorizon('all');
+                }}
+                className="mt-2 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
               >
-                View All Dates
+                Reset All Filters
               </button>
-            )}
+            ) : null}
           </div>
         ) : (
           <div className="mgr-table-wrapper">
