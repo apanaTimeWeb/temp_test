@@ -29,6 +29,7 @@ interface ManagerAttendanceDailyTableProps {
   onFieldChange: (id: string, field: ManagerAttendanceDailyTimeField, val: string) => void;
   onSendAlert: (student: Student) => void;
   onEvictOverstay?: (student: Student) => void;
+  onViewHistory?: (student: Student) => void;
 }
 
 export function ManagerAttendanceDailyTable({
@@ -49,6 +50,7 @@ export function ManagerAttendanceDailyTable({
   onFieldChange,
   onSendAlert,
   onEvictOverstay,
+  onViewHistory,
 }: ManagerAttendanceDailyTableProps) {
   const tManagerUi = useTranslations('manager.manager_attendance.ui');
 
@@ -76,6 +78,7 @@ export function ManagerAttendanceDailyTable({
               onFieldChange={onFieldChange}
               onSendAlert={onSendAlert}
               onEvictOverstay={onEvictOverstay}
+              onViewHistory={onViewHistory}
             />
           ))
         )}

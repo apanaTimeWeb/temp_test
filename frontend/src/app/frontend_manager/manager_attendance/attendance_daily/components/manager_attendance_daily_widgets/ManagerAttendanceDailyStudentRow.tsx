@@ -3,11 +3,11 @@
 
 // RESPONSIBILITY: Render the attendance daily student row component within the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
-import { Bell, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import { Bell, CheckCircle, Clock, AlertTriangle, Calendar } from 'lucide-react';
 import type { ManagerAttendanceDailyStudentRowProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
 
 /** Single illustrative attendance row. All changes remain local preview state. */
-export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFieldChange, onSendAlert, onEvictOverstay }: ManagerAttendanceDailyStudentRowProps) {
+export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFieldChange, onSendAlert, onEvictOverstay, onViewHistory }: ManagerAttendanceDailyStudentRowProps) {
   const tManagerUi = useTranslations('manager.manager_attendance.ui');
   const isAlert = student.consecutiveAbsent >= 3;
   const isOverstay = Boolean(student.isOverstay);
@@ -24,9 +24,29 @@ export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFi
             </span>
           )}
         </div>
-        <div className="eng-att-meta">
-          {student.smartId} · {({ Morning: tManagerUi('morning'), Afternoon: tManagerUi('afternoon'), Evening: tManagerUi('evening') } as Record<string, string>)[student.shift] ?? student.shift} {tManagerUi('shift_dbd79b')}
-          {student.seat && ` · ${student.seat}`}
+        <div className="eng-att-meta flex items-center gap-1.5 flex-wrap">
+          <span>{student.smartId}</span>
+          <span>·</span>
+          <span>{({ Morning: tManagerUi('morning'), Afternoon: tManagerUi('afternoon'), Evening: tManagerUi('evening') } as Record<string, string>)[student.shift] ?? student.shift} {tManagerUi('shift_dbd79b')}</span>
+          {student.seat && (
+            <>
+              <span>·</span>
+              <span>{student.seat}</span>
+            </>
+          )}
+          {onViewHistory && (
+            <>
+              <span>·</span>
+              <button
+                type="button"
+                onClick={() => onViewHistory(student)}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-500 hover:text-indigo-400 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer underline underline-offset-2 transition-colors ml-0.5"
+                title={`View ${student.name}'s month-wise attendance history & calendar`}
+              >
+                <Calendar size={11} /> Monthly History
+              </button>
+            </>
+          )}
         </div>
       </div>
       <div className="eng-seg-group" role="group" aria-label={`${tManagerUi('attendance')} — ${student.name}`}>

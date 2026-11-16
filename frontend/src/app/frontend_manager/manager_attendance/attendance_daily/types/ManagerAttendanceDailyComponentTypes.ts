@@ -19,6 +19,7 @@ export interface ManagerAttendanceDailyStudentRowProps {
   onFieldChange: (id: string, field: AttendanceDailyTimeField, value: string) => void;
   onSendAlert?: (student: Student) => void;
   onEvictOverstay?: (student: Student) => void;
+  onViewHistory?: (student: Student) => void;
 }
 
 export type ManagerAttendanceDailyPageProps = {

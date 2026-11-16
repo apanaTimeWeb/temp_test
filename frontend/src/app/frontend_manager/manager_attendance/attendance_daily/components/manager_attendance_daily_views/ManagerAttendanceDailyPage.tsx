@@ -14,6 +14,8 @@ import type { AttStatus, Student, ManagerAttendanceDailyTimeField } from '@/app/
 import { ManagerAttendanceDailyKpis } from './ManagerAttendanceDailyKpis';
 import { ManagerAttendanceDailyToolbar } from './ManagerAttendanceDailyToolbar';
 import { ManagerAttendanceDailyTable } from './ManagerAttendanceDailyTable';
+import { ManagerAttendanceDailyMonthlyRegister } from './ManagerAttendanceDailyMonthlyRegister';
+import { ManagerAttendanceDailyMemberMonthlyHistoryModal } from './ManagerAttendanceDailyMemberMonthlyHistoryModal';
 
 const INIT_STUDENTS: Student[] = MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE.map((student) => ({ ...student }));
 
@@ -31,7 +33,8 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
   yesterdayDate.setDate(yesterdayDate.getDate() - 1);
   const yesterdayStr = toLocalDateInputValue(yesterdayDate);
 
-  const [activeTab, setActiveTab] = useState<'roster' | 'turnover'>('roster');
+  const [activeTab, setActiveTab] = useState<'roster' | 'monthly_history' | 'turnover'>('roster');
+  const [selectedHistoryStudent, setSelectedHistoryStudent] = useState<Student | null>(null);
   const [date, setDate] = useState(() => todayStr);
   const [shift, setShift] = useState('All');
   const [students, setStudents] = useState<Student[]>(INIT_STUDENTS);
@@ -201,37 +204,6 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
         </div>
       </div>
 
-      <ManagerAttendanceDailyToolbar
-        date={date}
-        setDate={setDate}
-        todayStr={todayStr}
-        yesterdayStr={yesterdayStr}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        shift={shift}
-        setShift={setShift}
-        present={present}
-        absent={absent}
-        late={late}
-        startItem={startItem}
-        endItem={endItem}
-        totalRows={totalRows}
-        dateLabel={dateLabel}
-        onExportCsv={handleExportCsv}
-        onResetPage={() => setPage(0)}
-      />
-
-      <ManagerAttendanceDailyKpis
-        filtered={filtered}
-        dateLabel={dateLabel}
-        shift={shift}
-        shiftLabel={shiftLabel}
-        present={present}
-        absent={absent}
-        late={late}
-        marked={marked}
-      />
-
       {/* ── View Mode Tabs ── */}
       <div className="flex items-center gap-3 border-b border-border">
         <button
@@ -245,6 +217,15 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
         </button>
         <button
           type="button"
+          onClick={() => setActiveTab('monthly_history')}
+          className={`flex items-center gap-1.5 pb-3 px-1 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
+            activeTab === 'monthly_history' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
+          }`}
+        >
+          <span>Monthly Attendance History</span>
+        </button>
+        <button
+          type="button"
           onClick={() => setActiveTab('turnover')}
           className={`flex items-center gap-1.5 pb-3 px-1 text-sm font-semibold border-b-2 transition-all cursor-pointer ${
             activeTab === 'turnover' ? 'border-primary text-primary' : 'border-transparent text-secondary hover:text-primary'
@@ -255,10 +236,46 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
         </button>
       </div>
 
-      {activeTab === 'turnover' ? (
+      {activeTab === 'monthly_history' ? (
+        <ManagerAttendanceDailyMonthlyRegister
+          students={students}
+          onOpenStudentHistory={(student) => setSelectedHistoryStudent(student)}
+        />
+      ) : activeTab === 'turnover' ? (
         <ManagerAttendanceDailyFloorTurnoverQueue />
       ) : (
         <>
+          <ManagerAttendanceDailyToolbar
+            date={date}
+            setDate={setDate}
+            todayStr={todayStr}
+            yesterdayStr={yesterdayStr}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            shift={shift}
+            setShift={setShift}
+            present={present}
+            absent={absent}
+            late={late}
+            startItem={startItem}
+            endItem={endItem}
+            totalRows={totalRows}
+            dateLabel={dateLabel}
+            onExportCsv={handleExportCsv}
+            onResetPage={() => setPage(0)}
+          />
+
+          <ManagerAttendanceDailyKpis
+            filtered={filtered}
+            dateLabel={dateLabel}
+            shift={shift}
+            shiftLabel={shiftLabel}
+            present={present}
+            absent={absent}
+            late={late}
+            marked={marked}
+          />
+
           <ManagerAttendanceDailyTable
             filtered={filtered}
             paginatedStudents={paginatedStudents}
@@ -278,6 +295,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
             onFieldChange={setField}
             onSendAlert={handleSendAlert}
             onEvictOverstay={handleEvictOverstay}
+            onViewHistory={(student) => setSelectedHistoryStudent(student)}
           />
 
           {/* ── Sticky Save Bar ── */}
@@ -299,6 +317,13 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
           </div>
         </>
       )}
+
+      {/* ── Individual Member Monthly Attendance History Modal ── */}
+      <ManagerAttendanceDailyMemberMonthlyHistoryModal
+        isOpen={Boolean(selectedHistoryStudent)}
+        student={selectedHistoryStudent}
+        onClose={() => setSelectedHistoryStudent(null)}
+      />
     </div>
   );
 }
