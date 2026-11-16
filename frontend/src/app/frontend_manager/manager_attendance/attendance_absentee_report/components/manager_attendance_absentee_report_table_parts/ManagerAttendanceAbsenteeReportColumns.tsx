@@ -1,26 +1,25 @@
 // RESPONSIBILITY: Render the attendance absentee report columns component within the components feature. It does not own backend persistence or cross-feature business logic.
 // RESPONSIBILITY: Render the attendance absentee report columns component within the components feature. It does not own backend persistence or cross-feature business logic.
-import { Mail, Phone, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MessageSquare, Eye } from 'lucide-react';
 import type { NativeColumn, NativeCellParams } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportNativeTable';
 import { formatManagerAbsenteeReportCalendarDate } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/utils/ManagerAttendanceAbsenteeReportDateFormatting';
 import type { ManagerAttendanceAbsenteeReportSampleAbsentee } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/hooks/ManagerAttendanceAbsenteeReportDemoRepository';
 import type { ManagerAttendanceAbsenteeReportAbsenteeColumnLabels } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/types/ManagerAttendanceAbsenteeReportComponentTypes';
 export type { ManagerAttendanceAbsenteeReportAbsenteeColumnLabels };
 
-
-
 export function createManagerAbsenteeReportAbsenteeColumns(
   labels: ManagerAttendanceAbsenteeReportAbsenteeColumnLabels,
   shiftLabels: Record<string, string>,
   badgeClass: (daysAbsent: number) => string,
   onAlertWhatsApp?: (item: ManagerAttendanceAbsenteeReportSampleAbsentee) => void,
+  onViewDetails?: (item: ManagerAttendanceAbsenteeReportSampleAbsentee) => void,
 ): NativeColumn<ManagerAttendanceAbsenteeReportSampleAbsentee>[] {
   return [
     {
       field: 'name', headerName: labels.student, flex: 1, minWidth: 200,
       cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => (
-        <div className="eng-td-cell py-2">
-          <div className="eng-att-avatar eng-avatar--sm mr-3" aria-hidden="true">{params.data?.initials ?? ''}</div>
+        <div className="eng-td-cell py-2 flex items-center">
+          <div className="eng-att-avatar eng-avatar--sm mr-3 shrink-0" aria-hidden="true">{params.data?.initials ?? ''}</div>
           <span className="eng-td-name font-medium">{params.value}</span>
         </div>
       ),
@@ -46,23 +45,39 @@ export function createManagerAbsenteeReportAbsenteeColumns(
       ),
     },
     {
-      headerName: labels.actions, width: 140, sortable: false,
-      cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => (
-        <div className="eng-row-actions h-full flex items-center">
-          {params.data?.notified ? (
-            <span className="eng-badge eng-badge--neutral">{labels.samplePreviouslyNotified}</span>
-          ) : (
-            <button
-              type="button"
-              onClick={() => params.data && onAlertWhatsApp?.(params.data)}
-              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
-              title={`Send WhatsApp alert to ${params.data?.name}'s parent`}
-            >
-              <MessageSquare size={12} className="mr-0.5" /> WhatsApp
-            </button>
-          )}
-        </div>
-      ),
+      headerName: labels.actions, width: 160, sortable: false,
+      cellRenderer: (params: NativeCellParams<ManagerAttendanceAbsenteeReportSampleAbsentee>) => {
+        const item = params.data;
+        if (!item) return null;
+        return (
+          <div className="eng-row-actions h-full flex items-center gap-1.5 justify-end">
+            {onViewDetails && (
+              <button
+                type="button"
+                onClick={() => onViewDetails(item)}
+                className="p-1.5 rounded-lg text-sky-400 hover:text-sky-300 hover:bg-sky-500/15 transition-colors cursor-pointer"
+                title={`View absentee profile for ${item.name}`}
+                aria-label={`View absentee profile for ${item.name}`}
+              >
+                <Eye size={15} />
+              </button>
+            )}
+
+            {item.notified ? (
+              <span className="eng-badge eng-badge--neutral text-[10px]">{labels.samplePreviouslyNotified}</span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => onAlertWhatsApp?.(item)}
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors cursor-pointer"
+                title={`Send WhatsApp alert to ${item.name}'s parent`}
+              >
+                <MessageSquare size={12} className="mr-0.5" /> WhatsApp
+              </button>
+            )}
+          </div>
+        );
+      },
     },
   ];
 }
