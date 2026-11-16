@@ -318,79 +318,6 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               )}
             </div>
           </div>
-          {selected && cardData && (
-            <div className="mgr-card mgr-idcard-actions-card">
-              <div className="mgr-card-header">
-                <h2 className="mgr-section-title">{tManagerUi('actions')}</h2>
-              </div>
-              <div className="mgr-card-body mgr-idcard-actions-body">
-                {/* Print Layout Selector */}
-                <div className="space-y-1.5 p-3 rounded-xl bg-surface border border-border">
-                  <label
-                    htmlFor="manager-id-card-layout-select"
-                    className="text-xs font-bold text-foreground flex items-center justify-between"
-                  >
-                    <span className="flex items-center gap-1.5">
-                      <Layers size={13} className="text-primary" />
-                      <span>Print Format / Layout</span>
-                    </span>
-                    <span className="text-[10px] text-primary font-mono font-bold uppercase">
-                      {printLayout === 'pvc_single' ? 'CR-80 Thermal' : printLayout === 'a4_sheet_8' ? 'A4 (2x4 Grid)' : 'A4 (2x5 Grid)'}
-                    </span>
-                  </label>
-                  <select
-                    id="manager-id-card-layout-select"
-                    data-testid="manager-id-card-layout-select"
-                    value={printLayout}
-                    onChange={(e) => setPrintLayout(e.target.value as IdCardPrintLayout)}
-                    className="w-full text-xs py-1.5 px-2.5 rounded-lg border border-border bg-card text-foreground font-medium focus:ring-1 focus:ring-primary focus:outline-none"
-                  >
-                    <option value="pvc_single">Single PVC Card (CR-80 / Thermal)</option>
-                    <option value="a4_sheet_8">A4 Paper Sheet (8 Cards - 2×4 Grid)</option>
-                    <option value="a4_sheet_10">A4 Paper Sheet (10 Cards - 2×5 Grid)</option>
-                  </select>
-                  <p className="text-[10px] text-secondary leading-tight">
-                    {printLayout === 'pvc_single'
-                      ? 'Calibrated for CR-80 PVC thermal card printers (85.6mm × 54mm).'
-                      : printLayout === 'a4_sheet_8'
-                      ? 'Standard A4 sheet with 8 card slots (2×4) & scissor cut guides for lamination.'
-                      : 'Compact A4 sheet with 10 card slots (2×5) & scissor cut guides.'}
-                  </p>
-                </div>
-
-                {/* WhatsApp Share Button */}
-                <button
-                  type="button"
-                  onClick={handleShareWhatsApp}
-                  data-testid="manager-students-id-card-whatsapp-share"
-                  title="Share ID Card via WhatsApp"
-                  aria-label="Share ID Card via WhatsApp"
-                  className="mgr-btn-whatsapp cursor-pointer flex items-center justify-center gap-2"
-                >
-                  <MessageSquare size={18} strokeWidth={2} /> <span>Share via WhatsApp</span>
-                </button>
-
-                {/* Print Button */}
-                <button
-                  type="button"
-                  onClick={() => window.print()}
-                  title={tManagerUi('print_id_card')}
-                  aria-label={tManagerUi('print_id_card')}
-                  className="mgr-btn-ghost mgr-btn-full flex items-center justify-center gap-2 font-bold cursor-pointer"
-                  data-testid="manager-students-id-card-print"
-                >
-                  <Printer size={18} strokeWidth={2} />
-                  <span>
-                    {bulkSelectedIds.length > 1
-                      ? `Print ${bulkSelectedIds.length} Selected Cards`
-                      : printLayout === 'pvc_single'
-                      ? `${tManagerUi('print_id_card')} (PVC)`
-                      : `Print A4 Sheet (${printLayout === 'a4_sheet_8' ? '8' : '10'} Cards)`}
-                  </span>
-                </button>
-              </div>
-            </div>
-          )}
         </div>
         <div className="mgr-idcard-preview-panel">
           {cardData ? (
@@ -564,6 +491,64 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   </div>
                 </div>
               )}
+
+              {/* Actions Bar merged directly below card preview */}
+              <div className="w-full no-print p-3 rounded-xl bg-surface border border-border shadow-xs mt-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+                {/* Print Layout Selector */}
+                <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                  <label
+                    htmlFor="manager-id-card-layout-select"
+                    className="text-xs font-bold text-foreground flex items-center gap-1.5 shrink-0"
+                  >
+                    <Layers size={14} className="text-primary" />
+                    <span>Layout:</span>
+                  </label>
+                  <select
+                    id="manager-id-card-layout-select"
+                    data-testid="manager-id-card-layout-select"
+                    value={printLayout}
+                    onChange={(e) => setPrintLayout(e.target.value as IdCardPrintLayout)}
+                    className="text-xs py-1.5 px-2.5 rounded-lg border border-border bg-card text-foreground font-semibold focus:ring-1 focus:ring-primary focus:outline-none cursor-pointer"
+                  >
+                    <option value="pvc_single">Single PVC Card (CR-80 / Thermal)</option>
+                    <option value="a4_sheet_8">A4 Paper Sheet (8 Cards - 2×4 Grid)</option>
+                    <option value="a4_sheet_10">A4 Paper Sheet (10 Cards - 2×5 Grid)</option>
+                  </select>
+                </div>
+
+                {/* Actions: WhatsApp & Print Buttons */}
+                <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+                  <button
+                    type="button"
+                    onClick={handleShareWhatsApp}
+                    data-testid="manager-students-id-card-whatsapp-share"
+                    title="Share ID Card via WhatsApp"
+                    aria-label="Share ID Card via WhatsApp"
+                    className="mgr-btn-whatsapp cursor-pointer inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg shrink-0"
+                  >
+                    <MessageSquare size={15} strokeWidth={2} />
+                    <span>Share via WhatsApp</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    title={tManagerUi('print_id_card')}
+                    aria-label={tManagerUi('print_id_card')}
+                    className="mgr-btn-primary cursor-pointer inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-xs font-bold rounded-lg shadow-xs shrink-0"
+                    data-testid="manager-students-id-card-print"
+                  >
+                    <Printer size={15} strokeWidth={2} />
+                    <span>
+                      {bulkSelectedIds.length > 1
+                        ? `Print ${bulkSelectedIds.length} Selected Cards`
+                        : printLayout === 'pvc_single'
+                        ? `${tManagerUi('print_id_card')} (PVC)`
+                        : `Print A4 Sheet (${printLayout === 'a4_sheet_8' ? '8' : '10'} Cards)`}
+                    </span>
+                  </button>
+                </div>
+              </div>
 
               {/* Hidden on screen, visible on print container with calibrated print media styles */}
               <div className={`hidden print:block mgr-print-container print-mode-${printLayout}`}>
