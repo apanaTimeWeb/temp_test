@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Orchestrate the client-side view and local interactions for components. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
 
-import { useEffect, useMemo, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   CheckCircle2,
@@ -19,6 +19,10 @@ import StudentIdCard, {
 import { ManagerMembersIdCardGeneratorStudentIdCardBack } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardBack';
 import ManagerMembersIdCardGeneratorStudentIdCardQuarterly from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardQuarterly';
 import { ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack';
+import ManagerMembersIdCardGeneratorStudentIdCardHalfYearly from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardHalfYearly';
+import { ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack';
+import ManagerMembersIdCardGeneratorStudentIdCardFullYear from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardFullYear';
+import { ManagerMembersIdCardGeneratorStudentIdCardFullYearBack } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardGeneratorStudentIdCardFullYearBack';
 import { useManagerIdCardGeneratorFormatting } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGeneratorFormatting';
 import { useManagerIdCardGenerator } from '@/app/frontend_manager/manager_members/members_id_card_generator/hooks/useManagerMembersIdCardGenerator';
 import type { ManagerStudent } from '@/app/frontend_manager/manager_members/members_id_card_generator/types/ManagerMembersIdCardGeneratorTypes';
@@ -26,10 +30,19 @@ import { MANAGER_STUDENT_STATUS_ACTIVE, MANAGER_STUDENT_STATUS_SUSPENDED, MANAGE
 import { ManagerMembersIdCardGeneratorEmptyState } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_empty_states/ManagerMembersIdCardGeneratorEmptyState';
 import { ManagerMembersIdCardBulkDispatchModal } from '@/app/frontend_manager/manager_members/members_id_card_generator/components/manager_members_id_card_generator_sections/ManagerMembersIdCardBulkDispatchModal';
 
-function isQuarterlyPlan(plan?: string): boolean {
-  if (!plan) return false;
+export type IdCardPlanTheme = 'monthly' | 'quarterly' | 'half-yearly' | 'full-year';
+
+export function getIdCardPlanTheme(plan?: string): IdCardPlanTheme {
+  if (!plan) return 'monthly';
   const p = plan.trim().toLowerCase();
-  return p.includes('quarter') || p === 'qtr';
+  if (p.includes('quarter') || p === 'qtr') return 'quarterly';
+  if (p.includes('half')) return 'half-yearly';
+  if (p.includes('annual') || p.includes('year') || p.includes('full')) return 'full-year';
+  return 'monthly';
+}
+
+function isQuarterlyPlan(plan?: string): boolean {
+  return getIdCardPlanTheme(plan) === 'quarterly';
 }
 
 export function ManagerMembersIdCardGeneratorIdCardClient() {
@@ -314,9 +327,22 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <p className="mgr-page-subtitle mgr-idcard-preview-label mb-0 font-bold">{tManagerUi('preview')} {selected?.name}</p>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${isQuarterlyPlan(cardData.plan) ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-primary/10 text-primary border border-primary/20'}`}>
-                    {cardData.plan || 'Monthly'}
-                  </span>
+                  {(() => {
+                    const theme = getIdCardPlanTheme(cardData.plan);
+                    let badgeClass = 'bg-primary/10 text-primary border border-primary/20';
+                    if (theme === 'quarterly') {
+                      badgeClass = 'bg-amber-500/20 text-amber-400 border border-amber-500/30';
+                    } else if (theme === 'half-yearly') {
+                      badgeClass = 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30';
+                    } else if (theme === 'full-year') {
+                      badgeClass = 'bg-amber-200/20 text-[#f5ebd7] border border-amber-200/30';
+                    }
+                    return (
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeClass}`}>
+                        {cardData.plan || 'Monthly'}
+                      </span>
+                    );
+                  })()}
                   <span className="text-[10px] font-mono font-bold text-primary bg-primary/10 border border-primary/20 px-2 py-0.5 rounded-full hidden sm:inline-block">
                     85.60 mm × 53.98 mm (8.56 cm × 5.4 cm)
                   </span>
@@ -361,21 +387,47 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
 
               <div className="w-full">
                 <div className="mgr-idcard-workbench">
-                  {isQuarterlyPlan(cardData.plan) ? (
-                    <ManagerMembersIdCardGeneratorStudentIdCardQuarterly
-                      data={cardData}
-                      side={cardSide}
-                      scale={previewScale}
-                      onSideChange={setCardSide}
-                    />
-                  ) : (
-                    <StudentIdCard
-                      data={cardData}
-                      side={cardSide}
-                      scale={previewScale}
-                      onSideChange={setCardSide}
-                    />
-                  )}
+                  {(() => {
+                    const theme = getIdCardPlanTheme(cardData.plan);
+                    if (theme === 'quarterly') {
+                      return (
+                        <ManagerMembersIdCardGeneratorStudentIdCardQuarterly
+                          data={cardData}
+                          side={cardSide}
+                          scale={previewScale}
+                          onSideChange={setCardSide}
+                        />
+                      );
+                    }
+                    if (theme === 'half-yearly') {
+                      return (
+                        <ManagerMembersIdCardGeneratorStudentIdCardHalfYearly
+                          data={cardData}
+                          side={cardSide}
+                          scale={previewScale}
+                          onSideChange={setCardSide}
+                        />
+                      );
+                    }
+                    if (theme === 'full-year') {
+                      return (
+                        <ManagerMembersIdCardGeneratorStudentIdCardFullYear
+                          data={cardData}
+                          side={cardSide}
+                          scale={previewScale}
+                          onSideChange={setCardSide}
+                        />
+                      );
+                    }
+                    return (
+                      <StudentIdCard
+                        data={cardData}
+                        side={cardSide}
+                        scale={previewScale}
+                        onSideChange={setCardSide}
+                      />
+                    );
+                  })()}
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] text-secondary mt-2 px-1 no-print">
                   <span className="flex items-center gap-1.5 flex-wrap">
@@ -425,43 +477,44 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   {bulkStudents.length > 0 ? (
                     bulkStudents.map((student) => {
                       const data = getStudentCardData(student);
-                      const isQtr = isQuarterlyPlan(data.plan);
+                      const theme = getIdCardPlanTheme(data.plan);
                       return (
-                        <React.Fragment key={`print-duplex-${student.smartId}`}>
+                        <Fragment key={`print-duplex-${student.smartId}`}>
                           <div className="break-after-page">
-                            {isQtr ? (
-                              <ManagerMembersIdCardGeneratorStudentIdCardQuarterly data={data} side="front" />
-                            ) : (
-                              <StudentIdCard data={data} side="front" />
-                            )}
+                            {theme === 'quarterly' && <ManagerMembersIdCardGeneratorStudentIdCardQuarterly data={data} side="front" />}
+                            {theme === 'half-yearly' && <ManagerMembersIdCardGeneratorStudentIdCardHalfYearly data={data} side="front" />}
+                            {theme === 'full-year' && <ManagerMembersIdCardGeneratorStudentIdCardFullYear data={data} side="front" />}
+                            {theme === 'monthly' && <StudentIdCard data={data} side="front" />}
                           </div>
                           <div className="break-after-page">
-                            {isQtr ? (
-                              <ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack data={data} />
-                            ) : (
-                              <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />
-                            )}
+                            {theme === 'quarterly' && <ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack data={data} />}
+                            {theme === 'half-yearly' && <ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack data={data} />}
+                            {theme === 'full-year' && <ManagerMembersIdCardGeneratorStudentIdCardFullYearBack data={data} />}
+                            {theme === 'monthly' && <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />}
                           </div>
-                        </React.Fragment>
+                        </Fragment>
                       );
                     })
                   ) : (
-                    <>
-                      <div className="break-after-page">
-                        {isQuarterlyPlan(cardData.plan) ? (
-                          <ManagerMembersIdCardGeneratorStudentIdCardQuarterly data={cardData} side="front" />
-                        ) : (
-                          <StudentIdCard data={cardData} side="front" />
-                        )}
-                      </div>
-                      <div className="break-after-page">
-                        {isQuarterlyPlan(cardData.plan) ? (
-                          <ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack data={cardData} />
-                        ) : (
-                          <ManagerMembersIdCardGeneratorStudentIdCardBack data={cardData} />
-                        )}
-                      </div>
-                    </>
+                    (() => {
+                      const theme = getIdCardPlanTheme(cardData.plan);
+                      return (
+                        <>
+                          <div className="break-after-page">
+                            {theme === 'quarterly' && <ManagerMembersIdCardGeneratorStudentIdCardQuarterly data={cardData} side="front" />}
+                            {theme === 'half-yearly' && <ManagerMembersIdCardGeneratorStudentIdCardHalfYearly data={cardData} side="front" />}
+                            {theme === 'full-year' && <ManagerMembersIdCardGeneratorStudentIdCardFullYear data={cardData} side="front" />}
+                            {theme === 'monthly' && <StudentIdCard data={cardData} side="front" />}
+                          </div>
+                          <div className="break-after-page">
+                            {theme === 'quarterly' && <ManagerMembersIdCardGeneratorStudentIdCardQuarterlyBack data={cardData} />}
+                            {theme === 'half-yearly' && <ManagerMembersIdCardGeneratorStudentIdCardHalfYearlyBack data={cardData} />}
+                            {theme === 'full-year' && <ManagerMembersIdCardGeneratorStudentIdCardFullYearBack data={cardData} />}
+                            {theme === 'monthly' && <ManagerMembersIdCardGeneratorStudentIdCardBack data={cardData} />}
+                          </div>
+                        </>
+                      );
+                    })()
                   )}
                 </div>
               </div>
