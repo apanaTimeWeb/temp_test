@@ -20,9 +20,10 @@ function maskCardPhone(phone?: string | null): string {
 }
 
 function ManagerMembersIdCardGeneratorBarcodeStripes({ id }: { id: string }) {
+  const safeId = id && id.length > 0 ? id : 'LIB-DEFAULT';
   const bars: { width: number; gap: number }[] = [];
   for (let index = 0; index < 28; index += 1) {
-    const code = id.charCodeAt(index % id.length) + index * 3;
+    const code = safeId.charCodeAt(index % safeId.length) + index * 3;
     bars.push({ width: (code % 3) + 1, gap: (code % 2) + 1 });
   }
   let totalWidth = 0;
@@ -35,7 +36,7 @@ function ManagerMembersIdCardGeneratorBarcodeStripes({ id }: { id: string }) {
       viewBox={`0 0 ${totalWidth} 36`}
       preserveAspectRatio="none"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label={`Barcode for ${id}`}
+      aria-label={`Barcode for ${safeId}`}
       className="w-full h-full block"
     >
       {bars.map((bar, index) => {
@@ -44,7 +45,7 @@ function ManagerMembersIdCardGeneratorBarcodeStripes({ id }: { id: string }) {
         currentX += bar.width + bar.gap;
         return (
           <rect
-            key={`${id}-stripe-${index}`}
+            key={`${safeId}-stripe-${index}`}
             x={xPos}
             y="0"
             width={bar.width}
@@ -59,6 +60,7 @@ function ManagerMembersIdCardGeneratorBarcodeStripes({ id }: { id: string }) {
 }
 
 function ManagerMembersIdCardGeneratorQrSvg({ code }: { code: string }) {
+  const safeCode = code || 'LIB-0000';
   return (
     <svg
       width="100%"
@@ -66,7 +68,7 @@ function ManagerMembersIdCardGeneratorQrSvg({ code }: { code: string }) {
       viewBox="0 0 25 25"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label={`QR for ${code}`}
+      aria-label={`QR for ${safeCode}`}
       className="w-full h-full block"
     >
       <rect width="25" height="25" rx="2" fill="#FFFFFF" />
@@ -140,7 +142,7 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
 
   const currentSide = internalSide;
   const tManagerUi = useTranslations('manager.manager_id_card_generator.ui');
-  const initials = data.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase();
+  const initials = data.name.trim().split(/\s+/).map((part) => part[0]).filter(Boolean).join('').slice(0, 2).toUpperCase() || 'ID';
 
   const shiftLabels: Record<string, string> = {
     Morning: tManagerUi('shift_morning') || 'Morning',
@@ -214,10 +216,10 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
         <div className="card-profile">
           <div className="card-photo">{initials}</div>
           <div className="card-identity">
-            <div className="card-name">{data.name}</div>
-            <span className="card-smartid">#{data.smartId}</span>
-            {data.college && <div className="card-college">🎓 {data.college}</div>}
-            <div className="card-phone">📱 {maskCardPhone(data.phone)}</div>
+            <div className="card-name" title={data.name}>{data.name}</div>
+            <span className="card-smartid" title={`Smart ID: ${data.smartId}`}>#{data.smartId}</span>
+            {data.college && <div className="card-college" title={data.college}>🎓 {data.college}</div>}
+            <div className="card-phone" title={data.phone || undefined}>📱 {maskCardPhone(data.phone)}</div>
           </div>
         </div>
 
@@ -233,19 +235,21 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
         <div className="card-details">
           <div className="card-detail card-detail--shift">
             <div className="card-detail-label">{tManagerUi('shift_149b8d') || 'Shift'}</div>
-            <div className="card-detail-value">{shiftLabel}</div>
+            <div className="card-detail-value" title={shiftLabel}>{shiftLabel}</div>
           </div>
           <div className="card-detail card-detail--seat">
             <div className="card-detail-label">{tManagerUi('seat') || 'Seat'}</div>
-            <div className="card-detail-value">{data.seat}</div>
+            <div className="card-detail-value" title={data.seat}>{data.seat}</div>
           </div>
           <div className="card-detail card-detail--plan">
             <div className="card-detail-label">{tManagerUi('plan') || 'Plan'}</div>
-            <div className="card-detail-value">{planLabel}</div>
+            <div className="card-detail-value" title={planLabel}>{planLabel}</div>
           </div>
           <div className="card-detail card-detail--locker">
             <div className="card-detail-label">{tManagerUi('locker_420c5c') || 'Locker'}</div>
-            <div className="card-detail-value">{data.locker ? data.locker : 'No Locker'}</div>
+            <div className="card-detail-value" title={data.locker ? data.locker : 'No Locker'}>
+              {data.locker ? data.locker : 'No Locker'}
+            </div>
           </div>
         </div>
 

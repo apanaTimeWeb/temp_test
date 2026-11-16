@@ -488,6 +488,7 @@
   .mgr-students-theme .card-verify.expired .card-verify-title,
   .card-verify.expired .card-verify-title { color: #ef4444; }
 
+  .mgr-students-theme .side-label,
   .side-label {
     display: flex;
     align-items: center;
@@ -500,6 +501,7 @@
     margin-bottom: 8px;
     justify-content: center;
   }
+  .mgr-students-theme .side-label .dot,
   .side-label .dot {
     width: 5px;
     height: 5px;
@@ -508,34 +510,44 @@
     box-shadow: 0 0 8px #6366f1;
   }
 
-  .mgr-students-theme .mgr-idcard-holo-lines {
+  .mgr-students-theme .mgr-idcard-holo-lines,
+  .mgr-idcard-holo-lines {
     position: absolute; inset: 0;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
     pointer-events: none; z-index: 1; border-radius: 3.18mm;
   }
-  .mgr-students-theme .mgr-idcard-header {
+  .mgr-students-theme .mgr-idcard-header,
+  .mgr-idcard-header {
     background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(29, 78, 216, 0.9) 100%);
     padding: 6px 12px; display: flex; align-items: center;
     justify-content: space-between; position: relative; z-index: 2;
     border-bottom: 1.5px solid rgba(255, 255, 255, 0.18);
     flex-shrink: 0;
   }
-  .mgr-students-theme .mgr-idcard-header::after {
+  .mgr-students-theme .mgr-idcard-header::after,
+  .mgr-idcard-header::after {
     content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
     background: rgba(255, 255, 255, 0.12);
   }
-  .mgr-students-theme .mgr-idcard-header-left  { display: flex; align-items: center; gap: 8px; }
-  .mgr-students-theme .mgr-idcard-header-right { display: flex; align-items: center; gap: 8px; }
-  .mgr-students-theme .mgr-idcard-logo-icon    { font-size: 17px; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)); line-height: 1; }
-  .mgr-students-theme .mgr-idcard-logo-text    { font-size: 11px; font-weight: 800; color: #FFFFFF !important; letter-spacing: 0.1em; line-height: 1.1; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
-  .mgr-students-theme .mgr-idcard-branch-text  { font-size: 8px; color: #FDE047 !important; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.1; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
-  .mgr-students-theme .mgr-idcard-header-chip  {
+  .mgr-students-theme .mgr-idcard-header-left,
+  .mgr-idcard-header-left  { display: flex; align-items: center; gap: 8px; }
+  .mgr-students-theme .mgr-idcard-header-right,
+  .mgr-idcard-header-right { display: flex; align-items: center; gap: 8px; }
+  .mgr-students-theme .mgr-idcard-logo-icon,
+  .mgr-idcard-logo-icon    { font-size: 17px; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)); line-height: 1; }
+  .mgr-students-theme .mgr-idcard-logo-text,
+  .mgr-idcard-logo-text    { font-size: 11px; font-weight: 800; color: #FFFFFF !important; letter-spacing: 0.1em; line-height: 1.1; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+  .mgr-students-theme .mgr-idcard-branch-text,
+  .mgr-idcard-branch-text  { font-size: 8px; color: #FDE047 !important; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.1; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
+  .mgr-students-theme .mgr-idcard-header-chip,
+  .mgr-idcard-header-chip  {
     background: rgba(255, 255, 255, 0.18); border: 1px solid rgba(255, 255, 255, 0.38);
     border-radius: 4px; padding: 2px 7px; font-size: 7.5px; font-weight: 800;
     color: #FFFFFF !important; letter-spacing: 0.1em; text-transform: uppercase; backdrop-filter: blur(4px);
     line-height: 1.2; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
-  .mgr-students-theme .mgr-idcard-body         {
+  .mgr-students-theme .mgr-idcard-body,
+  .mgr-idcard-body         {
     padding: 8px 12px; position: relative; z-index: 2;
     flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-height: 0;
   }
@@ -591,19 +603,24 @@
   .mgr-students-theme .mgr-idcard-tamper-seal    { display: flex; flex-direction: column; align-items: center; gap: 1px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 4px; padding: 2px 4px; }
   .mgr-students-theme .mgr-idcard-tamper-text    { font-size: 6px; font-weight: 800; color: #34d399; letter-spacing: 0.08em; text-transform: uppercase; }
   .mgr-students-theme .mgr-idcard-tamper-sub     { font-size: 5.2px; color: #34d399; letter-spacing: 0.04em; white-space: nowrap; }
-  .mgr-students-theme .mgr-idcard-stripe {
+  .mgr-students-theme .mgr-idcard-stripe,
+  .mgr-idcard-stripe {
     height: 4px;
     background: linear-gradient(90deg, #2563eb, #7c3aed, #059669, #e11d48, #2563eb);
     background-size: 200% 100%;
     animation: mgr-stripe-scroll 3s linear infinite;
     position: relative; z-index: 2; flex-shrink: 0;
   }
-  .mgr-students-theme .mgr-idcard-arrow   { color: #64748B; font-size: 10px; }
-  .mgr-students-theme .mgr-idcard-college { margin-top: 1px; }
-  .mgr-students-theme .mgr-idcard-phone   { font-size: 8.5px; color: #A1A1AA; display: flex; align-items: center; gap: 3px; }
+  .mgr-students-theme .mgr-idcard-arrow,
+  .mgr-idcard-arrow   { color: #64748B; font-size: 10px; }
+  .mgr-students-theme .mgr-idcard-college,
+  .mgr-idcard-college { margin-top: 1px; }
+  .mgr-students-theme .mgr-idcard-phone,
+  .mgr-idcard-phone   { font-size: 8.5px; color: #A1A1AA; display: flex; align-items: center; gap: 3px; }
 
   /* CR-80 Magnetic Stripe on Back Card */
-  .mgr-students-theme .mgr-idcard-magstripe {
+  .mgr-students-theme .mgr-idcard-magstripe,
+  .mgr-idcard-magstripe {
     height: 18px;
     background: #09090b;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -615,7 +632,8 @@
     padding: 0 12px;
     flex-shrink: 0;
   }
-  .mgr-students-theme .mgr-idcard-magstripe-code {
+  .mgr-students-theme .mgr-idcard-magstripe-code,
+  .mgr-idcard-magstripe-code {
     font-family: 'Courier New', monospace;
     font-size: 6.5px;
     color: rgba(255, 255, 255, 0.25);
@@ -742,7 +760,8 @@
   .mgr-students-theme .mgr-idcard-student-info   { flex: 1; min-width: 0; }
   .mgr-students-theme .mgr-idcard-actions-card   { margin-top: 16px; }
   .mgr-students-theme .mgr-idcard-actions-body   { display: flex; flex-direction: column; gap: 10px; }
-  .mgr-students-theme .mgr-idcard-preview-label  { margin-bottom: 8px; text-align: center; }
+  .mgr-students-theme .mgr-idcard-preview-label,
+  .mgr-idcard-preview-label  { margin-bottom: 0 !important; }
   .mgr-students-theme .mgr-idcard-preview-hint   { text-align: center; margin-top: 8px; }
   .mgr-students-theme .mgr-idcard-empty-card     { width: 100%; }
 
