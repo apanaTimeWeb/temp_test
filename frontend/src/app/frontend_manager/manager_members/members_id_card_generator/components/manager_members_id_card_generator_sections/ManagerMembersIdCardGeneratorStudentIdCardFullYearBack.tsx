@@ -125,7 +125,7 @@ export function ManagerMembersIdCardGeneratorStudentIdCardFullYearBack({
 
       {/* Magnetic Stripe */}
       <div className="fy-mag-stripe" aria-hidden="true">
-        <span className="fy-mag-stripe-text">◄ AUTHORIZED MEMBER · SECURITY STRIPE ►</span>
+        <span className="fy-mag-stripe-text">◄ VIP BLACK PLATINUM MEMBER · SECURITY PASS ►</span>
       </div>
 
       {/* Back Top Row */}
@@ -135,8 +135,8 @@ export function ManagerMembersIdCardGeneratorStudentIdCardFullYearBack({
           <div className="fy-back-serial">S/N {serial}</div>
         </div>
         <div className="fy-tier-badge">
-          <span className="fy-tier-crown">👑</span>
-          <span className="fy-tier-label">PLATINUM</span>
+          <span className="fy-tier-crown">💎</span>
+          <span className="fy-tier-label">BLACK PLATINUM</span>
         </div>
       </div>
 

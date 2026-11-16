@@ -335,7 +335,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                     } else if (theme === 'half-yearly') {
                       badgeClass = 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
                     } else if (theme === 'full-year') {
-                      badgeClass = 'bg-amber-200/20 text-[#f5ebd7] border border-amber-200/30';
+                      badgeClass = 'bg-slate-200/20 text-slate-100 border border-slate-300/40 shadow-xs';
                     }
                     return (
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeClass}`}>
