@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { useManagerExpensesCurrencyFormatter } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/hooks/ManagerAccountsExpensesFormattingHook';
 import type { NativeColumn } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_table_parts/ManagerAccountsExpensesNativeTable';
 import { useState, useMemo, useCallback } from 'react';
-import { Plus, RefreshCw, Wallet, Printer, Download } from 'lucide-react';
+import { Plus, RefreshCw, Printer } from 'lucide-react';
 import ManagerAccountsExpensesExpenseSummaryCards from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseSummaryCards';
 import ManagerAccountsExpensesExpenseCategoryFilter from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesExpenseCategoryFilter';
 import ManagerAccountsExpensesExpenseLedger from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_widgets/ManagerAccountsExpensesExpenseLedger';
@@ -34,7 +34,29 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   const tManagerUi = useTranslations('manager.manager_expenses.ui');
   const formatManagerExpensesCurrency = useManagerExpensesCurrencyFormatter();
 
-  const [expenses, setExpenses] = useState<Expense[]>(MOCK as Expense[]);
+  const initialExpenses: Expense[] = useMemo(() => {
+    const today = new Date();
+    const fmt = (d: Date) => d.toISOString().slice(0, 10);
+    return (MOCK as Expense[]).map((exp, idx) => {
+      const d = new Date(today);
+      if (idx === 0) {
+        // Today
+      } else if (idx === 1) {
+        d.setDate(d.getDate() - 1);
+      } else if (idx === 2) {
+        d.setDate(d.getDate() - 3);
+      } else if (idx === 3) {
+        d.setDate(d.getDate() - 7);
+      } else if (idx === 4) {
+        d.setDate(d.getDate() - 14);
+      } else {
+        d.setDate(d.getDate() - 25);
+      }
+      return { ...exp, date: fmt(d) };
+    });
+  }, []);
+
+  const [expenses, setExpenses] = useState<Expense[]>(initialExpenses);
   const [catFilter, setCatFilter] = useState('all');
   const [modeFilter, setModeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,7 +65,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
   const [isSyncing, setIsSyncing] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
 
-  const [timeHorizon, setTimeHorizon] = useState<ManagerExpensesTimeHorizon>('this_month');
+  const [timeHorizon, setTimeHorizon] = useState<ManagerExpensesTimeHorizon>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
 
@@ -188,67 +210,53 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
 
   return (
     <div className="space-y-6" data-route-view={view} data-route-id={id}>
-      {/* ── Executive ERP Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 flex-wrap text-xs">
-              <span className="font-semibold text-primary uppercase tracking-wider">Accounting & Operations</span>
-              <span className="text-border">•</span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-danger-bg text-danger border border-border">
-                <Wallet size={12} /> Disbursement & Petty Cash
-              </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-muted text-secondary border border-border">
-                📍 Assigned Branch Ledger
-              </span>
-            </div>
-
-            <div className="flex items-baseline gap-3 flex-wrap">
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-primary">
-                {tManagerUi('expense_ledger')}
-              </h1>
-              <span className="text-xs px-2.5 py-1 rounded-md bg-primary-subtle text-primary font-bold">
-                {searchedExpenses.length} Records • Scope: {timeHorizonLabel}
-              </span>
-            </div>
-
-            <p className="text-sm text-secondary">{tManagerUi('track_all_library_operational_expenses')}</p>
+      {/* ── Clean Executive Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-primary">
+              {tManagerUi('expense_ledger')}
+            </h1>
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-primary-subtle text-primary font-bold border border-border">
+              {searchedExpenses.length} Records
+            </span>
           </div>
+          <p className="text-xs sm:text-sm text-secondary mt-1">
+            Track, audit, and disburse library operational expenses, petty cash, and fiscal ledger vouchers.
+          </p>
+        </div>
 
-          <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
-            {/* Print Report Button */}
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
-              title="Print Expense Ledger"
-            >
-              <Printer size={14} />
-              <span>Print Ledger</span>
-            </button>
+        {/* Action Buttons: Print Report, Sync Balances, Add Expense */}
+        <div className="flex items-center flex-wrap gap-2.5">
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover transition-colors cursor-pointer shadow-xs"
+            title="Print Expense Ledger"
+          >
+            <Printer size={14} />
+            <span>Print Report</span>
+          </button>
 
-            {/* Sync Journal Button */}
-            <button
-              type="button"
-              onClick={handleSyncExpenses}
-              disabled={isSyncing}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60"
-              title="Sync Expense Ledger"
-            >
-              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
-              <span>{isSyncing ? 'Syncing...' : 'Sync Journal'}</span>
-            </button>
+          <button
+            type="button"
+            onClick={handleSyncExpenses}
+            disabled={isSyncing}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60"
+            title="Sync Expense Ledger"
+          >
+            <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
+            <span>{isSyncing ? 'Syncing...' : 'Sync Balances'}</span>
+          </button>
 
-            {/* Add Expense Button */}
-            <button
-              type="button"
-              onClick={() => setIsAddExpenseOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
-            >
-              <Plus size={16} />
-              <span>Add Operational Expense</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setIsAddExpenseOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
+          >
+            <Plus size={15} />
+            <span>Add Expense</span>
+          </button>
         </div>
       </div>
 
