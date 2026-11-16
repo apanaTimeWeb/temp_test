@@ -13687,7 +13687,15 @@
         "seats": "Seats",
         "floors": "Floors",
         "shifts": "Shifts",
-        "branch_info_subtitle": "View branch details, seating capacity, operating shifts, and contact information."
+        "branch_info_subtitle": "View branch details, seating capacity, operating shifts, and contact information.",
+        "student_wifi_connect": "Student Wi-Fi Connect",
+        "student_wifi_subtitle": "Front desk scannable QR code & network credentials for students",
+        "wifi_ssid": "Network Name (SSID)",
+        "wifi_password": "Wi-Fi Password",
+        "wifi_qr_code": "Wi-Fi QR Code",
+        "print_front_desk_standee": "Print Desk Standee",
+        "scan_to_connect": "Scan with Camera to Connect",
+        "wifi_operations_hint": "Eliminates repeated Wi-Fi queries to branch manager"
       },
       "errors": {
         "GENERIC_TITLE": "Something went wrong",

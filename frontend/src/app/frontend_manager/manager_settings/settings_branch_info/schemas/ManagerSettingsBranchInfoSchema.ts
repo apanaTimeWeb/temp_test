@@ -21,6 +21,12 @@ export const managerBranchInfoDraftSchema = z.object({
   supportEmail: z.string().trim().email().max(254),
   profileCreatedDate: z.string().trim().min(1).max(50),
   lastUpdatedDate: z.string().trim().min(1).max(50),
+  // Student Wi-Fi Connect Configuration
+  wifiSsid: z.string().trim().min(1).max(64).default('SmartLibrary_Student_5G'),
+  wifiPassword: z.string().trim().max(64).default('StudyHub@2026'),
+  wifiSecurity: z.enum(['WPA', 'WEP', 'nopass']).default('WPA'),
+  wifiFrequency: z.string().trim().max(60).default('Dual-Band 5 GHz / 2.4 GHz High-Speed'),
+  wifiInstructions: z.string().trim().max(200).default('Scan to connect to high-speed student Wi-Fi'),
 });
 
 export type ManagerSettingsBranchInfoDraft = z.infer<typeof managerBranchInfoDraftSchema>;

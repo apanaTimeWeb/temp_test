@@ -1,8 +1,9 @@
 'use client';
 // RESPONSIBILITY: Provide the compact, luxury-styled, multi-accented branch information view.
 // It applies semantic color coding (Gold, Emerald, Purple, Cyan, Rose) and high-density, sleek layout hierarchy.
+// Includes Student Wi-Fi Connect QR Code generation, printable front desk standee, and quick credential management.
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useManagerBranchInfoForm } from '@/app/frontend_manager/manager_settings/settings_branch_info/hooks/useManagerSettingsBranchInfoForm';
@@ -17,8 +18,6 @@ import {
   Hash,
   ShieldCheck,
   Calendar,
-  Globe,
-  IndianRupee,
   Armchair,
   Layers,
   PhoneCall,
@@ -33,12 +32,51 @@ import {
   Sun,
   Moon,
   Compass,
+  Wifi,
+  QrCode,
+  Printer,
+  Eye,
+  EyeOff,
+  Radio,
 } from 'lucide-react';
+import { ManagerSettingsBranchInfoWifiModal } from '@/app/frontend_manager/manager_settings/settings_branch_info/components/manager_settings_branch_info_modals/ManagerSettingsBranchInfoWifiModal';
+import {
+  generateQrMatrix,
+  generateQrSvgPath,
+  formatWifiQrPayload,
+} from '@/app/frontend_manager/manager_settings/settings_branch_info/utils/ManagerSettingsBranchInfoWifiQr';
 
 export default function ManagerSettingsBranchInfoPage() {
   const tManagerUi = useTranslations('manager.manager_branch_info.ui');
   const { branchData } = useManagerBranchInfoForm();
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  // Student Wi-Fi Standee & Modal States
+  const [isWifiModalOpen, setIsWifiModalOpen] = useState(false);
+  const [showPagePassword, setShowPagePassword] = useState(false);
+  const [wifiConfig, setWifiConfig] = useState<{
+    ssid: string;
+    password: string;
+    security: 'WPA' | 'WEP' | 'nopass';
+  }>({
+    ssid: branchData.wifiSsid || 'SmartLibrary_Student_5G',
+    password: branchData.wifiPassword || 'StudyHub@2026',
+    security: (branchData.wifiSecurity || 'WPA') as 'WPA' | 'WEP' | 'nopass',
+  });
+
+  // Real-time on-page QR SVG generation
+  const pageWifiPayload = useMemo(() => {
+    return formatWifiQrPayload({
+      ssid: wifiConfig.ssid,
+      password: wifiConfig.password,
+      security: wifiConfig.security,
+    });
+  }, [wifiConfig]);
+
+  const pageQrSvg = useMemo(() => {
+    const matrix = generateQrMatrix(pageWifiPayload, 'M');
+    return generateQrSvgPath(matrix, 2);
+  }, [pageWifiPayload]);
 
   const t = (key: string, fallback: string): string => {
     try {
@@ -73,6 +111,8 @@ export default function ManagerSettingsBranchInfoPage() {
       `• Desk Phone: ${branchData.phone}`,
       `• Helpline Phone: ${branchData.supportPhone}`,
       `• Support Email: ${branchData.supportEmail}`,
+      `• Student Wi-Fi (SSID): ${wifiConfig.ssid}`,
+      `• Wi-Fi Password: ${wifiConfig.password}`,
       `• Manager: ${branchData.managerName}`,
       `• Established: ${branchData.establishmentDate}`,
       `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
@@ -96,15 +136,29 @@ export default function ManagerSettingsBranchInfoPage() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={copyAllBranchDetails}
-          className="inline-flex items-center gap-1.5 self-start sm:self-auto text-xs font-semibold px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 hover:border-amber-500/40 transition-all cursor-pointer shadow-xs"
-          title="Copy complete branch profile to clipboard"
-        >
-          <Share2 size={13} className="text-amber-400" />
-          <span>Share Profile</span>
-        </button>
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          {/* Quick Wi-Fi Standee Button */}
+          <button
+            type="button"
+            onClick={() => setIsWifiModalOpen(true)}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 transition-all cursor-pointer shadow-xs"
+            title="Open Student Wi-Fi Front Desk Standee"
+          >
+            <Wifi size={13} className="text-amber-400" />
+            <span>Wi-Fi Standee QR</span>
+          </button>
+
+          {/* Share Profile Button */}
+          <button
+            type="button"
+            onClick={copyAllBranchDetails}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 hover:border-amber-500/40 transition-all cursor-pointer shadow-xs"
+            title="Copy complete branch profile to clipboard"
+          >
+            <Share2 size={13} className="text-amber-400" />
+            <span>Share Profile</span>
+          </button>
+        </div>
       </div>
 
       {/* ── COMPACT LUXURY FACILITY HERO BANNER ── */}
@@ -172,6 +226,17 @@ export default function ManagerSettingsBranchInfoPage() {
                   <Calendar size={11} className="text-slate-400" />
                   Est. {branchData.establishmentDate || '2021'}
                 </span>
+
+                {/* Quick Wi-Fi Standee Badge (Cyan) */}
+                <button
+                  type="button"
+                  onClick={() => setIsWifiModalOpen(true)}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 font-medium border border-cyan-500/25 transition-all cursor-pointer"
+                  title="Open Student Wi-Fi Front Desk Standee"
+                >
+                  <Wifi size={11} className="text-cyan-400" />
+                  <span>Wi-Fi Standee QR</span>
+                </button>
               </div>
             </div>
           </div>
@@ -377,8 +442,145 @@ export default function ManagerSettingsBranchInfoPage() {
           </div>
         </div>
 
-        {/* ── RIGHT COLUMN (5 Cols): Actionable Contacts, In-Charge & Audit ── */}
+        {/* ── RIGHT COLUMN (5 Cols): Wi-Fi QR Standee, Actionable Contacts & Audit ── */}
         <div className="lg:col-span-5 space-y-4">
+          {/* ── HIGHLIGHTED CARD: STUDENT WI-FI CONNECT & FRONT DESK QR STANDEE ── */}
+          <div className="rounded-xl border border-amber-500/30 bg-gradient-to-b from-[#181308]/90 via-[#0e0e1c]/95 to-[#0b0c20]/95 p-4 space-y-3.5 shadow-md relative overflow-hidden">
+            {/* Subtle Golden Glow */}
+            <div className="absolute top-0 right-0 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+
+            {/* Card Header */}
+            <div className="flex items-center justify-between border-b border-white/5 pb-2.5 relative z-10">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/30">
+                  <Wifi size={14} />
+                </div>
+                <div>
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                    <span>{t('student_wifi_connect', 'Student Wi-Fi Connect')}</span>
+                  </h3>
+                  <span className="text-[10px] text-slate-400 block">
+                    {t('wifi_qr_code', 'Front Desk QR Code Standee')}
+                  </span>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                <Radio size={10} className="animate-pulse text-amber-400" />
+                <span>5G Active</span>
+              </span>
+            </div>
+
+            {/* Body: Live QR Code Thumbnail & Quick Credentials */}
+            <div className="flex items-center gap-3.5 relative z-10">
+              {/* Clickable QR Code Standee Preview Thumbnail */}
+              <button
+                type="button"
+                onClick={() => setIsWifiModalOpen(true)}
+                className="relative w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-xl p-2 shrink-0 border-2 border-amber-500/40 hover:border-amber-400 transition-all shadow-lg group cursor-pointer flex items-center justify-center"
+                title="Click to view full standee & print"
+              >
+                <svg
+                  viewBox={pageQrSvg.viewBox}
+                  className="w-full h-full text-slate-900 group-hover:scale-105 transition-transform"
+                  shapeRendering="crispEdges"
+                >
+                  <path d={pageQrSvg.path} fill="#0f172a" />
+                </svg>
+                {/* Center Badge Icon */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="w-5 h-5 rounded-md bg-white border border-slate-900 shadow-xs flex items-center justify-center text-slate-900">
+                    <Wifi size={10} />
+                  </div>
+                </div>
+                {/* Hover overlay hint */}
+                <div className="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity flex flex-col items-center justify-center text-[10px] font-bold text-amber-300 gap-1">
+                  <QrCode size={16} />
+                  <span>Enlarge</span>
+                </div>
+              </button>
+
+              {/* Wi-Fi Credentials Pill Box */}
+              <div className="flex-1 min-w-0 space-y-2 text-xs">
+                {/* Network SSID Row */}
+                <div className="p-2 rounded-lg bg-amber-500/5 border border-amber-500/20">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-amber-300/80 font-medium">
+                      {t('wifi_ssid', 'Network Name (SSID)')}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard(wifiConfig.ssid, 'Wi-Fi SSID', 'card_ssid')}
+                      className="text-amber-400/80 hover:text-amber-300 cursor-pointer p-0.5"
+                      title="Copy SSID"
+                    >
+                      {copiedKey === 'card_ssid' ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                    </button>
+                  </div>
+                  <span className="font-mono font-bold text-white text-xs truncate block mt-0.5">
+                    {wifiConfig.ssid}
+                  </span>
+                </div>
+
+                {/* Password Row */}
+                <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-slate-400 font-medium">
+                      {t('wifi_password', 'Password')}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setShowPagePassword(!showPagePassword)}
+                        className="text-slate-400 hover:text-slate-200 cursor-pointer p-0.5"
+                        title={showPagePassword ? 'Hide password' : 'Show password'}
+                      >
+                        {showPagePassword ? <EyeOff size={11} /> : <Eye size={11} />}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => copyToClipboard(wifiConfig.password, 'Wi-Fi Password', 'card_pwd')}
+                        className="text-slate-400 hover:text-amber-300 cursor-pointer p-0.5"
+                        title="Copy Password"
+                      >
+                        {copiedKey === 'card_pwd' ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                      </button>
+                    </div>
+                  </div>
+                  <span className="font-mono font-bold text-amber-300 text-xs truncate block mt-0.5">
+                    {showPagePassword ? wifiConfig.password : '••••••••••••'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions Strip */}
+            <div className="flex items-center gap-2 pt-1 border-t border-white/5 relative z-10">
+              <button
+                type="button"
+                onClick={() => setIsWifiModalOpen(true)}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-sm cursor-pointer"
+              >
+                <Printer size={13} />
+                <span>{t('print_front_desk_standee', 'Print Desk Standee')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsWifiModalOpen(true)}
+                className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 font-semibold text-xs transition-all cursor-pointer"
+                title="Open full standee view & scan instructions"
+              >
+                <QrCode size={13} className="text-cyan-400" />
+                <span>Standee Preview</span>
+              </button>
+            </div>
+
+            {/* Operational Impact Notice */}
+            <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-300/90 flex items-center gap-1.5 relative z-10">
+              <Sparkles size={11} className="text-emerald-400 shrink-0" />
+              <span>{t('wifi_operations_hint', 'Eliminates repeated Wi-Fi queries to branch manager.')}</span>
+            </div>
+          </div>
+
           {/* Card: Contact Channels (Actionable with Semantic Colors) */}
           <div className="rounded-xl border border-white/10 bg-[#0b0c20]/90 p-4 space-y-3.5 shadow-sm">
             <div className="flex items-center justify-between border-b border-white/5 pb-2.5">
@@ -528,6 +730,21 @@ export default function ManagerSettingsBranchInfoPage() {
           </div>
         </div>
       </div>
+
+      {/* ── STUDENT WI-FI QR & DESK STANDEE MODAL ── */}
+      <ManagerSettingsBranchInfoWifiModal
+        isOpen={isWifiModalOpen}
+        onClose={() => setIsWifiModalOpen(false)}
+        branchName={branchData.branchName}
+        branchCode={branchData.branchCode}
+        managerName={branchData.managerName}
+        managerPhone={branchData.phone}
+        initialSsid={wifiConfig.ssid}
+        initialPassword={wifiConfig.password}
+        initialSecurity={wifiConfig.security}
+        initialFrequency={branchData.wifiFrequency || 'Dual-Band 5 GHz / 2.4 GHz High-Speed'}
+        onUpdateWifi={(updated) => setWifiConfig(updated)}
+      />
     </div>
   );
 }

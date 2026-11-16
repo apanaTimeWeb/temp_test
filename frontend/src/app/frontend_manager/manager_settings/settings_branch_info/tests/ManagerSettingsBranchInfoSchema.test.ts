@@ -21,6 +21,11 @@ const validDraft = {
   supportEmail: 'support@example.com',
   profileCreatedDate: '2023-01-15',
   lastUpdatedDate: '2026-10-25',
+  wifiSsid: 'SmartLibrary_Student_5G',
+  wifiPassword: 'StudyHub@2026',
+  wifiSecurity: 'WPA' as const,
+  wifiFrequency: 'Dual-Band 5 GHz / 2.4 GHz High-Speed',
+  wifiInstructions: 'Scan to connect student Wi-Fi',
 };
 
 describe('managerBranchInfoDraftSchema', () => {
@@ -43,6 +48,21 @@ describe('managerBranchInfoDraftSchema', () => {
       expect(result.data.currency).toBe('INR (₹)');
       expect(result.data.timezone).toBe('Asia/Kolkata (IST)');
       expect(result.data.supportPhone).toBe('+91 9876543299');
+      expect(result.data.wifiSsid).toBe('SmartLibrary_Student_5G');
+      expect(result.data.wifiPassword).toBe('StudyHub@2026');
+      expect(result.data.wifiSecurity).toBe('WPA');
+    }
+  });
+
+  it('provides default wifi configuration when wifi fields are omitted', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { wifiSsid, wifiPassword, wifiSecurity, ...withoutWifi } = validDraft;
+    const result = managerBranchInfoDraftSchema.safeParse(withoutWifi);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.wifiSsid).toBe('SmartLibrary_Student_5G');
+      expect(result.data.wifiPassword).toBe('StudyHub@2026');
+      expect(result.data.wifiSecurity).toBe('WPA');
     }
   });
 });

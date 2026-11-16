@@ -21,4 +21,10 @@ export const MANAGER_BRANCH_INFO_SAMPLE_DRAFT: ManagerSettingsBranchInfoDraft = 
   supportEmail: 'support.cp@smartlibrary.com',
   profileCreatedDate: '15 Jan 2023',
   lastUpdatedDate: '25 Oct 2026',
+  // Student Wi-Fi Connect Configuration
+  wifiSsid: 'SmartLibrary_Student_5G',
+  wifiPassword: 'StudyHub@2026',
+  wifiSecurity: 'WPA',
+  wifiFrequency: 'Dual-Band 5 GHz / 2.4 GHz High-Speed',
+  wifiInstructions: 'Scan with camera or Wi-Fi settings to connect instantly',
 };
