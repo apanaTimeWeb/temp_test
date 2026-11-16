@@ -433,7 +433,7 @@ export function ManagerMembersEnquiriesTable({
                             ? 'opacity-40 cursor-not-allowed'
                             : 'hover:bg-rose-500/35 hover:text-rose-200 hover:border-rose-400 hover:scale-105 active:scale-95 cursor-pointer opacity-80 hover:opacity-100'
                         }`}
-                        title={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost (ड्रॉप कारण चुनें)'}
+                        title={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost'}
                         aria-label={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost'}
                         disabled={enq.status === 'Lost'}
                         onClick={(e) => {

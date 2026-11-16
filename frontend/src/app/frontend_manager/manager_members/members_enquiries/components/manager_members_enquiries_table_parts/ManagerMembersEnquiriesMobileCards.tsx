@@ -253,7 +253,7 @@ export function ManagerMembersEnquiriesMobileCards({
                     : 'hover:bg-rose-500/35 hover:text-rose-200 cursor-pointer opacity-90 hover:opacity-100'
                 }`}
                 aria-label={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost'}
-                title={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost (ड्रॉप कारण चुनें)'}
+                title={enq.status === 'Lost' ? tManagerUi('already_marked_lost') : 'Mark Enquiry as Lost'}
                 disabled={enq.status === 'Lost'}
                 onClick={(e) => {
                   e.stopPropagation();

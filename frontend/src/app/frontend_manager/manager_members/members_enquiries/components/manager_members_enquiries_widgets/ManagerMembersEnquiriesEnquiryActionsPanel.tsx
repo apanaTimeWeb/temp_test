@@ -62,7 +62,7 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
             onClick={onSendDemoPass}
           >
             <Ticket size={15} className="text-emerald-200" aria-hidden="true" />
-            1-Click WhatsApp Demo Pass (फ्री ट्रायल)
+            1-Click WhatsApp Demo Pass (Free Trial)
           </button>
         )}
 
@@ -89,10 +89,10 @@ export function ManagerMembersEnquiriesEnquiryActionsPanel({
             }`}
             disabled={status === 'Lost'}
             onClick={onMarkLost}
-            title={status === 'Lost' ? alreadyLostLabel : 'Mark Enquiry as Lost (वजह दर्ज करें)'}
+            title={status === 'Lost' ? alreadyLostLabel : 'Mark Enquiry as Lost'}
           >
             <XCircle size={15} className="text-rose-400" aria-hidden="true" />
-            {status === 'Lost' ? alreadyLostLabel : 'Mark as Lost (ड्रॉप कारण दर्ज करें)'}
+            {status === 'Lost' ? alreadyLostLabel : 'Mark as Lost'}
           </button>
         ) : (
           <button

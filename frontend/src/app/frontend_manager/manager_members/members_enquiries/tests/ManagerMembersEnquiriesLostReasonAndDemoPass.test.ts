@@ -61,7 +61,7 @@ describe('Manager Members Enquiries - Lost Reason & WhatsApp Demo Pass Enhanceme
       'components/manager_members_enquiries_sections/ManagerMembersEnquiriesEnquiryProfileCard.tsx'
     );
     expect(profileCardSource).toContain("enquiry.status === 'Lost' && enquiry.lostReason");
-    expect(profileCardSource).toContain('Lost Reason (ड्रॉप कारण):');
+    expect(profileCardSource).toContain('Lost Reason:');
 
     const tableSource = readSource(
       'components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesTable.tsx'

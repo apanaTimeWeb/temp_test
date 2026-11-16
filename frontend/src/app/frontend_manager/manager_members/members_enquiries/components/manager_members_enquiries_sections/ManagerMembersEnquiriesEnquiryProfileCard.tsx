@@ -42,7 +42,7 @@ export function ManagerMembersEnquiriesEnquiryProfileCard({
 
       {enquiry.status === 'Lost' && enquiry.lostReason && (
         <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-2.5 text-xs text-rose-300">
-          <span className="font-bold text-rose-200 shrink-0">Lost Reason (ड्रॉप कारण):</span>
+          <span className="font-bold text-rose-200 shrink-0">Lost Reason:</span>
           <span>{enquiry.lostReason}</span>
           {enquiry.lostDate && <span className="text-slate-400 font-mono ml-auto">({enquiry.lostDate})</span>}
         </div>
