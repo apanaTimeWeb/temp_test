@@ -8,8 +8,8 @@ import type { ReferralRow } from '@/app/frontend_manager/manager_members/members
 export interface ManagerMembersReferralBonusKpisProps {
   records: ReferralRow[];
   timeHorizonLabel?: string;
-  statusFilter: 'All' | 'Credited' | 'Pending';
-  onSelectStatusFilter: (status: 'All' | 'Credited' | 'Pending') => void;
+  statusFilter: 'All' | 'Credited' | 'Pending' | 'Adjusted in Renewal';
+  onSelectStatusFilter: (status: 'All' | 'Credited' | 'Pending' | 'Adjusted in Renewal') => void;
 }
 
 export function ManagerMembersReferralBonusKpis({
@@ -28,11 +28,11 @@ export function ManagerMembersReferralBonusKpis({
   };
 
   const totalBonusAmount = records
-    .filter((r) => r.status === 'Credited')
+    .filter((r) => r.status === 'Credited' || r.status === 'Adjusted in Renewal')
     .reduce((sum, r) => sum + parseBonusAmount(r.bonus), 0);
 
   const pendingCount = records.filter((r) => r.status === 'Pending').length;
-  const creditedCount = records.filter((r) => r.status === 'Credited').length;
+  const creditedCount = records.filter((r) => r.status === 'Credited' || r.status === 'Adjusted in Renewal').length;
 
   const kpis = [
     {

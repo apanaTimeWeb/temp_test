@@ -10,6 +10,7 @@ import {
   Clock,
   Download,
   Gift,
+  Receipt,
   Search,
   Trash2,
   X,
@@ -25,8 +26,8 @@ export interface ManagerMembersReferralBonusTableProps {
   totalRows: number;
   searchQuery: string;
   setSearchQuery: (val: string) => void;
-  statusFilter: 'All' | 'Credited' | 'Pending';
-  setStatusFilter: (val: 'All' | 'Credited' | 'Pending') => void;
+  statusFilter: 'All' | 'Credited' | 'Pending' | 'Adjusted in Renewal';
+  setStatusFilter: (val: 'All' | 'Credited' | 'Pending' | 'Adjusted in Renewal') => void;
   methodFilter: 'All' | 'Fee Discount' | 'UPI Cash';
   setMethodFilter: (val: 'All' | 'Fee Discount' | 'UPI Cash') => void;
   hasActiveFilters: boolean;
@@ -35,6 +36,7 @@ export interface ManagerMembersReferralBonusTableProps {
   sortDirection: 'asc' | 'desc';
   onToggleSort: (field: ReferralSortField) => void;
   onApprove: (id: string) => void;
+  onApplyToRenewal: (referral: ReferralRow) => void;
   onDeleteReferral?: (id: string) => void;
   onExportCsv: () => void;
   page: number;
@@ -62,6 +64,7 @@ export function ManagerMembersReferralBonusTable({
   sortDirection,
   onToggleSort,
   onApprove,
+  onApplyToRenewal,
   onDeleteReferral,
   onExportCsv,
   page,
@@ -134,16 +137,17 @@ export function ManagerMembersReferralBonusTable({
               )}
             </div>
 
-            <div className="w-full sm:w-40">
+            <div className="w-full sm:w-44">
               <select
                 aria-label="Filter by Status"
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value as 'All' | 'Credited' | 'Pending')}
+                onChange={(e) => setStatusFilter(e.target.value as 'All' | 'Credited' | 'Pending' | 'Adjusted in Renewal')}
                 className="mgr-select text-xs w-full h-9"
               >
                 <option value="All">All Statuses</option>
-                <option value="Credited">Credited</option>
                 <option value="Pending">Pending Approval</option>
+                <option value="Credited">Credited</option>
+                <option value="Adjusted in Renewal">Adjusted in Renewal</option>
               </select>
             </div>
 
@@ -263,10 +267,16 @@ export function ManagerMembersReferralBonusTable({
                     <td className="py-3 px-4 align-middle whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                          r.status === 'Credited' ? 'bg-success-bg text-success' : 'bg-warning-bg text-warning'
+                          r.status === 'Adjusted in Renewal'
+                            ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30'
+                            : r.status === 'Credited'
+                              ? 'bg-success-bg text-success'
+                              : 'bg-warning-bg text-warning'
                         }`}
                       >
-                        {r.status === 'Credited' ? (
+                        {r.status === 'Adjusted in Renewal' ? (
+                          <Receipt size={12} className="shrink-0 text-indigo-400" />
+                        ) : r.status === 'Credited' ? (
                           <CheckCircle2 size={12} className="shrink-0 text-success" />
                         ) : (
                           <Clock size={12} className="shrink-0 text-warning" />
@@ -275,23 +285,38 @@ export function ManagerMembersReferralBonusTable({
                       </span>
                     </td>
 
-                    {/* Column 8: Actions (Approve + Delete) */}
+                    {/* Column 8: Actions (Approve + Apply to Renewal + Delete) */}
                     <td className="py-3 px-4 text-right align-middle whitespace-nowrap">
                       <div className="inline-flex items-center gap-1.5 justify-end">
-                        {r.status === 'Pending' ? (
-                          <button
-                            type="button"
-                            onClick={() => onApprove(r.id)}
-                            className="mgr-btn-primary text-xs h-8 px-2.5 inline-flex items-center gap-1.5 rounded-lg font-semibold transition-colors"
-                          >
-                            <CheckCircle2 size={13} className="shrink-0 text-on-primary" />
-                            <span>Approve</span>
-                          </button>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-success-bg text-success">
-                            <CheckCircle2 size={12} className="shrink-0 text-success" />
-                            <span>Credited</span>
+                        {r.status === 'Adjusted in Renewal' ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
+                            <CheckCircle2 size={12} className="shrink-0 text-indigo-400" />
+                            <span>Adjusted (-{r.bonus})</span>
                           </span>
+                        ) : (
+                          <>
+                            {r.status === 'Pending' && (
+                              <button
+                                type="button"
+                                onClick={() => onApprove(r.id)}
+                                className="mgr-btn-primary text-xs h-8 px-2.5 inline-flex items-center gap-1.5 rounded-lg font-semibold transition-colors"
+                                title="Approve referral"
+                              >
+                                <CheckCircle2 size={13} className="shrink-0 text-on-primary" />
+                                <span>Approve</span>
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => onApplyToRenewal(r)}
+                              className="inline-flex items-center gap-1.5 text-xs h-8 px-2.5 rounded-lg font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition-colors cursor-pointer"
+                              title={`Apply ${r.bonus} referral discount to ${r.referrer}'s next monthly fee renewal`}
+                              data-testid={`apply-renewal-btn-${r.id}`}
+                            >
+                              <Receipt size={13} className="shrink-0 text-white" />
+                              <span>Apply to Renewal</span>
+                            </button>
+                          </>
                         )}
 
                         {onDeleteReferral && (

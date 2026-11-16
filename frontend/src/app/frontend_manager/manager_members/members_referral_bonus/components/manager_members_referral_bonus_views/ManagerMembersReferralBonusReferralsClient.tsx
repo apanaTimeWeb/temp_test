@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import type { ReferralRow } from '@/app/frontend_manager/manager_members/members_referral_bonus/types/ManagerMembersReferralBonusComponentTypes';
 import { ManagerMembersReferralBonusTable, type ReferralSortField } from './ManagerMembersReferralBonusTable';
 import { ManagerMembersReferralBonusAddModal } from '../manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusAddModal';
+import { ManagerMembersReferralBonusApplyRenewalModal } from '../manager_members_referral_bonus_dialogs/ManagerMembersReferralBonusApplyRenewalModal';
 import ManagerMembersReferralBonusTimeHorizonBar, { type ManagerReferralTimeHorizon } from './ManagerMembersReferralBonusTimeHorizonBar';
 import ManagerMembersReferralBonusKpis from './ManagerMembersReferralBonusKpis';
 import { getInitialReferrals } from '@/app/frontend_manager/manager_members/members_referral_bonus/mocks/manager_members_referral_bonus_fixtures/ManagerMembersReferralBonusFixtures';
@@ -67,13 +68,14 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'All' | 'Credited' | 'Pending'>('All');
+  const [statusFilter, setStatusFilter] = useState<'All' | 'Credited' | 'Pending' | 'Adjusted in Renewal'>('All');
   const [methodFilter, setMethodFilter] = useState<'All' | 'Fee Discount' | 'UPI Cash'>('All');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [sortField, setSortField] = useState<ReferralSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [applyRenewalTarget, setApplyRenewalTarget] = useState<ReferralRow | null>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const toggleSort = (field: ReferralSortField) => {
@@ -153,6 +155,16 @@ export function ManagerMembersReferralBonusReferralsClient() {
   const handleApprove = (id: string) => {
     updateRecords((prev) => prev.map((r) => (r.id === id ? { ...r, status: 'Credited' } : r)));
     setToastMsg(`Referral ${id} approved and bonus credited!`);
+    setTimeout(() => setToastMsg(null), 3500);
+  };
+
+  const handleApplyToRenewal = (referral: ReferralRow) => {
+    setApplyRenewalTarget(referral);
+  };
+
+  const handleRenewalApplied = (updatedRow: ReferralRow) => {
+    updateRecords((prev) => prev.map((r) => (r.id === updatedRow.id ? updatedRow : r)));
+    setToastMsg(`Referral ${updatedRow.id} bonus applied to ${updatedRow.referrer}'s next renewal!`);
     setTimeout(() => setToastMsg(null), 3500);
   };
 
@@ -302,6 +314,7 @@ export function ManagerMembersReferralBonusReferralsClient() {
         sortDirection={sortDirection}
         onToggleSort={toggleSort}
         onApprove={handleApprove}
+        onApplyToRenewal={handleApplyToRenewal}
         onDeleteReferral={handleDeleteReferral}
         onExportCsv={handleExportCsv}
         page={page}
@@ -322,6 +335,14 @@ export function ManagerMembersReferralBonusReferralsClient() {
         onClose={() => setIsAddModalOpen(false)}
         onAddReferral={handleAddReferral}
         nextId={`REF-${100 + records.length + 1}`}
+      />
+
+      {/* Apply to Next Renewal Modal */}
+      <ManagerMembersReferralBonusApplyRenewalModal
+        isOpen={Boolean(applyRenewalTarget)}
+        onClose={() => setApplyRenewalTarget(null)}
+        referral={applyRenewalTarget}
+        onApplied={handleRenewalApplied}
       />
 
       {/* Centered Professional Mini Delete Confirmation Modal */}

@@ -35,6 +35,7 @@ export function getInitialReferrals(): ReferralRow[] {
     { id: 'REF-104', referrer: 'Ananya Roy (LIB-1155)', referred: 'Pooja Iyer', date: d(15), status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
     { id: 'REF-105', referrer: 'Rahul Gupta (LIB-1190)', referred: 'Aditya Mehra', date: d(5), status: 'Pending', bonus: '₹500', method: 'UPI Cash' },
     { id: 'REF-106', referrer: 'Neha Verma (LIB-1204)', referred: 'Siddharth Jain', date: d(8), status: 'Credited', bonus: '₹500', method: 'Fee Discount' },
+    { id: 'REF-107', referrer: 'Karan Malhotra (LIB-1230)', referred: 'Manish Tiwari', date: d(10), status: 'Adjusted in Renewal', bonus: '₹300', method: 'Fee Discount', appliedDiscountAmount: 300, appliedRenewalDate: d(2) },
   ];
 }
 
