@@ -9,11 +9,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { managerFinanceCollectFeeDraftSchema, type ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
 import { toast } from 'sonner';
-import { Search, IndianRupee, UserCheck, Calendar, Tag, AlertTriangle, AlertCircle, CheckCircle, Scale, PieChart, Archive, Plus } from 'lucide-react';
+import { Search, IndianRupee, UserCheck, Calendar, Tag, AlertTriangle, AlertCircle, CheckCircle, Scale, PieChart, Archive, Plus, Layers } from 'lucide-react';
 import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview';
 import ManagerFinanceCollectFeeDurationSelector from './ManagerFinanceCollectFeeDurationSelector';
 import ManagerFinanceCollectFeeDiscountsSection from './ManagerFinanceCollectFeeDiscountsSection';
 import ManagerFinanceCollectFeeStudentInfo from './ManagerFinanceCollectFeeStudentInfo';
+import ManagerFinanceCollectFeePostPaymentModal from './ManagerFinanceCollectFeePostPaymentModal';
 import { MANAGER_FINANCE_COLLECT_FEE_STUDENTS } from '@/app/frontend_manager/manager_finance/finance_collect_fee/mocks/manager_finance_collect_fee_fixtures/ManagerFinanceCollectFeeMocks';
 import type { ManagerFinanceCollectFeeMode } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 import {
@@ -80,6 +81,67 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
   useEffect(() => {
     setReceiptNumber(`REC-${Date.now().toString().slice(-6)}`);
   }, []);
+
+  // Post-Payment Confirmation Popup State
+  const [isPostPaymentModalOpen, setIsPostPaymentModalOpen] = useState(false);
+  const [lastPaidReceipt, setLastPaidReceipt] = useState<{
+    receiptNumber: string;
+    studentName: string;
+    smartId: string;
+    phone: string;
+    totalAmount: number;
+    paymentMode: string;
+    txnId?: string;
+    billingPeriod?: string;
+    lineItems: { id: string; label: string; amount: number }[];
+  } | null>(null);
+
+  // Composite Billing (Multi-Item Invoice) State
+  const [compositeEnabled, setCompositeEnabled] = useState(false);
+  const [compositeItems, setCompositeItems] = useState([
+    { id: 'seat_fee', label: 'Seat Monthly Fee', amount: 1200, enabled: true },
+    { id: 'locker_fee', label: 'Locker Rental Fee', amount: 400, enabled: false },
+    { id: 'late_fine', label: 'Late Fine / Penalty', amount: 200, enabled: false },
+    { id: 'reg_fee', label: 'Registration / Admission Fee', amount: 500, enabled: false },
+  ]);
+
+  const toggleCompositeItem = (id: string) => {
+    setCompositeItems((prev) => {
+      const next = prev.map((item) => (item.id === id ? { ...item, enabled: !item.enabled } : item));
+      const newTotal = next.filter((i) => i.enabled).reduce((sum, i) => sum + i.amount, 0);
+      setDraftValue('amount', String(newTotal));
+      return next;
+    });
+  };
+
+  const updateCompositeItemAmount = (id: string, newAmt: number) => {
+    setCompositeItems((prev) => {
+      const next = prev.map((item) => (item.id === id ? { ...item, amount: newAmt } : item));
+      const newTotal = next.filter((i) => i.enabled).reduce((sum, i) => sum + i.amount, 0);
+      setDraftValue('amount', String(newTotal));
+      return next;
+    });
+  };
+
+  // Pre-fill student & amount from query parameters (e.g. from Payment Promises or Fines)
+  useEffect(() => {
+    if (_routeQuery.id || _routeQuery.name || _routeQuery.smartId) {
+      const matched = MANAGER_FINANCE_COLLECT_FEE_STUDENTS.find(
+        (s) =>
+          (_routeQuery.id && String(s.id) === String(_routeQuery.id)) ||
+          (_routeQuery.smartId && s.smartId.toLowerCase() === _routeQuery.smartId.toLowerCase()) ||
+          (_routeQuery.name && s.name.toLowerCase().includes(_routeQuery.name.toLowerCase()))
+      );
+      if (matched) {
+        setSelectedStudent(matched);
+        setSearch(matched.name);
+        setValue('member', String(matched.id));
+      }
+    }
+    if (_routeQuery.amount) {
+      setDraftValue('amount', _routeQuery.amount);
+    }
+  }, [_routeQuery.id, _routeQuery.name, _routeQuery.smartId, _routeQuery.amount]);
 
   const billingCycleInfo = useMemo(() => {
     return calculateBillingCycleInfo(billingMonth || currentYearMonth, Number(monthsToRenew) || 1);
@@ -271,9 +333,28 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
     setTimeout(() => {
       setIsSubmitting(false);
       toast.success(`${tManagerUi('collect_fee')}: ₹${total} (${purposeName}) for ${studentName} recorded successfully!`, { id: 'manager-finance-collect-fee-success' });
-      resetForm();
+      const activeLineItems = compositeEnabled
+        ? compositeItems.filter((i) => i.enabled).map((i) => ({ id: i.id, label: i.label, amount: i.amount }))
+        : [{ id: 'primary', label: activeCollectionOption.label, amount: total }];
+      setLastPaidReceipt({
+        receiptNumber,
+        studentName,
+        smartId: selectedStudent?.smartId || '',
+        phone: selectedStudent?.phone || '',
+        totalAmount: total,
+        paymentMode: mode,
+        txnId,
+        billingPeriod: billingCycleInfo.coverageLabel,
+        lineItems: activeLineItems,
+      });
+      setIsPostPaymentModalOpen(true);
     }, 250);
   });
+
+  const handleClosePostPaymentModal = () => {
+    setIsPostPaymentModalOpen(false);
+    resetForm();
+  };
 
   return (
     <>
@@ -501,6 +582,87 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
               )}
             </div>
 
+            {/* 2.5 Composite Billing (Multi-Item Invoice) Card */}
+            <div className="fin-card p-6 space-y-4 border border-border bg-card">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-primary/10 text-primary">
+                    <Layers size={18} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-text-primary">Composite Billing (Multi-Item Receipt)</h3>
+                    <p className="text-xs text-secondary">Bundle seat fees, lockers, and late penalties into one combined receipt.</p>
+                  </div>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    data-testid="manager-finance-composite-toggle"
+                    checked={compositeEnabled}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setCompositeEnabled(checked);
+                      if (checked) {
+                        const sum = compositeItems.filter((i) => i.enabled).reduce((acc, curr) => acc + curr.amount, 0);
+                        setDraftValue('amount', String(sum));
+                      } else {
+                        const cycleAmt = STANDARD_CYCLE_AMOUNTS[monthsToRenew] || 1200;
+                        setDraftValue('amount', String(cycleAmt));
+                      }
+                    }}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+
+              {compositeEnabled && (
+                <div className="space-y-3 pt-3 border-t border-border/70 animate-in fade-in">
+                  <p className="text-xs font-semibold text-text-primary">Select items to include in this invoice:</p>
+                  <div className="space-y-2">
+                    {compositeItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className={`flex items-center justify-between gap-3 p-3 rounded-xl border transition-all ${
+                          item.enabled ? 'border-primary/40 bg-primary/5 shadow-xs' : 'border-border bg-card opacity-60'
+                        }`}
+                      >
+                        <label className="flex items-center gap-2.5 cursor-pointer flex-1 select-none">
+                          <input
+                            type="checkbox"
+                            checked={item.enabled}
+                            onChange={() => toggleCompositeItem(item.id)}
+                            className="rounded text-primary focus:ring-primary w-4 h-4"
+                          />
+                          <span className={`text-xs font-semibold ${item.enabled ? 'text-primary' : 'text-secondary'}`}>
+                            {item.label}
+                          </span>
+                        </label>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-secondary font-semibold">₹</span>
+                          <input
+                            type="number"
+                            min="0"
+                            step="50"
+                            value={item.amount}
+                            disabled={!item.enabled}
+                            onChange={(e) => updateCompositeItemAmount(item.id, Number(e.target.value) || 0)}
+                            className="w-24 text-xs font-bold rounded-lg border border-border bg-surface px-2.5 py-1 text-right focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-surface border border-border text-xs font-bold text-primary">
+                    <span>Combined Total ({compositeItems.filter((i) => i.enabled).length} items):</span>
+                    <span className="text-base font-black text-emerald-600 dark:text-emerald-400">
+                      ₹{compositeItems.filter((i) => i.enabled).reduce((acc, curr) => acc + curr.amount, 0).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* 3. Payment Details Card */}
             <div className="fin-card p-6 space-y-4">
               <div className="flex items-center justify-between">
@@ -709,11 +871,26 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
             isSubmitting={isSubmitting}
             isCollectAvailable={true}
             receiptNumber={receiptNumber}
+            lineItems={compositeEnabled ? compositeItems.filter((i) => i.enabled) : undefined}
             onCollect={handleCollect}
             onCancel={resetForm}
           />
         </div>
       </div>
+
+      <ManagerFinanceCollectFeePostPaymentModal
+        isOpen={isPostPaymentModalOpen}
+        onClose={handleClosePostPaymentModal}
+        receiptNumber={lastPaidReceipt?.receiptNumber || receiptNumber}
+        studentName={lastPaidReceipt?.studentName || ''}
+        smartId={lastPaidReceipt?.smartId || ''}
+        phone={lastPaidReceipt?.phone || ''}
+        totalAmount={lastPaidReceipt?.totalAmount || 0}
+        paymentMode={lastPaidReceipt?.paymentMode || 'cash'}
+        txnId={lastPaidReceipt?.txnId}
+        billingPeriod={lastPaidReceipt?.billingPeriod}
+        lineItems={lastPaidReceipt?.lineItems}
+      />
     </>
   );
 }

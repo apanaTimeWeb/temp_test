@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Eye, RefreshCw, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Eye, RefreshCw, ArrowUpDown, ArrowUp, ArrowDown, TrendingUp } from 'lucide-react';
 import type { MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS } from '@/app/frontend_manager/manager_finance/finance_subscriptions/hooks/ManagerFinanceSubscriptionsDemoRepository';
 import { ManagerFinanceSubscriptionsEmptyState } from '@/app/frontend_manager/manager_finance/finance_subscriptions/components/manager_finance_subscriptions_empty_states/ManagerFinanceSubscriptionsEmptyState';
 
@@ -39,6 +39,7 @@ export interface ManagerFinanceSubscriptionsTableProps {
   onNextPage: () => void;
   onSelectSubscription: (sub: (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0]) => void;
   onRenewSubscription?: (sub: (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0]) => void;
+  onUpgradeSubscription?: (sub: (typeof MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS)[0]) => void;
   formatCurrency: (amount: number) => string;
   formatDate: (date: string) => string;
   displayPlan: (val: string) => string;
@@ -84,6 +85,7 @@ export default function ManagerFinanceSubscriptionsTable({
   onNextPage,
   onSelectSubscription,
   onRenewSubscription,
+  onUpgradeSubscription,
   formatCurrency,
   formatDate,
   displayPlan,
@@ -182,6 +184,17 @@ export default function ManagerFinanceSubscriptionsTable({
                     >
                       <RefreshCw size={11} /> Renew
                     </button>
+                    {onUpgradeSubscription && (
+                      <button
+                        type="button"
+                        data-testid={`upgrade-plan-btn-${s.id}`}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20 cursor-pointer transition-colors shadow-xs"
+                        onClick={() => onUpgradeSubscription(s)}
+                        title={`Pro-rata plan upgrade for ${s.studentName}`}
+                      >
+                        <TrendingUp size={11} /> Upgrade
+                      </button>
+                    )}
                     <button
                       type="button"
                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 cursor-pointer transition-colors shadow-xs"

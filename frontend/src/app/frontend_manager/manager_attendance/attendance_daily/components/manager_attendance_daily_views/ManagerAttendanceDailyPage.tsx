@@ -86,6 +86,19 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
     toast.success(`Absentee warning notice dispatched to ${student.name} (${student.smartId}) for ${student.consecutiveAbsent} consecutive days!`);
   };
 
+  const handleEvictOverstay = (student: Student) => {
+    setStudents((prev) =>
+      prev.map((s) =>
+        s.id === student.id
+          ? { ...s, isOverstay: false, outTime: '15:30' }
+          : s
+      )
+    );
+    toast.success(
+      `Overstay alert dispatched to ${student.name} (${student.seat || 'Assigned Seat'}). Vacate request issued for incoming evening shift student.`
+    );
+  };
+
   const dateLabel = useMemo(() => {
     if (date === todayStr) return 'Today';
     if (date === yesterdayStr) return 'Yesterday';
@@ -264,6 +277,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
             onStatusChange={setStatus}
             onFieldChange={setField}
             onSendAlert={handleSendAlert}
+            onEvictOverstay={handleEvictOverstay}
           />
 
           {/* ── Sticky Save Bar ── */}

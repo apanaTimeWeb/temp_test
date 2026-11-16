@@ -16,6 +16,8 @@ export default async function ManagerFinanceCollectFeePage({ searchParams }: Man
     name: firstValue(params.name),
     phone: firstValue(params.phone),
     smartId: firstValue(params.smartId),
+    amount: firstValue(params.amount),
+    promiseId: firstValue(params.promiseId),
   };
   return <ManagerFinanceCollectFeeMain {...mainProps} />;
 }

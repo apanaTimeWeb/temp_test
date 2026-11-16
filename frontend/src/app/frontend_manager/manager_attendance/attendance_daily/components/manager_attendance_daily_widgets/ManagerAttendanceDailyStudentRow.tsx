@@ -3,25 +3,31 @@
 
 // RESPONSIBILITY: Render the attendance daily student row component within the components feature. It does not own backend persistence or cross-feature business logic.
 import { useTranslations } from 'next-intl';
-import { Bell, CheckCircle, Clock } from 'lucide-react';
+import { Bell, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 import type { ManagerAttendanceDailyStudentRowProps } from '@/app/frontend_manager/manager_attendance/attendance_daily/types/ManagerAttendanceDailyComponentTypes';
 
-
-
-
-
-
 /** Single illustrative attendance row. All changes remain local preview state. */
-export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFieldChange, onSendAlert }: ManagerAttendanceDailyStudentRowProps) {
+export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFieldChange, onSendAlert, onEvictOverstay }: ManagerAttendanceDailyStudentRowProps) {
   const tManagerUi = useTranslations('manager.manager_attendance.ui');
   const isAlert = student.consecutiveAbsent >= 3;
+  const isOverstay = Boolean(student.isOverstay);
 
   return (
-    <div className={`eng-att-row${isAlert ? ' eng-att-row--alert' : ''}`}>
+    <div className={`eng-att-row${isAlert ? ' eng-att-row--alert' : ''}${isOverstay ? ' border-2 border-rose-500/80 bg-rose-500/10 dark:bg-rose-950/25' : ''}`}>
       <div className="eng-att-avatar" aria-hidden="true">{student.initials}</div>
       <div className="eng-att-info">
-        <div className="eng-att-name">{student.name}</div>
-        <div className="eng-att-meta">{student.smartId} · {({ Morning: tManagerUi('morning'), Afternoon: tManagerUi('afternoon'), Evening: tManagerUi('evening') } as Record<string, string>)[student.shift] ?? student.shift} {tManagerUi('shift_dbd79b')}</div>
+        <div className="eng-att-name flex items-center gap-2">
+          <span>{student.name}</span>
+          {isOverstay && (
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-rose-600 text-white animate-pulse">
+              Overstay Alert
+            </span>
+          )}
+        </div>
+        <div className="eng-att-meta">
+          {student.smartId} · {({ Morning: tManagerUi('morning'), Afternoon: tManagerUi('afternoon'), Evening: tManagerUi('evening') } as Record<string, string>)[student.shift] ?? student.shift} {tManagerUi('shift_dbd79b')}
+          {student.seat && ` · ${student.seat}`}
+        </div>
       </div>
       <div className="eng-seg-group" role="group" aria-label={`${tManagerUi('attendance')} — ${student.name}`}>
         {(['present', 'absent', 'late'] as const).map((status) => (
@@ -47,6 +53,26 @@ export function ManagerAttendanceDailyStudentRow({ student, onStatusChange, onFi
           )}
         </div>
       )}
+
+      {isOverstay && (
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-semibold">
+          <AlertTriangle size={14} className="shrink-0 text-rose-500" />
+          <span className="font-bold">
+            Shift Ended at {student.shiftEnd || '14:00 (2:00 PM)'} (+{student.overstayMinutes || 90}m overstay)
+          </span>
+          {onEvictOverstay && (
+            <button
+              type="button"
+              onClick={() => onEvictOverstay(student)}
+              className="ml-auto px-2.5 py-1 text-[11px] font-bold rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow-xs transition-all cursor-pointer whitespace-nowrap"
+              title={`Notify ${student.name} to vacate seat for incoming shift`}
+            >
+              Evict / Vacate Seat
+            </button>
+          )}
+        </div>
+      )}
+
       {isAlert && (
         <div className="eng-att-alert">
           <span className="eng-badge eng-badge--warning">⚠️ {student.consecutiveAbsent} {tManagerUi('days_consecutive')}</span>

@@ -18,6 +18,7 @@ import {
   AlertTriangle,
   Clock,
   ShieldCheck,
+  FileCheck,
 } from 'lucide-react';
 import { createManagerAbsenteeReportAbsenteeColumns } from '@/app/frontend_manager/manager_attendance/attendance_absentee_report/components/manager_attendance_absentee_report_table_parts/ManagerAttendanceAbsenteeReportColumns';
 import ManagerAttendanceAbsenteeTimeHorizonBar, {
@@ -92,6 +93,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
   const [threshold, setThreshold] = useState('3');
   const [shift, setShift] = useState('All');
   const [alertStatusFilter, setAlertStatusFilter] = useState<'all' | 'pending' | 'notified'>('all');
+  const [leaveStatusFilter, setLeaveStatusFilter] = useState<'all' | 'unexcused_risk' | 'on_leave'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const shiftLabels: Record<string, string> = {
@@ -118,14 +120,28 @@ export default function ManagerAttendanceAbsenteeReportPage({
     toast.success(`WhatsApp notice dispatched for ${item.name}`);
   };
 
-  const handleMarkExcused = (smartId: string, reason: string) => {
+  const handleMarkExcused = (smartId: string, reason: string, duration?: string) => {
     setRowsList((prev) =>
-      prev.map((r) => (r.smartId === smartId ? { ...r, excused: true, leaveReason: reason } : r))
+      prev.map((r) =>
+        r.smartId === smartId
+          ? {
+              ...r,
+              excused: true,
+              leaveReason: reason,
+              leaveDuration: duration || '10 Days',
+            }
+          : r
+      )
     );
     if (selectedAbsentee && selectedAbsentee.smartId === smartId) {
-      setSelectedAbsentee({ ...selectedAbsentee, excused: true, leaveReason: reason });
+      setSelectedAbsentee({
+        ...selectedAbsentee,
+        excused: true,
+        leaveReason: reason,
+        leaveDuration: duration || '10 Days',
+      });
     }
-    toast.success(`Absence for ${smartId} marked as Excused Leave (${reason})`);
+    toast.success(`Absence for ${smartId} marked as Excused / On Leave (${reason})`);
   };
 
   const handleRevokeExcused = (smartId: string) => {
@@ -169,18 +185,22 @@ export default function ManagerAttendanceAbsenteeReportPage({
       const matchAlertStatus =
         alertStatusFilter === 'all' ||
         (alertStatusFilter === 'notified' ? r.notified : !r.notified);
+      const matchLeaveStatus =
+        leaveStatusFilter === 'all' ||
+        (leaveStatusFilter === 'unexcused_risk' ? !r.excused : Boolean(r.excused));
       const matchQ =
         !q ||
         r.name.toLowerCase().includes(q) ||
         r.smartId.toLowerCase().includes(q) ||
         (r.parentPhone && r.parentPhone.includes(q)) ||
         (r.parentEmail && r.parentEmail.toLowerCase().includes(q));
-      return matchThr && matchShift && matchAlertStatus && matchQ;
+      return matchThr && matchShift && matchAlertStatus && matchLeaveStatus && matchQ;
     });
-  }, [timeFilteredRows, threshold, shift, alertStatusFilter, searchQuery]);
+  }, [timeFilteredRows, threshold, shift, alertStatusFilter, leaveStatusFilter, searchQuery]);
 
-  const critical = filtered.filter((r) => r.daysAbsent >= 7);
-  const moderate = filtered.filter((r) => r.daysAbsent >= 3 && r.daysAbsent < 7);
+  const critical = filtered.filter((r) => r.daysAbsent >= 7 && !r.excused);
+  const moderate = filtered.filter((r) => r.daysAbsent >= 3 && r.daysAbsent < 7 && !r.excused);
+  const onLeaveStudents = filtered.filter((r) => Boolean(r.excused));
   const notifiedCount = filtered.filter((r) => r.notified).length;
 
   const hasActiveFilters = Boolean(
@@ -189,6 +209,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
       threshold !== '3' ||
       timeHorizon !== 'all' ||
       alertStatusFilter !== 'all' ||
+      leaveStatusFilter !== 'all' ||
       customStartDate !== '' ||
       customEndDate !== ''
   );
@@ -199,6 +220,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
     setThreshold('3');
     setTimeHorizon('all');
     setAlertStatusFilter('all');
+    setLeaveStatusFilter('all');
     setCustomStartDate('');
     setCustomEndDate('');
     toast.info('Absentee filters reset to default.');
@@ -349,7 +371,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
       />
 
       {/* ── Clean Executive KPI Cards (No [All Time] clutter, Non-toggle Display Cards) ── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Total Absentees */}
         <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs cursor-default select-none">
           <div className="flex items-center justify-between">
@@ -365,16 +387,16 @@ export default function ManagerAttendanceAbsenteeReportPage({
               {filtered.length}
             </div>
             <p className="mt-1 text-xs text-secondary">
-              Above {threshold === 'all' ? '0' : threshold} days unexcused absence
+              Above {threshold === 'all' ? '0' : threshold} days absence
             </p>
           </div>
         </div>
 
-        {/* Critical (7+ Days) */}
+        {/* Critical (7+ Days) Unexcused Dropout Risk */}
         <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs cursor-default select-none">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-rose-400 uppercase tracking-wider">
-              {tManagerUi('critical_7_days')}
+              Critical Risk (7+ D)
             </span>
             <div className="w-10 h-10 rounded-xl bg-rose-500/15 text-rose-400 border border-rose-500/30 flex items-center justify-center">
               <AlertTriangle size={20} />
@@ -384,7 +406,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
             <div className="text-2xl font-bold tracking-tight text-rose-400 font-mono">
               {critical.length}
             </div>
-            <p className="mt-1 text-xs text-secondary">Immediate seat re-allocation risk</p>
+            <p className="mt-1 text-xs text-secondary">Unexcused dropout & seat loss risk</p>
           </div>
         </div>
 
@@ -392,7 +414,7 @@ export default function ManagerAttendanceAbsenteeReportPage({
         <div className="rounded-2xl border border-border/80 bg-card p-5 shadow-xs cursor-default select-none">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
-              {tManagerUi('moderate_3_6_days')}
+              Moderate (3-6 D)
             </span>
             <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center">
               <Clock size={20} />
@@ -403,6 +425,24 @@ export default function ManagerAttendanceAbsenteeReportPage({
               {moderate.length}
             </div>
             <p className="mt-1 text-xs text-secondary">Active attendance monitoring</p>
+          </div>
+        </div>
+
+        {/* On Leave / Excused */}
+        <div className="rounded-2xl border border-blue-500/30 bg-blue-500/5 p-5 shadow-xs cursor-default select-none">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
+              On Leave / Excused
+            </span>
+            <div className="w-10 h-10 rounded-xl bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center">
+              <FileCheck size={20} />
+            </div>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-bold tracking-tight text-blue-400 font-mono">
+              {onLeaveStudents.length}
+            </div>
+            <p className="mt-1 text-xs text-secondary">Approved leave (seats protected)</p>
           </div>
         </div>
 
@@ -417,6 +457,13 @@ export default function ManagerAttendanceAbsenteeReportPage({
             </div>
           </div>
           <div className="mt-3">
+            <div className="text-2xl font-bold tracking-tight text-emerald-400 font-mono">
+              {notifiedCount}
+            </div>
+            <p className="mt-1 text-xs text-secondary">Of {filtered.length} total filtered absentees</p>
+          </div>
+        </div>
+      </div>
             <div className="text-2xl font-bold tracking-tight text-emerald-400 font-mono">
               {notifiedCount}
             </div>
@@ -481,6 +528,54 @@ export default function ManagerAttendanceAbsenteeReportPage({
                   key={opt.id}
                   type="button"
                   onClick={() => setAlertStatusFilter(opt.id)}
+                  style={
+                    isActive
+                      ? {
+                          boxShadow: `0 0 16px ${glowColor}`,
+                          backgroundColor: bgActive,
+                          borderColor: bgActive,
+                          color: '#ffffff',
+                        }
+                      : undefined
+                  }
+                  className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                    isActive
+                      ? 'border shadow-sm font-bold'
+                      : 'bg-surface-highlight/70 text-secondary hover:text-primary hover:bg-surface-hover border border-border/80'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Leave / Dropout Risk Status Filter */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 xl:pb-0 scrollbar-none shrink-0">
+            <span className="text-xs font-semibold text-secondary shrink-0 mr-1">Status:</span>
+            {[
+              { id: 'all', label: 'All Absentees' },
+              { id: 'unexcused_risk', label: 'Dropout Risk (Unexcused)' },
+              { id: 'on_leave', label: 'On Leave / Excused' },
+            ].map((opt) => {
+              const isActive = leaveStatusFilter === opt.id;
+              const glowColor =
+                opt.id === 'unexcused_risk'
+                  ? 'rgba(239, 68, 68, 0.45)'
+                  : opt.id === 'on_leave'
+                  ? 'rgba(59, 130, 246, 0.45)'
+                  : 'rgba(99, 102, 241, 0.45)';
+              const bgActive =
+                opt.id === 'unexcused_risk'
+                  ? '#dc2626'
+                  : opt.id === 'on_leave'
+                  ? '#2563eb'
+                  : '#6366f1';
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => setLeaveStatusFilter(opt.id as any)}
                   style={
                     isActive
                       ? {

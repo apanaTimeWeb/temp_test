@@ -26,6 +26,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({
   balanceRemaining,
   paymentDate,
   txnId,
+  lineItems,
   onCollect,
   onCancel,
 }: ManagerFinanceCollectFeeReceiptPreviewProps) {
@@ -105,6 +106,17 @@ export function ManagerFinanceCollectFeeReceiptPreview({
                 </div>
               ))}
             </div>
+            {lineItems && lineItems.length > 0 && (
+              <div className="space-y-1 py-2 my-2 border-y border-dashed border-border/80 text-[11px]">
+                <p className="font-bold text-secondary uppercase tracking-wider text-[10px]">Itemized Items</p>
+                {lineItems.map((item) => (
+                  <div key={item.id} className="flex justify-between items-center text-secondary">
+                    <span>{item.label}</span>
+                    <span className="font-semibold text-text-primary">₹{item.amount}</span>
+                  </div>
+                ))}
+              </div>
+            )}
             <div className="fin-receipt-dashed-line">
               <p className="fin-receipt-total-label">{tManagerUi('total_amount')}</p>
               <p className="fin-receipt-total-amount">{total > 0 ? formatCurrency(toMinorUnits(total)) : formatCurrency(0)}</p>

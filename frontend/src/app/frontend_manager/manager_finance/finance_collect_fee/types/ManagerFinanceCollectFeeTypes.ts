@@ -35,6 +35,7 @@ export interface ManagerFinanceCollectFeeReceiptPreviewProps {
   balanceRemaining?: number;
   paymentDate?: string;
   txnId?: string;
+  lineItems?: { id: string; label: string; amount: number }[];
   onCollect: () => void;
   onCancel: () => void;
 }

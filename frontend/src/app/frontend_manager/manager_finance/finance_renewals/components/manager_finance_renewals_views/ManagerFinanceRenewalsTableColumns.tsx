@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { RotateCcw, Send } from 'lucide-react';
+import { RotateCcw, Send, UserX, Clock } from 'lucide-react';
 import type { NativeCellParams } from '@/app/frontend_manager/manager_finance/finance_renewals/components/manager_finance_renewals_table_parts/ManagerFinanceRenewalsNativeTable';
 
 export interface BuildRenewalColumnsParams {
@@ -12,6 +12,7 @@ export interface BuildRenewalColumnsParams {
   formatCurrency: (val: number) => string;
   onRenewStudent: (id: number | string, studentName: string) => void;
   onRemindStudent: (studentName: string) => void;
+  onReleaseSeat?: (id: number | string, studentName: string) => void;
 }
 
 export function buildRenewalColumns({
@@ -22,6 +23,7 @@ export function buildRenewalColumns({
   formatCurrency,
   onRenewStudent,
   onRemindStudent,
+  onReleaseSeat,
 }: BuildRenewalColumnsParams) {
   return [
     { field: 'studentName', headerName: tManagerUi('student'), flex: 1, minWidth: 150, cellRenderer: (p: NativeCellParams) => <span className="fin-cell-name font-medium">{p.value}</span> },
@@ -32,12 +34,33 @@ export function buildRenewalColumns({
     {
       field: 'daysLeft',
       headerName: tManagerUi('days_left'),
-      width: 120,
+      width: 140,
       cellRenderer: (p: NativeCellParams) => {
         const daysLeft = typeof p.value === 'number' ? p.value : 0;
+        const row = p.data as { isSeatReleased?: boolean };
+        if (row?.isSeatReleased) {
+          return (
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-secondary">
+              ✓ Seat Vacated
+            </span>
+          );
+        }
+        if (daysLeft < 0) {
+          const isOverduePastGrace = daysLeft < -3;
+          return (
+            <div className="flex flex-col text-left">
+              <span className="fin-text-danger font-semibold">
+                {tManagerUi('days_ago_count', { count: Math.abs(daysLeft) })}
+              </span>
+              <span className={`text-[10px] font-bold ${isOverduePastGrace ? 'text-rose-600 dark:text-rose-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                {isOverduePastGrace ? 'Release Timer: Overdue' : `Grace: ${3 + daysLeft}d left`}
+              </span>
+            </div>
+          );
+        }
         return (
-          <span className={daysLeft < 0 ? 'fin-text-danger font-semibold' : daysLeft <= 7 ? 'fin-text-warning font-semibold' : 'fin-text-body'}>
-            {daysLeft < 0 ? tManagerUi('days_ago_count', { count: Math.abs(daysLeft) }) : tManagerUi('days_count', { count: daysLeft })}
+          <span className={daysLeft <= 7 ? 'fin-text-warning font-semibold' : 'fin-text-body'}>
+            {tManagerUi('days_count', { count: daysLeft })}
           </span>
         );
       },
@@ -55,12 +78,13 @@ export function buildRenewalColumns({
     },
     {
       headerName: tManagerUi('actions'),
-      width: 200,
+      width: 240,
       sortable: false,
       cellRenderer: (p: NativeCellParams) => {
-        const row = p.data as { id: number | string; studentName: string };
+        const row = p.data as { id: number | string; studentName: string; daysLeft: number; isSeatReleased?: boolean };
+        const isEligibleForRelease = row.daysLeft < -3 && !row.isSeatReleased;
         return (
-          <div className="flex items-center gap-2 h-full">
+          <div className="flex items-center gap-1.5 h-full flex-wrap">
             <button
               type="button"
               onClick={() => onRenewStudent(row.id, row.studentName)}
@@ -77,6 +101,17 @@ export function buildRenewalColumns({
             >
               <Send size={12} className="text-amber-500" /> Remind
             </button>
+            {isEligibleForRelease && onReleaseSeat && (
+              <button
+                type="button"
+                data-testid={`release-seat-btn-${row.id}`}
+                onClick={() => onReleaseSeat(row.id, row.studentName)}
+                className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 border border-rose-500/20 transition-colors cursor-pointer"
+                title={`Release seat for ${row.studentName} due to grace period expiration`}
+              >
+                <UserX size={12} /> Release Seat
+              </button>
+            )}
           </div>
         );
       },

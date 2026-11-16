@@ -9,5 +9,7 @@ export function ManagerFinanceCollectFeeMain(props: ManagerFinanceCollectFeeMain
     name={props.name}
     phone={props.phone}
     smartId={props.smartId}
+    amount={props.amount}
+    promiseId={props.promiseId}
   />;
 }

@@ -11,6 +11,7 @@ import type { ManagerFinanceSubscriptionsRouteQueryProps } from '@/app/frontend_
 import ManagerFinanceSubscriptionsTable from './ManagerFinanceSubscriptionsTable';
 import ManagerFinanceSubscriptionsDetailModal from './ManagerFinanceSubscriptionsDetailModal';
 import ManagerFinanceSubscriptionsRenewModal from './ManagerFinanceSubscriptionsRenewModal';
+import ManagerFinanceSubscriptionsUpgradeModal from './ManagerFinanceSubscriptionsUpgradeModal';
 
 const URL_FILTERS = {
   status: { defaultValue: 'all', allowedValues: ['all', 'active', 'expired', 'suspended', 'cancelled'] },
@@ -32,6 +33,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
   const [rows, setRows] = useState(MANAGER_FINANCE_SAMPLE_SUBSCRIPTIONS);
   const [selectedSub, setSelectedSub] = useState<(typeof rows)[0] | null>(null);
   const [renewingSub, setRenewingSub] = useState<(typeof rows)[0] | null>(null);
+  const [upgradingSub, setUpgradingSub] = useState<(typeof rows)[0] | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -42,6 +44,23 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
   const handleQuickRenew = () => {
     const urgent = [...rows].sort((a, b) => a.daysLeft - b.daysLeft)[0] || rows[0];
     if (urgent) setRenewingSub(urgent);
+  };
+
+  const handleConfirmUpgrade = (id: number, newPlanName: string, newShift: string, netPayable: number) => {
+    setRows((prev) =>
+      prev.map((r) =>
+        r.id === id
+          ? {
+              ...r,
+              plan: newPlanName,
+              shift: newShift,
+              total: r.total + netPayable * 100,
+              paid: r.paid + netPayable * 100,
+            }
+          : r
+      )
+    );
+    setActionFeedback(`Subscription upgraded to ${newShift} (${newPlanName}) successfully.`);
   };
 
   const handleExportCsv = () => {
@@ -432,6 +451,7 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         onNextPage={() => setPage((c) => Math.min(pageCount - 1, c + 1))}
         onSelectSubscription={(s) => setSelectedSub(s)}
         onRenewSubscription={(s) => setRenewingSub(s)}
+        onUpgradeSubscription={(s) => setUpgradingSub(s)}
         sortField={sortField} sortDirection={sortDirection} onToggleSort={toggleSort}
         formatCurrency={formatCurrency} formatDate={formatDate} displayPlan={displayPlan}
         labels={{
@@ -475,6 +495,13 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
         }}
         formatDate={formatDate}
         formatCurrency={formatCurrency}
+      />
+
+      <ManagerFinanceSubscriptionsUpgradeModal
+        isOpen={Boolean(upgradingSub)}
+        subscription={upgradingSub}
+        onClose={() => setUpgradingSub(null)}
+        onConfirmUpgrade={handleConfirmUpgrade}
       />
     </div>
   );

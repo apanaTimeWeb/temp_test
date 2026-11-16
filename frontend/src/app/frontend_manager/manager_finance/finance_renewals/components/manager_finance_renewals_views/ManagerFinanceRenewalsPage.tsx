@@ -30,6 +30,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   const [renewalsList, setRenewalsList] = useState(MANAGER_FINANCE_SAMPLE_RENEWALS);
   const [feedbackMsg, setFeedbackMsg] = useState<string | null>(null);
   const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
+  const [bulkWhatsAppScope, setBulkWhatsAppScope] = useState<typeof renewalsList>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [shiftFilter, setShiftFilter] = useState('all');
   const [planFilter, setPlanFilter] = useState('all');
@@ -50,6 +51,10 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
 
   const expiringCritical = useMemo(() => horizonFiltered.filter((r) => r.daysLeft <= 3 && r.daysLeft >= 0), [horizonFiltered]);
   const expiredCount = useMemo(() => horizonFiltered.filter((r) => r.daysLeft < 0).length, [horizonFiltered]);
+  const pastGraceList = useMemo(
+    () => renewalsList.filter((r) => r.daysLeft < -3 && !(r as { isSeatReleased?: boolean }).isSeatReleased),
+    [renewalsList]
+  );
 
   const visible = horizonFiltered.filter((r) => {
     if (filter === 'expired') return r.daysLeft < 0;
@@ -93,7 +98,42 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
   const handlePrint = () => window.print();
 
   const handleWhatsAppAll = () => {
+    setBulkWhatsAppScope(searchedRenewals);
     setIsBulkWhatsAppOpen(true);
+  };
+
+  const handleSend3DayReminders = () => {
+    const critical = renewalsList.filter((r) => r.daysLeft <= 3);
+    setBulkWhatsAppScope(critical.length > 0 ? critical : renewalsList);
+    setIsBulkWhatsAppOpen(true);
+  };
+
+  const handleAutoReleaseSeats = async () => {
+    const count = pastGraceList.length;
+    if (count === 0) return;
+    const ok = await confirm(
+      `Release ${count} seats overdue by > 3 days? These seats will become vacant immediately for new admissions.`,
+      tManagerUi('cancel') || 'Cancel',
+      `Release ${count} Seats`
+    );
+    if (!ok) return;
+    setRenewalsList((prev) =>
+      prev.map((item) => (item.daysLeft < -3 ? { ...item, isSeatReleased: true } : item))
+    );
+    setFeedbackMsg(`Successfully released ${count} seats past 3-day grace period.`);
+  };
+
+  const handleReleaseSingleSeat = async (id: number | string, studentName: string) => {
+    const ok = await confirm(
+      `Release seat for ${studentName} (overdue > 3 days)? This will mark their seat as vacant.`,
+      tManagerUi('cancel') || 'Cancel',
+      'Release Seat'
+    );
+    if (!ok) return;
+    setRenewalsList((prev) =>
+      prev.map((item) => (String(item.id) === String(id) ? { ...item, isSeatReleased: true } : item))
+    );
+    setFeedbackMsg(`Seat for ${studentName} successfully vacated and released.`);
   };
 
   const handleEmailAll = () => {
@@ -171,6 +211,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
         formatCurrency,
         onRenewStudent: handleRenewStudent,
         onRemindStudent: handleRemindStudent,
+        onReleaseSeat: handleReleaseSingleSeat,
       }),
     [tManagerUi, formatDate, formatCurrency]
   );
@@ -222,7 +263,10 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
       <ManagerFinanceRenewalsAlertBanner
         expiringCount={expiringCritical.length}
         expiredCount={expiredCount}
+        pastGraceCount={pastGraceList.length}
         onSendDueReminders={handleWhatsAppAll}
+        onSend3DayReminders={handleSend3DayReminders}
+        onAutoReleaseSeats={handleAutoReleaseSeats}
       />
 
       {feedbackMsg && (
@@ -273,7 +317,7 @@ export default function ManagerFinanceRenewalsPage(_routeQuery: ManagerFinanceRe
       <ManagerFinanceRenewalsBulkWhatsAppModal
         isOpen={isBulkWhatsAppOpen}
         onClose={() => setIsBulkWhatsAppOpen(false)}
-        renewals={searchedRenewals}
+        renewals={bulkWhatsAppScope.length > 0 ? bulkWhatsAppScope : searchedRenewals}
         onComplete={() => setIsBulkWhatsAppOpen(false)}
       />
     </div>

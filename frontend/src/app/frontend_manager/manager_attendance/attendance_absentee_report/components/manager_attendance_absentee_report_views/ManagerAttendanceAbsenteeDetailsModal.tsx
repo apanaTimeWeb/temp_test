@@ -20,11 +20,12 @@ export interface ManagerAttendanceAbsenteeDetailsModalProps {
   absentee: ManagerAttendanceAbsenteeReportSampleAbsentee | null;
   onClose: () => void;
   onSendWhatsApp: (item: ManagerAttendanceAbsenteeReportSampleAbsentee) => void;
-  onMarkExcused?: (smartId: string, reason: string) => void;
+  onMarkExcused?: (smartId: string, reason: string, duration?: string) => void;
   onRevokeExcused?: (smartId: string) => void;
 }
 
 const LEAVE_PRESETS = [
+  'Visiting Village / Hometown (10 Days)',
   'Medical Leave / Health Illness',
   'College / Competitive Exam',
   'Family Emergency',
@@ -41,6 +42,7 @@ export function ManagerAttendanceAbsenteeDetailsModal({
   onRevokeExcused,
 }: ManagerAttendanceAbsenteeDetailsModalProps) {
   const [selectedReason, setSelectedReason] = useState(LEAVE_PRESETS[0]);
+  const [leaveDays, setLeaveDays] = useState('10');
   const [isAddingLeave, setIsAddingLeave] = useState(false);
 
   useEffect(() => {
@@ -249,10 +251,26 @@ export function ManagerAttendanceAbsenteeDetailsModal({
                   </option>
                 ))}
               </select>
+
+              <div className="flex items-center gap-2">
+                <label htmlFor="leave-days-input" className="text-[11px] text-secondary whitespace-nowrap">
+                  Leave Duration:
+                </label>
+                <input
+                  id="leave-days-input"
+                  type="text"
+                  placeholder="e.g. 10 Days"
+                  value={leaveDays}
+                  onChange={(e) => setLeaveDays(e.target.value)}
+                  className="w-24 text-xs px-2 py-1 rounded-lg bg-card border border-border text-primary outline-none focus:border-primary"
+                />
+              </div>
+
               <button
                 type="button"
                 onClick={() => {
-                  onMarkExcused?.(absentee.smartId, selectedReason);
+                  const finalReason = `${selectedReason}${leaveDays ? ` (${leaveDays.includes('Day') ? leaveDays : `${leaveDays} Days`})` : ''}`;
+                  onMarkExcused?.(absentee.smartId, finalReason, leaveDays);
                   setIsAddingLeave(false);
                 }}
                 className="w-full text-xs py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-colors cursor-pointer"
