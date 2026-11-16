@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import { X, MessageSquarePlus, AlertCircle, Armchair } from 'lucide-react';
+import { X, MessageSquarePlus, AlertCircle, Armchair, MapPin } from 'lucide-react';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
 import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
@@ -24,6 +24,15 @@ const CATEGORIES = [
   'Other Operational Issue',
 ] as const;
 
+const QUICK_LOCATION_TAGS = [
+  'Seat S-14 (Hall A)',
+  'Discussion Room 2',
+  'Silent Zone (Row 3)',
+  'AC Duct Area (Desk S-08)',
+  'Cabin B',
+  'Reading Cubicle 5',
+];
+
 export default function ManagerCommunicationComplaintsAddModal({
   isOpen,
   onClose,
@@ -32,6 +41,8 @@ export default function ManagerCommunicationComplaintsAddModal({
   const [selectedStudentId, setSelectedStudentId] = useState('');
   const [studentName, setStudentName] = useState('');
   const [seatNumber, setSeatNumber] = useState('');
+  const [seatTag, setSeatTag] = useState('');
+  const [studentPhone, setStudentPhone] = useState('9876543210');
   const [category, setCategory] = useState<string>(CATEGORIES[0]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -51,7 +62,9 @@ export default function ManagerCommunicationComplaintsAddModal({
     const found = MANAGER_MEMBERS_DEMO_RECORDS.find((s) => s.id === studentId);
     if (found) {
       setStudentName(`${found.name} (${found.id})`);
-      setSeatNumber(found.seat || 'S-01');
+      setSeatNumber(found.seat || 'S-14');
+      setSeatTag(found.seat ? `Seat ${found.seat} (Hall A)` : 'Seat S-14 (Hall A)');
+      if (found.phone) setStudentPhone(found.phone);
     }
   };
 
@@ -64,10 +77,16 @@ export default function ManagerCommunicationComplaintsAddModal({
       return;
     }
 
+    const assignedTag =
+      seatTag.trim() || (seatNumber.trim() ? `Seat ${seatNumber.trim()} (Hall A)` : 'General Study Area');
+
     const complaint: ManagerCommunicationComplaintsComplaint = {
       id: `CMP-${Date.now().toString().slice(-4)}`,
       title: `${category}: ${title.trim()}${priority === 'Urgent' ? ' [URGENT]' : ''}`,
-      student: seatNumber.trim() ? `${studentName.trim()} (Seat #${seatNumber.trim()})` : studentName.trim(),
+      student: studentName.trim(),
+      phone: studentPhone,
+      seatTag: assignedTag,
+      priority: priority,
       description: description.trim(),
       status: 'Open',
       date: new Date().toISOString().slice(0, 10),
@@ -77,7 +96,7 @@ export default function ManagerCommunicationComplaintsAddModal({
     };
 
     onSubmit(complaint);
-    toast.success(`Complaint registered for ${studentName}`);
+    toast.success(`Complaint registered for ${studentName} at ${assignedTag}`);
     onClose();
   };
 
@@ -134,14 +153,50 @@ export default function ManagerCommunicationComplaintsAddModal({
               />
             </div>
             <div>
-              <label className="font-semibold text-primary block mb-1">Assigned Seat</label>
+              <label className="font-semibold text-primary block mb-1">Student WhatsApp Phone</label>
               <input
                 type="text"
-                className="mgr-input text-xs"
-                placeholder="e.g. S-14"
-                value={seatNumber}
-                onChange={(e) => setSeatNumber(e.target.value)}
+                className="mgr-input text-xs font-mono"
+                placeholder="e.g. 9876543210"
+                value={studentPhone}
+                onChange={(e) => setStudentPhone(e.target.value)}
               />
+            </div>
+          </div>
+
+          {/* Seat / Hall Tagging Section */}
+          <div className="p-3 rounded-xl bg-amber-500/5 border border-amber-500/20 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="font-bold text-amber-300 flex items-center gap-1.5">
+                <Armchair size={13} className="text-amber-400" />
+                <span>Seat / Hall / Cabin Location Tag *</span>
+              </label>
+              <span className="text-[10px] text-amber-200/80">e.g. Seat S-14 (Hall A)</span>
+            </div>
+            <input
+              type="text"
+              required
+              className="mgr-input text-xs font-semibold border-amber-500/30 focus:border-amber-400"
+              placeholder="e.g. Seat S-14 (Hall A) or Discussion Room"
+              value={seatTag}
+              onChange={(e) => setSeatTag(e.target.value)}
+            />
+            <div className="flex flex-wrap gap-1.5 pt-0.5">
+              <span className="text-[10px] text-secondary self-center mr-1">Quick Tag:</span>
+              {QUICK_LOCATION_TAGS.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => setSeatTag(tag)}
+                  className={`text-[10px] px-2 py-0.5 rounded-md border font-mono transition-colors cursor-pointer ${
+                    seatTag === tag
+                      ? 'bg-amber-500/25 text-amber-200 border-amber-500/50 font-bold'
+                      : 'bg-card text-secondary border-border hover:border-amber-500/30 hover:text-primary'
+                  }`}
+                >
+                  + {tag}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -223,7 +278,7 @@ export default function ManagerCommunicationComplaintsAddModal({
               type="text"
               required
               className="mgr-input text-xs"
-              placeholder="e.g. Chair armrest broken at Desk #14"
+              placeholder="e.g. Water leaking from AC unit onto desk"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -245,13 +300,13 @@ export default function ManagerCommunicationComplaintsAddModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-1.5 rounded-lg border border-border text-secondary hover:text-primary transition-colors"
+              className="px-3 py-1.5 rounded-lg border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="mgr-btn-primary mgr-btn-sm text-xs font-bold"
+              className="mgr-btn-primary mgr-btn-sm text-xs font-bold cursor-pointer"
             >
               Submit Ticket
             </button>

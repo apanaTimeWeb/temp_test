@@ -2,7 +2,16 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Eye, RefreshCw, CheckCircle, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
+import {
+  Eye,
+  RefreshCw,
+  CheckCircle,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  MessageSquare,
+  Armchair,
+} from 'lucide-react';
 import type {
   ManagerCommunicationComplaintsComplaint,
   ManagerCommunicationComplaintsComplaintStatus,
@@ -29,6 +38,7 @@ interface ManagerCommunicationComplaintsTableProps {
   sortDirection: 'asc' | 'desc';
   toggleSort: (field: ComplaintSortField) => void;
   onStatusChange?: (id: string, newStatus: ManagerCommunicationComplaintsComplaintStatus) => void;
+  onResolveClick?: (complaint: ManagerCommunicationComplaintsComplaint) => void;
 }
 
 export function ManagerCommunicationComplaintsTable({
@@ -50,6 +60,7 @@ export function ManagerCommunicationComplaintsTable({
   sortDirection,
   toggleSort,
   onStatusChange,
+  onResolveClick,
 }: ManagerCommunicationComplaintsTableProps) {
   const tManagerUi = useTranslations('manager.manager_complaints.ui');
 
@@ -64,7 +75,7 @@ export function ManagerCommunicationComplaintsTable({
         <button
           type="button"
           onClick={() => toggleSort(field)}
-          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-secondary hover:text-primary focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
           aria-label={`${label}, sort ${
             isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'
           }`}
@@ -116,14 +127,43 @@ export function ManagerCommunicationComplaintsTable({
             const expanded = expandedDesc.includes(complaint.id);
             const long = complaint.description.length > 60;
             const rowNumber = effectivePage * pageSize + index + 1;
+            const locationTag = complaint.seatTag || 'General Area';
+
             return (
               <tr
                 key={complaint.id}
                 className="border-b border-border last:border-0 hover:bg-surface-hover even:bg-surface-zebra h-12"
               >
                 <td className="mc-td-mono px-3 py-3 align-middle">{rowNumber}</td>
-                <td className="mc-td-bold px-3 py-3 align-middle">{complaint.title}</td>
-                <td className="px-3 py-3 align-middle">{complaint.student ?? '—'}</td>
+                {/* Title & Seat Tag */}
+                <td className="mc-td-bold px-3 py-3 align-middle">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span>{complaint.title}</span>
+                      {complaint.priority === 'Urgent' && (
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-sm bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                          URGENT
+                        </span>
+                      )}
+                    </div>
+                    {/* Explicit Seat / Location Badge */}
+                    <div>
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/25 font-mono text-[10px] font-bold">
+                        <Armchair size={10} className="text-amber-400 shrink-0" />
+                        <span>{locationTag}</span>
+                      </span>
+                    </div>
+                  </div>
+                </td>
+                {/* Student Info */}
+                <td className="px-3 py-3 align-middle">
+                  <div className="space-y-0.5">
+                    <span className="font-semibold block text-primary">{complaint.student ?? 'Anonymous'}</span>
+                    {complaint.phone && (
+                      <span className="text-[10px] text-secondary font-mono block">+91 {complaint.phone}</span>
+                    )}
+                  </div>
+                </td>
                 <td className="px-3 py-3 align-middle">
                   <span>
                     {long && !expanded ? `${complaint.description.slice(0, 60)}…` : complaint.description}
@@ -132,7 +172,7 @@ export function ManagerCommunicationComplaintsTable({
                     <button
                       type="button"
                       onClick={() => toggleDesc(complaint.id)}
-                      className="mc-link-btn ml-1"
+                      className="mc-link-btn ml-1 cursor-pointer"
                     >
                       {expanded ? tManagerUi('less') : tManagerUi('more')}
                     </button>
@@ -171,14 +211,19 @@ export function ManagerCommunicationComplaintsTable({
                       </button>
                     )}
 
-                    {/* Mark Resolved */}
+                    {/* Mark Resolved -> Triggers Resolution WhatsApp Modal */}
                     {complaint.status !== 'Resolved' && (
                       <button
                         type="button"
-                        onClick={onStatusChange ? () => onStatusChange(complaint.id, 'Resolved') : undefined}
-                        disabled={!onStatusChange}
+                        onClick={
+                          onResolveClick
+                            ? () => onResolveClick(complaint)
+                            : onStatusChange
+                            ? () => onStatusChange(complaint.id, 'Resolved')
+                            : undefined
+                        }
                         className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer"
-                        title="Mark as Resolved"
+                        title="Resolve & Send WhatsApp"
                         aria-label={`Mark #${complaint.id} resolved`}
                       >
                         <CheckCircle size={13} />
@@ -194,14 +239,15 @@ export function ManagerCommunicationComplaintsTable({
                         let cleanPhone = (complaint.phone || '9876543210').replace(/\D/g, '');
                         if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
                         const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+                        const resolutionText = complaint.resolvedNote ? `\nResolution: ${complaint.resolvedNote}` : '';
                         const text = encodeURIComponent(
-                          `Hello ${studentName},\nRegarding your query #${complaint.id} ("${complaint.title}") at Central Library:\nCurrent status is: ${complaint.status}.\n— Central Library Team`
+                          `Hello ${studentName},\nRegarding your query #${complaint.id} ("${complaint.title}") at [${locationTag}]:\nCurrent status is: ${complaint.status}.${resolutionText}\n— Central Library Team`
                         );
                         window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank', 'noopener,noreferrer');
                       }}
                       className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors cursor-pointer"
-                      title="WhatsApp Student"
-                      aria-label={`WhatsApp student for complaint #${complaint.id}`}
+                      title="Open WhatsApp chat with student"
+                      aria-label="WhatsApp student"
                     >
                       <MessageSquare size={13} />
                     </button>
@@ -213,58 +259,50 @@ export function ManagerCommunicationComplaintsTable({
         </tbody>
       </table>
 
-      {totalRows > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-secondary">
-          <span>
-            Showing {startItem}–{endItem} of {totalRows} results
-          </span>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <label
-                htmlFor="rows-per-page-communication-complaints"
-                className="text-xs text-secondary whitespace-nowrap"
-              >
-                Rows per page:
-              </label>
-              <select
-                id="rows-per-page-communication-complaints"
-                value={pageSize}
-                onChange={(e) => {
-                  setPageSize(Number(e.target.value));
-                  setPage(0);
-                }}
-                className="rounded border border-border bg-surface px-2 py-1 text-xs text-primary"
-              >
-                <option value={10}>10</option>
-                <option value={25}>25</option>
-                <option value={50}>50</option>
-              </select>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className="mgr-btn-ghost mgr-btn-sm"
-                disabled={effectivePage <= 0}
-                onClick={() => setPage((current) => Math.max(0, current - 1))}
-              >
-                Previous
-              </button>
-              <span className="text-xs text-secondary px-1">
-                Page {effectivePage + 1} of {pageCount}
-              </span>
-              <button
-                type="button"
-                className="mgr-btn-ghost mgr-btn-sm"
-                disabled={effectivePage >= pageCount - 1}
-                onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
-              >
-                Next
-              </button>
-            </div>
+      {/* Pagination Footer */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-3 py-3 border-t border-border text-xs text-secondary">
+        <div>
+          Showing {totalRows === 0 ? 0 : startItem}–{endItem} of {totalRows} complaints
+        </div>
+        <div className="flex items-center gap-2">
+          <span>Rows per page:</span>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+              setPage(0);
+            }}
+            className="mgr-select text-xs py-1 px-2"
+          >
+            {[5, 10, 20, 50].map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+          <div className="flex items-center gap-1 ml-2">
+            <button
+              type="button"
+              disabled={effectivePage <= 0}
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              className="px-2 py-1 rounded border border-border disabled:opacity-40 hover:bg-surface-hover cursor-pointer"
+            >
+              Previous
+            </button>
+            <span className="px-2 font-mono">
+              {effectivePage + 1} / {Math.max(1, pageCount)}
+            </span>
+            <button
+              type="button"
+              disabled={effectivePage + 1 >= pageCount}
+              onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+              className="px-2 py-1 rounded border border-border disabled:opacity-40 hover:bg-surface-hover cursor-pointer"
+            >
+              Next
+            </button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
-

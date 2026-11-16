@@ -19,8 +19,10 @@ import {
   Megaphone,
   CreditCard,
   CalendarClock,
+  Printer,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { ManagerCommunicationNotificationCenterFlyerModal } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_modals/ManagerCommunicationNotificationCenterFlyerModal';
 import {
   managerCommunicationNotificationDraftSchema,
   type ManagerCommunicationNotificationCenterNotificationDraft,
@@ -31,6 +33,7 @@ import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_mem
 export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
   const tManagerUi = useTranslations('manager.manager_notification_center.ui');
   const [draftFeedback, setDraftFeedback] = useState<string | null>(null);
+  const [isFlyerOpen, setIsFlyerOpen] = useState(false);
 
   const {
     register,
@@ -424,16 +427,27 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
           {notificationFieldError('message')}
         </div>
 
-        {/* Action Buttons: Reset & Submit */}
+        {/* Action Buttons: Reset, Convert to Flyer, & Submit */}
         <div className="pt-3 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={handleClearForm}
-            className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold h-11 px-5 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-all cursor-pointer w-full sm:w-auto"
-          >
-            <RotateCcw size={14} />
-            <span>Clear Form</span>
-          </button>
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={handleClearForm}
+              className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold h-11 px-4 rounded-xl border border-border bg-card hover:bg-surface-hover text-secondary hover:text-primary transition-all cursor-pointer flex-1 sm:flex-initial"
+            >
+              <RotateCcw size={14} />
+              <span>Clear</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsFlyerOpen(true)}
+              className="mgr-btn-outline inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold h-11 px-4 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 transition-all cursor-pointer flex-1 sm:flex-initial"
+              title="Convert this draft into an official printable A4 noticeboard flyer"
+            >
+              <Printer size={14} className="text-amber-400" />
+              <span>Print as A4 Flyer</span>
+            </button>
+          </div>
 
           <button
             type="submit"
@@ -444,6 +458,13 @@ export function ManagerCommunicationNotificationCenterNotificationDraftForm() {
           </button>
         </div>
       </form>
+
+      {/* A4 Noticeboard Flyer Modal */}
+      <ManagerCommunicationNotificationCenterFlyerModal
+        isOpen={isFlyerOpen}
+        onClose={() => setIsFlyerOpen(false)}
+        customDraftBody={messageValue}
+      />
     </div>
   );
 }

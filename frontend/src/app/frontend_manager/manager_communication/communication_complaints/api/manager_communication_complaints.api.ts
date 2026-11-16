@@ -29,12 +29,15 @@ export async function fetchManagerCommunicationComplaints(): Promise<ManagerComm
   return raw.map((item) => ({
     id: item.id,
     title: item.subject,
-    student: null,
+    student: item.student ?? null,
+    phone: item.phone ?? null,
+    seatTag: item.seatTag ?? null,
+    priority: item.priority ?? 'Normal',
     description: item.description,
     status: item.status === 'open' ? 'Open' : item.status === 'resolved' ? 'Resolved' : 'In-Progress',
     date: toValidatedCalendarDate(item.createdAt),
-    resolvedBy: null,
-    resolvedDate: null,
-    resolvedNote: null,
+    resolvedBy: item.status === 'resolved' ? 'Facility Manager' : null,
+    resolvedDate: item.status === 'resolved' ? toValidatedCalendarDate(item.createdAt) : null,
+    resolvedNote: item.status === 'resolved' ? 'Issue inspected and resolved by library team.' : null,
   }));
 }

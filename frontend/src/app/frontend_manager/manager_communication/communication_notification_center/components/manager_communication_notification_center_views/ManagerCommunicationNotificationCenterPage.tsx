@@ -3,10 +3,11 @@
 import type { ManagerCommunicationNotificationCenterMainProps } from '@/app/frontend_manager/manager_communication/communication_notification_center/types/ManagerCommunicationNotificationCenterMainTypes';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { Bell, Send, History } from 'lucide-react';
+import { Bell, Send, History, Printer, FileText } from 'lucide-react';
 import { ManagerCommunicationNotificationCenterNotificationDraftForm } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_forms/ManagerCommunicationNotificationCenterNotificationDraftForm';
 import { ManagerCommunicationNotificationCenterNotificationHistorySection } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_sections/ManagerCommunicationNotificationCenterNotificationHistorySection';
 import { ManagerCommunicationNotificationCenterMyNotificationsSection } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_sections/ManagerCommunicationNotificationCenterMyNotificationsSection';
+import { ManagerCommunicationNotificationCenterFlyerModal } from '@/app/frontend_manager/manager_communication/communication_notification_center/components/manager_communication_notification_center_modals/ManagerCommunicationNotificationCenterFlyerModal';
 
 export default function ManagerCommunicationNotificationCenterPage({
   view,
@@ -14,6 +15,7 @@ export default function ManagerCommunicationNotificationCenterPage({
 }: ManagerCommunicationNotificationCenterMainProps) {
   const tManagerUi = useTranslations('manager.manager_notification_center.ui');
   const [activeTab, setActiveTab] = useState('My Notifications');
+  const [isFlyerModalOpen, setIsFlyerModalOpen] = useState(false);
 
   const TABS = [
     {
@@ -75,6 +77,19 @@ export default function ManagerCommunicationNotificationCenterPage({
           <p className="text-xs sm:text-sm text-secondary mt-1">
             {tManagerUi('review_sample_notification_history_and_draft_a_message_p_d184ad')}
           </p>
+        </div>
+
+        {/* Quick A4 Noticeboard Flyer Generator Button */}
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={() => setIsFlyerModalOpen(true)}
+            className="mgr-btn-primary inline-flex items-center gap-2 text-xs sm:text-sm font-bold py-2.5 px-4 rounded-xl shadow-sm cursor-pointer"
+            title="Open printable A4 noticeboard flyer generator"
+          >
+            <Printer size={15} />
+            <span>Print Noticeboard Flyer (A4 नोटिस)</span>
+          </button>
         </div>
       </div>
 
@@ -148,6 +163,12 @@ export default function ManagerCommunicationNotificationCenterPage({
           <ManagerCommunicationNotificationCenterNotificationHistorySection />
         )}
       </div>
+
+      {/* Printable A4 Noticeboard Flyer Modal */}
+      <ManagerCommunicationNotificationCenterFlyerModal
+        isOpen={isFlyerModalOpen}
+        onClose={() => setIsFlyerModalOpen(false)}
+      />
     </div>
   );
 }

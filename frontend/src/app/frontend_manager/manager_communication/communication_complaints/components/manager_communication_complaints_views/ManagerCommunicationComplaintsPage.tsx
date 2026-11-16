@@ -30,6 +30,7 @@ import type {
 import { MANAGER_COMMUNICATION_COMPLAINT_TABS } from '@/app/frontend_manager/manager_communication/communication_complaints/constants/ManagerCommunicationComplaintsComplaintConstants';
 import { ManagerCommunicationComplaintsEmptyState } from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_empty_states/ManagerCommunicationComplaintsEmptyState';
 import ManagerCommunicationComplaintsAddModal from '@/app/frontend_manager/manager_communication/communication_complaints/components/manager_communication_complaints_views/ManagerCommunicationComplaintsAddModal';
+import { ManagerCommunicationComplaintsResolveModal } from './ManagerCommunicationComplaintsResolveModal';
 import { ManagerCommunicationComplaintsToolbar } from './ManagerCommunicationComplaintsToolbar';
 import {
   ManagerCommunicationComplaintsTable,
@@ -77,6 +78,31 @@ export default function ManagerCommunicationComplaintsPage({
   const [sortField, setSortField] = useState<ComplaintSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [statusOverrides, setStatusOverrides] = useState<Record<string, ManagerCommunicationComplaintsComplaintStatus>>({});
+  const [resolveModalComplaint, setResolveModalComplaint] = useState<ManagerCommunicationComplaintsComplaint | null>(null);
+
+  const handleOpenResolveModal = useCallback((complaint: ManagerCommunicationComplaintsComplaint) => {
+    setResolveModalComplaint(complaint);
+  }, []);
+
+  const handleConfirmResolve = useCallback(
+    (complaintId: string, resolvedNote: string, _shouldSendWhatsApp: boolean, _openBrowserWhatsApp: boolean) => {
+      setStatusOverrides((prev) => ({ ...prev, [complaintId]: 'Resolved' }));
+      setLocalComplaints((prev) =>
+        prev.map((c) =>
+          c.id === complaintId
+            ? {
+                ...c,
+                status: 'Resolved',
+                resolvedNote,
+                resolvedDate: new Date().toISOString().slice(0, 10),
+                resolvedBy: 'Facility Manager',
+              }
+            : c
+        )
+      );
+    },
+    []
+  );
 
   const handleStatusChange = useCallback((cid: string, newStatus: ManagerCommunicationComplaintsComplaintStatus) => {
     setStatusOverrides((prev) => ({ ...prev, [cid]: newStatus }));
@@ -109,6 +135,7 @@ export default function ManagerCommunicationComplaintsPage({
         !q ||
         c.title.toLowerCase().includes(q) ||
         (c.student && c.student.toLowerCase().includes(q)) ||
+        (c.seatTag && c.seatTag.toLowerCase().includes(q)) ||
         c.description.toLowerCase().includes(q) ||
         (c.resolvedBy && c.resolvedBy.toLowerCase().includes(q));
       return matchCat && matchQ;
@@ -377,6 +404,7 @@ export default function ManagerCommunicationComplaintsPage({
             sortDirection={sortDirection}
             toggleSort={toggleSort}
             onStatusChange={handleStatusChange}
+            onResolveClick={handleOpenResolveModal}
           />
         )}
       </div>
@@ -389,6 +417,16 @@ export default function ManagerCommunicationComplaintsPage({
           onClose={closeComplaintDialog}
           formatKnownIsoCalendarDate={formatKnownIsoCalendarDate}
           statusBadge={statusBadge}
+          onResolveClick={handleOpenResolveModal}
+        />
+      )}
+
+      {resolveModalComplaint && (
+        <ManagerCommunicationComplaintsResolveModal
+          complaint={resolveModalComplaint}
+          isOpen={Boolean(resolveModalComplaint)}
+          onClose={() => setResolveModalComplaint(null)}
+          onConfirmResolve={handleConfirmResolve}
         />
       )}
 

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { X, MessageSquare, Printer, Copy, User, Calendar, CheckCircle2 } from 'lucide-react';
+import { X, MessageSquare, Printer, Copy, User, Calendar, CheckCircle2, Armchair } from 'lucide-react';
 import { toast } from 'sonner';
 import type {
   ManagerCommunicationComplaintsComplaint,
@@ -16,6 +16,7 @@ interface ManagerCommunicationComplaintsViewModalProps {
   onClose: () => void;
   formatKnownIsoCalendarDate: (value: string, locale: string) => string;
   statusBadge: (status: ManagerCommunicationComplaintsComplaintStatus) => React.ReactNode;
+  onResolveClick?: (complaint: ManagerCommunicationComplaintsComplaint) => void;
 }
 
 export function ManagerCommunicationComplaintsViewModal({
@@ -25,17 +26,20 @@ export function ManagerCommunicationComplaintsViewModal({
   onClose,
   formatKnownIsoCalendarDate,
   statusBadge,
+  onResolveClick,
 }: ManagerCommunicationComplaintsViewModalProps) {
   const tManagerUi = useTranslations('manager.manager_complaints.ui');
+
+  const locationTag = viewItem.seatTag || 'General Study Area';
 
   const handleWhatsAppStudent = () => {
     const studentName = viewItem.student || 'Student';
     let cleanPhone = (viewItem.phone || '9876543210').replace(/\D/g, '');
     if (cleanPhone.length === 11 && cleanPhone.startsWith('0')) cleanPhone = cleanPhone.slice(1);
     const targetPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
-    const resolutionText = viewItem.resolvedNote ? `\n\nResolution: ${viewItem.resolvedNote}` : '';
+    const resolutionText = viewItem.resolvedNote ? `\n\nAction Taken: ${viewItem.resolvedNote}` : '';
     const text = encodeURIComponent(
-      `Hello ${studentName},\nThis is an update regarding your query/complaint (#${viewItem.id} - "${viewItem.title}") at Central Library.\n` +
+      `Hello ${studentName},\nThis is an update regarding your complaint (#${viewItem.id} - "${viewItem.title}") regarding [${locationTag}] at Central Library.\n` +
       `Current Status: ${viewItem.status}${resolutionText}\n\n` +
       `Please let us know if you require any further assistance.\n— Central Library Administration`
     );
@@ -45,9 +49,11 @@ export function ManagerCommunicationComplaintsViewModal({
   };
 
   const handleCopyDetails = () => {
-    navigator.clipboard.writeText(
-      `Complaint #${viewItem.id}\nTitle: ${viewItem.title}\nStudent: ${viewItem.student || 'Anonymous'}\nStatus: ${viewItem.status}\nDate: ${viewItem.date}\nDescription: ${viewItem.description}`
-    );
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(
+        `Complaint #${viewItem.id}\nTitle: ${viewItem.title}\nSeat / Hall: ${locationTag}\nStudent: ${viewItem.student || 'Anonymous'}\nStatus: ${viewItem.status}\nDate: ${viewItem.date}\nDescription: ${viewItem.description}`
+      );
+    }
     toast.success('Complaint summary copied to clipboard');
   };
 
@@ -65,7 +71,7 @@ export function ManagerCommunicationComplaintsViewModal({
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className="relative w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-5"
+        className="relative w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4"
       >
         {/* Header */}
         <div className="flex items-start justify-between pb-3 border-b border-border">
@@ -75,6 +81,11 @@ export function ManagerCommunicationComplaintsViewModal({
                 Ticket #{viewItem.id}
               </span>
               {statusBadge(viewItem.status)}
+              {viewItem.priority === 'Urgent' && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                  URGENT
+                </span>
+              )}
             </div>
             <h3 id="complaint-view-title" className="text-lg font-bold text-primary">
               {viewItem.title}
@@ -92,23 +103,36 @@ export function ManagerCommunicationComplaintsViewModal({
 
         {/* Content Details */}
         <div className="space-y-3.5 text-xs sm:text-sm">
-          <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-surface/50 border border-border">
-            <div className="flex items-center gap-2">
+          {/* Metadata 3-col Box */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 p-3.5 rounded-xl bg-surface/50 border border-border">
+            <div className="flex items-center gap-2 min-w-0">
               <User size={14} className="text-secondary shrink-0" />
-              <div>
-                <span className="text-[11px] text-secondary font-semibold block">Student</span>
-                <p className="font-bold text-primary truncate">{viewItem.student ?? 'Anonymous'}</p>
+              <div className="min-w-0">
+                <span className="text-[10px] text-secondary font-semibold block">Student</span>
+                <p className="font-bold text-primary truncate text-xs">{viewItem.student ?? 'Anonymous'}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-2 min-w-0">
+              <Armchair size={14} className="text-amber-400 shrink-0" />
+              <div className="min-w-0">
+                <span className="text-[10px] text-amber-300 font-semibold block">Seat / Location</span>
+                <p className="font-mono font-bold text-amber-300 truncate text-xs">{locationTag}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 min-w-0">
               <Calendar size={14} className="text-secondary shrink-0" />
-              <div>
-                <span className="text-[11px] text-secondary font-semibold block">Date Lodged</span>
-                <p className="font-mono text-secondary">{formatKnownIsoCalendarDate(viewItem.date, locale)}</p>
+              <div className="min-w-0">
+                <span className="text-[10px] text-secondary font-semibold block">Date Lodged</span>
+                <p className="font-mono text-secondary text-xs truncate">
+                  {formatKnownIsoCalendarDate(viewItem.date, locale)}
+                </p>
               </div>
             </div>
           </div>
 
+          {/* Description */}
           <div className="p-3.5 rounded-xl bg-surface/30 border border-border space-y-1.5">
             <span className="text-[11px] font-semibold text-secondary">Complaint Description</span>
             <p className="text-xs sm:text-sm text-primary leading-relaxed bg-card p-3 rounded-lg border border-border/70">
@@ -116,15 +140,14 @@ export function ManagerCommunicationComplaintsViewModal({
             </p>
           </div>
 
+          {/* Resolution Card if resolved */}
           {viewItem.resolvedNote && (
             <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 space-y-1">
               <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-xs">
                 <CheckCircle2 size={13} />
                 <span>{tManagerUi('resolution')}</span>
               </div>
-              <p className="text-xs text-emerald-300 leading-relaxed">
-                {viewItem.resolvedNote}
-              </p>
+              <p className="text-xs text-emerald-300 leading-relaxed">{viewItem.resolvedNote}</p>
               {viewItem.resolvedBy && (
                 <span className="text-[11px] text-emerald-400/80 block mt-1">
                   Resolved by {viewItem.resolvedBy}
@@ -157,6 +180,20 @@ export function ManagerCommunicationComplaintsViewModal({
           </div>
 
           <div className="flex items-center gap-2">
+            {viewItem.status !== 'Resolved' && onResolveClick && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onResolveClick(viewItem);
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 transition-colors cursor-pointer"
+              >
+                <CheckCircle2 size={13} />
+                <span>Resolve Ticket</span>
+              </button>
+            )}
+
             <button
               type="button"
               onClick={handleWhatsAppStudent}
@@ -179,4 +216,3 @@ export function ManagerCommunicationComplaintsViewModal({
     </div>
   );
 }
-
