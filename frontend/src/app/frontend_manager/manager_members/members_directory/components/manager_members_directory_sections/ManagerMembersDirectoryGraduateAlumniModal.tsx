@@ -2,8 +2,25 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { GraduationCap, Award, Calendar, Clock, Armchair, X, Check, ShieldCheck } from 'lucide-react';
+import {
+  GraduationCap,
+  Award,
+  Calendar,
+  Clock,
+  Armchair,
+  X,
+  Check,
+  ShieldCheck,
+  ShieldAlert,
+  ExternalLink,
+  AlertTriangle,
+} from 'lucide-react';
 import type { ManagerMembersDirectoryRecord } from '@/app/frontend_manager/manager_members/members_directory/types/ManagerMembersDirectoryTypes';
+import {
+  checkMemberDepositSettlement,
+  getDepositSettlementFinanceUrl,
+  type MemberDepositSettlementInfo,
+} from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
 
 export interface ManagerGraduateAlumniDetails {
   exam: string;
@@ -13,6 +30,8 @@ export interface ManagerGraduateAlumniDetails {
   testimonial: string;
   leftDate: string;
   releaseSeat: boolean;
+  depositSettlementStatus: 'Refunded' | 'Settled' | 'Held' | 'No Deposit';
+  depositAmount?: number;
 }
 
 export interface ManagerMembersDirectoryGraduateAlumniModalProps {
@@ -35,6 +54,12 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
   const [leftDate, setLeftDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [testimonial, setTestimonial] = useState('');
   const [releaseSeat, setReleaseSeat] = useState(true);
+  const [depositInfo, setDepositInfo] = useState<MemberDepositSettlementInfo>({
+    hasHeldDeposit: false,
+    amount: 0,
+    status: 'No Deposit',
+  });
+  const [depositAction, setDepositAction] = useState<'refund_now' | 'leave_held'>('refund_now');
 
   useEffect(() => {
     if (member) {
@@ -43,6 +68,10 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
       setDesignation('');
       setTestimonial('');
       setLeftDate(new Date().toISOString().slice(0, 10));
+
+      const dep = checkMemberDepositSettlement(member);
+      setDepositInfo(dep);
+      setDepositAction(dep.hasHeldDeposit ? 'refund_now' : 'refund_now');
     }
   }, [member]);
 
@@ -55,6 +84,14 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
       return;
     }
 
+    const depositSettlementStatus = depositInfo.hasHeldDeposit
+      ? depositAction === 'refund_now'
+        ? 'Refunded'
+        : 'Held'
+      : depositInfo.status === 'Refunded'
+        ? 'Refunded'
+        : 'No Deposit';
+
     onGraduate(member, {
       exam: exam.trim(),
       designation: designation.trim(),
@@ -63,6 +100,8 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
       testimonial: testimonial.trim(),
       leftDate,
       releaseSeat,
+      depositSettlementStatus,
+      depositAmount: depositInfo.hasHeldDeposit ? depositInfo.amount : undefined,
     });
   };
 
@@ -240,23 +279,112 @@ export function ManagerMembersDirectoryGraduateAlumniModal({
             </div>
           )}
 
-          {/* Exit Clearance & No-Dues Verification */}
-          <div className="p-3 rounded-xl bg-surface border border-border flex items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2.5">
-              <ShieldCheck size={16} className="text-emerald-500 shrink-0" />
-              <div>
-                <span className="font-semibold text-primary block">
-                  Verify No-Dues & Deposit Clearance
-                </span>
-                <span className="text-[11px] text-secondary block">
-                  Ensure locker key is returned and security deposit is settled at the accounts desk
+          {/* Exit Clearance & Deposit Settlement Verification */}
+          {depositInfo.hasHeldDeposit ? (
+            <div
+              className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-3"
+              data-testid="held-deposit-clearance-box"
+            >
+              <div className="flex items-start justify-between gap-2.5">
+                <div className="flex items-start gap-2.5">
+                  <ShieldAlert size={18} className="text-amber-500 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-amber-500">
+                        Active Security Deposit Held: ₹{depositInfo.amount}
+                      </span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-400">
+                        Pending Settlement
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-secondary mt-0.5">
+                      Student has an active refundable deposit on record. Settle or verify refund before closing account to prevent risk of unreturned dues.
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={getDepositSettlementFinanceUrl(member.name, member.phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 transition-colors shrink-0"
+                  title="Open Finance Security Deposits desk in new tab"
+                >
+                  <span>Settle Deposit ↗</span>
+                  <ExternalLink size={12} />
+                </a>
+              </div>
+
+              {/* Settlement Action Radio Group */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 border-t border-amber-500/20 text-xs">
+                <label
+                  className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-colors ${
+                    depositAction === 'refund_now'
+                      ? 'bg-amber-500/15 border-amber-500/50 text-primary font-semibold'
+                      : 'bg-surface/50 border-border text-secondary hover:bg-surface'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="depositAction"
+                    value="refund_now"
+                    checked={depositAction === 'refund_now'}
+                    onChange={() => setDepositAction('refund_now')}
+                    className="w-3.5 h-3.5 text-amber-500 focus:ring-amber-400 cursor-pointer"
+                  />
+                  <span>Mark Refunded Now (₹{depositInfo.amount})</span>
+                </label>
+
+                <label
+                  className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-colors ${
+                    depositAction === 'leave_held'
+                      ? 'bg-amber-500/15 border-amber-500/50 text-primary font-semibold'
+                      : 'bg-surface/50 border-border text-secondary hover:bg-surface'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="depositAction"
+                    value="leave_held"
+                    checked={depositAction === 'leave_held'}
+                    onChange={() => setDepositAction('leave_held')}
+                    className="w-3.5 h-3.5 text-amber-500 focus:ring-amber-400 cursor-pointer"
+                  />
+                  <span>Keep Held (Settle Later in Alumni)</span>
+                </label>
+              </div>
+            </div>
+          ) : (
+            <div className="p-3 rounded-xl bg-surface border border-border flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck size={16} className="text-emerald-500 shrink-0" />
+                <div>
+                  <span className="font-semibold text-primary block">
+                    Verify No-Dues & Deposit Clearance
+                  </span>
+                  <span className="text-[11px] text-secondary block">
+                    {depositInfo.status === 'Refunded'
+                      ? 'Security deposit is already refunded. Safe to graduate without outstanding financial dues.'
+                      : 'No active held security deposit on record. Locker & account clearance verified.'}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href={getDepositSettlementFinanceUrl(member.name, member.phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[11px] text-secondary hover:text-primary hover:underline"
+                  title="View Security Deposits ledger"
+                >
+                  <span>Ledger</span>
+                  <ExternalLink size={10} />
+                </a>
+                <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  Clearance Verified
                 </span>
               </div>
             </div>
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
-              Clearance Verified
-            </span>
-          </div>
+          )}
 
           {/* Footer Actions */}
           <div className="flex items-center justify-end gap-2 pt-3 border-t border-border shrink-0">

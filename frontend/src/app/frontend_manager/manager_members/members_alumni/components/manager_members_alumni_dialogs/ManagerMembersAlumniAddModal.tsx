@@ -9,14 +9,22 @@ import {
   Check,
   CheckCircle2,
   Clock,
+  ExternalLink,
   GraduationCap,
   Phone,
   Quote,
+  ShieldAlert,
+  ShieldCheck,
   User,
 } from 'lucide-react';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
+import {
+  checkMemberDepositSettlement,
+  getDepositSettlementFinanceUrl,
+  settleAndRefundDepositInLedger,
+} from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
 
 export interface ManagerMembersAlumniAddModalProps {
   isOpen: boolean;
@@ -38,6 +46,9 @@ export function ManagerMembersAlumniAddModal({
   const [currentStatus, setCurrentStatus] = useState<MembersAlumniRow['currentStatus']>('Cleared Exam');
   const [designation, setDesignation] = useState('');
   const [testimonial, setTestimonial] = useState('');
+  const [depositSettlementStatus, setDepositSettlementStatus] = useState<MembersAlumniRow['depositSettlementStatus']>('Refunded');
+  const [depositAmount, setDepositAmount] = useState<number>(500);
+  const [hasHeldDeposit, setHasHeldDeposit] = useState<boolean>(false);
 
   // Close modal on Escape key press
   useEffect(() => {
@@ -88,6 +99,8 @@ export function ManagerMembersAlumniAddModal({
       setName('');
       setPhone('');
       setExam('');
+      setHasHeldDeposit(false);
+      setDepositSettlementStatus('Refunded');
       return;
     }
     const found = availableStudents.find((s) => s.id === studentId);
@@ -97,6 +110,21 @@ export function ManagerMembersAlumniAddModal({
       if (found.department || found.preparationFor) {
         setExam(found.department || found.preparationFor || '');
       }
+
+      const dep = checkMemberDepositSettlement(found);
+      if (dep.hasHeldDeposit) {
+        setHasHeldDeposit(true);
+        setDepositAmount(dep.amount);
+        setDepositSettlementStatus('Refunded');
+      } else if (dep.status === 'Refunded') {
+        setHasHeldDeposit(false);
+        setDepositAmount(0);
+        setDepositSettlementStatus('Refunded');
+      } else {
+        setHasHeldDeposit(false);
+        setDepositAmount(0);
+        setDepositSettlementStatus('No Deposit');
+      }
     }
   };
 
@@ -105,6 +133,9 @@ export function ManagerMembersAlumniAddModal({
     setName('');
     setPhone('');
     setExam('');
+    setHasHeldDeposit(false);
+    setDepositAmount(500);
+    setDepositSettlementStatus('Refunded');
   };
 
   const handleResetForm = () => {
@@ -117,6 +148,9 @@ export function ManagerMembersAlumniAddModal({
     setCurrentStatus('Cleared Exam');
     setDesignation('');
     setTestimonial('');
+    setHasHeldDeposit(false);
+    setDepositAmount(500);
+    setDepositSettlementStatus('Refunded');
   };
 
   const handleClose = () => {
@@ -161,7 +195,21 @@ export function ManagerMembersAlumniAddModal({
       designation: designation.trim(),
       testimonial: testimonial.trim(),
       currentStatus,
+      depositSettlementStatus: hasHeldDeposit ? depositSettlementStatus : 'No Deposit',
+      depositAmount: hasHeldDeposit ? depositAmount : undefined,
     };
+
+    if (hasHeldDeposit && depositSettlementStatus === 'Refunded') {
+      settleAndRefundDepositInLedger(
+        {
+          id: selectedStudentId,
+          name: trimmedName,
+          phone: cleanPhone,
+        },
+        depositAmount,
+        `Refunded upon alumni record creation (${trimmedExam})`
+      );
+    }
 
     onAdd(newRecord);
     toast.success(`Alumni record created for ${trimmedName} (${trimmedExam})`);
@@ -227,6 +275,68 @@ export function ManagerMembersAlumniAddModal({
                 >
                   Clear / Change
                 </button>
+              </div>
+            )}
+
+            {/* Step 1.5: Security Deposit Clearance & Direct Settlement Link */}
+            {hasHeldDeposit && (
+              <div
+                className="mt-2.5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2.5"
+                data-testid="alumni-held-deposit-box"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-2">
+                    <ShieldAlert size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-amber-500">
+                          Security Deposit Held: ₹{depositAmount}
+                        </span>
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-400">
+                          Pending Refund
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-secondary mt-0.5">
+                        Verify deposit refund or handover before creating alumni record to ensure student account is cleared.
+                      </p>
+                    </div>
+                  </div>
+                  <a
+                    href={getDepositSettlementFinanceUrl(name, phone)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 transition-colors shrink-0"
+                    title="Open Finance Security Deposits desk in new tab"
+                  >
+                    <span>Settle Deposit ↗</span>
+                    <ExternalLink size={11} />
+                  </a>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-4 pt-1.5 border-t border-amber-500/20 text-xs">
+                  <label className="flex items-center gap-1.5 cursor-pointer text-primary font-medium">
+                    <input
+                      type="radio"
+                      name="alumniDepositAction"
+                      value="Refunded"
+                      checked={depositSettlementStatus === 'Refunded'}
+                      onChange={() => setDepositSettlementStatus('Refunded')}
+                      className="w-3.5 h-3.5 text-amber-500 focus:ring-amber-400 cursor-pointer"
+                    />
+                    <span>Refund Deposit Now (₹{depositAmount})</span>
+                  </label>
+                  <label className="flex items-center gap-1.5 cursor-pointer text-secondary hover:text-primary">
+                    <input
+                      type="radio"
+                      name="alumniDepositAction"
+                      value="Held"
+                      checked={depositSettlementStatus === 'Held'}
+                      onChange={() => setDepositSettlementStatus('Held')}
+                      className="w-3.5 h-3.5 text-amber-500 focus:ring-amber-400 cursor-pointer"
+                    />
+                    <span>Keep as Held (Pending Settlement)</span>
+                  </label>
+                </div>
               </div>
             )}
           </div>

@@ -4,20 +4,24 @@ import {
   ArrowUp,
   ArrowDown,
   Award,
+  AlertTriangle,
   Briefcase,
   Calendar,
   ChevronLeft,
   ChevronRight,
   Clock,
+  ExternalLink,
   GraduationCap,
   CheckCircle2,
   Phone,
   Quote,
   Search,
+  ShieldCheck,
   Trash2,
   X,
 } from 'lucide-react';
 import type { MembersAlumniRow } from '@/app/frontend_manager/manager_members/members_alumni/types/ManagerMembersAlumniComponentTypes';
+import { getDepositSettlementFinanceUrl } from '@/app/frontend_manager/manager_members/members_alumni/utils/ManagerMembersAlumniDepositSettlement';
 
 export type AlumniSortField = 'id' | 'name' | 'phone' | 'leftDate' | 'duration' | 'exam' | 'currentStatus';
 
@@ -216,6 +220,7 @@ export function ManagerMembersAlumniTable({
                 {renderSortableHeader('leftDate', 'Exit Date')}
                 {renderSortableHeader('duration', 'Tenure')}
                 <th scope="col" className="py-3 px-4 text-left align-middle whitespace-nowrap">Junior Advice</th>
+                <th scope="col" className="py-3 px-4 text-left align-middle whitespace-nowrap">Deposit Clearance</th>
                 {renderSortableHeader('currentStatus', 'Status')}
                 <th scope="col" className="py-3 px-4 text-right align-middle whitespace-nowrap">Actions</th>
               </tr>
@@ -223,7 +228,7 @@ export function ManagerMembersAlumniTable({
             <tbody>
               {filteredAlumni.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="py-12 text-center text-secondary text-xs sm:text-sm align-middle">
+                  <td colSpan={10} className="py-12 text-center text-secondary text-xs sm:text-sm align-middle">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <GraduationCap size={36} className="text-primary shrink-0" />
                       <p className="font-medium">No alumni records matching the selected search query and filters.</p>
@@ -308,7 +313,44 @@ export function ManagerMembersAlumniTable({
                       )}
                     </td>
 
-                    {/* Column 8: Status Badge */}
+                    {/* Column 8: Deposit Clearance & Settlement Link */}
+                    <td className="py-3 px-4 align-middle whitespace-nowrap" data-testid={`alumni-deposit-clearance-${alumnus.id}`}>
+                      {alumnus.depositSettlementStatus === 'Held' ? (
+                        <div className="flex items-center gap-1.5">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/30">
+                            <AlertTriangle size={12} className="shrink-0 text-amber-500" />
+                            <span>Held {alumnus.depositAmount ? `₹${alumnus.depositAmount}` : '₹500'}</span>
+                          </span>
+                          <a
+                            href={getDepositSettlementFinanceUrl(alumnus.name, alumnus.phone)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-400 hover:text-amber-300 hover:underline px-2 py-0.5 rounded-lg bg-amber-500/10 border border-amber-500/25 transition-colors"
+                            title={`Settle security deposit for ${alumnus.name} in Finance Security Deposits desk`}
+                          >
+                            <span>Settle</span>
+                            <ExternalLink size={10} />
+                          </a>
+                        </div>
+                      ) : alumnus.depositSettlementStatus === 'Refunded' ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                          <CheckCircle2 size={12} className="shrink-0 text-emerald-400" />
+                          <span>Refunded {alumnus.depositAmount ? `₹${alumnus.depositAmount}` : ''}</span>
+                        </span>
+                      ) : alumnus.depositSettlementStatus === 'Settled' ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                          <CheckCircle2 size={12} className="shrink-0 text-emerald-400" />
+                          <span>Settled</span>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-xs text-secondary opacity-70">
+                          <ShieldCheck size={13} className="shrink-0 text-emerald-500" />
+                          <span>Cleared</span>
+                        </span>
+                      )}
+                    </td>
+
+                    {/* Column 9: Status Badge */}
                     <td className="py-3 px-4 align-middle whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
