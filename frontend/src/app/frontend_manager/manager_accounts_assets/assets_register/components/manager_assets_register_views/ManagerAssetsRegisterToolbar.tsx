@@ -143,24 +143,24 @@ export function ManagerAssetsRegisterToolbar({
       {/* Bottom Row: Search and Category Filter */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         {/* Search Input with non-overlapping padding and clear button */}
-        <div className="relative flex-1">
-          <Search
-            size={15}
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none"
-          />
+        <div className="relative flex-1 flex items-center">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search asset name, category, or location..."
-            style={{ paddingLeft: '2.6rem', paddingRight: '2.25rem' }}
+            style={{ paddingLeft: '2.5rem', paddingRight: '2.25rem' }}
             className="w-full text-xs rounded-xl bg-card border border-border py-2 text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+          />
+          <Search
+            size={16}
+            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary pointer-events-none z-10"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md hover:bg-surface-hover transition-colors"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-secondary hover:text-primary rounded-md hover:bg-surface-hover transition-colors z-10"
               title="Clear search"
             >
               <X size={14} />
