@@ -358,53 +358,6 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   </p>
                 </div>
 
-                {/* Card Side to Print Selector */}
-                <div className="space-y-1.5 p-3 rounded-xl bg-surface border border-border">
-                  <label
-                    className="text-xs font-bold text-foreground flex items-center justify-between"
-                  >
-                    <span className="flex items-center gap-1.5">
-                      <RotateCw size={13} className="text-primary" />
-                      <span>Card Side to Print</span>
-                    </span>
-                    <span className="text-[10px] text-secondary font-semibold capitalize">
-                      {cardSide === 'both' ? 'Both (Duplex)' : `${cardSide} only`}
-                    </span>
-                  </label>
-                  <div className="grid grid-cols-3 gap-1 p-0.5 rounded-lg bg-card border border-border text-xs" data-testid="manager-id-card-side-select">
-                    <button
-                      type="button"
-                      onClick={() => setCardSide('front')}
-                      data-testid="manager-id-card-side-front-btn"
-                      className={`py-1 px-1.5 rounded-md font-semibold text-[11px] transition-colors cursor-pointer text-center ${
-                        cardSide === 'front' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'
-                      }`}
-                    >
-                      Front
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setCardSide('back')}
-                      data-testid="manager-id-card-side-back-btn"
-                      className={`py-1 px-1.5 rounded-md font-semibold text-[11px] transition-colors cursor-pointer text-center ${
-                        cardSide === 'back' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'
-                      }`}
-                    >
-                      Back
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setCardSide('both')}
-                      data-testid="manager-id-card-side-both-btn"
-                      className={`py-1 px-1.5 rounded-md font-semibold text-[11px] transition-colors cursor-pointer text-center ${
-                        cardSide === 'both' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-secondary hover:text-foreground'
-                      }`}
-                    >
-                      Both
-                    </button>
-                  </div>
-                </div>
-
                 {/* WhatsApp Share Button */}
                 <button
                   type="button"

@@ -159,7 +159,7 @@ describe('Print Stylesheet and Layout Integrity', () => {
     expect(cssContent).toContain('print-color-adjust: exact');
   });
 
-  it('verifies client orchestrator contains layout selector, card side selector, and retains WhatsApp and Print', () => {
+  it('verifies client orchestrator contains layout selector and retains WhatsApp and Print', () => {
     expect(clientPath).toBeDefined();
     const clientContent = readFileSync(clientPath!, 'utf8');
 
@@ -168,12 +168,6 @@ describe('Print Stylesheet and Layout Integrity', () => {
     expect(clientContent).toContain('pvc_single');
     expect(clientContent).toContain('a4_sheet_8');
     expect(clientContent).toContain('a4_sheet_10');
-
-    // Card Side Selector
-    expect(clientContent).toContain('manager-id-card-side-select');
-    expect(clientContent).toContain('manager-id-card-side-front-btn');
-    expect(clientContent).toContain('manager-id-card-side-back-btn');
-    expect(clientContent).toContain('manager-id-card-side-both-btn');
 
     // Unremoved Existing Features
     expect(clientContent).toContain('manager-students-id-card-whatsapp-share');
