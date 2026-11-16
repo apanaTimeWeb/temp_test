@@ -500,9 +500,10 @@ export function ManagerMembersEnquiriesTable({
           </div>
         </div>
       </div>
+    </div>
 
-      {/* Lost Reason Modal (Rendered outside the overflow-hidden table container) */}
-      <ManagerMembersEnquiriesLostReasonModal
+    {/* Lost Reason Modal (Rendered outside the overflow-hidden table container) */}
+    <ManagerMembersEnquiriesLostReasonModal
         isOpen={Boolean(lostModalEnquiry)}
         onClose={() => setLostModalEnquiry(null)}
         enquiry={lostModalEnquiry}
