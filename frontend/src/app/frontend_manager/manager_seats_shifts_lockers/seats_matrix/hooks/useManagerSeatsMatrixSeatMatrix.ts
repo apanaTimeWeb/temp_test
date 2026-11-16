@@ -77,5 +77,72 @@ export function useManagerSeatsMatrix() {
     }
   };
 
-  return { ...query, visible, freeCount, activeTab, setActiveTab, selectedSeat, setSelectedSeat, updateSeat, addSeat };
+  const swapSeats = (sourceSeatId: string, targetSeatId: string): boolean => {
+    const source = allSeats.find((s) => s.id === sourceSeatId) ?? visible.find((s) => s.id === sourceSeatId);
+    const target = allSeats.find((s) => s.id === targetSeatId) ?? visible.find((s) => s.id === targetSeatId);
+    if (!source || !target) return false;
+
+    const sourceCurrent = { ...source, ...(overrides[sourceSeatId] ?? {}) };
+    const targetCurrent = { ...target, ...(overrides[targetSeatId] ?? {}) };
+
+    const sourceData = {
+      student: sourceCurrent.student,
+      smartId: sourceCurrent.smartId,
+      studentGender: sourceCurrent.studentGender,
+      shift: sourceCurrent.shift,
+      expiry: sourceCurrent.expiry,
+      status: sourceCurrent.status,
+      shiftAllocations: sourceCurrent.shiftAllocations,
+    };
+
+    const targetData = {
+      student: targetCurrent.student,
+      smartId: targetCurrent.smartId,
+      studentGender: targetCurrent.studentGender,
+      shift: targetCurrent.shift,
+      expiry: targetCurrent.expiry,
+      status: targetCurrent.status,
+      shiftAllocations: targetCurrent.shiftAllocations,
+    };
+
+    setOverrides((prev) => ({
+      ...prev,
+      [sourceSeatId]: {
+        ...(prev[sourceSeatId] ?? {}),
+        student: targetData.student || undefined,
+        smartId: targetData.smartId || undefined,
+        studentGender: targetData.studentGender || undefined,
+        shift: targetData.shift || undefined,
+        expiry: targetData.expiry || undefined,
+        status: targetData.student ? targetData.status : ('free' as const),
+        shiftAllocations: targetData.shiftAllocations,
+      },
+      [targetSeatId]: {
+        ...(prev[targetSeatId] ?? {}),
+        student: sourceData.student || undefined,
+        smartId: sourceData.smartId || undefined,
+        studentGender: sourceData.studentGender || undefined,
+        shift: sourceData.shift || undefined,
+        expiry: sourceData.expiry || undefined,
+        status: sourceData.student ? sourceData.status : ('free' as const),
+        shiftAllocations: sourceData.shiftAllocations,
+      },
+    }));
+
+    if (selectedSeat && selectedSeat.id === sourceSeatId) {
+      setSelectedSeat({
+        ...sourceCurrent,
+        student: targetData.student || undefined,
+        smartId: targetData.smartId || undefined,
+        studentGender: targetData.studentGender || undefined,
+        shift: targetData.shift || undefined,
+        expiry: targetData.expiry || undefined,
+        status: targetData.student ? targetData.status : ('free' as const),
+      });
+    }
+
+    return true;
+  };
+
+  return { ...query, visible, freeCount, activeTab, setActiveTab, selectedSeat, setSelectedSeat, updateSeat, addSeat, swapSeats };
 }

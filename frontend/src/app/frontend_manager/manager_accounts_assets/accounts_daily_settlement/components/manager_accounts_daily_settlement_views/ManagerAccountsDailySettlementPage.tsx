@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import { RefreshCw, Scale, Printer, Download, Eye, CheckCircle2, Clock } from 'lucide-react';
+import { RefreshCw, Scale, Printer, Download, Eye, CheckCircle2, Clock, Coins } from 'lucide-react';
 import type { ManagerAccountsDailySettlementMainProps } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/types/ManagerAccountsDailySettlementMainTypes';
 import type { Entry } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
 import { MANAGER_ACCOUNTING_SAMPLE_DAILY_SETTLEMENTS } from '@/app/frontend_manager/manager_accounts_assets/accounts_daily_settlement/hooks/ManagerAccountsDailySettlementDemoRepository';
@@ -15,6 +15,7 @@ import { ManagerAccountsDailySettlementToolbar } from './ManagerAccountsDailySet
 import ManagerAccountsDailySettlementTimeHorizonBar, { type ManagerDailySettlementTimeHorizon } from './ManagerAccountsDailySettlementTimeHorizonBar';
 import ManagerAccountsDailySettlementConfirmModal from '../manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementConfirmModal';
 import { ManagerAccountsDailySettlementDetailsModal } from './ManagerAccountsDailySettlementDetailsModal';
+import { ManagerAccountsDailySettlementDenominationAndHandoverModal } from '../manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementDenominationAndHandoverModal';
 
 function toLocalDateInputValue(date: Date): string {
   const year = date.getFullYear();
@@ -43,6 +44,8 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingSettlementShift, setPendingSettlementShift] = useState<string | null>(null);
   const [selectedAuditEntry, setSelectedAuditEntry] = useState<Entry | null>(null);
+  const [isDenominationModalOpen, setIsDenominationModalOpen] = useState(false);
+  const [activeDenominationEntry, setActiveDenominationEntry] = useState<Entry | null>(null);
 
   const dateScopeLabel = useMemo(() => {
     switch (timeHorizon) {
@@ -245,6 +248,22 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
               <Download size={14} />
               <span>Export CSV</span>
             </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setActiveDenominationEntry(filteredEntries[0] || entries[0] || null);
+                setIsDenominationModalOpen(true);
+              }}
+              style={{
+                boxShadow: '0 0 16px rgba(16, 185, 129, 0.4)',
+              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all cursor-pointer"
+              title="Currency Denomination Counter & Owner Handover Receipt"
+            >
+              <Coins size={14} />
+              <span>Denomination & Owner Handover</span>
+            </button>
           </div>
         </div>
       </div>
@@ -351,6 +370,27 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
         formatCurrency={formatManagerDailySettlementCurrency}
         onClose={() => setSelectedAuditEntry(null)}
         onSettleShift={handleRequestSettleShift}
+      />
+
+      {/* ── Currency Denomination Counter & Owner Handover Receipt Modal ── */}
+      <ManagerAccountsDailySettlementDenominationAndHandoverModal
+        isOpen={isDenominationModalOpen}
+        entry={activeDenominationEntry}
+        formatCurrency={formatManagerDailySettlementCurrency}
+        onClose={() => setIsDenominationModalOpen(false)}
+        onConfirmSettlement={({ handoverToOwner, ownerName }) => {
+          if (activeDenominationEntry) {
+            setEntries((prev) =>
+              prev.map((e) =>
+                e.shift === activeDenominationEntry.shift
+                  ? { ...e, status: 'settled', settledBy: 'Branch Manager Satyam' }
+                  : e
+              )
+            );
+          }
+          toast.success(`Handover of ₹${handoverToOwner.toLocaleString('en-IN')} to ${ownerName} confirmed!`);
+          setIsDenominationModalOpen(false);
+        }}
       />
     </div>
   );

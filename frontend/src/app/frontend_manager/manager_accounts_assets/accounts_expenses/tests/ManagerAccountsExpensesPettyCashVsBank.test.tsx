@@ -82,7 +82,7 @@ describe('ManagerAccountsExpensesPettyCashVsBank', () => {
     );
 
     // Verify Petty Cash card is present
-    expect(screen.getByText(/Petty Cash Float \(गल्ला\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Petty Cash Float/i)).toBeInTheDocument();
     // Petty cash total = 150 + 500 = ₹650
     expect(screen.getByText('₹650')).toBeInTheDocument();
 

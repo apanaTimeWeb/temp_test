@@ -51,11 +51,11 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
 
-        {/* Petty Cash Float (गल्ले से नकद खर्च) */}
+        {/* Petty Cash Float */}
         <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-5 shadow-xs cursor-default select-none">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-              <span>Petty Cash Float (गल्ला)</span>
+              <span>Petty Cash Float</span>
             </span>
             <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center">
               <Wallet size={20} />
@@ -71,7 +71,7 @@ export default function ManagerAccountsExpensesExpenseSummaryCards({
           </div>
         </div>
 
-        {/* Bank & Owner Direct Expenses (मालिक/बैंक खाता खर्च) */}
+        {/* Bank & Owner Direct Expenses */}
         <div className="rounded-2xl border border-sky-500/30 bg-sky-500/5 p-5 shadow-xs cursor-default select-none">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-sky-400 uppercase tracking-wider">

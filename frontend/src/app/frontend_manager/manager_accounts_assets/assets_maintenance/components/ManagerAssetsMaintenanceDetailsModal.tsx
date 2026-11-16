@@ -173,6 +173,19 @@ export function ManagerAssetsMaintenanceDetailsModal({
           </div>
         </div>
 
+        {/* Operating Expenses Synchronization Banner */}
+        {logItem.cost > 0 && (
+          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs flex items-center justify-between text-emerald-300">
+            <span className="flex items-center gap-1.5 font-medium">
+              <CheckCircle2 size={13} className="text-emerald-400" />
+              <span>Accounts Ledger Synchronization:</span>
+            </span>
+            <span className="font-semibold text-emerald-400 bg-emerald-500/20 px-2.5 py-0.5 rounded-full text-[11px] border border-emerald-500/30">
+              Auto-Posted to Expenses
+            </span>
+          </div>
+        )}
+
         {/* Footer Actions */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-3 border-t border-border">
           <button

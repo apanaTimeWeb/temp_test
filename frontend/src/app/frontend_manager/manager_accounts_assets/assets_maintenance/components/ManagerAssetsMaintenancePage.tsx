@@ -66,7 +66,15 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
 
   const handleCreateOrder = (newLog: MaintenanceLogItem) => {
     setLogsList((prev) => [newLog, ...prev]);
-    toast.success(`Maintenance request for "${newLog.assetName}" logged successfully.`);
+    if (newLog.cost > 0 && newLog.autoPostToExpenses !== false) {
+      const formattedAmount = (newLog.cost / 100).toLocaleString('en-IN');
+      const sourceLabel = newLog.expensePaymentSource === 'bank_direct' ? 'Bank Account' : 'Petty Cash Float';
+      toast.success(
+        `Maintenance order logged & expense of ₹${formattedAmount} automatically posted to Operating Expenses (${sourceLabel})!`
+      );
+    } else {
+      toast.success(`Maintenance request for "${newLog.assetName}" logged successfully.`);
+    }
   };
 
   const handleRequestUpdateStatus = (logId: number, currentStatus: string) => {

@@ -72,7 +72,7 @@ export function createManagerExpensesExpenseColumnDefinitions(
               {mode}
             </span>
             <span className={`text-[10px] font-medium ${isPettyCash ? 'text-emerald-400' : 'text-sky-400'}`}>
-              {isPettyCash ? '• Petty Cash (गल्ला)' : '• Bank / Owner'}
+              {isPettyCash ? '• Petty Cash' : '• Bank / Owner'}
             </span>
           </div>
         );

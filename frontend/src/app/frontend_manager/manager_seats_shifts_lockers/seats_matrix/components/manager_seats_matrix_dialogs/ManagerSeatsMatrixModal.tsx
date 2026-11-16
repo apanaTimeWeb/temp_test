@@ -18,6 +18,7 @@ export function ManagerSeatsMatrixModal({
   onClose,
   onUpdateSeat,
   onOpenStudentProfile,
+  onOpenSwapModal,
 }: ManagerSeatsMatrixModalProps) {
   const tManagerUi = useTranslations('manager.manager_seat_matrix.ui');
   const router = useRouter();
@@ -239,6 +240,7 @@ export function ManagerSeatsMatrixModal({
               router={router}
               shiftLabel={shiftLabel}
               onOpenStudentProfile={onOpenStudentProfile}
+              onOpenSwapModal={onOpenSwapModal}
             />
           )}
 

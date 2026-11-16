@@ -69,16 +69,27 @@ export async function fetchManagerSeatsMatrix(): Promise<SeatData[]> {
     if (student) {
       studentGender = (item.gender === 'Female' || item.studentGender === 'Female' || /priya|neha|ritu|pooja|shweta|anita|kavita|sunita|sneha|aditi/i.test(student)) ? 'Female' : 'Male';
     }
+    const seatId = requiredString(item, 'seatNumber').replace(/^S-/, '');
+    const rawWing = optionalString(item, 'wing');
+    let resolvedWing = rawWing;
+    if (!resolvedWing) {
+      const num = parseInt(seatId.replace(/\D/g, ''), 10);
+      if (!Number.isNaN(num)) {
+        resolvedWing = num <= 10 ? 'AC Hall A' : num <= 20 ? 'AC Hall B' : num <= 30 ? 'Silent Zone' : 'Girls Cabin';
+      } else {
+        resolvedWing = seatId.startsWith('A') ? 'AC Hall A' : seatId.startsWith('B') ? 'AC Hall B' : seatId.startsWith('C') ? 'Silent Zone' : 'Girls Cabin';
+      }
+    }
     return {
       uuid: optionalString(item, 'id'),
-      id: requiredString(item, 'seatNumber').replace(/^S-/, ''),
+      id: seatId,
       status: normalizeManagerSeatMatrixStatus(item.status, item),
       student,
       studentGender,
       smartId: optionalString(item, 'smartId'),
       shift: optionalString(item, 'shift'),
       expiry: optionalString(item, 'expiry', 'expiryDate'),
-      wing: optionalString(item, 'wing'),
+      wing: resolvedWing,
     };
   });
 }

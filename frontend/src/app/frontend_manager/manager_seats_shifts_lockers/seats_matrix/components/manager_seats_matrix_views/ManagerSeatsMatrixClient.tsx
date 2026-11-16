@@ -2,7 +2,7 @@
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, LayoutGrid, List, Plus, Download, Armchair, X, RotateCcw } from 'lucide-react';
+import { Search, LayoutGrid, List, Plus, Download, Armchair, X, RotateCcw, ArrowLeftRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { sanitizeManagerSeatMatrixCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/utils/ManagerSeatsMatrixCsv';
 import { useManagerSeatsMatrix } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/hooks/useManagerSeatsMatrixSeatMatrix';
@@ -10,6 +10,7 @@ import { SHIFT_TABS } from '@/app/frontend_manager/manager_seats_shifts_lockers/
 import { MANAGER_SEATS_MATRIX_ROUTES } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/config/manager_seats_matrix.url_config';
 import { ManagerSeatsMatrixModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixModal';
 import { ManagerSeatsMatrixStudentProfileModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixStudentProfileModal';
+import { ManagerSeatsMatrixSwapModal } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/components/manager_seats_matrix_dialogs/ManagerSeatsMatrixSwapModal';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 import { ManagerSeatsMatrixGridView } from './ManagerSeatsMatrixGridView';
 import { ManagerSeatsMatrixTableView, type SeatSortField } from './ManagerSeatsMatrixTableView';
@@ -40,6 +41,7 @@ export function ManagerSeatsMatrixClient() {
     setSelectedSeat,
     updateSeat,
     addSeat,
+    swapSeats,
   } = useManagerSeatsMatrix();
 
   const router = useRouter();
@@ -48,7 +50,10 @@ export function ManagerSeatsMatrixClient() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [genderFilter, setGenderFilter] = useState<'all' | 'Male' | 'Female'>('all');
+  const [zoneFilter, setZoneFilter] = useState<string>('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isSwapModalOpen, setIsSwapModalOpen] = useState(false);
+  const [swapSourceSeat, setSwapSourceSeat] = useState<SeatData | null>(null);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [sortField, setSortField] = useState<SeatSortField | null>(null);
@@ -75,9 +80,14 @@ export function ManagerSeatsMatrixClient() {
         genderFilter === 'all' ||
         (statusFilter === 'free' ? true : seat.student ? seat.studentGender === genderFilter : false);
 
-      return matchesSearch && matchesStatus && matchesGender;
+      // 4. Zone / Hall filter (AC Hall A, AC Hall B, Silent Zone, Girls Cabin)
+      const matchesZone =
+        zoneFilter === 'all' ||
+        (seat.wing && seat.wing.toLowerCase().includes(zoneFilter.toLowerCase()));
+
+      return matchesSearch && matchesStatus && matchesGender && matchesZone;
     });
-  }, [visible, searchQuery, statusFilter, genderFilter]);
+  }, [visible, searchQuery, statusFilter, genderFilter, zoneFilter]);
 
   const filteredTableSeats = filteredSeats;
   const visibleGridSeats = filteredSeats;
@@ -86,6 +96,7 @@ export function ManagerSeatsMatrixClient() {
     searchQuery.trim() !== '' ||
     statusFilter !== 'all' ||
     genderFilter !== 'all' ||
+    zoneFilter !== 'all' ||
     activeTab !== 'All'
   );
 
@@ -93,8 +104,22 @@ export function ManagerSeatsMatrixClient() {
     setSearchQuery('');
     setStatusFilter('all');
     setGenderFilter('all');
+    setZoneFilter('all');
     setActiveTab('All');
     setPage(0);
+  };
+
+  const handleConfirmSwap = (sourceSeatId: string, targetSeatId: string, reason?: string) => {
+    const success = swapSeats(sourceSeatId, targetSeatId);
+    if (success) {
+      toast.success(
+        `Seat S-${sourceSeatId} successfully swapped with Seat S-${targetSeatId}${
+          reason ? ` · ${reason}` : ''
+        }`
+      );
+    } else {
+      toast.error('Unable to swap seats. Please check allocations and try again.');
+    }
   };
 
   const toggleSort = (field: SeatSortField) => {
@@ -211,6 +236,20 @@ export function ManagerSeatsMatrixClient() {
 
             <button
               type="button"
+              onClick={() => {
+                const initial = selectedSeat || visible.find((s) => s.status === 'occupied') || visible[0] || null;
+                setSwapSourceSeat(initial);
+                setIsSwapModalOpen(true);
+              }}
+              data-testid="manager-seat-matrix-swap-btn"
+              className="inline-flex items-center gap-1.5 text-xs font-bold py-1.5 px-3 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 transition-colors cursor-pointer"
+              title="Directly swap or relocate seats without vacating or losing data"
+            >
+              <ArrowLeftRight size={13} /> Swap Seats
+            </button>
+
+            <button
+              type="button"
               onClick={() => setIsAddModalOpen(true)}
               className="mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5 text-xs font-bold cursor-pointer"
             >
@@ -295,6 +334,21 @@ export function ManagerSeatsMatrixClient() {
               <option value="Female">👩 Female Students</option>
             </select>
 
+            {/* Zone / Hall Selector Dropdown */}
+            <select
+              aria-label="Filter seats by Zone / Hall"
+              data-testid="manager-seats-zone-filter"
+              value={zoneFilter}
+              onChange={(e) => { setZoneFilter(e.target.value); setPage(0); }}
+              className="bg-surface text-primary text-xs font-semibold px-3 h-9 rounded-xl border border-border hover:border-primary focus:ring-1 focus:ring-primary transition-colors cursor-pointer shrink-0"
+            >
+              <option value="all">🏛️ All Zones / Halls</option>
+              <option value="AC Hall A">❄️ AC Hall A</option>
+              <option value="AC Hall B">❄️ AC Hall B</option>
+              <option value="Silent Zone">🤫 Silent Zone</option>
+              <option value="Girls Cabin">👩 Girls Cabin</option>
+            </select>
+
             {/* Reset Filters Button */}
             {isFiltered && (
               <button
@@ -362,6 +416,23 @@ export function ManagerSeatsMatrixClient() {
           setSelectedSeat(null);
           setProfileSeat(seat);
         }}
+        onOpenSwapModal={(seat) => {
+          setSelectedSeat(null);
+          setSwapSourceSeat(seat);
+          setIsSwapModalOpen(true);
+        }}
+      />
+
+      {/* Seat Swap & Relocation Modal */}
+      <ManagerSeatsMatrixSwapModal
+        isOpen={isSwapModalOpen}
+        sourceSeat={swapSourceSeat}
+        allSeats={visible}
+        onClose={() => {
+          setIsSwapModalOpen(false);
+          setSwapSourceSeat(null);
+        }}
+        onConfirmSwap={handleConfirmSwap}
       />
 
       {/* Direct Student Profile & KYC Popup */}

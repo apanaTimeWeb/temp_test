@@ -86,7 +86,7 @@ export function ManagerAccountsExpensesDetailsModal({
                 <span className="text-[11px] font-medium text-secondary">
                   Fund Source:{' '}
                   <strong className={isPetty ? 'text-emerald-400' : 'text-sky-400'}>
-                    {isPetty ? 'Petty Cash Float (गल्ला नकद)' : 'Bank / Owner Account (मालिक खाता)'}
+                    {isPetty ? 'Petty Cash Float (Counter)' : 'Bank / Owner Account'}
                   </strong>
                 </span>
               </div>

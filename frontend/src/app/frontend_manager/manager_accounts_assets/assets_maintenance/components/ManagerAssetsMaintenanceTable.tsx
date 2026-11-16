@@ -39,6 +39,9 @@ export interface MaintenanceLogItem {
   status: 'pending' | 'in-progress' | 'completed';
   priority?: MaintenancePriority;
   type?: MaintenanceType;
+  autoPostToExpenses?: boolean;
+  expensePostedId?: number | null;
+  expensePaymentSource?: 'petty_cash' | 'bank_direct';
 }
 
 interface ManagerAssetsMaintenanceTableProps {
@@ -229,9 +232,14 @@ export function ManagerAssetsMaintenanceTable({
                       </div>
                     </td>
 
-                    {/* Cost */}
-                    <td className="py-3 px-4 text-right font-semibold text-xs text-emerald-400 whitespace-nowrap">
-                      {formatCurrency(l.cost)}
+                    {/* Cost & Auto-Expense Badge */}
+                    <td className="py-3 px-4 text-right font-semibold text-xs whitespace-nowrap">
+                      <span className="text-emerald-400 font-mono font-bold">{formatCurrency(l.cost)}</span>
+                      {l.cost > 0 && (
+                        <span className="text-[10px] text-emerald-400/80 font-medium block">
+                          ✓ Auto-Expense
+                        </span>
+                      )}
                     </td>
 
                     {/* Status Badge */}

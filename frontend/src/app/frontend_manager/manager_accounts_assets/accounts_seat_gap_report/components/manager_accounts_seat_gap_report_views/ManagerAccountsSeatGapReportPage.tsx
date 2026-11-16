@@ -22,6 +22,7 @@ import {
   CheckCircle2,
   Eye,
   Layers,
+  Target,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { ManagerAccountsSeatGapReportEmptyState } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/components/manager_accounts_seat_gap_report_empty_states/ManagerAccountsSeatGapReportEmptyState';
@@ -30,6 +31,7 @@ import ManagerAccountsSeatGapReportTimeHorizonBar, {
 } from './ManagerAccountsSeatGapReportTimeHorizonBar';
 import { ManagerAccountsSeatGapReportToolbar } from './ManagerAccountsSeatGapReportToolbar';
 import { ManagerAccountsSeatGapReportDetailsModal } from './ManagerAccountsSeatGapReportDetailsModal';
+import { ManagerAccountsSeatGapReportRetargetModal } from './ManagerAccountsSeatGapReportRetargetModal';
 
 function formatKnownIsoCalendarDate(value: string, locale: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
@@ -71,6 +73,7 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
 
   // Modal State
   const [selectedSeat, setSelectedSeat] = useState<GapRow | null>(null);
+  const [retargetSeat, setRetargetSeat] = useState<GapRow | null>(null);
 
   const floors = useMemo(() => [...new Set(gapList.map((r) => r.floor))], [gapList]);
 
@@ -536,6 +539,18 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
                             <Eye size={15} />
                           </button>
 
+                          {r.status === 'vacant' && (
+                            <button
+                              type="button"
+                              onClick={() => setRetargetSeat(r)}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 border border-purple-500/40 shadow-xs transition-all cursor-pointer"
+                              title={`Match inquiries & send offer for seat ${r.seatNo}`}
+                            >
+                              <Target size={12} />
+                              <span>Retarget</span>
+                            </button>
+                          )}
+
                           <button
                             type="button"
                             onClick={() => handleToggleSeatStatus(r)}
@@ -635,6 +650,17 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
         formatCurrency={formatManagerSeatGapReportCurrency}
         onClose={() => setSelectedSeat(null)}
         onToggleStatus={handleToggleSeatStatus}
+        onRetargetLeads={(s) => {
+          setSelectedSeat(null);
+          setRetargetSeat(s);
+        }}
+      />
+
+      {/* Retarget Leads & Send WhatsApp Offer Modal */}
+      <ManagerAccountsSeatGapReportRetargetModal
+        isOpen={Boolean(retargetSeat)}
+        seat={retargetSeat}
+        onClose={() => setRetargetSeat(null)}
       />
     </div>
   );

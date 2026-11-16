@@ -40,6 +40,8 @@ export function ManagerAssetsMaintenanceAddModal({
 }: ManagerAssetsMaintenanceAddModalProps) {
   const [selectedPriority, setSelectedPriority] = useState<PriorityOption>('routine');
   const [selectedType, setSelectedType] = useState<TypeOption>('preventive');
+  const [autoPostToExpenses, setAutoPostToExpenses] = useState<boolean>(true);
+  const [expensePaymentSource, setExpensePaymentSource] = useState<'petty_cash' | 'bank_direct'>('petty_cash');
 
   const {
     register,
@@ -117,6 +119,8 @@ export function ManagerAssetsMaintenanceAddModal({
       status: 'pending',
       priority: selectedPriority,
       type: selectedType,
+      autoPostToExpenses: costMinorUnits > 0 ? autoPostToExpenses : false,
+      expensePaymentSource: costMinorUnits > 0 ? expensePaymentSource : undefined,
     };
     onAddOrder(newLog);
     reset();
@@ -394,6 +398,57 @@ export function ManagerAssetsMaintenanceAddModal({
               )}
             </div>
           </div>
+
+          {/* Auto-Post to Operating Expenses Ledger */}
+          {Number(watch('cost')) > 0 && (
+            <div className="p-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-emerald-300 flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={autoPostToExpenses}
+                    onChange={(e) => setAutoPostToExpenses(e.target.checked)}
+                    className="rounded border-border text-emerald-600 focus:ring-emerald-500 w-4 h-4 cursor-pointer"
+                  />
+                  <span>Auto-Post to Operating Expenses</span>
+                </label>
+                <span className="text-xs text-emerald-300 font-mono font-bold">
+                  ₹{Number(watch('cost')).toLocaleString('en-IN')}
+                </span>
+              </div>
+              <p className="text-[11px] text-emerald-200/80 leading-relaxed pl-6">
+                Automatically logs a "Maintenance" expense voucher into Operating Expenses so repair costs are never omitted from accounts ledger.
+              </p>
+
+              {autoPostToExpenses && (
+                <div className="pl-6 pt-1 flex items-center gap-2 text-xs flex-wrap">
+                  <span className="text-[11px] text-secondary font-medium">Expense Fund Source:</span>
+                  <button
+                    type="button"
+                    onClick={() => setExpensePaymentSource('petty_cash')}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer ${
+                      expensePaymentSource === 'petty_cash'
+                        ? 'bg-emerald-500/25 text-emerald-300 border-emerald-500/40 shadow-xs'
+                        : 'bg-card text-secondary border-border'
+                    }`}
+                  >
+                    Petty Cash Float
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setExpensePaymentSource('bank_direct')}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-all cursor-pointer ${
+                      expensePaymentSource === 'bank_direct'
+                        ? 'bg-sky-500/25 text-sky-300 border-sky-500/40 shadow-xs'
+                        : 'bg-card text-secondary border-border'
+                    }`}
+                  >
+                    Bank / Owner Direct
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Scheduled Date */}
           <div>

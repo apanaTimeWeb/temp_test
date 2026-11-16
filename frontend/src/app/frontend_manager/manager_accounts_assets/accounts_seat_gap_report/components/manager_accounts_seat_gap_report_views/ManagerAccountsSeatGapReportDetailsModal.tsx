@@ -12,6 +12,7 @@ import {
   Printer,
   Calendar,
   Sparkles,
+  Target,
 } from 'lucide-react';
 import type { GapRow } from '@/app/frontend_manager/manager_accounts_assets/accounts_seat_gap_report/hooks/ManagerAccountsSeatGapReportDemoRepository';
 
@@ -21,6 +22,7 @@ interface ManagerAccountsSeatGapReportDetailsModalProps {
   formatCurrency: (val: number) => string;
   onClose: () => void;
   onToggleStatus?: (seat: GapRow) => void;
+  onRetargetLeads?: (seat: GapRow) => void;
 }
 
 export function ManagerAccountsSeatGapReportDetailsModal({
@@ -29,6 +31,7 @@ export function ManagerAccountsSeatGapReportDetailsModal({
   formatCurrency,
   onClose,
   onToggleStatus,
+  onRetargetLeads,
 }: ManagerAccountsSeatGapReportDetailsModalProps) {
   useEffect(() => {
     if (!isOpen) return;
@@ -170,7 +173,7 @@ export function ManagerAccountsSeatGapReportDetailsModal({
             <Printer size={14} /> Print Seat Audit
           </button>
 
-          <div className="flex items-center gap-2 justify-end">
+          <div className="flex items-center gap-2 justify-end flex-wrap">
             <button
               type="button"
               onClick={onClose}
@@ -178,6 +181,19 @@ export function ManagerAccountsSeatGapReportDetailsModal({
             >
               Close
             </button>
+            {seat.status === 'vacant' && onRetargetLeads && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onRetargetLeads(seat);
+                }}
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold shadow-xs cursor-pointer transition-all"
+              >
+                <Target size={14} />
+                <span>Retarget Inquiries</span>
+              </button>
+            )}
             {onToggleStatus && (
               <button
                 type="button"

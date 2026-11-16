@@ -247,7 +247,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="text-xs font-semibold text-secondary">
-                Expense Fund Source (खर्च का स्रोत) <span className="text-destructive">*</span>
+                Expense Fund Source <span className="text-destructive">*</span>
               </label>
               <span className="text-[11px] text-secondary">Separates counter cash float from bank</span>
             </div>
@@ -268,7 +268,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
                   <Wallet size={16} />
                 </div>
                 <div>
-                  <p className="font-bold">Petty Cash Float (गल्ला)</p>
+                  <p className="font-bold">Petty Cash Float</p>
                   <p className="text-[10px] opacity-80">Counter cash drawer spend</p>
                 </div>
               </button>

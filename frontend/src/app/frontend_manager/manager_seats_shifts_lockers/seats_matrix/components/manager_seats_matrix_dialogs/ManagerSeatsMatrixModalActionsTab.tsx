@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { User, UserPlus, Wrench, CheckCircle, LogOut, Layers } from 'lucide-react';
+import { User, UserPlus, Wrench, CheckCircle, LogOut, Layers, ArrowLeftRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import type { SeatData, ShiftType } from '../../types/ManagerSeatsMatrixTypes';
@@ -24,6 +24,7 @@ interface ManagerSeatsMatrixModalActionsTabProps {
   router: { push: (url: string) => void };
   shiftLabel: string;
   onOpenStudentProfile?: (seat: SeatData) => void;
+  onOpenSwapModal?: (seat: SeatData) => void;
 }
 
 export function ManagerSeatsMatrixModalActionsTab({
@@ -41,6 +42,7 @@ export function ManagerSeatsMatrixModalActionsTab({
   router,
   shiftLabel,
   onOpenStudentProfile,
+  onOpenSwapModal,
 }: ManagerSeatsMatrixModalActionsTabProps) {
   const tManagerUi = useTranslations('manager.manager_seat_matrix.ui');
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -464,10 +466,10 @@ export function ManagerSeatsMatrixModalActionsTab({
 
       {/* Action Buttons */}
       <div className="space-y-2.5 pt-1">
-        <div className="flex gap-2.5">
+        <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            className="mgr-btn-primary flex-1 h-9 text-xs font-semibold flex items-center justify-center gap-1.5 rounded-xl transition-colors cursor-pointer disabled:opacity-50"
+            className="mgr-btn-primary flex-1 min-w-[130px] h-9 text-xs font-semibold flex items-center justify-center gap-1.5 rounded-xl transition-colors cursor-pointer disabled:opacity-50"
             disabled={!selectedSeat.student}
             onClick={() => {
               if (onOpenStudentProfile) {
@@ -480,6 +482,18 @@ export function ManagerSeatsMatrixModalActionsTab({
             <User size={14} />
             <span>{tManagerUi('view_full_profile')}</span>
           </button>
+          {onOpenSwapModal && (
+            <button
+              type="button"
+              data-testid="manager-seat-swap-action-btn"
+              className="inline-flex items-center justify-center gap-1.5 px-3 h-9 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 text-xs font-bold transition-colors cursor-pointer"
+              onClick={() => onOpenSwapModal(selectedSeat)}
+              title="Directly swap or relocate this seat allocation"
+            >
+              <ArrowLeftRight size={13} />
+              <span>Swap / Move</span>
+            </button>
+          )}
           <button
             type="button"
             className="mgr-btn-ghost text-xs font-semibold px-4 h-9 rounded-xl border border-border text-secondary hover:text-primary transition-colors cursor-pointer"
