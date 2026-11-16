@@ -7,23 +7,74 @@
     width: 440px;
     max-width: 100%;
     flex-shrink: 0;
-    transition: width theme(--animate-duration-fast) ease;
+    transition: width theme(--animate-duration-fast) ease, height theme(--animate-duration-fast) ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   .mgr-students-theme .mgr-scale-100 {
     width: 85.60mm !important;
+    height: 53.98mm !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow: visible !important;
+  }
+  .mgr-students-theme .mgr-scale-100 .id-card,
+  .mgr-students-theme .mgr-scale-100 .mgr-idcard {
+    width: 440px !important;
+    height: 278px !important;
+    min-width: 440px !important;
+    min-height: 278px !important;
+    max-width: none !important;
+    max-height: none !important;
+    transform: scale(0.735294) !important;
+    transform-origin: top center !important;
+    flex-shrink: 0 !important;
   }
   .mgr-students-theme .mgr-scale-133 {
     width: 440px !important;
+    height: 278px !important;
+    max-width: 100% !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+  }
+  .mgr-students-theme .mgr-scale-133 .id-card,
+  .mgr-students-theme .mgr-scale-133 .mgr-idcard {
+    width: 440px !important;
+    height: 278px !important;
+    transform: none;
+    flex-shrink: 0 !important;
   }
   .mgr-students-theme .mgr-scale-150 {
     width: 500px !important;
+    height: 316px !important;
+    max-width: 100% !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    overflow: visible !important;
+  }
+  .mgr-students-theme .mgr-scale-150 .id-card,
+  .mgr-students-theme .mgr-scale-150 .mgr-idcard {
+    width: 440px !important;
+    height: 278px !important;
+    min-width: 440px !important;
+    min-height: 278px !important;
+    transform: scale(1.13636) !important;
+    transform-origin: top center !important;
+    flex-shrink: 0 !important;
   }
 
   /* ════════ FRONT CARD UI (PREMIUM ID CARD) ════════ */
   .mgr-students-theme .id-card,
-  .id-card {
-    width: 100%;
-    aspect-ratio: 85.60 / 53.98;
+  .id-card,
+  .mgr-students-theme .mgr-idcard,
+  .mgr-idcard {
+    width: 440px;
+    height: 278px;
     border-radius: 16px;
     position: relative;
     overflow: hidden;
@@ -46,7 +97,7 @@
     padding: 14px 16px !important;
     display: flex !important;
     flex-direction: column !important;
-    justify-content: space-between !important;
+    box-sizing: border-box !important;
   }
   .mgr-students-theme .id-card--front::before,
   .id-card--front::before {
@@ -556,8 +607,53 @@
   }
 
   @media (max-width: 480px) {
-    .mgr-students-theme .mgr-idcard-wrap { width: 100%; }
-    .mgr-students-theme .mgr-idcard { width: 100%; }
+    .mgr-students-theme .mgr-idcard-workbench {
+      padding: 16px 8px !important;
+    }
+    .mgr-students-theme .mgr-scale-133,
+    .mgr-students-theme .mgr-scale-150 {
+      width: 330px !important;
+      height: 208px !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: flex-start !important;
+      overflow: visible !important;
+    }
+    .mgr-students-theme .mgr-scale-133 .id-card,
+    .mgr-students-theme .mgr-scale-133 .mgr-idcard,
+    .mgr-students-theme .mgr-scale-150 .id-card,
+    .mgr-students-theme .mgr-scale-150 .mgr-idcard {
+      width: 440px !important;
+      height: 278px !important;
+      min-width: 440px !important;
+      min-height: 278px !important;
+      transform: scale(0.75) !important;
+      transform-origin: top center !important;
+      flex-shrink: 0 !important;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .mgr-students-theme .mgr-scale-100,
+    .mgr-students-theme .mgr-scale-133,
+    .mgr-students-theme .mgr-scale-150 {
+      width: 290px !important;
+      height: 183px !important;
+    }
+    .mgr-students-theme .mgr-scale-100 .id-card,
+    .mgr-students-theme .mgr-scale-100 .mgr-idcard,
+    .mgr-students-theme .mgr-scale-133 .id-card,
+    .mgr-students-theme .mgr-scale-133 .mgr-idcard,
+    .mgr-students-theme .mgr-scale-150 .id-card,
+    .mgr-students-theme .mgr-scale-150 .mgr-idcard {
+      width: 440px !important;
+      height: 278px !important;
+      min-width: 440px !important;
+      min-height: 278px !important;
+      transform: scale(0.659) !important;
+      transform-origin: top center !important;
+      flex-shrink: 0 !important;
+    }
   }
   .mgr-students-theme .mgr-idcard-preview-panel  { display: flex; flex-direction: column; align-items: center; gap: 16px; }
   .mgr-students-theme .mgr-idcard-preview-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
@@ -718,6 +814,20 @@
     overflow: hidden;
     position: relative;
     background: #18181b;
+    height: 185px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mgr-students-theme .mgr-a4-sheet-cell-preview .id-card,
+  .mgr-students-theme .mgr-a4-sheet-cell-preview .mgr-idcard {
+    width: 440px !important;
+    height: 278px !important;
+    min-width: 440px !important;
+    min-height: 278px !important;
+    transform: scale(0.60) !important;
+    transform-origin: center center !important;
+    flex-shrink: 0 !important;
   }
   .mgr-students-theme .mgr-a4-cut-tag {
     position: absolute;
@@ -746,9 +856,9 @@
   /* Card standard physical dimensions: CR-80 (ISO/IEC 7810 ID-1) */
   /* 85.60 mm × 53.98 mm (8.56 cm × 5.4 cm) */
   .mgr-students-theme .mgr-idcard {
-    width: 100%;
-    aspect-ratio: 85.60 / 53.98;
-    border-radius: 3.18mm; overflow: hidden;
+    width: 440px;
+    height: 278px;
+    border-radius: 16px; overflow: hidden;
     background: radial-gradient(135% 100% at 85% 10%, #1e293b 0%, #0f172a 45%, #020617 100%);
     border: 1px solid rgba(255, 255, 255, 0.16);
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05),

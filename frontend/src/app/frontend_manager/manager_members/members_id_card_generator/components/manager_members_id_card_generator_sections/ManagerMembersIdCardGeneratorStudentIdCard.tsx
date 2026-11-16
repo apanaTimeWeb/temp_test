@@ -345,22 +345,26 @@ export default function ManagerMembersIdCardGeneratorStudentIdCard({
 
       {/* Render Cards according to currentSide */}
       {currentSide === 'front' && (
-        <div className={`mgr-idcard-wrap ${scale === '100' ? 'mgr-scale-100' : scale === '150' ? 'mgr-scale-150' : 'mgr-scale-133'}`}>
+        <div className="flex flex-col items-center">
           <div className="side-label no-print">
             <span className="dot" />
             Front Side
           </div>
-          {renderFrontCard()}
+          <div className={`mgr-idcard-wrap ${scale === '100' ? 'mgr-scale-100' : scale === '150' ? 'mgr-scale-150' : 'mgr-scale-133'}`}>
+            {renderFrontCard()}
+          </div>
         </div>
       )}
 
       {currentSide === 'back' && (
-        <div className={`mgr-idcard-wrap ${scale === '100' ? 'mgr-scale-100' : scale === '150' ? 'mgr-scale-150' : 'mgr-scale-133'}`}>
+        <div className="flex flex-col items-center">
           <div className="side-label no-print">
             <span className="dot" />
             Back Side
           </div>
-          <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />
+          <div className={`mgr-idcard-wrap ${scale === '100' ? 'mgr-scale-100' : scale === '150' ? 'mgr-scale-150' : 'mgr-scale-133'}`}>
+            <ManagerMembersIdCardGeneratorStudentIdCardBack data={data} />
+          </div>
         </div>
       )}
 

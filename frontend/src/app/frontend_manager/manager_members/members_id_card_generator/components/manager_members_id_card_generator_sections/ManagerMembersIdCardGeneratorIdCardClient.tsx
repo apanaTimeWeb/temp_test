@@ -517,7 +517,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                 </div>
 
                 {/* Actions: WhatsApp & Print Buttons */}
-                <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+                <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto justify-end">
                   <button
                     type="button"
                     onClick={handleShareWhatsApp}
@@ -592,10 +592,6 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
                   </div>
                 )}
               </div>
-
-              <p className="mgr-cell-sub mgr-idcard-preview-hint no-print">
-                {tManagerUi('use_preview_only_until_validity_and_verification_contract_is_supplied')}
-              </p>
             </>
           ) : (
             <div className="mgr-card mgr-idcard-empty-card">
