@@ -94,7 +94,7 @@ export function ManagerMembersEnquiriesMobileCards({
     }
   };
 
-  const renderStatusBadge = (status: ManagerMembersEnquiriesEnquiryStatus) => {
+  const renderStatusBadge = (status: ManagerMembersEnquiriesEnquiryStatus, lostReason?: string) => {
     const label = statusLabels[status];
     switch (status) {
       case 'New':
@@ -127,9 +127,17 @@ export function ManagerMembersEnquiriesMobileCards({
         );
       case 'Lost':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
+          <span
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30"
+            title={lostReason ? `Lost Reason: ${lostReason}` : undefined}
+          >
             <XCircle size={10} className="text-rose-400" />
             {label}
+            {lostReason && (
+              <span className="text-[10px] font-normal text-rose-300/80 ml-1">
+                ({lostReason.split('/')[0].trim()})
+              </span>
+            )}
           </span>
         );
     }
@@ -173,7 +181,7 @@ export function ManagerMembersEnquiriesMobileCards({
               </div>
               <div>
                 <span className="text-slate-400 text-[10px] uppercase font-semibold block mb-1">{tManagerUi('status')}</span>
-                {renderStatusBadge(enq.status)}
+                {renderStatusBadge(enq.status, enq.lostReason)}
               </div>
               <div>
                 <span className="text-slate-400 text-[10px] uppercase font-semibold block mb-1">{tManagerUi('handled_by')}</span>

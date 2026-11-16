@@ -95,6 +95,11 @@ export function ManagerMembersEnquiriesKanbanCard({ enq, colClass, onClick }: Ma
             <Clock size={10} className="text-emerald-400" /> {tManagerUi('upcoming')}
           </span>
         ) : null}
+        {enq.status === 'Lost' && enq.lostReason && (
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/30 truncate max-w-[180px]" title={enq.lostReason}>
+            {enq.lostReason.split('/')[0].trim()}
+          </span>
+        )}
       </div>
 
       <div className="crm-card-footer flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-indigo-500/15">

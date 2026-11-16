@@ -37,6 +37,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
   const [followUpDirty, setFollowUpDirty] = useState(false);
   const [isLostModalOpen, setIsLostModalOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState<ManagerMembersEnquiriesEnquiryStatus | null>(null);
+  const [lostInfo, setLostInfo] = useState<{ reason: string; date: string } | null>(null);
   const navigateWithUnsavedChanges = (href: string) => {
     if (!followUpDirty) { router.push(href); return; }
     void confirm(tManagerUi('confirm_leave_with_unsaved_changes'), tManagerUi('cancel'), tManagerUi('continue')).then((confirmed) => {
@@ -80,6 +81,12 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
   if (!enquiry) return <div className="crm-page crm-empty-state crm-not-found"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('enquiry_not_found')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
 
   const effectiveStatus = currentStatus ?? enquiry.status;
+  const displayEnquiry = {
+    ...enquiry,
+    status: effectiveStatus,
+    lostReason: lostInfo?.reason ?? enquiry.lostReason,
+    lostDate: lostInfo?.date ?? enquiry.lostDate,
+  };
 
   const handleConvert = () => {
     try {
@@ -89,9 +96,13 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
         phone: enquiry.phone,
         shift: enquiry.shift,
         source: enquiry.source,
+        preferredBranch: enquiry.preferredBranch,
       });
       sessionStorage.setItem('manager_pending_enquiry_conversion', payload);
       sessionStorage.setItem('enquiry_conversion_prefill', payload);
+      sessionStorage.setItem('new_admission_prefill', payload);
+      localStorage.setItem('manager_pending_enquiry_conversion', payload);
+      localStorage.setItem('enquiry_conversion_prefill', payload);
     } catch {
       // Storage fallback
     }
@@ -105,6 +116,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
       : `Marked as Lost | Reason: ${reason}`;
     handleAddFollowUp({ date: todayStr, remark: remarkText });
     setCurrentStatus('Lost');
+    setLostInfo({ reason, date: todayStr });
     try {
       sessionStorage.setItem(`manager_crm_lost_${id}`, JSON.stringify({ reason, notes, date: todayStr }));
     } catch {
@@ -134,7 +146,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
       <div className="crm-detail-grid">
         <div className="crm-detail-left">
           <ManagerMembersEnquiriesEnquiryProfileCard
-            enquiry={enquiry}
+            enquiry={displayEnquiry}
             locale={locale}
             statusLabel={statusLabels[effectiveStatus]}
             sourceFieldLabel={tManagerUi('source')}
@@ -200,7 +212,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
     <ManagerMembersEnquiriesLostReasonModal
       isOpen={isLostModalOpen}
       onClose={() => setIsLostModalOpen(false)}
-      enquiry={enquiry}
+      enquiry={displayEnquiry}
       onConfirm={handleConfirmLost}
     />
   </>;

@@ -39,6 +39,15 @@ export function ManagerMembersEnquiriesEnquiryProfileCard({
           </p>
         </div>
       </div>
+
+      {enquiry.status === 'Lost' && enquiry.lostReason && (
+        <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-2.5 text-xs text-rose-300">
+          <span className="font-bold text-rose-200 shrink-0">Lost Reason (ड्रॉप कारण):</span>
+          <span>{enquiry.lostReason}</span>
+          {enquiry.lostDate && <span className="text-slate-400 font-mono ml-auto">({enquiry.lostDate})</span>}
+        </div>
+      )}
+
       <div className="crm-info-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         <ManagerMembersEnquiriesInfoItem icon={<Tag size={14} className="text-sky-400" aria-hidden="true" />} label={sourceFieldLabel} value={sourceLabel} />
         <ManagerMembersEnquiriesInfoItem icon={<Clock size={14} className="text-amber-400" aria-hidden="true" />} label={shiftFieldLabel} value={shiftLabel} />

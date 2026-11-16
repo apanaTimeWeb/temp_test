@@ -156,9 +156,13 @@ export function ManagerMembersEnquiriesTable({
           phone: enq.phone,
           shift: enq.shift,
           source: enq.source,
+          preferredBranch: enq.preferredBranch,
         });
         sessionStorage.setItem('manager_pending_enquiry_conversion', payload);
         sessionStorage.setItem('enquiry_conversion_prefill', payload);
+        sessionStorage.setItem('new_admission_prefill', payload);
+        localStorage.setItem('manager_pending_enquiry_conversion', payload);
+        localStorage.setItem('enquiry_conversion_prefill', payload);
       } catch {
         // Storage fallback
       }
@@ -220,7 +224,7 @@ export function ManagerMembersEnquiriesTable({
     }
   };
 
-  const renderStatusBadge = (status: ManagerMembersEnquiriesEnquiryStatus) => {
+  const renderStatusBadge = (status: ManagerMembersEnquiriesEnquiryStatus, lostReason?: string) => {
     const label = statusLabels[status];
     switch (status) {
       case 'New':
@@ -253,9 +257,17 @@ export function ManagerMembersEnquiriesTable({
         );
       case 'Lost':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
+          <span
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30"
+            title={lostReason ? `Lost Reason: ${lostReason}` : undefined}
+          >
             <XCircle size={11} className="text-rose-400" />
             {label}
+            {lostReason && (
+              <span className="text-[10px] font-normal text-rose-300/80 ml-1">
+                ({lostReason.split('/')[0].trim()})
+              </span>
+            )}
           </span>
         );
     }
@@ -351,7 +363,7 @@ export function ManagerMembersEnquiriesTable({
                     {maskManagerEnquiriesPhone(enq.phone)}
                   </td>
                   <td className="p-3.5">{renderShiftBadge(enq.shift)}</td>
-                  <td className="p-3.5">{renderStatusBadge(enq.status)}</td>
+                  <td className="p-3.5">{renderStatusBadge(enq.status, enq.lostReason)}</td>
                   <td className="p-3.5 text-slate-300 text-xs">
                     <div className="inline-flex items-center gap-1.5">
                       <User size={13} className="text-indigo-400" />

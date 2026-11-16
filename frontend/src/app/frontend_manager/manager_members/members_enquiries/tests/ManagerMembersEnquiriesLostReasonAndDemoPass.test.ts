@@ -46,6 +46,7 @@ describe('Manager Members Enquiries - Lost Reason & WhatsApp Demo Pass Enhanceme
     );
     expect(tableSource).toContain("sessionStorage.setItem('manager_pending_enquiry_conversion'");
     expect(tableSource).toContain("sessionStorage.setItem('enquiry_conversion_prefill'");
+    expect(tableSource).toContain("localStorage.setItem('manager_pending_enquiry_conversion'");
     expect(tableSource).toContain('onQuickConvert={(e, enq) => handleQuickConvert(e, enq)}');
 
     const mobileSource = readSource(
@@ -53,6 +54,20 @@ describe('Manager Members Enquiries - Lost Reason & WhatsApp Demo Pass Enhanceme
     );
     expect(mobileSource).toContain('onQuickConvert: (e: MouseEvent, enq?: ManagerMembersEnquiriesEnquiry) => void');
     expect(mobileSource).toContain('onClick={(e) => onQuickConvert(e, enq)}');
+  });
+
+  it('displays lost reason in profile card and table badges when enquiry is lost', () => {
+    const profileCardSource = readSource(
+      'components/manager_members_enquiries_sections/ManagerMembersEnquiriesEnquiryProfileCard.tsx'
+    );
+    expect(profileCardSource).toContain("enquiry.status === 'Lost' && enquiry.lostReason");
+    expect(profileCardSource).toContain('Lost Reason (ड्रॉप कारण):');
+
+    const tableSource = readSource(
+      'components/manager_members_enquiries_table_parts/ManagerMembersEnquiriesTable.tsx'
+    );
+    expect(tableSource).toContain('lostReason && (');
+    expect(tableSource).toContain('renderStatusBadge(enq.status, enq.lostReason)');
   });
 
   it('enriches bulk WhatsApp templates with 1-Day Demo Pass and Location presets', () => {
