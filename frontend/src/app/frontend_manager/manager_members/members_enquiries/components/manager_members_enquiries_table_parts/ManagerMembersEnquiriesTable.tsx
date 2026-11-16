@@ -274,7 +274,8 @@ export function ManagerMembersEnquiriesTable({
   };
 
   return (
-    <div className="rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 backdrop-blur-md overflow-hidden shadow-xl">
+    <>
+      <div className="rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 backdrop-blur-md overflow-hidden shadow-xl">
       {/* Mobile Card List View */}
       <ManagerMembersEnquiriesMobileCards
         paginated={paginated}
@@ -499,7 +500,8 @@ export function ManagerMembersEnquiriesTable({
           </div>
         </div>
       </div>
-      {/* Lost Reason Modal */}
+
+      {/* Lost Reason Modal (Rendered outside the overflow-hidden table container) */}
       <ManagerMembersEnquiriesLostReasonModal
         isOpen={Boolean(lostModalEnquiry)}
         onClose={() => setLostModalEnquiry(null)}
@@ -510,6 +512,6 @@ export function ManagerMembersEnquiriesTable({
           }
         }}
       />
-    </div>
+    </>
   );
 }

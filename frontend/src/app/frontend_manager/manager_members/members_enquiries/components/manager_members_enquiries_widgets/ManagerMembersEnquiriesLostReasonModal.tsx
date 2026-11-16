@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, AlertTriangle, XCircle, Check } from 'lucide-react';
 import type { ManagerMembersEnquiriesEnquiry } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesTypes';
 
@@ -29,6 +30,11 @@ export function ManagerMembersEnquiriesLostReasonModal({
 }: ManagerMembersEnquiriesLostReasonModalProps) {
   const [selectedReason, setSelectedReason] = useState<string>(MANAGER_CRM_LOST_REASONS[0].label);
   const [notes, setNotes] = useState<string>('');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -49,22 +55,22 @@ export function ManagerMembersEnquiriesLostReasonModal({
     onClose();
   };
 
-  return (
+  const modalContent = (
     <div
       role="dialog"
       aria-modal="true"
       aria-labelledby="lost-reason-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Modal Dialog (Direct presentation without inner scroll box) */}
-      <div className="relative z-10 w-full max-w-2xl bg-[#0c0f28] border border-rose-500/40 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative z-10 w-full max-w-2xl bg-[#0c0f28] border border-rose-500/40 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 my-auto">
         {/* Header */}
         <div className="px-6 py-4 bg-gradient-to-r from-rose-900/80 via-rose-950/90 to-[#0c0f28] border-b border-rose-500/30 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -186,4 +192,10 @@ export function ManagerMembersEnquiriesLostReasonModal({
       </div>
     </div>
   );
+
+  if (mounted && typeof document !== 'undefined') {
+    return createPortal(modalContent, document.body);
+  }
+
+  return modalContent;
 }
