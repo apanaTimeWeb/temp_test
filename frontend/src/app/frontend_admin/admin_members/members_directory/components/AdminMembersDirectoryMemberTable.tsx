@@ -4,7 +4,7 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 
 import { useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, MoreVertical, Building2, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, Search, Filter, RotateCcw, X, ChevronLeft, ChevronRight, IndianRupee, Clock, DownloadCloud, FileSpreadsheet, Printer } from 'lucide-react';
+import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, Search, Filter, RotateCcw, X, ChevronLeft, ChevronRight, IndianRupee, Clock, DownloadCloud, FileSpreadsheet, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { formatAdminMembersDate, downloadAdminMembersDemoCsv, downloadAdminMembersDemoExcel, printAdminMembersRoster } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
@@ -34,17 +34,15 @@ export default function AdminMembersMemberTable({
 }: AdminMembersMemberTableProps) {
   const t = useTranslations('ADMIN_MEMBERS');
   const locale = useLocale();
-  type MemberSortField = 'name' | 'branch' | 'phone' | 'plan' | 'seat' | 'expiryDate' | 'status';
+  type MemberSortField = 'name' | 'phone' | 'plan' | 'seat' | 'expiryDate' | 'status';
   const [sortField, setSortField] = useState<MemberSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useAdminApplicationInfrastructureUrlQueryState<number>('page', 0);
-  const [openActionsFor, setOpenActionsFor] = useState<string | null>(null);
   const [pageSize, setPageSize] = useState(10);
   const [searchQuery, setSearchQuery] = useState('');
   const [planFilter, setPlanFilter] = useState<string>('all');
   const [feeFilter, setFeeFilter] = useState<'all' | 'Paid' | 'Due'>('all');
   const [shiftFilter, setShiftFilter] = useState<string>('all');
-  const [branchFilter, setBranchFilter] = useState<string>('all');
 
   const availablePlans = useMemo(() => {
     const set = new Set<string>();
@@ -58,14 +56,6 @@ export default function AdminMembersMemberTable({
     const set = new Set<string>();
     members.forEach((m) => {
       if (m.shift) set.add(m.shift);
-    });
-    return Array.from(set);
-  }, [members]);
-
-  const availableBranches = useMemo(() => {
-    const set = new Set<string>();
-    members.forEach((m) => {
-      if (m.branch) set.add(m.branch);
     });
     return Array.from(set);
   }, [members]);
@@ -87,9 +77,6 @@ export default function AdminMembersMemberTable({
 
   const searchedMembers = useMemo(() => {
     let result = filteredMembers;
-    if (branchFilter !== 'all') {
-      result = result.filter((m) => (m.branch || '').toLowerCase() === branchFilter.toLowerCase());
-    }
     if (planFilter !== 'all') {
       result = result.filter((m) => m.plan.toLowerCase().includes(planFilter.toLowerCase()));
     }
@@ -114,7 +101,7 @@ export default function AdminMembersMemberTable({
       );
     }
     return result;
-  }, [filteredMembers, branchFilter, planFilter, feeFilter, shiftFilter, searchQuery]);
+  }, [filteredMembers, planFilter, feeFilter, shiftFilter, searchQuery]);
 
   const sortedMembers = useMemo(() => {
     if (!sortField) return searchedMembers;
@@ -207,14 +194,13 @@ export default function AdminMembersMemberTable({
   };
 
   const isFilterActive = Boolean(
-    searchQuery || planFilter !== 'all' || feeFilter !== 'all' || shiftFilter !== 'all' || branchFilter !== 'all'
+    searchQuery || planFilter !== 'all' || feeFilter !== 'all' || shiftFilter !== 'all'
   );
 
   const resetAllFilters = () => {
     setSearchQuery('');
     setPlanFilter('all');
     setShiftFilter('all');
-    setBranchFilter('all');
     setFeeFilter('all');
     setPage(0);
   };
@@ -234,7 +220,7 @@ export default function AdminMembersMemberTable({
                 setSearchQuery(e.target.value);
                 setPage(0);
               }}
-              placeholder="Search member by name, ID, phone, email, seat, branch..."
+              placeholder="Search member by name, ID, phone, email, seat, plan..."
               className="w-full rounded-xl border border-slate-700/60 bg-slate-950/70 pl-10 pr-9 py-2 text-xs text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
             />
             {searchQuery && (
@@ -287,27 +273,6 @@ export default function AdminMembersMemberTable({
         {/* FILTERS & STATS ROW */}
         <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1 border-t border-slate-800/40">
           <div className="flex flex-wrap items-center gap-2">
-            {/* Branch filter */}
-            {availableBranches.length > 1 && (
-              <div className="relative flex items-center">
-                <Building2 size={13} className="absolute left-2.5 text-amber-400 pointer-events-none" />
-                <select
-                  value={branchFilter}
-                  onChange={(e) => {
-                    setBranchFilter(e.target.value);
-                    setPage(0);
-                  }}
-                  aria-label="Filter by branch"
-                  className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors"
-                >
-                  <option value="all">All Branches</option>
-                  {availableBranches.map((branch) => (
-                    <option key={branch} value={branch}>{branch}</option>
-                  ))}
-                </select>
-              </div>
-            )}
-
             {/* Plan filter */}
             <div className="relative flex items-center">
               <Filter size={13} className="absolute left-2.5 text-purple-400 pointer-events-none" />
@@ -413,10 +378,9 @@ export default function AdminMembersMemberTable({
                     )}
                   </th>
                   {renderSortableHeader('name', t('TABLE_MEMBER'))}
-                  {renderSortableHeader('branch', 'Branch')}
                   {renderSortableHeader('phone', t('TABLE_CONTACT'))}
                   {renderSortableHeader('plan', t('TABLE_PLAN'))}
-                  {renderSortableHeader('seat', 'Seat / Shift')}
+                  {renderSortableHeader('seat', 'Seat')}
                   {renderSortableHeader('expiryDate', t('TABLE_EXPIRY'))}
                   {renderSortableHeader('status', t('TABLE_STATUS'))}
                   <th scope="col" className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
@@ -442,28 +406,12 @@ export default function AdminMembersMemberTable({
                         <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 font-semibold text-white hover:text-indigo-300 transition-colors text-left" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
                         <span className="block text-xs font-mono text-slate-400">{displayValue(member.id)}</span>
                       </th>
-                      <td className="px-4 py-3">
-                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-300 whitespace-nowrap">
-                          <Building2 size={13} className="text-amber-400 shrink-0" />
-                          <span>{member.branch || 'Downtown Central'}</span>
-                        </span>
-                      </td>
-                      <td className="px-4 py-3"><span className="block text-slate-200">{displayValue(member.email)}</span><span className="text-xs text-slate-400">{displayValue(member.phone)}</span></td>
+                      <td className="px-4 py-3 text-slate-200 text-xs font-mono">{displayValue(member.email || member.phone)}</td>
                       <td className="px-4 py-3 text-slate-200 font-medium">{displayValue(member.plan)}</td>
-                      <td className="px-4 py-3">
-                        <span className="block font-medium text-slate-200">{member.seat ? `Seat ${member.seat}` : '—'}</span>
-                        <span className="text-xs text-slate-400">{member.shift || '—'}{member.locker ? ` · Locker ${member.locker}` : ''}</span>
-                      </td>
+                      <td className="px-4 py-3 text-slate-200 font-medium">{member.seat ? `Seat ${member.seat}` : '—'}</td>
                       <td className="px-4 py-3 text-slate-300">{expiryLabel(member.expiryDate)}</td>
                       <td className="px-4 py-3">
-                        <div className="flex flex-col gap-1 items-start">
-                          <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${getStatusBadge(member.status)}`}>{statusLabel(member.status)}</span>
-                          {member.feeStatus && (
-                            <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${member.feeStatus === 'Paid' ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-400' : 'border border-rose-500/20 bg-rose-500/10 text-rose-400'}`}>
-                              {member.feeStatus === 'Due' && member.dueFeeMinor ? `Due: ₹${(member.dueFeeMinor / 100).toLocaleString('en-IN')}` : `Fee: ${member.feeStatus}`}
-                            </span>
-                          )}
-                        </div>
+                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getStatusBadge(member.status)}`}>{statusLabel(member.status)}</span>
                       </td>
                       <td className="px-4 py-3">
                         <div className="relative flex justify-end gap-1.5">
@@ -497,41 +445,6 @@ export default function AdminMembersMemberTable({
                           >
                             <MessageSquare size={17} strokeWidth={2} className="text-emerald-400" aria-hidden="true" />
                           </button>
-                          <button
-                            type="button"
-                            className="min-h-9 min-w-9 rounded-lg border border-slate-700/60 bg-slate-800/40 text-slate-300 hover:text-white hover:bg-slate-800 inline-flex items-center justify-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
-                            aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })}
-                            aria-expanded={openActionsFor === member.id}
-                            aria-controls={`admin-member-actions-${member.id}`}
-                            onClick={() => setOpenActionsFor((current) => current === member.id ? null : member.id)}
-                          >
-                            <MoreVertical size={17} strokeWidth={2} aria-hidden="true" />
-                          </button>
-                          {openActionsFor === member.id && (
-                            <div
-                              id={`admin-member-actions-${member.id}`}
-                              aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })}
-                              onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }}
-                              className="absolute right-0 z-30 mt-10 min-w-48 rounded-xl border border-slate-700/80 bg-slate-900/95 backdrop-blur-xl p-1.5 shadow-2xl space-y-0.5"
-                            >
-                              <button
-                                type="button"
-                                className="flex items-center gap-2 min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
-                                onClick={() => { setOpenActionsFor(null); onSelectMember(member); }}
-                              >
-                                <Eye size={14} className="text-sky-400 shrink-0" />
-                                <span>{t('ACTION_VIEW_DETAILS')}</span>
-                              </button>
-                              <button
-                                type="button"
-                                className="flex items-center gap-2 min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
-                                onClick={() => setOpenActionsFor(null)}
-                              >
-                                <X size={14} className="text-rose-400 shrink-0" />
-                                <span>{t('ACTION_CLOSE_MENU')}</span>
-                              </button>
-                            </div>
-                          )}
                         </div>
                       </td>
                     </tr>

@@ -151,18 +151,11 @@ describe("Consolidated from AdminMembersDirectoryCoreRegressionSuite.test.tsx", 
                 });
             });
             suite0_describe('member action disclosure keyboard behavior', () => {
-                suite0_it('uses ordinary disclosure buttons rather than claiming incomplete ARIA menu semantics and closes on Escape', () => {
+                suite0_it('provides direct view and WhatsApp actions without redundant 3-dots disclosure menus', () => {
                     renderTable('en');
-                    const trigger = suite0_screen.getAllByRole('button', { name: 'Open actions for Demo Member One' })[0]!;
-                    suite0_fireEvent.click(trigger);
-                    suite0_expect(suite0_screen.queryByRole('menu')).toBeNull();
                     suite0_expect(suite0_screen.getAllByRole('button', { name: 'View member details' }).length).toBeGreaterThan(0);
-                    const disclosure = trigger.getAttribute('aria-controls');
-                    suite0_expect(disclosure).toBeTruthy();
-                    const panel = document.getElementById(disclosure!);
-                    suite0_expect(panel).toBeTruthy();
-                    suite0_fireEvent.keyDown(panel!, { key: 'Escape' });
-                    suite0_expect(document.getElementById(disclosure!)).toBeNull();
+                    suite0_expect(suite0_screen.getAllByRole('button', { name: /Chat with .* on WhatsApp/i }).length).toBeGreaterThan(0);
+                    suite0_expect(suite0_screen.queryByRole('button', { name: /Open actions for/i })).toBeNull();
                 });
             });
         });

@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState, useMemo } from 'react';
-import { CheckCircle, Pencil, Plus, Trash2, Building2, Search, Layers, IndianRupee, Clock, Download, FileSpreadsheet, Printer } from 'lucide-react';
+import { CheckCircle, Pencil, Plus, Trash2, Building2, Search, Layers, IndianRupee, Clock, Download, FileSpreadsheet, Printer, Users } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
@@ -10,7 +10,6 @@ import type { AdminPlansPlan, AdminPlansFormValues } from '@/app/frontend_admin/
 import { ADMIN_PLANS_STATUS_VALUES } from '@/app/frontend_admin/admin_members/members_plans/config/admin_members_plans.url_config';
 import AdminPlansFormDialog from '@/app/frontend_admin/admin_members/members_plans/components/AdminMembersPlansFormDialog';
 import AdminPlansDeleteDialog from '@/app/frontend_admin/admin_members/members_plans/components/AdminMembersPlansDeleteDialog';
-import { AdminMembersPlansPricingRuleSettings } from './AdminMembersPlansPricingRuleSettings';
 
 import type { AdminPlansEmptyStateProps } from '@/app/frontend_admin/admin_members/members_plans/types/AdminMembersPlansComponentTypes';
 
@@ -374,13 +373,13 @@ export default function AdminPlansPage() {
             trend: 'Standard Term',
           },
           {
-            label: 'Covered Scope',
-            value: selectedBranch ? selectedBranch.code : 'All Branches',
-            icon: Building2,
+            label: 'Total Subscribers',
+            value: visiblePlans.reduce((acc, p) => acc + (p.subscribers || 0), 0),
+            icon: Users,
             border: 'border-purple-500/20 hover:border-purple-500/40',
             glow: 'bg-purple-500/10 text-purple-400',
             badge: 'border-purple-500/20 bg-purple-500/10 text-purple-400',
-            trend: 'Branch Assigned',
+            trend: 'Active Students',
           },
         ].map((kpi) => (
           <div
@@ -402,8 +401,6 @@ export default function AdminPlansPage() {
           </div>
         ))}
       </div>
-
-      <AdminMembersPlansPricingRuleSettings />
 
       {/* SEARCH AND FILTER BAR */}
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-xl p-3 shadow-lg">

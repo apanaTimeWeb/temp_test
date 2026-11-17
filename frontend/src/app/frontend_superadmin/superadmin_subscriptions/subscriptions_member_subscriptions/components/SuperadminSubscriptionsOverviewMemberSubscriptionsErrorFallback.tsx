@@ -6,17 +6,27 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { AlertTriangle, RefreshCcw } from 'lucide-react';
 
 type SuperadminSubscriptionsOverviewMemberSubscriptionsErrorFallbackProps = { onRetry: () => void };
 
 export default function SuperadminSubscriptionsOverviewMemberSubscriptionsErrorFallback({ onRetry }: SuperadminSubscriptionsOverviewMemberSubscriptionsErrorFallbackProps) {
   const t = useTranslations('SUPERADMIN_FINANCE');
   return (
-    <section className="mx-auto w-full max-w-3xl rounded-xl border border-border bg-danger-bg p-6 text-danger" role="alert" data-testid="superadmin_subscriptions-subscriptions_member_subscriptions-error-fallback">
-      <h2 className="text-lg font-semibold">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>
-      <p className="mt-2 text-sm">{t('COPY.MODULE_ROUTE_ERROR_MESSAGE')}</p>
-      <button type="button" className="sa-btn-primary mt-4 min-h-11 min-w-28" onClick={onRetry} data-testid="superadmin_subscriptions-subscriptions_member_subscriptions-error-retry">
-        {t('COPY.RETRY_MODULE_ROUTE')}
+    <section className="mx-auto w-full max-w-xl rounded-2xl border border-rose-500/30 bg-[#0c0f28]/95 p-6 sm:p-8 text-center shadow-xl backdrop-blur-md flex flex-col items-center justify-center" role="alert" data-testid="superadmin_subscriptions-subscriptions_member_subscriptions-error-fallback">
+      <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-rose-500/30 bg-rose-500/15 text-rose-400 shadow-inner">
+        <AlertTriangle className="h-7 w-7" />
+      </div>
+      <h2 className="text-lg sm:text-xl font-bold text-slate-100">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>
+      <p className="mt-2 text-xs sm:text-sm text-slate-400 max-w-md">{t('COPY.MODULE_ROUTE_ERROR_MESSAGE')}</p>
+      <button
+        type="button"
+        className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer"
+        onClick={onRetry}
+        data-testid="superadmin_subscriptions-subscriptions_member_subscriptions-error-retry"
+      >
+        <RefreshCcw className="h-4 w-4" />
+        <span>{t('COPY.RETRY_MODULE_ROUTE')}</span>
       </button>
     </section>
   );

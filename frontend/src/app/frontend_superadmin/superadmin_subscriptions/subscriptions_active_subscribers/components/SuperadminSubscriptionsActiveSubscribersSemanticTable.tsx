@@ -1,5 +1,5 @@
 'use client';
-import SuperadminSubscriptionsActiveSubscribersEmptyState from '@/app/frontend_superadmin\superadmin_subscriptions\subscriptions_active_subscribers\components\SuperadminSubscriptionsActiveSubscribersEmptyState';
+import SuperadminSubscriptionsActiveSubscribersEmptyState from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersEmptyState';
 /** Responsibility: Superadmin Subscriptions Semantic Table; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
 /** Data-Flow: leaf-owned props or hook state -> SuperadminSubscriptionsActiveSubscribersSemanticTable formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
 import { useTranslations } from 'next-intl';
