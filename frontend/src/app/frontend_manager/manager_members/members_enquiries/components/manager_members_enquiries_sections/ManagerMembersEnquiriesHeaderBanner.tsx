@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { RefreshCw, LayoutGrid, List, Plus, MessageCircle } from 'lucide-react';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { ManagerMembersEnquiriesBoardViewMode } from '@/app/frontend_manager/manager_members/members_enquiries/types/ManagerMembersEnquiriesComponentTypes';
 
 export interface ManagerMembersEnquiriesHeaderBannerProps {
@@ -83,7 +84,7 @@ export function ManagerMembersEnquiriesHeaderBanner({
             title="Refresh CRM Pipeline"
             className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60 cursor-pointer"
           >
-            <RefreshCw size={14} className={isFetching ? 'animate-spin text-indigo-400' : 'text-indigo-400'} />
+            {isFetching ? <ButtonLoader icon="search" /> : <RefreshCw size={14} className="text-indigo-400" />}
             <span className="hidden sm:inline">{isFetching ? 'Syncing...' : 'Sync Pipeline'}</span>
           </button>
 

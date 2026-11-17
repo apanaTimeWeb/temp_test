@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Download, Plus, Printer, Upload, Search, Building2, IndianRupee } from 'lucide-react';
+import { Download, Plus, Printer, Upload, Search, Building2, IndianRupee, Clock, CheckCircle2, Users, TrendingUp } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_SHIFTS_DEMO_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/mocks/scenarios/admin_shifts_management.scenarios';
@@ -42,6 +42,15 @@ export function AdminShiftsManagementPage() {
       return true;
     });
   }, [shifts, isAllBranches, selectedBranch, statusFilter, searchQuery]);
+
+  const shiftStats = useMemo(() => {
+    const total = visibleShifts.length;
+    const active = visibleShifts.filter((s) => s.active).length;
+    const totalCapacity = visibleShifts.reduce((acc, s) => acc + (s.capacity || 0), 0);
+    const totalOccupancy = visibleShifts.reduce((acc, s) => acc + (s.occupancy || 0), 0);
+    const avgOccupancy = totalCapacity > 0 ? Math.round((totalOccupancy / totalCapacity) * 100) : 0;
+    return { total, active, totalCapacity, totalOccupancy, avgOccupancy };
+  }, [visibleShifts]);
 
   const exportCsv = () => {
     if (!isDemoMode) return;
@@ -106,6 +115,53 @@ export function AdminShiftsManagementPage() {
           >
             <Printer size={18} strokeWidth={2} />{t('print')}
           </button>
+        </div>
+      </div>
+
+      {/* 4 Premium Glassmorphic KPI Cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
+        <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-linear-to-br from-cyan-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Total Shifts</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+              <Clock size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{shiftStats.total}</p>
+          <p className="mt-1 text-xs text-text-secondary">{selectedBranch ? selectedBranch.name : 'Configured shifts'}</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-linear-to-br from-emerald-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Active Shifts</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+              <CheckCircle2 size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{shiftStats.active}</p>
+          <p className="mt-1 text-xs text-text-secondary">Currently accepting bookings</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-indigo-500/20 bg-linear-to-br from-indigo-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Total Capacity</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+              <Users size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">{shiftStats.totalCapacity}</p>
+          <p className="mt-1 text-xs text-text-secondary">Max concurrent desk slots</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-purple-500/20 bg-linear-to-br from-purple-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Enrolled Seats</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/15 text-purple-600 dark:text-purple-400">
+              <TrendingUp size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-purple-600 dark:text-purple-400">{shiftStats.totalOccupancy}</p>
+          <p className="mt-1 text-xs text-text-secondary">{shiftStats.avgOccupancy}% network utilization</p>
         </div>
       </div>
 

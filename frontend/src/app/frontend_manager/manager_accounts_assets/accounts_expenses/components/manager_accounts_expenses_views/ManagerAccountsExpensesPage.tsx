@@ -19,6 +19,7 @@ import { ManagerAccountsExpensesToolbar } from '@/app/frontend_manager/manager_a
 import { ManagerAccountsExpensesAddExpenseModal } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_dialogs/ManagerAccountsExpensesAddExpenseModal';
 import { ManagerAccountsExpensesCategoryReview } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_sections/ManagerAccountsExpensesCategoryReview';
 import { ManagerAccountsExpensesDetailsModal } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/components/manager_accounts_expenses_dialogs/ManagerAccountsExpensesDetailsModal';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 export type ManagerExpensesTimeHorizon = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -248,7 +249,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60"
             title="Sync Expense Ledger"
           >
-            <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
+            {isSyncing ? <ButtonLoader icon="fine" /> : <RefreshCw size={14} />}
             <span>{isSyncing ? 'Syncing...' : 'Sync Balances'}</span>
           </button>
 

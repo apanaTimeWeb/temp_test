@@ -10,7 +10,7 @@ import { MANAGER_REPORTS_DATE_RANGES } from '@/app/frontend_manager/manager_dash
 import { useManagerReports } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/hooks/useManagerDashboardReports';
 import { ManagerDashboardReportsContractBlockedError } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/api/manager_dashboard_reports.api';
 import type { ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
-import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { LibraryLoader, ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 export default function ManagerDashboardReportsPage() {
   const tManagerUi = useTranslations('manager.manager_reports.ui');
@@ -186,7 +186,7 @@ export default function ManagerDashboardReportsPage() {
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               title="Refresh reports data"
             >
-              <RotateCw size={13} className={query.isFetching ? 'animate-spin text-primary' : 'text-muted-foreground'} />
+              {query.isFetching ? <ButtonLoader icon="report" /> : <RotateCw size={13} className="text-muted-foreground" />}
               <span>{query.isFetching ? 'Refreshing...' : 'Refresh'}</span>
             </button>
             <button

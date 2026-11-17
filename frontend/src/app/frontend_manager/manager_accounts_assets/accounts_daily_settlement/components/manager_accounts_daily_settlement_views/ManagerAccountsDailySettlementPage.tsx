@@ -16,6 +16,7 @@ import ManagerAccountsDailySettlementTimeHorizonBar, { type ManagerDailySettleme
 import ManagerAccountsDailySettlementConfirmModal from '../manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementConfirmModal';
 import { ManagerAccountsDailySettlementDetailsModal } from './ManagerAccountsDailySettlementDetailsModal';
 import { ManagerAccountsDailySettlementDenominationAndHandoverModal } from '../manager_accounts_daily_settlement_dialogs/ManagerAccountsDailySettlementDenominationAndHandoverModal';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 function toLocalDateInputValue(date: Date): string {
   const year = date.getFullYear();
@@ -223,7 +224,7 @@ export default function ManagerAccountsDailySettlementPage({ view, id }: Manager
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60 whitespace-nowrap shrink-0"
               title="Sync Drawer Balances"
             >
-              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
+              {isSyncing ? <ButtonLoader icon="return" /> : <RefreshCw size={14} />}
               <span>{isSyncing ? 'Syncing...' : 'Sync Balances'}</span>
             </button>
 

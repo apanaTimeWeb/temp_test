@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { TrendingUp, X, CheckCircle2, Calculator, ArrowRight, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 export interface SubscriptionRecord {
   id: number;
@@ -223,7 +224,7 @@ export default function ManagerFinanceSubscriptionsUpgradeModal({
               data-testid="confirm-pro-rata-upgrade-btn"
               className="mgr-btn-primary text-xs flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <CheckCircle2 size={14} />
+              {isSubmitting ? <ButtonLoader icon="fine" /> : <CheckCircle2 size={14} />}
               <span>{isSubmitting ? 'Upgrading...' : `Confirm Plan Upgrade (₹${netProRataPayable})`}</span>
             </button>
           </div>

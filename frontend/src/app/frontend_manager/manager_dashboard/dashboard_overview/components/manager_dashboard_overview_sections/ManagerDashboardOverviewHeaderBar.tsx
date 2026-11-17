@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { TrendingUp, RotateCw, Clock, CalendarRange, UserPlus, PhoneCall, IndianRupee, QrCode, Users } from 'lucide-react';
 import { MANAGER_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_manager/manager_dashboard/dashboard_overview/config/manager_dashboard_overview.url_config';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 export type DashboardTimeRange = 'today' | 'this_week' | 'this_month' | 'custom';
 
@@ -73,7 +74,7 @@ export function ManagerDashboardOverviewHeaderBar({
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
             title="Refresh dashboard KPIs"
           >
-            <RotateCw size={13} className={isFetching ? 'animate-spin text-primary' : 'text-muted-foreground'} />
+            {isFetching ? <ButtonLoader icon="library" /> : <RotateCw size={13} className="text-muted-foreground" />}
             <span>{isFetching ? 'Refreshing...' : 'Refresh'}</span>
           </button>
           <Link

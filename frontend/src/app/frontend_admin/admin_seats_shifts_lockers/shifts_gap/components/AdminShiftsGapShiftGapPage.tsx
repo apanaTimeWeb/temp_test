@@ -6,9 +6,9 @@ import { useTranslations } from 'next-intl';
 // RESPONSIBILITY: Entry page for the admin_shifts module.
 // DATA FLOW: Next.js Router -> Page -> Components
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import { ChevronDown, Zap } from 'lucide-react';
+import { ChevronDown, Zap, Clock, AlertCircle, Armchair, IndianRupee } from 'lucide-react';
 import { ADMIN_SHIFTS_DEMO_SHIFT_GAPS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/mocks/AdminShiftsGapShiftGapFixtures';
 import AdminShiftsGapOverstayAuditTable from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/components/AdminShiftsGapOverstayAuditTable';
 
@@ -31,6 +31,14 @@ export function AdminShiftsShiftGapPage() {
 
   const visible = shiftFilter === 'All' ? ADMIN_SHIFTS_DEMO_SHIFT_GAPS : ADMIN_SHIFTS_DEMO_SHIFT_GAPS.filter((shift) => shift.name === shiftFilter);
 
+  const gapStats = useMemo(() => {
+    const totalShifts = visible.length;
+    const totalGaps = visible.reduce((acc, s) => acc + s.gaps.length, 0);
+    const totalGapSeats = visible.reduce((acc, s) => acc + s.gaps.reduce((gAcc, g) => gAcc + g.seats, 0), 0);
+    const estRevLoss = visible.reduce((acc, s) => acc + s.gaps.reduce((gAcc, g) => gAcc + g.revLoss, 0), 0);
+    return { totalShifts, totalGaps, totalGapSeats, estRevLoss };
+  }, [visible]);
+
   if (!isDemoMode) return <section className="space-y-3 rounded-lg border border-warning-bg bg-card p-6"><h1 className="text-section-title font-semibold text-text-primary">{t('shiftGapTitle')}</h1><p role="status" className="text-warning-text">{t('shiftGapLiveUnavailable')}</p></section>;
 
   return (
@@ -44,6 +52,53 @@ export function AdminShiftsShiftGapPage() {
           </div>
         </div>
 
+        {/* 4 Premium Glassmorphic KPI Cards */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
+          <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-linear-to-br from-cyan-500/10 via-card to-card p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Shifts Analyzed</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+                <Clock size={18} strokeWidth={2.2} />
+              </div>
+            </div>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{gapStats.totalShifts}</p>
+            <p className="mt-1 text-xs text-text-secondary">Active shift timelines</p>
+          </div>
+
+          <div className="relative overflow-hidden rounded-xl border border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Gap Windows</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                <AlertCircle size={18} strokeWidth={2.2} />
+              </div>
+            </div>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{gapStats.totalGaps}</p>
+            <p className="mt-1 text-xs text-text-secondary">Unutilized time slots</p>
+          </div>
+
+          <div className="relative overflow-hidden rounded-xl border border-indigo-500/20 bg-linear-to-br from-indigo-500/10 via-card to-card p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Unassigned Desks</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+                <Armchair size={18} strokeWidth={2.2} />
+              </div>
+            </div>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">{gapStats.totalGapSeats}</p>
+            <p className="mt-1 text-xs text-text-secondary">Available for quick-fill</p>
+          </div>
+
+          <div className="relative overflow-hidden rounded-xl border border-rose-500/20 bg-linear-to-br from-rose-500/10 via-card to-card p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Revenue Opportunity</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
+                <IndianRupee size={18} strokeWidth={2.2} />
+              </div>
+            </div>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">₹{gapStats.estRevLoss}</p>
+            <p className="mt-1 text-xs text-text-secondary">Recoverable seat leak</p>
+          </div>
+        </div>
+
         <div className="flex min-w-0 flex-col gap-3 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center">
           <div className="relative min-w-0 sm:w-56">
             <select aria-label={t('shift')} data-testid="admin_shifts-page-control-001" className="min-h-11 w-full appearance-none rounded-md border border-border bg-input px-3 py-2 pr-9 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-60" value={shiftFilter} onChange={e => setShiftFilter(e.target.value)}>
@@ -52,7 +107,10 @@ export function AdminShiftsShiftGapPage() {
             </select>
             <ChevronDown size={18} strokeWidth={2} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary" />
           </div>
-          <p className="text-sm text-text-secondary" role="note">{t('periodSingleDay')}</p>
+          <p className="text-sm text-text-secondary" role="note">
+            <span className="sr-only">{t('periodSingleDay')}</span>
+            Period: Single-Day Schedule · Daily real-time tracking
+          </p>
         </div>
 
         {visible.map(shift => {

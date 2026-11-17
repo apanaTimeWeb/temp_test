@@ -8,7 +8,7 @@ import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ChevronDown, Search, Wrench } from 'lucide-react';
+import { ChevronDown, Search, Wrench, Armchair, CheckCircle2, AlertOctagon } from 'lucide-react';
 import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import {
@@ -48,12 +48,25 @@ export function AdminSeatsManagementPage() {
   const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | SeatStatus>('statusFilter', 'all', { validValues: ['all', 'Working', 'Maintenance', 'Broken'] });
   const { selectedBranch, isAllBranches } = useAdminBranch();
 
-  const filtered = seats.filter((seat) => {
-    const matchBranch = isAllBranches || !selectedBranch || seat.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(seat.branch.toLowerCase());
+  const branchScopedSeats = useMemo(() => {
+    return seats.filter((seat) => {
+      return isAllBranches || !selectedBranch || seat.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(seat.branch.toLowerCase());
+    });
+  }, [seats, isAllBranches, selectedBranch]);
+
+  const stats = useMemo(() => {
+    const total = branchScopedSeats.length;
+    const working = branchScopedSeats.filter(s => s.status === 'Working').length;
+    const maintenance = branchScopedSeats.filter(s => s.status === 'Maintenance').length;
+    const broken = branchScopedSeats.filter(s => s.status === 'Broken').length;
+    return { total, working, maintenance, broken };
+  }, [branchScopedSeats]);
+
+  const filtered = branchScopedSeats.filter((seat) => {
     const normalizedSearch = search.trim().toLocaleLowerCase();
     const matchesSearch = [seat.seatNo, seat.branch, seat.assignedTo]
       .some((value) => value.toLocaleLowerCase().includes(normalizedSearch));
-    return matchBranch && matchesSearch && matchesAdminSeatsFilter(seat.status, statusFilter);
+    return matchesSearch && matchesAdminSeatsFilter(seat.status, statusFilter);
   });
 
   const colDefs = useMemo<readonly DataGridColumn<Seat>[]>(() => [
@@ -103,6 +116,53 @@ export function AdminSeatsManagementPage() {
         <div>
           <h1 className="text-page-title font-bold text-text-primary">{t('seatsTitle')}</h1>
           <p className="text-sm text-text-secondary">{t('seatsSubtitle')}</p>
+        </div>
+      </div>
+
+      {/* 4 Premium Glassmorphic KPI Cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
+        <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-linear-to-br from-cyan-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Total Inventory</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+              <Armchair size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{stats.total}</p>
+          <p className="mt-1 text-xs text-text-secondary">{selectedBranch ? selectedBranch.name : 'All branches'}</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-linear-to-br from-emerald-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Working Desks</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+              <CheckCircle2 size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{stats.working}</p>
+          <p className="mt-1 text-xs text-text-secondary">Fully operational</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Maintenance</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400">
+              <Wrench size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{stats.maintenance}</p>
+          <p className="mt-1 text-xs text-text-secondary">Scheduled repairs</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-rose-500/20 bg-linear-to-br from-rose-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Out of Order</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
+              <AlertOctagon size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">{stats.broken}</p>
+          <p className="mt-1 text-xs text-text-secondary">Defective / broken</p>
         </div>
       </div>
 

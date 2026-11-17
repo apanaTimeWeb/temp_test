@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
-import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { LibraryLoader, ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 import { getManagerEnquiriesDemoPassWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import {
@@ -125,7 +125,7 @@ export function ManagerMembersEnquiriesClient() {
             onClick={() => { void refetch(); }}
             disabled={isFetching}
           >
-            <RefreshCw size={15} className={isFetching ? 'animate-spin' : ''} />
+            {isFetching ? <ButtonLoader icon="search" /> : <RefreshCw size={15} />}
             {isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}
           </button>
         </div>

@@ -85,6 +85,15 @@ export function AdminSeatMatrixSeatMatrixPage() {
 
   const query = searchQuery.trim().toLowerCase();
 
+  const stats = useMemo(() => {
+    const total = branchFilteredSeats.length;
+    const free = branchFilteredSeats.filter(s => s.status === 'free').length;
+    const occupied = branchFilteredSeats.filter(s => s.status === 'occupied').length;
+    const expiringOrMaint = branchFilteredSeats.filter(s => s.status === 'expiring' || s.status === 'maintenance').length;
+    const occupancyRate = total > 0 ? Math.round((occupied / total) * 100) : 0;
+    return { total, free, occupied, expiringOrMaint, occupancyRate };
+  }, [branchFilteredSeats]);
+
   const downloadCsv = () => {
     const rows = [[t('seat'), t('status'), t('student'), t('shift'), t('plan'), t('locker'), t('expires')], ...visible.map(seat => [seat.id, seat.status, displayValue(seat.student), displayValue(seat.shift), displayValue(seat.plan), displayValue(seat.locker), displayValue(seat.expiry)])];
     const csv = buildAdminSeatMatrixSeatMatrixCsv(rows);
@@ -93,10 +102,90 @@ export function AdminSeatMatrixSeatMatrixPage() {
 
   return (
     <div className="min-w-0 space-y-6">
-      <div className="flex flex-wrap gap-2 mb-4" aria-label={t('seatMatrixActions')}>
-        <button type="button" className="inline-flex min-h-11 items-center justify-center rounded-t-md border-b-2 border-transparent px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={downloadCsv}><Download size={18} strokeWidth={2}/>{t('exportMatrix')}</button>
-        <button type="button" className="inline-flex min-h-11 items-center justify-center rounded-t-md border-b-2 border-transparent px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => window.print()}><Printer size={18} strokeWidth={2}/>{t('printFloorPlan')}</button>
-        <button type="button" className="inline-flex min-h-11 items-center justify-center rounded-t-md border-b-2 border-transparent px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" disabled title={t('studentNotificationContract')}><MessageSquare size={18} strokeWidth={2}/>{t('notifyStudents')}</button>
+      {/* Executive Header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-page-title font-bold text-text-primary">
+            {selectedBranch ? `${selectedBranch.name} · Seat Matrix` : t('floorPlan')}
+          </h1>
+          <p className="text-sm text-text-secondary">
+            Visual desk layout, real-time shift occupancy, and student allocations across library branches
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2" aria-label={t('seatMatrixActions')}>
+          <button
+            type="button"
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-text-primary hover:bg-surface-hover hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-xs"
+            onClick={downloadCsv}
+          >
+            <Download size={15} strokeWidth={2} className="text-primary" />
+            <span>{t('exportMatrix')}</span>
+          </button>
+          <button
+            type="button"
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-text-primary hover:bg-surface-hover hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-xs"
+            onClick={() => window.print()}
+          >
+            <Printer size={15} strokeWidth={2} className="text-secondary" />
+            <span>{t('printFloorPlan')}</span>
+          </button>
+          <button
+            type="button"
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-border bg-card px-3.5 py-2 text-xs font-semibold text-text-secondary opacity-50 cursor-not-allowed shadow-xs"
+            disabled
+            title={t('studentNotificationContract')}
+          >
+            <MessageSquare size={15} strokeWidth={2} />
+            <span>{t('notifyStudents')}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* 4 Premium Glassmorphic KPI Cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
+        <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-linear-to-br from-cyan-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Total Desks</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+              <Armchair size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{stats.total}</p>
+          <p className="mt-1 text-xs text-text-secondary">Network capacity</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-linear-to-br from-emerald-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Available Free</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+              <CheckCircle2 size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{stats.free}</p>
+          <p className="mt-1 text-xs text-text-secondary">Ready for allocation</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-indigo-500/20 bg-linear-to-br from-indigo-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Occupied Desks</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+              <Users size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">{stats.occupied}</p>
+          <p className="mt-1 text-xs text-text-secondary">{stats.occupancyRate}% seat utilization</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Maint. / Expiring</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400">
+              <AlertTriangle size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{stats.expiringOrMaint}</p>
+          <p className="mt-1 text-xs text-text-secondary">Requires attention</p>
+        </div>
       </div>
 
       {/* Shift Tabs & Real-Time Search Bar */}

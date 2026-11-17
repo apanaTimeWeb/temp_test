@@ -16,6 +16,7 @@ import { ManagerAttendanceDailyToolbar } from './ManagerAttendanceDailyToolbar';
 import { ManagerAttendanceDailyTable } from './ManagerAttendanceDailyTable';
 import { ManagerAttendanceDailyMonthlyRegister } from './ManagerAttendanceDailyMonthlyRegister';
 import { ManagerAttendanceDailyMemberMonthlyHistoryModal } from './ManagerAttendanceDailyMemberMonthlyHistoryModal';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 const INIT_STUDENTS: Student[] = MANAGER_ENGAGEMENT_SAMPLE_ATTENDANCE.map((student) => ({ ...student }));
 
@@ -179,7 +180,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
               className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-primary hover:bg-surface-hover motion-safe:transition-all shadow-2xs active:scale-95 disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
               title="Sync Biometric Turnstiles"
             >
-              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : 'text-primary'} />
+              {isSyncing ? <ButtonLoader icon="report" /> : <RefreshCw size={14} className="text-primary" />}
               <span>{isSyncing ? 'Syncing...' : 'Sync Turnstiles'}</span>
             </button>
             <button

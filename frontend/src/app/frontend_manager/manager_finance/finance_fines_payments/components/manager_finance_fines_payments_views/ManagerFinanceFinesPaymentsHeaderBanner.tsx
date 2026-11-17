@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { RefreshCw, Receipt, Download, Printer } from 'lucide-react';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 export interface ManagerFinanceFinesPaymentsHeaderBannerProps {
   receiptsCount?: number;
@@ -79,7 +80,7 @@ export default function ManagerFinanceFinesPaymentsHeaderBanner({
             className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60 cursor-pointer"
             title="Sync Financial Ledger"
           >
-            <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
+            {isSyncing ? <ButtonLoader icon="fine" /> : <RefreshCw size={14} />}
             <span>{isSyncing ? 'Syncing...' : 'Sync Ledger'}</span>
           </button>
 
