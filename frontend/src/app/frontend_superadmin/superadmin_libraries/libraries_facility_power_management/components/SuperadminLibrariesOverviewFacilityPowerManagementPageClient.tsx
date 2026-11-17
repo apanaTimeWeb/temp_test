@@ -41,7 +41,7 @@ export default function SuperadminLibrariesOverviewFacilityPowerManagementPageCl
 
   return (
     <div>
-      {(SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ALERT_LOG?.length === 0) && <SuperadminLibrariesOverviewFacilityPowerManagementEmptyState />}
+      {((SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ALERT_LOG as unknown[]).length === 0) && <SuperadminLibrariesOverviewFacilityPowerManagementEmptyState />}
 
       <div className="mb-8">
         <div className="flex items-center gap-2 text-secondary text-xs font-medium tracking-wide mb-1">

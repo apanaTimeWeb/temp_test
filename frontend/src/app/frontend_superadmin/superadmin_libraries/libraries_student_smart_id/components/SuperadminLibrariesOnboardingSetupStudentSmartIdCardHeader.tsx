@@ -9,5 +9,5 @@ import type { SuperadminSystemCardHeaderProps } from '@/app/frontend_superadmin/
  * @param parameter Input required by the declared feature contract. Declared type: SuperadminSystemCardHeaderProps.
  */
 export function SuperadminLibrariesOnboardingSetupStudentSmartIdCardHeader({ children, className }: SuperadminSystemCardHeaderProps) {
-  return <div className={cn('sys-card-header', className)}>{children}</div>;
+  return <div className={cn('sys-card-header flex flex-col gap-1.5 pb-4 border-b border-border/60 mb-5', className)}>{children}</div>;
 }

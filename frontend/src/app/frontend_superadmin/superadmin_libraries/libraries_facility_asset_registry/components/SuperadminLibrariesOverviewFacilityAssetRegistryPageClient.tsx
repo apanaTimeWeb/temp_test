@@ -32,7 +32,7 @@ export default function SuperadminLibrariesOverviewFacilityAssetRegistryPageClie
   const locale = useLocale();
   const translateValidationMessage = useSuperadminLibrariesOverviewFacilityAssetRegistryValidationMessage();
   const [assets, setAssets] = useState<SuperadminAccountingAsset[]>(() => SUPERADMIN_ACCOUNTING_SAMPLE_ASSETS.map((asset) => ({ ...asset })));
-  const [catFilter, setCatFilter] = useSuperadminLibrariesOverviewFacilityAssetRegistryUrlFilter('assetCategory', 'all');
+  const [catFilter, setCatFilter] = useSuperadminLibrariesOverviewFacilityAssetRegistryUrlFilter<string>('assetCategory', 'all');
   const [showAdd, setShowAdd] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const { register, handleSubmit, reset, formState: { errors, isSubmitting , isDirty} } = useForm<SuperadminAccountingAssetFormValues>({

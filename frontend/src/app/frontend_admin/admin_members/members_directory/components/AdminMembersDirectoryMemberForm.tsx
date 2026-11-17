@@ -28,15 +28,15 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
 
   const defaults = editingMember
     ? {
-        name: editingMember.name,
-        email: editingMember.email,
-        phone: editingMember.phone,
-        plan: editingMember.plan,
-        branch: editingMember.branch || '',
-        shift: editingMember.shift || '',
-        seat: editingMember.seat || '',
-        locker: editingMember.locker || '',
-      }
+      name: editingMember.name,
+      email: editingMember.email,
+      phone: editingMember.phone,
+      plan: editingMember.plan,
+      branch: editingMember.branch || '',
+      shift: editingMember.shift || '',
+      seat: editingMember.seat || '',
+      locker: editingMember.locker || '',
+    }
     : { name: '', email: '', phone: '', plan: '', branch: '', shift: '', seat: '', locker: '' };
 
   const { register, handleSubmit, formState: { errors, isSubmitting, isDirty }, reset } = useForm<AdminMembersCreateFormValues>({
@@ -150,9 +150,13 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
           <datalist id={`shift-opts-${prefix}`}>{ADMIN_MEMBERS_SHIFT_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}</datalist>
         </div>
         <div className="grid gap-1 text-sm">
-          <label htmlFor={`${prefix}-branch`}>Branch (Optional)</label>
-          <input id={`${prefix}-branch`} list={`branch-opts-${prefix}`} className="admin-input" placeholder="e.g. Main Branch" maxLength={100} {...register('branch')} />
-          <datalist id={`branch-opts-${prefix}`}>{branchOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}</datalist>
+          <label htmlFor={`${prefix}-branch`}>Branch</label>
+          <select id={`${prefix}-branch`} className="admin-input" {...register('branch')}>
+            <option value="">Select Branch</option>
+            {branches.map((b) => (
+              <option key={b.id} value={b.name}>{b.name}</option>
+            ))}
+          </select>
         </div>
         <div className="grid gap-1 text-sm">
           <label htmlFor={`${prefix}-locker`}>Locker No. (Optional)</label>

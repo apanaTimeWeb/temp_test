@@ -103,6 +103,26 @@ const nextConfig = {
         source: '/admin/:path*',
         destination: '/frontend_admin/:path*',
       },
+      {
+        source: '/superadmin',
+        destination: '/frontend_superadmin/superadmin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/superadmin/dashboard',
+        destination: '/frontend_superadmin/superadmin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/superadmin/superadmin_dashboard',
+        destination: '/frontend_superadmin/superadmin_dashboard/dashboard_overview',
+      },
+      {
+        source: '/superadmin/superadmin_setup-wizard',
+        destination: '/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup',
+      },
+      {
+        source: '/superadmin/:path*',
+        destination: '/frontend_superadmin/:path*',
+      },
     ];
   },
   async redirects() {

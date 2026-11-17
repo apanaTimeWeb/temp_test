@@ -3,7 +3,7 @@
 
 import React, { useMemo, useState, type FormEvent } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Activity, AlertTriangle, Armchair, ArrowLeft, CalendarClock, CheckCircle, CreditCard, DownloadCloud, FileText, IndianRupee, MessageSquare, RotateCcw, ShieldAlert, UserPlus, UserRound, Users, Building2 } from 'lucide-react';
+import { Activity, AlertTriangle, Armchair, ArrowLeft, CalendarClock, CheckCircle, CreditCard, DownloadCloud, FileText, IndianRupee, MessageSquare, RotateCcw, ShieldAlert, UserPlus, UserRound, Users, Building2, TrendingUp, X, Sparkles } from 'lucide-react';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ALL_BRANCHES_ID } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
 import { toast } from 'sonner';
@@ -19,13 +19,35 @@ import AdminMembersDirectorySecondaryViews from '@/app/frontend_admin/admin_memb
 import { AdminMembersDirectoryMemberDetailCard } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberDetailCard';
 import type { AdminMembersDirectoryDataToolsViewProps, AdminMembersDirectoryViewProps, AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps, AdminMembersExportStatusFilter } from '@/app/frontend_admin/admin_members/members_directory/types/AdminMembersDirectoryComponentTypes';
 
+const TAB_ICON_COLORS: Record<string, string> = {
+  all: 'text-sky-400',
+  categories: 'text-purple-400',
+  departments: 'text-indigo-400',
+  active: 'text-emerald-400',
+  expired: 'text-rose-400',
+  suspended: 'text-amber-400',
+  blocked: 'text-red-400',
+  import: 'text-blue-400',
+  export: 'text-teal-400',
+  documents: 'text-fuchsia-400',
+  plans: 'text-cyan-400',
+  renewal: 'text-orange-400',
+  profile: 'text-sky-400',
+  attendance: 'text-emerald-400',
+  membership: 'text-purple-400',
+  renewalHistory: 'text-amber-400',
+  paymentHistory: 'text-teal-400',
+  lostHistory: 'text-rose-400',
+  activityHistory: 'text-blue-400',
+};
+
 export default function AdminMembersDirectoryView({ model }: AdminMembersDirectoryViewProps) {
   const t = useTranslations('ADMIN_MEMBERS');
   const { activeTab, setActiveTab, viewingMember, setViewingMember, detailTab, setDetailTab, mainNav, detailNav, isDemoMode, dummyMembers, demoRenewals } = model;
   return (
     <div className="w-full space-y-6 text-text-primary">
       {!isDemoMode && <p role="status" className="mb-4 rounded-xl border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('LIVE_RECORDS_UNAVAILABLE')}</p>}
-      
+
       {/* EXECUTIVE HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -38,7 +60,7 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
               title={t('BACK_TO_LIST')}
               onClick={() => setViewingMember(null)}
             >
-              <ArrowLeft size={18} strokeWidth={2} aria-hidden="true"/>
+              <ArrowLeft size={18} strokeWidth={2} aria-hidden="true" />
             </button>
           )}
           <div>
@@ -138,13 +160,12 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
                 aria-current={isActive ? 'page' : undefined}
                 aria-pressed={isActive}
                 onClick={() => setActiveTab(item.id)}
-                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-200 ${
-                  isActive
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-200 ${isActive
                     ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/25'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                }`}
+                  }`}
               >
-                <item.icon size={16} aria-hidden="true" className={isActive ? 'text-white' : 'text-slate-400'} />
+                <item.icon size={16} aria-hidden="true" className={`${isActive ? 'text-white' : (TAB_ICON_COLORS[item.id] || 'text-indigo-400')} shrink-0 transition-transform group-hover:scale-110`} />
                 <span>{t(item.labelKey)}</span>
               </button>
             );
@@ -160,13 +181,12 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
                 aria-current={isActive ? 'page' : undefined}
                 aria-pressed={isActive}
                 onClick={() => setDetailTab(item.id)}
-                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-200 ${
-                  isActive
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-200 ${isActive
                     ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/25'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-                }`}
+                  }`}
               >
-                <item.icon size={16} aria-hidden="true" className={isActive ? 'text-white' : 'text-slate-400'} />
+                <item.icon size={16} aria-hidden="true" className={`${isActive ? 'text-white' : (TAB_ICON_COLORS[item.id] || 'text-indigo-400')} shrink-0 transition-transform group-hover:scale-110`} />
                 <span>{t(item.labelKey)}</span>
               </button>
             );
@@ -190,8 +210,9 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
 
   const branchFilteredMembers = useMemo(() => {
     if (isAllBranches || !selectedBranch) return dummyMembers;
+    const branchNameLower = selectedBranch.name.toLowerCase().trim();
     return dummyMembers.filter((m) =>
-      m.branch ? m.branch.toLowerCase().includes(selectedBranch.name.toLowerCase()) : true
+      m.branch ? m.branch.toLowerCase().trim() === branchNameLower || m.branch.toLowerCase().includes(branchNameLower) : false
     );
   }, [isAllBranches, selectedBranch, dummyMembers]);
 
@@ -220,17 +241,17 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
             <h2 id="admin-members-list-title" className="text-base sm:text-lg font-bold text-white tracking-tight">{t(memberListConfig.titleKey)}</h2>
             <div className="flex flex-wrap items-center gap-2.5">
               {selectedMemberIds.length > 0 && (
-                <button type="button" onClick={clearSelection} className="text-xs text-slate-400 hover:text-white underline px-1">
-                  Clear ({selectedMemberIds.length})
+                <button type="button" onClick={clearSelection} className="inline-flex items-center gap-1 text-xs text-rose-400 hover:text-rose-300 hover:underline px-1">
+                  <X size={13} className="text-rose-400" /> Clear ({selectedMemberIds.length})
                 </button>
               )}
               <button
                 type="button"
                 onClick={() => setIsBulkWhatsAppOpen(true)}
                 disabled={branchFilteredMembers.length === 0}
-                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all disabled:opacity-40"
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3.5 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/25 transition-all disabled:opacity-40 shadow-sm shadow-emerald-500/10"
               >
-                <MessageSquare size={14} /> Bulk WhatsApp
+                <MessageSquare size={14} className="text-emerald-400" /> Bulk WhatsApp
                 {selectedMemberIds.length > 0 && (
                   <span className="rounded-full bg-emerald-500 text-black px-1.5 py-0.2 text-[10px] font-bold">
                     {selectedMemberIds.length}
@@ -239,10 +260,10 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
               </button>
               <button
                 type="button"
-                className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-700/60 bg-slate-800/40 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/15 px-3.5 py-1.5 text-xs font-semibold text-amber-300 hover:text-white hover:bg-amber-500/25 transition-colors shadow-sm shadow-amber-500/10"
                 onClick={() => setActiveTab('renewal')}
               >
-                <RotateCcw size={16} aria-hidden="true" />
+                <RotateCcw size={15} className="text-amber-400" aria-hidden="true" />
                 <span>{t('NAV_RENEWAL')}</span>
               </button>
             </div>

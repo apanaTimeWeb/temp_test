@@ -6,7 +6,8 @@ import { SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES as __SUPERADMIN_LIBRARIES_
 import { useCallback, useState } from 'react';
 import {
   BookOpen, Check, ChevronRight, ChevronLeft,
-  Rocket, SkipForward,
+  Rocket, SkipForward, Building2, Clock, Armchair,
+  CreditCard, CheckCircle, Lightbulb,
 } from 'lucide-react';
 import type { BranchDetailsData, ShiftsData, SeatsData, PlansData } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/types/SuperadminLibrariesOnboardingSetupTypes';
 import { SUPERADMIN_SETUP_WIZARD_STEPS as STEPS } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/constants/SuperadminLibrariesOnboardingSetupConstants';
@@ -72,12 +73,15 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
       )}
 
       {/* ── STEPPER SIDEBAR ── */}
-      <aside className="sa-wizard-sidebar">
+      <aside className="sa-wizard-sidebar bg-card/60 backdrop-blur-md border-r border-border/80">
         <div className="sa-wizard-logo-area">
-          <div className="sa-wizard-logo-box">
-            <BookOpen size={18} className="text-primary" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 shadow-md shadow-indigo-500/10">
+            <BookOpen size={18} className="text-indigo-400" />
           </div>
-          <span className="sa-wizard-logo-title">{tCopy("COPY.SETUP_WIZARD")}</span>
+          <div>
+            <span className="sa-wizard-logo-title font-bold text-slate-100">{tCopy("COPY.SETUP_WIZARD")}</span>
+            <p className="text-[10px] text-slate-400 font-medium">Onboarding Pipeline</p>
+          </div>
         </div>
 
         <div className="space-y-1">
@@ -87,20 +91,20 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
             return (
               <div key={s.num} className="relative">
                 {i < STEPS.length - 1 && (
-                  <div className={`sa-step-connector ${isDone ? 'sa-step-connector--done' : ''}`} />
+                  <div className={`sa-step-connector ${isDone ? 'sa-step-connector--done bg-emerald-500/60' : 'bg-slate-700/40'}`} />
                 )}
-                <div className={`sa-step-item ${isActive ? 'sa-step-item--active' : ''}`}>
-                  <div className={`sa-step-dot ${isDone ? 'sa-step-dot--done' : isActive ? 'sa-step-dot--active' : ''}`}>
+                <div className={`sa-step-item ${isActive ? 'sa-step-item--active bg-indigo-500/10 rounded-xl p-2' : 'p-2'}`}>
+                  <div className={`sa-step-dot ${isDone ? 'sa-step-dot--done border-emerald-500 bg-emerald-500/20 text-emerald-400' : isActive ? 'sa-step-dot--active border-indigo-500 bg-indigo-600 text-white shadow-md shadow-indigo-500/30' : 'border-slate-700 bg-slate-800 text-slate-400'}`}>
                     {isDone
-                      ? <Check size={14} className="text-primary" />
-                      : <span className={`sa-wizard-step-num-badge ${isActive ? 'sa-wizard-step-num-badge--active' : ''}`}>{s.num}</span>
+                      ? <Check size={14} className="text-emerald-400" />
+                      : <span className={`sa-wizard-step-num-badge font-bold ${isActive ? 'sa-wizard-step-num-badge--active text-white' : 'text-slate-400'}`}>{s.num}</span>
                     }
                   </div>
                   <div>
-                    <p className={`sa-step-label ${isActive ? 'sa-step-label--active' : isDone ? 'sa-step-label--done' : ''}`}>
+                    <p className={`sa-step-label text-xs sm:text-sm font-semibold ${isActive ? 'sa-step-label--active text-indigo-300' : isDone ? 'sa-step-label--done text-slate-300' : 'text-slate-400'}`}>
                       {tCopy(s.titleKey)}
                     </p>
-                    <p className="sa-wizard-field-label--sm-no-mb">{tCopy(s.descKey)}</p>
+                    <p className="sa-wizard-field-label--sm-no-mb text-[11px] text-slate-400">{tCopy(s.descKey)}</p>
                   </div>
                 </div>
               </div>
@@ -108,43 +112,46 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
           })}
         </div>
 
-        <div className="mt-auto space-y-3">
-          <div className="sa-tip-card">
-            {tCopy("COPY.YOU_CAN_UPDATE_THESE_SETTINGS_ANYTIME_FROM_YOUR_DASHBOARD")}
+        <div className="mt-auto space-y-3 pt-4 border-t border-border/60">
+          <div className="sa-tip-card flex items-start gap-2 p-3 rounded-xl border border-amber-500/20 bg-amber-500/10 text-xs text-amber-200">
+            <Lightbulb size={16} className="text-amber-400 shrink-0 mt-0.5" />
+            <span>{tCopy("COPY.YOU_CAN_UPDATE_THESE_SETTINGS_ANYTIME_FROM_YOUR_DASHBOARD")}</span>
           </div>
           <button
             id="skip-setup-sidebar-btn"
             type="button"
             onClick={openSkipModal}
-            className="sa-wizard-skip-btn"
+            className="sa-wizard-skip-btn w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all cursor-pointer"
            data-testid="superadmin-setup-wizard-setup-wizard-overview-skip-setup-sidebar-btn-1">
-            <SkipForward size={12} /> {tCopy("COPY.SKIP_SETUP_FOR_NOW")}
+            <SkipForward size={13} className="text-slate-400" /> {tCopy("COPY.SKIP_SETUP_FOR_NOW")}
           </button>
         </div>
       </aside>
 
       {/* ── MAIN CONTENT ── */}
-      <main className="flex-1 flex flex-col">
-        <div className="sa-wizard-topbar">
-          <div className="sa-wizard-progress-track">
+      <main className="flex-1 flex flex-col min-w-0">
+        <div className="sa-wizard-topbar border-b border-border/80 px-4 py-3 flex items-center justify-between gap-4">
+          <div className="sa-wizard-progress-track flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
             {/* ✅ RULE 3 — dynamic computed width */}
-            <progress className="sa-wizard-progress" max={100} value={progress} aria-label={tCopy("COPY.SETUP_WIZARD_COMPLETION")} />
+            <progress className="sa-wizard-progress w-full h-full accent-indigo-500" max={100} value={progress} aria-label={tCopy("COPY.SETUP_WIZARD_COMPLETION")} />
           </div>
           <button
             id="skip-setup-btn"
             type="button"
             onClick={openSkipModal}
-            className="sa-wizard-topbar-skip"
+            className="sa-wizard-topbar-skip inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700/60 bg-slate-800/50 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all cursor-pointer"
            data-testid="superadmin-setup-wizard-setup-wizard-overview-skip-setup-btn-2">
-            <SkipForward size={13} /> {tCopy("COPY.SKIP_SETUP")}
+            <SkipForward size={13} className="text-slate-400" /> {tCopy("COPY.SKIP_SETUP")}
           </button>
         </div>
 
-        <div className="sa-wizard-content-area">
-          <div className="sa-wizard-content-inner">
-            <div className="sa-wizard-step-header">
-              <p className="sa-wizard-step-label">{tCopy("COPY.STEP")} {step} {tCopy("COPY.OF")} {STEPS.length}</p>
-              <h2 className="sa-wizard-step-title">{tCopy(STEPS[step - 1].titleKey)}</h2>
+        <div className="sa-wizard-content-area flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+          <div className="sa-wizard-content-inner max-w-2xl mx-auto space-y-6">
+            <div className="sa-wizard-step-header pb-4 border-b border-border/70">
+              <span className="sa-wizard-step-label inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 mb-2">
+                {tCopy("COPY.STEP")} {step} {tCopy("COPY.OF")} {STEPS.length}
+              </span>
+              <h2 className="sa-wizard-step-title text-xl sm:text-2xl font-bold text-slate-100">{tCopy(STEPS[step - 1].titleKey)}</h2>
             </div>
 
             {step === 1 && <SuperadminLibrariesOnboardingSetupStep1Form initialValues={branch} onDirtyChange={handleWizardDirtyChange} onNext={d => { setBranch(d); setHasUnsavedChanges(true); nextStep(); }} />}
@@ -154,85 +161,92 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
 
             {/* ── Step 5: Launch ── */}
             {step === 5 && (
-              <div className="space-y-5">
-                <div className="sa-wizard-summary-card">
-                  <h3 className="sa-wizard-summary-title">{branch.name}</h3>
-                  <p className="sa-wizard-summary-address">
-                    {branch.address}, {branch.city}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="sa-wizard-summary-badge sa-wizard-summary-badge--shifts">
-                      ⏰ {shifts.shifts.length} {tCopy("COPY.SHIFTS_ADDED")}
+              <div className="space-y-6">
+                <div className="sa-wizard-summary-card rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/20 via-card to-card p-6 shadow-xl shadow-black/20 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-400 shadow-md">
+                      <Building2 size={22} />
+                    </div>
+                    <div>
+                      <h3 className="sa-wizard-summary-title text-xl font-bold text-slate-100">{branch.name}</h3>
+                      <p className="sa-wizard-summary-address text-xs sm:text-sm text-slate-400">
+                        {branch.address}, {branch.city}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2.5 pt-2 border-t border-border/60">
+                    <span className="sa-wizard-summary-badge sa-wizard-summary-badge--shifts inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                      <Clock size={13} className="text-emerald-400" /> {shifts.shifts.length} {tCopy("COPY.SHIFTS_ADDED")}
                     </span>
-                    <span className="sa-wizard-summary-badge sa-wizard-summary-badge--seats">
-                      🪑 {seats.count} {tCopy("COPY.SEATS_CREATED")}
+                    <span className="sa-wizard-summary-badge sa-wizard-summary-badge--seats inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/15 border border-sky-500/30 text-sky-300">
+                      <Armchair size={13} className="text-sky-400" /> {seats.count} {tCopy("COPY.SEATS_CREATED")}
                     </span>
-                    <span className="sa-wizard-summary-badge sa-wizard-summary-badge--plans">
-                      💳 {plans.plans.length} {tCopy("COPY.PLANS_READY")}
+                    <span className="sa-wizard-summary-badge sa-wizard-summary-badge--plans inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300">
+                      <CreditCard size={13} className="text-purple-400" /> {plans.plans.length} {tCopy("COPY.PLANS_READY")}
                     </span>
                     {branch.gst && (
-                      <span className="sa-wizard-summary-badge sa-wizard-summary-badge--gst">
-                        {tCopy("COPY.GST_ENABLED")}
+                      <span className="sa-wizard-summary-badge sa-wizard-summary-badge--gst inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300">
+                        <CheckCircle size={13} className="text-amber-400" /> {tCopy("COPY.GST_ENABLED")}
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="sa-wizard-shifts-preview">
-                  <p className="sa-wizard-preview-section-label">{tCopy("COPY.SHIFTS")}</p>
+                <div className="sa-wizard-shifts-preview rounded-xl border border-border/70 bg-card/60 p-4 space-y-2">
+                  <p className="sa-wizard-preview-section-label text-xs font-semibold uppercase tracking-wider text-slate-400">{tCopy("COPY.SHIFTS")}</p>
                   <div className="flex flex-wrap gap-2">
                     {shifts.shifts.map((s) => (
-                      <span key={s.name} className="sa-wizard-preview-chip">
-                        {s.name}: {s.start} – {s.end}
+                      <span key={s.name} className="sa-wizard-preview-chip inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-surface border border-border text-xs font-medium text-slate-200">
+                        <Clock size={12} className="text-emerald-400" /> {s.name}: {s.start} – {s.end}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="sa-wizard-plans-preview">
-                  <p className="sa-wizard-preview-section-label">{tCopy("COPY.FEE_PLANS")}</p>
+                <div className="sa-wizard-plans-preview rounded-xl border border-border/70 bg-card/60 p-4 space-y-2">
+                  <p className="sa-wizard-preview-section-label text-xs font-semibold uppercase tracking-wider text-slate-400">{tCopy("COPY.FEE_PLANS")}</p>
                   <div className="flex flex-wrap gap-2">
                     {plans.plans.map((pl) => (
-                      <span key={pl.name} className="sa-wizard-preview-chip">
-                        {pl.name} · {pl.days}{tCopy("COPY.D")} {formatSuperadminSetupWizardMajorPreviewCurrency(pl.price, 'INR', locale)}
+                      <span key={pl.name} className="sa-wizard-preview-chip inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-surface border border-border text-xs font-medium text-slate-200">
+                        <CreditCard size={12} className="text-purple-400" /> {pl.name} · {pl.days}{tCopy("COPY.D")} {formatSuperadminSetupWizardMajorPreviewCurrency(pl.price, 'INR', locale)}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                {launchNotice && <p className="rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="alert">{launchNotice}</p>}
+                {launchNotice && <p className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs sm:text-sm text-amber-200" role="alert">{launchNotice}</p>}
                 <button
                   id="launch-dashboard-btn"
                   type="button"
                   onClick={handleLaunch}
                   disabled title={tCopy("COPY.SETUP_LAUNCH_UNAVAILABLE")}
-                  className="sa-wizard-launch-btn disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="sa-wizard-launch-btn w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-bold text-sm sm:text-base shadow-lg shadow-indigo-500/30 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-describedby="setup-launch-note"
                  data-testid="superadmin-setup-wizard-setup-wizard-overview-launch-dashboard-btn-3">
-                  <Rocket size={20} /> {tCopy("COPY.SHOW_LAUNCH_AVAILABILITY")}
+                  <Rocket size={20} className="text-indigo-200" /> {tCopy("COPY.SHOW_LAUNCH_AVAILABILITY")}
                 </button>
-                <p id="setup-launch-note" className="text-sm text-warning">{tCopy("COPY.SETUP_LAUNCH_IS_UNAVAILABLE_WITHOUT_THE_HOST_SETUP_WRITE_CONTRACT_THIS_PREVIEW_WILL_NOT_CHANGE_PLATFORM_DATA")}</p>
+                <p id="setup-launch-note" className="text-xs text-amber-300 text-center">{tCopy("COPY.SETUP_LAUNCH_IS_UNAVAILABLE_WITHOUT_THE_HOST_SETUP_WRITE_CONTRACT_THIS_PREVIEW_WILL_NOT_CHANGE_PLATFORM_DATA")}</p>
               </div>
             )}
 
             {/* ── FOOTER NAV ── */}
             {step !== 5 ? (
-              <div className="sa-wizard-footer">
+              <div className="sa-wizard-footer pt-6 border-t border-border/70 flex items-center justify-between gap-4">
                 <button
                   type="button"
                   id="wizard-back-btn"
                   onClick={prevStep}
                   disabled={step === 1}
-                  className="sa-btn-ghost sa-btn-ghost--sm disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="sa-btn-ghost sa-btn-ghost--sm inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs sm:text-sm font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                  data-testid="superadmin-setup-wizard-setup-wizard-overview-wizard-back-btn-4">
                   <ChevronLeft size={16} /> {tCopy("COPY.BACK")}
                 </button>
-                <span className="sa-wizard-footer-step-count">{tCopy("COPY.STEP")} {step} {tCopy("COPY.OF")} {STEPS.length}</span>
+                <span className="sa-wizard-footer-step-count text-xs font-semibold text-slate-400">{tCopy("COPY.STEP")} {step} {tCopy("COPY.OF")} {STEPS.length}</span>
                 <button
                   type="submit"
                   id="wizard-next-btn"
                   form={`step${step}-form`}
-                  className="sa-wizard-next-btn"
+                  className="sa-wizard-next-btn inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer"
                  data-testid="superadmin-setup-wizard-setup-wizard-overview-wizard-next-btn-5">
                   {tCopy("COPY.NEXT_STEP")} <ChevronRight size={16} />
                 </button>
@@ -242,8 +256,9 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="sa-wizard-back-link"
+                  className="sa-wizard-back-link text-xs sm:text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer inline-flex items-center gap-1.5"
                  data-testid="superadmin-setup-wizard-setup-wizard-overview-back-to-fee-plans-6">
+                  <ChevronLeft size={15} />
                   {tCopy("COPY.BACK_TO_FEE_PLANS")}
                 </button>
               </div>

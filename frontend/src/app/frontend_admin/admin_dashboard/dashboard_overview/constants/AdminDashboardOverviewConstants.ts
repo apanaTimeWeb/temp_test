@@ -50,7 +50,7 @@ export const ADMIN_DASHBOARD_BRANCH_METRICS: Record<
   },
   'BR-001': {
     branches: '1',
-    branchesSub: 'Downtown Central (Main Campus)',
+    branchesSub: 'Downtown Central',
     members: '520',
     membersSub: 'Downtown active members',
     occupancy: '89.4%',

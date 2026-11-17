@@ -9,5 +9,5 @@ import type { SuperadminSystemCardContentProps } from '@/app/frontend_superadmin
  * @param parameter Input required by the declared feature contract. Declared type: SuperadminSystemCardContentProps.
  */
 export function SuperadminLibrariesOnboardingSetupStudentSmartIdCardContent({ children, className }: SuperadminSystemCardContentProps) {
-  return <div className={cn('sys-card-content', className)}>{children}</div>;
+  return <div className={cn('sys-card-content space-y-4', className)}>{children}</div>;
 }

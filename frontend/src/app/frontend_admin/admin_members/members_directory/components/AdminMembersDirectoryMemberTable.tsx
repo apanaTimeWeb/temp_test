@@ -4,7 +4,7 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 
 import { useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, MoreVertical, Building2, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
+import { Eye, MoreVertical, Building2, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, Search, Filter, RotateCcw, X, Edit, ChevronLeft, ChevronRight, IndianRupee } from 'lucide-react';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { formatAdminMembersDate } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
 import { displayValue } from '@/lib/display_value';
@@ -39,6 +39,17 @@ export default function AdminMembersMemberTable({
   const [page, setPage] = useAdminApplicationInfrastructureUrlQueryState<number>('page', 0);
   const [openActionsFor, setOpenActionsFor] = useState<string | null>(null);
   const [pageSize, setPageSize] = useState(10);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [planFilter, setPlanFilter] = useState<string>('all');
+  const [feeFilter, setFeeFilter] = useState<'all' | 'Paid' | 'Due'>('all');
+
+  const availablePlans = useMemo(() => {
+    const set = new Set<string>();
+    members.forEach((m) => {
+      if (m.plan) set.add(m.plan);
+    });
+    return Array.from(set);
+  }, [members]);
 
   const toggleSort = (field: MemberSortField) => {
     setPage(0);
@@ -55,9 +66,34 @@ export default function AdminMembersMemberTable({
     [filterStatus, members],
   );
 
+  const searchedMembers = useMemo(() => {
+    let result = filteredMembers;
+    if (planFilter !== 'all') {
+      result = result.filter((m) => m.plan.toLowerCase().includes(planFilter.toLowerCase()));
+    }
+    if (feeFilter !== 'all') {
+      result = result.filter((m) => m.feeStatus === feeFilter);
+    }
+    const q = searchQuery.trim().toLowerCase();
+    if (q) {
+      result = result.filter((m) =>
+        m.name.toLowerCase().includes(q) ||
+        m.id.toLowerCase().includes(q) ||
+        (m.email && m.email.toLowerCase().includes(q)) ||
+        (m.phone && m.phone.toLowerCase().includes(q)) ||
+        (m.seat && m.seat.toLowerCase().includes(q)) ||
+        (m.shift && m.shift.toLowerCase().includes(q)) ||
+        (m.locker && m.locker.toLowerCase().includes(q)) ||
+        (m.branch && m.branch.toLowerCase().includes(q)) ||
+        m.plan.toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [filteredMembers, planFilter, feeFilter, searchQuery]);
+
   const sortedMembers = useMemo(() => {
-    if (!sortField) return filteredMembers;
-    return [...filteredMembers].sort((a, b) => {
+    if (!sortField) return searchedMembers;
+    return [...searchedMembers].sort((a, b) => {
       const aVal = a[sortField] ?? '';
       const bVal = b[sortField] ?? '';
       if (typeof aVal === 'string' && typeof bVal === 'string') {
@@ -66,7 +102,7 @@ export default function AdminMembersMemberTable({
       }
       return 0;
     });
-  }, [filteredMembers, sortField, sortDirection]);
+  }, [searchedMembers, sortField, sortDirection]);
 
   const pageCount = Math.max(1, Math.ceil(sortedMembers.length / pageSize));
   const currentPage = Math.min(page, pageCount - 1);
@@ -87,12 +123,12 @@ export default function AdminMembersMemberTable({
           <span>{label}</span>
           {isActive ? (
             sortDirection === 'asc' ? (
-              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowUp className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
             ) : (
-              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowDown className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-slate-500 opacity-60 group-hover:opacity-100 group-hover:text-indigo-400 transition-colors shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -118,132 +154,286 @@ export default function AdminMembersMemberTable({
     return <div className="p-8 text-center text-slate-400" role="status">{t('TABLE_EMPTY')}</div>;
   }
 
+  const isFilterActive = Boolean(searchQuery || planFilter !== 'all' || feeFilter !== 'all');
+
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-800/80 bg-slate-950/20">
-      <div className="hidden overflow-x-auto md:block">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-900/80 uppercase text-[11px] font-semibold text-slate-400 border-b border-slate-800/80 tracking-wider">
-            <tr>
-              <th scope="col" className="w-10 px-4 py-3">
-                {onToggleSelectAll && (
-                  <input
-                    type="checkbox"
-                    aria-label="Select all members on this page"
-                    checked={visibleMembers.length > 0 && visibleMembers.every((m) => selectedIds.includes(m.id))}
-                    onChange={onToggleSelectAll}
-                    className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
-                  />
-                )}
-              </th>
-              {renderSortableHeader('name', t('TABLE_MEMBER'))}
-              {renderSortableHeader('branch', 'Branch')}
-              {renderSortableHeader('phone', t('TABLE_CONTACT'))}
-              {renderSortableHeader('plan', t('TABLE_PLAN'))}
-              {renderSortableHeader('seat', 'Seat / Shift')}
-              {renderSortableHeader('expiryDate', t('TABLE_EXPIRY'))}
-              {renderSortableHeader('status', t('TABLE_STATUS'))}
-              <th scope="col" className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-800/50">
-            {visibleMembers.map((member) => {
-              const isSelected = selectedIds.includes(member.id);
-              return (
-              <tr key={member.id} className={`hover:bg-indigo-500/5 transition-colors h-14 ${isSelected ? 'bg-indigo-950/30' : ''}`}>
-                <td className="w-10 px-4 py-3">
-                  {onToggleSelectOne && (
-                    <input
-                      type="checkbox"
-                      aria-label={`Select ${member.name}`}
-                      checked={isSelected}
-                      onChange={() => onToggleSelectOne(member.id)}
-                      className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
-                    />
-                  )}
-                </td>
-                <th scope="row" className="px-4 py-3 font-medium text-white">
-                  <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 font-semibold text-white hover:text-indigo-300 transition-colors" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
-                  <span className="block text-xs font-mono text-slate-400">{displayValue(member.id)}</span>
-                </th>
-                <td className="px-4 py-3">
-                  <span className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900/70 px-2.5 py-1 text-xs font-medium text-slate-300 whitespace-nowrap">
-                    <Building2 size={12} className="text-indigo-400 shrink-0" />
-                    <span>{member.branch || 'Downtown Central'}</span>
-                  </span>
-                </td>
-                <td className="px-4 py-3"><span className="block text-slate-200">{displayValue(member.email)}</span><span className="text-xs text-slate-400">{displayValue(member.phone)}</span></td>
-                <td className="px-4 py-3 text-slate-200 font-medium">{displayValue(member.plan)}</td>
-                <td className="px-4 py-3">
-                  <span className="block font-medium text-slate-200">{member.seat ? `Seat ${member.seat}` : '—'}</span>
-                  <span className="text-xs text-slate-400">{member.shift || '—'}{member.locker ? ` · Locker ${member.locker}` : ''}</span>
-                </td>
-                <td className="px-4 py-3 text-slate-300">{expiryLabel(member.expiryDate)}</td>
-                <td className="px-4 py-3">
-                  <div className="flex flex-col gap-1 items-start">
-                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${getStatusBadge(member.status)}`}>{statusLabel(member.status)}</span>
-                    {member.feeStatus && (
-                      <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${member.feeStatus === 'Paid' ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-400' : 'border border-rose-500/20 bg-rose-500/10 text-rose-400'}`}>
-                        {member.feeStatus === 'Due' && member.dueFeeMinor ? `Due: ₹${(member.dueFeeMinor / 100).toLocaleString('en-IN')}` : `Fee: ${member.feeStatus}`}
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="px-4 py-3"><div className="relative flex justify-end gap-1">
-                  <button type="button" className="min-h-9 min-w-9 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 inline-flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" aria-label={t('ACTION_VIEW_MEMBER', { name: member.name })} onClick={() => onSelectMember(member)}><Eye size={18} strokeWidth={2} aria-hidden="true" /></button>
-                  <button
-                    type="button"
-                    className="min-h-9 min-w-9 rounded-lg text-emerald-400 hover:bg-emerald-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 inline-flex items-center justify-center transition-colors"
-                    title="Chat on WhatsApp"
-                    aria-label={`Chat with ${member.name} on WhatsApp`}
-                    onClick={() => {
-                      if (onQuickWhatsApp) {
-                        onQuickWhatsApp(member);
-                      } else {
-                        const digits = (member.phone || '').replace(/\D/g, '');
-                        const clean = digits.length === 11 && digits.startsWith('0') ? digits.slice(1) : digits;
-                        const phone = clean.length === 10 ? `91${clean}` : clean;
-                        const popup = window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`Hello ${member.name}, greetings from Smart Library admin!`)}`, '_blank', 'noopener,noreferrer');
-                        if (popup) {
-                          popup.opener = null;
-                        }
-                      }
-                    }}
-                  >
-                    <MessageSquare size={18} strokeWidth={2} aria-hidden="true" />
-                  </button>
-                  <button
-                    type="button"
-                    className="min-h-9 min-w-9 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 inline-flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
-                    aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })}
-                    aria-expanded={openActionsFor === member.id}
-                    aria-controls={`admin-member-actions-${member.id}`}
-                    onClick={() => setOpenActionsFor((current) => current === member.id ? null : member.id)}
-                  ><MoreVertical size={18} strokeWidth={2} aria-hidden="true" /></button>
-                  {openActionsFor === member.id && <div id={`admin-member-actions-${member.id}`} aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })} onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }} className="absolute right-4 z-20 mt-10 min-w-48 rounded-xl border border-slate-800 bg-slate-900/95 backdrop-blur-xl p-1.5 shadow-2xl">
-                    <button type="button" className="block min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" onClick={() => { setOpenActionsFor(null); onSelectMember(member); }}>{t('ACTION_VIEW_DETAILS')}</button>
-                    <button type="button" disabled={!canMutate} title={!canMutate ? t('MEMBER_EDIT_UNAVAILABLE') : undefined} className="block min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 disabled:cursor-not-allowed disabled:opacity-40" onClick={() => { setOpenActionsFor(null); onAction('EDIT', member); }}>{t('ACTION_EDIT_MEMBER')}</button>
-                    <button type="button" className="block min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" onClick={() => setOpenActionsFor(null)}>{t('ACTION_CLOSE_MENU')}</button>
-                  </div>}
-                </div></td>
-              </tr>
-              );
-            })}
-          </tbody>
-        </table>
+    <div className="overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/30 shadow-xl">
+      {/* SEARCH AND FILTER TOOLBAR */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3.5 sm:p-4 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md">
+        <div className="relative flex-1 min-w-[220px]">
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sky-400 pointer-events-none" />
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPage(0);
+            }}
+            placeholder="Search member by name, ID, phone, email, seat, branch..."
+            className="w-full rounded-xl border border-slate-700/60 bg-slate-950/70 pl-10 pr-9 py-2 text-xs text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setPage(0);
+              }}
+              aria-label="Clear search"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+            >
+              <X size={14} className="text-rose-400" />
+            </button>
+          )}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Plan filter */}
+          <div className="relative flex items-center">
+            <Filter size={13} className="absolute left-2.5 text-purple-400 pointer-events-none" />
+            <select
+              value={planFilter}
+              onChange={(e) => {
+                setPlanFilter(e.target.value);
+                setPage(0);
+              }}
+              aria-label="Filter by plan"
+              className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-2 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors"
+            >
+              <option value="all">All Plans</option>
+              {availablePlans.map((plan) => (
+                <option key={plan} value={plan}>{plan}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Fee Status filter */}
+          <div className="relative flex items-center">
+            <IndianRupee size={13} className="absolute left-2.5 text-emerald-400 pointer-events-none" />
+            <select
+              value={feeFilter}
+              onChange={(e) => {
+                setFeeFilter(e.target.value as 'all' | 'Paid' | 'Due');
+                setPage(0);
+              }}
+              aria-label="Filter by fee status"
+              className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-2 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors"
+            >
+              <option value="all">All Fees</option>
+              <option value="Paid">Paid</option>
+              <option value="Due">Due Fee</option>
+            </select>
+          </div>
+
+          {/* Reset button */}
+          {isFilterActive && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setPlanFilter('all');
+                setFeeFilter('all');
+                setPage(0);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 transition-colors"
+            >
+              <RotateCcw size={12} className="text-rose-400" /> Reset
+            </button>
+          )}
+
+          <span className="text-[11px] font-medium text-slate-400 ml-1">
+            {searchedMembers.length} of {filteredMembers.length}
+          </span>
+        </div>
       </div>
-      <AdminMembersDirectoryMemberMobileCards
-        visibleMembers={visibleMembers}
-        selectedIds={selectedIds}
-        onToggleSelectOne={onToggleSelectOne}
-        onSelectMember={onSelectMember}
-        onAction={onAction}
-        canMutate={canMutate}
-        statusLabel={statusLabel}
-        expiryLabel={expiryLabel}
-      />
+
+      {searchedMembers.length === 0 ? (
+        <div className="p-8 text-center text-slate-400 space-y-3" role="status">
+          <p className="text-sm text-slate-300">No members found matching your search or filters.</p>
+          <button
+            type="button"
+            onClick={() => {
+              setSearchQuery('');
+              setPlanFilter('all');
+              setFeeFilter('all');
+              setPage(0);
+            }}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-slate-700 transition-colors"
+          >
+            <RotateCcw size={12} className="text-rose-400" /> Clear Search
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className="hidden overflow-x-auto md:block">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-slate-900/80 uppercase text-[11px] font-semibold text-slate-400 border-b border-slate-800/80 tracking-wider">
+                <tr>
+                  <th scope="col" className="w-10 px-4 py-3">
+                    {onToggleSelectAll && (
+                      <input
+                        type="checkbox"
+                        aria-label="Select all members on this page"
+                        checked={visibleMembers.length > 0 && visibleMembers.every((m) => selectedIds.includes(m.id))}
+                        onChange={onToggleSelectAll}
+                        className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
+                      />
+                    )}
+                  </th>
+                  {renderSortableHeader('name', t('TABLE_MEMBER'))}
+                  {renderSortableHeader('branch', 'Branch')}
+                  {renderSortableHeader('phone', t('TABLE_CONTACT'))}
+                  {renderSortableHeader('plan', t('TABLE_PLAN'))}
+                  {renderSortableHeader('seat', 'Seat / Shift')}
+                  {renderSortableHeader('expiryDate', t('TABLE_EXPIRY'))}
+                  {renderSortableHeader('status', t('TABLE_STATUS'))}
+                  <th scope="col" className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/50">
+                {visibleMembers.map((member) => {
+                  const isSelected = selectedIds.includes(member.id);
+                  return (
+                    <tr key={member.id} className={`hover:bg-indigo-500/5 transition-colors h-14 ${isSelected ? 'bg-indigo-950/30' : ''}`}>
+                      <td className="w-10 px-4 py-3">
+                        {onToggleSelectOne && (
+                          <input
+                            type="checkbox"
+                            aria-label={`Select ${member.name}`}
+                            checked={isSelected}
+                            onChange={() => onToggleSelectOne(member.id)}
+                            className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
+                          />
+                        )}
+                      </td>
+                      <th scope="row" className="px-4 py-3 font-medium text-white">
+                        <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 font-semibold text-white hover:text-indigo-300 transition-colors text-left" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
+                        <span className="block text-xs font-mono text-slate-400">{displayValue(member.id)}</span>
+                      </th>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-300 whitespace-nowrap">
+                          <Building2 size={13} className="text-amber-400 shrink-0" />
+                          <span>{member.branch || 'Downtown Central'}</span>
+                        </span>
+                      </td>
+                      <td className="px-4 py-3"><span className="block text-slate-200">{displayValue(member.email)}</span><span className="text-xs text-slate-400">{displayValue(member.phone)}</span></td>
+                      <td className="px-4 py-3 text-slate-200 font-medium">{displayValue(member.plan)}</td>
+                      <td className="px-4 py-3">
+                        <span className="block font-medium text-slate-200">{member.seat ? `Seat ${member.seat}` : '—'}</span>
+                        <span className="text-xs text-slate-400">{member.shift || '—'}{member.locker ? ` · Locker ${member.locker}` : ''}</span>
+                      </td>
+                      <td className="px-4 py-3 text-slate-300">{expiryLabel(member.expiryDate)}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex flex-col gap-1 items-start">
+                          <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${getStatusBadge(member.status)}`}>{statusLabel(member.status)}</span>
+                          {member.feeStatus && (
+                            <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${member.feeStatus === 'Paid' ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-400' : 'border border-rose-500/20 bg-rose-500/10 text-rose-400'}`}>
+                              {member.feeStatus === 'Due' && member.dueFeeMinor ? `Due: ₹${(member.dueFeeMinor / 100).toLocaleString('en-IN')}` : `Fee: ${member.feeStatus}`}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="relative flex justify-end gap-1.5">
+                          <button
+                            type="button"
+                            className="min-h-9 min-w-9 rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 hover:text-sky-300 hover:bg-sky-500/20 inline-flex items-center justify-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                            aria-label={t('ACTION_VIEW_MEMBER', { name: member.name })}
+                            title="View member details"
+                            onClick={() => onSelectMember(member)}
+                          >
+                            <Eye size={17} strokeWidth={2} className="text-sky-400" aria-hidden="true" />
+                          </button>
+                          <button
+                            type="button"
+                            className="min-h-9 min-w-9 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 inline-flex items-center justify-center transition-all"
+                            title="Chat on WhatsApp"
+                            aria-label={`Chat with ${member.name} on WhatsApp`}
+                            onClick={() => {
+                              if (onQuickWhatsApp) {
+                                onQuickWhatsApp(member);
+                              } else {
+                                const digits = (member.phone || '').replace(/\D/g, '');
+                                const clean = digits.length === 11 && digits.startsWith('0') ? digits.slice(1) : digits;
+                                const phone = clean.length === 10 ? `91${clean}` : clean;
+                                const popup = window.open(`https://wa.me/${phone}?text=${encodeURIComponent(`Hello ${member.name}, greetings from Smart Library admin!`)}`, '_blank', 'noopener,noreferrer');
+                                if (popup) {
+                                  popup.opener = null;
+                                }
+                              }
+                            }}
+                          >
+                            <MessageSquare size={17} strokeWidth={2} className="text-emerald-400" aria-hidden="true" />
+                          </button>
+                          <button
+                            type="button"
+                            className="min-h-9 min-w-9 rounded-lg border border-slate-700/60 bg-slate-800/40 text-slate-300 hover:text-white hover:bg-slate-800 inline-flex items-center justify-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+                            aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })}
+                            aria-expanded={openActionsFor === member.id}
+                            aria-controls={`admin-member-actions-${member.id}`}
+                            onClick={() => setOpenActionsFor((current) => current === member.id ? null : member.id)}
+                          >
+                            <MoreVertical size={17} strokeWidth={2} aria-hidden="true" />
+                          </button>
+                          {openActionsFor === member.id && (
+                            <div
+                              id={`admin-member-actions-${member.id}`}
+                              aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })}
+                              onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }}
+                              className="absolute right-0 z-30 mt-10 min-w-48 rounded-xl border border-slate-700/80 bg-slate-900/95 backdrop-blur-xl p-1.5 shadow-2xl space-y-0.5"
+                            >
+                              <button
+                                type="button"
+                                className="flex items-center gap-2 min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                                onClick={() => { setOpenActionsFor(null); onSelectMember(member); }}
+                              >
+                                <Eye size={14} className="text-sky-400 shrink-0" />
+                                <span>{t('ACTION_VIEW_DETAILS')}</span>
+                              </button>
+                              <button
+                                type="button"
+                                disabled={!canMutate}
+                                title={!canMutate ? t('MEMBER_EDIT_UNAVAILABLE') : undefined}
+                                className="flex items-center gap-2 min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 disabled:cursor-not-allowed disabled:opacity-40"
+                                onClick={() => { setOpenActionsFor(null); onAction('EDIT', member); }}
+                              >
+                                <Edit size={14} className="text-amber-400 shrink-0" />
+                                <span>{t('ACTION_EDIT_MEMBER')}</span>
+                              </button>
+                              <button
+                                type="button"
+                                className="flex items-center gap-2 min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+                                onClick={() => setOpenActionsFor(null)}
+                              >
+                                <X size={14} className="text-rose-400 shrink-0" />
+                                <span>{t('ACTION_CLOSE_MENU')}</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <AdminMembersDirectoryMemberMobileCards
+            visibleMembers={visibleMembers}
+            selectedIds={selectedIds}
+            onToggleSelectOne={onToggleSelectOne}
+            onSelectMember={onSelectMember}
+            onAction={onAction}
+            canMutate={canMutate}
+            statusLabel={statusLabel}
+            expiryLabel={expiryLabel}
+          />
+        </>
+      )}
+
       {filteredMembers.length > 0 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-800/80 px-4 py-3 text-xs text-slate-400 bg-slate-900/30">
-          <span>{t('PAGINATION_SHOWING_RANGE', { start: currentPage * pageSize + 1, end: Math.min((currentPage + 1) * pageSize, filteredMembers.length), total: filteredMembers.length })}</span>
+          <span>{t('PAGINATION_SHOWING_RANGE', { start: currentPage * pageSize + 1, end: Math.min((currentPage + 1) * pageSize, sortedMembers.length), total: sortedMembers.length })}</span>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <label htmlFor="rows-per-page-members-directory" className="text-xs text-slate-400 whitespace-nowrap">
@@ -266,10 +456,11 @@ export default function AdminMembersMemberTable({
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="min-h-8 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
+                className="inline-flex items-center min-h-8 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
                 disabled={currentPage === 0}
                 onClick={() => setPage((current) => Math.max(0, current - 1))}
               >
+                <ChevronLeft size={14} className="mr-1 text-slate-400" />
                 {t('PAGINATION_PREVIOUS')}
               </button>
               <span className="text-xs text-slate-400">
@@ -277,11 +468,12 @@ export default function AdminMembersMemberTable({
               </span>
               <button
                 type="button"
-                className="min-h-8 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
+                className="inline-flex items-center min-h-8 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
                 disabled={currentPage >= pageCount - 1}
                 onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
               >
                 {t('PAGINATION_NEXT')}
+                <ChevronRight size={14} className="ml-1 text-slate-400" />
               </button>
             </div>
           </div>

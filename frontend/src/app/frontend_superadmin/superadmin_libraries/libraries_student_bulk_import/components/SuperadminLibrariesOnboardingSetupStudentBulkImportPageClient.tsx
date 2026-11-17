@@ -118,63 +118,92 @@ export default function SuperadminLibrariesOnboardingSetupStudentBulkImportPageC
       {rows.length === 0 && <SuperadminLibrariesOnboardingSetupStudentBulkImportEmptyState />}
       {rows.length > 0 && visible.length === 0 && <SuperadminLibrariesOnboardingSetupStudentBulkImportEmptyState filtered />}
 
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-primary flex items-center gap-3"><FileSpreadsheet size={26} /> {tCopy("COPY.BULK_STUDENT_IMPORT")}</h1>
-          <p className="text-secondary mt-2">{tCopy("COPY.CSV_VALIDATION_PREVIEW_NO_STUDENT_IMPORT_ENDPOINT_OR_BACKEND_WRITE_FBD700B7")}</p>
+      <header className="flex flex-wrap items-center justify-between gap-4 p-5 sm:p-6 rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-card via-card/95 to-indigo-950/20 shadow-xl shadow-black/20">
+        <div className="flex items-center gap-3.5">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 shadow-md shadow-indigo-500/10">
+            <FileSpreadsheet size={24} />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-100 flex items-center gap-2">
+              {tCopy("COPY.BULK_STUDENT_IMPORT")}
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">{tCopy("COPY.CSV_VALIDATION_PREVIEW_NO_STUDENT_IMPORT_ENDPOINT_OR_BACKEND_WRITE_FBD700B7")}</p>
+          </div>
         </div>
-        <button type="button" className="sa-btn-ghost" onClick={downloadTemplate} data-testid="superadmin-system-system-bulk-import-download-csv-template-1"><Download size={16} /> {tCopy("COPY.DOWNLOAD_CSV_TEMPLATE")}</button>
+        <button
+          type="button"
+          className="sa-btn-ghost inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-xs"
+          onClick={downloadTemplate}
+          data-testid="superadmin-system-system-bulk-import-download-csv-template-1">
+          <Download size={15} className="text-indigo-400" /> {tCopy("COPY.DOWNLOAD_CSV_TEMPLATE")}
+        </button>
       </header>
 
-      <p className="sa-preview-notice" role="status">{tCopy("COPY.THE_SELECTED_CSV_IS_PARSED_LOCALLY_THE_IMPORT_ACTION_IS_INTENTIONA_93083701")}</p>
-      {statusMessage && <p className="text-sm text-secondary" role="status">{statusMessage}</p>}
-      {errorMessage && <p className="p-3 rounded-md border border-border bg-danger-bg text-danger text-sm" role="alert">{errorMessage}</p>}
+      <p className="sa-preview-notice rounded-xl border border-indigo-500/20 bg-indigo-500/10 p-3.5 text-xs text-indigo-300" role="status">{tCopy("COPY.THE_SELECTED_CSV_IS_PARSED_LOCALLY_THE_IMPORT_ACTION_IS_INTENTIONA_93083701")}</p>
+      {statusMessage && <p className="text-xs text-slate-400" role="status">{statusMessage}</p>}
+      {errorMessage && <p className="p-3.5 rounded-xl border border-rose-500/40 bg-rose-500/15 text-rose-300 text-xs sm:text-sm font-medium" role="alert">{errorMessage}</p>}
 
-      <div className="sa-card p-5 space-y-4">
-        <label htmlFor="superadmin-bulk-import-file" className="sa-label">{tCopy("COPY.CSV_FILE_UP_TO_5_MB_500_ROWS")}</label>
-        <input ref={inputRef} id="superadmin-bulk-import-file" type="file" accept=".csv,text/csv" className="sa-input" onChange={event => void handleFile(event.target.files?.[0])}  data-testid="superadmin-system-system-bulk-import-superadmin-bulk-import-file-2"/>
-        {fileName && <p className="text-sm text-secondary">{tCopy("COPY.SELECTED")}{fileName}</p>}
+      <div className="sa-card rounded-2xl border border-indigo-500/20 bg-card/85 p-6 shadow-xl space-y-3">
+        <label htmlFor="superadmin-bulk-import-file" className="sa-label text-xs font-semibold uppercase tracking-wider text-slate-300 block">{tCopy("COPY.CSV_FILE_UP_TO_5_MB_500_ROWS")}</label>
+        <input ref={inputRef} id="superadmin-bulk-import-file" type="file" accept=".csv,text/csv" className="sa-input block w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-500/20 file:text-indigo-300 hover:file:bg-indigo-500/30 cursor-pointer" onChange={event => void handleFile(event.target.files?.[0])}  data-testid="superadmin-system-system-bulk-import-superadmin-bulk-import-file-2"/>
+        {fileName && <p className="text-xs text-indigo-300 font-medium">{tCopy("COPY.SELECTED")} <span className="font-mono text-slate-200">{fileName}</span></p>}
       </div>
 
       {rows.length > 0 && <>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="sa-card p-4"><p className="text-secondary text-xs uppercase">{tCopy("COPY.VALID_ROWS")}</p><p className="text-2xl font-bold text-primary">{valid}</p></div>
-          <div className="sa-card p-4"><p className="text-secondary text-xs uppercase">{tCopy("COPY.WARNINGS")}</p><p className="text-2xl font-bold text-warning">{warnings}</p></div>
-          <div className="sa-card p-4"><p className="text-secondary text-xs uppercase">{tCopy("COPY.ERRORS")}</p><p className="text-2xl font-bold text-danger">{errors}</p></div>
+          <div className="sa-card rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/20 via-card to-card p-5 shadow-lg relative overflow-hidden">
+            <p className="text-emerald-400 text-xs uppercase font-bold tracking-wider">{tCopy("COPY.VALID_ROWS")}</p>
+            <p className="text-3xl font-extrabold text-slate-100 mt-1">{valid}</p>
+          </div>
+          <div className="sa-card rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/20 via-card to-card p-5 shadow-lg relative overflow-hidden">
+            <p className="text-amber-400 text-xs uppercase font-bold tracking-wider">{tCopy("COPY.WARNINGS")}</p>
+            <p className="text-3xl font-extrabold text-slate-100 mt-1">{warnings}</p>
+          </div>
+          <div className="sa-card rounded-2xl border border-rose-500/30 bg-gradient-to-br from-rose-950/20 via-card to-card p-5 shadow-lg relative overflow-hidden">
+            <p className="text-rose-400 text-xs uppercase font-bold tracking-wider">{tCopy("COPY.ERRORS")}</p>
+            <p className="text-3xl font-extrabold text-slate-100 mt-1">{errors}</p>
+          </div>
         </div>
-        <div className="sa-card p-4 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-base font-semibold text-primary">{tCopy("COPY.PARSED_CSV_ROWS")}</h2>
-            <label className="text-sm text-secondary">{tCopy("COPY.FILTER_STATUS")}<select aria-label={tCopy("COPY.FILTER")} className="sa-select ml-2" value={filter} onChange={event => setFilter(event.target.value as typeof filter)} data-testid="superadmin-system-system-bulk-import-filter-3"><option value="all">{tCopy("COPY.ALL")}</option><option value="ok">{tCopy("COPY.VALID")}</option><option value="warning">{tCopy("COPY.WARNINGS")}</option><option value="error">{tCopy("COPY.ERRORS")}</option></select></label>
+        <div className="sa-card rounded-2xl border border-border/80 bg-card/90 shadow-xl p-5 space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-border/70">
+            <h2 className="text-base font-bold text-slate-100">{tCopy("COPY.PARSED_CSV_ROWS")}</h2>
+            <label className="text-xs text-slate-400 font-medium inline-flex items-center">{tCopy("COPY.FILTER_STATUS")}
+              <select aria-label={tCopy("COPY.FILTER")} className="sa-select ml-2 rounded-xl border border-indigo-500/25 bg-background/90 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500 focus:outline-none" value={filter} onChange={event => setFilter(event.target.value as typeof filter)} data-testid="superadmin-system-system-bulk-import-filter-3">
+                <option value="all">{tCopy("COPY.ALL")}</option>
+                <option value="ok">{tCopy("COPY.VALID")}</option>
+                <option value="warning">{tCopy("COPY.WARNINGS")}</option>
+                <option value="error">{tCopy("COPY.ERRORS")}</option>
+              </select>
+            </label>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead><tr className="sa-table-header"><th className="text-left p-2">{tCopy("COPY.ROW")}</th><th className="text-left p-2">{tCopy("COPY.NAME")}</th><th className="text-left p-2">{tCopy("COPY.PHONE")}</th><th className="text-left p-2">{tCopy("COPY.EMAIL")}</th><th className="text-left p-2">{tCopy("COPY.SHIFT")}</th><th className="text-left p-2">{tCopy("COPY.SEAT")}</th><th className="text-left p-2">{tCopy("COPY.VALIDATION")}</th></tr></thead>
-              <tbody>{pageRows.map(row => <tr key={row.row} className="sa-table-row border-b border-border">
-                <td className="p-2">{row.row}</td><td className="p-2">{row.name || '—'}</td><td className="p-2">{row.phone ? maskSensitiveData(row.phone) : '—'}</td><td className="p-2">{row.email ? maskSensitiveData(row.email) : '—'}</td><td className="p-2">{row.shift || '—'}</td><td className="p-2">{row.seat || '—'}</td>
-                <td className="p-2"><span className={`sa-badge ${row.status === 'ok' ? 'sa-badge--success' : row.status === 'warning' ? 'sa-badge--warning' : 'sa-badge--danger'}`}>{row.status === 'ok' ? <CheckCircle size={12} /> : row.status === 'warning' ? <AlertTriangle size={12} /> : <XCircle size={12} />} {row.status === 'ok' ? tCopy('COPY.VALID') : row.status === 'warning' ? tCopy('COPY.WARNINGS') : tCopy('COPY.ERRORS')}{issueText(row) ? ` — ${issueText(row)}` : ''}</span></td>
+            <table className="w-full text-xs sm:text-sm">
+              <thead><tr className="sa-table-header border-b border-border text-slate-400 text-xs uppercase tracking-wider"><th className="text-left p-2.5">{tCopy("COPY.ROW")}</th><th className="text-left p-2.5">{tCopy("COPY.NAME")}</th><th className="text-left p-2.5">{tCopy("COPY.PHONE")}</th><th className="text-left p-2.5">{tCopy("COPY.EMAIL")}</th><th className="text-left p-2.5">{tCopy("COPY.SHIFT")}</th><th className="text-left p-2.5">{tCopy("COPY.SEAT")}</th><th className="text-left p-2.5">{tCopy("COPY.VALIDATION")}</th></tr></thead>
+              <tbody>{pageRows.map(row => <tr key={row.row} className="sa-table-row border-b border-border/50 hover:bg-surface-hover/50 transition-colors">
+                <td className="p-2.5 font-mono text-slate-400">{row.row}</td><td className="p-2.5 font-medium text-slate-200">{row.name || '—'}</td><td className="p-2.5 font-mono text-slate-300">{row.phone ? maskSensitiveData(row.phone) : '—'}</td><td className="p-2.5 text-slate-300">{row.email ? maskSensitiveData(row.email) : '—'}</td><td className="p-2.5 text-slate-300">{row.shift || '—'}</td><td className="p-2.5 text-slate-300">{row.seat || '—'}</td>
+                <td className="p-2.5"><span className={`sa-badge inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${row.status === 'ok' ? 'sa-badge--success bg-emerald-500/15 border border-emerald-500/30 text-emerald-300' : row.status === 'warning' ? 'sa-badge--warning bg-amber-500/15 border border-amber-500/30 text-amber-300' : 'sa-badge--danger bg-rose-500/15 border border-rose-500/30 text-rose-300'}`}>{row.status === 'ok' ? <CheckCircle size={12} className="text-emerald-400" /> : row.status === 'warning' ? <AlertTriangle size={12} className="text-amber-400" /> : <XCircle size={12} className="text-rose-400" />} {row.status === 'ok' ? tCopy('COPY.VALID') : row.status === 'warning' ? tCopy('COPY.WARNINGS') : tCopy('COPY.ERRORS')}{issueText(row) ? ` — ${issueText(row)}` : ''}</span></td>
               </tr>)}</tbody>
             </table>
           </div>
-          <nav className="flex flex-wrap items-center justify-between gap-3" aria-label={tCopy('COPY.PAGINATION')}>
-            <p className="text-sm text-secondary" aria-live="polite">
+          <nav className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border/60" aria-label={tCopy('COPY.PAGINATION')}>
+            <p className="text-xs text-slate-400" aria-live="polite">
               {tCopy('COPY.PAGE_RANGE', { start: firstVisibleRow, end: lastVisibleRow, total: visible.length })}
             </p>
             <div className="flex items-center gap-2">
-              <button type="button" className="sa-btn-ghost" onClick={() => setCurrentPage(page => Math.max(1, page - 1))} disabled={safePage <= 1}>
+              <button type="button" className="sa-btn-ghost inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold disabled:opacity-30 cursor-pointer" onClick={() => setCurrentPage(page => Math.max(1, page - 1))} disabled={safePage <= 1}>
                 {tCopy('COPY.PREVIOUS_PAGE')}
               </button>
-              <span className="text-sm text-secondary" aria-live="polite">
+              <span className="text-xs font-semibold text-slate-300 px-2" aria-live="polite">
                 {tCopy('COPY.PAGE_NUMBER', { current: safePage, total: pageCount })}
               </span>
-              <button type="button" className="sa-btn-ghost" onClick={() => setCurrentPage(page => Math.min(pageCount, page + 1))} disabled={safePage >= pageCount}>
+              <button type="button" className="sa-btn-ghost inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold disabled:opacity-30 cursor-pointer" onClick={() => setCurrentPage(page => Math.min(pageCount, page + 1))} disabled={safePage >= pageCount}>
                 {tCopy('COPY.NEXT_PAGE')}
               </button>
             </div>
           </nav>
-          <div className="flex flex-wrap gap-3">
-            <button type="button" className="sa-btn-primary" disabled title={tCopy("COPY.BLOCKED_THE_SUPPLIED_SCOPE_CONTAINS_NO_STUDENT_IMPORT_API_CONTRACT")} data-testid="superadmin-system-system-bulk-import-blocked-the-supplied-scope-contains-no-student-import-api-contract-4"><Upload size={16} /> {tCopy("COPY.IMPORT")}{valid} {tCopy("COPY.VALID_ROWS_2")}</button>
-            <button type="button" className="sa-btn-ghost" onClick={() => { setRows([]); setCurrentPage(1); setFileName(''); setErrorMessage(''); setFilter('all'); setStatusMessage(tCopy('COPY.BULK_IMPORT_INITIAL_STATUS')); if (inputRef.current) inputRef.current.value = ''; }} data-testid="superadmin-system-system-bulk-import-clear-preview-5">{tCopy("COPY.CLEAR_PREVIEW")}</button>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <button type="button" className="sa-btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer" disabled title={tCopy("COPY.BLOCKED_THE_SUPPLIED_SCOPE_CONTAINS_NO_STUDENT_IMPORT_API_CONTRACT")} data-testid="superadmin-system-system-bulk-import-blocked-the-supplied-scope-contains-no-student-import-api-contract-4"><Upload size={16} /> {tCopy("COPY.IMPORT")}{valid} {tCopy("COPY.VALID_ROWS_2")}</button>
+            <button type="button" className="sa-btn-ghost inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs sm:text-sm font-semibold transition-all cursor-pointer" onClick={() => { setRows([]); setCurrentPage(1); setFileName(''); setErrorMessage(''); setFilter('all'); setStatusMessage(tCopy('COPY.BULK_IMPORT_INITIAL_STATUS')); if (inputRef.current) inputRef.current.value = ''; }} data-testid="superadmin-system-system-bulk-import-clear-preview-5">{tCopy("COPY.CLEAR_PREVIEW")}</button>
           </div>
         </div>
       </>}

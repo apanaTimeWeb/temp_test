@@ -4,13 +4,14 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { FileSpreadsheet, Hash } from 'lucide-react';
 import { SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES as __SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES } from "@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/config/superadmin_libraries_onboarding_setup.url_config";
 
 type SuperadminLibrariesOnboardingSetupWorkflowNavigationProps = { currentView?: string };
 
 const WORKFLOW_ITEMS = [
-  { view: 'student_bulk_import', labelKey: 'WORKFLOW_STUDENT_BULK_IMPORT', href: __SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES.SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_WORKFLOW_URLS.STUDENT_BULK_IMPORT },
-  { view: 'student_smart_id', labelKey: 'WORKFLOW_STUDENT_SMART_ID', href: __SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES.SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_WORKFLOW_URLS.STUDENT_SMART_ID },
+  { view: 'student_bulk_import', icon: FileSpreadsheet, labelKey: 'WORKFLOW_STUDENT_BULK_IMPORT', href: __SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES.SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_WORKFLOW_URLS.STUDENT_BULK_IMPORT },
+  { view: 'student_smart_id', icon: Hash, labelKey: 'WORKFLOW_STUDENT_SMART_ID', href: __SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES.SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_WORKFLOW_URLS.STUDENT_SMART_ID },
 ] as const;
 
 /**
@@ -20,14 +21,25 @@ const WORKFLOW_ITEMS = [
 export default function SuperadminLibrariesOnboardingSetupWorkflowNavigation({ currentView }: SuperadminLibrariesOnboardingSetupWorkflowNavigationProps) {
   const t = useTranslations('SUPERADMIN_SETUP_WIZARD');
   return (
-    <nav aria-label={t('COPY.WORKFLOW_NAVIGATION')} className="mb-4 border-b border-border" data-testid="superadmin-libraries_onboarding_setup-workflow-navigation">
+    <nav aria-label={t('COPY.WORKFLOW_NAVIGATION')} className="mb-4 border-b border-border/80" data-testid="superadmin-libraries_onboarding_setup-workflow-navigation">
       <ul className="flex min-w-0 flex-wrap gap-2" role="list">
         {WORKFLOW_ITEMS.map((item) => {
           const active = currentView === item.view || currentView === `${item.view}_detail`;
+          const Icon = item.icon;
           return (
             <li key={item.view} className="min-w-0">
-              <Link href={item.href} aria-current={active ? 'page' : undefined} className={`inline-flex min-h-11 items-center rounded-t-lg border-b-2 px-3 py-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${active ? 'border-focus bg-primary-subtle text-primary' : 'border-transparent text-secondary hover:bg-surface-hover hover:text-primary'}`} data-testid={`superadmin-libraries_onboarding_setup-workflow-${item.view}`}>
-                {t(`COPY.${item.labelKey}`)}
+              <Link
+                href={item.href}
+                aria-current={active ? 'page' : undefined}
+                className={`inline-flex min-h-10 items-center gap-2 rounded-t-xl border-b-2 px-3.5 py-2 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 cursor-pointer ${
+                  active
+                    ? 'border-indigo-400 bg-indigo-500/10 text-indigo-300 shadow-xs'
+                    : 'border-transparent text-slate-400 hover:bg-surface-hover hover:text-slate-200'
+                }`}
+                data-testid={`superadmin-libraries_onboarding_setup-workflow-${item.view}`}
+              >
+                <Icon size={15} className={active ? 'text-indigo-400' : 'text-slate-400'} />
+                <span>{t(`COPY.${item.labelKey}`)}</span>
               </Link>
             </li>
           );

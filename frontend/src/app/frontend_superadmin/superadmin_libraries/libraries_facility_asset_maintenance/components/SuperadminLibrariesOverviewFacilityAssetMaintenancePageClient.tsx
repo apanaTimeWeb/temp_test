@@ -31,7 +31,7 @@ export default function SuperadminLibrariesOverviewFacilityAssetMaintenancePageC
   const locale = useLocale();
   const translateValidationMessage = useSuperadminLibrariesOverviewFacilityAssetMaintenanceValidationMessage();
   const [logs, setLogs] = useState<SuperadminAccountingMaintenanceLog[]>(() => SUPERADMIN_ACCOUNTING_SAMPLE_MAINTENANCE_LOGS.map((log) => ({ ...log })));
-  const [statusFilter, setStatusFilter] = useSuperadminLibrariesOverviewFacilityAssetMaintenanceUrlFilter('maintenanceStatus', 'all');
+  const [statusFilter, setStatusFilter] = useSuperadminLibrariesOverviewFacilityAssetMaintenanceUrlFilter<string>('maintenanceStatus', 'all');
   const [showAdd, setShowAdd] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const { register, handleSubmit, reset, formState: { errors, isSubmitting , isDirty} } = useForm<SuperadminAccountingMaintenanceFormValues>({

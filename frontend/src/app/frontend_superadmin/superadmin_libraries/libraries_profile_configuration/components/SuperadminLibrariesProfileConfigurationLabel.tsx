@@ -7,7 +7,19 @@ import type { SuperadminLibrariesProfileConfigurationLabelProps } from '@/app/fr
 
 export const SuperadminLibrariesProfileConfigurationLabel = forwardRef<HTMLLabelElement, SuperadminLibrariesProfileConfigurationLabelProps>(
   ({ className, htmlFor, id, title, onClick, 'aria-label': ariaLabel, 'aria-describedby': ariaDescribedBy, 'data-testid': dataTestId, children }, ref) => (
-    <label ref={ref} htmlFor={htmlFor} id={id} title={title} onClick={onClick} aria-label={ariaLabel} aria-describedby={ariaDescribedBy} data-testid={dataTestId} className={cn('sys-label', className)}>{children}</label>
+    <label
+      ref={ref}
+      htmlFor={htmlFor}
+      id={id}
+      title={title}
+      onClick={onClick}
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
+      data-testid={dataTestId}
+      className={cn('sys-label text-xs font-semibold uppercase tracking-wider text-slate-300 inline-flex items-center gap-1.5 mb-1', className)}
+    >
+      {children}
+    </label>
   ),
 );
 SuperadminLibrariesProfileConfigurationLabel.displayName = 'SuperadminLibrariesProfileConfigurationLabel';

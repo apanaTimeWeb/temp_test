@@ -9,5 +9,5 @@ import type { SuperadminSystemCardFooterProps } from '@/app/frontend_superadmin/
  * @param parameter Input required by the declared feature contract. Declared type: SuperadminSystemCardFooterProps.
  */
 export function SuperadminLibrariesProfileConfigurationCardFooter({ children, className }: SuperadminSystemCardFooterProps) {
-  return <div className={cn('sys-card-footer', className)}>{children}</div>;
+  return <div className={cn('sys-card-footer pt-5 mt-5 border-t border-border/60 flex flex-wrap items-center justify-end gap-3', className)}>{children}</div>;
 }

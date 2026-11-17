@@ -9,7 +9,12 @@ import { plansSchema } from '@/app/frontend_superadmin/superadmin_libraries/libr
 import type { PlansData } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/types/SuperadminLibrariesOnboardingSetupTypes';
 import { Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-const inputCls = (hasErr?: boolean) => `sa-input${hasErr ? ' sa-input--error' : ''}`;
+const inputCls = (hasErr?: boolean) =>
+  `sa-input w-full rounded-xl border px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:outline-none focus:ring-2 ${
+    hasErr
+      ? 'sa-input--error border-rose-500/60 bg-rose-500/5 focus:border-rose-500 focus:ring-rose-500/20'
+      : 'border-indigo-500/25 bg-background/80 focus:border-indigo-500 focus:ring-indigo-500/20'
+  }`;
 
 /**
  * Performs the superadmin libraries onboarding setup step4 form operation within libraries onboarding setup; inputs and outputs follow the declared TypeScript contract.
@@ -58,10 +63,10 @@ export default function SuperadminLibrariesOnboardingSetupStep4Form({ onNext, in
             type="button"
             onClick={() => remove(i)}
             disabled={fields.length <= 1}
-            className="sa-wizard-remove-btn"
+            className="sa-wizard-remove-btn p-2 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
             aria-label={tCopy("COPY.REMOVE_PLAN_NUMBER_ARIA_LABEL", { index: i + 1 })}
            data-testid={`superadmin-setup-wizard-setup-wizard-step4-form-remove-plan-number-aria-label-4-${String(field.id)}`}>
-            <Trash2 size={14} />
+            <Trash2 size={14} className="text-rose-400" />
           </button>
         </div>
       ))}
@@ -69,9 +74,9 @@ export default function SuperadminLibrariesOnboardingSetupStep4Form({ onNext, in
       <button
         type="button"
         onClick={() => append({ name: '', days: 30, price: 0 })}
-        className="sa-btn-dashed"
+        className="sa-btn-dashed w-full py-2.5 rounded-xl border-2 border-dashed border-indigo-500/30 hover:border-indigo-500/60 bg-indigo-500/5 hover:bg-indigo-500/10 text-indigo-300 font-semibold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
        data-testid="superadmin-setup-wizard-setup-wizard-step4-form-add-another-plan-5">
-        <Plus size={15} /> {tCopy("COPY.ADD_ANOTHER_PLAN")}
+        <Plus size={15} className="text-indigo-400" /> {tCopy("COPY.ADD_ANOTHER_PLAN")}
       </button>
     </form>
   );

@@ -8,7 +8,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { branchDetailsSchema } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/schemas/SuperadminLibrariesOnboardingSetupSchema';
 import type { BranchDetailsData } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/types/SuperadminLibrariesOnboardingSetupTypes';
 import { useTranslations } from 'next-intl';
-const inputCls = (hasErr?: boolean) => `sa-input${hasErr ? ' sa-input--error' : ''}`;
+const inputCls = (hasErr?: boolean) =>
+  `sa-input w-full rounded-xl border px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:outline-none focus:ring-2 ${
+    hasErr
+      ? 'sa-input--error border-rose-500/60 bg-rose-500/5 focus:border-rose-500 focus:ring-rose-500/20'
+      : 'border-indigo-500/25 bg-background/80 focus:border-indigo-500 focus:ring-indigo-500/20'
+  }`;
 
 /**
  * Performs the superadmin libraries onboarding setup step1 form operation within libraries onboarding setup; inputs and outputs follow the declared TypeScript contract.

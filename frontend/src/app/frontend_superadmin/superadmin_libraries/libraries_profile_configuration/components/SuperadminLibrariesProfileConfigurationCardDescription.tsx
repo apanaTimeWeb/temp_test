@@ -9,5 +9,5 @@ import type { SuperadminSystemCardDescriptionProps } from '@/app/frontend_supera
  * @param parameter Input required by the declared feature contract. Declared type: SuperadminSystemCardDescriptionProps.
  */
 export function SuperadminLibrariesProfileConfigurationCardDescription({ children, className }: SuperadminSystemCardDescriptionProps) {
-  return <p className={cn('sys-card-desc', className)}>{children}</p>;
+  return <p className={cn('sys-card-desc text-xs sm:text-sm text-slate-400 font-normal leading-relaxed', className)}>{children}</p>;
 }

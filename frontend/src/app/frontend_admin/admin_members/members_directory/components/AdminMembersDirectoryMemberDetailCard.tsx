@@ -20,6 +20,8 @@ import {
   Download,
   CheckCircle,
   X,
+  Edit,
+  Building2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
@@ -90,52 +92,61 @@ export function AdminMembersDirectoryMemberDetailCard({
 
         <button
           type="button"
-          className="admin-btn-ghost min-h-10 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/15 px-4 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-500/25 transition-all disabled:cursor-not-allowed disabled:opacity-50"
           disabled={!isDemoMode}
           title={!isDemoMode ? t('MEMBER_EDIT_UNAVAILABLE') : undefined}
           onClick={() => onEdit(member)}
         >
-          {t('ACTION_EDIT_MEMBER')}
+          <Edit size={14} className="text-amber-400" />
+          <span>{t('ACTION_EDIT_MEMBER')}</span>
         </button>
       </div>
 
       {detailTab === 'profile' ? (
         <div className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="flex items-start gap-3 rounded-lg border border-border bg-card p-3">
-              <UserRound size={18} className="text-primary shrink-0 mt-0.5" aria-hidden="true" />
-              <div>
+            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                <UserRound size={18} />
+              </div>
+              <div className="min-w-0">
                 <p className="text-xs uppercase font-medium text-text-secondary">{t('DETAIL_CONTACT')}</p>
-                <p className="text-sm font-semibold text-text-primary mt-0.5">{member.email}</p>
-                <p className="text-xs text-text-secondary">{member.phone}</p>
+                <p className="text-sm font-semibold text-text-primary mt-0.5 truncate">{member.email}</p>
+                <p className="text-xs text-text-secondary mt-0.5">{member.phone}</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 rounded-lg border border-border bg-card p-3">
-              <CreditCard size={18} className="text-primary shrink-0 mt-0.5" aria-hidden="true" />
-              <div>
+            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                <CreditCard size={18} />
+              </div>
+              <div className="min-w-0">
                 <p className="text-xs uppercase font-medium text-text-secondary">{t('DETAIL_MEMBERSHIP')}</p>
-                <p className="text-sm font-semibold text-text-primary mt-0.5">{member.plan}</p>
-                <p className="text-xs text-text-secondary">{t('DETAIL_EXPIRY_PREFIX', { expiry: expiryDate })}</p>
+                <p className="text-sm font-semibold text-purple-400 mt-0.5">{member.plan}</p>
+                <p className="text-xs text-text-secondary mt-0.5">{t('DETAIL_EXPIRY_PREFIX', { expiry: expiryDate })}</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 rounded-lg border border-border bg-card p-3">
-              <Armchair size={18} className="text-primary shrink-0 mt-0.5" aria-hidden="true" />
-              <div>
+            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                <Armchair size={18} />
+              </div>
+              <div className="min-w-0">
                 <p className="text-xs uppercase font-medium text-text-secondary">Seat & Shift</p>
                 <p className="text-sm font-semibold text-text-primary mt-0.5">
                   {member.seat ? `Seat: ${member.seat}` : 'Seat: Unassigned'}
                 </p>
-                <p className="text-xs text-text-secondary">
+                <p className="text-xs text-text-secondary mt-0.5">
                   Shift: {member.shift || 'General'}{member.locker ? ` · Locker: ${member.locker}` : ''}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 rounded-lg border border-border bg-card p-3">
-              <IndianRupee size={18} className="text-primary shrink-0 mt-0.5" aria-hidden="true" />
-              <div>
+            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <IndianRupee size={18} />
+              </div>
+              <div className="min-w-0">
                 <p className="text-xs uppercase font-medium text-text-secondary">Fee Status</p>
                 <p className={member.feeStatus === 'Due' ? 'text-danger-text font-semibold text-sm mt-0.5' : 'text-success-text font-semibold text-sm mt-0.5'}>
                   {member.feeStatus || 'Paid'}
@@ -150,11 +161,13 @@ export function AdminMembersDirectoryMemberDetailCard({
             </div>
 
             {member.branch && (
-              <div className="flex items-start gap-3 rounded-lg border border-border bg-card p-3">
-                <Users size={18} className="text-primary shrink-0 mt-0.5" aria-hidden="true" />
-                <div>
+              <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                  <Building2 size={18} />
+                </div>
+                <div className="min-w-0">
                   <p className="text-xs uppercase font-medium text-text-secondary">Branch</p>
-                  <p className="text-sm font-semibold text-text-primary mt-0.5">{member.branch}</p>
+                  <p className="text-sm font-semibold text-amber-400 mt-0.5">{member.branch}</p>
                 </div>
               </div>
             )}
@@ -173,7 +186,7 @@ export function AdminMembersDirectoryMemberDetailCard({
                   href={`https://wa.me/${waPhone}?text=${waText}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="admin-btn-ghost inline-flex min-h-10 items-center gap-1.5 text-success-text hover:text-success-text"
+                  className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all"
                 >
                   <MessageSquare size={16} aria-hidden="true" /> WhatsApp
                 </a>
@@ -182,7 +195,7 @@ export function AdminMembersDirectoryMemberDetailCard({
             {member.status === 'Active' && (
               <button
                 type="button"
-                className="admin-btn-ghost inline-flex min-h-10 items-center gap-1.5 text-warning-text hover:text-warning-text"
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3.5 py-1.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/20 transition-all"
                 onClick={() => toast.info(`Member status change requested for ${member.name}`)}
               >
                 <ShieldAlert size={16} aria-hidden="true" /> Suspend
@@ -191,10 +204,10 @@ export function AdminMembersDirectoryMemberDetailCard({
             {member.status === 'Suspended' && (
               <button
                 type="button"
-                className="admin-btn-ghost inline-flex min-h-10 items-center gap-1.5 text-success-text hover:text-success-text"
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all"
                 onClick={() => toast.info(`Reactivation requested for ${member.name}`)}
               >
-                <ShieldAlert size={16} aria-hidden="true" /> Reactivate
+                <ShieldCheck size={16} aria-hidden="true" /> Reactivate
               </button>
             )}
           </div>
