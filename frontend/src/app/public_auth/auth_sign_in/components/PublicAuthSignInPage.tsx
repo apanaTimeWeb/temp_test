@@ -9,6 +9,7 @@ import {
   Eye, EyeOff, BookOpen, CheckCircle, Lock,
   Shield, Zap, Users, Sparkles, LayoutGrid, Clock,
 } from 'lucide-react';
+import { LibraryLoader, ButtonLoader } from '@/components/ui/loader/LibraryLoader';
 
 interface RoleConfig {
   id: 'superadmin' | 'admin' | 'manager';
@@ -318,13 +319,10 @@ export default function PublicAuthSignInPage() {
 
       {/* SUCCESS POPUP */}
       {loginSuccess && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#030712]/80 backdrop-blur-sm transition-opacity duration-300">
-          <div className="bg-[#12121d] border border-emerald-500/30 p-8 rounded-3xl shadow-[0_20px_60px_-15px_rgba(16,185,129,0.3)] flex flex-col items-center justify-center gap-2 transform scale-100 transition-transform duration-300">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3 border border-emerald-500/20">
-              <CheckCircle size={32} />
-            </div>
-            <h3 className="text-white text-xl font-black tracking-tight">Login Successful</h3>
-            <p className="text-slate-400 text-sm font-medium">Redirecting securely...</p>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#030712]/80 backdrop-blur-sm transition-opacity duration-300" role="status" aria-label="Loading">
+          <div className="bg-[#12121d] border border-emerald-500/30 p-8 rounded-3xl shadow-[0_20px_60px_-15px_rgba(16,185,129,0.3)] flex flex-col items-center justify-center gap-4 transform scale-100 transition-transform duration-300">
+            <LibraryLoader size="md" icon="library" variant="contra" />
+            <h3 className="text-white text-lg font-bold tracking-tight">Login Successful</h3>
           </div>
         </div>
       )}
@@ -539,17 +537,14 @@ export default function PublicAuthSignInPage() {
                 id="login-submit-btn"
                 type="submit"
                 disabled={isSubmitting}
-                className="submit-btn shimmer-btn glow-indigo w-full text-white font-black text-sm py-4 rounded-xl transition-all active:scale-[0.98] mt-2 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="submit-btn shimmer-btn glow-indigo w-full text-white font-black text-sm py-4 rounded-xl transition-all active:scale-[0.98] mt-2 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isSubmitting ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Signing in...
-                  </>
+                  <ButtonLoader icon="library" />
                 ) : (
                   <>
                     <Lock size={16} />
-                    Secure Sign In
+                    <span>Sign In</span>
                     <Sparkles size={14} />
                   </>
                 )}
