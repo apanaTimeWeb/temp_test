@@ -10,6 +10,7 @@ import {
   X,
   BookOpen,
   Search,
+  User,
 } from 'lucide-react';
 import {
   ADMIN_NAVIGATION_GROUPS,
@@ -25,7 +26,7 @@ import {
 } from '../utils/AdminNavigationSidebarPathUtils';
 
 /**
- * @description Renders role-owned navigation, interactive search, expandable submodule accordions, responsive drawer behavior, and the admin logout confirmation.
+ * @description Renders role-owned navigation, interactive search, expandable submodule accordions, and responsive drawer behavior.
  * @dependencies Consumes only role navigation configuration and zero-business dialog primitives.
  * @edge-case Nested routes auto-expand their parent domain group; mobile drawer closes after navigation.
  */
@@ -256,7 +257,7 @@ export function AdminNavigationSidebar({
           {expanded ? (
             <div className="admin-sidebar-footer-user flex items-center gap-2.5 min-w-0 flex-1">
               <div className="admin-sidebar-footer-avatar" aria-hidden="true">
-                LA
+                <User size={16} strokeWidth={2.2} />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-bold text-white truncate">{t('ADMIN_GREETING')}</p>
@@ -265,7 +266,7 @@ export function AdminNavigationSidebar({
             </div>
           ) : (
             <div className="admin-sidebar-footer-avatar mx-auto" aria-hidden="true">
-              LA
+              <User size={16} strokeWidth={2.2} />
             </div>
           )}
         </div>

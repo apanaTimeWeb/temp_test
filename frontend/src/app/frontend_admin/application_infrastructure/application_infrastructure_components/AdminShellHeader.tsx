@@ -156,7 +156,7 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
             title={t('DEMO_PROFILE_TOOLTIP')}
           >
             <div className="admin-avatar admin-avatar-header" aria-hidden="true">
-              LA
+              <User size={17} strokeWidth={2.2} />
             </div>
             <div className="admin-avatar-details hidden sm:flex">
               <span>{greeting}</span>
@@ -173,7 +173,7 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
             <div className="admin-profile-dropdown" role="menu">
               <div className="admin-profile-dropdown-header">
                 <div className="admin-avatar admin-avatar-header" aria-hidden="true">
-                  LA
+                  <User size={20} strokeWidth={2.2} />
                 </div>
                 <div className="admin-profile-dropdown-meta">
                   <p className="admin-profile-dropdown-name">{t('ADMIN_GREETING')}</p>
@@ -228,25 +228,49 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
       </div>
 
       <Dialog open={showLogoutModal} onOpenChange={setShowLogoutModal}>
-        <DialogContent className="max-w-sm bg-[#0b0c20] border-indigo-500/30 text-white">
-          <DialogHeader>
-            <DialogTitle className="text-white text-lg font-bold">{t('LOG_OUT_TITLE')}</DialogTitle>
-            <DialogDescription className="text-slate-400 text-sm">{t('LOG_OUT_DESCRIPTION')}</DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="mt-4 flex justify-end gap-2">
+        <DialogContent className="max-w-sm bg-[#0b0c20] border border-indigo-500/30 text-white rounded-2xl shadow-2xl p-6">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mb-3">
+              <LogOut size={24} strokeWidth={2.2} />
+            </div>
+            <DialogHeader className="text-center sm:text-center">
+              <DialogTitle className="text-white text-lg font-bold text-center">
+                {t('LOG_OUT_TITLE')}
+              </DialogTitle>
+              <DialogDescription className="text-slate-400 text-sm mt-1 text-center">
+                {t('LOG_OUT_DESCRIPTION')}
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+
+          <div className="my-3 rounded-xl bg-white/[0.03] border border-white/5 p-3 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center">
+              <User size={20} strokeWidth={2.2} />
+            </div>
+            <div className="text-left flex-1 min-w-0">
+              <p className="text-xs font-semibold text-white truncate">Administrator</p>
+              <p className="text-[11px] text-slate-400 truncate">admin@libraryos.com</p>
+            </div>
+            <span className="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 rounded px-1.5 py-0.5">
+              ADMIN
+            </span>
+          </div>
+
+          <DialogFooter className="mt-2 flex items-center justify-end gap-2.5 sm:justify-end">
             <button
               type="button"
               onClick={() => setShowLogoutModal(false)}
-              className="border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/5 transition-colors"
+              className="border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/5 transition-colors cursor-pointer"
             >
               {t('CANCEL')}
             </button>
             <button
               type="button"
               onClick={handleSignOut}
-              className="bg-red-600 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-700 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+              className="bg-red-600 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-700 transition-colors cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
             >
-              {t('LOG_OUT')}
+              <LogOut size={14} strokeWidth={2} />
+              <span>{t('LOG_OUT')}</span>
             </button>
           </DialogFooter>
         </DialogContent>
