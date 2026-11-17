@@ -123,29 +123,10 @@ export default function AdminDashboardOverviewMain() {
       {/* ── Executive Header Banner ── */}
       <div className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card transition-all space-y-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 flex-wrap text-xs">
-              <span className="font-bold text-indigo-400 uppercase tracking-wider">
-                {t('LIBRARY_OVERVIEW_EYEBROW')}
-              </span>
-              <span className="text-border">•</span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Multi-Branch Network
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-                <Building2 size={12} className="text-indigo-400" />
-                Scope: <strong className="text-white">{selectedBranch ? `${selectedBranch.name} (${selectedBranch.code})` : 'All Branches (Network View)'}</strong>
-              </span>
-            </div>
-
+          <div>
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
               {t('LIBRARY_OVERVIEW_TITLE')}
             </h1>
-
-            <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
-              {t('LIBRARY_OVERVIEW_DESCRIPTION')}
-            </p>
           </div>
 
           {/* Right Header Fast Action */}
@@ -173,7 +154,7 @@ export default function AdminDashboardOverviewMain() {
               href={ADMIN_ROUTES.MEMBERS_DIRECTORY}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-950/40 transition-all hover:scale-[1.02] cursor-pointer"
             >
-              <UserPlus size={13} />
+              <Users size={13} />
               <span>Members Directory</span>
             </Link>
             <Link

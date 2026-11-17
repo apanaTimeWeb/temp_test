@@ -268,7 +268,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
         members={selectedMemberIds.length > 0 ? branchFilteredMembers.filter((m) => selectedMemberIds.includes(m.id)) : branchFilteredMembers}
       />
 
-      {/* ADD MEMBER FORM */}
+      {/* MEMBER EDIT MODAL */}
       <AdminMembersDirectoryMemberForm model={model} />
 
       {/* SECONDARY TAB VIEWS share the parent active-tab lifecycle. */}

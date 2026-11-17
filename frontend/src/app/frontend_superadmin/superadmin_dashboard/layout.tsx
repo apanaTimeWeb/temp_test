@@ -6,8 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-
-
+import { LayoutDashboard } from 'lucide-react';
 
 /**
  * Performs the domain layout operation within layout.tsx; inputs and outputs follow the declared TypeScript contract.
@@ -19,23 +18,34 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   const routes = [
     { key: 'dashboard_overview', label: t('COPY.NAV_DASHBOARD_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.dashboard_overview },
   ] as const;
+
   return (
-    <div className="min-w-0">
-      <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-5 border-b border-border" data-testid="superadmin_dashboard-secondary-navigation">
+    <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
+      <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-6 border-b border-border/80" data-testid="superadmin_dashboard-secondary-navigation">
         <ul className="flex min-w-0 flex-wrap gap-2" role="list">
           {routes.map((route) => {
-            const active = pathname === route.href;
+            const active = pathname === route.href || pathname.startsWith(route.href + '/');
             return (
               <li key={route.key} className="min-w-0">
-                <Link href={route.href} aria-current={active ? 'page' : undefined} className={`inline-flex min-h-11 items-center rounded-t-lg border-b-2 px-3 py-2 text-sm font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${active ? 'border-focus bg-primary-subtle text-primary' : 'border-transparent text-secondary hover:bg-surface-hover hover:text-primary'}`} data-testid={`superadmin_dashboard-secondary-link-${route.key}`}>
-                  {route.label}
+                <Link
+                  href={route.href}
+                  aria-current={active ? 'page' : undefined}
+                  className={`inline-flex min-h-10 items-center gap-2 rounded-t-xl border-b-2 px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 cursor-pointer ${
+                    active
+                      ? 'border-indigo-400 bg-indigo-500/10 text-indigo-300 shadow-xs'
+                      : 'border-transparent text-slate-400 hover:bg-surface-hover hover:text-slate-200'
+                  }`}
+                  data-testid={`superadmin_dashboard-secondary-link-${route.key}`}
+                >
+                  <LayoutDashboard size={14} className={active ? 'text-indigo-400' : 'text-slate-400'} />
+                  <span>{route.label}</span>
                 </Link>
               </li>
             );
           })}
         </ul>
       </nav>
-      <div className="min-w-0">{children}</div>
+      <div className="w-full max-w-full min-w-0">{children}</div>
     </div>
   );
 }

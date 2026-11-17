@@ -56,7 +56,7 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
   }, []);
 
   useAdminMembersDirectoryUnsavedChangesGuard(
-    isDirty && (isEditing || (!model.viewingMember && model.activeTab === 'add')),
+    isDirty && isEditing,
     isSubmitting,
     handleBlockedNavigation,
   );
@@ -100,7 +100,6 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
       ...(values.locker?.trim() ? { locker: values.locker.trim() } : {}),
     };
     if (editingMember) model.handleSaveDemoMember(editingMember, cleanedValues);
-    else model.handleAddMember(cleanedValues);
   });
 
   const renderFormFields = (isEditMode: boolean) => {
@@ -192,39 +191,7 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
     );
   }
 
-  if (model.viewingMember || model.activeTab !== 'add') return null;
-
-  return (
-    <section className="admin-card p-6" aria-labelledby="admin-members-add-title">
-      <div className="mb-5 flex items-center gap-3">
-        <UserPlus size={20} strokeWidth={2} aria-hidden="true"/>
-        <div>
-          <h2 id="admin-members-add-title">{t('ADD_MEMBER_TITLE')}</h2>
-          <p className="text-sm text-text-secondary">
-            {model.isDemoMode && <span className="sr-only">{t('FORM_NOTICE_DEMO')}</span>}
-            <span>{t('FORM_NOTICE')}</span>
-          </p>
-        </div>
-      </div>
-      <form className="grid gap-4 sm:grid-cols-2" onSubmit={submit} noValidate>
-        {renderFormFields(false)}
-        <div className="sm:col-span-2 flex flex-wrap gap-2 pt-2">
-          <button className="admin-btn-primary min-h-11" type="submit" disabled={isSubmitting}>{t('VALIDATE_DETAILS')}</button>
-          <button className="admin-btn-ghost min-h-11" type="button" onClick={requestCancel}>{t('CANCEL')}</button>
-        </div>
-      </form>
-      {confirmDiscard && (
-        <div role="alertdialog" aria-modal="true" aria-labelledby="admin-members-add-discard-title" className="mt-4 rounded-lg border border-warning-bg bg-card p-4">
-          <h3 id="admin-members-add-discard-title" className="font-semibold text-text-primary">{t('UNSAVED_CHANGES_TITLE')}</h3>
-          <p className="mt-2 text-text-secondary">{t('UNSAVED_CHANGES_DESCRIPTION')}</p>
-          <div className="mt-4 flex flex-wrap justify-end gap-2">
-            <button type="button" className="admin-btn-ghost min-h-11" onClick={() => { setConfirmDiscard(false); setPendingNavigation(null); }}>{t('KEEP_EDITING')}</button>
-            <button type="button" className="admin-btn-danger min-h-11" onClick={discardDraft}>{t('DISCARD_CHANGES')}</button>
-          </div>
-        </div>
-      )}
-    </section>
-  );
+  return null;
 }
 
 export type { AdminMembersDirectoryMemberFormProps };

@@ -14,7 +14,7 @@ export default function SuperadminDashboardOverviewEmptyState({ filtered = false
   const tCopy = useTranslations('SUPERADMIN_DASHBOARD');
   return (
     <span role="status" aria-live="polite" data-testid="superadmin_dashboard_overview-empty-state" className="inline-flex items-center justify-center gap-2 text-sm text-secondary">
-      <Inbox aria-hidden="true" className="h-4 w-4 shrink-0" />
+      <Inbox aria-hidden="true" className="h-4 w-4 shrink-0 text-indigo-400" />
       <span>{tCopy(filtered ? 'COPY.TABLE_EMPTY_FILTERED' : 'COPY.TABLE_EMPTY')}</span>
     </span>
   );

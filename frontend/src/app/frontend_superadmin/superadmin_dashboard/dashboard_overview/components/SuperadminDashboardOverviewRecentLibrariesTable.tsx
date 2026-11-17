@@ -1,88 +1,157 @@
 'use client';
-/** Responsibility: Superadmin Dashboard Recent Libraries Table; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
-/** Data-Flow: leaf-owned props or hook state -> SuperadminDashboardOverviewRecentLibrariesTable formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
-import type { SemanticCellParams as ICellRendererParams } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewSemanticTable';
+/** Responsibility: Superadmin Dashboard Recent Libraries Table; displays recent tenant registrations with plan/status badges, avatar chips, and action links. */
+import type { SemanticCellParams as ICellRendererParams, SemanticColumnDef as ColDef } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewSemanticTable';
 import SuperadminDashboardOverviewSemanticTable from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewSemanticTable';
-
 import { useMemo } from 'react';
 import Link from 'next/link';
-import type { SemanticColumnDef as ColDef } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewSemanticTable';
-import type { SuperadminDashboardRecentLibrariesTableProps } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/types/SuperadminDashboardOverviewTypes';
-import { ExternalLink } from 'lucide-react';
-
-
-import type { SuperadminDashboardRecentLibrary as Library } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/types/SuperadminDashboardOverviewTypes';
-import { SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES as __SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES } from "@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/config/superadmin_dashboard_overview.url_config";
+import type { SuperadminDashboardRecentLibrariesTableProps, SuperadminDashboardRecentLibrary as Library } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/types/SuperadminDashboardOverviewTypes';
+import { ExternalLink, Building2 } from 'lucide-react';
+import { SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES } from "@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/config/superadmin_dashboard_overview.url_config";
 import { useTranslations } from 'next-intl';
-import { SUPERADMIN_DASHBOARD_LIBRARY_STATUS_CONFIG } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/constants/SuperadminDashboardOverviewStatusConstants';
-import { SUPERADMIN_DASHBOARD_RECENT_LIBRARIES_TABLE_PLAN_CLS } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/constants/SuperadminDashboardOverviewStaticConstants';
 
+const PLAN_STYLES: Record<string, string> = {
+  Enterprise: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+  Pro:        'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+  Starter:    'bg-sky-500/15 text-sky-300 border-sky-500/30',
+  Basic:      'bg-slate-500/15 text-slate-300 border-slate-500/30',
+};
 
-
-
-
-
+const STATUS_STYLES: Record<string, { badge: string; dot?: string; label: string }> = {
+  active: {
+    badge: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+    dot: 'bg-emerald-400',
+    label: 'Active',
+  },
+  setup: {
+    badge: 'bg-sky-500/15 text-sky-400 border-sky-500/30',
+    dot: 'bg-sky-400',
+    label: 'In Setup',
+  },
+  inactive: {
+    badge: 'bg-rose-500/15 text-rose-400 border-rose-500/30',
+    dot: 'bg-rose-400',
+    label: 'Inactive',
+  },
+};
 
 /**
- * Performs the superadmin dashboard overview recent libraries table operation within dashboard overview; inputs and outputs follow the declared TypeScript contract.
- * @param parameter Input required by the declared feature contract. Declared type: SuperadminDashboardRecentLibrariesTableProps.
+ * Performs the superadmin dashboard overview recent libraries table operation within dashboard overview.
  */
 export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }: SuperadminDashboardRecentLibrariesTableProps) {
   const t = useTranslations('SUPERADMIN_DASHBOARD');
 
-  const colDefs = useMemo<ColDef[]>(() => [
+  const colDefs = useMemo<ColDef<Library>[]>(() => [
     {
-      headerName: t('COPY.LIBRARY'), field: 'name', flex: 2, minWidth: 180,
+      headerName: t('COPY.LIBRARY'),
+      field: 'name',
+      flex: 2,
+      minWidth: 180,
       cellRenderer: (p: ICellRendererParams<Library>) => (
         <div className="flex items-center gap-3">
-          <div className="sa-avatar-cell">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shrink-0 shadow-xs">
             {p.data?.initials}
           </div>
-          <span className="font-medium text-primary text-sm">{p.data?.name}</span>
+          <span className="font-semibold text-white text-sm">{p.data?.name}</span>
         </div>
       ),
     },
-    { headerName: t('COPY.OWNER'), field: 'owner', flex: 1.5, minWidth: 130,
-      cellClass: () => 'sa-cell-muted' },
     {
-      headerName: t('COPY.STUDENTS'), field: 'students', flex: 0.8, minWidth: 90,
+      headerName: t('COPY.OWNER'),
+      field: 'owner',
+      flex: 1.5,
+      minWidth: 130,
       cellRenderer: (p: ICellRendererParams<Library>) => (
-        <span className="font-bold text-primary">{p.data?.students}</span>
+        <span className="text-slate-300 text-xs sm:text-sm">{p.data?.owner}</span>
       ),
     },
     {
-      headerName: t('COPY.PLAN'), field: 'plan', flex: 0.8, minWidth: 100,
+      headerName: t('COPY.STUDENTS'),
+      field: 'students',
+      flex: 0.8,
+      minWidth: 90,
+      cellRenderer: (p: ICellRendererParams<Library>) => (
+        <span className="font-bold text-white text-xs sm:text-sm">{p.data?.students?.toLocaleString() ?? 0}</span>
+      ),
+    },
+    {
+      headerName: t('COPY.PLAN'),
+      field: 'plan',
+      flex: 0.8,
+      minWidth: 100,
       cellRenderer: (p: ICellRendererParams<Library>) => {
-        const cls = SUPERADMIN_DASHBOARD_RECENT_LIBRARIES_TABLE_PLAN_CLS[p.data?.plan ?? ''] ?? 'sa-badge--info';
-        return <span className={`sa-badge ${cls} text-xs uppercase tracking-tight`}>{p.data?.plan}</span>;
+        const plan = p.data?.plan ?? 'Basic';
+        const cls = PLAN_STYLES[plan] ?? PLAN_STYLES.Basic;
+        return (
+          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold border uppercase tracking-wider ${cls}`}>
+            {plan}
+          </span>
+        );
       },
     },
     {
-      headerName: t('COPY.STATUS'), field: 'status', flex: 0.9, minWidth: 100,
+      headerName: t('COPY.STATUS'),
+      field: 'status',
+      flex: 0.9,
+      minWidth: 110,
       cellRenderer: (p: ICellRendererParams<Library>) => {
-        const s = SUPERADMIN_DASHBOARD_LIBRARY_STATUS_CONFIG[p.data?.status ?? 'inactive'];
-        return <span className={`sa-badge ${s.cls} text-xs uppercase tracking-tight`}>{t(s.labelKey)}</span>;
+        const status = p.data?.status ?? 'inactive';
+        const config = STATUS_STYLES[status] ?? STATUS_STYLES.inactive;
+        return (
+          <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${config.badge}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${config.dot} ${status === 'active' ? 'animate-pulse' : ''}`} />
+            <span>{config.label}</span>
+          </span>
+        );
       },
     },
-    { headerName: t('COPY.JOINED'), field: 'joinedAt', flex: 0.9, minWidth: 100,
-      cellRenderer: (p: ICellRendererParams<Library>) => { const value = p.data?.joinedAt ?? ''; if (value === '2 hours ago') return t('COPY.TWO_HOURS_AGO'); if (value === '3 days ago') return t('COPY.THREE_DAYS_AGO'); if (value === '1 week ago') return t('COPY.ONE_WEEK_AGO'); if (value === '2 weeks ago') return t('COPY.TWO_WEEKS_AGO'); if (value === '1 month ago') return t('COPY.ONE_MONTH_AGO'); return t('COPY.ILLUSTRATIVE_TIME'); } },
+    {
+      headerName: t('COPY.JOINED'),
+      field: 'joinedAt',
+      flex: 0.9,
+      minWidth: 100,
+      cellRenderer: (p: ICellRendererParams<Library>) => {
+        const value = p.data?.joinedAt ?? '';
+        if (value === '2 hours ago') return <span className="text-xs text-slate-400">{t('COPY.TWO_HOURS_AGO')}</span>;
+        if (value === '3 days ago') return <span className="text-xs text-slate-400">{t('COPY.THREE_DAYS_AGO')}</span>;
+        if (value === '1 week ago') return <span className="text-xs text-slate-400">{t('COPY.ONE_WEEK_AGO')}</span>;
+        if (value === '2 weeks ago') return <span className="text-xs text-slate-400">{t('COPY.TWO_WEEKS_AGO')}</span>;
+        if (value === '1 month ago') return <span className="text-xs text-slate-400">{t('COPY.ONE_MONTH_AGO')}</span>;
+        return <span className="text-xs text-slate-400">{value || t('COPY.ILLUSTRATIVE_TIME')}</span>;
+      },
+    },
   ], [t]);
 
   return (
-    <div className="sa-card overflow-hidden">
-      <div className="p-6 flex items-center justify-between border-b border-border">
-        <h2 className="text-base font-bold text-primary">{t("COPY.RECENTLY_REGISTERED_LIBRARIES")}</h2>
-        <Link href={__SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES} className="text-primary text-xs font-bold flex items-center gap-1 hover:underline" data-testid="superadmin-dashboard-dashboard_overview-link-1">
-          {t("COPY.VIEW_ALL")} <ExternalLink size={12} />
+    <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 shadow-md overflow-hidden">
+      {/* Table Header */}
+      <div className="p-5 sm:p-6 flex flex-wrap items-center justify-between gap-3 border-b border-border/80">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-indigo-500/15 border border-indigo-500/30">
+            <Building2 size={18} className="text-indigo-400" />
+          </div>
+          <div>
+            <h2 className="text-base sm:text-lg font-bold text-white">{t("COPY.RECENTLY_REGISTERED_LIBRARIES")}</h2>
+            <p className="text-xs text-slate-400">Newly onboarded tenant partners</p>
+          </div>
+        </div>
+
+        <Link
+          href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES}
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
+          data-testid="superadmin-dashboard-dashboard_overview-link-1"
+        >
+          <span>{t("COPY.VIEW_ALL")}</span>
+          <ExternalLink size={13} className="text-indigo-400" />
         </Link>
       </div>
+
+      {/* Semantic Table */}
       <div className="sa-dashboard-recent-libraries-chart">
-        <SuperadminDashboardOverviewSemanticTable
-         
+        <SuperadminDashboardOverviewSemanticTable<Library>
           rowData={data}
           columnDefs={colDefs}
-          rowHeight={52}
-          headerHeight={44}
+          rowHeight={54}
+          headerHeight={46}
           suppressCellFocus={true}
           suppressPaginationPanel={true}
         />

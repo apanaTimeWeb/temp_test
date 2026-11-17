@@ -77,7 +77,6 @@ export function resolveAdminMembersDirectoryView(value: string | null): AdminMem
 
 export const ADMIN_MEMBERS_DIRECTORY_NAVIGATION: readonly AdminMembersNavigationItem[] = [
   { id: 'all', labelKey: 'NAV_ALL_MEMBERS', icon: Users, color: 'primary' },
-  { id: 'add', labelKey: 'NAV_ADD_MEMBER', icon: UserPlus, color: 'success' },
   { id: 'categories', labelKey: 'NAV_CATEGORIES', icon: Tags, color: 'purple' },
   { id: 'departments', labelKey: 'NAV_DEPARTMENTS', icon: Building, color: 'info' },
   { id: 'active', labelKey: 'NAV_ACTIVE', icon: CheckCircle, color: 'success' },

@@ -6,11 +6,10 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 /**
  * Owns the dashboard overview semantic table state lifecycle for dashboard overview, keeping feature state and side effects within this leaf.
  * @param args Input required by the declared feature contract. Declared type: { rowData?: readonly T[] | null; paginationPageSize: number; paginationEnabled?: boolean; }.
- 
  * @returns The module-owned state/actions or utility result consumed by the caller.
  */
 export function useSuperadminDashboardOverviewSemanticTableState<T extends object>(args: { rowData?: readonly T[] | null; paginationPageSize: number; paginationEnabled?: boolean }) {
-  const { rowData, paginationPageSize, paginationEnabled = false } = args;
+  const { rowData, paginationPageSize, paginationEnabled = true } = args;
   const [sort, setSort] = useState<{ field: string; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(0);
   const [filterText, setFilterText] = useState('');
@@ -65,9 +64,46 @@ export function useSuperadminDashboardOverviewSemanticTableState<T extends objec
     }
     replaceRoute();
   }, [filterText, page, urlStateReady, queryString, pathname, router]);
+
+  // Filter rows
+  const filteredRows = useMemo(() => {
+    if (!rowData) return [];
+    if (!filterText.trim()) return [...rowData];
+    const q = filterText.toLowerCase();
+    return rowData.filter((row) =>
+      Object.values(row as Record<string, unknown>).some((val) =>
+        String(val ?? '').toLowerCase().includes(q)
+      )
+    );
+  }, [rowData, filterText]);
+
+  // Sort rows
+  const sortedRows = useMemo(() => {
+    if (!sort) return filteredRows;
+    const { field, direction } = sort;
+    return [...filteredRows].sort((a, b) => {
+      const aVal = (a as Record<string, unknown>)[field];
+      const bVal = (b as Record<string, unknown>)[field];
+      if (aVal === bVal) return 0;
+      if (aVal == null) return 1;
+      if (bVal == null) return -1;
+      const cmp = aVal < bVal ? -1 : 1;
+      return direction === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredRows, sort]);
+
+  const pageCount = useMemo(() => {
+    return Math.max(1, Math.ceil(sortedRows.length / (paginationPageSize || 10)));
+  }, [sortedRows.length, paginationPageSize]);
+
   // Keep the current page valid when filtering or data changes reduce the available page count.
-  // Effect contract: clamp the current page to the valid range whenever pageCount changes; [pageCount] is the deliberate dependency boundary.
-  useEffect(() => { setPage((current) => Math.max(0, Math.min(current, pageCount - 1))); }, [pageCount]);
-  const visibleRows = paginationEnabled ? sortedRows.slice(page * paginationPageSize, (page + 1) * paginationPageSize) : sortedRows;
+  useEffect(() => {
+    setPage((current) => Math.max(0, Math.min(current, pageCount - 1)));
+  }, [pageCount]);
+
+  const visibleRows = paginationEnabled
+    ? sortedRows.slice(page * paginationPageSize, (page + 1) * paginationPageSize)
+    : sortedRows;
+
   return { sort, setSort, page, setPage, filterText, setFilterText, sortedRows, pageCount, visibleRows };
 }

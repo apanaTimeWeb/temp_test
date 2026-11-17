@@ -643,7 +643,7 @@
     "UNKNOWN_DATE": "Unknown date",
     "LIBRARY_OVERVIEW_EYEBROW": "LIBRARY ADMINISTRATION",
     "LIBRARY_OVERVIEW_TITLE": "Library overview",
-    "LIBRARY_OVERVIEW_DESCRIPTION": "Open core Library work areas. Aggregate metrics are not shown until their data sources and access contracts are verified.",
+    "LIBRARY_OVERVIEW_DESCRIPTION": "",
     "LIBRARY_DESTINATIONS": "Library destinations",
     "LIBRARY_CATALOG_TITLE": "Catalog",
     "LIBRARY_CATALOG_UNAVAILABLE": "Title and physical-copy totals are not connected to an approved aggregate data contract.",

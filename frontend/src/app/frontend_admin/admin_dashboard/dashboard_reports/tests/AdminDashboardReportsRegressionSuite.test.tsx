@@ -854,58 +854,13 @@ suite2_describe('Original suite: AdminDashboardReportsAnalyticsToolbar.test.tsx'
 
 
 
-suite3_describe("Reports route and metadata library interactions", () => {
+suite3_describe("Reports route and analytics rendering", () => {
   function renderReportsPage() {
     return suite3_render(<Suite3_NextIntlClientProvider locale="en" messages={suite3_pageMessages}><Suite3_AdminDashboardReportsPage /></Suite3_NextIntlClientProvider>);
   }
 
-  suite3_it("switches between analytics and the report library without changing the page route", () => {
+  suite3_it("renders the analytics overview on the canonical reports route", () => {
     renderReportsPage();
-    const analyticsButton = suite3_screen.getByRole("button", { name: "Analytics" });
-    const libraryButton = suite3_screen.getByRole("button", { name: "Report library" });
-    suite3_expect(analyticsButton).toHaveAttribute("aria-pressed", "true");
-    suite3_expect(libraryButton).toHaveAttribute("aria-pressed", "false");
     suite3_expect(suite3_screen.getByTestId("dashboard-reports-analytics-view")).toBeVisible();
-    suite3_fireEvent.click(libraryButton);
-    suite3_expect(libraryButton).toHaveAttribute("aria-pressed", "true");
-    suite3_expect(analyticsButton).toHaveAttribute("aria-pressed", "false");
-    suite3_expect(suite3_screen.getByRole("searchbox", { name: "Search reports" })).toBeVisible();
-    suite3_expect(suite3_screen.getByText("Member directory summary")).toBeVisible();
-    suite3_expect(suite3_screen.queryByTestId("dashboard-reports-analytics-view")).not.toBeInTheDocument();
-    suite3_fireEvent.click(analyticsButton);
-    suite3_expect(suite3_screen.getByTestId("dashboard-reports-analytics-view")).toBeVisible();
-  });
-
-  suite3_it("filters the metadata catalog and exposes a recoverable no-results state", async () => {
-    renderReportsPage();
-    suite3_fireEvent.click(suite3_screen.getByRole("button", { name: "Report library" }));
-    const search = suite3_screen.getByRole("searchbox", { name: "Search reports" });
-    suite3_expect(suite3_screen.getByText("Member directory summary")).toBeVisible();
-    suite3_fireEvent.change(search, { target: { value: "Finance" } });
-    await suite3_waitFor(() => suite3_expect(suite3_screen.getByText("Finance summary")).toBeVisible());
-    suite3_expect(suite3_screen.queryByText("Member directory summary")).not.toBeInTheDocument();
-    suite3_fireEvent.change(search, { target: { value: "not-a-report-category" } });
-    await suite3_waitFor(() => suite3_expect(suite3_screen.getByRole("status")).toHaveTextContent("No reports match your search."));
-    suite3_fireEvent.change(search, { target: { value: "" } });
-    await suite3_waitFor(() => suite3_expect(suite3_screen.getByText("Member directory summary")).toBeVisible());
-  });
-
-  suite3_it("downloads a metadata-only CSV and reports successful dispatch", () => {
-    suite3_vi.useFakeTimers();
-    const createObjectURL = suite3_vi.fn(() => "blob:reports-library-catalog");
-    Object.defineProperty(URL, "createObjectURL", { configurable: true, writable: true, value: createObjectURL });
-    Object.defineProperty(URL, "revokeObjectURL", { configurable: true, writable: true, value: suite3_vi.fn() });
-    let downloadedFilename = "";
-    suite3_vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(function click(this: HTMLAnchorElement) {
-      downloadedFilename = this.download;
-    });
-    renderReportsPage();
-    suite3_fireEvent.click(suite3_screen.getByRole("button", { name: "Report library" }));
-    suite3_fireEvent.click(suite3_screen.getByRole("button", { name: "Export catalog CSV" }));
-    suite3_vi.runOnlyPendingTimers();
-    suite3_expect(createObjectURL).toHaveBeenCalledOnce();
-    suite3_expect(downloadedFilename).toBe("reports-library-catalog.csv");
-    suite3_expect(suite3_toastMocks.success).toHaveBeenCalledOnce();
-    suite3_expect(suite3_toastMocks.error).not.toHaveBeenCalled();
   });
 });

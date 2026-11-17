@@ -1,28 +1,35 @@
 /** Feature-local retry fallback for dashboard_overview; never renders raw exception details or stack traces. */
 /** Responsibility: SuperadminDashboardOverviewErrorFallback; render a feature-local retry/error state without exposing raw exception details or implying that a backend operation succeeded. */
-/** Data-Flow: route error boundary -> typed error and retry/reset callback -> safe localized error presentation; raw exception details remain hidden. */
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { AlertCircle, RotateCcw } from 'lucide-react';
 
-/**
- * Defines the public SuperadminDashboardOverviewErrorFallbackProps contract for dashboard overview. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
- * @property error User-safe error or explanatory message; raw exception details are not implied. Declared type: Error & { digest?: string; }.
- * @property reset Value defined by the existing feature-local contract. Declared type: () => void.
- */
 export type SuperadminDashboardOverviewErrorFallbackProps = { error: Error & { digest?: string }; reset: () => void };
 
 /**
  * Renders the safe retry state for dashboard overview without exposing raw exception details.
- * @param parameter Input required by the declared feature contract. Declared type: SuperadminDashboardOverviewErrorFallbackProps.
  */
 export default function SuperadminDashboardOverviewErrorFallback({ reset }: SuperadminDashboardOverviewErrorFallbackProps) {
   const t = useTranslations('SUPERADMIN_DASHBOARD');
   return (
-    <section className="mx-auto w-full max-w-3xl rounded-xl border border-border bg-danger-bg p-6 text-danger" role="alert" data-testid="superadmin_dashboard_overview-dashboard_overview-error-fallback">
-      <h2 className="text-lg font-semibold">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>
-      <p className="mt-2 text-sm">{t('COPY.MODULE_ROUTE_ERROR_MESSAGE')}</p>
-      <button type="button" className="sa-btn-primary mt-4 min-h-11 min-w-28" onClick={reset} data-testid="superadmin_dashboard_overview-dashboard_overview-error-retry">{t('COPY.RETRY_MODULE_ROUTE')}</button>
+    <section className="mx-auto w-full max-w-3xl rounded-2xl border border-rose-500/30 bg-[#1c0a0e]/95 p-6 shadow-md" role="alert" data-testid="superadmin_dashboard_overview-dashboard_overview-error-fallback">
+      <div className="flex items-center gap-3 mb-2">
+        <div className="p-2 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
+          <AlertCircle size={20} />
+        </div>
+        <h2 className="text-lg font-bold text-white">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>
+      </div>
+      <p className="mt-2 text-xs sm:text-sm text-slate-300">{t('COPY.MODULE_ROUTE_ERROR_MESSAGE')}</p>
+      <button
+        type="button"
+        className="inline-flex items-center gap-2 min-h-10 px-4 rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-500 hover:to-rose-400 text-white text-xs font-bold shadow-md shadow-rose-950/50 transition-all hover:scale-[1.02] cursor-pointer mt-4"
+        onClick={reset}
+        data-testid="superadmin_dashboard_overview-dashboard_overview-error-retry"
+      >
+        <RotateCcw size={14} />
+        <span>{t('COPY.RETRY_MODULE_ROUTE')}</span>
+      </button>
     </section>
   );
 }
