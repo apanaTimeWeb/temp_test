@@ -1117,14 +1117,15 @@
 
   /* ── Sidebar logo box ── */
   .sa-sidebar-logo-box {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background-color: var(--primary);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary) 0%, #f97316 100%);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--primary) 40%, transparent);
   }
 
   /* ── Sidebar divider ── */
@@ -1135,16 +1136,57 @@
   }
 
   /* ── Sidebar user footer ── */
-  .sa-sidebar-footer {
-    margin-top: auto;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
+  .sa-header-account-btn {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding-left: 8px;
-    padding-right: 8px;
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+    border: 1px solid var(--border);
+    transition: background-color 0.15s, border-color 0.15s;
   }
+  .sa-header-account-btn:hover {
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+    border-color: var(--border-focus);
+  }
+  .sa-header-account-info { text-align: left; }
+  .sa-header-account-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 200px;
+    background: var(--bg-floating);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow-dialog);
+    overflow: hidden;
+    z-index: 60;
+    animation: pageFadeUp 0.15s ease forwards;
+  }
+  .sa-header-account-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: left;
+    transition: background-color 0.15s;
+  }
+  .sa-header-account-item:hover { background: var(--surface-hover); }
+  .sa-header-account-item--danger { color: var(--danger-text); }
+  .sa-header-account-item--danger:hover { background: var(--danger-bg); }
+  .sa-header-account-divider { height: 1px; background: var(--border); margin: 4px 0; }
+
+  .sa-sidebar-footer { display: none; }
+
 
   /* ── Tip box inside card ── */
   .sa-card-tip {
@@ -1276,17 +1318,17 @@
     top: 0;
     z-index: 50;
     height: var(--layout-header-height);
-    background: var(--bg-header);
+    background: linear-gradient(90deg, #0d0d14 0%, #111118 100%);
     backdrop-filter: blur(32px);
     -webkit-backdrop-filter: blur(32px);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 32px;
     width: calc(100% - 260px);
     left: 260px;
-    box-shadow: var(--shadow-popover);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--primary) 15%, transparent), 0 4px 24px rgba(0,0,0,0.4);
   }
   .sa-header-search {
     display: flex;
@@ -1674,20 +1716,22 @@
     gap: 16px;
   }
   .sa-sidebar-logo-name {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 800;
-    background: none;
-    color: var(--primary);
+    background: linear-gradient(90deg, var(--primary) 0%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     line-height: 1.2;
     letter-spacing: -0.02em;
   }
   .sa-sidebar-logo-sub {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-secondary);
     font-weight: 600;
-    letter-spacing: 0.05em;
-    margin-top: 2px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    margin-top: 1px;
   }
   .sa-sidebar-nav {
     flex: 1;
