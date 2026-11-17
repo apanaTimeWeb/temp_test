@@ -26,9 +26,9 @@ export function AdminAccountsFinancialReportsKpiCards({ totalIncomeMinor, totalE
           </div>
           <TrendingUp size={18} className="text-success-text" strokeWidth={2} />
         </div>
-        <p className="mt-2 text-kpi font-bold text-text-primary text-success-text">{formatAdminAccountingCurrency(totalIncomeMinor, locale)}</p>
+        <p className="mt-2 text-kpi font-bold text-success-text">{formatAdminAccountingCurrency(totalIncomeMinor, locale)}</p>
       </div>
-      <div className="rounded-xl border border-border bg-card p-5 shadow-card border-danger-bg bg-danger-bg">
+      <div className="rounded-xl border border-border bg-card p-5 shadow-card">
         <div className="mb-2 flex items-center justify-between gap-3">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">{t('TOTAL_EXPENSES')}</span>
@@ -38,7 +38,7 @@ export function AdminAccountsFinancialReportsKpiCards({ totalIncomeMinor, totalE
           </div>
           <TrendingDown size={18} className="text-danger-text" strokeWidth={2} />
         </div>
-        <p className="mt-2 text-kpi font-bold text-text-primary text-danger-text">{formatAdminAccountingCurrency(totalExpenseMinor, locale)}</p>
+        <p className="mt-2 text-kpi font-bold text-danger-text">{formatAdminAccountingCurrency(totalExpenseMinor, locale)}</p>
       </div>
       <div className="rounded-xl border border-border bg-card p-5 shadow-card">
         <div className="mb-2 flex items-center justify-between gap-3">
@@ -50,7 +50,7 @@ export function AdminAccountsFinancialReportsKpiCards({ totalIncomeMinor, totalE
           </div>
           <BarChart2 size={18} strokeWidth={2} className="text-text-secondary" />
         </div>
-        <p className={`mt-2 text-kpi font-bold text-text-primary ${netProfitMinor >= 0 ? 'text-success-text' : 'text-danger-text'}`}>{formatAdminAccountingCurrency(netProfitMinor, locale)}</p>
+        <p className={`mt-2 text-kpi font-bold ${netProfitMinor >= 0 ? 'text-success-text' : 'text-danger-text'}`}>{formatAdminAccountingCurrency(netProfitMinor, locale)}</p>
       </div>
     </section>
   );

@@ -84,18 +84,18 @@ export default function AdminDashboardReportsAnalyticsSecondaryInsightsSection({
         <button
           type="button"
           onClick={() => toggleSort(field)}
-          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
+          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded px-1 -mx-1 transition-colors cursor-pointer"
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
           <span>{label}</span>
           {isActive ? (
             sortDirection === 'asc' ? (
-              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowUp className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
             ) : (
-              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowDown className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-slate-400 opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>

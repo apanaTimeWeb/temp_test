@@ -471,30 +471,23 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-/* Sleek custom scrollbars matching Manager */
-.admin-theme ::-webkit-scrollbar,
-.admin-sidebar-nav::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+/* Complete scrollbar invisibility across all elements while maintaining full scrollability */
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
-.admin-theme ::-webkit-scrollbar-track,
-.admin-sidebar-nav::-webkit-scrollbar-track {
-  background: #030712;
-}
-.admin-theme ::-webkit-scrollbar-thumb,
-.admin-sidebar-nav::-webkit-scrollbar-thumb {
-  background: #2d2d5e;
-  border-radius: 10px;
-}
-.admin-theme ::-webkit-scrollbar-thumb:hover,
-.admin-sidebar-nav::-webkit-scrollbar-thumb:hover {
-  background: #6366f1;
+
+*::-webkit-scrollbar,
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .admin-theme,
 .admin-sidebar-nav {
-  scrollbar-width: thin;
-  scrollbar-color: #2d2d5e #030712;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
 .admin-nav-icon-badge {

@@ -245,3 +245,16 @@ body{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:var(--bg-pa
     height: 34px;
   }
 }
+
+/* Globally hide scrollbars while preserving scroll functionality */
+*, *::before, *::after {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
