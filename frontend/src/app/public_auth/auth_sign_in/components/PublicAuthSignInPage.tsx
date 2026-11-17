@@ -246,7 +246,7 @@ const LOGIN_CSS = `
 
   /* ===== Library Loader (Login redirect overlay) ===== */
   .login-loader-overlay {
-    background: #030712;
+    background: #F7F3EA;
   }
   .login-loader-box {
     position: relative;
@@ -265,7 +265,6 @@ const LOGIN_CSS = `
   }
   .login-loader-inner {
     position: absolute; inset: 0;
-    width: 100%; height: 100%;
     animation: loginSpinCCW 2.4s linear infinite;
   }
   .login-loader-icon {
