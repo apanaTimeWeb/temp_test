@@ -120,7 +120,7 @@ export default function AdminEnquiriesPageView() {
               </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('PAGE_TITLE')}</h1>
               <p className="text-xs sm:text-sm text-slate-400">
-                {isDemoMode ? t('DEMO_SUBTITLE', { count: timeFiltered.length }) : t('LIVE_SUBTITLE')} • Range: <span className="font-semibold text-indigo-400">{timeRangeLabel}</span>
+                <span>{timeFiltered.length} Active Leads • Track every prospect from enquiry to admission</span> • Range: <span className="font-semibold text-indigo-400">{timeRangeLabel}</span>
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-slate-800/80 bg-slate-950/50 p-1.5 shadow-inner">

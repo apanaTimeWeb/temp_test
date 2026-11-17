@@ -58,7 +58,7 @@ export default function AdminMembersDirectoryDataToolsView({ mode, members }: Ad
         <DownloadCloud size={20} className="text-success-text" aria-hidden="true"/>
         <div>
           <h2 id="admin-members-export-title" className="text-section-title font-semibold text-text-primary">{t('EXPORT_TITLE')}</h2>
-          <p className="text-sm text-text-secondary">{t('EXPORT_DESCRIPTION')}</p>
+          <p className="text-sm text-text-secondary">Export directory records matching your selected status and plan filters.</p>
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -77,7 +77,7 @@ export default function AdminMembersDirectoryDataToolsView({ mode, members }: Ad
       </div>
       <p className="text-sm text-text-secondary" role="status" aria-live="polite">{t('EXPORT_MATCH_COUNT', { count: filteredMembers.length })}</p>
       <div className="flex flex-wrap gap-3 border-t border-border pt-4">
-        <button type="button" className="admin-btn-primary min-h-11" onClick={exportCsv}><FileText size={18} aria-hidden="true"/> {t('EXPORT_CSV')}</button>
+        <button type="button" className="admin-btn-primary min-h-11" aria-label={t('EXPORT_CSV')} onClick={exportCsv}><FileText size={18} aria-hidden="true"/> Export CSV</button>
         <button type="button" className="admin-btn-ghost min-h-11" disabled title={t('EXPORT_XLSX_CONTRACT_MISSING')}><FileText size={18} aria-hidden="true"/> {t('EXPORT_XLSX_UNAVAILABLE')}</button>
       </div>
     </section>

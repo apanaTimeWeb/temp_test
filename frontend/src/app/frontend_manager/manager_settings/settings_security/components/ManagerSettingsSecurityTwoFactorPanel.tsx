@@ -187,9 +187,8 @@ export function ManagerSettingsSecurityTwoFactorPanel({
                     <path d={qrSvg.path} fill="#0f172a" />
                   </svg>
                 ) : (
-                  <div className="flex flex-col items-center justify-center gap-1.5" role="status">
-                    <LibraryLoader size="sm" icon="library" hideAura={true} label="Loading QR code" />
-                    <span className="text-[10px] text-slate-500 font-medium">Loading QR...</span>
+                  <div className="flex items-center justify-center w-full h-full" role="status">
+                    <LibraryLoader size="sm" icon="library" hideAura={true} />
                   </div>
                 )}
               </div>

@@ -13,6 +13,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { ManagerActiveSession } from '../types/ManagerSettingsSecurityTypes';
 
 interface ManagerSettingsSecurityActiveSessionsPanelProps {
@@ -155,9 +156,9 @@ export function ManagerSettingsSecurityActiveSessionsPanel({
                     type="button"
                     onClick={() => handleRevoke(session.id, session.device)}
                     disabled={revokingId === session.id}
-                    className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 transition-all cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 transition-all cursor-pointer disabled:opacity-50"
                   >
-                    <LogOut size={12} />
+                    {revokingId === session.id ? <ButtonLoader icon="library" /> : <LogOut size={12} />}
                     <span>{revokingId === session.id ? 'Revoking...' : 'Revoke Session'}</span>
                   </button>
                 )}

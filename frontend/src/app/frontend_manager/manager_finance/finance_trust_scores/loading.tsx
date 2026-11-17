@@ -6,7 +6,6 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       icon="report"
       variant="default"
-      title="Loading Trust Scores..."
     />
   );
 }

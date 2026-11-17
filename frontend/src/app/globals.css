@@ -244,32 +244,36 @@ html.dark .mgr-theme,
 }
 
 /* ==========================================================================
-   LIBRARY LOADER SYSTEM (Smart Luxury Gold / Blue Palette)
+   LIBRARY LOADER SYSTEM (Exact Demo Specification)
    ========================================================================== */
+.loader-box,
 .library-loader-box {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
+.loader-box .loader-aura,
 .library-loader-box .loader-aura {
   position: absolute;
   inset: 0;
   border-radius: 50%;
   filter: blur(12px);
-  opacity: 0.45;
+  opacity: 0.4;
   pointer-events: none;
   background: radial-gradient(circle, #F4D03F 0%, #C8912A 50%, transparent 80%);
 }
 
+.loader-box .loader-ring,
 .library-loader-box .loader-ring {
   width: 100%;
   height: 100%;
   animation: spinCW 1.2s linear infinite;
 }
 
+.loader-box .loader-icon,
 .library-loader-box .loader-icon {
   position: absolute;
   inset: 0;
@@ -278,9 +282,10 @@ html.dark .mgr-theme,
   justify-content: center;
   pointer-events: none;
   user-select: none;
-  color: #F4D03F;
+  color: #1E3A5F;
 }
 
+.loader-box .loader-icon svg,
 .library-loader-box .loader-icon svg {
   width: 45%;
   height: 45%;
@@ -295,23 +300,26 @@ html.dark .mgr-theme,
   to { transform: rotate(-360deg); }
 }
 
-/* Variant: Book Flip (pages turn) */
+/* ===== Variant: Book Flip (pages turn) ===== */
 @keyframes flipRight {
   0%, 45%, 100% { transform: scaleX(1); opacity: 1; }
   60%, 80%      { transform: scaleX(0.35); opacity: 0.5; }
 }
 
+.loader-box.flip .right-page,
 .library-loader-box.flip .right-page {
   transform-box: fill-box;
   transform-origin: 0% 50%;
   animation: flipRight 2.4s ease-in-out infinite;
 }
 
-/* Variant: Contra-Rotate (dual rings) */
+/* ===== Variant: Contra-Rotate (dual rings) ===== */
+.loader-box.contra .loader-ring,
 .library-loader-box.contra .loader-ring {
   animation: spinCW 1.4s linear infinite;
 }
 
+.loader-box.contra .inner-svg,
 .library-loader-box.contra .inner-svg {
   position: absolute;
   inset: 0;
@@ -320,26 +328,42 @@ html.dark .mgr-theme,
   animation: spinCCW 2.4s linear infinite;
 }
 
-/* Variant: Breath (icon pulses) */
+/* ===== Variant: Breath (icon pulses) ===== */
 @keyframes bookBreath {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(0.9); }
 }
 
+.loader-box.breath .loader-icon svg,
 .library-loader-box.breath .loader-icon svg {
   animation: bookBreath 1.8s ease-in-out infinite;
   transform-origin: center;
 }
 
-/* Accessibility: Respect prefers-reduced-motion */
+/* ===== Button / Action Wrappers ===== */
+.btn .loader-aura,
+button .loader-aura {
+  display: none;
+}
+
+.btn .loader-icon,
+button .loader-icon {
+  color: #F4D03F;
+}
+
+/* Accessibility: reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  .loader-box .loader-ring,
   .library-loader-box .loader-ring {
     animation-duration: 4s !important;
   }
+  .loader-box .inner-svg,
   .library-loader-box .inner-svg {
     animation-duration: 6s !important;
   }
+  .loader-box.flip .right-page,
   .library-loader-box.flip .right-page,
+  .loader-box.breath .loader-icon svg,
   .library-loader-box.breath .loader-icon svg {
     animation: none !important;
   }

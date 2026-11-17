@@ -7,6 +7,7 @@ import { useManagerNewAdmissionFormatting } from '@/app/frontend_manager/manager
 
 import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { MANAGER_MEMBERS_NEW_ADMISSION_ROUTES } from '@/app/frontend_manager/manager_members/members_new_admission/config/manager_members_new_admission.url_config';
 import type { ManagerMembersNewAdmissionAdmissionSummaryProps } from '@/app/frontend_manager/manager_members/members_new_admission/types/ManagerMembersNewAdmissionComponentTypes';
 export type { ManagerMembersNewAdmissionAdmissionSummaryProps };
@@ -87,9 +88,9 @@ export function ManagerMembersNewAdmissionAdmissionSummary({
               disabled={!canSubmit || isSubmitting}
               title={!canSubmit ? 'Please complete all required fields (Name, Phone, Gender, Shift, Seat, Plan, Amount)' : undefined}
               aria-label={isSubmitting ? 'Confirming Admission' : 'Confirm Admission'}
-              className={`mgr-btn-primary mgr-btn-full${!canSubmit || isSubmitting ? ' cursor-not-allowed opacity-50' : ''}`}
+              className={`mgr-btn-primary mgr-btn-full flex items-center justify-center gap-2${!canSubmit || isSubmitting ? ' cursor-not-allowed opacity-50' : ''}`}
             >
-              <CheckCircle size={18} strokeWidth={2} />
+              {isSubmitting ? <ButtonLoader icon="user" /> : <CheckCircle size={18} strokeWidth={2} />}
               {isSubmitting ? tManagerUi('confirming') : tManagerUi('confirm_admission')}
             </button>
             <Link href={MANAGER_MEMBERS_NEW_ADMISSION_ROUTES.LIST} className="mgr-btn-ghost mgr-btn-full">{tManagerUi('cancel')}</Link>

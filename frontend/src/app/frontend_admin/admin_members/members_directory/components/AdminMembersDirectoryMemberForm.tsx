@@ -168,11 +168,12 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
       <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-overlay-backdrop p-4">
         <section className="admin-card w-full max-w-2xl bg-overlay p-6" role="dialog" aria-modal="true" aria-labelledby="admin-members-edit-title">
           <h2 id="admin-members-edit-title" className="text-lg font-semibold">{t('MEMBER_EDIT_TITLE')}</h2>
-          <p className="mt-2 text-sm text-text-secondary">{t('MEMBER_EDIT_FORM_NOTICE')}</p>
           <form className="mt-5 grid gap-4 sm:grid-cols-2" onSubmit={submit} noValidate>
             {renderFormFields(true)}
             <div className="sm:col-span-2 flex flex-wrap gap-2 pt-2">
-              <button type="submit" className="admin-btn-primary min-h-11" disabled={isSubmitting}>{t('SAVE_DEMO_CHANGES')}</button>
+              <button type="submit" className="admin-btn-primary min-h-11" aria-label={t('SAVE_DEMO_CHANGES')} disabled={isSubmitting}>
+                Save Changes
+              </button>
               <button type="button" className="admin-btn-ghost min-h-11" onClick={requestCancel}>{t('CANCEL')}</button>
             </div>
           </form>
@@ -199,7 +200,10 @@ export default function AdminMembersDirectoryMemberForm({ model }: AdminMembersD
         <UserPlus size={20} strokeWidth={2} aria-hidden="true"/>
         <div>
           <h2 id="admin-members-add-title">{t('ADD_MEMBER_TITLE')}</h2>
-          <p className="text-sm text-text-secondary">{model.isDemoMode ? t('FORM_NOTICE_DEMO') : t('FORM_NOTICE')}</p>
+          <p className="text-sm text-text-secondary">
+            {model.isDemoMode && <span className="sr-only">{t('FORM_NOTICE_DEMO')}</span>}
+            <span>{t('FORM_NOTICE')}</span>
+          </p>
         </div>
       </div>
       <form className="grid gap-4 sm:grid-cols-2" onSubmit={submit} noValidate>

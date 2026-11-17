@@ -251,9 +251,8 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               {requestedId && !isPending && !selected && <p className="mgr-input-hint" role="alert" data-testid="manager-student-id-card-request-not-found">{tManagerUi('no_loaded_student_matches_the_requested_smart_id')}{requestedId}{tManagerUi('no_other_student_s_card_has_been_selected')}</p>}
               <div className="mgr-idcard-student-list">
                 {isPending ? (
-                  <div className="mgr-loading-state flex flex-col items-center justify-center p-6 gap-2" role="status">
-                    <LibraryLoader size="sm" icon="user" label={tManagerUi('loading_students_522ba5')} />
-                    <span className="text-xs text-secondary font-medium">{tManagerUi('loading_students_522ba5')}</span>
+                  <div className="mgr-loading-state flex items-center justify-center p-6" role="status">
+                    <LibraryLoader size="sm" icon="user" />
                   </div>
                 ) : filtered.length === 0 ? <ManagerMembersIdCardGeneratorEmptyState className="mgr-empty-state"><div className="mgr-empty-icon"><Search size={36} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_students_found')}</p></ManagerMembersIdCardGeneratorEmptyState> : paginatedStudents.map((student: ManagerStudent) => {
                   const initials = student.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase();

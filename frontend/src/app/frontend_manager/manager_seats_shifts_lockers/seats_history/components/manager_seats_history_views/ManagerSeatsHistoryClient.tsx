@@ -521,11 +521,8 @@ export function ManagerSeatsHistoryClient() {
           </button>
         </div>
       ) : historyQuery.isPending ? (
-        <div className="ss-empty-state p-12 rounded-2xl bg-card border border-border flex flex-col items-center justify-center gap-3 text-center" role="status">
-          <LibraryLoader size="md" icon="report" variant="default" label={tManagerUi('loading_seat_history')} />
-          <p className="ss-empty-state__title text-amber-500/90 text-xs font-semibold uppercase tracking-wider">
-            {tManagerUi('loading_seat_history')}
-          </p>
+        <div className="ss-empty-state p-12 rounded-2xl bg-card border border-border flex items-center justify-center" role="status">
+          <LibraryLoader size="md" icon="report" variant="default" />
         </div>
       ) : filtered.length === 0 ? (
         <ManagerSeatsHistoryEmptyState className="ss-empty-state p-12 rounded-2xl bg-card border border-border text-center space-y-2">

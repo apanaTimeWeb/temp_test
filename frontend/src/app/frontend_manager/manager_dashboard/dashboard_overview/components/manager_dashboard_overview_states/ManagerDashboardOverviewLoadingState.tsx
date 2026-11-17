@@ -4,16 +4,9 @@ import { useTranslations } from 'next-intl';
 import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 export function ManagerDashboardOverviewLoadingState() {
-  const tManagerUi = useTranslations('manager.manager_dashboard.ui');
   return (
-    <div className="mgr-page" role="status" aria-live="polite">
-      <div className="flex flex-col items-center justify-center p-8 gap-3 text-center">
-        <LibraryLoader size="lg" icon="library" variant="contra" label={tManagerUi('loading_dashboard_data')} />
-        <span className="text-xs font-semibold uppercase tracking-wider text-amber-500/90">{tManagerUi('loading_dashboard_data')}</span>
-      </div>
-      <div className="mgr-page-header"><div className="mgr-skeleton mgr-skeleton-title" /><div className="mgr-skeleton mgr-skeleton-action" /></div>
-      <div className="mgr-kpi-grid mgr-section-gap">{[1,2,3,4].map((item) => <div key={item} className="mgr-kpi-card"><div className="mgr-skeleton mgr-skeleton-line" /><div className="mgr-skeleton mgr-skeleton-value" /></div>)}</div>
-      <span className="sr-only">{tManagerUi('loading_dashboard_data')}</span>
+    <div className="mgr-page flex items-center justify-center min-h-[50vh]" role="status" aria-live="polite">
+      <LibraryLoader size="lg" icon="library" variant="contra" />
     </div>
   );
 }

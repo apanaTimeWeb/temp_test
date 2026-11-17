@@ -6,7 +6,6 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       icon="fine"
       variant="default"
-      title="Loading Renewals..."
     />
   );
 }

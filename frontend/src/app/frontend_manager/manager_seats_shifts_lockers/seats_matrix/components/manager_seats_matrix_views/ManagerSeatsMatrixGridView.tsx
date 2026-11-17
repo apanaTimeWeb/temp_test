@@ -203,11 +203,8 @@ export function ManagerSeatsMatrixGridView({
         </div>
 
         {isPending ? (
-          <div className="flex flex-col items-center justify-center py-20 text-secondary gap-3 text-center" role="status">
-            <LibraryLoader size="md" icon="issue" variant="contra" label={tManagerUi('loading_seat_matrix')} />
-            <p className="text-xs font-semibold text-amber-500/90 tracking-wider uppercase">
-              {tManagerUi('loading_seat_matrix')}
-            </p>
+          <div className="flex items-center justify-center py-20" role="status">
+            <LibraryLoader size="md" icon="issue" variant="contra" />
           </div>
         ) : visibleGridSeats.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center space-y-2">

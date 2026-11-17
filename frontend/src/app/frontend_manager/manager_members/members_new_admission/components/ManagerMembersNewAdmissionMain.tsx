@@ -20,9 +20,8 @@ export function ManagerMembersNewAdmissionMain(props: ManagerMembersNewAdmission
       <ManagerMembersNewAdmissionErrorBoundary>
         <Suspense
           fallback={
-            <div className="flex flex-col items-center justify-center p-16 gap-3" role="status">
-              <LibraryLoader size="lg" icon="user" variant="flip" label={t('loading_form')} />
-              <p className="text-xs font-semibold text-amber-500/90 tracking-wider uppercase">{t('loading_form')}</p>
+            <div className="flex items-center justify-center p-16" role="status">
+              <LibraryLoader size="lg" icon="user" variant="flip" />
             </div>
           }
         >

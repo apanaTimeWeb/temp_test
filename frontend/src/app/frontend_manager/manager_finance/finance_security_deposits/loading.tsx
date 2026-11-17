@@ -6,7 +6,6 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       icon="return"
       variant="contra"
-      title="Loading Security Deposits..."
     />
   );
 }

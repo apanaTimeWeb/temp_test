@@ -105,30 +105,8 @@ export default function ManagerDashboardReportsPage() {
 
   if (query.isPending) {
     return (
-      <div className="mgr-page mgr-reports-theme" role="status" aria-live="polite" aria-busy="true">
-        <span className="sr-only">{tManagerUi('loading_reports')}</span>
-        <div className="flex flex-col items-center justify-center p-8 gap-3">
-          <LibraryLoader size="lg" icon="report" variant="default" label={tManagerUi('loading_reports')} />
-          <p className="text-xs font-semibold uppercase tracking-wider text-amber-500/90">{tManagerUi('loading_reports')}</p>
-        </div>
-        <div aria-hidden="true" className="motion-safe:animate-pulse motion-reduce:animate-none space-y-6">
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
-            <div className="mgr-skeleton mgr-skeleton-title h-8 w-48 mb-2" />
-            <div className="mgr-skeleton mgr-skeleton-line h-4 w-72" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="rounded-2xl border border-border bg-card p-5 h-32 flex flex-col justify-between">
-                <div className="mgr-skeleton mgr-skeleton-line h-4 w-24" />
-                <div className="mgr-skeleton mgr-skeleton-value h-8 w-32" />
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-border bg-card p-6 h-64" />
-            <div className="rounded-2xl border border-border bg-card p-6 h-64" />
-          </div>
-        </div>
+      <div className="mgr-page mgr-reports-theme flex items-center justify-center min-h-[50vh]" role="status" aria-live="polite" aria-busy="true">
+        <LibraryLoader size="lg" icon="report" variant="default" />
       </div>
     );
   }

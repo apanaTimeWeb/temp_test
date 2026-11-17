@@ -16,6 +16,7 @@ import {
   Clock,
   Sparkles,
 } from 'lucide-react';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { MaintenanceLogItem } from './ManagerAssetsMaintenanceTable';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_ACCOUNTING_SAMPLE_ASSETS } from '@/app/frontend_manager/manager_accounts_assets/assets_register/mocks/manager_assets_register_fixtures/ManagerAssetsRegisterAssetSampleFixtures';
@@ -490,8 +491,8 @@ export function ManagerAssetsMaintenanceAddModal({
               }}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold border hover:opacity-95 transition-all cursor-pointer disabled:opacity-50"
             >
-              <Sparkles size={14} />
-              Log Maintenance Order
+              {isSubmitting ? <ButtonLoader icon="book" /> : <Sparkles size={14} />}
+              <span>{isSubmitting ? 'Logging...' : 'Log Maintenance Order'}</span>
             </button>
           </div>
         </form>

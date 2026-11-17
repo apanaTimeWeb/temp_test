@@ -231,9 +231,8 @@ export function ManagerMembersEnquiriesClient() {
           </button>
         </div>
       ) : isPending ? (
-        <div className="flex flex-col items-center justify-center p-24 text-secondary gap-3 bg-card rounded-2xl border border-border" role="status">
-          <LibraryLoader size="md" icon="search" variant="breath" label={tManagerUi('loading_pipeline')} />
-          <p className="text-sm font-medium text-amber-500/90">{tManagerUi('loading_pipeline')}</p>
+        <div className="flex items-center justify-center p-24 bg-card rounded-2xl border border-border" role="status">
+          <LibraryLoader size="md" icon="search" variant="breath" />
         </div>
       ) : view === 'kanban' ? (
         <ManagerMembersEnquiriesKanban

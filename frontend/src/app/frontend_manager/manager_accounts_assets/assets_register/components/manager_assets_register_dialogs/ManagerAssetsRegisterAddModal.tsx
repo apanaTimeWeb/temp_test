@@ -17,6 +17,7 @@ import {
   Archive,
   Sparkles,
 } from 'lucide-react';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { ManagerAssetsRegisterAsset } from '@/app/frontend_manager/manager_accounts_assets/assets_register/hooks/ManagerAssetsRegisterDemoRepository';
 import {
   managerAssetsRegisterAssetFormSchema,
@@ -433,8 +434,8 @@ export function ManagerAssetsRegisterAddModal({
               }}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold border hover:opacity-95 transition-all cursor-pointer disabled:opacity-50"
             >
-              <Sparkles size={14} />
-              Register Asset
+              {isSubmitting ? <ButtonLoader icon="library" /> : <Sparkles size={14} />}
+              <span>{isSubmitting ? 'Registering...' : 'Register Asset'}</span>
             </button>
           </div>
         </form>

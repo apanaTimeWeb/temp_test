@@ -86,7 +86,7 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
               },
               {
                 label: t('KPI_NEW_THIS_MONTH'),
-                value: '—',
+                value: String(Math.max(1, Math.ceil(dummyMembers.length * 0.25))),
                 icon: UserPlus,
                 border: 'border-purple-500/20 hover:border-purple-500/40',
                 glow: 'bg-purple-500/10 text-purple-400',

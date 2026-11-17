@@ -6,7 +6,6 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       icon="fine"
       variant="contra"
-      title="Loading Auto Suspension Rules..."
     />
   );
 }

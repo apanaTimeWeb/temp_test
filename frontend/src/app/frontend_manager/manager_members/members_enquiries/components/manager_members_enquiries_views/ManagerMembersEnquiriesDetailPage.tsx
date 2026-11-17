@@ -79,9 +79,8 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
 
   if (enquiryQuery.isPending) {
     return (
-      <div className="crm-page crm-empty-state flex flex-col items-center justify-center p-12 gap-3" role="status">
-        <LibraryLoader size="md" icon="search" variant="breath" label={tManagerUi('loading_enquiry')} />
-        <p className="text-sm font-semibold text-amber-500/90">{tManagerUi('loading_enquiry')}</p>
+      <div className="crm-page crm-empty-state flex items-center justify-center p-16" role="status">
+        <LibraryLoader size="md" icon="search" variant="breath" />
       </div>
     );
   }

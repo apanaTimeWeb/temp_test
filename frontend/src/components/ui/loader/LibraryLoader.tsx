@@ -159,11 +159,9 @@ export function LibraryLoader({
 export function ButtonLoader({
   icon = 'book',
   className = '',
-  label = 'Processing',
 }: {
   icon?: LoaderIcon;
   className?: string;
-  label?: string;
 }) {
   return (
     <LibraryLoader
@@ -171,7 +169,6 @@ export function ButtonLoader({
       icon={icon}
       hideAura={true}
       className={`shrink-0 ${className}`.trim()}
-      label={label}
     />
   );
 }
@@ -180,71 +177,50 @@ export function ButtonLoader({
 export function SectionLoader({
   icon = 'search',
   className = '',
-  label = 'Loading section...',
-  message,
 }: {
   icon?: LoaderIcon;
   className?: string;
-  label?: string;
-  message?: string;
 }) {
   return (
-    <div className={`flex flex-col items-center justify-center gap-3 p-6 text-center ${className}`.trim()}>
-      <LibraryLoader size="sm" icon={icon} label={label} />
-      {message && <p className="text-xs font-medium text-secondary">{message}</p>}
+    <div className={`flex items-center justify-center p-6 ${className}`.trim()} role="status" aria-label="Loading">
+      <LibraryLoader size="sm" icon={icon} />
     </div>
   );
 }
 
-/** Wrapper for Processing Badges / Status pills */
+/** Wrapper for Processing Badges / Status pills (size sm, 40px) */
 export function ProcessingLoader({
   icon = 'fine',
   className = '',
-  label = 'Processing...',
 }: {
   icon?: LoaderIcon;
   className?: string;
-  label?: string;
 }) {
   return (
-    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/25 ${className}`.trim()}>
-      <LibraryLoader size="xs" icon={icon} hideAura={true} label={label} />
-      <span className="text-xs font-semibold text-primary">{label}</span>
+    <div className={`processing ${className}`.trim()} role="status" aria-label="Loading">
+      <LibraryLoader size="sm" icon={icon} />
     </div>
   );
 }
 
-/** Wrapper for Page-level route loading screens (loading.tsx) */
+/** Wrapper for Page-level route loading screens (loading.tsx - size lg, 96px) */
 export function ManagerPageLoader({
   icon = 'library',
-  variant = 'contra',
-  title = 'Loading this section...',
+  variant = 'default',
   className = '',
 }: {
   icon?: LoaderIcon;
   variant?: LoaderVariant;
-  title?: string;
   className?: string;
+  title?: string;
 }) {
   return (
     <main
-      className={`min-h-[55vh] flex flex-col items-center justify-center p-8 gap-5 w-full ${className}`.trim()}
+      className={`min-h-[60vh] flex items-center justify-center p-8 w-full ${className}`.trim()}
       role="status"
-      aria-busy="true"
-      aria-live="polite"
-      aria-describedby="manager-feature-loading-message"
+      aria-label="Loading"
     >
-      <LibraryLoader size="lg" icon={icon} variant={variant} label={title} />
-      
-      <div className="flex flex-col items-center gap-2 max-w-sm w-full text-center">
-        <p id="manager-feature-loading-message" className="text-xs font-semibold tracking-wider uppercase text-amber-500/90 font-mono">
-          {title}
-        </p>
-        <div aria-hidden="true" className="w-full space-y-2.5 mt-2">
-          <div className="h-2 bg-amber-500/15 border border-amber-500/20 rounded-full w-4/5 mx-auto motion-safe:animate-pulse" />
-          <div className="h-2 bg-muted/40 rounded-full w-1/2 mx-auto motion-safe:animate-pulse" />
-        </div>
-      </div>
+      <LibraryLoader size="lg" icon={icon} variant={variant} />
     </main>
   );
 }

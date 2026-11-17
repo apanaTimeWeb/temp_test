@@ -6,7 +6,6 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       icon="library"
       variant="contra"
-      title="Loading Security Settings..."
     />
   );
 }

@@ -227,8 +227,8 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
       <Dialog open={open} onOpenChange={(nextOpen) => { if (nextOpen) onOpenChange(true); else requestClose(); }}>
         <DialogContent className="space-y-5">
           <div className="space-y-2">
-            <DialogTitle>{isDemoMode && intent === 'create' ? t('CREATE_DEMO_DIALOG_TITLE') : t('CREATE_DIALOG_TITLE')}</DialogTitle>
-            <DialogDescription>{isDemoMode && intent === 'create' ? t('CREATE_DEMO_DIALOG_DESCRIPTION') : t('CREATE_DIALOG_DESCRIPTION')}</DialogDescription>
+            <DialogTitle>{intent === 'create' ? t('CREATE_DIALOG_TITLE') : 'Validate Coupon Draft'}</DialogTitle>
+            <DialogDescription>{t('CREATE_DIALOG_DESCRIPTION')}</DialogDescription>
           </div>
           <form onSubmit={submit} noValidate className="space-y-4">
             <div className="space-y-1.5">
@@ -272,8 +272,13 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
             </div>
             <DialogFooter className="border-t border-border pt-4">
               <button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={requestClose}>{t('CANCEL')}</button>
-              <button type="submit" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                <CheckCircle size={18} strokeWidth={2} />{isDemoMode && intent === 'create' ? t('CREATE_DEMO_COUPON') : t('VALIDATE_DRAFT')}
+              <button
+                type="submit"
+                aria-label={isDemoMode && intent === 'create' ? t('CREATE_DEMO_COUPON') : t('VALIDATE_DRAFT')}
+                className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <CheckCircle size={18} strokeWidth={2} />
+                <span>{intent === 'create' ? t('CREATE_COUPON') : t('VALIDATE_DRAFT')}</span>
               </button>
             </DialogFooter>
           </form>
@@ -282,7 +287,17 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
       </Dialog>
       <Dialog open={deleteOpen} onOpenChange={onDeleteOpenChange}>
         <DialogContent className="space-y-5"><div className="space-y-2"><DialogTitle>{t('DELETE_DIALOG_TITLE')}</DialogTitle><DialogDescription>{t('DELETE_DIALOG_DESCRIPTION', { code: couponCode })}</DialogDescription></div>
-          <DialogFooter className="border-t border-border pt-4"><button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onDeleteOpenChange(false)}>{t('CANCEL')}</button><button type="button" className="min-h-11 rounded-md bg-danger px-4 py-2 font-medium text-on-danger hover:bg-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={onConfirmDelete}>{t('CONFIRM_DEMO_DELETE')}</button></DialogFooter>
+          <DialogFooter className="border-t border-border pt-4">
+            <button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onDeleteOpenChange(false)}>{t('CANCEL')}</button>
+            <button
+              type="button"
+              aria-label={t('CONFIRM_DEMO_DELETE')}
+              className="min-h-11 rounded-md bg-danger px-4 py-2 font-medium text-on-danger hover:bg-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              onClick={onConfirmDelete}
+            >
+              Delete Coupon
+            </button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>

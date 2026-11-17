@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState, useMemo } from 'react';
-import { CheckCircle, Pencil, Plus, Trash2, Building2, Search } from 'lucide-react';
+import { CheckCircle, Pencil, Plus, Trash2, Building2, Search, Layers, IndianRupee, Clock } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
@@ -196,6 +196,66 @@ export default function AdminPlansPage() {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* KPI CARDS */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          {
+            label: 'Total Plans',
+            value: visiblePlans.length,
+            icon: Layers,
+            border: 'border-cyan-500/20 hover:border-cyan-500/40',
+            glow: 'bg-cyan-500/10 text-cyan-400',
+            badge: 'border-cyan-500/20 bg-cyan-500/10 text-cyan-400',
+            trend: 'Catalog Active',
+          },
+          {
+            label: 'Active Plans',
+            value: visiblePlans.filter((p) => p.status === ADMIN_PLANS_STATUS_VALUES[0]).length,
+            icon: CheckCircle,
+            border: 'border-emerald-500/20 hover:border-emerald-500/40',
+            glow: 'bg-emerald-500/10 text-emerald-400',
+            badge: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
+            trend: 'Live for Students',
+          },
+          {
+            label: 'Avg Duration',
+            value: visiblePlans.length > 0 ? `${Math.round(visiblePlans.reduce((a, b) => a + (b.durationDays || 30), 0) / visiblePlans.length)} Days` : '30 Days',
+            icon: Clock,
+            border: 'border-amber-500/20 hover:border-amber-500/40',
+            glow: 'bg-amber-500/10 text-amber-400',
+            badge: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
+            trend: 'Standard Term',
+          },
+          {
+            label: 'Covered Scope',
+            value: selectedBranch ? selectedBranch.code : 'All Branches',
+            icon: Building2,
+            border: 'border-purple-500/20 hover:border-purple-500/40',
+            glow: 'bg-purple-500/10 text-purple-400',
+            badge: 'border-purple-500/20 bg-purple-500/10 text-purple-400',
+            trend: 'Branch Assigned',
+          },
+        ].map((kpi) => (
+          <div
+            key={kpi.label}
+            className={`relative overflow-hidden rounded-2xl border ${kpi.border} bg-slate-900/60 backdrop-blur-xl p-5 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-0.5`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{kpi.label}</span>
+              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${kpi.glow}`}>
+                <kpi.icon size={20} strokeWidth={2.2} />
+              </div>
+            </div>
+            <div className="mt-3 text-2xl font-bold tracking-tight text-white">{kpi.value}</div>
+            <div className="mt-2 flex items-center gap-1.5">
+              <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${kpi.badge}`}>
+                {kpi.trend}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
 
       <AdminMembersPlansPricingRuleSettings />

@@ -5,7 +5,20 @@ import { useTranslations } from 'next-intl';
 import useAdminSeatMatrixDialogFocus from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/hooks/useAdminSeatsMatrixDialogFocus';
 import { useMemo, useRef, useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarDays, User, Printer, Download, MessageSquare, Building2, Search, Sparkles } from 'lucide-react';
+import {
+  CalendarDays,
+  User,
+  Printer,
+  Download,
+  MessageSquare,
+  Building2,
+  Search,
+  Sparkles,
+  Armchair,
+  CheckCircle2,
+  Users,
+  AlertTriangle,
+} from 'lucide-react';
 import type { AdminSeatMatrixSeatMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/types/AdminSeatsMatrixTypes';
 import { useAdminSeatMatrixSeatMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/hooks/useAdminSeatsMatrixSeatMatrix';
 import { ADMIN_SEAT_MATRIX_SEAT_OCCUPANCY_STATUS_BADGE_CLASS, ADMIN_SEAT_MATRIX_SHIFT_BADGE_CLASS, ADMIN_SEAT_MATRIX_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/config/admin_seats_matrix.url_config';

@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { X, MessageSquarePlus, AlertCircle, Armchair, MapPin } from 'lucide-react';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 import { MANAGER_MEMBERS_DEMO_RECORDS } from '@/app/frontend_manager/manager_members/members_directory/mocks/manager_members_directory_fixtures/ManagerMembersDirectoryFixtures';
 import type { ManagerCommunicationComplaintsComplaint } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsTypes';
@@ -39,6 +40,7 @@ export default function ManagerCommunicationComplaintsAddModal({
   onSubmit,
 }: ManagerCommunicationComplaintsAddModalProps) {
   const [selectedStudentId, setSelectedStudentId] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [studentName, setStudentName] = useState('');
   const [seatNumber, setSeatNumber] = useState('');
   const [seatTag, setSeatTag] = useState('');
@@ -306,9 +308,11 @@ export default function ManagerCommunicationComplaintsAddModal({
             </button>
             <button
               type="submit"
-              className="mgr-btn-primary mgr-btn-sm text-xs font-bold cursor-pointer"
+              disabled={isSubmitting}
+              className="mgr-btn-primary mgr-btn-sm text-xs font-bold cursor-pointer inline-flex items-center gap-1.5"
             >
-              Submit Ticket
+              {isSubmitting ? <ButtonLoader icon="book" /> : null}
+              <span>{isSubmitting ? 'Submitting...' : 'Submit Ticket'}</span>
             </button>
           </div>
         </form>

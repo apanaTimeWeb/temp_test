@@ -12,6 +12,7 @@ import {
   AlertCircle,
   FileCheck,
 } from 'lucide-react';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { toast } from 'sonner';
 import type { ManagerCommunicationComplaintsComplaint } from '../../types/ManagerCommunicationComplaintsTypes';
 

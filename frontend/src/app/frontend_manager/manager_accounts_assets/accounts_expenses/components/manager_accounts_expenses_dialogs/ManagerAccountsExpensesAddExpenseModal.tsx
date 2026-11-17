@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X, CheckCircle, Receipt, Wallet, Smartphone, CreditCard, Building } from 'lucide-react';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { Expense } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/types/ManagerAccountsExpensesComponentTypes';
 import { MANAGER_ACCOUNTING_EXPENSE_CATEGORIES as CATEGORIES } from '@/app/frontend_manager/manager_accounts_assets/accounts_expenses/constants/ManagerAccountsExpensesConstants';
 import {
@@ -358,8 +359,8 @@ export function ManagerAccountsExpensesAddExpenseModal({
               disabled={isSubmitting}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
             >
-              <CheckCircle size={14} />
-              <span>Record Expense</span>
+              {isSubmitting ? <ButtonLoader icon="fine" /> : <CheckCircle size={14} />}
+              <span>{isSubmitting ? 'Recording...' : 'Record Expense'}</span>
             </button>
           </div>
         </form>
