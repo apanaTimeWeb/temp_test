@@ -23,7 +23,7 @@ const LEGEND_ITEMS: Array<{ label: string; cls: string }> = [
 
 export function AdminLockersLockerMatrixPage() {
   const t = useTranslations('ADMIN_LOCKERS');
-  const { branches, selectedBranchId, selectedBranch, setSelectedBranchId, isAllBranches } = useAdminBranch();
+  const { selectedBranchId, selectedBranch, isAllBranches } = useAdminBranch();
   const [selectedLocker, setSelectedLocker] = useState<AdminLockersLockerMatrixViewModel | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
 
@@ -78,45 +78,6 @@ export function AdminLockersLockerMatrixPage() {
           >
             <List size={14} /> Table View
           </button>
-        </div>
-      </div>
-
-      {/* Multi-Branch Floor Filter Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-3.5">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary">
-            <Building2 size={14} className="text-primary shrink-0" />
-            Branch:
-          </span>
-          <button
-            type="button"
-            onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
-            className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-              isAllBranches
-                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-            }`}
-          >
-            All Branches ({lockers.length})
-          </button>
-          {branches.map((branch) => {
-            const count = lockers.filter((l) => !l.branchId || l.branchId === branch.id).length;
-            const isSelected = selectedBranchId === branch.id;
-            return (
-              <button
-                key={branch.id}
-                type="button"
-                onClick={() => setSelectedBranchId(branch.id)}
-                className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                  isSelected
-                    ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                    : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-                }`}
-              >
-                {branch.name} ({count})
-              </button>
-            );
-          })}
         </div>
       </div>
 

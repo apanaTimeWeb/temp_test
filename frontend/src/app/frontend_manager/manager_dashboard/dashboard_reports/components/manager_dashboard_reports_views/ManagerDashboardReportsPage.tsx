@@ -10,6 +10,7 @@ import { MANAGER_REPORTS_DATE_RANGES } from '@/app/frontend_manager/manager_dash
 import { useManagerReports } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/hooks/useManagerDashboardReports';
 import { ManagerDashboardReportsContractBlockedError } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/api/manager_dashboard_reports.api';
 import type { ManagerDashboardReportsDateRange } from '@/app/frontend_manager/manager_dashboard/dashboard_reports/types/ManagerDashboardReportsTypes';
+import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 export default function ManagerDashboardReportsPage() {
   const tManagerUi = useTranslations('manager.manager_reports.ui');
@@ -106,6 +107,10 @@ export default function ManagerDashboardReportsPage() {
     return (
       <div className="mgr-page mgr-reports-theme" role="status" aria-live="polite" aria-busy="true">
         <span className="sr-only">{tManagerUi('loading_reports')}</span>
+        <div className="flex flex-col items-center justify-center p-8 gap-3">
+          <LibraryLoader size="lg" icon="report" variant="default" label={tManagerUi('loading_reports')} />
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-500/90">{tManagerUi('loading_reports')}</p>
+        </div>
         <div aria-hidden="true" className="motion-safe:animate-pulse motion-reduce:animate-none space-y-6">
           <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
             <div className="mgr-skeleton mgr-skeleton-title h-8 w-48 mb-2" />

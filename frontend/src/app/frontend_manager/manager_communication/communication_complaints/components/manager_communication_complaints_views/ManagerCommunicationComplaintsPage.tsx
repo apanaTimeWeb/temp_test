@@ -19,6 +19,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 import type { ManagerCommunicationComplaintsMainProps } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsMainTypes';
 import { useManagerComplaintsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/ManagerCommunicationComplaintsDialogFocus';
@@ -367,9 +368,9 @@ export default function ManagerCommunicationComplaintsPage({
 
       <div className="mc-card mc-card--flush">
         {isPending ? (
-          <div className="mc-empty" role="status">
-            <RefreshCw className="motion-safe:animate-spin" size={20} />
-            <p className="mc-empty__title">{tManagerUi('loading_complaints')}</p>
+          <div className="mc-empty flex flex-col items-center justify-center p-8 gap-3" role="status">
+            <LibraryLoader size="sm" icon="book" variant="flip" label={tManagerUi('loading_complaints')} />
+            <p className="mc-empty__title text-xs font-semibold text-amber-500/90">{tManagerUi('loading_complaints')}</p>
           </div>
         ) : isError ? (
           <div className="mc-empty" role="alert" aria-live="assertive">

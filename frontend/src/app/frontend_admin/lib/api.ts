@@ -44,6 +44,21 @@ function resolveRequestLocale(explicitLocale?: string): string {
   return 'en';
 }
 
+function resolveRequestBranchScope(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const urlParam = new URLSearchParams(window.location.search).get('branch');
+    if (urlParam) return urlParam;
+    const stored = window.localStorage.getItem('admin_selected_branch');
+    if (stored) return stored;
+    const cookieMatch = document.cookie.match(/(^| )admin_selected_branch=([^;]+)/);
+    if (cookieMatch && cookieMatch[2]) return decodeURIComponent(cookieMatch[2]);
+  } catch {
+    // Resilience in restricted environments
+  }
+  return null;
+}
+
 export async function apiFetch<TResponse = unknown>(path: string, options: ApiFetchOptions = {}): Promise<TResponse> {
   const method = (options.method ?? 'GET').toUpperCase();
   const idempotencyKey = options.idempotencyKey?.trim();
@@ -60,6 +75,10 @@ export async function apiFetch<TResponse = unknown>(path: string, options: ApiFe
   }
   headers.set('Accept-Language', resolveRequestLocale(options.locale));
   if (idempotencyKey) headers.set('Idempotency-Key', idempotencyKey);
+  const branchScope = resolveRequestBranchScope();
+  if (branchScope && !headers.has('X-Branch-Id')) {
+    headers.set('X-Branch-Id', branchScope);
+  }
 
   const { idempotencyKey: _idempotencyKey, locale: _locale, ...requestInit } = options;
   const response = await fetch(url, {

@@ -43,7 +43,7 @@ function computeShiftOccupancy(seat: AdminSeatMatrixSeatMatrixViewModel) {
 
 export function AdminSeatMatrixSeatMatrixPage() {
   const t = useTranslations('ADMIN_SEAT_MATRIX');
-  const { branches, selectedBranchId, selectedBranch, setSelectedBranchId, isAllBranches } = useAdminBranch();
+  const { selectedBranchId, selectedBranch, isAllBranches } = useAdminBranch();
   const [activeTab, setActiveTab] = useState<(typeof ADMIN_SEAT_MATRIX_SHIFTS)[number]>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSeat, setSelectedSeat] = useState<AdminSeatMatrixSeatMatrixViewModel | null>(null);
@@ -84,41 +84,6 @@ export function AdminSeatMatrixSeatMatrixPage() {
         <button type="button" className="inline-flex min-h-11 items-center justify-center rounded-t-md border-b-2 border-transparent px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={downloadCsv}><Download size={18} strokeWidth={2}/>{t('exportMatrix')}</button>
         <button type="button" className="inline-flex min-h-11 items-center justify-center rounded-t-md border-b-2 border-transparent px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => window.print()}><Printer size={18} strokeWidth={2}/>{t('printFloorPlan')}</button>
         <button type="button" className="inline-flex min-h-11 items-center justify-center rounded-t-md border-b-2 border-transparent px-3 py-2 text-sm font-medium text-text-secondary hover:bg-surface-hover hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" disabled title={t('studentNotificationContract')}><MessageSquare size={18} strokeWidth={2}/>{t('notifyStudents')}</button>
-      </div>
-
-      {/* Multi-Branch Floor Plan Selector Pills */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-3.5">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary">
-            <Building2 size={14} className="text-primary shrink-0" />
-            {t('branch')}:
-          </span>
-          <button
-            type="button"
-            onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
-            className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-              isAllBranches ? 'bg-primary text-primary-foreground font-semibold shadow-xs' : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-            }`}
-          >
-            {t('allBranches')} ({seats.length})
-          </button>
-          {branches.map((branch) => {
-            const count = seats.filter((s) => !s.branchId || s.branchId === branch.id).length;
-            const isSelected = selectedBranchId === branch.id;
-            return (
-              <button
-                key={branch.id}
-                type="button"
-                onClick={() => setSelectedBranchId(branch.id)}
-                className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                  isSelected ? 'bg-primary text-primary-foreground font-semibold shadow-xs' : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-                }`}
-              >
-                {branch.name} ({count})
-              </button>
-            );
-          })}
-        </div>
       </div>
 
       {/* Shift Tabs & Real-Time Search Bar */}

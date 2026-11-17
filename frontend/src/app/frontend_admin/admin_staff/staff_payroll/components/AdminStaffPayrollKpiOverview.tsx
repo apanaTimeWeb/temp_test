@@ -18,16 +18,9 @@ interface Props {
   model: AdminStaffPayrollModel;
 }
 
-const BRANCH_OPTIONS = [
-  { id: 'all', fallback: 'All Branches' },
-  { id: 'BR-001', fallback: 'Downtown Central' },
-  { id: 'BR-002', fallback: 'Westside Branch' },
-  { id: 'BR-003', fallback: 'North Hub' },
-];
-
 export function AdminStaffPayrollKpiOverview({ model }: Props) {
   const t = useTranslations('ADMIN_STAFF_PAYROLL');
-  const { filters, setSelectedBranchId, setSelectedMonth, setStatusFilter, setSearchQuery, kpis } = model;
+  const { filters, setSelectedMonth, setStatusFilter, setSearchQuery, kpis } = model;
 
   const progressPercent = kpis.totalPayrollAmount > 0
     ? Math.round((kpis.disbursedAmount / kpis.totalPayrollAmount) * 100)
@@ -101,31 +94,8 @@ export function AdminStaffPayrollKpiOverview({ model }: Props) {
         </div>
       </div>
 
-      {/* Controls Bar: Branch Quick Pills + Month Selector */}
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm md:flex-row md:items-center md:justify-between">
-        {/* Branch Quick Pills */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-semibold text-text-secondary">{t('BRANCH_SELECTOR_LABEL')}:</span>
-          {BRANCH_OPTIONS.map((b) => {
-            const isActive = filters.selectedBranchId === b.id;
-            return (
-              <button
-                key={b.id}
-                type="button"
-                onClick={() => setSelectedBranchId(b.id)}
-                className={`inline-flex min-h-9 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                  isActive
-                    ? 'bg-primary text-on-primary shadow-sm'
-                    : 'border border-border bg-surface text-text-secondary hover:bg-surface-hover hover:text-text-primary'
-                }`}
-              >
-                <Building2 size={13} />
-                {b.fallback}
-              </button>
-            );
-          })}
-        </div>
-
+      {/* Controls Bar: Month Selector */}
+      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm md:flex-row md:items-center md:justify-end">
         {/* Month Selector */}
         <div className="flex items-center gap-2">
           <Calendar size={16} className="text-text-secondary" />

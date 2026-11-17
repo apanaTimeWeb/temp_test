@@ -3,6 +3,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { User, Armchair, Sparkles, Clock, Info } from 'lucide-react';
+import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/types/ManagerSeatsMatrixTypes';
 import { LEGEND_ITEMS } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_matrix/constants/ManagerSeatsMatrixConstants';
 
@@ -202,8 +203,11 @@ export function ManagerSeatsMatrixGridView({
         </div>
 
         {isPending ? (
-          <div className="flex items-center justify-center py-24 text-secondary text-sm">
-            {tManagerUi('loading_seat_matrix')}
+          <div className="flex flex-col items-center justify-center py-20 text-secondary gap-3 text-center" role="status">
+            <LibraryLoader size="md" icon="issue" variant="contra" label={tManagerUi('loading_seat_matrix')} />
+            <p className="text-xs font-semibold text-amber-500/90 tracking-wider uppercase">
+              {tManagerUi('loading_seat_matrix')}
+            </p>
           </div>
         ) : visibleGridSeats.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center space-y-2">

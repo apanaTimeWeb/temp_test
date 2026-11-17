@@ -6,9 +6,9 @@ import { Search, Building2, Filter } from 'lucide-react';
 interface AdminShiftsGapAuditToolbarProps {
   searchQuery: string;
   onSearchChange: (q: string) => void;
-  branchFilter: string;
-  onBranchFilterChange: (b: string) => void;
-  branches: string[];
+  branchFilter?: string;
+  onBranchFilterChange?: (b: string) => void;
+  branches?: string[];
   statusFilter: string;
   onStatusFilterChange: (s: string) => void;
 }
@@ -16,9 +16,6 @@ interface AdminShiftsGapAuditToolbarProps {
 export function AdminShiftsGapAuditToolbar({
   searchQuery,
   onSearchChange,
-  branchFilter,
-  onBranchFilterChange,
-  branches,
   statusFilter,
   onStatusFilterChange,
 }: AdminShiftsGapAuditToolbarProps) {
@@ -35,21 +32,6 @@ export function AdminShiftsGapAuditToolbar({
           onChange={(e) => onSearchChange(e.target.value)}
           className="min-h-10 w-full rounded-md border border-border bg-input pl-9 pr-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         />
-      </div>
-
-      <div className="flex items-center gap-2">
-        <Building2 className="h-4 w-4 text-text-secondary" />
-        <select
-          aria-label={t('tableBranchSeat')}
-          value={branchFilter}
-          onChange={(e) => onBranchFilterChange(e.target.value)}
-          className="min-h-10 rounded-md border border-border bg-input px-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        >
-          <option value="ALL">{t('filterAllBranches')}</option>
-          {branches.map((b) => (
-            <option key={b} value={b}>{b}</option>
-          ))}
-        </select>
       </div>
 
       <div className="flex items-center gap-2">

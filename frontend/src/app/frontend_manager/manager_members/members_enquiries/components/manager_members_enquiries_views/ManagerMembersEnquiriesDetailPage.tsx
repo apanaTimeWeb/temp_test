@@ -10,6 +10,7 @@ import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manage
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, XCircle } from 'lucide-react';
+import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { fetchManagerEnquiriesEnquiryById } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.api';
 import { MANAGER_CRM_QUERY_KEYS } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.query_keys';
 import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
@@ -76,7 +77,14 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
     });
   };
 
-  if (enquiryQuery.isPending) return <div className="crm-page crm-empty-state"><p>{tManagerUi('loading_enquiry')}</p></div>;
+  if (enquiryQuery.isPending) {
+    return (
+      <div className="crm-page crm-empty-state flex flex-col items-center justify-center p-12 gap-3" role="status">
+        <LibraryLoader size="md" icon="search" variant="breath" label={tManagerUi('loading_enquiry')} />
+        <p className="text-sm font-semibold text-amber-500/90">{tManagerUi('loading_enquiry')}</p>
+      </div>
+    );
+  }
   if (enquiryQuery.isError) return <div className="crm-page crm-empty-state crm-not-found" role="alert"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('unable_to_load_enquiry')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-primary crm-mt-12" onClick={() => { void enquiryQuery.refetch(); }} disabled={enquiryQuery.isFetching}>{enquiryQuery.isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
   if (!enquiry) return <div className="crm-page crm-empty-state crm-not-found"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('enquiry_not_found')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
 

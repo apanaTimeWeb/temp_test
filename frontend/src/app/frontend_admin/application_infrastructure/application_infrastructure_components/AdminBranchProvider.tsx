@@ -39,6 +39,13 @@ function resolveInitialBranch(): string {
     if (stored && (stored === ALL_BRANCHES_ID || DEFAULT_ADMIN_BRANCHES.some((b) => b.id === stored))) {
       return stored;
     }
+    const cookieMatch = document.cookie.match(new RegExp('(^| )' + STORAGE_KEY + '=([^;]+)'));
+    if (cookieMatch && cookieMatch[2]) {
+      const cookieVal = decodeURIComponent(cookieMatch[2]);
+      if (cookieVal === ALL_BRANCHES_ID || DEFAULT_ADMIN_BRANCHES.some((b) => b.id === cookieVal)) {
+        return cookieVal;
+      }
+    }
   } catch {
     // Graceful fallback when storage/URL is inaccessible
   }
@@ -61,6 +68,7 @@ export function AdminBranchProvider({
     if (typeof window !== 'undefined') {
       try {
         window.localStorage.setItem(STORAGE_KEY, branchId);
+        document.cookie = `${STORAGE_KEY}=${encodeURIComponent(branchId)}; path=/; max-age=31536000; SameSite=Lax`;
         const url = new URL(window.location.href);
         if (branchId === ALL_BRANCHES_ID) {
           url.searchParams.delete('branch');

@@ -33,51 +33,6 @@ export function AdminCommunicationComplaintsBranchBar({
 
   return (
     <>
-      {/* Multi-Branch Complaint Filter Pills */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card p-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary">
-            <Building2 size={14} className="text-primary shrink-0" />
-            Branch:
-          </span>
-          <button
-            type="button"
-            onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
-            className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-              isAllBranches
-                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-            }`}
-          >
-            All Branches ({complaints.length})
-          </button>
-          {branches.map((b) => {
-            const count = complaints.filter((c) => c.branchName?.toLowerCase().includes(b.name.toLowerCase())).length;
-            const isSelected = selectedBranchId === b.id;
-            return (
-              <button
-                key={b.id}
-                type="button"
-                onClick={() => setSelectedBranchId(b.id)}
-                className={`min-h-8 rounded-full px-3 py-1 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                  isSelected
-                    ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                    : 'bg-surface-highlight text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-                }`}
-              >
-                {b.name} ({count})
-              </button>
-            );
-          })}
-        </div>
-        {selectedBranch && (
-          <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2.5 py-1 text-xs text-text-secondary">
-            <span className="font-medium text-text-primary">{selectedBranch.name}</span>
-            <span>({selectedBranch.code})</span>
-          </span>
-        )}
-      </div>
-
       {/* Filter Tabs */}
       <div className="gap-1 rounded-lg border border-border bg-input p-1 inline-flex mb-6">
         {tabs.map((status) => (

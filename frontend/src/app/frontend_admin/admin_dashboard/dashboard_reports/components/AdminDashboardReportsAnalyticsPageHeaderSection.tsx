@@ -117,23 +117,23 @@ export default function AdminDashboardReportsAnalyticsPageHeaderSection(props: A
             </div>
           </div>
 
-          {/* Branch Filter Dropdown */}
-          <div className="flex items-center gap-2 w-full md:w-auto">
-            <Building2 size={14} className="text-indigo-400 shrink-0" />
+          {/* Sub-module branch selector removed from visual UI; Global Header is the single source of truth */}
+          <label className="sr-only">
+            <span>{t('BRANCH_FILTER')}</span>
             <select
               data-testid="admin_dashboard_reports-AdminDashboardReportsAnalytics-control-003"
               aria-label={t('BRANCH_FILTER')}
               disabled={!props.isDemoMode}
               value={props.branch}
               onChange={(event) => props.onBranchChange(event.target.value)}
-              className="admin-select admin-select-sm text-xs font-semibold rounded-xl bg-[#0b0c20] border border-indigo-500/30 text-white py-1.5 pl-3 pr-8 shadow-sm hover:border-indigo-400 focus:ring-2 focus:ring-indigo-500 w-full md:w-auto"
+              className="sr-only"
             >
               <option value="All Branches">{t('ALL_BRANCHES')}</option>
               {props.branchOptions.map((option) => (
                 <option key={option} value={option}>{option}</option>
               ))}
             </select>
-          </div>
+          </label>
         </div>
       </div>
     </section>

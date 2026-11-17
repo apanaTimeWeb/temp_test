@@ -35,7 +35,6 @@ export default function AdminEnquiriesPageView() {
     toast.success(`Successfully deleted ${count} enquiry lead${count > 1 ? 's' : ''}.`);
   };
 
-  if (!isFrontendDemoModeEnabled()) return <section className="space-y-3 rounded-lg border border-warning-bg bg-card p-6"><h1 className="text-section-title font-semibold text-text-primary">{t('CRM_UNAVAILABLE_TITLE')}</h1><p role="status" className="text-warning-text">{t('CRM_UNAVAILABLE_DESC')}</p></section>;
   const statusLabel = (status: string) => {
     const keys: Record<string, string> = { New: 'STATUS_NEW', Visited: 'STATUS_VISITED', Interested: 'STATUS_INTERESTED', Converted: 'STATUS_CONVERTED', Lost: 'STATUS_LOST' };
     return t(keys[status] ?? 'STATUS');
@@ -94,6 +93,15 @@ export default function AdminEnquiriesPageView() {
   const whatsappRecipients = useMemo(() => {
     return selectedIds.length > 0 ? timeFiltered.filter((e) => selectedIds.includes(e.id)) : timeFiltered;
   }, [selectedIds, timeFiltered]);
+
+  if (!isFrontendDemoModeEnabled()) {
+    return (
+      <section className="space-y-3 rounded-lg border border-warning-bg bg-card p-6">
+        <h1 className="text-section-title font-semibold text-text-primary">{t('CRM_UNAVAILABLE_TITLE')}</h1>
+        <p role="status" className="text-warning-text">{t('CRM_UNAVAILABLE_DESC')}</p>
+      </section>
+    );
+  }
 
   return (
     <div className="w-full space-y-6 text-text-primary pb-10">
@@ -322,38 +330,6 @@ export default function AdminEnquiriesPageView() {
                             <PhoneCall size={18} strokeWidth={2} className="mx-auto text-slate-500 mb-2"/>
                             <p data-testid="admin_enquiries-AdminEnquiriesPageView-state-015" className="text-xs font-medium text-slate-300">{t('NO_STATUS_LEADS', { status: statusLabel(col.label) })}</p>
                             <p data-testid="admin_enquiries-AdminEnquiriesPageView-state-016" className="mt-1 text-[11px] text-slate-500">{t('LEADS_MOVE_HINT', { status: statusLabel(col.label) })}</p>
-                          </div>
-                        ) : (
-                          cards.map((enq) => (
-                            <AdminEnquiriesEnquiryKanbanCard key={enq.id} enq={enq} colClass={col.cardClass} onClick={() => router.push(ADMIN_ENQUIRIES_URLS.ENQUIRY_DETAIL(enq.id))} />
-                          ))
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </>
-        )}
-                {ADMIN_ENQUIRIES_ENQUIRY_KANBAN_COLUMNS.map((col) => {
-                  const cards = colTimeFiltered(col.id);
-                  return (
-                    <div key={col.id} className="flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-surface-zebra">
-                      <div className="flex items-center justify-between gap-2 border-b border-border bg-card p-3">
-                        <div className="flex min-w-0 items-center gap-2">
-                          <span className={`h-2 w-2 shrink-0 rounded-full bg-primary ${ADMIN_ENQUIRIES_ENQUIRY_DOT_CLASSES[col.id]}`} />
-                          <span className="truncate text-body font-semibold text-text-primary">{statusLabel(col.label)}</span>
-                          <span className="inline-flex min-h-6 min-w-6 items-center justify-center rounded-full bg-surface-highlight px-2 text-caption font-semibold text-text-secondary">{cards.length}</span>
-                        </div>
-                        <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-013" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" title={t('COLUMN_ACTIONS_UNAVAILABLE')} aria-label={t('COLUMN_OPTIONS')} disabled><MoreHorizontal size={18} strokeWidth={2}/></button>
-                      </div>
-                      <div className="flex min-h-40 flex-col gap-3 p-3">
-                        {cards.length === 0 ? (
-                          <div data-testid="admin_enquiries-AdminEnquiriesPageView-state-014" className="rounded-md border border-dashed border-border p-4 text-center">
-                            <PhoneCall size={18} strokeWidth={2}/>
-                            <p data-testid="admin_enquiries-AdminEnquiriesPageView-state-015" className="text-body font-medium text-text-primary">{t('NO_STATUS_LEADS', { status: statusLabel(col.label) })}</p>
-                            <p data-testid="admin_enquiries-AdminEnquiriesPageView-state-016" className="mt-1 text-caption text-text-secondary">{t('LEADS_MOVE_HINT', { status: statusLabel(col.label) })}</p>
                           </div>
                         ) : (
                           cards.map((enq) => (

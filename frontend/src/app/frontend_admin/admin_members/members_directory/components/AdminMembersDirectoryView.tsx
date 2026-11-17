@@ -184,7 +184,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
   const t = useTranslations('ADMIN_MEMBERS');
   const locale = useLocale();
   const { activeTab, setActiveTab, viewingMember, dummyMembers, isDemoMode, handleAction, openMemberDetails } = model;
-  const { branches, selectedBranchId, selectedBranch, setSelectedBranchId, isAllBranches } = useAdminBranch();
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([]);
   const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
 
@@ -218,55 +218,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
         <section className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-5 md:p-6 shadow-xl space-y-4" aria-labelledby="admin-members-list-title">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 id="admin-members-list-title" className="text-base sm:text-lg font-bold text-white tracking-tight">{t(memberListConfig.titleKey)}</h2>
-            <button
-              type="button"
-              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-700/60 bg-slate-800/40 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
-              onClick={() => setActiveTab('renewal')}
-            >
-              <RotateCcw size={16} aria-hidden="true" />
-              <span>{t('NAV_RENEWAL')}</span>
-            </button>
-          </div>
-
-          {/* Multi-Branch Filter Strip */}
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800/80 bg-slate-950/40 p-3 shadow-inner">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1">
-                <Building2 size={14} className="text-indigo-400 shrink-0" />
-                Branch:
-              </span>
-              <button
-                type="button"
-                onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
-                className={`min-h-7 rounded-lg px-3 py-1 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 ${
-                  isAllBranches
-                    ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-semibold shadow-xs'
-                    : 'bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800'
-                }`}
-              >
-                All Branches ({dummyMembers.length})
-              </button>
-              {branches.map((b) => {
-                const count = dummyMembers.filter((m) => m.branch?.toLowerCase().includes(b.name.toLowerCase())).length;
-                const isSelected = selectedBranchId === b.id;
-                return (
-                  <button
-                    key={b.id}
-                    type="button"
-                    onClick={() => setSelectedBranchId(b.id)}
-                    className={`min-h-7 rounded-lg px-3 py-1 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 ${
-                      isSelected
-                        ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-semibold shadow-xs'
-                        : 'bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800'
-                    }`}
-                  >
-                    {b.name} ({count})
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-2.5">
               {selectedMemberIds.length > 0 && (
                 <button type="button" onClick={clearSelection} className="text-xs text-slate-400 hover:text-white underline px-1">
                   Clear ({selectedMemberIds.length})
@@ -276,7 +228,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
                 type="button"
                 onClick={() => setIsBulkWhatsAppOpen(true)}
                 disabled={branchFilteredMembers.length === 0}
-                className="inline-flex min-h-8 items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all disabled:opacity-40"
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all disabled:opacity-40"
               >
                 <MessageSquare size={14} /> Bulk WhatsApp
                 {selectedMemberIds.length > 0 && (
@@ -284,6 +236,14 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
                     {selectedMemberIds.length}
                   </span>
                 )}
+              </button>
+              <button
+                type="button"
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-700/60 bg-slate-800/40 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                onClick={() => setActiveTab('renewal')}
+              >
+                <RotateCcw size={16} aria-hidden="true" />
+                <span>{t('NAV_RENEWAL')}</span>
               </button>
             </div>
           </div>

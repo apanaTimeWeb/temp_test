@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
+import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { MANAGER_MEMBERS_ENQUIRIES_ROUTES } from '@/app/frontend_manager/manager_members/members_enquiries/config/manager_members_enquiries.url_config';
 import { getManagerEnquiriesDemoPassWhatsAppUrl } from '@/app/frontend_manager/manager_members/members_enquiries/utils/ManagerMembersEnquiriesUtilities';
 import {
@@ -230,9 +231,9 @@ export function ManagerMembersEnquiriesClient() {
           </button>
         </div>
       ) : isPending ? (
-        <div className="flex flex-col items-center justify-center p-24 text-secondary gap-3 bg-card rounded-2xl border border-border">
-          <RefreshCw size={28} className="animate-spin text-primary" />
-          <p className="text-sm font-medium">{tManagerUi('loading_pipeline')}</p>
+        <div className="flex flex-col items-center justify-center p-24 text-secondary gap-3 bg-card rounded-2xl border border-border" role="status">
+          <LibraryLoader size="md" icon="search" variant="breath" label={tManagerUi('loading_pipeline')} />
+          <p className="text-sm font-medium text-amber-500/90">{tManagerUi('loading_pipeline')}</p>
         </div>
       ) : view === 'kanban' ? (
         <ManagerMembersEnquiriesKanban

@@ -243,8 +243,6 @@ export default function AdminEnquiriesTable({
       )}
     </div>
   );
-    </div>
-  );
 }
 
 export type { AdminEnquiriesTableProps };

@@ -243,3 +243,106 @@ html.dark .mgr-theme,
   height: 0 !important;
 }
 
+/* ==========================================================================
+   LIBRARY LOADER SYSTEM (Smart Luxury Gold / Blue Palette)
+   ========================================================================== */
+.library-loader-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.library-loader-box .loader-aura {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  filter: blur(12px);
+  opacity: 0.45;
+  pointer-events: none;
+  background: radial-gradient(circle, #F4D03F 0%, #C8912A 50%, transparent 80%);
+}
+
+.library-loader-box .loader-ring {
+  width: 100%;
+  height: 100%;
+  animation: spinCW 1.2s linear infinite;
+}
+
+.library-loader-box .loader-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  color: #F4D03F;
+}
+
+.library-loader-box .loader-icon svg {
+  width: 45%;
+  height: 45%;
+  filter: drop-shadow(0 0 4px rgba(200, 145, 42, 0.45));
+}
+
+@keyframes spinCW {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinCCW {
+  to { transform: rotate(-360deg); }
+}
+
+/* Variant: Book Flip (pages turn) */
+@keyframes flipRight {
+  0%, 45%, 100% { transform: scaleX(1); opacity: 1; }
+  60%, 80%      { transform: scaleX(0.35); opacity: 0.5; }
+}
+
+.library-loader-box.flip .right-page {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  animation: flipRight 2.4s ease-in-out infinite;
+}
+
+/* Variant: Contra-Rotate (dual rings) */
+.library-loader-box.contra .loader-ring {
+  animation: spinCW 1.4s linear infinite;
+}
+
+.library-loader-box.contra .inner-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: spinCCW 2.4s linear infinite;
+}
+
+/* Variant: Breath (icon pulses) */
+@keyframes bookBreath {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(0.9); }
+}
+
+.library-loader-box.breath .loader-icon svg {
+  animation: bookBreath 1.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .library-loader-box .loader-ring {
+    animation-duration: 4s !important;
+  }
+  .library-loader-box .inner-svg {
+    animation-duration: 6s !important;
+  }
+  .library-loader-box.flip .right-page,
+  .library-loader-box.breath .loader-icon svg {
+    animation: none !important;
+  }
+}
+
+

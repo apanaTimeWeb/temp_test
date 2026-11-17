@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import { Search, Download, X, History, RotateCcw, Calendar, Armchair, ShieldAlert, Filter } from 'lucide-react';
 import { toast } from 'sonner';
+import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 import { ManagerSeatsHistoryNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_table_parts/ManagerSeatsHistoryNativeTable';
 import { sanitizeManagerSeatHistoryCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryCsv';
@@ -70,7 +71,7 @@ export function ManagerSeatsHistoryClient() {
       const matchSeat = seatFilter === 'all' || h.seatNo === seatFilter;
       const matchShift = shiftFilter === 'all' || h.shift.toLowerCase() === shiftFilter.toLowerCase();
       const matchReason = reasonFilter === 'all' || h.reason.toLowerCase() === reasonFilter.toLowerCase();
-      
+
       let matchSearch = true;
       if (normalizedSearch) {
         if (searchScope === 'studentName') {
@@ -106,13 +107,13 @@ export function ManagerSeatsHistoryClient() {
     };
 
     const formatShift = (value: string) =>
-      ({
-        Morning: tManagerUi('morning'),
-        Afternoon: tManagerUi('afternoon'),
-        Evening: tManagerUi('evening'),
-        Night: tManagerUi('night'),
-        'Full Day': tManagerUi('full_day'),
-      }[value] ?? value);
+    ({
+      Morning: tManagerUi('morning'),
+      Afternoon: tManagerUi('afternoon'),
+      Evening: tManagerUi('evening'),
+      Night: tManagerUi('night'),
+      'Full Day': tManagerUi('full_day'),
+    }[value] ?? value);
 
     const formatReason = (value: string) => {
       if (value === 'Admission') return tManagerUi('history_reason_admission');
@@ -196,11 +197,10 @@ export function ManagerSeatsHistoryClient() {
           const isActive = status.toLowerCase() === 'active';
           return (
             <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                isActive
+              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${isActive
                   ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
                   : 'bg-surface text-secondary border border-border'
-              }`}
+                }`}
             >
               {status}
             </span>
@@ -341,10 +341,10 @@ export function ManagerSeatsHistoryClient() {
                   searchScope === 'studentName'
                     ? 'Search by Student Name (e.g. Rahul, Priya)...'
                     : searchScope === 'seatNo'
-                    ? 'Search by Seat No (e.g. S-001)...'
-                    : searchScope === 'smartId'
-                    ? 'Search by Smart ID (e.g. TEST-001)...'
-                    : 'Search by Student Name, Seat No, Smart ID...'
+                      ? 'Search by Seat No (e.g. S-001)...'
+                      : searchScope === 'smartId'
+                        ? 'Search by Smart ID (e.g. TEST-001)...'
+                        : 'Search by Student Name, Seat No, Smart ID...'
                 }
                 className="mgr-input !pl-9 pr-8 text-xs w-full h-9 rounded-xl border border-border bg-surface text-primary placeholder:text-secondary focus:outline-none focus:ring-1 focus:ring-primary"
                 value={search}
@@ -370,11 +370,10 @@ export function ManagerSeatsHistoryClient() {
               type="button"
               data-testid="manager-quick-past-1-month-btn"
               onClick={() => setTimeHorizon(timeHorizon === '30days' ? 'all' : '30days')}
-              className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 h-9 rounded-xl border transition-all cursor-pointer shrink-0 ${
-                timeHorizon === '30days'
+              className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 h-9 rounded-xl border transition-all cursor-pointer shrink-0 ${timeHorizon === '30days'
                   ? 'bg-amber-500/20 text-amber-300 border-amber-500/60 shadow-xs ring-1 ring-amber-500/30'
                   : 'border-border bg-surface text-secondary hover:text-primary hover:border-amber-500/40'
-              }`}
+                }`}
               title="Filter to Past 1 Month Occupants (Audit mode for damage or theft)"
             >
               <Calendar size={13} className={timeHorizon === '30days' ? 'text-amber-400' : 'text-secondary'} />
@@ -522,8 +521,9 @@ export function ManagerSeatsHistoryClient() {
           </button>
         </div>
       ) : historyQuery.isPending ? (
-        <div className="ss-empty-state p-12 rounded-2xl bg-card border border-border text-center">
-          <p className="ss-empty-state__title text-secondary text-sm">
+        <div className="ss-empty-state p-12 rounded-2xl bg-card border border-border flex flex-col items-center justify-center gap-3 text-center" role="status">
+          <LibraryLoader size="md" icon="report" variant="default" label={tManagerUi('loading_seat_history')} />
+          <p className="ss-empty-state__title text-amber-500/90 text-xs font-semibold uppercase tracking-wider">
             {tManagerUi('loading_seat_history')}
           </p>
         </div>

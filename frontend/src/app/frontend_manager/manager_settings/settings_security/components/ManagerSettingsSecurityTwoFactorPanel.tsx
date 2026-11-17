@@ -13,6 +13,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { ManagerTwoFactorConfig } from '../types/ManagerSettingsSecurityTypes';
 import {
   generateQrMatrix,
@@ -186,7 +187,10 @@ export function ManagerSettingsSecurityTwoFactorPanel({
                     <path d={qrSvg.path} fill="#0f172a" />
                   </svg>
                 ) : (
-                  <span className="text-xs text-slate-500">Loading QR...</span>
+                  <div className="flex flex-col items-center justify-center gap-1.5" role="status">
+                    <LibraryLoader size="sm" icon="library" hideAura={true} label="Loading QR code" />
+                    <span className="text-[10px] text-slate-500 font-medium">Loading QR...</span>
+                  </div>
                 )}
               </div>
               <p className="text-[11px] text-slate-400">

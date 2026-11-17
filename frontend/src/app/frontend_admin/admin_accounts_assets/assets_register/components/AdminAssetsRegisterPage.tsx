@@ -187,23 +187,6 @@ export function AdminAssetsRegisterPage() {
               />
             </div>
 
-            {/* Branch Filter Dropdown */}
-            <div className="relative min-w-[160px]">
-              <select
-                value={branchFilter}
-                onChange={(e) => setBranchFilter(e.target.value)}
-                aria-label={t('FILTERS.ALL_BRANCHES')}
-                className="w-full rounded-md border border-border bg-card px-3 py-1.5 text-xs sm:text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                <option value="ALL">{t('FILTERS.ALL_BRANCHES')}</option>
-                {availableBranches.map((b) => (
-                  <option key={b.id} value={b.id}>
-                    {b.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
             {/* Category Filter Dropdown */}
             <div className="relative min-w-[180px]">
               <select
