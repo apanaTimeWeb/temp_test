@@ -309,10 +309,10 @@ export default function ManagerCommunicationComplaintsAddModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mgr-btn-primary mgr-btn-sm text-xs font-bold cursor-pointer inline-flex items-center gap-1.5"
+              className="mc-btn-primary flex items-center gap-2 cursor-pointer"
             >
               {isSubmitting ? <ButtonLoader icon="message-square-warning" /> : null}
-              <span>{isSubmitting ? 'Submitting...' : 'Submit Ticket'}</span>
+              <span>Submit Complaint</span>
             </button>
           </div>
         </form>

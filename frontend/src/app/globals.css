@@ -243,9 +243,10 @@ html.dark .mgr-theme,
   height: 0 !important;
 }
 
-/* ==========================================================================
-   LIBRARY LOADER SYSTEM (Exact Demo Specification)
-   ========================================================================== */
+/* ============================================================
+   LIBRARY LOADER — Golden dual-ring loader
+   ============================================================ */
+
 .loader-box,
 .library-loader-box {
   position: relative;
@@ -255,6 +256,7 @@ html.dark .mgr-theme,
   flex-shrink: 0;
 }
 
+/* Golden aura glow */
 .loader-box .loader-aura,
 .library-loader-box .loader-aura {
   position: absolute;
@@ -266,13 +268,38 @@ html.dark .mgr-theme,
   background: radial-gradient(circle, #F4D03F 0%, #C8912A 50%, transparent 80%);
 }
 
+/* Outer ring — CW spin (sab variants) */
 .loader-box .loader-ring,
 .library-loader-box .loader-ring {
   width: 100%;
   height: 100%;
-  animation: spinCW 1.2s linear infinite;
+  animation: spinCW 1.4s linear infinite;
 }
 
+/* Inner ring base */
+.loader-box .inner-svg,
+.library-loader-box .inner-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* default variant — subtle CCW inner ring */
+.loader-box:not(.contra):not(.flip):not(.breath) .inner-svg,
+.library-loader-box:not(.contra):not(.flip):not(.breath) .inner-svg {
+  inset: 8%;
+  animation: spinCCW 2.8s linear infinite;
+}
+
+/* contra variant — inner CCW ring full inset */
+.loader-box.contra .inner-svg,
+.library-loader-box.contra .inner-svg {
+  inset: 0;
+  animation: spinCCW 2.4s linear infinite;
+}
+
+/* Center icon */
 .loader-box .loader-icon,
 .library-loader-box .loader-icon {
   position: absolute;
@@ -292,81 +319,61 @@ html.dark .mgr-theme,
   filter: drop-shadow(0 0 4px rgba(200, 145, 42, 0.45));
 }
 
-@keyframes spinCW {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes spinCCW {
-  to { transform: rotate(-360deg); }
-}
-
-/* ===== Variant: Book Flip (pages turn) ===== */
-@keyframes flipRight {
-  0%, 45%, 100% { transform: scaleX(1); opacity: 1; }
-  60%, 80%      { transform: scaleX(0.35); opacity: 0.5; }
-}
-
-.loader-box.flip .right-page,
-.library-loader-box.flip .right-page {
-  transform-box: fill-box;
-  transform-origin: 0% 50%;
-  animation: flipRight 2.4s ease-in-out infinite;
-}
-
-/* ===== Variant: Contra-Rotate (dual rings) ===== */
-.loader-box.contra .loader-ring,
-.library-loader-box.contra .loader-ring {
-  animation: spinCW 1.4s linear infinite;
-}
-
-.loader-box.contra .inner-svg,
-.library-loader-box.contra .inner-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  animation: spinCCW 2.4s linear infinite;
-}
-
-/* ===== Variant: Breath (icon pulses) ===== */
+/* breath variant — icon pulse */
 @keyframes bookBreath {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(0.9); }
 }
-
 .loader-box.breath .loader-icon svg,
 .library-loader-box.breath .loader-icon svg {
   animation: bookBreath 1.8s ease-in-out infinite;
   transform-origin: center;
 }
 
-/* ===== Button / Action Wrappers ===== */
-.btn .loader-aura,
-button .loader-aura {
-  display: none;
+/* flip variant — icon flip (generic, kisi bhi icon pe) */
+@keyframes flipIcon {
+  0%, 45%, 100% { transform: scaleX(1); opacity: 1; }
+  60%, 80%      { transform: scaleX(0.35); opacity: 0.5; }
+}
+.loader-box.flip .loader-icon svg,
+.library-loader-box.flip .loader-icon svg {
+  animation: flipIcon 2.4s ease-in-out infinite;
+  transform-origin: center;
 }
 
-.btn .loader-icon,
-button .loader-icon {
-  color: #F4D03F;
+/* Button ke andar xs — aura halka karo */
+.loader-box.button-loader .loader-aura,
+.library-loader-box.button-loader .loader-aura {
+  opacity: 0.25;
 }
 
-/* Accessibility: reduced motion */
+/* Keyframes */
+@keyframes spinCW  { to { transform: rotate(360deg); } }
+@keyframes spinCCW { to { transform: rotate(-360deg); } }
+
+/* Reduced motion — respect karo */
 @media (prefers-reduced-motion: reduce) {
   .loader-box .loader-ring,
-  .library-loader-box .loader-ring {
-    animation-duration: 4s !important;
-  }
+  .library-loader-box .loader-ring { animation-duration: 4s !important; }
   .loader-box .inner-svg,
-  .library-loader-box .inner-svg {
-    animation-duration: 6s !important;
-  }
-  .loader-box.flip .right-page,
-  .library-loader-box.flip .right-page,
+  .library-loader-box .inner-svg   { animation-duration: 6s !important; }
   .loader-box.breath .loader-icon svg,
-  .library-loader-box.breath .loader-icon svg {
-    animation: none !important;
-  }
+  .library-loader-box.breath .loader-icon svg,
+  .loader-box.flip .loader-icon svg,
+  .library-loader-box.flip .loader-icon svg { animation: none !important; }
+}
+
+/* Screen-reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 
