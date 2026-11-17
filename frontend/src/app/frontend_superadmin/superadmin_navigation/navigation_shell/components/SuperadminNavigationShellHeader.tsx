@@ -97,20 +97,17 @@ export default function SuperadminNavigationShellHeader({ onMenuClick, menuExpan
           )}
         </div>
 
-        {/* Account Avatar */}
+        {/* Account Avatar — icon only */}
         <div className="relative" ref={accountRef}>
           <button
             type="button"
-            className="sa-header-account-btn"
+            className="sa-header-avatar-icon"
             onClick={() => setAccountOpen(o => !o)}
             aria-expanded={accountOpen}
             aria-label={t('COPY.SUPER_ADMIN')}
+            style={{ cursor: 'pointer', border: '2px solid transparent', transition: 'border-color 0.15s' }}
             data-testid="superadmin-navigation-header-account-11">
-            <div className="sa-header-avatar-icon">{t('COPY.SA')}</div>
-            <div className="sa-header-account-info hidden md:block">
-              <p className="sa-header-avatar-name">{t('COPY.SUPER_ADMIN')}</p>
-              <p className="sa-header-avatar-role">{t('COPY.PLATFORM_OWNER')}</p>
-            </div>
+            {t('COPY.SA')}
           </button>
 
           {accountOpen && (
