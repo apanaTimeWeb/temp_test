@@ -244,9 +244,26 @@ const LOGIN_CSS = `
   }
   .submit-btn:hover::before { left: 100%; }
 
-  /* ===== Library Loader (Login redirect overlay) ===== */
+  /* ===== Library Loader (Login redirect overlay - Translucent Modal) ===== */
   .login-loader-overlay {
+    background: rgba(3, 7, 18, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .login-loader-modal {
     background: #F7F3EA;
+    border: 2px solid #E8DFC9;
+    border-radius: 24px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 35px rgba(200, 145, 42, 0.25);
+    animation: modalPop 0.25s ease-out;
+  }
+  @keyframes modalPop {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
   }
   .login-loader-box {
     position: relative;
@@ -370,32 +387,34 @@ export default function PublicAuthSignInPage() {
             </defs>
           </svg>
 
-          <div className="login-loader-box">
-            <div className="login-loader-aura" />
+          <div className="login-loader-modal">
+            <div className="login-loader-box">
+              <div className="login-loader-aura" />
 
-            {/* Outer CW ring (golden gradient) */}
-            <svg className="login-loader-ring" viewBox="0 0 100 100" fill="none">
-              <circle cx="50" cy="50" r="44" stroke="#C8912A" strokeWidth="2.5"
-                strokeDasharray="4 6" opacity="0.3" vectorEffect="non-scaling-stroke"/>
-              <circle cx="50" cy="50" r="44" stroke="url(#loginLibGrad)" strokeWidth="3"
-                strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke"/>
-            </svg>
-
-            {/* Inner CCW ring (navy dashed) */}
-            <svg className="login-loader-inner" viewBox="0 0 100 100" fill="none">
-              <circle cx="50" cy="50" r="35" stroke="#1E3A5F" strokeWidth="1.5"
-                strokeDasharray="6 10" opacity="0.4" vectorEffect="non-scaling-stroke"/>
-            </svg>
-
-            {/* Dashboard icon */}
-            <div className="login-loader-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-                   strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="7" height="9" rx="1"/>
-                <rect x="14" y="3" width="7" height="5" rx="1"/>
-                <rect x="14" y="12" width="7" height="9" rx="1"/>
-                <rect x="3" y="16" width="7" height="5" rx="1"/>
+              {/* Outer CW ring (golden gradient) */}
+              <svg className="login-loader-ring" viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="50" r="44" stroke="#C8912A" strokeWidth="2.5"
+                  strokeDasharray="4 6" opacity="0.3" vectorEffect="non-scaling-stroke"/>
+                <circle cx="50" cy="50" r="44" stroke="url(#loginLibGrad)" strokeWidth="3"
+                  strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke"/>
               </svg>
+
+              {/* Inner CCW ring (navy dashed) */}
+              <svg className="login-loader-inner" viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="50" r="35" stroke="#1E3A5F" strokeWidth="1.5"
+                  strokeDasharray="6 10" opacity="0.4" vectorEffect="non-scaling-stroke"/>
+              </svg>
+
+              {/* Dashboard icon */}
+              <div className="login-loader-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                     strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="7" height="9" rx="1"/>
+                  <rect x="14" y="3" width="7" height="5" rx="1"/>
+                  <rect x="14" y="12" width="7" height="9" rx="1"/>
+                  <rect x="3" y="16" width="7" height="5" rx="1"/>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
