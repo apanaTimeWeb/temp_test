@@ -66,16 +66,35 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
       <div className="sa-sidebar-divider" />
 
       <nav id="superadmin-primary-navigation" className="sa-sidebar-nav" aria-label={t("COPY.SUPER_ADMIN_PRIMARY_NAVIGATION")}>
-        {SUPERADMIN_NAVIGATION_NAV_ITEMS.map(({ href, icon: Icon, labelKey }) => {
+        {SUPERADMIN_NAVIGATION_NAV_ITEMS.map(({ href, icon: Icon, labelKey }, idx) => {
           const isActive = pathname === href || pathname.startsWith(href + '/');
+          const colors = [
+            { bg: 'rgba(250,204,21,0.15)',  color: '#facc15' },   // Dashboard - gold
+            { bg: 'rgba(96,165,250,0.15)',   color: '#60a5fa' },   // Libraries - blue
+            { bg: 'rgba(74,222,128,0.15)',   color: '#4ade80' },   // Users - green
+            { bg: 'rgba(248,113,113,0.15)',  color: '#f87171' },   // Billing - red
+            { bg: 'rgba(192,132,252,0.15)',  color: '#c084fc' },   // Subscriptions - purple
+            { bg: 'rgba(251,191,36,0.15)',   color: '#fbbf24' },   // Plans - amber
+            { bg: 'rgba(52,211,153,0.15)',   color: '#34d399' },   // Accounting - emerald
+            { bg: 'rgba(248,113,113,0.18)',  color: '#ef4444' },   // Security - danger red
+            { bg: 'rgba(56,189,248,0.15)',   color: '#38bdf8' },   // Analytics - sky
+            { bg: 'rgba(163,230,53,0.15)',   color: '#a3e635' },   // System - lime
+            { bg: 'rgba(249,115,22,0.15)',   color: '#fb923c' },   // Communication - orange
+            { bg: 'rgba(34,211,238,0.15)',   color: '#22d3ee' },   // Support - cyan
+            { bg: 'rgba(167,139,250,0.15)',  color: '#a78bfa' },   // Settings - violet
+          ];
+          const c = colors[idx % colors.length];
 
           return (
             <Link
               key={href}
               href={href}
               className={`sa-nav-link ${isActive ? 'sa-nav-link--active' : ''}`}
->
-              <Icon size={18} aria-hidden="true" />
+              style={{ '--nav-icon-bg': c.bg, '--nav-icon-color': c.color } as React.CSSProperties}
+            >
+              <span className="sa-nav-icon-box">
+                <Icon size={16} aria-hidden="true" />
+              </span>
               <span>{t(labelKey)}</span>
             </Link>
           );
