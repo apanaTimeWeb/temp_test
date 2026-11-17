@@ -2,8 +2,9 @@
 // RESPONSIBILITY: Owns the coupons page summary, KPI indicators, and explicit query result states.
 
 import { useTranslations } from 'next-intl';
-import { Tag, Plus, Search } from 'lucide-react';
+import { Tag, Plus, Search, Download, FileSpreadsheet, Printer } from 'lucide-react';
 import { useState, useMemo } from 'react';
+import { toast } from 'sonner';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
@@ -45,6 +46,159 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
       (c.type && c.type.toLowerCase().includes(q))
     );
   }, [coupons, search]);
+
+  const downloadCouponsCsv = () => {
+    const headers = ['Coupon ID', 'Code', 'Discount', 'Type', 'Valid Until', 'Max Uses', 'Used Count', 'Branch', 'Status'];
+    const rows = filteredCoupons.map((c) => [
+      `"${c.id}"`,
+      `"${c.code}"`,
+      c.discount,
+      `"${c.type}"`,
+      `"${c.validUntil || ''}"`,
+      c.maxUses ?? '',
+      c.usedCount ?? 0,
+      `"${(c.branchApplicability || 'All Branches').replaceAll('"', '""')}"`,
+      `"${c.status || 'Active'}"`,
+    ]);
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((row) => row.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'smart-library-coupons.csv';
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filteredCoupons.length} coupons to CSV`);
+  };
+
+  const downloadCouponsExcel = () => {
+    const headers = ['Coupon ID', 'Code', 'Discount', 'Type', 'Valid Until', 'Max Uses', 'Used Count', 'Branch', 'Status'];
+    const rows = filteredCoupons.map((c) => [
+      c.id,
+      c.code,
+      c.type === 'Percent' ? `${c.discount}%` : `₹${c.discount}`,
+      c.type,
+      c.validUntil || '—',
+      c.maxUses ?? 'Unlimited',
+      c.usedCount ?? 0,
+      c.branchApplicability || 'All Branches',
+      c.status || 'Active',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Coupons</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #3b0764; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #581c87; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #faf5ff; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'smart-library-coupons.xls';
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filteredCoupons.length} coupons to Excel (.xls)`);
+  };
+
+  const printCouponsRoster = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) { window.print(); return; }
+    const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smart Library - Promotional Coupons & Discounts</title>
+          <style>
+            @page { size: landscape; margin: 10mm; }
+            body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #7e22ce; padding-bottom: 10px; margin-bottom: 12px; }
+            .title { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #7e22ce; letter-spacing: 0.5px; }
+            .subtitle { font-size: 12px; color: #64748b; margin-top: 2px; }
+            .meta { font-size: 11px; text-align: right; color: #475569; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; }
+            th { background-color: #f3e8ff; color: #6b21a8; text-align: left; padding: 6px; border: 1px solid #e9d5ff; font-weight: 700; text-transform: uppercase; font-size: 10px; }
+            td { padding: 6px; border: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background-color: #faf5ff; }
+            .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+            .badge-active { background: #dcfce7; color: #15803d; }
+            .badge-expired { background: #fee2e2; color: #b91c1c; }
+            .badge-disabled { background: #f1f5f9; color: #475569; }
+            .footer { margin-top: 14px; font-size: 10px; color: #94a3b8; display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 6px; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="title">Smart Library Network · Promotional Coupons Registry</div>
+              <div class="subtitle">Discounts & Referral Codes · Total Coupons: ${filteredCoupons.length}</div>
+            </div>
+            <div class="meta">
+              <div><strong>Generated:</strong> ${dateStr}</div>
+              <div><strong>Scope:</strong> Admin Authorized View</div>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Coupon Code</th>
+                <th>Discount</th>
+                <th>Type</th>
+                <th>Valid Until</th>
+                <th>Max Uses</th>
+                <th>Redeemed</th>
+                <th>Branch</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${filteredCoupons.map((c) => `
+                <tr>
+                  <td><strong style="font-family:monospace; color:#6b21a8;">${c.code}</strong></td>
+                  <td>${c.type === 'Percent' ? `${c.discount}%` : `₹${c.discount}`}</td>
+                  <td>${c.type}</td>
+                  <td>${c.validUntil || '—'}</td>
+                  <td>${c.maxUses ?? 'Unlimited'}</td>
+                  <td>${c.usedCount ?? 0}</td>
+                  <td>${c.branchApplicability || 'All Branches'}</td>
+                  <td><span class="badge badge-${(c.status || 'Active').toLowerCase()}">${c.status || 'Active'}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <div class="footer">
+            <span>Smart Library Marketing & Promotions</span>
+            <span>Page 1 of 1</span>
+          </div>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
 
   const metrics = [
     {
@@ -88,7 +242,7 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
     <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-5 shadow-xl space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="relative flex-1 min-w-[240px] max-w-md">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
           <input
             type="text"
             value={search}
@@ -100,6 +254,38 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
             aria-label="Search coupons"
             className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={downloadCouponsCsv}
+            disabled={filteredCoupons.length === 0}
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-medium text-cyan-300 hover:text-white hover:bg-cyan-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+            title="Export Coupons to CSV"
+          >
+            <Download size={14} strokeWidth={2} className="text-cyan-400" />
+            <span>CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={downloadCouponsExcel}
+            disabled={filteredCoupons.length === 0}
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:text-white hover:bg-emerald-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+            title="Export Coupons to Excel (.xls)"
+          >
+            <FileSpreadsheet size={14} strokeWidth={2} className="text-emerald-400" />
+            <span>Excel</span>
+          </button>
+          <button
+            type="button"
+            onClick={printCouponsRoster}
+            disabled={filteredCoupons.length === 0}
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 px-3 py-1.5 text-xs font-medium text-sky-300 hover:text-white hover:bg-sky-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+            title="Print Coupons Roster"
+          >
+            <Printer size={14} strokeWidth={2} className="text-sky-400" />
+            <span>Print</span>
+          </button>
         </div>
       </div>
       <div className="overflow-hidden rounded-xl border border-slate-800/80 bg-slate-950/20">
@@ -121,12 +307,6 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
       <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 shadow-lg shadow-black/20">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-400">
-                {t('BREADCRUMB')}
-              </span>
-              <span className="text-xs text-slate-400">• Promotional Discounts</span>
-            </div>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('PAGE_TITLE')}</h1>
             <p className="text-xs sm:text-sm text-slate-400">{t('PAGE_SUBTITLE')}</p>
           </div>

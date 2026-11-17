@@ -2,7 +2,7 @@
 /** Responsibility: Superadmin System Auto Scale Page Client; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
 /** Data-Flow: canonical route -> SuperadminLibrariesOverviewLibraryCapacityScalingRecommendationsPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 
-import { SuperadminLibrariesLibraryCapacityScalingRecommendationsDateLabel } from "@/app/frontend_superadmin/superadmin_libraries/libraries_library_capacity_scaling_recommendations/utils/SuperadminLibrariesLibraryCapacityScalingRecommendationsDateFormatter";
+import { formatSuperadminLibrariesLibraryCapacityScalingRecommendationsDateLabel as SuperadminLibrariesLibraryCapacityScalingRecommendationsDateLabel } from "@/app/frontend_superadmin/superadmin_libraries/libraries_library_capacity_scaling_recommendations/utils/SuperadminLibrariesLibraryCapacityScalingRecommendationsDateFormatter";
 import { useSuperadminLibrariesCapacityScalingRecommendationsState } from '@/app/frontend_superadmin/superadmin_libraries/libraries_library_capacity_scaling_recommendations/hooks/useSuperadminLibrariesCapacityScalingRecommendationsState';
 import { useLocale, useTranslations } from 'next-intl';
 

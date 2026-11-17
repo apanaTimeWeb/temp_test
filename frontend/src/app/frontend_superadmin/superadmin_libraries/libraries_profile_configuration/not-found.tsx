@@ -2,8 +2,8 @@
 /** Responsibility: localized not-found boundary for the owning Superadmin leaf. */
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { FileQuestion, ArrowLeft } from 'lucide-react';
 import { SUPERADMIN_LIBRARIES_PROFILE_CONFIGURATION_ROUTES } from '@/app/frontend_superadmin/superadmin_libraries/libraries_profile_configuration/config/superadmin_libraries_profile_configuration.url_config';
-
 
 /**
  * Performs the superadmin module not found operation within libraries profile configuration; inputs and outputs follow the declared TypeScript contract.
@@ -11,10 +11,20 @@ import { SUPERADMIN_LIBRARIES_PROFILE_CONFIGURATION_ROUTES } from '@/app/fronten
 export default function SuperadminModuleNotFound() {
   const t = useTranslations('SUPERADMIN_SYSTEM');
   return (
-    <section className="mx-auto w-full max-w-3xl rounded-xl border border-border bg-card p-6 text-primary" role="status">
-      <h1 className="text-xl font-semibold">{t('COPY.MODULE_NOT_FOUND_TITLE')}</h1>
-      <p className="mt-2 text-sm text-secondary">{t('COPY.MODULE_NOT_FOUND_MESSAGE')}</p>
-      <Link className="sa-btn-primary mt-4 inline-flex" href={SUPERADMIN_LIBRARIES_PROFILE_CONFIGURATION_ROUTES.SUPERADMIN_SYSTEM_PROFILE_URLS.DASHBOARD_OVERVIEW} data-testid="superadmin-libraries-profile-configuration-not-found-dashboard-link">{t('COPY.BACK_TO_DASHBOARD')}</Link>
+    <section className="mx-auto w-full max-w-2xl rounded-2xl border border-indigo-500/20 bg-card/90 backdrop-blur-md p-8 text-center shadow-xl shadow-black/20 my-12 space-y-4" role="status">
+      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 mx-auto shadow-md">
+        <FileQuestion size={28} />
+      </div>
+      <div>
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{t('COPY.MODULE_NOT_FOUND_TITLE')}</h1>
+        <p className="mt-1.5 text-xs sm:text-sm text-slate-400 max-w-md mx-auto">{t('COPY.MODULE_NOT_FOUND_MESSAGE')}</p>
+      </div>
+      <div>
+        <Link className="sa-btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer" href={SUPERADMIN_LIBRARIES_PROFILE_CONFIGURATION_ROUTES.SUPERADMIN_SYSTEM_PROFILE_URLS.DASHBOARD_OVERVIEW} data-testid="superadmin-libraries-profile-configuration-not-found-dashboard-link">
+          <ArrowLeft size={16} />
+          {t('COPY.BACK_TO_DASHBOARD')}
+        </Link>
+      </div>
     </section>
   );
 }

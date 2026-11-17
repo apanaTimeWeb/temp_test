@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import { Search, LayoutGrid, List, MoreHorizontal, PhoneCall, Upload, Download, Printer, MessageSquare, Send, Mail, CalendarDays, CheckCircle, Clock, Phone, User, Calendar, Users, TrendingUp, UserCheck, Target, XCircle, Trash2 } from 'lucide-react';
+import { Search, LayoutGrid, List, MoreHorizontal, PhoneCall, Upload, Download, Printer, MessageSquare, Send, Mail, CalendarDays, CheckCircle, Clock, Phone, User, Calendar, Users, TrendingUp, UserCheck, Target, XCircle, Trash2, FileSpreadsheet } from 'lucide-react';
 import { toast } from 'sonner';
 import { ADMIN_ENQUIRIES_ENQUIRY_KANBAN_COLUMNS, ADMIN_ENQUIRIES_ENQUIRY_STATUS_FILTERS, ADMIN_ENQUIRIES_URLS, ADMIN_ENQUIRIES_ENQUIRY_DOT_CLASSES } from '@/app/frontend_admin/admin_members/members_enquiries/config/admin_members_enquiries.url_config';
 import useEnquiriesPage from '@/app/frontend_admin/admin_members/members_enquiries/hooks/useAdminMembersEnquiriesPage';
@@ -11,7 +11,7 @@ import AdminEnquiriesEnquiryKanbanCard from '@/app/frontend_admin/admin_members/
 import AdminMembersEnquiriesBulkWhatsAppModal from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesBulkWhatsAppModal';
 
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
-import { buildAdminEnquiriesCsv } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
+import { buildAdminEnquiriesCsv, downloadAdminEnquiriesExcel, printAdminEnquiriesRoster } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
 import type { Enquiry } from '@/app/frontend_admin/admin_members/members_enquiries/schemas/AdminMembersEnquiriesSchema';
 import type { AdminEnquiriesEnquiryKanbanCardProps } from '@/app/frontend_admin/admin_members/members_enquiries/types/AdminMembersEnquiriesComponentTypes';
 
@@ -90,6 +90,12 @@ export default function AdminEnquiriesPageView() {
     toast.success(t('EXPORT_SUCCESS', { count: timeFiltered.length }));
   };
 
+  const downloadExcel = () => {
+    if (!isDemoMode) { toast.error(t('LIVE_EXPORT_UNAVAILABLE')); return; }
+    downloadAdminEnquiriesExcel(timeFiltered, 'admin-crm-enquiries.xls');
+    toast.success(`Exported ${timeFiltered.length} enquiries to Excel (.xls)`);
+  };
+
   const whatsappRecipients = useMemo(() => {
     return selectedIds.length > 0 ? timeFiltered.filter((e) => selectedIds.includes(e.id)) : timeFiltered;
   }, [selectedIds, timeFiltered]);
@@ -111,13 +117,6 @@ export default function AdminEnquiriesPageView() {
         <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 shadow-lg shadow-black/20">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-400">
-                  <Target className="h-3 w-3" />
-                  {t('BREADCRUMB')}
-                </span>
-                <span className="text-xs text-slate-400">• CRM Pipeline</span>
-              </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('PAGE_TITLE')}</h1>
               <p className="text-xs sm:text-sm text-slate-400">
                 <span>{timeFiltered.length} Active Leads • Track every prospect from enquiry to admission</span> • Range: <span className="font-semibold text-indigo-400">{timeRangeLabel}</span>
@@ -222,7 +221,7 @@ export default function AdminEnquiriesPageView() {
         {/* Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-xl p-3 shadow-lg">
           <div className="relative min-w-0 flex-1 max-w-sm">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" strokeWidth={2} />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" strokeWidth={2} />
             <input
               type="text"
               aria-label={t('SEARCH_ARIA')}
@@ -256,7 +255,7 @@ export default function AdminEnquiriesPageView() {
               aria-label={t('KANBAN_SWITCH')}
               aria-pressed={view === 'kanban'}
             >
-              <LayoutGrid size={15} strokeWidth={2}/>
+              <LayoutGrid size={15} strokeWidth={2} className={view === 'kanban' ? 'text-white' : 'text-indigo-400'} />
             </button>
             <button
               data-testid="admin_enquiries-AdminEnquiriesPageView-control-002"
@@ -268,7 +267,7 @@ export default function AdminEnquiriesPageView() {
               aria-label={t('TABLE_SWITCH')}
               aria-pressed={view === 'table'}
             >
-              <List size={15} strokeWidth={2}/>
+              <List size={15} strokeWidth={2} className={view === 'table' ? 'text-white' : 'text-indigo-400'} />
             </button>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -280,26 +279,27 @@ export default function AdminEnquiriesPageView() {
                   className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 transition-colors"
                   title="Delete selected enquiries"
                 >
-                  <Trash2 size={13} /> Delete Selected ({selectedIds.length})
+                  <Trash2 size={13} className="text-rose-400" /> Delete Selected ({selectedIds.length})
                 </button>
                 <button
                   type="button"
                   onClick={clearSelection}
                   className="inline-flex h-9 items-center gap-1 rounded-xl border border-slate-800 bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
                 >
-                  <XCircle size={13} /> Clear ({selectedIds.length})
+                  <XCircle size={13} className="text-slate-400" /> Clear ({selectedIds.length})
                 </button>
               </>
             )}
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-003" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('IMPORT_TITLE')}><Upload size={14} strokeWidth={2}/> {t('IMPORT')}</button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-004" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title={isDemoMode ? t('EXPORT_DEMO_TITLE') : t('EXPORT_LIVE_TITLE')} onClick={downloadCsv}><Download size={14} strokeWidth={2}/> {t('CSV')}</button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-005" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" onClick={() => window.print()}><Printer size={14} strokeWidth={2}/> {t('PRINT')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-003" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-300 hover:text-amber-200 hover:bg-amber-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('IMPORT_TITLE')}><Upload size={14} strokeWidth={2} className="text-amber-400"/> {t('IMPORT')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-004" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-medium text-cyan-300 hover:text-white hover:bg-cyan-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title={isDemoMode ? t('EXPORT_DEMO_TITLE') : t('EXPORT_LIVE_TITLE')} onClick={downloadCsv}><Download size={14} strokeWidth={2} className="text-cyan-400"/> {t('CSV')}</button>
+            <button className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:text-white hover:bg-emerald-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title="Export Excel spreadsheet (.xls)" onClick={downloadExcel}><FileSpreadsheet size={14} strokeWidth={2} className="text-emerald-400"/> Excel</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-005" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 px-3 py-1.5 text-xs font-medium text-sky-300 hover:text-white hover:bg-sky-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" onClick={() => printAdminEnquiriesRoster(timeFiltered)}><Printer size={14} strokeWidth={2} className="text-sky-400"/> {t('PRINT')}</button>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-006" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={timeFiltered.length === 0} title={t('WHATSAPP_TITLE')} onClick={() => setIsBulkWhatsAppOpen(true)}>
-              <MessageSquare size={14} strokeWidth={2}/> {t('WHATSAPP')}
+              <MessageSquare size={14} strokeWidth={2} className="text-emerald-400"/> {t('WHATSAPP')}
               {selectedIds.length > 0 && <span className="rounded-full bg-emerald-500 text-black px-1.5 py-0.2 text-[10px] font-bold">{selectedIds.length}</span>}
             </button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-007" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-sky-400 hover:text-sky-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('TELEGRAM_TITLE')}><Send size={14} strokeWidth={2}/> {t('TELEGRAM')}</button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-008" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-indigo-400 hover:text-indigo-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('EMAIL_TITLE')}><Mail size={14} strokeWidth={2}/> {t('EMAIL')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-007" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-sky-400 hover:text-sky-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('TELEGRAM_TITLE')}><Send size={14} strokeWidth={2} className="text-sky-400"/> {t('TELEGRAM')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-008" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-indigo-400 hover:text-indigo-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('EMAIL_TITLE')}><Mail size={14} strokeWidth={2} className="text-indigo-400"/> {t('EMAIL')}</button>
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 {
   "ADMIN_ENQUIRIES": {
-    "BREADCRUMB": "CRM › Enquiries",
+    "BREADCRUMB": "Enquiries",
     "PAGE_TITLE": "Enquiry Pipeline",
     "DEMO_SUBTITLE": "{count, plural, one {# demo lead} other {# demo leads}} • Track every prospect from enquiry to admission",
     "LIVE_SUBTITLE": "Enquiry data is unavailable until a verified CRM API integration is supplied.",

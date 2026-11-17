@@ -4,6 +4,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { AlertCircle, RotateCcw } from 'lucide-react';
 
 /**
  * Defines the public SuperadminSecurityIpFirewallErrorFallbackProps contract for security ip firewall. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
@@ -19,10 +20,29 @@ export type SuperadminSecurityIpFirewallErrorFallbackProps = { error: Error & { 
 export default function SuperadminSecurityIpFirewallErrorFallback({ reset }: SuperadminSecurityIpFirewallErrorFallbackProps) {
   const t = useTranslations('SUPERADMIN_SECURITY');
   return (
-    <section className="mx-auto w-full max-w-3xl rounded-xl border border-border bg-danger-bg p-6 text-danger" role="alert" data-testid="superadmin_security_ip_firewall-security_ip_firewall-error-fallback">
-      <h2 className="text-lg font-semibold">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>
-      <p className="mt-2 text-sm">{t('COPY.MODULE_ROUTE_ERROR_MESSAGE')}</p>
-      <button type="button" className="sa-btn-primary mt-4 min-h-11 min-w-28" onClick={reset} data-testid="superadmin_security_ip_firewall-security_ip_firewall-error-retry">{t('COPY.RETRY_MODULE_ROUTE')}</button>
-    </section>
+    <div className="flex min-h-[50vh] w-full items-center justify-center p-4">
+      <section
+        className="w-full max-w-lg rounded-2xl border border-rose-500/30 bg-rose-500/10 p-6 sm:p-8 text-center backdrop-blur-md shadow-xl"
+        role="alert"
+        data-testid="superadmin_security_ip_firewall-security_ip_firewall-error-fallback"
+      >
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-rose-500/40 bg-rose-500/20 text-rose-400">
+          <AlertCircle size={28} aria-hidden="true" />
+        </div>
+        <h2 className="text-lg sm:text-xl font-bold text-slate-100">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>
+        <p className="mt-2 text-xs sm:text-sm text-slate-300 leading-relaxed">{t('COPY.MODULE_ROUTE_ERROR_MESSAGE')}</p>
+        <div className="mt-6 flex justify-center">
+          <button
+            type="button"
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 px-6 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition-all hover:from-indigo-500 hover:to-indigo-600 active:scale-95 cursor-pointer"
+            onClick={reset}
+            data-testid="superadmin_security_ip_firewall-security_ip_firewall-error-retry"
+          >
+            <RotateCcw size={15} />
+            <span>{t('COPY.RETRY_MODULE_ROUTE')}</span>
+          </button>
+        </div>
+      </section>
+    </div>
   );
 }

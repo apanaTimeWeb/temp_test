@@ -22,90 +22,102 @@ export default function SuperadminUsersDirectoryContent({ activeTab, users, user
     }
   };
   return (
-      <div className="sa-card p-0 overflow-hidden h-150 flex flex-col">
-        {activeTab === 'All Users' && (
-          <div className="flex-1 w-full">
-            <SuperadminUsersDirectorySemanticTable<SuperadminUserData>
-             
-              rowData={users}
-              columnDefs={userCols}
+    <div className="overflow-hidden rounded-2xl border border-border/80 bg-card/90 shadow-sm flex flex-col min-h-[480px]">
+      {activeTab === 'All Users' && (
+        <div className="flex-1 w-full">
+          <SuperadminUsersDirectorySemanticTable<SuperadminUserData>
+            rowData={users}
+            columnDefs={userCols}
+            headerHeight={48}
+            rowHeight={56}
+            suppressCellFocus={false}
+            getRowId={(params) => params.data.id}
+          />
+        </div>
+      )}
+
+      {activeTab === 'User Sessions' && (
+        <div className="flex-1 w-full flex flex-col">
+          <div className="p-4 sm:p-5 border-b border-border/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/40">
+            <div>
+              <h3 className="text-sm font-bold text-slate-100">{t("COPY.ACTIVE_SESSIONS_AUDIT")}</h3>
+              <p className="text-xs text-slate-400 mt-0.5">{t("COPY.MONITOR_ACTIVE_USER_SESSIONS_AND_FORCEFULLY_REVOKE_ACCESS_IF_NECESSARY")}</p>
+            </div>
+            <button
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold cursor-not-allowed"
+              type="button"
+              disabled
+              title={t("COPY.UNAVAILABLE_THE_SESSION_MANAGEMENT_API_CONTRACT_IS_NOT_SUPPLIED")}
+              data-testid="superadmin-users-users-content-unavailable-the-session-management-api-contract-is-not-supplied-1"
+            >
+              <LogOut size={13} className="text-rose-400" />
+              <span>{t("COPY.REVOKE_ALL_IDLE_UNAVAILABLE")}</span>
+            </button>
+          </div>
+          <div className="flex-1">
+            <SuperadminUsersDirectorySemanticTable<SuperadminSessionData>
+              rowData={sessions}
+              columnDefs={sessionCols}
               headerHeight={48}
               rowHeight={56}
               suppressCellFocus={false}
               getRowId={(params) => params.data.id}
             />
           </div>
-        )}
+        </div>
+      )}
 
-        {activeTab === 'User Sessions' && (
-          <div className="flex-1 w-full flex flex-col">
-            <div className="p-4 border-b border-border flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-bold text-primary">{t("COPY.ACTIVE_SESSIONS_AUDIT")}</h3>
-                <p className="text-xs text-secondary">{t("COPY.MONITOR_ACTIVE_USER_SESSIONS_AND_FORCEFULLY_REVOKE_ACCESS_IF_NECESSARY")}</p>
-              </div>
-              <button className="sa-btn-secondary sa-btn-secondary--sm" type="button" disabled title={t("COPY.UNAVAILABLE_THE_SESSION_MANAGEMENT_API_CONTRACT_IS_NOT_SUPPLIED")} data-testid="superadmin-users-users-content-unavailable-the-session-management-api-contract-is-not-supplied-1">
-                <LogOut size={14} className="mr-1 inline" /> {t("COPY.REVOKE_ALL_IDLE_UNAVAILABLE")}
-              </button>
-            </div>
-            <div className="flex-1">
-              <SuperadminUsersDirectorySemanticTable<SuperadminSessionData>
-               
-                rowData={sessions}
-                columnDefs={sessionCols}
-                headerHeight={48}
-                rowHeight={56}
-                suppressCellFocus={false}
-                getRowId={(params) => params.data.id}
-              />
-            </div>
+      {activeTab === 'Roles & Permissions' && (
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+          <div className="mb-6">
+            <h3 className="text-base font-bold text-slate-100">{t("COPY.ROLE_BASED_ACCESS_CONTROL_RBAC_MATRIX")}</h3>
+            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">{t("COPY.DEFINE_WHICH_ROLES_HAVE_ACCESS_TO_SPECIFIC_SAAS_MODULES")}</p>
           </div>
-        )}
-
-        {activeTab === 'Roles & Permissions' && (
-          <div className="flex-1 overflow-y-auto p-6">
-            <div className="mb-6">
-              <h3 className="text-base font-bold text-primary">{t("COPY.ROLE_BASED_ACCESS_CONTROL_RBAC_MATRIX")}</h3>
-              <p className="text-sm text-secondary">{t("COPY.DEFINE_WHICH_ROLES_HAVE_ACCESS_TO_SPECIFIC_SAAS_MODULES")}</p>
-            </div>
-            
-            <div className="border border-border rounded-xl overflow-hidden bg-card">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-surface-hover text-secondary">
-                  <tr>
-                    <th className="py-3 px-4 font-semibold border-b border-border">{t("COPY.MODULE_FEATURE")}</th>
-                    <th className="py-3 px-4 font-semibold border-b border-border text-center text-info">{t("COPY.SUPERADMIN")}</th>
-                    <th className="py-3 px-4 font-semibold border-b border-border text-center text-success">{t("COPY.ADMIN_TENANT")}</th>
-                    <th className="py-3 px-4 font-semibold border-b border-border text-center text-warning">{t("COPY.MANAGER")}</th>
+          
+          <div className="border border-border/80 rounded-2xl overflow-hidden bg-slate-900/40">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-slate-900/80 text-slate-300">
+                <tr>
+                  <th className="py-3 px-4 font-semibold text-xs tracking-wider uppercase border-b border-border/80">{t("COPY.MODULE_FEATURE")}</th>
+                  <th className="py-3 px-4 font-bold text-xs tracking-wider uppercase border-b border-border/80 text-center text-purple-400">{t("COPY.SUPERADMIN")}</th>
+                  <th className="py-3 px-4 font-bold text-xs tracking-wider uppercase border-b border-border/80 text-center text-indigo-400">{t("COPY.ADMIN_TENANT")}</th>
+                  <th className="py-3 px-4 font-bold text-xs tracking-wider uppercase border-b border-border/80 text-center text-sky-400">{t("COPY.MANAGER")}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/40">
+                {rolePermissions.map((row) => (
+                  <tr key={row.module} className="hover:bg-indigo-500/5 transition-colors">
+                    <td className="py-3.5 px-4 text-slate-200 font-medium">{getRolePermissionModuleLabel(row.module)}</td>
+                    <td className="py-3.5 px-4 text-center">
+                      <span className="sr-only">{t("COPY.SUPERADMIN_2")} {row.superadmin ? t('COPY.ALLOWED') : t('COPY.NOT_ALLOWED')}</span>
+                      {row.superadmin ? <CheckCircle aria-hidden="true" size={17} className="text-emerald-400 mx-auto" /> : <X aria-hidden="true" size={16} className="text-slate-600 mx-auto" />}
+                    </td>
+                    <td className="py-3.5 px-4 text-center">
+                      <span className="sr-only">{t("COPY.TENANT_ADMIN")} {row.admin ? t('COPY.ALLOWED') : t('COPY.NOT_ALLOWED')}</span>
+                      {row.admin ? <CheckCircle aria-hidden="true" size={17} className="text-emerald-400 mx-auto" /> : <X aria-hidden="true" size={16} className="text-slate-600 mx-auto" />}
+                    </td>
+                    <td className="py-3.5 px-4 text-center">
+                      <span className="sr-only">{t("COPY.MANAGER_2")} {row.manager ? t('COPY.ALLOWED') : t('COPY.NOT_ALLOWED')}</span>
+                      {row.manager ? <CheckCircle aria-hidden="true" size={17} className="text-emerald-400 mx-auto" /> : <X aria-hidden="true" size={16} className="text-slate-600 mx-auto" />}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {rolePermissions.map((row) => (
-                    <tr key={row.module} className="hover:bg-surface-hover motion-safe:transition-colors motion-reduce:transition-none">
-                      <td className="py-3 px-4 text-primary font-medium">{getRolePermissionModuleLabel(row.module)}</td>
-                      <td className="py-3 px-4 text-center">
-                        <span className="sr-only">{t("COPY.SUPERADMIN_2")} {row.superadmin ? t('COPY.ALLOWED') : t('COPY.NOT_ALLOWED')}</span>
-                        {row.superadmin ? <CheckCircle aria-hidden="true" size={16} className="text-success mx-auto" /> : <X aria-hidden="true" size={16} className="text-secondary mx-auto" />}
-                      </td>
-                      <td className="py-3 px-4 text-center">
-                        <span className="sr-only">{t("COPY.TENANT_ADMIN")} {row.admin ? t('COPY.ALLOWED') : t('COPY.NOT_ALLOWED')}</span>
-                        {row.admin ? <CheckCircle aria-hidden="true" size={16} className="text-success mx-auto" /> : <X aria-hidden="true" size={16} className="text-secondary mx-auto" />}
-                      </td>
-                      <td className="py-3 px-4 text-center">
-                        <span className="sr-only">{t("COPY.MANAGER_2")} {row.manager ? t('COPY.ALLOWED') : t('COPY.NOT_ALLOWED')}</span>
-                        {row.manager ? <CheckCircle aria-hidden="true" size={16} className="text-success mx-auto" /> : <X aria-hidden="true" size={16} className="text-secondary mx-auto" />}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="mt-6 flex justify-end">
-              <button className="sa-btn-primary" type="button" disabled title={t("COPY.UNAVAILABLE_NO_RBAC_WRITE_API_CONTRACT_IS_SUPPLIED")} data-testid="superadmin-users-users-content-unavailable-no-rbac-write-api-contract-is-supplied-2">{t("COPY.SAVE_RBAC_CHANGES_UNAVAILABLE")}</button>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
-        )}
-      </div>
-
+          <div className="mt-6 flex justify-end">
+            <button
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 opacity-50 cursor-not-allowed"
+              type="button"
+              disabled
+              title={t("COPY.UNAVAILABLE_NO_RBAC_WRITE_API_CONTRACT_IS_SUPPLIED")}
+              data-testid="superadmin-users-users-content-unavailable-no-rbac-write-api-contract-is-supplied-2"
+            >
+              {t("COPY.SAVE_RBAC_CHANGES_UNAVAILABLE")}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

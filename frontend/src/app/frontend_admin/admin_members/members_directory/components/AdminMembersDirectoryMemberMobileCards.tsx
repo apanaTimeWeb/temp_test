@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { MoreVertical, MessageSquare, Building2, Eye, Edit, Mail, Phone, CreditCard, Armchair, CalendarClock, X } from 'lucide-react';
+import { MoreVertical, MessageSquare, Building2, Eye, Mail, Phone, CreditCard, Armchair, CalendarClock, X } from 'lucide-react';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { displayValue } from '@/lib/display_value';
 
@@ -163,16 +163,6 @@ export default function AdminMembersDirectoryMemberMobileCards({
                 >
                   <Eye size={14} className="text-sky-400 shrink-0" />
                   <span>{t('ACTION_VIEW_DETAILS')}</span>
-                </button>
-                <button
-                  type="button"
-                  disabled={!canMutate}
-                  title={!canMutate ? t('MEMBER_EDIT_UNAVAILABLE') : undefined}
-                  className="flex items-center gap-2 min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 disabled:cursor-not-allowed disabled:opacity-40"
-                  onClick={() => { setOpenActionsFor(null); onAction('EDIT', member); }}
-                >
-                  <Edit size={14} className="text-amber-400 shrink-0" />
-                  <span>{t('ACTION_EDIT_MEMBER')}</span>
                 </button>
                 <button
                   type="button"

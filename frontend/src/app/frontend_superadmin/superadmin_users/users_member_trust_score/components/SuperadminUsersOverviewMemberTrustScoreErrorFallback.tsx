@@ -6,18 +6,32 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { AlertCircle, RotateCcw } from 'lucide-react';
 
 type SuperadminUsersOverviewMemberTrustScoreErrorFallbackProps = { onRetry: () => void };
 
 export default function SuperadminUsersOverviewMemberTrustScoreErrorFallback({ onRetry }: SuperadminUsersOverviewMemberTrustScoreErrorFallbackProps) {
   const t = useTranslations('SUPERADMIN_FINANCE');
   return (
-    <section className="mx-auto w-full max-w-3xl rounded-xl border border-border bg-danger-bg p-6 text-danger" role="alert" data-testid="superadmin_users-users_member_trust_score-error-fallback">
-      <h2 className="text-lg font-semibold">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>
-      <p className="mt-2 text-sm">{t('COPY.MODULE_ROUTE_ERROR_MESSAGE')}</p>
-      <button type="button" className="sa-btn-primary mt-4 min-h-11 min-w-28" onClick={onRetry} data-testid="superadmin_users-users_member_trust_score-error-retry">
-        {t('COPY.RETRY_MODULE_ROUTE')}
-      </button>
+    <section className="mx-auto w-full max-w-xl rounded-2xl border border-rose-500/30 bg-card/90 backdrop-blur-md p-8 text-center shadow-xl shadow-black/20 my-10 space-y-4" role="alert" data-testid="superadmin_users-users_member_trust_score-error-fallback">
+      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-400 mx-auto shadow-md">
+        <AlertCircle size={28} />
+      </div>
+      <div>
+        <h2 className="text-xl font-bold text-slate-100">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>
+        <p className="mt-1.5 text-xs sm:text-sm text-slate-400 max-w-md mx-auto">{t('COPY.MODULE_ROUTE_ERROR_MESSAGE')}</p>
+      </div>
+      <div>
+        <button
+          type="button"
+          className="sa-btn-primary inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer"
+          onClick={onRetry}
+          data-testid="superadmin_users-users_member_trust_score-error-retry"
+        >
+          <RotateCcw size={16} />
+          {t('COPY.RETRY_MODULE_ROUTE')}
+        </button>
+      </div>
     </section>
   );
 }

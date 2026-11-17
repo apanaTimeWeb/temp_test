@@ -9,10 +9,9 @@ import { seatsSchema } from '@/app/frontend_superadmin/superadmin_libraries/libr
 import type { SeatsData } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/types/SuperadminLibrariesOnboardingSetupTypes';
 import { useTranslations } from 'next-intl';
 const inputCls = (hasErr?: boolean) =>
-  `sa-input w-full rounded-xl border px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:outline-none focus:ring-2 ${
-    hasErr
-      ? 'sa-input--error border-rose-500/60 bg-rose-500/5 focus:border-rose-500 focus:ring-rose-500/20'
-      : 'border-indigo-500/25 bg-background/80 focus:border-indigo-500 focus:ring-indigo-500/20'
+  `sa-input w-full rounded-xl border px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:outline-none focus:ring-2 ${hasErr
+    ? 'sa-input--error border-rose-500/60 bg-rose-500/5 focus:border-rose-500 focus:ring-rose-500/20'
+    : 'border-indigo-500/25 bg-background/80 focus:border-indigo-500 focus:ring-indigo-500/20'
   }`;
 
 /**
@@ -22,14 +21,14 @@ const inputCls = (hasErr?: boolean) =>
 export default function SuperadminLibrariesOnboardingSetupStep3Form({ onNext, initialValues, onDirtyChange }: { onNext: (d: SeatsData) => void; initialValues: SeatsData; onDirtyChange?: (isDirty: boolean) => void }) {
   const tCopy = useTranslations('SUPERADMIN_SETUP_WIZARD');
   const translateValidationMessage = useSuperadminLibrariesOnboardingSetupValidationMessage();
-  const { register, handleSubmit, watch, formState: { errors , isDirty} } = useForm<SeatsData>({
+  const { register, handleSubmit, watch, formState: { errors, isDirty } } = useForm<SeatsData>({
     resolver: zodResolver(seatsSchema),
     defaultValues: initialValues,
   });
   // Effect contract: propagate the active step form dirty state to the wizard owner so protection persists across steps; dependency set [isDirty, onDirtyChange] is the deliberate re-run boundary.
   // Effect contract: propagate the current step dirty state to the wizard owner so navigation protection persists across step unmounts; dependencies track the form state and stable callback.
   useEffect(() => { onDirtyChange?.(isDirty); }, [isDirty, onDirtyChange]);
-  const count  = watch('count')  || 0;
+  const count = watch('count') || 0;
   const prefix = watch('prefix') || '';
 
   const preview =
@@ -52,7 +51,7 @@ export default function SuperadminLibrariesOnboardingSetupStep3Form({ onNext, in
           </label>
           <input id="superadmin-superadminsetupwizardstep3form-33-input" type="number" min={1} max={9999} step={1} inputMode="numeric"
             {...register('count', { valueAsNumber: true })} aria-invalid={Boolean(errors.count)} aria-describedby={errors.count ? 'step3-count-error' : undefined}
-            className={inputCls(!!errors.count)}  data-testid="superadmin-setup-wizard-setup-wizard-step3-form-superadmin-superadminsetupwizardstep3form-33-input-1"/>
+            className={inputCls(!!errors.count)} data-testid="superadmin-setup-wizard-setup-wizard-step3-form-superadmin-superadminsetupwizardstep3form-33-input-1" />
           {errors.count && <p id="step3-count-error" role="alert" className="sa-wizard-field-error">{translateValidationMessage(errors.count.message)}</p>}
         </div>
         <div className="space-y-1.5">
@@ -60,7 +59,7 @@ export default function SuperadminLibrariesOnboardingSetupStep3Form({ onNext, in
             {tCopy("COPY.SEAT_PREFIX")} <span className="sa-wizard-field-optional">{tCopy("COPY.MAX_3")}</span>
           </label>
           <input id="superadmin-superadminsetupwizardstep3form-42-input" maxLength={3} {...register('prefix')} aria-invalid={Boolean(errors.prefix)} aria-describedby={errors.prefix ? 'step3-prefix-error' : undefined} placeholder={tCopy("COPY.E_G_SL")}
-            className={inputCls(!!errors.prefix)}  data-testid="superadmin-setup-wizard-setup-wizard-step3-form-superadmin-superadminsetupwizardstep3form-42-input-2"/>
+            className={inputCls(!!errors.prefix)} data-testid="superadmin-setup-wizard-setup-wizard-step3-form-superadmin-superadminsetupwizardstep3form-42-input-2" />
           {errors.prefix && <p id="step3-prefix-error" role="alert" className="sa-wizard-field-error">{translateValidationMessage(errors.prefix.message)}</p>}
         </div>
       </div>
@@ -82,9 +81,9 @@ export default function SuperadminLibrariesOnboardingSetupStep3Form({ onNext, in
             const seatNumber = i + 1;
             const seatLabel = `${prefix}${String(seatNumber).padStart(2, '0')}`;
             return (
-            <div key={seatLabel} className={seatCellClass(i)}>
-              {seatLabel}
-            </div>
+              <div key={seatLabel} className={seatCellClass(i)}>
+                {seatLabel}
+              </div>
             );
           })}
           {count > 20 && (

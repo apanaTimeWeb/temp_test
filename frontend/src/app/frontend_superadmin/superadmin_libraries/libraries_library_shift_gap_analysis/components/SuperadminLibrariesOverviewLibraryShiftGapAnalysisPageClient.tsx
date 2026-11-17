@@ -65,7 +65,7 @@ export default function SuperadminLibrariesOverviewLibraryShiftGapAnalysisPageCl
       {/* Day-wise Gap Table */}
       <div className="acct-filter-bar">
         <p className="acct-section-label">{tCopy("COPY.DAY_WISE_GAP_LOG")}</p>
-        <select aria-label={tCopy("COPY.SHIFT_FILTER")} className="acct-select w-40 ml-auto" value={shiftFilter} onChange={e => setShiftFilter(e.target.value)} data-testid="superadmin-accounting-accounting-shift-gap-analyzer-shift-filter-1">
+        <select aria-label={tCopy("COPY.SHIFT_FILTER")} className="acct-select w-40 ml-auto" value={shiftFilter} onChange={e => setShiftFilter(e.target.value as 'all' | 'Morning' | 'Afternoon' | 'Night')} data-testid="superadmin-accounting-accounting-shift-gap-analyzer-shift-filter-1">
           <option value="all">{tCopy("COPY.ALL_SHIFTS")}</option>
           <option value="Morning">{tCopy("COPY.MORNING")}</option>
           <option value="Afternoon">{tCopy("COPY.AFTERNOON")}</option>

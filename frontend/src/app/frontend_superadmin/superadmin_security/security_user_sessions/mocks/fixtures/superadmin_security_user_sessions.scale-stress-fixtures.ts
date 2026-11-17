@@ -5,24 +5,18 @@
  * These are for isolated UI scale testing only; they do not represent backend data or API contracts.
  */
 import { SUPERADMIN_USERS_INITIAL_SESSIONS as MODULE_SCALE_FIXTURE_SOURCE } from './SuperadminSecurityUserSessionsMockFixtures';
+import type { SuperadminSessionData } from '../../types/SuperadminSecurityUserSessionsTypes';
 
-type FixtureRecord = Record<string, unknown>;
-const sourceRecords = MODULE_SCALE_FIXTURE_SOURCE as unknown as readonly FixtureRecord[];
-
-function withDeterministicIdentity(record: FixtureRecord, index: number): FixtureRecord {
-  const copy: FixtureRecord = { ...record };
-  const identityKey = ['id', 'key', 'code', 'reference', 'receiptNumber', 'invoiceNumber'].find((key) => key in copy);
-  const key = identityKey ?? '__scaleFixtureIndex';
-  const current = copy[key];
-  copy[key] = identityKey && typeof current === 'number'
-    ? current * 1000 + index
-    : `${String(current ?? 'scale')}-${String(index).padStart(4, '0')}`;
-  return copy;
+function withDeterministicIdentity(record: SuperadminSessionData, index: number): SuperadminSessionData {
+  return {
+    ...record,
+    id: `${record.id}-${String(index).padStart(4, '0')}`,
+  };
 }
 
-function createScaleTier(count: number): readonly FixtureRecord[] {
-  if (sourceRecords.length === 0) return [];
-  return Array.from({ length: count }, (_, index) => withDeterministicIdentity(sourceRecords[index % sourceRecords.length], index + 1));
+function createScaleTier(count: number): readonly SuperadminSessionData[] {
+  if (MODULE_SCALE_FIXTURE_SOURCE.length === 0) return [];
+  return Array.from({ length: count }, (_, index) => withDeterministicIdentity(MODULE_SCALE_FIXTURE_SOURCE[index % MODULE_SCALE_FIXTURE_SOURCE.length], index + 1));
 }
 
 export const MOCK_SCALE_TIER_1_SMALL = createScaleTier(10);

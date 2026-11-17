@@ -310,7 +310,6 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
           member={model.viewingMember}
           detailTab={model.detailTab}
           isDemoMode={isDemoMode}
-          onEdit={(member) => model.handleAction('EDIT', member)}
         />
       )}
     </div>

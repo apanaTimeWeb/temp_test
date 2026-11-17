@@ -182,13 +182,6 @@ export function AdminFinanceDashboardPage() {
       <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-success-bg px-2.5 py-0.5 text-xs font-semibold text-success-text">
-                <Landmark className="h-3.5 w-3.5" />
-                Network Treasury & Collections
-              </span>
-              <span className="text-xs text-text-secondary">• Central Ledger</span>
-            </div>
             <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('TITLE')}</h1>
             <p className="text-sm text-text-secondary max-w-2xl">{t('SUBTITLE')}</p>
           </div>

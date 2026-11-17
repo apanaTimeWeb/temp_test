@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MapPin, Edit2, X, CheckCircle, ShieldAlert, Mail, Phone, IndianRupee, Building, Users } from 'lucide-react';
-import type { SuperadminLibrariesPanelProps } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
+import type { SuperadminLibrariesPanelProps, SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 import { SUPERADMIN_LIBRARIES_PLAN_VALUES } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/constants/SuperadminLibrariesOverviewConstants';
 import { SUPERADMIN_LIBRARIES_EDIT_SCHEMA, type SuperadminLibrariesEditFormValues } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/schemas/SuperadminLibrariesOverviewSchema';
 import { SuperadminLibrariesFormatMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewFormattingUtilities';
@@ -97,7 +97,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
   const savePreview = handleSubmit(async (values) => {
     setSaveError('');
     try {
-      await onSave({ ...lib, ...values });
+      await onSave({ ...lib, ...values, plan: values.plan as SuperadminLibrariesLibrary['plan'] });
       setSaved(true);
       setEditing(false);
     } catch {
@@ -176,15 +176,18 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
                 <div>
                   <label htmlFor="superadmin-libraries-name" className="sa-label text-xs">{t("COPY.LIBRARY_NAME")}</label>
                   <input
-                    ref={firstInputRef}
                     id="superadmin-libraries-name"
                     className="w-full px-3 py-2 text-xs rounded-xl border border-indigo-500/25 bg-input text-white focus:border-indigo-400 outline-none"
                     aria-invalid={Boolean(errors.name)}
                     aria-describedby={errors.name ? 'superadmin-libraries-name-error' : undefined}
                     {...register('name')}
+                    ref={(el) => {
+                      register('name').ref(el);
+                      if (firstInputRef) (firstInputRef as { current: HTMLInputElement | null }).current = el;
+                    }}
                     data-testid="superadmin-libraries-libraries-superadmin-libraries-name-3"
                   />
-                  {translateValidationMessage(errors.name?.message) && <p id="superadmin-libraries-name-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.name.message)}</p>}
+                  {errors.name?.message && <p id="superadmin-libraries-name-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.name.message)}</p>}
                 </div>
                 <div>
                   <label htmlFor="superadmin-libraries-owner" className="sa-label text-xs">{t("COPY.OWNER_NAME")}</label>
@@ -196,7 +199,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
                     {...register('owner')}
                     data-testid="superadmin-libraries-libraries-superadmin-libraries-owner-4"
                   />
-                  {translateValidationMessage(errors.owner?.message) && <p id="superadmin-libraries-owner-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.owner.message)}</p>}
+                  {errors.owner?.message && <p id="superadmin-libraries-owner-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.owner.message)}</p>}
                 </div>
               </div>
 
@@ -213,7 +216,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
                     {...register('email')}
                     data-testid="superadmin-libraries-libraries-superadmin-libraries-email-5"
                   />
-                  {translateValidationMessage(errors.email?.message) && <p id="superadmin-libraries-email-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.email.message)}</p>}
+                  {errors.email?.message && <p id="superadmin-libraries-email-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.email.message)}</p>}
                 </div>
                 <div>
                   <label htmlFor="superadmin-libraries-phone" className="sa-label text-xs">{t("COPY.PHONE")}</label>
@@ -227,7 +230,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
                     {...register('phone')}
                     data-testid="superadmin-libraries-libraries-superadmin-libraries-phone-6"
                   />
-                  {translateValidationMessage(errors.phone?.message) && <p id="superadmin-libraries-phone-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.phone.message)}</p>}
+                  {errors.phone?.message && <p id="superadmin-libraries-phone-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.phone.message)}</p>}
                 </div>
               </div>
 
@@ -241,7 +244,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
                   {...register('gstNumber')}
                   data-testid="superadmin-libraries-libraries-superadmin-libraries-gst-7"
                 />
-                {translateValidationMessage(errors.gstNumber?.message) && <p id="superadmin-libraries-gst-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.gstNumber.message)}</p>}
+                {errors.gstNumber?.message && <p id="superadmin-libraries-gst-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.gstNumber.message)}</p>}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -255,7 +258,7 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
                     {...register('location')}
                     data-testid="superadmin-libraries-libraries-superadmin-libraries-location-8"
                   />
-                  {translateValidationMessage(errors.location?.message) && <p id="superadmin-libraries-location-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.location.message)}</p>}
+                  {errors.location?.message && <p id="superadmin-libraries-location-error" className="text-xs text-rose-400 mt-1" role="alert">{translateValidationMessage(errors.location.message)}</p>}
                 </div>
                 <div>
                   <label htmlFor="superadmin-libraries-plan" className="sa-label text-xs">{t("COPY.SAAS_PLAN")}</label>

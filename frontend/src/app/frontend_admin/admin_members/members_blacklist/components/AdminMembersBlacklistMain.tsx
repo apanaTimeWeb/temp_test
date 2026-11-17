@@ -99,12 +99,6 @@ export default function AdminMembersBlacklistMain() {
         <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 shadow-lg shadow-black/20">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-rose-400">
-                  {t('BREADCRUMB')}
-                </span>
-                <span className="text-xs text-slate-400">• Security Restrictions</span>
-              </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('TITLE')}</h1>
               <p className="text-xs sm:text-sm text-slate-400">{t('SUBTITLE')}</p>
             </div>

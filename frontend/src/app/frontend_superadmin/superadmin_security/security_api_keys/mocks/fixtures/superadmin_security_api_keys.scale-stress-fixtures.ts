@@ -4,7 +4,7 @@
  * Deterministic local stress tiers derived from this module's existing synthetic fixture source.
  * These are for isolated UI scale testing only; they do not represent backend data or API contracts.
  */
-import { SUPERADMIN_SECURITY_IP_RULES as MODULE_SCALE_FIXTURE_SOURCE } from './SuperadminSecurityApiKeysPreviewMockFixtures';
+import { SUPERADMIN_SECURITY_API_KEYS as MODULE_SCALE_FIXTURE_SOURCE } from './SuperadminSecurityApiKeysPreviewMockFixtures';
 
 type FixtureRecord = Record<string, unknown>;
 const sourceRecords = MODULE_SCALE_FIXTURE_SOURCE as unknown as readonly FixtureRecord[];

@@ -17,8 +17,8 @@ import { useSuperadminUsersDirectoryUnsavedChangesGuard } from '@/app/frontend_s
 export default function SuperadminUsersDirectoryModal({ showModal, editUser, onClose, handleSave }: SuperadminUsersModalProps) {
   const t = useTranslations('SUPERADMIN_USERS');
   const translateValidationMessage = useSuperadminUsersDirectoryValidationMessage();
-  const dialogRef = useRef<HTMLDivElement>(null);
-  const firstInputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const firstInputRef = useRef<HTMLInputElement | null>(null);
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
 
@@ -110,34 +110,43 @@ export default function SuperadminUsersDirectoryModal({ showModal, editUser, onC
 
   if (!showModal) return null;
 
+  const { ref: nameFormRef, ...nameRegister } = register('name');
   const onSubmit = handleSubmit((values) => handleSave(values));
 
   return (
     <div
-      className="sa-wizard-modal-overlay"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) requestCloseRef.current();
       }}
     >
       <div
         ref={dialogRef}
-        className="sa-wizard-modal sa-wizard-modal--wide"
+        className="w-full max-w-xl rounded-2xl border border-indigo-500/25 bg-slate-900/95 p-6 shadow-2xl shadow-black/40 backdrop-blur-md"
         role="dialog"
         aria-modal="true"
         aria-labelledby="superadmin-user-modal-title"
         aria-describedby="superadmin-user-modal-description"
         tabIndex={-1}
       >
-        <div className="flex items-center justify-between mb-6">
-          <h2 id="superadmin-user-modal-title" className="text-lg font-bold text-primary flex items-center gap-2">
-            <Shield size={20} aria-hidden="true" className="text-primary" />
-            {editUser ? t('COPY.EDIT_USER_CONFIGURATION') : t('COPY.PROVISION_NEW_USER')}
+        <div className="flex items-center justify-between mb-5 pb-4 border-b border-border/80">
+          <h2 id="superadmin-user-modal-title" className="text-lg font-bold text-slate-100 flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
+              <Shield size={18} aria-hidden="true" />
+            </div>
+            <span>{editUser ? t('COPY.EDIT_USER_CONFIGURATION') : t('COPY.PROVISION_NEW_USER')}</span>
           </h2>
-          <button type="button" aria-label={t("COPY.CLOSE_USER_DIALOG")} onClick={() => requestCloseRef.current()} className="text-secondary hover:text-primary" data-testid="superadmin-users-users-close-user-dialog-1">
-            <X size={20} aria-hidden="true" />
+          <button
+            type="button"
+            aria-label={t("COPY.CLOSE_USER_DIALOG")}
+            onClick={() => requestCloseRef.current()}
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors cursor-pointer"
+            data-testid="superadmin-users-users-close-user-dialog-1"
+          >
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
-        <p id="superadmin-user-modal-description" className="mb-4 text-sm text-secondary">
+        <p id="superadmin-user-modal-description" className="mb-4 text-xs sm:text-sm text-slate-400">
           {t("COPY.CHANGES_IN_THIS_SCREEN_UPDATE_SAMPLE_DATA_IN_THIS_PAGE_ONLY_NO_USER_ACCOUNT_IS_CREATED_OR_CHANGED_ON_THE_SERVER")}
         </p>
 
@@ -145,87 +154,107 @@ export default function SuperadminUsersDirectoryModal({ showModal, editUser, onC
           <div className="space-y-4 mb-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="superadmin-user-full-name" className="text-xs font-semibold text-secondary block mb-1">{t("COPY.FULL_NAME")}</label>
+                <label htmlFor="superadmin-user-full-name" className="text-xs font-semibold text-slate-300 block mb-1">{t("COPY.FULL_NAME")}</label>
                 <input
-                  ref={firstInputRef}
                   id="superadmin-user-full-name"
                   autoComplete="name"
-                  className="sa-input w-full"
+                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   aria-invalid={Boolean(errors.name)}
                   aria-describedby={errors.name ? 'superadmin-user-full-name-error' : undefined}
-                  {...register('name')}
-                 data-testid="superadmin-users-users-superadmin-user-full-name-2"/>
-                {translateValidationMessage(errors.name?.message) && <p id="superadmin-user-full-name-error" className="mt-1 text-xs text-danger" role="alert">{translateValidationMessage(errors.name.message)}</p>}
+                  {...nameRegister}
+                  ref={(el) => {
+                    nameFormRef(el);
+                    firstInputRef.current = el;
+                  }}
+                  data-testid="superadmin-users-users-superadmin-user-full-name-2"
+                />
+                {errors.name?.message && <p id="superadmin-user-full-name-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.name.message)}</p>}
               </div>
               <div>
-                <label htmlFor="superadmin-user-username" className="text-xs font-semibold text-secondary block mb-1">{t("COPY.USERNAME")}</label>
+                <label htmlFor="superadmin-user-username" className="text-xs font-semibold text-slate-300 block mb-1">{t("COPY.USERNAME")}</label>
                 <input
                   id="superadmin-user-username"
                   autoComplete="username"
-                  className="sa-input w-full"
+                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   aria-invalid={Boolean(errors.username)}
                   aria-describedby={errors.username ? 'superadmin-user-username-error' : undefined}
                   {...register('username')}
-                 data-testid="superadmin-users-users-superadmin-user-username-3"/>
-                {translateValidationMessage(errors.username?.message) && <p id="superadmin-user-username-error" className="mt-1 text-xs text-danger" role="alert">{translateValidationMessage(errors.username.message)}</p>}
+                  data-testid="superadmin-users-users-superadmin-user-username-3"
+                />
+                {errors.username?.message && <p id="superadmin-user-username-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.username.message)}</p>}
               </div>
             </div>
             <div>
-              <label htmlFor="superadmin-user-email" className="text-xs font-semibold text-secondary block mb-1">{t("COPY.EMAIL_ADDRESS")}</label>
+              <label htmlFor="superadmin-user-email" className="text-xs font-semibold text-slate-300 block mb-1">{t("COPY.EMAIL_ADDRESS")}</label>
               <input
                 id="superadmin-user-email"
                 type="email"
                 autoComplete="email"
-                className="sa-input w-full"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 aria-invalid={Boolean(errors.email)}
                 aria-describedby={errors.email ? 'superadmin-user-email-error' : undefined}
                 {...register('email')}
-               data-testid="superadmin-users-users-superadmin-user-email-4"/>
-              {translateValidationMessage(errors.email?.message) && <p id="superadmin-user-email-error" className="mt-1 text-xs text-danger" role="alert">{translateValidationMessage(errors.email.message)}</p>}
+                data-testid="superadmin-users-users-superadmin-user-email-4"
+              />
+              {errors.email?.message && <p id="superadmin-user-email-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.email.message)}</p>}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="superadmin-user-role" className="text-xs font-semibold text-secondary block mb-1">{t("COPY.ROLE_TYPE")}</label>
+                <label htmlFor="superadmin-user-role" className="text-xs font-semibold text-slate-300 block mb-1">{t("COPY.ROLE_TYPE")}</label>
                 <select
                   id="superadmin-user-role"
-                  className="sa-input w-full"
+                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-sm text-slate-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   aria-invalid={Boolean(errors.role)}
                   aria-describedby={errors.role ? 'superadmin-user-role-error' : undefined}
                   {...register('role')}
-                 data-testid="superadmin-users-users-superadmin-user-role-5">
-                  {SUPERADMIN_USERS_ROLE_OPTIONS.map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}
+                  data-testid="superadmin-users-users-superadmin-user-role-5"
+                >
+                  {SUPERADMIN_USERS_ROLE_OPTIONS.map((option) => <option key={option.value} value={option.value} className="bg-slate-900 text-slate-100">{t(option.labelKey)}</option>)}
                 </select>
-                {translateValidationMessage(errors.role?.message) && <p id="superadmin-user-role-error" className="mt-1 text-xs text-danger" role="alert">{translateValidationMessage(errors.role.message)}</p>}
+                {errors.role?.message && <p id="superadmin-user-role-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.role.message)}</p>}
               </div>
               <div>
-                <label htmlFor="superadmin-user-branch" className="text-xs font-semibold text-secondary block mb-1">{t("COPY.ASSIGNED_TENANT_BRANCH")}</label>
+                <label htmlFor="superadmin-user-branch" className="text-xs font-semibold text-slate-300 block mb-1">{t("COPY.ASSIGNED_TENANT_BRANCH")}</label>
                 <input
                   id="superadmin-user-branch"
-                  className="sa-input w-full"
+                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   aria-invalid={Boolean(errors.branch)}
                   aria-describedby={errors.branch ? 'superadmin-user-branch-error' : undefined}
                   {...register('branch')}
-                 data-testid="superadmin-users-users-superadmin-user-branch-6"/>
-                {translateValidationMessage(errors.branch?.message) && <p id="superadmin-user-branch-error" className="mt-1 text-xs text-danger" role="alert">{translateValidationMessage(errors.branch.message)}</p>}
+                  data-testid="superadmin-users-users-superadmin-user-branch-6"
+                />
+                {errors.branch?.message && <p id="superadmin-user-branch-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.branch.message)}</p>}
               </div>
             </div>
-            <div className="mt-4 p-3 border border-border rounded-lg bg-floating flex items-center justify-between gap-3">
+            <div className="mt-4 p-4 border border-indigo-500/20 rounded-xl bg-slate-900/50 flex items-center justify-between gap-3">
               <div>
-                <h3 className="text-sm font-semibold text-primary flex items-center gap-1">
-                  <ShieldCheck size={14} aria-hidden="true" className="text-success" /> {t("COPY.ENFORCE_2FA")}
+                <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+                  <ShieldCheck size={16} aria-hidden="true" className="text-emerald-400" /> {t("COPY.ENFORCE_2FA")}
                 </h3>
-                <p className="text-xs text-secondary">{t("COPY.REQUIRE_TWO_FACTOR_AUTHENTICATION_ON_NEXT_LOGIN_PREVIEW_ONLY")}</p>
+                <p className="text-xs text-slate-400 mt-0.5">{t("COPY.REQUIRE_TWO_FACTOR_AUTHENTICATION_ON_NEXT_LOGIN_PREVIEW_ONLY")}</p>
               </div>
-              <label className="sa-toggle" htmlFor="superadmin-user-two-factor">
+              <label className="sa-toggle cursor-pointer" htmlFor="superadmin-user-two-factor">
                 <span className="sr-only">{t("COPY.ENFORCE_TWO_FACTOR_AUTHENTICATION")}</span>
-                <input id="superadmin-user-two-factor" type="checkbox" {...register('twoFactor')}  data-testid="superadmin-users-users-superadmin-user-two-factor-7"/>
+                <input id="superadmin-user-two-factor" type="checkbox" {...register('twoFactor')} data-testid="superadmin-users-users-superadmin-user-two-factor-7"/>
                 <span className="sa-slider" aria-hidden="true" />
               </label>
             </div>
           </div>
-          <div className="flex flex-wrap justify-end gap-3 pt-4 border-t border-border">
-            <button type="button" className="sa-btn-ghost" onClick={() => requestCloseRef.current()} data-testid="superadmin-users-users-cancel-8">{t("COPY.CANCEL")}</button>
-            <button type="submit" className="sa-btn-primary" disabled={isSubmitting} data-testid="superadmin-users-users-saving-preview-9">
+          <div className="flex flex-wrap justify-end gap-3 pt-4 border-t border-border/80">
+            <button
+              type="button"
+              className="px-4 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              onClick={() => requestCloseRef.current()}
+              data-testid="superadmin-users-users-cancel-8"
+            >
+              {t("COPY.CANCEL")}
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+              disabled={isSubmitting}
+              data-testid="superadmin-users-users-saving-preview-9"
+            >
               {isSubmitting ? t('COPY.SAVING_PREVIEW') : editUser ? t('COPY.UPDATE_CONFIGURATION_PREVIEW') : t('COPY.ADD_USER_PREVIEW')}
             </button>
           </div>

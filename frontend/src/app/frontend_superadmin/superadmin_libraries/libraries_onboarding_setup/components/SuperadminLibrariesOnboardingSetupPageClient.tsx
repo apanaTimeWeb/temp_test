@@ -41,9 +41,9 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
   const [branch, setBranch] = useState<BranchDetailsData>({
     name: d.libraryName, address: d.address, city: d.city, gst: d.gst,
   });
-  const [shifts, setShifts] = useState<ShiftsData>({ shifts: d.shifts });
+  const [shifts, setShifts] = useState<ShiftsData>({ shifts: [...d.shifts] });
   const [seats,  setSeats]  = useState<SeatsData>({ count: d.seatCount, prefix: d.seatPrefix });
-  const [plans,  setPlans]  = useState<PlansData>({ plans: d.plans });
+  const [plans,  setPlans]  = useState<PlansData>({ plans: [...d.plans] });
 
   const progress = ((step - 1) / (STEPS.length - 1)) * 100;
 

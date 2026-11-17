@@ -1,6 +1,6 @@
 {
   "ADMIN_ENQUIRIES": {
-    "BREADCRUMB": "CRM › पूछताछ",
+    "BREADCRUMB": "पूछताछ",
     "PAGE_TITLE": "पूछताछ पाइपलाइन",
     "DEMO_SUBTITLE": "{count, plural, one {# डेमो लीड} other {# डेमो लीड}} • पूछताछ से प्रवेश तक हर संभावित ग्राहक को ट्रैक करें",
     "LIVE_SUBTITLE": "सत्यापित CRM API इंटीग्रेशन उपलब्ध होने तक पूछताछ का डेटा उपलब्ध नहीं है।",

@@ -14,6 +14,9 @@ import managerHi from '@/lib/locales/manager_merged_hi.json';
 import adminEn from '@/lib/locales/admin_merged_en.json';
 import adminHi from '@/lib/locales/admin_merged_hi.json';
 
+import superadminEn from '@/lib/locales/superadmin_merged_en.json';
+import superadminHi from '@/lib/locales/superadmin_merged_hi.json';
+
 function isPlainObject(item: unknown): item is Record<string, unknown> {
   return item !== null && typeof item === 'object' && !Array.isArray(item);
 }
@@ -53,8 +56,8 @@ function expandNamespaces(obj: Record<string, any>, prefix = ''): Record<string,
   return expanded;
 }
 
-const baseMergedEn = deepMerge(signInEn, regEn, recoveryEn, resetEn, managerEn, adminEn);
-const baseMergedHi = deepMerge(signInHi, regHi, recoveryHi, resetHi, managerHi, adminHi);
+const baseMergedEn = deepMerge(signInEn, regEn, recoveryEn, resetEn, managerEn, adminEn, superadminEn);
+const baseMergedHi = deepMerge(signInHi, regHi, recoveryHi, resetHi, managerHi, adminHi, superadminHi);
 
 export const mergedEnMessages = baseMergedEn;
 export const mergedHiMessages = baseMergedHi;

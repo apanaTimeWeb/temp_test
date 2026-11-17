@@ -96,7 +96,7 @@ export default function AdminMembersDirectoryBulkWhatsAppModal({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border px-6 py-4 bg-surface">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-success-bg text-success-text">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
               <MessageSquare size={18} strokeWidth={2.2} />
             </div>
             <div>
@@ -112,7 +112,7 @@ export default function AdminMembersDirectoryBulkWhatsAppModal({
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="rounded-lg p-1.5 text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="rounded-lg p-1.5 text-text-secondary hover:bg-surface-hover hover:text-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
           >
             <X size={18} />
           </button>
@@ -123,7 +123,7 @@ export default function AdminMembersDirectoryBulkWhatsAppModal({
           {/* Preset Buttons */}
           <div>
             <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-2 flex items-center gap-1.5">
-              <Sparkles size={13} className="text-primary" />
+              <Sparkles size={13} className="text-amber-400" />
               Quick Templates
             </label>
             <div className="flex flex-wrap gap-2 mt-1.5">

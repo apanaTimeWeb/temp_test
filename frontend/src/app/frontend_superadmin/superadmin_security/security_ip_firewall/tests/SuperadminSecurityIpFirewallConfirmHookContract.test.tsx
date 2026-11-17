@@ -13,7 +13,7 @@ afterEach(() => { cleanup(); document.body.innerHTML = ''; vi.restoreAllMocks();
 
 function renderConfirm(locale: 'en' | 'hi') {
   const messages = locale === 'hi' ? hiMessages : enMessages;
-  const wrapper = ({ children }: PropsWithChildren) => createElement(NextIntlClientProvider, { locale, messages }, children);
+  const wrapper = ({ children }: PropsWithChildren) => createElement(NextIntlClientProvider, { locale, messages, children }, children);
   return renderHook(() => useSuperadminSecurityIpFirewallConfirm(), { wrapper });
 }
 

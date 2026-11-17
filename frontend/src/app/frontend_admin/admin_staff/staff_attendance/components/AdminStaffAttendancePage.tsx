@@ -44,13 +44,6 @@ export function AdminStaffAttendancePage() {
       <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-info-bg px-2.5 py-0.5 text-xs font-semibold text-info-text">
-                <Users2 className="h-3.5 w-3.5" />
-                Staff Operations & Roster
-              </span>
-              <span className="text-xs text-text-muted">• Central Network Duty</span>
-            </div>
             <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
               {t('PAGE_TITLE')}
             </h1>

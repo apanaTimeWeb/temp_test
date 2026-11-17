@@ -3,7 +3,7 @@
 
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
-import { Tags, Building, DownloadCloud, UploadCloud, ArrowRight, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Tags, Building, DownloadCloud, UploadCloud, ArrowRight, ArrowUpDown, ArrowUp, ArrowDown, RotateCcw } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminMembersCategory, AdminMembersDepartment, AdminMembersRenewal, AdminMembersDemoMutationResult } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import useAdminMembersDirectoryMain from '@/app/frontend_admin/admin_members/members_directory/hooks/useAdminMembersDirectoryMain';
@@ -66,10 +66,58 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
 
   if (model.activeTab === 'categories') {
     const categories: readonly AdminMembersCategory[] = model.demoCategories;
-    return <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-categories-title"><div className="mb-5 flex flex-wrap items-center justify-between gap-4"><h2 id="admin-members-categories-title" className="admin-shared-card-heading">{t('CATEGORY_TITLE')}</h2><button type="button" data-testid="admin_members-AdminMembersCategoriesView-control-001" className="admin-btn-primary" aria-expanded={categoryCreating} aria-controls="admin-members-category-create" onClick={() => { setCategoryCreating((current) => !current); setCategoryError(null); }}><Tags size={18} aria-hidden="true" /> {t('CATEGORY_ADD')}</button></div>
-      {categoryCreating && <form id="admin-members-category-create" className="my-4 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto]" onSubmit={submitCategory}><div className="grid gap-1"><label htmlFor="admin-members-category-name" className="admin-label">{t('CATEGORY_NAME_LABEL')}</label><input id="admin-members-category-name" className="admin-input" value={categoryName} onChange={(event) => setCategoryName(event.target.value)} required maxLength={80} aria-invalid={Boolean(categoryError)} aria-describedby={categoryError ? 'admin-members-category-name-error' : undefined} />{categoryError && <p id="admin-members-category-name-error" role="alert" className="text-sm text-danger-text">{categoryError}</p>}</div><button type="submit" className="admin-btn-primary self-end min-h-11" aria-label={t('CATEGORY_SAVE')}>Save Category</button><button type="button" className="admin-btn-ghost self-end min-h-11" onClick={() => { setCategoryCreating(false); setCategoryName(''); setCategoryError(null); }}>{t('CANCEL')}</button></form>}
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 admin-shared-card-grid">{categories.map((category) => <li key={category.name} className="flex items-center gap-4 rounded-xl border border-border bg-floating p-5"><span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg" data-admin-bg={category.color} data-admin-color={category.color}><Tags size={18} aria-hidden="true" /></span><span className="min-w-0"><span className="block font-semibold text-primary">{category.name}</span><span className="block text-sm text-text-secondary">{t('SAMPLE_MEMBERS_COUNT', { count: category.members })}</span></span></li>)}</ul>
-    </section>;
+    return (
+      <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-categories-title">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+          <h2 id="admin-members-categories-title" className="admin-shared-card-heading flex items-center gap-2">
+            <Tags size={20} className="text-purple-400" />
+            <span>{t('CATEGORY_TITLE')}</span>
+          </h2>
+          <button
+            type="button"
+            data-testid="admin_members-AdminMembersCategoriesView-control-001"
+            className="inline-flex items-center gap-2 rounded-xl border border-purple-500/40 bg-purple-500/15 px-4 py-2 text-xs font-semibold text-purple-300 hover:bg-purple-500/25 transition-all shadow-sm"
+            aria-expanded={categoryCreating}
+            aria-controls="admin-members-category-create"
+            onClick={() => { setCategoryCreating((current) => !current); setCategoryError(null); }}
+          >
+            <Tags size={16} className="text-purple-400" aria-hidden="true" />
+            <span>{t('CATEGORY_ADD')}</span>
+          </button>
+        </div>
+        {categoryCreating && (
+          <form id="admin-members-category-create" className="my-4 grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto_auto] p-4 rounded-xl border border-slate-800 bg-slate-900/60" onSubmit={submitCategory}>
+            <div className="grid gap-1">
+              <label htmlFor="admin-members-category-name" className="admin-label">{t('CATEGORY_NAME_LABEL')}</label>
+              <input id="admin-members-category-name" className="admin-input" value={categoryName} onChange={(event) => setCategoryName(event.target.value)} required maxLength={80} aria-invalid={Boolean(categoryError)} aria-describedby={categoryError ? 'admin-members-category-name-error' : undefined} />
+              {categoryError && <p id="admin-members-category-name-error" role="alert" className="text-sm text-danger-text">{categoryError}</p>}
+            </div>
+            <button type="submit" className="admin-btn-primary self-end min-h-11" aria-label={t('CATEGORY_SAVE')}>Save Category</button>
+            <button type="button" className="admin-btn-ghost self-end min-h-11" onClick={() => { setCategoryCreating(false); setCategoryName(''); setCategoryError(null); }}>{t('CANCEL')}</button>
+          </form>
+        )}
+        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 admin-shared-card-grid">
+          {categories.map((category) => {
+            const colorClass = category.color === 'primary'
+              ? 'bg-sky-500/15 text-sky-400 border border-sky-500/30'
+              : category.color === 'purple'
+              ? 'bg-purple-500/15 text-purple-400 border border-purple-500/30'
+              : 'bg-amber-500/15 text-amber-400 border border-amber-500/30';
+            return (
+              <li key={category.name} className="flex items-center gap-4 rounded-xl border border-slate-800 bg-slate-900/60 p-4 shadow-sm hover:border-slate-700 transition-colors">
+                <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${colorClass}`} data-admin-bg={category.color} data-admin-color={category.color}>
+                  <Tags size={18} aria-hidden="true" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-semibold text-white">{category.name}</span>
+                  <span className="block text-xs text-slate-400">{t('SAMPLE_MEMBERS_COUNT', { count: category.members })}</span>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    );
   }
   if (model.activeTab === 'departments') {
     const rawDepartments: readonly AdminMembersDepartment[] = model.demoDepartments;
@@ -103,22 +151,79 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
             <span>{label}</span>
             {isActive ? (
               deptSortDirection === 'asc' ? (
-                <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+                <ArrowUp className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
               ) : (
-                <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+                <ArrowDown className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
               )
             ) : (
-              <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+              <ArrowUpDown className="text-slate-500 opacity-60 group-hover:opacity-100 group-hover:text-indigo-400 transition-opacity shrink-0" size={14} aria-hidden="true" />
             )}
           </button>
         </th>
       );
     };
 
-    return <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-departments-title"><div className="mb-5 flex flex-wrap items-center justify-between gap-4"><h2 id="admin-members-departments-title" className="admin-shared-card-heading">{t('DEPARTMENTS_TITLE')}</h2><button type="button" data-testid="admin_members-AdminMembersDepartmentsView-control-001" className="admin-btn-primary" aria-expanded={departmentCreating} aria-controls="admin-members-department-create" onClick={() => { setDepartmentCreating((current) => !current); setDepartmentError(null); }}><Building size={18} aria-hidden="true" /> {t('DEPARTMENT_ADD')}</button></div>
-      {departmentCreating && <form id="admin-members-department-create" className="my-4 grid gap-3 sm:grid-cols-2" onSubmit={submitDepartment}><div className="grid gap-1"><label htmlFor="admin-members-department-name" className="admin-label">{t('DEPARTMENT_NAME_LABEL')}</label><input id="admin-members-department-name" className="admin-input" value={departmentName} onChange={(event) => setDepartmentName(event.target.value)} required maxLength={100} /></div><div className="grid gap-1"><label htmlFor="admin-members-department-head" className="admin-label">{t('DEPARTMENT_HEAD_LABEL')}</label><input id="admin-members-department-head" className="admin-input" value={departmentHead} onChange={(event) => setDepartmentHead(event.target.value)} required maxLength={100} /></div>{departmentError && <p role="alert" className="text-sm text-danger-text sm:col-span-2">{departmentError}</p>}<div className="flex flex-wrap gap-2 sm:col-span-2"><button type="submit" className="admin-btn-primary min-h-11" aria-label={t('DEPARTMENT_SAVE')}>Save Department</button><button type="button" className="admin-btn-ghost min-h-11" onClick={() => { setDepartmentCreating(false); setDepartmentName(''); setDepartmentHead(''); setDepartmentError(null); }}>{t('CANCEL')}</button></div></form>}
-      <div className="overflow-x-auto"><table className="w-full min-w-100 border-collapse text-left text-sm"><thead><tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">{renderDeptHeader('name', t('DEPARTMENT_NAME'))}{renderDeptHeader('head', t('DEPARTMENT_HEAD'))}{renderDeptHeader('members', t('DEPARTMENT_MEMBERS_COUNT'))}</tr></thead><tbody>{departments.map((department) => <tr key={department.name} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra"><th scope="row" className="p-3 text-left font-medium text-text-primary">{department.name}</th><td className="p-3">{department.head}</td><td className="p-3">{department.members}</td></tr>)}</tbody></table></div>
-    </section>;
+    return (
+      <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-departments-title">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+          <h2 id="admin-members-departments-title" className="admin-shared-card-heading flex items-center gap-2">
+            <Building size={20} className="text-sky-400" />
+            <span>{t('DEPARTMENTS_TITLE')}</span>
+          </h2>
+          <button
+            type="button"
+            data-testid="admin_members-AdminMembersDepartmentsView-control-001"
+            className="inline-flex items-center gap-2 rounded-xl border border-sky-500/40 bg-sky-500/15 px-4 py-2 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 transition-all shadow-sm"
+            aria-expanded={departmentCreating}
+            aria-controls="admin-members-department-create"
+            onClick={() => { setDepartmentCreating((current) => !current); setDepartmentError(null); }}
+          >
+            <Building size={16} className="text-sky-400" aria-hidden="true" />
+            <span>{t('DEPARTMENT_ADD')}</span>
+          </button>
+        </div>
+        {departmentCreating && (
+          <form id="admin-members-department-create" className="my-4 grid gap-3 sm:grid-cols-2 p-4 rounded-xl border border-slate-800 bg-slate-900/60" onSubmit={submitDepartment}>
+            <div className="grid gap-1">
+              <label htmlFor="admin-members-department-name" className="admin-label">{t('DEPARTMENT_NAME_LABEL')}</label>
+              <input id="admin-members-department-name" className="admin-input" value={departmentName} onChange={(event) => setDepartmentName(event.target.value)} required maxLength={100} />
+            </div>
+            <div className="grid gap-1">
+              <label htmlFor="admin-members-department-head" className="admin-label">{t('DEPARTMENT_HEAD_LABEL')}</label>
+              <input id="admin-members-department-head" className="admin-input" value={departmentHead} onChange={(event) => setDepartmentHead(event.target.value)} required maxLength={100} />
+            </div>
+            {departmentError && <p role="alert" className="text-sm text-danger-text sm:col-span-2">{departmentError}</p>}
+            <div className="flex flex-wrap gap-2 sm:col-span-2">
+              <button type="submit" className="admin-btn-primary min-h-11" aria-label={t('DEPARTMENT_SAVE')}>Save Department</button>
+              <button type="button" className="admin-btn-ghost min-h-11" onClick={() => { setDepartmentCreating(false); setDepartmentName(''); setDepartmentHead(''); setDepartmentError(null); }}>{t('CANCEL')}</button>
+            </div>
+          </form>
+        )}
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-100 border-collapse text-left text-sm">
+            <thead>
+              <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                {renderDeptHeader('name', t('DEPARTMENT_NAME'))}
+                {renderDeptHeader('head', t('DEPARTMENT_HEAD'))}
+                {renderDeptHeader('members', t('DEPARTMENT_MEMBERS_COUNT'))}
+              </tr>
+            </thead>
+            <tbody>
+              {departments.map((department) => (
+                <tr key={department.name} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
+                  <th scope="row" className="p-3 text-left font-medium text-text-primary flex items-center gap-2">
+                    <Building size={14} className="text-sky-400 shrink-0" />
+                    <span>{department.name}</span>
+                  </th>
+                  <td className="p-3">{department.head}</td>
+                  <td className="p-3 font-semibold text-sky-400">{department.members}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    );
   }
   if (model.activeTab === 'renewal') {
     const rawRenewals: readonly AdminMembersRenewal[] = model.demoRenewals;
@@ -153,19 +258,80 @@ export default function AdminMembersDirectorySecondaryViews({ model }: AdminMemb
             <span>{label}</span>
             {isActive ? (
               renewalSortDirection === 'asc' ? (
-                <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+                <ArrowUp className="text-amber-400 font-bold shrink-0" size={14} aria-hidden="true" />
               ) : (
-                <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+                <ArrowDown className="text-amber-400 font-bold shrink-0" size={14} aria-hidden="true" />
               )
             ) : (
-              <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+              <ArrowUpDown className="text-slate-500 opacity-60 group-hover:opacity-100 group-hover:text-amber-400 transition-opacity shrink-0" size={14} aria-hidden="true" />
             )}
           </button>
         </th>
       );
     };
 
-    return <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-renewals-title"><h2 id="admin-members-renewals-title" className="admin-shared-section-heading">{t('RENEWALS_TITLE')}</h2><div className="mt-4 grid gap-3 md:hidden" aria-label={t('RENEWALS_TITLE')}>{renewals.map((renewal) => <article key={`mobile-${renewal.member}`} className="rounded-lg border border-border p-4"><h3 className="font-semibold text-text-primary">{renewal.member}</h3><dl className="mt-2 grid gap-2 text-sm"><div><dt className="text-text-secondary">{t('RENEWALS_CURRENT_PLAN')}</dt><dd>{renewal.plan}</dd></div><div><dt className="text-text-secondary">{t('RENEWALS_EXPIRY_IN')}</dt><dd>{expiryLabel(renewal.expiresIn)}</dd></div></dl><button type="button" className="admin-btn-primary mt-3 min-h-11 w-full" disabled={renewal.reminderRecorded} title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined} onClick={() => recordReminder(renewal.member)}>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</button></article>)}</div><div className="mt-4 hidden overflow-x-auto md:block"><table className="w-full text-left text-sm"><thead><tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">{renderRenewalHeader('member', t('RENEWALS_MEMBER'))}{renderRenewalHeader('plan', t('RENEWALS_CURRENT_PLAN'))}{renderRenewalHeader('expiresIn', t('RENEWALS_EXPIRY_IN'))}<th scope="col" className="p-3">{t('RENEWALS_ACTION')}</th></tr></thead><tbody>{renewals.map((renewal) => <tr key={renewal.member} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra"><th scope="row" className="p-3 text-left font-medium text-text-primary">{renewal.member}</th><td className="p-3">{renewal.plan}</td><td className="p-3">{expiryLabel(renewal.expiresIn)}</td><td className="p-3"><button type="button" className="admin-btn-primary min-h-11" disabled={renewal.reminderRecorded} title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined} onClick={() => recordReminder(renewal.member)}>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</button></td></tr>)}</tbody></table></div></section>;
+    return (
+      <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-renewals-title">
+        <h2 id="admin-members-renewals-title" className="admin-shared-section-heading flex items-center gap-2">
+          <RotateCcw size={20} className="text-amber-400" />
+          <span>{t('RENEWALS_TITLE')}</span>
+        </h2>
+        <div className="mt-4 grid gap-3 md:hidden" aria-label={t('RENEWALS_TITLE')}>
+          {renewals.map((renewal) => (
+            <article key={`mobile-${renewal.member}`} className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 shadow-sm">
+              <h3 className="font-semibold text-white">{renewal.member}</h3>
+              <dl className="mt-2 grid gap-2 text-sm">
+                <div><dt className="text-slate-400">{t('RENEWALS_CURRENT_PLAN')}</dt><dd className="text-purple-300 font-medium">{renewal.plan}</dd></div>
+                <div><dt className="text-slate-400">{t('RENEWALS_EXPIRY_IN')}</dt><dd className="text-rose-400 font-medium">{expiryLabel(renewal.expiresIn)}</dd></div>
+              </dl>
+              <button
+                type="button"
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-amber-500/40 bg-amber-500/15 px-3 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-500/25 transition-all disabled:opacity-50 mt-3"
+                disabled={renewal.reminderRecorded}
+                title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined}
+                onClick={() => recordReminder(renewal.member)}
+              >
+                <RotateCcw size={14} className="text-amber-400" />
+                <span>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</span>
+              </button>
+            </article>
+          ))}
+        </div>
+        <div className="mt-4 hidden overflow-x-auto md:block">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                {renderRenewalHeader('member', t('RENEWALS_MEMBER'))}
+                {renderRenewalHeader('plan', t('RENEWALS_CURRENT_PLAN'))}
+                {renderRenewalHeader('expiresIn', t('RENEWALS_EXPIRY_IN'))}
+                <th scope="col" className="p-3">{t('RENEWALS_ACTION')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {renewals.map((renewal) => (
+                <tr key={renewal.member} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
+                  <th scope="row" className="p-3 text-left font-medium text-white">{renewal.member}</th>
+                  <td className="p-3 text-purple-300 font-medium">{renewal.plan}</td>
+                  <td className="p-3 text-rose-400 font-medium">{expiryLabel(renewal.expiresIn)}</td>
+                  <td className="p-3">
+                    <button
+                      type="button"
+                      className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/15 px-3 py-1.5 text-xs font-semibold text-amber-300 hover:bg-amber-500/25 transition-all disabled:opacity-50"
+                      disabled={renewal.reminderRecorded}
+                      title={renewal.reminderRecorded ? t('RENEWAL_REMINDER_DISABLED_TITLE') : undefined}
+                      onClick={() => recordReminder(renewal.member)}
+                    >
+                      <RotateCcw size={13} className="text-amber-400" />
+                      <span>{renewal.reminderRecorded ? t('RENEWAL_REMINDER_RECORDED_LABEL') : t('RENEWAL_SEND_REMINDER')}</span>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    );
   }
   if (model.activeTab === 'import') return <section className="admin-card p-10 text-center" aria-labelledby="admin-members-import-title"><div className="mb-3 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-subtle text-primary" aria-hidden="true"><UploadCloud size={22} /></div><h2 id="admin-members-import-title" className="mb-3 text-2xl font-bold text-text-primary">{t('IMPORT_TITLE')}</h2><p className="mt-2 text-text-secondary">{t('IMPORT_DESCRIPTION')}</p><p className="mt-3 rounded-md border border-warning-bg bg-warning-bg p-4 text-warning-text" role="status">{t('IMPORT_UNAVAILABLE')}</p><button type="button" className="admin-btn-ghost mt-3 min-h-11" disabled title={t('IMPORT_TEMPLATE_BLOCKED')}><DownloadCloud size={18} aria-hidden="true" /> {t('IMPORT_TEMPLATE')}</button></section>;
   return null;

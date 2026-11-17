@@ -306,29 +306,33 @@ describe("Consolidated from AdminMembersDirectorySecondaryViewsRegressionSuite.t
             return renderLocalized(locale, <DemoMembersScreen />);
         }
         suite1_describe('Admin Members secondary views localization and demo state', () => {
-            suite1_it('creates a category in session state and preserves it after navigation away and back', () => {
+            suite1_it('does not offer categories, departments, import, export, or documents in admin directory navigation', () => {
                 renderDemoScreen('en');
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Member Categories' }));
+                suite1_expect(suite1_screen.queryByRole('button', { name: 'Member Categories' })).toBeNull();
+                suite1_expect(suite1_screen.queryByRole('button', { name: 'Departments' })).toBeNull();
+                suite1_expect(suite1_screen.queryByRole('button', { name: 'Member Import' })).toBeNull();
+                suite1_expect(suite1_screen.queryByRole('button', { name: 'Member Export' })).toBeNull();
+                suite1_expect(suite1_screen.queryByRole('button', { name: 'Member Documents' })).toBeNull();
+            });
+            suite1_it('handles secondary category view mutation safely when rendered directly', () => {
+                suite1_vi.stubEnv('NEXT_PUBLIC_FRONTEND_DEMO_MODE', 'true');
+                function TestCategories() {
+                    const model = suite1_useAdminMembersDirectoryMain();
+                    return <Suite0_AdminMembersDirectorySecondaryViews model={{ ...model, activeTab: 'categories' }} />;
+                }
+                suite1_render(<Suite0_NextIntlClientProvider locale="en" messages={suite0_adminMembersEn}><TestCategories /></Suite0_NextIntlClientProvider>);
                 suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Add Category' }));
                 suite1_fireEvent.change(suite1_screen.getByLabelText('Category name'), { target: { value: 'Session Category' } });
                 suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Save demo category' }));
                 suite1_expect(suite1_screen.getByText('Session Category')).toBeTruthy();
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'All Members' }));
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Member Categories' }));
-                suite1_expect(suite1_screen.getByText('Session Category')).toBeTruthy();
             });
-            suite1_it('validates duplicate categories without mutating the list', () => {
-                renderDemoScreen('en');
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Member Categories' }));
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Add Category' }));
-                suite1_fireEvent.change(suite1_screen.getByLabelText('Category name'), { target: { value: 'Student' } });
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Save demo category' }));
-                suite1_expect(suite1_screen.getByRole('alert').textContent).toContain('already exists');
-                suite1_expect(suite1_screen.getAllByText('Student')).toHaveLength(1);
-            });
-            suite1_it('creates a department in the active demo session while plan CRUD remains owned by the canonical plans module', () => {
-                renderDemoScreen('en');
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Departments' }));
+            suite1_it('handles secondary department view mutation safely when rendered directly', () => {
+                suite1_vi.stubEnv('NEXT_PUBLIC_FRONTEND_DEMO_MODE', 'true');
+                function TestDepartments() {
+                    const model = suite1_useAdminMembersDirectoryMain();
+                    return <Suite0_AdminMembersDirectorySecondaryViews model={{ ...model, activeTab: 'departments' }} />;
+                }
+                suite1_render(<Suite0_NextIntlClientProvider locale="en" messages={suite0_adminMembersEn}><TestDepartments /></Suite0_NextIntlClientProvider>);
                 suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Add Department' }));
                 suite1_fireEvent.change(suite1_screen.getByLabelText('Department name'), { target: { value: 'Demo Robotics' } });
                 suite1_fireEvent.change(suite1_screen.getByLabelText('Department head'), { target: { value: 'Demo Head' } });
@@ -340,18 +344,14 @@ describe("Consolidated from AdminMembersDirectorySecondaryViewsRegressionSuite.t
                 renderDemoScreen('en');
                 suite1_expect(suite1_screen.queryByRole('button', { name: 'Add Member' })).toBeNull();
             });
-            suite1_it('updates a demo member and reflects the change in detail and list views', async () => {
+            suite1_it('keeps member profile view-only without Edit Member action', async () => {
                 renderDemoScreen('en');
                 suite1_fireEvent.click(suite1_screen.getAllByRole('button', { name: 'John Doe' })[0]);
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Edit member' }));
-                suite1_fireEvent.change(suite1_screen.getByLabelText('Full name'), { target: { value: 'John Doe Updated' } });
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Save demo changes' }));
-                await suite0_waitFor(() => {
-                    suite1_expect(suite1_screen.getByRole('heading', { name: 'Member: John Doe Updated' })).toBeTruthy();
-                });
+                suite1_expect(suite1_screen.getByRole('heading', { name: 'Member: John Doe' })).toBeTruthy();
+                suite1_expect(suite1_screen.queryByRole('button', { name: 'Edit member' })).toBeNull();
+                suite1_expect(suite1_screen.queryByRole('button', { name: 'Save demo changes' })).toBeNull();
                 suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'Back to members list' }));
-                suite1_expect(suite1_screen.getAllByRole('button', { name: 'John Doe Updated' }).length).toBeGreaterThan(0);
-                suite1_expect(suite1_screen.queryByRole('button', { name: 'John Doe' })).toBeNull();
+                suite1_expect(suite1_screen.getAllByRole('button', { name: 'John Doe' }).length).toBeGreaterThan(0);
             });
             suite1_it('records reminder status in demo state and disables repeated reminders', () => {
                 renderDemoScreen('hi');
@@ -362,8 +362,12 @@ describe("Consolidated from AdminMembersDirectorySecondaryViewsRegressionSuite.t
                 suite1_expect(suite1_screen.getAllByRole('button', { name: 'रिमाइंडर भेजें' }).length).toBeGreaterThan(0);
             });
             suite1_it('keeps the unavailable import template disabled rather than presenting a fake download action', () => {
-                renderDemoScreen('hi');
-                suite1_fireEvent.click(suite1_screen.getByRole('button', { name: 'सदस्य आयात करें' }));
+                suite1_vi.stubEnv('NEXT_PUBLIC_FRONTEND_DEMO_MODE', 'true');
+                function TestImport() {
+                    const model = suite1_useAdminMembersDirectoryMain();
+                    return <Suite0_AdminMembersDirectorySecondaryViews model={{ ...model, activeTab: 'import' }} />;
+                }
+                suite1_render(<Suite0_NextIntlClientProvider locale="hi" messages={suite0_adminMembersHi}><TestImport /></Suite0_NextIntlClientProvider>);
                 suite1_expect(suite1_screen.getByRole('status').textContent).toContain('उपलब्ध नहीं');
                 const downloadButton = suite1_screen.getByRole('button', { name: 'टेम्पलेट फ़ाइल डाउनलोड करें' }) as HTMLButtonElement;
                 suite1_expect(downloadButton.disabled).toBe(true);

@@ -10,7 +10,11 @@ import {
   Building2,
   Search,
   Filter,
+  Download,
+  FileSpreadsheet,
+  Printer,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import type { AdminStaffAttendanceModel } from '@/app/frontend_admin/admin_staff/staff_attendance/types/AdminStaffAttendanceTypes';
 
 interface Props {
@@ -20,6 +24,160 @@ interface Props {
 export function AdminStaffAttendanceOverviewSection({ model }: Props) {
   const t = useTranslations('ADMIN_STAFF_ATTENDANCE');
   const { filters, setTab, setStatusFilter, setSelectedShift, setSearchQuery, kpis } = model;
+
+  const downloadStaffAttendanceCsv = () => {
+    const headers = ['Record ID', 'Staff Name', 'Role', 'Branch', 'Shift', 'Clock In', 'Clock Out', 'Total Hours', 'Status'];
+    const rows = model.records.map((r) => [
+      `"${r.id}"`,
+      `"${r.staffName.replaceAll('"', '""')}"`,
+      `"${r.role}"`,
+      `"${(r.branchName || 'Downtown Central').replaceAll('"', '""')}"`,
+      `"${r.shiftType}"`,
+      `"${r.clockIn || '—'}"`,
+      `"${r.clockOut || '—'}"`,
+      r.totalHours || 0,
+      `"${r.status}"`,
+    ]);
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((row) => row.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `staff-attendance-${model.filters.selectedDate || 'records'}.csv`;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${model.records.length} staff attendance records to CSV`);
+  };
+
+  const downloadStaffAttendanceExcel = () => {
+    const headers = ['Record ID', 'Staff Name', 'Role', 'Branch', 'Shift', 'Clock In', 'Clock Out', 'Total Hours', 'Status'];
+    const rows = model.records.map((r) => [
+      r.id,
+      r.staffName,
+      r.role,
+      r.branchName || 'Downtown Central',
+      r.shiftType,
+      r.clockIn || '—',
+      r.clockOut || '—',
+      r.totalHours || 0,
+      r.status,
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Attendance</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #0f172a; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #1e293b; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #f8fafc; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `staff-attendance-${model.filters.selectedDate || 'records'}.xls`;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${model.records.length} staff attendance records to Excel (.xls)`);
+  };
+
+  const printStaffAttendanceRoster = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) { window.print(); return; }
+    const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smart Library - Staff Attendance Log</title>
+          <style>
+            @page { size: landscape; margin: 10mm; }
+            body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0f172a; padding-bottom: 10px; margin-bottom: 12px; }
+            .title { font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+            .subtitle { font-size: 12px; color: #64748b; margin-top: 2px; }
+            .meta { font-size: 11px; text-align: right; color: #475569; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; }
+            th { background-color: #f1f5f9; color: #0f172a; text-align: left; padding: 6px; border: 1px solid #cbd5e1; font-weight: 700; text-transform: uppercase; font-size: 10px; }
+            td { padding: 6px; border: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background-color: #f8fafc; }
+            .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+            .badge-present { background: #dcfce7; color: #15803d; }
+            .badge-late { background: #fef3c7; color: #b45309; }
+            .badge-absent { background: #fee2e2; color: #b91c1c; }
+            .badge-on_leave { background: #e0e7ff; color: #4338ca; }
+            .footer { margin-top: 14px; font-size: 10px; color: #94a3b8; display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 6px; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="title">Smart Library Network · Staff Daily Attendance Record</div>
+              <div class="subtitle">Operational Date: ${model.filters.selectedDate} · Total Staff Records: ${model.records.length}</div>
+            </div>
+            <div class="meta">
+              <div><strong>Generated:</strong> ${dateStr}</div>
+              <div><strong>Rate:</strong> ${kpis.attendanceRatePercent}% Present</div>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Staff Name</th>
+                <th>Designation / Role</th>
+                <th>Branch</th>
+                <th>Shift</th>
+                <th>Punch In</th>
+                <th>Punch Out</th>
+                <th>Hours</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${model.records.map((r) => `
+                <tr>
+                  <td><strong>${r.staffName}</strong></td>
+                  <td>${r.role}</td>
+                  <td>${r.branchName || 'Downtown Central'}</td>
+                  <td>${r.shiftType}</td>
+                  <td>${r.clockIn || '—'}</td>
+                  <td>${r.clockOut || '—'}</td>
+                  <td>${r.totalHours ? `${r.totalHours} hrs` : '—'}</td>
+                  <td><span class="badge badge-${r.status.toLowerCase()}">${r.status}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <div class="footer">
+            <span>Smart Library Staff Operations</span>
+            <span>Page 1 of 1</span>
+          </div>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
 
   return (
     <div className="space-y-6">
@@ -92,8 +250,42 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
         </div>
       </div>
 
-      {/* Controls Bar: Tab Switcher */}
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm md:flex-row md:items-center md:justify-end">
+      {/* Controls Bar: Tab Switcher & Export Utilities */}
+      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 shadow-sm md:flex-row md:items-center md:justify-between">
+        {/* Export and Print Controls */}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={downloadStaffAttendanceCsv}
+            disabled={model.records.length === 0}
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+            title="Export Attendance to CSV"
+          >
+            <Download size={14} strokeWidth={2} className="text-cyan-500" />
+            <span>CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={downloadStaffAttendanceExcel}
+            disabled={model.records.length === 0}
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+            title="Export Attendance to Excel (.xls)"
+          >
+            <FileSpreadsheet size={14} strokeWidth={2} className="text-emerald-500" />
+            <span>Excel</span>
+          </button>
+          <button
+            type="button"
+            onClick={printStaffAttendanceRoster}
+            disabled={model.records.length === 0}
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 px-3 py-1.5 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:bg-sky-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+            title="Print Attendance Roster"
+          >
+            <Printer size={14} strokeWidth={2} className="text-sky-500" />
+            <span>Print</span>
+          </button>
+        </div>
+
         {/* View Tabs */}
         <div className="flex rounded-lg border border-border bg-surface p-1">
           <button
@@ -126,7 +318,7 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
       {/* Filter Row: Search + Status + Shift */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-disabled" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
           <input
             type="text"
             value={filters.searchQuery}

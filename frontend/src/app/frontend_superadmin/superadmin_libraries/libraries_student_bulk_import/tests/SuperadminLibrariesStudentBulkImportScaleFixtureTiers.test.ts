@@ -19,8 +19,8 @@ describe('libraries_student_bulk_import deterministic scale fixture tiers', () =
     expect(maskSensitiveData('+91 98765 43210')).toBe('********3210');
   });
   it('bounds each rendered preview page across all supported scale tiers', () => {
-    const firstPage = (rows: unknown[]) => rows.slice(0, SUPERADMIN_SYSTEM_BULK_IMPORT_PAGE_SIZE);
-    const secondPage = (rows: unknown[]) => rows.slice(SUPERADMIN_SYSTEM_BULK_IMPORT_PAGE_SIZE, SUPERADMIN_SYSTEM_BULK_IMPORT_PAGE_SIZE * 2);
+    const firstPage = (rows: readonly unknown[]) => rows.slice(0, SUPERADMIN_SYSTEM_BULK_IMPORT_PAGE_SIZE);
+    const secondPage = (rows: readonly unknown[]) => rows.slice(SUPERADMIN_SYSTEM_BULK_IMPORT_PAGE_SIZE, SUPERADMIN_SYSTEM_BULK_IMPORT_PAGE_SIZE * 2);
     expect(firstPage(MOCK_SCALE_TIER_1_SMALL)).toHaveLength(10);
     expect(firstPage(MOCK_SCALE_TIER_2_STANDARD)).toHaveLength(50);
     expect(firstPage(MOCK_SCALE_TIER_3_STRESS)).toHaveLength(50);

@@ -4,9 +4,10 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 
 import { useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, MoreVertical, Building2, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, Search, Filter, RotateCcw, X, Edit, ChevronLeft, ChevronRight, IndianRupee } from 'lucide-react';
+import { Eye, MoreVertical, Building2, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, Search, Filter, RotateCcw, X, ChevronLeft, ChevronRight, IndianRupee, Clock, DownloadCloud, FileSpreadsheet, Printer } from 'lucide-react';
+import { toast } from 'sonner';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
-import { formatAdminMembersDate } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
+import { formatAdminMembersDate, downloadAdminMembersDemoCsv, downloadAdminMembersDemoExcel, printAdminMembersRoster } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
 import { displayValue } from '@/lib/display_value';
 import AdminMembersDirectoryMemberMobileCards from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberMobileCards';
 import type { AdminMembersMemberTableProps } from '@/app/frontend_admin/admin_members/members_directory/types/AdminMembersDirectoryComponentTypes';
@@ -42,11 +43,29 @@ export default function AdminMembersMemberTable({
   const [searchQuery, setSearchQuery] = useState('');
   const [planFilter, setPlanFilter] = useState<string>('all');
   const [feeFilter, setFeeFilter] = useState<'all' | 'Paid' | 'Due'>('all');
+  const [shiftFilter, setShiftFilter] = useState<string>('all');
+  const [branchFilter, setBranchFilter] = useState<string>('all');
 
   const availablePlans = useMemo(() => {
     const set = new Set<string>();
     members.forEach((m) => {
       if (m.plan) set.add(m.plan);
+    });
+    return Array.from(set);
+  }, [members]);
+
+  const availableShifts = useMemo(() => {
+    const set = new Set<string>();
+    members.forEach((m) => {
+      if (m.shift) set.add(m.shift);
+    });
+    return Array.from(set);
+  }, [members]);
+
+  const availableBranches = useMemo(() => {
+    const set = new Set<string>();
+    members.forEach((m) => {
+      if (m.branch) set.add(m.branch);
     });
     return Array.from(set);
   }, [members]);
@@ -68,11 +87,17 @@ export default function AdminMembersMemberTable({
 
   const searchedMembers = useMemo(() => {
     let result = filteredMembers;
+    if (branchFilter !== 'all') {
+      result = result.filter((m) => (m.branch || '').toLowerCase() === branchFilter.toLowerCase());
+    }
     if (planFilter !== 'all') {
       result = result.filter((m) => m.plan.toLowerCase().includes(planFilter.toLowerCase()));
     }
     if (feeFilter !== 'all') {
       result = result.filter((m) => m.feeStatus === feeFilter);
+    }
+    if (shiftFilter !== 'all') {
+      result = result.filter((m) => (m.shift || '').toLowerCase() === shiftFilter.toLowerCase());
     }
     const q = searchQuery.trim().toLowerCase();
     if (q) {
@@ -89,7 +114,7 @@ export default function AdminMembersMemberTable({
       );
     }
     return result;
-  }, [filteredMembers, planFilter, feeFilter, searchQuery]);
+  }, [filteredMembers, branchFilter, planFilter, feeFilter, shiftFilter, searchQuery]);
 
   const sortedMembers = useMemo(() => {
     if (!sortField) return searchedMembers;
@@ -154,95 +179,207 @@ export default function AdminMembersMemberTable({
     return <div className="p-8 text-center text-slate-400" role="status">{t('TABLE_EMPTY')}</div>;
   }
 
-  const isFilterActive = Boolean(searchQuery || planFilter !== 'all' || feeFilter !== 'all');
+  const handleExportCsv = () => {
+    if (searchedMembers.length === 0) {
+      toast.info('No members available to export.');
+      return;
+    }
+    downloadAdminMembersDemoCsv(searchedMembers, 'smart-library-members.csv');
+    toast.success(`Exported ${searchedMembers.length} member(s) to CSV`);
+  };
+
+  const handleExportExcel = () => {
+    if (searchedMembers.length === 0) {
+      toast.info('No members available to export.');
+      return;
+    }
+    downloadAdminMembersDemoExcel(searchedMembers, 'smart-library-members.xls');
+    toast.success(`Exported ${searchedMembers.length} member(s) to Excel (.xls)`);
+  };
+
+  const handlePrint = () => {
+    if (searchedMembers.length === 0) {
+      toast.info('No members available to print.');
+      return;
+    }
+    printAdminMembersRoster(searchedMembers, 'Member Directory Roster');
+    toast.success(`Prepared ${searchedMembers.length} member(s) for printing`);
+  };
+
+  const isFilterActive = Boolean(
+    searchQuery || planFilter !== 'all' || feeFilter !== 'all' || shiftFilter !== 'all' || branchFilter !== 'all'
+  );
+
+  const resetAllFilters = () => {
+    setSearchQuery('');
+    setPlanFilter('all');
+    setShiftFilter('all');
+    setBranchFilter('all');
+    setFeeFilter('all');
+    setPage(0);
+  };
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-950/30 shadow-xl">
-      {/* SEARCH AND FILTER TOOLBAR */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3.5 sm:p-4 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md">
-        <div className="relative flex-1 min-w-[220px]">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sky-400 pointer-events-none" />
-          <input
-            type="search"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setPage(0);
-            }}
-            placeholder="Search member by name, ID, phone, email, seat, branch..."
-            className="w-full rounded-xl border border-slate-700/60 bg-slate-950/70 pl-10 pr-9 py-2 text-xs text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery('');
+      {/* SEARCH, FILTER & EXPORT TOOLBAR */}
+      <div className="flex flex-col gap-3 p-3.5 sm:p-4 border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          {/* SEARCH INPUT */}
+          <div className="relative flex-1 min-w-[200px]">
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sky-400 pointer-events-none" />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
                 setPage(0);
               }}
-              aria-label="Clear search"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+              placeholder="Search member by name, ID, phone, email, seat, branch..."
+              className="w-full rounded-xl border border-slate-700/60 bg-slate-950/70 pl-10 pr-9 py-2 text-xs text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-colors"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setPage(0);
+                }}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+              >
+                <X size={14} className="text-rose-400" />
+              </button>
+            )}
+          </div>
+
+          {/* EXPORT / PRINT BUTTONS */}
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              title="Download filtered members as CSV"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-teal-500/30 bg-teal-500/10 px-3 py-2 text-xs font-semibold text-teal-300 hover:bg-teal-500/20 transition-all shadow-sm"
             >
-              <X size={14} className="text-rose-400" />
+              <DownloadCloud size={14} className="text-teal-400 shrink-0" />
+              <span>CSV</span>
             </button>
-          )}
+            <button
+              type="button"
+              onClick={handleExportExcel}
+              title="Download filtered members as Excel (.xls)"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20 transition-all shadow-sm"
+            >
+              <FileSpreadsheet size={14} className="text-emerald-400 shrink-0" />
+              <span>Excel</span>
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              title="Print member directory roster"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 px-3 py-2 text-xs font-semibold text-sky-300 hover:bg-sky-500/20 transition-all shadow-sm"
+            >
+              <Printer size={14} className="text-sky-400 shrink-0" />
+              <span>Print</span>
+            </button>
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Plan filter */}
-          <div className="relative flex items-center">
-            <Filter size={13} className="absolute left-2.5 text-purple-400 pointer-events-none" />
-            <select
-              value={planFilter}
-              onChange={(e) => {
-                setPlanFilter(e.target.value);
-                setPage(0);
-              }}
-              aria-label="Filter by plan"
-              className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-2 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors"
-            >
-              <option value="all">All Plans</option>
-              {availablePlans.map((plan) => (
-                <option key={plan} value={plan}>{plan}</option>
-              ))}
-            </select>
+        {/* FILTERS & STATS ROW */}
+        <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1 border-t border-slate-800/40">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Branch filter */}
+            {availableBranches.length > 1 && (
+              <div className="relative flex items-center">
+                <Building2 size={13} className="absolute left-2.5 text-amber-400 pointer-events-none" />
+                <select
+                  value={branchFilter}
+                  onChange={(e) => {
+                    setBranchFilter(e.target.value);
+                    setPage(0);
+                  }}
+                  aria-label="Filter by branch"
+                  className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors"
+                >
+                  <option value="all">All Branches</option>
+                  {availableBranches.map((branch) => (
+                    <option key={branch} value={branch}>{branch}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Plan filter */}
+            <div className="relative flex items-center">
+              <Filter size={13} className="absolute left-2.5 text-purple-400 pointer-events-none" />
+              <select
+                value={planFilter}
+                onChange={(e) => {
+                  setPlanFilter(e.target.value);
+                  setPage(0);
+                }}
+                aria-label="Filter by plan"
+                className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors"
+              >
+                <option value="all">All Plans</option>
+                {availablePlans.map((plan) => (
+                  <option key={plan} value={plan}>{plan}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Shift filter */}
+            {availableShifts.length > 0 && (
+              <div className="relative flex items-center">
+                <Clock size={13} className="absolute left-2.5 text-teal-400 pointer-events-none" />
+                <select
+                  value={shiftFilter}
+                  onChange={(e) => {
+                    setShiftFilter(e.target.value);
+                    setPage(0);
+                  }}
+                  aria-label="Filter by shift"
+                  className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors"
+                >
+                  <option value="all">All Shifts</option>
+                  {availableShifts.map((shift) => (
+                    <option key={shift} value={shift}>{shift}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Fee Status filter */}
+            <div className="relative flex items-center">
+              <IndianRupee size={13} className="absolute left-2.5 text-emerald-400 pointer-events-none" />
+              <select
+                value={feeFilter}
+                onChange={(e) => {
+                  setFeeFilter(e.target.value as 'all' | 'Paid' | 'Due');
+                  setPage(0);
+                }}
+                aria-label="Filter by fee status"
+                className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors"
+              >
+                <option value="all">All Fees</option>
+                <option value="Paid">Paid</option>
+                <option value="Due">Due Fee</option>
+              </select>
+            </div>
+
+            {/* Reset button */}
+            {isFilterActive && (
+              <button
+                type="button"
+                onClick={resetAllFilters}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-2.5 py-1.5 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 transition-colors"
+              >
+                <RotateCcw size={12} className="text-rose-400" /> Reset
+              </button>
+            )}
           </div>
 
-          {/* Fee Status filter */}
-          <div className="relative flex items-center">
-            <IndianRupee size={13} className="absolute left-2.5 text-emerald-400 pointer-events-none" />
-            <select
-              value={feeFilter}
-              onChange={(e) => {
-                setFeeFilter(e.target.value as 'all' | 'Paid' | 'Due');
-                setPage(0);
-              }}
-              aria-label="Filter by fee status"
-              className="rounded-xl border border-slate-700/60 bg-slate-950/70 pl-7 pr-3 py-2 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none transition-colors"
-            >
-              <option value="all">All Fees</option>
-              <option value="Paid">Paid</option>
-              <option value="Due">Due Fee</option>
-            </select>
-          </div>
-
-          {/* Reset button */}
-          {isFilterActive && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchQuery('');
-                setPlanFilter('all');
-                setFeeFilter('all');
-                setPage(0);
-              }}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 transition-colors"
-            >
-              <RotateCcw size={12} className="text-rose-400" /> Reset
-            </button>
-          )}
-
-          <span className="text-[11px] font-medium text-slate-400 ml-1">
-            {searchedMembers.length} of {filteredMembers.length}
+          <span className="text-[11px] font-medium text-slate-400 shrink-0">
+            {searchedMembers.length} of {filteredMembers.length} records
           </span>
         </div>
       </div>
@@ -252,15 +389,10 @@ export default function AdminMembersMemberTable({
           <p className="text-sm text-slate-300">No members found matching your search or filters.</p>
           <button
             type="button"
-            onClick={() => {
-              setSearchQuery('');
-              setPlanFilter('all');
-              setFeeFilter('all');
-              setPage(0);
-            }}
+            onClick={resetAllFilters}
             className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-slate-700 transition-colors"
           >
-            <RotateCcw size={12} className="text-rose-400" /> Clear Search
+            <RotateCcw size={12} className="text-rose-400" /> Clear Search & Filters
           </button>
         </div>
       ) : (
@@ -389,16 +521,6 @@ export default function AdminMembersMemberTable({
                               >
                                 <Eye size={14} className="text-sky-400 shrink-0" />
                                 <span>{t('ACTION_VIEW_DETAILS')}</span>
-                              </button>
-                              <button
-                                type="button"
-                                disabled={!canMutate}
-                                title={!canMutate ? t('MEMBER_EDIT_UNAVAILABLE') : undefined}
-                                className="flex items-center gap-2 min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 disabled:cursor-not-allowed disabled:opacity-40"
-                                onClick={() => { setOpenActionsFor(null); onAction('EDIT', member); }}
-                              >
-                                <Edit size={14} className="text-amber-400 shrink-0" />
-                                <span>{t('ACTION_EDIT_MEMBER')}</span>
                               </button>
                               <button
                                 type="button"

@@ -77,15 +77,10 @@ export function resolveAdminMembersDirectoryView(value: string | null): AdminMem
 
 export const ADMIN_MEMBERS_DIRECTORY_NAVIGATION: readonly AdminMembersNavigationItem[] = [
   { id: 'all', labelKey: 'NAV_ALL_MEMBERS', icon: Users, color: 'primary' },
-  { id: 'categories', labelKey: 'NAV_CATEGORIES', icon: Tags, color: 'purple' },
-  { id: 'departments', labelKey: 'NAV_DEPARTMENTS', icon: Building, color: 'info' },
   { id: 'active', labelKey: 'NAV_ACTIVE', icon: CheckCircle, color: 'success' },
   { id: 'expired', labelKey: 'NAV_EXPIRED', icon: AlertTriangle, color: 'danger' },
   { id: 'suspended', labelKey: 'NAV_SUSPENDED', icon: PauseCircle, color: 'warning' },
   { id: 'blocked', labelKey: 'NAV_BLOCKED', icon: Ban, color: 'danger' },
-  { id: 'import', labelKey: 'NAV_IMPORT', icon: UploadCloud, color: 'primary' },
-  { id: 'export', labelKey: 'NAV_EXPORT', icon: DownloadCloud, color: 'primary' },
-  { id: 'documents', labelKey: 'NAV_DOCUMENTS', icon: FileText, color: 'purple' },
 ];
 
 export const ADMIN_MEMBERS_DETAIL_NAVIGATION: readonly AdminMembersDetailNavigationItem[] = [
