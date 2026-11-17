@@ -11,7 +11,7 @@ import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { ChevronRight, Eye, X } from 'lucide-react';
+import { ChevronRight, Eye, X, MessageSquare, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
@@ -71,7 +71,7 @@ export function AdminCommunicationWhatsappLogsPage() {
       width: 130,
       sortable: true,
       cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
-        <span data-testid={`admin_communication-whatsapp-type-${p.data.id}`} className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE[String(p.value ?? '')] ?? 'bg-surface-highlight text-text-secondary border-border'} mt-2`}>
+        <span data-testid={`admin_communication-whatsapp-type-${p.data.id}`} className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE[String(p.value ?? '')] ?? 'bg-surface-muted text-text-secondary border-border'} mt-2`}>
           {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL[String(p.value ?? 'welcome')] ?? 'WHATSAPP_TYPE_UNKNOWN')}
         </span>
       )
@@ -82,7 +82,7 @@ export function AdminCommunicationWhatsappLogsPage() {
       width: 120,
       sortable: true,
       cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
-        <span data-testid={`admin_communication-whatsapp-status-${p.data.id}`} className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE[String(p.value ?? '')] ?? 'bg-surface-highlight text-text-secondary border-border'} mt-2`}>
+        <span data-testid={`admin_communication-whatsapp-status-${p.data.id}`} className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE[String(p.value ?? '')] ?? 'bg-surface-muted text-text-secondary border-border'} mt-2`}>
           {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL[String(p.value ?? '')] ?? 'WHATSAPP_STATUS_UNKNOWN')}
         </span>
       )
@@ -94,8 +94,15 @@ export function AdminCommunicationWhatsappLogsPage() {
       sortable: false,
       cellRenderer: (params: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
         <div className="h-full flex items-center">
-          <button data-testid={`admin_communication-whatsapp-view-${params.data.id}`} type="button" onClick={() => setViewLog(params.data)} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base" title={t('WHATSAPP_VIEW_ACTION')} aria-label={t('WHATSAPP_VIEW_MESSAGE_FOR', { phone: params.data.phone })}>
-            <Eye size={18}  strokeWidth={2}/>
+          <button
+            data-testid={`admin_communication-whatsapp-view-${params.data.id}`}
+            type="button"
+            onClick={() => setViewLog(params.data)}
+            className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:bg-primary/20 hover:scale-105 motion-safe:transition-all"
+            title={t('WHATSAPP_VIEW_ACTION')}
+            aria-label={t('WHATSAPP_VIEW_MESSAGE_FOR', { phone: params.data.phone })}
+          >
+            <Eye size={16} strokeWidth={2}/>
           </button>
         </div>
       )
@@ -105,9 +112,9 @@ export function AdminCommunicationWhatsappLogsPage() {
   return (
     <div className="min-h-screen bg-page p-6 md:p-8">
       {isDemoMode ? (
-        <p role="status" className="mb-4 rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('WHATSAPP_LOGS_DEMO_BANNER')}</p>
+        <p role="status" className="sr-only">{t('WHATSAPP_LOGS_DEMO_BANNER')}</p>
       ) : (
-        <p role="status" className="mb-4 rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('WHATSAPP_LOGS_LIVE_UNAVAILABLE')}</p>
+        <p role="status" className="sr-only">{t('WHATSAPP_LOGS_LIVE_UNAVAILABLE')}</p>
       )}
       {/* View Message Modal */}
       {viewLog && (
@@ -117,8 +124,8 @@ export function AdminCommunicationWhatsappLogsPage() {
             <DialogTitle className="text-lg mb-4 font-bold text-text-primary">{t('WHATSAPP_LOG_DETAILS_TITLE')}</DialogTitle>
             <DialogDescription className="sr-only">{t('WHATSAPP_LOG_DETAILS_DESCRIPTION')}</DialogDescription>
             <div data-testid="admin_communication-page-state-005" className="flex-wrap mb-6 flex gap-2">
-              <span data-testid="admin_communication-page-state-006" className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE[viewLog.type] ?? 'bg-surface-highlight text-text-secondary border-border'}`}>{t(ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL[viewLog.type] ?? 'WHATSAPP_TYPE_UNKNOWN')}</span>
-              <span data-testid="admin_communication-page-state-007" className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE[viewLog.status] ?? 'bg-surface-highlight text-text-secondary border-border'}`}>{t(ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL[viewLog.status] ?? 'WHATSAPP_STATUS_UNKNOWN')}</span>
+              <span data-testid="admin_communication-page-state-006" className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE[viewLog.type] ?? 'bg-surface-muted text-text-secondary border-border'}`}>{t(ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL[viewLog.type] ?? 'WHATSAPP_TYPE_UNKNOWN')}</span>
+              <span data-testid="admin_communication-page-state-007" className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE[viewLog.status] ?? 'bg-surface-muted text-text-secondary border-border'}`}>{t(ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL[viewLog.status] ?? 'WHATSAPP_STATUS_UNKNOWN')}</span>
             </div>
             <div className="grid-cols-1 sm:grid-cols-2 grid grid-cols-2 gap-4 mb-6 bg-page p-4 rounded-lg">
               {([{ label: t('WHATSAPP_TO'), value: viewLog.phone }, { label: t('WHATSAPP_STUDENT'), value: viewLog.student }, { label: t('WHATSAPP_SENT_AT'), value: viewLog.dateTime }]).map(({ label, value }) => (
@@ -148,6 +155,52 @@ export function AdminCommunicationWhatsappLogsPage() {
         </div>
         <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight text-text-primary">📱 {t('WHATSAPP_LOGS_TITLE')}</h1>
         <p className="mt-1 text-ui text-text-secondary">{isDemoMode ? t('WHATSAPP_LOGS_DEMO_SUBTITLE') : t('WHATSAPP_LOGS_LIVE_SUBTITLE')}</p>
+      </div>
+
+      {/* KPI Summary Cards */}
+      <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Total Messages</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+              <MessageSquare size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-cyan-400">{visibleLogs.length}</p>
+        </div>
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Delivered</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              <CheckCircle size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-emerald-400">
+            {visibleLogs.filter((l) => l.status === 'Delivered').length}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">In Transit / Sent</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30">
+              <Clock size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-amber-400">
+            {visibleLogs.filter((l) => l.status === 'Sent' || l.status === 'Pending').length}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-rose-500/20 bg-gradient-to-br from-rose-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Failed / Bounced</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/15 text-rose-400 border border-rose-500/30">
+              <AlertCircle size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-rose-400">
+            {visibleLogs.filter((l) => l.status === 'Failed').length}
+          </p>
+        </div>
       </div>
 
       {/* Filter Bar */}

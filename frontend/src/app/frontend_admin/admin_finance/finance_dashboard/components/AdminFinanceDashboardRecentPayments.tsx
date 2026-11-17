@@ -66,29 +66,37 @@ export function AdminFinanceDashboardRecentPayments({
                 </p>
               </div>
             ) : (
-              displayedPayments.map((p) => (
-                <div key={p.id} className="flex items-center justify-between gap-4 p-4 hover:bg-surface-hover motion-safe:transition-colors">
-                  <div>
-                    <div className="text-sm font-semibold text-text-primary">{p.studentName}</div>
-                    <div className="text-xs text-text-secondary">{p.studentSmartId} · {p.date}</div>
+              displayedPayments.map((p) => {
+                const initials = p.studentName.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+                return (
+                  <div key={p.id} className="flex items-center justify-between gap-4 p-4 hover:bg-surface-hover motion-safe:transition-colors">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-indigo-500/10 to-purple-500/10 text-indigo-500 font-bold text-xs border border-indigo-500/20 shrink-0">
+                        {initials}
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-text-primary">{p.studentName}</div>
+                        <div className="text-xs text-text-secondary font-mono">{p.studentSmartId} · {p.date}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span
+                        data-testid="admin_finance-page-state-001"
+                        className={`inline-flex min-h-6 items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize whitespace-nowrap ${
+                          p.mode === 'cash' ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' :
+                          p.mode === 'upi' ? 'border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' :
+                          p.mode === 'card' ? 'border-purple-500/20 bg-purple-500/10 text-purple-600 dark:text-purple-400' :
+                          p.mode === 'bank' ? 'border-cyan-500/20 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400' :
+                          'border-border bg-surface-highlight text-text-secondary'
+                        }`}
+                      >
+                        {p.mode}
+                      </span>
+                      <span className="font-bold text-sm text-text-primary font-mono">{formatCurrency(p.amount)}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span
-                      data-testid="admin_finance-page-state-001"
-                      className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2.5 py-0.5 text-xs font-semibold capitalize whitespace-nowrap ${
-                        p.mode === 'cash' ? 'bg-success-bg text-success-text' :
-                        p.mode === 'upi' ? 'bg-surface-highlight text-primary' :
-                        p.mode === 'card' ? 'bg-info-bg text-info-text' :
-                        p.mode === 'bank' ? 'bg-warning-bg text-warning-text' :
-                        'bg-surface-highlight text-text-secondary'
-                      }`}
-                    >
-                      {p.mode}
-                    </span>
-                    <span className="font-semibold text-sm text-text-primary">{formatCurrency(p.amount)}</span>
-                  </div>
-                </div>
-              ))
+                );
+              })
             )}
       </div>
     </div>

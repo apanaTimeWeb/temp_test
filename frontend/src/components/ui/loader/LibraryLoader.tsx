@@ -351,12 +351,14 @@ export function ProcessingLoader({
   );
 }
 
-/** Wrapper for Page-level route loading screens (loading.tsx - size lg, 96px) */
+/** Wrapper for Page-level route loading screens (loading.tsx - size md, 64px) */
 export function ManagerPageLoader({
+  size = 'md',
   icon = 'library',
   variant = 'default',
   className = '',
 }: {
+  size?: LoaderSize | number;
   icon?: LoaderIcon;
   variant?: LoaderVariant;
   className?: string;
@@ -368,7 +370,7 @@ export function ManagerPageLoader({
       role="status"
       aria-label="Loading"
     >
-      <LibraryLoader size="lg" icon={icon} variant={variant} />
+      <LibraryLoader size={size} icon={icon} variant={variant} />
     </main>
   );
 }

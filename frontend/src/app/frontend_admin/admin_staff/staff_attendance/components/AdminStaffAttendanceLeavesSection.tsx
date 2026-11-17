@@ -104,9 +104,9 @@ export function AdminStaffAttendanceLeavesSection({ leaveRequests, onAction }: L
   };
 
   const statusStyles = {
-    PENDING: 'bg-warning-bg text-warning-text border-border',
-    APPROVED: 'bg-success-bg text-success-text border-border',
-    REJECTED: 'bg-destructive-bg text-destructive border-border',
+    PENDING: 'bg-warning-bg text-warning-text border-warning-bg',
+    APPROVED: 'bg-success-bg text-success-text border-success-bg',
+    REJECTED: 'bg-danger-bg text-danger-text border-danger-bg',
   };
 
   return (

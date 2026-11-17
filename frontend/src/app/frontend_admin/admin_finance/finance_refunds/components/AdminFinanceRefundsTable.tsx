@@ -2,17 +2,17 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Building2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Building2, ArrowUpDown, ArrowUp, ArrowDown, Check, X, CheckCircle2 } from 'lucide-react';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import { getAdminFinanceRefundStatusLabelKey } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsRefundStatus';
 import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
 
 const ADMIN_FINANCE_REFUND_STATUS_BADGE: Record<AdminFinanceRefund['status'], string> = {
-  pending: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-warning-bg text-warning-text border-warning-bg',
-  approved: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-success-bg text-success-text border-success-bg',
-  rejected: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-danger-bg text-danger-text border-danger-bg',
-  processed: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-info-bg text-info-text border-info-bg',
+  pending: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-amber-500/25 bg-amber-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-amber-600 dark:text-amber-400',
+  approved: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-emerald-600 dark:text-emerald-400',
+  rejected: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-rose-500/25 bg-rose-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-rose-600 dark:text-rose-400',
+  processed: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-cyan-600 dark:text-cyan-400',
 };
 
 type RefundSortField = 'studentName' | 'branchName' | 'exitDate' | 'depositHeld' | 'deductionAmount' | 'netRefund' | 'status' | 'paymentMethod';
@@ -184,27 +184,29 @@ export function AdminFinanceRefundsTable({
                       <div className="flex items-center gap-1.5">
                         <button
                           type="button"
-                          className="rounded px-2.5 py-1 text-xs font-semibold bg-success-bg text-success-text hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+                          className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 cursor-pointer transition-all"
                           onClick={() => onApprove(refund)}
                         >
-                          Approve
+                          <Check size={12} strokeWidth={2.5} /> Approve
                         </button>
                         <button
                           type="button"
-                          className="rounded px-2.5 py-1 text-xs font-semibold bg-danger-bg text-danger-text hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+                          className="inline-flex items-center gap-1 rounded-lg border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 cursor-pointer transition-all"
                           onClick={() => onReject(refund)}
                         >
-                          Reject
+                          <X size={12} strokeWidth={2.5} /> Reject
                         </button>
                       </div>
                     ) : refund.status === 'approved' ? (
-                      <span className="inline-flex items-center gap-1 text-xs font-medium text-success-text">
-                        ✓ Approved
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
+                        <CheckCircle2 size={12} /> Approved
                       </span>
                     ) : refund.status === 'processed' ? (
-                      `${refund.processedDate ? formatDate(refund.processedDate) : t('PROCESSED_FALLBACK')}${refund.paymentMethod ? ` · ${refund.paymentMethod}` : ''}`
+                      <span className="inline-flex items-center gap-1 text-xs text-text-secondary font-mono">
+                        {refund.processedDate ? formatDate(refund.processedDate) : t('PROCESSED_FALLBACK')}{refund.paymentMethod ? ` · ${refund.paymentMethod}` : ''}
+                      </span>
                     ) : (
-                      t('REFUND_VIEW_ONLY')
+                      <span className="text-xs text-text-secondary italic">{t('REFUND_VIEW_ONLY')}</span>
                     )}
                   </td>
                 </tr>

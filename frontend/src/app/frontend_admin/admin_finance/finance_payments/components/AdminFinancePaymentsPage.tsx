@@ -6,7 +6,7 @@ import useAdminFinancePaymentsQuery from '@/app/frontend_admin/admin_finance/fin
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { FileText, Receipt, Search, Calendar, Download, TrendingUp, CreditCard, MessageSquare } from 'lucide-react';
+import { FileText, Receipt, Search, Calendar, Download, TrendingUp, CreditCard, MessageSquare, IndianRupee } from 'lucide-react';
 import { toast } from 'sonner';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
@@ -19,11 +19,11 @@ import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/fin
 
 
 const ADMIN_FINANCE_MODE_BADGE: Record<AdminFinancePayment['mode'], string> = {
-  cash: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-pay-cash-bg text-pay-cash border-border',
-  upi: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-pay-upi-bg text-pay-upi border-border',
-  card: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-pay-card-bg text-pay-card border-border',
-  bank: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-pay-bank-bg text-pay-bank border-border',
-  unknown: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap bg-card text-text-secondary border-border',
+  cash: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-emerald-600 dark:text-emerald-400',
+  upi: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-indigo-500/25 bg-indigo-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-indigo-600 dark:text-indigo-400',
+  card: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-purple-500/25 bg-purple-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-purple-600 dark:text-purple-400',
+  bank: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-cyan-500/25 bg-cyan-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-cyan-600 dark:text-cyan-400',
+  unknown: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-border bg-card px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-text-secondary',
 };
 
 function mapAdminFinancePayment(record: AdminFinancePaymentApiRecord): AdminFinancePayment {
@@ -95,6 +95,22 @@ export function AdminFinancePaymentsPage() {
     return timeRange === 'all' ? 'All Time' : timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'this_month' ? 'This Month' : 'Custom Range';
   }, [timeRange]);
 
+  const kpiStats = useMemo(() => {
+    const validPayments = visible.filter((p) => p.status === 'valid');
+    const totalCollected = validPayments.reduce((acc, p) => acc + p.amount, 0);
+    const digitalCount = validPayments.filter((p) => p.mode === 'upi' || p.mode === 'card' || p.mode === 'bank').length;
+    const digitalShare = validPayments.length > 0 ? Math.round((digitalCount / validPayments.length) * 100) : 0;
+    const totalLateFee = validPayments.reduce((acc, p) => acc + (p.lateFee ?? 0), 0);
+    const currency = validPayments[0]?.currencyCode;
+    const unit = validPayments[0]?.amountUnit;
+    return {
+      totalCollected: formatAdminFinanceApiAmount(totalCollected, currency, unit),
+      validCount: validPayments.length,
+      digitalShare,
+      totalLateFee: formatAdminFinanceApiAmount(totalLateFee, currency, unit),
+    };
+  }, [visible]);
+
   const handleExport = () => {
     const csv = buildAdminFinancePaymentsCsv(visible, { receipt: t('CSV_RECEIPT'), date: t('CSV_DATE'), student: t('CSV_STUDENT'), smartId: t('CSV_SMART_ID'), amount: t('CSV_AMOUNT'), currency: t('CSV_CURRENCY'), amountUnit: t('CSV_AMOUNT_UNIT'), mode: t('CSV_MODE'), lateFee: t('CSV_LATE_FEE'), receivedBy: t('CSV_RECEIVED_BY'), status: t('CSV_STATUS') });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
@@ -117,8 +133,8 @@ export function AdminFinancePaymentsPage() {
     { field: 'amount', headerName: t('AMOUNT'), width: 120, sortable: true, valueFormatter: (params: DataGridCellParams<AdminFinancePayment>) => formatAdminFinanceApiAmount(params.data.amount, params.data.currencyCode, params.data.amountUnit) },
     { field: 'mode', headerName: t('MODE'), width: 110, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => <span className={ADMIN_FINANCE_MODE_BADGE[params.data.mode]}>{params.data.mode === 'cash' ? t('CASH') : params.data.mode === 'upi' ? t('UPI') : params.data.mode === 'card' ? t('CARD') : params.data.mode === 'bank' ? t('BANK_TRANSFER') : t('UNKNOWN')}</span> },
     { field: 'txnId', headerName: t('TXN_ID'), width: 130, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => <span className="font-mono text-caption text-text-secondary">{String(params.value ?? '—')}</span> },
-    { field: 'lateFee', headerName: t('LATE_FEE'), width: 110, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => { const amount = typeof params.value === 'number' ? params.value : null; return <span className={amount !== null && amount > 0 ? 'text-warning-text' : 'text-text-secondary'}>{amount === null ? '—' : formatAdminFinanceApiAmount(amount, params.data.currencyCode, params.data.amountUnit)}</span>; } },
-    { field: 'status', headerName: t('STATUS'), width: 130, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => <span className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold capitalize whitespace-nowrap ${params.data.status === 'valid' ? 'bg-success-bg text-success-text border-success-bg' : 'bg-card text-text-secondary border-border'}`}>{params.data.status === 'valid' ? t('VALID') : params.data.status === 'deleted' ? t('DELETED') : t('UNKNOWN')}</span> },
+    { field: 'lateFee', headerName: t('LATE_FEE'), width: 110, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => { const amount = typeof params.value === 'number' ? params.value : null; return <span className={amount !== null && amount > 0 ? 'text-warning-text font-bold' : 'text-text-secondary'}>{amount === null ? '—' : formatAdminFinanceApiAmount(amount, params.data.currencyCode, params.data.amountUnit)}</span>; } },
+    { field: 'status', headerName: t('STATUS'), width: 130, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => <span className={`inline-flex min-h-6 items-center gap-1 rounded-full border px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap ${params.data.status === 'valid' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400'}`}>{params.data.status === 'valid' ? t('VALID') : params.data.status === 'deleted' ? t('DELETED') : t('UNKNOWN')}</span> },
     {
       headerName: t('ACTIONS'),
       width: 170,
@@ -128,23 +144,25 @@ export function AdminFinancePaymentsPage() {
           <div className="flex items-center gap-1.5">
             <button
               type="button"
-              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               onClick={() => router.push(ADMIN_FINANCE_PAYMENTS_ROUTES.RECEIPT(params.data.id))}
               aria-label={t('VIEW_RECEIPT', { number: params.data.receiptNumber })}
+              title="View receipt"
             >
-              <Receipt size={18} strokeWidth={2} />
+              <Receipt size={15} strokeWidth={2.2} />
             </button>
             <button
               type="button"
-              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               onClick={() => router.push(ADMIN_FINANCE_PAYMENTS_ROUTES.INVOICE(params.data.id))}
               aria-label={t('VIEW_INVOICE', { number: params.data.receiptNumber })}
+              title="View invoice"
             >
-              <FileText size={18} strokeWidth={2} />
+              <FileText size={15} strokeWidth={2.2} />
             </button>
             <button
               type="button"
-              className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               title="Share receipt via WhatsApp"
               aria-label={`Share receipt ${params.data.receiptNumber} with ${params.data.studentName} on WhatsApp`}
               onClick={() => {
@@ -153,7 +171,7 @@ export function AdminFinancePaymentsPage() {
                 if (popup) popup.opener = null;
               }}
             >
-              <MessageSquare size={18} strokeWidth={2} />
+              <MessageSquare size={15} strokeWidth={2.2} />
             </button>
           </div>
         ) : null,
@@ -204,6 +222,53 @@ export function AdminFinancePaymentsPage() {
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* 4 Premium Glassmorphic KPI Cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
+        <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-linear-to-br from-emerald-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Total Collected</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+              <IndianRupee size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 font-mono">{kpiStats.totalCollected}</p>
+          <p className="mt-1 text-xs text-text-secondary">{timeRangeLabel} collections</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-linear-to-br from-cyan-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Transactions</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+              <Receipt size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{kpiStats.validCount}</p>
+          <p className="mt-1 text-xs text-text-secondary">Valid receipts issued</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-indigo-500/20 bg-linear-to-br from-indigo-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Digital Share</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+              <CreditCard size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">{kpiStats.digitalShare}%</p>
+          <p className="mt-1 text-xs text-text-secondary">UPI, card & netbanking</p>
+        </div>
+
+        <div className="relative overflow-hidden rounded-xl border border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Late Fees</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400">
+              <TrendingUp size={18} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400 font-mono">{kpiStats.totalLateFee}</p>
+          <p className="mt-1 text-xs text-text-secondary">Accrued penalty revenue</p>
         </div>
       </div>
 

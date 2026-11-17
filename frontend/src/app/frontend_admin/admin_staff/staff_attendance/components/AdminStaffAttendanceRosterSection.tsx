@@ -86,7 +86,7 @@ export function AdminStaffAttendanceRosterSection({ slots }: Props) {
                       {slot.daysActive.map((d) => (
                         <span
                           key={d}
-                          className="rounded bg-surface-highlight px-1.5 py-0.5 text-[9px] font-semibold text-text-secondary"
+                          className="rounded border border-border bg-card px-1.5 py-0.5 text-[9px] font-semibold text-text-primary"
                         >
                           {d}
                         </span>

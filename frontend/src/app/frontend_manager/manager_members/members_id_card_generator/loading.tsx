@@ -4,6 +4,7 @@ import { ManagerPageLoader } from '@/app/frontend_manager/components/ManagerLoad
 export default function ManagerFeatureLoading() {
   return (
     <ManagerPageLoader
+      size="md"
       icon="id-card"
       variant="default"
     />

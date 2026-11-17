@@ -20,6 +20,6 @@ export const ATTENDANCE_STATUS_VARIANTS = {
   PRESENT: 'bg-success-bg text-success-text border-success-border',
   LATE: 'bg-warning-bg text-warning-text border-warning-border',
   ABSENT: 'bg-danger-bg text-danger-text border-danger-border',
-  ON_LEAVE: 'bg-surface-highlight text-text-secondary border-border',
+  ON_LEAVE: 'bg-info-bg text-info-text border-info-bg',
 } as const;
 

@@ -21,51 +21,51 @@ export default function AdminStaffRolesPermissionsMatrixTable({ modules, demoMod
     <div className="overflow-x-auto rounded-lg border border-border bg-card">
       <table className="w-full text-left">
         <thead>
-          <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
-            <th scope="col" className="p-3 text-left text-text-secondary">{t('COLUMN_PERMISSION_ACTION')}</th>
-            {ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.map((role) => (
-              <th key={role} scope="col" className="p-3 text-left text-text-secondary">{roleLabels[role]}</th>
-            ))}
-          </tr>
+            <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
+              <th scope="col" className="p-3 text-left text-text-secondary">{t('COLUMN_PERMISSION_ACTION')}</th>
+              {ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.map((role) => (
+                <th key={role} scope="col" className="p-3 text-left text-text-secondary">{roleLabels[role]}</th>
+              ))}
+            </tr>
         </thead>
         <tbody>
           {modules.map((module, moduleIndex) => (
             <Fragment key={module.module}>
-              <tr className="h-12 border-t border-border bg-surface-highlight">
-                <th scope="rowgroup" colSpan={ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.length + 1} className="p-3 text-left font-semibold text-text-primary">
-                  <Shield size={18} strokeWidth={2} className="mr-2 inline text-primary" />
-                  {getModuleLabel(module.module)}
-                </th>
-              </tr>
-              {module.actions.map((action, actionIndex) => (
-                <tr key={action.key} className="h-12 border-t border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
-                  <th scope="row" className="p-3 text-left font-normal text-text-primary">{action.label}</th>
-                  {ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.map((role) => {
-                    const entry = resolveAdminStaffRolesPermissionsRoleEntry(action.roles, role);
-                    const isEnabled = entry.value === true;
-                    const isConfigured = entry.key !== null;
-                    const roleLabel = roleLabels[role];
-                    const accessibleName = isConfigured
-                      ? t(isEnabled ? 'ACCESSIBILITY_DISABLE' : 'ACCESSIBILITY_ENABLE', { action: action.label, role: roleLabel })
-                      : t('ACCESSIBILITY_UNKNOWN', { action: action.label, role: roleLabel });
-                    return (
-                      <td key={role} className="p-3">
-                        <button
-                          type="button"
-                          aria-pressed={isConfigured ? isEnabled : undefined}
-                          aria-label={accessibleName}
-                          disabled={!demoMode || !isConfigured}
-                          onClick={() => { if (entry.key !== null) onToggle(moduleIndex, actionIndex, entry.key); }}
-                          className={`min-h-11 min-w-11 rounded-full border border-border disabled:cursor-not-allowed disabled:opacity-60 ${!isConfigured ? 'bg-surface-highlight text-text-disabled' : isEnabled ? 'bg-success text-on-success' : 'bg-surface-highlight text-text-secondary'}`}
-                        >
-                          <span className="sr-only">{!isConfigured ? t('STATE_UNKNOWN') : isEnabled ? t('STATE_ENABLED') : t('STATE_DISABLED')}</span>
-                          <span aria-hidden="true" className="mx-auto block h-3 w-3 rounded-full bg-current" />
-                        </button>
-                      </td>
-                    );
-                  })}
+                <tr className="h-12 border-t border-border bg-surface-muted/60">
+                  <th scope="rowgroup" colSpan={ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.length + 1} className="p-3 text-left font-semibold text-text-primary">
+                    <Shield size={18} strokeWidth={2} className="mr-2 inline text-primary" />
+                    {getModuleLabel(module.module)}
+                  </th>
                 </tr>
-              ))}
+                {module.actions.map((action, actionIndex) => (
+                  <tr key={action.key} className="h-12 border-t border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
+                    <th scope="row" className="p-3 text-left font-normal text-text-primary">{action.label}</th>
+                    {ADMIN_STAFF_ROLES_PERMISSIONS_ROLES.map((role) => {
+                      const entry = resolveAdminStaffRolesPermissionsRoleEntry(action.roles, role);
+                      const isEnabled = entry.value === true;
+                      const isConfigured = entry.key !== null;
+                      const roleLabel = roleLabels[role];
+                      const accessibleName = isConfigured
+                        ? t(isEnabled ? 'ACCESSIBILITY_DISABLE' : 'ACCESSIBILITY_ENABLE', { action: action.label, role: roleLabel })
+                        : t('ACCESSIBILITY_UNKNOWN', { action: action.label, role: roleLabel });
+                      return (
+                        <td key={role} className="p-3">
+                          <button
+                            type="button"
+                            aria-pressed={isConfigured ? isEnabled : undefined}
+                            aria-label={accessibleName}
+                            disabled={!demoMode || !isConfigured}
+                            onClick={() => { if (entry.key !== null) onToggle(moduleIndex, actionIndex, entry.key); }}
+                            className={`min-h-11 min-w-11 rounded-full border border-border disabled:cursor-not-allowed disabled:opacity-60 transition-all ${!isConfigured ? 'bg-surface-muted text-text-disabled' : isEnabled ? 'bg-success text-on-success shadow-sm hover:scale-105' : 'bg-card text-text-secondary hover:bg-surface-hover hover:scale-105'}`}
+                          >
+                            <span className="sr-only">{!isConfigured ? t('STATE_UNKNOWN') : isEnabled ? t('STATE_ENABLED') : t('STATE_DISABLED')}</span>
+                            <span aria-hidden="true" className="mx-auto block h-3 w-3 rounded-full bg-current" />
+                          </button>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
             </Fragment>
           ))}
         </tbody>

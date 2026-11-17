@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import useAdminCommunicationNoticesUnsavedChangesGuard from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesUnsavedChangesGuard';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2 } from 'lucide-react';
+import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2, Radio, Clock, CheckCircle2 } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { getAdminCommunicationNoticeStatus } from '@/app/frontend_admin/admin_communication/communication_notices/utils/AdminCommunicationNoticesDateUtils';
@@ -145,7 +145,7 @@ export function AdminCommunicationNoticesPage() {
       width: 160,
       sortable: true,
       cellRenderer: (p: DataGridCellParams<Notice>) => (
-        <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary mt-2 whitespace-nowrap">
+        <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1 text-xs font-medium text-text-primary mt-2 whitespace-nowrap">
           <Building2 size={12} className="text-primary shrink-0" />
           <span>{p.data.targetBranch ?? 'All Branches'}</span>
         </span>
@@ -158,7 +158,8 @@ export function AdminCommunicationNoticesPage() {
       width: 120,
       sortable: true,
       cellRenderer: (p: DataGridCellParams<Notice>) => (
-        <span data-testid="admin_communication-page-state-001" className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${p.value === 'Active' ? 'bg-success-bg text-success-text border-success-bg' : 'bg-transparent text-text-secondary border-border'} mt-2`}>
+        <span data-testid="admin_communication-page-state-001" className={`inline-flex min-h-6 items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${p.value === 'Active' ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/15 text-amber-400 border-amber-500/30'} mt-2`}>
+          <span className={`h-1.5 w-1.5 rounded-full ${p.value === 'Active' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
           {p.value === 'Active' ? t('NOTICE_STATUS_ACTIVE') : p.value === 'Expired' ? t('NOTICE_STATUS_EXPIRED') : t('NOTICE_STATUS_UNKNOWN')}
         </span>
       )
@@ -168,13 +169,42 @@ export function AdminCommunicationNoticesPage() {
     { field: 'postedDate', headerName: t('NOTICE_COLUMN_POSTED_DATE'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-mono text-text-secondary text-sm">{p.value}</span> },
     {
       headerName: t('NOTICE_COLUMN_ACTIONS'),
-      width: 140,
+      width: 150,
       sortable: false,
       cellRenderer: (params: DataGridCellParams<Notice>) => (
-        <div className="h-full flex items-center gap-2">
-          <button data-testid={`admin_communication-notice-edit-${params.data.id}`} type="button" disabled={!isDemoMode} title={!isDemoMode ? t('NOTICE_PERSISTENCE_BLOCKED') : t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })} onClick={() => openEdit(params.data)} aria-label={t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"><Edit2 size={18} strokeWidth={2}/></button>
-          <button data-testid={`admin_communication-notice-broadcast-${params.data.id}`} type="button" onClick={() => setBroadcastItem(params.data)} aria-label={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-safe:duration-base" title={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })}><Send size={18} strokeWidth={2}/></button>
-          <button data-testid={`admin_communication-notice-delete-${params.data.id}`} type="button" disabled={!isDemoMode} title={!isDemoMode ? t('NOTICE_DELETE_BLOCKED_TOAST') : t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })} onClick={() => setDeleteItem(params.data)} aria-label={t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })} className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary text-danger-text hover:bg-danger-bg hover:text-danger-text motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"><Trash2 size={18} strokeWidth={2}/></button>
+        <div className="h-full flex items-center gap-1.5">
+          <button
+            data-testid={`admin_communication-notice-edit-${params.data.id}`}
+            type="button"
+            disabled={!isDemoMode}
+            title={!isDemoMode ? t('NOTICE_PERSISTENCE_BLOCKED') : t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })}
+            onClick={() => openEdit(params.data)}
+            aria-label={t('NOTICE_ROW_EDIT_ARIA', { title: params.data.title })}
+            className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 hover:bg-sky-500/20 hover:scale-105 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Edit2 size={16} strokeWidth={2}/>
+          </button>
+          <button
+            data-testid={`admin_communication-notice-broadcast-${params.data.id}`}
+            type="button"
+            onClick={() => setBroadcastItem(params.data)}
+            aria-label={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })}
+            className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 hover:bg-indigo-500/20 hover:scale-105 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            title={t('NOTICE_ROW_BROADCAST_ARIA', { title: params.data.title })}
+          >
+            <Send size={16} strokeWidth={2}/>
+          </button>
+          <button
+            data-testid={`admin_communication-notice-delete-${params.data.id}`}
+            type="button"
+            disabled={!isDemoMode}
+            title={!isDemoMode ? t('NOTICE_DELETE_BLOCKED_TOAST') : t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })}
+            onClick={() => setDeleteItem(params.data)}
+            aria-label={t('NOTICE_ROW_DELETE_ARIA', { title: params.data.title })}
+            className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 hover:bg-rose-500/20 hover:scale-105 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <Trash2 size={16} strokeWidth={2}/>
+          </button>
         </div>
       )
     }
@@ -224,6 +254,52 @@ export function AdminCommunicationNoticesPage() {
         <button data-testid="admin_communication-page-control-012" onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary-hover motion-safe:transition-colors font-medium">
           <Plus size={18} strokeWidth={2}/> {t('NOTICE_POST_BUTTON')}
         </button>
+      </div>
+
+      {/* KPI Summary Cards */}
+      <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Total Notices</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
+              <Radio size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-indigo-400">{filteredNotices.length}</p>
+        </div>
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Active Notices</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              <CheckCircle2 size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-emerald-400">
+            {filteredNotices.filter((n) => n.status === 'Active').length}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Expired</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30">
+              <Clock size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-amber-400">
+            {filteredNotices.filter((n) => n.status === 'Expired').length}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Target Branches</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+              <Building2 size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-cyan-400">
+            {isAllBranches ? 'All Branches' : (selectedBranch?.name ?? '1 Branch')}
+          </p>
+        </div>
       </div>
 
       {/* Multi-Branch Notice Filter Pills & Search */}

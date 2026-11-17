@@ -66,7 +66,7 @@ export function AdminCommunicationComplaintDetailModal({
               )}
             </div>
             <div className="flex items-center gap-2 text-xs text-text-secondary">
-              <span className="inline-flex items-center gap-1 rounded bg-surface-highlight px-2 py-0.5 font-medium text-text-primary">
+              <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-0.5 font-medium text-text-primary">
                 <Building2 size={12} className="text-primary" />
                 {viewItem.branchName ?? 'Downtown Central'}
               </span>

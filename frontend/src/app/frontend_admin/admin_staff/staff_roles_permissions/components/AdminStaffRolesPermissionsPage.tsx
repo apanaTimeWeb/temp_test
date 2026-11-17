@@ -3,7 +3,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { CheckCircle, Search } from 'lucide-react';
+import { CheckCircle, Search, Shield, KeyRound, Lock, CheckCircle2 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import AdminStaffRolesPermissionsMatrixTable from '@/app/frontend_admin/admin_staff/staff_roles_permissions/components/AdminStaffRolesPermissionsMatrixTable';
@@ -19,6 +19,24 @@ export default function AdminStaffRolesPermissionsPage() {
   const demoMode = isFrontendDemoModeEnabled();
   const { permsQuery, perms, setPerms } = useAdminStaffRolesPermissionsState();
   const [searchQuery, setSearchQuery] = useState('');
+
+  const kpis = useMemo(() => {
+    let totalActions = 0;
+    let enabledActions = 0;
+    perms.forEach((mod) => {
+      totalActions += mod.actions.length;
+      mod.actions.forEach((act) => {
+        if (act.roles && Object.values(act.roles).some(Boolean)) {
+          enabledActions += 1;
+        }
+      });
+    });
+    return {
+      moduleCount: perms.length,
+      actionCount: totalActions,
+      enabledCount: enabledActions,
+    };
+  }, [perms]);
 
   const filteredPerms = useMemo(() => {
     if (!searchQuery.trim()) return perms;
@@ -41,11 +59,11 @@ export default function AdminStaffRolesPermissionsPage() {
     if (!demoMode) return;
     setPerms((current) => current.map((module, currentModuleIndex) => currentModuleIndex === moduleIndex
       ? {
-          ...module,
-          actions: module.actions.map((action, currentActionIndex) => currentActionIndex === actionIndex
-            ? { ...action, roles: { ...action.roles, [roleKey]: !action.roles[roleKey] } }
-            : action),
-        }
+        ...module,
+        actions: module.actions.map((action, currentActionIndex) => currentActionIndex === actionIndex
+          ? { ...action, roles: { ...action.roles, [roleKey]: !action.roles[roleKey] } }
+          : action),
+      }
       : module));
   };
 
@@ -90,6 +108,53 @@ export default function AdminStaffRolesPermissionsPage() {
             <CheckCircle size={18} strokeWidth={2} /> {t('SAVE_CHANGES')}
           </button>
         </header>
+
+        {/* Permission KPI Summary Cards */}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Modules</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Shield size={16} strokeWidth={2.2} />
+              </div>
+            </div>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{kpis.moduleCount}</p>
+            <span className="text-xs text-text-muted">Domain Areas</span>
+          </div>
+
+          <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Actions</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-info-bg text-info-text">
+                <KeyRound size={16} strokeWidth={2.2} />
+              </div>
+            </div>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-info-text">{kpis.actionCount}</p>
+            <span className="text-xs text-text-muted">Granular Permissions</span>
+          </div>
+
+          <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Active Rules</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success-bg text-success-text">
+                <CheckCircle2 size={16} strokeWidth={2.2} />
+              </div>
+            </div>
+            <p className="mt-2 text-2xl font-bold tracking-tight text-success-text">{kpis.enabledCount}</p>
+            <span className="text-xs text-text-muted">Enabled for Manager</span>
+          </div>
+
+          <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Model</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-bg text-purple-text">
+                <Lock size={16} strokeWidth={2.2} />
+              </div>
+            </div>
+            <p className="mt-2 text-xl font-bold tracking-tight text-purple-text">RBAC</p>
+            <span className="text-xs text-text-muted">Role Based Access</span>
+          </div>
+        </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <p id="admin-permissions-save-help" className="text-sm text-text-secondary" role="status">

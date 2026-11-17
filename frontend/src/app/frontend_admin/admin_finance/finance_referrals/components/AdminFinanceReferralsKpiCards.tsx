@@ -1,7 +1,7 @@
 'use client';
 // Responsibility: AdminFinanceReferralsKpiCards component owned by admin_finance_referrals.
 
-import { Users, Trophy, IndianRupee } from 'lucide-react';
+import { Users, Trophy, IndianRupee, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
 
@@ -10,6 +10,7 @@ interface AdminFinanceReferralsKpiCardsProps {
   totalBonus: number;
   topReferrer: { name: string; referredNames: string[] };
   timeRangeLabel: string;
+  activeCount?: number;
 }
 
 export function AdminFinanceReferralsKpiCards({
@@ -17,63 +18,75 @@ export function AdminFinanceReferralsKpiCards({
   totalBonus,
   topReferrer,
   timeRangeLabel,
+  activeCount,
 }: AdminFinanceReferralsKpiCardsProps) {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
 
   return (
-    <div className="grid gap-4 md:grid-cols-3">
-      <div className="rounded-xl border border-border bg-card p-5 shadow-card">
-        <div className="mb-2 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">
-              {t('TOTAL_REFERRALS')}
-            </span>
-            <span className="inline-flex items-center rounded-full bg-primary-subtle px-2 py-0.5 text-[10px] font-semibold text-primary">
-              [{timeRangeLabel}]
-            </span>
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
+      {/* Total Referrals */}
+      <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-linear-to-br from-cyan-500/10 via-card to-card p-4 shadow-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+            {t('TOTAL_REFERRALS')}
+          </span>
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+            <Users size={18} strokeWidth={2.2} />
           </div>
-          <Users size={18} strokeWidth={2} className="text-text-secondary" />
         </div>
-        <p className="mt-2 text-kpi font-bold text-text-primary">{totalReferrals}</p>
+        <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{totalReferrals}</p>
+        <p className="mt-1 text-xs text-text-secondary">{timeRangeLabel} conversions</p>
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-5 shadow-card">
-        <div className="mb-2 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">
-              {t('TOTAL_BONUS')}
-            </span>
-            <span className="inline-flex items-center rounded-full bg-primary-subtle px-2 py-0.5 text-[10px] font-semibold text-primary">
-              [{timeRangeLabel}]
-            </span>
+      {/* Total Bonus */}
+      <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-linear-to-br from-emerald-500/10 via-card to-card p-4 shadow-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+            {t('TOTAL_BONUS')}
+          </span>
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+            <IndianRupee size={18} strokeWidth={2.2} />
           </div>
-          <IndianRupee size={18} className="text-text-secondary" strokeWidth={2} />
         </div>
-        <p className="mt-2 text-kpi font-bold text-text-primary text-success-text">
+        <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 font-mono">
           {formatAdminFinanceCurrency(totalBonus)}
         </p>
+        <p className="mt-1 text-xs text-text-secondary">Earned by advocates</p>
       </div>
 
-      <div className="rounded-xl border border-border bg-card p-5 shadow-card">
-        <div className="mb-2 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-badge font-semibold uppercase tracking-[0.08em] text-text-secondary">
-              {t('TOP_REFERRER')}
-            </span>
-            <span className="inline-flex items-center rounded-full bg-primary-subtle px-2 py-0.5 text-[10px] font-semibold text-primary">
-              [{timeRangeLabel}]
-            </span>
+      {/* Top Referrer */}
+      <div className="relative overflow-hidden rounded-xl border border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card p-4 shadow-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+            {t('TOP_REFERRER')}
+          </span>
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400">
+            <Trophy size={18} strokeWidth={2.2} />
           </div>
-          <Trophy size={18} className="text-warning-text" strokeWidth={2} />
         </div>
-        <p className="mt-2 text-kpi font-bold text-text-primary">{topReferrer.name}</p>
-        <p className="text-caption text-text-secondary">
+        <p className="mt-2 text-xl font-bold tracking-tight text-text-primary truncate">{topReferrer.name}</p>
+        <p className="mt-1 text-xs text-amber-600 dark:text-amber-400 font-medium">
           {t('LISTED_REFERRALS', { count: topReferrer.referredNames.length })}
         </p>
+      </div>
+
+      {/* Active Referrers */}
+      <div className="relative overflow-hidden rounded-xl border border-indigo-500/20 bg-linear-to-br from-indigo-500/10 via-card to-card p-4 shadow-sm">
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+            Advocates
+          </span>
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+            <TrendingUp size={18} strokeWidth={2.2} />
+          </div>
+        </div>
+        <p className="mt-2 text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400 font-mono">
+          {activeCount ?? 6}
+        </p>
+        <p className="mt-1 text-xs text-text-secondary">Enrolled promoters</p>
       </div>
     </div>
   );
 }
 
 export default AdminFinanceReferralsKpiCards;
-

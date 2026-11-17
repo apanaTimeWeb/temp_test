@@ -176,6 +176,7 @@ export function AdminFinanceReferralsPage() {
         totalBonus={totalBonus}
         topReferrer={topReferrer}
         timeRangeLabel={timeRangeLabel}
+        activeCount={filteredReferrers.length}
       />
 
       {/* Search Bar */}

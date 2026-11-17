@@ -82,11 +82,11 @@ export function AdminAccountsDailySettlementTableRow({
       {/* Variance */}
       <td className="px-4 py-3.5 text-right font-mono whitespace-nowrap">
         {isShortage ? (
-          <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-xs font-semibold bg-destructive-bg text-destructive">
+          <span className="inline-flex items-center gap-0.5 rounded px-2 py-0.5 text-xs font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
             {formatPaiseToRupees(record.difference)}
           </span>
         ) : isSurplus ? (
-          <span className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-xs font-semibold bg-success-bg text-success-text">
+          <span className="inline-flex items-center gap-0.5 rounded px-2 py-0.5 text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
             +{formatPaiseToRupees(record.difference)}
           </span>
         ) : (
@@ -97,19 +97,19 @@ export function AdminAccountsDailySettlementTableRow({
       {/* Status Badge */}
       <td className="px-4 py-3.5 text-center whitespace-nowrap">
         {record.status === 'PENDING_APPROVAL' && (
-          <span className="inline-flex items-center gap-1 rounded-full border border-warning-bg bg-warning-bg px-2.5 py-0.5 text-xs font-medium text-warning-text">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-400">
             <Clock className="h-3 w-3" />
             <span>{t('STATUS.PENDING_APPROVAL')}</span>
           </span>
         )}
         {record.status === 'APPROVED' && (
-          <span className="inline-flex items-center gap-1 rounded-full border border-success-bg bg-success-bg px-2.5 py-0.5 text-xs font-medium text-success-text">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
             <Check className="h-3 w-3" />
             <span>{t('STATUS.APPROVED')}</span>
           </span>
         )}
         {record.status === 'DISCREPANCY_FLAGGED' && (
-          <span className="inline-flex items-center gap-1 rounded-full border border-destructive-bg bg-destructive-bg px-2.5 py-0.5 text-xs font-medium text-destructive">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
             <AlertTriangle className="h-3 w-3" />
             <span>{t('STATUS.DISCREPANCY_FLAGGED')}</span>
           </span>
@@ -125,7 +125,7 @@ export function AdminAccountsDailySettlementTableRow({
                 type="button"
                 onClick={() => onApprove(record)}
                 title={t('ACTIONS.APPROVE_CLEAR')}
-                className="inline-flex items-center gap-1 rounded-md bg-success px-2.5 py-1.5 text-xs font-medium text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success min-h-[32px] motion-safe:transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 min-h-[32px] motion-safe:transition-all hover:scale-[1.02]"
               >
                 <Check className="h-3.5 w-3.5" />
                 <span>{t('ACTIONS.APPROVE_CLEAR')}</span>
@@ -134,7 +134,7 @@ export function AdminAccountsDailySettlementTableRow({
                 type="button"
                 onClick={() => onFlag(record)}
                 title={t('ACTIONS.FLAG_DISCREPANCY')}
-                className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-1.5 text-xs font-medium text-destructive hover:bg-destructive-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive min-h-[32px] motion-safe:transition-colors"
+                className="inline-flex items-center gap-1 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1.5 text-xs font-semibold text-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 min-h-[32px] motion-safe:transition-all"
               >
                 <ShieldAlert className="h-3.5 w-3.5" />
                 <span>{t('ACTIONS.FLAG_DISCREPANCY')}</span>
@@ -147,16 +147,16 @@ export function AdminAccountsDailySettlementTableRow({
               type="button"
               onClick={() => onApprove(record)}
               title="Re-audit and Clear"
-              className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[32px]"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-1.5 text-xs font-semibold text-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 min-h-[32px] motion-safe:transition-all"
             >
-              <Check className="h-3.5 w-3.5 text-success" />
+              <Check className="h-3.5 w-3.5 text-amber-400" />
               <span>Re-audit & Clear</span>
             </button>
           )}
 
           {record.status === 'APPROVED' && (
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <Check className="h-3.5 w-3.5 text-success" />
+            <span className="text-xs text-muted-foreground flex items-center gap-1 font-medium">
+              <Check className="h-3.5 w-3.5 text-emerald-400" />
               <span>{displayValue(record.approvedBy ?? 'Approved')}</span>
             </span>
           )}
@@ -167,7 +167,7 @@ export function AdminAccountsDailySettlementTableRow({
               target="_blank"
               rel="noreferrer"
               title={t('ACTIONS.VIEW_SLIP')}
-              className="inline-flex items-center justify-center p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[32px] min-w-[32px]"
+              className="inline-flex items-center justify-center p-1.5 rounded-md text-primary hover:text-primary-foreground hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[32px] min-w-[32px]"
             >
               <ExternalLink className="h-3.5 w-3.5" />
             </a>

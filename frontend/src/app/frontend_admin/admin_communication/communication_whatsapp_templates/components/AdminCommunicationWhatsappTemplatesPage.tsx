@@ -8,7 +8,7 @@ import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogConte
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { useRef } from 'react';
-import { ChevronRight, X, Send } from 'lucide-react';
+import { ChevronRight, X, Send, FileText, Sparkles, Layers } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import { ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES, ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS } from '@/app/frontend_admin/admin_communication/communication_whatsapp_templates/config/admin_communication_whatsapp_templates_whatsapp_template_constants';
@@ -58,7 +58,7 @@ export function AdminCommunicationWhatsappTemplatesPage() {
   return (
     <div className="min-h-screen bg-page p-6 md:p-8">
       {toast && <div className="fixed bottom-6 right-6 z-50 rounded-xl border border-border bg-card px-4 py-3 text-ui font-semibold text-text-primary shadow-toast" role="status" aria-live="polite" aria-atomic="true">{toast}</div>}
-      <p className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text" role="status">{t('WHATSAPP_TEMPLATES_PREVIEW_BANNER')}</p>
+      <p className="sr-only" role="status">{t('WHATSAPP_TEMPLATES_PREVIEW_BANNER')}</p>
 
       {/* Test Message Modal */}
       {showTest && (
@@ -98,13 +98,46 @@ export function AdminCommunicationWhatsappTemplatesPage() {
         <p className="mt-1 text-ui text-text-secondary">{t('WHATSAPP_TEMPLATES_SUBTITLE')}</p>
       </div>
 
+      {/* KPI Cards */}
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">System Templates</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+              <FileText size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-cyan-400">{templates.length}</p>
+        </div>
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Characters Used</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              <Sparkles size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-emerald-400">
+            {charCount} <span className="text-xs text-text-secondary font-normal">/ {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS}</span>
+          </p>
+        </div>
+        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-purple-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Available Variables</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/15 text-purple-400 border border-purple-500/30">
+              <Layers size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-purple-400">{ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES.length}</p>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-6">
         {/* Top Filter Bar */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2.5">
           {templates.map((template) => (
             <button type="button" data-testid={`admin_communication-template-${template.id}`} key={template.id} onClick={() => setActiveId(template.id)}
               aria-pressed={activeId === template.id}
-              className={`flex min-h-11 items-center gap-2.5 rounded-xl border border-transparent px-3 py-2 text-left text-body font-medium text-text-secondary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary${activeId === template.id ? ' border-primary bg-primary-subtle text-primary' : ''} admin-communication-style-1e854c543a`}
+              className={`flex min-h-10 items-center gap-2 rounded-xl border px-3.5 py-2 text-left text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${activeId === template.id ? 'border-primary bg-primary text-on-primary shadow-xs scale-[1.02]' : 'border-border bg-card text-text-secondary hover:text-text-primary hover:border-border/80'} admin-communication-style-1e854c543a`}
               >
               {template.icon} {t(template.labelKey)}
             </button>
@@ -138,7 +171,15 @@ export function AdminCommunicationWhatsappTemplatesPage() {
             <p id="admin-communication-template-variables-label" className="mb-1.5 block text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary">{t('WHATSAPP_INSERT_VARIABLE')}</p>
             <div className="mt-1.5 flex flex-wrap gap-2" role="group" aria-labelledby="admin-communication-template-variables-label">
               {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES.map(v => (
-                <button data-testid={`admin_communication-template-variable-${v.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`} key={v} type="button" onClick={() => insertVar(v)} className="inline-flex min-h-11 items-center rounded-md border border-border bg-primary-subtle px-3 py-1 text-ui font-semibold text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">{v}</button>
+                <button
+                  data-testid={`admin_communication-template-variable-${v.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}
+                  key={v}
+                  type="button"
+                  onClick={() => insertVar(v)}
+                  className="inline-flex min-h-[32px] items-center rounded-lg border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-xs font-semibold text-primary hover:bg-primary/20 hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
+                >
+                  {v}
+                </button>
               ))}
             </div>
           </div>
@@ -149,7 +190,12 @@ export function AdminCommunicationWhatsappTemplatesPage() {
 
           <div className="mt-4">
             <p id="admin-communication-template-preview-label" className="mb-1.5 block text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary">{t('WHATSAPP_PREVIEW_SAMPLE_VALUES')}</p>
-            <div className="relative mt-2 rounded-lg border border-border bg-input p-4 text-body leading-normal text-text-primary whitespace-pre-wrap" aria-labelledby="admin-communication-template-preview-label">{preview}</div>
+            <div className="relative mt-2 rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-4 text-sm font-sans leading-relaxed text-emerald-100 whitespace-pre-wrap shadow-inner" aria-labelledby="admin-communication-template-preview-label">
+              <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold mb-2">
+                <span>💬 WhatsApp Live Preview:</span>
+              </div>
+              {preview}
+            </div>
           </div>
 
           <div className="mt-5 flex items-center gap-3 justify-end">

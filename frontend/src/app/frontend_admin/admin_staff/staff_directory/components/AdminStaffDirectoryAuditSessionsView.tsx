@@ -101,7 +101,7 @@ export function AdminStaffDirectoryAuditSessionsView() {
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+            <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
               {renderSortableHeader(t('SESSION_COLUMN_MANAGER'), sessionSortField === 'managerName', sessionSortDirection, () => toggleSessionSort('managerName'))}
               {renderSortableHeader(t('SESSION_COLUMN_DEVICE'), sessionSortField === 'operatingSystem', sessionSortDirection, () => toggleSessionSort('operatingSystem'))}
               {renderSortableHeader(t('SESSION_COLUMN_IP'), sessionSortField === 'ipAddress', sessionSortDirection, () => toggleSessionSort('ipAddress'))}

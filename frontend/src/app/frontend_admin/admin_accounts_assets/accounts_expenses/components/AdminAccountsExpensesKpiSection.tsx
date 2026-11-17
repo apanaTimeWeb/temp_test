@@ -26,6 +26,8 @@ export function AdminAccountsExpensesKpiSection({ expenses, visibleExpenses, tim
       value: formatAdminAccountingCurrency(totalApproved, locale),
       icon: TrendingDown,
       color: 'rose',
+      cardClass: 'border-rose-500/20 bg-gradient-to-br from-rose-500/10 via-card to-card hover:border-rose-500/40',
+      iconClass: 'bg-rose-500/15 text-rose-400 border border-rose-500/30',
       sub: `${approvedExpenses.length} approved`,
       badge: timeRangeLabel && timeRangeLabel !== 'All Time' ? timeRangeLabel : null,
     },
@@ -34,6 +36,8 @@ export function AdminAccountsExpensesKpiSection({ expenses, visibleExpenses, tim
       value: formatAdminAccountingCurrency(totalPending, locale),
       icon: Clock,
       color: 'amber',
+      cardClass: 'border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-card to-card hover:border-amber-500/40',
+      iconClass: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
       sub: `${pendingExpenses.length} awaiting review`,
       badge: null,
     },
@@ -42,6 +46,8 @@ export function AdminAccountsExpensesKpiSection({ expenses, visibleExpenses, tim
       value: formatAdminAccountingCurrency(filteredTotal, locale),
       icon: Filter,
       color: 'blue',
+      cardClass: 'border-sky-500/20 bg-gradient-to-br from-sky-500/10 via-card to-card hover:border-sky-500/40',
+      iconClass: 'bg-sky-500/15 text-sky-400 border border-sky-500/30',
       sub: timeRangeLabel ? `${visibleExpenses.length} records in ${timeRangeLabel}` : `${visibleExpenses.length} records`,
       badge: timeRangeLabel && timeRangeLabel !== 'All Time' ? timeRangeLabel : null,
     },
@@ -50,6 +56,8 @@ export function AdminAccountsExpensesKpiSection({ expenses, visibleExpenses, tim
       value: String(categoriesCount),
       icon: Tag,
       color: 'purple',
+      cardClass: 'border-purple-500/20 bg-gradient-to-br from-purple-500/10 via-card to-card hover:border-purple-500/40',
+      iconClass: 'bg-purple-500/15 text-purple-400 border border-purple-500/30',
       sub: 'Categorized types',
       badge: null,
     },
@@ -57,10 +65,10 @@ export function AdminAccountsExpensesKpiSection({ expenses, visibleExpenses, tim
 
   return (
     <section aria-label={t('SUMMARY_ARIA')} className="grid grid-cols-2 gap-4 md:grid-cols-4">
-      {kpis.map(({ label, value, icon: Icon, color, sub, badge }) => (
+      {kpis.map(({ label, value, icon: Icon, cardClass, iconClass, sub, badge }) => (
         <div
           key={label}
-          className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5"
+          className={`group relative overflow-hidden rounded-xl border p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 ${cardClass}`}
         >
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-1.5 flex-wrap">
@@ -71,12 +79,7 @@ export function AdminAccountsExpensesKpiSection({ expenses, visibleExpenses, tim
                 </span>
               )}
             </div>
-            <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
-              color === 'rose' ? 'bg-danger-bg text-danger-text' :
-              color === 'amber' ? 'bg-warning-bg text-warning-text' :
-              color === 'blue' ? 'bg-info-bg text-info-text' :
-              'bg-surface-highlight text-primary'
-            }`}>
+            <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${iconClass}`}>
               <Icon size={16} strokeWidth={2.2} />
             </div>
           </div>

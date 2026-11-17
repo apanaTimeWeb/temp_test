@@ -162,7 +162,7 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
   return (
     <div className="space-y-6 pb-10">
       {!isDemoMode && (
-        <p role="status" className="rounded-xl border border-warning-border bg-warning-bg p-3 text-xs font-medium text-warning-text">
+        <p role="status" className="sr-only">
           {t('LIVE_UNAVAILABLE')}
         </p>
       )}

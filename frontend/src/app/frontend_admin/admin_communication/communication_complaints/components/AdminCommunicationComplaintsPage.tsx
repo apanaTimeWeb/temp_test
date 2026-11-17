@@ -7,7 +7,7 @@ import { enUS, hi } from 'date-fns/locale';
 import { useLocale, useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight, Plus } from 'lucide-react';
+import { ChevronRight, Plus, MessageSquare, AlertTriangle, RefreshCw, CheckCircle } from 'lucide-react';
 import { getAdminCommunicationComplaintStatus, ADMIN_COMMUNICATION_COMPLAINT_STATUS } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
 import { createAdminCommunicationComplaintSchema, type AdminCommunicationComplaintFormValues } from '@/app/frontend_admin/admin_communication/communication_complaints/schemas/AdminCommunicationComplaintsSchema';
 import AdminCommunicationComplaintAddModal from '@/app/frontend_admin/admin_communication/communication_complaints/components/AdminCommunicationComplaintsComplaintAddModal';
@@ -179,15 +179,15 @@ export function AdminCommunicationComplaintsPage() {
   };
 
   const statusBadge = (s: CStatus) => {
-    if (s === ADMIN_COMMUNICATION_COMPLAINT_STATUS.OPEN) return <span data-testid="admin_communication-page-state-001" className="inline-flex min-h-6 items-center gap-1 rounded-full border px-2 py-1 text-badge font-semibold whitespace-nowrap bg-danger-bg text-danger-text border-danger-bg">{t('COMPLAINT_STATUS_OPEN')}</span>;
-    if (s === ADMIN_COMMUNICATION_COMPLAINT_STATUS.IN_PROGRESS) return <span data-testid="admin_communication-page-state-002" className="inline-flex min-h-6 items-center gap-1 rounded-full border px-2 py-1 text-badge font-semibold whitespace-nowrap bg-warning-bg text-warning-text border-warning-bg">{t('COMPLAINT_STATUS_IN_PROGRESS')}</span>;
-    if (s === ADMIN_COMMUNICATION_COMPLAINT_STATUS.RESOLVED) return <span data-testid="admin_communication-page-state-003" className="inline-flex min-h-6 items-center gap-1 rounded-full border px-2 py-1 text-badge font-semibold whitespace-nowrap bg-success-bg text-success-text border-success-bg">{t('COMPLAINT_STATUS_RESOLVED')}</span>;
+    if (s === ADMIN_COMMUNICATION_COMPLAINT_STATUS.OPEN) return <span data-testid="admin_communication-page-state-001" className="inline-flex min-h-6 items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400 whitespace-nowrap"><span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-pulse" />{t('COMPLAINT_STATUS_OPEN')}</span>;
+    if (s === ADMIN_COMMUNICATION_COMPLAINT_STATUS.IN_PROGRESS) return <span data-testid="admin_communication-page-state-002" className="inline-flex min-h-6 items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-400 whitespace-nowrap"><span className="h-1.5 w-1.5 rounded-full bg-amber-400" />{t('COMPLAINT_STATUS_IN_PROGRESS')}</span>;
+    if (s === ADMIN_COMMUNICATION_COMPLAINT_STATUS.RESOLVED) return <span data-testid="admin_communication-page-state-003" className="inline-flex min-h-6 items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-400 whitespace-nowrap"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />{t('COMPLAINT_STATUS_RESOLVED')}</span>;
     return <span className="inline-flex min-h-6 items-center gap-1 rounded-full border px-2 py-1 text-badge font-semibold whitespace-nowrap bg-transparent text-text-secondary border-border">{t('COMPLAINT_STATUS_UNKNOWN')}</span>;
   };
 
   return (
     <div className="min-h-screen bg-page p-6 md:p-8">
-      <p role="status" className={`mb-4 rounded-md border p-3 text-sm ${isDemoMode ? 'border-info bg-info-bg text-info-text' : 'border-warning-bg bg-warning-bg text-warning-text'}`}>{isDemoMode ? t('COMPLAINT_DEMO_BANNER') : t('COMPLAINT_ADD_API_UNAVAILABLE')}</p>
+      <p role="status" className="sr-only">{isDemoMode ? t('COMPLAINT_DEMO_BANNER') : t('COMPLAINT_ADD_API_UNAVAILABLE')}</p>
       {toast && <div className="fixed bottom-6 right-6 z-50 rounded-xl border border-border bg-card px-4 py-3 text-ui font-semibold text-text-primary shadow-toast" role="status" aria-live="polite" aria-atomic="true">{toast}</div>}
 
       {/* Complaint Entry Modal */}
@@ -219,6 +219,52 @@ export function AdminCommunicationComplaintsPage() {
         <button data-testid="admin_communication-page-control-014" onClick={openAdd} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-body font-semibold text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base">
           <Plus size={18} strokeWidth={2}/> {t('COMPLAINTS_ADD_BUTTON')}
         </button>
+      </div>
+
+      {/* KPI Summary Cards */}
+      <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Total Tickets</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+              <MessageSquare size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-cyan-400">{branchFiltered.length}</p>
+        </div>
+        <div className="rounded-2xl border border-rose-500/20 bg-gradient-to-br from-rose-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Open & Escalated</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/15 text-rose-400 border border-rose-500/30">
+              <AlertTriangle size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-rose-400">
+            {branchFiltered.filter((c) => c.status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.OPEN).length}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">In Progress</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30">
+              <RefreshCw size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-amber-400">
+            {branchFiltered.filter((c) => c.status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.IN_PROGRESS).length}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Resolved</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              <CheckCircle size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-emerald-400">
+            {branchFiltered.filter((c) => c.status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.RESOLVED).length}
+          </p>
+        </div>
       </div>
 
       {/* Multi-Branch Complaint Filter Pills & Status Filter Tabs */}

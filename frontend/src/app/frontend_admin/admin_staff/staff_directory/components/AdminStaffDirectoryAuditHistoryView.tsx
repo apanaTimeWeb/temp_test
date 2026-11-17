@@ -94,7 +94,7 @@ export function AdminStaffDirectoryAuditHistoryView() {
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+            <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
               {renderSortableHeader(t('HISTORY_COLUMN_MANAGER'), historySortField === 'managerName', historySortDirection, () => toggleHistorySort('managerName'))}
               {renderSortableHeader(t('HISTORY_COLUMN_DATETIME'), historySortField === 'timeKey', historySortDirection, () => toggleHistorySort('timeKey'))}
               {renderSortableHeader(t('HISTORY_COLUMN_STATUS'), historySortField === 'statusKey', historySortDirection, () => toggleHistorySort('statusKey'))}

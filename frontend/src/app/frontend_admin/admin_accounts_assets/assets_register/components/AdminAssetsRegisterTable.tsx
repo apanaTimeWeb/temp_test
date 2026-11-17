@@ -165,19 +165,19 @@ export function AdminAssetsRegisterTable({
                   {/* AMC Protection Status */}
                   <td className="px-4 py-3.5 text-center whitespace-nowrap">
                     {asset.amcStatus === 'ACTIVE_AMC' && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-success-bg px-2.5 py-0.5 text-xs font-medium text-success-text">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
                         <ShieldCheck className="h-3 w-3" />
                         <span>{t('AMC_STATUS.ACTIVE_AMC')}</span>
                       </span>
                     )}
                     {asset.amcStatus === 'UNDER_WARRANTY' && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-0.5 text-xs font-medium text-info">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-500/15 px-2.5 py-0.5 text-xs font-semibold text-sky-400">
                         <ShieldCheck className="h-3 w-3" />
                         <span>{t('AMC_STATUS.UNDER_WARRANTY')}</span>
                       </span>
                     )}
                     {asset.amcStatus === 'EXPIRED_NO_AMC' && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-destructive-bg px-2.5 py-0.5 text-xs font-medium text-destructive">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
                         <AlertTriangle className="h-3 w-3" />
                         <span>{t('AMC_STATUS.EXPIRED_NO_AMC')}</span>
                       </span>
@@ -192,7 +192,7 @@ export function AdminAssetsRegisterTable({
                     <p className="font-medium text-foreground">{asset.vendorName}</p>
                     <a
                       href={`tel:${asset.vendorContact}`}
-                      className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                      className="inline-flex items-center gap-1 text-xs text-primary hover:underline font-mono"
                     >
                       <Phone className="h-3 w-3" />
                       <span>{asset.vendorContact}</span>
@@ -202,19 +202,19 @@ export function AdminAssetsRegisterTable({
                   {/* Health Status */}
                   <td className="px-4 py-3.5 text-center whitespace-nowrap">
                     {asset.status === 'OPERATIONAL' && (
-                      <span className="inline-flex items-center gap-1 text-xs font-medium text-success">
-                        <span className="h-2 w-2 rounded-full bg-success" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                         <span>{t('STATUS.OPERATIONAL')}</span>
                       </span>
                     )}
                     {asset.status === 'MAINTENANCE_REQUIRED' && (
-                      <span className="inline-flex items-center gap-1 text-xs font-medium text-warning">
-                        <span className="h-2 w-2 rounded-full bg-warning" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-400">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
                         <span>{t('STATUS.MAINTENANCE_REQUIRED')}</span>
                       </span>
                     )}
                     {asset.status === 'UNDER_REPAIR' && (
-                      <span className="inline-flex items-center gap-1 text-xs font-medium text-destructive">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
                         <Wrench className="h-3 w-3" />
                         <span>{t('STATUS.UNDER_REPAIR')}</span>
                       </span>
@@ -230,7 +230,7 @@ export function AdminAssetsRegisterTable({
                       type="button"
                       onClick={() => onManageAmc(asset)}
                       title={t('ACTIONS.MANAGE_AMC')}
-                      className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[32px] motion-safe:transition-colors"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 hover:bg-primary/20 hover:border-primary/50 px-2.5 py-1.5 text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[32px] motion-safe:transition-all hover:scale-[1.02]"
                     >
                       <CalendarClock className="h-3.5 w-3.5 text-primary" />
                       <span>{t('ACTIONS.MANAGE_AMC')}</span>

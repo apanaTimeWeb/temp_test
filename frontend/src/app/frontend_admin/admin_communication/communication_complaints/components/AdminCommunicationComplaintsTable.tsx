@@ -142,7 +142,7 @@ export function AdminCommunicationComplaintsTable({
     <div className="overflow-x-auto">
       <table className="w-full border-collapse text-body text-left">
         <thead>
-          <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+          <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
             <th className="py-3 px-4 text-left">{t('TABLE_NUMBER')}</th>
             {renderSortableHeader('title', t('TABLE_TITLE'))}
             {renderSortableHeader('branchName', 'Branch')}
@@ -166,14 +166,14 @@ export function AdminCommunicationComplaintsTable({
                 <td className="py-3 px-4">
                   <div className="font-semibold text-text-primary">{c.title}</div>
                   {c.isEscalatedToHq && (
-                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-danger-bg text-danger-text px-2 py-0.5 text-[10px] font-bold border border-border">
+                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-rose-500/15 text-rose-400 border border-rose-500/30 px-2 py-0.5 text-[10px] font-bold">
                       <AlertTriangle size={10} className="shrink-0" />
                       Escalated to HQ
                     </span>
                   )}
                 </td>
                 <td className="py-3 px-4">
-                  <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary whitespace-nowrap">
+                  <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2 py-0.5 text-xs font-medium text-text-primary whitespace-nowrap">
                     <Building2 size={12} className="text-primary shrink-0" />
                     <span>{c.branchName ?? 'Downtown Central'}</span>
                   </span>
@@ -199,7 +199,7 @@ export function AdminCommunicationComplaintsTable({
                 <td className="py-3 px-4 text-text-secondary">{c.resolvedBy}</td>
                 <td className="py-3 px-4 text-text-secondary">{formatComplaintDate(c.resolvedDate)}</td>
                 <td className="py-3 px-4 text-right">
-                  <div className="flex items-center justify-end gap-1">
+                  <div className="flex items-center justify-end gap-1.5">
                     <button
                       type="button"
                       onClick={() => {
@@ -209,20 +209,20 @@ export function AdminCommunicationComplaintsTable({
                           popup.opener = null;
                         }
                       }}
-                      className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors motion-safe:duration-base"
+                      className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 motion-safe:transition-all"
                       title="WhatsApp student"
                       aria-label={`WhatsApp ${c.student} regarding ${c.title}`}
                     >
-                      <MessageSquare size={18} strokeWidth={2}/>
+                      <MessageSquare size={16} strokeWidth={2}/>
                     </button>
                     <button
                       data-testid={`admin_communication-complaint-view-${c.id}`}
                       onClick={() => onView(c)}
-                      className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base"
+                      className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-all"
                       title={t('COMPLAINT_VIEW_ACTION')}
                       aria-label={t('COMPLAINT_VIEW_ARIA', { title: c.title })}
                     >
-                      <Eye size={18} strokeWidth={2}/>
+                      <Eye size={16} strokeWidth={2}/>
                     </button>
                     {c.status === 'Open' && (
                       <button
@@ -230,10 +230,10 @@ export function AdminCommunicationComplaintsTable({
                         disabled={!isDemoMode}
                         title={!isDemoMode ? t('COMPLAINT_STATUS_UPDATE_BLOCKED') : t('COMPLAINT_STATUS_IN_PROGRESS')}
                         onClick={() => onMarkInProgress(c.id)}
-                        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
                         aria-label={t('COMPLAINT_MARK_IN_PROGRESS_ARIA', { title: c.title })}
                       >
-                        <RefreshCw size={18} strokeWidth={2}/>
+                        <RefreshCw size={16} strokeWidth={2}/>
                       </button>
                     )}
                     {c.status !== 'Resolved' && (
@@ -242,10 +242,10 @@ export function AdminCommunicationComplaintsTable({
                         disabled={!isDemoMode}
                         title={!isDemoMode ? t('COMPLAINT_RESOLUTION_BLOCKED') : t('COMPLAINT_RESOLVE_TITLE')}
                         onClick={() => onResolve(c)}
-                        className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-transparent text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"
+                        className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
                         aria-label={t('COMPLAINT_RESOLVE_ARIA', { title: c.title })}
                       >
-                        <CheckCircle size={18} strokeWidth={2}/>
+                        <CheckCircle size={16} strokeWidth={2}/>
                       </button>
                     )}
                   </div>

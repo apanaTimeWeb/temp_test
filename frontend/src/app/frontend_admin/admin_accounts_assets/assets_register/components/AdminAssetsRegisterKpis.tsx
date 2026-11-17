@@ -46,25 +46,29 @@ export function AdminAssetsRegisterKpis({ records }: Props) {
         title={t('TOTAL_ASSETS')}
         value={String(totalCount)}
         subtitle={t('SUB_ASSETS')}
-        icon={<Building2 className="h-5 w-5" />}
+        icon={<Building2 className="h-5 w-5 text-indigo-400" />}
+        className="border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-surface to-surface hover:border-indigo-500/40"
       />
       <AdminPrimitiveKpiCard
         title={t('TOTAL_CAPEX')}
         value={formatPaiseToRupees(totalCapEx)}
         subtitle={t('SUB_CAPEX')}
-        icon={<IndianRupee className="h-5 w-5" />}
+        icon={<IndianRupee className="h-5 w-5 text-emerald-400" />}
+        className="border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-surface to-surface hover:border-emerald-500/40"
       />
       <AdminPrimitiveKpiCard
         title={t('ACTIVE_AMC')}
         value={String(amcCount)}
         subtitle={t('SUB_AMC')}
-        icon={<ShieldCheck className="h-5 w-5" />}
+        icon={<ShieldCheck className="h-5 w-5 text-cyan-400" />}
+        className="border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-surface to-surface hover:border-cyan-500/40"
       />
       <AdminPrimitiveKpiCard
         title={t('WARRANTY_ALERTS')}
         value={String(expiringCount)}
         subtitle={t('SUB_WARRANTY')}
-        icon={<AlertCircle className="h-5 w-5" />}
+        icon={<AlertCircle className="h-5 w-5 text-amber-400" />}
+        className="border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-surface to-surface hover:border-amber-500/40"
       />
     </div>
   );

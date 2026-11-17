@@ -6,7 +6,7 @@ import useAdminFinanceRefundsQuery from '@/app/frontend_admin/admin_finance/fina
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Building2, Search, RotateCcw } from 'lucide-react';
+import { Building2, Search, RotateCcw, IndianRupee, Clock, CheckCircle2, XCircle } from 'lucide-react';
 import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
 import { formatAdminFinanceApiAmount } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
@@ -133,35 +133,62 @@ export function AdminFinanceRefundsPage() {
         count={timeFilteredRefunds.length}
       />
 
-      {/* KPI Cards with Dynamic Period Badges */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg border border-border bg-card p-4">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">{t('TOTAL_REFUNDED')}</p>
-            <span className="inline-flex items-center rounded-full bg-primary-subtle px-1.5 py-0.2 text-[10px] font-semibold text-primary">[{timeRangeLabel}]</span>
+      {/* 4 Premium Glassmorphic KPI Cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
+        {/* Total Refunded */}
+        <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-linear-to-br from-emerald-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('TOTAL_REFUNDED')}</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+              <IndianRupee size={18} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-1 text-page-title font-bold text-text-primary text-success-text">{isPending || loadError ? '—' : formatAdminFinanceApiAmount(totalRefunded, hasSingleCurrencyUnit ? firstProcessedRefund?.currencyCode : undefined, hasSingleCurrencyUnit ? firstProcessedRefund?.amountUnit : undefined)}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400 font-mono">
+            {isPending || loadError ? '—' : formatAdminFinanceApiAmount(totalRefunded, hasSingleCurrencyUnit ? firstProcessedRefund?.currencyCode : undefined, hasSingleCurrencyUnit ? firstProcessedRefund?.amountUnit : undefined)}
+          </p>
+          <p className="mt-1 text-xs text-text-secondary">{timeRangeLabel} disbursements</p>
         </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">{t('PENDING')}</p>
-            <span className="inline-flex items-center rounded-full bg-primary-subtle px-1.5 py-0.2 text-[10px] font-semibold text-primary">[{timeRangeLabel}]</span>
+
+        {/* Pending Approval */}
+        <div className="relative overflow-hidden rounded-xl border border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('PENDING')}</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400">
+              <Clock size={18} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-1 text-page-title font-bold text-text-primary text-warning-text">{isPending || loadError ? '—' : pendingCount}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">
+            {isPending || loadError ? '—' : pendingCount}
+          </p>
+          <p className="mt-1 text-xs text-text-secondary">Awaiting verification</p>
         </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">{t('APPROVED')}</p>
-            <span className="inline-flex items-center rounded-full bg-primary-subtle px-1.5 py-0.2 text-[10px] font-semibold text-primary">[{timeRangeLabel}]</span>
+
+        {/* Approved */}
+        <div className="relative overflow-hidden rounded-xl border border-indigo-500/20 bg-linear-to-br from-indigo-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('APPROVED')}</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+              <CheckCircle2 size={18} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-1 text-page-title font-bold text-text-primary">{isPending || loadError ? '—' : timeFilteredRefunds.filter((refund) => refund.status === 'approved').length}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">
+            {isPending || loadError ? '—' : timeFilteredRefunds.filter((refund) => refund.status === 'approved').length}
+          </p>
+          <p className="mt-1 text-xs text-text-secondary">Ready for settlement</p>
         </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <p className="text-micro font-semibold uppercase tracking-wider text-text-secondary">{t('REJECTED')}</p>
-            <span className="inline-flex items-center rounded-full bg-primary-subtle px-1.5 py-0.2 text-[10px] font-semibold text-primary">[{timeRangeLabel}]</span>
+
+        {/* Rejected */}
+        <div className="relative overflow-hidden rounded-xl border border-rose-500/20 bg-linear-to-br from-rose-500/10 via-card to-card p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('REJECTED')}</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
+              <XCircle size={18} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-1 text-page-title font-bold text-text-primary text-danger-text">{isPending || loadError ? '—' : timeFilteredRefunds.filter((refund) => refund.status === 'rejected').length}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">
+            {isPending || loadError ? '—' : timeFilteredRefunds.filter((refund) => refund.status === 'rejected').length}
+          </p>
+          <p className="mt-1 text-xs text-text-secondary">Declined claims</p>
         </div>
       </div>
 

@@ -168,13 +168,13 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-1">
+                    <div className="flex items-center justify-end gap-1.5">
                       <button
                         type="button"
                         onClick={() => onInspect(r)}
                         title={t('ACTION_INSPECT')}
                         aria-label={t('ACTION_INSPECT')}
-                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md text-text-secondary hover:bg-surface hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
                       >
                         <Eye size={16} />
                       </button>
@@ -183,7 +183,7 @@ export function AdminStaffAttendanceLogTable({ records, onInspect, onRegularize 
                         onClick={() => onRegularize(r)}
                         title={t('ACTION_REGULARIZE')}
                         aria-label={t('ACTION_REGULARIZE')}
-                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-md text-primary hover:bg-primary-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
                       >
                         <Edit3 size={16} />
                       </button>

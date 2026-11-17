@@ -172,7 +172,7 @@ export function AdminAccountsSeatGapReportPage() {
   return (
     <div className="space-y-6">
       {!isDemoMode && (
-        <p role="status" className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">
+        <p role="status" className="sr-only">
           {t('LIVE_UNAVAILABLE')}
         </p>
       )}

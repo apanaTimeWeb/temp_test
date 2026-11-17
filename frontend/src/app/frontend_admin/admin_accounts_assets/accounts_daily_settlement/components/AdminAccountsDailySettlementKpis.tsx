@@ -53,25 +53,29 @@ export function AdminAccountsDailySettlementKpis({ records }: Props) {
         title={t('EXPECTED_CASH')}
         value={formatPaiseToRupees(expectedCash)}
         subtitle={t('SUB_EXPECTED')}
-        icon={<Wallet className="h-5 w-5" />}
+        icon={<Wallet className="h-5 w-5 text-indigo-400" />}
+        className="border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-surface to-surface hover:border-indigo-500/40"
       />
       <AdminPrimitiveKpiCard
         title={t('CLEARED_CASH')}
         value={formatPaiseToRupees(clearedCash)}
         subtitle={t('SUB_CLEARED')}
-        icon={<CheckCircle2 className="h-5 w-5" />}
+        icon={<CheckCircle2 className="h-5 w-5 text-emerald-400" />}
+        className="border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-surface to-surface hover:border-emerald-500/40"
       />
       <AdminPrimitiveKpiCard
         title={t('PENDING_HANDOVER')}
         value={formatPaiseToRupees(pendingCash)}
         subtitle={`${pendingCount} shifts · ${t('SUB_PENDING')}`}
-        icon={<Clock className="h-5 w-5" />}
+        icon={<Clock className="h-5 w-5 text-amber-400" />}
+        className="border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-surface to-surface hover:border-amber-500/40"
       />
       <AdminPrimitiveKpiCard
         title={t('DISCREPANCY_SHORTAGE')}
         value={formatPaiseToRupees(discrepancyCash)}
         subtitle={`${flaggedCount} shifts · ${t('SUB_DISCREPANCY')}`}
-        icon={<AlertTriangle className="h-5 w-5" />}
+        icon={<AlertTriangle className="h-5 w-5 text-rose-400" />}
+        className="border-rose-500/20 bg-gradient-to-br from-rose-500/10 via-surface to-surface hover:border-rose-500/40"
       />
     </div>
   );

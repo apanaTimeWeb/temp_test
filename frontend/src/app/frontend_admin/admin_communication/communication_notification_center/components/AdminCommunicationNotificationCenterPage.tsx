@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ChevronRight, ArrowRight, CheckCheck } from 'lucide-react';
+import { ChevronRight, ArrowRight, CheckCheck, Bell, AlertTriangle, Sparkles } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import {
@@ -37,7 +37,7 @@ export function AdminCommunicationNotificationCenterPage() {
 
   return (
     <div className="min-h-screen bg-page p-8">
-      <p role="status" className="mb-4 rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('NOTIFICATION_CENTER_DEMO_BANNER')}</p>
+      <p role="status" className="sr-only">{t('NOTIFICATION_CENTER_DEMO_BANNER')}</p>
       <div className="mb-8">
         <div className="mb-1.5 flex items-center gap-1.5 text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary">
           <span>{t('BREADCRUMB_COMMUNICATION')}</span><ChevronRight size={18} strokeWidth={2} /><span>{t('NOTIFICATION_CENTER_TITLE')}</span>
@@ -53,12 +53,43 @@ export function AdminCommunicationNotificationCenterPage() {
         </div>
       </div>
 
+      {/* KPI Cards */}
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Total Alerts</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+              <Bell size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-cyan-400">{filtered.length}</p>
+        </div>
+        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Unread</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30">
+              <Sparkles size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-amber-400">{unread}</p>
+        </div>
+        <div className="rounded-2xl border border-rose-500/20 bg-gradient-to-br from-rose-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-500/40">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">High Priority</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/15 text-rose-400 border border-rose-500/30">
+              <AlertTriangle size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="text-2xl font-bold tracking-tight text-rose-400">{filtered.filter((n) => n.priority === 'High').length}</p>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-6">
         {/* Top Filter Bar */}
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2.5">
           {ADMIN_COMMUNICATION_NOTIFICATION_CATEGORIES.map(c => (
             <button data-testid={`admin_communication-notification-filter-${c.id.toLowerCase().replaceAll(' ', '-')}`} key={c.id} onClick={() => setCat(c.id)} aria-pressed={cat === c.id}
-              className={`flex min-h-11 w-full items-center justify-center gap-3 rounded-xl border px-4 py-3 text-left text-body font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${cat === c.id ? 'border-primary bg-primary text-on-primary shadow-card hover:opacity-95' : 'border-transparent bg-card text-text-secondary hover:border-border hover:shadow-card'}`}
+              className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border px-3.5 py-2 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${cat === c.id ? 'border-primary bg-primary text-on-primary shadow-xs scale-[1.02]' : 'border-border bg-card text-text-secondary hover:text-text-primary hover:border-border/80'}`}
               >
               <span aria-hidden="true">{c.icon}</span><span>{t(c.labelKey)}</span>
             </button>
@@ -75,7 +106,7 @@ export function AdminCommunicationNotificationCenterPage() {
           ) : (
             filtered.map(n => (
               <div key={n.id} className={`relative flex items-start gap-5 border-b border-l-4 border-border p-6 hover:bg-surface-hover ${n.read ? 'border-l-transparent opacity-60' : 'border-l-primary'}`}>
-                <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-surface-highlight text-section-title ${ADMIN_COMMUNICATION_NOTIFICATION_ICON_CLASS[n.category]}`}>{n.icon}</div>
+                <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-surface-muted border border-border/50 text-section-title ${ADMIN_COMMUNICATION_NOTIFICATION_ICON_CLASS[n.category]}`}>{n.icon}</div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <p className="mb-1 text-body font-semibold text-text-primary">{t(n.titleKey)}</p>

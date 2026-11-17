@@ -106,7 +106,7 @@ export default function ManagerDashboardReportsPage() {
   if (query.isPending) {
     return (
       <div className="mgr-page mgr-reports-theme flex items-center justify-center min-h-[50vh]" role="status" aria-live="polite" aria-busy="true">
-        <LibraryLoader size="lg" icon="chart-bar" variant="default" />
+        <LibraryLoader size="md" icon="chart-bar" variant="default" />
       </div>
     );
   }

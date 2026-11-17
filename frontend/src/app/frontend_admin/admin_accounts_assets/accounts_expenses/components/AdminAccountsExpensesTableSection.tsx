@@ -113,7 +113,7 @@ export function AdminAccountsExpensesTableSection({
         const status = params.data.status ?? 'APPROVED';
         if (status === 'PENDING_APPROVAL') {
           return (
-            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-warning-bg px-2 py-0.5 text-xs font-medium text-warning-text">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-400">
               <Clock className="h-3 w-3" />
               <span>{t('STATUS_PENDING')}</span>
             </span>
@@ -121,14 +121,14 @@ export function AdminAccountsExpensesTableSection({
         }
         if (status === 'APPROVED') {
           return (
-            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-success-bg px-2 py-0.5 text-xs font-medium text-success-text">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
               <CheckCircle2 className="h-3 w-3" />
               <span>{t('STATUS_APPROVED')}</span>
             </span>
           );
         }
         return (
-          <span className="inline-flex items-center gap-1 rounded-full border border-destructive-bg bg-destructive-bg px-2 py-0.5 text-xs font-medium text-destructive">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
             <XCircle className="h-3 w-3" />
             <span>{t('STATUS_REJECTED')}</span>
           </span>
@@ -183,7 +183,7 @@ export function AdminAccountsExpensesTableSection({
                   onRequestApprove(params.data);
                 }}
                 title={t('APPROVE')}
-                className="inline-flex items-center justify-center rounded-md bg-success p-1.5 text-white hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-success min-h-[32px] min-w-[32px]"
+                className="inline-flex items-center justify-center rounded-lg bg-emerald-600 hover:bg-emerald-500 p-1.5 text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 min-h-[32px] min-w-[32px] motion-safe:transition-all hover:scale-105"
               >
                 <Check className="h-3.5 w-3.5" />
               </button>
@@ -196,7 +196,7 @@ export function AdminAccountsExpensesTableSection({
                   onRequestReject(params.data);
                 }}
                 title={t('REJECT')}
-                className="inline-flex items-center justify-center rounded-md border border-border bg-card p-1.5 text-destructive hover:bg-destructive-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive min-h-[32px] min-w-[32px]"
+                className="inline-flex items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 p-1.5 text-rose-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 min-h-[32px] min-w-[32px] motion-safe:transition-all hover:scale-105"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -205,7 +205,7 @@ export function AdminAccountsExpensesTableSection({
               type="button"
               data-testid={`admin_accounting-expenses-delete-${params.data.id}`}
               aria-label={t('DELETE_EXPENSE', { description: params.data.description })}
-              className="inline-flex items-center justify-center rounded-md border border-border p-1.5 text-danger-text bg-danger-bg hover:opacity-80 min-h-[32px] min-w-[32px] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex items-center justify-center rounded-lg border border-border p-1.5 text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 hover:border-rose-500/30 min-h-[32px] min-w-[32px] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-all"
               disabled={!canMutate}
               title={!canMutate ? t('DELETE_BLOCKED') : undefined}
               onClick={(event) => {

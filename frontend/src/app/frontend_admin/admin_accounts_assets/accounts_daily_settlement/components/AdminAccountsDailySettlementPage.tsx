@@ -88,7 +88,7 @@ export function AdminAccountsDailySettlementPage() {
       {isDemo && (
         <div
           role="status"
-          className="flex items-center gap-2 rounded-lg border border-border bg-primary-subtle p-3 text-xs text-primary font-medium"
+          className="sr-only"
         >
           <ShieldCheck className="h-4 w-4 shrink-0 text-primary" />
           <span>{t('LIVE_UNAVAILABLE')}</span>
