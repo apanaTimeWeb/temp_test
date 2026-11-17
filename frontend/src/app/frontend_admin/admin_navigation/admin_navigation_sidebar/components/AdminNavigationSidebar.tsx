@@ -10,12 +10,10 @@ import {
   X,
   BookOpen,
   Search,
-  User,
 } from 'lucide-react';
 import {
   ADMIN_NAVIGATION_GROUPS,
 } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
-import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import type { AdminNavigationSidebarProps } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/types/AdminNavigationSidebarComponentTypes';
 import { AdminNavigationSidebarSearch } from './AdminNavigationSidebarSearch';
 import { AdminNavigationSidebarNavGroup } from './AdminNavigationSidebarNavGroup';
@@ -183,18 +181,13 @@ export function AdminNavigationSidebar({
           {expanded && (
             <Link
               href="/admin/admin_dashboard"
-              className="admin-sidebar-brand-link flex items-center gap-2.5 text-decoration-none min-w-0"
+              className="admin-sidebar-brand-link"
               onClick={mobileOpen ? closeMobile : undefined}
             >
-              <div className="admin-sidebar-brand-mark">
-                <BookOpen size={18} strokeWidth={2.2} />
-              </div>
-              <div className="flex items-center gap-1.5 min-w-0">
-                <span className="admin-sidebar-brand font-black tracking-tight text-white">
-                  {ADMIN_BRAND_CONFIG.name}
-                </span>
-                <span className="admin-sidebar-role-badge">ADMIN</span>
-              </div>
+              <span className="admin-sidebar-brand-mark" aria-hidden="true">
+                <BookOpen size={18} strokeWidth={2} />
+              </span>
+              <span className="admin-sidebar-brand-name">LibraryOS</span>
             </Link>
           )}
         </div>
@@ -248,28 +241,6 @@ export function AdminNavigationSidebar({
             ))
           )}
         </nav>
-
-        <div
-          className={`admin-sidebar-footer ${
-            expanded ? 'admin-sidebar-footer-expanded' : 'admin-sidebar-footer-collapsed'
-          }`}
-        >
-          {expanded ? (
-            <div className="admin-sidebar-footer-user flex items-center gap-2.5 min-w-0 flex-1">
-              <div className="admin-sidebar-footer-avatar" aria-hidden="true">
-                <User size={16} strokeWidth={2.2} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-bold text-white truncate">{t('ADMIN_GREETING')}</p>
-                <p className="text-xs text-slate-400 truncate">{t('ADMINISTRATOR')}</p>
-              </div>
-            </div>
-          ) : (
-            <div className="admin-sidebar-footer-avatar mx-auto" aria-hidden="true">
-              <User size={16} strokeWidth={2.2} />
-            </div>
-          )}
-        </div>
       </aside>
     </>
   );

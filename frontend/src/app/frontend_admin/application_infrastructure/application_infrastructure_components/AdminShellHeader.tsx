@@ -5,7 +5,7 @@ import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/ap
 // DATA FLOW: AdminRoute -> AdminHeader
 
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Building2, Bell, Menu, LogOut, User, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
@@ -27,10 +27,7 @@ import type { AdminShellHeaderProps } from '@/app/frontend_admin/application_inf
 
 export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderProps) {
   const t = useTranslations('ADMIN_SHELL');
-  const locale = useLocale();
   const { branches, selectedBranchId, setSelectedBranchId } = useAdminBranch();
-  const [greeting, setGreeting] = useState('');
-  const [dateStr, setDateStr] = useState('');
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
@@ -54,16 +51,6 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
     setShowLogoutModal(false);
     window.location.href = '/public_auth/auth_sign_in';
   }, []);
-
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting(t('GOOD_MORNING'));
-    else if (hour < 18) setGreeting(t('GOOD_AFTERNOON'));
-    else setGreeting(t('GOOD_EVENING'));
-
-    const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
-    setDateStr(new Date().toLocaleDateString(locale, options));
-  }, [locale, t]);
 
   // Close profile menu when clicking outside
   useEffect(() => {
@@ -110,18 +97,7 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
               ))}
             </SelectContent>
           </Select>
-          <span className="admin-header-branch-badge hidden sm:inline-block">Admin Scope</span>
         </div>
-      </div>
-
-      {/* Center Section: Greeting & Live Date */}
-      <div className="admin-header-center hidden lg:flex flex-col items-center justify-center">
-        <span className="admin-header-greeting">
-          {greeting}, {t('ADMIN_GREETING')}! 👋
-        </span>
-        <span className="admin-header-date">
-          {dateStr}
-        </span>
       </div>
 
       {/* Right Section: ThemeToggle, Notifications Bell, Avatar Profile Dropdown */}
@@ -159,7 +135,6 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
               <User size={17} strokeWidth={2.2} />
             </div>
             <div className="admin-avatar-details hidden sm:flex">
-              <span>{greeting}</span>
               <strong>{t('ADMIN_GREETING')}</strong>
             </div>
             <ChevronDown

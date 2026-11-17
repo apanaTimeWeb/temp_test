@@ -30,7 +30,6 @@ export function AdminNavigationSidebarNavGroup({
   isSubmoduleActive,
 }: AdminNavigationSidebarNavGroupProps) {
   const t = useTranslations('ADMIN_NAVIGATION');
-  const GroupIcon = group.icon;
   const groupLabel = t(group.labelKey) ?? group.label;
   const groupColor = ADMIN_NAV_GROUP_COLORS[group.id] ?? DEFAULT_ADMIN_NAV_COLOR;
 
@@ -46,33 +45,15 @@ export function AdminNavigationSidebarNavGroup({
             ? 'admin_sidebar-AdminShellSidebar-link-admin-admin-dashboard'
             : `admin_sidebar-AdminNavigationSidebar-group-${group.id}`
         }
-        className={`admin-sidebar-group-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+        className={`admin-sidebar-group-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
           activeGroup ? 'is-active' : ''
         }`}
       >
-        <div className="admin-sidebar-group-btn-content">
-          <span
-            className="admin-nav-icon-badge"
-            style={{
-              color: groupColor.iconColor,
-              backgroundColor: activeGroup ? `${groupColor.iconColor}33` : groupColor.bg,
-              boxShadow: activeGroup ? `0 0 12px ${groupColor.iconColor}40` : undefined,
-            }}
-          >
-            <GroupIcon
-              size={15}
-              strokeWidth={2.2}
-              className="admin-sidebar-group-icon"
-              aria-hidden="true"
-            />
-          </span>
-          <span className="admin-sidebar-group-label">{groupLabel}</span>
-        </div>
+        <span className="admin-sidebar-group-label">{groupLabel}</span>
         <ChevronDown
-          size={14}
+          size={13}
           strokeWidth={2}
           className={`admin-sidebar-group-chevron ${isGroupOpen ? 'is-expanded' : ''}`}
-          style={isGroupOpen ? { color: groupColor.iconColor } : undefined}
           aria-hidden="true"
         />
       </button>
@@ -97,29 +78,20 @@ export function AdminNavigationSidebarNavGroup({
               data-testid={`admin_sidebar-AdminNavigationSidebar-link-${sub.href
                 .replace(/[^a-zA-Z0-9]+/g, '-')
                 .replace(/^-|-$/g, '')}`}
-              className={`admin-sidebar-sublink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+              className={`admin-sidebar-sublink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                 subActive ? 'admin-sidebar-sublink-active' : ''
               }`}
-              style={
-                subActive
-                  ? {
-                      borderLeftColor: subColor.iconColor,
-                      background: `linear-gradient(135deg, ${subColor.iconColor}22, rgba(99, 102, 241, 0.12))`,
-                      color: '#ffffff',
-                    }
-                  : undefined
-              }
             >
               <span
                 className="admin-nav-icon-badge-sub"
                 style={{
                   color: subColor.iconColor,
                   backgroundColor: subActive ? `${subColor.iconColor}33` : subColor.bg,
-                  boxShadow: subActive ? `0 0 10px ${subColor.iconColor}40` : undefined,
+                  boxShadow: subActive ? `0 0 12px ${subColor.iconColor}50` : undefined,
                 }}
               >
                 <SubIcon
-                  size={13}
+                  size={15}
                   strokeWidth={2.2}
                   className="admin-sidebar-sublink-icon"
                   aria-hidden="true"
