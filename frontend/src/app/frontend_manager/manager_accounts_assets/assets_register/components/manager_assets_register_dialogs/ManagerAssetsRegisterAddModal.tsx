@@ -434,7 +434,7 @@ export function ManagerAssetsRegisterAddModal({
               }}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold border hover:opacity-95 transition-all cursor-pointer disabled:opacity-50"
             >
-              {isSubmitting ? <ButtonLoader icon="library" /> : <Sparkles size={14} />}
+              {isSubmitting ? <ButtonLoader icon="clipboard-list" /> : <Sparkles size={14} />}
               <span>{isSubmitting ? 'Registering...' : 'Register Asset'}</span>
             </button>
           </div>

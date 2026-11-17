@@ -311,7 +311,7 @@ export default function ManagerCommunicationComplaintsAddModal({
               disabled={isSubmitting}
               className="mgr-btn-primary mgr-btn-sm text-xs font-bold cursor-pointer inline-flex items-center gap-1.5"
             >
-              {isSubmitting ? <ButtonLoader icon="book" /> : null}
+              {isSubmitting ? <ButtonLoader icon="message-square-warning" /> : null}
               <span>{isSubmitting ? 'Submitting...' : 'Submit Ticket'}</span>
             </button>
           </div>

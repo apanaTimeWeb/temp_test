@@ -491,7 +491,7 @@ export function ManagerAssetsMaintenanceAddModal({
               }}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-xs font-semibold border hover:opacity-95 transition-all cursor-pointer disabled:opacity-50"
             >
-              {isSubmitting ? <ButtonLoader icon="book" /> : <Sparkles size={14} />}
+              {isSubmitting ? <ButtonLoader icon="wrench" /> : <Sparkles size={14} />}
               <span>{isSubmitting ? 'Logging...' : 'Log Maintenance Order'}</span>
             </button>
           </div>

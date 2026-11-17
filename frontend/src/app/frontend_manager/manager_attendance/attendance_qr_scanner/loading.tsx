@@ -4,7 +4,7 @@ import { ManagerPageLoader } from '@/app/frontend_manager/components/ManagerLoad
 export default function ManagerFeatureLoading() {
   return (
     <ManagerPageLoader
-      icon="search"
+      icon="qr-code"
       variant="breath"
     />
   );

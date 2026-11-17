@@ -158,7 +158,7 @@ export function ManagerSettingsSecurityActiveSessionsPanel({
                     disabled={revokingId === session.id}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 transition-all cursor-pointer disabled:opacity-50"
                   >
-                    {revokingId === session.id ? <ButtonLoader icon="library" /> : <LogOut size={12} />}
+                    {revokingId === session.id ? <ButtonLoader icon="key-round" /> : <LogOut size={12} />}
                     <span>{revokingId === session.id ? 'Revoking...' : 'Revoke Session'}</span>
                   </button>
                 )}

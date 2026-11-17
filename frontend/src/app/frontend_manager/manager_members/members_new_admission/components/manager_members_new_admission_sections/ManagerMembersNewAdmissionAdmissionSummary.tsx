@@ -90,7 +90,7 @@ export function ManagerMembersNewAdmissionAdmissionSummary({
               aria-label={isSubmitting ? 'Confirming Admission' : 'Confirm Admission'}
               className={`mgr-btn-primary mgr-btn-full flex items-center justify-center gap-2${!canSubmit || isSubmitting ? ' cursor-not-allowed opacity-50' : ''}`}
             >
-              {isSubmitting ? <ButtonLoader icon="user" /> : <CheckCircle size={18} strokeWidth={2} />}
+              {isSubmitting ? <ButtonLoader icon="user-check" /> : <CheckCircle size={18} strokeWidth={2} />}
               {isSubmitting ? tManagerUi('confirming') : tManagerUi('confirm_admission')}
             </button>
             <Link href={MANAGER_MEMBERS_NEW_ADMISSION_ROUTES.LIST} className="mgr-btn-ghost mgr-btn-full">{tManagerUi('cancel')}</Link>

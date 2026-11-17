@@ -80,7 +80,7 @@ export default function ManagerFinanceFinesPaymentsHeaderBanner({
             className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-border-strong hover:bg-surface-hover motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60 cursor-pointer"
             title="Sync Financial Ledger"
           >
-            {isSyncing ? <ButtonLoader icon="fine" /> : <RefreshCw size={14} />}
+            {isSyncing ? <ButtonLoader icon="banknote" /> : <RefreshCw size={14} />}
             <span>{isSyncing ? 'Syncing...' : 'Sync Ledger'}</span>
           </button>
 

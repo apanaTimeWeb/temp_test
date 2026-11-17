@@ -249,7 +249,7 @@ export default function ManagerAccountsExpensesPage({ view, id }: ManagerAccount
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:bg-surface-hover motion-safe:transition-all shadow-xs cursor-pointer active:scale-95 disabled:opacity-60"
             title="Sync Expense Ledger"
           >
-            {isSyncing ? <ButtonLoader icon="fine" /> : <RefreshCw size={14} />}
+            {isSyncing ? <ButtonLoader icon="receipt" /> : <RefreshCw size={14} />}
             <span>{isSyncing ? 'Syncing...' : 'Sync Balances'}</span>
           </button>
 

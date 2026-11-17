@@ -204,7 +204,7 @@ export function ManagerSeatsMatrixGridView({
 
         {isPending ? (
           <div className="flex items-center justify-center py-20" role="status">
-            <LibraryLoader size="md" icon="issue" variant="contra" />
+            <LibraryLoader size="md" icon="grid-3x3" variant="contra" />
           </div>
         ) : visibleGridSeats.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center space-y-2">

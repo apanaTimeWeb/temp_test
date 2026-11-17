@@ -21,7 +21,7 @@ export function ManagerMembersNewAdmissionMain(props: ManagerMembersNewAdmission
         <Suspense
           fallback={
             <div className="flex items-center justify-center p-16" role="status">
-              <LibraryLoader size="lg" icon="user" variant="flip" />
+              <LibraryLoader size="lg" icon="user-check" variant="flip" />
             </div>
           }
         >

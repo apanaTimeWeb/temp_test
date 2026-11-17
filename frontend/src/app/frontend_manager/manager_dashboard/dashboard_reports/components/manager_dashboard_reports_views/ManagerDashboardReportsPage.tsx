@@ -106,7 +106,7 @@ export default function ManagerDashboardReportsPage() {
   if (query.isPending) {
     return (
       <div className="mgr-page mgr-reports-theme flex items-center justify-center min-h-[50vh]" role="status" aria-live="polite" aria-busy="true">
-        <LibraryLoader size="lg" icon="report" variant="default" />
+        <LibraryLoader size="lg" icon="chart-bar" variant="default" />
       </div>
     );
   }
@@ -186,7 +186,7 @@ export default function ManagerDashboardReportsPage() {
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               title="Refresh reports data"
             >
-              {query.isFetching ? <ButtonLoader icon="report" /> : <RotateCw size={13} className="text-muted-foreground" />}
+              {query.isFetching ? <ButtonLoader icon="chart-bar" /> : <RotateCw size={13} className="text-muted-foreground" />}
               <span>{query.isFetching ? 'Refreshing...' : 'Refresh'}</span>
             </button>
             <button

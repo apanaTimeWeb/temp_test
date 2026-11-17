@@ -180,7 +180,7 @@ export default function ManagerAttendanceDailyPage({ view, id, name, phone, smar
               className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-secondary hover:text-primary hover:border-primary hover:bg-surface-hover motion-safe:transition-all shadow-2xs active:scale-95 disabled:opacity-60 cursor-pointer flex-1 sm:flex-initial"
               title="Sync Biometric Turnstiles"
             >
-              {isSyncing ? <ButtonLoader icon="report" /> : <RefreshCw size={14} className="text-primary" />}
+              {isSyncing ? <ButtonLoader icon="calendar-check" /> : <RefreshCw size={14} className="text-primary" />}
               <span>{isSyncing ? 'Syncing...' : 'Sync Turnstiles'}</span>
             </button>
             <button

@@ -180,7 +180,7 @@ export function ManagerSeatsMatrixClient() {
           onClick={() => { void refetch(); }}
           disabled={isFetching}
         >
-          {isFetching ? <ButtonLoader icon="issue" /> : null}
+          {isFetching ? <ButtonLoader icon="grid-3x3" /> : null}
           <span>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</span>
         </button>
       </section>

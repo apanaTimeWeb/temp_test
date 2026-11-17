@@ -143,7 +143,7 @@ export function ManagerFinanceCollectFeeReceiptPreview({
               disabled={!isCollectAvailable || !selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim()) || isSubmitting}
             >
               {isSubmitting ? (
-                <ButtonLoader icon="fine" />
+                <ButtonLoader icon="hand-coins" />
               ) : isCollectAvailable ? (
                 <CheckCircle size={16} className={(!selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim())) ? 'text-secondary' : 'text-on-success'} />
               ) : (

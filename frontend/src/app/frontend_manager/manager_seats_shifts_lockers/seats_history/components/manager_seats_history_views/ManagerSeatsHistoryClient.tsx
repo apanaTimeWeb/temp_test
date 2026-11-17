@@ -518,13 +518,13 @@ export function ManagerSeatsHistoryClient() {
             onClick={() => historyQuery.refetch()}
             disabled={historyQuery.isFetching}
           >
-            {historyQuery.isFetching ? <ButtonLoader icon="report" /> : null}
+            {historyQuery.isFetching ? <ButtonLoader icon="history" /> : null}
             <span>{tManagerUi('retry')}</span>
           </button>
         </div>
       ) : historyQuery.isPending ? (
         <div className="ss-empty-state p-12 rounded-2xl bg-card border border-border flex items-center justify-center" role="status">
-          <LibraryLoader size="md" icon="report" variant="default" />
+          <LibraryLoader size="md" icon="history" variant="default" />
         </div>
       ) : filtered.length === 0 ? (
         <ManagerSeatsHistoryEmptyState className="ss-empty-state p-12 rounded-2xl bg-card border border-border text-center space-y-2">

@@ -168,7 +168,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
     toast.success(`Smart ID card WhatsApp link opened for ${selected.name} (+91 ${clean10})`);
   };
 
-  if (isError) return <div className="mgr-page mgr-students-theme"><div className="mgr-state-card mgr-state-card-error" role="alert"><p className="mgr-state-title">{tManagerUi('unable_to_load_students')}</p><p className="mgr-state-description">{tManagerUi('please_retry_from_the_students_directory')}</p><button type="button" className="mgr-btn-primary mgr-btn-sm mt-3 inline-flex items-center gap-1.5" onClick={() => { void refetch(); }} disabled={isFetching}>{isFetching ? <ButtonLoader icon="user" /> : null}<span>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</span></button></div></div>;
+  if (isError) return <div className="mgr-page mgr-students-theme"><div className="mgr-state-card mgr-state-card-error" role="alert"><p className="mgr-state-title">{tManagerUi('unable_to_load_students')}</p><p className="mgr-state-description">{tManagerUi('please_retry_from_the_students_directory')}</p><button type="button" className="mgr-btn-primary mgr-btn-sm mt-3 inline-flex items-center gap-1.5" onClick={() => { void refetch(); }} disabled={isFetching}>{isFetching ? <ButtonLoader icon="id-card" /> : null}<span>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</span></button></div></div>;
 
   return (
     <div className="mgr-page mgr-students-theme">
@@ -252,7 +252,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               <div className="mgr-idcard-student-list">
                 {isPending ? (
                   <div className="mgr-loading-state flex items-center justify-center p-6" role="status">
-                    <LibraryLoader size="sm" icon="user" />
+                    <LibraryLoader size="sm" icon="id-card" />
                   </div>
                 ) : filtered.length === 0 ? <ManagerMembersIdCardGeneratorEmptyState className="mgr-empty-state"><div className="mgr-empty-icon"><Search size={36} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_students_found')}</p></ManagerMembersIdCardGeneratorEmptyState> : paginatedStudents.map((student: ManagerStudent) => {
                   const initials = student.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase();

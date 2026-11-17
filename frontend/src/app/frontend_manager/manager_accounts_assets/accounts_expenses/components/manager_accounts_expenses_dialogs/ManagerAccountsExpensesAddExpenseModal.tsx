@@ -359,7 +359,7 @@ export function ManagerAccountsExpensesAddExpenseModal({
               disabled={isSubmitting}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary-hover shadow-xs transition-all cursor-pointer"
             >
-              {isSubmitting ? <ButtonLoader icon="fine" /> : <CheckCircle size={14} />}
+              {isSubmitting ? <ButtonLoader icon="receipt" /> : <CheckCircle size={14} />}
               <span>{isSubmitting ? 'Recording...' : 'Record Expense'}</span>
             </button>
           </div>

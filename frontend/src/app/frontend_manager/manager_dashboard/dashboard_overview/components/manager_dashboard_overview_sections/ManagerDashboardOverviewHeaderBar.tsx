@@ -74,7 +74,7 @@ export function ManagerDashboardOverviewHeaderBar({
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-semibold text-foreground hover:bg-surface-hover hover:border-primary transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
             title="Refresh dashboard KPIs"
           >
-            {isFetching ? <ButtonLoader icon="library" /> : <RotateCw size={13} className="text-muted-foreground" />}
+            {isFetching ? <ButtonLoader icon="layout-dashboard" /> : <RotateCw size={13} className="text-muted-foreground" />}
             <span>{isFetching ? 'Refreshing...' : 'Refresh'}</span>
           </button>
           <Link

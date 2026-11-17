@@ -369,13 +369,13 @@ export default function ManagerCommunicationComplaintsPage({
       <div className="mc-card mc-card--flush">
         {isPending ? (
           <div className="mc-empty flex items-center justify-center p-8" role="status">
-            <LibraryLoader size="md" icon="book" variant="flip" />
+            <LibraryLoader size="md" icon="message-square-warning" variant="contra" />
           </div>
         ) : isError ? (
           <div className="mc-empty" role="alert" aria-live="assertive">
             <p className="mc-empty__title">{tManagerUi('unable_to_load_complaints')}</p>
             <button type="button" className="mc-btn-ghost mt-3 inline-flex items-center gap-1.5" onClick={() => refetch()} disabled={isFetching}>
-              {isFetching ? <ButtonLoader icon="book" /> : null}
+              {isFetching ? <ButtonLoader icon="message-square-warning" /> : null}
               <span>{tManagerUi('retry')}</span>
             </button>
           </div>

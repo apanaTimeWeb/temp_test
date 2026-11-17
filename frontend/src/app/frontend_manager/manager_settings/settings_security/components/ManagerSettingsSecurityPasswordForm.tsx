@@ -299,7 +299,7 @@ export function ManagerSettingsSecurityPasswordForm() {
             disabled={isSubmitting || !checks.length || !checks.matches}
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 text-xs font-bold text-slate-950 transition-all cursor-pointer shadow-sm"
           >
-            {isSubmitting ? <ButtonLoader icon="library" /> : <ShieldCheck size={14} />}
+            {isSubmitting ? <ButtonLoader icon="key-round" /> : <ShieldCheck size={14} />}
             {isSubmitting ? 'Updating...' : 'Update Password'}
           </button>
         </div>

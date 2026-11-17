@@ -1,9 +1,89 @@
 'use client';
 
 import React from 'react';
+import {
+  LayoutDashboard,
+  BarChart3,
+  Scale,
+  Receipt,
+  Armchair,
+  Wrench,
+  ClipboardList,
+  UserX,
+  CalendarCheck,
+  QrCode,
+  MessageSquareWarning,
+  Bell,
+  MessageCircle,
+  MessageSquareText,
+  Ban,
+  HandCoins,
+  Banknote,
+  Handshake,
+  RefreshCw,
+  ShieldCheck,
+  Repeat,
+  Star,
+  GraduationCap,
+  Users,
+  Search,
+  UserPlus,
+  IdCard,
+  UserCheck,
+  Gift,
+  Lock,
+  History,
+  Grid3X3,
+  Building,
+  LifeBuoy,
+  KeyRound,
+} from 'lucide-react';
 
 export type LoaderSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-export type LoaderIcon = 'book' | 'search' | 'user' | 'issue' | 'return' | 'fine' | 'report' | 'library';
+export type LoaderIcon =
+  | 'book'
+  | 'search'
+  | 'user'
+  | 'issue'
+  | 'return'
+  | 'fine'
+  | 'report'
+  | 'library'
+  | 'layout-dashboard'
+  | 'chart-bar'
+  | 'scale'
+  | 'receipt'
+  | 'armchair'
+  | 'wrench'
+  | 'clipboard-list'
+  | 'user-x'
+  | 'calendar-check'
+  | 'qr-code'
+  | 'message-square-warning'
+  | 'bell'
+  | 'message-circle'
+  | 'message-square-text'
+  | 'ban'
+  | 'hand-coins'
+  | 'banknote'
+  | 'handshake'
+  | 'refresh-cw'
+  | 'shield-check'
+  | 'repeat'
+  | 'star'
+  | 'graduation-cap'
+  | 'users'
+  | 'user-plus'
+  | 'id-card'
+  | 'user-check'
+  | 'gift'
+  | 'lock'
+  | 'history'
+  | 'grid-3x3'
+  | 'building'
+  | 'life-buoy'
+  | 'key-round'
+  | (string & {});
 export type LoaderVariant = 'default' | 'flip' | 'contra' | 'breath';
 
 export interface LibraryLoaderProps {
@@ -26,6 +106,74 @@ const SIZE_MAP: Record<LoaderSize, number> = {
 
 function renderSvgIcon(icon: LoaderIcon) {
   switch (icon) {
+    case 'layout-dashboard':
+      return <LayoutDashboard strokeWidth={2} aria-hidden="true" />;
+    case 'chart-bar':
+      return <BarChart3 strokeWidth={2} aria-hidden="true" />;
+    case 'scale':
+      return <Scale strokeWidth={2} aria-hidden="true" />;
+    case 'receipt':
+      return <Receipt strokeWidth={2} aria-hidden="true" />;
+    case 'armchair':
+      return <Armchair strokeWidth={2} aria-hidden="true" />;
+    case 'wrench':
+      return <Wrench strokeWidth={2} aria-hidden="true" />;
+    case 'clipboard-list':
+      return <ClipboardList strokeWidth={2} aria-hidden="true" />;
+    case 'user-x':
+      return <UserX strokeWidth={2} aria-hidden="true" />;
+    case 'calendar-check':
+      return <CalendarCheck strokeWidth={2} aria-hidden="true" />;
+    case 'qr-code':
+      return <QrCode strokeWidth={2} aria-hidden="true" />;
+    case 'message-square-warning':
+      return <MessageSquareWarning strokeWidth={2} aria-hidden="true" />;
+    case 'bell':
+      return <Bell strokeWidth={2} aria-hidden="true" />;
+    case 'message-circle':
+      return <MessageCircle strokeWidth={2} aria-hidden="true" />;
+    case 'message-square-text':
+      return <MessageSquareText strokeWidth={2} aria-hidden="true" />;
+    case 'ban':
+      return <Ban strokeWidth={2} aria-hidden="true" />;
+    case 'hand-coins':
+      return <HandCoins strokeWidth={2} aria-hidden="true" />;
+    case 'banknote':
+      return <Banknote strokeWidth={2} aria-hidden="true" />;
+    case 'handshake':
+      return <Handshake strokeWidth={2} aria-hidden="true" />;
+    case 'refresh-cw':
+      return <RefreshCw strokeWidth={2} aria-hidden="true" />;
+    case 'shield-check':
+      return <ShieldCheck strokeWidth={2} aria-hidden="true" />;
+    case 'repeat':
+      return <Repeat strokeWidth={2} aria-hidden="true" />;
+    case 'star':
+      return <Star strokeWidth={2} aria-hidden="true" />;
+    case 'graduation-cap':
+      return <GraduationCap strokeWidth={2} aria-hidden="true" />;
+    case 'users':
+      return <Users strokeWidth={2} aria-hidden="true" />;
+    case 'user-plus':
+      return <UserPlus strokeWidth={2} aria-hidden="true" />;
+    case 'id-card':
+      return <IdCard strokeWidth={2} aria-hidden="true" />;
+    case 'user-check':
+      return <UserCheck strokeWidth={2} aria-hidden="true" />;
+    case 'gift':
+      return <Gift strokeWidth={2} aria-hidden="true" />;
+    case 'lock':
+      return <Lock strokeWidth={2} aria-hidden="true" />;
+    case 'history':
+      return <History strokeWidth={2} aria-hidden="true" />;
+    case 'grid-3x3':
+      return <Grid3X3 strokeWidth={2} aria-hidden="true" />;
+    case 'building':
+      return <Building strokeWidth={2} aria-hidden="true" />;
+    case 'life-buoy':
+      return <LifeBuoy strokeWidth={2} aria-hidden="true" />;
+    case 'key-round':
+      return <KeyRound strokeWidth={2} aria-hidden="true" />;
     case 'search':
       return (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

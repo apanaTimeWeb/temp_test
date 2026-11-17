@@ -4,8 +4,8 @@ import { ManagerPageLoader } from '@/app/frontend_manager/components/ManagerLoad
 export default function ManagerFeatureLoading() {
   return (
     <ManagerPageLoader
-      icon="library"
-      variant="contra"
+      icon="bell"
+      variant="breath"
     />
   );
 }
