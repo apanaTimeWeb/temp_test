@@ -9,7 +9,7 @@ import {
   Eye, EyeOff, BookOpen, CheckCircle, Lock,
   Shield, Zap, Users, Sparkles, LayoutGrid, Clock,
 } from 'lucide-react';
-import { PublicAuthBlockerOverlay, PublicAuthButtonLoader } from '@/app/public_auth/components/PublicAuthLoader';
+import { PublicAuthBlockerOverlay, PublicAuthButtonLoader } from '@/app/public_auth/auth_sign_in/components/PublicAuthSignInLoader';
 
 interface RoleConfig {
   id: 'superadmin' | 'admin' | 'manager';
