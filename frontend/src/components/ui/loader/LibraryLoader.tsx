@@ -265,10 +265,10 @@ export function LibraryLoader({
       {/* Embedded reusable gradient defs */}
       <svg width="0" height="0" className="absolute pointer-events-none" aria-hidden="true">
         <defs>
-          <linearGradient id="libGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#F4D03F" />
-            <stop offset="50%" stopColor="#C8912A" />
-            <stop offset="100%" stopColor="#1E3A5F" />
+          <linearGradient id="libGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#22D3EE" />
+            <stop offset="50%" stopColor="#6366F1" />
+            <stop offset="100%" stopColor="#A78BFA" />
           </linearGradient>
         </defs>
       </svg>
@@ -280,18 +280,18 @@ export function LibraryLoader({
       {variant === 'contra' ? (
         <>
           <svg className="loader-ring" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-            <circle cx="50" cy="50" r="44" stroke="#C8912A" strokeWidth="2.5" strokeDasharray="4 6" opacity="0.3" vectorEffect="non-scaling-stroke" />
-            <circle cx="50" cy="50" r="44" stroke="url(#libGrad)" strokeWidth="3" strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke" />
+            <circle cx="50" cy="50" r="44" stroke="#6366F1" strokeWidth="2.5" strokeDasharray="4 6" opacity="0.35" vectorEffect="non-scaling-stroke" />
+            <circle cx="50" cy="50" r="44" stroke="url(#libGrad)" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke" />
           </svg>
           <svg className="inner-svg" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-            <circle cx="50" cy="50" r="35" stroke="#1E3A5F" strokeWidth="1.5" strokeDasharray="6 10" opacity="0.4" vectorEffect="non-scaling-stroke" />
+            <circle cx="50" cy="50" r="35" stroke="#22D3EE" strokeWidth="1.8" strokeDasharray="6 10" opacity="0.75" vectorEffect="non-scaling-stroke" />
           </svg>
         </>
       ) : (
         <svg className="loader-ring" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-          <circle cx="50" cy="50" r="44" stroke="#C8912A" strokeWidth="2.5" strokeDasharray="4 6" opacity="0.3" vectorEffect="non-scaling-stroke" />
-          <circle cx="50" cy="50" r="44" stroke="url(#libGrad)" strokeWidth="3" strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke" />
-          <circle cx="50" cy="50" r="35" stroke="#1E3A5F" strokeWidth="1.5" strokeDasharray="6 10" opacity="0.35" vectorEffect="non-scaling-stroke" />
+          <circle cx="50" cy="50" r="44" stroke="#6366F1" strokeWidth="2.5" strokeDasharray="4 6" opacity="0.35" vectorEffect="non-scaling-stroke" />
+          <circle cx="50" cy="50" r="44" stroke="url(#libGrad)" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke" />
+          <circle cx="50" cy="50" r="35" stroke="#22D3EE" strokeWidth="1.8" strokeDasharray="6 10" opacity="0.75" vectorEffect="non-scaling-stroke" />
         </svg>
       )}
 

@@ -244,7 +244,7 @@ html.dark .mgr-theme,
 }
 
 /* ============================================================
-   LIBRARY LOADER — Golden dual-ring loader
+   AURORA CYBER-LUXURY DUAL-RING LOADER
    ============================================================ */
 
 .loader-box,
@@ -256,16 +256,16 @@ html.dark .mgr-theme,
   flex-shrink: 0;
 }
 
-/* Golden aura glow */
+/* Aurora aura glow */
 .loader-box .loader-aura,
 .library-loader-box .loader-aura {
   position: absolute;
-  inset: 0;
+  inset: -4px;
   border-radius: 50%;
-  filter: blur(12px);
-  opacity: 0.4;
+  filter: blur(16px);
+  opacity: 0.6;
   pointer-events: none;
-  background: radial-gradient(circle, #F4D03F 0%, #C8912A 50%, transparent 80%);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(139, 92, 246, 0.2) 45%, rgba(34, 211, 238, 0.1) 70%, transparent 85%);
 }
 
 /* Outer ring — CW spin (sab variants) */
@@ -309,14 +309,14 @@ html.dark .mgr-theme,
   justify-content: center;
   pointer-events: none;
   user-select: none;
-  color: #1E3A5F;
+  color: #FFFFFF;
 }
 
 .loader-box .loader-icon svg,
 .library-loader-box .loader-icon svg {
   width: 45%;
   height: 45%;
-  filter: drop-shadow(0 0 4px rgba(200, 145, 42, 0.45));
+  filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.7)) drop-shadow(0 0 4px rgba(34, 211, 238, 0.5));
 }
 
 /* breath variant — icon pulse */
