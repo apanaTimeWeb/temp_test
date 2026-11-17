@@ -10,31 +10,31 @@ export function PublicAuthLoginLoader() {
   return (
     <>
       <style>{`
-        .loader-box {
+        .auth-loader-box {
           position: relative;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
         }
-        .loader-aura {
+        .auth-loader-box .loader-aura {
           position: absolute; inset: 0; border-radius: 50%;
           filter: blur(12px); opacity: 0.4; pointer-events: none;
           background: radial-gradient(circle, #F4D03F 0%, #C8912A 50%, transparent 80%);
         }
-        .loader-ring {
+        .auth-loader-box .loader-ring {
           width: 100%; height: 100%;
           animation: spinCW 1.4s linear infinite;
         }
-        .inner-svg {
+        .auth-loader-box .inner-svg {
           position: absolute; inset: 0;
           animation: spinCCW 2.4s linear infinite;
         }
-        .loader-icon {
+        .auth-loader-box .loader-icon {
           position: absolute; inset: 0;
           display: flex; align-items: center; justify-content: center;
           pointer-events: none; user-select: none;
           color: #1E3A5F;
         }
-        .loader-icon svg {
+        .auth-loader-box .loader-icon svg {
           width: 45%; height: 45%;
           filter: drop-shadow(0 0 4px rgba(200,145,42,0.45));
         }
@@ -43,8 +43,8 @@ export function PublicAuthLoginLoader() {
         @keyframes spinCCW { to { transform: rotate(-360deg); } }
 
         @media (prefers-reduced-motion: reduce) {
-          .loader-ring { animation-duration: 4s !important; }
-          .inner-svg   { animation-duration: 6s !important; }
+          .auth-loader-box .loader-ring { animation-duration: 4s !important; }
+          .auth-loader-box .inner-svg   { animation-duration: 6s !important; }
         }
       `}</style>
 
@@ -58,7 +58,7 @@ export function PublicAuthLoginLoader() {
         </defs>
       </svg>
 
-      <div className="loader-box" style={{ width: '96px', height: '96px' }} role="status" aria-label="Loading">
+      <div className="loader-box contra auth-loader-box" style={{ width: '96px', height: '96px' }} role="status" aria-label="Loading">
         <div className="loader-aura" />
 
         {/* Outer CW ring (golden gradient) */}
@@ -112,7 +112,7 @@ export function PublicAuthBlockerOverlay() {
 /** Button loader (20px) for submit button */
 export function PublicAuthButtonLoader() {
   return (
-    <div className="loader-box" style={{ width: 20, height: 20 }}>
+    <div className="loader-box contra auth-loader-box button-loader" style={{ width: 20, height: 20 }}>
       <div className="loader-aura" style={{ opacity: 0.2 }} />
       <svg className="loader-ring" viewBox="0 0 100 100" fill="none">
         <circle cx="50" cy="50" r="44" stroke="#C8912A" strokeWidth="2.5" strokeDasharray="4 6" opacity="0.5" vectorEffect="non-scaling-stroke" />

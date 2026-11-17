@@ -532,7 +532,7 @@ export default function PublicAuthSignInPage() {
                 disabled={isSubmitting || loginSuccess}
                 className="submit-btn shimmer-btn glow-indigo w-full text-white font-black text-sm py-4 rounded-xl transition-all active:scale-[0.98] mt-2 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
-                {isSubmitting ? (
+                {isSubmitting || loginSuccess ? (
                   <PublicAuthButtonLoader />
                 ) : (
                   <>
