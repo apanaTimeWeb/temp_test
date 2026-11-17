@@ -88,17 +88,6 @@ export default function AdminMembersDirectoryMemberMobileCards({
             </div>
           </dl>
           <div className="relative flex flex-wrap items-center gap-2 border-t border-slate-800/80 pt-3">
-            {onToggleSelectOne && (
-              <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer mr-1">
-                <input
-                  type="checkbox"
-                  checked={selectedIds.includes(member.id)}
-                  onChange={() => onToggleSelectOne(member.id)}
-                  className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
-                />
-                <span>Select</span>
-              </label>
-            )}
             <button
               type="button"
               className="min-h-9 flex-1 inline-flex items-center justify-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 px-3 text-xs font-semibold text-sky-400 hover:text-sky-300 hover:bg-sky-500/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"

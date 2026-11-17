@@ -366,17 +366,6 @@ export default function AdminMembersMemberTable({
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-900/80 uppercase text-[11px] font-semibold text-slate-400 border-b border-slate-800/80 tracking-wider">
                 <tr>
-                  <th scope="col" className="w-10 px-4 py-3">
-                    {onToggleSelectAll && (
-                      <input
-                        type="checkbox"
-                        aria-label="Select all members on this page"
-                        checked={visibleMembers.length > 0 && visibleMembers.every((m) => selectedIds.includes(m.id))}
-                        onChange={onToggleSelectAll}
-                        className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
-                      />
-                    )}
-                  </th>
                   {renderSortableHeader('name', t('TABLE_MEMBER'))}
                   {renderSortableHeader('phone', t('TABLE_CONTACT'))}
                   {renderSortableHeader('plan', t('TABLE_PLAN'))}
@@ -387,25 +376,12 @@ export default function AdminMembersMemberTable({
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/50">
-                {visibleMembers.map((member) => {
-                  const isSelected = selectedIds.includes(member.id);
-                  return (
-                    <tr key={member.id} className={`hover:bg-indigo-500/5 transition-colors h-14 ${isSelected ? 'bg-indigo-950/30' : ''}`}>
-                      <td className="w-10 px-4 py-3">
-                        {onToggleSelectOne && (
-                          <input
-                            type="checkbox"
-                            aria-label={`Select ${member.name}`}
-                            checked={isSelected}
-                            onChange={() => onToggleSelectOne(member.id)}
-                            className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
-                          />
-                        )}
-                      </td>
-                      <th scope="row" className="px-4 py-3 font-medium text-white">
-                        <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 font-semibold text-white hover:text-indigo-300 transition-colors text-left" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
-                        <span className="block text-xs font-mono text-slate-400">{displayValue(member.id)}</span>
-                      </th>
+                {visibleMembers.map((member) => (
+                  <tr key={member.id} className="hover:bg-indigo-500/5 transition-colors h-14">
+                    <th scope="row" className="px-4 py-3 font-medium text-white">
+                      <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 font-semibold text-white hover:text-indigo-300 transition-colors text-left" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
+                      <span className="block text-xs font-mono text-slate-400">{displayValue(member.id)}</span>
+                    </th>
                       <td className="px-4 py-3 text-slate-200 text-xs font-mono">{displayValue(member.email || member.phone)}</td>
                       <td className="px-4 py-3 text-slate-200 font-medium">{displayValue(member.plan)}</td>
                       <td className="px-4 py-3 text-slate-200 font-medium">{member.seat ? `Seat ${member.seat}` : '—'}</td>
@@ -448,8 +424,7 @@ export default function AdminMembersMemberTable({
                         </div>
                       </td>
                     </tr>
-                  );
-                })}
+                ))}
               </tbody>
             </table>
           </div>

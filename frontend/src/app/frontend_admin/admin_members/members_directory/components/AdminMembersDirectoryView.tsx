@@ -240,11 +240,6 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 id="admin-members-list-title" className="text-base sm:text-lg font-bold text-white tracking-tight">{t(memberListConfig.titleKey)}</h2>
             <div className="flex flex-wrap items-center gap-2.5">
-              {selectedMemberIds.length > 0 && (
-                <button type="button" onClick={clearSelection} className="inline-flex items-center gap-1 text-xs text-rose-400 hover:text-rose-300 hover:underline px-1">
-                  <X size={13} className="text-rose-400" /> Clear ({selectedMemberIds.length})
-                </button>
-              )}
               <button
                 type="button"
                 onClick={() => setIsBulkWhatsAppOpen(true)}
@@ -252,11 +247,6 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
                 className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3.5 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/25 transition-all disabled:opacity-40 shadow-sm shadow-emerald-500/10"
               >
                 <MessageSquare size={14} className="text-emerald-400" /> Bulk WhatsApp
-                {selectedMemberIds.length > 0 && (
-                  <span className="rounded-full bg-emerald-500 text-black px-1.5 py-0.2 text-[10px] font-bold">
-                    {selectedMemberIds.length}
-                  </span>
-                )}
               </button>
               <button
                 type="button"
