@@ -6,6 +6,7 @@ import { maskManagerCollectFeePhone } from '@/app/frontend_manager/manager_finan
 import { useManagerCollectFeeFormatting } from '@/app/frontend_manager/manager_finance/finance_collect_fee/hooks/ManagerFinanceCollectFeeFormattingHook';
 import { AlertCircle, BookOpen, CheckCircle, X, MessageSquare } from 'lucide-react';
 import { toast } from 'sonner';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import type { ManagerFinanceCollectFeeReceiptPreviewProps } from '@/app/frontend_manager/manager_finance/finance_collect_fee/types/ManagerFinanceCollectFeeTypes';
 
 export function ManagerFinanceCollectFeeReceiptPreview({
@@ -141,8 +142,10 @@ export function ManagerFinanceCollectFeeReceiptPreview({
               onClick={onCollect}
               disabled={!isCollectAvailable || !selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim()) || isSubmitting}
             >
-              {isCollectAvailable ? (
-                <CheckCircle size={16} className={(!selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim()) || isSubmitting) ? 'text-secondary' : 'text-on-success'} />
+              {isSubmitting ? (
+                <ButtonLoader icon="fine" />
+              ) : isCollectAvailable ? (
+                <CheckCircle size={16} className={(!selectedStudent || !amount || parseFloat(amount) <= 0 || (mode !== 'cash' && !txnId?.trim())) ? 'text-secondary' : 'text-on-success'} />
               ) : (
                 <AlertCircle size={16} className="text-secondary" />
               )}
