@@ -30,57 +30,72 @@ export function AdminStaffPayrollKpiOverview({ model }: Props) {
     <div className="space-y-6">
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-primary">
-            <Wallet size={16} />
-            <span className="text-xs font-medium">{t('KPI_TOTAL_PAYROLL')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_TOTAL_PAYROLL')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Wallet size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-text-primary">
+          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">
             ₹{kpis.totalPayrollAmount.toLocaleString('en-IN')}
           </p>
+          <span className="text-xs text-text-muted">Total Gross Budget</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-success-text">
-            <CheckCircle2 size={16} />
-            <span className="text-xs font-medium">{t('KPI_DISBURSED_AMOUNT')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_DISBURSED_AMOUNT')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-success-bg text-success-text">
+              <CheckCircle2 size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-success-text">
+          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
             ₹{kpis.disbursedAmount.toLocaleString('en-IN')}
           </p>
+          <span className="text-xs text-text-muted">Processed & Paid</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-warning-text">
-            <Clock size={16} />
-            <span className="text-xs font-medium">{t('KPI_PENDING_AMOUNT')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_PENDING_AMOUNT')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-warning-bg text-warning-text">
+              <Clock size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-warning-text">
+          <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">
             ₹{kpis.pendingAmount.toLocaleString('en-IN')}
           </p>
+          <span className="text-xs text-text-muted">Awaiting Authorization</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-text-secondary">
-            <Users size={16} />
-            <span className="text-xs font-medium">{t('KPI_TOTAL_STAFF')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_TOTAL_STAFF')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-info-bg text-info-text">
+              <Users size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-text-primary">{kpis.totalStaffCount}</p>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{kpis.totalStaffCount}</p>
+          <span className="text-xs text-text-muted">Payroll Employees</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-2 text-danger-text">
-            <TrendingDown size={16} />
-            <span className="text-xs font-medium">{t('KPI_TOTAL_DEDUCTIONS')}</span>
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_TOTAL_DEDUCTIONS')}</span>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-danger-bg text-danger-text">
+              <TrendingDown size={15} strokeWidth={2.2} />
+            </div>
           </div>
-          <p className="mt-2 text-2xl font-bold text-danger-text">
+          <p className="mt-2 text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">
             ₹{kpis.totalDeductions.toLocaleString('en-IN')}
           </p>
+          <span className="text-xs text-text-muted">Unpaid & Advance</span>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
           <div className="flex items-center justify-between text-xs text-text-secondary">
-            <span className="font-medium">{t('KPI_PAYOUT_PROGRESS')}</span>
+            <span className="font-semibold uppercase tracking-wider">{t('KPI_PAYOUT_PROGRESS')}</span>
             <span className="font-bold text-primary">{progressPercent}%</span>
           </div>
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-surface">

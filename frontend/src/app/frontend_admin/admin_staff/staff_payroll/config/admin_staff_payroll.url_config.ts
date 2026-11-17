@@ -13,7 +13,7 @@ export const ADMIN_STAFF_PAYROLL_API = {
 export const PAYROLL_STATUS_VARIANTS = {
   DISBURSED: 'bg-success-bg text-success-text border-success-border',
   PENDING: 'bg-warning-bg text-warning-text border-warning-border',
-  ON_HOLD: 'bg-surface-highlight text-text-secondary border-border',
+  ON_HOLD: 'bg-info-bg text-info-text border-info-bg',
 } as const;
 
 export const PAYROLL_MONTHS = [

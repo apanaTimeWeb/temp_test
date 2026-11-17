@@ -178,7 +178,7 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
                         onClick={() => onOpenSlip(r)}
                         title={t('ACTION_SLIP')}
                         aria-label={t('ACTION_SLIP')}
-                        className="inline-flex min-h-9 items-center gap-1 rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-medium text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-border bg-card px-2.5 py-1 text-xs font-semibold text-text-secondary hover:bg-surface-hover hover:text-text-primary hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
                       >
                         <FileText size={14} />
                         <span className="hidden sm:inline">Slip</span>
@@ -190,7 +190,7 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
                         onClick={() => onOpenDisburse(r)}
                         title={t('ACTION_DISBURSE')}
                         aria-label={t('ACTION_DISBURSE')}
-                        className="inline-flex min-h-9 items-center gap-1 rounded-md bg-primary px-3 py-1 text-xs font-semibold text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
+                        className="inline-flex min-h-9 items-center gap-1 rounded-lg bg-primary px-3 py-1 text-xs font-semibold text-on-primary hover:bg-primary-hover hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40 motion-safe:transition-all shadow-xs"
                       >
                         <Send size={13} />
                         <span>{isDisbursed ? 'Paid' : 'Disburse'}</span>
