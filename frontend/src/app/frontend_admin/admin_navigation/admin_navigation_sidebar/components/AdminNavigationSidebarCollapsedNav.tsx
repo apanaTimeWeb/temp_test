@@ -4,6 +4,10 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { ADMIN_SIDEBAR_NAV } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
+import {
+  ADMIN_NAV_GROUP_COLORS,
+  DEFAULT_ADMIN_NAV_COLOR,
+} from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_colors';
 import { isSidebarLinkActive } from '../utils/AdminNavigationSidebarPathUtils';
 
 interface AdminNavigationSidebarCollapsedNavProps {
@@ -25,6 +29,9 @@ export function AdminNavigationSidebarCollapsedNav({
         if ('group' in item) return null;
         const Icon = item.icon;
         const active = pathname ? isSidebarLinkActive(pathname, item.href) : false;
+        const groupKey = item.labelKey ? item.labelKey.toLowerCase() : '';
+        const colorMeta = ADMIN_NAV_GROUP_COLORS[groupKey] ?? DEFAULT_ADMIN_NAV_COLOR;
+
         return (
           <Link
             data-testid={`admin_sidebar-AdminNavigationSidebar-link-${item.href
@@ -35,16 +42,24 @@ export function AdminNavigationSidebarCollapsedNav({
             href={item.href}
             title={t(item.labelKey ?? item.label)}
             onClick={mobileOpen ? onMobileClose : undefined}
-            className={`admin-sidebar-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+            className={`admin-sidebar-link admin-sidebar-collapsed-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
               active ? 'admin-sidebar-link-active' : ''
             }`}
           >
-            <Icon
-              size={18}
-              strokeWidth={2}
-              className={active ? 'text-primary' : 'text-text-secondary'}
-              aria-hidden="true"
-            />
+            <span
+              className="admin-nav-icon-badge"
+              style={{
+                color: colorMeta.iconColor,
+                backgroundColor: active ? `${colorMeta.iconColor}33` : colorMeta.bg,
+                boxShadow: active ? `0 0 12px ${colorMeta.iconColor}50` : undefined,
+              }}
+            >
+              <Icon
+                size={16}
+                strokeWidth={2.2}
+                aria-hidden="true"
+              />
+            </span>
           </Link>
         );
       })}
@@ -53,4 +68,3 @@ export function AdminNavigationSidebarCollapsedNav({
 }
 
 export default AdminNavigationSidebarCollapsedNav;
-

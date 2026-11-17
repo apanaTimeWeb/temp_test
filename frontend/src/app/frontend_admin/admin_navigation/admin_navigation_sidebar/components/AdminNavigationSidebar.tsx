@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import {
-  LogOut,
   Menu,
   X,
   BookOpen,
@@ -17,7 +16,6 @@ import {
 } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
 import type { AdminNavigationSidebarProps } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/types/AdminNavigationSidebarComponentTypes';
-import { AdminNavigationSidebarLogoutModal } from './AdminNavigationSidebarLogoutModal';
 import { AdminNavigationSidebarSearch } from './AdminNavigationSidebarSearch';
 import { AdminNavigationSidebarNavGroup } from './AdminNavigationSidebarNavGroup';
 import { AdminNavigationSidebarCollapsedNav } from './AdminNavigationSidebarCollapsedNav';
@@ -41,7 +39,6 @@ export function AdminNavigationSidebar({
   const pathname = usePathname();
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   const [internalMobileOpen, setInternalMobileOpen] = useState(false);
-  const [showLogout, setShowLogout] = useState(false);
 
   // Default all navigation domain accordion groups to expanded
   const [expandedGroups, setExpandedGroups] = useState<string[]>(() =>
@@ -185,15 +182,18 @@ export function AdminNavigationSidebar({
           {expanded && (
             <Link
               href="/admin/admin_dashboard"
-              className="flex items-center gap-2 text-decoration-none"
+              className="admin-sidebar-brand-link flex items-center gap-2.5 text-decoration-none min-w-0"
               onClick={mobileOpen ? closeMobile : undefined}
             >
               <div className="admin-sidebar-brand-mark">
-                <BookOpen size={18} strokeWidth={2} />
+                <BookOpen size={18} strokeWidth={2.2} />
               </div>
-              <span className="admin-sidebar-brand text-primary">
-                {ADMIN_BRAND_CONFIG.name} <span className="text-primary">{ADMIN_BRAND_CONFIG.suffix}</span>
-              </span>
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="admin-sidebar-brand font-black tracking-tight text-white">
+                  {ADMIN_BRAND_CONFIG.name}
+                </span>
+                <span className="admin-sidebar-role-badge">ADMIN</span>
+              </div>
             </Link>
           )}
         </div>
@@ -253,28 +253,23 @@ export function AdminNavigationSidebar({
             expanded ? 'admin-sidebar-footer-expanded' : 'admin-sidebar-footer-collapsed'
           }`}
         >
-          {expanded && (
-            <div className="min-w-0">
-              <p className="text-sm font-semibold truncate">{t('ADMIN_GREETING')}</p>
-              <p className="text-caption text-text-secondary truncate">{t('ADMINISTRATOR')}</p>
+          {expanded ? (
+            <div className="admin-sidebar-footer-user flex items-center gap-2.5 min-w-0 flex-1">
+              <div className="admin-sidebar-footer-avatar" aria-hidden="true">
+                LA
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold text-white truncate">{t('ADMIN_GREETING')}</p>
+                <p className="text-xs text-slate-400 truncate">{t('ADMINISTRATOR')}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="admin-sidebar-footer-avatar mx-auto" aria-hidden="true">
+              LA
             </div>
           )}
-          <button
-            data-testid="admin_sidebar-AdminNavigationSidebar-control-003"
-            type="button"
-            className="admin-sidebar-logout focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-            aria-label={t('LOG_OUT')}
-            onClick={() => setShowLogout(true)}
-          >
-            <LogOut size={expanded ? 18 : 20} />
-          </button>
         </div>
       </aside>
-
-      <AdminNavigationSidebarLogoutModal
-        open={showLogout}
-        onOpenChange={setShowLogout}
-      />
     </>
   );
 }

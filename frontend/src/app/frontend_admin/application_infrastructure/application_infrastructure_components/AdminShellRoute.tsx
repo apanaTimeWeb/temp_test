@@ -22,6 +22,11 @@ export function AdminShellRoute({ children }: { children: ReactNode }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const closeMobileNavigation = useCallback(() => setMobileNavigationOpen(false), []);
   useEffect(() => { setMobileNavigationOpen(false); }, [pathname]);
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1024) {
+      setSidebarCollapsed(true);
+    }
+  }, []);
   const isAdminRoute =
     pathname === ADMIN_ROUTES.PREFIX ||
     pathname.startsWith(`${ADMIN_ROUTES.PREFIX}/`) ||
@@ -37,7 +42,7 @@ export function AdminShellRoute({ children }: { children: ReactNode }) {
           <div className="admin-theme admin-shell-flex">
             <AdminNavigationSidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed((current) => !current)} mobileOpen={mobileNavigationOpen} onMobileClose={closeMobileNavigation} />
             <div className={`admin-main-offset ${sidebarCollapsed ? 'admin-main-offset-collapsed' : 'admin-main-offset-expanded'}`}>
-              <AdminShellHeader onMobileOpen={() => setMobileNavigationOpen(true)} />
+              <AdminShellHeader collapsed={sidebarCollapsed} onMobileOpen={() => setMobileNavigationOpen(true)} />
               <main className="admin-shell-content">
                 <div className="motion-safe:transition-opacity motion-safe:duration-base">{children}</div>
               </main>

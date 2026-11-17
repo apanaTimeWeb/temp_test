@@ -96,24 +96,24 @@ export default function AdminEnquiriesTable({
   return (
     <div className="space-y-4">
       {sorted.length === 0 ? (
-        <div role="status" className="flex min-h-56 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-card p-6 text-center">
-          <p className="text-section-title font-semibold text-text-primary">{t('NO_ENQUIRIES_FOUND')}</p>
-          <p className="max-w-lg text-body text-text-secondary">{t('TRY_FILTERS')}</p>
+        <div role="status" className="flex min-h-56 flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-slate-800/80 bg-slate-900/40 p-6 text-center">
+          <p className="text-base font-bold text-white">{t('NO_ENQUIRIES_FOUND')}</p>
+          <p className="max-w-lg text-xs text-slate-400">{t('TRY_FILTERS')}</p>
         </div>
       ) : (
-        <>
+        <div className="overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl shadow-xl">
           <div className="hidden overflow-x-auto md:block">
-            <table className="w-full border-collapse text-left text-body">
+            <table className="w-full border-collapse text-left text-sm">
               <thead>
-                <tr className="bg-surface-highlight uppercase text-xs text-text-secondary font-semibold h-12">
-                  <th scope="col" className="w-10 px-3">
+                <tr className="bg-slate-900/80 uppercase text-[11px] font-semibold text-slate-400 border-b border-slate-800/80 tracking-wider h-12">
+                  <th scope="col" className="w-10 px-4">
                     {onToggleSelectAll && (
                       <input
                         type="checkbox"
                         aria-label="Select all enquiries on this page"
                         checked={pageRows.length > 0 && pageRows.every((r) => selectedIds.includes(r.id))}
                         onChange={onToggleSelectAll}
-                        className="rounded border-border"
+                        className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
                       />
                     )}
                   </th>
@@ -128,52 +128,52 @@ export default function AdminEnquiriesTable({
                   <th scope="col">{t('ACTIONS')}</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-800/50">
                 {pageRows.map((enquiry, index) => {
                   const isSelected = selectedIds.includes(enquiry.id);
                   return (
                     <tr
                       key={enquiry.id}
-                      className={`border-b border-border hover:bg-surface-hover even:bg-surface-zebra h-12 ${isSelected ? 'bg-primary-subtle' : ''}`}
+                      className={`hover:bg-indigo-500/5 transition-colors h-14 ${isSelected ? 'bg-indigo-950/30' : ''}`}
                       data-testid={`admin_enquiries-AdminEnquiriesTable-row-${enquiry.id}`}
                     >
-                      <td className="w-10 px-3">
+                      <td className="w-10 px-4">
                         {onToggleSelectOne && (
                           <input
                             type="checkbox"
                             aria-label={`Select ${enquiry.name}`}
                             checked={isSelected}
                             onChange={() => onToggleSelectOne(enquiry.id)}
-                            className="rounded border-border"
+                            className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
                           />
                         )}
                       </td>
-                      <td className="w-12 text-caption text-text-secondary">{safePage * pageSize + index + 1}</td>
+                      <td className="w-12 text-xs font-mono text-slate-500">{safePage * pageSize + index + 1}</td>
                       <td>
-                        <button type="button" className="min-w-48 min-h-11 rounded text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectEnquiry(enquiry)} aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })}>
-                          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-subtle font-semibold text-primary h-8 w-8 text-caption" aria-hidden="true">{enquiry.avatar}</span>
-                          <span className="font-semibold text-text-primary ml-2">{enquiry.name}</span>
+                        <button type="button" className="min-w-48 min-h-11 rounded text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 flex items-center" onClick={() => onSelectEnquiry(enquiry)} aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })}>
+                          <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-indigo-500/30 bg-indigo-500/10 font-bold text-indigo-400 text-xs" aria-hidden="true">{enquiry.avatar}</span>
+                          <span className="font-semibold text-white hover:text-indigo-300 ml-2.5 transition-colors">{enquiry.name}</span>
                         </button>
                       </td>
-                      <td className="select-none text-text-secondary">{maskPhone(enquiry.phone)}</td>
-                      <td><span className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-info-bg text-info-text">{enquiry.shift || '—'}</span></td>
+                      <td className="select-none text-xs text-slate-400 font-mono">{maskPhone(enquiry.phone)}</td>
+                      <td><span className="inline-flex min-h-6 items-center rounded-full border border-slate-700/60 bg-slate-800/60 px-2.5 py-0.5 text-xs font-medium text-slate-300">{enquiry.shift || '—'}</span></td>
                       <td>{renderStatusBadge(enquiry.status)}</td>
-                      <td className="text-text-secondary">{enquiry.handledBy || t('UNASSIGNED')}</td>
-                      <td className="text-text-secondary">{formatAdminEnquiriesDate(enquiry.addedDate, locale)}</td>
-                      <td>{enquiry.isOverdue ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-001" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-danger-bg text-danger-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_OVERDUE')}</span> : enquiry.isToday ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-002" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-warning-bg text-warning-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_TODAY')}</span> : enquiry.isUpcoming ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-003" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-success-bg text-success-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_UPCOMING')}</span> : null}</td>
+                      <td className="text-xs text-slate-400">{enquiry.handledBy || t('UNASSIGNED')}</td>
+                      <td className="text-xs text-slate-400">{formatAdminEnquiriesDate(enquiry.addedDate, locale)}</td>
+                      <td>{enquiry.isOverdue ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-001" className="inline-flex min-h-6 items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-xs font-semibold text-rose-400"><Clock size={13} strokeWidth={2}/>{t('FOLLOWUP_OVERDUE')}</span> : enquiry.isToday ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-002" className="inline-flex min-h-6 items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-400"><Clock size={13} strokeWidth={2}/>{t('FOLLOWUP_TODAY')}</span> : enquiry.isUpcoming ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-003" className="inline-flex min-h-6 items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400"><Clock size={13} strokeWidth={2}/>{t('FOLLOWUP_UPCOMING')}</span> : null}</td>
                       <td className="whitespace-nowrap">
                         <div className="flex items-center gap-1.5">
-                          <button type="button" className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })} onClick={() => onSelectEnquiry(enquiry)}>
-                            <Eye aria-hidden="true" size={18} strokeWidth={2} />
+                          <button type="button" className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/50 text-slate-300 hover:text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 transition-colors" aria-label={t('VIEW_DETAILS_FOR', { name: enquiry.name })} onClick={() => onSelectEnquiry(enquiry)}>
+                            <Eye aria-hidden="true" size={16} strokeWidth={2} />
                           </button>
                           <button
                             type="button"
-                            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                            className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 transition-colors"
                             title="Chat on WhatsApp"
                             aria-label={`Chat with ${enquiry.name} on WhatsApp`}
                             onClick={() => handleWhatsAppClick(enquiry)}
                           >
-                            <MessageSquare aria-hidden="true" size={18} strokeWidth={2} />
+                            <MessageSquare aria-hidden="true" size={16} strokeWidth={2} />
                           </button>
                         </div>
                       </td>
@@ -184,9 +184,9 @@ export default function AdminEnquiriesTable({
             </table>
           </div>
 
-          <div className="grid gap-3 md:hidden" aria-label={t('ENQUIRY_RECORDS')}>
+          <div className="grid gap-3.5 p-4 md:hidden" aria-label={t('ENQUIRY_RECORDS')}>
             {pageRows.map((enquiry) => (
-              <article key={enquiry.id} className="rounded-lg border border-border bg-card p-4">
+              <article key={enquiry.id} className="rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-4 shadow-lg shadow-black/20">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2">
                     {onToggleSelectOne && (
@@ -195,52 +195,54 @@ export default function AdminEnquiriesTable({
                         aria-label={`Select ${enquiry.name}`}
                         checked={selectedIds.includes(enquiry.id)}
                         onChange={() => onToggleSelectOne(enquiry.id)}
-                        className="rounded border-border mt-1"
+                        className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400 mt-1"
                       />
                     )}
                     <div>
-                      <h2 className="font-semibold text-text-primary">{enquiry.name}</h2>
-                      <p className="mt-1 text-sm text-text-secondary">{maskPhone(enquiry.phone)}</p>
+                      <h2 className="font-semibold text-white">{enquiry.name}</h2>
+                      <p className="mt-1 font-mono text-xs text-slate-400">{maskPhone(enquiry.phone)}</p>
                     </div>
                   </div>
                   {renderStatusBadge(enquiry.status)}
                 </div>
-                <dl className="mt-3 grid grid-cols-2 gap-3 text-sm">
-                  <div><dt className="text-text-secondary">{t('PREFERRED_SHIFT')}</dt><dd className="text-text-primary">{enquiry.shift || '—'}</dd></div>
-                  <div><dt className="text-text-secondary">{t('HANDLED_BY')}</dt><dd className="text-text-primary">{enquiry.handledBy || t('UNASSIGNED')}</dd></div>
-                  <div><dt className="text-text-secondary">{t('DATE_ADDED')}</dt><dd className="text-text-primary">{formatAdminEnquiriesDate(enquiry.addedDate, locale)}</dd></div>
-                  <div><dt className="text-text-secondary">{t('FOLLOW_UP')}</dt><dd>{enquiry.isOverdue ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-001" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-danger-bg text-danger-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_OVERDUE')}</span> : enquiry.isToday ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-002" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-warning-bg text-warning-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_TODAY')}</span> : enquiry.isUpcoming ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-003" className="inline-flex min-h-6 items-center rounded-full px-2 py-1 text-caption font-semibold bg-success-bg text-success-text"><Clock size={18} strokeWidth={2}/>{t('FOLLOWUP_UPCOMING')}</span> : null}</dd></div>
+                <dl className="mt-3 grid grid-cols-2 gap-3 text-xs">
+                  <div><dt className="text-slate-400">{t('PREFERRED_SHIFT')}</dt><dd className="text-slate-200">{enquiry.shift || '—'}</dd></div>
+                  <div><dt className="text-slate-400">{t('HANDLED_BY')}</dt><dd className="text-slate-200">{enquiry.handledBy || t('UNASSIGNED')}</dd></div>
+                  <div><dt className="text-slate-400">{t('DATE_ADDED')}</dt><dd className="text-slate-200">{formatAdminEnquiriesDate(enquiry.addedDate, locale)}</dd></div>
+                  <div><dt className="text-slate-400">{t('FOLLOW_UP')}</dt><dd>{enquiry.isOverdue ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-001" className="inline-flex min-h-6 items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/10 px-2 py-0.5 text-xs font-semibold text-rose-400"><Clock size={13} strokeWidth={2}/>{t('FOLLOWUP_OVERDUE')}</span> : enquiry.isToday ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-002" className="inline-flex min-h-6 items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-400"><Clock size={13} strokeWidth={2}/>{t('FOLLOWUP_TODAY')}</span> : enquiry.isUpcoming ? <span data-testid="admin_enquiries-AdminMembersEnquiriesEnquiryFollowUpBadge-state-003" className="inline-flex min-h-6 items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-xs font-semibold text-emerald-400"><Clock size={13} strokeWidth={2}/>{t('FOLLOWUP_UPCOMING')}</span> : null}</dd></div>
                 </dl>
-                <div className="mt-4 flex gap-2">
-                  <button type="button" className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-body font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectEnquiry(enquiry)}>
-                    <Eye aria-hidden="true" size={18} strokeWidth={2} /> {t('VIEW_DETAILS')}
+                <div className="mt-3.5 flex gap-2 border-t border-slate-800/80 pt-3">
+                  <button type="button" className="inline-flex min-h-9 flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" onClick={() => onSelectEnquiry(enquiry)}>
+                    <Eye aria-hidden="true" size={14} strokeWidth={2} /> {t('VIEW_DETAILS')}
                   </button>
                   <button
                     type="button"
-                    className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-body font-medium text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
                     onClick={() => handleWhatsAppClick(enquiry)}
                   >
-                    <MessageSquare aria-hidden="true" size={18} strokeWidth={2} /> WhatsApp
+                    <MessageSquare aria-hidden="true" size={14} strokeWidth={2} /> WhatsApp
                   </button>
                 </div>
               </article>
             ))}
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-border px-2 py-3 text-sm text-text-secondary sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 border-t border-slate-800/80 px-4 py-3 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between bg-slate-900/30">
             <p aria-live="polite">{resultsSummary}</p>
             <div className="flex flex-wrap items-center gap-2">
               <label htmlFor="admin-crm-enquiry-page-size">{t('ROWS_PER_PAGE')}</label>
-              <select id="admin-crm-enquiry-page-size" className="min-h-11 w-full min-w-0 rounded-md border border-border bg-input px-3 py-2 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" value={pageSize} onChange={(event) => setPageSize(Number(event.target.value))}>
+              <select id="admin-crm-enquiry-page-size" className="min-h-8 rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1 text-xs text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" value={pageSize} onChange={(event) => setPageSize(Number(event.target.value))}>
                 <option value={10}>10</option><option value={25}>25</option><option value={50}>50</option>
               </select>
-              <button type="button" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-body font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" disabled={safePage === 0} onClick={() => setPage((current) => Math.max(0, current - 1))}>{t('PREVIOUS')}</button>
-              <span aria-current="page">{t('PAGE_OF', { page: safePage + 1, pages: pageCount })}</span>
-              <button type="button" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-body font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" disabled={safePage >= pageCount - 1} onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}>{t('NEXT')}</button>
+              <button type="button" className="inline-flex min-h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" disabled={safePage === 0} onClick={() => setPage((current) => Math.max(0, current - 1))}>{t('PREVIOUS')}</button>
+              <span aria-current="page" className="text-xs text-slate-400">{t('PAGE_OF', { page: safePage + 1, pages: pageCount })}</span>
+              <button type="button" className="inline-flex min-h-8 items-center justify-center gap-1.5 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" disabled={safePage >= pageCount - 1} onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}>{t('NEXT')}</button>
             </div>
           </div>
-        </>
+        </div>
       )}
+    </div>
+  );
     </div>
   );
 }

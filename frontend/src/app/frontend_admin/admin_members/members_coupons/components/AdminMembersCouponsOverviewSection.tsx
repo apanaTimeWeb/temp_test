@@ -47,20 +47,48 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
   }, [coupons, search]);
 
   const metrics = [
-    { label: t('KPI_TOTAL_COUPONS'), value: coupons.length, background: 'bg-primary-subtle', foreground: 'text-primary' },
-    { label: t('KPI_ACTIVE'), value: coupons.filter((coupon) => coupon.status === 'Active').length, background: 'bg-success-bg', foreground: 'text-success-text' },
-    { label: t('KPI_EXPIRED'), value: coupons.filter((coupon) => coupon.status === 'Expired').length, background: 'bg-danger-bg', foreground: 'text-danger-text' },
-    { label: t('KPI_TOTAL_USES'), value: coupons.length > 0 && coupons.every((coupon) => typeof coupon.usedCount === 'number') ? coupons.reduce((sum, coupon) => sum + (coupon.usedCount ?? 0), 0) : '—', background: 'bg-warning-bg', foreground: 'text-warning-text' },
+    {
+      label: t('KPI_TOTAL_COUPONS'),
+      value: coupons.length,
+      border: 'border-cyan-500/20 hover:border-cyan-500/40',
+      glow: 'bg-cyan-500/10 text-cyan-400',
+      badge: 'border-cyan-500/20 bg-cyan-500/10 text-cyan-400',
+      trend: 'Active Catalog',
+    },
+    {
+      label: t('KPI_ACTIVE'),
+      value: coupons.filter((coupon) => coupon.status === 'Active').length,
+      border: 'border-emerald-500/20 hover:border-emerald-500/40',
+      glow: 'bg-emerald-500/10 text-emerald-400',
+      badge: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
+      trend: 'Redeemable',
+    },
+    {
+      label: t('KPI_EXPIRED'),
+      value: coupons.filter((coupon) => coupon.status === 'Expired').length,
+      border: 'border-rose-500/20 hover:border-rose-500/40',
+      glow: 'bg-rose-500/10 text-rose-400',
+      badge: 'border-rose-500/20 bg-rose-500/10 text-rose-400',
+      trend: 'Archived',
+    },
+    {
+      label: t('KPI_TOTAL_USES'),
+      value: coupons.length > 0 && coupons.every((coupon) => typeof coupon.usedCount === 'number') ? coupons.reduce((sum, coupon) => sum + (coupon.usedCount ?? 0), 0) : '—',
+      border: 'border-amber-500/20 hover:border-amber-500/40',
+      glow: 'bg-amber-500/10 text-amber-400',
+      badge: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
+      trend: 'Total Redemptions',
+    },
   ];
   let results: React.ReactNode;
-  if (isError) results = <section role="alert" className="rounded-lg border border-danger-text bg-danger-bg p-6 text-danger-text"><p>{t('LOAD_ERROR')}</p><button type="button" className="mt-3 min-h-11 rounded-md border border-border px-3 py-2 text-primary" onClick={onRetry}>{t('RETRY')}</button></section>;
-  else if (isPending) results = <section role="status" aria-busy="true" aria-label={t('LOADING')} className="space-y-3 rounded-lg border border-border bg-card p-4 sm:p-6"><span className="sr-only">{t('LOADING')}</span><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }, (_, index) => <div key={`coupon-skeleton-card-${index + 1}`} className="h-10 rounded bg-skeleton-base motion-safe:animate-pulse" />)}</div><div className="space-y-2 pt-3">{Array.from({ length: 5 }, (_, index) => <div key={`coupon-skeleton-row-${index + 1}`} className="h-11 rounded bg-skeleton-highlight motion-safe:animate-pulse" />)}</div></section>;
+  if (isError) results = <section role="alert" className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-6 text-rose-400"><p>{t('LOAD_ERROR')}</p><button type="button" className="mt-3 rounded-xl border border-rose-500/40 px-3 py-1.5 text-xs font-semibold text-rose-300 hover:bg-rose-500/20" onClick={onRetry}>{t('RETRY')}</button></section>;
+  else if (isPending) results = <section role="status" aria-busy="true" aria-label={t('LOADING')} className="space-y-3 rounded-2xl border border-slate-800/80 bg-slate-900/40 p-5 md:p-6"><span className="sr-only">{t('LOADING')}</span><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{Array.from({ length: 6 }, (_, index) => <div key={`coupon-skeleton-card-${index + 1}`} className="h-10 rounded-xl bg-slate-800/50 motion-safe:animate-pulse" />)}</div><div className="space-y-2 pt-3">{Array.from({ length: 5 }, (_, index) => <div key={`coupon-skeleton-row-${index + 1}`} className="h-11 rounded-xl bg-slate-800/40 motion-safe:animate-pulse" />)}</div></section>;
   else if (coupons.length === 0) results = <AdminEmptyState showIcon={false} title={t('EMPTY_TITLE')} description={t('EMPTY_DESCRIPTION')} />;
   else results = (
-    <div className="space-y-4">
+    <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-5 shadow-xl space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="relative flex-1 min-w-[240px] max-w-md">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={search}
@@ -70,27 +98,95 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
             }}
             placeholder="Search coupons by code, branch, status..."
             aria-label="Search coupons"
-            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-border bg-input text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
         </div>
       </div>
-      <DataGrid
-        rowData={filteredCoupons}
-        columnDefs={columns}
-        pagination
-        pageSize={25}
-        emptyMessage={t('EMPTY_TITLE')}
-        page={urlTablePage0}
-        onPageChange={setUrlTablePage0}
-      />
+      <div className="overflow-hidden rounded-xl border border-slate-800/80 bg-slate-950/20">
+        <DataGrid
+          rowData={filteredCoupons}
+          columnDefs={columns}
+          pagination
+          pageSize={25}
+          emptyMessage={t('EMPTY_TITLE')}
+          page={urlTablePage0}
+          onPageChange={setUrlTablePage0}
+        />
+      </div>
     </div>
   );
-  return <div className="space-y-6">
-    <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div className="min-w-0 space-y-1"><p className="text-caption text-text-secondary">{t('BREADCRUMB')}</p><h1 className="text-page-title font-bold text-text-primary">{t('PAGE_TITLE')}</h1><p className="text-sm text-text-secondary">{t('PAGE_SUBTITLE')}</p></div><div className="flex flex-wrap items-center gap-3"><button type="button" className="inline-flex min-h-11 items-center gap-2 rounded-md border border-border px-4 py-2 text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:text-text-disabled" disabled={!isDemoMode} aria-describedby="admin-coupons-mutation-note" title={isDemoMode ? t('DEMO_MODE_NOTICE') : t('MUTATIONS_UNAVAILABLE')} onClick={onCreateCoupon}><Plus size={18} strokeWidth={2}/>{t('CREATE_COUPON')}</button><button type="button" className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={onValidateDraft}>{t('VALIDATE_DRAFT')}</button></div></header>
-    <p id="admin-coupons-mutation-note" role="status" className="rounded-lg border border-warning-bg bg-warning-bg p-3 text-sm text-warning-text">{isDemoMode ? t('DEMO_MODE_NOTICE') : t('MUTATIONS_UNAVAILABLE')}</p>
-    <section aria-label={t('KPI_SECTION_LABEL')} className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{metrics.map((metric) => <div key={metric.label} className="flex min-h-28 items-center gap-3 rounded-lg border border-border bg-card p-4 shadow-card"><div className={`grid h-12 w-12 shrink-0 place-items-center rounded-lg ${metric.background}`} aria-hidden="true"><Tag size={18} strokeWidth={2} className={metric.foreground}/></div><div className="min-w-0"><p className="text-caption text-text-secondary">{metric.label}</p><p className="text-kpi font-bold text-text-primary" aria-live={isPending ? 'off' : 'polite'}>{isPending ? t('KPI_LOADING') : isError ? '—' : metric.value}</p></div></div>)}</section>
-    {results}
-  </div>;
+  return (
+    <div className="w-full space-y-6 text-text-primary">
+      {/* EXECUTIVE HEADER */}
+      <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 shadow-lg shadow-black/20">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-400">
+                {t('BREADCRUMB')}
+              </span>
+              <span className="text-xs text-slate-400">• Promotional Discounts</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('PAGE_TITLE')}</h1>
+            <p className="text-xs sm:text-sm text-slate-400">{t('PAGE_SUBTITLE')}</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 hover:from-indigo-600 hover:to-indigo-700 transition-all disabled:cursor-not-allowed disabled:opacity-40"
+              disabled={!isDemoMode}
+              aria-describedby="admin-coupons-mutation-note"
+              title={isDemoMode ? t('DEMO_MODE_NOTICE') : t('MUTATIONS_UNAVAILABLE')}
+              onClick={onCreateCoupon}
+            >
+              <Plus size={16} strokeWidth={2}/>
+              <span>{t('CREATE_COUPON')}</span>
+            </button>
+            <button
+              type="button"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-700/60 bg-slate-800/50 px-4 py-2 text-xs font-semibold text-slate-200 hover:text-white hover:bg-slate-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              onClick={onValidateDraft}
+            >
+              {t('VALIDATE_DRAFT')}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="admin-coupons-mutation-note" role="status" className="sr-only">
+        <span>{isDemoMode ? t('DEMO_MODE_NOTICE') : t('MUTATIONS_UNAVAILABLE')}</span>
+      </div>
+
+      {/* 4 KPI CARDS */}
+      <section aria-label={t('KPI_SECTION_LABEL')} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {metrics.map((metric) => (
+          <div
+            key={metric.label}
+            className={`relative overflow-hidden rounded-2xl border ${metric.border} bg-slate-900/60 backdrop-blur-xl p-5 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-0.5`}
+          >
+            <div className="flex items-start justify-between">
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">{metric.label}</p>
+                <p className="mt-2 text-2xl font-bold tracking-tight text-white" aria-live={isPending ? 'off' : 'polite'}>
+                  {isPending ? t('KPI_LOADING') : isError ? '—' : metric.value}
+                </p>
+              </div>
+              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${metric.glow}`}>
+                <Tag size={20} strokeWidth={2} />
+              </div>
+            </div>
+            <div className="mt-3 flex items-center gap-1.5">
+              <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${metric.badge}`}>
+                {metric.trend}
+              </span>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {results}
+    </div>
+  );
 }
 
 

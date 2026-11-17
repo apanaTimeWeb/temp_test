@@ -166,44 +166,62 @@ export default function AdminPlansPage() {
   };
 
   return (
-    <div className="pb-10" >
-      {!isDemoMode && <p role="status" className="mb-4 rounded-lg border border-warning-bg bg-warning-bg p-4 text-warning-text">{t('PERSISTENCE_BLOCKED')}</p>}
-      <div className="admin-page-header admin-shared-section-divider">
-        <div>
-          <p className="admin-breadcrumb">{t('BREADCRUMB')}</p>
-          <h1 className="admin-page-title">{t('PAGE_TITLE')}</h1>
-          <p className="admin-page-subtitle">{t('PAGE_SUBTITLE')}</p>
-        </div>
-        <div className="admin-page-actions">
-          <button type="button" data-testid="admin_plans-AdminMembersPlansMain-control-001" className="admin-btn-primary disabled:cursor-not-allowed disabled:opacity-60" onClick={handleCreate} disabled={!isDemoMode} title={!isDemoMode ? t('PERSISTENCE_BLOCKED') : undefined}>
-            <Plus size={18} strokeWidth={2} /> {t('CREATE_PLAN')}
-          </button>
+    <div className="w-full space-y-6 text-text-primary pb-10">
+      {!isDemoMode && <p role="status" className="mb-4 rounded-xl border border-warning-bg bg-warning-bg p-4 text-warning-text">{t('PERSISTENCE_BLOCKED')}</p>}
+      
+      {/* EXECUTIVE HEADER */}
+      <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 shadow-lg shadow-black/20">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-400">
+                {t('BREADCRUMB')}
+              </span>
+              <span className="text-xs text-slate-400">• Fee Structure</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('PAGE_TITLE')}</h1>
+            <p className="text-xs sm:text-sm text-slate-400">{t('PAGE_SUBTITLE')}</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              data-testid="admin_plans-AdminMembersPlansMain-control-001"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-indigo-500/25 hover:from-indigo-600 hover:to-indigo-700 transition-all disabled:cursor-not-allowed disabled:opacity-40"
+              onClick={handleCreate}
+              disabled={!isDemoMode}
+              title={!isDemoMode ? t('PERSISTENCE_BLOCKED') : undefined}
+            >
+              <Plus size={16} strokeWidth={2} />
+              <span>{t('CREATE_PLAN')}</span>
+            </button>
+          </div>
         </div>
       </div>
 
       <AdminMembersPlansPricingRuleSettings />
 
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+      {/* SEARCH AND FILTER BAR */}
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-xl p-3 shadow-lg">
         <div className="relative min-w-[260px] max-w-sm flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search plans by name, feature, duration, or branch..."
-            className="w-full rounded-lg border border-border bg-card py-2 pl-9 pr-3 text-sm text-text-primary placeholder:text-text-tertiary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            className="w-full rounded-xl border border-slate-800 bg-slate-950/60 py-2 pl-9 pr-3 text-xs text-white placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
           {(['all', 'Active', 'Inactive'] as const).map((status) => (
             <button
               key={status}
               type="button"
               onClick={() => setStatusFilter(status)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                 statusFilter === status
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'border border-border bg-card text-text-secondary hover:bg-surface-highlight hover:text-text-primary'
+                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-xs'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
             >
               {status === 'all' ? 'All Plans' : status}
@@ -211,52 +229,99 @@ export default function AdminPlansPage() {
           ))}
         </div>
       </div>
+
       {!isDemoMode && plansQuery.isError ? (
-        <div role="alert" className="rounded-lg border border-border bg-card p-6 text-danger-text">
+        <div role="alert" className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-6 text-rose-400">
           {t('LOAD_ERROR')}
-          <button type="button" className="ml-3 rounded border border-border px-3 py-2 text-primary" onClick={() => window.location.reload()}>{t('RETRY')}</button>
+          <button type="button" className="ml-3 rounded-xl border border-rose-500/40 px-3 py-1.5 text-xs font-semibold text-rose-300 hover:bg-rose-500/20" onClick={() => window.location.reload()}>{t('RETRY')}</button>
         </div>
       ) : null}
-      {!isDemoMode && plansQuery.isPending ? <div role="status" className="rounded-lg border border-border bg-card p-8 text-center text-text-secondary">{t('LOADING')}</div> : null}
-      {(isDemoMode || (!plansQuery.isPending && !plansQuery.isError)) && visiblePlans.length === 0 ? <div role="status" className="rounded-lg border border-border bg-card p-8 text-center text-text-secondary">{t('EMPTY')}</div> : null}
+      {!isDemoMode && plansQuery.isPending ? <div role="status" className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-8 text-center text-slate-400">{t('LOADING')}</div> : null}
+      {(isDemoMode || (!plansQuery.isPending && !plansQuery.isError)) && visiblePlans.length === 0 ? <div role="status" className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-8 text-center text-slate-400">{t('EMPTY')}</div> : null}
       {(isDemoMode || (!plansQuery.isPending && !plansQuery.isError)) && visiblePlans.length > 0 ? (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {visiblePlans.map((plan) => {
             const localizedStatus = plan.status === ADMIN_PLANS_STATUS_VALUES[0]
               ? t('STATUS_ACTIVE')
               : plan.status === ADMIN_PLANS_STATUS_VALUES[1]
                 ? t('STATUS_INACTIVE')
                 : t('STATUS_UNKNOWN');
+            const isActive = plan.status === ADMIN_PLANS_STATUS_VALUES[0];
             return (
-              <div key={plan.id} className="admin-plan-card" data-admin-inactive={plan.status === ADMIN_PLANS_STATUS_VALUES[1] ? 'true' : 'false'}>
-                <div className="admin-shared-row-between">
-                  <div><h3 className="admin-shared-card-title">{plan.name}</h3></div>
-                  <div className="flex flex-col items-end gap-1.5">
-                    <span data-testid={`admin_plans-AdminMembersPlansMain-plan-status-${plan.id}`} aria-label={`${plan.name} ${t('STATUS_SUFFIX')}: ${localizedStatus}`} className={`admin-badge ${plan.status === ADMIN_PLANS_STATUS_VALUES[0] ? 'admin-badge-success' : plan.status === ADMIN_PLANS_STATUS_VALUES[1] ? 'admin-badge-danger' : 'admin-badge-neutral'} admin-shared-interactive-cursor`}>
+              <div
+                key={plan.id}
+                className="relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 shadow-lg shadow-black/20 hover:-translate-y-1 hover:border-indigo-500/30 transition-all duration-300"
+                data-admin-inactive={plan.status === ADMIN_PLANS_STATUS_VALUES[1] ? 'true' : 'false'}
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-base font-bold text-white tracking-tight leading-snug">{plan.name}</h3>
+                    <span
+                      data-testid={`admin_plans-AdminMembersPlansMain-plan-status-${plan.id}`}
+                      aria-label={`${plan.name} ${t('STATUS_SUFFIX')}: ${localizedStatus}`}
+                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold border ${
+                        isActive
+                          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                          : 'border-rose-500/30 bg-rose-500/10 text-rose-400'
+                      }`}
+                    >
                       {localizedStatus}
                     </span>
                   </div>
+
+                  <div className="mt-3 flex items-baseline gap-1">
+                    <span className="text-2xl sm:text-3xl font-extrabold text-white" aria-label={t('PRICE')}>
+                      {formatAdminPlansPrice(plan.price, plan.currencyCode, plan.amountUnit, locale)}
+                    </span>
+                    <span className="text-xs text-slate-400">/ {t('DURATION_DAYS', { count: plan.durationDays })}</span>
+                  </div>
+
+                  <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                    <span data-testid="admin_plans-AdminMembersPlansMain-state-004" className="inline-flex items-center gap-1 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-medium text-indigo-400">
+                      👥 {plan.subscribers} {t('ACTIVE_SUBSCRIBERS')}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-slate-700/60 bg-slate-800/60 px-2.5 py-0.5 text-[11px] font-medium text-slate-300">
+                      <Building2 size={11} className="text-indigo-400 shrink-0" />
+                      <span>{plan.branchApplicability || 'All Branches'}</span>
+                    </span>
+                  </div>
+
+                  <div className="mt-4 border-t border-slate-800/70 pt-3">
+                    <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{t('FEATURES')}</p>
+                    <ul className="m-0 flex list-none flex-col gap-2 p-0">
+                      {plan.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2 text-xs text-slate-300">
+                          <CheckCircle size={14} className="mt-0.5 shrink-0 text-emerald-400" strokeWidth={2} />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <div className="flex items-baseline gap-0.5">
-                  <span className="text-3xl font-extrabold leading-none text-text-primary" aria-label={t('PRICE')}>{formatAdminPlansPrice(plan.price, plan.currencyCode, plan.amountUnit, locale)}</span>
-                  <span className="ml-1 text-ui text-text-secondary">/ {t('DURATION_DAYS', { count: plan.durationDays })}</span>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <span data-testid="admin_plans-AdminMembersPlansMain-state-004" className="admin-badge admin-badge-info">👥 {plan.subscribers} {t('ACTIVE_SUBSCRIBERS')}</span>
-                  <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary">
-                    <Building2 size={12} className="text-primary shrink-0" />
-                    <span>{plan.branchApplicability || 'All Branches'}</span>
-                  </span>
-                </div>
-                <div className="border-t border-border pt-3">
-                  <p className="mb-2 text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary">{t('FEATURES')}</p>
-                  <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
-                    {plan.features.map((feature) => <li key={feature} className="flex items-start gap-1.5 text-ui text-text-primary"><CheckCircle size={18} className="mt-0.5 shrink-0 text-success-text" strokeWidth={2} /><span>{feature}</span></li>)}
-                  </ul>
-                </div>
-                <div className="flex justify-end gap-1.5 border-t border-border pt-3">
-                  <button type="button" data-testid={`admin_plans-AdminMembersPlansMain-edit-${plan.id}`} aria-label={`${t('EDIT')} ${plan.name}`} className="admin-btn-icon disabled:cursor-not-allowed disabled:opacity-60 text-info-text" onClick={() => handleEdit(plan)} disabled={!isDemoMode} title={!isDemoMode ? t('PERSISTENCE_BLOCKED') : t('EDIT')}><Pencil size={18} strokeWidth={2} /></button>
-                  <button type="button" data-testid={`admin_plans-AdminMembersPlansMain-delete-${plan.id}`} aria-label={`${t('DELETE')} ${plan.name}`} className="admin-btn-icon disabled:cursor-not-allowed disabled:opacity-60 admin-shared-text-danger" onClick={() => setDeleteId(plan.id)} disabled={!isDemoMode} title={!isDemoMode ? t('DELETE_BLOCKED') : t('DELETE')}><Trash2 size={18} strokeWidth={2} /></button>
+
+                <div className="mt-5 flex justify-end gap-1.5 border-t border-slate-800/70 pt-3">
+                  <button
+                    type="button"
+                    data-testid={`admin_plans-AdminMembersPlansMain-edit-${plan.id}`}
+                    aria-label={`${t('EDIT')} ${plan.name}`}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/50 text-indigo-400 hover:text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+                    onClick={() => handleEdit(plan)}
+                    disabled={!isDemoMode}
+                    title={!isDemoMode ? t('PERSISTENCE_BLOCKED') : t('EDIT')}
+                  >
+                    <Pencil size={15} strokeWidth={2} />
+                  </button>
+                  <button
+                    type="button"
+                    data-testid={`admin_plans-AdminMembersPlansMain-delete-${plan.id}`}
+                    aria-label={`${t('DELETE')} ${plan.name}`}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/50 text-rose-400 hover:text-white hover:bg-rose-600/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+                    onClick={() => setDeleteId(plan.id)}
+                    disabled={!isDemoMode}
+                    title={!isDemoMode ? t('DELETE_BLOCKED') : t('DELETE')}
+                  >
+                    <Trash2 size={15} strokeWidth={2} />
+                  </button>
                 </div>
               </div>
             );
@@ -268,7 +333,6 @@ export default function AdminPlansPage() {
     </div>
   );
 }
-
 // Responsibility: AdminPlansEmptyState component owned by admin_plans; responsibility folder: admin_plans_empty_state.
 
 

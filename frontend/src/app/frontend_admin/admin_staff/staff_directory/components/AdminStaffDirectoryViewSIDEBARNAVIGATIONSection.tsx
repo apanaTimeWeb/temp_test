@@ -27,7 +27,9 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
           <button type="button" data-testid={`admin_staff_directory-AdminStaffDirectoryViewSIDEBARNAVIGATIONSection-navigation-${item.id}`} key={item.id}
             aria-current={activeTab === item.id ? 'page' : undefined} aria-pressed={activeTab === item.id}
             onClick={() => setActiveTab(item.id)} className={`admin-tab-button min-h-11 ${activeTab === item.id ? 'admin-tab-button-active' : ''}`}>
-            <item.icon size={18} className={activeTab === item.id ? 'text-primary' : 'text-text-secondary'} />
+            <span className={`inline-flex items-center justify-center w-6 h-6 rounded-md transition-transform ${activeTab === item.id ? 'bg-primary/20 text-primary shadow-xs' : 'bg-muted/60 text-text-secondary'}`}>
+              <item.icon size={15} aria-hidden="true" />
+            </span>
             {t(item.labelKey)}
           </button>
         ))}

@@ -6,4 +6,5 @@ export interface AdminQueryProviderProps {
 
 export interface AdminShellHeaderProps {
   onMobileOpen?: () => void;
+  collapsed?: boolean;
 }

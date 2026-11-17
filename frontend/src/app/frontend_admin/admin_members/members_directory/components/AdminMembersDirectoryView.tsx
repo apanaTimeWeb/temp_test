@@ -23,79 +23,154 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
   const t = useTranslations('ADMIN_MEMBERS');
   const { activeTab, setActiveTab, viewingMember, setViewingMember, detailTab, setDetailTab, mainNav, detailNav, isDemoMode, dummyMembers, demoRenewals } = model;
   return (
-    <div className="motion-safe:transition-opacity motion-safe:duration-base admin-shared-page-container" >
-      {!isDemoMode && <p role="status" className="mb-4 rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('LIVE_RECORDS_UNAVAILABLE')}</p>}
+    <div className="w-full space-y-6 text-text-primary">
+      {!isDemoMode && <p role="status" className="mb-4 rounded-xl border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('LIVE_RECORDS_UNAVAILABLE')}</p>}
       
-      {/* HEADER */}
-      <div className="admin-shared-toolbar" >
-        {viewingMember && (
-          <button type="button" data-testid="admin_members-AdminMembersDirectoryView-control-001" className="admin-btn-icon" aria-label={t('BACK_TO_LIST')} title={t('BACK_TO_LIST')} onClick={() => setViewingMember(null)}>
-            <ArrowLeft size={18} strokeWidth={2} aria-hidden="true"/>
-          </button>
-        )}
-        <div>
-          <h1 className="admin-shared-page-title" >
-            {viewingMember ? t('MEMBER_DETAIL_TITLE', { name: viewingMember.name }) : t('PAGE_TITLE')}
-          </h1>
-          <p className="admin-shared-page-subtitle" >
-            {viewingMember ? t('MEMBER_DETAIL_SUMMARY', { id: viewingMember.id, status: t(viewingMember.status === 'Active' ? 'STATUS_ACTIVE' : viewingMember.status === 'Expired' ? 'STATUS_EXPIRED' : viewingMember.status === 'Suspended' ? 'STATUS_SUSPENDED' : viewingMember.status === 'Blocked' ? 'STATUS_BLOCKED' : 'STATUS_UNKNOWN') }) : t('PAGE_SUBTITLE')}
-          </p>
+      {/* EXECUTIVE HEADER */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-3">
+          {viewingMember && (
+            <button
+              type="button"
+              data-testid="admin_members-AdminMembersDirectoryView-control-001"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-700/60 bg-slate-850/80 text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+              aria-label={t('BACK_TO_LIST')}
+              title={t('BACK_TO_LIST')}
+              onClick={() => setViewingMember(null)}
+            >
+              <ArrowLeft size={18} strokeWidth={2} aria-hidden="true"/>
+            </button>
+          )}
+          <div>
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                {viewingMember ? t('MEMBER_DETAIL_TITLE', { name: viewingMember.name }) : t('PAGE_TITLE')}
+              </h1>
+              {!viewingMember && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Live Directory
+                </span>
+              )}
+            </div>
+            <p className="mt-1 text-xs sm:text-sm text-slate-400">
+              {viewingMember ? t('MEMBER_DETAIL_SUMMARY', { id: viewingMember.id, status: t(viewingMember.status === 'Active' ? 'STATUS_ACTIVE' : viewingMember.status === 'Expired' ? 'STATUS_EXPIRED' : viewingMember.status === 'Suspended' ? 'STATUS_SUSPENDED' : viewingMember.status === 'Blocked' ? 'STATUS_BLOCKED' : 'STATUS_UNKNOWN') }) : t('PAGE_SUBTITLE')}
+            </p>
+          </div>
         </div>
       </div>
 
       {/* TOP KPI CARDS */}
       {isDemoMode && !viewingMember && (
         <section aria-label={t('DEMO_METRICS_NOTICE')} className="space-y-2">
-        <p className="text-caption text-text-secondary" role="note">{t('DEMO_METRICS_NOTICE')}</p>
-        <div className="mb-6 grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-6" >
-          {[
-            { label: t('KPI_TOTAL_MEMBERS'), value: String(dummyMembers.length), icon: Users, color: 'primary' },
-            { label: t('KPI_ACTIVE_MEMBERS'), value: String(dummyMembers.filter((member) => member.status === 'Active').length), icon: CheckCircle, color: 'success' },
-            { label: t('KPI_NEW_THIS_MONTH'), value: '—', icon: UserPlus, color: 'purple' },
-            { label: t('KPI_PENDING_RENEWALS'), value: String(demoRenewals.filter((renewal) => !renewal.reminderRecorded).length), icon: AlertTriangle, color: 'danger' }
-          ].map((kpi, i) => (
-            <div key={kpi.label} className="admin-card motion-safe:hover:-translate-y-1 flex items-center gap-5 p-5 motion-safe:transition-transform motion-safe:duration-base" >
-              <div className="flex h-16 w-16 items-center justify-center rounded-xl" data-admin-bg={kpi.color} data-admin-color={kpi.color}>
-                {React.createElement(kpi.icon as React.ElementType, { size: 28 })}
+          <p className="sr-only" role="note">{t('DEMO_METRICS_NOTICE')}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              {
+                label: t('KPI_TOTAL_MEMBERS'),
+                value: String(dummyMembers.length),
+                icon: Users,
+                border: 'border-cyan-500/20 hover:border-cyan-500/40',
+                glow: 'bg-cyan-500/10 text-cyan-400',
+                badge: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
+                trend: 'All Registered',
+              },
+              {
+                label: t('KPI_ACTIVE_MEMBERS'),
+                value: String(dummyMembers.filter((member) => member.status === 'Active').length),
+                icon: CheckCircle,
+                border: 'border-emerald-500/20 hover:border-emerald-500/40',
+                glow: 'bg-emerald-500/10 text-emerald-400',
+                badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+                trend: 'In Good Standing',
+              },
+              {
+                label: t('KPI_NEW_THIS_MONTH'),
+                value: '—',
+                icon: UserPlus,
+                border: 'border-purple-500/20 hover:border-purple-500/40',
+                glow: 'bg-purple-500/10 text-purple-400',
+                badge: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+                trend: 'Current Cycle',
+              },
+              {
+                label: t('KPI_PENDING_RENEWALS'),
+                value: String(demoRenewals.filter((renewal) => !renewal.reminderRecorded).length),
+                icon: AlertTriangle,
+                border: 'border-rose-500/20 hover:border-rose-500/40',
+                glow: 'bg-rose-500/10 text-rose-400',
+                badge: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+                trend: 'Action Required',
+              }
+            ].map((kpi) => (
+              <div
+                key={kpi.label}
+                className={`relative overflow-hidden rounded-2xl border ${kpi.border} bg-slate-900/60 backdrop-blur-xl p-5 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-0.5`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{kpi.label}</span>
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${kpi.glow}`}>
+                    <kpi.icon size={20} />
+                  </div>
+                </div>
+                <div className="mt-3 text-2xl font-bold tracking-tight text-white">{kpi.value}</div>
+                <div className="mt-2 flex items-center gap-1.5">
+                  <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${kpi.badge}`}>
+                    {kpi.trend}
+                  </span>
+                </div>
               </div>
-              <div>
-                <div className="text-body font-semibold uppercase tracking-wide text-text-secondary" >{kpi.label}</div>
-                <div className="mt-1 text-kpi font-extrabold text-text-primary" >{kpi.value}</div>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
         </section>
       )}
 
       {/* TOP SCROLLABLE NAVIGATION TABS */}
-      <div className="admin-card mb-6 flex gap-2 overflow-x-auto whitespace-nowrap p-2" >
+      <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-xl p-1.5 flex gap-1.5 overflow-x-auto whitespace-nowrap shadow-inner">
         {!viewingMember ? (
-          mainNav.map((item) => (
-            <button type="button" data-testid={`admin_members-AdminMembersDirectoryView-main-tab-${item.id}`}
-              key={item.id}
-              aria-current={activeTab === item.id ? 'page' : undefined}
-              aria-pressed={activeTab === item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`admin-tab-button ${activeTab === item.id ? "admin-tab-button-active" : ""}`}
-            >
-              <item.icon size={18} aria-hidden="true" className={activeTab === item.id ? "text-primary" : "text-text-secondary"} />
-              {t(item.labelKey)}
-            </button>
-          ))
+          mainNav.map((item) => {
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                type="button"
+                data-testid={`admin_members-AdminMembersDirectoryView-main-tab-${item.id}`}
+                key={item.id}
+                aria-current={isActive ? 'page' : undefined}
+                aria-pressed={isActive}
+                onClick={() => setActiveTab(item.id)}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-200 ${
+                  isActive
+                    ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/25'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <item.icon size={16} aria-hidden="true" className={isActive ? 'text-white' : 'text-slate-400'} />
+                <span>{t(item.labelKey)}</span>
+              </button>
+            );
+          })
         ) : (
-          detailNav.map((item) => (
-            <button type="button" data-testid={`admin_members-AdminMembersDirectoryView-detail-tab-${item.id}`}
-              key={item.id}
-              aria-current={detailTab === item.id ? 'page' : undefined}
-              aria-pressed={detailTab === item.id}
-              onClick={() => setDetailTab(item.id)}
-              className={`admin-tab-button ${detailTab === item.id ? "admin-tab-button-active" : ""}`}
-            >
-              <item.icon size={18} aria-hidden="true" className={detailTab === item.id ? "text-primary" : "text-text-secondary"} />
-              {t(item.labelKey)}
-            </button>
-          ))
+          detailNav.map((item) => {
+            const isActive = detailTab === item.id;
+            return (
+              <button
+                type="button"
+                data-testid={`admin_members-AdminMembersDirectoryView-detail-tab-${item.id}`}
+                key={item.id}
+                aria-current={isActive ? 'page' : undefined}
+                aria-pressed={isActive}
+                onClick={() => setDetailTab(item.id)}
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold transition-all duration-200 ${
+                  isActive
+                    ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-md shadow-indigo-500/25'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <item.icon size={16} aria-hidden="true" className={isActive ? 'text-white' : 'text-slate-400'} />
+                <span>{t(item.labelKey)}</span>
+              </button>
+            );
+          })
         )}
       </div>
 
@@ -136,124 +211,129 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
     suspended: { titleKey: 'NAV_SUSPENDED', filterStatus: ADMIN_MEMBERS_STATUS_VALUES[2] },
     blocked: { titleKey: 'NAV_BLOCKED', filterStatus: ADMIN_MEMBERS_STATUS_VALUES[3] },
   }[activeTab as 'all' | 'active' | 'expired' | 'suspended' | 'blocked'];
-  return <div className="admin-shared-stack" >
-          
-          {/* -------------------- MAIN DASHBOARD VIEWS -------------------- */}
-          {!viewingMember && memberListConfig && (
-            <section className="admin-card admin-shared-card-padding" aria-labelledby="admin-members-list-title" >
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 id="admin-members-list-title" className="admin-shared-section-heading">{t(memberListConfig.titleKey)}</h2>
-                <button type="button" className="admin-btn-ghost inline-flex min-h-11 items-center gap-2" onClick={() => setActiveTab('renewal')}>
-                  <RotateCcw size={18} aria-hidden="true" />{t('NAV_RENEWAL')}
-                </button>
-              </div>
+  return (
+    <div className="space-y-6">
+      {/* -------------------- MAIN DASHBOARD VIEWS -------------------- */}
+      {!viewingMember && memberListConfig && (
+        <section className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-5 md:p-6 shadow-xl space-y-4" aria-labelledby="admin-members-list-title">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 id="admin-members-list-title" className="text-base sm:text-lg font-bold text-white tracking-tight">{t(memberListConfig.titleKey)}</h2>
+            <button
+              type="button"
+              className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-700/60 bg-slate-800/40 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+              onClick={() => setActiveTab('renewal')}
+            >
+              <RotateCcw size={16} aria-hidden="true" />
+              <span>{t('NAV_RENEWAL')}</span>
+            </button>
+          </div>
 
-              {/* Multi-Branch Filter Pills */}
-              <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-lg border border-border bg-surface-highlight p-2.5 my-3">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-text-secondary mr-1">
-                    <Building2 size={13} className="text-primary shrink-0" />
-                    Branch:
-                  </span>
+          {/* Multi-Branch Filter Strip */}
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800/80 bg-slate-950/40 p-3 shadow-inner">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1">
+                <Building2 size={14} className="text-indigo-400 shrink-0" />
+                Branch:
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
+                className={`min-h-7 rounded-lg px-3 py-1 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 ${
+                  isAllBranches
+                    ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-semibold shadow-xs'
+                    : 'bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                All Branches ({dummyMembers.length})
+              </button>
+              {branches.map((b) => {
+                const count = dummyMembers.filter((m) => m.branch?.toLowerCase().includes(b.name.toLowerCase())).length;
+                const isSelected = selectedBranchId === b.id;
+                return (
                   <button
+                    key={b.id}
                     type="button"
-                    onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
-                    className={`min-h-7 rounded-full px-2.5 py-0.5 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                      isAllBranches
-                        ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                        : 'bg-card text-text-secondary hover:text-text-primary'
+                    onClick={() => setSelectedBranchId(b.id)}
+                    className={`min-h-7 rounded-lg px-3 py-1 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 ${
+                      isSelected
+                        ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-semibold shadow-xs'
+                        : 'bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800'
                     }`}
                   >
-                    All Branches ({dummyMembers.length})
+                    {b.name} ({count})
                   </button>
-                  {branches.map((b) => {
-                    const count = dummyMembers.filter((m) => m.branch?.toLowerCase().includes(b.name.toLowerCase())).length;
-                    const isSelected = selectedBranchId === b.id;
-                    return (
-                      <button
-                        key={b.id}
-                        type="button"
-                        onClick={() => setSelectedBranchId(b.id)}
-                        className={`min-h-7 rounded-full px-2.5 py-0.5 text-xs font-medium motion-safe:transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                          isSelected
-                            ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                            : 'bg-card text-text-secondary hover:text-text-primary'
-                        }`}
-                      >
-                        {b.name} ({count})
-                      </button>
-                    );
-                  })}
-                </div>
+                );
+              })}
+            </div>
 
-                <div className="flex items-center gap-2">
-                  {selectedMemberIds.length > 0 && (
-                    <button type="button" onClick={clearSelection} className="text-xs text-text-secondary hover:text-text-primary underline px-1">
-                      Clear ({selectedMemberIds.length})
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => setIsBulkWhatsAppOpen(true)}
-                    disabled={branchFilteredMembers.length === 0}
-                    className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-success-bg bg-success-bg px-2.5 py-1 text-xs font-semibold text-success-text hover:bg-success hover:text-on-success transition-all disabled:opacity-50"
-                  >
-                    <MessageSquare size={13} /> Bulk WhatsApp
-                    {selectedMemberIds.length > 0 && (
-                      <span className="rounded-full bg-success text-on-success px-1.5 py-0.2 text-[10px] font-bold">
-                        {selectedMemberIds.length}
-                      </span>
-                    )}
-                  </button>
-                </div>
-              </div>
+            <div className="flex items-center gap-2.5">
+              {selectedMemberIds.length > 0 && (
+                <button type="button" onClick={clearSelection} className="text-xs text-slate-400 hover:text-white underline px-1">
+                  Clear ({selectedMemberIds.length})
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setIsBulkWhatsAppOpen(true)}
+                disabled={branchFilteredMembers.length === 0}
+                className="inline-flex min-h-8 items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all disabled:opacity-40"
+              >
+                <MessageSquare size={14} /> Bulk WhatsApp
+                {selectedMemberIds.length > 0 && (
+                  <span className="rounded-full bg-emerald-500 text-black px-1.5 py-0.2 text-[10px] font-bold">
+                    {selectedMemberIds.length}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
 
-              <AdminMembersMemberTable
-                members={branchFilteredMembers}
-                filterStatus={memberListConfig.filterStatus}
-                onSelectMember={openMemberDetails}
-                onAction={handleAction}
-                canMutate={isDemoMode}
-                selectedIds={selectedMemberIds}
-                onToggleSelectOne={toggleSelectOne}
-                onToggleSelectAll={toggleSelectAll}
-              />
-            </section>
-          )}
-
-          {/* Bulk WhatsApp Modal */}
-          <AdminMembersDirectoryBulkWhatsAppModal
-            isOpen={isBulkWhatsAppOpen}
-            onClose={() => setIsBulkWhatsAppOpen(false)}
-            members={selectedMemberIds.length > 0 ? branchFilteredMembers.filter((m) => selectedMemberIds.includes(m.id)) : branchFilteredMembers}
+          <AdminMembersMemberTable
+            members={branchFilteredMembers}
+            filterStatus={memberListConfig.filterStatus}
+            onSelectMember={openMemberDetails}
+            onAction={handleAction}
+            canMutate={isDemoMode}
+            selectedIds={selectedMemberIds}
+            onToggleSelectOne={toggleSelectOne}
+            onToggleSelectAll={toggleSelectAll}
           />
+        </section>
+      )}
 
-          {/* ADD MEMBER FORM */}
-          <AdminMembersDirectoryMemberForm model={model} />
+      {/* Bulk WhatsApp Modal */}
+      <AdminMembersDirectoryBulkWhatsAppModal
+        isOpen={isBulkWhatsAppOpen}
+        onClose={() => setIsBulkWhatsAppOpen(false)}
+        members={selectedMemberIds.length > 0 ? branchFilteredMembers.filter((m) => selectedMemberIds.includes(m.id)) : branchFilteredMembers}
+      />
 
-          {/* SECONDARY TAB VIEWS share the parent active-tab lifecycle. */}
-          <AdminMembersDirectorySecondaryViews model={model} />
-          {isDemoMode && !viewingMember && activeTab === 'export' && <AdminMembersDirectoryDataToolsView key={activeTab} mode="export" members={dummyMembers} />}
-          {isDemoMode && !viewingMember && activeTab === 'documents' && <AdminMembersDirectoryDataToolsView key={activeTab} mode="documents" members={dummyMembers} />}
+      {/* ADD MEMBER FORM */}
+      <AdminMembersDirectoryMemberForm model={model} />
 
-          {!isDemoMode && !viewingMember && ['categories', 'departments', 'renewal', 'import', 'export', 'documents'].includes(activeTab) && (
-            <section className="admin-card p-5" role="status">
-              <h2 className="text-lg font-semibold">{t('FEATURE_DATA_UNAVAILABLE')}</h2>
-              <p className="mt-2 text-text-secondary">{t('FEATURE_DATA_UNAVAILABLE_DESCRIPTION')}</p>
-            </section>
-          )}
+      {/* SECONDARY TAB VIEWS share the parent active-tab lifecycle. */}
+      <AdminMembersDirectorySecondaryViews model={model} />
+      {isDemoMode && !viewingMember && activeTab === 'export' && <AdminMembersDirectoryDataToolsView key={activeTab} mode="export" members={dummyMembers} />}
+      {isDemoMode && !viewingMember && activeTab === 'documents' && <AdminMembersDirectoryDataToolsView key={activeTab} mode="documents" members={dummyMembers} />}
 
-          {/* -------------------- DETAILED MEMBER VIEW -------------------- */}
-          {model.viewingMember && (
-            <AdminMembersDirectoryMemberDetailCard
-              member={model.viewingMember}
-              detailTab={model.detailTab}
-              isDemoMode={isDemoMode}
-              onEdit={(member) => model.handleAction('EDIT', member)}
-            />
-          )}
+      {!isDemoMode && !viewingMember && ['categories', 'departments', 'renewal', 'import', 'export', 'documents'].includes(activeTab) && (
+        <section className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-5" role="status">
+          <h2 className="text-lg font-semibold text-white">{t('FEATURE_DATA_UNAVAILABLE')}</h2>
+          <p className="mt-2 text-slate-400">{t('FEATURE_DATA_UNAVAILABLE_DESCRIPTION')}</p>
+        </section>
+      )}
 
-      </div>;
+      {/* -------------------- DETAILED MEMBER VIEW -------------------- */}
+      {model.viewingMember && (
+        <AdminMembersDirectoryMemberDetailCard
+          member={model.viewingMember}
+          detailTab={model.detailTab}
+          isDemoMode={isDemoMode}
+          onEdit={(member) => model.handleAction('EDIT', member)}
+        />
+      )}
+    </div>
+  );
 }
 
 export { AdminMembersDirectoryDataToolsView };

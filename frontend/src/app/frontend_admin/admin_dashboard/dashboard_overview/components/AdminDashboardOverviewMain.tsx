@@ -1,6 +1,7 @@
 'use client';
 // RESPONSIBILITY: Owns the AdminDashboardOverviewMain presentation responsibility for the dashboard_overview module. It does not own cross-module business logic or API transport.
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
 import {
   Armchair,
   Users,
@@ -9,6 +10,11 @@ import {
   Calendar,
   RefreshCw,
   X,
+  CreditCard,
+  LayoutGrid,
+  Receipt,
+  UserPlus,
+  Clock,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
@@ -21,6 +27,7 @@ import {
   ADMIN_DASHBOARD_DESTINATIONS,
   ADMIN_DASHBOARD_BRANCH_METRICS,
 } from '@/app/frontend_admin/admin_dashboard/dashboard_overview/constants/AdminDashboardOverviewConstants';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 import { toast } from 'sonner';
 
 /**
@@ -70,7 +77,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: rawMetrics.branchesSub,
       Icon: Building2,
       trend: selectedBranchId === 'all' ? '+1 this quarter' : 'Branch Active',
-      theme: 'bg-warning-bg text-warning-text border-border',
+      theme: 'bg-sky-500/15 text-sky-400 border border-sky-500/30',
     },
     {
       id: 'kpi-members',
@@ -80,7 +87,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: rawMetrics.membersSub,
       Icon: Users,
       trend: '+12% vs last month',
-      theme: 'bg-info-bg text-info-text border-border',
+      theme: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30',
     },
     {
       id: 'kpi-occupancy',
@@ -90,7 +97,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: rawMetrics.occupancySub,
       Icon: Armchair,
       trend: 'Optimal capacity',
-      theme: 'bg-surface-highlight text-primary border-border',
+      theme: 'bg-cyan-500/15 text-cyan-400 border border-cyan-500/30',
     },
     {
       id: 'kpi-revenue',
@@ -100,7 +107,7 @@ export default function AdminDashboardOverviewMain() {
       subtext: dynamicRevenue.subtext,
       Icon: WalletCards,
       trend: '96% on-time fee recovery',
-      theme: 'bg-success-bg text-success-text border-border',
+      theme: 'bg-amber-500/15 text-amber-400 border border-amber-500/30',
     },
   ];
 
@@ -112,30 +119,31 @@ export default function AdminDashboardOverviewMain() {
   ];
 
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-6 p-4 text-text-primary sm:p-6 lg:p-8">
+    <div className="w-full space-y-6 text-text-primary">
       {/* ── Executive Header Banner ── */}
-      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm">
+      <div className="rounded-2xl border border-indigo-500/20 bg-card p-5 sm:p-6 shadow-card transition-all space-y-5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap text-xs">
-              <span className="font-semibold text-primary uppercase tracking-wider">
+              <span className="font-bold text-indigo-400 uppercase tracking-wider">
                 {t('LIBRARY_OVERVIEW_EYEBROW')}
               </span>
               <span className="text-border">•</span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-medium bg-success-bg text-success-text border border-border">
-                <Building2 size={12} />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 Multi-Branch Network
               </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-medium bg-secondary-subtle text-text-secondary border border-border">
-                Scope: <strong className="text-text-primary">{selectedBranch ? `${selectedBranch.name} (${selectedBranch.code})` : 'All Branches (Network View)'}</strong>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+                <Building2 size={12} className="text-indigo-400" />
+                Scope: <strong className="text-white">{selectedBranch ? `${selectedBranch.name} (${selectedBranch.code})` : 'All Branches (Network View)'}</strong>
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-text-primary">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
               {t('LIBRARY_OVERVIEW_TITLE')}
             </h1>
 
-            <p className="text-sm text-text-secondary">
+            <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
               {t('LIBRARY_OVERVIEW_DESCRIPTION')}
             </p>
           </div>
@@ -146,37 +154,74 @@ export default function AdminDashboardOverviewMain() {
               type="button"
               onClick={handleSyncOverview}
               disabled={isSyncing}
-              className="inline-flex items-center gap-1.5 min-h-11 px-3.5 rounded-xl border border-border bg-card text-xs font-semibold text-text-secondary hover:text-text-primary hover:border-border hover:bg-surface-hover motion-safe:transition-all shadow-sm active:scale-95 disabled:opacity-60"
+              className="inline-flex items-center gap-2 min-h-10 px-4 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-xs font-bold text-indigo-300 hover:bg-indigo-500/20 hover:text-white transition-all shadow-sm active:scale-95 disabled:opacity-60 cursor-pointer"
               title="Sync Central Analytics"
             >
-              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-primary' : ''} />
+              <RefreshCw size={14} className={isSyncing ? 'animate-spin text-indigo-400' : 'text-indigo-400'} />
               <span>{isSyncing ? 'Syncing...' : 'Sync Central'}</span>
             </button>
+          </div>
+        </div>
+
+        {/* ── Quick Administrative Actions Strip (Matching Manager Design) ── */}
+        <div className="pt-4 border-t border-indigo-500/15 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-1">
+              Quick Actions:
+            </span>
+            <Link
+              href={ADMIN_ROUTES.MEMBERS_DIRECTORY}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white text-xs font-bold shadow-md shadow-indigo-950/40 transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              <UserPlus size={13} />
+              <span>Members Directory</span>
+            </Link>
+            <Link
+              href={ADMIN_ROUTES.SEATS_MATRIX}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/25 text-xs font-semibold transition-all cursor-pointer"
+            >
+              <LayoutGrid size={13} />
+              <span>Seat Matrix</span>
+            </Link>
+            <Link
+              href={ADMIN_ROUTES.FINANCE_PAYMENTS}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 text-xs font-semibold transition-all cursor-pointer"
+            >
+              <CreditCard size={13} />
+              <span>Finance Collections</span>
+            </Link>
+            <Link
+              href={ADMIN_ROUTES.ACCOUNTS_DAILY_SETTLEMENT}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25 text-xs font-semibold transition-all cursor-pointer"
+            >
+              <Receipt size={13} />
+              <span>Daily Settlement</span>
+            </Link>
           </div>
         </div>
       </div>
 
       {/* ── Main Global Time Horizon Segmented Pill Bar ── */}
-      <div className="rounded-xl border border-border bg-card p-3 sm:p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="rounded-2xl border border-indigo-500/20 bg-card p-3.5 sm:p-4 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-primary shrink-0" />
-          <span className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+          <Clock size={16} className="text-indigo-400 shrink-0" />
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
             Analytics Time Horizon:
           </span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* Segmented Time Horizon Pills */}
-          <div className="inline-flex bg-muted p-1 rounded-xl border border-border flex-wrap">
+          <div className="inline-flex bg-slate-900/70 p-1 rounded-xl border border-indigo-500/20 flex-wrap gap-1">
             {timeHorizonOptions.map((opt) => (
               <button
                 key={opt.id}
                 type="button"
                 onClick={() => setTimeRange(opt.id)}
-                className={`min-h-8 px-3 py-1 text-xs font-medium rounded-lg motion-safe:transition-all ${
+                className={`min-h-8 px-3.5 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   timeRange === opt.id
-                    ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
-                    : 'text-text-secondary hover:text-text-primary'
+                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-950/50'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
                 }`}
               >
                 {opt.label}
@@ -186,23 +231,23 @@ export default function AdminDashboardOverviewMain() {
 
           {/* Custom Date Range Picker */}
           {timeRange === 'custom' && (
-            <div className="flex items-center gap-2 flex-wrap text-xs bg-muted p-1.5 rounded-lg border border-border">
-              <label className="flex items-center gap-1 text-text-secondary">
-                <span>From:</span>
+            <div className="flex items-center gap-2 flex-wrap text-xs bg-slate-900/80 p-1.5 rounded-xl border border-indigo-500/30">
+              <label className="flex items-center gap-1.5 text-slate-300">
+                <span className="text-xs font-semibold">From:</span>
                 <input
                   type="date"
                   value={customStartDate}
                   onChange={(e) => setCustomStartDate(e.target.value)}
-                  className="px-2 py-1 bg-card border border-border rounded text-xs text-text-primary outline-none focus:border-primary"
+                  className="px-2.5 py-1 bg-[#0b0c20] border border-indigo-500/30 rounded-lg text-xs text-white outline-none focus:border-indigo-400"
                 />
               </label>
-              <label className="flex items-center gap-1 text-text-secondary">
-                <span>To:</span>
+              <label className="flex items-center gap-1.5 text-slate-300">
+                <span className="text-xs font-semibold">To:</span>
                 <input
                   type="date"
                   value={customEndDate}
                   onChange={(e) => setCustomEndDate(e.target.value)}
-                  className="px-2 py-1 bg-card border border-border rounded text-xs text-text-primary outline-none focus:border-primary"
+                  className="px-2.5 py-1 bg-[#0b0c20] border border-indigo-500/30 rounded-lg text-xs text-white outline-none focus:border-indigo-400"
                 />
               </label>
               {(customStartDate || customEndDate) && (
@@ -212,7 +257,7 @@ export default function AdminDashboardOverviewMain() {
                     setCustomStartDate('');
                     setCustomEndDate('');
                   }}
-                  className="p-1 text-text-secondary hover:text-destructive"
+                  className="p-1 text-slate-400 hover:text-red-400 rounded transition-colors"
                   title="Clear custom dates"
                 >
                   <X size={13} />
@@ -240,13 +285,13 @@ export default function AdminDashboardOverviewMain() {
 
       <aside
         role="status"
-        className="rounded-xl border border-border bg-card p-4 text-xs text-text-secondary"
+        className="rounded-2xl border border-indigo-500/15 bg-card/60 p-4 text-xs text-slate-400 backdrop-blur-sm"
       >
-        <h2 className="font-semibold text-text-primary">
+        <h2 className="font-bold text-white text-sm">
           {t('LIBRARY_DATA_PENDING_TITLE')}
         </h2>
-        <p className="mt-1">{t('LIBRARY_DATA_PENDING_DESCRIPTION')}</p>
+        <p className="mt-1 leading-relaxed">{t('LIBRARY_DATA_PENDING_DESCRIPTION')}</p>
       </aside>
-    </main>
+    </div>
   );
 }

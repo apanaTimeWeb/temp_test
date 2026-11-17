@@ -99,15 +99,30 @@ export default function AdminMembersMemberTable({
     );
   };
 
+  const getStatusBadge = (status: AdminMembersMember['status']) => {
+    switch (status) {
+      case 'Active':
+        return 'border border-emerald-500/30 bg-emerald-500/10 text-emerald-400';
+      case 'Expired':
+        return 'border border-rose-500/30 bg-rose-500/10 text-rose-400';
+      case 'Suspended':
+        return 'border border-amber-500/30 bg-amber-500/10 text-amber-400';
+      case 'Blocked':
+        return 'border border-red-500/30 bg-red-500/10 text-red-400';
+      default:
+        return 'border border-slate-700 bg-slate-800 text-slate-300';
+    }
+  };
+
   if (filteredMembers.length === 0) {
-    return <div className="p-6 text-center text-text-secondary" role="status">{t('TABLE_EMPTY')}</div>;
+    return <div className="p-8 text-center text-slate-400" role="status">{t('TABLE_EMPTY')}</div>;
   }
 
   return (
-    <div>
+    <div className="overflow-hidden rounded-xl border border-slate-800/80 bg-slate-950/20">
       <div className="hidden overflow-x-auto md:block">
         <table className="w-full text-left text-sm">
-          <thead className="bg-surface-highlight uppercase text-xs text-text-secondary font-semibold">
+          <thead className="bg-slate-900/80 uppercase text-[11px] font-semibold text-slate-400 border-b border-slate-800/80 tracking-wider">
             <tr>
               <th scope="col" className="w-10 px-4 py-3">
                 {onToggleSelectAll && (
@@ -116,7 +131,7 @@ export default function AdminMembersMemberTable({
                     aria-label="Select all members on this page"
                     checked={visibleMembers.length > 0 && visibleMembers.every((m) => selectedIds.includes(m.id))}
                     onChange={onToggleSelectAll}
-                    className="rounded border-border"
+                    className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
                   />
                 )}
               </th>
@@ -130,11 +145,11 @@ export default function AdminMembersMemberTable({
               <th scope="col" className="px-4 py-3 text-right">{t('TABLE_ACTIONS')}</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-slate-800/50">
             {visibleMembers.map((member) => {
               const isSelected = selectedIds.includes(member.id);
               return (
-              <tr key={member.id} className={`border-b border-border hover:bg-surface-hover even:bg-surface-zebra h-12 ${isSelected ? 'bg-primary-subtle' : ''}`}>
+              <tr key={member.id} className={`hover:bg-indigo-500/5 transition-colors h-14 ${isSelected ? 'bg-indigo-950/30' : ''}`}>
                 <td className="w-10 px-4 py-3">
                   {onToggleSelectOne && (
                     <input
@@ -142,42 +157,42 @@ export default function AdminMembersMemberTable({
                       aria-label={`Select ${member.name}`}
                       checked={isSelected}
                       onChange={() => onToggleSelectOne(member.id)}
-                      className="rounded border-border"
+                      className="rounded border-slate-700 bg-slate-900 text-indigo-500 focus:ring-indigo-400"
                     />
                   )}
                 </td>
-                <th scope="row" className="px-4 py-3 font-medium text-text-primary">
-                  <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
-                  <span className="block text-xs font-normal text-text-secondary">{displayValue(member.id)}</span>
+                <th scope="row" className="px-4 py-3 font-medium text-white">
+                  <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 font-semibold text-white hover:text-indigo-300 transition-colors" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
+                  <span className="block text-xs font-mono text-slate-400">{displayValue(member.id)}</span>
                 </th>
                 <td className="px-4 py-3">
-                  <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary whitespace-nowrap">
-                    <Building2 size={12} className="text-primary shrink-0" />
+                  <span className="inline-flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900/70 px-2.5 py-1 text-xs font-medium text-slate-300 whitespace-nowrap">
+                    <Building2 size={12} className="text-indigo-400 shrink-0" />
                     <span>{member.branch || 'Downtown Central'}</span>
                   </span>
                 </td>
-                <td className="px-4 py-3"><span className="block">{displayValue(member.email)}</span><span className="text-text-secondary">{displayValue(member.phone)}</span></td>
-                <td className="px-4 py-3">{displayValue(member.plan)}</td>
+                <td className="px-4 py-3"><span className="block text-slate-200">{displayValue(member.email)}</span><span className="text-xs text-slate-400">{displayValue(member.phone)}</span></td>
+                <td className="px-4 py-3 text-slate-200 font-medium">{displayValue(member.plan)}</td>
                 <td className="px-4 py-3">
-                  <span className="block font-medium text-text-primary">{member.seat ? `Seat ${member.seat}` : '—'}</span>
-                  <span className="text-xs text-text-secondary">{member.shift || '—'}{member.locker ? ` · Locker ${member.locker}` : ''}</span>
+                  <span className="block font-medium text-slate-200">{member.seat ? `Seat ${member.seat}` : '—'}</span>
+                  <span className="text-xs text-slate-400">{member.shift || '—'}{member.locker ? ` · Locker ${member.locker}` : ''}</span>
                 </td>
-                <td className="px-4 py-3">{expiryLabel(member.expiryDate)}</td>
+                <td className="px-4 py-3 text-slate-300">{expiryLabel(member.expiryDate)}</td>
                 <td className="px-4 py-3">
                   <div className="flex flex-col gap-1 items-start">
-                    <span className="rounded-full bg-surface-highlight px-2.5 py-0.5 text-xs font-semibold">{statusLabel(member.status)}</span>
+                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${getStatusBadge(member.status)}`}>{statusLabel(member.status)}</span>
                     {member.feeStatus && (
-                      <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${member.feeStatus === 'Paid' ? 'bg-success-bg text-success-text' : 'bg-danger-bg text-danger-text'}`}>
+                      <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${member.feeStatus === 'Paid' ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-400' : 'border border-rose-500/20 bg-rose-500/10 text-rose-400'}`}>
                         {member.feeStatus === 'Due' && member.dueFeeMinor ? `Due: ₹${(member.dueFeeMinor / 100).toLocaleString('en-IN')}` : `Fee: ${member.feeStatus}`}
                       </span>
                     )}
                   </div>
                 </td>
                 <td className="px-4 py-3"><div className="relative flex justify-end gap-1">
-                  <button type="button" className="min-h-11 min-w-11 rounded-md hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-label={t('ACTION_VIEW_MEMBER', { name: member.name })} onClick={() => onSelectMember(member)}><Eye size={18} strokeWidth={2} aria-hidden="true" /></button>
+                  <button type="button" className="min-h-9 min-w-9 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 inline-flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" aria-label={t('ACTION_VIEW_MEMBER', { name: member.name })} onClick={() => onSelectMember(member)}><Eye size={18} strokeWidth={2} aria-hidden="true" /></button>
                   <button
                     type="button"
-                    className="min-h-11 min-w-11 rounded-md text-success-text hover:bg-success-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary inline-flex items-center justify-center"
+                    className="min-h-9 min-w-9 rounded-lg text-emerald-400 hover:bg-emerald-500/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 inline-flex items-center justify-center transition-colors"
                     title="Chat on WhatsApp"
                     aria-label={`Chat with ${member.name} on WhatsApp`}
                     onClick={() => {
@@ -198,16 +213,16 @@ export default function AdminMembersMemberTable({
                   </button>
                   <button
                     type="button"
-                    className="min-h-11 min-w-11 rounded-md hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="min-h-9 min-w-9 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 inline-flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
                     aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })}
                     aria-expanded={openActionsFor === member.id}
                     aria-controls={`admin-member-actions-${member.id}`}
                     onClick={() => setOpenActionsFor((current) => current === member.id ? null : member.id)}
                   ><MoreVertical size={18} strokeWidth={2} aria-hidden="true" /></button>
-                  {openActionsFor === member.id && <div id={`admin-member-actions-${member.id}`} aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })} onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }} className="absolute right-4 z-10 mt-12 min-w-48 rounded-md border border-border bg-popover p-1 shadow-popover">
-                    <button type="button" className="block min-h-11 w-full rounded px-3 py-2 text-left text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => { setOpenActionsFor(null); onSelectMember(member); }}>{t('ACTION_VIEW_DETAILS')}</button>
-                    <button type="button" disabled={!canMutate} title={!canMutate ? t('MEMBER_EDIT_UNAVAILABLE') : undefined} className="block min-h-11 w-full rounded px-3 py-2 text-left text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50" onClick={() => { setOpenActionsFor(null); onAction('EDIT', member); }}>{t('ACTION_EDIT_MEMBER')}</button>
-                    <button type="button" className="block min-h-11 w-full rounded px-3 py-2 text-left text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => setOpenActionsFor(null)}>{t('ACTION_CLOSE_MENU')}</button>
+                  {openActionsFor === member.id && <div id={`admin-member-actions-${member.id}`} aria-label={t('ACTION_OPEN_ACTIONS', { name: member.name })} onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }} className="absolute right-4 z-20 mt-10 min-w-48 rounded-xl border border-slate-800 bg-slate-900/95 backdrop-blur-xl p-1.5 shadow-2xl">
+                    <button type="button" className="block min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" onClick={() => { setOpenActionsFor(null); onSelectMember(member); }}>{t('ACTION_VIEW_DETAILS')}</button>
+                    <button type="button" disabled={!canMutate} title={!canMutate ? t('MEMBER_EDIT_UNAVAILABLE') : undefined} className="block min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 disabled:cursor-not-allowed disabled:opacity-40" onClick={() => { setOpenActionsFor(null); onAction('EDIT', member); }}>{t('ACTION_EDIT_MEMBER')}</button>
+                    <button type="button" className="block min-h-10 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400" onClick={() => setOpenActionsFor(null)}>{t('ACTION_CLOSE_MENU')}</button>
                   </div>}
                 </div></td>
               </tr>
@@ -227,11 +242,11 @@ export default function AdminMembersMemberTable({
         expiryLabel={expiryLabel}
       />
       {filteredMembers.length > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border px-4 py-3 text-sm text-text-secondary">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-800/80 px-4 py-3 text-xs text-slate-400 bg-slate-900/30">
           <span>{t('PAGINATION_SHOWING_RANGE', { start: currentPage * pageSize + 1, end: Math.min((currentPage + 1) * pageSize, filteredMembers.length), total: filteredMembers.length })}</span>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
-              <label htmlFor="rows-per-page-members-directory" className="text-xs text-text-secondary whitespace-nowrap">
+              <label htmlFor="rows-per-page-members-directory" className="text-xs text-slate-400 whitespace-nowrap">
                 Rows per page:
               </label>
               <select
@@ -241,7 +256,7 @@ export default function AdminMembersMemberTable({
                   setPageSize(Number(e.target.value));
                   setPage(0);
                 }}
-                className="rounded border border-border bg-input px-2 py-1 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1 text-xs text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
               >
                 <option value={10}>10</option>
                 <option value={25}>25</option>
@@ -251,18 +266,18 @@ export default function AdminMembersMemberTable({
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="min-h-9 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-text-disabled"
+                className="min-h-8 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
                 disabled={currentPage === 0}
                 onClick={() => setPage((current) => Math.max(0, current - 1))}
               >
                 {t('PAGINATION_PREVIOUS')}
               </button>
-              <span className="text-xs text-text-secondary">
+              <span className="text-xs text-slate-400">
                 Page {currentPage + 1} of {pageCount}
               </span>
               <button
                 type="button"
-                className="min-h-9 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-surface-hover disabled:cursor-not-allowed disabled:text-text-disabled"
+                className="min-h-8 rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-200 hover:text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
                 disabled={currentPage >= pageCount - 1}
                 onClick={() => setPage((current) => Math.min(pageCount - 1, current + 1))}
               >
@@ -275,6 +290,5 @@ export default function AdminMembersMemberTable({
     </div>
   );
 }
-
 
 export type { AdminMembersMemberTableProps };

@@ -96,33 +96,59 @@ export default function AdminEnquiriesPageView() {
   }, [selectedIds, timeFiltered]);
 
   return (
-    <div className="space-y-6 pb-10">
-      <p className="rounded-xl border border-warning-border bg-warning-bg p-3 text-xs font-medium text-warning-text" role="status">{t('CRM_DEMO_BANNER')}</p>
+    <div className="w-full space-y-6 text-text-primary pb-10">
+      <div role="status" className="sr-only"><span>{t('CRM_DEMO_BANNER')}</span></div>
       <div className="min-w-0 space-y-6 text-text-primary">
         {/* Executive Header */}
-        <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 shadow-lg shadow-black/20">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="space-y-1.5">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-md bg-info-bg px-2.5 py-0.5 text-xs font-semibold text-info-text"><Target className="h-3.5 w-3.5" />{t('BREADCRUMB')}</span>
-                <span className="text-xs text-text-muted">• CRM Pipeline</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-400">
+                  <Target className="h-3 w-3" />
+                  {t('BREADCRUMB')}
+                </span>
+                <span className="text-xs text-slate-400">• CRM Pipeline</span>
               </div>
-              <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('PAGE_TITLE')}</h1>
-              <p className="text-sm text-text-secondary">{isDemoMode ? t('DEMO_SUBTITLE', { count: timeFiltered.length }) : t('LIVE_SUBTITLE')} • Range: <span className="font-semibold text-primary">{timeRangeLabel}</span></p>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('PAGE_TITLE')}</h1>
+              <p className="text-xs sm:text-sm text-slate-400">
+                {isDemoMode ? t('DEMO_SUBTITLE', { count: timeFiltered.length }) : t('LIVE_SUBTITLE')} • Range: <span className="font-semibold text-indigo-400">{timeRangeLabel}</span>
+              </p>
             </div>
-            <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border bg-surface p-2 shadow-sm backdrop-blur-md">
-              <div className="flex items-center rounded-lg bg-surface-muted p-1 border border-border">
+            <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-slate-800/80 bg-slate-950/50 p-1.5 shadow-inner">
+              <div className="flex items-center rounded-lg bg-slate-900/80 p-1 border border-slate-800/60">
                 {(['all', 'today', 'this_week', 'this_month', 'custom'] as const).map((r) => (
-                  <button key={r} type="button" onClick={() => setTimeRange(r)} className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${timeRange === r ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'}`}>
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => setTimeRange(r)}
+                    className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                      timeRange === r
+                        ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-xs'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                    }`}
+                  >
                     {r === 'all' ? 'All Time' : r === 'today' ? 'Today' : r === 'this_week' ? 'This Week' : r === 'this_month' ? 'This Month' : <><Calendar className="h-3 w-3" />Custom</>}
                   </button>
                 ))}
               </div>
               {timeRange === 'custom' && (
                 <div className="flex items-center gap-1.5 text-xs">
-                  <input type="date" value={customStartDate} onChange={(e) => setCustomStartDate(e.target.value)} aria-label="Start date" className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-primary" />
-                  <span className="text-text-muted">to</span>
-                  <input type="date" value={customEndDate} onChange={(e) => setCustomEndDate(e.target.value)} aria-label="End date" className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+                  <input
+                    type="date"
+                    value={customStartDate}
+                    onChange={(e) => setCustomStartDate(e.target.value)}
+                    aria-label="Start date"
+                    className="rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                  />
+                  <span className="text-slate-500">to</span>
+                  <input
+                    type="date"
+                    value={customEndDate}
+                    onChange={(e) => setCustomEndDate(e.target.value)}
+                    aria-label="End date"
+                    className="rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-1 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                  />
                 </div>
               )}
             </div>
@@ -130,62 +156,142 @@ export default function AdminEnquiriesPageView() {
         </div>
 
         {/* 4 KPI Cards */}
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: 'Total Leads', value: totalLeads, icon: Users, color: 'indigo', sub: `All enquiries in ${timeRangeLabel}` },
-            { label: 'New Prospects', value: newProspects, icon: UserCheck, color: 'sky', sub: `Fresh inbound leads (${timeRangeLabel})` },
-            { label: 'In Pipeline', value: inPipeline, icon: TrendingUp, color: 'amber', sub: `Visited + Interested (${timeRangeLabel})` },
-            { label: 'Conversion Rate', value: `${conversionRate}%`, icon: Target, color: 'emerald', sub: `${converted} admitted in ${timeRangeLabel}` },
-          ].map(({ label, value, icon: Icon, color, sub }) => (
-            <div key={label} className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{label}</span>
-                <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${color === 'indigo' || color === 'sky' ? 'bg-info-bg text-info-text' : color === 'amber' ? 'bg-warning-bg text-warning-text' : 'bg-success-bg text-success-text'}`}><Icon size={17} strokeWidth={2.2} /></div>
+            {
+              label: 'Total Leads',
+              value: totalLeads,
+              icon: Users,
+              border: 'border-cyan-500/20 hover:border-cyan-500/40',
+              glow: 'bg-cyan-500/10 text-cyan-400',
+              badge: 'border-cyan-500/20 bg-cyan-500/10 text-cyan-400',
+              sub: `All enquiries in ${timeRangeLabel}`
+            },
+            {
+              label: 'New Prospects',
+              value: newProspects,
+              icon: UserCheck,
+              border: 'border-indigo-500/20 hover:border-indigo-500/40',
+              glow: 'bg-indigo-500/10 text-indigo-400',
+              badge: 'border-indigo-500/20 bg-indigo-500/10 text-indigo-400',
+              sub: `Fresh inbound leads (${timeRangeLabel})`
+            },
+            {
+              label: 'In Pipeline',
+              value: inPipeline,
+              icon: TrendingUp,
+              border: 'border-amber-500/20 hover:border-amber-500/40',
+              glow: 'bg-amber-500/10 text-amber-400',
+              badge: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
+              sub: `Visited + Interested (${timeRangeLabel})`
+            },
+            {
+              label: 'Conversion Rate',
+              value: `${conversionRate}%`,
+              icon: Target,
+              border: 'border-emerald-500/20 hover:border-emerald-500/40',
+              glow: 'bg-emerald-500/10 text-emerald-400',
+              badge: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
+              sub: `${converted} admitted in ${timeRangeLabel}`
+            },
+          ].map(({ label, value, icon: Icon, border, glow, badge, sub }) => (
+            <div
+              key={label}
+              className={`relative overflow-hidden rounded-2xl border ${border} bg-slate-900/60 backdrop-blur-xl p-5 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-0.5`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</span>
+                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${glow}`}>
+                  <Icon size={20} strokeWidth={2.2} />
+                </div>
               </div>
-              <p className="text-2xl font-bold tracking-tight text-text-primary">{value}</p>
-              <p className="mt-1 text-xs text-text-muted">{sub}</p>
+              <p className="mt-3 text-2xl font-bold tracking-tight text-white">{value}</p>
+              <p className="mt-2 text-xs text-slate-400 truncate">{sub}</p>
             </div>
           ))}
         </div>
 
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-xl p-3 shadow-lg">
           <div className="relative min-w-0 flex-1 max-w-sm">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none" strokeWidth={2} />
-            <input type="text" aria-label={t('SEARCH_ARIA')} disabled={!isDemoMode} className="min-h-9 w-full rounded-lg border border-border bg-input px-3 py-1.5 pl-9 text-xs text-text-primary placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" placeholder={t('SEARCH_PLACEHOLDER')} value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" strokeWidth={2} />
+            <input
+              type="text"
+              aria-label={t('SEARCH_ARIA')}
+              disabled={!isDemoMode}
+              className="min-h-9 w-full rounded-xl border border-slate-800 bg-slate-950/60 px-3 py-1.5 pl-9 text-xs text-white placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              placeholder={t('SEARCH_PLACEHOLDER')}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
-          <select data-testid="admin_enquiries-AdminEnquiriesPageView-control-009" aria-label={t('FILTER_ARIA')} disabled={!isDemoMode} className="min-h-9 rounded-lg border border-border bg-input px-3 py-1.5 text-xs text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            {ADMIN_ENQUIRIES_ENQUIRY_STATUS_FILTERS.map((status) => (<option key={status} value={status}>{status === 'All' ? t('ALL_STATUSES') : statusLabel(status)}</option>))}
+          <select
+            data-testid="admin_enquiries-AdminEnquiriesPageView-control-009"
+            aria-label={t('FILTER_ARIA')}
+            disabled={!isDemoMode}
+            className="min-h-9 rounded-xl border border-slate-800 bg-slate-950/60 px-3 py-1.5 text-xs text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            {ADMIN_ENQUIRIES_ENQUIRY_STATUS_FILTERS.map((status) => (
+              <option key={status} value={status}>{status === 'All' ? t('ALL_STATUSES') : statusLabel(status)}</option>
+            ))}
           </select>
-          <div className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface-muted p-1">
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-001" className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all ${view === 'kanban' ? 'bg-primary text-primary-contrast shadow-sm' : 'hover:bg-surface-elevated'}`} onClick={() => setView('kanban')} title={t('KANBAN_TITLE')} aria-label={t('KANBAN_SWITCH')} aria-pressed={view === 'kanban'}><LayoutGrid size={15} strokeWidth={2}/></button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-002" className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all ${view === 'table' ? 'bg-primary text-primary-contrast shadow-sm' : 'hover:bg-surface-elevated'}`} onClick={() => setView('table')} title={t('TABLE_TITLE')} aria-label={t('TABLE_SWITCH')} aria-pressed={view === 'table'}><List size={15} strokeWidth={2}/></button>
+          <div className="inline-flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
+            <button
+              data-testid="admin_enquiries-AdminEnquiriesPageView-control-001"
+              className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 transition-all ${
+                view === 'kanban' ? 'bg-indigo-500 text-white shadow-xs' : 'hover:text-white hover:bg-slate-800/60'
+              }`}
+              onClick={() => setView('kanban')}
+              title={t('KANBAN_TITLE')}
+              aria-label={t('KANBAN_SWITCH')}
+              aria-pressed={view === 'kanban'}
+            >
+              <LayoutGrid size={15} strokeWidth={2}/>
+            </button>
+            <button
+              data-testid="admin_enquiries-AdminEnquiriesPageView-control-002"
+              className={`inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 transition-all ${
+                view === 'table' ? 'bg-indigo-500 text-white shadow-xs' : 'hover:text-white hover:bg-slate-800/60'
+              }`}
+              onClick={() => setView('table')}
+              title={t('TABLE_TITLE')}
+              aria-label={t('TABLE_SWITCH')}
+              aria-pressed={view === 'table'}
+            >
+              <List size={15} strokeWidth={2}/>
+            </button>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-2">
             {selectedIds.length > 0 && (
               <>
                 <button
                   type="button"
                   onClick={handleDeleteSelected}
-                  className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-danger-bg bg-danger-bg px-2.5 py-1.5 text-xs font-semibold text-danger-text hover:bg-danger hover:text-on-danger transition-colors"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 transition-colors"
                   title="Delete selected enquiries"
                 >
                   <Trash2 size={13} /> Delete Selected ({selectedIds.length})
                 </button>
-                <button type="button" onClick={clearSelection} className="inline-flex h-9 items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs font-medium text-text-secondary hover:bg-surface-elevated">
+                <button
+                  type="button"
+                  onClick={clearSelection}
+                  className="inline-flex h-9 items-center gap-1 rounded-xl border border-slate-800 bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                >
                   <XCircle size={13} /> Clear ({selectedIds.length})
                 </button>
               </>
             )}
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-003" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-surface-elevated transition-colors disabled:cursor-not-allowed disabled:opacity-50" type="button" disabled title={t('IMPORT_TITLE')}><Upload size={14} strokeWidth={2}/> {t('IMPORT')}</button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-004" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-surface-elevated transition-colors disabled:cursor-not-allowed disabled:opacity-50" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title={isDemoMode ? t('EXPORT_DEMO_TITLE') : t('EXPORT_LIVE_TITLE')} onClick={downloadCsv}><Download size={14} strokeWidth={2}/> {t('CSV')}</button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-005" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text-secondary hover:bg-surface-elevated transition-colors disabled:cursor-not-allowed disabled:opacity-50" type="button" onClick={() => window.print()}><Printer size={14} strokeWidth={2}/> {t('PRINT')}</button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-006" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-success-bg bg-success-bg px-3 py-1.5 text-xs font-semibold text-success-text hover:bg-success hover:text-on-success transition-all disabled:cursor-not-allowed disabled:opacity-50" type="button" disabled={timeFiltered.length === 0} title={t('WHATSAPP_TITLE')} onClick={() => setIsBulkWhatsAppOpen(true)}>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-003" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('IMPORT_TITLE')}><Upload size={14} strokeWidth={2}/> {t('IMPORT')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-004" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title={isDemoMode ? t('EXPORT_DEMO_TITLE') : t('EXPORT_LIVE_TITLE')} onClick={downloadCsv}><Download size={14} strokeWidth={2}/> {t('CSV')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-005" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" onClick={() => window.print()}><Printer size={14} strokeWidth={2}/> {t('PRINT')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-006" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={timeFiltered.length === 0} title={t('WHATSAPP_TITLE')} onClick={() => setIsBulkWhatsAppOpen(true)}>
               <MessageSquare size={14} strokeWidth={2}/> {t('WHATSAPP')}
-              {selectedIds.length > 0 && <span className="rounded-full bg-success text-on-success px-1.5 py-0.2 text-[10px] font-bold">{selectedIds.length}</span>}
+              {selectedIds.length > 0 && <span className="rounded-full bg-emerald-500 text-black px-1.5 py-0.2 text-[10px] font-bold">{selectedIds.length}</span>}
             </button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-007" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-sky-600 hover:bg-surface-elevated transition-colors disabled:cursor-not-allowed disabled:opacity-50" type="button" disabled title={t('TELEGRAM_TITLE')}><Send size={14} strokeWidth={2}/> {t('TELEGRAM')}</button>
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-008" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-blue-600 hover:bg-surface-elevated transition-colors disabled:cursor-not-allowed disabled:opacity-50" type="button" disabled title={t('EMAIL_TITLE')}><Mail size={14} strokeWidth={2}/> {t('EMAIL')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-007" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-sky-400 hover:text-sky-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('TELEGRAM_TITLE')}><Send size={14} strokeWidth={2}/> {t('TELEGRAM')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-008" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-indigo-400 hover:text-indigo-300 hover:bg-slate-800 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('EMAIL_TITLE')}><Mail size={14} strokeWidth={2}/> {t('EMAIL')}</button>
           </div>
         </div>
 
@@ -193,11 +299,43 @@ export default function AdminEnquiriesPageView() {
         {view === 'kanban' && (
           <>
             {!isDemoMode ? (
-              <p data-testid="admin_enquiries-AdminEnquiriesPageView-state-live-unavailable" role="status" className="mt-12 rounded-lg border border-warning-bg bg-warning-bg p-4 text-warning-text">{t('LIVE_WARNING')}</p>
+              <p data-testid="admin_enquiries-AdminEnquiriesPageView-state-live-unavailable" role="status" className="mt-12 rounded-xl border border-warning-bg bg-warning-bg p-4 text-warning-text">{t('LIVE_WARNING')}</p>
             ) : timeFiltered.length === 0 ? (
               <div data-testid="admin_enquiries-AdminEnquiriesPageView-state-010" className="mt-12"><AdminEmptyState showIcon={false} title={t('NO_ENQUIRIES')} description={t('NO_MATCHING_ENQUIRIES')} /></div>
             ) : (
               <div className="grid min-w-0 grid-cols-[repeat(5,minmax(15rem,84vw))] gap-4 overflow-x-auto pb-2 md:grid-cols-[repeat(5,minmax(15rem,1fr))]">
+                {ADMIN_ENQUIRIES_ENQUIRY_KANBAN_COLUMNS.map((col) => {
+                  const cards = colTimeFiltered(col.id);
+                  return (
+                    <div key={col.id} className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl">
+                      <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 bg-slate-900/80 p-3">
+                        <div className="flex min-w-0 items-center gap-2">
+                          <span className={`h-2 w-2 shrink-0 rounded-full bg-indigo-400 ${ADMIN_ENQUIRIES_ENQUIRY_DOT_CLASSES[col.id]}`} />
+                          <span className="truncate text-xs font-bold text-white uppercase tracking-wider">{statusLabel(col.label)}</span>
+                          <span className="inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-slate-800 px-2 text-[11px] font-bold text-slate-300">{cards.length}</span>
+                        </div>
+                        <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-013" className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700/60 bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 disabled:cursor-not-allowed disabled:opacity-40" title={t('COLUMN_ACTIONS_UNAVAILABLE')} aria-label={t('COLUMN_OPTIONS')} disabled><MoreHorizontal size={16} strokeWidth={2}/></button>
+                      </div>
+                      <div className="flex min-h-40 flex-col gap-3 p-3">
+                        {cards.length === 0 ? (
+                          <div data-testid="admin_enquiries-AdminEnquiriesPageView-state-014" className="rounded-xl border border-dashed border-slate-800/80 p-4 text-center">
+                            <PhoneCall size={18} strokeWidth={2} className="mx-auto text-slate-500 mb-2"/>
+                            <p data-testid="admin_enquiries-AdminEnquiriesPageView-state-015" className="text-xs font-medium text-slate-300">{t('NO_STATUS_LEADS', { status: statusLabel(col.label) })}</p>
+                            <p data-testid="admin_enquiries-AdminEnquiriesPageView-state-016" className="mt-1 text-[11px] text-slate-500">{t('LEADS_MOVE_HINT', { status: statusLabel(col.label) })}</p>
+                          </div>
+                        ) : (
+                          cards.map((enq) => (
+                            <AdminEnquiriesEnquiryKanbanCard key={enq.id} enq={enq} colClass={col.cardClass} onClick={() => router.push(ADMIN_ENQUIRIES_URLS.ENQUIRY_DETAIL(enq.id))} />
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
                 {ADMIN_ENQUIRIES_ENQUIRY_KANBAN_COLUMNS.map((col) => {
                   const cards = colTimeFiltered(col.id);
                   return (

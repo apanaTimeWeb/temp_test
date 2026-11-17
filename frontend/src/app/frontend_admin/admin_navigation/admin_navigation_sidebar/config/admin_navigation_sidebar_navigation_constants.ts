@@ -79,7 +79,7 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     icon: LayoutDashboard,
     submodules: [
       { href: ADMIN_ROUTES.DASHBOARD_OVERVIEW, icon: LayoutDashboard, label: 'Dashboard Overview', labelKey: 'SUBMODULE_DASHBOARD_OVERVIEW' },
-      { href: ADMIN_ROUTES.DASHBOARD_REPORTS, icon: BarChart2, label: 'Dashboard Reports', labelKey: 'SUBMODULE_DASHBOARD_REPORTS' },
+      { href: ADMIN_ROUTES.DASHBOARD_REPORTS, icon: BarChart2, label: 'Reports & Analytics', labelKey: 'SUBMODULE_DASHBOARD_REPORTS' },
     ],
   },
   {

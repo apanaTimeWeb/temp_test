@@ -4,6 +4,11 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { ChevronDown } from 'lucide-react';
 import type { AdminNavigationGroup } from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_navigation_constants';
+import {
+  ADMIN_NAV_GROUP_COLORS,
+  ADMIN_NAV_SUBMODULE_COLORS,
+  DEFAULT_ADMIN_NAV_COLOR,
+} from '@/app/frontend_admin/admin_navigation/admin_navigation_sidebar/config/admin_navigation_sidebar_colors';
 
 interface AdminNavigationSidebarNavGroupProps {
   group: AdminNavigationGroup;
@@ -27,6 +32,7 @@ export function AdminNavigationSidebarNavGroup({
   const t = useTranslations('ADMIN_NAVIGATION');
   const GroupIcon = group.icon;
   const groupLabel = t(group.labelKey) ?? group.label;
+  const groupColor = ADMIN_NAV_GROUP_COLORS[group.id] ?? DEFAULT_ADMIN_NAV_COLOR;
 
   return (
     <div className="admin-sidebar-group-block">
@@ -45,18 +51,28 @@ export function AdminNavigationSidebarNavGroup({
         }`}
       >
         <div className="admin-sidebar-group-btn-content">
-          <GroupIcon
-            size={17}
-            strokeWidth={2}
-            className="admin-sidebar-group-icon"
-            aria-hidden="true"
-          />
+          <span
+            className="admin-nav-icon-badge"
+            style={{
+              color: groupColor.iconColor,
+              backgroundColor: activeGroup ? `${groupColor.iconColor}33` : groupColor.bg,
+              boxShadow: activeGroup ? `0 0 12px ${groupColor.iconColor}40` : undefined,
+            }}
+          >
+            <GroupIcon
+              size={15}
+              strokeWidth={2.2}
+              className="admin-sidebar-group-icon"
+              aria-hidden="true"
+            />
+          </span>
           <span className="admin-sidebar-group-label">{groupLabel}</span>
         </div>
         <ChevronDown
           size={14}
           strokeWidth={2}
           className={`admin-sidebar-group-chevron ${isGroupOpen ? 'is-expanded' : ''}`}
+          style={isGroupOpen ? { color: groupColor.iconColor } : undefined}
           aria-hidden="true"
         />
       </button>
@@ -70,6 +86,8 @@ export function AdminNavigationSidebarNavGroup({
           const subActive = isSubmoduleActive(pathname ?? '', sub.href);
           const SubIcon = sub.icon;
           const subLabel = t(sub.labelKey) ?? sub.label;
+          const subColor = ADMIN_NAV_SUBMODULE_COLORS[sub.labelKey] ?? groupColor;
+
           return (
             <Link
               key={sub.href}
@@ -82,13 +100,31 @@ export function AdminNavigationSidebarNavGroup({
               className={`admin-sidebar-sublink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
                 subActive ? 'admin-sidebar-sublink-active' : ''
               }`}
+              style={
+                subActive
+                  ? {
+                      borderLeftColor: subColor.iconColor,
+                      background: `linear-gradient(135deg, ${subColor.iconColor}22, rgba(99, 102, 241, 0.12))`,
+                      color: '#ffffff',
+                    }
+                  : undefined
+              }
             >
-              <SubIcon
-                size={14}
-                strokeWidth={2}
-                className="admin-sidebar-sublink-icon"
-                aria-hidden="true"
-              />
+              <span
+                className="admin-nav-icon-badge-sub"
+                style={{
+                  color: subColor.iconColor,
+                  backgroundColor: subActive ? `${subColor.iconColor}33` : subColor.bg,
+                  boxShadow: subActive ? `0 0 10px ${subColor.iconColor}40` : undefined,
+                }}
+              >
+                <SubIcon
+                  size={13}
+                  strokeWidth={2.2}
+                  className="admin-sidebar-sublink-icon"
+                  aria-hidden="true"
+                />
+              </span>
               <span className="admin-sidebar-sublink-label">{subLabel}</span>
             </Link>
           );
@@ -99,4 +135,3 @@ export function AdminNavigationSidebarNavGroup({
 }
 
 export default AdminNavigationSidebarNavGroup;
-

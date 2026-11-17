@@ -29,10 +29,10 @@ export default function AdminBlacklistRecordsTable({ records, columns, onRowClic
   }, [records, search]);
 
   return (
-    <div className="space-y-3">
+    <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-5 shadow-xl space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="relative flex-1 min-w-[240px] max-w-md">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={search}
@@ -42,22 +42,24 @@ export default function AdminBlacklistRecordsTable({ records, columns, onRowClic
             }}
             placeholder="Search blacklisted members by name, phone, reason..."
             aria-label="Search blacklisted members"
-            className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-border bg-input text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
           />
         </div>
       </div>
-      <DataGrid
-        rowData={filteredRecords}
-        columnDefs={columns}
-        pagination
-        pageSize={25}
-        rowHeight={56}
-        onRowClicked={onRowClicked}
-        tableLabel={t('TABLE_LABEL')}
-        mobileOpenLabel={t('OPEN_RECORD')}
-        page={urlTablePage0}
-        onPageChange={setUrlTablePage0}
-      />
+      <div className="overflow-hidden rounded-xl border border-slate-800/80 bg-slate-950/20">
+        <DataGrid
+          rowData={filteredRecords}
+          columnDefs={columns}
+          pagination
+          pageSize={25}
+          rowHeight={56}
+          onRowClicked={onRowClicked}
+          tableLabel={t('TABLE_LABEL')}
+          mobileOpenLabel={t('OPEN_RECORD')}
+          page={urlTablePage0}
+          onPageChange={setUrlTablePage0}
+        />
+      </div>
     </div>
   );
 }

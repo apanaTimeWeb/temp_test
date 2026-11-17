@@ -31,7 +31,9 @@ export default function AdminSettingsBranchesViewSIDEBARNAVIGATIONSection({ mode
             onClick={() => setActiveTab(item.id)}
             className={`admin-tab-button admin-tab-button-branch ${activeTab === item.id ? 'admin-tab-button-active' : ''}`}
           >
-            <item.icon size={18} aria-hidden="true" className={activeTab === item.id ? 'text-primary' : 'text-text-secondary'} />
+            <span className={`inline-flex items-center justify-center w-6 h-6 rounded-md transition-transform ${activeTab === item.id ? 'bg-primary/20 text-primary shadow-xs' : 'bg-muted/60 text-text-secondary'}`}>
+              <item.icon size={15} aria-hidden="true" />
+            </span>
             {t(`NAV_MAIN_${item.id.toUpperCase()}`)}
           </button>
         )) : (
@@ -45,7 +47,9 @@ export default function AdminSettingsBranchesViewSIDEBARNAVIGATIONSection({ mode
                 onClick={() => setDetailTab(item.id)}
                 className={`admin-tab-button admin-tab-button-branch ${detailTab === item.id ? 'admin-tab-button-active' : ''}`}
               >
-                <item.icon size={18} aria-hidden="true" className={detailTab === item.id ? 'text-primary' : 'text-text-secondary'} />
+                <span className={`inline-flex items-center justify-center w-6 h-6 rounded-md transition-transform ${detailTab === item.id ? 'bg-primary/20 text-primary shadow-xs' : 'bg-muted/60 text-text-secondary'}`}>
+                  <item.icon size={15} aria-hidden="true" />
+                </span>
                 {t(`NAV_DETAIL_${item.id.toUpperCase()}`)}
               </button>
             ))}

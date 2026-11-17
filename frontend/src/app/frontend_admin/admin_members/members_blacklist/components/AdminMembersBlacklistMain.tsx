@@ -92,14 +92,37 @@ export default function AdminMembersBlacklistMain() {
   return (
     <>
       <Toaster position="bottom-right" richColors closeButton />
-      <div className="space-y-6">
-        <div className="space-y-3">
-          {!isDemoMode && <p role="status" className="rounded-lg border border-warning-bg bg-warning-bg p-4 text-warning-text">{t('LIVE_UNAVAILABLE')}</p>}
-          <header className="admin-page-header">
-            <div><p className="admin-breadcrumb">{t('BREADCRUMB')}</p><h1 className="admin-page-title">{t('TITLE')}</h1><p className="admin-page-subtitle">{t('SUBTITLE')}</p></div>
-            <div className="admin-page-actions"><button type="button" className="admin-btn-danger min-h-11 disabled:cursor-not-allowed disabled:opacity-50" onClick={() => { if (isDemoMode) setShowForm(true); }} disabled={!isDemoMode} title={!isDemoMode ? t('LIVE_UNAVAILABLE') : undefined}><AlertOctagon size={18} strokeWidth={2} /> {t('ADD_ACTION')}</button></div>
-          </header>
+      <div className="w-full space-y-6 text-text-primary pb-10">
+        {!isDemoMode && <p role="status" className="rounded-xl border border-warning-bg bg-warning-bg p-4 text-warning-text">{t('LIVE_UNAVAILABLE')}</p>}
+        
+        {/* EXECUTIVE HEADER */}
+        <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 shadow-lg shadow-black/20">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-rose-400">
+                  {t('BREADCRUMB')}
+                </span>
+                <span className="text-xs text-slate-400">• Security Restrictions</span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('TITLE')}</h1>
+              <p className="text-xs sm:text-sm text-slate-400">{t('SUBTITLE')}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-rose-500/25 hover:from-rose-600 hover:to-rose-700 transition-all disabled:cursor-not-allowed disabled:opacity-40"
+                onClick={() => { if (isDemoMode) setShowForm(true); }}
+                disabled={!isDemoMode}
+                title={!isDemoMode ? t('LIVE_UNAVAILABLE') : undefined}
+              >
+                <AlertOctagon size={16} strokeWidth={2} />
+                <span>{t('ADD_ACTION')}</span>
+              </button>
+            </div>
+          </div>
         </div>
+
         <AdminBlacklistRecordsSection
           records={visibleRecords}
           columns={columns}
@@ -109,31 +132,52 @@ export default function AdminMembersBlacklistMain() {
           onRetry={() => { void recordsQuery.refetch(); }}
           onRowClicked={setSelectedRecord}
         />
+
         {selectedRecord && (
-          <section className="rounded-lg border border-border bg-card p-4 sm:p-6" aria-labelledby="admin-blacklist-record-detail-title" aria-live="polite">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <h2 id="admin-blacklist-record-detail-title" className="text-lg font-semibold text-text-primary">{t('DETAILS_TITLE')}</h2>
-              <button type="button" className="min-h-11 rounded-md border border-border px-3 py-2 text-primary" onClick={() => setSelectedRecord(null)}>{t('DETAILS_CLOSE')}</button>
+          <section className="rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 shadow-xl" aria-labelledby="admin-blacklist-record-detail-title" aria-live="polite">
+            <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-800/80 pb-4">
+              <h2 id="admin-blacklist-record-detail-title" className="text-base font-bold text-white tracking-tight">{t('DETAILS_TITLE')}</h2>
+              <button
+                type="button"
+                className="min-h-8 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 py-1 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                onClick={() => setSelectedRecord(null)}
+              >
+                {t('DETAILS_CLOSE')}
+              </button>
             </div>
             <dl className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {selectedRecordDetails.map(([label, value]) => (
-                <div key={label} className="min-w-0 rounded-md bg-surface-highlight p-3">
-                  <dt className="text-xs font-semibold uppercase tracking-wide text-text-secondary">{label}</dt>
-                  <dd className="mt-1 break-words text-sm text-text-primary">{value || '—'}</dd>
+                <div key={label} className="min-w-0 rounded-xl border border-slate-800/60 bg-slate-950/40 p-3.5">
+                  <dt className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">{label}</dt>
+                  <dd className="mt-1 break-words text-xs text-white font-medium">{value || '—'}</dd>
                 </div>
               ))}
             </dl>
           </section>
         )}
+
         <>
           <AdminBlacklistFormDialog open={showForm} onOpenChange={setShowForm} onSubmit={(values: AdminBlacklistFormSchemaType) => submit(values)} isDemoMode={isDemoMode} />
           <Dialog open={removeId !== null} onOpenChange={(open) => { if (!open) setRemoveId(null); }}>
-            <DialogContent>
-              <DialogTitle className="text-section-title font-semibold text-text-primary">{t('REMOVE_TITLE')}</DialogTitle>
-              <DialogDescription className="mt-3">{t(isDemoMode ? 'REMOVE_DEMO_DESCRIPTION' : 'REMOVE_DESCRIPTION')}</DialogDescription>
-              <div className="mt-6 flex justify-end gap-3">
-                <button type="button" className="admin-btn-ghost min-h-11" onClick={() => setRemoveId(null)}>{t('CANCEL')}</button>
-                <button type="button" className="admin-btn-danger min-h-11 disabled:cursor-not-allowed disabled:opacity-50" disabled={!isDemoMode} onClick={confirmRemove}>{t('CONFIRM')}</button>
+            <DialogContent className="rounded-2xl border border-slate-800 bg-slate-900/95 backdrop-blur-xl p-6 text-white shadow-2xl">
+              <DialogTitle className="text-base font-bold text-white tracking-tight">{t('REMOVE_TITLE')}</DialogTitle>
+              <DialogDescription className="mt-2 text-xs text-slate-400">{t(isDemoMode ? 'REMOVE_DEMO_DESCRIPTION' : 'REMOVE_DESCRIPTION')}</DialogDescription>
+              <div className="mt-6 flex justify-end gap-2.5">
+                <button
+                  type="button"
+                  className="rounded-xl border border-slate-700/60 bg-slate-800/50 px-4 py-2 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
+                  onClick={() => setRemoveId(null)}
+                >
+                  {t('CANCEL')}
+                </button>
+                <button
+                  type="button"
+                  className="rounded-xl bg-rose-600 px-4 py-2 text-xs font-semibold text-white hover:bg-rose-700 transition-colors disabled:cursor-not-allowed disabled:opacity-40"
+                  disabled={!isDemoMode}
+                  onClick={confirmRemove}
+                >
+                  {t('CONFIRM')}
+                </button>
               </div>
             </DialogContent>
           </Dialog>
