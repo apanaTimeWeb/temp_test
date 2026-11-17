@@ -82,7 +82,7 @@ export default function AdminSecurityDeviceSessionsPanel() {
       <div className="mt-4 hidden overflow-x-auto md:block">
         <table className="w-full min-w-190 text-left text-sm">
           <thead>
-            <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+            <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
               {renderSortableHeader('managerKey', t('COLUMN_MANAGER'))}
               {renderSortableHeader('deviceKey', t('COLUMN_DEVICE'))}
               {renderSortableHeader('ip', t('COLUMN_LOCATION_IP'))}

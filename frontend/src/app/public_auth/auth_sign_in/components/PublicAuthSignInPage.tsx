@@ -243,6 +243,47 @@ const LOGIN_CSS = `
     transition: left 0.5s;
   }
   .submit-btn:hover::before { left: 100%; }
+
+  /* ===== User Exact Library Loader (Login Time) ===== */
+  .login-overlay-bg {
+    background: #F7F3EA;
+  }
+  .loader-box {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .loader-aura {
+    position: absolute; inset: 0; border-radius: 50%;
+    filter: blur(12px); opacity: 0.4; pointer-events: none;
+    background: radial-gradient(circle, #F4D03F 0%, #C8912A 50%, transparent 80%);
+  }
+  .loader-ring {
+    width: 100%; height: 100%;
+    animation: spinCW 1.4s linear infinite;
+  }
+  .inner-svg {
+    position: absolute; inset: 0;
+    animation: spinCCW 2.4s linear infinite;
+  }
+  .loader-icon {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; user-select: none;
+    color: #1E3A5F;
+  }
+  .loader-icon svg {
+    width: 45%; height: 45%;
+    filter: drop-shadow(0 0 4px rgba(200,145,42,0.45));
+  }
+
+  @keyframes spinCW  { to { transform: rotate(360deg); } }
+  @keyframes spinCCW { to { transform: rotate(-360deg); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader-ring { animation-duration: 4s !important; }
+    .inner-svg   { animation-duration: 6s !important; }
+  }
 `;
 
 const roleIcons: Record<string, ReactNode> = {
@@ -317,12 +358,46 @@ export default function PublicAuthSignInPage() {
       <div className="aurora-orb-2" style={{ bottom: '-10%', right: '-8%' }} />
       <div className="aurora-orb-3" style={{ top: '40%', left: '30%' }} />
 
-      {/* SUCCESS POPUP */}
+      {/* SUCCESS / REDIRECT OVERLAY */}
       {loginSuccess && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#030712]/80 backdrop-blur-sm transition-opacity duration-300" role="status" aria-label="Loading">
-          <div className="bg-[#12121d] border border-emerald-500/30 p-8 rounded-3xl shadow-[0_20px_60px_-15px_rgba(16,185,129,0.3)] flex flex-col items-center justify-center gap-4 transform scale-100 transition-transform duration-300">
-            <LibraryLoader size="md" icon="library" variant="contra" />
-            <h3 className="text-white text-lg font-bold tracking-tight">Login Successful</h3>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center login-overlay-bg transition-opacity duration-300" role="status" aria-label="Loading">
+          <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
+            <defs>
+              <linearGradient id="libGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#F4D03F" />
+                <stop offset="50%" stopColor="#C8912A" />
+                <stop offset="100%" stopColor="#1E3A5F" />
+              </linearGradient>
+            </defs>
+          </svg>
+
+          <div className="loader-box" style={{ width: '96px', height: '96px' }} role="status" aria-label="Loading">
+            <div className="loader-aura" />
+
+            {/* Outer CW ring (golden gradient) */}
+            <svg className="loader-ring" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="50" r="44" stroke="#C8912A" strokeWidth="2.5"
+                strokeDasharray="4 6" opacity="0.3" vectorEffect="non-scaling-stroke"/>
+              <circle cx="50" cy="50" r="44" stroke="url(#libGrad)" strokeWidth="3"
+                strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke"/>
+            </svg>
+
+            {/* Inner CCW ring (navy dashed) */}
+            <svg className="inner-svg" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="50" r="35" stroke="#1E3A5F" strokeWidth="1.5"
+                strokeDasharray="6 10" opacity="0.4" vectorEffect="non-scaling-stroke"/>
+            </svg>
+
+            {/* Dashboard icon */}
+            <div className="loader-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                   strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="7" height="9" rx="1"/>
+                <rect x="14" y="3" width="7" height="5" rx="1"/>
+                <rect x="14" y="12" width="7" height="9" rx="1"/>
+                <rect x="3" y="16" width="7" height="5" rx="1"/>
+              </svg>
+            </div>
           </div>
         </div>
       )}
@@ -536,11 +611,11 @@ export default function PublicAuthSignInPage() {
               <button
                 id="login-submit-btn"
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || loginSuccess}
                 className="submit-btn shimmer-btn glow-indigo w-full text-white font-black text-sm py-4 rounded-xl transition-all active:scale-[0.98] mt-2 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
-                {isSubmitting ? (
-                  <ButtonLoader icon="library" />
+                {isSubmitting || loginSuccess ? (
+                  <ButtonLoader icon="layout-dashboard" />
                 ) : (
                   <>
                     <Lock size={16} />

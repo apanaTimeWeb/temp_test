@@ -11,7 +11,7 @@ export default function AdminSecurityDashboardPanel() {
   return (
     <section className="admin-card p-6" aria-labelledby="admin-security-dashboard-title">
       <h2 id="admin-security-dashboard-title" className="mb-5 text-section-title font-semibold text-text-primary">{t('DASHBOARD_TITLE')}</h2>
-      <p className="mb-4 text-sm text-text-secondary">{t('DEMO_DATA_NOTICE')}</p>
+      <p className="sr-only">{t('DEMO_DATA_NOTICE')}</p>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {ADMIN_SECURITY_DASHBOARD_METRICS.map((metric) => (
           <article key={metric.id} className="rounded-lg border border-border bg-floating p-5">

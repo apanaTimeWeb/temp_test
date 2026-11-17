@@ -27,7 +27,7 @@ export default function AdminSupportPage() {
 
   return (
     <div className="space-y-4 mx-auto max-w-[1200px] p-6" >
-      <p role="status" className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">
+      <p role="status" className={isDemoMode ? 'sr-only' : 'rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text'}>
         {t(isDemoMode ? 'DEMO_PREVIEW_NOTICE' : 'LIVE_UNAVAILABLE_NOTICE')}
       </p>
       <header>

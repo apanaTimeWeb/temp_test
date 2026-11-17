@@ -103,7 +103,7 @@ export default function AdminSettingsProfileReadOnlyPanels({ view }: AdminSettin
         <div className="mt-4 hidden overflow-x-auto md:block">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+              <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
                 {renderSortableHeader('dateKey', t('HISTORY_DATE'))}
                 {renderSortableHeader('ip', t('HISTORY_IP'))}
                 {renderSortableHeader('deviceKey', t('HISTORY_DEVICE'))}

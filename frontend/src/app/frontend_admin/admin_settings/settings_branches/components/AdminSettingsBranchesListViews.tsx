@@ -90,7 +90,7 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
       </th>
     );
   };
-  const statusClass = (status: AdminBranchesStatus) => status === ADMIN_BRANCHES_STATUS_OPTIONS[0] ? 'bg-success-bg text-success-text' : status === ADMIN_BRANCHES_STATUS_OPTIONS[1] ? 'bg-danger-bg text-danger-text' : 'bg-surface-highlight text-text-secondary';
+  const statusClass = (status: AdminBranchesStatus) => status === ADMIN_BRANCHES_STATUS_OPTIONS[0] ? 'bg-success-bg text-success-text' : status === ADMIN_BRANCHES_STATUS_OPTIONS[1] ? 'bg-danger-bg text-danger-text' : 'bg-muted text-text-secondary border border-border';
   const activateRow = (event: KeyboardEvent<HTMLTableRowElement>, branch: AdminBranchesBranch) => {
     const target = event.target;
     if (target instanceof HTMLElement && target.closest('button,a,input,select,textarea,[role=menuitem]')) return;
@@ -149,7 +149,7 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
           <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm text-left">
               <thead>
-                <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
                   {renderSortableHeader('name', t('TABLE_BRANCH'))}
                   {renderSortableHeader('manager', t('TABLE_MANAGER'))}
                   {renderSortableHeader('status', t('TABLE_STATUS'))}
@@ -172,9 +172,9 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
                       </span>
                     </td>
                     <td className="relative px-4 py-3">
-                      <div className="flex justify-end gap-2">
-                        <button type="button" aria-label={t('VIEW_BRANCH', { name: branch.name })} className="min-h-11 min-w-11 rounded-md text-text-secondary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => { setOpenActionsFor(null); setViewingBranch(branch); }}><Eye size={18} strokeWidth={2}/></button>
-                        <button type="button" aria-label={t('OPEN_ACTIONS', { name: branch.name })} aria-haspopup="menu" aria-expanded={openActionsFor === branch.id} aria-controls={`admin-branch-actions-${branch.id}`} className="min-h-11 min-w-11 rounded-md text-text-secondary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => setOpenActionsFor((current) => current === branch.id ? null : branch.id)}><MoreVertical size={18} strokeWidth={2}/></button>
+                      <div className="flex justify-end items-center gap-1.5">
+                        <button type="button" aria-label={t('VIEW_BRANCH', { name: branch.name })} className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all" onClick={() => { setOpenActionsFor(null); setViewingBranch(branch); }}><Eye size={16} strokeWidth={2}/></button>
+                        <button type="button" aria-label={t('OPEN_ACTIONS', { name: branch.name })} aria-haspopup="menu" aria-expanded={openActionsFor === branch.id} aria-controls={`admin-branch-actions-${branch.id}`} className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all" onClick={() => setOpenActionsFor((current) => current === branch.id ? null : branch.id)}><MoreVertical size={16} strokeWidth={2}/></button>
                       </div>
                       {openActionsFor === branch.id && (
                         <div id={`admin-branch-actions-${branch.id}`} role="menu" aria-label={t('OPEN_ACTIONS', { name: branch.name })} onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }} className="absolute right-4 top-14 z-10 min-w-48 rounded-md border border-border bg-popover p-1 shadow-popover">

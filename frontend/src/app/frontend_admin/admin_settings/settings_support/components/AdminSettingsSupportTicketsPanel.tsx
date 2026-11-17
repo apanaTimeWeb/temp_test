@@ -1,8 +1,8 @@
 'use client';
 // RESPONSIBILITY: AdminSupportTicketsPanel component owned by admin_support; responsibility folder: admin_support_components_sections.
 
-import { useState } from 'react';
-import { MessageSquare, Plus, Ticket } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { MessageSquare, Plus, Ticket, AlertCircle, CheckCircle2, HelpCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ADMIN_SUPPORT_DEMO_TICKETS } from '@/app/frontend_admin/admin_settings/settings_support/mocks/scenarios/admin_settings_support.scenarios';
 import AdminSupportCreateTicketForm from '@/app/frontend_admin/admin_settings/settings_support/components/AdminSettingsSupportCreateTicketForm';
@@ -12,10 +12,66 @@ export default function AdminSupportTicketsPanel() {
   const t = useTranslations('ADMIN_SUPPORT');
   const [showCreateForm, setShowCreateForm] = useState(false);
 
+  const kpis = useMemo(() => {
+    return {
+      total: ADMIN_SUPPORT_DEMO_TICKETS.length,
+      open: ADMIN_SUPPORT_DEMO_TICKETS.filter((t) => t.status === 'open').length,
+      resolved: ADMIN_SUPPORT_DEMO_TICKETS.filter((t) => t.status === 'resolved').length,
+    };
+  }, []);
+
   if (showCreateForm) return <AdminSupportCreateTicketForm onCancel={() => setShowCreateForm(false)} />;
 
   return (
-    <section className="admin-card" aria-labelledby="admin-support-tickets-title">
+    <div className="space-y-6">
+      {/* Support KPI Cards */}
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('TICKETS_TITLE')}</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Ticket size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{kpis.total}</p>
+          <span className="text-xs text-text-muted">Total Raised</span>
+        </div>
+
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('TICKET_OPEN')}</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning-bg text-warning-text">
+              <AlertCircle size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-warning-text">{kpis.open}</p>
+          <span className="text-xs text-text-muted">Awaiting Action</span>
+        </div>
+
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('TICKET_RESOLVED')}</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success-bg text-success-text">
+              <CheckCircle2 size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-2xl font-bold tracking-tight text-success-text">{kpis.resolved}</p>
+          <span className="text-xs text-text-muted">Closed & Verified</span>
+        </div>
+
+        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('STATUS_HEADING')}</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-info-bg text-info-text">
+              <HelpCircle size={16} strokeWidth={2.2} />
+            </div>
+          </div>
+          <p className="mt-2 text-xl font-bold tracking-tight text-info-text">Active</p>
+          <span className="text-xs text-text-muted">Helpdesk Operational</span>
+        </div>
+      </div>
+
+      <section className="admin-card" aria-labelledby="admin-support-tickets-title">
       <div className="flex items-center justify-between gap-3">
         <h2 id="admin-support-tickets-title" className="text-base font-semibold text-text-primary">{t('TICKETS_TITLE')}</h2>
         <button type="button" data-testid="admin_support-AdminSettingsSupportMain-control-002" className="admin-btn-primary min-h-11" onClick={() => setShowCreateForm(true)}>
@@ -47,5 +103,6 @@ export default function AdminSupportTicketsPanel() {
         ))}
       </div>
     </section>
+  </div>
   );
 }

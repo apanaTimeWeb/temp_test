@@ -9,8 +9,8 @@ export default function Loading() {
   return (
     <div className="flex h-full w-full items-center justify-center p-8" role="status" aria-label={t('ROUTE_LOADING')}>
       <div className="motion-safe:animate-pulse space-y-4 w-full max-w-3xl">
-        <div className="h-8 bg-surface-highlight rounded w-1/4"></div>
-        <div className="h-64 bg-surface-highlight rounded w-full"></div>
+        <div className="h-8 bg-surface-muted rounded w-1/4"></div>
+        <div className="h-64 bg-surface-muted rounded w-full"></div>
       </div>
     </div>
   );

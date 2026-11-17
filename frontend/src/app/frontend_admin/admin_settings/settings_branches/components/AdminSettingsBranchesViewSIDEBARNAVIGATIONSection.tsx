@@ -181,7 +181,7 @@ export function AdminSettingsBranchesViewSIDEBARNAVIGATIONSectionMAINDASHBOARDVI
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="h-12 bg-surface-highlight uppercase text-xs text-text-secondary font-semibold border-b border-border">
+                  <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
                     {renderManagerSortableHeader('name', t('TABLE_BRANCH'))}
                     {renderManagerSortableHeader('manager', t('TABLE_MANAGER'))}
                     {renderManagerSortableHeader('status', t('TABLE_STATUS'))}
