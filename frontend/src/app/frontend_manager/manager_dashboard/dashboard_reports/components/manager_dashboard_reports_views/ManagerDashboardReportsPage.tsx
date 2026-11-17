@@ -125,10 +125,12 @@ export default function ManagerDashboardReportsPage() {
         {!contractBlocked && (
           <button
             type="button"
-            className="mt-4 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary-hover shadow-xs transition-all"
+            className="mt-4 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary-hover shadow-xs transition-all inline-flex items-center gap-1.5"
             onClick={() => void query.refetch()}
+            disabled={query.isFetching}
           >
-            {tManagerUi('retry')}
+            {query.isFetching ? <ButtonLoader icon="chart-bar" /> : null}
+            <span>{tManagerUi('retry')}</span>
           </button>
         )}
       </div>

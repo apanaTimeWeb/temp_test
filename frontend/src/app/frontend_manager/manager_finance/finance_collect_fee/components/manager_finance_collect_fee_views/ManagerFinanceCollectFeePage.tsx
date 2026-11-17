@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { managerFinanceCollectFeeDraftSchema, type ManagerFinanceCollectFeeDraft } from '@/app/frontend_manager/manager_finance/finance_collect_fee/schemas/ManagerFinanceCollectFeeDraftSchema';
 import { toast } from 'sonner';
 import { Search, IndianRupee, UserCheck, Calendar, Tag, AlertTriangle, AlertCircle, CheckCircle, Scale, PieChart, Archive, Plus, Layers } from 'lucide-react';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { ManagerFinanceCollectFeeReceiptPreview } from '@/app/frontend_manager/manager_finance/finance_collect_fee/components/manager_finance_collect_fee_views/ManagerFinanceCollectFeeReceiptPreview';
 import ManagerFinanceCollectFeeDurationSelector from './ManagerFinanceCollectFeeDurationSelector';
 import ManagerFinanceCollectFeeDiscountsSection from './ManagerFinanceCollectFeeDiscountsSection';
@@ -857,7 +858,7 @@ export default function ManagerFinanceCollectFeePage(_routeQuery: ManagerFinance
                   disabled={isSubmitDisabled}
                   className="fin-btn fin-btn-primary w-full py-3 text-sm font-bold flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 >
-                  <IndianRupee size={16} />
+                  {isSubmitting ? <ButtonLoader icon="hand-coins" /> : <IndianRupee size={16} />}
                   <span>
                     {isSubmitting
                       ? 'Recording Fee Collection...'
