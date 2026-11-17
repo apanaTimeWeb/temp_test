@@ -5,16 +5,11 @@ import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/ap
 // DATA FLOW: AdminRoute -> AdminHeader
 
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Building2, Bell, Menu, LogOut, User, ChevronDown } from 'lucide-react';
 import { toast } from 'sonner';
-import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
-import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
-import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
-import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
-import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
 import { AdminShellThemeToggle } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellThemeToggle';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import Select from '@/components/ui/select/Select';
@@ -63,6 +58,18 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isProfileOpen]);
+
+  // Close logout modal when pressing Escape
+  useEffect(() => {
+    if (!showLogoutModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowLogoutModal(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showLogoutModal]);
 
   return (
     <header className={`admin-header ${collapsed ? 'admin-header-collapsed' : 'admin-header-expanded'}`} data-testid="admin-header">
@@ -202,54 +209,72 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
         </div>
       </div>
 
-      <Dialog open={showLogoutModal} onOpenChange={setShowLogoutModal}>
-        <DialogContent className="max-w-sm bg-[#0b0c20] border border-indigo-500/30 text-white rounded-2xl shadow-2xl p-6">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mb-3">
-              <LogOut size={24} strokeWidth={2.2} />
-            </div>
-            <DialogHeader className="text-center sm:text-center">
-              <DialogTitle className="text-white text-lg font-bold text-center">
+      {showLogoutModal && typeof document !== 'undefined' && createPortal(
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="admin-logout-title"
+          aria-describedby="admin-logout-desc"
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
+          data-testid="admin-logout-overlay"
+        >
+          <div
+            className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
+            onClick={() => setShowLogoutModal(false)}
+            aria-hidden="true"
+          />
+          <div
+            className="relative z-10 w-full max-w-sm rounded-2xl border border-indigo-500/30 bg-[#0b0c20] p-6 text-white shadow-2xl animate-in zoom-in-95 fade-in duration-200 focus:outline-none"
+            data-testid="admin-logout-modal"
+          >
+            <div className="flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mb-3">
+                <LogOut size={24} strokeWidth={2.2} />
+              </div>
+              <h2 id="admin-logout-title" className="text-white text-lg font-bold text-center">
                 {t('LOG_OUT_TITLE')}
-              </DialogTitle>
-              <DialogDescription className="text-slate-400 text-sm mt-1 text-center">
+              </h2>
+              <p id="admin-logout-desc" className="text-slate-400 text-sm mt-1 text-center">
                 {t('LOG_OUT_DESCRIPTION')}
-              </DialogDescription>
-            </DialogHeader>
-          </div>
-
-          <div className="my-3 rounded-xl bg-white/[0.03] border border-white/5 p-3 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center">
-              <User size={20} strokeWidth={2.2} />
+              </p>
             </div>
-            <div className="text-left flex-1 min-w-0">
-              <p className="text-xs font-semibold text-white truncate">Administrator</p>
-              <p className="text-[11px] text-slate-400 truncate">admin@libraryos.com</p>
-            </div>
-            <span className="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 rounded px-1.5 py-0.5">
-              ADMIN
-            </span>
-          </div>
 
-          <DialogFooter className="mt-2 flex items-center justify-end gap-2.5 sm:justify-end">
-            <button
-              type="button"
-              onClick={() => setShowLogoutModal(false)}
-              className="border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/5 transition-colors cursor-pointer"
-            >
-              {t('CANCEL')}
-            </button>
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="bg-red-600 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-700 transition-colors cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
-            >
-              <LogOut size={14} strokeWidth={2} />
-              <span>{t('LOG_OUT')}</span>
-            </button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <div className="my-4 rounded-xl bg-white/[0.03] border border-white/5 p-3 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white flex items-center justify-center">
+                <User size={20} strokeWidth={2.2} />
+              </div>
+              <div className="text-left flex-1 min-w-0">
+                <p className="text-xs font-semibold text-white truncate">Administrator</p>
+                <p className="text-[11px] text-slate-400 truncate">admin@libraryos.com</p>
+              </div>
+              <span className="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 rounded px-1.5 py-0.5">
+                ADMIN
+              </span>
+            </div>
+
+            <div className="mt-4 flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                data-testid="admin-logout-cancel"
+                onClick={() => setShowLogoutModal(false)}
+                className="border border-white/10 rounded-lg px-4 py-2 text-sm text-slate-300 hover:bg-white/5 transition-colors cursor-pointer"
+              >
+                {t('CANCEL')}
+              </button>
+              <button
+                type="button"
+                data-testid="admin-logout-confirm"
+                onClick={handleSignOut}
+                className="bg-red-600 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-700 transition-colors cursor-pointer flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+              >
+                <LogOut size={14} strokeWidth={2} />
+                <span>{t('LOG_OUT')}</span>
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </header>
   );
 }

@@ -15,6 +15,12 @@ const translations: Record<string, string> = {
   NOTIFICATIONS_UNAVAILABLE: 'Notifications unavailable',
   NOTIFICATIONS_BLOCKED: 'Notifications API/route is not supplied; there are no notifications to display.',
   DEMO_PROFILE_TOOLTIP: 'Demo profile; authenticated identity is not connected',
+  LOG_OUT: 'Log out',
+  LOG_OUT_TITLE: 'Log out?',
+  LOG_OUT_DESCRIPTION: 'Are you sure you want to log out of this session?',
+  CANCEL: 'Cancel',
+  ADMINISTRATOR: 'Administrator',
+  MY_PROFILE: 'My Profile',
 };
 
 vi.mock('next-intl', () => ({
@@ -47,5 +53,67 @@ describe('AdminShellHeader branch selector contract', () => {
 
     fireEvent.change(selector, { target: { value: 'BR-001' } });
     expect((selector as HTMLSelectElement).value).toBe('BR-001');
+  });
+});
+
+describe('AdminShellHeader logout modal viewport centering contract', () => {
+  it('opens centered logout dialog in document.body outside header', () => {
+    const { container } = render(
+      <AdminBranchProvider>
+        <AdminShellHeader />
+      </AdminBranchProvider>,
+    );
+
+    const header = container.querySelector('header');
+    expect(header).toBeTruthy();
+
+    // Dialog is initially not rendered
+    expect(screen.queryByRole('dialog')).toBeNull();
+
+    // Click profile dropdown toggle
+    const profileBtn = screen.getByTestId('admin_header-AdminShellHeader-control-003');
+    fireEvent.click(profileBtn);
+
+    // Click logout button in menu
+    const logoutBtn = screen.getByTestId('admin_header-AdminShellHeader-control-logout');
+    fireEvent.click(logoutBtn);
+
+    // Logout modal dialog is now rendered in document.body
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeTruthy();
+    expect(document.body.contains(dialog)).toBe(true);
+    expect(header?.contains(dialog)).toBe(false);
+
+    // Verify dialog has centered fixed positioning classes
+    expect(dialog.className).toContain('fixed');
+    expect(dialog.className).toContain('inset-0');
+    expect(dialog.className).toContain('items-center');
+    expect(dialog.className).toContain('justify-center');
+
+    // Title and description are visible
+    expect(screen.getByText('Log out?')).toBeTruthy();
+    expect(screen.getByText('Are you sure you want to log out of this session?')).toBeTruthy();
+
+    // Click cancel button closes the modal
+    const cancelBtn = screen.getByTestId('admin-logout-cancel');
+    fireEvent.click(cancelBtn);
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('closes logout dialog on Escape key press', () => {
+    render(
+      <AdminBranchProvider>
+        <AdminShellHeader />
+      </AdminBranchProvider>,
+    );
+
+    // Open modal
+    fireEvent.click(screen.getByTestId('admin_header-AdminShellHeader-control-003'));
+    fireEvent.click(screen.getByTestId('admin_header-AdminShellHeader-control-logout'));
+    expect(screen.getByRole('dialog')).toBeTruthy();
+
+    // Press Escape
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).toBeNull();
   });
 });
