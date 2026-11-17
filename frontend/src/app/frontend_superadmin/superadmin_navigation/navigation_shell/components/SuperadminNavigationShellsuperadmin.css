@@ -1,5 +1,90 @@
 /* Inter is provided by the host application's next/font configuration. */
 
+/* ── Superadmin token bridge: maps --color-* globals to the short-hand tokens
+   used throughout this CSS file (--bg-sidebar, --text-primary, --border, etc.) ── */
+.superadmin-theme {
+  /* Backgrounds */
+  --bg-page:            var(--color-bg-page, #050505);
+  --bg-card:            var(--color-bg-card, #111111);
+  --bg-sidebar:         var(--color-bg-sidebar, #050505);
+  --bg-header:          var(--color-bg-header, #111111);
+  --bg-input:           var(--color-bg-input, #1a1a1a);
+  --bg-floating:        var(--color-bg-floating, #1a1a1a);
+  --bg-overlay:         var(--color-bg-overlay, #242424);
+  --bg-popover:         var(--color-bg-popover, #2e2e2e);
+
+  /* Surfaces */
+  --surface-hover:      var(--color-surface-hover, rgba(250,204,21,0.08));
+  --surface-highlight:  var(--color-surface-highlight, rgba(250,204,21,0.05));
+  --surface-zebra:      var(--color-surface-zebra, #141414);
+
+  /* Overlay */
+  --overlay-backdrop:   var(--color-overlay-backdrop, rgba(0,0,0,0.6));
+
+  /* Focus */
+  --focus-ring:         var(--color-focus-ring, #facc15);
+
+  /* Borders */
+  --border:             var(--color-border, #27272a);
+  --border-focus:       var(--color-border-focus, #facc15);
+
+  /* Text */
+  --text-primary:       var(--color-text-primary, #ffffff);
+  --text-secondary:     var(--color-text-secondary, #a1a1aa);
+  --text-disabled:      var(--color-text-disabled, #52525b);
+  --text-on-primary:    var(--color-text-on-primary, #111111);
+  --text-on-danger:     var(--color-text-on-danger, #ffffff);
+  --text-on-success:    var(--color-text-on-success, #ffffff);
+  --text-on-warning:    var(--color-text-on-warning, #111111);
+
+  /* Brand */
+  --primary:            var(--color-primary, #facc15);
+  --primary-hover:      var(--color-primary-hover, #eab308);
+  --primary-subtle:     var(--color-primary-subtle, rgba(250,204,21,0.15));
+
+  /* Status */
+  --success:            var(--color-success, #15803d);
+  --success-text:       var(--color-success-text, #4ade80);
+  --success-bg:         var(--color-success-bg, #064e3b);
+  --warning:            var(--color-warning, #f59e0b);
+  --warning-text:       var(--color-warning-text, #fbbf24);
+  --warning-bg:         var(--color-warning-bg, #451a03);
+  --danger:             var(--color-danger, #b91c1c);
+  --danger-text:        var(--color-danger-text, #f87171);
+  --danger-bg:          var(--color-danger-bg, #450a0a);
+  --info:               var(--color-info, #1d4ed8);
+  --info-text:          var(--color-info-text, #60a5fa);
+  --info-bg:            var(--color-info-bg, #172554);
+
+  /* Misc */
+  --purple-text:        var(--color-purple-text, #c084fc);
+  --warning-bg:         var(--color-warning-bg, #451a03);
+
+  /* Shadows */
+  --shadow-card:        0 4px 24px rgba(0,0,0,0.3);
+  --shadow-popover:     0 8px 32px rgba(0,0,0,0.4);
+  --shadow-dialog:      0 20px 60px rgba(0,0,0,0.6);
+
+  /* Radii */
+  --radius-sm:          4px;
+  --radius-md:          8px;
+  --radius-lg:          12px;
+  --radius-xl:          16px;
+
+  /* Layout */
+  --layout-sidebar-width:    260px;
+  --layout-header-height:    64px;
+  --layout-content-padding:  24px;
+
+  /* Font sizes */
+  --font-size-body:          14px;
+  --font-size-caption:       12px;
+  --font-size-section-title: 16px;
+
+  /* Table */
+  --table-row-height-compact: 2rem;
+}
+
 @layer base {
   .superadmin-theme {
     --sb-bg:            transparent;
