@@ -19,7 +19,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { LibraryLoader, ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 import type { ManagerCommunicationComplaintsMainProps } from '@/app/frontend_manager/manager_communication/communication_complaints/types/ManagerCommunicationComplaintsMainTypes';
 import { useManagerComplaintsDialogFocus } from '@/app/frontend_manager/manager_communication/communication_complaints/hooks/ManagerCommunicationComplaintsDialogFocus';
@@ -374,8 +374,9 @@ export default function ManagerCommunicationComplaintsPage({
         ) : isError ? (
           <div className="mc-empty" role="alert" aria-live="assertive">
             <p className="mc-empty__title">{tManagerUi('unable_to_load_complaints')}</p>
-            <button type="button" className="mc-btn-ghost mt-3" onClick={() => refetch()}>
-              {tManagerUi('retry')}
+            <button type="button" className="mc-btn-ghost mt-3 inline-flex items-center gap-1.5" onClick={() => refetch()} disabled={isFetching}>
+              {isFetching ? <ButtonLoader icon="book" /> : null}
+              <span>{tManagerUi('retry')}</span>
             </button>
           </div>
         ) : filtered.length === 0 ? (

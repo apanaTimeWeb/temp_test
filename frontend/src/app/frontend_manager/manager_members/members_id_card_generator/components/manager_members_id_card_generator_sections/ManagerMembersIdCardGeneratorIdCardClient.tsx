@@ -12,7 +12,7 @@ import {
   Search,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { LibraryLoader, ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import StudentIdCard, {
   type IdCardData,
   type IdCardSide,
@@ -168,7 +168,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
     toast.success(`Smart ID card WhatsApp link opened for ${selected.name} (+91 ${clean10})`);
   };
 
-  if (isError) return <div className="mgr-page mgr-students-theme"><div className="mgr-state-card mgr-state-card-error" role="alert"><p className="mgr-state-title">{tManagerUi('unable_to_load_students')}</p><p className="mgr-state-description">{tManagerUi('please_retry_from_the_students_directory')}</p><button type="button" className="mgr-btn-primary mgr-btn-sm mt-3" onClick={() => { void refetch(); }} disabled={isFetching}>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button></div></div>;
+  if (isError) return <div className="mgr-page mgr-students-theme"><div className="mgr-state-card mgr-state-card-error" role="alert"><p className="mgr-state-title">{tManagerUi('unable_to_load_students')}</p><p className="mgr-state-description">{tManagerUi('please_retry_from_the_students_directory')}</p><button type="button" className="mgr-btn-primary mgr-btn-sm mt-3 inline-flex items-center gap-1.5" onClick={() => { void refetch(); }} disabled={isFetching}>{isFetching ? <ButtonLoader icon="user" /> : null}<span>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</span></button></div></div>;
 
   return (
     <div className="mgr-page mgr-students-theme">

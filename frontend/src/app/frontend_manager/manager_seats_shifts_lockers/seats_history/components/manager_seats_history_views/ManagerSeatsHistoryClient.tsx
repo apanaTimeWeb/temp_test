@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 import { Search, Download, X, History, RotateCcw, Calendar, Armchair, ShieldAlert, Filter } from 'lucide-react';
 import { toast } from 'sonner';
-import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { LibraryLoader, ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 import { ManagerSeatsHistoryNativeTable } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/components/manager_seats_history_table_parts/ManagerSeatsHistoryNativeTable';
 import { sanitizeManagerSeatHistoryCsvCell } from '@/app/frontend_manager/manager_seats_shifts_lockers/seats_history/utils/ManagerSeatsHistoryCsv';
@@ -514,10 +514,12 @@ export function ManagerSeatsHistoryClient() {
           </p>
           <button
             type="button"
-            className="ss-btn-ghost mt-3 mgr-btn-primary mgr-btn-sm"
+            className="ss-btn-ghost mt-3 mgr-btn-primary mgr-btn-sm inline-flex items-center gap-1.5"
             onClick={() => historyQuery.refetch()}
+            disabled={historyQuery.isFetching}
           >
-            {tManagerUi('retry')}
+            {historyQuery.isFetching ? <ButtonLoader icon="report" /> : null}
+            <span>{tManagerUi('retry')}</span>
           </button>
         </div>
       ) : historyQuery.isPending ? (

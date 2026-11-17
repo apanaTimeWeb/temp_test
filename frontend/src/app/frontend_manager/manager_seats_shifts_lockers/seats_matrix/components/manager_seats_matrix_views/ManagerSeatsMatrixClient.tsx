@@ -15,6 +15,7 @@ import type { SeatData } from '@/app/frontend_manager/manager_seats_shifts_locke
 import { ManagerSeatsMatrixGridView } from './ManagerSeatsMatrixGridView';
 import { ManagerSeatsMatrixTableView, type SeatSortField } from './ManagerSeatsMatrixTableView';
 import { ManagerSeatsMatrixAddModal } from '../manager_seats_matrix_dialogs/ManagerSeatsMatrixAddModal';
+import { ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 
 // RESPONSIBILITY: Main Client view for Seat Matrix (Unified interactive map & tabular manager). Glues data hook to UI. It does not own backend persistence or cross-feature business logic.
 
@@ -175,11 +176,12 @@ export function ManagerSeatsMatrixClient() {
         <p className="text-secondary mt-2">{tManagerUi('check_your_connection_and_try_again')}</p>
         <button
           type="button"
-          className="mgr-btn-primary mt-4"
+          className="mgr-btn-primary mt-4 inline-flex items-center gap-1.5"
           onClick={() => { void refetch(); }}
           disabled={isFetching}
         >
-          {isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}
+          {isFetching ? <ButtonLoader icon="issue" /> : null}
+          <span>{isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</span>
         </button>
       </section>
     );

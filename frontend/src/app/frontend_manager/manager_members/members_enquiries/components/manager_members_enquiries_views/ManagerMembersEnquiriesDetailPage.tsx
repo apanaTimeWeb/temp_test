@@ -10,7 +10,7 @@ import { useManagerMembersEnquiriesConfirm } from '@/app/frontend_manager/manage
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, XCircle } from 'lucide-react';
-import { LibraryLoader } from '@/app/frontend_manager/components/ManagerLoader';
+import { LibraryLoader, ButtonLoader } from '@/app/frontend_manager/components/ManagerLoader';
 import { fetchManagerEnquiriesEnquiryById } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.api';
 import { MANAGER_CRM_QUERY_KEYS } from '@/app/frontend_manager/manager_members/members_enquiries/api/manager_members_enquiries.query_keys';
 import { MANAGER_CRM_STATUS_OPTIONS } from '@/app/frontend_manager/manager_members/members_enquiries/constants/ManagerMembersEnquiriesConstants';
@@ -84,7 +84,7 @@ export default function ManagerMembersEnquiriesDetailPage({ id }: ManagerMembers
       </div>
     );
   }
-  if (enquiryQuery.isError) return <div className="crm-page crm-empty-state crm-not-found" role="alert"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('unable_to_load_enquiry')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-primary crm-mt-12" onClick={() => { void enquiryQuery.refetch(); }} disabled={enquiryQuery.isFetching}>{enquiryQuery.isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</button><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
+  if (enquiryQuery.isError) return <div className="crm-page crm-empty-state crm-not-found" role="alert"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('unable_to_load_enquiry')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-primary crm-mt-12 inline-flex items-center gap-1.5" onClick={() => { void enquiryQuery.refetch(); }} disabled={enquiryQuery.isFetching}>{enquiryQuery.isFetching ? <ButtonLoader icon="search" /> : null}<span>{enquiryQuery.isFetching ? tManagerUi('retrying') : tManagerUi('try_again')}</span></button><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
   if (!enquiry) return <div className="crm-page crm-empty-state crm-not-found"><XCircle size={40} className="crm-empty-icon" /><p className="crm-empty-title">{tManagerUi('enquiry_not_found')}</p><p className="crm-empty-sub">{tManagerUi('the_enquiry_could_not_be_loaded_for_id')}{id}.</p><button type="button" className="crm-btn-ghost crm-mt-12" onClick={() => navigateWithUnsavedChanges(MANAGER_MEMBERS_ENQUIRIES_ROUTES.LIST)}><ArrowLeft size={15} />{tManagerUi('back_to_pipeline')}</button></div>;
 
   const effectiveStatus = currentStatus ?? enquiry.status;
