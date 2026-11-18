@@ -98,68 +98,74 @@ export function ManagerDashboardOverviewKpiGrid({
       case 'Active Students':
       case 'Active Members':
         return {
-          cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60',
-          iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
-          badge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+          cardBg: 'border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-lg shadow-indigo-950/30 hover:border-indigo-500/40 hover:shadow-indigo-950/40',
+          iconBox: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400',
+          badge: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/25',
           stroke: '#818cf8',
           textMuted: 'text-indigo-200/70',
           accent: 'text-indigo-400',
           progress: 'from-indigo-500 to-indigo-400',
+          glow: 'bg-indigo-500/10 group-hover:bg-indigo-500/20',
         };
       case 'Expiring Members':
       case 'Expiring Soon':
       case 'Renewals Due':
         return {
-          cardBg: 'border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 hover:border-amber-400/60',
-          iconBox: 'bg-amber-500/20 border-amber-500/40 text-amber-400',
-          badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+          cardBg: 'border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-lg shadow-amber-950/30 hover:border-amber-500/40 hover:shadow-amber-950/40',
+          iconBox: 'bg-amber-500/15 border-amber-500/30 text-amber-400',
+          badge: 'bg-amber-500/10 text-amber-300 border-amber-500/25',
           stroke: '#fbbf24',
           textMuted: 'text-amber-200/70',
           accent: 'text-amber-400',
           progress: 'from-amber-500 to-amber-400',
+          glow: 'bg-amber-500/10 group-hover:bg-amber-500/20',
         };
       case 'Attendance Today':
       case 'Today Attendance':
         return {
-          cardBg: 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 hover:border-emerald-400/60',
-          iconBox: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400',
-          badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+          cardBg: 'border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-lg shadow-emerald-950/30 hover:border-emerald-500/40 hover:shadow-emerald-950/40',
+          iconBox: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
+          badge: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/25',
           stroke: '#34d399',
           textMuted: 'text-emerald-200/70',
           accent: 'text-emerald-400',
           progress: 'from-emerald-500 to-emerald-400',
+          glow: 'bg-emerald-500/10 group-hover:bg-emerald-500/20',
         };
       case 'New Enquiries':
       case 'New Inquiries':
         return {
-          cardBg: 'border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 shadow-lg shadow-sky-950/40 hover:border-sky-400/60',
-          iconBox: 'bg-sky-500/20 border-sky-500/40 text-sky-400',
-          badge: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
-          stroke: '#38bdf8',
-          textMuted: 'text-sky-200/70',
-          accent: 'text-sky-400',
-          progress: 'from-sky-500 to-sky-400',
+          cardBg: 'border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-lg shadow-cyan-950/30 hover:border-cyan-500/40 hover:shadow-cyan-950/40',
+          iconBox: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400',
+          badge: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/25',
+          stroke: '#22d3ee',
+          textMuted: 'text-cyan-200/70',
+          accent: 'text-cyan-400',
+          progress: 'from-cyan-500 to-cyan-400',
+          glow: 'bg-cyan-500/10 group-hover:bg-cyan-500/20',
         };
       case 'Occupied Seats':
       case 'Seats Occupied':
         return {
-          cardBg: 'border-purple-500/40 bg-gradient-to-br from-purple-950/80 via-[#24133f] to-purple-900/60 shadow-lg shadow-purple-950/40 hover:border-purple-400/60',
-          iconBox: 'bg-purple-500/20 border-purple-500/40 text-purple-400',
-          badge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+          cardBg: 'border-purple-500/25 bg-gradient-to-br from-[#180c28]/95 via-[#180c28]/90 to-[#221238]/80 shadow-lg shadow-purple-950/30 hover:border-purple-500/40 hover:shadow-purple-950/40',
+          iconBox: 'bg-purple-500/15 border-purple-500/30 text-purple-400',
+          badge: 'bg-purple-500/10 text-purple-300 border-purple-500/25',
           stroke: '#c084fc',
           textMuted: 'text-purple-200/70',
           accent: 'text-purple-400',
           progress: 'from-purple-500 to-purple-400',
+          glow: 'bg-purple-500/10 group-hover:bg-purple-500/20',
         };
       default:
         return {
-          cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60',
-          iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
-          badge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+          cardBg: 'border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-lg shadow-indigo-950/30 hover:border-indigo-500/40 hover:shadow-indigo-950/40',
+          iconBox: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400',
+          badge: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/25',
           stroke: '#818cf8',
           textMuted: 'text-indigo-200/70',
           accent: 'text-indigo-400',
           progress: 'from-indigo-500 to-indigo-400',
+          glow: 'bg-indigo-500/10 group-hover:bg-indigo-500/20',
         };
     }
   };
@@ -217,11 +223,14 @@ export function ManagerDashboardOverviewKpiGrid({
           <Link
             key={kpi.title}
             href={route}
-            className={`mgr-kpi-card group relative flex flex-col justify-between p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-xl cursor-pointer overflow-hidden text-inherit no-underline ${theme.cardBg}`}
+            className={`group relative flex flex-col justify-between p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-xl cursor-pointer overflow-hidden text-inherit no-underline ${theme.cardBg}`}
           >
+            {/* Glowing Orb */}
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full blur-2xl transition-all duration-500 ${theme.glow}`} />
+
             {/* Decorative Sparkline */}
-            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-32 h-16 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-              <path d="M0,32 Q20,15 45,28 T90,14 T130,22 T150,8" fill="none" stroke={theme.stroke} strokeWidth="2.5" strokeLinecap="round" />
+            <svg aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+              <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke={theme.stroke} strokeWidth="2.5" strokeLinecap="round" />
             </svg>
 
             <div className="relative z-10">

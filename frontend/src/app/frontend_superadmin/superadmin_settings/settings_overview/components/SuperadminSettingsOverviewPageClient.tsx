@@ -58,82 +58,86 @@ const translateValidationMessage = useSuperadminSettingsOverviewValidationMessag
   };
 
   return (
-    <div className="sa-page-animate">
+    <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
       <form onSubmit={handleSubmit(handleSave)} noValidate data-testid="superadmin-superadmin-settings-overview-page-client-form-line-50">
-      <div className="flex flex-col gap-1 mb-8">
-        <div className="sa-breadcrumb">
-          <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span><span>{tCopy("COPY.SYSTEM_SETTINGS")}</span>
-        </div>
-        <div className="flex items-center justify-between mt-2">
-          <h1 className="sa-page-title flex items-center gap-3">
-            <Settings className="text-primary" size={28} /> {tCopy("COPY.SYSTEM_SETTINGS")}
-          </h1>
-          <button type="submit" disabled={isSubmitting} className="sa-btn-primary" data-testid="superadmin-settings-settings-overview-save-changes-1">
-            <CheckCircle size={16} /> {tCopy("COPY.SAVE_CHANGES")}
+
+      {/* Hero Header */}
+      <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/80 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg mb-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span>
+              <span className="text-indigo-300 font-medium">{tCopy("COPY.SYSTEM_SETTINGS")}</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-100 flex items-center gap-2.5">
+              <Settings className="text-indigo-400" size={24} /> {tCopy("COPY.SYSTEM_SETTINGS")}
+            </h1>
+          </div>
+          <button type="submit" disabled={isSubmitting}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+            data-testid="superadmin-settings-settings-overview-save-changes-1">
+            <CheckCircle size={14} /> {tCopy("COPY.SAVE_CHANGES")}
           </button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-2 mb-6 border-b border-border pb-2 overflow-x-auto hide-scrollbar" role="navigation" aria-label={tCopy("COPY.SYSTEM_SETTINGS_SECTIONS")}>
+      <div className="flex items-center gap-2 mb-6 border-b border-indigo-500/20 pb-2 overflow-x-auto" role="navigation" aria-label={tCopy("COPY.SYSTEM_SETTINGS_SECTIONS")}>
         {SUPERADMIN_SETTINGS_TABS.map((tab) => (
-          <button type="button"
-            key={tab.name}
+          <button type="button" key={tab.name}
             id={`settings-tab-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
             aria-controls={`settings-panel-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
             aria-current={activeTab === tab.name ? 'page' : undefined}
             onClick={() => navigateToWorkflow(tab.name)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold motion-safe:transition-all motion-reduce:transition-none whitespace-nowrap ${
-              activeTab === tab.name 
-                ? 'bg-primary-subtle text-primary border border-focus shadow-card' 
-                : 'text-secondary hover:bg-surface-hover hover:text-primary'
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === tab.name
+                ? 'border border-indigo-500/40 bg-indigo-500/20 text-indigo-300 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
             }`}
-           data-testid={`superadmin-settings-settings-overview-set-active-tab-2-${String(tab.name)}`}>
-            <tab.icon size={16} /> {tCopy(tab.labelKey)}
+            data-testid={`superadmin-settings-settings-overview-set-active-tab-2-${String(tab.name)}`}>
+            <tab.icon size={14} /> {tCopy(tab.labelKey)}
           </button>
         ))}
       </div>
 
-      {/* Keep every tab-to-panel relationship resolvable, including inactive preview panels. */}
       {SUPERADMIN_SETTINGS_TABS.filter((tab) => tab.name !== activeTab).map((tab) => {
         const tabId = tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-        return <div key={tab.name} id={`settings-panel-${tabId}`}  aria-labelledby={`settings-tab-${tabId}`} hidden />;
+        return <div key={tab.name} id={`settings-panel-${tabId}`} aria-labelledby={`settings-tab-${tabId}`} hidden />;
       })}
 
-      {/* Content */}
-      <div id={`settings-panel-${activeTab.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className="sa-card p-6 h-150 overflow-y-auto"  aria-labelledby={`settings-tab-${activeTab.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} aria-label={tCopy('COPY.ACTIVE_TAB_SETTINGS_ARIA_LABEL', { tab: tCopy(SUPERADMIN_SETTINGS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_GENERAL') })} tabIndex={0}>
-        
+      {/* Content Panel */}
+      <div id={`settings-panel-${activeTab.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+        className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] p-6 h-150 overflow-y-auto shadow-lg"
+        aria-labelledby={`settings-tab-${activeTab.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+        aria-label={tCopy('COPY.ACTIVE_TAB_SETTINGS_ARIA_LABEL', { tab: tCopy(SUPERADMIN_SETTINGS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_GENERAL') })}
+        tabIndex={0}>
+
         {activeTab === 'General' && (
-          <div className="max-w-2xl space-y-8 motion-safe:animate-fade-in motion-reduce:animate-none">
+          <div className="max-w-2xl space-y-8">
             <div>
-              <h2 className="text-lg font-bold text-primary mb-2">{tCopy("COPY.GENERAL_REGIONAL")}</h2>
-              <p className="text-sm text-secondary mb-6">{tCopy("COPY.GLOBAL_CONFIGURATION_APPLIED_TO_ALL_NEWLY_REGISTERED_LIBRARIES_BY_DEFAULT")}</p>
-              
-              <div className="grid grid-cols-2 gap-6">
-                <div className="flex flex-col gap-2 col-span-2">
-                  <label htmlFor="settings-platform-name" className="text-sm font-semibold text-primary">{tCopy("COPY.PLATFORM_NAME")}</label>
-                  <input id="settings-platform-name" type="text" className="sa-input" aria-invalid={Boolean(errors.generalConfig?.platformName)} aria-describedby={errors.generalConfig?.platformName ? 'settings-platform-name-error' : undefined} {...register('generalConfig.platformName')}  data-testid="superadmin-settings-settings-overview-settings-platform-name-3"/>
-                  {translateValidationMessage(errors.generalConfig?.platformName?.message) && <p id="settings-platform-name-error" className="text-xs text-danger" role="alert">{translateValidationMessage(errors.generalConfig.platformName.message)}</p>}
+              <h2 className="text-base font-bold text-slate-100 mb-1">{tCopy("COPY.GENERAL_REGIONAL")}</h2>
+              <p className="text-xs text-slate-400 mb-6">{tCopy("COPY.GLOBAL_CONFIGURATION_APPLIED_TO_ALL_NEWLY_REGISTERED_LIBRARIES_BY_DEFAULT")}</p>
+              <div className="grid grid-cols-2 gap-5">
+                <div className="flex flex-col gap-1.5 col-span-2">
+                  <label htmlFor="settings-platform-name" className="text-xs font-semibold uppercase tracking-wider text-slate-300">{tCopy("COPY.PLATFORM_NAME")}</label>
+                  <input id="settings-platform-name" type="text" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" aria-invalid={Boolean(errors.generalConfig?.platformName)} aria-describedby={errors.generalConfig?.platformName ? 'settings-platform-name-error' : undefined} {...register('generalConfig.platformName')} data-testid="superadmin-settings-settings-overview-settings-platform-name-3"/>
+                  {translateValidationMessage(errors.generalConfig?.platformName?.message) && <p id="settings-platform-name-error" className="text-xs text-rose-400" role="alert">{translateValidationMessage(errors.generalConfig.platformName.message)}</p>}
                 </div>
-                <div className="flex flex-col gap-2 col-span-2">
-                  <label htmlFor="settings-support-email" className="text-sm font-semibold text-primary">{tCopy("COPY.GLOBAL_SUPPORT_EMAIL")}</label>
-                  <input id="settings-support-email" type="email" className="sa-input" aria-invalid={Boolean(errors.generalConfig?.supportEmail)} aria-describedby={errors.generalConfig?.supportEmail ? 'settings-support-email-error' : undefined} {...register('generalConfig.supportEmail')}  data-testid="superadmin-settings-settings-overview-settings-support-email-4"/>
-                  {translateValidationMessage(errors.generalConfig?.supportEmail?.message) && <p id="settings-support-email-error" className="text-xs text-danger" role="alert">{translateValidationMessage(errors.generalConfig.supportEmail.message)}</p>}
+                <div className="flex flex-col gap-1.5 col-span-2">
+                  <label htmlFor="settings-support-email" className="text-xs font-semibold uppercase tracking-wider text-slate-300">{tCopy("COPY.GLOBAL_SUPPORT_EMAIL")}</label>
+                  <input id="settings-support-email" type="email" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" aria-invalid={Boolean(errors.generalConfig?.supportEmail)} aria-describedby={errors.generalConfig?.supportEmail ? 'settings-support-email-error' : undefined} {...register('generalConfig.supportEmail')} data-testid="superadmin-settings-settings-overview-settings-support-email-4"/>
+                  {translateValidationMessage(errors.generalConfig?.supportEmail?.message) && <p id="settings-support-email-error" className="text-xs text-rose-400" role="alert">{translateValidationMessage(errors.generalConfig.supportEmail.message)}</p>}
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="settings-default-currency" className="text-sm font-semibold text-primary">{tCopy("COPY.DEFAULT_CURRENCY")}</label>
-                  <select id="settings-default-currency" className="sa-input appearance-none bg-floating" aria-invalid={Boolean(errors.generalConfig?.currency)} {...register('generalConfig.currency')} data-testid="superadmin-settings-settings-overview-settings-default-currency-5">
-                    <option>{tCopy("COPY.INR")}</option>
-                    <option>{tCopy("COPY.USD")}</option>
-                    <option>{tCopy("COPY.AED")}</option>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="settings-default-currency" className="text-xs font-semibold uppercase tracking-wider text-slate-300">{tCopy("COPY.DEFAULT_CURRENCY")}</label>
+                  <select id="settings-default-currency" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-200 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" aria-invalid={Boolean(errors.generalConfig?.currency)} {...register('generalConfig.currency')} data-testid="superadmin-settings-settings-overview-settings-default-currency-5">
+                    <option>{tCopy("COPY.INR")}</option><option>{tCopy("COPY.USD")}</option><option>{tCopy("COPY.AED")}</option>
                   </select>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="settings-default-timezone" className="text-sm font-semibold text-primary">{tCopy("COPY.DEFAULT_TIMEZONE")}</label>
-                  <select id="settings-default-timezone" className="sa-input appearance-none bg-floating" aria-invalid={Boolean(errors.generalConfig?.timezone)} {...register('generalConfig.timezone')} data-testid="superadmin-settings-settings-overview-settings-default-timezone-6">
-                    <option>{tCopy("COPY.ASIA_KOLKATA")}</option>
-                    <option>{tCopy("COPY.UTC")}</option>
-                    <option>{tCopy("COPY.AMERICA_NEW_YORK")}</option>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="settings-default-timezone" className="text-xs font-semibold uppercase tracking-wider text-slate-300">{tCopy("COPY.DEFAULT_TIMEZONE")}</label>
+                  <select id="settings-default-timezone" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-200 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" aria-invalid={Boolean(errors.generalConfig?.timezone)} {...register('generalConfig.timezone')} data-testid="superadmin-settings-settings-overview-settings-default-timezone-6">
+                    <option>{tCopy("COPY.ASIA_KOLKATA")}</option><option>{tCopy("COPY.UTC")}</option><option>{tCopy("COPY.AMERICA_NEW_YORK")}</option>
                   </select>
                 </div>
               </div>
@@ -141,18 +145,13 @@ const translateValidationMessage = useSuperadminSettingsOverviewValidationMessag
           </div>
         )}
 
-        
-
-        
-
         {activeTab !== 'General' && activeTab !== 'APIs & Integrations' && activeTab !== 'Maintenance Mode' && (
-          <div className="flex flex-col items-center justify-center h-full text-secondary motion-safe:animate-fade-in motion-reduce:animate-none">
-            <Palette size={48} className="mb-4 opacity-30 text-primary" />
-            <p className="text-lg font-medium">{tCopy(SUPERADMIN_SETTINGS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_GENERAL')}</p>
-            <p className="text-sm mt-1 text-center max-w-sm">{tCopy(SUPERADMIN_SETTINGS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_GENERAL')} {tCopy("COPY.CONTROLS_ARE_NOT_CONNECTED_IN_THIS_SOURCE_ONLY_PREVIEW_NO_CONFIGURATION_IS_READ_OR_SAVED_FOR_THIS_SECTION")}</p>
+          <div className="flex flex-col items-center justify-center h-full gap-3">
+            <Palette size={40} className="text-indigo-400/40" />
+            <p className="text-sm font-semibold text-slate-300">{tCopy(SUPERADMIN_SETTINGS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_GENERAL')}</p>
+            <p className="text-xs text-slate-400 text-center max-w-sm">{tCopy(SUPERADMIN_SETTINGS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_GENERAL')} {tCopy("COPY.CONTROLS_ARE_NOT_CONNECTED_IN_THIS_SOURCE_ONLY_PREVIEW_NO_CONFIGURATION_IS_READ_OR_SAVED_FOR_THIS_SECTION")}</p>
           </div>
         )}
-
       </div>
       </form>
     </div>

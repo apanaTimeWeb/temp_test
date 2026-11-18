@@ -358,8 +358,6 @@
   /* ═══════════════ KPI CARDS ═══════════════ */
 
   .mgr-kpi-card {
-    background-color: theme(--color-card);
-    border: 1px solid theme(--color-border);
     border-radius: 12px;
     padding: 20px;
     display: flex;

@@ -10,15 +10,23 @@ import { useTranslations } from 'next-intl';
 export default function SuperadminSystemHealthOverviewNetworkMetrics() {
   const t = useTranslations('SUPERADMIN_SYSTEM_HEALTH');
   return (
-    <section className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8" aria-label={t("COPY.SAMPLE_NETWORK_METRICS")}>
+    <section className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" aria-label={t("COPY.SAMPLE_NETWORK_METRICS")}>
       {SUPERADMIN_SYSTEM_HEALTH_NETWORK_KPIS.map((kpi) => {
         const MetricIcon = SUPERADMIN_SYSTEM_HEALTH_NETWORK_ICONS[kpi.id];
         const metricColor = SUPERADMIN_SYSTEM_HEALTH_NETWORK_COLORS[kpi.id];
         return (
-          <div key={kpi.id} className="sa-card p-5 border border-border bg-surface-highlight">
-            <div className="flex justify-between items-start mb-4"><div className={`p-2 rounded-lg bg-surface-hover ${metricColor}`}><MetricIcon size={20} aria-hidden="true" /></div><span className="text-xs font-bold px-2 py-1 bg-surface-hover text-secondary rounded-full">{t(kpi.trendKey)}</span></div>
-            <p className="text-xs text-secondary font-medium uppercase tracking-wider mb-1">{t(kpi.labelKey)}</p>
-            <h3 className="text-2xl font-bold text-primary">{kpi.value} <span className="text-sm text-disabled font-normal">{kpi.unit}</span></h3>
+          <div key={kpi.id} className="relative overflow-hidden rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-950/40 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
+            <div className="flex justify-between items-start mb-4">
+              <div className={`p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 ${metricColor}`}>
+                <MetricIcon size={18} aria-hidden="true" />
+              </div>
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300">{t(kpi.trendKey)}</span>
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">{t(kpi.labelKey)}</p>
+            <h3 className="text-2xl font-black text-slate-100">{kpi.value} <span className="text-sm text-slate-400 font-normal">{kpi.unit}</span></h3>
+            <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800">
+              <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400" style={{ width: '75%' }} />
+            </div>
           </div>
         );
       })}
