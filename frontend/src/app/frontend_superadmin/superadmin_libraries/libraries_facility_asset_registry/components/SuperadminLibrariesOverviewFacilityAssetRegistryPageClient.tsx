@@ -77,33 +77,53 @@ export default function SuperadminLibrariesOverviewFacilityAssetRegistryPageClie
     <div className="space-y-6">
       {(visible?.length === 0) && <SuperadminLibrariesOverviewFacilityAssetRegistryEmptyState filtered={catFilter !== 'all'} />}
 
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="acct-page-title">{tCopy("COPY.ASSET_MANAGER")}</h1>
-          <p className="acct-page-subtitle">{tCopy("COPY.TRACK_ASSET_SAMPLES_AND_PREVIEW_ASSET_STATE_CHANGES")}</p>
-          <p className="mt-3 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy("COPY.SAMPLE_ASSET_DATA_ONLY_ADD_ASSET_UPDATES_THIS_PAGE_PREVIEW_NO_ASSET_PERSISTENCE_API_IS_SUPPLIED")}</p>
+      {/* ── Page Header ── */}
+      <div className="w-full rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-5 sm:p-6 shadow-md mb-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{tCopy("COPY.ASSET_MANAGER")}</h1>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">{tCopy("COPY.TRACK_ASSET_SAMPLES_AND_PREVIEW_ASSET_STATE_CHANGES")}</p>
+            <p className="mt-2 rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-3 py-2 text-xs text-indigo-300" role="status">{tCopy("COPY.SAMPLE_ASSET_DATA_ONLY_ADD_ASSET_UPDATES_THIS_PAGE_PREVIEW_NO_ASSET_PERSISTENCE_API_IS_SUPPLIED")}</p>
+          </div>
+          <button type="button" className="inline-flex items-center gap-1.5 min-h-9 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md transition-all cursor-pointer shrink-0" onClick={() => setShowAdd(true)} data-testid="superadmin-accounting-accounting-assets-add-asset-1"><Plus size={13} /> {tCopy("COPY.ADD_ASSET")}</button>
         </div>
-        <button type="button" className="acct-badge acct-badge--info cursor-pointer" onClick={() => setShowAdd(true)} data-testid="superadmin-accounting-accounting-assets-add-asset-1"><Plus size={12} /> {tCopy("COPY.ADD_ASSET")}</button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="acct-kpi-card"><p className="acct-kpi-label">{tCopy("COPY.TOTAL_ASSETS")}</p><p className="acct-kpi-value">{assets.length}</p></div>
-        <div className="acct-kpi-card"><p className="acct-kpi-label acct-text-success">{tCopy("COPY.CURRENT_VALUE")}</p><p className="acct-kpi-value acct-text-success">{formatSuperadminAccountingMajorPreviewCurrency(totalValue, 'INR', locale)}</p></div>
-        <div className="acct-kpi-card acct-kpi-card--warning"><p className="acct-kpi-label acct-kpi-label--warning">{tCopy("COPY.UNDER_MAINTENANCE")}</p><p className="acct-kpi-value acct-kpi-value--warning">{assets.filter(a=>a.status==='maintenance').length}</p></div>
-        <div className="acct-kpi-card"><p className="acct-kpi-label acct-text-muted">{tCopy("COPY.DISPOSED")}</p><p className="acct-kpi-value acct-text-muted">{assets.filter(a=>a.status==='disposed').length}</p></div>
+      {/* ── KPI Cards ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+        <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 to-[#12163a]/80 shadow-md p-4 sm:p-5 hover:scale-[1.01] transition-all">
+          <p className="text-xs font-semibold text-indigo-300 uppercase tracking-wider mb-1">{tCopy("COPY.TOTAL_ASSETS")}</p>
+          <p className="text-2xl sm:text-3xl font-extrabold text-white">{assets.length}</p>
+          <div className="w-full h-1 bg-slate-800 rounded-full mt-3"><div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-400 w-[78%]" /></div>
+        </div>
+        <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 to-[#0e2721]/80 shadow-md p-4 sm:p-5 hover:scale-[1.01] transition-all">
+          <p className="text-xs font-semibold text-emerald-300 uppercase tracking-wider mb-1">{tCopy("COPY.CURRENT_VALUE")}</p>
+          <p className="text-xl sm:text-2xl font-extrabold text-white">{formatSuperadminAccountingMajorPreviewCurrency(totalValue, 'INR', locale)}</p>
+          <div className="w-full h-1 bg-slate-800 rounded-full mt-3"><div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 w-[88%]" /></div>
+        </div>
+        <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 to-[#2c200c]/80 shadow-md p-4 sm:p-5 hover:scale-[1.01] transition-all">
+          <p className="text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">{tCopy("COPY.UNDER_MAINTENANCE")}</p>
+          <p className="text-2xl sm:text-3xl font-extrabold text-white">{assets.filter(a=>a.status==='maintenance').length}</p>
+          <div className="w-full h-1 bg-slate-800 rounded-full mt-3"><div className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-400" style={{width: `${Math.min(100, assets.filter(a=>a.status==='maintenance').length * 25)}%`}} /></div>
+        </div>
+        <div className="rounded-2xl border border-slate-500/25 bg-gradient-to-br from-[#111]/95 to-[#1e1e1e]/80 shadow-md p-4 sm:p-5 hover:scale-[1.01] transition-all">
+          <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">{tCopy("COPY.DISPOSED")}</p>
+          <p className="text-2xl sm:text-3xl font-extrabold text-white">{assets.filter(a=>a.status==='disposed').length}</p>
+          <div className="w-full h-1 bg-slate-800 rounded-full mt-3"><div className="h-full rounded-full bg-gradient-to-r from-slate-500 to-slate-400" style={{width: `${Math.min(100, assets.filter(a=>a.status==='disposed').length * 25)}%`}} /></div>
+        </div>
       </div>
 
-      <div className="acct-filter-bar">
-        <select aria-label={tCopy("COPY.CAT_FILTER")} className="acct-select w-44" value={catFilter} onChange={e => setCatFilter(e.target.value)} data-testid="superadmin-accounting-accounting-assets-cat-filter-2">
+      <div className="flex flex-wrap items-center gap-2.5 p-3 sm:p-3.5 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 shadow-md">
+        <select aria-label={tCopy("COPY.CAT_FILTER")} className="rounded-xl border border-indigo-500/25 bg-card px-3 py-2 text-xs font-medium text-white hover:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none cursor-pointer w-44" value={catFilter} onChange={e => setCatFilter(e.target.value)} data-testid="superadmin-accounting-accounting-assets-cat-filter-2">
           <option value="all">{tCopy("COPY.ALL_CATEGORIES")}</option>
           {categories.map((c) => <option key={c}>{c}</option>)}
         </select>
       </div>
 
-      <div className="acct-card overflow-x-auto">
-        <table className="w-full">
+      <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 shadow-md overflow-x-auto">
+        <table className="w-full text-sm">
           <thead>
-            <tr className="acct-table-header-row">
+            <tr className="border-b border-indigo-500/20 text-xs font-semibold text-slate-400 uppercase tracking-wide">
               <th className="text-left py-3 px-4">{tCopy("COPY.ASSET_NAME")}</th>
               <th className="text-left py-3 px-4">{tCopy("COPY.CATEGORY")}</th>
               <th className="text-left py-3 px-4">{tCopy("COPY.PURCHASE_DATE")}</th>
@@ -113,18 +133,18 @@ export default function SuperadminLibrariesOverviewFacilityAssetRegistryPageClie
               <th className="text-left py-3 px-4">{tCopy("COPY.STATUS")}</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-indigo-500/10">
             {visible.length === 0 ? (
-              <tr><td colSpan={7}><div className="acct-empty-state"><div className="acct-empty-state__icon">🏷️</div><p className="acct-empty-state__title">{tCopy("COPY.NO_ASSETS_FOUND")}</p></div></td></tr>
+              <tr><td colSpan={7}><div className="flex flex-col items-center justify-center gap-2 py-10 text-center"><div className="text-3xl">🏷️</div><p className="text-sm text-slate-400">{tCopy("COPY.NO_ASSETS_FOUND")}</p></div></td></tr>
             ) : visible.map((a) => (
-              <tr key={a.id} className={`acct-table-hover-row acct-table-row ${a.status === 'disposed' ? 'opacity-50' : ''}`}>
-                <td className="py-3 px-4 acct-cell-name">{a.name}</td>
-                <td className="py-3 px-4"><span className="acct-badge acct-badge--neutral">{a.category}</span></td>
-                <td className="py-3 px-4 acct-cell-subtext">{a.purchaseDate}</td>
-                <td className="py-3 px-4 text-right acct-cell-subtext">{formatSuperadminAccountingMajorPreviewCurrency(a.purchaseValue, 'INR', locale)}</td>
-                <td className="py-3 px-4 text-right font-semibold acct-text-body">{formatSuperadminAccountingMajorPreviewCurrency(a.currentValue, 'INR', locale)}</td>
-                <td className="py-3 px-4 acct-cell-subtext">{a.location}</td>
-                <td className="py-3 px-4"><span className={`acct-badge ${SUPERADMIN_ACCOUNTING_ASSET_STATUS_BADGE[a.status]}`}>{tCopy(`COPY.${String(a.status).toUpperCase().replace(/[^A-Z0-9]+/g, '_')}`)}</span></td>
+              <tr key={a.id} className={`hover:bg-indigo-500/5 transition-colors ${a.status === 'disposed' ? 'opacity-50' : ''}`}>
+                <td className="py-3 px-4 font-semibold text-white text-xs">{a.name}</td>
+                <td className="py-3 px-4"><span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border border-slate-700 bg-slate-800/60 text-slate-300">{a.category}</span></td>
+                <td className="py-3 px-4 text-slate-400 text-xs">{a.purchaseDate}</td>
+                <td className="py-3 px-4 text-right text-slate-400 text-xs">{formatSuperadminAccountingMajorPreviewCurrency(a.purchaseValue, 'INR', locale)}</td>
+                <td className="py-3 px-4 text-right font-semibold text-emerald-300 text-xs">{formatSuperadminAccountingMajorPreviewCurrency(a.currentValue, 'INR', locale)}</td>
+                <td className="py-3 px-4 text-slate-400 text-xs">{a.location}</td>
+                <td className="py-3 px-4"><span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border ${SUPERADMIN_ACCOUNTING_ASSET_STATUS_BADGE[a.status]}`}>{tCopy(`COPY.${String(a.status).toUpperCase().replace(/[^A-Z0-9]+/g, '_')}`)}</span></td>
               </tr>
             ))}
           </tbody>

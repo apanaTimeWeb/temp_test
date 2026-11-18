@@ -4,7 +4,6 @@ import SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersEmptyState from '
 /** Data-Flow: canonical route -> SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 
 import { useTranslations } from 'next-intl';
-import { SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersKpiCard as KpiCard } from '@/app/frontend_superadmin/superadmin_libraries/libraries_facility_maintenance_work_orders/components/SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersKpiCard';
 import { SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersCard as Card } from '@/app/frontend_superadmin/superadmin_libraries/libraries_facility_maintenance_work_orders/components/SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersCard';
 import { SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersCardHeader as CardHeader } from '@/app/frontend_superadmin/superadmin_libraries/libraries_facility_maintenance_work_orders/components/SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersCardHeader';
 import { SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersCardTitle as CardTitle } from '@/app/frontend_superadmin/superadmin_libraries/libraries_facility_maintenance_work_orders/components/SuperadminLibrariesOverviewFacilityMaintenanceWorkOrdersCardTitle';
@@ -32,24 +31,49 @@ export default function SuperadminLibrariesOverviewFacilityMaintenanceWorkOrders
 
   return (
     <div>
-      <div className="mb-8">
-        <div className="flex items-center gap-2 text-secondary text-xs font-medium tracking-wide mb-1">
+      {/* ── Colorful Header Banner ── */}
+      <div className="w-full rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-5 sm:p-6 shadow-md mb-2">
+        <div className="flex items-center gap-2 text-slate-400 text-xs font-medium tracking-wide mb-2">
           <span>{tCopy("COPY.SYSTEM")}</span>
           <ChevronRight size={12} />
-          <span>{tCopy("COPY.MAINTENANCE")}</span>
+          <span className="text-indigo-400">{tCopy("COPY.MAINTENANCE")}</span>
         </div>
-        <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
-          <Wrench size={28} className="text-primary" />
-          {tCopy("COPY.MAINTENANCE_DASHBOARD")}</h1>
-        <p className="text-secondary mt-1 text-sm">{tCopy("COPY.TRACK_AND_MANAGE_MAINTENANCE_FOR_SEATS_ASSETS_AND_LOCKERS")}</p>
-        <p className="mt-3 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy("COPY.PREVIEW_ONLY_SEAT_ASSET_AND_LOCKER_RECORDS_ARE_SYNTHETIC_EXAMPLES__C0136DBC")}</p>
+        <div className="flex items-center gap-3 mb-1">
+          <div className="p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shrink-0">
+            <Wrench size={22} />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{tCopy("COPY.MAINTENANCE_DASHBOARD")}</h1>
+        </div>
+        <p className="text-xs sm:text-sm text-slate-400 mt-1">{tCopy("COPY.TRACK_AND_MANAGE_MAINTENANCE_FOR_SEATS_ASSETS_AND_LOCKERS")}</p>
+        <p className="mt-2 rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-3 py-2 text-xs text-indigo-300" role="status">{tCopy("COPY.PREVIEW_ONLY_SEAT_ASSET_AND_LOCKER_RECORDS_ARE_SYNTHETIC_EXAMPLES__C0136DBC")}</p>
       </div>
 
-      {/* Summary KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <KpiCard title={tCopy("COPY.SEATS_NEEDING_ATTENTION")} value={seatsNeedingAttention} icon="🪑" trend="down" trendLabel={tCopy("COPY.ACTION_REQUIRED")} />
-        <KpiCard title={tCopy("COPY.ASSETS_OVERDUE")} value={assetsOverdue} icon="⚙️" trend="down" trendLabel={tCopy("COPY.SERVICE_OVERDUE")} />
-        <KpiCard title={tCopy("COPY.LOCKER_ISSUES")} value={lockerIssues} icon="🔒" trend="down" trendLabel={tCopy("COPY.REPORTED_ISSUES")} />
+      {/* Summary KPI Cards — colorful gradient style */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+        <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 to-[#2c200c]/80 shadow-md p-5 hover:scale-[1.01] transition-all">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <span className="text-xs font-semibold text-amber-300 uppercase tracking-wider">{tCopy("COPY.SEATS_NEEDING_ATTENTION")}</span>
+            <span className="text-2xl shrink-0">🪑</span>
+          </div>
+          <p className="text-3xl font-extrabold text-white mb-1">{seatsNeedingAttention}</p>
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">{tCopy("COPY.ACTION_REQUIRED")}</span>
+        </div>
+        <div className="rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1a0810]/95 to-[#2a0e1a]/80 shadow-md p-5 hover:scale-[1.01] transition-all">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <span className="text-xs font-semibold text-rose-300 uppercase tracking-wider">{tCopy("COPY.ASSETS_OVERDUE")}</span>
+            <span className="text-2xl shrink-0">⚙️</span>
+          </div>
+          <p className="text-3xl font-extrabold text-white mb-1">{assetsOverdue}</p>
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">{tCopy("COPY.SERVICE_OVERDUE")}</span>
+        </div>
+        <div className="rounded-2xl border border-purple-500/25 bg-gradient-to-br from-[#120a28]/95 to-[#1e1038]/80 shadow-md p-5 hover:scale-[1.01] transition-all">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <span className="text-xs font-semibold text-purple-300 uppercase tracking-wider">{tCopy("COPY.LOCKER_ISSUES")}</span>
+            <span className="text-2xl shrink-0">🔒</span>
+          </div>
+          <p className="text-3xl font-extrabold text-white mb-1">{lockerIssues}</p>
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30">{tCopy("COPY.REPORTED_ISSUES")}</span>
+        </div>
       </div>
 
       {/* Section 1 — Seats */}

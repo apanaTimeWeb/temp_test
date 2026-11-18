@@ -343,96 +343,92 @@ export default function SuperadminLibrariesOverviewPageClient() {
       )}
 
       {/* ─── 4 KPI Cards Grid (Responsive: 1-col mob, 2-col tab, 4-col laptop) ─── */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-6" aria-label="Libraries Statistics">
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5" aria-label="Libraries Statistics">
         {/* Card 1: Total Registered Libraries */}
-        <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-md p-5 sm:p-6 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl relative overflow-hidden group">
-          <div className="flex items-start justify-between relative z-10 gap-3">
-            <span className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Total Libraries</span>
-            <div className="p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shrink-0 group-hover:scale-110 transition-transform">
-              <Building2 size={20} />
+        <div className="rounded-xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 to-[#12163a]/80 shadow-md p-3.5 sm:p-4 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl relative overflow-hidden group">
+          <div className="flex items-start justify-between relative z-10 gap-2">
+            <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider leading-tight">Total Libraries</span>
+            <div className="p-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shrink-0 group-hover:scale-110 transition-transform">
+              <Building2 size={15} />
             </div>
           </div>
-          <div className="relative z-10 mt-3 sm:mt-4">
-            <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">{libraries.length.toLocaleString()}</p>
-            <div className="mt-3.5 flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                <TrendingUp size={12} />
+          <div className="relative z-10 mt-2">
+            <p className="text-xl sm:text-2xl font-extrabold tracking-tight text-white">{libraries.length.toLocaleString()}</p>
+            <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <TrendingUp size={10} />
                 <span>+12 this month</span>
               </span>
-              <span className="text-xs text-slate-400 font-medium">Licensed facilities</span>
             </div>
-            <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden mt-4">
+            <div className="w-full h-1 bg-slate-800/80 rounded-full overflow-hidden mt-2.5">
               <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-400 w-[78%]" />
             </div>
           </div>
         </div>
 
         {/* Card 2: Operating Tenants */}
-        <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-md p-5 sm:p-6 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl relative overflow-hidden group">
-          <div className="flex items-start justify-between relative z-10 gap-3">
-            <span className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Active Tenants</span>
-            <div className="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shrink-0 group-hover:scale-110 transition-transform">
-              <Store size={20} />
+        <div className="rounded-xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 to-[#0e2721]/80 shadow-md p-3.5 sm:p-4 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl relative overflow-hidden group">
+          <div className="flex items-start justify-between relative z-10 gap-2">
+            <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider leading-tight">Active Tenants</span>
+            <div className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shrink-0 group-hover:scale-110 transition-transform">
+              <Store size={15} />
             </div>
           </div>
-          <div className="relative z-10 mt-3 sm:mt-4">
-            <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">{activeCount.toLocaleString()}</p>
-            <div className="mt-3.5 flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                <CheckCircle size={12} />
+          <div className="relative z-10 mt-2">
+            <p className="text-xl sm:text-2xl font-extrabold tracking-tight text-white">{activeCount.toLocaleString()}</p>
+            <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <CheckCircle size={10} />
                 <span>98.2% Active</span>
               </span>
-              <span className="text-xs text-slate-400 font-medium">Live operations</span>
             </div>
-            <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden mt-4">
+            <div className="w-full h-1 bg-slate-800/80 rounded-full overflow-hidden mt-2.5">
               <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 w-[98%]" />
             </div>
           </div>
         </div>
 
         {/* Card 3: Total Enrolled Students */}
-        <div className="rounded-2xl border border-sky-500/25 bg-gradient-to-br from-[#0c1828]/95 via-[#0c1828]/90 to-[#122238]/80 shadow-md p-5 sm:p-6 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl relative overflow-hidden group">
-          <div className="flex items-start justify-between relative z-10 gap-3">
-            <span className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Enrolled Students</span>
-            <div className="p-2.5 rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400 shrink-0 group-hover:scale-110 transition-transform">
-              <Users size={20} />
+        <div className="rounded-xl border border-sky-500/25 bg-gradient-to-br from-[#0c1828]/95 to-[#122238]/80 shadow-md p-3.5 sm:p-4 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl relative overflow-hidden group">
+          <div className="flex items-start justify-between relative z-10 gap-2">
+            <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider leading-tight">Enrolled Students</span>
+            <div className="p-1.5 rounded-lg border border-sky-500/30 bg-sky-500/15 text-sky-400 shrink-0 group-hover:scale-110 transition-transform">
+              <Users size={15} />
             </div>
           </div>
-          <div className="relative z-10 mt-3 sm:mt-4">
-            <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">{totalStudents.toLocaleString()}</p>
-            <div className="mt-3.5 flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30">
-                <TrendingUp size={12} />
+          <div className="relative z-10 mt-2">
+            <p className="text-xl sm:text-2xl font-extrabold tracking-tight text-white">{totalStudents.toLocaleString()}</p>
+            <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30">
+                <TrendingUp size={10} />
                 <span>+1,240 this week</span>
               </span>
-              <span className="text-xs text-slate-400 font-medium">Active learners</span>
             </div>
-            <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden mt-4">
+            <div className="w-full h-1 bg-slate-800/80 rounded-full overflow-hidden mt-2.5">
               <div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-sky-400 w-[84%]" />
             </div>
           </div>
         </div>
 
         {/* Card 4: Aggregate LTV Revenue */}
-        <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-md p-5 sm:p-6 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl relative overflow-hidden group">
-          <div className="flex items-start justify-between relative z-10 gap-3">
-            <span className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">{t("COPY.TABLE_COLUMN_LTV_REVENUE_SAMPLE")}</span>
-            <div className="p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shrink-0 group-hover:scale-110 transition-transform">
-              <IndianRupee size={20} />
+        <div className="rounded-xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 to-[#2c200c]/80 shadow-md p-3.5 sm:p-4 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl relative overflow-hidden group">
+          <div className="flex items-start justify-between relative z-10 gap-2">
+            <span className="text-[11px] font-semibold text-slate-300 uppercase tracking-wider leading-tight">{t("COPY.TABLE_COLUMN_LTV_REVENUE_SAMPLE")}</span>
+            <div className="p-1.5 rounded-lg border border-amber-500/30 bg-amber-500/15 text-amber-400 shrink-0 group-hover:scale-110 transition-transform">
+              <IndianRupee size={15} />
             </div>
           </div>
-          <div className="relative z-10 mt-3 sm:mt-4">
-            <p className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
+          <div className="relative z-10 mt-2">
+            <p className="text-xl sm:text-2xl font-extrabold tracking-tight text-white truncate">
               {SuperadminLibrariesFormatMajorPreviewCurrency(totalRevenue, 'INR', locale)}
             </p>
-            <div className="mt-3.5 flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                <TrendingUp size={12} />
+            <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <TrendingUp size={10} />
                 <span>+14.7% MoM</span>
               </span>
-              <span className="text-xs text-slate-400 font-medium">Platform volume</span>
             </div>
-            <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden mt-4">
+            <div className="w-full h-1 bg-slate-800/80 rounded-full overflow-hidden mt-2.5">
               <div className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-400 w-[91%]" />
             </div>
           </div>

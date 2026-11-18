@@ -43,17 +43,20 @@ export default function SuperadminLibrariesOverviewFacilityPowerManagementPageCl
     <div>
       {((SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ALERT_LOG as unknown as unknown[]).length === 0) && <SuperadminLibrariesOverviewFacilityPowerManagementEmptyState />}
 
-      <div className="mb-8">
-        <div className="flex items-center gap-2 text-secondary text-xs font-medium tracking-wide mb-1">
+      <div className="w-full rounded-2xl border border-sky-500/25 bg-[#0c1828]/95 p-5 sm:p-6 shadow-md mb-6">
+        <div className="flex items-center gap-2 text-slate-400 text-xs font-medium tracking-wide mb-2">
           <span>{tCopy("COPY.SYSTEM")}</span>
-          <ChevronRight aria-hidden="true" size={18} strokeWidth={2} />
-          <span>{tCopy("COPY.POWER_SAVING")}</span>
+          <ChevronRight aria-hidden="true" size={12} strokeWidth={2} />
+          <span className="text-sky-400">{tCopy("COPY.POWER_SAVING")}</span>
         </div>
-        <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
-          <Zap aria-hidden="true" size={18} strokeWidth={2} className="text-primary" />
-          {tCopy("COPY.POWER_SAVING_MODE")}</h1>
-        <p className="text-secondary mt-1 text-sm">{tCopy("COPY.ILLUSTRATIVE_ZONE_OCCUPANCY_SUMMARY")}</p>
-        <p className="mt-3 rounded-lg border border-border bg-info-bg p-3 text-sm text-info" role="status">{tCopy("COPY.SYNTHETIC_POWER_SAVING_PREVIEW_NOTICE")}</p>
+        <div className="flex items-center gap-3 mb-1">
+          <div className="p-2.5 rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400 shrink-0">
+            <Zap aria-hidden="true" size={22} strokeWidth={2} />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{tCopy("COPY.POWER_SAVING_MODE")}</h1>
+        </div>
+        <p className="text-xs sm:text-sm text-slate-400 mt-1">{tCopy("COPY.ILLUSTRATIVE_ZONE_OCCUPANCY_SUMMARY")}</p>
+        <p className="mt-2 rounded-xl border border-sky-500/20 bg-sky-500/10 px-3 py-2 text-xs text-sky-300" role="status">{tCopy("COPY.SYNTHETIC_POWER_SAVING_PREVIEW_NOTICE")}</p>
       </div>
 
       {/* Config Card */}

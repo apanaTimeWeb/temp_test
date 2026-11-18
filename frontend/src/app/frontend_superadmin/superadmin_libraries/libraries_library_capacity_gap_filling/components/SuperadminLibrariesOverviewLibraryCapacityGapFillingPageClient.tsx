@@ -15,18 +15,22 @@ export default function SuperadminLibrariesOverviewLibraryCapacityGapFillingPage
   return (
     <div className="space-y-6">
       <header className="mb-8">
-        <div className="mb-1 flex items-center gap-2 text-xs font-medium tracking-wide text-secondary">
-          <span>{tCopy('COPY.SYSTEM')}</span>
-          <ChevronRight aria-hidden="true" size={18} strokeWidth={2} />
-          <span>{tCopy('COPY.GAP_FILLING')}</span>
+        <div className="w-full rounded-2xl border border-purple-500/25 bg-gradient-to-br from-[#120a28]/95 to-[#1e1038]/80 p-5 sm:p-6 shadow-md">
+          <div className="mb-2 flex items-center gap-2 text-xs font-medium tracking-wide text-slate-400">
+            <span>{tCopy('COPY.SYSTEM')}</span>
+            <ChevronRight aria-hidden="true" size={12} strokeWidth={2} />
+            <span className="text-purple-400">{tCopy('COPY.GAP_FILLING')}</span>
+          </div>
+          <div className="flex items-center gap-3 mb-1">
+            <div className="p-2.5 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shrink-0">
+              <GitBranch aria-hidden="true" size={22} strokeWidth={2} />
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{tCopy('COPY.GAP_FILLING_ALGORITHM')}</h1>
+          </div>
+          <p className="mt-1 text-xs sm:text-sm text-slate-400">{tCopy('COPY.VISUALIZE_EMPTY_TIME_SLOTS_AND_MONETIZE_UNUSED_SEAT_CAPACITY')}</p>
+          <p className="mt-2 rounded-xl border border-purple-500/20 bg-purple-500/10 px-3 py-2 text-xs text-purple-300" role="status">{tCopy('COPY.PREVIEW_ONLY_DISCLOSURE')}</p>
+          <p className="mt-1.5 rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-3 py-2 text-xs text-indigo-300" role="status">{tCopy('COPY.STATIC_SAMPLE_NO_FILTER_CONTRACT')}</p>
         </div>
-        <h1 className="flex items-center gap-3 text-3xl font-bold text-primary">
-          <GitBranch aria-hidden="true" size={18} strokeWidth={2} className="text-primary" />
-          {tCopy('COPY.GAP_FILLING_ALGORITHM')}
-        </h1>
-        <p className="mt-1 text-sm text-secondary">{tCopy('COPY.VISUALIZE_EMPTY_TIME_SLOTS_AND_MONETIZE_UNUSED_SEAT_CAPACITY')}</p>
-        <p className="mt-3 rounded-lg border border-border bg-info-bg p-3 text-sm text-info" role="status">{tCopy('COPY.PREVIEW_ONLY_DISCLOSURE')}</p>
-        <p className="mt-2 rounded-lg border border-warning-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy('COPY.STATIC_SAMPLE_NO_FILTER_CONTRACT')}</p>
       </header>
 
       <section aria-labelledby="capacity-gap-samples-heading" className="space-y-4">

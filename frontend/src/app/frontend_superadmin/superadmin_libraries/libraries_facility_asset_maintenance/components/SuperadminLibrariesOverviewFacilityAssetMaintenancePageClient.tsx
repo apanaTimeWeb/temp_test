@@ -79,24 +79,44 @@ export default function SuperadminLibrariesOverviewFacilityAssetMaintenancePageC
     <div className="space-y-6">
       {(visible?.length === 0) && <SuperadminLibrariesOverviewFacilityAssetMaintenanceEmptyState filtered />}
 
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="acct-page-title">{tCopy("COPY.ASSET_MAINTENANCE")}</h1>
-          <p className="acct-page-subtitle">{tCopy("COPY.REVIEW_ILLUSTRATIVE_MAINTENANCE_REQUESTS_AND_SERVICE_HISTORY")}</p>
-          <p className="mt-3 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy("COPY.SAMPLE_RECORDS_ONLY_LOGGING_OR_COMPLETING_A_REQUEST_CHANGES_BROWSER_PREVIEW_STATE_AND_DOES_NOT_CREATE_A_SERVICE_ORDER")}</p>
+      {/* ── Page Header ── */}
+      <div className="w-full rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-5 sm:p-6 shadow-md mb-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{tCopy("COPY.ASSET_MAINTENANCE")}</h1>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">{tCopy("COPY.REVIEW_ILLUSTRATIVE_MAINTENANCE_REQUESTS_AND_SERVICE_HISTORY")}</p>
+            <p className="mt-2 rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-3 py-2 text-xs text-indigo-300" role="status">{tCopy("COPY.SAMPLE_RECORDS_ONLY_LOGGING_OR_COMPLETING_A_REQUEST_CHANGES_BROWSER_PREVIEW_STATE_AND_DOES_NOT_CREATE_A_SERVICE_ORDER")}</p>
+          </div>
+          <button type="button" className="inline-flex items-center gap-1.5 min-h-9 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md transition-all cursor-pointer shrink-0" onClick={() => setShowAdd(true)} data-testid="superadmin-accounting-accounting-asset-maintenance-log-request-1"><Plus size={13} /> {tCopy("COPY.LOG_REQUEST")}</button>
         </div>
-        <button type="button" className="acct-badge acct-badge--info cursor-pointer" onClick={() => setShowAdd(true)} data-testid="superadmin-accounting-accounting-asset-maintenance-log-request-1"><Plus size={12} /> {tCopy("COPY.LOG_REQUEST")}</button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="acct-kpi-card acct-kpi-card--warning"><p className="acct-kpi-label acct-kpi-label--warning">{tCopy("COPY.PENDING")}</p><p className="acct-kpi-value acct-kpi-value--warning">{logs.filter(l=>l.status==='pending').length}</p></div>
-        <div className="acct-kpi-card"><p className="acct-kpi-label acct-text-info">{tCopy("COPY.IN_PROGRESS")}</p><p className="acct-kpi-value acct-text-info">{logs.filter(l=>l.status==='in-progress').length}</p></div>
-        <div className="acct-kpi-card"><p className="acct-kpi-label acct-text-success">{tCopy("COPY.COMPLETED")}</p><p className="acct-kpi-value acct-text-success">{logs.filter(l=>l.status==='completed').length}</p></div>
-        <div className="acct-kpi-card acct-kpi-card--danger"><p className="acct-kpi-label acct-kpi-label--danger">{tCopy("COPY.TOTAL_COST")}</p><p className="acct-kpi-value acct-kpi-value--danger">{formatSuperadminAccountingMajorPreviewCurrency(totalCost, 'INR', locale)}</p></div>
+      {/* ── KPI Cards ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+        <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 to-[#2c200c]/80 shadow-md p-4 sm:p-5 hover:scale-[1.01] transition-all">
+          <p className="text-xs font-semibold text-amber-300 uppercase tracking-wider mb-1">{tCopy("COPY.PENDING")}</p>
+          <p className="text-2xl sm:text-3xl font-extrabold text-white">{logs.filter(l=>l.status==='pending').length}</p>
+          <div className="w-full h-1 bg-slate-800 rounded-full mt-3"><div className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-400" style={{width: `${Math.min(100, logs.filter(l=>l.status==='pending').length * 20)}%`}} /></div>
+        </div>
+        <div className="rounded-2xl border border-sky-500/25 bg-gradient-to-br from-[#0c1828]/95 to-[#122238]/80 shadow-md p-4 sm:p-5 hover:scale-[1.01] transition-all">
+          <p className="text-xs font-semibold text-sky-300 uppercase tracking-wider mb-1">{tCopy("COPY.IN_PROGRESS")}</p>
+          <p className="text-2xl sm:text-3xl font-extrabold text-white">{logs.filter(l=>l.status==='in-progress').length}</p>
+          <div className="w-full h-1 bg-slate-800 rounded-full mt-3"><div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-sky-400" style={{width: `${Math.min(100, logs.filter(l=>l.status==='in-progress').length * 20)}%`}} /></div>
+        </div>
+        <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 to-[#0e2721]/80 shadow-md p-4 sm:p-5 hover:scale-[1.01] transition-all">
+          <p className="text-xs font-semibold text-emerald-300 uppercase tracking-wider mb-1">{tCopy("COPY.COMPLETED")}</p>
+          <p className="text-2xl sm:text-3xl font-extrabold text-white">{logs.filter(l=>l.status==='completed').length}</p>
+          <div className="w-full h-1 bg-slate-800 rounded-full mt-3"><div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400" style={{width: `${Math.min(100, logs.filter(l=>l.status==='completed').length * 20)}%`}} /></div>
+        </div>
+        <div className="rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1a0810]/95 to-[#2a0e1a]/80 shadow-md p-4 sm:p-5 hover:scale-[1.01] transition-all">
+          <p className="text-xs font-semibold text-rose-300 uppercase tracking-wider mb-1">{tCopy("COPY.TOTAL_COST")}</p>
+          <p className="text-xl sm:text-2xl font-extrabold text-white">{formatSuperadminAccountingMajorPreviewCurrency(totalCost, 'INR', locale)}</p>
+          <div className="w-full h-1 bg-slate-800 rounded-full mt-3"><div className="h-full rounded-full bg-gradient-to-r from-rose-500 to-rose-400 w-[75%]" /></div>
+        </div>
       </div>
 
-      <div className="acct-filter-bar">
-        <select aria-label={tCopy("COPY.STATUS_FILTER")} className="acct-select w-44" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} data-testid="superadmin-accounting-accounting-asset-maintenance-status-filter-2">
+      <div className="flex flex-wrap items-center gap-2.5 p-3 sm:p-3.5 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 shadow-md">
+        <select aria-label={tCopy("COPY.STATUS_FILTER")} className="rounded-xl border border-indigo-500/25 bg-card px-3 py-2 text-xs font-medium text-white hover:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none cursor-pointer w-44" value={statusFilter} onChange={e => setStatusFilter(e.target.value)} data-testid="superadmin-accounting-accounting-asset-maintenance-status-filter-2">
           <option value="all">{tCopy("COPY.ALL_STATUS")}</option>
           <option value="pending">{tCopy("COPY.PENDING")}</option>
           <option value="in-progress">{tCopy("COPY.IN_PROGRESS")}</option>
@@ -104,10 +124,10 @@ export default function SuperadminLibrariesOverviewFacilityAssetMaintenancePageC
         </select>
       </div>
 
-      <div className="acct-card overflow-x-auto">
-        <table className="w-full">
+      <div className="rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 shadow-md overflow-x-auto">
+        <table className="w-full text-sm">
           <thead>
-            <tr className="acct-table-header-row">
+            <tr className="border-b border-indigo-500/20 text-xs font-semibold text-slate-400 uppercase tracking-wide">
               <th className="text-left py-3 px-4">{tCopy("COPY.ASSET")}</th>
               <th className="text-left py-3 px-4">{tCopy("COPY.ISSUE")}</th>
               <th className="text-left py-3 px-4">{tCopy("COPY.REPORTED")}</th>
@@ -118,21 +138,21 @@ export default function SuperadminLibrariesOverviewFacilityAssetMaintenancePageC
               <th className="text-right py-3 px-4">{tCopy("COPY.ACTION")}</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-indigo-500/10">
             {visible.length === 0 ? (
-              <tr><td colSpan={8}><div className="acct-empty-state"><div className="acct-empty-state__icon">🔧</div><p className="acct-empty-state__title">{tCopy("COPY.NO_MAINTENANCE_RECORDS_FOUND")}</p></div></td></tr>
+              <tr><td colSpan={8}><div className="flex flex-col items-center justify-center gap-2 py-10 text-center"><div className="text-3xl">🔧</div><p className="text-sm text-slate-400">{tCopy("COPY.NO_MAINTENANCE_RECORDS_FOUND")}</p></div></td></tr>
             ) : visible.map((l) => (
-              <tr key={l.id} className="acct-table-hover-row acct-table-row">
-                <td className="py-3 px-4 acct-cell-name">{l.assetName}</td>
-                <td className="py-3 px-4 acct-text-body">{l.issue}</td>
-                <td className="py-3 px-4 acct-cell-subtext">{l.reportedDate}</td>
-                <td className="py-3 px-4 acct-cell-subtext">{l.scheduledDate}</td>
-                <td className="py-3 px-4 acct-cell-subtext">{l.vendor}</td>
-                <td className="py-3 px-4 text-right font-semibold acct-text-body">{formatSuperadminAccountingMajorPreviewCurrency(l.cost, 'INR', locale)}</td>
-                <td className="py-3 px-4"><span className={`acct-badge ${SUPERADMIN_ACCOUNTING_MAINTENANCE_STATUS_BADGE[l.status]}`}>{tCopy(`COPY.${String(l.status).toUpperCase().replace(/[^A-Z0-9]+/g, '_')}`)}</span></td>
+              <tr key={l.id} className="hover:bg-indigo-500/5 transition-colors">
+                <td className="py-3 px-4 font-semibold text-white text-xs">{l.assetName}</td>
+                <td className="py-3 px-4 text-slate-300 text-xs">{l.issue}</td>
+                <td className="py-3 px-4 text-slate-400 text-xs">{l.reportedDate}</td>
+                <td className="py-3 px-4 text-slate-400 text-xs">{l.scheduledDate}</td>
+                <td className="py-3 px-4 text-slate-400 text-xs">{l.vendor}</td>
+                <td className="py-3 px-4 text-right font-semibold text-amber-300 text-xs">{formatSuperadminAccountingMajorPreviewCurrency(l.cost, 'INR', locale)}</td>
+                <td className="py-3 px-4"><span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border ${SUPERADMIN_ACCOUNTING_MAINTENANCE_STATUS_BADGE[l.status]}`}>{tCopy(`COPY.${String(l.status).toUpperCase().replace(/[^A-Z0-9]+/g, '_')}`)}</span></td>
                 <td className="py-3 px-4 text-right">
                   {l.status !== 'completed' && (
-                    <button type="button" className="acct-badge acct-badge--success cursor-pointer" onClick={() => handleComplete(l.id)} data-testid={`superadmin-accounting-accounting-asset-maintenance-done-3-${String(l.id)}`}>
+                    <button type="button" className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25 cursor-pointer transition-all" onClick={() => handleComplete(l.id)} data-testid={`superadmin-accounting-accounting-asset-maintenance-done-3-${String(l.id)}`}>
                       <CheckCircle size={11} /> {tCopy("COPY.DONE")}
                     </button>
                   )}
