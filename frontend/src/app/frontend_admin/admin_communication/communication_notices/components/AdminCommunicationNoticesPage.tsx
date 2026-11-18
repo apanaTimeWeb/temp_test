@@ -54,7 +54,15 @@ export function AdminCommunicationNoticesPage() {
 
   const noticeForm = useForm<AdminCommunicationNoticeFormValues>({
     resolver: zodResolver(noticeSchema),
-    defaultValues: { title: '', message: '', validTill: '', targetBranch: 'All Branches' },
+    defaultValues: {
+      title: '',
+      message: '',
+      validTill: '',
+      targetBranch: 'All Branches',
+      sendWhatsApp: false,
+      sendEmail: false,
+      sendSms: false,
+    },
     mode: 'onBlur',
   });
 
@@ -82,8 +90,32 @@ export function AdminCommunicationNoticesPage() {
     toastTimeoutRef.current = window.setTimeout(() => { setToast(''); toastTimeoutRef.current = null; }, 3000);
   };
 
-  const openAdd = () => { noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches' }); setEditItem(null); setShowAdd(true); };
-  const openEdit = (n: Notice) => { noticeForm.reset({ title: n.title, message: n.message, validTill: n.validTill, targetBranch: n.targetBranch || 'All Branches' }); setEditItem(n); setShowAdd(true); };
+  const openAdd = () => {
+    noticeForm.reset({
+      title: '',
+      message: '',
+      validTill: '',
+      targetBranch: 'All Branches',
+      sendWhatsApp: true,
+      sendEmail: true,
+      sendSms: false,
+    });
+    setEditItem(null);
+    setShowAdd(true);
+  };
+  const openEdit = (n: Notice) => {
+    noticeForm.reset({
+      title: n.title,
+      message: n.message,
+      validTill: n.validTill,
+      targetBranch: n.targetBranch || 'All Branches',
+      sendWhatsApp: n.channels?.includes('whatsapp') ?? true,
+      sendEmail: n.channels?.includes('email') ?? false,
+      sendSms: n.channels?.includes('sms') ?? false,
+    });
+    setEditItem(n);
+    setShowAdd(true);
+  };
 
   const handleSave = (values: AdminCommunicationNoticeFormValues) => {
     if (!isDemoMode) { showToast(t('NOTICE_CREATE_BLOCKED_TOAST')); return; }
@@ -91,18 +123,33 @@ export function AdminCommunicationNoticesPage() {
     const postedDate = now.toISOString().slice(0, 10);
     const validTill = values.validTill;
     const targetBranch = values.targetBranch?.trim() || 'All Branches';
+    const channels: Array<'whatsapp' | 'email' | 'sms'> = [];
+    if (values.sendWhatsApp) channels.push('whatsapp');
+    if (values.sendEmail) channels.push('email');
+    if (values.sendSms) channels.push('sms');
 
     if (editItem) {
-      setDemoNotices((current) => current.map((notice) => notice.id === editItem.id ? { ...notice, title: values.title.trim(), message: values.message.trim(), validTill, targetBranch, status: getAdminCommunicationNoticeStatus(validTill) } : notice));
+      setDemoNotices((current) => current.map((notice) => notice.id === editItem.id ? { ...notice, title: values.title.trim(), message: values.message.trim(), validTill, targetBranch, channels, status: getAdminCommunicationNoticeStatus(validTill) } : notice));
       showToast(t('NOTICE_DEMO_UPDATED', { title: values.title.trim() }));
     } else {
-      const nextNotice: Notice = { id: `NOTICE-DEMO-${Date.now()}`, title: values.title.trim(), message: values.message.trim(), validTill, targetBranch, postedBy: t('DEMO_AUTHOR'), postedDate, status: getAdminCommunicationNoticeStatus(validTill) };
+      const nextNotice: Notice = {
+        id: `NOTICE-DEMO-${Date.now()}`,
+        title: values.title.trim(),
+        message: values.message.trim(),
+        validTill,
+        targetBranch,
+        postedBy: t('DEMO_AUTHOR'),
+        postedDate,
+        channels,
+        status: getAdminCommunicationNoticeStatus(validTill),
+      };
       setDemoNotices((current) => [nextNotice, ...current]);
-      showToast(t('NOTICE_DEMO_CREATED', { title: nextNotice.title }));
+      const channelText = channels.length > 0 ? ` & dispatched via ${channels.join(', ').toUpperCase()}` : '';
+      showToast(`${t('NOTICE_DEMO_CREATED', { title: nextNotice.title })}${channelText}`);
     }
     setShowAdd(false);
     setEditItem(null);
-    noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches' });
+    noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches', sendWhatsApp: false, sendEmail: false, sendSms: false });
   };
 
   const handleDelete = () => {
@@ -150,6 +197,37 @@ export function AdminCommunicationNoticesPage() {
           <span>{p.data.targetBranch ?? 'All Branches'}</span>
         </span>
       ),
+    },
+    {
+      field: 'channels',
+      headerName: 'Channels',
+      width: 130,
+      sortable: false,
+      cellRenderer: (p: DataGridCellParams<Notice>) => {
+        const channels = p.data.channels ?? ['whatsapp', 'email'];
+        return (
+          <div className="flex items-center gap-1 mt-2">
+            {channels.includes('whatsapp') && (
+              <span className="rounded px-1.5 py-0.5 text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" title="WhatsApp Broadcast">
+                WA
+              </span>
+            )}
+            {channels.includes('email') && (
+              <span className="rounded px-1.5 py-0.5 text-[10px] font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30" title="Email Dispatch">
+                Email
+              </span>
+            )}
+            {channels.includes('sms') && (
+              <span className="rounded px-1.5 py-0.5 text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30" title="SMS Alert">
+                SMS
+              </span>
+            )}
+            {channels.length === 0 && (
+              <span className="text-[10px] text-text-secondary">Portal</span>
+            )}
+          </div>
+        );
+      },
     },
     { field: 'message', headerName: t('NOTICE_COLUMN_MESSAGE'), flex: 1, minWidth: 230, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="text-text-secondary text-sm truncate block w-full pt-1" title={p.value}>{p.value}</span> },
     { 

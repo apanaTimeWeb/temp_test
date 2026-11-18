@@ -147,6 +147,7 @@ export function AdminCommunicationComplaintsPage() {
   const [viewItem, setViewItem] = useState<Complaint | null>(null);
   const [resolveItem, setResolveItem] = useState<Complaint | null>(null);
   const [resolveNote, setResolveNote] = useState('');
+  const [search, setSearch] = useState('');
 
   const isLoading = !isDemoMode && complaintsQuery.isPending;
   const errorMessage = !isDemoMode && complaintsQuery.isError ? t('COMPLAINT_UNKNOWN_ERROR') : null;
@@ -184,7 +185,202 @@ export function AdminCommunicationComplaintsPage() {
     });
   }, [isAllBranches, selectedBranch, complaints]);
 
-  const filtered = tab === 'All' ? branchFiltered : branchFiltered.filter(c => c.status === tab);
+  const filtered = useMemo(() => {
+    let list = tab === 'All' ? branchFiltered : branchFiltered.filter((c) => c.status === tab);
+    const q = search.trim().toLowerCase();
+    if (q) {
+      list = list.filter((c) =>
+        c.student.toLowerCase().includes(q) ||
+        (c.seatNumber ? c.seatNumber.toLowerCase().includes(q) : false) ||
+        c.id.toLowerCase().includes(q) ||
+        c.title.toLowerCase().includes(q) ||
+        c.description.toLowerCase().includes(q) ||
+        (c.branchName ? c.branchName.toLowerCase().includes(q) : false)
+      );
+    }
+    return list;
+  }, [tab, branchFiltered, search]);
+
+  const handleExportCsv = () => {
+    const headers = [
+      'Ticket ID',
+      'Title / Grievance Subject',
+      'Category',
+      'Priority',
+      'Complainant Student',
+      'Phone',
+      'Seat / Room',
+      'Branch',
+      'Status',
+      'Date Logged',
+      'Resolved Date',
+      'Resolved By',
+      'Resolution Notes',
+    ];
+    const rows = filtered.map((c) => [
+      c.id,
+      `"${c.title.replace(/"/g, '""')}"`,
+      `"${c.category ?? 'General'}"`,
+      c.priority ?? 'MEDIUM',
+      `"${c.student.replace(/"/g, '""')}"`,
+      `"${c.studentPhone ?? ''}"`,
+      `"${c.seatNumber ?? ''}"`,
+      `"${c.branchName ?? ''}"`,
+      c.status,
+      c.date,
+      c.resolvedDate !== '—' ? c.resolvedDate : '',
+      `"${c.resolvedBy !== '—' ? c.resolvedBy.replace(/"/g, '""') : ''}"`,
+      `"${(c.resolvedNote ?? '').replace(/"/g, '""')}"`,
+    ]);
+    const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-complaints-report-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast(`Exported ${filtered.length} complaints to CSV`);
+  };
+
+  const handleExportExcel = () => {
+    const headers = [
+      'Ticket ID',
+      'Subject',
+      'Category',
+      'Priority',
+      'Student',
+      'Phone',
+      'Seat/Room',
+      'Branch',
+      'Status',
+      'Date Logged',
+      'Resolved Date',
+      'Resolved By',
+      'Resolution Notes',
+    ];
+    const rows = filtered.map((c) => [
+      c.id,
+      c.title,
+      c.category ?? 'General',
+      c.priority ?? 'MEDIUM',
+      c.student,
+      c.studentPhone ?? '-',
+      c.seatNumber ?? '-',
+      c.branchName ?? 'Downtown Central',
+      c.status,
+      c.date,
+      c.resolvedDate,
+      c.resolvedBy,
+      c.resolvedNote || '-',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Complaints</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #e11d48; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #be123c; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #fff1f2; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-complaints-report-${new Date().toISOString().slice(0, 10)}.xls`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast(`Exported ${filtered.length} complaints to Excel (.xls)`);
+  };
+
+  const handlePrint = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=900,height=800');
+    if (!printWindow) return;
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Student Complaints Audit Report</title>
+        <style>
+          body { font-family: -apple-system, sans-serif; padding: 24px; color: #1e293b; font-size: 12px; }
+          .header { display: flex; justify-content: space-between; border-bottom: 2px solid #e11d48; padding-bottom: 12px; margin-bottom: 16px; }
+          .title { font-size: 18px; font-weight: bold; color: #e11d48; }
+          table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 11px; }
+          th { background: #f1f5f9; text-align: left; padding: 8px; border: 1px solid #cbd5e1; font-weight: bold; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background: #f8fafc; }
+          .badge { padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px; }
+          .open { background: #fee2e2; color: #b91c1c; }
+          .in-prog { background: #fef3c7; color: #b45309; }
+          .resolved { background: #dcfce7; color: #15803d; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <div class="title">SMART LIBRARY NETWORK - GRIEVANCES REPORT</div>
+            <div>Branch: ${isAllBranches ? 'All Branches' : (selectedBranch?.name ?? 'Downtown Central')}</div>
+          </div>
+          <div style="text-align: right;">
+            <div>Date: ${new Date().toLocaleDateString('en-IN')}</div>
+            <div>Total Tickets: ${filtered.length}</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Ticket ID</th>
+              <th>Student Name</th>
+              <th>Seat/Room</th>
+              <th>Subject</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Date Logged</th>
+              <th>Resolution</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map((c) => `
+              <tr>
+                <td><strong>${c.id}</strong></td>
+                <td>${c.student}</td>
+                <td>${c.seatNumber ?? '-'}</td>
+                <td>${c.title}</td>
+                <td>${c.category ?? 'General'}</td>
+                <td><span class="badge ${c.status === 'Open' ? 'open' : c.status === 'In-Progress' ? 'in-prog' : 'resolved'}">${c.status}</span></td>
+                <td>${c.date}</td>
+                <td>${c.status === 'Resolved' ? `${c.resolvedNote} (By ${c.resolvedBy})` : 'Pending'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <script>window.onload = function() { window.print(); };</script>
+      </body>
+      </html>
+    `;
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
 
   const handleAdd = (values: AdminCommunicationComplaintFormValues) => {
     if (!isDemoMode) { showToast(t('COMPLAINT_SUBMISSION_BLOCKED')); return; }
@@ -337,7 +533,7 @@ export function AdminCommunicationComplaintsPage() {
         </div>
       </div>
 
-      {/* Multi-Branch Complaint Filter Pills & Status Filter Tabs */}
+      {/* Multi-Branch Complaint Filter Pills, Search Bar & Status Filter Tabs */}
       <AdminCommunicationComplaintsBranchBar
         branches={branches}
         selectedBranchId={selectedBranchId}
@@ -348,6 +544,11 @@ export function AdminCommunicationComplaintsPage() {
         tab={tab}
         setTab={setTab}
         tabs={TABS}
+        search={search}
+        onSearchChange={setSearch}
+        onExportCsv={handleExportCsv}
+        onExportExcel={handleExportExcel}
+        onPrint={handlePrint}
       />
 
       {/* Table */}

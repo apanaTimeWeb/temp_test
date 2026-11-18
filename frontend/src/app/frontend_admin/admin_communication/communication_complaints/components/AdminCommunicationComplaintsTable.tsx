@@ -21,6 +21,8 @@ import {
   Tag,
   ShieldAlert,
   Clock,
+  PhoneCall,
+  MessageCircle,
 } from 'lucide-react';
 import { ADMIN_COMMUNICATION_COMPLAINT_STATUS } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
 import AdminCommunicationEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
@@ -387,9 +389,42 @@ export function AdminCommunicationComplaintsTable({
                     </div>
                   </td>
 
-                  {/* Actions (Icon Trigger to inspect full details) */}
+                  {/* Actions (Icon Trigger to inspect full details, contact, resolve) */}
                   <td className="py-4 px-4 text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-1.5">
+                      {/* Direct WhatsApp Update to Complainant */}
+                      {c.studentPhone && (
+                        <a
+                          href={(() => {
+                            const cleanDigits = (c.studentPhone ?? '').replace(/\D/g, '');
+                            const phone = cleanDigits.length === 10 ? `91${cleanDigits}` : cleanDigits;
+                            const msg = c.status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.RESOLVED
+                              ? `Hello ${c.student}, your library grievance (${c.id}: "${c.title}") has been marked RESOLVED by ${c.resolvedBy || 'Library Admin'}. Note: ${c.resolvedNote || 'Issue has been addressed'}.`
+                              : `Hello ${c.student}, regarding your library grievance (${c.id}: "${c.title}"): our administration is actively addressing this issue.`;
+                            return phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+                          })()}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/25 hover:border-emerald-500/50 transition-all shadow-xs"
+                          title={`Send WhatsApp update to ${c.student} (${c.studentPhone})`}
+                          aria-label={`Send WhatsApp update to ${c.student}`}
+                        >
+                          <MessageCircle size={14} />
+                        </a>
+                      )}
+
+                      {/* Direct Phone Call to Complainant */}
+                      {c.studentPhone && (
+                        <a
+                          href={`tel:${c.studentPhone.replace(/\s+/g, '')}`}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 hover:bg-sky-500/25 hover:border-sky-500/50 transition-all shadow-xs"
+                          title={`Call ${c.student} (${c.studentPhone})`}
+                          aria-label={`Call ${c.student}`}
+                        >
+                          <PhoneCall size={14} />
+                        </a>
+                      )}
+
                       {/* View Dossier Trigger */}
                       <button
                         type="button"

@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import type { UseFormReturn } from 'react-hook-form';
-import { X, Building2 } from 'lucide-react';
+import { X, Building2, Radio, MessageSquare, Mail, Send } from 'lucide-react';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -160,6 +160,57 @@ export function AdminCommunicationNoticeModal({
                     {noticeForm.formState.errors.validTill.message}
                   </p>
                 )}
+              </div>
+
+              {/* Multi-Channel Broadcast Dispatch */}
+              <div className="rounded-xl border border-border bg-card/60 p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Radio className="h-4 w-4 text-primary" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-text-primary">
+                    Multi-Channel Broadcast Dispatch
+                  </span>
+                </div>
+                <p className="text-xs text-text-secondary">
+                  Optionally broadcast this notice directly to enrolled students through external channels upon saving:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                  <label className="flex items-center gap-2.5 rounded-lg border border-border bg-card p-2.5 cursor-pointer hover:bg-card-hover transition-colors">
+                    <input
+                      type="checkbox"
+                      aria-label="WhatsApp Broadcast"
+                      {...noticeForm.register('sendWhatsApp')}
+                      className="rounded border-border text-emerald-600 focus:ring-emerald-500 h-4 w-4"
+                    />
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
+                      <MessageSquare size={13} />
+                      <span>WhatsApp</span>
+                    </div>
+                  </label>
+                  <label className="flex items-center gap-2.5 rounded-lg border border-border bg-card p-2.5 cursor-pointer hover:bg-card-hover transition-colors">
+                    <input
+                      type="checkbox"
+                      aria-label="Email Broadcast"
+                      {...noticeForm.register('sendEmail')}
+                      className="rounded border-border text-sky-600 focus:ring-sky-500 h-4 w-4"
+                    />
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-sky-400">
+                      <Mail size={13} />
+                      <span>Email</span>
+                    </div>
+                  </label>
+                  <label className="flex items-center gap-2.5 rounded-lg border border-border bg-card p-2.5 cursor-pointer hover:bg-card-hover transition-colors">
+                    <input
+                      type="checkbox"
+                      aria-label="SMS Flash Alert"
+                      {...noticeForm.register('sendSms')}
+                      className="rounded border-border text-amber-600 focus:ring-amber-500 h-4 w-4"
+                    />
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-400">
+                      <Send size={13} />
+                      <span>SMS Alert</span>
+                    </div>
+                  </label>
+                </div>
               </div>
 
               <p className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text" role="status">

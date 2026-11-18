@@ -17,6 +17,8 @@ import {
   Search,
   CheckCircle2,
   Clock,
+  Edit2,
+  Plus,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
@@ -31,6 +33,7 @@ export function AdminCommunicationWhatsappTemplatesPage() {
   const t = useTranslations('ADMIN_COMMUNICATION');
   const {
     templates,
+    setTemplates,
     activeId,
     setActiveId,
     showTest,
@@ -45,6 +48,14 @@ export function AdminCommunicationWhatsappTemplatesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  // Create / Edit Template State
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingTemplate, setEditingTemplate] = useState<any | null>(null);
+  const [formTitle, setFormTitle] = useState('');
+  const [formCategory, setFormCategory] = useState('');
+  const [formTrigger, setFormTrigger] = useState('');
+  const [formBody, setFormBody] = useState('');
+
   const showToast = (message: string) => {
     if (toastTimeoutRef.current !== null) window.clearTimeout(toastTimeoutRef.current);
     setToast(message);
@@ -54,12 +65,27 @@ export function AdminCommunicationWhatsappTemplatesPage() {
     }, 3000);
   };
 
+  const getTemplateLabel = (tmpl: any) => {
+    try {
+      const translated = t(tmpl.labelKey);
+      return translated && !translated.startsWith('ADMIN_COMMUNICATION') ? translated : tmpl.labelKey;
+    } catch {
+      return tmpl.labelKey;
+    }
+  };
+
   const handleTest = () => {
     if (!isAdminCommunicationPhoneNumberValid(testPhone)) {
       showToast(t('WHATSAPP_TEST_PHONE_INVALID'));
       return;
     }
-    showToast(t('WHATSAPP_TEST_NOT_SENT'));
+    const activeTemplate = templates.find((tmpl) => tmpl.id === activeId) || templates[0];
+    const previewMessage = formatPreview(activeTemplate.body);
+    const waUrl = `https://wa.me/91${testPhone}?text=${encodeURIComponent(previewMessage)}`;
+    if (typeof window !== 'undefined') {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }
+    showToast(`Test dispatch opened in WhatsApp Web for +91 ${testPhone}`);
     setShowTest(false);
   };
 
@@ -75,6 +101,60 @@ export function AdminCommunicationWhatsappTemplatesPage() {
   const openTestForTemplate = (id: string) => {
     setActiveId(id);
     setShowTest(true);
+  };
+
+  const openCreateTemplate = () => {
+    setEditingTemplate(null);
+    setFormTitle('');
+    setFormCategory('Announcements');
+    setFormTrigger('Manual notification or event trigger');
+    setFormBody('Hello {name},\n\nThis is an official communication regarding your seat {seat} at {libraryname}.\n\nThank you,\nAdministration');
+    setShowEditModal(true);
+  };
+
+  const openEditTemplate = (tmpl: any) => {
+    setEditingTemplate(tmpl);
+    setFormTitle(getTemplateLabel(tmpl));
+    setFormCategory(tmpl.category || 'General');
+    setFormTrigger(tmpl.triggerEvent || '');
+    setFormBody(tmpl.body);
+    setShowEditModal(true);
+  };
+
+  const handleSaveTemplate = () => {
+    if (!formTitle.trim() || !formBody.trim()) {
+      showToast('Template title and body are required');
+      return;
+    }
+    if (editingTemplate) {
+      setTemplates((prev) =>
+        prev.map((tmpl) =>
+          tmpl.id === editingTemplate.id
+            ? {
+                ...tmpl,
+                labelKey: formTitle as any,
+                category: formCategory.trim() || 'General',
+                triggerEvent: formTrigger.trim(),
+                body: formBody.trim(),
+              }
+            : tmpl
+        )
+      );
+      showToast(`Template "${formTitle}" updated successfully`);
+    } else {
+      const newId = `custom_${Date.now()}`;
+      const newTmpl = {
+        id: newId as any,
+        labelKey: formTitle as any,
+        icon: '💬',
+        category: formCategory.trim() || 'General',
+        triggerEvent: formTrigger.trim(),
+        body: formBody.trim(),
+      };
+      setTemplates((prev) => [newTmpl, ...prev]);
+      showToast(`Template "${formTitle}" created successfully`);
+    }
+    setShowEditModal(false);
   };
 
   const formatPreview = (rawBody: string) => {
@@ -101,15 +181,17 @@ export function AdminCommunicationWhatsappTemplatesPage() {
   const filteredTemplates = useMemo(() => {
     return templates.filter((tmpl) => {
       const matchesCategory = selectedCategory === 'ALL' || tmpl.category === selectedCategory;
+      const label = getTemplateLabel(tmpl).toLowerCase();
+      const q = searchQuery.trim().toLowerCase();
       const matchesSearch =
-        searchQuery.trim() === '' ||
-        tmpl.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        t(tmpl.labelKey).toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tmpl.body.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (tmpl.triggerEvent && tmpl.triggerEvent.toLowerCase().includes(searchQuery.toLowerCase()));
+        q === '' ||
+        tmpl.id.toLowerCase().includes(q) ||
+        label.includes(q) ||
+        tmpl.body.toLowerCase().includes(q) ||
+        (tmpl.triggerEvent && tmpl.triggerEvent.toLowerCase().includes(q));
       return matchesCategory && matchesSearch;
     });
-  }, [templates, selectedCategory, searchQuery, t]);
+  }, [templates, selectedCategory, searchQuery]);
 
   return (
     <div className="min-w-0 space-y-6">
@@ -192,6 +274,124 @@ export function AdminCommunicationWhatsappTemplatesPage() {
         </Dialog>
       )}
 
+      {/* Create / Edit Template Modal */}
+      {showEditModal && (
+        <Dialog open onOpenChange={setShowEditModal}>
+          <DialogContent className="relative w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <DialogTitle className="text-base font-bold text-white flex items-center gap-2">
+                <MessageSquare size={16} className="text-emerald-400" />
+                <span>{editingTemplate ? 'Edit WhatsApp Template' : 'Create WhatsApp Template'}</span>
+              </DialogTitle>
+              <button
+                type="button"
+                onClick={() => setShowEditModal(false)}
+                className="rounded-xl p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white"
+                aria-label="Close"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <DialogDescription className="text-xs text-slate-400">
+              Customize WhatsApp communication template text and dynamic replacement variables.
+            </DialogDescription>
+            <div className="space-y-3.5">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                  Template Title
+                </label>
+                <input
+                  type="text"
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                  placeholder="e.g. Fee Due Notice, Seat Expiry Warning"
+                  value={formTitle}
+                  onChange={(e) => setFormTitle(e.target.value)}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                    Category
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                    placeholder="e.g. Finance, Announcements"
+                    value={formCategory}
+                    onChange={(e) => setFormCategory(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">
+                    Trigger Event
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                    placeholder="e.g. 3 days before expiry"
+                    value={formTrigger}
+                    onChange={(e) => setFormTrigger(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                    Template Body
+                  </label>
+                  <span className="text-[11px] font-mono text-slate-400">
+                    {formBody.length} / {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS} chars
+                  </span>
+                </div>
+                <textarea
+                  rows={6}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/70 p-3 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none font-sans leading-relaxed resize-none"
+                  placeholder="Write your template message. Use tokens like {name}, {seat}, {duedate}..."
+                  value={formBody}
+                  onChange={(e) => setFormBody(e.target.value)}
+                />
+              </div>
+              {/* Available Variables Token Pills */}
+              <div>
+                <span className="block text-[11px] font-medium text-slate-400 mb-1.5">
+                  Click token to insert:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES.map((v) => (
+                    <button
+                      key={v.token}
+                      type="button"
+                      onClick={() => setFormBody((prev) => `${prev} ${v.token}`)}
+                      className="rounded-lg border border-slate-700 bg-slate-800/80 px-2 py-0.5 text-[11px] font-mono text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-500/40 transition-colors"
+                      title={v.description}
+                    >
+                      {v.token}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-2 border-t border-slate-800 pt-3">
+              <button
+                type="button"
+                onClick={() => setShowEditModal(false)}
+                className="rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveTemplate}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-500"
+              >
+                <CheckCircle2 size={13} />
+                <span>{editingTemplate ? 'Save Changes' : 'Create Template'}</span>
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -209,6 +409,15 @@ export function AdminCommunicationWhatsappTemplatesPage() {
             <ShieldCheck size={14} />
             <span>Official Admin Templates</span>
           </span>
+          <button
+            type="button"
+            data-testid="admin_communication-add-template-btn"
+            onClick={openCreateTemplate}
+            className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-lg shadow-emerald-600/20 hover:bg-emerald-500 transition-all cursor-pointer"
+          >
+            <Plus size={14} />
+            <span>New Template</span>
+          </button>
         </div>
       </div>
 
@@ -412,6 +621,16 @@ export function AdminCommunicationWhatsappTemplatesPage() {
                 </button>
 
                 <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    data-testid={`admin_communication-edit-template-${template.id}`}
+                    onClick={() => openEditTemplate(template)}
+                    className="inline-flex items-center gap-1 rounded-xl border border-slate-700 bg-slate-800/80 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
+                    title="Edit Template"
+                  >
+                    <Edit2 size={12} />
+                    <span>Edit</span>
+                  </button>
                   <button
                     type="button"
                     onClick={() => openTestForTemplate(template.id)}

@@ -26,6 +26,8 @@ import {
   ShieldCheck,
   CheckCheck,
   RotateCcw,
+  Download,
+  FileSpreadsheet,
 } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
@@ -134,6 +136,9 @@ export function AdminCommunicationWhatsappLogsPage() {
   const [dateTo, setDateTo] = useAdminApplicationInfrastructureUrlQueryState<string>('dateTo', '');
   const [viewLog, setViewLog] = useState<AdminCommunicationWhatsappLog | null>(null);
   const [toast, setToast] = useState('');
+  const [logsList, setLogsList] = useState<AdminCommunicationWhatsappLog[]>(
+    isDemoMode ? ADMIN_COMMUNICATION_WHATSAPP_LOGS_FIXTURES : []
+  );
 
   const showToast = (message: string) => {
     setToast(message);
@@ -149,7 +154,35 @@ export function AdminCommunicationWhatsappLogsPage() {
     }
   };
 
-  const filtered = filterAdminCommunicationWhatsappLogs(isDemoMode ? ADMIN_COMMUNICATION_WHATSAPP_LOGS_FIXTURES : [], {
+  const handleRetry = (logId: string) => {
+    setLogsList((prev) =>
+      prev.map((log) =>
+        log.id === logId
+          ? {
+              ...log,
+              status: 'Sent' as const,
+              error: undefined,
+              dateTime: new Date().toISOString().replace('T', ' ').slice(0, 19),
+            }
+          : log
+      )
+    );
+    if (viewLog && viewLog.id === logId) {
+      setViewLog((prev) =>
+        prev
+          ? {
+              ...prev,
+              status: 'Sent',
+              error: undefined,
+              dateTime: new Date().toISOString().replace('T', ' ').slice(0, 19),
+            }
+          : null
+      );
+    }
+    showToast(`Message #${logId} queued for retry & sent successfully`);
+  };
+
+  const filtered = filterAdminCommunicationWhatsappLogs(logsList, {
     type: typeFilter as 'All' | AdminCommunicationWhatsappLog['type'],
     status: statusFilter as 'All' | AdminCommunicationWhatsappLog['status'],
     search,
@@ -167,6 +200,105 @@ export function AdminCommunicationWhatsappLogsPage() {
         selectedBranch.name.toLowerCase().includes(log.branch.toLowerCase())
     );
   }, [filtered, isAllBranches, selectedBranch]);
+
+  const handleExportCsv = () => {
+    if (visibleLogs.length === 0) {
+      showToast('No logs to export');
+      return;
+    }
+    const headers = [
+      'Log ID',
+      'Date & Time',
+      'Student Name',
+      'Mobile Number',
+      'Branch',
+      'Message Type',
+      'Status',
+      'Error Reason',
+      'Message Content',
+    ];
+    const rows = visibleLogs.map((log) => [
+      `#WA-LOG-00${log.id}`,
+      `"${log.dateTime}"`,
+      `"${log.student.replace(/"/g, '""')}"`,
+      `"${log.phone}"`,
+      `"${(log.branch || 'Downtown').replace(/"/g, '""')}"`,
+      `"${log.type}"`,
+      `"${log.status}"`,
+      `"${(log.error || '').replace(/"/g, '""')}"`,
+      `"${log.message.replace(/"/g, '""').replace(/\n/g, ' ')}"`,
+    ]);
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `admin-whatsapp-delivery-logs-${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showToast(`Exported ${visibleLogs.length} WhatsApp logs to CSV`);
+  };
+
+  const handleExportExcel = () => {
+    if (visibleLogs.length === 0) {
+      showToast('No logs to export');
+      return;
+    }
+    const tableRows = visibleLogs
+      .map(
+        (log) => `
+      <tr>
+        <td style="padding:6px;border:1px solid #ccc;font-family:monospace;">#WA-LOG-00${log.id}</td>
+        <td style="padding:6px;border:1px solid #ccc;">${log.dateTime}</td>
+        <td style="padding:6px;border:1px solid #ccc;font-weight:bold;">${log.student}</td>
+        <td style="padding:6px;border:1px solid #ccc;font-family:monospace;">${log.phone}</td>
+        <td style="padding:6px;border:1px solid #ccc;">${log.branch || 'Downtown'}</td>
+        <td style="padding:6px;border:1px solid #ccc;">${log.type}</td>
+        <td style="padding:6px;border:1px solid #ccc;font-weight:bold;">${log.status}</td>
+        <td style="padding:6px;border:1px solid #ccc;color:#c00;">${log.error || '—'}</td>
+        <td style="padding:6px;border:1px solid #ccc;">${log.message.replace(/\n/g, '<br/>')}</td>
+      </tr>`
+      )
+      .join('');
+
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="utf-8"/><title>WhatsApp Delivery Logs Report</title></head>
+        <body>
+          <h2>Smart Library - WhatsApp Delivery Audit Logs</h2>
+          <p>Generated: ${new Date().toLocaleString('en-IN')}</p>
+          <table border="1" style="border-collapse:collapse;font-family:sans-serif;font-size:12px;">
+            <thead>
+              <tr style="background-color:#0d9488;color:#ffffff;font-weight:bold;text-align:left;">
+                <th style="padding:8px;border:1px solid #ccc;">Log ID</th>
+                <th style="padding:8px;border:1px solid #ccc;">Date & Time</th>
+                <th style="padding:8px;border:1px solid #ccc;">Student Name</th>
+                <th style="padding:8px;border:1px solid #ccc;">Mobile Number</th>
+                <th style="padding:8px;border:1px solid #ccc;">Branch</th>
+                <th style="padding:8px;border:1px solid #ccc;">Type</th>
+                <th style="padding:8px;border:1px solid #ccc;">Status</th>
+                <th style="padding:8px;border:1px solid #ccc;">Error Reason</th>
+                <th style="padding:8px;border:1px solid #ccc;">Message Content</th>
+              </tr>
+            </thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+        </body>
+      </html>`;
+
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `admin-whatsapp-delivery-logs-${new Date().toISOString().slice(0, 10)}.xls`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showToast(`Exported ${visibleLogs.length} WhatsApp logs to Excel`);
+  };
 
   const hasActiveFilters = typeFilter !== 'All' || statusFilter !== 'All' || search.trim() !== '' || dateFrom !== '' || dateTo !== '';
 
@@ -326,10 +458,10 @@ export function AdminCommunicationWhatsappLogsPage() {
     },
     {
       headerName: t('WHATSAPP_COLUMN_ACTIONS'),
-      width: 85,
+      width: 120,
       sortable: false,
       cellRenderer: (params: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
-        <div className="h-full flex items-center justify-center">
+        <div className="h-full flex items-center justify-center gap-1.5">
           <button
             data-testid={`admin_communication-whatsapp-view-${params.data.id}`}
             type="button"
@@ -340,6 +472,18 @@ export function AdminCommunicationWhatsappLogsPage() {
           >
             <Eye size={15} strokeWidth={2.2} />
           </button>
+          {params.data.status === 'Failed' && (
+            <button
+              data-testid={`admin_communication-whatsapp-retry-${params.data.id}`}
+              type="button"
+              onClick={() => handleRetry(params.data.id)}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:border-amber-500/50 hover:text-white transition-all cursor-pointer shadow-xs"
+              title="Retry / Resend failed message"
+              aria-label="Retry dispatch"
+            >
+              <RotateCcw size={14} strokeWidth={2.2} />
+            </button>
+          )}
         </div>
       ),
     },

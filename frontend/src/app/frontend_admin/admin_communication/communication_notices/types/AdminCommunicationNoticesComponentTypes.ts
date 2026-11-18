@@ -16,6 +16,7 @@ export interface Notice {
   validTill: string; postedBy: string; postedDate: string;
   status: AdminCommunicationNoticesStatus;
   targetBranch?: string;
+  channels?: Array<'whatsapp' | 'email' | 'sms'>;
 }
 
 export interface AdminCommunicationNoticesHarnessProps {
