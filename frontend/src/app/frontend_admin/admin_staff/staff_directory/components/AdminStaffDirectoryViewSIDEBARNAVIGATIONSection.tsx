@@ -7,7 +7,7 @@ import AdminStaffDirectoryAuditSection from '@/app/frontend_admin/admin_staff/st
 import AdminStaffDirectoryDetailLogsSection from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryDetailLogsSection';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useMemo, useState } from 'react';
-import { Eye, ExternalLink, MoreVertical, Search, ArrowUpDown, ArrowUp, ArrowDown, Users, UserCheck, UserX, AlertCircle } from 'lucide-react';
+import { Eye, MoreVertical, Search, ArrowUpDown, ArrowUp, ArrowDown, Users, UserCheck, UserX, AlertCircle } from 'lucide-react';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import type { AdminStaffDirectoryManager, AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import { ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
@@ -252,12 +252,6 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
           );
   };
 
-  const handleOpenDesk = (branchName: string) => {
-    const branchParam = encodeURIComponent(branchName);
-          const popup = window.open(`/frontend_manager/manager_dashboard/dashboard_overview?branch=${branchParam}`, '_blank', 'noopener,noreferrer');
-          if (popup) popup.opener = null;
-  };
-
           const tableContent = (
           <div>
             <div className="p-4 border-b border-border flex flex-wrap items-center justify-between gap-3">
@@ -287,7 +281,6 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
                       <dl className="mt-3 grid grid-cols-1 gap-2 text-sm"><div><dt className="text-text-secondary">{t('TABLE_CONTACT')}</dt><dd className="break-words">{maskAdminStaffDirectoryEmail(manager.email)} · {maskAdminStaffDirectoryPhone(manager.phone)}</dd></div><div><dt className="text-text-secondary">{t('TABLE_BRANCH')}</dt><dd>{manager.branch}</dd></div><div><dt className="text-text-secondary">{t('TABLE_LAST_ACTIVE')}</dt><dd>{getAdminStaffDirectoryLastActiveLabel(manager.lastActive, t)}</dd></div></dl>
                       <div className="mt-3 flex flex-wrap gap-2">
                         <button type="button" className="min-h-11 rounded-md border border-border px-3 text-sm font-medium" onClick={() => onSelectManager(manager)}>{t('VIEW_MANAGER', { name: manager.name })}</button>
-                        <button type="button" className="inline-flex min-h-11 items-center gap-1.5 rounded-md border border-border bg-primary-subtle px-3 text-xs font-semibold text-primary hover:bg-surface-hover" onClick={() => handleOpenDesk(manager.branch)} title={t('OPEN_MANAGER_DESK_TOOLTIP', { branch: manager.branch })}><ExternalLink size={14} />{t('OPEN_MANAGER_DESK')}</button>
                         <button type="button" disabled aria-describedby={`admin-staff-users-row-actions-help-mobile-${manager.id}`} className="min-h-11 rounded-md px-3 text-text-disabled">{t('TABLE_ACTIONS')}</button>
                       </div>
                       <p id={`admin-staff-users-row-actions-help-mobile-${manager.id}`} className="mt-1 text-xs text-text-secondary">{t('ROW_ACTIONS_BLOCKED')}</p>
@@ -317,7 +310,6 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
                         <td className="px-4 py-3">{getAdminStaffDirectoryLastActiveLabel(manager.lastActive, t)}</td>
                         <td className="px-4 py-3"><span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES[manager.status]}`}>{({ Active: t('STATUS_ACTIVE'), Suspended: t('STATUS_SUSPENDED'), Deactivated: t('STATUS_DEACTIVATED') } as const)[manager.status]}</span></td>
                           <td className="px-4 py-3"><div className="flex justify-end items-center gap-1.5">
-                            <button type="button" aria-label={t('OPEN_MANAGER_DESK_TOOLTIP', { branch: manager.branch })} title={t('OPEN_MANAGER_DESK_TOOLTIP', { branch: manager.branch })} className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold text-primary bg-primary/10 border border-primary/20 hover:bg-primary/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all" onClick={() => handleOpenDesk(manager.branch)}><ExternalLink size={14} /><span>{t('OPEN_MANAGER_DESK')}</span></button>
                             <button type="button" aria-label={t('VIEW_MANAGER', { name: manager.name })} className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all" onClick={() => onSelectManager(manager)}><Eye size={16} strokeWidth={2} /></button>
                             <button type="button" aria-label={t('ROW_ACTIONS', { name: manager.name })} title={t('ROW_ACTIONS_BLOCKED')} disabled aria-describedby="admin-staff-users-row-actions-help" className="min-h-9 min-w-9 inline-flex items-center justify-center cursor-not-allowed rounded-lg text-text-disabled"><MoreVertical size={16} strokeWidth={2} /></button>
                           </div></td>
