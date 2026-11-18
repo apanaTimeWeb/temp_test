@@ -7,6 +7,7 @@ import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/ap
 
 const SUBMODULE_NAVIGATION = [
   { href: ADMIN_ROUTES.SETTINGS_PROFILE, labelKey: 'SUBMODULE_SETTINGS_PROFILE' },
+  { href: ADMIN_ROUTES.SETTINGS_SECURITY, labelKey: 'SUBMODULE_SETTINGS_SECURITY' },
   { href: ADMIN_ROUTES.SETTINGS_SUPPORT, labelKey: 'SUBMODULE_SETTINGS_SUPPORT' },
 ] as const;
 

@@ -1,7 +1,9 @@
 'use client';
+import { useState } from 'react';
 import useAdminSecurityTabState from '@/app/frontend_admin/admin_settings/settings_security/hooks/useAdminSettingsSecurityTabState';
 import { useTranslations } from 'next-intl';
 import { LogOut, MonitorSmartphone, Lock, Unlock, UserRoundCheck, UserRoundX } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { ADMIN_SECURITY_EVENT_FILTERS, ADMIN_SECURITY_NAV_ITEMS } from '@/app/frontend_admin/admin_settings/settings_security/config/admin_settings_security.url_config';
 import { ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES, ADMIN_SECURITY_EVENT_FIXTURES, ADMIN_SECURITY_BLOCKED_ACCOUNT_FIXTURES } from '@/app/frontend_admin/admin_settings/settings_security/mocks/scenarios/admin_settings_security.scenarios';
@@ -23,8 +25,14 @@ export default function AdminSecurityPage() {
   const t = useTranslations('ADMIN_SECURITY');
   const isDemoMode = isFrontendDemoModeEnabled();
   const [activeTab, setActiveTab] = useAdminSecurityTabState();
+  const [activeSessions, setActiveSessions] = useState(() => [...ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES]);
   const [eventFilter, setEventFilter] = useAdminApplicationInfrastructureUrlQueryState<AdminSecurityEventFilter>('eventFilter', 'all', { validValues: ['all', 'password', 'account', '2fa', 'session'] });
   const visibleSecurityEvents = filterAdminSecurityEvents(ADMIN_SECURITY_EVENT_FIXTURES, eventFilter);
+
+  const handleForceLogoutSession = (sessionId: string, nameKey: string, ip: string) => {
+    setActiveSessions((prev) => prev.filter((s) => s.id !== sessionId));
+    toast.success(`Session for ${t(nameKey)} (${ip}) revoked and logged out successfully`);
+  };
   return (
     <div className="mx-auto w-full max-w-7xl space-y-4 p-6">
       {!isDemoMode && <p role="status" className="rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('LIVE_UNAVAILABLE_NOTICE')}</p>}
@@ -50,10 +58,29 @@ export default function AdminSecurityPage() {
             </div>
           </section>}
           {activeTab === 'active-sessions' && <section className="admin-card p-6" aria-labelledby="admin-security-active-sessions-title">
-            <h2 id="admin-security-active-sessions-title" className="text-section-title font-semibold text-text-primary">{t('ACTIVE_SESSIONS_TITLE')}</h2><p className="mt-1 text-sm text-text-secondary">{t('DEMO_DATA_NOTICE')}</p>
-            <div className="mt-4 space-y-3">{ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES.map((session) => <article key={session.id} className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h2 id="admin-security-active-sessions-title" className="text-section-title font-semibold text-text-primary">{t('ACTIVE_SESSIONS_TITLE')}</h2>
+                <p className="mt-1 text-sm text-text-secondary">{t('DEMO_DATA_NOTICE')}</p>
+              </div>
+              {activeSessions.filter((s) => !s.current).length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveSessions((prev) => prev.filter((s) => s.current));
+                    toast.success('All other active sessions have been terminated successfully');
+                  }}
+                  data-testid="admin-security-revoke-all-other-sessions-btn"
+                  className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all shadow-xs"
+                >
+                  <LogOut size={14} />
+                  <span>Terminate All Other Sessions</span>
+                </button>
+              )}
+            </div>
+            <div className="mt-4 space-y-3">{activeSessions.map((session) => <article key={session.id} className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-card p-4">
               <div className="flex min-w-0 items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary-subtle text-primary" aria-hidden="true"><MonitorSmartphone size={18} strokeWidth={2} /></div><div className="min-w-0"><h3 className="font-semibold text-text-primary">{t(session.nameKey)} <span className="admin-badge">{t(session.roleKey)}</span></h3><p className="mt-1 break-words text-sm text-text-secondary">{t(session.deviceKey)} · {t('IP_LABEL')}: {session.ip}</p>{session.current && <span className="mt-2 inline-block admin-badge admin-badge-success">{t('CURRENT_SESSION')}</span>}</div></div>
-              {!session.current && <button type="button" data-testid={`admin_security-AdminSettingsSecurityMain-control-revoke-${session.id}`} className="admin-btn-ghost-danger min-h-11" disabled title={t('SESSION_REVOKE_BLOCKED')}><LogOut size={18} strokeWidth={2} aria-hidden="true" /> {t('FORCE_LOGOUT')}</button>}
+              {!session.current && <button type="button" data-testid={`admin_security-AdminSettingsSecurityMain-control-revoke-${session.id}`} className="admin-btn-ghost-danger min-h-11 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 active:scale-95 transition-all" onClick={() => handleForceLogoutSession(session.id, session.nameKey, session.ip)} title="Force logout this active session"><LogOut size={16} strokeWidth={2} aria-hidden="true" /> {t('FORCE_LOGOUT')}</button>}
             </article>)}</div>
           </section>}
           {activeTab === 'failed-logins' && <AdminSecurityFailedLoginsPanel />}

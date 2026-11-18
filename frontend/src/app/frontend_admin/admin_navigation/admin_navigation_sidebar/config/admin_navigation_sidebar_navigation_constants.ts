@@ -26,6 +26,7 @@ import {
   DollarSign,
   Handshake,
   Shield,
+  ShieldAlert,
   ShieldCheck,
   Wallet,
   FileText,
@@ -173,7 +174,8 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
     label: 'Settings',
     icon: Settings,
     submodules: [
-      { href: ADMIN_ROUTES.SETTINGS_PROFILE, icon: UserCheck, label: 'Profile & Security', labelKey: 'SUBMODULE_SETTINGS_PROFILE' },
+      { href: ADMIN_ROUTES.SETTINGS_PROFILE, icon: UserCheck, label: 'Profile & Branches', labelKey: 'SUBMODULE_SETTINGS_PROFILE' },
+      { href: ADMIN_ROUTES.SETTINGS_SECURITY, icon: ShieldAlert, label: 'Security & Sessions', labelKey: 'SUBMODULE_SETTINGS_SECURITY' },
       { href: ADMIN_ROUTES.SETTINGS_SUPPORT, icon: LifeBuoy, label: 'Support', labelKey: 'SUBMODULE_SETTINGS_SUPPORT' },
     ],
   },

@@ -12,7 +12,6 @@ describe('security responsive panels', () => {
     rerender(<AdminSecurityDeviceSessionsPanel />);
     expect(screen.getAllByRole('article').length).toBeGreaterThan(0);
     expect(screen.getAllByRole('table').length).toBe(1);
-    expect(screen.getAllByRole('button', { name: 'REVOKE' }).every((button) => (button as HTMLButtonElement).disabled)).toBe(true);
-    expect(screen.getAllByText('SESSION_REVOKE_BLOCKED').length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('button', { name: 'REVOKE' }).every((button) => !(button as HTMLButtonElement).disabled)).toBe(true);
   });
 });

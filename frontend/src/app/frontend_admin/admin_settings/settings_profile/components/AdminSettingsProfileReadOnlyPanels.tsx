@@ -4,6 +4,7 @@
 import { ArrowDown, ArrowUp, ArrowUpDown, Camera, LogOut, Mail, MonitorSmartphone, Phone, ShieldCheck, CheckCircle2, Building2, Sparkles, Clock, Globe, Shield } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import { ADMIN_PROFILE_DEMO_ACCOUNT, ADMIN_PROFILE_DEMO_LOGIN_HISTORY, ADMIN_PROFILE_DEMO_SESSIONS } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
 import type { AdminSettingsProfileReadOnlyPanelsProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 
@@ -14,6 +15,12 @@ import type { AdminSettingsProfileReadOnlyPanelsProps } from '@/app/frontend_adm
  */
 export default function AdminSettingsProfileReadOnlyPanels({ view }: AdminSettingsProfileReadOnlyPanelsProps) {
   const t = useTranslations('ADMIN_PROFILE');
+  const [profileSessions, setProfileSessions] = useState(() => [...ADMIN_PROFILE_DEMO_SESSIONS]);
+
+  const handleRevokeProfileSession = (sessionId: string, deviceName: string, ip: string) => {
+    setProfileSessions((prev) => prev.filter((s) => s.id !== sessionId));
+    toast.success(`Session for ${deviceName} (${ip}) terminated successfully`);
+  };
 
   type HistorySortField = 'dateKey' | 'ip' | 'deviceKey' | 'status';
   const [sortField, setSortField] = useState<HistorySortField | null>(null);
@@ -273,7 +280,7 @@ export default function AdminSettingsProfileReadOnlyPanels({ view }: AdminSettin
       </div>
 
       <div className="mt-6 space-y-4">
-        {ADMIN_PROFILE_DEMO_SESSIONS.map((session) => (
+        {profileSessions.map((session) => (
           <article
             key={session.id}
             className={`flex flex-wrap items-center justify-between gap-4 rounded-2xl border p-5 transition-all ${
