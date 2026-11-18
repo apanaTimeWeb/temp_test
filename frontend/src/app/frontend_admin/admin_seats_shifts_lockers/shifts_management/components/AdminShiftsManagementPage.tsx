@@ -3,13 +3,38 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Download, Plus, Printer, Upload, Search, Building2, IndianRupee, Clock, CheckCircle2, Users, TrendingUp } from 'lucide-react';
+import { Download, Plus, Printer, Upload, Search, Building2, IndianRupee, Clock, CheckCircle2, Users, TrendingUp, Moon } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_SHIFTS_DEMO_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/mocks/scenarios/admin_shifts_management.scenarios';
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
 import { serializeAdminShiftsCsv } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/utils/AdminShiftsManagementCsvUtils';
 import { AdminShiftsManagementAddModal } from './AdminShiftsManagementAddModal';
+
+function getShiftDurationHours(startTime: string, endTime: string): number {
+  if (!startTime || !endTime) return 0;
+  const [sH, sM] = startTime.split(':').map(Number);
+  const [eH, eM] = endTime.split(':').map(Number);
+  let diff = (eH * 60 + eM) - (sH * 60 + sM);
+  if (diff <= 0) diff += 24 * 60;
+  return Math.round((diff / 60) * 10) / 10;
+}
+
+function isShiftOvernight(startTime: string, endTime: string): boolean {
+  if (!startTime || !endTime) return false;
+  const [sH, sM] = startTime.split(':').map(Number);
+  const [eH, eM] = endTime.split(':').map(Number);
+  return (eH * 60 + eM) <= (sH * 60 + sM);
+}
+
+function getBranchBadgeClass(branchName?: string): string {
+  if (!branchName) return 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400';
+  const lower = branchName.toLowerCase();
+  if (lower.includes('downtown')) return 'border-indigo-500/30 bg-indigo-500/10 text-indigo-400';
+  if (lower.includes('westside')) return 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400';
+  if (lower.includes('north')) return 'border-purple-500/30 bg-purple-500/10 text-purple-400';
+  return 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400';
+}
 
 /** Admin Shift overview and shift configuration. */
 export function AdminShiftsManagementPage() {
@@ -19,17 +44,33 @@ export function AdminShiftsManagementPage() {
   const [shifts, setShifts] = useState<AdminShiftsShift[]>(() => isDemoMode ? [...ADMIN_SHIFTS_DEMO_SHIFTS] : []);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
+  const [branchFilter, setBranchFilter] = useState<string>('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const visibleShifts = useMemo(() => {
     return shifts.filter((shift) => {
+      // Branch filter dropdown in page
+      if (branchFilter !== 'all') {
+        const sBranch = (shift.branchName || 'All Branches').toLowerCase();
+        const bTarget = branchFilter.toLowerCase();
+        if (bTarget === 'all branches') {
+          if (sBranch !== 'all branches') return false;
+        } else {
+          if (!sBranch.includes(bTarget) && !bTarget.includes(sBranch) && sBranch !== 'all branches') {
+            return false;
+          }
+        }
+      }
+
+      // Global context branch filter
       if (!isAllBranches && selectedBranch) {
-        if (shift.branchName) {
+        if (shift.branchName && shift.branchName !== 'All Branches') {
           const sName = selectedBranch.name.toLowerCase();
           const bName = shift.branchName.toLowerCase();
           if (!sName.includes(bName) && !bName.includes(sName)) return false;
         }
       }
+
       if (statusFilter === 'active' && !shift.active) return false;
       if (statusFilter === 'inactive' && shift.active) return false;
       if (searchQuery.trim()) {
@@ -41,7 +82,7 @@ export function AdminShiftsManagementPage() {
       }
       return true;
     });
-  }, [shifts, isAllBranches, selectedBranch, statusFilter, searchQuery]);
+  }, [shifts, isAllBranches, selectedBranch, statusFilter, branchFilter, searchQuery]);
 
   const shiftStats = useMemo(() => {
     const total = visibleShifts.length;
@@ -81,7 +122,7 @@ export function AdminShiftsManagementPage() {
           <button
             type="button"
             data-testid="admin_shifts-page-control-add-shift"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground motion-safe:transition-colors motion-safe:duration-base hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-sm"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground motion-safe:transition-colors motion-safe:duration-base hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-sm cursor-pointer"
             onClick={() => setIsAddModalOpen(true)}
           >
             <Plus size={18} strokeWidth={2} /> Add Shift
@@ -98,7 +139,7 @@ export function AdminShiftsManagementPage() {
           <button
             type="button"
             data-testid="admin_shifts-page-control-002"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-3 py-2 font-medium text-primary motion-safe:transition-colors motion-safe:duration-base hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 justify-start"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-3 py-2 font-medium text-primary motion-safe:transition-colors motion-safe:duration-base hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 justify-start cursor-pointer"
             disabled={!isDemoMode}
             title={!isDemoMode ? t('liveShiftNotice') : undefined}
             onClick={exportCsv}
@@ -108,7 +149,7 @@ export function AdminShiftsManagementPage() {
           <button
             type="button"
             data-testid="admin_shifts-page-control-003"
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-3 py-2 font-medium text-primary motion-safe:transition-colors motion-safe:duration-base hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 justify-start"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-3 py-2 font-medium text-primary motion-safe:transition-colors motion-safe:duration-base hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 justify-start cursor-pointer"
             disabled={!isDemoMode}
             title={!isDemoMode ? t('liveShiftNotice') : undefined}
             onClick={() => window.print()}
@@ -177,7 +218,7 @@ export function AdminShiftsManagementPage() {
         </div>
       </div>
 
-      {/* Search and Filters Bar */}
+      {/* Search and Filters Bar with In-Page Branch Selector */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-border bg-card p-4 shadow-xs">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -189,21 +230,42 @@ export function AdminShiftsManagementPage() {
             className="w-full rounded-md border border-border bg-input pl-9 pr-3 py-2 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           />
         </div>
-        <div className="flex items-center gap-2 overflow-x-auto">
-          {(['all', 'active', 'inactive'] as const).map((filter) => (
-            <button
-              key={filter}
-              type="button"
-              onClick={() => setStatusFilter(filter)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium uppercase tracking-wider transition-colors ${
-                statusFilter === filter
-                  ? 'bg-primary text-primary-foreground font-semibold'
-                  : 'bg-surface-highlight text-muted-foreground hover:text-foreground'
-              }`}
+
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Branch Filter Dropdown */}
+          <div className="flex items-center gap-1.5 rounded-lg border border-border bg-surface-highlight px-2.5 py-1.5">
+            <Building2 size={13} className="text-primary shrink-0" />
+            <select
+              value={branchFilter}
+              onChange={(e) => setBranchFilter(e.target.value)}
+              className="bg-transparent text-xs text-foreground focus:outline-none cursor-pointer font-medium"
+              aria-label="Filter shifts by branch"
             >
-              {filter === 'all' ? 'All Shifts' : filter === 'active' ? 'Active' : 'Inactive'}
-            </button>
-          ))}
+              <option value="all" className="bg-card text-foreground">All Branches (Global & Local)</option>
+              <option value="All Branches" className="bg-card text-foreground">Global Network Only</option>
+              <option value="Downtown Central" className="bg-card text-foreground">Downtown Central (24 Desks)</option>
+              <option value="Westside Branch" className="bg-card text-foreground">Westside Branch (12 Desks)</option>
+              <option value="North Hub" className="bg-card text-foreground">North Hub (12 Desks)</option>
+            </select>
+          </div>
+
+          {/* Status Filter Buttons */}
+          <div className="flex items-center gap-1">
+            {(['all', 'active', 'inactive'] as const).map((filter) => (
+              <button
+                key={filter}
+                type="button"
+                onClick={() => setStatusFilter(filter)}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium uppercase tracking-wider transition-colors cursor-pointer ${
+                  statusFilter === filter
+                    ? 'bg-primary text-primary-foreground font-semibold'
+                    : 'bg-surface-highlight text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {filter === 'all' ? 'All Shifts' : filter === 'active' ? 'Active' : 'Inactive'}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -215,50 +277,73 @@ export function AdminShiftsManagementPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {visibleShifts.map((shift) => (
-            <div key={shift.id} className={`min-w-0 rounded-xl border border-border bg-card p-4${!shift.active ? ' min-w-0 rounded-xl border border-border bg-card p-4' : ''}`}>
-              <div className="space-y-4 p-4">
-                <div className="flex items-start justify-between gap-3 border-b border-border p-4">
-                  <h2 className="text-section-title font-semibold text-text-primary">{shift.name}</h2>
-                  <div className="flex items-center gap-2">
+          {visibleShifts.map((shift) => {
+            const duration = getShiftDurationHours(shift.startTime, shift.endTime);
+            const overnight = isShiftOvernight(shift.startTime, shift.endTime);
+            const branchBadgeClass = getBranchBadgeClass(shift.branchName);
+
+            return (
+              <div key={shift.id} className={`min-w-0 rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/40${!shift.active ? ' opacity-75' : ''}`}>
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between gap-3 border-b border-border pb-3">
+                    <div>
+                      <h2 className="text-base font-bold text-text-primary">{shift.name}</h2>
+                      <div className="flex items-center gap-1.5 mt-1">
+                        {shift.branchName && (
+                          <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[11px] font-semibold ${branchBadgeClass}`}>
+                            <Building2 size={11} className="shrink-0" />
+                            <span>{shift.branchName}</span>
+                          </span>
+                        )}
+                        {overnight && (
+                          <span className="inline-flex items-center gap-0.5 rounded-md border border-purple-500/30 bg-purple-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-purple-300">
+                            <Moon size={10} /> Overnight
+                          </span>
+                        )}
+                      </div>
+                    </div>
                     <span
                       data-testid="admin_shifts-page-state-008"
-                      className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs font-medium ${shift.active ? 'border-success-text bg-success-bg text-success-text' : 'border-border bg-surface-highlight text-text-secondary'}`}
+                      className={`inline-flex min-h-6 items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium ${shift.active ? 'border-success-text bg-success-bg text-success-text' : 'border-border bg-surface-highlight text-text-secondary'}`}
                     >
                       {shift.active ? t('activeStatus') : t('inactiveStatus')}
                     </span>
-                    {shift.branchName && (
-                      <span className="inline-flex items-center gap-1 rounded-md border border-border bg-surface-highlight px-2 py-0.5 text-xs font-medium text-text-primary">
-                        <Building2 size={12} className="text-primary shrink-0" />
-                        <span>{shift.branchName}</span>
-                      </span>
-                    )}
                   </div>
-                </div>
-                <div className="flex items-center justify-between gap-2 rounded-lg bg-surface-highlight p-3">
-                  <p className="text-xs sm:text-sm font-medium text-text-primary">
-                    {shift.startTime} → {shift.endTime}
-                  </p>
-                  <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1 text-xs font-bold text-primary shadow-xs">
-                    <IndianRupee size={12} />
-                    <span>{shift.monthlyPrice ?? 700} / mo</span>
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                  <div>
-                    <p className="text-xs text-text-secondary">{t('occupancy')}</p>
-                    <p className="text-sm font-semibold tabular-nums text-text-primary">
-                      {t('studentsCount', { count: shift.occupancy })}
-                      <span className="font-mono text-xs text-text-secondary"> / {shift.capacity}</span>
-                    </p>
+
+                  <div className="flex items-center justify-between gap-2 rounded-lg bg-surface-highlight p-3">
+                    <div>
+                      <p className="text-xs sm:text-sm font-semibold text-text-primary flex items-center gap-1.5">
+                        <Clock size={13} className="text-primary" />
+                        <span>{shift.startTime} → {shift.endTime}</span>
+                      </p>
+                      <p className="text-[11px] text-text-secondary font-mono mt-0.5">
+                        {duration} Hours Duration
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1 text-xs font-bold text-primary shadow-xs">
+                      <IndianRupee size={12} />
+                      <span>{shift.monthlyPrice ?? 700} / mo</span>
+                    </span>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-surface-highlight">
-                    <div className={`h-full rounded-full bg-primary motion-safe:transition-[width] motion-safe:duration-base admin-dynamic-width-${Math.min(100, Math.max(0, Math.round((shift.occupancy / Math.max(1, shift.capacity)) * 100)))}`} />
+
+                  <div className="flex items-center justify-between gap-2 pt-1">
+                    <div>
+                      <p className="text-xs text-text-secondary">{t('occupancy')}</p>
+                      <p className="text-sm font-semibold tabular-nums text-text-primary">
+                        {t('studentsCount', { count: shift.occupancy })}
+                        <span className="font-mono text-xs text-text-secondary"> / {shift.capacity} Desks</span>
+                      </p>
+                    </div>
+                    <div className="w-24 h-2 overflow-hidden rounded-full bg-surface-highlight">
+                      <div
+                        className={`h-full rounded-full bg-primary motion-safe:transition-[width] motion-safe:duration-base admin-dynamic-width-${Math.min(100, Math.max(0, Math.round((shift.occupancy / Math.max(1, shift.capacity)) * 100)))}`}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
