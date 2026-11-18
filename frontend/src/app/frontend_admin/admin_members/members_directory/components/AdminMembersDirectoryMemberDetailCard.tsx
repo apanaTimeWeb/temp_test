@@ -35,6 +35,14 @@ import {
   Key,
   TrendingUp,
   FileSpreadsheet,
+  Award,
+  CalendarCheck,
+  GraduationCap,
+  Layers,
+  Lock,
+  PauseCircle,
+  PhoneCall,
+  ExternalLink,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
@@ -45,12 +53,14 @@ interface AdminMembersDirectoryMemberDetailCardProps {
   detailTab: string;
   isDemoMode: boolean;
   onEdit?: (member: AdminMembersMember) => void;
+  onSelectTab?: (tab: string) => void;
 }
 
 export function AdminMembersDirectoryMemberDetailCard({
   member,
   detailTab,
   isDemoMode,
+  onSelectTab,
 }: AdminMembersDirectoryMemberDetailCardProps) {
   const t = useTranslations('ADMIN_MEMBERS');
   const locale = useLocale();
@@ -212,6 +222,14 @@ export function AdminMembersDirectoryMemberDetailCard({
 
         {/* Quick Utility Actions */}
         <div className="flex flex-wrap items-center gap-2">
+          <a
+            href={`tel:${member.phone.replace(/\D/g, '')}`}
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/15 px-3 py-1.5 text-xs font-semibold text-amber-400 hover:bg-amber-500/25 transition-all shadow-xs"
+            title={`Call ${member.name}`}
+          >
+            <PhoneCall size={14} className="text-amber-400" />
+            <span>Call</span>
+          </a>
           <button
             type="button"
             onClick={handleDirectWhatsApp}
@@ -254,7 +272,32 @@ export function AdminMembersDirectoryMemberDetailCard({
       {/* -------------------- 1. PROFILE TAB -------------------- */}
       {detailTab === 'profile' && (
         <div className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Active Leave / Membership Freeze Banner if On Leave or Suspended */}
+          {(member.status === 'Suspended' || member.status === 'Blocked') && (
+            <div className="p-4 rounded-xl bg-gradient-to-r from-cyan-950/70 via-cyan-900/50 to-[#0c0f28] border border-cyan-500/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 flex items-center justify-center shrink-0 mt-0.5">
+                  <PauseCircle size={22} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-bold text-cyan-200 text-sm">
+                      Membership Status: {status}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                      15 Days Notice Registered
+                    </span>
+                  </div>
+                  <p className="text-slate-300 mt-1">
+                    Student leave and examinations status noted at branch desk.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Core Identity & Access Overview 4-tile grid */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20">
                 <UserRound size={18} />
@@ -278,21 +321,6 @@ export function AdminMembersDirectoryMemberDetailCard({
             </div>
 
             <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                <Armchair size={18} />
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs uppercase font-medium text-text-secondary">Seat & Shift Allocation</p>
-                <p className="text-sm font-semibold text-text-primary mt-0.5">
-                  {member.seat ? `Seat: ${member.seat}` : 'Seat: Dedicated Desk A-01'}
-                </p>
-                <p className="text-xs text-text-secondary mt-0.5">
-                  Shift: {member.shift || 'General'} · Locker: {member.locker || 'L-02'}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 <IndianRupee size={18} />
               </div>
@@ -312,44 +340,265 @@ export function AdminMembersDirectoryMemberDetailCard({
                 <Building2 size={18} />
               </div>
               <div className="min-w-0">
-                <p className="text-xs uppercase font-medium text-text-secondary">Branch & Access Gate</p>
+                <p className="text-xs uppercase font-medium text-text-secondary">Branch & Gate</p>
                 <p className="text-sm font-semibold text-amber-400 mt-0.5">{member.branch || 'Downtown Central'}</p>
-                <p className="text-xs text-text-secondary mt-0.5">Turnstile Door 1 · RFID Enabled</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-3.5 shadow-sm">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20">
-                <ShieldCheck size={18} />
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs uppercase font-medium text-text-secondary">Identity Verification</p>
-                <p className="text-sm font-semibold text-teal-400 mt-0.5">KYC 100% Completed</p>
-                <p className="text-xs text-text-secondary mt-0.5">Aadhaar UID & Student ID Verified</p>
+                <p className="text-xs text-text-secondary mt-0.5">Turnstile 1 · RFID Active</p>
               </div>
             </div>
           </div>
 
-          {/* Academic & Emergency Details Box */}
-          <div className="rounded-xl border border-border bg-surface-muted/40 p-4 space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-text-secondary">Personal & Emergency Record</h3>
-            <div className="grid gap-3 sm:grid-cols-2 text-xs">
+          {/* Manager-Style 4 Extended Cards Grid: Seat, Monthly Attendance, Guardian, Academic Goal */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 min-w-0 w-full max-w-full">
+            {/* 1. Seat & Shift Allotment */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-card border border-border space-y-3 min-w-0 shadow-sm flex flex-col justify-between">
               <div>
-                <span className="text-text-muted">Guardian / Emergency Contact:</span>
-                <p className="font-semibold text-text-primary mt-0.5">Ramesh Doe (Parent) · +91 91234 56789</p>
+                <div className="flex items-center justify-between border-b border-border pb-2 gap-2 mb-3">
+                  <h4 className="font-bold text-primary flex items-center gap-2 text-sm truncate">
+                    <Armchair size={16} className="text-indigo-400 shrink-0" />
+                    <span className="truncate">Seat & Shift Allotment</span>
+                  </h4>
+                  <span className="font-mono text-xs font-bold text-indigo-300 bg-indigo-500/15 border border-indigo-500/30 px-2 py-0.5 rounded">
+                    {member.seat ? `Seat ${member.seat}` : 'Desk A-01'}
+                  </span>
+                </div>
+                <div className="space-y-2.5 text-xs">
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary flex items-center gap-1.5 shrink-0">
+                      <Armchair size={14} className="text-indigo-400" /> Assigned Seat:
+                    </span>
+                    <span className="font-bold text-primary bg-indigo-500/15 border border-indigo-500/30 px-2 py-0.5 rounded text-right truncate">
+                      {member.seat ? `Seat ${member.seat}` : 'Desk A-01'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary flex items-center gap-1.5 shrink-0">
+                      <Clock size={14} className="text-amber-400" /> Shift Timing:
+                    </span>
+                    <span className="font-semibold text-primary text-right truncate">
+                      {member.shift || 'Morning 08:00 AM - 02:00 PM'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary flex items-center gap-1.5 shrink-0">
+                      <Layers size={14} className="text-sky-400" /> Floor:
+                    </span>
+                    <span className="font-medium text-primary text-right truncate">
+                      1st Floor (Quiet Study Zone)
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary flex items-center gap-1.5 shrink-0">
+                      <Lock size={14} className="text-purple-400" /> Locker:
+                    </span>
+                    <span className="font-medium text-primary text-right truncate">
+                      {member.locker || 'Locker L-02'}
+                    </span>
+                  </div>
+                </div>
               </div>
+            </div>
+
+            {/* 2. Monthly Attendance & Consistency Card */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-card border border-border space-y-3 min-w-0 shadow-sm flex flex-col justify-between">
               <div>
-                <span className="text-text-muted">Preparation Stream / Course:</span>
-                <p className="font-semibold text-text-primary mt-0.5">UPSC Civil Services & State PSC Aspirant</p>
+                <div className="flex items-center justify-between border-b border-border pb-2 gap-2 mb-3">
+                  <h4 className="font-bold text-primary flex items-center gap-2 text-sm truncate">
+                    <CalendarCheck size={16} className="text-emerald-400 shrink-0" />
+                    <span className="truncate">Monthly Attendance</span>
+                  </h4>
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                    Nov 2026
+                  </span>
+                </div>
+                <div className="space-y-2.5 text-xs">
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Attendance Rate:</span>
+                    <span className="font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded text-right font-mono">
+                      92.3% Present
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Monthly Breakdown:</span>
+                    <span className="font-medium text-primary text-right truncate">24 P · 2 A · 1 L</span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Current Streak:</span>
+                    <span className="font-semibold text-primary text-right truncate">14 Days Active</span>
+                  </div>
+                </div>
               </div>
+              <div className="pt-2 border-t border-border">
+                <button
+                  type="button"
+                  onClick={() => onSelectTab?.('attendance')}
+                  className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold inline-flex items-center gap-1.5 cursor-pointer hover:underline"
+                  title="Open Full Biometric Attendance Punch Register"
+                >
+                  <span>Open Punch Register</span>
+                  <ExternalLink size={12} />
+                </button>
+              </div>
+            </div>
+
+            {/* 3. Parent & Guardian Information */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-card border border-border space-y-3 min-w-0 shadow-sm flex flex-col justify-between">
               <div>
-                <span className="text-text-muted">Registered Address:</span>
-                <p className="font-semibold text-text-primary mt-0.5">Flat 402, Green Avenue, Sector 15, City Center</p>
+                <div className="flex items-center justify-between border-b border-border pb-2 gap-2 mb-3">
+                  <h4 className="font-bold text-primary flex items-center gap-2 text-sm truncate">
+                    <UserRound size={16} className="text-sky-400 shrink-0" />
+                    <span className="truncate">Guardian & Family Info</span>
+                  </h4>
+                  <span className="text-xs text-secondary font-mono">Verified</span>
+                </div>
+                <div className="space-y-2.5 text-xs">
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Parent / Guardian:</span>
+                    <span className="font-bold text-primary text-right truncate">Ramesh Sharma (Parent)</span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Guardian Contact:</span>
+                    <span className="font-mono text-primary text-right truncate">+91 91234 56789</span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Gender:</span>
+                    <span className="font-medium text-primary text-right truncate">Male</span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Date of Birth:</span>
+                    <span className="font-medium text-primary text-right truncate">15 Aug 2002</span>
+                  </div>
+                </div>
               </div>
+            </div>
+
+            {/* 4. Academic & Target Goal */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-card border border-border space-y-3 min-w-0 shadow-sm flex flex-col justify-between">
               <div>
-                <span className="text-text-muted">Smart RFID Keycard Tag:</span>
-                <p className="font-mono font-semibold text-indigo-400 mt-0.5">TAG-RFID-{memberIdClean}9-VERIFIED</p>
+                <div className="flex items-center justify-between border-b border-border pb-2 gap-2 mb-3">
+                  <h4 className="font-bold text-primary flex items-center gap-2 text-sm truncate">
+                    <GraduationCap size={16} className="text-emerald-400 shrink-0" />
+                    <span className="truncate">Academic & Target Goal</span>
+                  </h4>
+                  <span className="text-xs text-emerald-400 font-mono">Aspirant</span>
+                </div>
+                <div className="space-y-2.5 text-xs">
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Target Exam:</span>
+                    <span className="font-bold text-primary text-right truncate">UPSC Civil Services</span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Stream / Course:</span>
+                    <span className="font-medium text-primary text-right truncate">General Studies & History</span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">College / Univ:</span>
+                    <span className="font-medium text-primary text-right truncate">Delhi University</span>
+                  </div>
+                  <div className="flex justify-between items-center gap-2 min-w-0">
+                    <span className="text-secondary shrink-0">Target Year:</span>
+                    <span className="font-semibold text-emerald-400 text-right truncate">2027</span>
+                  </div>
+                </div>
               </div>
+            </div>
+          </div>
+
+          {/* Referral Rewards & Bonus Banner (From Manager) */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-card border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4 min-w-0 shadow-sm">
+            <div className="flex items-center gap-4 min-w-0">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center text-amber-400 shrink-0 border border-amber-500/30">
+                <Award size={24} />
+              </div>
+              <div className="min-w-0">
+                <h4 className="font-bold text-primary flex items-center gap-2 flex-wrap text-sm">
+                  <span>Referral Rewards & Student Network</span>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                    250 Points
+                  </span>
+                </h4>
+                <p className="text-xs text-secondary mt-0.5 truncate">
+                  Referred by: <span className="font-medium text-primary">Aman Verma (MEM-004)</span> · Reward Tier: Silver
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
+              <span className="text-xs font-mono text-secondary px-3 py-1.5 rounded-lg bg-surface border border-border">
+                Active Referral Contributor
+              </span>
+            </div>
+          </div>
+
+          {/* KYC Documents Section with Preview Buttons (From Manager) */}
+          <div className="rounded-2xl border border-border bg-card p-5 space-y-4 shadow-sm">
+            <div className="flex items-center justify-between border-b border-border pb-3 flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={18} className="text-emerald-400" />
+                <h4 className="text-sm font-bold text-text-primary">Verified KYC Documentation (Identity & Residence)</h4>
+              </div>
+              <span className="text-xs text-emerald-400 font-semibold bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-0.5">
+                4 Files Attached · 100% Verified
+              </span>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                {
+                  title: 'Aadhaar Card (UIDAI)',
+                  number: `UID: XXXX-XXXX-${memberIdClean}849`,
+                  file: 'aadhaar_card_verified.pdf',
+                  verified: 'Verified by Desk Manager',
+                },
+                {
+                  title: 'College / Student ID Card',
+                  number: `Roll: DU-2024-ENG-${memberIdClean}9`,
+                  file: 'student_college_id.pdf',
+                  verified: 'Academic Enrollment Active',
+                },
+                {
+                  title: 'Admission Undertaking',
+                  number: `Form: UND-${memberIdClean}-2024`,
+                  file: 'admission_undertaking_signed.pdf',
+                  verified: 'Digitally Signed & Accepted',
+                },
+                {
+                  title: 'Permanent Address Proof',
+                  number: 'Electricity Utility Voucher',
+                  file: 'address_proof_utility.pdf',
+                  verified: 'Residential Check Passed',
+                },
+              ].map((doc, idx) => (
+                <div key={idx} className="rounded-xl border border-border bg-surface-muted/30 p-3.5 space-y-2.5 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <FileText size={16} className="text-indigo-400 shrink-0" />
+                        <p className="text-xs font-bold text-text-primary truncate">{doc.title}</p>
+                      </div>
+                      <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-1.5 py-0.2 rounded shrink-0">
+                        Verified
+                      </span>
+                    </div>
+                    <p className="text-[11px] font-mono text-text-secondary mt-1 truncate">{doc.number}</p>
+                  </div>
+                  <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewDoc({ type: doc.title, number: doc.number, fileName: doc.file, note: doc.verified })}
+                      className="text-xs text-sky-400 hover:text-sky-300 font-semibold inline-flex items-center gap-1 cursor-pointer"
+                    >
+                      <Eye size={12} /> Preview
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => toast.success(`Downloaded ${doc.file} for ${member.name}`)}
+                      className="text-xs text-text-secondary hover:text-text-primary p-1 cursor-pointer"
+                      title="Download PDF"
+                    >
+                      <Download size={13} />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

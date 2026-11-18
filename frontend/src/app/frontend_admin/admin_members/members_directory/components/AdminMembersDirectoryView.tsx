@@ -307,6 +307,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
           member={model.viewingMember}
           detailTab={model.detailTab}
           isDemoMode={isDemoMode}
+          onSelectTab={model.setDetailTab}
         />
       )}
     </div>

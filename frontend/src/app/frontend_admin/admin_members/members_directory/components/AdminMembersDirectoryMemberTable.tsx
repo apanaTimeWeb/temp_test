@@ -4,7 +4,7 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 
 import { useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, Search, Filter, RotateCcw, X, ChevronLeft, ChevronRight, IndianRupee, Clock, DownloadCloud, FileSpreadsheet, Printer } from 'lucide-react';
+import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, Search, Filter, RotateCcw, X, ChevronLeft, ChevronRight, IndianRupee, Clock, DownloadCloud, FileSpreadsheet, Printer, PhoneCall } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { formatAdminMembersDate, downloadAdminMembersDemoCsv, downloadAdminMembersDemoExcel, printAdminMembersRoster } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
@@ -379,8 +379,15 @@ export default function AdminMembersMemberTable({
                 {visibleMembers.map((member) => (
                   <tr key={member.id} className="hover:bg-indigo-500/5 transition-colors h-14">
                     <th scope="row" className="px-4 py-3 font-medium text-white">
-                      <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 font-semibold text-white hover:text-indigo-300 transition-colors text-left" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
-                      <span className="block text-xs font-mono text-slate-400">{displayValue(member.id)}</span>
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl border border-indigo-500/30 bg-indigo-500/10 flex items-center justify-center shrink-0 font-bold text-xs text-indigo-300">
+                          {member.name.trim().slice(0, 2).toUpperCase() || 'ST'}
+                        </div>
+                        <div>
+                          <button type="button" className="underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 font-semibold text-white hover:text-indigo-300 transition-colors text-left block" onClick={() => onSelectMember(member)}>{displayValue(member.name)}</button>
+                          <span className="block text-xs font-mono text-slate-400">{displayValue(member.id)}</span>
+                        </div>
+                      </div>
                     </th>
                       <td className="px-4 py-3 text-slate-200 text-xs font-mono">{displayValue(member.email || member.phone)}</td>
                       <td className="px-4 py-3 text-slate-200 font-medium">{displayValue(member.plan)}</td>
@@ -391,6 +398,16 @@ export default function AdminMembersMemberTable({
                       </td>
                       <td className="px-4 py-3">
                         <div className="relative flex justify-end gap-1.5">
+                          {member.phone && (
+                            <a
+                              href={`tel:${member.phone.replace(/\D/g, '')}`}
+                              className="min-h-9 min-w-9 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:text-amber-300 hover:bg-amber-500/20 inline-flex items-center justify-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                              title={`Call ${member.name}`}
+                              aria-label={`Call ${member.name}`}
+                            >
+                              <PhoneCall size={15} strokeWidth={2} className="text-amber-400" aria-hidden="true" />
+                            </a>
+                          )}
                           <button
                             type="button"
                             className="min-h-9 min-w-9 rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 hover:text-sky-300 hover:bg-sky-500/20 inline-flex items-center justify-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
