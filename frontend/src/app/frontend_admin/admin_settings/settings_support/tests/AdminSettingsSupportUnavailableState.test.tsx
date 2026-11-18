@@ -15,10 +15,8 @@ describe('AdminSettingsSupportMain without a support API contract', () => {
     expect(screen.getByRole('heading', { name: 'ADMIN_SUPPORT.UNAVAILABLE_TICKETS_TITLE' })).toBeTruthy();
   });
 
-  it('shows explicit terminal states for unavailable status and announcement feeds', () => {
+  it('shows explicit terminal states for unavailable announcement feeds', () => {
     render(<AdminSettingsSupportMain />);
-    fireEvent.click(screen.getByTestId('admin_support-AdminSettingsSupportMain-navigation-status'));
-    expect(screen.getByRole('heading', { name: 'ADMIN_SUPPORT.UNAVAILABLE_STATUS_TITLE' })).toBeTruthy();
     fireEvent.click(screen.getByTestId('admin_support-AdminSettingsSupportMain-navigation-announcements'));
     expect(screen.getByRole('heading', { name: 'ADMIN_SUPPORT.UNAVAILABLE_ANNOUNCEMENTS_TITLE' })).toBeTruthy();
   });

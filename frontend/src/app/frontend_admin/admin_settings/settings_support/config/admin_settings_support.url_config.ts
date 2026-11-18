@@ -30,11 +30,8 @@ export const ADMIN_SUPPORT_TICKET_CATEGORIES = ['bug', 'feature', 'billing', 'ot
 export const ADMIN_SUPPORT_TICKET_PRIORITIES = ['low', 'medium', 'high', 'critical'] as const;
 
 export const ADMIN_SUPPORT_NAVIGATION_ITEMS: readonly AdminSupportNavigationItem[] = [
-  { id: 'help', labelKey: 'NAV_HELP', icon: LifeBuoy },
   { id: 'tickets', labelKey: 'NAV_TICKETS', icon: Ticket },
-  { id: 'status', labelKey: 'NAV_STATUS', icon: Activity },
   { id: 'announcements', labelKey: 'NAV_ANNOUNCEMENTS', icon: BellRing },
-  { id: 'docs', labelKey: 'NAV_DOCS', icon: BookOpen },
 ] as const;
 
 const ADMIN_SUPPORT_CATEGORY_LABEL_KEYS = {

@@ -4,7 +4,7 @@
 import { useCallback, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { AdminSupportTab } from '@/app/frontend_admin/admin_settings/settings_support/types/AdminSettingsSupportTypes';
-const TABS: readonly AdminSupportTab[] = ['help', 'tickets', 'status', 'announcements', 'docs'];
+const TABS: readonly AdminSupportTab[] = ['tickets', 'announcements'];
 export default function useAdminSupportTabState() {
   const router = useRouter(); const pathname = usePathname(); const searchParams = useSearchParams();
   const value = searchParams.get('view');

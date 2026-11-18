@@ -9,7 +9,7 @@ import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Paperclip, Send } from 'lucide-react';
+import { Paperclip, Send, Ticket, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLocale, useTranslations } from 'next-intl';
 import { AdminSupportTicketSchema, type AdminSupportTicketFormValues } from '@/app/frontend_admin/admin_settings/settings_support/schemas/AdminSettingsSupportTicketSchema';
@@ -52,78 +52,231 @@ export default function AdminSupportCreateTicketForm({ onCancel }: AdminSupportC
 
   if (createdTicket) {
     return (
-      <section className="admin-card space-y-4 p-5" aria-labelledby="admin-support-ticket-created-title">
-        <h2 id="admin-support-ticket-created-title" className="text-base font-semibold text-text-primary">{t('DEMO_TICKET_CREATED_TITLE')}</h2>
-        <p role="status" className="rounded-md border border-info-bg bg-info-bg p-3 text-info-text">{t('DEMO_TICKET_CREATED', { id: createdTicket.id })}</p>
-        <dl className="grid gap-3 sm:grid-cols-2">
-          <div><dt className="admin-label">{t('FIELD_SUBJECT')}</dt><dd className="text-text-primary">{createdTicket.subject}</dd></div>
-          <div><dt className="admin-label">{t('FIELD_PRIORITY')}</dt><dd className="text-text-primary">{t(ADMIN_SUPPORT_TICKET_PRIORITY_OPTIONS.find((option) => option.value === createdTicket.priority)?.labelKey ?? 'PRIORITY_MEDIUM')}</dd></div>
-          <div><dt className="admin-label">{t('FIELD_CATEGORY')}</dt><dd className="text-text-primary">{t(ADMIN_SUPPORT_TICKET_CATEGORY_OPTIONS.find((option) => option.value === createdTicket.category)?.labelKey ?? 'CATEGORY_OTHER')}</dd></div>
-          <div><dt className="admin-label">{t('FIELD_CREATED_AT')}</dt><dd className="text-text-primary">{format(new Date(createdTicket.createdAt), 'PPpp', { locale: locale === 'hi' ? hi : enIN })}</dd></div>
-          <div className="sm:col-span-2"><dt className="admin-label">{t('FIELD_DESCRIPTION')}</dt><dd className="whitespace-pre-wrap text-text-primary">{createdTicket.description}</dd></div>
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 sm:p-6 shadow-xl backdrop-blur-md space-y-5" aria-labelledby="admin-support-ticket-created-title">
+        <div className="flex items-center gap-3 border-b border-slate-800 pb-4">
+          <div className="h-10 w-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+            <CheckCircle2 size={20} />
+          </div>
+          <div>
+            <h2 id="admin-support-ticket-created-title" className="text-base font-bold text-white">{t('DEMO_TICKET_CREATED_TITLE')}</h2>
+            <p className="text-xs text-slate-400 mt-0.5">Your ticket has been logged in this session preview.</p>
+          </div>
+        </div>
+
+        <p role="status" className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-xs text-emerald-300 font-medium">
+          {t('DEMO_TICKET_CREATED', { id: createdTicket.id })}
+        </p>
+
+        <dl className="grid gap-3.5 sm:grid-cols-2 rounded-2xl border border-slate-800 bg-slate-950/60 p-4 sm:p-5">
+          <div>
+            <dt className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t('FIELD_SUBJECT')}</dt>
+            <dd className="text-sm font-bold text-white mt-1">{createdTicket.subject}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t('FIELD_PRIORITY')}</dt>
+            <dd className="text-sm font-bold text-white mt-1">{t(ADMIN_SUPPORT_TICKET_PRIORITY_OPTIONS.find((option) => option.value === createdTicket.priority)?.labelKey ?? 'PRIORITY_MEDIUM')}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t('FIELD_CATEGORY')}</dt>
+            <dd className="text-sm font-bold text-white mt-1">{t(ADMIN_SUPPORT_TICKET_CATEGORY_OPTIONS.find((option) => option.value === createdTicket.category)?.labelKey ?? 'CATEGORY_OTHER')}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t('FIELD_CREATED_AT')}</dt>
+            <dd className="text-sm font-mono text-slate-300 mt-1">{format(new Date(createdTicket.createdAt), 'PPpp', { locale: locale === 'hi' ? hi : enIN })}</dd>
+          </div>
+          <div className="sm:col-span-2 pt-2 border-t border-slate-800/80">
+            <dt className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t('FIELD_DESCRIPTION')}</dt>
+            <dd className="whitespace-pre-wrap text-xs text-slate-300 mt-1 leading-relaxed bg-slate-900/60 p-3 rounded-xl border border-slate-800/60">{createdTicket.description}</dd>
+          </div>
         </dl>
-        <div className="flex flex-wrap gap-2"><button type="button" className="admin-btn-primary min-h-11" onClick={() => setCreatedTicket(null)}>{t('CREATE_ANOTHER_TICKET')}</button><button type="button" className="admin-btn-ghost min-h-11" onClick={requestCancel}>{t('CANCEL')}</button></div>
+
+        <div className="flex flex-wrap gap-2.5 pt-2">
+          <button type="button" className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-md hover:bg-indigo-500 transition-all cursor-pointer" onClick={() => setCreatedTicket(null)}>
+            <Ticket size={14} />
+            <span>{t('CREATE_ANOTHER_TICKET')}</span>
+          </button>
+          <button type="button" className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer" onClick={requestCancel}>
+            <ArrowLeft size={14} />
+            <span>{t('CANCEL')}</span>
+          </button>
+        </div>
       </section>
     );
   }
 
   return (
-    <section className="admin-card" aria-labelledby="admin-support-create-ticket-title">
-      <div className="flex items-center justify-between gap-3">
-        <h2 id="admin-support-create-ticket-title" className="text-base font-semibold text-text-primary">{t('CREATE_TICKET_TITLE')}</h2>
-        <button type="button" data-testid="admin_support-AdminSettingsSupportMain-control-005" className="admin-btn-ghost min-h-11" onClick={requestCancel}>{t('CANCEL')}</button>
+    <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 sm:p-6 shadow-xl backdrop-blur-md space-y-5" aria-labelledby="admin-support-create-ticket-title">
+      <div className="flex items-center justify-between gap-3 border-b border-slate-800 pb-4">
+        <div>
+          <h2 id="admin-support-create-ticket-title" className="text-lg font-bold text-white flex items-center gap-2">
+            <Ticket size={18} className="text-indigo-400" />
+            <span>{t('CREATE_TICKET_TITLE')}</span>
+          </h2>
+          <p className="text-xs text-slate-400 mt-0.5">Fill in issue particulars to open a new support ticket</p>
+        </div>
+        <button
+          type="button"
+          data-testid="admin_support-AdminSettingsSupportMain-control-005"
+          className="rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
+          onClick={requestCancel}
+        >
+          {t('CANCEL')}
+        </button>
       </div>
-      <p role="status" className={`mt-3 rounded-md border p-3 ${isDemoMode ? 'border-info-bg bg-info-bg text-info-text' : 'border-warning-bg bg-warning-bg text-warning-text'}`}>{isDemoMode ? t('DEMO_TICKET_NOTICE') : t('SUBMIT_BLOCKED')}</p>
-      <form data-testid="admin_support-AdminSettingsSupportMain-control-006" onSubmit={handleCreateTicket} noValidate className="mt-4 space-y-4">
+
+      <p role="status" className={`rounded-xl border p-3 text-xs ${isDemoMode ? 'border-indigo-500/30 bg-indigo-500/10 text-indigo-300' : 'border-amber-500/30 bg-amber-500/10 text-amber-300'}`}>
+        {isDemoMode ? t('DEMO_TICKET_NOTICE') : t('SUBMIT_BLOCKED')}
+      </p>
+
+      <form data-testid="admin_support-AdminSettingsSupportMain-control-006" onSubmit={handleCreateTicket} noValidate className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="admin-support-ticket-category" className="admin-label">{t('FIELD_CATEGORY')}</label>
-            <select id="admin-support-ticket-category" data-testid="admin_support-AdminSettingsSupportMain-control-007" className="admin-input" aria-invalid={Boolean(errors.category)} aria-describedby={errors.category ? 'admin-support-ticket-category-error' : undefined} {...register('category')} required>
-              {ADMIN_SUPPORT_TICKET_CATEGORY_OPTIONS.map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}
+            <label htmlFor="admin-support-ticket-category" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              {t('FIELD_CATEGORY')}
+            </label>
+            <select
+              id="admin-support-ticket-category"
+              data-testid="admin_support-AdminSettingsSupportMain-control-007"
+              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              aria-invalid={Boolean(errors.category)}
+              aria-describedby={errors.category ? 'admin-support-ticket-category-error' : undefined}
+              {...register('category')}
+              required
+            >
+              {ADMIN_SUPPORT_TICKET_CATEGORY_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {t(option.labelKey)}
+                </option>
+              ))}
             </select>
-            {errors.category && <p id="admin-support-ticket-category-error" className="admin-error" role="alert">{t(getAdminSupportValidationMessageKey('category', errors.category.type))}</p>}
+            {errors.category && (
+              <p id="admin-support-ticket-category-error" className="mt-1 text-xs text-rose-400 font-medium" role="alert">
+                {t(getAdminSupportValidationMessageKey('category', errors.category.type))}
+              </p>
+            )}
           </div>
+
           <div>
-            <label htmlFor="admin-support-ticket-priority" className="admin-label">{t('FIELD_PRIORITY')}</label>
-            <select id="admin-support-ticket-priority" data-testid="admin_support-AdminSettingsSupportMain-control-008" className="admin-input" aria-invalid={Boolean(errors.priority)} aria-describedby={errors.priority ? 'admin-support-ticket-priority-error' : undefined} {...register('priority')} required>
-              {ADMIN_SUPPORT_TICKET_PRIORITY_OPTIONS.map((option) => <option key={option.value} value={option.value}>{t(option.labelKey)}</option>)}
+            <label htmlFor="admin-support-ticket-priority" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              {t('FIELD_PRIORITY')}
+            </label>
+            <select
+              id="admin-support-ticket-priority"
+              data-testid="admin_support-AdminSettingsSupportMain-control-008"
+              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              aria-invalid={Boolean(errors.priority)}
+              aria-describedby={errors.priority ? 'admin-support-ticket-priority-error' : undefined}
+              {...register('priority')}
+              required
+            >
+              {ADMIN_SUPPORT_TICKET_PRIORITY_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {t(option.labelKey)}
+                </option>
+              ))}
             </select>
-            {errors.priority && <p id="admin-support-ticket-priority-error" className="admin-error" role="alert">{t(getAdminSupportValidationMessageKey('priority', errors.priority.type))}</p>}
+            {errors.priority && (
+              <p id="admin-support-ticket-priority-error" className="mt-1 text-xs text-rose-400 font-medium" role="alert">
+                {t(getAdminSupportValidationMessageKey('priority', errors.priority.type))}
+              </p>
+            )}
           </div>
         </div>
+
         <div>
-          <label htmlFor="admin-support-ticket-subject" className="admin-label">{t('FIELD_SUBJECT')}</label>
-          <input id="admin-support-ticket-subject" type="text" className="admin-input" placeholder={t('SUBJECT_PLACEHOLDER')} maxLength={160} {...register('subject')} aria-invalid={Boolean(errors.subject)} aria-describedby={errors.subject ? 'admin-support-ticket-subject-error' : undefined} required />
-          {errors.subject && <p id="admin-support-ticket-subject-error" className="admin-error" role="alert">{t(getAdminSupportValidationMessageKey('subject', errors.subject.type))}</p>}
+          <label htmlFor="admin-support-ticket-subject" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+            {t('FIELD_SUBJECT')}
+          </label>
+          <input
+            id="admin-support-ticket-subject"
+            type="text"
+            className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            placeholder={t('SUBJECT_PLACEHOLDER')}
+            maxLength={160}
+            {...register('subject')}
+            aria-invalid={Boolean(errors.subject)}
+            aria-describedby={errors.subject ? 'admin-support-ticket-subject-error' : undefined}
+            required
+          />
+          {errors.subject && (
+            <p id="admin-support-ticket-subject-error" className="mt-1 text-xs text-rose-400 font-medium" role="alert">
+              {t(getAdminSupportValidationMessageKey('subject', errors.subject.type))}
+            </p>
+          )}
         </div>
+
         <div>
-          <label htmlFor="admin-support-ticket-description" className="admin-label">{t('FIELD_DESCRIPTION')}</label>
-          <textarea id="admin-support-ticket-description" className="admin-input min-h-28" placeholder={t('DESCRIPTION_PLACEHOLDER')} maxLength={5000} {...register('description')} aria-invalid={Boolean(errors.description)} aria-describedby={errors.description ? 'admin-support-ticket-description-error' : undefined} required />
-          {errors.description && <p id="admin-support-ticket-description-error" className="admin-error" role="alert">{t(getAdminSupportValidationMessageKey('description', errors.description.type))}</p>}
+          <label htmlFor="admin-support-ticket-description" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+            {t('FIELD_DESCRIPTION')}
+          </label>
+          <textarea
+            id="admin-support-ticket-description"
+            className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 min-h-28 resize-y"
+            placeholder={t('DESCRIPTION_PLACEHOLDER')}
+            maxLength={5000}
+            {...register('description')}
+            aria-invalid={Boolean(errors.description)}
+            aria-describedby={errors.description ? 'admin-support-ticket-description-error' : undefined}
+            required
+          />
+          {errors.description && (
+            <p id="admin-support-ticket-description-error" className="mt-1 text-xs text-rose-400 font-medium" role="alert">
+              {t(getAdminSupportValidationMessageKey('description', errors.description.type))}
+            </p>
+          )}
         </div>
+
         <div>
-          <p className="admin-label">{t('ATTACHMENT_LABEL')}</p>
-          <div className="flex items-start gap-3 rounded-md border border-border bg-floating p-3" role="status" aria-live="polite">
-            <Paperclip size={18} className="mt-0.5 shrink-0 text-text-secondary" strokeWidth={2} aria-hidden="true" />
-            <div className="text-sm">
-              <p className="text-text-primary">{t('ATTACHMENT_UNAVAILABLE')}</p>
-              <p className="mt-1 text-text-secondary">{t('ATTACHMENT_NO_UPLOAD')}</p>
+          <p className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">{t('ATTACHMENT_LABEL')}</p>
+          <div className="flex items-start gap-3 rounded-xl border border-slate-800 bg-slate-950/40 p-3" role="status" aria-live="polite">
+            <Paperclip size={16} className="mt-0.5 shrink-0 text-slate-400" strokeWidth={2} aria-hidden="true" />
+            <div className="text-xs">
+              <p className="text-slate-300 font-medium">{t('ATTACHMENT_UNAVAILABLE')}</p>
+              <p className="mt-0.5 text-slate-500">{t('ATTACHMENT_NO_UPLOAD')}</p>
             </div>
           </div>
         </div>
-        <div className="flex justify-end">
-          <button data-testid="admin_support-AdminSettingsSupportMain-control-009" type="submit" className="admin-btn-primary min-h-11 disabled:cursor-not-allowed disabled:opacity-50" disabled={isSubmitting || !isDemoMode} title={!isDemoMode ? t('SUBMIT_BLOCKED') : undefined}>
-            <Send size={18} strokeWidth={2} aria-hidden="true" /> {isDemoMode ? t('CREATE_TICKET_DEMO') : t('VALIDATE_SUBMISSION_UNAVAILABLE')}
+
+        <div className="flex items-center justify-end gap-2.5 pt-2">
+          <button
+            type="button"
+            className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
+            onClick={requestCancel}
+          >
+            {t('CANCEL')}
+          </button>
+          <button
+            data-testid="admin_support-AdminSettingsSupportMain-control-009"
+            type="submit"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-indigo-600/25 hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-40 transition-all cursor-pointer"
+            disabled={isSubmitting || !isDemoMode}
+            title={!isDemoMode ? t('SUBMIT_BLOCKED') : undefined}
+          >
+            <Send size={14} strokeWidth={2} aria-hidden="true" />
+            <span>{isDemoMode ? t('CREATE_TICKET_DEMO') : t('VALIDATE_SUBMISSION_UNAVAILABLE')}</span>
           </button>
         </div>
       </form>
+
       <Dialog open={showDiscardDialog} onOpenChange={(open) => { if (!open) { setShowDiscardDialog(false); setPendingHref(null); } }}>
-        <DialogContent className="space-y-4">
-          <DialogTitle>{t('UNSAVED_CHANGES_TITLE')}</DialogTitle>
-          <DialogDescription>{t('UNSAVED_CHANGES_DESCRIPTION')}</DialogDescription>
-          <DialogFooter>
-            <button type="button" className="min-h-11 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => { setShowDiscardDialog(false); setPendingHref(null); }}>{t('UNSAVED_CHANGES_STAY')}</button>
-            <button type="button" className="min-h-11 rounded-md bg-danger px-4 py-2 text-sm font-semibold text-on-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={discardDraft}>{t('UNSAVED_CHANGES_LEAVE')}</button>
+        <DialogContent className="space-y-4 rounded-2xl border border-slate-800 bg-slate-900 text-white p-6 shadow-2xl max-w-md">
+          <DialogTitle className="text-base font-bold text-white">{t('UNSAVED_CHANGES_TITLE')}</DialogTitle>
+          <DialogDescription className="text-xs text-slate-400">{t('UNSAVED_CHANGES_DESCRIPTION')}</DialogDescription>
+          <DialogFooter className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <button
+              type="button"
+              className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
+              onClick={() => { setShowDiscardDialog(false); setPendingHref(null); }}
+            >
+              {t('UNSAVED_CHANGES_STAY')}
+            </button>
+            <button
+              type="button"
+              className="rounded-xl bg-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-md hover:bg-rose-500 transition-all cursor-pointer"
+              onClick={discardDraft}
+            >
+              {t('UNSAVED_CHANGES_LEAVE')}
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

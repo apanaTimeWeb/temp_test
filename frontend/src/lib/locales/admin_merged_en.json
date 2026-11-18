@@ -4450,8 +4450,8 @@
     "ROUTE_LOADING": "Loading security page"
   },
   "ADMIN_SUPPORT": {
-    "PAGE_TITLE": "Help & Support",
-    "PAGE_SUBTITLE": "Find help, review your tickets, and see support resources.",
+    "PAGE_TITLE": "Help & Support Desk",
+    "PAGE_SUBTITLE": "Dedicated administrator assistance, priority support ticketing, and platform operational advisories.",
     "DEMO_PREVIEW_NOTICE": "Demo preview only. Sample tickets, system status, and announcements are not live backend records.",
     "LIVE_UNAVAILABLE_NOTICE": "Support-ticket, system-status, and announcement APIs are not supplied. Sample records and actions are hidden.",
     "SUPPORT_SECTIONS_LABEL": "Support sections",
