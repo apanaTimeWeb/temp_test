@@ -25,6 +25,7 @@ export const ADMIN_ROUTES = {
   FINANCE_REFUNDS: '/admin/admin_finance/finance_refunds',
   FINANCE_REFERRALS: '/admin/admin_finance/finance_referrals',
   FINANCE_AUTO_SUSPEND: '/admin/admin_finance/finance_auto_suspend',
+  FINANCE_SECURITY_DEPOSITS: '/admin/admin_finance/finance_security_deposits',
   ACCOUNTS_DAILY_SETTLEMENT: '/admin/admin_accounts_assets/accounts_daily_settlement',
   ACCOUNTS_EXPENSES: '/admin/admin_accounts_assets/accounts_expenses',
   ACCOUNTS_FINANCIAL_REPORTS: '/admin/admin_accounts_assets/accounts_financial_reports',
