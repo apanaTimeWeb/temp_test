@@ -3,7 +3,7 @@
 
 import React, { useMemo, useState, type FormEvent } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Activity, AlertTriangle, Armchair, ArrowLeft, CalendarClock, CheckCircle, CreditCard, DownloadCloud, FileText, IndianRupee, MessageSquare, RotateCcw, ShieldAlert, UserPlus, UserRound, Users, Building2, TrendingUp, X } from 'lucide-react';
+import { Activity, AlertTriangle, Armchair, ArrowLeft, CalendarClock, CheckCircle, CreditCard, DownloadCloud, FileText, IndianRupee, MessageSquare, RotateCcw, ShieldAlert, UserPlus, UserRound, Users, Building2, TrendingUp, X, Upload } from 'lucide-react';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ALL_BRANCHES_ID } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
 import { toast } from 'sonner';
@@ -14,6 +14,7 @@ import { downloadAdminMembersDemoCsv, formatAdminMembersDate } from '@/app/front
 import AdminMembersDirectoryMemberForm from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberForm';
 import AdminMembersMemberTable from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberTable';
 import AdminMembersDirectoryBulkWhatsAppModal from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryBulkWhatsAppModal';
+import AdminMembersDirectoryBulkImportModal from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryBulkImportModal';
 import AdminMembersDirectoryDataToolsView from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDataToolsView';
 import AdminMembersDirectorySecondaryViews from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectorySecondaryViews';
 import { AdminMembersDirectoryMemberDetailCard } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberDetailCard';
@@ -210,10 +211,11 @@ export default function AdminMembersDirectoryView({ model }: AdminMembersDirecto
 export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: AdminMembersDirectoryViewMAINDASHBOARDVIEWSSectionProps) {
   const t = useTranslations('ADMIN_MEMBERS');
   const locale = useLocale();
-  const { activeTab, setActiveTab, viewingMember, dummyMembers, isDemoMode, handleAction, openMemberDetails } = model;
+  const { activeTab, setActiveTab, viewingMember, dummyMembers, isDemoMode, handleAction, openMemberDetails, handleBulkAddMembers } = model as any;
   const { selectedBranch, isAllBranches } = useAdminBranch();
   const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([]);
   const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
+  const [isBulkImportOpen, setIsBulkImportOpen] = useState(false);
 
   const branchFilteredMembers = useMemo(() => {
     if (isAllBranches || !selectedBranch) return dummyMembers;
@@ -249,6 +251,14 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
             <div className="flex flex-wrap items-center gap-2.5">
               <button
                 type="button"
+                onClick={() => setIsBulkImportOpen(true)}
+                className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-indigo-500/40 bg-indigo-500/15 px-3.5 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 hover:text-white transition-all shadow-sm shadow-indigo-500/10"
+                title="Bulk Import Students from CSV/Excel"
+              >
+                <Upload size={14} className="text-indigo-400" /> Bulk Import CSV
+              </button>
+              <button
+                type="button"
                 onClick={() => setIsBulkWhatsAppOpen(true)}
                 disabled={branchFilteredMembers.length === 0}
                 className="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 px-3.5 py-1.5 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/25 transition-all disabled:opacity-40 shadow-sm shadow-emerald-500/10"
@@ -278,6 +288,18 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
           />
         </section>
       )}
+
+      {/* Bulk Import CSV Modal */}
+      <AdminMembersDirectoryBulkImportModal
+        isOpen={isBulkImportOpen}
+        onClose={() => setIsBulkImportOpen(false)}
+        onImport={(newMembers) => {
+          if (handleBulkAddMembers) {
+            handleBulkAddMembers(newMembers);
+          }
+        }}
+        defaultBranch={selectedBranch?.name || 'Main Branch'}
+      />
 
       {/* Bulk WhatsApp Modal */}
       <AdminMembersDirectoryBulkWhatsAppModal

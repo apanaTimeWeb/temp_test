@@ -108,6 +108,33 @@ export default function useAdminMembersDirectoryMain() {
     setActiveTab('all');
     toast.success(t('DEMO_MEMBER_CREATED', { name: newMember.name }), { id: 'admin_members-members_directory-hooks-useAdminMembersDirectoryMain-toast-104-5' });
   };
+  const handleBulkAddMembers = (newMembers: Array<Omit<AdminMembersMember, 'id' | 'status' | 'feeStatus' | 'expiryDate'>>) => {
+    if (!isDemoMode) {
+      toast.info(t('PERSISTENCE_BLOCKED'), { id: 'admin_members-bulk-import-blocked' });
+      return;
+    }
+    let seq = nextDemoMemberSequence;
+    const created: AdminMembersMember[] = newMembers.map((m) => {
+      const id = `MEM-${String(seq++).padStart(3, '0')}`;
+      return {
+        id,
+        name: m.name.trim(),
+        email: m.email.trim(),
+        phone: m.phone.trim(),
+        plan: m.plan.trim() || 'Standard Monthly',
+        branch: m.branch?.trim() || undefined,
+        shift: m.shift?.trim() || undefined,
+        seat: m.seat?.trim() || undefined,
+        feeStatus: 'Paid',
+        status: 'Active',
+        expiryDate: '',
+      };
+    });
+    setDemoMembers((current) => [...created, ...current]);
+    setNextDemoMemberSequence(seq);
+    setActiveTab('all');
+    toast.success(`Successfully imported ${created.length} students into directory.`);
+  };
   const openMemberDetails = (member: AdminMembersMember) => { setViewingMember(member); setDetailTab('profile'); };
-  return { activeTab, setActiveTab, viewingMember, setViewingMember, detailTab, setDetailTab, mainNav: ADMIN_MEMBERS_DIRECTORY_NAVIGATION, detailNav: ADMIN_MEMBERS_DETAIL_NAVIGATION, dummyMembers: isDemoMode ? demoMembers : [], editingMember, setEditingMember, handleSaveDemoMember, demoCategories, demoDepartments, demoRenewals, createDemoCategory, createDemoDepartment, recordDemoRenewalReminder, isDemoMode, handleAction, handleAddMember, openMemberDetails } as const;
+  return { activeTab, setActiveTab, viewingMember, setViewingMember, detailTab, setDetailTab, mainNav: ADMIN_MEMBERS_DIRECTORY_NAVIGATION, detailNav: ADMIN_MEMBERS_DETAIL_NAVIGATION, dummyMembers: isDemoMode ? demoMembers : [], editingMember, setEditingMember, handleSaveDemoMember, demoCategories, demoDepartments, demoRenewals, createDemoCategory, createDemoDepartment, recordDemoRenewalReminder, isDemoMode, handleAction, handleAddMember, handleBulkAddMembers, openMemberDetails } as const;
 }

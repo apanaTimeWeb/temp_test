@@ -4,7 +4,7 @@ import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_a
 
 import { useMemo, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, Search, Filter, RotateCcw, X, ChevronLeft, ChevronRight, IndianRupee, Clock, DownloadCloud, FileSpreadsheet, Printer, PhoneCall } from 'lucide-react';
+import { Eye, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare, Search, Filter, RotateCcw, X, ChevronLeft, ChevronRight, IndianRupee, Clock, DownloadCloud, FileSpreadsheet, Printer, PhoneCall, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 import { formatAdminMembersDate, downloadAdminMembersDemoCsv, downloadAdminMembersDemoExcel, printAdminMembersRoster } from '@/app/frontend_admin/admin_members/members_directory/utils/AdminMembersDirectoryExportUtils';
@@ -406,6 +406,16 @@ export default function AdminMembersMemberTable({
                               aria-label={`Call ${member.name}`}
                             >
                               <PhoneCall size={15} strokeWidth={2} className="text-amber-400" aria-hidden="true" />
+                            </a>
+                          )}
+                          {member.email && (
+                            <a
+                              href={`mailto:${member.email}?subject=${encodeURIComponent('Smart Library Notice')}&body=${encodeURIComponent(`Dear ${member.name},\n\n`)}`}
+                              className="min-h-9 min-w-9 rounded-lg border border-purple-500/30 bg-purple-500/10 text-purple-400 hover:text-purple-300 hover:bg-purple-500/20 inline-flex items-center justify-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+                              title={`Email ${member.name}`}
+                              aria-label={`Email ${member.name}`}
+                            >
+                              <Mail size={15} strokeWidth={2} className="text-purple-400" aria-hidden="true" />
                             </a>
                           )}
                           <button

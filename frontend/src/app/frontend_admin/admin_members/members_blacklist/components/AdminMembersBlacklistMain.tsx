@@ -3,7 +3,7 @@ import { useMemo, useCallback, useEffect, useState } from 'react';
 import { format, isValid, parseISO } from 'date-fns';
 import { enIN, hi } from 'date-fns/locale';
 import { useLocale, useTranslations } from 'next-intl';
-import { AlertOctagon, X, Save, ShieldAlert, UserX, Lock, Users } from 'lucide-react';
+import { AlertOctagon, X, Save, ShieldAlert, UserX, Lock, Users, Download, FileSpreadsheet } from 'lucide-react';
 import { type DataGridColumn, type DataGridCellParams } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { ADMIN_BLACKLIST_STATUS_VALUES, ADMIN_BLACKLIST_EMPTY_FORM } from '@/app/frontend_admin/admin_members/members_blacklist/config/admin_members_blacklist.url_config';
 import type { AdminBlacklistRecord, AdminBlacklistFormDialogProps } from '@/app/frontend_admin/admin_members/members_blacklist/types/AdminMembersBlacklistTypes';
@@ -89,6 +89,79 @@ export default function AdminMembersBlacklistMain() {
     [t('TABLE_STATUS'), selectedRecord.status],
   ] : [];
 
+  const downloadBlacklistCsv = () => {
+    const headers = ['Record ID', 'Student Name', 'Phone', 'Reason', 'Blacklisted By', 'Incident Date', 'Previous Seat', 'Branch', 'Status'];
+    const rows = visibleRecords.map((r) => [
+      `"${r.id}"`,
+      `"${(r.name || '').replaceAll('"', '""')}"`,
+      `"${r.phone || ''}"`,
+      `"${(r.reason || '').replaceAll('"', '""')}"`,
+      `"${(r.blacklistedBy || 'Admin Operations').replaceAll('"', '""')}"`,
+      `"${r.blacklistedOn || ''}"`,
+      `"${(r.previousSeat || '').replaceAll('"', '""')}"`,
+      `"${(r.branch || 'Main Branch').replaceAll('"', '""')}"`,
+      `"${r.status || 'Blacklisted'}"`,
+    ]);
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((row) => row.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'smart-library-blacklist-report.csv';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${visibleRecords.length} blacklisted student records to CSV`);
+  };
+
+  const downloadBlacklistExcel = () => {
+    const headers = ['Record ID', 'Student Name', 'Phone', 'Reason', 'Blacklisted By', 'Incident Date', 'Previous Seat', 'Branch', 'Status'];
+    const rows = visibleRecords.map((r) => [
+      r.id,
+      r.name,
+      r.phone || '—',
+      r.reason,
+      r.blacklistedBy || 'Admin Operations',
+      r.blacklistedOn || '—',
+      r.previousSeat || '—',
+      r.branch || 'Main Branch',
+      r.status || 'Blacklisted',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Blacklist</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #881337; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #9f1239; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #fff1f2; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'smart-library-blacklist-report.xls';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${visibleRecords.length} blacklist records to Excel (.xls)`);
+  };
+
   return (
     <>
       <Toaster position="bottom-right" richColors closeButton />
@@ -102,10 +175,30 @@ export default function AdminMembersBlacklistMain() {
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('TITLE')}</h1>
               <p className="text-xs sm:text-sm text-slate-400">{t('SUBTITLE')}</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-4 py-2.5 text-xs font-semibold text-white shadow-md shadow-rose-500/25 hover:from-rose-600 hover:to-rose-700 transition-all disabled:cursor-not-allowed disabled:opacity-40"
+                onClick={downloadBlacklistCsv}
+                disabled={visibleRecords.length === 0}
+                className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2 text-xs font-semibold text-rose-300 hover:text-white hover:bg-rose-500/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+                title="Export Blacklist to CSV"
+              >
+                <Download size={14} className="text-rose-400" />
+                <span>Export CSV</span>
+              </button>
+              <button
+                type="button"
+                onClick={downloadBlacklistExcel}
+                disabled={visibleRecords.length === 0}
+                className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-semibold text-emerald-300 hover:text-white hover:bg-emerald-500/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+                title="Export Blacklist to Excel"
+              >
+                <FileSpreadsheet size={14} className="text-emerald-400" />
+                <span>Excel</span>
+              </button>
+              <button
+                type="button"
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 px-4 py-2 text-xs font-semibold text-white shadow-md shadow-rose-500/25 hover:from-rose-600 hover:to-rose-700 transition-all disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={() => { if (isDemoMode) setShowForm(true); }}
                 disabled={!isDemoMode}
                 title={!isDemoMode ? t('LIVE_UNAVAILABLE') : undefined}

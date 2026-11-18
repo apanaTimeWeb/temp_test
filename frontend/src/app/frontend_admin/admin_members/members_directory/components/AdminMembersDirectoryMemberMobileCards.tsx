@@ -96,6 +96,16 @@ export default function AdminMembersDirectoryMemberMobileCards({
               <Eye size={14} className="text-sky-400" />
               {t('ACTION_VIEW_DETAILS')}
             </button>
+            {member.email && (
+              <a
+                href={`mailto:${member.email}?subject=${encodeURIComponent('Smart Library Notice')}&body=${encodeURIComponent(`Dear ${member.name},\n\n`)}`}
+                className="min-h-9 rounded-xl border border-purple-500/30 bg-purple-500/10 px-3 text-xs font-semibold text-purple-400 hover:bg-purple-500/20 inline-flex items-center justify-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+                aria-label={`Email ${member.name}`}
+                title={`Email ${member.name}`}
+              >
+                <Mail size={14} className="text-purple-400" /> Email
+              </a>
+            )}
             <button
               type="button"
               className="min-h-9 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 inline-flex items-center justify-center gap-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"

@@ -10,6 +10,7 @@ import AdminEnquiriesTable from '@/app/frontend_admin/admin_members/members_enqu
 import AdminEnquiriesEnquiryKanbanCard from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminEnquiriesEnquiryKanbanCard';
 import AdminMembersEnquiriesBulkWhatsAppModal from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesBulkWhatsAppModal';
 import AdminMembersEnquiriesDetailModal from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesDetailModal';
+import AdminMembersEnquiriesImportModal from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesImportModal';
 
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import { buildAdminEnquiriesCsv, downloadAdminEnquiriesExcel, printAdminEnquiriesRoster } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
@@ -27,7 +28,13 @@ export default function AdminEnquiriesPageView() {
   const [customEndDate, setCustomEndDate] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [selectedEnquiryModal, setSelectedEnquiryModal] = useState<Enquiry | null>(null);
+
+  const handleImportLeads = (newLeads: Enquiry[]) => {
+    setEnquiries((prev) => [...newLeads, ...prev]);
+    toast.success(`Successfully imported ${newLeads.length} enquiry leads.`);
+  };
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) return;
@@ -311,7 +318,7 @@ export default function AdminEnquiriesPageView() {
                 </button>
               </>
             )}
-            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-003" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-300 hover:text-amber-200 hover:bg-amber-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled title={t('IMPORT_TITLE')}><Upload size={14} strokeWidth={2} className="text-amber-400"/> {t('IMPORT')}</button>
+            <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-003" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-300 hover:text-amber-200 hover:bg-amber-500/20 transition-colors" type="button" onClick={() => setIsImportModalOpen(true)} title={t('IMPORT_TITLE')}><Upload size={14} strokeWidth={2} className="text-amber-400"/> {t('IMPORT')}</button>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-004" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-medium text-cyan-300 hover:text-white hover:bg-cyan-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title={isDemoMode ? t('EXPORT_DEMO_TITLE') : t('EXPORT_LIVE_TITLE')} onClick={downloadCsv}><Download size={14} strokeWidth={2} className="text-cyan-400"/> {t('CSV')}</button>
             <button className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:text-white hover:bg-emerald-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" disabled={!isDemoMode || timeFiltered.length === 0} title="Export Excel spreadsheet (.xls)" onClick={downloadExcel}><FileSpreadsheet size={14} strokeWidth={2} className="text-emerald-400"/> Excel</button>
             <button data-testid="admin_enquiries-AdminEnquiriesPageView-control-005" className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 px-3 py-1.5 text-xs font-medium text-sky-300 hover:text-white hover:bg-sky-500/20 transition-colors disabled:cursor-not-allowed disabled:opacity-40" type="button" onClick={() => printAdminEnquiriesRoster(timeFiltered)}><Printer size={14} strokeWidth={2} className="text-sky-400"/> {t('PRINT')}</button>
@@ -398,6 +405,13 @@ export default function AdminEnquiriesPageView() {
         isOpen={isBulkWhatsAppOpen}
         onClose={() => setIsBulkWhatsAppOpen(false)}
         enquiries={whatsappRecipients}
+      />
+
+      {/* Import Leads CSV Modal */}
+      <AdminMembersEnquiriesImportModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        onImport={handleImportLeads}
       />
     </div>
   );

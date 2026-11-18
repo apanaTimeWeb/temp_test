@@ -2,9 +2,10 @@
 // RESPONSIBILITY: Owns the coupons page summary, KPI indicators, and explicit query result states.
 
 import { useTranslations } from 'next-intl';
-import { Tag, Plus, Search, Download, FileSpreadsheet, Printer } from 'lucide-react';
+import { Tag, Plus, Search, Download, FileSpreadsheet, Printer, Sparkles, Filter } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
+import AdminMembersCouponsFlyerModal from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsFlyerModal';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
@@ -35,6 +36,8 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
   const t = useTranslations('ADMIN_COUPONS');
   const [urlTablePage0, setUrlTablePage0] = useAdminApplicationInfrastructureUrlQueryState<number>('admin-coupons-admin-coupons-results-section-1-page', 0);
   const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'All' | 'Active' | 'Expired' | 'Exhausted'>('All');
+  const [isFlyerModalOpen, setIsFlyerModalOpen] = useState(false);
 
   const filteredCoupons = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -45,9 +48,10 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
         (c.status && c.status.toLowerCase().includes(q)) ||
         (c.type && c.type.toLowerCase().includes(q))
       );
-      return matchesSearch;
+      const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
+      return matchesSearch && matchesStatus;
     });
-  }, [coupons, search]);
+  }, [coupons, search, statusFilter]);
 
   const downloadCouponsCsv = () => {
     const headers = ['Coupon ID', 'Code', 'Discount', 'Type', 'Valid Until', 'Max Uses', 'Used Count', 'Branch', 'Status'];
@@ -248,7 +252,7 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
     <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-5 shadow-xl space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
-          <div className="relative flex-1 min-w-[220px] max-w-sm">
+          <div className="relative flex-1 min-w-[200px] max-w-sm">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
             <input
               type="text"
@@ -262,8 +266,32 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
               className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
           </div>
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value as any);
+              setUrlTablePage0(0);
+            }}
+            aria-label="Filter coupons by status"
+            className="h-9 px-3 text-xs rounded-xl border border-slate-800 bg-slate-950/60 text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <option value="All">All Statuses</option>
+            <option value="Active">Active Only</option>
+            <option value="Expired">Expired</option>
+            <option value="Exhausted">Exhausted</option>
+          </select>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsFlyerModalOpen(true)}
+            disabled={filteredCoupons.length === 0}
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-xs font-semibold text-purple-300 hover:text-white hover:bg-purple-500/20 transition-all disabled:cursor-not-allowed disabled:opacity-40"
+            title="Generate & Print Coupon Flyers"
+          >
+            <Sparkles size={14} className="text-purple-400" />
+            <span>Coupon Flyers</span>
+          </button>
           <button
             type="button"
             onClick={downloadCouponsCsv}
@@ -307,6 +335,12 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
           onPageChange={setUrlTablePage0}
         />
       </div>
+
+      <AdminMembersCouponsFlyerModal
+        isOpen={isFlyerModalOpen}
+        onClose={() => setIsFlyerModalOpen(false)}
+        coupons={filteredCoupons}
+      />
     </div>
   );
   return (

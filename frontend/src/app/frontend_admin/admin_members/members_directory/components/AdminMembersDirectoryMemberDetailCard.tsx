@@ -239,6 +239,16 @@ export function AdminMembersDirectoryMemberDetailCard({
             <MessageSquare size={14} className="text-emerald-400" />
             <span>WhatsApp</span>
           </button>
+          {member.email && (
+            <a
+              href={`mailto:${member.email}?subject=${encodeURIComponent('Smart Library Membership Update')}&body=${encodeURIComponent(`Dear ${member.name},\n\n`)}`}
+              className="inline-flex min-h-9 items-center gap-1.5 rounded-xl border border-purple-500/40 bg-purple-500/15 px-3 py-1.5 text-xs font-semibold text-purple-400 hover:bg-purple-500/25 transition-all shadow-xs"
+              title={`Send Email directly to ${member.name}`}
+            >
+              <Mail size={14} className="text-purple-400" />
+              <span>Email</span>
+            </a>
+          )}
           <button
             type="button"
             onClick={() => copyToClipboard(member.phone, 'Phone number')}
