@@ -105,56 +105,53 @@ export default function SuperadminBillingOverviewPageClient() {
   ], [tCopy, showToast]);
 
   return (
-    <div className="sa-page-animate relative">
-
-      <div className="flex flex-col gap-1 mb-8">
-        <div className="sa-breadcrumb">
-          <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span><span>{tCopy("COPY.BILLING")}</span>
-        </div>
-        <div className="flex items-center justify-between mt-2">
-          <h1 className="sa-page-title">{tCopy("COPY.BILLING_REVENUE")}</h1>
-          <div className="flex items-center gap-3">
-            {(
-              <button type="button" className="sa-btn-secondary" onClick={exportInvoicePreviewCsv} data-testid="superadmin-billing-billing-overview-export-csv-2">
-                <Download size={16} className="text-secondary" /> {tCopy("COPY.EXPORT_CSV")}
-              </button>
-            )}
+    <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
+      {/* Hero Header */}
+      <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/80 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span>
+              <span className="text-indigo-300 font-medium">{tCopy("COPY.BILLING")}</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{tCopy("COPY.BILLING_REVENUE")}</h1>
           </div>
+          <button type="button"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 transition-all active:scale-95 cursor-pointer"
+            onClick={exportInvoicePreviewCsv} data-testid="superadmin-billing-billing-overview-export-csv-2">
+            <Download size={14} className="text-indigo-400" /> {tCopy("COPY.EXPORT_CSV")}
+          </button>
         </div>
       </div>
 
-      <p className="mb-4 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy("COPY.INVOICE_AND_PROMOTION_ENTRIES_ARE_LOCAL_DEMONSTRATION_DATA_PROMO_CHANGES_ARE_PREVIEWS_AND_ARE_NOT_LIVE_BILLING_CHANGES")}</p>
+      <p className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-200" role="status">
+        {tCopy("COPY.INVOICE_AND_PROMOTION_ENTRIES_ARE_LOCAL_DEMONSTRATION_DATA_PROMO_CHANGES_ARE_PREVIEWS_AND_ARE_NOT_LIVE_BILLING_CHANGES")}
+      </p>
 
-      <div className="flex items-center gap-2 mb-6 border-b border-border pb-2 overflow-x-auto hide-scrollbar">
+      {/* Tab Nav */}
+      <div className="flex items-center gap-2 border-b border-indigo-500/20 pb-2 overflow-x-auto">
         {SUPERADMIN_BILLING_TABS.map((tab) => (
-          <button type="button"
-            key={tab.id}
-            onClick={() => navigateToWorkflow(tab.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold motion-safe:transition-all motion-reduce:transition-none whitespace-nowrap ${
-              activeTab === tab.id 
-                ? 'bg-info-bg text-primary border border-border shadow-card' 
-                : 'text-secondary hover:bg-surface-hover hover:text-primary'
+          <button type="button" key={tab.id} onClick={() => navigateToWorkflow(tab.id)}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === tab.id
+                ? 'border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
             }`}
-           data-testid={`superadmin-billing-billing-overview-set-active-tab-4-${String(tab.id)}`}>
-            <tab.icon size={16} /> {tCopy(tab.labelKey)}
+            data-testid={`superadmin-billing-billing-overview-set-active-tab-4-${String(tab.id)}`}>
+            <tab.icon size={14} /> {tCopy(tab.labelKey)}
           </button>
         ))}
       </div>
 
       {activeTab === 'invoices' && <SuperadminBillingOverviewKpiCards />}
 
-      <div className="sa-card p-0 overflow-hidden h-125 flex flex-col">
+      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg h-125 flex flex-col">
         {activeTab === 'invoices' && (
-          <div className="flex-1 w-full motion-safe:animate-fade-in motion-reduce:animate-none">
+          <div className="flex-1 w-full">
             <SuperadminBillingOverviewSemanticTable rowData={invoices} columnDefs={colDefs} headerHeight={48} rowHeight={64} suppressCellFocus pagination paginationPageSize={10} />
           </div>
         )}
-
-        
       </div>
-
-      {/* Promo Code Modal — preview-only, with validated fields and accessible focus lifecycle. */}
-      
     </div>
   );
 }

@@ -16,6 +16,10 @@ export function ManagerDashboardOverviewCashDrawerCard({
       aria-labelledby="manager-cash-drawer-heading"
       className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 via-[#0d1e1c] to-[#0c0f24] p-5 sm:p-6 shadow-lg shadow-emerald-950/20 transition-all flex flex-col justify-between h-full hover:border-emerald-400/50"
     >
+      {/* Decorative background sparkline */}
+      <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-15 group-hover:opacity-25 transition-opacity pointer-events-none" viewBox="0 0 150 45">
+        <path d="M0,32 Q25,12 55,26 T105,10 T150,5" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+      </svg>
       <div>
         {/* Card Header */}
         <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-white/10">

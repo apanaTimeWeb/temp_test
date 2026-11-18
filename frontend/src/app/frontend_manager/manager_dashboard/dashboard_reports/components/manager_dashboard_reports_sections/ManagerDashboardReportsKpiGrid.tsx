@@ -18,11 +18,11 @@ const getReportTheme = (icon: string) => {
   switch (icon) {
     case 'Users':
       return {
-        cardBg: 'border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261c0c] to-amber-900/60 shadow-lg shadow-amber-950/40 hover:border-amber-400/60',
-        iconBox: 'bg-amber-500/20 border-amber-500/40 text-amber-400',
-        badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-        stroke: '#fbbf24',
-        accent: 'text-amber-400',
+        cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60',
+        iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
+        badge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+        stroke: '#818cf8',
+        accent: 'text-indigo-400',
       };
     case 'CalendarCheck':
       return {

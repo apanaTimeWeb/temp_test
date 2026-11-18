@@ -155,95 +155,110 @@ export default function SuperadminAccountingExpensesPageClient() {
   ];
 
   return (
-    <div className="space-y-6">
-      <p className="rounded-md border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy("COPY.SAMPLE_EXPENSE_ROWS_ONLY_ADD_DELETE_ACTIONS_AFFECT_LOCAL_PREVIEW_STATE_AND_DO_NOT_WRITE_ACCOUNTING_RECORDS")}</p>
-      <p className="rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy("COPY.SAMPLE_EXPENSE_RECORDS_ONLY_ADDING_OR_DELETING_EXPENSES_CHANGES_LOCAL_PREVIEW_STATE_AND_DOES_NOT_WRITE_TO_A_BACKEND")}</p>
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="acct-page-title">{tCopy("COPY.EXPENSE_LEDGER")}</h1>
-          <p className="acct-page-subtitle">{tCopy("COPY.TRACK_ALL_LIBRARY_OPERATIONAL_EXPENSES")}</p>
+    <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
+      {/* Hero Header */}
+      <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-950/60 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span>
+              <span className="text-amber-300 font-medium">{tCopy("COPY.EXPENSE_LEDGER")}</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{tCopy("COPY.EXPENSE_LEDGER")}</h1>
+            <p className="text-xs text-slate-400">{tCopy("COPY.TRACK_ALL_LIBRARY_OPERATIONAL_EXPENSES")}</p>
+          </div>
+          <button id="expense-add-trigger" type="button"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white text-xs font-bold shadow-md transition-all active:scale-95 cursor-pointer"
+            onClick={() => setShowAdd(true)} data-testid="superadmin-accounting-accounting-expenses-expense-add-trigger-2">
+            <Plus size={15} /> {tCopy("COPY.ADD_EXPENSE")}
+          </button>
         </div>
-        <button id="expense-add-trigger" type="button" className="acct-badge acct-badge--info cursor-pointer flex items-center gap-1 hover:border-focus" onClick={() => setShowAdd(true)} data-testid="superadmin-accounting-accounting-expenses-expense-add-trigger-2">
-          <Plus size={14} /> {tCopy("COPY.ADD_EXPENSE")}
-        </button>
       </div>
 
+      <p className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-200" role="status">
+        {tCopy("COPY.SAMPLE_EXPENSE_ROWS_ONLY_ADD_DELETE_ACTIONS_AFFECT_LOCAL_PREVIEW_STATE_AND_DO_NOT_WRITE_ACCOUNTING_RECORDS")}
+      </p>
+
+      {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="acct-kpi-card">
-          <p className="acct-kpi-label">{tCopy("COPY.TOTAL_EXPENSES")}</p>
-          <p className="acct-kpi-value acct-text-danger">{formatSuperadminAccountingMajorPreviewCurrency(expenses.reduce((s,e)=>s+e.amount,0), 'INR', locale)}</p>
+        <div className="relative overflow-hidden rounded-2xl border border-rose-500/30 bg-gradient-to-br from-rose-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
+          <p className="text-xs font-semibold uppercase tracking-wider text-rose-400">{tCopy("COPY.TOTAL_EXPENSES")}</p>
+          <p className="mt-3 text-2xl font-black text-slate-100">{formatSuperadminAccountingMajorPreviewCurrency(expenses.reduce((s,e)=>s+e.amount,0), 'INR', locale)}</p>
+          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-rose-500 to-pink-400" style={{ width: '85%' }} /></div>
         </div>
-        <div className="acct-kpi-card">
-          <p className="acct-kpi-label">{tCopy("COPY.THIS_MONTH")}</p>
-          <p className="acct-kpi-value">{formatSuperadminAccountingMajorPreviewCurrency(currentMonthTotal, 'INR', locale)}</p>
+        <div className="relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-400">{tCopy("COPY.THIS_MONTH")}</p>
+          <p className="mt-3 text-2xl font-black text-slate-100">{formatSuperadminAccountingMajorPreviewCurrency(currentMonthTotal, 'INR', locale)}</p>
+          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-amber-500 to-yellow-400" style={{ width: '45%' }} /></div>
         </div>
-        <div className="acct-kpi-card">
-          <p className="acct-kpi-label">{tCopy("COPY.ENTRIES")}</p>
-          <p className="acct-kpi-value">{expenses.length}</p>
+        <div className="relative overflow-hidden rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
+          <p className="text-xs font-semibold uppercase tracking-wider text-sky-400">{tCopy("COPY.ENTRIES")}</p>
+          <p className="mt-3 text-2xl font-black text-slate-100">{expenses.length}</p>
+          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-sky-500 to-cyan-400" style={{ width: '60%' }} /></div>
         </div>
-        <div className="acct-kpi-card">
-          <p className="acct-kpi-label">{tCopy("COPY.SUPERADMIN_ACCOUNTING_EXPENSE_CATEGORIES")}</p>
-          <p className="acct-kpi-value">{new Set(expenses.map((e) =>e.category)).size}</p>
+        <div className="relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
+          <p className="text-xs font-semibold uppercase tracking-wider text-purple-400">{tCopy("COPY.SUPERADMIN_ACCOUNTING_EXPENSE_CATEGORIES")}</p>
+          <p className="mt-3 text-2xl font-black text-slate-100">{new Set(expenses.map((e) => e.category)).size}</p>
+          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-purple-500 to-violet-400" style={{ width: '70%' }} /></div>
         </div>
       </div>
 
-      <div className="acct-filter-bar flex items-center justify-between p-4 bg-card border border-border rounded-lg">
-        <div className="flex flex-col">
-          <label htmlFor="expense-category-filter" className="acct-label text-xs mb-1">{tCopy("COPY.FILTER_BY_CATEGORY")}</label>
-          <select id="expense-category-filter" className="acct-select w-48" value={catFilter} onChange={e => setCatFilter(e.target.value)} data-testid="superadmin-accounting-accounting-expenses-expense-category-filter-3">
+      {/* Filter Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] shadow-md">
+        <div className="flex flex-col gap-1">
+          <label htmlFor="expense-category-filter" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{tCopy("COPY.FILTER_BY_CATEGORY")}</label>
+          <select id="expense-category-filter"
+            className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3 py-2 text-xs font-medium text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-400 cursor-pointer"
+            value={catFilter} onChange={e => setCatFilter(e.target.value)} data-testid="superadmin-accounting-accounting-expenses-expense-category-filter-3">
             <option value="all">{tCopy("COPY.ALL_CATEGORIES")}</option>
             {SUPERADMIN_ACCOUNTING_EXPENSE_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
-        <button type="button" className="acct-badge acct-badge--neutral cursor-pointer hover:border-focus flex items-center gap-1" onClick={async () => { if (await confirmLeave()) router.push(__SUPERADMIN_ACCOUNTING_EXPENSES_ROUTES.MODULE_URLS.EXPENSE_CATEGORIES); }} data-testid="superadmin-accounting-accounting-expenses-view-categories-4">
-          <TrendingUp size={14} /> {tCopy("COPY.VIEW_CATEGORIES")}
+        <button type="button"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 transition-all cursor-pointer"
+          onClick={async () => { if (await confirmLeave()) router.push(__SUPERADMIN_ACCOUNTING_EXPENSES_ROUTES.MODULE_URLS.EXPENSE_CATEGORIES); }}
+          data-testid="superadmin-accounting-accounting-expenses-view-categories-4">
+          <TrendingUp size={13} /> {tCopy("COPY.VIEW_CATEGORIES")}
         </button>
       </div>
 
-      <div className="acct-card p-4">
+      {/* Table */}
+      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg">
         {visible.length === 0 ? (
-          <div className="acct-empty-state py-12">
-            <div className="acct-empty-state__icon">💸</div>
-            <p className="acct-empty-state__title">{tCopy("COPY.NO_EXPENSES_FOUND")}</p>
+          <div className="flex flex-col items-center justify-center py-16 gap-3">
+            <span className="text-4xl">💸</span>
+            <p className="text-sm font-semibold text-slate-400">{tCopy("COPY.NO_EXPENSES_FOUND")}</p>
           </div>
         ) : (
-          <div className="mgr-table-wrapper h-112">
-            <SuperadminAccountingExpensesSemanticTable
-             
-              rowData={visible}
-              columnDefs={colDefs}
-              rowHeight={56}
-              headerHeight={48}
-              pagination={true}
-              paginationPageSize={10}
-              defaultColDef={{
-                sortable: true,
-                filter: true,
-                resizable: true
-              }}
-            />
+          <div className="h-112">
+            <SuperadminAccountingExpensesSemanticTable rowData={visible} columnDefs={colDefs} rowHeight={56} headerHeight={48} pagination={true} paginationPageSize={10} defaultColDef={{ sortable: true, filter: true, resizable: true }} />
           </div>
         )}
       </div>
 
       {showAdd && (
-        <div className="acct-dialog-overlay" onMouseDown={event => { if (event.target === event.currentTarget) setShowAdd(false); }}>
-          <div ref={dialogRef} className="acct-dialog bg-card" role="dialog" aria-modal="true" aria-labelledby="expense-dialog-title">
-            <h2 id="expense-dialog-title" className="acct-dialog__title mb-4 font-bold text-primary">{tCopy("COPY.ADD_EXPENSE_PREVIEW")}</h2>
-            <button type="button" aria-label={tCopy("COPY.CLOSE_ADD_EXPENSE_DIALOG")} className="acct-dialog__close hover:text-danger" onClick={() => setShowAdd(false)} data-testid="superadmin-accounting-accounting-expenses-close-add-expense-dialog-5">✕</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onMouseDown={event => { if (event.target === event.currentTarget) setShowAdd(false); }}>
+          <div ref={dialogRef} className="w-full max-w-lg rounded-2xl border border-amber-500/30 bg-gradient-to-br from-[#0c0f28] to-[#080b1a] p-6 shadow-2xl space-y-4" role="dialog" aria-modal="true" aria-labelledby="expense-dialog-title">
+            <div className="flex items-center justify-between pb-3 border-b border-amber-500/20">
+              <h2 id="expense-dialog-title" className="text-base font-bold text-slate-100 flex items-center gap-2">
+                <Plus size={18} className="text-amber-400" />
+                {tCopy("COPY.ADD_EXPENSE_PREVIEW")}
+              </h2>
+              <button type="button" aria-label={tCopy("COPY.CLOSE_ADD_EXPENSE_DIALOG")} className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer" onClick={() => setShowAdd(false)} data-testid="superadmin-accounting-accounting-expenses-close-add-expense-dialog-5">✕</button>
+            </div>
             <form className="space-y-4" noValidate onSubmit={handleSubmit(handleAdd)} data-testid="superadmin-superadmin-accounting-expenses-page-client-form-line-229">
-              <div><label htmlFor="expense-date" className="acct-label text-sm font-semibold mb-1 block">{tCopy("COPY.DATE")} <span className="acct-text-danger">*</span></label><input id="expense-date" type="date" className="acct-input w-full" aria-invalid={Boolean(errors.date)} aria-describedby={errors.date ? "expense-date-error" : undefined} {...register("date")}  data-testid="superadmin-accounting-accounting-expenses-expense-date-6"/>{errors.date && <p id="expense-date-error" className="text-sm text-danger" role="alert">{translateValidationMessage(errors.date.message)}</p>}</div>
-              <div><label htmlFor="expense-category" className="acct-label text-sm font-semibold mb-1 block">{tCopy("COPY.CATEGORY")}</label><select id="expense-category" className="acct-select w-full" {...register("category")} data-testid="superadmin-accounting-accounting-expenses-expense-category-7">{SUPERADMIN_ACCOUNTING_EXPENSE_CATEGORIES.map((c) =><option key={c}>{c}</option>)}</select></div>
-              <div><label htmlFor="expense-description" className="acct-label text-sm font-semibold mb-1 block">{tCopy("COPY.DESCRIPTION")} <span className="acct-text-danger">*</span></label><input id="expense-description" className="acct-input w-full" placeholder={tCopy("COPY.ENTER_DESCRIPTION")} aria-invalid={Boolean(errors.description)} aria-describedby={errors.description ? "expense-description-error" : undefined} {...register("description")}  data-testid="superadmin-accounting-accounting-expenses-expense-description-8"/>{errors.description && <p id="expense-description-error" className="text-sm text-danger" role="alert">{translateValidationMessage(errors.description.message)}</p>}</div>
-              <div><label htmlFor="expense-amount" className="acct-label text-sm font-semibold mb-1 block">{tCopy("COPY.AMOUNT")} <span className="acct-text-danger">*</span></label><input id="expense-amount" type="number" min="0.01" step="0.01" className="acct-input w-full" placeholder="0" aria-invalid={Boolean(errors.amount)} aria-describedby={errors.amount ? "expense-amount-error" : undefined} {...register("amount")}  data-testid="superadmin-accounting-accounting-expenses-expense-amount-9"/>{errors.amount && <p id="expense-amount-error" className="text-sm text-danger" role="alert">{translateValidationMessage(errors.amount.message)}</p>}</div>
-              <div><label htmlFor="expense-paid-by" className="acct-label text-sm font-semibold mb-1 block">{tCopy("COPY.PAID_BY")} <span className="acct-text-danger">*</span></label><input id="expense-paid-by" className="acct-input w-full" placeholder={tCopy("COPY.NAME")} aria-invalid={Boolean(errors.paidBy)} aria-describedby={errors.paidBy ? "expense-paid-by-error" : undefined} {...register("paidBy")}  data-testid="superadmin-accounting-accounting-expenses-expense-paid-by-10"/>{errors.paidBy && <p id="expense-paid-by-error" className="text-sm text-danger" role="alert">{translateValidationMessage(errors.paidBy.message)}</p>}</div>
-              <div><label htmlFor="expense-mode" className="acct-label text-sm font-semibold mb-1 block">{tCopy("COPY.MODE")}</label><select id="expense-mode" className="acct-select w-full" {...register("mode")} data-testid="superadmin-accounting-accounting-expenses-expense-mode-11">
-                <option value="cash">{tCopy("COPY.CASH")}</option><option value="upi">{tCopy("COPY.UPI")}</option><option value="card">{tCopy("COPY.CARD")}</option><option value="bank">{tCopy("COPY.BANK_TRANSFER")}</option>
-              </select></div>
-              <p className="text-xs text-secondary">{tCopy("COPY.PREVIEW_ONLY_SAVE_UPDATES_THIS_PAGE_S_LOCAL_SAMPLE_STATE_AND_DOES_NOT_SUBMIT_TO_A_SERVER")}</p>
-              <div className="acct-dialog__footer mt-6 flex justify-end gap-3">
-                <button type="button" className="px-4 py-2 border border-border text-primary rounded hover:bg-card motion-safe:transition-colors motion-reduce:transition-none" onClick={() => setShowAdd(false)} data-testid="superadmin-accounting-accounting-expenses-cancel-12">{tCopy("COPY.CANCEL")}</button>
-                <button type="submit" disabled={isSubmitting} className="px-4 py-2 bg-success text-on-success rounded hover:bg-success hover:text-on-success motion-safe:transition-colors motion-reduce:transition-none" data-testid="superadmin-accounting-accounting-expenses-save-preview-13">{tCopy("COPY.SAVE_PREVIEW")}</button>
+              <div><label htmlFor="expense-date" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">{tCopy("COPY.DATE")} <span className="text-rose-400">*</span></label><input id="expense-date" type="date" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-100 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 [color-scheme:dark]" aria-invalid={Boolean(errors.date)} aria-describedby={errors.date ? "expense-date-error" : undefined} {...register("date")} data-testid="superadmin-accounting-accounting-expenses-expense-date-6"/>{errors.date && <p id="expense-date-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.date.message)}</p>}</div>
+              <div><label htmlFor="expense-category" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">{tCopy("COPY.CATEGORY")}</label><select id="expense-category" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-200 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" {...register("category")} data-testid="superadmin-accounting-accounting-expenses-expense-category-7">{SUPERADMIN_ACCOUNTING_EXPENSE_CATEGORIES.map((c) =><option key={c}>{c}</option>)}</select></div>
+              <div><label htmlFor="expense-description" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">{tCopy("COPY.DESCRIPTION")} <span className="text-rose-400">*</span></label><input id="expense-description" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" placeholder={tCopy("COPY.ENTER_DESCRIPTION")} aria-invalid={Boolean(errors.description)} aria-describedby={errors.description ? "expense-description-error" : undefined} {...register("description")} data-testid="superadmin-accounting-accounting-expenses-expense-description-8"/>{errors.description && <p id="expense-description-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.description.message)}</p>}</div>
+              <div className="grid grid-cols-2 gap-4">
+                <div><label htmlFor="expense-amount" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">{tCopy("COPY.AMOUNT")} <span className="text-rose-400">*</span></label><input id="expense-amount" type="number" min="0.01" step="0.01" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" placeholder="0" aria-invalid={Boolean(errors.amount)} aria-describedby={errors.amount ? "expense-amount-error" : undefined} {...register("amount")} data-testid="superadmin-accounting-accounting-expenses-expense-amount-9"/>{errors.amount && <p id="expense-amount-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.amount.message)}</p>}</div>
+                <div><label htmlFor="expense-mode" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">{tCopy("COPY.MODE")}</label><select id="expense-mode" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-200 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" {...register("mode")} data-testid="superadmin-accounting-accounting-expenses-expense-mode-11"><option value="cash">{tCopy("COPY.CASH")}</option><option value="upi">{tCopy("COPY.UPI")}</option><option value="card">{tCopy("COPY.CARD")}</option><option value="bank">{tCopy("COPY.BANK_TRANSFER")}</option></select></div>
+              </div>
+              <div><label htmlFor="expense-paid-by" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">{tCopy("COPY.PAID_BY")} <span className="text-rose-400">*</span></label><input id="expense-paid-by" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" placeholder={tCopy("COPY.NAME")} aria-invalid={Boolean(errors.paidBy)} aria-describedby={errors.paidBy ? "expense-paid-by-error" : undefined} {...register("paidBy")} data-testid="superadmin-accounting-accounting-expenses-expense-paid-by-10"/>{errors.paidBy && <p id="expense-paid-by-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.paidBy.message)}</p>}</div>
+              <p className="text-xs text-amber-400/80" role="status">{tCopy("COPY.PREVIEW_ONLY_SAVE_UPDATES_THIS_PAGE_S_LOCAL_SAMPLE_STATE_AND_DOES_NOT_SUBMIT_TO_A_SERVER")}</p>
+              <div className="flex justify-end gap-3 pt-3 border-t border-indigo-500/20">
+                <button type="button" className="px-4 py-2 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-all cursor-pointer" onClick={() => setShowAdd(false)} data-testid="superadmin-accounting-accounting-expenses-cancel-12">{tCopy("COPY.CANCEL")}</button>
+                <button type="submit" disabled={isSubmitting} className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white text-xs font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 cursor-pointer" data-testid="superadmin-accounting-accounting-expenses-save-preview-13">{tCopy("COPY.SAVE_PREVIEW")}</button>
               </div>
             </form>
           </div>

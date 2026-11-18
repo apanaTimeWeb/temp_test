@@ -158,42 +158,51 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
 
 
   return (
-    <div className="sa-page-animate pb-10">
-      
-      <p className="mb-4 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{t("COPY.SUPPORT_TICKETS_AND_MESSAGE_THREADS_ARE_SAMPLE_DATA_TICKET_UPDATES_STAY_IN_LOCAL_PAGE_STATE_REPLIES_AND_INTERNAL_NOTES_ARE_NOT_SENT")}</p>
+    <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
       {selected && <SuperadminSupportTicketsOverviewDetailPanel key={selected.id} tkt={selected} onClose={handleCloseDetail} onSave={handleSave} />}
 
-      <div className="flex flex-col gap-1 mb-8">
-        <div className="sa-breadcrumb">
-          <span>{t("COPY.LIBRARY_OS")}</span><span>/</span><span>{t("COPY.SUPER_ADMIN")}</span><span>/</span><span>{t("COPY.SUPPORT_HELPDESK")}</span>
-        </div>
-        <div className="flex items-center justify-between mt-2">
-          <h1 className="sa-page-title">{t("COPY.SAAS_SUPPORT_HELPDESK")}</h1>
-          <button type="button" className="sa-btn-secondary" onClick={exportSampleTickets} data-testid="superadmin-support-tickets-support-tickets-overview-export-logs-2">
-            <FileText size={16} className="text-secondary" /> {t("COPY.EXPORT_LOGS")}
+      {/* Hero Header */}
+      <div className="rounded-2xl border border-rose-500/25 bg-gradient-to-br from-rose-950/60 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <span>{t("COPY.LIBRARY_OS")}</span><span>/</span><span>{t("COPY.SUPER_ADMIN")}</span><span>/</span>
+              <span className="text-rose-300 font-medium">{t("COPY.SUPPORT_HELPDESK")}</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{t("COPY.SAAS_SUPPORT_HELPDESK")}</h1>
+          </div>
+          <button type="button"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-rose-500/30 bg-rose-500/15 text-xs font-semibold text-rose-300 hover:bg-rose-500/25 transition-all active:scale-95 cursor-pointer"
+            onClick={exportSampleTickets} data-testid="superadmin-support-tickets-support-tickets-overview-export-logs-2">
+            <FileText size={14} /> {t("COPY.EXPORT_LOGS")}
           </button>
         </div>
       </div>
 
+      <p className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-200" role="status">
+        {t("COPY.SUPPORT_TICKETS_AND_MESSAGE_THREADS_ARE_SAMPLE_DATA_TICKET_UPDATES_STAY_IN_LOCAL_PAGE_STATE_REPLIES_AND_INTERNAL_NOTES_ARE_NOT_SENT")}
+      </p>
+
       <SuperadminSupportTicketsOverviewKpiCards openCount={openCount} slaBreachCount={slaBreachCount} avgResponse={SUPERADMIN_SUPPORT_TICKETS_SAMPLE_AVERAGE_RESPONSE} />
 
-      <div className="sa-card overflow-hidden p-0 border border-border shadow-2xl">
-        <div className="flex items-center gap-4 p-4 border-b border-border bg-surface-highlight">
-          <div className="flex gap-2">
+      {/* Table with filter */}
+      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg">
+        <div className="flex items-center gap-3 p-4 border-b border-indigo-500/20 bg-indigo-500/5">
+          <div className="flex gap-2 flex-wrap">
             {SUPERADMIN_SUPPORT_TICKETS_FILTERS.map((f) => (
               <button type="button" key={f} aria-pressed={filter === f} onClick={() => setFilter(f)}
-                className={`px-4 py-1.5 rounded-lg text-sm font-bold motion-safe:transition-all motion-reduce:transition-none ${
-                  filter === f 
-                  ? 'bg-info-bg text-info border border-border' 
-                  : 'text-secondary hover:text-primary hover:bg-surface-hover'
-                }`} data-testid={`superadmin-support-tickets-support-tickets-overview-set-filter-3-${String(f)}`}>
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  filter === f
+                    ? 'border border-indigo-500/40 bg-indigo-500/20 text-indigo-300'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
+                data-testid={`superadmin-support-tickets-support-tickets-overview-set-filter-3-${String(f)}`}>
                 {f === 'All' ? t('COPY.FILTER_ALL') : f === 'Open' ? t('COPY.STATUS_OPEN') : f === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : t('COPY.STATUS_RESOLVED')}
               </button>
             ))}
           </div>
-          <span className="ml-auto text-xs font-medium text-disabled">{filtered.length} {t("COPY.MATCHING_TICKETS")}</span>
+          <span className="ml-auto text-xs font-medium text-slate-400">{filtered.length} {t("COPY.MATCHING_TICKETS")}</span>
         </div>
-        
         <div className="sa-support-ticket-chart" role="region" aria-label={t("COPY.SAMPLE_SUPPORT_TICKETS_TABLE")}>
           <SuperadminSupportTicketsOverviewSemanticTable rowData={filtered} sourceRowCount={tickets.length} columnDefs={colDefs} pagination paginationPageSize={15} getRowId={({ data }) => data.id} hideFilter />
         </div>

@@ -110,40 +110,67 @@ export default function SuperadminCommunicationNoticesPageClient({ id }: { id?: 
   ];
 
   return (
-    <div className="eng-page" data-resource-id={id || undefined}>
-      {noticesQuery.isError && <p className="eng-info-box mb-3" role="alert">{tCopy("COPY.COULD_NOT_LOAD_NOTICES_FROM_THE_CONFIGURED_ENDPOINT")} <button type="button" className="underline ml-2" onClick={() => { void queryClient.invalidateQueries({ queryKey: SUPERADMIN_COMMUNICATION_NOTICES_QUERY_KEYS.lists() }); void noticesQuery.refetch(); }} data-testid="superadmin-communication-communication-notices-retry-4">{tCopy("COPY.RETRY")}</button></p>}
-      {noticesQuery.isPending && <p className="eng-info-box mb-3" role="status">{tCopy("COPY.LOADING_NOTICES")}</p>}
-      <p className="eng-info-box mb-3" role="status">{tCopy("COPY.CREATE_EDIT_DELETE_AND_BROADCAST_ACTIONS_ARE_PREVIEW_ONLY_OR_UNAVAILABLE_UNTIL_APPROVED_WRITE_BROADCAST_CONTRACTS_ARE_SUPPLIED")}</p>
+    <div className="w-full max-w-full min-w-0 space-y-6 pb-12" data-resource-id={id || undefined}>
+      {noticesQuery.isError && <p className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3.5 text-xs text-rose-200" role="alert">{tCopy("COPY.COULD_NOT_LOAD_NOTICES_FROM_THE_CONFIGURED_ENDPOINT")} <button type="button" className="underline ml-2 text-rose-300" onClick={() => { void queryClient.invalidateQueries({ queryKey: SUPERADMIN_COMMUNICATION_NOTICES_QUERY_KEYS.lists() }); void noticesQuery.refetch(); }} data-testid="superadmin-communication-communication-notices-retry-4">{tCopy("COPY.RETRY")}</button></p>}
+
+      {/* Hero Header */}
+      <div className="rounded-2xl border border-sky-500/25 bg-gradient-to-br from-sky-950/60 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <span>{tCopy("COPY.COMMUNICATION")}</span><span>/</span>
+              <span className="text-sky-300 font-medium">{tCopy("COPY.NOTICES")}</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{tCopy("COPY.NOTICE_BOARD")}</h1>
+            <p className="text-xs text-slate-400">{tCopy("COPY.POST_AND_MANAGE_LIBRARY_NOTICES_FOR_STUDENTS")}</p>
+          </div>
+          <button type="button" onClick={openAdd}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white text-xs font-bold shadow-md transition-all active:scale-95 cursor-pointer"
+            data-testid="superadmin-communication-communication-notices-post-notice-15">
+            <Plus size={15} /> {tCopy("COPY.POST_NOTICE")}
+          </button>
+        </div>
+      </div>
+
+      <p className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-200" role="status">
+        {tCopy("COPY.CREATE_EDIT_DELETE_AND_BROADCAST_ACTIONS_ARE_PREVIEW_ONLY_OR_UNAVAILABLE_UNTIL_APPROVED_WRITE_BROADCAST_CONTRACTS_ARE_SUPPLIED")}
+      </p>
+
+      {/* Table */}
+      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg">
+        {noticesQuery.isPending ? (
+          <div className="flex items-center justify-center py-16"><p className="text-sm text-slate-400">{tCopy("COPY.LOADING_NOTICES")}</p></div>
+        ) : notices.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 gap-3">
+            <span className="text-4xl">📢</span>
+            <p className="text-sm font-semibold text-slate-400">{tCopy("COPY.NO_NOTICES_POSTED_YET")}</p>
+            <button type="button" onClick={openAdd} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-500/15 border border-sky-500/30 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 transition-all cursor-pointer" data-testid="superadmin-communication-communication-notices-post-notice-16"><Plus size={14} /> {tCopy("COPY.POST_NOTICE")}</button>
+          </div>
+        ) : (
+          <div className="h-125">
+            <SuperadminCommunicationNoticesSemanticTable rowData={notices} columnDefs={colDefs} rowHeight={56} headerHeight={48} pagination={true} paginationPageSize={10} defaultColDef={{ sortable: true, filter: true, resizable: true }} />
+          </div>
+        )}
+      </div>
 
       {/* Add/Edit Modal */}
       {showAdd && (
-        <div className="eng-overlay">
-          <div className="eng-modal eng-modal--lg bg-card">
-            <button type="button" onClick={requestCloseAdd} className="eng-modal-close hover:text-danger" aria-label={tCopy("COPY.CLOSE_ADD_EDIT_NOTICE_DIALOG")} data-testid="superadmin-communication-communication-notices-close-add-edit-notice-dialog-5"><X size={16} aria-hidden="true" /></button>
-            <p className="eng-modal-title mb-4 font-bold text-primary">{editItem ? tCopy('COPY.EDIT_NOTICE_ACTION') : tCopy('COPY.POST_NOTICE_ACTION')}</p>
-            <form onSubmit={handleSubmit(handleSave)} noValidate data-testid="superadmin-superadmin-communication-notices-page-client-form-line-119">
-              <div className="eng-form-stack space-y-4">
-                <div>
-                  <label className="eng-label text-sm font-semibold mb-1 block" htmlFor="notice-title">{tCopy("COPY.TITLE")} <span className="eng-required text-danger">*</span></label>
-                  <input id="notice-title" className="eng-input py-2 px-3 border rounded w-full" placeholder={tCopy("COPY.NOTICE_TITLE")} aria-invalid={Boolean(errors.title)} aria-describedby={errors.title ? 'notice-title-error' : undefined} {...register('title')}  data-testid="superadmin-communication-communication-notices-notice-title-6"/>
-                  {errors.title && <p id="notice-title-error" className="text-xs text-danger" role="alert">{translateValidationMessage(errors.title.message)}</p>}
-                </div>
-                <div>
-                  <label className="eng-label text-sm font-semibold mb-1 block" htmlFor="notice-message">{tCopy("COPY.MESSAGE")} <span className="eng-required text-danger">*</span></label>
-                  <textarea id="notice-message" className="eng-textarea py-2 px-3 border rounded w-full" rows={6} placeholder={tCopy("COPY.NOTICE_MESSAGE")} aria-invalid={Boolean(translateValidationMessage(errors.message))} aria-describedby={translateValidationMessage(errors.message) ? 'notice-message-error' : undefined} {...register('message')}  data-testid="superadmin-communication-communication-notices-notice-message-7"/>
-                  {translateValidationMessage(errors.message) && <p id="notice-message-error" className="text-xs text-danger" role="alert">{translateValidationMessage(errors.message.message)}</p>}
-                </div>
-                <div>
-                  <label className="eng-label text-sm font-semibold mb-1 block" htmlFor="notice-valid-till">{tCopy("COPY.VALID_TILL")} <span className="eng-required text-danger">*</span></label>
-                  <input id="notice-valid-till" type="date" className="eng-input py-2 px-3 border rounded w-full" min={today} aria-invalid={Boolean(errors.validTill)} aria-describedby={errors.validTill ? 'notice-valid-till-error' : undefined} {...register('validTill')}  data-testid="superadmin-communication-communication-notices-notice-valid-till-8"/>
-                  {errors.validTill && <p id="notice-valid-till-error" className="text-xs text-danger" role="alert">{translateValidationMessage(errors.validTill.message)}</p>}
-                </div>
-              </div>
-              <div className="eng-modal-footer mt-6 flex justify-end gap-3">
-                <button type="button" onClick={requestCloseAdd} className="px-4 py-2 border border-border text-primary rounded hover:bg-card motion-safe:transition-colors motion-reduce:transition-none" data-testid="superadmin-communication-communication-notices-cancel-9">{tCopy("COPY.CANCEL")}</button>
-                <button type="submit" className="px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary-hover motion-safe:transition-colors motion-reduce:transition-none disabled:opacity-50 disabled:cursor-not-allowed" disabled={isSubmitting} data-testid="superadmin-communication-communication-notices-update-notice-preview-10">
-                  {editItem ? tCopy('COPY.UPDATE_NOTICE_PREVIEW') : tCopy('COPY.POST_NOTICE_PREVIEW')}
-                </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-sky-500/30 bg-gradient-to-br from-[#0c0f28] to-[#080b1a] p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-sky-500/20">
+              <p className="text-base font-bold text-slate-100 flex items-center gap-2">
+                <Plus size={18} className="text-sky-400" />
+                {editItem ? tCopy('COPY.EDIT_NOTICE_ACTION') : tCopy('COPY.POST_NOTICE_ACTION')}
+              </p>
+              <button type="button" onClick={requestCloseAdd} className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all cursor-pointer" aria-label={tCopy("COPY.CLOSE_ADD_EDIT_NOTICE_DIALOG")} data-testid="superadmin-communication-communication-notices-close-add-edit-notice-dialog-5"><X size={16} /></button>
+            </div>
+            <form onSubmit={handleSubmit(handleSave)} noValidate className="space-y-4" data-testid="superadmin-superadmin-communication-notices-page-client-form-line-119">
+              <div><label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="notice-title">{tCopy("COPY.TITLE")} <span className="text-rose-400">*</span></label><input id="notice-title" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400" placeholder={tCopy("COPY.NOTICE_TITLE")} aria-invalid={Boolean(errors.title)} aria-describedby={errors.title ? 'notice-title-error' : undefined} {...register('title')} data-testid="superadmin-communication-communication-notices-notice-title-6"/>{errors.title && <p id="notice-title-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.title.message)}</p>}</div>
+              <div><label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="notice-message">{tCopy("COPY.MESSAGE")} <span className="text-rose-400">*</span></label><textarea id="notice-message" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 resize-none" rows={5} placeholder={tCopy("COPY.NOTICE_MESSAGE")} aria-invalid={Boolean(translateValidationMessage(errors.message))} aria-describedby={translateValidationMessage(errors.message) ? 'notice-message-error' : undefined} {...register('message')} data-testid="superadmin-communication-communication-notices-notice-message-7"/>{translateValidationMessage(errors.message) && <p id="notice-message-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.message.message)}</p>}</div>
+              <div><label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="notice-valid-till">{tCopy("COPY.VALID_TILL")} <span className="text-rose-400">*</span></label><input id="notice-valid-till" type="date" className="w-full rounded-xl border border-indigo-500/30 bg-indigo-500/[0.07] px-3.5 py-2.5 text-sm text-slate-100 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 [color-scheme:dark]" min={today} aria-invalid={Boolean(errors.validTill)} aria-describedby={errors.validTill ? 'notice-valid-till-error' : undefined} {...register('validTill')} data-testid="superadmin-communication-communication-notices-notice-valid-till-8"/>{errors.validTill && <p id="notice-valid-till-error" className="mt-1 text-xs text-rose-400" role="alert">{translateValidationMessage(errors.validTill.message)}</p>}</div>
+              <div className="flex justify-end gap-3 pt-3 border-t border-indigo-500/20">
+                <button type="button" onClick={requestCloseAdd} className="px-4 py-2 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-all cursor-pointer" data-testid="superadmin-communication-communication-notices-cancel-9">{tCopy("COPY.CANCEL")}</button>
+                <button type="submit" className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white text-xs font-bold shadow-md transition-all active:scale-95 disabled:opacity-50 cursor-pointer" disabled={isSubmitting} data-testid="superadmin-communication-communication-notices-update-notice-preview-10">{editItem ? tCopy('COPY.UPDATE_NOTICE_PREVIEW') : tCopy('COPY.POST_NOTICE_PREVIEW')}</button>
               </div>
             </form>
           </div>
@@ -152,13 +179,13 @@ export default function SuperadminCommunicationNoticesPageClient({ id }: { id?: 
 
       {/* Delete Confirmation */}
       {deleteItem && (
-        <div className="eng-overlay">
-          <div className="eng-modal eng-modal--sm bg-card">
-            <p className="eng-modal-title mb-2 font-bold text-primary">{tCopy("COPY.DELETE_NOTICE")}</p>
-            <p className="eng-modal-desc text-sm text-secondary" id="notice-delete-unavailable">{tCopy("COPY.NOTICE_DELETE_UNAVAILABLE_NO_CHANGE")}</p>
-            <div className="eng-modal-footer mt-6 flex justify-end gap-3">
-              <button type="button" onClick={() => setDeleteItem(null)} className="px-4 py-2 border border-border text-primary rounded hover:bg-card motion-safe:transition-colors motion-reduce:transition-none" data-testid="superadmin-communication-communication-notices-cancel-11">{tCopy("COPY.CANCEL")}</button>
-              <button type="button" onClick={handleDelete} disabled title={tCopy("COPY.NOTICE_DELETE_UNAVAILABLE_NO_CHANGE")} aria-describedby="notice-delete-unavailable" className="px-4 py-2 bg-danger text-on-danger rounded hover:bg-danger hover:text-on-danger motion-safe:transition-colors motion-reduce:transition-none disabled:opacity-50 disabled:cursor-not-allowed" data-testid="superadmin-communication-communication-notices-delete-12">{tCopy("COPY.DELETE")}</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl border border-rose-500/30 bg-gradient-to-br from-[#0c0f28] to-[#080b1a] p-6 shadow-2xl space-y-4">
+            <p className="text-base font-bold text-slate-100">{tCopy("COPY.DELETE_NOTICE")}</p>
+            <p className="text-xs text-slate-400" id="notice-delete-unavailable">{tCopy("COPY.NOTICE_DELETE_UNAVAILABLE_NO_CHANGE")}</p>
+            <div className="flex justify-end gap-3 pt-3 border-t border-rose-500/20">
+              <button type="button" onClick={() => setDeleteItem(null)} className="px-4 py-2 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-all cursor-pointer" data-testid="superadmin-communication-communication-notices-cancel-11">{tCopy("COPY.CANCEL")}</button>
+              <button type="button" onClick={handleDelete} disabled className="px-4 py-2 rounded-xl bg-rose-600/50 text-white text-xs font-bold opacity-50 cursor-not-allowed" data-testid="superadmin-communication-communication-notices-delete-12">{tCopy("COPY.DELETE")}</button>
             </div>
           </div>
         </div>
@@ -166,59 +193,17 @@ export default function SuperadminCommunicationNoticesPageClient({ id }: { id?: 
 
       {/* Broadcast Confirmation */}
       {broadcastItem && (
-        <div className="eng-overlay">
-          <div className="eng-modal eng-modal--sm bg-card">
-            <p className="eng-modal-title mb-2 font-bold text-primary">{tCopy("COPY.BROADCAST_VIA_WHATSAPP")}</p>
-            <p className="eng-modal-desc text-sm text-secondary" id="notice-broadcast-unavailable">{tCopy("COPY.NOTICE_BROADCAST_UNAVAILABLE_NO_CHANGE")}</p>
-            <div className="eng-modal-footer mt-6 flex justify-end gap-3">
-              <button type="button" onClick={() => setBroadcastItem(null)} className="px-4 py-2 border border-border text-primary rounded hover:bg-card motion-safe:transition-colors motion-reduce:transition-none" data-testid="superadmin-communication-communication-notices-cancel-13">{tCopy("COPY.CANCEL")}</button>
-              <button type="button" onClick={handleBroadcast} disabled title={tCopy("COPY.NOTICE_BROADCAST_UNAVAILABLE_NO_CHANGE")} aria-describedby="notice-broadcast-unavailable" className="px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary-hover motion-safe:transition-colors motion-reduce:transition-none disabled:opacity-50 disabled:cursor-not-allowed" data-testid="superadmin-communication-communication-notices-broadcast-14">{tCopy("COPY.BROADCAST")}</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl border border-sky-500/30 bg-gradient-to-br from-[#0c0f28] to-[#080b1a] p-6 shadow-2xl space-y-4">
+            <p className="text-base font-bold text-slate-100">{tCopy("COPY.BROADCAST_VIA_WHATSAPP")}</p>
+            <p className="text-xs text-slate-400" id="notice-broadcast-unavailable">{tCopy("COPY.NOTICE_BROADCAST_UNAVAILABLE_NO_CHANGE")}</p>
+            <div className="flex justify-end gap-3 pt-3 border-t border-sky-500/20">
+              <button type="button" onClick={() => setBroadcastItem(null)} className="px-4 py-2 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-all cursor-pointer" data-testid="superadmin-communication-communication-notices-cancel-13">{tCopy("COPY.CANCEL")}</button>
+              <button type="button" onClick={handleBroadcast} disabled className="px-4 py-2 rounded-xl bg-sky-600/50 text-white text-xs font-bold opacity-50 cursor-not-allowed" data-testid="superadmin-communication-communication-notices-broadcast-14">{tCopy("COPY.BROADCAST")}</button>
             </div>
           </div>
         </div>
       )}
-
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <div className="eng-breadcrumb mb-2">
-            <span>{tCopy("COPY.COMMUNICATION")}</span><ChevronRight size={12} /><span>{tCopy("COPY.NOTICES")}</span>
-          </div>
-          <h1 className="eng-page-title text-2xl font-bold text-primary">{tCopy("COPY.NOTICE_BOARD")}</h1>
-          <p className="eng-page-subtitle text-secondary">{tCopy("COPY.POST_AND_MANAGE_LIBRARY_NOTICES_FOR_STUDENTS")}</p>
-        </div>
-        <button type="button" onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary-hover motion-safe:transition-colors motion-reduce:transition-none font-medium" data-testid="superadmin-communication-communication-notices-post-notice-15">
-          <Plus size={16} /> {tCopy("COPY.POST_NOTICE")}
-        </button>
-      </div>
-
-      <div className="eng-card eng-card--flush p-4">
-        {noticesQuery.isPending || noticesQuery.isError ? null : notices.length === 0 ? (
-          <div className="eng-empty py-12 flex flex-col items-center justify-center text-center">
-            <div className="eng-empty__icon text-4xl mb-4">📢</div>
-            <p className="eng-empty__title text-lg font-semibold text-primary mb-4">{tCopy("COPY.NO_NOTICES_POSTED_YET")}</p>
-            <button type="button" onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary-hover motion-safe:transition-colors motion-reduce:transition-none font-medium" data-testid="superadmin-communication-communication-notices-post-notice-16">
-              <Plus size={16} /> {tCopy("COPY.POST_NOTICE")}
-            </button>
-          </div>
-        ) : (
-          <div className="mgr-table-wrapper h-125">
-            <SuperadminCommunicationNoticesSemanticTable
-             
-              rowData={notices}
-              columnDefs={colDefs}
-              rowHeight={56}
-              headerHeight={48}
-              pagination={true}
-              paginationPageSize={10}
-              defaultColDef={{
-                sortable: true,
-                filter: true,
-                resizable: true
-              }}
-            />
-          </div>
-        )}
-      </div>
     </div>
   );
 }

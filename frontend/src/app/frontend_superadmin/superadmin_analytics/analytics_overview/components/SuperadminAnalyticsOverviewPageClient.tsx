@@ -97,51 +97,96 @@ const router = useRouter();
   const handleExport = () => window.print();
 
   return (
-    <div className="sa-page-animate space-y-6 pb-12">
-      <div className="rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">
+    <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
+      {/* Hero Header */}
+      <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/80 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="space-y-2">
+            <div className="flex items-center gap-1.5 text-xs text-slate-400">
+              <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span>
+              <span className="text-indigo-300 font-medium">{tCopy("COPY.REPORTS_ANALYTICS")}</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-100 flex items-center gap-2.5">
+              <Activity className="text-indigo-400" size={24} />
+              {tCopy("COPY.GLOBAL_SAAS_ANALYTICS")}
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-400">{tCopy("COPY.EXPLORE_THE_AVAILABLE_LOCAL_PREVIEW_DATASET_BY_DATE_RANGE_AND_REPORT_TYPE")}</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <label className="relative">
+              <span className="sr-only">{tCopy("COPY.REPORT_DATE_RANGE")}</span>
+              <Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
+              <select aria-label={tCopy("COPY.DATE_RANGE")} className="pl-9 pr-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-xs font-medium text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-400" value={dateRange} onChange={event => setDateRange(event.target.value as SuperadminReportsDateRange)} data-testid="superadmin-reports-reports-overview-date-range-2">
+                {SUPERADMIN_REPORTS_OVERVIEW_PAGE_CLIENT_DATE_RANGES.map(range => <option key={range} value={range}>{tCopy(({ 'Last 30 Days': 'COPY.DATE_RANGE_LAST_30_DAYS', 'Last 6 Months': 'COPY.DATE_RANGE_LAST_6_MONTHS', 'This Year': 'COPY.DATE_RANGE_THIS_YEAR', 'All Time': 'COPY.DATE_RANGE_ALL_TIME' } as const)[range as SuperadminReportsDateRange])}</option>)}
+              </select>
+            </label>
+            <button type="button" className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md transition-all active:scale-95 cursor-pointer" onClick={handleExport} data-testid="superadmin-reports-reports-overview-print-save-pdf-3">
+              <Download size={14} aria-hidden="true" /><span>{tCopy("COPY.PRINT_SAVE_PDF")}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-200" role="status">
         {tCopy("COPY.PREVIEW_ONLY_ALL_CHARTS_KPIS_AND_TENANT_ROWS_ON_THIS_PAGE_USE_SYNTHETIC_SAMPLE_DATA_A_VERIFIED_REPORTING_API_CONTRACT_WAS_NOT_INCLUDED_IN_THE_SUPPLIED_PACKAGE")}
-      </div>
-      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-        <div>
-          <div className="sa-breadcrumb"><span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span><span>{tCopy("COPY.REPORTS_ANALYTICS")}</span></div>
-          <h1 className="sa-page-title mt-2 flex items-center gap-3"><Activity className="text-primary" size={24} /> {tCopy("COPY.GLOBAL_SAAS_ANALYTICS")}</h1>
-          <p className="text-sm text-secondary">{tCopy("COPY.EXPLORE_THE_AVAILABLE_LOCAL_PREVIEW_DATASET_BY_DATE_RANGE_AND_REPORT_TYPE")}</p>
-        </div>
-        <div className="flex w-full items-center gap-3 md:w-auto">
-          <label className="relative flex-1 md:w-48">
-            <span className="sr-only">{tCopy("COPY.REPORT_DATE_RANGE")}</span><Calendar size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary" />
-            <select aria-label={tCopy("COPY.DATE_RANGE")} className="sa-input pl-9 text-sm" value={dateRange} onChange={event => setDateRange(event.target.value as SuperadminReportsDateRange)} data-testid="superadmin-reports-reports-overview-date-range-2">
-              {SUPERADMIN_REPORTS_OVERVIEW_PAGE_CLIENT_DATE_RANGES.map(range => <option key={range} value={range}>{tCopy(({ 'Last 30 Days': 'COPY.DATE_RANGE_LAST_30_DAYS', 'Last 6 Months': 'COPY.DATE_RANGE_LAST_6_MONTHS', 'This Year': 'COPY.DATE_RANGE_THIS_YEAR', 'All Time': 'COPY.DATE_RANGE_ALL_TIME' } as const)[range as SuperadminReportsDateRange])}</option>)}
-            </select>
-          </label>
-          <button type="button" className="sa-btn-primary shrink-0" onClick={handleExport} data-testid="superadmin-reports-reports-overview-print-save-pdf-3"><Download size={16} aria-hidden="true" /><span>{tCopy("COPY.PRINT_SAVE_PDF")}</span></button>
-        </div>
-      </div>
+      </p>
 
+      {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="sa-card p-5"><p className="text-xs font-semibold uppercase text-secondary">{tCopy("COPY.MRR_IN_SAMPLE_ROWS")}</p><p className="mt-3 text-2xl font-bold text-primary">{formatSuperadminReportsMajorPreviewCurrency(totalMrr, locale, 'INR')}</p></div>
-        <div className="sa-card p-5"><p className="text-xs font-semibold uppercase text-secondary">{tCopy("COPY.ARR_RUN_RATE_EQUIVALENT")}</p><p className="mt-3 text-2xl font-bold text-primary">{formatSuperadminReportsMajorPreviewCurrency(totalMrr * 12, locale, 'INR')}</p></div>
-        <div className="sa-card p-5"><div className="flex items-center gap-2"><Users size={16} className="text-success"/><p className="text-xs font-semibold uppercase text-secondary">{tCopy("COPY.ACTIVE_SAMPLE_TENANTS")}</p></div><p className="mt-3 text-2xl font-bold text-primary">{activeTenants}</p></div>
-        <div className="sa-card p-5"><p className="text-xs font-semibold uppercase text-secondary">{tCopy("COPY.TENANTS_MARKED_CHURN_RISK")}</p><p className="mt-3 text-2xl font-bold text-warning">{churnRisk}</p></div>
+        <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
+          <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400">{tCopy("COPY.MRR_IN_SAMPLE_ROWS")}</p>
+          <p className="mt-3 text-2xl sm:text-3xl font-black text-slate-100">{formatSuperadminReportsMajorPreviewCurrency(totalMrr, locale, 'INR')}</p>
+          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400" style={{ width: '78%' }} /></div>
+        </div>
+        <div className="relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
+          <p className="text-xs font-semibold uppercase tracking-wider text-indigo-300">{tCopy("COPY.ARR_RUN_RATE_EQUIVALENT")}</p>
+          <p className="mt-3 text-2xl sm:text-3xl font-black text-slate-100">{formatSuperadminReportsMajorPreviewCurrency(totalMrr * 12, locale, 'INR')}</p>
+          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-indigo-500 to-indigo-400" style={{ width: '65%' }} /></div>
+        </div>
+        <div className="relative overflow-hidden rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
+          <div className="flex items-center gap-2 mb-1"><Users size={14} className="text-sky-400"/><p className="text-xs font-semibold uppercase tracking-wider text-sky-400">{tCopy("COPY.ACTIVE_SAMPLE_TENANTS")}</p></div>
+          <p className="mt-2 text-2xl sm:text-3xl font-black text-slate-100">{activeTenants}</p>
+          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-sky-500 to-cyan-400" style={{ width: '90%' }} /></div>
+        </div>
+        <div className="relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-400">{tCopy("COPY.TENANTS_MARKED_CHURN_RISK")}</p>
+          <p className="mt-3 text-2xl sm:text-3xl font-black text-slate-100">{churnRisk}</p>
+          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-amber-500 to-orange-400" style={{ width: '20%' }} /></div>
+        </div>
       </div>
 
-      <section className="sa-card overflow-hidden">
-        <div className="flex gap-2 overflow-x-auto border-b border-border bg-surface-highlight p-3" role="navigation" aria-label={tCopy("COPY.REPORT_TYPE")}>
-          {SUPERADMIN_REPORTS_OVERVIEW_PAGE_CLIENT_REPORT_TABS.map(({ name, icon: Icon }) => <button type="button" key={name} aria-current={activeTab === name ? 'page' : undefined} onClick={() => navigateToWorkflow(name)} className={`flex min-h-11 items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold ${activeTab === name ? 'bg-primary text-on-primary' : 'text-secondary hover:bg-surface-hover'}`} data-testid={`superadmin-reports-reports-overview-set-active-tab-4-${String(name)}`}><Icon size={16} aria-hidden="true" />{tCopy(({ Financials: 'COPY.REPORT_TAB_FINANCIALS', 'Tenant Growth': 'COPY.REPORT_TAB_TENANT_GROWTH', 'Subscription Mix': 'COPY.REPORT_TAB_SUBSCRIPTION_MIX' } as const)[name])}</button>)}
+      {/* Chart Section */}
+      <section className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg">
+        <div className="flex gap-2 overflow-x-auto border-b border-indigo-500/20 bg-indigo-500/5 p-3" role="navigation" aria-label={tCopy("COPY.REPORT_TYPE")}>
+          {SUPERADMIN_REPORTS_OVERVIEW_PAGE_CLIENT_REPORT_TABS.map(({ name, icon: Icon }) => (
+            <button type="button" key={name} aria-current={activeTab === name ? 'page' : undefined} onClick={() => navigateToWorkflow(name)}
+              className={`flex min-h-9 items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                activeTab === name ? 'bg-indigo-500/20 border border-indigo-500/40 text-indigo-300' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+              }`}
+              data-testid={`superadmin-reports-reports-overview-set-active-tab-4-${String(name)}`}>
+              <Icon size={14} aria-hidden="true" />{tCopy(({ Financials: 'COPY.REPORT_TAB_FINANCIALS', 'Tenant Growth': 'COPY.REPORT_TAB_TENANT_GROWTH', 'Subscription Mix': 'COPY.REPORT_TAB_SUBSCRIPTION_MIX' } as const)[name])}
+            </button>
+          ))}
         </div>
         <div className="p-4 md:p-6">
-          <h2 className="text-base font-semibold">{tCopy(({ Financials: 'COPY.REPORT_TAB_FINANCIALS', 'Tenant Growth': 'COPY.REPORT_TAB_TENANT_GROWTH', 'Subscription Mix': 'COPY.REPORT_TAB_SUBSCRIPTION_MIX' } as const)[activeTab])} — {tCopy(({ 'Last 30 Days': 'COPY.DATE_RANGE_LAST_30_DAYS', 'Last 6 Months': 'COPY.DATE_RANGE_LAST_6_MONTHS', 'This Year': 'COPY.DATE_RANGE_THIS_YEAR', 'All Time': 'COPY.DATE_RANGE_ALL_TIME' } as const)[dateRange])}</h2>
-          <p className="mt-1 text-sm text-secondary">{tCopy("COPY.SAMPLE_VALUES_ONLY_THE_REPORT_API_IS_NOT_CONNECTED_IN_THIS_SOURCE_PACKAGE")}</p>
+          <h2 className="text-sm font-semibold text-slate-200">{tCopy(({ Financials: 'COPY.REPORT_TAB_FINANCIALS', 'Tenant Growth': 'COPY.REPORT_TAB_TENANT_GROWTH', 'Subscription Mix': 'COPY.REPORT_TAB_SUBSCRIPTION_MIX' } as const)[activeTab])} — {tCopy(({ 'Last 30 Days': 'COPY.DATE_RANGE_LAST_30_DAYS', 'Last 6 Months': 'COPY.DATE_RANGE_LAST_6_MONTHS', 'This Year': 'COPY.DATE_RANGE_THIS_YEAR', 'All Time': 'COPY.DATE_RANGE_ALL_TIME' } as const)[dateRange])}</h2>
+          <p className="mt-1 text-xs text-slate-400">{tCopy("COPY.SAMPLE_VALUES_ONLY_THE_REPORT_API_IS_NOT_CONNECTED_IN_THIS_SOURCE_PACKAGE")}</p>
           <div className="mt-4 h-80 min-w-0"><SuperadminAnalyticsOverviewAnalyticsChart activeTab={activeTab} dateRange={dateRange} /></div>
         </div>
       </section>
 
-      <section className="sa-card p-4 md:p-6">
+      {/* Tenant Table */}
+      <section className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] p-4 md:p-6 shadow-lg">
         <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
-          <div><h2 className="text-lg font-semibold">{tCopy("COPY.TENANT_PREVIEW_ROWS")}</h2><p className="mt-1 text-sm text-secondary">{tCopy("COPY.VIEWING")} {filteredTenants.length} {tCopy("COPY.SAMPLE_TENANTS")}</p></div>
+          <div>
+            <h2 className="text-base font-bold text-slate-100">{tCopy("COPY.TENANT_PREVIEW_ROWS")}</h2>
+            <p className="mt-1 text-xs text-slate-400">{tCopy("COPY.VIEWING")} {filteredTenants.length} {tCopy("COPY.SAMPLE_TENANTS")}</p>
+          </div>
           <div className="flex flex-wrap gap-2">
-            <button type="button" className="sa-btn-ghost sa-btn-ghost--sm" onClick={() => setTenantFilter(tenantFilter === 'All' ? 'Active' : tenantFilter === 'Active' ? 'Churn Risk' : 'All')} data-testid="superadmin-reports-reports-overview-filter-5"><Filter size={14} aria-hidden="true" /> {tCopy("COPY.FILTER")} {tenantFilter === 'All' ? tCopy('COPY.TENANT_FILTER_ALL') : tenantFilter === 'Active' ? tCopy('COPY.TENANT_STATUS_ACTIVE') : tCopy('COPY.TENANT_STATUS_CHURN_RISK')}</button>
-            <button type="button" className="sa-btn-ghost sa-btn-ghost--sm" onClick={() => router.push(__SUPERADMIN_ANALYTICS_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES_PAGE)} data-testid="superadmin-reports-reports-overview-view-libraries-6">{tCopy("COPY.VIEW_LIBRARIES")}</button>
+            <button type="button" className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 transition-all cursor-pointer" onClick={() => setTenantFilter(tenantFilter === 'All' ? 'Active' : tenantFilter === 'Active' ? 'Churn Risk' : 'All')} data-testid="superadmin-reports-reports-overview-filter-5">
+              <Filter size={13} aria-hidden="true" /> {tCopy("COPY.FILTER")} {tenantFilter === 'All' ? tCopy('COPY.TENANT_FILTER_ALL') : tenantFilter === 'Active' ? tCopy('COPY.TENANT_STATUS_ACTIVE') : tCopy('COPY.TENANT_STATUS_CHURN_RISK')}
+            </button>
+            <button type="button" className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-all cursor-pointer" onClick={() => router.push(__SUPERADMIN_ANALYTICS_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES_PAGE)} data-testid="superadmin-reports-reports-overview-view-libraries-6">{tCopy("COPY.VIEW_LIBRARIES")}</button>
           </div>
         </div>
         <div className="h-88 w-full" aria-label={tCopy("COPY.SAMPLE_TENANT_DATA_TABLE")}>

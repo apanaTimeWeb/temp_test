@@ -42,6 +42,10 @@ export function ManagerDashboardOverviewKpiGrid({
       case 'Total Students':
       case 'Total Members':
         return tManagerUi('dashboard_kpi_total_students');
+      case 'Expiring Members':
+      case 'Expiring Soon':
+      case 'Renewals Due':
+        return 'Renewals Due';
       case 'Attendance Today':
       case 'Today Attendance':
         if (timeRange === 'this_week') return 'Attendance (This Week)';
@@ -102,6 +106,18 @@ export function ManagerDashboardOverviewKpiGrid({
           accent: 'text-indigo-400',
           progress: 'from-indigo-500 to-indigo-400',
         };
+      case 'Expiring Members':
+      case 'Expiring Soon':
+      case 'Renewals Due':
+        return {
+          cardBg: 'border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 hover:border-amber-400/60',
+          iconBox: 'bg-amber-500/20 border-amber-500/40 text-amber-400',
+          badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+          stroke: '#fbbf24',
+          textMuted: 'text-amber-200/70',
+          accent: 'text-amber-400',
+          progress: 'from-amber-500 to-amber-400',
+        };
       case 'Attendance Today':
       case 'Today Attendance':
         return {
@@ -153,6 +169,10 @@ export function ManagerDashboardOverviewKpiGrid({
       case 'Total Students':
       case 'Total Members':
         return 'Active enrolled students';
+      case 'Expiring Members':
+      case 'Expiring Soon':
+      case 'Renewals Due':
+        return 'Subscriptions expiring soon';
       case 'Attendance Today':
       case 'Today Attendance':
         if (timeRange === 'this_week') return 'Total check-ins this week';

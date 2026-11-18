@@ -18,21 +18,21 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 w-full max-w-full min-w-0">
       {/* KPI 1: Total Enquiries */}
-      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261c0c] to-amber-900/60 p-4 sm:p-5 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 p-4 sm:p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-32 h-16 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <div className="flex items-center justify-between gap-3 mb-3">
             <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider truncate">Total Leads</span>
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shadow-xs shrink-0 transition-transform group-hover:scale-110">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center shadow-xs shrink-0 transition-transform group-hover:scale-110">
               <Users size={18} />
             </div>
           </div>
           <div>
             <div className="flex items-baseline justify-between gap-2">
               <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-sans">{stats.total}</div>
-              <span className="text-[10px] sm:text-xs font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
+              <span className="text-[10px] sm:text-xs font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 whitespace-nowrap">
                 {horizonLabel}
               </span>
             </div>
@@ -68,21 +68,21 @@ export function ManagerMembersEnquiriesKpis({ stats, horizonLabel }: ManagerMemb
       </div>
 
       {/* KPI 3: Active Pipeline (Visited + Interested) */}
-      <div className="group relative overflow-hidden rounded-2xl border border-purple-500/40 bg-gradient-to-br from-purple-950/80 via-[#24133f] to-purple-900/60 p-4 sm:p-5 shadow-lg shadow-purple-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-purple-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 p-4 sm:p-5 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-32 h-16 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,32 Q30,14 60,25 T110,10 T150,18" fill="none" stroke="#c084fc" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M0,32 Q30,14 60,25 T110,10 T150,18" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <div className="flex items-center justify-between gap-3 mb-3">
             <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider truncate">In Pipeline</span>
-            <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/40 flex items-center justify-center shadow-xs shrink-0 transition-transform group-hover:scale-110">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shadow-xs shrink-0 transition-transform group-hover:scale-110">
               <GitBranch size={18} />
             </div>
           </div>
           <div>
             <div className="flex items-baseline justify-between gap-2">
               <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-sans">{stats.activePipeline}</div>
-              <span className="text-[10px] sm:text-xs font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 whitespace-nowrap">
+              <span className="text-[10px] sm:text-xs font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 whitespace-nowrap">
                 {horizonLabel}
               </span>
             </div>
