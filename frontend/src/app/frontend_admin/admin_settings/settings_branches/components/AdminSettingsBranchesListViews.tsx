@@ -3,11 +3,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
-import type { KeyboardEvent, MouseEvent } from 'react';
 import useAdminSettingsBranchesMain from '@/app/frontend_admin/admin_settings/settings_branches/hooks/useAdminSettingsBranchesMain';
 import type { AdminBranchesBranch, AdminBranchesStatus } from '@/app/frontend_admin/admin_settings/settings_branches/schemas/AdminSettingsBranchesSchema';
 import { ADMIN_BRANCHES_DEFAULT_PAGE_SIZE, ADMIN_BRANCHES_PAGE_SIZE_OPTIONS, ADMIN_BRANCHES_STATUS_OPTIONS } from '@/app/frontend_admin/admin_settings/settings_branches/config/admin_settings_branches.url_config';
-import { Eye, MoreVertical, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { AdminBranchesListViewsProps } from '@/app/frontend_admin/admin_settings/settings_branches/types/AdminSettingsBranchesComponentTypes';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 
@@ -15,14 +14,13 @@ import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/A
 export default function AdminBranchesListViews({ model }: AdminBranchesListViewsProps) {
   const t = useTranslations('ADMIN_BRANCHES');
   const { activeTab, setActiveTab, branches, setViewingBranch } = model;
-  const filterStatus: AdminBranchesStatus | undefined = activeTab === 'active' ? ADMIN_BRANCHES_STATUS_OPTIONS[0] : activeTab === 'suspended' ? ADMIN_BRANCHES_STATUS_OPTIONS[1] : activeTab === 'archived' ? ADMIN_BRANCHES_STATUS_OPTIONS[2] : undefined;
+  const filterStatus: AdminBranchesStatus | undefined = ADMIN_BRANCHES_STATUS_OPTIONS[0];
   const [search, setSearch] = useState('');
   type BranchSortField = 'name' | 'manager' | 'status';
   const [sortField, setSortField] = useState<BranchSortField | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useAdminApplicationInfrastructureUrlQueryState<number>('page', 0);
   const [pageSize, setPageSize] = useAdminApplicationInfrastructureUrlQueryState<number>('pageSize', ADMIN_BRANCHES_DEFAULT_PAGE_SIZE, { validValues: [10, 25, 50] });
-  const [openActionsFor, setOpenActionsFor] = useState<string | null>(null);
 
   const toggleSort = (field: BranchSortField) => {
     setPage(0);
@@ -91,16 +89,6 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
     );
   };
   const statusClass = (status: AdminBranchesStatus) => status === ADMIN_BRANCHES_STATUS_OPTIONS[0] ? 'bg-success-bg text-success-text' : status === ADMIN_BRANCHES_STATUS_OPTIONS[1] ? 'bg-danger-bg text-danger-text' : 'bg-muted text-text-secondary border border-border';
-  const activateRow = (event: KeyboardEvent<HTMLTableRowElement>, branch: AdminBranchesBranch) => {
-    const target = event.target;
-    if (target instanceof HTMLElement && target.closest('button,a,input,select,textarea,[role=menuitem]')) return;
-    if (['Enter', ' '].includes(event.key)) { event.preventDefault(); setViewingBranch(branch); }
-  };
-  const clickRow = (event: MouseEvent<HTMLTableRowElement>, branch: AdminBranchesBranch) => {
-    const target = event.target;
-    if (target instanceof HTMLElement && target.closest('button,a,input,select,textarea')) return;
-    setViewingBranch(branch);
-  };
   const table = (
     <div className="w-full">
       <div className="p-4 border-b border-border flex flex-wrap items-center justify-between gap-3">
@@ -142,7 +130,6 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
                   <div><dt className="text-text-secondary">{t('TABLE_MANAGER')}</dt><dd className="break-words text-text-primary">{branch.manager}</dd></div>
                   <div><dt className="text-text-secondary">{t('BRANCH_ADDRESS_LABEL')}</dt><dd className="break-words text-text-primary">{branch.address}</dd></div>
                 </dl>
-                <button type="button" className="min-h-11 w-full rounded-md border border-border px-3 py-2 text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => setViewingBranch(branch)}>{t('VIEW_DETAILS')}</button>
               </article>
             ))}
           </div>
@@ -153,36 +140,22 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
                   {renderSortableHeader('name', t('TABLE_BRANCH'))}
                   {renderSortableHeader('manager', t('TABLE_MANAGER'))}
                   {renderSortableHeader('status', t('TABLE_STATUS'))}
-                  <th className="px-4 py-3 text-right text-slate-400">{t('TABLE_ACTIONS')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
                 {visibleRows.map((branch) => (
-                  <tr key={branch.id} tabIndex={0} className="h-14 cursor-pointer border-b border-slate-800/60 text-slate-200 motion-safe:transition-colors hover:bg-slate-800/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={(event) => clickRow(event, branch)} onKeyDown={(event) => activateRow(event, branch)} aria-label={t('OPEN_BRANCH', { name: branch.name })}>
+                  <tr key={branch.id} className="h-14 border-b border-slate-800/60 text-slate-200 motion-safe:transition-colors hover:bg-slate-800/40">
                     <td className="px-4 py-3">
-                      <button type="button" className="text-left text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => setViewingBranch(branch)}>
+                      <div>
                         <span className="font-semibold text-slate-100">{branch.name}</span>
                         <span className="block text-xs font-mono text-slate-400">{branch.code}</span>
-                      </button>
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-slate-300 font-medium">{branch.manager}</td>
                     <td className="px-4 py-3">
                       <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${statusClass(branch.status)}`}>
                         {t(branch.status === ADMIN_BRANCHES_STATUS_OPTIONS[0] ? 'STATUS_ACTIVE' : branch.status === ADMIN_BRANCHES_STATUS_OPTIONS[1] ? 'STATUS_SUSPENDED' : 'STATUS_ARCHIVED')}
                       </span>
-                    </td>
-                    <td className="relative px-4 py-3">
-                      <div className="flex justify-end items-center gap-1.5">
-                        <button type="button" aria-label={t('VIEW_BRANCH', { name: branch.name })} className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all" onClick={() => { setOpenActionsFor(null); setViewingBranch(branch); }}><Eye size={16} strokeWidth={2}/></button>
-                        <button type="button" aria-label={t('OPEN_ACTIONS', { name: branch.name })} aria-haspopup="menu" aria-expanded={openActionsFor === branch.id} aria-controls={`admin-branch-actions-${branch.id}`} className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all" onClick={() => setOpenActionsFor((current) => current === branch.id ? null : branch.id)}><MoreVertical size={16} strokeWidth={2}/></button>
-                      </div>
-                      {openActionsFor === branch.id && (
-                        <div id={`admin-branch-actions-${branch.id}`} role="menu" aria-label={t('OPEN_ACTIONS', { name: branch.name })} onKeyDown={(event) => { if (event.key === 'Escape') setOpenActionsFor(null); }} className="absolute right-4 top-14 z-10 min-w-48 rounded-xl border border-slate-700 bg-slate-900 p-1 shadow-2xl">
-                          <button type="button" role="menuitem" className="block min-h-11 w-full rounded-lg px-3 py-2 text-left text-primary hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => { setOpenActionsFor(null); setViewingBranch(branch); }}>{t('VIEW_DETAILS')}</button>
-                          <button type="button" role="menuitem" disabled title={t('EDIT_BRANCH_TITLE')} className="block min-h-11 w-full cursor-not-allowed rounded-lg px-3 py-2 text-left text-slate-500 disabled:opacity-60">{t('EDIT_BRANCH_UNAVAILABLE')}</button>
-                          <button type="button" role="menuitem" className="block min-h-11 w-full rounded-lg px-3 py-2 text-left text-slate-400 hover:bg-slate-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => setOpenActionsFor(null)}>{t('CLOSE_MENU')}</button>
-                        </div>
-                      )}
                     </td>
                   </tr>
                 ))}
@@ -205,10 +178,14 @@ export default function AdminBranchesListViews({ model }: AdminBranchesListViews
     </div>
   );
 
-  if (activeTab === 'all') return <section className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl backdrop-blur-md"><div className="flex items-center justify-between gap-4 p-5 border-b border-slate-800"><h2 className="text-lg font-bold text-white">{t('ALL_BRANCHES')}</h2><button type="button" className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-on-primary hover:bg-primary-hover shadow-md transition-all" onClick={() => setActiveTab('create')}>{t('NEW_BRANCH')}</button></div>{table}</section>;
-  if (activeTab === 'active') return <section className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl backdrop-blur-md"><h2 className="p-5 border-b border-slate-800 text-lg font-bold text-white">{t('ACTIVE_BRANCHES')}</h2>{table}</section>;
-  if (activeTab === 'suspended') return <section className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl backdrop-blur-md"><h2 className="p-5 border-b border-slate-800 text-lg font-bold text-white">{t('SUSPENDED_BRANCHES')}</h2>{table}</section>;
-  if (activeTab === 'archived') return <section className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl backdrop-blur-md"><h2 className="p-5 border-b border-slate-800 text-lg font-bold text-white">{t('ARCHIVED_BRANCHES')}</h2>{table}</section>;
+  if (activeTab === 'active' || activeTab === 'all') {
+    return (
+      <section className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl backdrop-blur-md">
+        <h2 className="p-5 border-b border-slate-800 text-lg font-bold text-white">{t('ACTIVE_BRANCHES')}</h2>
+        {table}
+      </section>
+    );
+  }
   return null;
 }
 

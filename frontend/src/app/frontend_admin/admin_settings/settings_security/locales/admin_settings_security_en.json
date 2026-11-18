@@ -90,6 +90,7 @@
     "COLUMN_ACTION": "Action",
     "REVOKE": "Revoke",
     "DEVICE_WINDOWS_CHROME": "Windows 11 / Chrome",
+    "DEVICE_WINDOWS_11_CHROME": "Windows 11 / Chrome",
     "DEVICE_ANDROID_CHROME": "Android / Chrome Mobile",
     "DEVICE_MAC_SAFARI": "MacBook Pro / Safari",
     "DEVICE_IPAD_SAFARI": "iPad / Safari",

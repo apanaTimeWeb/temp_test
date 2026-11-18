@@ -1,5 +1,5 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
-import { Clock, Edit3, Key, MonitorSmartphone, Settings, Shield, User } from 'lucide-react';
+import { Clock, Edit3, Key, MonitorSmartphone, Settings, Shield, User, ShieldAlert, XOctagon, Ban, Building2 } from 'lucide-react';
 import type { AdminProfileNavigationItem } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 
 /** Canonical route and API contract for admin_settings_profile; API entries are source-observed only. */
@@ -25,10 +25,15 @@ export const MODULE_URLS = ADMIN_PROFILE_URLS;
 export const ADMIN_PROFILE_NAVIGATION_ITEMS: readonly AdminProfileNavigationItem[] = [
   { id: 'profile', labelKey: 'NAV_PROFILE', icon: User },
   { id: 'edit', labelKey: 'NAV_EDIT', icon: Edit3 },
+  { id: 'branches', labelKey: 'NAV_BRANCHES', icon: Building2 },
   { id: 'password', labelKey: 'NAV_PASSWORD', icon: Key },
   { id: '2fa', labelKey: 'NAV_TWO_FACTOR', icon: Shield },
-  { id: 'history', labelKey: 'NAV_HISTORY', icon: Clock },
+  { id: 'dashboard', labelKey: 'NAV_DASHBOARD', icon: ShieldAlert },
   { id: 'sessions', labelKey: 'NAV_SESSIONS', icon: MonitorSmartphone },
+  { id: 'failed-logins', labelKey: 'NAV_FAILED_LOGINS', icon: XOctagon },
+  { id: 'blocked-users', labelKey: 'NAV_BLOCKED_USERS', icon: Ban },
+  { id: 'audit-trail', labelKey: 'NAV_AUDIT_TRAIL', icon: Clock },
+  { id: 'history', labelKey: 'NAV_HISTORY', icon: Clock },
   { id: 'security', labelKey: 'NAV_SECURITY', icon: Settings },
 ] as const;
 

@@ -5,6 +5,8 @@ import suite0_adminProfileEn from "@/app/frontend_admin/admin_settings/settings_
 import suite0_adminProfileHi from "@/app/frontend_admin/admin_settings/settings_profile/locales/admin_settings_profile_hi.json";
 import adminShellEn from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_en.json';
 import adminShellHi from '@/app/frontend_admin/application_infrastructure/application_infrastructure_locales/admin_shell_hi.json';
+import adminSecurityEn from '@/app/frontend_admin/admin_settings/settings_security/locales/admin_settings_security_en.json';
+import adminSecurityHi from '@/app/frontend_admin/admin_settings/settings_security/locales/admin_settings_security_hi.json';
 import { vi } from 'vitest';
 
 vi.mock('@/app/frontend_admin/lib/runtimeFeatures', () => ({ isFrontendDemoModeEnabled: () => true }));
@@ -72,8 +74,8 @@ suite0_describe("Consolidated: AdminSettingsProfileRegressionSuite", () => {
         });
     });
     suite0_describe('Original suite: AdminSettingsProfileResponsivePanels.test.tsx', () => {
-        const enMessages = { ...suite0_adminProfileEn, ...adminShellEn };
-        const hiMessages = { ...suite0_adminProfileHi, ...adminShellHi };
+        const enMessages = { ...suite0_adminProfileEn, ...adminShellEn, ...adminSecurityEn };
+        const hiMessages = { ...suite0_adminProfileHi, ...adminShellHi, ...adminSecurityHi };
         function renderProfile(locale: 'en' | 'hi' = 'en') {
             return suite0_render(<Suite0_NextIntlClientProvider locale={locale} messages={locale === 'en' ? enMessages : hiMessages}><Suite0_AdminProfilePage /></Suite0_NextIntlClientProvider>);
         }

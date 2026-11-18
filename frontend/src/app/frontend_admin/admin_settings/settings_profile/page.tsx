@@ -15,6 +15,12 @@ import { ADMIN_PROFILE_NAVIGATION_ITEMS } from '@/app/frontend_admin/admin_setti
 import AdminSettingsProfileReadOnlyPanels from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileReadOnlyPanels';
 import AdminProfileEditForm from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileEditForm';
 import AdminProfilePasswordForm from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfilePasswordForm';
+import AdminSecurityDashboardPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDashboardPanel';
+import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityFailedLoginsPanel';
+import AdminSecurityDeviceSessionsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDeviceSessionsPanel';
+import { AdminSecurityBlockedUsersPanel } from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityPage';
+import AdminSettingsSecurityAuditTrailPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityAuditTrailPanel';
+import AdminProfileActiveBranchesPanel from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminProfileActiveBranchesPanel';
 
 export default function AdminProfilePage() {
   const t = useTranslations('ADMIN_PROFILE');
@@ -98,8 +104,38 @@ export default function AdminProfilePage() {
             <>
               {activeTab === 'profile' && <AdminSettingsProfileReadOnlyPanels view="profile" />}
               {activeTab === 'edit' && <AdminProfileEditForm onDirtyChange={setProfileDraftDirty} />}
-              {activeTab === 'password' && <AdminProfilePasswordForm onDirtyChange={setProfileDraftDirty} />}
-              {activeTab === 'sessions' && <AdminSettingsProfileReadOnlyPanels view="sessions" />}
+              {activeTab === 'branches' && <AdminProfileActiveBranchesPanel />}
+              {activeTab === 'password' && (
+                <div className="space-y-6">
+                  <AdminProfilePasswordForm onDirtyChange={setProfileDraftDirty} />
+                  <section className="admin-card p-6" aria-labelledby="admin-profile-password-policy-title">
+                    <h2 id="admin-profile-password-policy-title" className="text-section-title font-semibold text-text-primary">{t('PASSWORD_EXPIRY')}</h2>
+                    <p className="mt-1 text-sm text-text-secondary">{t('PASSWORD_EXPIRY_DESCRIPTION')}</p>
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-4 rounded-md border border-border p-4">
+                      <div>
+                        <h3 className="font-semibold text-text-primary">{t('NEW_LOGIN_ALERTS')}</h3>
+                        <p className="mt-1 text-sm text-text-secondary">{t('NEW_LOGIN_ALERTS_DESCRIPTION')}</p>
+                      </div>
+                      <span data-testid="admin_profile-AdminSettingsProfileMain-state-010" className="admin-badge admin-badge-success">{t('SECURITY_STATUS_ILLUSTRATIVE')}</span>
+                    </div>
+                  </section>
+                </div>
+              )}
+              {activeTab === 'dashboard' && <AdminSecurityDashboardPanel />}
+              {activeTab === 'sessions' && (
+                <div className="space-y-6">
+                  <AdminSettingsProfileReadOnlyPanels view="sessions" />
+                  <AdminSecurityDeviceSessionsPanel />
+                </div>
+              )}
+              {activeTab === 'failed-logins' && <AdminSecurityFailedLoginsPanel />}
+              {activeTab === 'blocked-users' && <AdminSecurityBlockedUsersPanel />}
+              {activeTab === 'audit-trail' && (
+                <div className="space-y-6">
+                  <AdminSettingsSecurityAuditTrailPanel />
+                  <AdminSettingsProfileReadOnlyPanels view="history" />
+                </div>
+              )}
               {activeTab === '2fa' && <section className="admin-card p-6" aria-labelledby="admin-profile-two-factor-title">
                 <h2 id="admin-profile-two-factor-title" className="text-section-title font-semibold text-text-primary">{t('TWO_FACTOR_TITLE')}</h2>
                 <p className="mt-2 text-sm text-text-secondary">{t('TWO_FACTOR_DESCRIPTION')}</p>

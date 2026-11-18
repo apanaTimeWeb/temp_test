@@ -6,10 +6,8 @@ import { useTranslations } from 'next-intl';
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
 const SUBMODULE_NAVIGATION = [
-  { href: ADMIN_ROUTES.SETTINGS_BRANCHES, labelKey: 'SUBMODULE_SETTINGS_BRANCHES' },
-  { href: ADMIN_ROUTES.SETTINGS_SECURITY, labelKey: 'SUBMODULE_SETTINGS_SECURITY' },
+  { href: ADMIN_ROUTES.SETTINGS_PROFILE, labelKey: 'SUBMODULE_SETTINGS_PROFILE' },
   { href: ADMIN_ROUTES.SETTINGS_SUPPORT, labelKey: 'SUBMODULE_SETTINGS_SUPPORT' },
-  { href: ADMIN_ROUTES.SETTINGS_PROFILE, labelKey: 'SUBMODULE_SETTINGS_PROFILE' }
 ] as const;
 
 export default function AdminSettingsLayout({ children }: { children: ReactNode }) {

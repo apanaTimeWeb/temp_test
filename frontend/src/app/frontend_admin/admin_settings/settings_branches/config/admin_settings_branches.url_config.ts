@@ -43,16 +43,10 @@ export interface AdminBranchesDetailNavigationItem {
 }
 
 export const ADMIN_SETTINGS_BRANCHES_NAVIGATION: readonly AdminBranchesNavigationItem[] = [
-  { id: 'all', label: 'All branches', icon: Building2 },
-  { id: 'create', label: 'Create branch', icon: Plus },
   { id: 'active', label: 'Active branches', icon: CheckCircle2 },
-  { id: 'suspended', label: 'Suspended branches', icon: PauseCircle },
-  { id: 'archived', label: 'Archived branches', icon: Archive },
-  { id: 'managers', label: 'Branch managers', icon: Users },
   { id: 'settings', label: 'Global settings', icon: Settings },
-  { id: 'usage', label: 'Usage', icon: Activity },
   { id: 'reports', label: 'Comparison reports', icon: BarChart3 },
-  { id: 'holidays', label: 'Notice Board & Holidays', icon: CalendarCheck },
+  { id: 'holidays', label: 'Holidays', icon: CalendarCheck },
 ];
 
 export const ADMIN_BRANCHES_DETAIL_NAVIGATION: readonly AdminBranchesDetailNavigationItem[] = [

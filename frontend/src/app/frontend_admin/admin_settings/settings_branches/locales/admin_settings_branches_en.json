@@ -66,7 +66,7 @@
     "NAV_MAIN_SETTINGS": "Global settings",
     "NAV_MAIN_USAGE": "Usage",
     "NAV_MAIN_REPORTS": "Comparison reports",
-    "NAV_MAIN_HOLIDAYS": "Notice Board & Holidays",
+    "NAV_MAIN_HOLIDAYS": "Holidays",
     "HOLIDAYS_AUTHORITY_TITLE": "Central Authority & Anti-Tamper Policy",
     "HOLIDAYS_AUTHORITY_DESCRIPTION": "Branch managers cannot declare unapproved holidays or change library opening/closing hours. All schedule overrides and maintenance shutdowns must be authorized centrally by SuperAdmin.",
     "NOTICES_TITLE": "Digital Notice Board & Live Broadcasts",

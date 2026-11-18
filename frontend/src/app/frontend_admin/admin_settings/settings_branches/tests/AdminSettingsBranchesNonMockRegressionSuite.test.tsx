@@ -61,24 +61,23 @@ describe("Consolidated: AdminSettingsBranchesRegressionSuite", () => {
             { id: 'branch-1', name: 'Downtown', code: 'DT-01', address: 'Unknown address', phone: '', email: '', manager: 'A Manager', status: 'Active' },
         ];
         describe('AdminBranchesBranchTable', () => {
-            const makeListModel = (items: readonly AdminBranchesBranch[], activeTab: 'all' | 'suspended' = 'all') => ({
+            const makeListModel = (items: readonly AdminBranchesBranch[], activeTab: 'active' | 'all' = 'active') => ({
                 activeTab, setActiveTab: vi.fn(), branches: items, setViewingBranch: vi.fn(),
             }) as unknown as Parameters<typeof AdminBranchesListViews>[0]['model'];
-            it('opens an action menu and selects the branch from its detail action', () => {
+            it('renders the active branch list with action controls removed', () => {
                 const model = makeListModel(branches);
                 renderWithIntl(<AdminBranchesListViews model={model}/>);
-                fireEvent.click(screen.getByRole('button', { name: 'Open actions for Downtown' }));
-                expect(screen.getByRole('menu', { name: /actions for downtown/i })).toBeTruthy();
-                fireEvent.click(screen.getByRole('menuitem', { name: 'View branch details' }));
-                expect(model.setViewingBranch).toHaveBeenCalledWith(branches[0]);
-                expect(screen.queryByRole('menu')).toBeNull();
+                expect(screen.getAllByText('Downtown').length).toBeGreaterThan(0);
+                expect(screen.getAllByText('DT-01').length).toBeGreaterThan(0);
+                expect(screen.queryByRole('button', { name: /Open actions for Downtown/i })).toBeNull();
+                expect(screen.queryByRole('button', { name: /View branch details/i })).toBeNull();
             });
-            it('marks editing unavailable without an authoritative mutation contract', () => {
+            it('renders branch details as plain display without action menu', () => {
                 renderWithIntl(<AdminBranchesListViews model={makeListModel(branches)}/>);
-                fireEvent.click(screen.getByRole('button', { name: 'Open actions for Downtown' }));
-                expect(screen.getByRole('menuitem', { name: 'Edit branch (API required)' }).hasAttribute('disabled')).toBe(true);
+                expect(screen.queryByRole('menu')).toBeNull();
+                expect(screen.queryByRole('menuitem')).toBeNull();
             });
-            it('resets and clamps pagination when the status filter reduces the result set', () => {
+            it('paginates active branches', () => {
                 const manyBranches: AdminBranchesBranch[] = Array.from({ length: 30 }, (_, index) => ({
                     id: `branch-${index + 1}`,
                     name: `Branch ${index + 1}`,
@@ -87,26 +86,13 @@ describe("Consolidated: AdminSettingsBranchesRegressionSuite", () => {
                     phone: '',
                     email: '',
                     manager: 'Unknown manager',
-                    status: (index < 25 ? 'Active' : 'Suspended') as AdminBranchesBranch['status'],
+                    status: 'Active' as AdminBranchesBranch['status'],
                 }));
                 const model = makeListModel(manyBranches);
-                const view = renderWithIntl(<AdminBranchesListViews model={model}/>);
+                renderWithIntl(<AdminBranchesListViews model={model}/>);
                 const nextBtn = screen.getByRole('button', { name: 'Next' });
                 fireEvent.click(nextBtn);
                 expect(screen.getByText('Showing 26–30 of 30')).toBeTruthy();
-                view.rerender(
-                    <NextIntlClientProvider locale="en" messages={englishMessages}>
-                        <AdminBranchesListViews model={makeListModel(manyBranches, 'suspended')}/>
-                    </NextIntlClientProvider>
-                );
-                expect(screen.getByText('Showing 1–5 of 5')).toBeTruthy();
-            });
-            it('does not trigger row selection when Enter originates from a nested branch button', () => {
-                const onSelectBranch = vi.fn();
-                renderWithIntl(<AdminBranchesListViews model={makeListModel(branches)}/>);
-                const branchButton = screen.getByRole('button', { name: /Downtown DT-01/ });
-                fireEvent.keyDown(branchButton, { key: 'Enter' });
-                expect(onSelectBranch).not.toHaveBeenCalled();
             });
         });
     });

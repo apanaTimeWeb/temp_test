@@ -1,7 +1,7 @@
 // Canonical domain shell: direct submodule routes own all business screens.
 import { redirect } from 'next/navigation';
-import { ADMIN_SETTINGS_BRANCHES_CANONICAL_ROUTE } from './settings_branches/config/admin_settings_branches.url_config';
+import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
 export default function AdminSettingsPage() {
-  redirect(ADMIN_SETTINGS_BRANCHES_CANONICAL_ROUTE);
+  redirect(ADMIN_ROUTES.SETTINGS_PROFILE);
 }

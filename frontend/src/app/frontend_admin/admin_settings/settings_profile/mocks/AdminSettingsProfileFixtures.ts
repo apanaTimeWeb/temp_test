@@ -21,5 +21,21 @@ export const ADMIN_PROFILE_DEMO_LOGIN_HISTORY = [
   { id: 'history-demo-4', dateKey: 'HISTORY_SEPTEMBER_25', ip: '192.0.2.45', deviceKey: 'HISTORY_WINDOWS_CHROME', status: 'success' },
 ] as const;
 
+export interface AdminProfileActiveBranch {
+  id: string;
+  name: string;
+  code: string;
+  address: string;
+  phone: string;
+  email: string;
+  manager: string;
+  status: 'Active';
+}
+
+export const ADMIN_PROFILE_ACTIVE_BRANCHES: AdminProfileActiveBranch[] = [
+  { id: 'BR-001', name: 'Downtown Central', code: 'DT-CEN', address: '123 Main St, City', phone: '+91 9876543210', email: 'downtown@lib.com', manager: 'Vikram Singh', status: 'Active' },
+  { id: 'BR-003', name: 'North Hub', code: 'NH-01', address: '88 North Blvd, City', phone: '+91 9876543212', email: 'north@lib.com', manager: 'Rahul Sharma', status: 'Active' },
+];
+
 /** No handler is registered because no verified profile API endpoint exists in the supplied contract. */
 export const ADMIN_PROFILE_MSW_HANDLERS = [] as const;
