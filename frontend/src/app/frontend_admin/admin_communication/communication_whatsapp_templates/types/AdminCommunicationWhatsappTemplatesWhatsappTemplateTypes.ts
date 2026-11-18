@@ -4,6 +4,8 @@ export interface AdminCommunicationWhatsappTemplate {
   labelKey: AdminCommunicationWhatsappTemplateLabelKey;
   icon: string;
   body: string;
+  category?: string;
+  triggerEvent?: string;
 }
 
 export type AdminCommunicationWhatsappTemplateId = 'welcome' | 'fee_reminder' | 'renewal' | 'receipt' | 'notice' | 'absentee' | 'ptp';

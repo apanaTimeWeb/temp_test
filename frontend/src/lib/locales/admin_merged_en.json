@@ -5783,6 +5783,7 @@
     "BRANCH_SELECTOR_LABEL": "Filter Branch",
     "ALL_BRANCHES": "All Branches",
     "MONTH_SELECTOR_LABEL": "Payroll Cycle",
+    "FILTER_PERIOD": "Payroll Cycle",
     "SEARCH_PLACEHOLDER": "Search by staff name, ID, or role...",
     "FILTER_STATUS": "Filter Status",
     "ALL_STATUSES": "All Statuses",

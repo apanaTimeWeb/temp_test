@@ -5783,6 +5783,7 @@
     "BRANCH_SELECTOR_LABEL": "शाखा चुनें",
     "ALL_BRANCHES": "सभी शाखाएं",
     "MONTH_SELECTOR_LABEL": "पेरोल चक्र",
+    "FILTER_PERIOD": "पेरोल चक्र",
     "SEARCH_PLACEHOLDER": "स्टाफ का नाम, आईडी या पद खोजें...",
     "FILTER_STATUS": "स्थिति फ़िल्टर",
     "ALL_STATUSES": "सभी स्थितियां",
