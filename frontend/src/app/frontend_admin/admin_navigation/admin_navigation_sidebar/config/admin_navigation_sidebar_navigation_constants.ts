@@ -120,6 +120,7 @@ export const ADMIN_NAVIGATION_GROUPS: AdminNavigationGroup[] = [
       { href: ADMIN_ROUTES.FINANCE_PAYMENTS, icon: DollarSign, label: 'Payments', labelKey: 'SUBMODULE_FINANCE_PAYMENTS' },
       { href: ADMIN_ROUTES.FINANCE_REFUNDS, icon: RotateCcw, label: 'Refunds Approval', labelKey: 'SUBMODULE_FINANCE_REFUNDS' },
       { href: ADMIN_ROUTES.FINANCE_REFERRALS, icon: Users2, label: 'Referrals', labelKey: 'SUBMODULE_FINANCE_REFERRALS' },
+      { href: ADMIN_ROUTES.FINANCE_AUTO_SUSPEND, icon: Ban, label: 'Auto Suspend & Defaulters', labelKey: 'SUBMODULE_FINANCE_AUTO_SUSPEND' },
     ],
   },
   {
