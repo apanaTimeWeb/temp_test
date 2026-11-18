@@ -62,6 +62,15 @@ export default function AdminProfilePage() {
     router.push(destination, { scroll: false });
   };
   const activeLabelKey = ADMIN_PROFILE_NAVIGATION_ITEMS.find((item) => item.id === activeTab)?.labelKey ?? 'NAV_PROFILE';
+  const getTabLabel = (item: AdminProfileNavigationItem) => {
+    try {
+      const localized = t(item.labelKey);
+      if (localized && localized !== item.labelKey) {
+        return localized;
+      }
+    } catch {}
+    return item.label;
+  };
 
   return (
     <div className="mx-auto w-full max-w-5xl space-y-4 p-6">
@@ -90,7 +99,7 @@ export default function AdminProfilePage() {
               >
                 <span data-testid={`admin_profile-AdminSettingsProfileMain-navigation-${item.id}`} className="contents">
                   <Icon size={18} strokeWidth={2} className={selected ? 'text-primary' : 'text-text-secondary'} aria-hidden="true" />
-                  {t(item.labelKey)}
+                  {getTabLabel(item)}
                 </span>
               </button>
             );

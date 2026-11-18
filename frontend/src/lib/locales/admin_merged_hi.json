@@ -4319,7 +4319,12 @@
     "UNSAVED_CHANGES_DESCRIPTION": "आपके बदलाव अभी सहेजे नहीं गए हैं। क्या आप वाकई जाना चाहते हैं? आपके बदलाव खो जाएँगे।",
     "UNSAVED_CHANGES_STAY": "इसी पेज पर रहें",
     "UNSAVED_CHANGES_LEAVE": "बदलाव छोड़कर जाएँ",
-    "ERROR_PHONE_INVALID": "मान्य फ़ोन नंबर दर्ज करें।"
+    "ERROR_PHONE_INVALID": "मान्य फ़ोन नंबर दर्ज करें।",
+    "NAV_BRANCHES": "सक्रिय शाखाएँ",
+    "NAV_DASHBOARD": "सुरक्षा डैशबोर्ड",
+    "NAV_FAILED_LOGINS": "असफल लॉगिन",
+    "NAV_BLOCKED_USERS": "अवरुद्ध खाते",
+    "NAV_AUDIT_TRAIL": "ऑडिट ट्रेल एवं गतिविधि"
   },
   "ADMIN_SECURITY": {
     "PAGE_TITLE": "लाइब्रेरी सुरक्षा",

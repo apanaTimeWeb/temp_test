@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Building2, CheckCircle2, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Building2, Search, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import {
   ADMIN_PROFILE_ACTIVE_BRANCHES,
@@ -78,21 +78,6 @@ export default function AdminProfileActiveBranchesPanel() {
 
   return (
     <div className="space-y-6">
-      {/* Active Branches KPI Card */}
-      <div className="max-w-xs group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30 p-5 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
-        <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
-        </svg>
-        <div className="relative z-10 flex items-start justify-between gap-2">
-          <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Active Branches</span>
-          <div className="p-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
-            <CheckCircle2 size={18} strokeWidth={2.2} />
-          </div>
-        </div>
-        <p className="relative z-10 mt-3 text-3xl font-extrabold tracking-tight text-emerald-400 tabular-nums">{activeBranches.length}</p>
-        <span className="relative z-10 mt-3 pt-2 border-t border-white/10 block text-xs font-medium text-slate-400">Operational & On-Floor</span>
-      </div>
-
       {/* Active Branches Table Section */}
       <section className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl backdrop-blur-md">
         <div className="p-5 border-b border-slate-800 flex items-center justify-between gap-3">

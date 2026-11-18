@@ -4319,7 +4319,12 @@
     "UNSAVED_CHANGES_DESCRIPTION": "You have unsaved changes. Are you sure you want to leave? Your changes will be lost.",
     "UNSAVED_CHANGES_STAY": "Stay on this page",
     "UNSAVED_CHANGES_LEAVE": "Discard and leave",
-    "ERROR_PHONE_INVALID": "Enter a valid phone number."
+    "ERROR_PHONE_INVALID": "Enter a valid phone number.",
+    "NAV_BRANCHES": "Active Branches",
+    "NAV_DASHBOARD": "Security Dashboard",
+    "NAV_FAILED_LOGINS": "Failed Logins",
+    "NAV_BLOCKED_USERS": "Blocked Accounts",
+    "NAV_AUDIT_TRAIL": "Audit Trail"
   },
   "ADMIN_SECURITY": {
     "PAGE_TITLE": "Library Security",
