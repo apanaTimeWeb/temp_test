@@ -7,7 +7,24 @@ import AdminStaffDirectoryAuditSection from '@/app/frontend_admin/admin_staff/st
 import AdminStaffDirectoryDetailLogsSection from '@/app/frontend_admin/admin_staff/staff_directory/components/AdminStaffDirectoryDetailLogsSection';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useMemo, useState } from 'react';
-import { Eye, MoreVertical, Search, ArrowUpDown, ArrowUp, ArrowDown, Users, UserCheck, UserX, AlertCircle } from 'lucide-react';
+import {
+  Eye,
+  MoreVertical,
+  Search,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  Users,
+  UserCheck,
+  UserX,
+  AlertCircle,
+  Download,
+  FileSpreadsheet,
+  Printer,
+  MessageSquare,
+  Mail,
+  CheckCircle2,
+} from 'lucide-react';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import type { AdminStaffDirectoryManager, AdminStaffDirectoryTab } from '@/app/frontend_admin/admin_staff/staff_directory/schemas/AdminStaffDirectorySchema';
 import { ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES } from '@/app/frontend_admin/admin_staff/staff_directory/config/admin_staff_directory.url_config';
@@ -139,7 +156,7 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
 
       return (
       <div>
-        {!viewingManager && listTab && <AdminStaffDirectoryManagerTable tab={listTab} managers={dummyManagers} onSelectManager={openManagerDetails} />}
+        {!viewingManager && listTab && <AdminStaffDirectoryManagerTable tab={listTab} managers={dummyManagers} onSelectManager={openManagerDetails} onUpdateStatus={model.handleUpdateManagerStatus} />}
 
         {!viewingManager && activeTab === 'add' && !isDemoMode && (
           <section className="admin-card p-5" role="status" aria-labelledby="admin-staff-users-create-blocked-title">
@@ -164,7 +181,7 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
       // RESPONSIBILITY: AdminStaffDirectoryManagerTable component owned by admin_staff_directory; responsibility folder: admin_staff_directory_components_tables.
 
       /** Renders one manager status table; unsupported row actions remain disabled until their API behavior is verified. */
-      export function AdminStaffDirectoryManagerTable({managers, filterStatus, tab, onSelectManager}: AdminStaffDirectoryManagerTableProps) {
+      export function AdminStaffDirectoryManagerTable({managers, filterStatus, tab, onSelectManager, onUpdateStatus}: AdminStaffDirectoryManagerTableProps) {
   const t = useTranslations('ADMIN_STAFF_DIRECTORY');
       type ManagerSortField = 'name' | 'email' | 'branch' | 'lastActive' | 'status';
       const [sortField, setSortField] = useState<ManagerSortField | null>(null);
@@ -181,6 +198,144 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
           setSortField(field);
         setSortDirection('asc');
     }
+  };
+
+  const handleExportCsv = () => {
+    if (sortedManagers.length === 0) return;
+    const headers = ['Staff ID', 'Name', 'Username', 'Role', 'Email', 'Phone', 'Branch', 'Status', 'Last Active'];
+    const rows = sortedManagers.map((m) => [
+      `"${m.id}"`,
+      `"${m.name.replace(/"/g, '""')}"`,
+      `"${m.username}"`,
+      `"${m.role || 'Staff'}"`,
+      `"${m.email}"`,
+      `"${m.phone}"`,
+      `"${m.branch}"`,
+      `"${m.status}"`,
+      `"${m.lastActive}"`,
+    ]);
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-staff-roster-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const handleExportExcel = () => {
+    if (sortedManagers.length === 0) return;
+    const rows = sortedManagers
+      .map(
+        (m) => `
+      <tr>
+        <td style="padding:6px;border:1px solid #ccc;font-family:monospace;">${m.id}</td>
+        <td style="padding:6px;border:1px solid #ccc;font-weight:bold;">${m.name}</td>
+        <td style="padding:6px;border:1px solid #ccc;">@${m.username}</td>
+        <td style="padding:6px;border:1px solid #ccc;">${m.role || 'Staff'}</td>
+        <td style="padding:6px;border:1px solid #ccc;">${m.email}</td>
+        <td style="padding:6px;border:1px solid #ccc;font-family:monospace;">${m.phone}</td>
+        <td style="padding:6px;border:1px solid #ccc;">${m.branch}</td>
+        <td style="padding:6px;border:1px solid #ccc;font-weight:bold;">${m.status}</td>
+        <td style="padding:6px;border:1px solid #ccc;">${m.lastActive}</td>
+      </tr>`
+      )
+      .join('');
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="utf-8"/><title>Staff Directory Roster</title></head>
+        <body>
+          <h2>Smart Library Network - Staff Directory Roster</h2>
+          <p>Generated: ${new Date().toLocaleString('en-IN')}</p>
+          <table border="1" style="border-collapse:collapse;font-family:sans-serif;font-size:12px;">
+            <thead>
+              <tr style="background-color:#1e293b;color:#ffffff;font-weight:bold;text-align:left;">
+                <th style="padding:8px;border:1px solid #ccc;">Staff ID</th>
+                <th style="padding:8px;border:1px solid #ccc;">Name</th>
+                <th style="padding:8px;border:1px solid #ccc;">Username</th>
+                <th style="padding:8px;border:1px solid #ccc;">Role</th>
+                <th style="padding:8px;border:1px solid #ccc;">Email</th>
+                <th style="padding:8px;border:1px solid #ccc;">Phone</th>
+                <th style="padding:8px;border:1px solid #ccc;">Branch</th>
+                <th style="padding:8px;border:1px solid #ccc;">Status</th>
+                <th style="padding:8px;border:1px solid #ccc;">Last Active</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </body>
+      </html>`;
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-staff-roster-${new Date().toISOString().slice(0, 10)}.xls`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
+  const handlePrint = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) { window.print(); return; }
+    const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smart Library - Staff Directory Roster</title>
+          <style>
+            @page { size: landscape; margin: 10mm; }
+            body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 12px; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; }
+            th { background: #f1f5f9; padding: 6px; border: 1px solid #cbd5e1; text-align: left; }
+            td { padding: 6px; border: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background: #f8fafc; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <h2 style="margin:0;">Smart Library Network · Staff Roster</h2>
+              <div style="font-size:12px;color:#64748b;">Total Staff Records: ${sortedManagers.length}</div>
+            </div>
+            <div style="font-size:11px;text-align:right;">
+              <div>Date: ${dateStr}</div>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Staff Name</th><th>Role</th><th>Email</th><th>Phone</th><th>Branch</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${sortedManagers.map((m) => `
+                <tr>
+                  <td><code>${m.id}</code></td>
+                  <td><strong>${m.name}</strong> (@${m.username})</td>
+                  <td>${m.role || 'Staff'}</td>
+                  <td>${m.email}</td>
+                  <td>${m.phone}</td>
+                  <td>${m.branch}</td>
+                  <td><strong>${m.status}</strong></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
   };
 
         const tabTitleKey = {all: 'PANEL_ALL', staff: 'PANEL_STAFF', active: 'PANEL_ACTIVE', suspended: 'PANEL_SUSPENDED', deactivated: 'PANEL_DEACTIVATED' } as const;
@@ -269,6 +424,40 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
                   className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-border bg-input text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
+
+              {/* Roster Controls: Export & Print */}
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handlePrint}
+                  disabled={sortedManagers.length === 0}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-primary hover:bg-surface-hover transition-colors disabled:opacity-40"
+                  title="Print Staff Roster"
+                >
+                  <Printer size={13} className="text-text-secondary" />
+                  <span>Print Roster</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExportCsv}
+                  disabled={sortedManagers.length === 0}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-semibold text-text-primary hover:bg-surface-hover transition-colors disabled:opacity-40"
+                  title="Export Staff CSV"
+                >
+                  <Download size={13} className="text-text-secondary" />
+                  <span>CSV</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleExportExcel}
+                  disabled={sortedManagers.length === 0}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors disabled:opacity-40"
+                  title="Export Staff Excel"
+                >
+                  <FileSpreadsheet size={13} />
+                  <span>Excel</span>
+                </button>
+              </div>
             </div>
             {filteredManagers.length === 0 ? (
               <p className="p-6 text-text-secondary" role="status">{t('NO_RECORDS')}</p>
@@ -279,11 +468,73 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
                     <article key={manager.id} className="rounded-lg border border-border p-4">
                       <div className="flex items-start justify-between gap-3"><div className="min-w-0"><button type="button" className="break-words font-semibold text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => onSelectManager(manager)}>{manager.name}</button><p className="text-xs text-text-secondary">@{manager.username}{manager.role ? ` · ${manager.role}` : ''}</p></div><span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES[manager.status]}`}>{({ Active: t('STATUS_ACTIVE'), Suspended: t('STATUS_SUSPENDED'), Deactivated: t('STATUS_DEACTIVATED') } as const)[manager.status]}</span></div>
                       <dl className="mt-3 grid grid-cols-1 gap-2 text-sm"><div><dt className="text-text-secondary">{t('TABLE_CONTACT')}</dt><dd className="break-words">{maskAdminStaffDirectoryEmail(manager.email)} · {maskAdminStaffDirectoryPhone(manager.phone)}</dd></div><div><dt className="text-text-secondary">{t('TABLE_BRANCH')}</dt><dd>{manager.branch}</dd></div><div><dt className="text-text-secondary">{t('TABLE_LAST_ACTIVE')}</dt><dd>{getAdminStaffDirectoryLastActiveLabel(manager.lastActive, t)}</dd></div></dl>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        <button type="button" className="min-h-11 rounded-md border border-border px-3 text-sm font-medium" onClick={() => onSelectManager(manager)}>{t('VIEW_MANAGER', { name: manager.name })}</button>
-                        <button type="button" disabled aria-describedby={`admin-staff-users-row-actions-help-mobile-${manager.id}`} className="min-h-11 rounded-md px-3 text-text-disabled">{t('TABLE_ACTIONS')}</button>
+                      <div className="mt-3 flex flex-wrap gap-2 items-center">
+                        <button type="button" className="min-h-10 rounded-md border border-border px-3 text-sm font-medium" onClick={() => onSelectManager(manager)}>{t('VIEW_MANAGER', { name: manager.name })}</button>
+                        <a
+                          href={`https://wa.me/91${manager.phone.replace(/\D/g, '').slice(-10)}?text=${encodeURIComponent(`Hello ${manager.name}, this is regarding Library Administration.`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex min-h-10 px-3 items-center gap-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/10 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20"
+                          title={`WhatsApp ${manager.name}`}
+                          aria-label={`WhatsApp ${manager.name}`}
+                        >
+                          <MessageSquare size={13} />
+                          <span>WhatsApp</span>
+                        </a>
+                        <a
+                          href={`mailto:${manager.email}?subject=${encodeURIComponent('Official Communication - Library Administration')}`}
+                          className="inline-flex min-h-10 px-3 items-center gap-1.5 rounded-md border border-sky-500/30 bg-sky-500/10 text-xs font-semibold text-sky-400 hover:bg-sky-500/20"
+                          title={`Email ${manager.name}`}
+                          aria-label={`Email ${manager.name}`}
+                        >
+                          <Mail size={13} />
+                          <span>Email</span>
+                        </a>
+                        {onUpdateStatus && manager.status === 'Active' && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => onUpdateStatus(manager.id, 'Suspended')}
+                              className="inline-flex min-h-10 px-2.5 items-center gap-1 rounded-md border border-amber-500/30 bg-amber-500/10 text-xs font-semibold text-amber-300 hover:bg-amber-500/20"
+                              title="Suspend staff account"
+                            >
+                              <AlertCircle size={13} />
+                              <span>Suspend</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => onUpdateStatus(manager.id, 'Deactivated')}
+                              className="inline-flex min-h-10 px-2.5 items-center gap-1 rounded-md border border-rose-500/30 bg-rose-500/10 text-xs font-semibold text-rose-300 hover:bg-rose-500/20"
+                              title="Deactivate staff account"
+                            >
+                              <UserX size={13} />
+                              <span>Deactivate</span>
+                            </button>
+                          </>
+                        )}
+                        {onUpdateStatus && manager.status === 'Suspended' && (
+                          <button
+                            type="button"
+                            onClick={() => onUpdateStatus(manager.id, 'Active')}
+                            className="inline-flex min-h-10 px-2.5 items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20"
+                            title="Activate staff account"
+                          >
+                            <UserCheck size={13} />
+                            <span>Activate</span>
+                          </button>
+                        )}
+                        {onUpdateStatus && manager.status === 'Deactivated' && (
+                          <button
+                            type="button"
+                            onClick={() => onUpdateStatus(manager.id, 'Active')}
+                            className="inline-flex min-h-10 px-2.5 items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20"
+                            title="Reactivate staff account"
+                          >
+                            <UserCheck size={13} />
+                            <span>Reactivate</span>
+                          </button>
+                        )}
                       </div>
-                      <p id={`admin-staff-users-row-actions-help-mobile-${manager.id}`} className="mt-1 text-xs text-text-secondary">{t('ROW_ACTIONS_BLOCKED')}</p>
                     </article>
                   ))}
                 </div>
@@ -310,8 +561,76 @@ export default function AdminStaffDirectoryViewSIDEBARNAVIGATIONSection({ model 
                         <td className="px-4 py-3">{getAdminStaffDirectoryLastActiveLabel(manager.lastActive, t)}</td>
                         <td className="px-4 py-3"><span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${ADMIN_STAFF_DIRECTORY_STATUS_BADGE_CLASSES[manager.status]}`}>{({ Active: t('STATUS_ACTIVE'), Suspended: t('STATUS_SUSPENDED'), Deactivated: t('STATUS_DEACTIVATED') } as const)[manager.status]}</span></td>
                           <td className="px-4 py-3"><div className="flex justify-end items-center gap-1.5">
-                            <button type="button" aria-label={t('VIEW_MANAGER', { name: manager.name })} className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all" onClick={() => onSelectManager(manager)}><Eye size={16} strokeWidth={2} /></button>
-                            <button type="button" aria-label={t('ROW_ACTIONS', { name: manager.name })} title={t('ROW_ACTIONS_BLOCKED')} disabled aria-describedby="admin-staff-users-row-actions-help" className="min-h-9 min-w-9 inline-flex items-center justify-center cursor-not-allowed rounded-lg text-text-disabled"><MoreVertical size={16} strokeWidth={2} /></button>
+                            {/* WhatsApp Staff */}
+                            <a
+                              href={`https://wa.me/91${manager.phone.replace(/\D/g, '').slice(-10)}?text=${encodeURIComponent(`Hello ${manager.name}, this is regarding Library Administration.`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/50 hover:text-white transition-all shadow-xs"
+                              title={`WhatsApp ${manager.name}`}
+                              aria-label={`WhatsApp ${manager.name}`}
+                            >
+                              <MessageSquare size={14} />
+                            </a>
+
+                            {/* Email Staff */}
+                            <a
+                              href={`mailto:${manager.email}?subject=${encodeURIComponent('Official Communication - Library Administration')}`}
+                              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 hover:border-sky-500/50 hover:text-white transition-all shadow-xs"
+                              title={`Email ${manager.name}`}
+                              aria-label={`Email ${manager.name}`}
+                            >
+                              <Mail size={14} />
+                            </a>
+
+                            {/* View Manager */}
+                            <button type="button" aria-label={t('VIEW_MANAGER', { name: manager.name })} className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-border bg-card text-text-secondary hover:text-text-primary hover:bg-surface-hover hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all" onClick={() => onSelectManager(manager)}><Eye size={15} strokeWidth={2} /></button>
+
+                            {/* Status Control Actions */}
+                            {onUpdateStatus && manager.status === 'Active' && (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => onUpdateStatus(manager.id, 'Suspended')}
+                                  className="inline-flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2 py-1 text-[11px] font-semibold text-amber-300 hover:bg-amber-500/20 transition-colors"
+                                  title="Suspend staff account"
+                                >
+                                  <AlertCircle size={12} />
+                                  <span>Suspend</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => onUpdateStatus(manager.id, 'Deactivated')}
+                                  className="inline-flex items-center gap-1 rounded-lg border border-rose-500/30 bg-rose-500/10 px-2 py-1 text-[11px] font-semibold text-rose-300 hover:bg-rose-500/20 transition-colors"
+                                  title="Deactivate staff account"
+                                >
+                                  <UserX size={12} />
+                                  <span>Deactivate</span>
+                                </button>
+                              </>
+                            )}
+                            {onUpdateStatus && manager.status === 'Suspended' && (
+                              <button
+                                type="button"
+                                onClick={() => onUpdateStatus(manager.id, 'Active')}
+                                className="inline-flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-[11px] font-semibold text-emerald-300 hover:bg-emerald-500/20 transition-colors"
+                                title="Activate staff account"
+                              >
+                                <UserCheck size={12} />
+                                <span>Activate</span>
+                              </button>
+                            )}
+                            {onUpdateStatus && manager.status === 'Deactivated' && (
+                              <button
+                                type="button"
+                                onClick={() => onUpdateStatus(manager.id, 'Active')}
+                                className="inline-flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-[11px] font-semibold text-emerald-300 hover:bg-emerald-500/20 transition-colors"
+                                title="Reactivate staff account"
+                              >
+                                <UserCheck size={12} />
+                                <span>Reactivate</span>
+                              </button>
+                            )}
                           </div></td>
                         </tr>
               ))}</tbody>

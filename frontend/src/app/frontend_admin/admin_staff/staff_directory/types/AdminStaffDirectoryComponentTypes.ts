@@ -19,6 +19,7 @@ export interface AdminStaffDirectoryManagerTableProps {
   filterStatus?: AdminStaffDirectoryManager['status'];
   tab?: Extract<AdminStaffDirectoryTab, AdminStaffDirectoryManagerTableTabSubset>;
   onSelectManager: (manager: AdminStaffDirectoryManager) => void;
+  onUpdateStatus?: (managerId: string, status: AdminStaffDirectoryManager['status']) => void;
 }
 
 export interface AdminStaffDirectoryViewSIDEBARNAVIGATIONSectionProps {

@@ -109,6 +109,34 @@ export function useAdminStaffPayroll(): AdminStaffPayrollModel {
     setSelectedRecordForDisbursal(null);
   }, [records, t]);
 
+  const handleBulkDisburse = useCallback(() => {
+    const pendingList = records.filter(
+      (r) => r.status !== 'DISBURSED' && (!selectedMonth || r.month === selectedMonth)
+    );
+    if (pendingList.length === 0) {
+      toast.info('All payroll records for this month are already disbursed');
+      return;
+    }
+    const totalDisbursedSum = pendingList.reduce((acc, r) => acc + r.netPayable, 0);
+    const timestamp = new Date().toISOString();
+    setRecords((prev) =>
+      prev.map((r) =>
+        r.status !== 'DISBURSED' && (!selectedMonth || r.month === selectedMonth)
+          ? {
+              ...r,
+              status: 'DISBURSED' as const,
+              disbursedAt: timestamp,
+              paymentMethod: 'BANK_TRANSFER' as const,
+              transactionRef: `BULK-NEFT-${Date.now().toString().slice(-8)}`,
+            }
+          : r
+      )
+    );
+    toast.success(
+      `Bulk disbursed ₹${totalDisbursedSum.toLocaleString('en-IN')} to ${pendingList.length} staff members`
+    );
+  }, [records, selectedMonth]);
+
   const filters: StaffPayrollFilterState = {
     selectedBranchId: effectiveBranchId,
     selectedMonth,
@@ -130,6 +158,7 @@ export function useAdminStaffPayroll(): AdminStaffPayrollModel {
     selectedRecordForDisbursal,
     setSelectedRecordForDisbursal,
     handleDisburseConfirm,
+    handleBulkDisburse,
   };
 }
 

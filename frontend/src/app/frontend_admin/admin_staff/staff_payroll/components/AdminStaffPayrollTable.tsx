@@ -13,6 +13,7 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  MessageSquare,
 } from 'lucide-react';
 import type { StaffSalaryRecord } from '@/app/frontend_admin/admin_staff/staff_payroll/schemas/AdminStaffPayrollSchema';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
@@ -289,6 +290,39 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
                   {/* Actions */}
                   <td className="px-3.5 py-2.5 text-right whitespace-nowrap">
                     <div className="flex items-center justify-end gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const slipText = `*Smart Library - Monthly Salary Slip*\n` +
+                            `Employee: ${r.staffName} (${r.staffId})\n` +
+                            `Designation: ${r.role}\n` +
+                            `Branch: ${r.branchName}\n` +
+                            `Month: ${r.month}\n` +
+                            `---------------------------\n` +
+                            `• Basic Salary: ₹${r.baseSalary.toLocaleString('en-IN')}\n` +
+                            `• Allowances / Bonus: +₹${r.allowances.toLocaleString('en-IN')}\n` +
+                            `• Deductions: -₹${r.deductions.toLocaleString('en-IN')}\n` +
+                            (r.advanceSalaryDeduction > 0 ? `• Advance Settled: -₹${r.advanceSalaryDeduction.toLocaleString('en-IN')}\n` : '') +
+                            `---------------------------\n` +
+                            `*Net Take-Home: ₹${r.netPayable.toLocaleString('en-IN')}*\n` +
+                            `Status: ${r.status}\n` +
+                            `Bank: ${r.bankDetails.bankName} (${r.bankDetails.accountNoMasked})\n` +
+                            (r.transactionRef ? `Ref / UTR: ${r.transactionRef}\n` : '') +
+                            `---------------------------\n` +
+                            `Official system generated salary slip from Smart Library Network Administration.`;
+                          const waUrl = `https://wa.me/?text=${encodeURIComponent(slipText)}`;
+                          if (typeof window !== 'undefined') {
+                            window.open(waUrl, '_blank', 'noopener,noreferrer');
+                          }
+                        }}
+                        title="Share Salary Slip on WhatsApp"
+                        aria-label="Share Salary Slip on WhatsApp"
+                        className="inline-flex h-8 items-center gap-1 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-2 py-1 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 hover:text-white transition-all cursor-pointer shadow-xs"
+                      >
+                        <MessageSquare size={13} />
+                        <span className="hidden xl:inline">WA</span>
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => onOpenSlip(r)}

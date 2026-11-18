@@ -85,7 +85,16 @@ export default function useAdminStaffDirectory() {
     setActiveTab('all');
     return 'created';
   };
+  const handleUpdateManagerStatus = useCallback((managerId: string, status: AdminStaffDirectoryManager['status']) => {
+    setDemoManagersOverride((current) => {
+      const list = current ?? ADMIN_STAFF_DIRECTORY_FIXTURE_DATA;
+      return list.map((m) => (m.id === managerId ? { ...m, status } : m));
+    });
+    if (viewingManager && viewingManager.id === managerId) {
+      setViewingManager((prev) => (prev ? { ...prev, status } : null));
+    }
+  }, [viewingManager]);
   const openManagerDetails = (manager: AdminStaffDirectoryManager) => { setViewingManager(manager); setManagerDetailTab('overview'); };
   const managerCounts = useMemo(() => ({ all: managers.length, active: managers.filter((manager) => manager.status === 'Active').length, suspended: managers.filter((manager) => manager.status === 'Suspended').length, deactivated: managers.filter((manager) => manager.status === 'Deactivated').length }), [managers]);
-  return { activeTab, setActiveTab, viewingManager, setViewingManager, managerDetailTab, setManagerDetailTab, navItems: ADMIN_STAFF_DIRECTORY_NAVIGATION, managers, dummyManagers: managers, managerCounts, isDemoMode, isLoading, hasLoadError, retryLoadManagers: managersQuery.refetch, handleAddManager, openManagerDetails } as const;
+  return { activeTab, setActiveTab, viewingManager, setViewingManager, managerDetailTab, setManagerDetailTab, navItems: ADMIN_STAFF_DIRECTORY_NAVIGATION, managers, dummyManagers: managers, managerCounts, isDemoMode, isLoading, hasLoadError, retryLoadManagers: managersQuery.refetch, handleAddManager, handleUpdateManagerStatus, openManagerDetails } as const;
 }

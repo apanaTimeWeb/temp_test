@@ -3,7 +3,18 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { CheckCircle, Search, Shield, KeyRound, Lock, CheckCircle2 } from 'lucide-react';
+import {
+  CheckCircle,
+  Search,
+  Shield,
+  KeyRound,
+  Lock,
+  CheckCircle2,
+  Download,
+  FileSpreadsheet,
+  Printer,
+  RotateCcw,
+} from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import AdminStaffRolesPermissionsMatrixTable from '@/app/frontend_admin/admin_staff/staff_roles_permissions/components/AdminStaffRolesPermissionsMatrixTable';
@@ -88,6 +99,139 @@ export default function AdminStaffRolesPermissionsPage() {
     toast.success(t('SAVE_DEMO_TOAST'), { id: 'admin-permissions-save-demo-only' });
   };
 
+  const handleExportCsv = () => {
+    if (perms.length === 0) return;
+    const headers = ['Module', 'Action Key', 'Permission Label', 'Manager Access'];
+    const rows: string[][] = [];
+    perms.forEach((mod) => {
+      mod.actions.forEach((act) => {
+        const hasAccess = act.roles?.manager ?? false;
+        rows.push([
+          `"${mod.module}"`,
+          `"${act.key}"`,
+          `"${act.label.replace(/"/g, '""')}"`,
+          hasAccess ? '"Enabled"' : '"Disabled"',
+        ]);
+      });
+    });
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-staff-roles-permissions-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success('Exported Roles & Permissions matrix to CSV');
+  };
+
+  const handleExportExcel = () => {
+    if (perms.length === 0) return;
+    let tableRows = '';
+    perms.forEach((mod) => {
+      mod.actions.forEach((act) => {
+        const hasAccess = act.roles?.manager ?? false;
+        tableRows += `
+          <tr>
+            <td style="padding:6px;border:1px solid #ccc;font-weight:bold;">${mod.module}</td>
+            <td style="padding:6px;border:1px solid #ccc;font-family:monospace;">${act.key}</td>
+            <td style="padding:6px;border:1px solid #ccc;">${act.label}</td>
+            <td style="padding:6px;border:1px solid #ccc;text-align:center;font-weight:bold;color:${hasAccess ? '#15803d' : '#b91c1c'};">${hasAccess ? 'GRANTED' : 'DENIED'}</td>
+          </tr>`;
+      });
+    });
+
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+          <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+          <title>Staff Roles & Permissions RBAC Matrix</title>
+          <style>
+            table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 11px; }
+            th { background-color: #0f172a; color: #ffffff; padding: 8px; border: 1px solid #334155; text-align: left; }
+            td { padding: 6px; border: 1px solid #cbd5e1; }
+          </style>
+        </head>
+        <body>
+          <h2>Smart Library Network · Staff RBAC Permissions Matrix</h2>
+          <p>Generated: ${new Date().toLocaleString('en-IN')}</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Module</th><th>Permission Key</th><th>Action Description</th><th>Manager Role</th>
+              </tr>
+            </thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+        </body>
+      </html>`;
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-staff-roles-permissions-${new Date().toISOString().slice(0, 10)}.xls`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success('Exported Roles & Permissions matrix to Excel (.xls)');
+  };
+
+  const handlePrint = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) { window.print(); return; }
+    const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    let tableRows = '';
+    perms.forEach((mod) => {
+      mod.actions.forEach((act) => {
+        const hasAccess = act.roles?.manager ?? false;
+        tableRows += `
+          <tr>
+            <td><strong>${mod.module}</strong></td>
+            <td><code>${act.key}</code></td>
+            <td>${act.label}</td>
+            <td style="color:${hasAccess ? '#15803d' : '#b91c1c'};font-weight:bold;">${hasAccess ? '✓ Allowed' : '✕ Restricted'}</td>
+          </tr>`;
+      });
+    });
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smart Library - Staff RBAC Permissions Matrix</title>
+          <style>
+            body { font-family: system-ui, sans-serif; color: #0f172a; margin: 0; padding: 15px; }
+            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 8px; margin-bottom: 12px; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; }
+            th { background: #f1f5f9; padding: 6px; border: 1px solid #cbd5e1; text-align: left; }
+            td { padding: 6px; border: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background: #f8fafc; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <h2 style="margin:0;">Smart Library Network · Staff Roles & Permissions</h2>
+              <div style="font-size:12px;color:#64748b;">RBAC Matrix for Operations & Branch Management</div>
+            </div>
+            <div style="font-size:11px;text-align:right;">Date: ${dateStr}</div>
+          </div>
+          <table>
+            <thead><tr><th>Module</th><th>Permission Key</th><th>Action</th><th>Manager Access</th></tr></thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   return (
     <>
       <Toaster position="bottom-right" richColors closeButton />
@@ -101,15 +245,47 @@ export default function AdminStaffRolesPermissionsPage() {
             <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('PAGE_TITLE')}</h1>
             <p className="text-sm text-text-secondary">{t('PAGE_SUBTITLE')}</p>
           </div>
-          <button
-            type="button"
-            className="admin-btn-primary min-h-11 self-start sm:self-auto"
-            onClick={save}
-            disabled={!demoMode || permsQuery.isPending || permsQuery.isError || perms.length === 0}
-            aria-describedby="admin-permissions-save-help"
-          >
-            <CheckCircle size={18} strokeWidth={2} /> {t('SAVE_CHANGES')}
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={handlePrint}
+              disabled={perms.length === 0}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+              title="Print RBAC Permissions Matrix"
+            >
+              <Printer size={13} className="text-text-secondary" />
+              <span>Print</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              disabled={perms.length === 0}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+              title="Export Permissions Matrix (CSV)"
+            >
+              <Download size={13} className="text-text-secondary" />
+              <span>CSV</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleExportExcel}
+              disabled={perms.length === 0}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors shadow-xs"
+              title="Export Permissions Matrix (Excel .xls)"
+            >
+              <FileSpreadsheet size={13} />
+              <span>Excel</span>
+            </button>
+            <button
+              type="button"
+              className="admin-btn-primary min-h-11 self-start sm:self-auto"
+              onClick={save}
+              disabled={!demoMode || permsQuery.isPending || permsQuery.isError || perms.length === 0}
+              aria-describedby="admin-permissions-save-help"
+            >
+              <CheckCircle size={18} strokeWidth={2} /> {t('SAVE_CHANGES')}
+            </button>
+          </div>
         </header>
 
         {/* Permission KPI Summary Cards */}

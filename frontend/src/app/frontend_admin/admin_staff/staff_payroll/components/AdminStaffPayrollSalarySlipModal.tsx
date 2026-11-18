@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Printer, X, Building2, CheckCircle2 } from 'lucide-react';
+import { Printer, X, Building2, CheckCircle2, MessageSquare } from 'lucide-react';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
@@ -22,6 +22,32 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleShareWhatsApp = () => {
+    const slipText = `*Smart Library - Monthly Salary Slip*\n` +
+      `Employee: ${record.staffName} (${record.staffId})\n` +
+      `Designation: ${record.role}\n` +
+      `Branch: ${record.branchName}\n` +
+      `Month: ${record.month}\n` +
+      `---------------------------\n` +
+      `• Basic Salary: ₹${record.baseSalary.toLocaleString('en-IN')}\n` +
+      `• Allowances / Bonus: +₹${record.allowances.toLocaleString('en-IN')}\n` +
+      `• Deductions: -₹${record.deductions.toLocaleString('en-IN')}\n` +
+      (record.advanceSalaryDeduction && record.advanceSalaryDeduction > 0
+        ? `• Advance Settled: -₹${record.advanceSalaryDeduction.toLocaleString('en-IN')}\n`
+        : '') +
+      `---------------------------\n` +
+      `*Net Take-Home: ₹${record.netPayable.toLocaleString('en-IN')}*\n` +
+      `Status: ${record.status}\n` +
+      `Bank: ${record.bankDetails.bankName} (${record.bankDetails.accountNoMasked})\n` +
+      (record.transactionRef ? `Ref / UTR: ${record.transactionRef}\n` : '') +
+      `---------------------------\n` +
+      `Official system generated salary slip from Smart Library Network Administration.`;
+    const waUrl = `https://wa.me/?text=${encodeURIComponent(slipText)}`;
+    if (typeof window !== 'undefined') {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    }
   };
 
   return (
@@ -147,14 +173,24 @@ export function AdminStaffPayrollSalarySlipModal({ record, isOpen, onClose }: Pr
           >
             {t('BTN_CLOSE')}
           </button>
-          <button
-            type="button"
-            onClick={handlePrint}
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-md bg-primary px-4 text-xs font-semibold text-on-primary hover:bg-primary-hover"
-          >
-            <Printer size={15} />
-            {t('BTN_PRINT')}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleShareWhatsApp}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/15 px-4 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/25 transition-colors cursor-pointer"
+            >
+              <MessageSquare size={14} />
+              <span>WhatsApp Salary Slip</span>
+            </button>
+            <button
+              type="button"
+              onClick={handlePrint}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-md bg-primary px-4 text-xs font-semibold text-on-primary hover:bg-primary-hover"
+            >
+              <Printer size={15} />
+              {t('BTN_PRINT')}
+            </button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

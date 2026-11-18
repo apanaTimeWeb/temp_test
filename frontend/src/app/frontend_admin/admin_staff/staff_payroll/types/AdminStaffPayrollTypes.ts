@@ -36,5 +36,6 @@ export interface AdminStaffPayrollModel {
   selectedRecordForDisbursal: StaffSalaryRecord | null;
   setSelectedRecordForDisbursal: (record: StaffSalaryRecord | null) => void;
   handleDisburseConfirm: (input: DisburseSalaryInput) => void;
+  handleBulkDisburse: () => void;
 }
 
