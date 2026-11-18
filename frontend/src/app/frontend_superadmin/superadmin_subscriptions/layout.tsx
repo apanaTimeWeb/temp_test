@@ -9,20 +9,16 @@ import type { ReactNode } from 'react';
 import { CreditCard, Users } from 'lucide-react';
 
 const TAB_ICONS = {
-  subscriptions_active_subscribers: Users,
   subscriptions_overview: CreditCard,
+  subscriptions_active_subscribers: Users,
 } as const;
 
-/**
- * Performs the domain layout operation within layout.tsx; inputs and outputs follow the declared TypeScript contract.
- * @param parameter Input required by the declared feature contract. Declared type: { children: ReactNode; }.
- */
 export default function DomainLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');
   const routes = [
-    { key: 'subscriptions_active_subscribers', label: t('COPY.NAV_SUBSCRIPTIONS_ACTIVE_SUBSCRIBERS'), href: SUPERADMIN_NAVIGATION_ROUTES.subscriptions_active_subscribers },
     { key: 'subscriptions_overview', label: t('COPY.NAV_SUBSCRIPTIONS_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.subscriptions_overview },
+    { key: 'subscriptions_active_subscribers', label: t('COPY.NAV_SUBSCRIPTIONS_ACTIVE_SUBSCRIBERS'), href: SUPERADMIN_NAVIGATION_ROUTES.subscriptions_active_subscribers },
   ] as const;
   return (
     <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
