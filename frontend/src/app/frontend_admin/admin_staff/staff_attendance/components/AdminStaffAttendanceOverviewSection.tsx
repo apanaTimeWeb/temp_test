@@ -183,70 +183,94 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
     <div className="space-y-6">
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_TOTAL_STAFF')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-info-bg text-info-text">
+        {/* Total Staff - Sky */}
+        <div className="group relative overflow-hidden rounded-2xl border border-sky-500/25 bg-gradient-to-br from-[#0c1828]/95 via-[#0c1828]/90 to-[#122238]/80 shadow-sky-950/30 p-4 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-16 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">{t('KPI_TOTAL_STAFF')}</span>
+            <div className="p-2 rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400">
               <Users size={15} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{kpis.totalStaff}</p>
-          <span className="text-xs text-text-muted">Total Roster Base</span>
+          <p className="relative z-10 mt-2 text-xl sm:text-2xl font-black tracking-tight text-white tabular-nums">{kpis.totalStaff}</p>
+          <span className="relative z-10 mt-2 block border-t border-white/10 pt-1.5 text-[11px] font-medium text-slate-400">Total Roster Base</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_PRESENT')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-success-bg text-success-text">
+        {/* Present - Emerald */}
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30 p-4 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-16 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">{t('KPI_PRESENT')}</span>
+            <div className="p-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400">
               <CheckCircle2 size={15} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{kpis.presentCount}</p>
-          <span className="text-xs text-text-muted">Punched & On Floor</span>
+          <p className="relative z-10 mt-2 text-xl sm:text-2xl font-black tracking-tight text-emerald-400 tabular-nums">{kpis.presentCount}</p>
+          <span className="relative z-10 mt-2 block border-t border-white/10 pt-1.5 text-[11px] font-medium text-slate-400">Punched & On Floor</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_LATE')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-warning-bg text-warning-text">
+        {/* Late - Amber */}
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-amber-950/30 p-4 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-16 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">{t('KPI_LATE')}</span>
+            <div className="p-2 rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400">
               <Clock size={15} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{kpis.lateCount}</p>
-          <span className="text-xs text-text-muted">{">"} 15 min punch-in</span>
+          <p className="relative z-10 mt-2 text-xl sm:text-2xl font-black tracking-tight text-amber-400 tabular-nums">{kpis.lateCount}</p>
+          <span className="relative z-10 mt-2 block border-t border-white/10 pt-1.5 text-[11px] font-medium text-slate-400">{">"} 15 min punch-in</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_ABSENT')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-danger-bg text-danger-text">
+        {/* Absent - Rose */}
+        <div className="group relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1f0a10]/95 via-[#1f0a10]/90 to-[#2d0e17]/80 shadow-rose-950/30 p-4 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-16 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#f87171" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">{t('KPI_ABSENT')}</span>
+            <div className="p-2 rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400">
               <UserX size={15} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">{kpis.absentCount}</p>
-          <span className="text-xs text-text-muted">Unreported absence</span>
+          <p className="relative z-10 mt-2 text-xl sm:text-2xl font-black tracking-tight text-rose-400 tabular-nums">{kpis.absentCount}</p>
+          <span className="relative z-10 mt-2 block border-t border-white/10 pt-1.5 text-[11px] font-medium text-slate-400">Unreported absence</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_ON_LEAVE')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-info-bg text-info-text">
+        {/* On Leave - Indigo */}
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-indigo-950/30 p-4 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-16 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">{t('KPI_ON_LEAVE')}</span>
+            <div className="p-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400">
               <CalendarCheck size={15} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{kpis.onLeaveCount}</p>
-          <span className="text-xs text-text-muted">Approved leaves</span>
+          <p className="relative z-10 mt-2 text-xl sm:text-2xl font-black tracking-tight text-white tabular-nums">{kpis.onLeaveCount}</p>
+          <span className="relative z-10 mt-2 block border-t border-white/10 pt-1.5 text-[11px] font-medium text-slate-400">Approved leaves</span>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('KPI_ATTENDANCE_RATE')}</span>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-subtle text-primary">
+        {/* Attendance Rate - Purple */}
+        <div className="group relative overflow-hidden rounded-2xl border border-purple-500/25 bg-gradient-to-br from-[#180c28]/95 via-[#180c28]/90 to-[#221238]/80 shadow-purple-950/30 p-4 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-16 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#c084fc" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">{t('KPI_ATTENDANCE_RATE')}</span>
+            <div className="p-2 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400">
               <Building2 size={15} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-primary">{kpis.attendanceRatePercent}%</p>
-          <span className="text-xs text-text-muted">Present vs Expected</span>
+          <p className="relative z-10 mt-2 text-xl sm:text-2xl font-black tracking-tight text-purple-400 tabular-nums">{kpis.attendanceRatePercent}%</p>
+          <span className="relative z-10 mt-2 block border-t border-white/10 pt-1.5 text-[11px] font-medium text-slate-400">Present vs Expected</span>
         </div>
       </div>
 

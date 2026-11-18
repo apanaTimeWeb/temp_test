@@ -119,49 +119,61 @@ export function AdminShiftsManagementPage() {
       </div>
 
       {/* 4 Premium Glassmorphic KPI Cards */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
-        <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-linear-to-br from-cyan-500/10 via-card to-card p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Total Shifts</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-cyan-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#22d3ee" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Total Shifts</span>
+            <div className="p-2.5 rounded-xl border border-cyan-500/30 bg-cyan-500/15 text-cyan-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
               <Clock size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{shiftStats.total}</p>
-          <p className="mt-1 text-xs text-text-secondary">{selectedBranch ? selectedBranch.name : 'Configured shifts'}</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">{shiftStats.total}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">{selectedBranch ? selectedBranch.name : 'Configured shifts'}</p>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-linear-to-br from-emerald-500/10 via-card to-card p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Active Shifts</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Active Shifts</span>
+            <div className="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
               <CheckCircle2 size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{shiftStats.active}</p>
-          <p className="mt-1 text-xs text-text-secondary">Currently accepting bookings</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-emerald-400 tabular-nums">{shiftStats.active}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Currently accepting bookings</p>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl border border-indigo-500/20 bg-linear-to-br from-indigo-500/10 via-card to-card p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Total Capacity</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-indigo-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Total Capacity</span>
+            <div className="p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
               <Users size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">{shiftStats.totalCapacity}</p>
-          <p className="mt-1 text-xs text-text-secondary">Max concurrent desk slots</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">{shiftStats.totalCapacity}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Max concurrent desk slots</p>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl border border-purple-500/20 bg-linear-to-br from-purple-500/10 via-card to-card p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Enrolled Seats</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-500/15 text-purple-600 dark:text-purple-400">
+        <div className="group relative overflow-hidden rounded-2xl border border-purple-500/25 bg-gradient-to-br from-[#180c28]/95 via-[#180c28]/90 to-[#221238]/80 shadow-purple-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#c084fc" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Enrolled Seats</span>
+            <div className="p-2.5 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
               <TrendingUp size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-purple-600 dark:text-purple-400">{shiftStats.totalOccupancy}</p>
-          <p className="mt-1 text-xs text-text-secondary">{shiftStats.avgOccupancy}% network utilization</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-purple-400 tabular-nums">{shiftStats.totalOccupancy}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">{shiftStats.avgOccupancy}% network utilization</p>
         </div>
       </div>
 

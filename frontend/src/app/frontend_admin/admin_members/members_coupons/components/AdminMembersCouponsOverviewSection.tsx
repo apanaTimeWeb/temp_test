@@ -204,33 +204,37 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
     {
       label: t('KPI_TOTAL_COUPONS'),
       value: coupons.length,
-      border: 'border-cyan-500/20 hover:border-cyan-500/40',
-      glow: 'bg-cyan-500/10 text-cyan-400',
-      badge: 'border-cyan-500/20 bg-cyan-500/10 text-cyan-400',
+      cardBorderBg: 'border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-cyan-950/30',
+      iconBox: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400',
+      strokeColor: '#22d3ee',
+      badgeBg: 'border-cyan-500/30 bg-cyan-500/15 text-cyan-400',
       trend: 'Active Catalog',
     },
     {
       label: t('KPI_ACTIVE'),
       value: coupons.filter((coupon) => coupon.status === 'Active').length,
-      border: 'border-emerald-500/20 hover:border-emerald-500/40',
-      glow: 'bg-emerald-500/10 text-emerald-400',
-      badge: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
+      cardBorderBg: 'border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30',
+      iconBox: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
+      strokeColor: '#34d399',
+      badgeBg: 'border-emerald-500/30 bg-emerald-500/15 text-emerald-400',
       trend: 'Redeemable',
     },
     {
       label: t('KPI_EXPIRED'),
       value: coupons.filter((coupon) => coupon.status === 'Expired').length,
-      border: 'border-rose-500/20 hover:border-rose-500/40',
-      glow: 'bg-rose-500/10 text-rose-400',
-      badge: 'border-rose-500/20 bg-rose-500/10 text-rose-400',
+      cardBorderBg: 'border-rose-500/25 bg-gradient-to-br from-[#1f0a10]/95 via-[#1f0a10]/90 to-[#2d0e17]/80 shadow-rose-950/30',
+      iconBox: 'bg-rose-500/15 border-rose-500/30 text-rose-400',
+      strokeColor: '#f87171',
+      badgeBg: 'border-rose-500/30 bg-rose-500/15 text-rose-400',
       trend: 'Archived',
     },
     {
       label: t('KPI_TOTAL_USES'),
       value: coupons.length > 0 && coupons.every((coupon) => typeof coupon.usedCount === 'number') ? coupons.reduce((sum, coupon) => sum + (coupon.usedCount ?? 0), 0) : '—',
-      border: 'border-amber-500/20 hover:border-amber-500/40',
-      glow: 'bg-amber-500/10 text-amber-400',
-      badge: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
+      cardBorderBg: 'border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-amber-950/30',
+      iconBox: 'bg-amber-500/15 border-amber-500/30 text-amber-400',
+      strokeColor: '#fbbf24',
+      badgeBg: 'border-amber-500/30 bg-amber-500/15 text-amber-400',
       trend: 'Total Redemptions',
     },
   ];
@@ -342,21 +346,24 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
         {metrics.map((metric) => (
           <div
             key={metric.label}
-            className={`relative overflow-hidden rounded-2xl border ${metric.border} bg-slate-900/60 backdrop-blur-xl p-5 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-0.5`}
+            className={`group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl ${metric.cardBorderBg}`}
           >
-            <div className="flex items-start justify-between">
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke={metric.strokeColor} strokeWidth="3" strokeLinecap="round" />
+            </svg>
+            <div className="relative z-10 flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">{metric.label}</p>
-                <p className="mt-2 text-2xl font-bold tracking-tight text-white" aria-live={isPending ? 'off' : 'polite'}>
+                <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300 truncate">{metric.label}</p>
+                <p className="mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums" aria-live={isPending ? 'off' : 'polite'}>
                   {isPending ? t('KPI_LOADING') : isError ? '—' : metric.value}
                 </p>
               </div>
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${metric.glow}`}>
-                <Tag size={20} strokeWidth={2} />
+              <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${metric.iconBox}`}>
+                <Tag size={18} strokeWidth={2.2} />
               </div>
             </div>
-            <div className="mt-3 flex items-center gap-1.5">
-              <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${metric.badge}`}>
+            <div className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 flex items-center gap-1.5">
+              <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold shadow-xs ${metric.badgeBg}`}>
                 {metric.trend}
               </span>
             </div>

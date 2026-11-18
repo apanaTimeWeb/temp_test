@@ -169,51 +169,58 @@ export default function AdminEnquiriesPageView() {
               label: 'Total Leads',
               value: totalLeads,
               icon: Users,
-              border: 'border-cyan-500/20 hover:border-cyan-500/40',
-              glow: 'bg-cyan-500/10 text-cyan-400',
-              badge: 'border-cyan-500/20 bg-cyan-500/10 text-cyan-400',
+              cardBorderBg: 'border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-cyan-950/30',
+              iconBox: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400',
+              strokeColor: '#22d3ee',
+              badgeBg: 'border-cyan-500/30 bg-cyan-500/15 text-cyan-400',
               sub: `All enquiries in ${timeRangeLabel}`
             },
             {
               label: 'New Prospects',
               value: newProspects,
               icon: UserCheck,
-              border: 'border-indigo-500/20 hover:border-indigo-500/40',
-              glow: 'bg-indigo-500/10 text-indigo-400',
-              badge: 'border-indigo-500/20 bg-indigo-500/10 text-indigo-400',
+              cardBorderBg: 'border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-indigo-950/30',
+              iconBox: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400',
+              strokeColor: '#818cf8',
+              badgeBg: 'border-indigo-500/30 bg-indigo-500/15 text-indigo-400',
               sub: `Fresh inbound leads (${timeRangeLabel})`
             },
             {
               label: 'In Pipeline',
               value: inPipeline,
               icon: TrendingUp,
-              border: 'border-amber-500/20 hover:border-amber-500/40',
-              glow: 'bg-amber-500/10 text-amber-400',
-              badge: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
+              cardBorderBg: 'border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-amber-950/30',
+              iconBox: 'bg-amber-500/15 border-amber-500/30 text-amber-400',
+              strokeColor: '#fbbf24',
+              badgeBg: 'border-amber-500/30 bg-amber-500/15 text-amber-400',
               sub: `Visited + Interested (${timeRangeLabel})`
             },
             {
               label: 'Conversion Rate',
               value: `${conversionRate}%`,
               icon: Target,
-              border: 'border-emerald-500/20 hover:border-emerald-500/40',
-              glow: 'bg-emerald-500/10 text-emerald-400',
-              badge: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
+              cardBorderBg: 'border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30',
+              iconBox: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
+              strokeColor: '#34d399',
+              badgeBg: 'border-emerald-500/30 bg-emerald-500/15 text-emerald-400',
               sub: `${converted} admitted in ${timeRangeLabel}`
             },
-          ].map(({ label, value, icon: Icon, border, glow, badge, sub }) => (
+          ].map(({ label, value, icon: Icon, cardBorderBg, iconBox, strokeColor, sub }) => (
             <div
               key={label}
-              className={`relative overflow-hidden rounded-2xl border ${border} bg-slate-900/60 backdrop-blur-xl p-5 shadow-lg shadow-black/20 transition-all duration-300 hover:-translate-y-0.5`}
+              className={`group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl ${cardBorderBg}`}
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</span>
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${glow}`}>
-                  <Icon size={20} strokeWidth={2.2} />
+              <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+                <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke={strokeColor} strokeWidth="3" strokeLinecap="round" />
+              </svg>
+              <div className="relative z-10 flex items-start justify-between gap-2">
+                <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300 truncate">{label}</span>
+                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${iconBox}`}>
+                  <Icon size={18} strokeWidth={2.2} />
                 </div>
               </div>
-              <p className="mt-3 text-2xl font-bold tracking-tight text-white">{value}</p>
-              <p className="mt-2 text-xs text-slate-400 truncate">{sub}</p>
+              <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">{value}</p>
+              <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400 truncate">{sub}</p>
             </div>
           ))}
         </div>

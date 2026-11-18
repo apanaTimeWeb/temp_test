@@ -22,29 +22,29 @@ interface KpiThemeConfig {
 
 const KPI_THEMES: Record<string, KpiThemeConfig> = {
   store: {
-    cardBorderBg: 'border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-indigo-950/30',
-    iconBox: 'bg-indigo-500/15 border-indigo-500/30',
+    cardBorderBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 shadow-lg shadow-indigo-950/50 hover:border-indigo-400/60',
+    iconBox: 'bg-indigo-500/20 border-indigo-500/40',
     iconColor: 'text-indigo-400',
     strokeColor: '#818cf8',
     progressGradient: 'from-indigo-500 to-indigo-400',
   },
   groups: {
-    cardBorderBg: 'border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30',
-    iconBox: 'bg-emerald-500/15 border-emerald-500/30',
+    cardBorderBg: 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0f2d22] to-emerald-900/60 shadow-lg shadow-emerald-950/50 hover:border-emerald-400/60',
+    iconBox: 'bg-emerald-500/20 border-emerald-500/40',
     iconColor: 'text-emerald-400',
     strokeColor: '#34d399',
     progressGradient: 'from-emerald-500 to-emerald-400',
   },
   currency_rupee: {
-    cardBorderBg: 'border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-amber-950/30',
-    iconBox: 'bg-amber-500/15 border-amber-500/30',
+    cardBorderBg: 'border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#2d1f08] to-amber-900/60 shadow-lg shadow-amber-950/50 hover:border-amber-400/60',
+    iconBox: 'bg-amber-500/20 border-amber-500/40',
     iconColor: 'text-amber-400',
     strokeColor: '#fbbf24',
     progressGradient: 'from-amber-500 to-amber-400',
   },
   pending_actions: {
-    cardBorderBg: 'border-rose-500/25 bg-gradient-to-br from-[#1f0a10]/95 via-[#1f0a10]/90 to-[#2d0e17]/80 shadow-rose-950/30',
-    iconBox: 'bg-rose-500/15 border-rose-500/30',
+    cardBorderBg: 'border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#2d0f18] to-rose-900/60 shadow-lg shadow-rose-950/50 hover:border-rose-400/60',
+    iconBox: 'bg-rose-500/20 border-rose-500/40',
     iconColor: 'text-rose-400',
     strokeColor: '#f87171',
     progressGradient: 'from-rose-500 to-rose-400',
@@ -52,8 +52,8 @@ const KPI_THEMES: Record<string, KpiThemeConfig> = {
 };
 
 const DEFAULT_THEME: KpiThemeConfig = {
-  cardBorderBg: 'border-sky-500/25 bg-gradient-to-br from-[#0c1828]/95 via-[#0c1828]/90 to-[#122238]/80 shadow-sky-950/30',
-  iconBox: 'bg-sky-500/15 border-sky-500/30',
+  cardBorderBg: 'border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0f2540] to-sky-900/60 shadow-lg shadow-sky-950/50 hover:border-sky-400/60',
+  iconBox: 'bg-sky-500/20 border-sky-500/40',
   iconColor: 'text-sky-400',
   strokeColor: '#38bdf8',
   progressGradient: 'from-sky-500 to-sky-400',

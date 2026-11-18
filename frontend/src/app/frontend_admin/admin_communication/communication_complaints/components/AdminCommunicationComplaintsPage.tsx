@@ -222,48 +222,71 @@ export function AdminCommunicationComplaintsPage() {
       </div>
 
       {/* KPI Summary Cards */}
-      <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Total Tickets</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-              <MessageSquare size={16} strokeWidth={2.2} />
+      <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+        {/* Total Tickets - Cyan */}
+        <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-cyan-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#22d3ee" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Total Tickets</span>
+            <div className="p-2.5 rounded-xl border border-cyan-500/30 bg-cyan-500/15 text-cyan-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <MessageSquare size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-cyan-400">{branchFiltered.length}</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">{branchFiltered.length}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Total grievances recorded</p>
         </div>
-        <div className="rounded-2xl border border-rose-500/20 bg-gradient-to-br from-rose-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-rose-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Open & Escalated</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500/15 text-rose-400 border border-rose-500/30">
-              <AlertTriangle size={16} strokeWidth={2.2} />
+
+        {/* Open & Escalated - Rose */}
+        <div className="group relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1f0a10]/95 via-[#1f0a10]/90 to-[#2d0e17]/80 shadow-rose-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#f87171" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Open & Escalated</span>
+            <div className="p-2.5 rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <AlertTriangle size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-rose-400">
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-rose-400 tabular-nums">
             {branchFiltered.filter((c) => c.status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.OPEN).length}
           </p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Unresolved complaints</p>
         </div>
-        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">In Progress</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30">
-              <RefreshCw size={16} strokeWidth={2.2} />
+
+        {/* In Progress - Amber */}
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-amber-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">In Progress</span>
+            <div className="p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <RefreshCw size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-amber-400">
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-amber-400 tabular-nums">
             {branchFiltered.filter((c) => c.status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.IN_PROGRESS).length}
           </p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Active investigation</p>
         </div>
-        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Resolved</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              <CheckCircle size={16} strokeWidth={2.2} />
+
+        {/* Resolved - Emerald */}
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Resolved</span>
+            <div className="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <CheckCircle size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-emerald-400">
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-emerald-400 tabular-nums">
             {branchFiltered.filter((c) => c.status === ADMIN_COMMUNICATION_COMPLAINT_STATUS.RESOLVED).length}
           </p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Successfully closed</p>
         </div>
       </div>
 

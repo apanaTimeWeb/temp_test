@@ -33,49 +33,65 @@ export default function AdminSettingsBranchesView({ model }: AdminSettingsBranch
 
       {/* KPI Cards when browsing branch network */}
       {!viewingBranch && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('NAV_MAIN_ALL')}</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Building2 size={16} strokeWidth={2.2} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          {/* Total Network - Indigo */}
+          <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-indigo-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round" />
+            </svg>
+            <div className="relative z-10 flex items-start justify-between gap-2">
+              <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">{t('NAV_MAIN_ALL')}</span>
+              <div className="p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                <Building2 size={18} strokeWidth={2.2} />
               </div>
             </div>
-            <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{branchCounts.all}</p>
-            <span className="text-xs text-text-muted">Total Network Locations</span>
+            <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">{branchCounts.all}</p>
+            <span className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 block text-xs font-medium text-slate-400">Total Network Locations</span>
           </div>
 
-          <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('STATUS_ACTIVE')}</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success-bg text-success-text">
-                <CheckCircle2 size={16} strokeWidth={2.2} />
+          {/* Active - Emerald */}
+          <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
+            </svg>
+            <div className="relative z-10 flex items-start justify-between gap-2">
+              <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">{t('STATUS_ACTIVE')}</span>
+              <div className="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                <CheckCircle2 size={18} strokeWidth={2.2} />
               </div>
             </div>
-            <p className="mt-2 text-2xl font-bold tracking-tight text-success-text">{branchCounts.active}</p>
-            <span className="text-xs text-text-muted">Operational & On-Floor</span>
+            <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-emerald-400 tabular-nums">{branchCounts.active}</p>
+            <span className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 block text-xs font-medium text-slate-400">Operational & On-Floor</span>
           </div>
 
-          <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('STATUS_SUSPENDED')}</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning-bg text-warning-text">
-                <AlertTriangle size={16} strokeWidth={2.2} />
+          {/* Suspended - Amber */}
+          <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-amber-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
+            </svg>
+            <div className="relative z-10 flex items-start justify-between gap-2">
+              <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">{t('STATUS_SUSPENDED')}</span>
+              <div className="p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                <AlertTriangle size={18} strokeWidth={2.2} />
               </div>
             </div>
-            <p className="mt-2 text-2xl font-bold tracking-tight text-warning-text">{branchCounts.suspended}</p>
-            <span className="text-xs text-text-muted">Under Maintenance</span>
+            <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-amber-400 tabular-nums">{branchCounts.suspended}</p>
+            <span className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 block text-xs font-medium text-slate-400">Under Maintenance</span>
           </div>
 
-          <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('STATUS_ARCHIVED')}</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted text-text-secondary">
-                <Archive size={16} strokeWidth={2.2} />
+          {/* Archived - Rose */}
+          <div className="group relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1f0a10]/95 via-[#1f0a10]/90 to-[#2d0e17]/80 shadow-rose-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#f87171" strokeWidth="3" strokeLinecap="round" />
+            </svg>
+            <div className="relative z-10 flex items-start justify-between gap-2">
+              <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">{t('STATUS_ARCHIVED')}</span>
+              <div className="p-2.5 rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                <Archive size={18} strokeWidth={2.2} />
               </div>
             </div>
-            <p className="mt-2 text-2xl font-bold tracking-tight text-text-secondary">{branchCounts.archived}</p>
-            <span className="text-xs text-text-muted">Decommissioned</span>
+            <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-rose-400 tabular-nums">{branchCounts.archived}</p>
+            <span className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 block text-xs font-medium text-slate-400">Decommissioned</span>
           </div>
         </div>
       )}

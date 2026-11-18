@@ -257,48 +257,71 @@ export function AdminCommunicationNoticesPage() {
       </div>
 
       {/* KPI Summary Cards */}
-      <div className="mb-6 grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-indigo-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Total Notices</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-              <Radio size={16} strokeWidth={2.2} />
+      <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+        {/* Total Notices - Indigo */}
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-indigo-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Total Notices</span>
+            <div className="p-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <Radio size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-indigo-400">{filteredNotices.length}</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">{filteredNotices.length}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Published broadcasts</p>
         </div>
-        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Active Notices</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              <CheckCircle2 size={16} strokeWidth={2.2} />
+
+        {/* Active Notices - Emerald */}
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Active Notices</span>
+            <div className="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <CheckCircle2 size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-emerald-400">
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-emerald-400 tabular-nums">
             {filteredNotices.filter((n) => n.status === 'Active').length}
           </p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Currently live to members</p>
         </div>
-        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-amber-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Expired</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30">
-              <Clock size={16} strokeWidth={2.2} />
+
+        {/* Expired - Amber */}
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-amber-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Expired</span>
+            <div className="p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <Clock size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-amber-400">
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-amber-400 tabular-nums">
             {filteredNotices.filter((n) => n.status === 'Expired').length}
           </p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Passed validity threshold</p>
         </div>
-        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Target Branches</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-              <Building2 size={16} strokeWidth={2.2} />
+
+        {/* Target Branches - Cyan */}
+        <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-cyan-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#22d3ee" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Target Branches</span>
+            <div className="p-2.5 rounded-xl border border-cyan-500/30 bg-cyan-500/15 text-cyan-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <Building2 size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-cyan-400">
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">
             {isAllBranches ? 'All Branches' : (selectedBranch?.name ?? '1 Branch')}
           </p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Notice recipient scope</p>
         </div>
       </div>
 

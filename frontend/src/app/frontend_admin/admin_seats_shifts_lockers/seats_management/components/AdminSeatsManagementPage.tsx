@@ -120,49 +120,61 @@ export function AdminSeatsManagementPage() {
       </div>
 
       {/* 4 Premium Glassmorphic KPI Cards */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:gap-4">
-        <div className="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-linear-to-br from-cyan-500/10 via-card to-card p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Total Inventory</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-cyan-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#22d3ee" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Total Inventory</span>
+            <div className="p-2.5 rounded-xl border border-cyan-500/30 bg-cyan-500/15 text-cyan-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
               <Armchair size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{stats.total}</p>
-          <p className="mt-1 text-xs text-text-secondary">{selectedBranch ? selectedBranch.name : 'All branches'}</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">{stats.total}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">{selectedBranch ? selectedBranch.name : 'All branches'}</p>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl border border-emerald-500/20 bg-linear-to-br from-emerald-500/10 via-card to-card p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Working Desks</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Working Desks</span>
+            <div className="p-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
               <CheckCircle2 size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{stats.working}</p>
-          <p className="mt-1 text-xs text-text-secondary">Fully operational</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-emerald-400 tabular-nums">{stats.working}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Fully operational</p>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl border border-amber-500/20 bg-linear-to-br from-amber-500/10 via-card to-card p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Maintenance</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400">
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-amber-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Maintenance</span>
+            <div className="p-2.5 rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
               <Wrench size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{stats.maintenance}</p>
-          <p className="mt-1 text-xs text-text-secondary">Scheduled repairs</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-amber-400 tabular-nums">{stats.maintenance}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Scheduled repairs</p>
         </div>
 
-        <div className="relative overflow-hidden rounded-xl border border-rose-500/20 bg-linear-to-br from-rose-500/10 via-card to-card p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">Out of Order</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/15 text-rose-600 dark:text-rose-400">
+        <div className="group relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1f0a10]/95 via-[#1f0a10]/90 to-[#2d0e17]/80 shadow-rose-950/30 p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#f87171" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10 flex items-start justify-between gap-2">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-slate-300">Out of Order</span>
+            <div className="p-2.5 rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
               <AlertOctagon size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">{stats.broken}</p>
-          <p className="mt-1 text-xs text-text-secondary">Defective / broken</p>
+          <p className="relative z-10 mt-3 sm:mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-rose-400 tabular-nums">{stats.broken}</p>
+          <p className="relative z-10 mt-3.5 pt-2.5 border-t border-white/10 text-xs font-medium text-slate-400">Defective / broken</p>
         </div>
       </div>
 
