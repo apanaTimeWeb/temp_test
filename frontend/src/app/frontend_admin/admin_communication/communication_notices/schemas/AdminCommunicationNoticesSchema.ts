@@ -38,6 +38,8 @@ export function createAdminCommunicationNoticeSchema(messages: Pick<AdminCommuni
     sendWhatsApp: z.boolean().optional(),
     sendEmail: z.boolean().optional(),
     sendSms: z.boolean().optional(),
+    priority: z.enum(['STANDARD', 'URGENT', 'EMERGENCY']).optional(),
+    isEmergency: z.boolean().optional(),
   });
 }
 export const AdminCommunicationNoticeSchema = createAdminCommunicationNoticeSchema(DEFAULT_MESSAGES);

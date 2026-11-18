@@ -25,6 +25,7 @@ export default function useAdminMembersBlacklistState() {
   const recordsQuery = useQuery({
     queryKey: ADMIN_BLACKLIST_QUERY_KEYS.list({ mode: isDemoMode ? 'demo' : 'live' }),
     queryFn: () => isDemoMode ? Promise.resolve([...ADMIN_BLACKLIST_DEMO_FIXTURES]) : fetchAdminBlacklist(),
+    initialData: isDemoMode ? [...ADMIN_BLACKLIST_DEMO_FIXTURES] : undefined,
   });
   const records = isDemoMode ? demoRecordsOverride ?? recordsQuery.data ?? [] : recordsQuery.data ?? [];
 
@@ -34,14 +35,64 @@ export default function useAdminMembersBlacklistState() {
       return;
     }
     const newRecord: AdminBlacklistRecord = {
-      id: `demo-blacklist-${Date.now()}`, name: values.name.trim(), phone: values.phone.trim(),
-      reason: values.reason.trim(), blacklistedBy: t('DEMO_ADMIN_NAME'),
-      blacklistedOn: format(new Date(), 'yyyy-MM-dd'), previousSeat: values.previousSeat.trim() || '—',
+      id: `demo-blacklist-${Date.now()}`,
+      name: values.name.trim(),
+      phone: values.phone.trim(),
+      reason: values.reason.trim(),
+      blacklistedBy: t('DEMO_ADMIN_NAME'),
+      blacklistedOn: format(new Date(), 'yyyy-MM-dd'),
+      previousSeat: values.previousSeat?.trim() || '—',
       status: ADMIN_BLACKLIST_STATUS_VALUES[0],
+      branch: values.branch || 'Downtown Central',
+      category: values.category || 'INDISCIPLINE_MISCONDUCT',
+      banScope: values.banScope || 'NETWORK_WIDE',
+      banDuration: values.banDuration || 'PERMANENT',
+      revokedSeat: values.revokeSeat ?? true,
+      revokedLocker: values.revokeLocker ?? true,
+      blockedBiometric: values.blockBiometric ?? true,
+      confiscatedDeposit: values.confiscateDeposit ?? false,
+      incidentDate: values.incidentDate || format(new Date(), 'yyyy-MM-dd'),
+      incidentLocation: values.incidentLocation || 'Reading Hall',
+      firRefNo: values.firRefNo || undefined,
+      incidentNotes: values.incidentNotes || values.reason.trim(),
     };
     setDemoRecordsOverride([newRecord, ...records]);
-    toast.info(t('DEMO_CREATED'), { id: 'admin_members-members_blacklist-hooks-useAdminMembersBlacklistState-toast-43-2' });
+    const scopeMsg = newRecord.banScope === 'NETWORK_WIDE' ? 'Network-Wide Ban Enforced across all branches' : 'Branch Ban Enforced';
+    toast.success(`Student blacklisted successfully. ${scopeMsg}. Active seat revoked.`);
     setShowForm(false);
+  };
+
+  const pardonStudent = (id: string, reason: string) => {
+    if (!isDemoMode) {
+      toast.info(t('MUTATION_BLOCKED'));
+      return;
+    }
+    const today = format(new Date(), 'yyyy-MM-dd');
+    setDemoRecordsOverride(
+      records.map((r) =>
+        r.id === id
+          ? {
+              ...r,
+              status: 'Pardoned',
+              pardonReason: reason,
+              pardonDate: today,
+              pardonedBy: 'Chief Admin',
+            }
+          : r
+      )
+    );
+    setSelectedRecord((cur) =>
+      cur?.id === id
+        ? {
+            ...cur,
+            status: 'Pardoned',
+            pardonReason: reason,
+            pardonDate: today,
+            pardonedBy: 'Chief Admin',
+          }
+        : cur
+    );
+    toast.success(`Ban revoked for student. Member access reinstated.`);
   };
 
   const confirmRemove = () => {
@@ -57,5 +108,5 @@ export default function useAdminMembersBlacklistState() {
     setRemoveId(null);
   };
 
-  return { isDemoMode, recordsQuery, records, showForm, setShowForm, removeId, setRemoveId, selectedRecord, setSelectedRecord, submit, confirmRemove } as const;
+  return { isDemoMode, recordsQuery, records, showForm, setShowForm, removeId, setRemoveId, selectedRecord, setSelectedRecord, submit, pardonStudent, confirmRemove } as const;
 }

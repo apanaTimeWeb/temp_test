@@ -20,6 +20,32 @@ export function createAdminBlacklistFormSchema(t: AdminBlacklistTranslate) {
     }, t('VALIDATION_PHONE_FORMAT')),
     reason: z.string().trim().min(1, t('VALIDATION_REASON_REQUIRED')),
     previousSeat: z.string().trim(),
+    category: z.enum([
+      'THEFT_STOLEN_PROPERTY',
+      'INDISCIPLINE_MISCONDUCT',
+      'PHYSICAL_ALTERCATION',
+      'PROPERTY_VANDALISM',
+      'UNAUTHORIZED_OCCUPANCY',
+      'FEE_DEFAULT_FRAUD',
+      'OTHER',
+    ]).optional(),
+    banScope: z.enum(['NETWORK_WIDE', 'BRANCH_SPECIFIC']).optional(),
+    banDuration: z.enum([
+      'PERMANENT',
+      'TEMPORARY_30_DAYS',
+      'TEMPORARY_90_DAYS',
+      'TEMPORARY_180_DAYS',
+      'TEMPORARY_1_YEAR',
+    ]).optional(),
+    revokeSeat: z.boolean().optional(),
+    revokeLocker: z.boolean().optional(),
+    blockBiometric: z.boolean().optional(),
+    confiscateDeposit: z.boolean().optional(),
+    incidentDate: z.string().optional(),
+    incidentLocation: z.string().optional(),
+    firRefNo: z.string().optional(),
+    incidentNotes: z.string().optional(),
+    branch: z.string().optional(),
   });
 }
 export const AdminBlacklistFormSchema = createAdminBlacklistFormSchema((key) => ADMIN_BLACKLIST_VALIDATION_ENGLISH[key]);

@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import type { UseFormReturn } from 'react-hook-form';
-import { X, Building2, Radio, MessageSquare, Mail, Send } from 'lucide-react';
+import { X, Building2, Radio, MessageSquare, Mail, Send, AlertTriangle, BellRing, Sparkles } from 'lucide-react';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -19,6 +19,7 @@ export interface AdminCommunicationNoticeModalProps {
   noticeForm: UseFormReturn<AdminCommunicationNoticeFormValues>;
   isDemoMode: boolean;
   branches: readonly AdminBranchItem[];
+  isEmergencyMode?: boolean;
   onRequestClose: () => void;
   onDiscard: () => void;
   onStay: () => void;
@@ -32,6 +33,7 @@ export function AdminCommunicationNoticeModal({
   noticeForm,
   isDemoMode,
   branches,
+  isEmergencyMode = false,
   onRequestClose,
   onDiscard,
   onStay,
@@ -41,9 +43,61 @@ export function AdminCommunicationNoticeModal({
 
   if (!showAdd) return null;
 
+  const applyPreset = (preset: 'WEATHER' | 'HOLIDAY' | 'POWER' | 'SECURITY') => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const nextWeek = new Date();
+    nextWeek.setDate(nextWeek.getDate() + 7);
+    const formatDate = (d: Date) => d.toISOString().slice(0, 10);
+
+    if (preset === 'WEATHER') {
+      noticeForm.setValue('title', 'Urgent: All Library Branches Closed Today Due to Heavy Rainfall', { shouldDirty: true });
+      noticeForm.setValue('message', 'Dear Students, Due to continuous heavy rainfall, severe waterlogging, and safety guidelines from municipal authorities, all Smart Library branch halls will remain CLOSED today. Digital portal and e-resources remain 24x7 active. Next operational advisory by 8:00 PM.', { shouldDirty: true });
+      noticeForm.setValue('validTill', formatDate(tomorrow), { shouldDirty: true });
+      noticeForm.setValue('targetBranch', 'All Branches', { shouldDirty: true });
+      noticeForm.setValue('sendWhatsApp', true, { shouldDirty: true });
+      noticeForm.setValue('sendEmail', true, { shouldDirty: true });
+      noticeForm.setValue('sendSms', true, { shouldDirty: true });
+      noticeForm.setValue('priority', 'EMERGENCY', { shouldDirty: true });
+      noticeForm.setValue('isEmergency', true, { shouldDirty: true });
+    } else if (preset === 'HOLIDAY') {
+      noticeForm.setValue('title', 'Notice: Library Network Closed for Scheduled Holiday', { shouldDirty: true });
+      noticeForm.setValue('message', 'Dear Students, Please be advised that all library study halls across the network will remain closed tomorrow in observance of the public holiday. Study shifts and reserved desks will resume standard schedule from 6:00 AM on the following day.', { shouldDirty: true });
+      noticeForm.setValue('validTill', formatDate(tomorrow), { shouldDirty: true });
+      noticeForm.setValue('targetBranch', 'All Branches', { shouldDirty: true });
+      noticeForm.setValue('sendWhatsApp', true, { shouldDirty: true });
+      noticeForm.setValue('sendEmail', true, { shouldDirty: true });
+      noticeForm.setValue('sendSms', true, { shouldDirty: true });
+      noticeForm.setValue('priority', 'EMERGENCY', { shouldDirty: true });
+      noticeForm.setValue('isEmergency', true, { shouldDirty: true });
+    } else if (preset === 'POWER') {
+      noticeForm.setValue('title', 'Notice: Essential Power Grid & Generator Maintenance', { shouldDirty: true });
+      noticeForm.setValue('message', 'Notice: Essential electrical line maintenance and backup generator testing scheduled today between 2:00 PM and 5:00 PM. Reading desk lamps and emergency lighting will remain operational. Silent study continues uninterrupted.', { shouldDirty: true });
+      noticeForm.setValue('validTill', formatDate(tomorrow), { shouldDirty: true });
+      noticeForm.setValue('targetBranch', 'All Branches', { shouldDirty: true });
+      noticeForm.setValue('sendWhatsApp', true, { shouldDirty: true });
+      noticeForm.setValue('sendEmail', true, { shouldDirty: true });
+      noticeForm.setValue('sendSms', false, { shouldDirty: true });
+      noticeForm.setValue('priority', 'URGENT', { shouldDirty: true });
+      noticeForm.setValue('isEmergency', true, { shouldDirty: true });
+    } else if (preset === 'SECURITY') {
+      noticeForm.setValue('title', 'Security Advisory: Mandatory ID Badge & Biometric Inspection', { shouldDirty: true });
+      noticeForm.setValue('message', 'Security Alert: Surprise administrative inspection in progress. Carrying digital Smart ID card and barcode pass is strictly mandatory for biometric turnstile entry. Non-registered individuals will be barred.', { shouldDirty: true });
+      noticeForm.setValue('validTill', formatDate(nextWeek), { shouldDirty: true });
+      noticeForm.setValue('targetBranch', 'All Branches', { shouldDirty: true });
+      noticeForm.setValue('sendWhatsApp', true, { shouldDirty: true });
+      noticeForm.setValue('sendEmail', true, { shouldDirty: true });
+      noticeForm.setValue('sendSms', true, { shouldDirty: true });
+      noticeForm.setValue('priority', 'EMERGENCY', { shouldDirty: true });
+      noticeForm.setValue('isEmergency', true, { shouldDirty: true });
+    }
+  };
+
+  const isEmergency = isEmergencyMode || noticeForm.watch('isEmergency');
+
   return (
     <Dialog open onOpenChange={(nextOpen) => { if (!nextOpen) { if (showDiscardDialog) onStay(); else onRequestClose(); } }}>
-      <DialogContent className="relative w-full overflow-y-auto rounded-xl border border-border bg-overlay p-6 shadow-dialog max-w-[560px] space-y-4">
+      <DialogContent className={`relative w-full overflow-y-auto rounded-xl border p-6 shadow-dialog max-w-[620px] space-y-4 ${isEmergency ? 'border-rose-500/40 bg-slate-900 text-white' : 'border-border bg-overlay text-text-primary'}`}>
         {showDiscardDialog ? (
           <>
             <DialogTitle>{t('UNSAVED_CHANGES_TITLE')}</DialogTitle>
@@ -76,9 +130,70 @@ export function AdminCommunicationNoticeModal({
             >
               <X size={18} strokeWidth={2} />
             </button>
-            <DialogTitle className="text-lg mb-4 font-bold text-text-primary">
-              {editItem ? t('NOTICE_EDIT_DIALOG_TITLE') : t('NOTICE_CREATE_DIALOG_TITLE')}
-            </DialogTitle>
+            
+            <div className="flex items-center gap-2.5 mb-2">
+              {isEmergency && (
+                <div className="p-2 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0 animate-pulse">
+                  <AlertTriangle size={20} />
+                </div>
+              )}
+              <div>
+                <DialogTitle className="text-lg font-bold text-text-primary flex items-center gap-2">
+                  <span>{editItem ? t('NOTICE_EDIT_DIALOG_TITLE') : isEmergency ? '🚨 Emergency Notice Broadcast (आपातकालीन नोटिस प्रसारण)' : t('NOTICE_CREATE_DIALOG_TITLE')}</span>
+                </DialogTitle>
+                {isEmergency && (
+                  <p className="text-xs text-rose-300 mt-0.5">
+                    High-priority blast to all network branches via WhatsApp, SMS & Push Alert
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Quick 1-Click Presets for Emergency Announcements */}
+            <div className="rounded-xl border border-rose-500/30 bg-rose-950/20 p-3.5 space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-rose-300 flex items-center gap-1.5">
+                  <Sparkles size={13} className="text-rose-400" />
+                  Quick Broadcast Presets (1-क्लिक टेम्पलेट्स)
+                </span>
+                <span className="text-[11px] text-slate-400">Click to autofill notice</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <button
+                  type="button"
+                  onClick={() => applyPreset('WEATHER')}
+                  className="rounded-lg border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/25 p-2 text-left transition-colors"
+                >
+                  <span className="text-xs font-bold text-rose-300 block truncate">🌧️ Rain Closure</span>
+                  <span className="text-[10px] text-slate-400 block truncate">भारी बारिश अवकाश</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyPreset('HOLIDAY')}
+                  className="rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/25 p-2 text-left transition-colors"
+                >
+                  <span className="text-xs font-bold text-amber-300 block truncate">🎉 Holiday Off</span>
+                  <span className="text-[10px] text-slate-400 block truncate">सार्वजनिक अवकाश</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyPreset('POWER')}
+                  className="rounded-lg border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/25 p-2 text-left transition-colors"
+                >
+                  <span className="text-xs font-bold text-sky-300 block truncate">⚡ Power Work</span>
+                  <span className="text-[10px] text-slate-400 block truncate">विद्युत मेंटेनेंस</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyPreset('SECURITY')}
+                  className="rounded-lg border border-purple-500/30 bg-purple-500/10 hover:bg-purple-500/25 p-2 text-left transition-colors"
+                >
+                  <span className="text-xs font-bold text-purple-300 block truncate">🛑 ID Checking</span>
+                  <span className="text-[10px] text-slate-400 block truncate">सुरक्षा चेकिंग</span>
+                </button>
+              </div>
+            </div>
+
             <DialogDescription className="sr-only">{t('NOTICE_FORM_DESCRIPTION')}</DialogDescription>
             <form onSubmit={noticeForm.handleSubmit(onSave)} noValidate className="flex flex-col gap-3.5 space-y-4">
               <div>
@@ -230,9 +345,9 @@ export function AdminCommunicationNoticeModal({
                   data-testid="admin_communication-page-control-007"
                   disabled={!isDemoMode}
                   title={!isDemoMode ? t('NOTICE_PERSISTENCE_BLOCKED') : undefined}
-                  className="min-h-11 px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary-hover motion-safe:transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                  className={`min-h-11 px-4 py-2 font-semibold text-white rounded motion-safe:transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${isEmergency ? 'bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 shadow-lg shadow-rose-600/30' : 'bg-primary text-on-primary hover:bg-primary-hover'}`}
                 >
-                  {editItem ? t('NOTICE_EDIT_UNAVAILABLE') : t('NOTICE_CREATE_UNAVAILABLE')}
+                  {isEmergency ? '🚨 Blast Emergency Broadcast (तत्काल प्रसारण करें)' : editItem ? t('NOTICE_EDIT_UNAVAILABLE') : t('NOTICE_CREATE_UNAVAILABLE')}
                 </button>
               </div>
             </form>

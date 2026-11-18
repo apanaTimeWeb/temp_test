@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import useAdminCommunicationNoticesUnsavedChangesGuard from '@/app/frontend_admin/admin_communication/communication_notices/hooks/useAdminCommunicationNoticesUnsavedChangesGuard';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2, Radio, Clock, CheckCircle2 } from 'lucide-react';
+import { ChevronRight, Plus, Edit2, Trash2, Send, SearchX, Building2, Radio, Clock, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { getAdminCommunicationNoticeStatus } from '@/app/frontend_admin/admin_communication/communication_notices/utils/AdminCommunicationNoticesDateUtils';
@@ -34,6 +34,7 @@ export function AdminCommunicationNoticesPage() {
   const [demoNotices, setDemoNotices] = useState<Notice[]>(() => isDemoMode ? ADMIN_COMMUNICATION_NOTICE_API_FIXTURE.map((notice) => ({ id: String(notice.id), title: notice.title, message: notice.message, postedBy: 'Demo session', postedDate: notice.createdAt.slice(0, 10), validTill: notice.validTill.slice(0, 10), targetBranch: 'All Branches', status: getAdminCommunicationNoticeStatus(notice.validTill) })) : []);
   const notices = isDemoMode ? demoNotices : apiNotices;
 
+  const [isEmergencyMode, setIsEmergencyMode] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
@@ -71,13 +72,13 @@ export function AdminCommunicationNoticesPage() {
 
   const requestCloseForm = () => {
     if (noticeForm.formState.isDirty) { setPendingHref(null); setShowDiscardDialog(true); return; }
-    setShowAdd(false); setEditItem(null); noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches' });
+    setShowAdd(false); setEditItem(null); setIsEmergencyMode(false); noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches' });
   };
 
   const discardFormDraft = () => {
     const destination = pendingHref;
     noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches' });
-    setEditItem(null); setShowAdd(false); setPendingHref(null); setShowDiscardDialog(false);
+    setEditItem(null); setShowAdd(false); setPendingHref(null); setShowDiscardDialog(false); setIsEmergencyMode(false);
     if (destination) router.push(destination);
   };
 
@@ -91,6 +92,7 @@ export function AdminCommunicationNoticesPage() {
   };
 
   const openAdd = () => {
+    setIsEmergencyMode(false);
     noticeForm.reset({
       title: '',
       message: '',
@@ -99,11 +101,35 @@ export function AdminCommunicationNoticesPage() {
       sendWhatsApp: true,
       sendEmail: true,
       sendSms: false,
+      priority: 'STANDARD',
+      isEmergency: false,
     });
     setEditItem(null);
     setShowAdd(true);
   };
+
+  const openEmergencyBroadcast = () => {
+    setIsEmergencyMode(true);
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    noticeForm.reset({
+      title: 'Urgent: All Library Branches Closed Today Due to Heavy Rainfall',
+      message: 'Dear Students, Due to continuous heavy rainfall, severe waterlogging, and safety guidelines from municipal authorities, all Smart Library branch halls will remain CLOSED today. Digital portal and e-resources remain 24x7 active. Next operational advisory by 8:00 PM.',
+      validTill: tomorrow.toISOString().slice(0, 10),
+      targetBranch: 'All Branches',
+      sendWhatsApp: true,
+      sendEmail: true,
+      sendSms: true,
+      priority: 'EMERGENCY',
+      isEmergency: true,
+    });
+    setEditItem(null);
+    setShowAdd(true);
+  };
+
   const openEdit = (n: Notice) => {
+    const isEmerg = n.priority === 'EMERGENCY' || n.isEmergency || false;
+    setIsEmergencyMode(isEmerg);
     noticeForm.reset({
       title: n.title,
       message: n.message,
@@ -112,6 +138,8 @@ export function AdminCommunicationNoticesPage() {
       sendWhatsApp: n.channels?.includes('whatsapp') ?? true,
       sendEmail: n.channels?.includes('email') ?? false,
       sendSms: n.channels?.includes('sms') ?? false,
+      priority: n.priority ?? (isEmerg ? 'EMERGENCY' : 'STANDARD'),
+      isEmergency: isEmerg,
     });
     setEditItem(n);
     setShowAdd(true);
@@ -127,9 +155,11 @@ export function AdminCommunicationNoticesPage() {
     if (values.sendWhatsApp) channels.push('whatsapp');
     if (values.sendEmail) channels.push('email');
     if (values.sendSms) channels.push('sms');
+    const isEmerg = isEmergencyMode || values.isEmergency || values.priority === 'EMERGENCY';
+    const priority = isEmerg ? 'EMERGENCY' : (values.priority || 'STANDARD');
 
     if (editItem) {
-      setDemoNotices((current) => current.map((notice) => notice.id === editItem.id ? { ...notice, title: values.title.trim(), message: values.message.trim(), validTill, targetBranch, channels, status: getAdminCommunicationNoticeStatus(validTill) } : notice));
+      setDemoNotices((current) => current.map((notice) => notice.id === editItem.id ? { ...notice, title: values.title.trim(), message: values.message.trim(), validTill, targetBranch, channels, priority, isEmergency: isEmerg, status: getAdminCommunicationNoticeStatus(validTill) } : notice));
       showToast(t('NOTICE_DEMO_UPDATED', { title: values.title.trim() }));
     } else {
       const nextNotice: Notice = {
@@ -141,14 +171,21 @@ export function AdminCommunicationNoticesPage() {
         postedBy: t('DEMO_AUTHOR'),
         postedDate,
         channels,
+        priority,
+        isEmergency: isEmerg,
         status: getAdminCommunicationNoticeStatus(validTill),
       };
       setDemoNotices((current) => [nextNotice, ...current]);
       const channelText = channels.length > 0 ? ` & dispatched via ${channels.join(', ').toUpperCase()}` : '';
-      showToast(`${t('NOTICE_DEMO_CREATED', { title: nextNotice.title })}${channelText}`);
+      if (isEmerg) {
+        showToast(`🚨 Emergency broadcast transmitted to ALL branches via ${channels.join(', ').toUpperCase()}!`);
+      } else {
+        showToast(`${t('NOTICE_DEMO_CREATED', { title: nextNotice.title })}${channelText}`);
+      }
     }
     setShowAdd(false);
     setEditItem(null);
+    setIsEmergencyMode(false);
     noticeForm.reset({ title: '', message: '', validTill: '', targetBranch: 'All Branches', sendWhatsApp: false, sendEmail: false, sendSms: false });
   };
 
@@ -163,6 +200,10 @@ export function AdminCommunicationNoticesPage() {
   const handleBroadcast = () => {
     showToast(t('NOTICE_BROADCAST_BLOCKED_TOAST'));
   };
+
+  const activeEmergencyNotice = useMemo(() => {
+    return notices.find((n) => (n.priority === 'EMERGENCY' || n.isEmergency) && n.status === 'Active');
+  }, [notices]);
 
   const filteredNotices = useMemo(() => {
     let list = notices;
@@ -185,7 +226,25 @@ export function AdminCommunicationNoticesPage() {
   }, [isAllBranches, selectedBranch, notices, search]);
 
   const colDefs: readonly DataGridColumn<Notice>[] = [
-    { field: 'title', headerName: t('NOTICE_COLUMN_TITLE'), width: 200, sortable: true, cellRenderer: (p: DataGridCellParams<Notice>) => <span className="font-semibold text-primary">{p.value}</span> },
+    {
+      field: 'title',
+      headerName: t('NOTICE_COLUMN_TITLE'),
+      width: 250,
+      sortable: true,
+      cellRenderer: (p: DataGridCellParams<Notice>) => {
+        const isEmerg = p.data.priority === 'EMERGENCY' || p.data.isEmergency;
+        return (
+          <div className="flex items-center gap-1.5 flex-wrap mt-2">
+            <span className={`font-semibold ${isEmerg ? 'text-rose-400 font-bold' : 'text-primary'}`}>{p.value}</span>
+            {isEmerg && (
+              <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse">
+                🚨 EMERGENCY
+              </span>
+            )}
+          </div>
+        );
+      },
+    },
     {
       field: 'targetBranch',
       headerName: 'Target Branch',
@@ -304,6 +363,7 @@ export function AdminCommunicationNoticesPage() {
         noticeForm={noticeForm}
         isDemoMode={isDemoMode}
         branches={branches}
+        isEmergencyMode={isEmergencyMode}
         onRequestClose={requestCloseForm}
         onDiscard={discardFormDraft}
         onStay={() => { setShowDiscardDialog(false); setPendingHref(null); }}
@@ -330,10 +390,54 @@ export function AdminCommunicationNoticesPage() {
           <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('NOTICE_PAGE_TITLE')}</h1>
           <p className="text-sm text-text-secondary">{t('NOTICE_PAGE_SUBTITLE')}</p>
         </div>
-        <button data-testid="admin_communication-page-control-012" onClick={openAdd} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 font-semibold text-primary-contrast shadow-sm hover:bg-primary-hover motion-safe:transition-colors">
-          <Plus size={18} strokeWidth={2}/> {t('NOTICE_POST_BUTTON')}
-        </button>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            data-testid="admin_communication-emergency-broadcast-btn"
+            onClick={openEmergencyBroadcast}
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-rose-600 via-rose-700 to-red-700 px-4 py-2.5 font-semibold text-white shadow-lg shadow-rose-950/40 hover:from-rose-500 hover:to-rose-600 border border-rose-500/30 motion-safe:transition-all"
+          >
+            <AlertTriangle size={18} strokeWidth={2} className="text-rose-200 animate-pulse" />
+            <span>Emergency Broadcast (आपातकालीन नोटिस)</span>
+          </button>
+          <button data-testid="admin_communication-page-control-012" onClick={openAdd} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 font-semibold text-primary-contrast shadow-sm hover:bg-primary-hover motion-safe:transition-colors">
+            <Plus size={18} strokeWidth={2}/> {t('NOTICE_POST_BUTTON')}
+          </button>
+        </div>
       </div>
+
+      {/* Active Emergency Alert Banner */}
+      {activeEmergencyNotice && (
+        <div className="mb-6 rounded-2xl border border-rose-500/40 bg-gradient-to-r from-rose-950/50 via-red-950/30 to-slate-900/60 p-4 sm:p-5 backdrop-blur-xl shadow-xl shadow-rose-950/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="p-2.5 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 shrink-0 mt-0.5 animate-pulse">
+              <AlertTriangle size={20} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="rounded-full bg-rose-500/25 text-rose-400 border border-rose-500/40 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider">
+                  Network-Wide Emergency Alert Active
+                </span>
+                <span className="text-xs text-slate-400 font-mono">Scope: {activeEmergencyNotice.targetBranch || 'All Branches'}</span>
+              </div>
+              <h3 className="text-base font-bold text-white mt-1">{activeEmergencyNotice.title}</h3>
+              <p className="text-xs text-slate-300 line-clamp-2 mt-0.5">{activeEmergencyNotice.message}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+            <button
+              type="button"
+              onClick={() => {
+                showToast(`🚨 Re-broadcasting emergency notice to ALL students across network branches via WhatsApp & SMS...`);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-rose-500/20 px-3.5 py-2 text-xs font-semibold text-rose-300 hover:text-white hover:bg-rose-500/30 transition-all shadow-sm"
+            >
+              <Send size={14} className="text-rose-400" />
+              <span>Re-Broadcast Blast</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* KPI Summary Cards */}
       <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
