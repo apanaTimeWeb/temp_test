@@ -655,14 +655,27 @@ export function AdminCommunicationWhatsappLogsPage() {
 
               {/* Action buttons */}
               <div className="flex items-center justify-between pt-1">
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(viewLog.message)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
-                >
-                  <Copy size={13} />
-                  <span>Copy Message Text</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(viewLog.message)}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
+                  >
+                    <Copy size={13} />
+                    <span>Copy Message Text</span>
+                  </button>
+                  {viewLog.status === 'Failed' && (
+                    <button
+                      type="button"
+                      data-testid={`admin_communication-modal-retry-${viewLog.id}`}
+                      onClick={() => handleRetry(viewLog.id)}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/15 px-3.5 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-500/25 transition-all cursor-pointer"
+                    >
+                      <RotateCcw size={13} />
+                      <span>Retry Dispatch</span>
+                    </button>
+                  )}
+                </div>
 
                 <button
                   data-testid="admin_communication-page-control-008"
@@ -679,25 +692,48 @@ export function AdminCommunicationWhatsappLogsPage() {
       )}
 
       {/* Header */}
-      <div>
-        <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-          <span>{t('BREADCRUMB_COMMUNICATION')}</span>
-          <ChevronRight size={14} />
-          <span className="text-slate-200">{t('WHATSAPP_LOGS_TITLE')}</span>
-        </div>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-            <MessageSquare size={18} />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <span>{t('BREADCRUMB_COMMUNICATION')}</span>
+            <ChevronRight size={14} />
+            <span className="text-slate-200">{t('WHATSAPP_LOGS_TITLE')}</span>
           </div>
-          <span>{t('WHATSAPP_LOGS_TITLE')}</span>
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
-            <ShieldCheck size={12} />
-            Live Dispatch History
-          </span>
-        </h1>
-        <p className="mt-0.5 text-xs text-slate-400">
-          {isDemoMode ? t('WHATSAPP_LOGS_DEMO_SUBTITLE') : t('WHATSAPP_LOGS_LIVE_SUBTITLE')}
-        </p>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+            <div className="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <MessageSquare size={18} />
+            </div>
+            <span>{t('WHATSAPP_LOGS_TITLE')}</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
+              <ShieldCheck size={12} />
+              Live Dispatch History
+            </span>
+          </h1>
+          <p className="mt-0.5 text-xs text-slate-400">
+            {isDemoMode ? t('WHATSAPP_LOGS_DEMO_SUBTITLE') : t('WHATSAPP_LOGS_LIVE_SUBTITLE')}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            data-testid="admin_communication-export-csv-btn"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-700 hover:text-white transition-all cursor-pointer shadow-xs"
+          >
+            <Download size={13} className="text-slate-400" />
+            <span>Export CSV</span>
+          </button>
+          <button
+            type="button"
+            data-testid="admin_communication-export-excel-btn"
+            onClick={handleExportExcel}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 px-3 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 transition-all cursor-pointer shadow-xs"
+          >
+            <FileSpreadsheet size={13} />
+            <span>Export Excel</span>
+          </button>
+        </div>
       </div>
 
       {/* KPI Summary Cards */}
