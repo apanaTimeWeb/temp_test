@@ -1,5 +1,6 @@
 'use client';
 
+import { DollarSign } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Toaster } from 'sonner';
 import { useAdminStaffPayroll } from '@/app/frontend_admin/admin_staff/staff_payroll/hooks/useAdminStaffPayroll';
@@ -17,8 +18,14 @@ export function AdminStaffPayrollPage() {
       <Toaster position="bottom-right" richColors closeButton />
 
       {/* Page Header */}
-      <div className="flex flex-col gap-1 border-b border-border pb-4">
-        <h1 className="text-2xl font-bold tracking-tight text-text-primary">
+      <div className="flex flex-col gap-2 border-b border-border pb-4">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+            <DollarSign className="h-3.5 w-3.5 text-primary" />
+            Compensation & Disbursement
+          </span>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
           {t('PAGE_TITLE')}
         </h1>
         <p className="text-sm text-text-secondary">

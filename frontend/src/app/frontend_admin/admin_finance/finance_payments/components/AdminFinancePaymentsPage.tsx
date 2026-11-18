@@ -349,15 +349,18 @@ export function AdminFinancePaymentsPage() {
       <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-md bg-info-bg px-2.5 py-0.5 text-xs font-semibold text-info-text">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
                 <CreditCard className="h-3.5 w-3.5" />
-                Finance / Ledger
+                Library Fee Collections
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2.5 py-0.5 text-[11px] font-mono text-text-secondary">
+                Scope: <span className="text-primary font-semibold">{timeRangeLabel}</span>
               </span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('PAYMENT_TITLE')}</h1>
-            <p className="text-sm text-text-secondary">
-              {t('PAYMENT_SUBTITLE')} • Scope: <span className="font-semibold text-primary">{timeRangeLabel}</span>
+            <p className="text-xs sm:text-sm text-text-secondary max-w-2xl leading-relaxed">
+              {t('PAYMENT_SUBTITLE')}
             </p>
           </div>
 

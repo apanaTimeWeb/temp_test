@@ -244,14 +244,15 @@ export function AdminCommunicationNoticesPage() {
       />
 
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-1.5 text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary mb-2">
-            <span>{t('BREADCRUMB_COMMUNICATION')}</span><ChevronRight size={18} strokeWidth={2} /><span>{t('NOTICE_PAGE_TITLE')}</span>
+        <div className="flex flex-col gap-2">
+          <div className="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+            <Radio className="h-3.5 w-3.5 text-primary" />
+            <span>Official Broadcasts</span>
           </div>
-          <h1 className="flex items-center gap-3 tracking-tight text-2xl font-bold text-text-primary">{t('NOTICE_PAGE_TITLE')}</h1>
-          <p className="mt-1 text-ui text-text-secondary">{t('NOTICE_PAGE_SUBTITLE')}</p>
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('NOTICE_PAGE_TITLE')}</h1>
+          <p className="text-sm text-text-secondary">{t('NOTICE_PAGE_SUBTITLE')}</p>
         </div>
-        <button data-testid="admin_communication-page-control-012" onClick={openAdd} className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded hover:bg-primary-hover motion-safe:transition-colors font-medium">
+        <button data-testid="admin_communication-page-control-012" onClick={openAdd} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 font-semibold text-primary-contrast shadow-sm hover:bg-primary-hover motion-safe:transition-colors">
           <Plus size={18} strokeWidth={2}/> {t('NOTICE_POST_BUTTON')}
         </button>
       </div>

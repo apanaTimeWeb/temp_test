@@ -113,9 +113,15 @@ export function AdminSeatsManagementPage() {
     <div className="min-w-0 space-y-6">
       {!isDemoMode && <p role="status" className="mb-4 rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('liveSeatNotice')}</p>}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-page-title font-bold text-text-primary">{t('seatsTitle')}</h1>
-          <p className="text-sm text-text-secondary">{t('seatsSubtitle')}</p>
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-0.5 text-xs font-semibold text-cyan-300">
+              <Armchair size={13} className="text-cyan-400" />
+              Desk & Cabin Inventory
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{t('seatsTitle')}</h1>
+          <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">{t('seatsSubtitle')}</p>
         </div>
       </div>
 

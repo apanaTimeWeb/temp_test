@@ -1,8 +1,8 @@
 {
   "ADMIN_ENQUIRIES": {
     "BREADCRUMB": "Enquiries",
-    "PAGE_TITLE": "Enquiry Pipeline",
-    "DEMO_SUBTITLE": "{count, plural, one {# demo lead} other {# demo leads}} • Track every prospect from enquiry to admission",
+    "PAGE_TITLE": "Student Enquiries",
+    "DEMO_SUBTITLE": "Track prospective student desk enquiries, preferred study shifts, and admission conversions.",
     "LIVE_SUBTITLE": "Enquiry data is unavailable until a verified CRM API integration is supplied.",
     "PREVIEW_ONLY": "CRM is in preview-only mode. No live enquiry API/DTO contract is wired, so this screen cannot confirm whether records exist.",
     "TABLE_UNAVAILABLE": "Table data is unavailable until the verified CRM API contract is integrated.",
@@ -34,7 +34,7 @@
     "ALL_STATUSES": "All statuses",
     "LIVE_WARNING": "CRM is in preview-only mode. No live enquiry API/DTO contract is wired, so this screen cannot confirm whether records exist.",
     "NO_ENQUIRIES": "No enquiries yet",
-    "NO_MATCHING_ENQUIRIES": "No leads match your current search or status criteria.",
+    "NO_MATCHING_ENQUIRIES": "No student enquiries match your current search or status criteria.",
     "COLUMN_OPTIONS": "Column options",
     "MORE_OPTIONS": "More options",
     "COLUMN_ACTIONS_UNAVAILABLE": "Column actions are not implemented; no data was changed.",

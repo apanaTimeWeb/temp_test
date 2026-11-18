@@ -78,9 +78,15 @@ export default function AdminProfilePage() {
         <span data-testid="admin_profile-AdminSettingsProfileMain-state-api-unavailable" className="sr-only" />
         {t('LIVE_UNAVAILABLE_NOTICE')}
       </p>}
-      <header>
-        <h1 className="text-page-title font-bold text-text-primary">{t('PAGE_TITLE')}</h1>
-        <p className="mt-1 text-sm text-text-secondary">{t('PAGE_SUBTITLE')}</p>
+      <header className="space-y-1.5">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+            <Shield className="h-3.5 w-3.5 text-primary" />
+            Admin Security & Governance
+          </span>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('PAGE_TITLE')}</h1>
+        <p className="text-sm text-text-secondary">{t('PAGE_SUBTITLE')}</p>
       </header>
       <div className="grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)]">
         <nav className="admin-card flex gap-2 overflow-x-auto lg:flex-col" aria-label={t('NAV_LABEL')}>

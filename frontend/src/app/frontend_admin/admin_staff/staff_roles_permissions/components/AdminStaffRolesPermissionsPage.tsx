@@ -92,15 +92,18 @@ export default function AdminStaffRolesPermissionsPage() {
     <>
       <Toaster position="bottom-right" richColors closeButton />
       <div className="space-y-6">
-        <header className="admin-page-header">
-          <div>
-            <p className="admin-breadcrumb">{t('BREADCRUMB')}</p>
-            <h1 className="admin-page-title">{t('PAGE_TITLE')}</h1>
-            <p className="admin-page-subtitle">{t('PAGE_SUBTITLE')}</p>
+        <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-2">
+            <div className="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+              <Shield className="h-3.5 w-3.5 text-primary" />
+              <span>Access Control & Security</span>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('PAGE_TITLE')}</h1>
+            <p className="text-sm text-text-secondary">{t('PAGE_SUBTITLE')}</p>
           </div>
           <button
             type="button"
-            className="admin-btn-primary min-h-11"
+            className="admin-btn-primary min-h-11 self-start sm:self-auto"
             onClick={save}
             disabled={!demoMode || permsQuery.isPending || permsQuery.isError || perms.length === 0}
             aria-describedby="admin-permissions-save-help"

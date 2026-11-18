@@ -2,7 +2,7 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, RotateCcw, PlusCircle, ShieldCheck } from 'lucide-react';
+import { Search, RotateCcw, PlusCircle, ShieldCheck, Building } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminAssetsRegisterState } from '@/app/frontend_admin/admin_accounts_assets/assets_register/hooks/useAdminAssetsRegisterState';
@@ -89,12 +89,16 @@ export function AdminAssetsRegisterPage() {
       )}
 
       {/* Header section with Add Asset button */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+            <Building className="h-3.5 w-3.5 text-primary" />
+            <span>Physical Assets & AMC Tracking</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             {t('TITLE')}
           </h1>
-          <p className="text-xs text-muted-foreground sm:text-sm">
+          <p className="text-sm text-muted-foreground">
             {t('SUBTITLE')}
           </p>
         </div>

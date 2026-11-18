@@ -2,6 +2,7 @@
 // RESPONSIBILITY: AdminAccountsFinancialReportsPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 
 import { useState } from 'react';
+import { BarChart3 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { AdminAccountsFinancialReportsDashboard } from '@/app/frontend_admin/admin_accounts_assets/accounts_financial_reports/components/AdminAccountsFinancialReportsDashboard';
@@ -16,9 +17,13 @@ export function AdminAccountsFinancialReportsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-page-title font-bold text-text-primary">{t('TITLE')}</h1>
-          <p className="mt-1 text-body text-text-secondary">{t('SUBTITLE')}</p>
+        <div className="flex flex-col gap-2">
+          <div className="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+            <BarChart3 className="h-3.5 w-3.5 text-primary" />
+            <span>Executive Financial Audit</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('TITLE')}</h1>
+          <p className="text-sm text-text-secondary">{t('SUBTITLE')}</p>
         </div>
         {isDemoMode && <div className="flex flex-wrap gap-2" aria-label={t('REPORT_PERIOD')}>
           {(['monthly', 'quarterly', 'yearly'] as const).map((nextPeriod) => (

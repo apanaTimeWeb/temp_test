@@ -100,9 +100,15 @@ return (
       </p>
     )}
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-      <div>
-        <h1 className="text-page-title font-bold text-text-primary">{t('shiftsTitle')}</h1>
-        <p className="text-sm text-text-secondary">{t('shiftsSubtitle')}</p>
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-xs font-semibold text-indigo-300">
+            <Clock size={13} className="text-indigo-400" />
+            Study Timetable & Slots
+          </span>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{t('shiftsTitle')}</h1>
+        <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">{t('shiftsSubtitle')}</p>
       </div>
       <div className="flex flex-wrap items-center gap-2 admin-shared-action-row" >
         <button

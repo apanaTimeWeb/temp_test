@@ -132,9 +132,14 @@ export function AdminFinanceRefundsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-page-title font-bold text-text-primary">{t('REFUND_TITLE')}</h1>
-        <p className="text-body text-text-secondary">{t('REFUND_SUBTITLE')} • Scope: <span className="font-semibold text-primary">{timeRangeLabel}</span></p>
+      <div className="flex flex-col gap-1.5">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">{t('REFUND_TITLE')}</h1>
+          <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2.5 py-0.5 text-[11px] font-mono text-text-secondary">
+            Scope: <span className="text-primary font-semibold">{timeRangeLabel}</span>
+          </span>
+        </div>
+        <p className="text-xs sm:text-sm text-text-secondary max-w-2xl leading-relaxed">{t('REFUND_SUBTITLE')}</p>
       </div>
 
       {/* Global Time Horizon Selector */}

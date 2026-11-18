@@ -119,9 +119,21 @@ export default function AdminEnquiriesPageView() {
         <div className="relative overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-xl p-5 md:p-6 shadow-lg shadow-black/20">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="space-y-1.5">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">{t('PAGE_TITLE')}</h1>
-              <p className="text-xs sm:text-sm text-slate-400">
-                <span>{timeFiltered.length} Active Leads • Track every prospect from enquiry to admission</span> • Range: <span className="font-semibold text-indigo-400">{timeRangeLabel}</span>
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-2.5">
+                  <Phone size={22} className="text-indigo-400" />
+                  <span>{t('PAGE_TITLE')}</span>
+                </h1>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-xs font-semibold text-indigo-300">
+                  <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
+                  <span>{timeFiltered.length} Active Enquiries</span>
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-800/80 px-2.5 py-0.5 text-[11px] font-mono text-slate-300">
+                  Range: <span className="text-indigo-400 font-semibold">{timeRangeLabel}</span>
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+                Track prospective student desk enquiries, preferred study shifts, and admission conversions.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-slate-800/80 bg-slate-950/50 p-1.5 shadow-inner">

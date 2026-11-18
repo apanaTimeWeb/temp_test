@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Toaster } from 'sonner';
-import { Calendar, Users2, ShieldCheck } from 'lucide-react';
+import { Calendar, CalendarCheck, Users2, ShieldCheck } from 'lucide-react';
 import { format, subDays } from 'date-fns';
 import { useAdminStaffAttendance } from '@/app/frontend_admin/admin_staff/staff_attendance/hooks/useAdminStaffAttendance';
 import { AdminStaffAttendanceOverviewSection } from '@/app/frontend_admin/admin_staff/staff_attendance/components/AdminStaffAttendanceOverviewSection';
@@ -44,6 +44,12 @@ export function AdminStaffAttendancePage() {
       <div className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-r from-surface to-surface-elevated p-6 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+                <CalendarCheck className="h-3.5 w-3.5 text-primary" />
+                Staff Attendance & Shifts
+              </span>
+            </div>
             <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
               {t('PAGE_TITLE')}
             </h1>

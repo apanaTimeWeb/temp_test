@@ -99,7 +99,7 @@ export default function AdminMembersEnquiriesDetailModal({
                 </span>
               </div>
               <p className="text-xs text-slate-400 mt-0.5 flex flex-wrap items-center gap-2">
-                <span>Lead ID: #{enquiry.id.slice(0, 6)}</span>
+                <span>Enquiry ID: #{enquiry.id.slice(0, 6)}</span>
                 <span>•</span>
                 <span className="flex items-center gap-1 font-mono text-slate-300">
                   <Phone size={12} className="text-slate-400" />
@@ -266,7 +266,7 @@ export default function AdminMembersEnquiriesDetailModal({
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-800 bg-slate-950/60 p-4 px-6 text-xs text-slate-400">
           <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
             <ShieldCheck size={14} className="text-indigo-400 shrink-0" />
-            <span>Admin Supervisory View • Lead operations & conversions are handled by branch managers.</span>
+            <span>Admin Supervisory View • Student enquiries and admissions are managed at branch manager desks.</span>
           </div>
           <button
             type="button"

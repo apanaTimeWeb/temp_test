@@ -4,7 +4,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { Search, RotateCcw } from 'lucide-react';
+import { Search, RotateCcw, Users2 } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_FINANCE_DEMO_REFERRERS } from '@/app/frontend_admin/admin_finance/finance_referrals/mocks/AdminFinanceReferralsDemoFixtures';
 import {
@@ -153,9 +153,15 @@ export function AdminFinanceReferralsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-page-title font-bold text-text-primary">{t('TITLE')}</h1>
-        <p className="mt-1 text-body text-text-secondary">{t('SUBTITLE')}</p>
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-xs font-semibold text-indigo-300">
+            <Users2 size={13} className="text-indigo-400" />
+            Student Referral Rewards
+          </span>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{t('TITLE')}</h1>
+        <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">{t('SUBTITLE')}</p>
       </div>
 
       {/* Global Time Horizon Selector */}

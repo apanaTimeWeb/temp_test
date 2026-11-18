@@ -255,14 +255,15 @@ export function AdminCommunicationComplaintsPage() {
 
       {/* Header */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="mb-1.5 flex items-center gap-1.5 text-badge font-semibold uppercase tracking-[0.07em] text-text-secondary">
-            <span>{t('BREADCRUMB_COMMUNICATION')}</span><ChevronRight size={18} strokeWidth={2} /><span>{t('COMPLAINTS_TITLE')}</span>
+        <div className="flex flex-col gap-2">
+          <div className="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+            <MessageSquare className="h-3.5 w-3.5 text-primary" />
+            <span>Student Support Desk</span>
           </div>
-          <h1 className="flex items-center gap-3 text-2xl font-bold tracking-tight text-text-primary">💬 {t('COMPLAINTS_TITLE')}</h1>
-          <p className="mt-1 text-ui text-text-secondary">{t('COMPLAINTS_SUBTITLE')}</p>
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('COMPLAINTS_TITLE')}</h1>
+          <p className="text-sm text-text-secondary">{t('COMPLAINTS_SUBTITLE')}</p>
         </div>
-        <button data-testid="admin_communication-page-control-014" onClick={openAdd} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-body font-semibold text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base">
+        <button data-testid="admin_communication-page-control-014" onClick={openAdd} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-primary bg-primary px-4 py-2.5 text-sm font-semibold text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base shadow-sm">
           <Plus size={18} strokeWidth={2}/> {t('COMPLAINTS_ADD_BUTTON')}
         </button>
       </div>

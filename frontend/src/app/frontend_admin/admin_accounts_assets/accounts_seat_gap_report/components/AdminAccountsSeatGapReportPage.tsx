@@ -2,6 +2,7 @@
 // RESPONSIBILITY: AdminAccountsSeatGapReportPage component owned by admin_accounting; responsibility folder: admin_accounting_components_views.
 
 import { useEffect, useMemo, useState } from 'react';
+import { TrendingUp } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
@@ -176,9 +177,13 @@ export function AdminAccountsSeatGapReportPage() {
           {t('LIVE_UNAVAILABLE')}
         </p>
       )}
-      <div>
-        <h1 className="text-page-title font-bold text-text-primary">{t('TITLE')}</h1>
-        <p className="mt-1 text-body text-text-secondary">{t('SUBTITLE')}</p>
+      <div className="flex flex-col gap-2">
+        <div className="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
+          <TrendingUp className="h-3.5 w-3.5 text-primary" />
+          <span>Seat Occupancy Efficiency</span>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">{t('TITLE')}</h1>
+        <p className="text-sm text-text-secondary">{t('SUBTITLE')}</p>
       </div>
 
       {/* Global Time Horizon Selector */}
