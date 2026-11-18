@@ -127,15 +127,15 @@ export function AdminDashboardOverviewKpis({ kpis, sectionLabel }: AdminDashboar
               </div>
 
               <div className="mt-3.5 sm:mt-4 flex items-baseline gap-2">
-                <span className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">
+                <span suppressHydrationWarning className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white tabular-nums">
                   {kpi.value}
                 </span>
               </div>
             </div>
 
             <div className="relative z-10 mt-3.5 flex items-center justify-between text-xs text-slate-400 border-t border-white/10 pt-2.5">
-              <span className="truncate mr-2 font-medium">{kpi.subtext}</span>
-              <span className={`inline-flex items-center gap-1 font-bold shrink-0 ${theme.trendColor}`}>
+              <span suppressHydrationWarning className="truncate mr-2 font-medium">{kpi.subtext}</span>
+              <span suppressHydrationWarning className={`inline-flex items-center gap-1 font-bold shrink-0 ${theme.trendColor}`}>
                 <TrendingUp size={12} aria-hidden="true" />
                 {kpi.trend}
               </span>

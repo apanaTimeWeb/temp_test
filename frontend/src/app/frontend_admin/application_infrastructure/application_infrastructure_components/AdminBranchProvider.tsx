@@ -61,7 +61,16 @@ export function AdminBranchProvider({
   initialBranches?: readonly AdminBranchItem[];
   defaultBranchId?: string;
 }) {
-  const [selectedBranchId, setSelectedBranchIdState] = useState<string>(() => defaultBranchId ?? resolveInitialBranch());
+  const [selectedBranchId, setSelectedBranchIdState] = useState<string>(() => defaultBranchId ?? ALL_BRANCHES_ID);
+
+  useEffect(() => {
+    if (!defaultBranchId) {
+      const initial = resolveInitialBranch();
+      if (initial && initial !== ALL_BRANCHES_ID) {
+        setSelectedBranchIdState(initial);
+      }
+    }
+  }, [defaultBranchId]);
 
   const setSelectedBranchId = (branchId: string) => {
     setSelectedBranchIdState(branchId);
