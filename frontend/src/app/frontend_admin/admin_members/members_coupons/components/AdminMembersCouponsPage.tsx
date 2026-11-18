@@ -225,64 +225,209 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
   return (
     <>
       <Dialog open={open} onOpenChange={(nextOpen) => { if (nextOpen) onOpenChange(true); else requestClose(); }}>
-        <DialogContent className="space-y-5">
-          <div className="space-y-2">
-            <DialogTitle>{intent === 'create' ? t('CREATE_DIALOG_TITLE') : 'Validate Coupon Draft'}</DialogTitle>
-            <DialogDescription>{t('CREATE_DIALOG_DESCRIPTION')}</DialogDescription>
+        <DialogContent className="max-w-xl rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-2xl space-y-5">
+          <div className="border-b border-slate-800 pb-3">
+            <DialogTitle className="text-lg font-bold text-white flex items-center gap-2">
+              <Building2 size={18} className="text-indigo-400" />
+              {intent === 'create' ? t('CREATE_DIALOG_TITLE') : 'Validate Coupon Draft'}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-400 mt-1">
+              {t('CREATE_DIALOG_DESCRIPTION')}
+            </DialogDescription>
           </div>
+
           <form onSubmit={submit} noValidate className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-code">{t('FIELD_CODE')}</label>
-              <input id="admin-coupon-code" {...codeRegistration} ref={codeRegistration.ref} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.code)} aria-describedby={form.formState.errors.code ? 'admin-coupon-code-error' : undefined} autoComplete="off" />
-              {typeof form.formState.errors.code?.message === 'string' && <p id="admin-coupon-code-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.code.message}</p>}
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-code">
+                {t('FIELD_CODE')} <span className="text-rose-400">*</span>
+              </label>
+              <input
+                id="admin-coupon-code"
+                {...codeRegistration}
+                ref={codeRegistration.ref}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                  codeRegistration.onChange(e);
+                }}
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-sm font-mono tracking-wider font-bold text-indigo-300 uppercase placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                placeholder="e.g. WELCOME50, DIWALI25"
+                aria-invalid={Boolean(form.formState.errors.code)}
+                aria-describedby={form.formState.errors.code ? 'admin-coupon-code-error' : undefined}
+                autoComplete="off"
+              />
+              {typeof form.formState.errors.code?.message === 'string' && (
+                <p id="admin-coupon-code-error" role="alert" className="text-xs text-rose-400 font-medium">
+                  {form.formState.errors.code.message}
+                </p>
+              )}
             </div>
-            <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-type">{t('FIELD_DISCOUNT_TYPE')}</label>
-              <select id="admin-coupon-type" {...form.register('type')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                <option value="Flat">{t('TYPE_FLAT')}</option>
-                <option value="Percent">{t('TYPE_PERCENT')}</option>
-              </select>
-              {typeof form.formState.errors.type?.message === 'string' && <p id="admin-coupon-type-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.type.message}</p>}
-            </div>
-            <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-branch">Branch Applicability</label>
-              <select id="admin-coupon-branch" {...form.register('branchApplicability')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                <option value="All Branches">All Branches (Global Promotion)</option>
-                <option value="Downtown Central">Downtown Central</option>
-                <option value="Westside Branch">Westside Branch</option>
-                <option value="North Hub">North Hub</option>
-              </select>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-discount">{t('FIELD_DISCOUNT_VALUE')}</label>
-                <input id="admin-coupon-discount" type="number" min="0.01" step="any" {...form.register('discount')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.discount)} aria-describedby={form.formState.errors.discount ? 'admin-coupon-discount-error' : undefined} />
-                {typeof form.formState.errors.discount?.message === 'string' && <p id="admin-coupon-discount-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.discount.message}</p>}
+
+            {/* Branch Applicability Condition */}
+            <div className="rounded-xl border border-slate-800/80 bg-slate-950/50 p-3.5 space-y-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                Target Branch Condition
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { value: 'All Branches', label: 'All Branches', desc: 'Global Network' },
+                  { value: 'Downtown Central', label: 'Downtown Central', desc: 'DT-CEN' },
+                  { value: 'Westside Branch', label: 'Westside Branch', desc: 'WS-BR' },
+                  { value: 'North Hub', label: 'North Hub', desc: 'NH-01' },
+                ].map((b) => {
+                  const currentBranch = form.watch('branchApplicability') || 'All Branches';
+                  const isSelected = currentBranch === b.value;
+                  return (
+                    <button
+                      key={b.value}
+                      type="button"
+                      onClick={() => form.setValue('branchApplicability', b.value, { shouldDirty: true })}
+                      className={`flex flex-col text-left rounded-lg border p-2.5 transition-all ${
+                        isSelected
+                          ? 'border-indigo-500 bg-indigo-500/20 text-indigo-200'
+                          : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 hover:bg-slate-900'
+                      }`}
+                    >
+                      <span className="text-xs font-bold leading-tight">{b.label}</span>
+                      <span className="text-[10px] text-slate-400">{b.desc}</span>
+                    </button>
+                  );
+                })}
               </div>
+            </div>
+
+            {/* Discount Type & Value */}
+            <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-max-uses">{t('FIELD_MAX_USES')}</label>
-                <input id="admin-coupon-max-uses" type="number" min="1" step="1" {...form.register('maxUses')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.maxUses)} aria-describedby={form.formState.errors.maxUses ? 'admin-coupon-max-uses-error' : undefined} />
-                {typeof form.formState.errors.maxUses?.message === 'string' && <p id="admin-coupon-max-uses-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.maxUses.message}</p>}
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-type">
+                  {t('FIELD_DISCOUNT_TYPE')}
+                </label>
+                <select
+                  id="admin-coupon-type"
+                  {...form.register('type')}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2.5 text-xs text-white focus:border-indigo-500 focus:outline-none"
+                >
+                  <option value="Flat">Flat Discount (₹ Amount Off)</option>
+                  <option value="Percent">Percentage (% Off)</option>
+                </select>
+                {typeof form.formState.errors.type?.message === 'string' && (
+                  <p id="admin-coupon-type-error" role="alert" className="text-xs text-rose-400">
+                    {form.formState.errors.type.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-discount">
+                  {t('FIELD_DISCOUNT_VALUE')} <span className="text-rose-400">*</span>
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2.5 text-xs font-bold text-slate-400">
+                    {form.watch('type') === 'Percent' ? '%' : '₹'}
+                  </span>
+                  <input
+                    id="admin-coupon-discount"
+                    type="number"
+                    min="0.01"
+                    step="any"
+                    {...form.register('discount')}
+                    className="w-full rounded-xl border border-slate-700 bg-slate-950/70 pl-7 pr-3 py-2.5 text-xs text-white focus:border-indigo-500 focus:outline-none font-mono"
+                    placeholder={form.watch('type') === 'Percent' ? '15' : '500'}
+                    aria-invalid={Boolean(form.formState.errors.discount)}
+                  />
+                </div>
+                {typeof form.formState.errors.discount?.message === 'string' && (
+                  <p id="admin-coupon-discount-error" role="alert" className="text-xs text-rose-400">
+                    {form.formState.errors.discount.message}
+                  </p>
+                )}
               </div>
             </div>
-            <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-text-secondary" htmlFor="admin-coupon-expiry">{t('FIELD_EXPIRY')}</label>
-              <input id="admin-coupon-expiry" type="date" {...form.register('expiry')} className="min-h-11 w-full rounded-md border border-border bg-input px-3 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" aria-invalid={Boolean(form.formState.errors.expiry)} aria-describedby={form.formState.errors.expiry ? 'admin-coupon-expiry-error' : undefined} />
-              {typeof form.formState.errors.expiry?.message === 'string' && <p id="admin-coupon-expiry-error" role="alert" className="text-caption text-danger-text">{form.formState.errors.expiry.message}</p>}
+
+            {/* Max Uses & Expiry */}
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-max-uses">
+                  {t('FIELD_MAX_USES')} <span className="text-rose-400">*</span>
+                </label>
+                <input
+                  id="admin-coupon-max-uses"
+                  type="number"
+                  min="1"
+                  step="1"
+                  {...form.register('maxUses')}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-xs text-white focus:border-indigo-500 focus:outline-none font-mono"
+                  placeholder="50"
+                  aria-invalid={Boolean(form.formState.errors.maxUses)}
+                />
+                {typeof form.formState.errors.maxUses?.message === 'string' && (
+                  <p id="admin-coupon-max-uses-error" role="alert" className="text-xs text-rose-400">
+                    {form.formState.errors.maxUses.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-expiry">
+                  {t('FIELD_EXPIRY')} <span className="text-rose-400">*</span>
+                </label>
+                <input
+                  id="admin-coupon-expiry"
+                  type="date"
+                  {...form.register('expiry')}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-2 text-xs text-white focus:border-indigo-500 focus:outline-none"
+                  aria-invalid={Boolean(form.formState.errors.expiry)}
+                />
+                {typeof form.formState.errors.expiry?.message === 'string' && (
+                  <p id="admin-coupon-expiry-error" role="alert" className="text-xs text-rose-400">
+                    {form.formState.errors.expiry.message}
+                  </p>
+                )}
+              </div>
             </div>
-            <DialogFooter className="border-t border-border pt-4">
-              <button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={requestClose}>{t('CANCEL')}</button>
+
+            <DialogFooter className="border-t border-slate-800 pt-4 flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+                onClick={requestClose}
+              >
+                {t('CANCEL')}
+              </button>
               <button
                 type="submit"
                 aria-label={isDemoMode && intent === 'create' ? t('CREATE_DEMO_COUPON') : t('VALIDATE_DRAFT')}
-                className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 py-2 font-medium text-on-primary hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
               >
-                <CheckCircle size={18} strokeWidth={2} />
+                <CheckCircle size={15} strokeWidth={2} />
                 <span>{intent === 'create' ? t('CREATE_COUPON') : t('VALIDATE_DRAFT')}</span>
               </button>
             </DialogFooter>
           </form>
-          {confirmDiscard && <div role="alertdialog" aria-modal="true" aria-labelledby="admin-coupon-discard-title" className="rounded-lg border border-warning-bg bg-card p-4"><h3 id="admin-coupon-discard-title" className="font-semibold text-text-primary">{t('UNSAVED_CHANGES_TITLE')}</h3><p className="mt-2 text-text-secondary">{t('UNSAVED_CHANGES_DESCRIPTION')}</p><div className="mt-4 flex justify-end gap-2"><button type="button" className="min-h-11 rounded-md border border-border px-4 py-2 text-primary" onClick={() => setConfirmDiscard(false)}>{t('KEEP_EDITING')}</button><button type="button" className="min-h-11 rounded-md bg-danger px-4 py-2 text-on-danger" onClick={discardDraft}>{t('DISCARD_CHANGES')}</button></div></div>}
+
+          {confirmDiscard && (
+            <div role="alertdialog" aria-modal="true" aria-labelledby="admin-coupon-discard-title" className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
+              <h3 id="admin-coupon-discard-title" className="text-xs font-bold text-amber-300">
+                {t('UNSAVED_CHANGES_TITLE')}
+              </h3>
+              <p className="mt-1 text-xs text-slate-300">{t('UNSAVED_CHANGES_DESCRIPTION')}</p>
+              <div className="mt-3 flex justify-end gap-2">
+                <button
+                  type="button"
+                  className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700"
+                  onClick={() => setConfirmDiscard(false)}
+                >
+                  {t('KEEP_EDITING')}
+                </button>
+                <button
+                  type="button"
+                  className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-500"
+                  onClick={discardDraft}
+                >
+                  {t('DISCARD_CHANGES')}
+                </button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
       <Dialog open={deleteOpen} onOpenChange={onDeleteOpenChange}>

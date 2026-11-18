@@ -55,17 +55,12 @@ describe('Manager Members Directory - Freeze / Leave & Collect Fee Enhancements'
     expect(tableSource).toContain('/frontend_manager/manager_finance/finance_collect_fee');
   });
 
-  it('verifies ManagerMembersDirectorySupportingSections is non-empty and renders operational SOPs & audit trail', () => {
+  it('verifies ManagerMembersDirectorySupportingSections does not render placeholder SOPs & mock audit logs', () => {
     const supportingSource = readSource(
       'components/manager_members_directory_sections/ManagerMembersDirectorySupportingSections.tsx'
     );
-    expect(supportingSource).not.toBe('export function ManagerMembersDirectorySupportingSections(_props: ManagerMembersDirectorySupportingSectionsProps) {\n  return null;\n}');
-    expect(supportingSource).toContain('Membership Operations & Counter SOP Guidelines');
-    expect(supportingSource).toContain('Membership Freeze & Leave Rules');
-    expect(supportingSource).toContain('Counter Fee Collection & Renewals');
-    expect(supportingSource).toContain('KYC & Document Verification');
-    expect(supportingSource).toContain('Security Deposit & Exit Clearance');
-    expect(supportingSource).toContain('Recent Member Lifecycle Activity & Audit Log');
+    expect(supportingSource).not.toContain('Membership Operations & Counter SOP Guidelines');
+    expect(supportingSource).not.toContain('Recent Member Lifecycle Activity & Audit Log');
   });
 
   it('includes On Leave in status badges dictionary', () => {

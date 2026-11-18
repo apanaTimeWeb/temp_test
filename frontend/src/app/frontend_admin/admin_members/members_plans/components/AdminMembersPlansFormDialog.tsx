@@ -1,5 +1,4 @@
 'use client';
-// RESPONSIBILITY: AdminPlansFormDialog component owned by admin_plans; responsibility folder: admin_plans_form_dialog.
 
 import useAdminMembersPlansUnsavedChangesGuard from '@/app/frontend_admin/admin_members/members_plans/hooks/useAdminMembersPlansUnsavedChangesGuard';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
@@ -7,11 +6,10 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { CheckCircle, Clock, Percent } from 'lucide-react';
+import { CheckCircle, Clock, Percent, Building2, X, AlertTriangle, Layers, Sparkles } from 'lucide-react';
 import { AdminPlansFormSchema, type AdminPlansFormValues } from '@/app/frontend_admin/admin_members/members_plans/schemas/AdminMembersPlansSchema';
 import type { AdminPlansFormDialogProps } from '@/app/frontend_admin/admin_members/members_plans/types/AdminMembersPlansComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { SearchableCombobox, type ComboboxOption } from '@/components/ui/combobox/SearchableCombobox';
 
 const EMPTY: AdminPlansFormValues = {
   name: '',
@@ -42,17 +40,6 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
   const dialogRef = useRef<HTMLDivElement>(null);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
-
-  const branchOptions: ComboboxOption[] = useMemo(() => {
-    return [
-      { value: 'All Branches', label: 'All Branches (Global Network Pricing)' },
-      ...branches.map((b) => ({
-        value: b.name,
-        label: b.name,
-        subLabel: b.city ? `${b.code} · ${b.city}` : b.code,
-      })),
-    ];
-  }, [branches]);
 
   const { register, handleSubmit, reset, setValue, watch, formState: { errors, isDirty, isSubmitting } } = useForm<AdminPlansFormValues>({
     resolver: zodResolver(AdminPlansFormSchema),
@@ -102,124 +89,314 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
 
   if (!open) return null;
 
+  const branchOptionsList = [
+    { value: 'All Branches', title: 'All Branches', subtitle: 'Global Network-Wide' },
+    ...branches.map((b) => ({
+      value: b.name,
+      title: b.name,
+      subtitle: `${b.code} · ${b.city}`,
+    })),
+  ];
+
   return (
-    <div data-testid="admin_plans-AdminMembersPlansMain-control-007" className="admin-modal-overlay" onClick={requestClose}>
-      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="admin-plans-form-dialog-title" tabIndex={-1} data-testid="admin_plans-AdminMembersPlansMain-control-008" className="admin-modal max-w-2xl max-h-[90vh] overflow-y-auto" onClick={(event) => event.stopPropagation()}>
-        <h2 id="admin-plans-form-dialog-title" className="admin-modal-title">{editingPlan ? t('EDIT_PLAN') : t('CREATE_NEW_PLAN')}</h2>
-        <form onSubmit={handleSubmit(onValidated)} noValidate>
-          <div className="admin-form-grid">
-            <div className="admin-form-field admin-form-field-full">
-              <label htmlFor="admin-plan-name" className="admin-label admin-label-required">{t('PLAN_NAME')}</label>
-              <input id="admin-plan-name" required className="admin-input" aria-invalid={Boolean(errors.name)} {...register('name')} placeholder={t('NAME_PLACEHOLDER')} />
-              {errors.name && <p className="text-sm text-danger-text" role="alert">{getValidationMessage(errors.name.message)}</p>}
-            </div>
+    <div
+      data-testid="admin_plans-AdminMembersPlansMain-control-007"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md overflow-y-auto"
+      onClick={requestClose}
+    >
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="admin-plans-form-dialog-title"
+        tabIndex={-1}
+        data-testid="admin_plans-AdminMembersPlansMain-control-008"
+        className="relative my-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-7 text-white shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div>
+            <h2 id="admin-plans-form-dialog-title" className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+              <Sparkles size={20} className="text-indigo-400" />
+              {editingPlan ? t('EDIT_PLAN') : t('CREATE_NEW_PLAN')}
+            </h2>
+            <p className="text-xs text-slate-400 mt-1">Configure pricing tier, branch applicability, and shift rates</p>
+          </div>
+          <button
+            type="button"
+            onClick={requestClose}
+            className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+          >
+            <X size={18} />
+          </button>
+        </div>
 
-            <div className="admin-form-field">
-              <label htmlFor="admin-plan-price" className="admin-label admin-label-required">{t('PRICE')} (₹ Base/Month)</label>
-              <input id="admin-plan-price" required min="0" className="admin-input" type="number" aria-invalid={Boolean(errors.price)} {...register('price')} placeholder={t('PRICE_PLACEHOLDER')} />
-              {errors.price && <p className="text-sm text-danger-text" role="alert">{getValidationMessage(errors.price.message)}</p>}
-            </div>
+        <form onSubmit={handleSubmit(onValidated)} noValidate className="mt-5 space-y-5">
+          {/* Plan Name */}
+          <div>
+            <label htmlFor="admin-plan-name" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              {t('PLAN_NAME')} <span className="text-rose-400">*</span>
+            </label>
+            <input
+              id="admin-plan-name"
+              required
+              className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              aria-invalid={Boolean(errors.name)}
+              {...register('name')}
+              placeholder={t('NAME_PLACEHOLDER')}
+            />
+            {errors.name && <p className="mt-1 text-xs text-rose-400" role="alert">{getValidationMessage(errors.name.message)}</p>}
+          </div>
 
-            <div className="admin-form-field">
-              <label className="admin-label">Branch Pricing & Scope</label>
-              <SearchableCombobox
-                options={branchOptions}
-                value={selectedBranchApplicability}
-                onChange={(val) => setValue('branchApplicability', val, { shouldDirty: true })}
-                placeholder="Select applicability..."
-              />
+          {/* Branch Selection Cards */}
+          <div className="rounded-xl border border-slate-800/80 bg-slate-950/50 p-4">
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                <Building2 size={14} className="text-indigo-400" />
+                Target Branch Condition
+              </label>
+              <span className="text-[11px] text-slate-400">Branch-specific pricing</span>
             </div>
-
-            {/* Tenure Presets */}
-            <div className="admin-form-field admin-form-field-full">
-              <div className="flex items-center justify-between mb-1">
-                <label className="admin-label">Tenure Duration Presets</label>
-                <span className="text-[11px] text-text-secondary">Click to auto-populate duration</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {TENURE_PRESETS.map((p) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {branchOptionsList.map((branchOpt) => {
+                const isSelected = selectedBranchApplicability === branchOpt.value;
+                return (
                   <button
-                    key={p.label}
+                    key={branchOpt.value}
                     type="button"
-                    onClick={() => {
-                      setValue('duration', p.duration, { shouldDirty: true, shouldValidate: true });
-                      setValue('durationDays', p.days, { shouldDirty: true, shouldValidate: true });
-                    }}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-highlight px-3 py-1.5 text-xs font-semibold text-text-primary hover:bg-surface-hover hover:border-primary"
+                    onClick={() => setValue('branchApplicability', branchOpt.value, { shouldDirty: true })}
+                    className={`flex items-start gap-3 rounded-xl border p-3 text-left transition-all ${
+                      isSelected
+                        ? 'border-indigo-500 bg-indigo-500/15 shadow-sm shadow-indigo-500/20'
+                        : 'border-slate-800 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-900'
+                    }`}
                   >
-                    <Clock size={12} className="text-primary" /> {p.label}
+                    <div className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${
+                      isSelected ? 'border-indigo-500 bg-indigo-500 text-white' : 'border-slate-600'
+                    }`}>
+                      {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                    </div>
+                    <div className="min-w-0">
+                      <p className={`text-xs font-bold leading-tight ${isSelected ? 'text-indigo-200' : 'text-slate-200'}`}>
+                        {branchOpt.title}
+                      </p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">{branchOpt.subtitle}</p>
+                    </div>
                   </button>
-                ))}
-              </div>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-[11px] text-slate-400">
+              {selectedBranchApplicability === 'All Branches'
+                ? '🌐 This plan is available globally across Downtown Central, Westside Branch, and North Hub.'
+                : `📍 This plan is exclusive to ${selectedBranchApplicability}. Other branches cannot enroll students in this plan.`}
+            </p>
+          </div>
+
+          {/* Price & Tenure Presets */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="admin-plan-price" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                {t('PRICE')} (₹ Base/Month) <span className="text-rose-400">*</span>
+              </label>
+              <input
+                id="admin-plan-price"
+                required
+                min="0"
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
+                type="number"
+                aria-invalid={Boolean(errors.price)}
+                {...register('price')}
+                placeholder={t('PRICE_PLACEHOLDER')}
+              />
+              {errors.price && <p className="mt-1 text-xs text-rose-400" role="alert">{getValidationMessage(errors.price.message)}</p>}
             </div>
 
-            <div className="admin-form-field">
-              <label htmlFor="admin-plan-duration" className="admin-label admin-label-required">{t('DURATION')}</label>
-              <input id="admin-plan-duration" required className="admin-input" aria-invalid={Boolean(errors.duration)} {...register('duration')} placeholder={t('DURATION_PLACEHOLDER')} />
-              {errors.duration && <p className="text-sm text-danger-text" role="alert">{getValidationMessage(errors.duration.message)}</p>}
-            </div>
-
-            <div className="admin-form-field">
-              <label htmlFor="admin-plan-duration-days" className="admin-label admin-label-required">{t('VALIDITY_DAYS')}</label>
-              <input id="admin-plan-duration-days" min="1" required className="admin-input" type="number" aria-invalid={Boolean(errors.durationDays)} {...register('durationDays')} placeholder={t('DAYS_PLACEHOLDER')} />
-              {errors.durationDays && <p className="text-sm text-danger-text" role="alert">{getValidationMessage(errors.durationDays.message)}</p>}
-            </div>
-
-            {/* Shift-Wise Rate Matrix */}
-            <div className="admin-form-field admin-form-field-full rounded-xl border border-border bg-surface-highlight p-3.5 my-1">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-text-primary">Shift-Based Pricing Engine</span>
-                <span className="text-[11px] text-text-secondary">Used by Manager Admission auto-calculation</span>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
-                <div>
-                  <label className="text-[11px] text-text-secondary block mb-1">Morning (6A-12P)</label>
-                  <input type="number" placeholder="₹800" className="admin-input text-xs" {...register('morningRate')} />
-                </div>
-                <div>
-                  <label className="text-[11px] text-text-secondary block mb-1">Afternoon (12P-5P)</label>
-                  <input type="number" placeholder="₹700" className="admin-input text-xs" {...register('afternoonRate')} />
-                </div>
-                <div>
-                  <label className="text-[11px] text-text-secondary block mb-1">Evening (5P-10P)</label>
-                  <input type="number" placeholder="₹900" className="admin-input text-xs" {...register('eveningRate')} />
-                </div>
-                <div>
-                  <label className="text-[11px] text-text-secondary block mb-1">Night (10P-6A)</label>
-                  <input type="number" placeholder="₹1000" className="admin-input text-xs" {...register('nightRate')} />
-                </div>
-                <div>
-                  <label className="text-[11px] text-text-secondary block mb-1">Full Day 24/7</label>
-                  <input type="number" placeholder="₹2000" className="admin-input text-xs" {...register('fullDayRate')} />
-                </div>
-              </div>
-              <div className="mt-3 flex items-center gap-2 text-xs">
-                <Percent size={13} className="text-primary" />
-                <span className="text-text-secondary">Multi-Shift Discount (% off for 2+ shifts):</span>
-                <input type="number" max="50" min="0" placeholder="10" className="admin-input w-20 text-xs py-1" {...register('multiShiftDiscount')} />
-              </div>
-            </div>
-
-            <div className="admin-form-field admin-form-field-full">
-              <label htmlFor="admin-plan-features" className="admin-label">{t('FEATURES_HELP')}</label>
-              <textarea id="admin-plan-features" className="admin-textarea admin-shared-textarea-no-resize" aria-invalid={Boolean(errors.features)} {...register('features')} rows={3} placeholder={t('FEATURES_PLACEHOLDER')} />
-              {errors.features && <p className="text-sm text-danger-text" role="alert">{getValidationMessage(errors.features.message)}</p>}
+            <div>
+              <label htmlFor="admin-plan-duration-days" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                {t('VALIDITY_DAYS')} <span className="text-rose-400">*</span>
+              </label>
+              <input
+                id="admin-plan-duration-days"
+                min="1"
+                required
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
+                type="number"
+                aria-invalid={Boolean(errors.durationDays)}
+                {...register('durationDays')}
+                placeholder={t('DAYS_PLACEHOLDER')}
+              />
+              {errors.durationDays && <p className="mt-1 text-xs text-rose-400" role="alert">{getValidationMessage(errors.durationDays.message)}</p>}
             </div>
           </div>
 
-          <div className="admin-modal-footer">
-            <button type="button" data-testid="admin_plans-AdminMembersPlansMain-control-009" className="admin-btn-ghost" onClick={requestClose}>{t('CANCEL')}</button>
-            <button type="submit" data-testid="admin_plans-AdminMembersPlansMain-control-010" className="admin-btn-primary"><CheckCircle size={18} strokeWidth={2} /> {t('SAVE_PLAN')}</button>
+          {/* Quick Tenure Presets */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Quick Validity Presets</span>
+              <span className="text-[11px] text-slate-500">Click to autofill duration</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {TENURE_PRESETS.map((p) => (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => {
+                    setValue('duration', p.duration, { shouldDirty: true, shouldValidate: true });
+                    setValue('durationDays', p.days, { shouldDirty: true, shouldValidate: true });
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700/80 bg-slate-800/80 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-indigo-500/50 hover:bg-slate-700 hover:text-white transition-all"
+                >
+                  <Clock size={12} className="text-indigo-400" /> {p.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="admin-plan-duration" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              {t('DURATION')} Label <span className="text-rose-400">*</span>
+            </label>
+            <input
+              id="admin-plan-duration"
+              required
+              className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              aria-invalid={Boolean(errors.duration)}
+              {...register('duration')}
+              placeholder={t('DURATION_PLACEHOLDER')}
+            />
+            {errors.duration && <p className="mt-1 text-xs text-rose-400" role="alert">{getValidationMessage(errors.duration.message)}</p>}
+          </div>
+
+          {/* Shift-Wise Rate Matrix */}
+          <div className="rounded-xl border border-slate-800/80 bg-slate-950/50 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                <Layers size={14} className="text-cyan-400" />
+                Shift-Specific Pricing Engine
+              </span>
+              <span className="text-[11px] text-slate-400">Used by Manager Admission workflow</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
+              <div>
+                <label className="text-[10px] text-slate-400 block mb-1">Morning (6A-12P)</label>
+                <input
+                  type="number"
+                  placeholder="₹800"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  {...register('morningRate')}
+                />
+              </div>
+              <div>
+                <label className="text-[10px] text-slate-400 block mb-1">Afternoon (12P-5P)</label>
+                <input
+                  type="number"
+                  placeholder="₹700"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  {...register('afternoonRate')}
+                />
+              </div>
+              <div>
+                <label className="text-[10px] text-slate-400 block mb-1">Evening (5P-10P)</label>
+                <input
+                  type="number"
+                  placeholder="₹900"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  {...register('eveningRate')}
+                />
+              </div>
+              <div>
+                <label className="text-[10px] text-slate-400 block mb-1">Night (10P-6A)</label>
+                <input
+                  type="number"
+                  placeholder="₹1000"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  {...register('nightRate')}
+                />
+              </div>
+              <div>
+                <label className="text-[10px] text-slate-400 block mb-1">Full Day (24/7)</label>
+                <input
+                  type="number"
+                  placeholder="₹2000"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                  {...register('fullDayRate')}
+                />
+              </div>
+            </div>
+            <div className="mt-3 flex items-center gap-2 text-xs border-t border-slate-800/80 pt-2.5">
+              <Percent size={13} className="text-amber-400" />
+              <span className="text-slate-300">Multi-Shift Discount (% off for 2+ shifts):</span>
+              <input
+                type="number"
+                max="50"
+                min="0"
+                placeholder="10"
+                className="w-20 rounded-lg border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+                {...register('multiShiftDiscount')}
+              />
+            </div>
+          </div>
+
+          {/* Features */}
+          <div>
+            <label htmlFor="admin-plan-features" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              {t('FEATURES_HELP')} (One per line)
+            </label>
+            <textarea
+              id="admin-plan-features"
+              className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none leading-relaxed"
+              aria-invalid={Boolean(errors.features)}
+              {...register('features')}
+              rows={3}
+              placeholder={t('FEATURES_PLACEHOLDER')}
+            />
+            {errors.features && <p className="mt-1 text-xs text-rose-400" role="alert">{getValidationMessage(errors.features.message)}</p>}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end gap-3 border-t border-slate-800 pt-4">
+            <button
+              type="button"
+              data-testid="admin_plans-AdminMembersPlansMain-control-009"
+              className="rounded-xl border border-slate-700 bg-slate-800 px-5 py-2.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+              onClick={requestClose}
+            >
+              {t('CANCEL')}
+            </button>
+            <button
+              type="submit"
+              data-testid="admin_plans-AdminMembersPlansMain-control-010"
+              className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+            >
+              <CheckCircle size={16} strokeWidth={2} />
+              {t('SAVE_PLAN')}
+            </button>
           </div>
         </form>
 
         {confirmDiscard && (
-          <div role="alertdialog" aria-modal="true" aria-labelledby="admin-plans-discard-title" className="mt-4 rounded-lg border border-warning-bg bg-card p-4">
-            <h3 id="admin-plans-discard-title" className="font-semibold text-text-primary">{t('UNSAVED_CHANGES_TITLE')}</h3>
-            <p className="mt-2 text-text-secondary">{t('UNSAVED_CHANGES_DESCRIPTION')}</p>
-            <div className="mt-4 flex justify-end gap-2">
-              <button type="button" className="admin-btn-ghost min-h-11" onClick={() => { setConfirmDiscard(false); setPendingNavigation(null); }}>{t('KEEP_EDITING')}</button>
-              <button type="button" className="admin-btn-danger min-h-11" onClick={discardDraft}>{t('DISCARD_CHANGES')}</button>
+          <div role="alertdialog" aria-modal="true" aria-labelledby="admin-plans-discard-title" className="mt-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
+            <h3 id="admin-plans-discard-title" className="text-sm font-bold text-amber-300 flex items-center gap-1.5">
+              <AlertTriangle size={16} />
+              {t('UNSAVED_CHANGES_TITLE')}
+            </h3>
+            <p className="mt-1 text-xs text-slate-300">{t('UNSAVED_CHANGES_DESCRIPTION')}</p>
+            <div className="mt-3 flex justify-end gap-2">
+              <button
+                type="button"
+                className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700"
+                onClick={() => { setConfirmDiscard(false); setPendingNavigation(null); }}
+              >
+                {t('KEEP_EDITING')}
+              </button>
+              <button
+                type="button"
+                className="rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-500"
+                onClick={discardDraft}
+              >
+                {t('DISCARD_CHANGES')}
+              </button>
             </div>
           </div>
         )}
