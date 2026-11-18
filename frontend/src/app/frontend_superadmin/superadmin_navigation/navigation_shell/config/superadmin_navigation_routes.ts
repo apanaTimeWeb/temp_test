@@ -39,8 +39,6 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   dashboard_overview: '/superadmin/superadmin_dashboard/dashboard_overview',
   data_export_jobs: '/superadmin/superadmin_system/data_export_jobs',
   libraries_onboarding_setup: '/superadmin/superadmin_libraries/libraries_onboarding_setup',
-  libraries_onboarding_setup__student_bulk_import: '/superadmin/superadmin_libraries/libraries_onboarding_setup?view=student_bulk_import',
-  libraries_onboarding_setup__student_smart_id: '/superadmin/superadmin_libraries/libraries_onboarding_setup?view=student_smart_id',
   libraries_overview: '/superadmin/superadmin_libraries/libraries_overview',
   libraries_overview__facility_asset_maintenance: '/superadmin/superadmin_libraries/libraries_overview?view=facility_asset_maintenance',
   libraries_overview__facility_asset_registry: '/superadmin/superadmin_libraries/libraries_overview?view=facility_asset_registry',

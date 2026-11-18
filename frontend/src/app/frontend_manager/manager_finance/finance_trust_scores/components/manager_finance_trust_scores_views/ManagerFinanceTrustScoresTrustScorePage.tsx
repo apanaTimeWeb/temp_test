@@ -167,63 +167,78 @@ export default function ManagerFinanceTrustScoresTrustScorePage(_routeQuery: Man
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-        <div className="fin-kpi-card rounded-2xl border border-border bg-card p-4 sm:p-5 transition-all hover:border-primary hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">{tManagerUi('scored_students')}</span>
-            <div className="w-10 h-10 rounded-xl bg-primary-subtle text-primary border border-border flex items-center justify-center">
-              <Users size={20} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-primary">
-                {MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.length}
+        <div className="fin-kpi-card group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 p-4 sm:p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">{tManagerUi('scored_students')}</span>
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+                <Users size={20} />
               </div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-                Total Ranked
-              </span>
             </div>
-            <p className="mt-1 text-xs text-secondary">Student profiles with reliability tracking</p>
+            <div className="mt-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-sans">
+                  {MANAGER_FINANCE_SAMPLE_TRUST_SCORE_STUDENTS.length}
+                </div>
+                <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+                  Total Ranked
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-slate-400">Student profiles with reliability tracking</p>
+            </div>
           </div>
         </div>
 
-        <div className="fin-kpi-card fin-kpi-card--danger rounded-2xl border border-border bg-card p-4 sm:p-5 transition-all hover:border-rose-500/40 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 uppercase tracking-wider">{tManagerUi('low_trust_less_than_40')}</span>
-            <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20 flex items-center justify-center">
-              <ShieldX size={20} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-rose-600 dark:text-rose-400">
-                {lowTrust}
+        <div className="fin-kpi-card fin-kpi-card--danger group relative overflow-hidden rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 p-4 sm:p-5 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">{tManagerUi('low_trust_less_than_40')}</span>
+              <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+                <ShieldX size={20} />
               </div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
-                High Risk
-              </span>
             </div>
-            <p className="mt-1 text-xs text-secondary">Low reliability profiles · Requires advance deposit</p>
+            <div className="mt-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-rose-400 font-sans">
+                  {lowTrust}
+                </div>
+                <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">
+                  High Risk
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-slate-400">Low reliability profiles · Requires advance deposit</p>
+            </div>
           </div>
         </div>
 
-        <div className="fin-kpi-card rounded-2xl border border-border bg-card p-4 sm:p-5 transition-all hover:border-emerald-500/40 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-secondary uppercase tracking-wider">{tManagerUi('average_trust_score')}</span>
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center">
-              <ShieldCheck size={20} />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
-                {avg}<span className="text-sm font-normal text-secondary">/100</span>
+        <div className="fin-kpi-card group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 p-4 sm:p-5 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">{tManagerUi('average_trust_score')}</span>
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+                <ShieldCheck size={20} />
               </div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                Campus Standing
-              </span>
             </div>
-            <p className="mt-1 text-xs text-secondary">Campus-wide reliability benchmark</p>
+            <div className="mt-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-emerald-400 font-sans">
+                  {avg}<span className="text-sm font-normal text-emerald-300/60">/100</span>
+                </div>
+                <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                  Campus Standing
+                </span>
+              </div>
+              <p className="mt-1 text-xs text-slate-400">Campus-wide reliability benchmark</p>
+            </div>
           </div>
         </div>
       </div>

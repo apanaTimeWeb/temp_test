@@ -129,8 +129,8 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
       </aside>
 
       {/* ── MAIN CONTENT ── */}
-      <main className="flex-1 flex flex-col min-w-0">
-        <div className="sa-wizard-topbar border-b border-border/80 px-4 py-3 flex items-center justify-between gap-4">
+      <main className="flex-1 flex flex-col min-w-0 bg-gradient-to-br from-[#080b1a] via-[#0a0d22] to-[#060810]">
+        <div className="sa-wizard-topbar border-b border-indigo-500/20 px-4 py-3 flex items-center justify-between gap-4 bg-[#0a0d22]/80 backdrop-blur-sm">
           <div className="sa-wizard-progress-track flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
             {/* ✅ RULE 3 — dynamic computed width */}
             <progress className="sa-wizard-progress w-full h-full accent-indigo-500" max={100} value={progress} aria-label={tCopy("COPY.SETUP_WIZARD_COMPLETION")} />
@@ -147,7 +147,7 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
 
         <div className="sa-wizard-content-area flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           <div className="sa-wizard-content-inner max-w-2xl mx-auto space-y-6">
-            <div className="sa-wizard-step-header pb-4 border-b border-border/70">
+            <div className="sa-wizard-step-header pb-4 border-b border-indigo-500/20">
               <span className="sa-wizard-step-label inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 mb-2">
                 {tCopy("COPY.STEP")} {step} {tCopy("COPY.OF")} {STEPS.length}
               </span>
@@ -231,7 +231,7 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
 
             {/* ── FOOTER NAV ── */}
             {step !== 5 ? (
-              <div className="sa-wizard-footer pt-6 border-t border-border/70 flex items-center justify-between gap-4">
+              <div className="sa-wizard-footer pt-6 border-t border-indigo-500/20 flex items-center justify-between gap-4">
                 <button
                   type="button"
                   id="wizard-back-btn"

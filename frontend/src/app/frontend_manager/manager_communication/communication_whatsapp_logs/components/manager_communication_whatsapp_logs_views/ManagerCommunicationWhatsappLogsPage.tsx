@@ -387,60 +387,72 @@ export default function ManagerCommunicationWhatsappLogsPage(_routeQuery: Manage
       {/* KPI Metric Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total Messages Card */}
-        <div className="mgr-card p-4 border border-border flex items-center gap-3.5 shadow-xs">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/25 shrink-0">
+        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-cyan-500/40 bg-gradient-to-br from-cyan-950/80 via-[#0a282f] to-cyan-900/60 shadow-lg shadow-cyan-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-cyan-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center border border-cyan-500/40 shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <Smartphone size={20} />
           </div>
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-cyan-300/80 block">
               Total Dispatched
             </span>
-            <span className="text-lg sm:text-xl font-extrabold text-primary">
+            <span className="text-lg sm:text-xl font-extrabold text-white tracking-tight font-sans">
               {totalCount}
             </span>
           </div>
         </div>
 
         {/* Delivered Card */}
-        <div className="mgr-card p-4 border border-border flex items-center gap-3.5 shadow-xs">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/25 shrink-0">
+        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/40 shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <CheckCheck size={20} />
           </div>
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-300/80 block">
               Delivered
             </span>
-            <span className="text-lg sm:text-xl font-extrabold text-emerald-400">
+            <span className="text-lg sm:text-xl font-extrabold text-emerald-400 tracking-tight font-sans">
               {deliveredCount}
             </span>
           </div>
         </div>
 
         {/* Sent / In Flight Card */}
-        <div className="mgr-card p-4 border border-border flex items-center gap-3.5 shadow-xs">
-          <div className="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center border border-sky-500/25 shrink-0">
+        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 shadow-lg shadow-sky-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center border border-sky-500/40 shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <Send size={18} />
           </div>
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-sky-300/80 block">
               Sent / In Flight
             </span>
-            <span className="text-lg sm:text-xl font-extrabold text-sky-400">
+            <span className="text-lg sm:text-xl font-extrabold text-sky-400 tracking-tight font-sans">
               {sentCount}
             </span>
           </div>
         </div>
 
         {/* Failed Card */}
-        <div className="mgr-card p-4 border border-border flex items-center gap-3.5 shadow-xs">
-          <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center border border-rose-500/25 shrink-0">
+        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center border border-rose-500/40 shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <AlertCircle size={20} />
           </div>
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-rose-400 block">
               Failed
             </span>
-            <span className="text-lg sm:text-xl font-extrabold text-rose-400">
+            <span className="text-lg sm:text-xl font-extrabold text-rose-400 tracking-tight font-sans">
               {failedCount}
             </span>
           </div>

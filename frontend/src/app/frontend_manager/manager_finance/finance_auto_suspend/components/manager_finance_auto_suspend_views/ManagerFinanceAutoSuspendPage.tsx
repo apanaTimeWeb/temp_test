@@ -127,32 +127,44 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
       value: `${config?.daysBeforeSuspend} Days`,
       icon: Settings,
       chip: 'Policy Threshold',
-      chipCls: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-      iconCls: 'bg-blue-500/10 text-blue-600 border border-blue-500/20',
+      chipCls: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+      iconCls: 'bg-sky-500/20 text-sky-400 border border-sky-500/40',
+      cardBg: 'border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 shadow-lg shadow-sky-950/40 hover:border-sky-400/60',
+      stroke: '#38bdf8',
+      valColor: 'text-white',
     },
     {
       label: tManagerUi('currently_suspended'),
       value: `${config?.currentlySuspended ?? 0} Students`,
       icon: Ban,
       chip: 'Active Suspensions',
-      chipCls: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-      iconCls: 'bg-rose-500/10 text-rose-600 border border-rose-500/20',
+      chipCls: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+      iconCls: 'bg-rose-500/20 text-rose-400 border border-rose-500/40',
+      cardBg: 'border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 shadow-lg shadow-rose-950/40 hover:border-rose-400/60',
+      stroke: '#f87171',
+      valColor: 'text-rose-400',
     },
     {
       label: tManagerUi('auto_restored_month'),
       value: `${config?.autoRestoredThisMonth ?? 0} Restored`,
       icon: RotateCcw,
       chip: 'Auto-Settled',
-      chipCls: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-      iconCls: 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20',
+      chipCls: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+      iconCls: 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40',
+      cardBg: 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 hover:border-emerald-400/60',
+      stroke: '#34d399',
+      valColor: 'text-emerald-400',
     },
     {
       label: tManagerUi('manual_restores'),
       value: `${config?.manualRestores ?? 0} Overrides`,
       icon: UserCheck,
       chip: 'Manager Action',
-      chipCls: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
-      iconCls: 'bg-purple-500/10 text-purple-600 border border-purple-500/20',
+      chipCls: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+      iconCls: 'bg-purple-500/20 text-purple-400 border border-purple-500/40',
+      cardBg: 'border-purple-500/40 bg-gradient-to-br from-purple-950/80 via-[#24133f] to-purple-900/60 shadow-lg shadow-purple-950/40 hover:border-purple-400/60',
+      stroke: '#c084fc',
+      valColor: 'text-purple-300',
     },
   ] as const;
 
@@ -221,21 +233,26 @@ export default function ManagerFinanceAutoSuspendPage(_routeQuery: ManagerFinanc
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {KPI_CARDS.map(({ label, value, icon: Icon, chip, chipCls, iconCls }) => (
-          <div key={label} className="p-5 rounded-2xl bg-card border border-border shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
-            <div className="flex justify-between items-start mb-3">
-              <div className={`p-2.5 rounded-xl border ${iconCls}`}>
-                <Icon size={18} />
+        {KPI_CARDS.map(({ label, value, icon: Icon, chip, chipCls, iconCls, cardBg, stroke, valColor }) => (
+          <div key={label} className={`group relative overflow-hidden p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between ${cardBg}`}>
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke={stroke} strokeWidth="2.5" strokeLinecap="round" />
+            </svg>
+            <div className="relative z-10">
+              <div className="flex justify-between items-start mb-3">
+                <div className={`p-2.5 rounded-xl border transition-transform group-hover:scale-110 shadow-xs ${iconCls}`}>
+                  <Icon size={18} />
+                </div>
+                <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${chipCls}`}>
+                  {chip}
+                </span>
               </div>
-              <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${chipCls}`}>
-                {chip}
-              </span>
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">
-                {label}
-              </p>
-              <h3 className="text-2xl font-black text-primary tracking-tight">{value}</h3>
+              <div>
+                <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                  {label}
+                </p>
+                <h3 className={`text-2xl sm:text-3xl font-extrabold tracking-tight font-sans ${valColor}`}>{value}</h3>
+              </div>
             </div>
           </div>
         ))}

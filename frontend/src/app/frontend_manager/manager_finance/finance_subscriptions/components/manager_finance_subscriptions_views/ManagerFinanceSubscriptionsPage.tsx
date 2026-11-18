@@ -297,66 +297,91 @@ export default function ManagerFinanceSubscriptionsPage(_routeQuery: ManagerFina
 
       {/* Subscription KPI Overview Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-secondary">
-            <span className="text-xs font-medium">Total Plans</span>
-            <Users size={16} className="text-primary" />
+        <div className="group relative overflow-hidden p-3.5 sm:p-4 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Total Plans</span>
+            <div className="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/40 text-indigo-400 flex items-center justify-center transition-transform group-hover:scale-110">
+              <Users size={16} />
+            </div>
           </div>
-          <div className="mt-2">
-            <span className="text-xl font-bold text-primary">{metrics.total}</span>
-            <span className="text-[11px] text-secondary ml-1.5">total enrolled</span>
+          <div className="mt-2.5 relative z-10">
+            <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight font-sans">{metrics.total}</span>
+            <span className="text-[11px] text-slate-400 ml-1.5">total enrolled</span>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-secondary">
-            <span className="text-xs font-medium">Active Plans</span>
-            <CheckCircle size={16} className="text-emerald-500" />
+        <div className="group relative overflow-hidden p-3.5 sm:p-4 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Active Plans</span>
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center transition-transform group-hover:scale-110">
+              <CheckCircle size={16} />
+            </div>
           </div>
-          <div className="mt-2">
-            <span className="text-xl font-bold text-emerald-600 dark:text-emerald-400">
+          <div className="mt-2.5 relative z-10">
+            <span className="text-xl sm:text-2xl font-extrabold text-emerald-400 tracking-tight font-sans">
               {metrics.active}
             </span>
-            <span className="text-[11px] text-secondary ml-1.5">active now</span>
+            <span className="text-[11px] text-emerald-200/70 ml-1.5">active now</span>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-secondary">
-            <span className="text-xs font-medium">Expiring Soon</span>
-            <Clock size={16} className="text-amber-500" />
+        <div className="group relative overflow-hidden p-3.5 sm:p-4 rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Expiring Soon</span>
+            <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center transition-transform group-hover:scale-110">
+              <Clock size={16} />
+            </div>
           </div>
-          <div className="mt-2">
-            <span className="text-xl font-bold text-amber-600 dark:text-amber-400">
+          <div className="mt-2.5 relative z-10">
+            <span className="text-xl sm:text-2xl font-extrabold text-amber-400 tracking-tight font-sans">
               {metrics.expiringSoon}
             </span>
-            <span className="text-[11px] text-secondary ml-1.5">within 15 days</span>
+            <span className="text-[11px] text-amber-200/70 ml-1.5">within 15 days</span>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-secondary">
-            <span className="text-xs font-medium">Action Needed</span>
-            <AlertTriangle size={16} className="text-rose-500" />
+        <div className="group relative overflow-hidden p-3.5 sm:p-4 rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Action Needed</span>
+            <div className="w-8 h-8 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-400 flex items-center justify-center transition-transform group-hover:scale-110">
+              <AlertTriangle size={16} />
+            </div>
           </div>
-          <div className="mt-2">
-            <span className="text-xl font-bold text-rose-600 dark:text-rose-400">
+          <div className="mt-2.5 relative z-10">
+            <span className="text-xl sm:text-2xl font-extrabold text-rose-400 tracking-tight font-sans">
               {metrics.expiredOrSuspended}
             </span>
-            <span className="text-[11px] text-secondary ml-1.5">expired or hold</span>
+            <span className="text-[11px] text-rose-200/70 ml-1.5">expired or hold</span>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-xl bg-card border border-border shadow-xs flex flex-col justify-between col-span-2 sm:col-span-1">
-          <div className="flex items-center justify-between text-secondary">
-            <span className="text-xs font-medium">Pending Dues</span>
-            <CreditCard size={16} className="text-primary" />
+        <div className="group relative overflow-hidden p-3.5 sm:p-4 rounded-2xl border border-purple-500/40 bg-gradient-to-br from-purple-950/80 via-[#24133f] to-purple-900/60 shadow-lg shadow-purple-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-purple-400/60 hover:shadow-xl flex flex-col justify-between col-span-2 sm:col-span-1">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q30,14 60,25 T110,10 T150,18" fill="none" stroke="#c084fc" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Pending Dues</span>
+            <div className="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center transition-transform group-hover:scale-110">
+              <CreditCard size={16} />
+            </div>
           </div>
-          <div className="mt-2">
-            <span className="text-xl font-bold text-primary">
+          <div className="mt-2.5 relative z-10">
+            <span className="text-xl sm:text-2xl font-extrabold text-purple-300 tracking-tight font-sans">
               {formatCurrency(metrics.totalDuesMinor)}
             </span>
-            <span className="text-[11px] text-rose-500 block font-medium mt-0.5">
+            <span className="text-[11px] text-rose-400 block font-semibold mt-0.5">
               {metrics.countWithDues} students pending
             </span>
           </div>

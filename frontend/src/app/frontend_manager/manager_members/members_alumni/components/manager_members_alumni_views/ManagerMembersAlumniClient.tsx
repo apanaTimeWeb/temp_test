@@ -327,42 +327,57 @@ export function ManagerMembersAlumniClient() {
         </div>
       )}
 
-      {/* KPI Cards - Vibrant themed icon colors by default */}
+      {/* KPI Cards - Rich gradient themed cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-        <div className="mgr-card p-4 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-xs text-secondary font-medium">Total Alumni Network</span>
-            <p suppressHydrationWarning className="text-2xl font-bold text-primary tracking-tight">{records.length}</p>
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 p-4 sm:p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex items-center justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="space-y-1 relative z-10">
+            <span className="text-xs text-slate-300 font-semibold uppercase tracking-wider">Total Alumni Network</span>
+            <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-sans">{records.length}</p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-primary-subtle text-primary flex items-center justify-center shrink-0">
-            <Users size={20} className="text-primary" />
-          </div>
-        </div>
-        <div className="mgr-card p-4 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-xs text-secondary font-medium">Exam Success Rate</span>
-            <p suppressHydrationWarning className="text-2xl font-bold text-success tracking-tight">{kpis.successRate}</p>
-          </div>
-          <div className="w-11 h-11 rounded-xl bg-success-bg text-success flex items-center justify-center shrink-0">
-            <Award size={20} className="text-success" />
+          <div className="w-11 h-11 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-110 relative z-10">
+            <Users size={20} className="text-indigo-400" />
           </div>
         </div>
-        <div className="mgr-card p-4 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-xs text-secondary font-medium">Govt / PSU Officers</span>
-            <p suppressHydrationWarning className="text-2xl font-bold text-info tracking-tight">{kpis.officersPercent}</p>
+
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 p-4 sm:p-5 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex items-center justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="space-y-1 relative z-10">
+            <span className="text-xs text-slate-300 font-semibold uppercase tracking-wider">Exam Success Rate</span>
+            <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-emerald-400 tracking-tight font-sans">{kpis.successRate}</p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-info-bg text-info flex items-center justify-center shrink-0">
-            <Building2 size={20} className="text-info" />
+          <div className="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-110 relative z-10">
+            <Award size={20} className="text-emerald-400" />
           </div>
         </div>
-        <div className="mgr-card p-4 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-xs text-secondary font-medium">Average Tenure</span>
-            <p suppressHydrationWarning className="text-2xl font-bold text-warning tracking-tight">{kpis.avgTenure}</p>
+
+        <div className="group relative overflow-hidden rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 p-4 sm:p-5 shadow-lg shadow-sky-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex items-center justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="space-y-1 relative z-10">
+            <span className="text-xs text-slate-300 font-semibold uppercase tracking-wider">Govt / PSU Officers</span>
+            <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-sky-400 tracking-tight font-sans">{kpis.officersPercent}</p>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-warning-bg text-warning flex items-center justify-center shrink-0">
-            <Clock size={20} className="text-warning" />
+          <div className="w-11 h-11 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/40 flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-110 relative z-10">
+            <Building2 size={20} className="text-sky-400" />
+          </div>
+        </div>
+
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261c0c] to-amber-900/60 p-4 sm:p-5 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex items-center justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="space-y-1 relative z-10">
+            <span className="text-xs text-slate-300 font-semibold uppercase tracking-wider">Average Tenure</span>
+            <p suppressHydrationWarning className="text-2xl sm:text-3xl font-extrabold text-amber-400 tracking-tight font-sans">{kpis.avgTenure}</p>
+          </div>
+          <div className="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-xs transition-transform group-hover:scale-110 relative z-10">
+            <Clock size={20} className="text-amber-400" />
           </div>
         </div>
       </div>

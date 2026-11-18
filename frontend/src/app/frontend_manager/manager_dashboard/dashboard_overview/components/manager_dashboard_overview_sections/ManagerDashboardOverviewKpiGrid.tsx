@@ -87,22 +87,64 @@ export function ManagerDashboardOverviewKpiGrid({
     }
   };
 
-  const getIconTheme = (title: string) => {
+  const getKpiTheme = (title: string) => {
     switch (title) {
       case 'Total Students':
       case 'Total Members':
-        return 'bg-warning-bg text-warning border-border';
+      case 'Active Students':
+      case 'Active Members':
+        return {
+          cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60',
+          iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
+          badge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+          stroke: '#818cf8',
+          textMuted: 'text-indigo-200/70',
+          accent: 'text-indigo-400',
+          progress: 'from-indigo-500 to-indigo-400',
+        };
       case 'Attendance Today':
       case 'Today Attendance':
-        return 'bg-success-bg text-success border-border';
+        return {
+          cardBg: 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 hover:border-emerald-400/60',
+          iconBox: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400',
+          badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+          stroke: '#34d399',
+          textMuted: 'text-emerald-200/70',
+          accent: 'text-emerald-400',
+          progress: 'from-emerald-500 to-emerald-400',
+        };
       case 'New Enquiries':
       case 'New Inquiries':
-        return 'bg-info-bg text-info border-border';
+        return {
+          cardBg: 'border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 shadow-lg shadow-sky-950/40 hover:border-sky-400/60',
+          iconBox: 'bg-sky-500/20 border-sky-500/40 text-sky-400',
+          badge: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+          stroke: '#38bdf8',
+          textMuted: 'text-sky-200/70',
+          accent: 'text-sky-400',
+          progress: 'from-sky-500 to-sky-400',
+        };
       case 'Occupied Seats':
       case 'Seats Occupied':
-        return 'bg-purple-bg text-purple border-border';
+        return {
+          cardBg: 'border-purple-500/40 bg-gradient-to-br from-purple-950/80 via-[#24133f] to-purple-900/60 shadow-lg shadow-purple-950/40 hover:border-purple-400/60',
+          iconBox: 'bg-purple-500/20 border-purple-500/40 text-purple-400',
+          badge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+          stroke: '#c084fc',
+          textMuted: 'text-purple-200/70',
+          accent: 'text-purple-400',
+          progress: 'from-purple-500 to-purple-400',
+        };
       default:
-        return 'bg-primary-subtle text-primary border-border';
+        return {
+          cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60',
+          iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
+          badge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+          stroke: '#818cf8',
+          textMuted: 'text-indigo-200/70',
+          accent: 'text-indigo-400',
+          progress: 'from-indigo-500 to-indigo-400',
+        };
     }
   };
 
@@ -148,18 +190,23 @@ export function ManagerDashboardOverviewKpiGrid({
         const Icon = iconMap[kpi.icon];
         const tone = getManagerDashboardTrendTone(kpi.trend);
         const route = getRouteForKpi(kpi.title);
-        const iconTheme = getIconTheme(kpi.title);
+        const theme = getKpiTheme(kpi.title);
         const isSeats = kpi.title.includes('Seat');
 
         return (
           <Link
             key={kpi.title}
             href={route}
-            className="mgr-kpi-card group relative flex flex-col justify-between p-5 rounded-2xl border border-border bg-card shadow-card hover:border-primary hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer overflow-hidden text-inherit no-underline"
+            className={`mgr-kpi-card group relative flex flex-col justify-between p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-xl cursor-pointer overflow-hidden text-inherit no-underline ${theme.cardBg}`}
           >
-            <div>
+            {/* Decorative Sparkline */}
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-32 h-16 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,32 Q20,15 45,28 T90,14 T130,22 T150,8" fill="none" stroke={theme.stroke} strokeWidth="2.5" strokeLinecap="round" />
+            </svg>
+
+            <div className="relative z-10">
               <div className="flex items-center justify-between gap-2">
-                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center font-bold transition-transform group-hover:scale-105 ${iconTheme}`}>
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center font-bold transition-transform group-hover:scale-110 shadow-xs ${theme.iconBox}`}>
                   {Icon && <Icon size={20} />}
                 </div>
 
@@ -167,10 +214,10 @@ export function ManagerDashboardOverviewKpiGrid({
                   <span
                     className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                       tone === 'up'
-                        ? 'bg-success-bg text-success border border-border'
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                         : tone === 'down'
-                        ? 'bg-danger-bg text-danger border border-border'
-                        : 'bg-muted text-muted-foreground border border-border'
+                        ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                        : 'bg-slate-700/40 text-slate-300 border border-slate-600/40'
                     }`}
                   >
                     {tone === 'up' && <TrendingUp size={11} />}
@@ -179,41 +226,41 @@ export function ManagerDashboardOverviewKpiGrid({
                   </span>
                   <ChevronRight
                     size={15}
-                    className="text-muted-foreground opacity-40 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0"
+                    className="text-slate-400 opacity-50 group-hover:text-white group-hover:translate-x-0.5 transition-all shrink-0"
                   />
                 </div>
               </div>
 
               <div className="mt-4">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="mgr-kpi-value text-3xl font-extrabold tracking-tight text-foreground font-sans">
+                  <p className="mgr-kpi-value text-3xl font-extrabold tracking-tight text-white font-sans">
                     {kpi.value}
                   </p>
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                  <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${theme.badge}`}>
                     [{periodBadgeLabel}]
                   </span>
                 </div>
-                <p className="mgr-kpi-label text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-1">
+                <p className="mgr-kpi-label text-xs font-semibold uppercase tracking-wider text-slate-300 mt-1">
                   {localizeKnownTitle(kpi.title)}
                 </p>
               </div>
             </div>
 
-            <div className="mt-3 pt-3 border-t border-border">
+            <div className="mt-3 pt-3 border-t border-white/10 relative z-10">
               {isSeats ? (
                 <div className="space-y-1.5">
-                  <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                  <div className="flex items-center justify-between text-[11px] text-slate-300">
                     <span>Occupancy</span>
-                    <span className="font-semibold text-foreground">75%</span>
+                    <span className="font-semibold text-white">75%</span>
                   </div>
-                  <div className="w-full bg-surface-highlight rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-primary h-full rounded-full motion-safe:transition-all motion-safe:duration-500 w-3/4" />
+                  <div className="w-full bg-slate-800/80 rounded-full h-1.5 overflow-hidden">
+                    <div className={`h-full rounded-full bg-gradient-to-r transition-all duration-500 w-3/4 ${theme.progress}`} />
                   </div>
                 </div>
               ) : (
-                <p className="text-[11px] text-muted-foreground flex items-center justify-between">
+                <p className="text-[11px] text-slate-300/80 flex items-center justify-between">
                   <span>{getKpiSubtitle(kpi.title)}</span>
-                  <span className="text-primary font-medium group-hover:underline">View →</span>
+                  <span className={`${theme.accent} font-medium group-hover:underline`}>View →</span>
                 </p>
               )}
             </div>

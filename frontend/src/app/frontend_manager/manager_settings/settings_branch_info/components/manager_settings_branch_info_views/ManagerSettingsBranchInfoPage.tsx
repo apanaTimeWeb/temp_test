@@ -257,76 +257,88 @@ export default function ManagerSettingsBranchInfoPage() {
       </div>
 
       {/* ── 4 COMPACT REFINED KPI METRICS CARDS ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* KPI 1: Seating Capacity (Warm Amber / Gold) */}
-        <div className="rounded-xl border border-amber-500/20 bg-gradient-to-b from-[#161208]/80 to-[#0e0e1a]/90 p-3.5 flex flex-col justify-between shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300/80">
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 p-4 sm:p-5 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-semibold uppercase tracking-wider text-amber-300/90">
               Total Seating
             </span>
-            <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
-              <Armchair size={14} />
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <Armchair size={18} />
             </div>
           </div>
-          <div className="mt-2.5">
-            <p className="text-base sm:text-lg font-black text-white font-mono tracking-tight">
+          <div className="mt-3 relative z-10">
+            <p className="text-2xl sm:text-3xl font-extrabold text-white font-mono tracking-tight font-sans">
               {branchData.totalSeatingCapacity || '120 Seats'}
             </p>
-            <p className="text-[11px] text-amber-200/60 mt-0.5">AC Study Desks</p>
+            <p className="text-xs text-amber-200/70 mt-1">AC Study Desks</p>
           </div>
         </div>
 
         {/* KPI 2: Floor Layout (Royal Violet / Purple) */}
-        <div className="rounded-xl border border-purple-500/20 bg-gradient-to-b from-[#140b22]/80 to-[#0e0e1a]/90 p-3.5 flex flex-col justify-between shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-purple-300/80">
+        <div className="group relative overflow-hidden rounded-2xl border border-purple-500/40 bg-gradient-to-br from-purple-950/80 via-[#24133f] to-purple-900/60 p-4 sm:p-5 shadow-lg shadow-purple-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-purple-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q30,14 60,25 T110,10 T150,18" fill="none" stroke="#c084fc" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-semibold uppercase tracking-wider text-purple-300/90">
               Floor Count
             </span>
-            <div className="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0">
-              <Layers size={14} />
+            <div className="w-10 h-10 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <Layers size={18} />
             </div>
           </div>
-          <div className="mt-2.5">
-            <p className="text-base sm:text-lg font-black text-white tracking-tight">
+          <div className="mt-3 relative z-10">
+            <p className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-sans">
               {branchData.totalFloors || '2 Floors'}
             </p>
-            <p className="text-[11px] text-purple-200/60 mt-0.5">Ground + 1st Floor</p>
+            <p className="text-xs text-purple-200/70 mt-1">Ground + 1st Floor</p>
           </div>
         </div>
 
         {/* KPI 3: Daily Shifts (Cyan / Sky) */}
-        <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-b from-[#081724]/80 to-[#0e0e1a]/90 p-3.5 flex flex-col justify-between shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-300/80">
+        <div className="group relative overflow-hidden rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 p-4 sm:p-5 shadow-lg shadow-sky-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-semibold uppercase tracking-wider text-sky-300/90">
               Daily Shifts
             </span>
-            <div className="w-7 h-7 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 flex items-center justify-center shrink-0">
-              <Clock size={14} />
+            <div className="w-10 h-10 rounded-xl bg-sky-500/20 border border-sky-500/40 text-sky-400 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <Clock size={18} />
             </div>
           </div>
-          <div className="mt-2.5">
-            <p className="text-base sm:text-lg font-black text-white tracking-tight">
+          <div className="mt-3 relative z-10">
+            <p className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-sans">
               {branchData.totalShifts || '3 Shifts'}
             </p>
-            <p className="text-[11px] text-cyan-200/60 mt-0.5">Morning · Eve · Night</p>
+            <p className="text-xs text-sky-200/70 mt-1">Morning · Eve · Night</p>
           </div>
         </div>
 
         {/* KPI 4: Operating Days & Schedule (Emerald Green) */}
-        <div className="rounded-xl border border-emerald-500/20 bg-gradient-to-b from-[#081a14]/80 to-[#0e0e1a]/90 p-3.5 flex flex-col justify-between shadow-xs">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-300/80">
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 p-4 sm:p-5 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="flex items-center justify-between relative z-10">
+            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-300/90">
               Operating Schedule
             </span>
-            <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
-              <CalendarCheck size={14} />
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+              <CalendarCheck size={18} />
             </div>
           </div>
-          <div className="mt-2.5">
-            <p className="text-base sm:text-lg font-black text-emerald-300 tracking-tight">
+          <div className="mt-3 relative z-10">
+            <p className="text-2xl sm:text-3xl font-extrabold text-emerald-400 tracking-tight font-sans">
               All 7 Days Open
             </p>
-            <p className="text-[11px] text-emerald-200/60 mt-0.5 truncate" title={branchData.workingHours}>
+            <p className="text-xs text-emerald-200/70 mt-1 truncate" title={branchData.workingHours}>
               {branchData.workingHours || '08:00 AM – 10:00 PM'}
             </p>
           </div>

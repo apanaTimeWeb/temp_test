@@ -275,62 +275,74 @@ export default function ManagerAssetsMaintenancePage({ view, id }: ManagerAssets
         </div>
       </div>
 
-      {/* KPI Overview Summary Cards (Clean Display Cards, NOT Interlinked Toggle Buttons) */}
+      {/* KPI Overview Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Tickets Overview */}
-        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center justify-between">
-          <div>
-            <p className="text-xs font-semibold text-secondary uppercase tracking-wider">
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
               Total Work Orders
             </p>
-            <p className="text-2xl font-bold text-primary mt-1">{logsList.length}</p>
-            <span className="text-[11px] text-secondary font-medium">Registered service logs</span>
+            <p className="text-2xl sm:text-3xl font-extrabold text-white mt-1 font-sans">{logsList.length}</p>
+            <span className="text-[11px] text-slate-400 font-medium">Registered service logs</span>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <Layers size={22} />
           </div>
         </div>
 
         {/* Pending Tickets Overview */}
-        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center justify-between">
-          <div>
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
             <p className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
               {tManagerUi('pending')}
             </p>
-            <p className="text-2xl font-bold text-amber-400 mt-1">{pendingCount}</p>
-            <span className="text-[11px] text-secondary font-medium">Awaiting service start</span>
+            <p className="text-2xl sm:text-3xl font-extrabold text-amber-400 mt-1 font-sans">{pendingCount}</p>
+            <span className="text-[11px] text-amber-200/70 font-medium">Awaiting service start</span>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <Clock size={22} />
           </div>
         </div>
 
         {/* In-Progress Tickets Overview */}
-        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center justify-between">
-          <div>
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 shadow-lg shadow-sky-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
             <p className="text-xs font-semibold text-sky-400 uppercase tracking-wider">
               {tManagerUi('in_progress')}
             </p>
-            <p className="text-2xl font-bold text-sky-400 mt-1">{inProgressCount}</p>
-            <span className="text-[11px] text-secondary font-medium">Under active technician repair</span>
+            <p className="text-2xl sm:text-3xl font-extrabold text-sky-400 mt-1 font-sans">{inProgressCount}</p>
+            <span className="text-[11px] text-sky-200/70 font-medium">Under active technician repair</span>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-sky-500/15 text-sky-400 border border-sky-500/30 flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <Wrench size={22} />
           </div>
         </div>
 
         {/* Completed & Cost Overview */}
-        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs flex items-center justify-between">
-          <div>
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
             <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
               {tManagerUi('completed')} ({completedCount})
             </p>
-            <p className="text-2xl font-bold text-emerald-400 mt-1">
+            <p className="text-2xl sm:text-3xl font-extrabold text-emerald-400 mt-1 font-mono">
               {formatManagerAssetMaintenanceCurrency(totalCost)}
             </p>
-            <span className="text-[11px] text-secondary font-medium">Total settled repair cost</span>
+            <span className="text-[11px] text-emerald-200/70 font-medium">Total settled repair cost</span>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <CheckCircle2 size={22} />
           </div>
         </div>

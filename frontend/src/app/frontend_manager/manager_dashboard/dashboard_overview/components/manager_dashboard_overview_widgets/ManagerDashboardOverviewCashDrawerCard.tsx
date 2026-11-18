@@ -14,35 +14,35 @@ export function ManagerDashboardOverviewCashDrawerCard({
   return (
     <section
       aria-labelledby="manager-cash-drawer-heading"
-      className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-card transition-all flex flex-col justify-between h-full"
+      className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 via-[#0d1e1c] to-[#0c0f24] p-5 sm:p-6 shadow-lg shadow-emerald-950/20 transition-all flex flex-col justify-between h-full hover:border-emerald-400/50"
     >
       <div>
         {/* Card Header */}
-        <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-border">
+        <div className="flex items-center justify-between gap-3 mb-5 pb-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-success-bg border border-border text-success flex items-center justify-center font-bold shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-bold shrink-0 shadow-xs">
               <Wallet size={20} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 id="manager-cash-drawer-heading" className="text-base sm:text-lg font-bold text-foreground">
+                <h2 id="manager-cash-drawer-heading" className="text-base sm:text-lg font-bold text-white">
                   Today's Cash Drawer
                 </h2>
                 {timeRangeLabel && (
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                     [{timeRangeLabel}]
                   </span>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground">Register #1 • Counter Balance</p>
+              <p className="text-xs text-slate-400">Register #1 • Counter Balance</p>
             </div>
           </div>
 
           <span
             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${
               settlementStatus === 'verified'
-                ? 'bg-success-bg text-success border-border'
-                : 'bg-warning-bg text-warning-text border-border'
+                ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
             }`}
           >
             {settlementStatus === 'verified' ? (
@@ -61,44 +61,44 @@ export function ManagerDashboardOverviewCashDrawerCard({
 
         {/* Counter Breakdown Grid */}
         <div className="grid grid-cols-2 gap-3 mb-4">
-          <div className="p-3.5 rounded-xl bg-surface-highlight border border-border">
-            <div className="flex items-center justify-between text-muted-foreground mb-1">
+          <div className="p-3.5 rounded-xl bg-emerald-950/60 border border-emerald-500/30 shadow-xs">
+            <div className="flex items-center justify-between text-emerald-300/80 mb-1">
               <span className="text-xs font-medium">Physical Cash</span>
-              <Wallet size={14} className="text-success" />
+              <Wallet size={14} className="text-emerald-400" />
             </div>
-            <div className="text-lg sm:text-xl font-extrabold text-foreground tracking-tight">
+            <div className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
               ₹{cashInDrawer.toLocaleString('en-IN')}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5">In register drawer</p>
+            <p className="text-[11px] text-emerald-300/60 mt-0.5">In register drawer</p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-surface-highlight border border-border">
-            <div className="flex items-center justify-between text-muted-foreground mb-1">
+          <div className="p-3.5 rounded-xl bg-cyan-950/60 border border-cyan-500/30 shadow-xs">
+            <div className="flex items-center justify-between text-cyan-300/80 mb-1">
               <span className="text-xs font-medium">UPI & Online</span>
-              <QrCode size={14} className="text-info" />
+              <QrCode size={14} className="text-cyan-400" />
             </div>
-            <div className="text-lg sm:text-xl font-extrabold text-foreground tracking-tight">
+            <div className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
               ₹{digitalCollections.toLocaleString('en-IN')}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-0.5">Instant gateway inflow</p>
+            <p className="text-[11px] text-cyan-300/60 mt-0.5">Instant gateway inflow</p>
           </div>
         </div>
 
         {/* Total Aggregate */}
-        <div className="p-3 rounded-xl bg-muted border border-border flex items-center justify-between text-xs mb-4">
-          <span className="font-semibold text-muted-foreground">Total Inflow Recorded:</span>
-          <span className="font-extrabold text-foreground text-sm">
+        <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-500/30 flex items-center justify-between text-xs mb-4">
+          <span className="font-semibold text-amber-200/80">Total Inflow Recorded:</span>
+          <span className="font-extrabold text-amber-400 text-sm">
             ₹{totalCollections.toLocaleString('en-IN')}
           </span>
         </div>
       </div>
 
       {/* Action Footer */}
-      <div className="pt-3 border-t border-border flex items-center justify-between gap-2.5">
-        <span className="text-xs text-muted-foreground">Register closing & cash handover</span>
+      <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-2.5">
+        <span className="text-xs text-slate-400">Register closing & cash handover</span>
         <Link
           href="/frontend_manager/manager_accounts_assets/accounts_daily_settlement"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs font-bold text-primary hover:text-primary-hover hover:border-primary transition-all cursor-pointer shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-xs font-bold text-emerald-300 hover:bg-emerald-500/20 transition-all cursor-pointer shadow-xs"
         >
           <span>Open Daily Settlement</span>
           <ArrowUpRight size={13} />

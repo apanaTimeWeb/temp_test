@@ -14,18 +14,48 @@ const icons: Record<string, LucideIcon> = {
   Phone,
 };
 
-const getReportIconTheme = (icon: string) => {
+const getReportTheme = (icon: string) => {
   switch (icon) {
     case 'Users':
-      return 'bg-warning-bg text-warning border-border';
+      return {
+        cardBg: 'border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261c0c] to-amber-900/60 shadow-lg shadow-amber-950/40 hover:border-amber-400/60',
+        iconBox: 'bg-amber-500/20 border-amber-500/40 text-amber-400',
+        badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+        stroke: '#fbbf24',
+        accent: 'text-amber-400',
+      };
     case 'CalendarCheck':
-      return 'bg-success-bg text-success border-border';
+      return {
+        cardBg: 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 hover:border-emerald-400/60',
+        iconBox: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400',
+        badge: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        stroke: '#34d399',
+        accent: 'text-emerald-400',
+      };
     case 'UserPlus':
-      return 'bg-purple-bg text-purple border-border';
+      return {
+        cardBg: 'border-purple-500/40 bg-gradient-to-br from-purple-950/80 via-[#24133f] to-purple-900/60 shadow-lg shadow-purple-950/40 hover:border-purple-400/60',
+        iconBox: 'bg-purple-500/20 border-purple-500/40 text-purple-400',
+        badge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+        stroke: '#c084fc',
+        accent: 'text-purple-400',
+      };
     case 'Phone':
-      return 'bg-info-bg text-info border-border';
+      return {
+        cardBg: 'border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 shadow-lg shadow-sky-950/40 hover:border-sky-400/60',
+        iconBox: 'bg-sky-500/20 border-sky-500/40 text-sky-400',
+        badge: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+        stroke: '#38bdf8',
+        accent: 'text-sky-400',
+      };
     default:
-      return 'bg-primary-subtle text-primary border-border';
+      return {
+        cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60',
+        iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
+        badge: 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30',
+        stroke: '#818cf8',
+        accent: 'text-indigo-400',
+      };
   }
 };
 
@@ -54,16 +84,21 @@ export function ManagerDashboardReportsKpiGrid({
       {cards.map((card) => {
         const Icon = icons[card.icon] || Users;
         const tone = card.trend ? getManagerReportsTrendTone(card.trend) : 'neutral';
-        const iconTheme = getReportIconTheme(card.icon);
+        const theme = getReportTheme(card.icon);
 
         return (
           <div
             key={card.title}
-            className="mgr-kpi-card p-5 rounded-2xl border border-border bg-card shadow-card hover:border-primary hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between"
+            className={`mgr-kpi-card relative overflow-hidden p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01] hover:shadow-xl group flex flex-col justify-between ${theme.cardBg}`}
           >
-            <div>
+            {/* Decorative Sparkline */}
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-32 h-16 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke={theme.stroke} strokeWidth="2.5" strokeLinecap="round" />
+            </svg>
+
+            <div className="relative z-10">
               <div className="flex items-center justify-between gap-2">
-                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center font-bold transition-transform group-hover:scale-105 ${iconTheme}`}>
+                <div className={`w-11 h-11 rounded-xl border flex items-center justify-center font-bold transition-transform group-hover:scale-110 shadow-xs ${theme.iconBox}`}>
                   <Icon size={20} />
                 </div>
 
@@ -71,10 +106,10 @@ export function ManagerDashboardReportsKpiGrid({
                   <span
                     className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                       tone === 'up'
-                        ? 'bg-success-bg text-success border border-border'
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                         : tone === 'down'
-                        ? 'bg-danger-bg text-danger border border-border'
-                        : 'bg-muted text-muted-foreground border border-border'
+                        ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                        : 'bg-slate-700/40 text-slate-300 border border-slate-600/40'
                     }`}
                   >
                     {tone === 'up' && <TrendingUp size={11} />}
@@ -86,22 +121,22 @@ export function ManagerDashboardReportsKpiGrid({
 
               <div className="mt-4">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="mgr-kpi-value text-3xl font-extrabold tracking-tight text-foreground font-sans">
+                  <p className="mgr-kpi-value text-3xl font-extrabold tracking-tight text-white font-sans">
                     {card.value}
                   </p>
-                  <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-surface-highlight text-primary border border-border">
+                  <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${theme.badge}`}>
                     [{dateRange}]
                   </span>
                 </div>
-                <p className="mgr-kpi-label text-xs font-semibold uppercase tracking-wider text-muted-foreground mt-1">
+                <p className="mgr-kpi-label text-xs font-semibold uppercase tracking-wider text-slate-300 mt-1">
                   {card.title}
                 </p>
               </div>
             </div>
 
-            <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground">
+            <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-300/80 relative z-10">
               <span>Verified {dateRange} Metric</span>
-              <span className="text-primary font-medium">Synced</span>
+              <span className={`${theme.accent} font-medium`}>Synced</span>
             </div>
           </div>
         );

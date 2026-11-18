@@ -36,7 +36,7 @@ const SUPERADMIN_LIBRARIES_OVERVIEW_LIBRARY_OFFLINE_OPERATIONS_SYSTEM_URLS = {
   AUTO_SCALE: '/superadmin/superadmin_libraries/libraries_overview?view=library_capacity_scaling_recommendations',
   BACKUPS: '/superadmin/superadmin_system/backup_configuration',
   BRANDING: '/superadmin/superadmin_settings/settings_branding',
-  BULK_IMPORT: '/superadmin/superadmin_libraries/libraries_onboarding_setup?view=student_bulk_import',
+  BULK_IMPORT: '/superadmin/superadmin_libraries/libraries_onboarding_setup',
   DATA_EXPORT: '/superadmin/superadmin_system/data_export_jobs',
   GAP_FILLING: '/superadmin/superadmin_libraries/libraries_overview?view=library_capacity_gap_filling',
   MAINTENANCE: '/superadmin/superadmin_libraries/libraries_overview?view=facility_maintenance_work_orders',
@@ -44,7 +44,7 @@ const SUPERADMIN_LIBRARIES_OVERVIEW_LIBRARY_OFFLINE_OPERATIONS_SYSTEM_URLS = {
   POWER_SAVING: '/superadmin/superadmin_libraries/libraries_overview?view=facility_power_management',
   PROFILE: '/superadmin/superadmin_libraries/libraries_profile_configuration',
   SETTINGS: '/superadmin/superadmin_settings/settings_general?view=settings_library_configuration',
-  SMART_ID: '/superadmin/superadmin_libraries/libraries_onboarding_setup?view=student_smart_id',
+  SMART_ID: '/superadmin/superadmin_libraries/libraries_onboarding_setup',
   WAITLIST_AUTOMATION: '/superadmin/superadmin_libraries/libraries_overview?view=library_waitlist_automation',
   WHATSAPP_INTEGRATION: '/superadmin/superadmin_communication/communication_whatsapp_integration',
 } as const;

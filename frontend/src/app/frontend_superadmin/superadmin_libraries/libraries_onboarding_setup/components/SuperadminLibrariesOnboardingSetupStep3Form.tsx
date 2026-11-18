@@ -10,8 +10,8 @@ import type { SeatsData } from '@/app/frontend_superadmin/superadmin_libraries/l
 import { useTranslations } from 'next-intl';
 const inputCls = (hasErr?: boolean) =>
   `sa-input w-full rounded-xl border px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:outline-none focus:ring-2 ${hasErr
-    ? 'sa-input--error border-rose-500/60 bg-rose-500/5 focus:border-rose-500 focus:ring-rose-500/20'
-    : 'border-indigo-500/25 bg-background/80 focus:border-indigo-500 focus:ring-indigo-500/20'
+    ? 'border-rose-500/60 bg-rose-500/5 focus:border-rose-500 focus:ring-rose-500/20'
+    : 'border-indigo-500/30 bg-indigo-500/[0.07] focus:border-indigo-400 focus:ring-indigo-500/20'
   }`;
 
 /**

@@ -267,64 +267,76 @@ export default function ManagerCommunicationComplaintsPage({
         </div>
       </div>
 
-      {/* 4 KPI Metric Summary Cards (Clean Overview Metric Cards - Not Interlinked Filter Buttons) */}
+      {/* 4 KPI Metric Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Card 1: Total Complaints */}
-        <div className="mgr-card p-4 rounded-2xl border border-border flex items-center gap-3.5 shadow-xs bg-card">
-          <div className="w-10 h-10 rounded-xl bg-indigo-500/15 text-indigo-400 flex items-center justify-center border border-indigo-500/30 shrink-0">
+        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <Layers size={20} />
           </div>
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-300 block">
               Total Lodged
             </span>
-            <span className="text-xl sm:text-2xl font-black text-primary">
+            <span className="text-xl sm:text-2xl font-extrabold text-white tracking-tight font-sans">
               {stats.total}
             </span>
           </div>
         </div>
 
         {/* Card 2: Open / Unresolved */}
-        <div className="mgr-card p-4 rounded-2xl border border-border flex items-center gap-3.5 shadow-xs bg-card">
-          <div className="w-10 h-10 rounded-xl bg-rose-500/15 text-rose-400 flex items-center justify-center border border-rose-500/30 shrink-0">
+        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <AlertCircle size={20} />
           </div>
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block flex items-center gap-1.5">
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-rose-400 block flex items-center gap-1.5">
               <span>Pending Open</span>
               {stats.openCount > 0 && <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
             </span>
-            <span className="text-xl sm:text-2xl font-black text-rose-400">
+            <span className="text-xl sm:text-2xl font-extrabold text-rose-400 tracking-tight font-sans">
               {stats.openCount}
             </span>
           </div>
         </div>
 
         {/* Card 3: In-Progress */}
-        <div className="mgr-card p-4 rounded-2xl border border-border flex items-center gap-3.5 shadow-xs bg-card">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center border border-amber-500/30 shrink-0">
+        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <Clock size={20} />
           </div>
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-amber-400 block">
               In-Progress
             </span>
-            <span className="text-xl sm:text-2xl font-black text-amber-400">
+            <span className="text-xl sm:text-2xl font-extrabold text-amber-400 tracking-tight font-sans">
               {stats.inProgressCount}
             </span>
           </div>
         </div>
 
         {/* Card 4: Resolved */}
-        <div className="mgr-card p-4 rounded-2xl border border-border flex items-center gap-3.5 shadow-xs bg-card">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center border border-emerald-500/30 shrink-0">
+        <div className="mgr-card group relative overflow-hidden p-4 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex items-center gap-3.5 select-none">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <CheckCircle2 size={20} />
           </div>
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary block">
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-400 block">
               Resolved ({stats.resolutionRate}%)
             </span>
-            <span className="text-xl sm:text-2xl font-black text-emerald-400">
+            <span className="text-xl sm:text-2xl font-extrabold text-emerald-400 tracking-tight font-sans">
               {stats.resolvedCount}
             </span>
           </div>

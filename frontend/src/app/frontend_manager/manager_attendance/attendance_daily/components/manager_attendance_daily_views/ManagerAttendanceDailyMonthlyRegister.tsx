@@ -213,48 +213,73 @@ export function ManagerAttendanceDailyMonthlyRegister({
 
       {/* ── Monthly Summary KPIs ── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3.5">
-        <div className="p-4 rounded-2xl border border-border bg-card shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-secondary">
-            Enrolled In Scope
-          </span>
-          <div className="mt-2 text-2xl font-black text-primary font-mono">{totalEnrolled}</div>
-          <p className="text-[11px] text-secondary mt-0.5">Active members</p>
-        </div>
-
-        <div className="p-4 rounded-2xl border border-border bg-card shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-500">
-            Avg Monthly Rate
-          </span>
-          <div className="mt-2 text-2xl font-black text-emerald-500 font-mono">{avgAttendance}%</div>
-          <p className="text-[11px] text-secondary mt-0.5">Average turnstile score</p>
-        </div>
-
-        <div className="p-4 rounded-2xl border border-border bg-card shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400">
-            High Consistent (&ge;90%)
-          </span>
-          <div className="mt-2 text-2xl font-black text-indigo-400 font-mono">
-            {highAttendanceCount}
+        <div className="group relative overflow-hidden p-4 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-300">
+              Enrolled In Scope
+            </span>
+            <div className="mt-2 text-2xl sm:text-3xl font-extrabold text-white font-mono">{totalEnrolled}</div>
+            <p className="text-[11px] text-slate-400 mt-0.5">Active members</p>
           </div>
-          <p className="text-[11px] text-secondary mt-0.5">Gold tier consistency</p>
         </div>
 
-        <div className="p-4 rounded-2xl border border-border bg-card shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-rose-500">
-            Dropout Risk (&lt;75%)
-          </span>
-          <div className="mt-2 text-2xl font-black text-rose-500 font-mono">
-            {lowAttendanceCount}
+        <div className="group relative overflow-hidden p-4 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,34 Q25,18 55,20 T105,8 T150,14" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-400">
+              Avg Monthly Rate
+            </span>
+            <div className="mt-2 text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono">{avgAttendance}%</div>
+            <p className="text-[11px] text-emerald-200/70 mt-0.5">Average turnstile score</p>
           </div>
-          <p className="text-[11px] text-secondary mt-0.5">Requires manager review</p>
         </div>
 
-        <div className="col-span-2 sm:col-span-1 p-4 rounded-2xl border border-border bg-card shadow-xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-secondary">
-            Study Hours Logged
-          </span>
-          <div className="mt-2 text-2xl font-black text-primary font-mono">{totalHoursLogged}h</div>
-          <p className="text-[11px] text-secondary mt-0.5">Total hours in hall</p>
+        <div className="group relative overflow-hidden p-4 rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 shadow-lg shadow-sky-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-sky-400">
+              High Consistent (&ge;90%)
+            </span>
+            <div className="mt-2 text-2xl sm:text-3xl font-extrabold text-sky-400 font-mono">
+              {highAttendanceCount}
+            </div>
+            <p className="text-[11px] text-sky-200/70 mt-0.5">Gold tier consistency</p>
+          </div>
+        </div>
+
+        <div className="group relative overflow-hidden p-4 rounded-2xl border border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#260e19] to-rose-900/60 shadow-lg shadow-rose-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-rose-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#f87171" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-rose-400">
+              Dropout Risk (&lt;75%)
+            </span>
+            <div className="mt-2 text-2xl sm:text-3xl font-extrabold text-rose-400 font-mono">
+              {lowAttendanceCount}
+            </div>
+            <p className="text-[11px] text-rose-200/70 mt-0.5">Requires manager review</p>
+          </div>
+        </div>
+
+        <div className="group relative overflow-hidden col-span-2 sm:col-span-1 p-4 rounded-2xl border border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/60 hover:shadow-xl flex flex-col justify-between">
+          <svg aria-hidden="true" className="absolute bottom-0 right-0 w-24 h-12 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative z-10">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-amber-400">
+              Study Hours Logged
+            </span>
+            <div className="mt-2 text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono">{totalHoursLogged}h</div>
+            <p className="text-[11px] text-amber-200/70 mt-0.5">Total hours in hall</p>
+          </div>
         </div>
       </div>
 

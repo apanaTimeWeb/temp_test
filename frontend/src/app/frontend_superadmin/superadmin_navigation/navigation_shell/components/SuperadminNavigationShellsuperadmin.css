@@ -146,18 +146,19 @@
     font-size: 14px;
     outline: none;
     transition: all 0.2s;
-    background-color: var(--bg-input);
+    background-color: rgba(99, 102, 241, 0.06);
     color: var(--text-primary);
-    border: 1px solid var(--border);
+    border: 1px solid rgba(99, 102, 241, 0.25);
   }
   .sa-input::placeholder { color: var(--text-secondary); }
   .sa-input:focus {
-    border-color: var(--border-focus);
-    box-shadow: var(--shadow-card);
+    border-color: rgba(99, 102, 241, 0.7);
+    background-color: rgba(99, 102, 241, 0.1);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
   }
-  .sa-input--error { border-color: var(--danger-text); }
+  .sa-input--error { border-color: var(--danger-text); background-color: rgba(239, 68, 68, 0.05); }
   .sa-input--error:focus {
-    box-shadow: var(--shadow-card);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
   }
 
   /* ── Label ── */
@@ -522,8 +523,8 @@
     transition: background-color 0.15s;
   }
   .sa-step-item--active {
-    background-color: color-mix(in srgb, var(--primary) 12%, transparent);
-    border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+    background-color: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.3);
   }
 
   /* ── Dashed add button ── */
@@ -603,7 +604,7 @@
   .sa-wizard-shell {
     min-height: 100vh;
     display: flex;
-    background-color: var(--bg-page);
+    background: linear-gradient(135deg, #080b1a 0%, #0a0d20 40%, #060810 100%);
     color: var(--text-primary);
   }
 
@@ -634,8 +635,8 @@
     display: flex;
     flex-direction: column;
     padding: var(--layout-content-padding);
-    border-right: 1px solid var(--border);
-    background-color: var(--bg-sidebar);
+    border-right: 1px solid rgba(99, 102, 241, 0.2);
+    background: linear-gradient(180deg, #0c0f28 0%, #080b1e 60%, #060810 100%);
     flex-shrink: 0;
   }
   @media (max-width: 767px) { .sa-wizard-sidebar { display: none; } }
@@ -741,8 +742,8 @@
     align-items: end;
     padding: 16px;
     border-radius: 12px;
-    border: 1px solid var(--border);
-    background-color: var(--bg-card);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    background: linear-gradient(135deg, rgba(99,102,241,0.07) 0%, rgba(15,18,50,0.8) 100%);
   }
   .sa-wizard-row--shifts { grid-template-columns: 1fr 120px 120px 36px; }
   .sa-wizard-row--plans  { grid-template-columns: 1fr 90px 110px 36px; }
@@ -770,8 +771,8 @@
   .sa-wizard-preview-card {
     padding: 16px;
     border-radius: 12px;
-    background-color: color-mix(in srgb, var(--primary) 8%, transparent);
-    border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+    background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(15,18,50,0.9) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.3);
   }
   .sa-wizard-preview-label {
     font-size: 12px;
@@ -818,21 +819,21 @@
   /* Summary card (Step 5) */
   .sa-wizard-summary-card {
     border-radius: 16px;
-    border: 1px solid var(--border);
+    border: 1px solid rgba(99, 102, 241, 0.3);
     padding: 24px;
-    background-color: var(--bg-card);
+    background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(10,12,35,0.95) 100%);
   }
   .sa-wizard-shifts-preview {
     padding: 16px;
     border-radius: 12px;
-    border: 1px solid var(--border);
-    background-color: color-mix(in srgb, var(--primary) 5%, transparent);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    background: linear-gradient(135deg, rgba(52,211,153,0.07) 0%, rgba(10,12,35,0.9) 100%);
   }
   .sa-wizard-plans-preview {
     padding: 16px;
     border-radius: 12px;
-    border: 1px solid var(--border);
-    background-color: color-mix(in srgb, var(--success) 5%, transparent);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    background: linear-gradient(135deg, rgba(167,139,250,0.07) 0%, rgba(10,12,35,0.9) 100%);
   }
 
   /* Summary badge */
