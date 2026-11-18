@@ -508,7 +508,7 @@
     "NOTICE_CREATE_UNAVAILABLE": "Post Notice (unavailable)",
     "NOTICE_ROW_CLOSE_FORM_ARIA": "Close notice form dialog",
     "WHATSAPP_TEMPLATES_TITLE": "WhatsApp Templates",
-    "WHATSAPP_TEMPLATES_SUBTITLE": "Customize message templates for review. They are not saved or sent.",
+    "WHATSAPP_TEMPLATES_SUBTITLE": "Standardized WhatsApp message templates and dynamic tokens for automated student updates.",
     "WHATSAPP_TEMPLATES_PREVIEW_BANNER": "Template editor preview only. Edits are not persisted, and test messages are not sent without approved API/provider contracts.",
     "WHATSAPP_TEST_DIALOG_TITLE": "Send Test Message",
     "WHATSAPP_TEST_DIALOG_DESCRIPTION": "Enter a phone number to validate the test preview. No message will be sent without a provider contract.",

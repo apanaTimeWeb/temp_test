@@ -179,7 +179,7 @@
     "NOTICE_CREATE_UNAVAILABLE": "सूचना पोस्ट करना उपलब्ध नहीं है",
     "NOTICE_ROW_CLOSE_FORM_ARIA": "सूचना फ़ॉर्म संवाद बंद करें",
     "WHATSAPP_TEMPLATES_TITLE": "WhatsApp टेम्पलेट",
-    "WHATSAPP_TEMPLATES_SUBTITLE": "समीक्षा के लिए संदेश टेम्पलेट अनुकूलित करें। इन्हें सहेजा या भेजा नहीं जाता।",
+    "WHATSAPP_TEMPLATES_SUBTITLE": "स्वचालित छात्र अपडेट के लिए व्हाट्सएप संदेश टेम्पलेट और डायनामिक टोकन।",
     "WHATSAPP_TEMPLATES_PREVIEW_BANNER": "टेम्पलेट संपादक केवल पूर्वावलोकन है। बदलाव स्थायी नहीं होते और स्वीकृत API/प्रदाता अनुबंध के बिना परीक्षण संदेश नहीं भेजे जाते।",
     "WHATSAPP_TEST_DIALOG_TITLE": "परीक्षण संदेश भेजें",
     "WHATSAPP_TEST_DIALOG_DESCRIPTION": "परीक्षण पूर्वावलोकन सत्यापित करने के लिए फ़ोन नंबर दर्ज करें। प्रदाता अनुबंध के बिना कोई संदेश नहीं भेजा जाएगा।",

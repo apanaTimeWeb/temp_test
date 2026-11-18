@@ -6,7 +6,6 @@ import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogD
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import { useRef, useState, useMemo } from 'react';
 import {
-  ChevronRight,
   X,
   Send,
   FileText,
@@ -235,22 +234,13 @@ export function AdminCommunicationWhatsappTemplatesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            <span>{t('BREADCRUMB_COMMUNICATION')}</span>
-            <ChevronRight size={14} />
-            <span className="text-slate-200">{t('WHATSAPP_TEMPLATES_TITLE')}</span>
-          </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
             <div className="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
               <MessageSquare size={18} />
             </div>
             <span>{t('WHATSAPP_TEMPLATES_TITLE')}</span>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
-              <ShieldCheck size={12} />
-              Meta Cloud API v20.0
-            </span>
           </h1>
-          <p className="mt-0.5 text-xs text-slate-400">{t('WHATSAPP_TEMPLATES_SUBTITLE')}</p>
+          <p className="mt-1 text-xs text-slate-400">{t('WHATSAPP_TEMPLATES_SUBTITLE')}</p>
         </div>
 
         {/* Quick Launch Studio Button */}
@@ -286,22 +276,19 @@ export function AdminCommunicationWhatsappTemplatesPage() {
           </div>
         </div>
 
-        {/* Broadcast Gateway Status - Emerald */}
+        {/* Template Categories - Emerald */}
         <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 p-5 shadow-lg shadow-emerald-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-500/40">
           <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl transition-all duration-500 group-hover:bg-emerald-500/20" />
           <div className="relative flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Meta API Gateway</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Template Categories</span>
             <div className="p-2.5 rounded-xl border shrink-0 bg-emerald-500/15 border-emerald-500/30 text-emerald-400">
-              <ShieldCheck size={18} strokeWidth={2.2} />
+              <Layers size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-3 text-2xl font-bold tracking-tight text-emerald-400 flex items-center gap-2">
-            <span>Verified</span>
-            <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-          </p>
+          <p className="mt-3 text-2xl font-bold tracking-tight text-emerald-400">{categories.length}</p>
           <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
             <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-emerald-300 bg-emerald-500/10 border-emerald-500/25">
-              100% Delivery Health
+              Lifecycle Workflows
             </span>
           </div>
         </div>
@@ -370,33 +357,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
             />
           </div>
         </div>
-
-        {/* Template Selector Quick Pills (Retaining test-id compatibility) */}
-        <div className="flex flex-wrap gap-1.5 border-t border-slate-800/80 pt-3">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 self-center mr-1">
-            Quick Jump:
-          </span>
-          {templates.map((template) => (
-            <button
-              type="button"
-              data-testid={`admin_communication-template-${template.id}`}
-              key={template.id}
-              onClick={() => {
-                setActiveId(template.id);
-                // Highlight or optionally open studio
-              }}
-              aria-pressed={activeId === template.id}
-              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-all ${
-                activeId === template.id
-                  ? 'border border-emerald-500 bg-emerald-500/20 text-emerald-300 shadow-sm'
-                  : 'border border-slate-800 bg-slate-950/50 text-slate-400 hover:border-slate-700 hover:text-white'
-              }`}
-            >
-              <span>{template.icon}</span>
-              <span>{t(template.labelKey)}</span>
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Main Templates Directory Grid */}
@@ -411,6 +371,7 @@ export function AdminCommunicationWhatsappTemplatesPage() {
           return (
             <div
               key={template.id}
+              data-testid={`admin_communication-template-${template.id}`}
               className={`group flex flex-col justify-between rounded-2xl border transition-all duration-200 overflow-hidden ${
                 isSelected
                   ? 'border-emerald-500/50 bg-gradient-to-b from-slate-900/90 to-slate-900/70 shadow-xl shadow-emerald-950/20 ring-1 ring-emerald-500/30'
@@ -522,9 +483,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
                 <div>
                   <DialogTitle className="text-lg font-bold text-white flex items-center gap-2">
                     <span>{t(active.labelKey)}</span>
-                    <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <ShieldCheck size={11} /> Meta Verified
-                    </span>
                   </DialogTitle>
                   <DialogDescription className="text-xs text-slate-400">
                     Live WhatsApp Business Template Studio with real-time smartphone recipient simulator.
