@@ -109,14 +109,27 @@ export default function AdminCouponsPage() {
       field: 'branchApplicability',
       headerName: 'Applicable Branch',
       flex: 1.2,
-      minWidth: 140,
+      minWidth: 150,
       sortable: true,
-      cellRenderer: ({ data }) => (
-        <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2 py-0.5 text-xs text-text-secondary">
-          <Building2 size={12} className="text-primary" />
-          {data.branchApplicability || 'All Branches'}
-        </span>
-      ),
+      cellRenderer: ({ data }) => {
+        const branch = data.branchApplicability || 'All Branches';
+        const isDowntown = branch.toLowerCase().includes('downtown');
+        const isWestside = branch.toLowerCase().includes('westside');
+        const isNorth = branch.toLowerCase().includes('north');
+        const badgeClass = isDowntown
+          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+          : isWestside
+            ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+            : isNorth
+              ? 'border-indigo-500/30 bg-indigo-500/10 text-indigo-400'
+              : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400';
+        return (
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${badgeClass}`}>
+            <Building2 size={12} />
+            {branch}
+          </span>
+        );
+      },
     },
     { field: 'expiry', headerName: t('COLUMN_EXPIRY'), flex: 1, minWidth: 120, sortable: true, valueFormatter: ({ data }) => formatAdminCouponsDate(data.expiry, locale) },
     {
@@ -181,8 +194,24 @@ export default function AdminCouponsPage() {
  * @dependencies Requires the ADMIN_COUPONS locale namespace and shared focus-managed dialog primitive.
  * @edge-case Live create remains unavailable until an authoritative API mutation contract is supplied.
  */
+const COUPON_PRESETS = [
+  { label: 'WELCOME50', code: 'WELCOME50', discount: 50, type: 'Percent' as const, maxUses: 100, desc: '50% First Admission' },
+  { label: 'FLAT₹500', code: 'FLAT500', discount: 500, type: 'Flat' as const, maxUses: 50, desc: '₹500 Off Desk Plan' },
+  { label: 'EXAMBOOST', code: 'EXAMBOOST', discount: 20, type: 'Percent' as const, maxUses: 200, desc: '20% Exam Prep Special' },
+  { label: 'WESTSIDE30', code: 'WESTSIDE30', discount: 30, type: 'Percent' as const, maxUses: 80, desc: '30% Westside Launch' },
+  { label: 'ANNUAL1000', code: 'ANNUAL1000', discount: 1000, type: 'Flat' as const, maxUses: 30, desc: '₹1000 Long-Term Discount' },
+];
+
+const BRANCH_OPTIONS = [
+  { value: 'All Branches', label: 'All Branches', code: 'GLOBAL', desc: 'Valid across entire 3-branch network', badge: 'Global Network' },
+  { value: 'Downtown Central', label: 'Downtown Central', code: 'DT-CEN', desc: 'Main City Center Hub Exclusive', badge: 'High-Demand Hub' },
+  { value: 'Westside Branch', label: 'Westside Branch', code: 'WS-BR', desc: 'Suburban Hub Exclusive (Promotion)', badge: 'Growth Hub' },
+  { value: 'North Hub', label: 'North Hub', code: 'NH-01', desc: 'North Campus Hub Exclusive', badge: 'Campus Hub' },
+];
+
 export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onCreateDemoCoupon, deleteOpen = false, couponCode = '', onDeleteOpenChange = () => undefined, onConfirmDelete = () => undefined }: AdminCouponsCreateDialogProps) {
   const t = useTranslations('ADMIN_COUPONS');
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const schema = useMemo(() => createAdminCouponsFormSchema({
     codeRequired: t('VALIDATION_CODE_REQUIRED'),
@@ -210,8 +239,28 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
   const codeRegistration = form.register('code');
 
   useEffect(() => {
-    if (open) reset(ADMIN_COUPONS_EMPTY_FORM);
-  }, [open, reset]);
+    if (open) {
+      const defaultBranch = !isAllBranches && selectedBranch ? selectedBranch.name : 'All Branches';
+      reset({
+        ...ADMIN_COUPONS_EMPTY_FORM,
+        branchApplicability: defaultBranch,
+      });
+    }
+  }, [open, isAllBranches, selectedBranch, reset]);
+
+  const watchedCode = form.watch('code');
+  const watchedType = form.watch('type');
+  const watchedDiscount = form.watch('discount');
+  const watchedMaxUses = form.watch('maxUses');
+  const watchedExpiry = form.watch('expiry');
+  const watchedBranch = form.watch('branchApplicability') || 'All Branches';
+
+  const applyPreset = (preset: typeof COUPON_PRESETS[0]) => {
+    form.setValue('code', preset.code, { shouldDirty: true, shouldValidate: true });
+    form.setValue('discount', String(preset.discount) as any, { shouldDirty: true, shouldValidate: true });
+    form.setValue('type', preset.type, { shouldDirty: true, shouldValidate: true });
+    form.setValue('maxUses', String(preset.maxUses) as any, { shouldDirty: true, shouldValidate: true });
+  };
 
   const submit = form.handleSubmit((values) => {
     if (isDemoMode && intent === 'create') {
@@ -225,7 +274,7 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
   return (
     <>
       <Dialog open={open} onOpenChange={(nextOpen) => { if (nextOpen) onOpenChange(true); else requestClose(); }}>
-        <DialogContent className="max-w-xl rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-2xl space-y-5">
+        <DialogContent className="max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
           <div className="border-b border-slate-800 pb-3">
             <DialogTitle className="text-lg font-bold text-white flex items-center gap-2">
               <Building2 size={18} className="text-indigo-400" />
@@ -236,11 +285,67 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
             </DialogDescription>
           </div>
 
+          {/* Quick Presets */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Quick Campaign Presets</span>
+              <span className="text-[10px] text-slate-500">1-click fill code & discount</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {COUPON_PRESETS.map((p) => (
+                <button
+                  key={p.code}
+                  type="button"
+                  onClick={() => applyPreset(p)}
+                  className="rounded-lg border border-slate-700/60 bg-slate-800/60 px-2.5 py-1 text-[11px] font-semibold text-slate-300 hover:border-indigo-500/50 hover:bg-indigo-500/10 hover:text-indigo-300 transition-colors"
+                >
+                  <span className="font-mono font-bold text-indigo-400">{p.label}</span>
+                  <span className="text-slate-400 ml-1.5 font-normal">({p.desc})</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Live Coupon Voucher Card Preview */}
+          <div className="relative overflow-hidden rounded-2xl border border-dashed border-indigo-500/40 bg-gradient-to-r from-indigo-950/40 via-purple-950/30 to-slate-900/60 p-4 shadow-lg">
+            <div className="absolute -left-3 top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-slate-900 border border-indigo-500/40" />
+            <div className="absolute -right-3 top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-slate-900 border border-indigo-500/40" />
+            <div className="flex items-center justify-between gap-3 px-3">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-base font-extrabold tracking-widest text-indigo-300">
+                    {watchedCode ? watchedCode.toUpperCase() : 'COUPONCODE'}
+                  </span>
+                  <span className="rounded-full bg-indigo-500/20 border border-indigo-500/30 px-2 py-0.5 text-[10px] font-bold text-indigo-300 uppercase">
+                    {watchedType === 'Percent' ? `${watchedDiscount || 0}% OFF` : `₹${watchedDiscount || 0} OFF`}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                  <span className="flex items-center gap-1">
+                    <Building2 size={11} className="text-indigo-400" />
+                    {watchedBranch}
+                  </span>
+                  <span>•</span>
+                  <span>Max Uses: {watchedMaxUses || '—'}</span>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-[10px] uppercase tracking-wider text-slate-500">Expires</div>
+                <div className="text-xs font-semibold text-slate-300">
+                  {watchedExpiry || 'No Date'}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <form onSubmit={submit} noValidate className="space-y-4">
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-code">
-                {t('FIELD_CODE')} <span className="text-rose-400">*</span>
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-code">
+                  {t('FIELD_CODE')}
+                </label>
+                <span className="text-xs text-rose-400 font-bold">*</span>
+              </div>
               <input
                 id="admin-coupon-code"
                 {...codeRegistration}
@@ -263,19 +368,18 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
             </div>
 
             {/* Branch Applicability Condition */}
-            <div className="rounded-xl border border-slate-800/80 bg-slate-950/50 p-3.5 space-y-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
-                Target Branch Condition
-              </label>
+            <div className="rounded-xl border border-slate-800/80 bg-slate-950/50 p-3.5 space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                  Target Branch Condition
+                </label>
+                <span className="text-[11px] text-indigo-400 font-medium">
+                  Active: {watchedBranch}
+                </span>
+              </div>
               <div className="grid grid-cols-2 gap-2">
-                {[
-                  { value: 'All Branches', label: 'All Branches', desc: 'Global Network' },
-                  { value: 'Downtown Central', label: 'Downtown Central', desc: 'DT-CEN' },
-                  { value: 'Westside Branch', label: 'Westside Branch', desc: 'WS-BR' },
-                  { value: 'North Hub', label: 'North Hub', desc: 'NH-01' },
-                ].map((b) => {
-                  const currentBranch = form.watch('branchApplicability') || 'All Branches';
-                  const isSelected = currentBranch === b.value;
+                {BRANCH_OPTIONS.map((b) => {
+                  const isSelected = watchedBranch === b.value;
                   return (
                     <button
                       key={b.value}
@@ -283,15 +387,31 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
                       onClick={() => form.setValue('branchApplicability', b.value, { shouldDirty: true })}
                       className={`flex flex-col text-left rounded-lg border p-2.5 transition-all ${
                         isSelected
-                          ? 'border-indigo-500 bg-indigo-500/20 text-indigo-200'
+                          ? 'border-indigo-500 bg-indigo-500/20 text-indigo-200 shadow-sm shadow-indigo-500/20'
                           : 'border-slate-800 bg-slate-900/60 text-slate-300 hover:border-slate-700 hover:bg-slate-900'
                       }`}
                     >
-                      <span className="text-xs font-bold leading-tight">{b.label}</span>
-                      <span className="text-[10px] text-slate-400">{b.desc}</span>
+                      <div className="flex items-center justify-between w-full">
+                        <span className="text-xs font-bold leading-tight">{b.label}</span>
+                        <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">{b.code}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 mt-1">{b.desc}</span>
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Dynamic Branch Condition Explanation Box */}
+              <div className="rounded-lg border border-indigo-500/20 bg-indigo-500/5 p-2.5 text-xs">
+                <div className="flex items-center gap-1.5 font-semibold text-indigo-300 text-[11px]">
+                  <Building2 size={12} />
+                  <span>Branch Condition Policy</span>
+                </div>
+                <p className="text-slate-400 text-[11px] leading-relaxed mt-1">
+                  {watchedBranch === 'All Branches'
+                    ? '🌐 Global Network: This coupon can be redeemed across all 3 library branches (Downtown Central, Westside Branch, and North Hub) for any student seat or plan checkout.'
+                    : `📍 Branch-Exclusive: This coupon code is strictly restricted to "${watchedBranch}". Students enrolling or renewing seats at other branches cannot apply this code.`}
+                </p>
               </div>
             </div>
 
@@ -317,9 +437,12 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-discount">
-                  {t('FIELD_DISCOUNT_VALUE')} <span className="text-rose-400">*</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-discount">
+                    {t('FIELD_DISCOUNT_VALUE')}
+                  </label>
+                  <span className="text-xs text-rose-400 font-bold">*</span>
+                </div>
                 <div className="relative">
                   <span className="absolute left-3 top-2.5 text-xs font-bold text-slate-400">
                     {form.watch('type') === 'Percent' ? '%' : '₹'}
@@ -346,9 +469,12 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
             {/* Max Uses & Expiry */}
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-max-uses">
-                  {t('FIELD_MAX_USES')} <span className="text-rose-400">*</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-max-uses">
+                    {t('FIELD_MAX_USES')}
+                  </label>
+                  <span className="text-xs text-rose-400 font-bold">*</span>
+                </div>
                 <input
                   id="admin-coupon-max-uses"
                   type="number"
@@ -367,9 +493,12 @@ export function AdminCouponsDialog({ open, isDemoMode, intent, onOpenChange, onC
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-expiry">
-                  {t('FIELD_EXPIRY')} <span className="text-rose-400">*</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300" htmlFor="admin-coupon-expiry">
+                    {t('FIELD_EXPIRY')}
+                  </label>
+                  <span className="text-xs text-rose-400 font-bold">*</span>
+                </div>
                 <input
                   id="admin-coupon-expiry"
                   type="date"

@@ -102,9 +102,21 @@ export default function AdminPlansPage() {
   const plans: AdminPlansPlan[] = isDemoMode ? demoPlans : plansQuery.data ?? [];
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'Active' | 'Inactive'>('all');
+  const [branchFilter, setBranchFilter] = useState<string>('all');
 
   const visiblePlans = useMemo(() => {
     return plans.filter((plan) => {
+      if (branchFilter !== 'all') {
+        const pBranch = (plan.branchApplicability || 'All Branches').toLowerCase();
+        const bTarget = branchFilter.toLowerCase();
+        if (bTarget === 'all branches') {
+          if (pBranch !== 'all branches') return false;
+        } else {
+          if (!pBranch.includes(bTarget) && !bTarget.includes(pBranch) && pBranch !== 'all branches') {
+            return false;
+          }
+        }
+      }
       if (!isAllBranches && selectedBranch) {
         if (plan.branchApplicability && plan.branchApplicability !== 'All Branches') {
           const bName = plan.branchApplicability.toLowerCase();
@@ -124,7 +136,7 @@ export default function AdminPlansPage() {
       }
       return true;
     });
-  }, [plans, selectedBranch, isAllBranches, statusFilter, searchQuery]);
+  }, [plans, selectedBranch, isAllBranches, statusFilter, branchFilter, searchQuery]);
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -422,6 +434,23 @@ export default function AdminPlansPage() {
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {/* Branch Filter */}
+          <div className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
+            <Building2 size={13} className="text-indigo-400 ml-2" />
+            <select
+              value={branchFilter}
+              onChange={(e) => setBranchFilter(e.target.value)}
+              className="bg-transparent text-xs text-white focus:outline-none pr-2 py-1 cursor-pointer font-medium"
+              aria-label="Filter plans by branch"
+            >
+              <option value="all" className="bg-slate-900 text-white">All Branches (Global & Local)</option>
+              <option value="All Branches" className="bg-slate-900 text-white">Global Network Only</option>
+              <option value="Downtown Central" className="bg-slate-900 text-white">Downtown Central</option>
+              <option value="Westside Branch" className="bg-slate-900 text-white">Westside Branch</option>
+              <option value="North Hub" className="bg-slate-900 text-white">North Hub</option>
+            </select>
+          </div>
+
           <div className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
             {(['all', 'Active', 'Inactive'] as const).map((status) => (
               <button
@@ -523,8 +552,16 @@ export default function AdminPlansPage() {
                     <span data-testid="admin_plans-AdminMembersPlansMain-state-004" className="inline-flex items-center gap-1 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-medium text-indigo-400">
                       👥 {plan.subscribers} {t('ACTIVE_SUBSCRIBERS')}
                     </span>
-                    <span className="inline-flex items-center gap-1 rounded-full border border-slate-700/60 bg-slate-800/60 px-2.5 py-0.5 text-[11px] font-medium text-slate-300">
-                      <Building2 size={11} className="text-indigo-400 shrink-0" />
+                    <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
+                      !plan.branchApplicability || plan.branchApplicability === 'All Branches'
+                        ? 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
+                        : plan.branchApplicability.includes('Downtown')
+                        ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                        : plan.branchApplicability.includes('Westside')
+                        ? 'border-amber-500/30 bg-amber-500/10 text-amber-300'
+                        : 'border-indigo-500/30 bg-indigo-500/10 text-indigo-300'
+                    }`}>
+                      <Building2 size={11} className="shrink-0" />
                       <span>{plan.branchApplicability || 'All Branches'}</span>
                     </span>
                   </div>

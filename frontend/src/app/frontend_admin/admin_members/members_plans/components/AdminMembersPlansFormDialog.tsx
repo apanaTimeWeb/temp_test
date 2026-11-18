@@ -33,10 +33,21 @@ const TENURE_PRESETS = [
   { label: '1 Year (365d)', duration: '1 Year', days: '365' },
 ];
 
+const QUICK_FACILITIES = [
+  'Reserved Personal Desk',
+  'High-Speed Fiber Wi-Fi',
+  'Personal Locker Included',
+  'AC Silent Study Zone',
+  'Dedicated Power Socket',
+  'RO Water & Pantry Access',
+  'Biometric & 24/7 CCTV Security',
+  'Discussion Room Access',
+];
+
 export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose, onValidated }: AdminPlansFormDialogProps) {
   const t = useTranslations('ADMIN_PLANS');
   const router = useRouter();
-  const { branches } = useAdminBranch();
+  const { branches, selectedBranch, isAllBranches } = useAdminBranch();
   const dialogRef = useRef<HTMLDivElement>(null);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
@@ -47,6 +58,25 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
   });
 
   const selectedBranchApplicability = watch('branchApplicability') || 'All Branches';
+  const watchedName = watch('name');
+  const watchedPrice = watch('price');
+  const watchedDurationDays = watch('durationDays');
+  const watchedFeatures = watch('features') || '';
+
+  const parsedFeatures = useMemo(() => {
+    return watchedFeatures.split('\n').map((f) => f.trim()).filter(Boolean);
+  }, [watchedFeatures]);
+
+  const toggleFeatureChip = (facility: string) => {
+    const lines = watchedFeatures.split('\n').map((f) => f.trim()).filter(Boolean);
+    let next: string[];
+    if (lines.includes(facility)) {
+      next = lines.filter((l) => l !== facility);
+    } else {
+      next = [...lines, facility];
+    }
+    setValue('features', next.join('\n'), { shouldDirty: true, shouldValidate: true });
+  };
 
   const handleBlockedNavigation = useCallback((href: string) => { setPendingNavigation(href); setConfirmDiscard(true); }, []);
   useAdminMembersPlansUnsavedChangesGuard(isDirty && open, isSubmitting, handleBlockedNavigation);
@@ -71,30 +101,49 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
 
   useEffect(() => {
     if (!open) return;
+    const initialBranch = editingPlan
+      ? (editingPlan.branchApplicability || 'All Branches')
+      : (!isAllBranches && selectedBranch ? selectedBranch.name : 'All Branches');
+
     reset(editingPlan ? {
       name: editingPlan.name,
       price: String(editingPlan.price),
       duration: editingPlan.duration,
       durationDays: String(editingPlan.durationDays),
       features: editingPlan.features.join('\n'),
-      branchApplicability: editingPlan.branchApplicability || 'All Branches',
+      branchApplicability: initialBranch,
       morningRate: '',
       afternoonRate: '',
       eveningRate: '',
       nightRate: '',
       fullDayRate: '',
       multiShiftDiscount: '10',
-    } : EMPTY);
-  }, [editingPlan, open, reset]);
+    } : {
+      ...EMPTY,
+      branchApplicability: initialBranch,
+    });
+  }, [editingPlan, open, reset, isAllBranches, selectedBranch]);
 
   if (!open) return null;
 
   const branchOptionsList = [
-    { value: 'All Branches', title: 'All Branches', subtitle: 'Global Network-Wide' },
+    {
+      value: 'All Branches',
+      title: 'All Branches (Network-Wide)',
+      subtitle: 'Universal across all 3 branches',
+      tag: 'Global',
+      tagColor: 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300',
+    },
     ...branches.map((b) => ({
       value: b.name,
       title: b.name,
-      subtitle: `${b.code} · ${b.city}`,
+      subtitle: `${b.code} · ${b.city || 'Campus Branch'}`,
+      tag: 'Branch-Exclusive',
+      tagColor: b.name.includes('Downtown')
+        ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+        : b.name.includes('Westside')
+        ? 'border-amber-500/30 bg-amber-500/10 text-amber-300'
+        : 'border-indigo-500/30 bg-indigo-500/10 text-indigo-300',
     })),
   ];
 
@@ -165,32 +214,47 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
                     key={branchOpt.value}
                     type="button"
                     onClick={() => setValue('branchApplicability', branchOpt.value, { shouldDirty: true })}
-                    className={`flex items-start gap-3 rounded-xl border p-3 text-left transition-all ${
+                    className={`flex items-start justify-between gap-3 rounded-xl border p-3 text-left transition-all ${
                       isSelected
                         ? 'border-indigo-500 bg-indigo-500/15 shadow-sm shadow-indigo-500/20'
                         : 'border-slate-800 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-900'
                     }`}
                   >
-                    <div className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${
-                      isSelected ? 'border-indigo-500 bg-indigo-500 text-white' : 'border-slate-600'
-                    }`}>
-                      {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                    <div className="flex items-start gap-2.5 min-w-0">
+                      <div className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${
+                        isSelected ? 'border-indigo-500 bg-indigo-500 text-white' : 'border-slate-600'
+                      }`}>
+                        {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                      </div>
+                      <div className="min-w-0">
+                        <p className={`text-xs font-bold leading-tight truncate ${isSelected ? 'text-indigo-200' : 'text-slate-200'}`}>
+                          {branchOpt.title}
+                        </p>
+                        <p className="text-[10px] text-slate-400 mt-0.5">{branchOpt.subtitle}</p>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className={`text-xs font-bold leading-tight ${isSelected ? 'text-indigo-200' : 'text-slate-200'}`}>
-                        {branchOpt.title}
-                      </p>
-                      <p className="text-[10px] text-slate-400 mt-0.5">{branchOpt.subtitle}</p>
-                    </div>
+                    <span className={`shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${branchOpt.tagColor}`}>
+                      {branchOpt.tag}
+                    </span>
                   </button>
                 );
               })}
             </div>
-            <p className="mt-2 text-[11px] text-slate-400">
-              {selectedBranchApplicability === 'All Branches'
-                ? '🌐 This plan is available globally across Downtown Central, Westside Branch, and North Hub.'
-                : `📍 This plan is exclusive to ${selectedBranchApplicability}. Other branches cannot enroll students in this plan.`}
-            </p>
+
+            <div className="mt-3 rounded-lg border border-slate-800 bg-slate-900/80 p-3 text-xs flex items-start gap-2.5">
+              <Building2 size={16} className="text-indigo-400 shrink-0 mt-0.5" />
+              <div className="text-[11px] leading-relaxed">
+                {selectedBranchApplicability === 'All Branches' ? (
+                  <span className="text-slate-300">
+                    <strong className="text-cyan-400 font-semibold">🌐 Global Network Condition:</strong> This plan will be available across all 3 branches (Downtown Central, Westside Branch, and North Hub) with uniform pricing.
+                  </span>
+                ) : (
+                  <span className="text-slate-300">
+                    <strong className="text-emerald-400 font-semibold">📍 Branch-Exclusive Condition:</strong> This plan is customized for <strong className="text-white">{selectedBranchApplicability}</strong>. Because rent, seat infrastructure, and amenities differ between branches, students of other branches cannot purchase or use this plan.
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Price & Tenure Presets */}
@@ -338,11 +402,36 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
             </div>
           </div>
 
-          {/* Features */}
+          {/* Features with 1-Click Quick Chips */}
           <div>
-            <label htmlFor="admin-plan-features" className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-              {t('FEATURES_HELP')} (One per line)
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label htmlFor="admin-plan-features" className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                {t('FEATURES_HELP')} (One per line)
+              </label>
+              <span className="text-[11px] text-slate-400">Click chips below to add</span>
+            </div>
+
+            <div className="flex flex-wrap gap-1.5 mb-2.5">
+              {QUICK_FACILITIES.map((facility) => {
+                const isSelected = parsedFeatures.includes(facility);
+                return (
+                  <button
+                    key={facility}
+                    type="button"
+                    onClick={() => toggleFeatureChip(facility)}
+                    className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-[11px] font-medium transition-all ${
+                      isSelected
+                        ? 'border border-emerald-500/40 bg-emerald-500/15 text-emerald-300'
+                        : 'border border-slate-700/80 bg-slate-800/80 text-slate-300 hover:bg-slate-700 hover:text-white'
+                    }`}
+                  >
+                    {isSelected ? <CheckCircle size={11} className="text-emerald-400" /> : <span className="text-slate-500">+</span>}
+                    {facility}
+                  </button>
+                );
+              })}
+            </div>
+
             <textarea
               id="admin-plan-features"
               className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none leading-relaxed"
@@ -352,6 +441,48 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
               placeholder={t('FEATURES_PLACEHOLDER')}
             />
             {errors.features && <p className="mt-1 text-xs text-rose-400" role="alert">{getValidationMessage(errors.features.message)}</p>}
+          </div>
+
+          {/* Live Card Preview Box */}
+          <div className="rounded-xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/30 via-slate-900 to-slate-950 p-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
+                <Sparkles size={13} /> Live Catalog Preview
+              </span>
+              <span className="text-[10px] text-slate-400">Student & Manager Interface</span>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-4 shadow-md">
+              <div className="flex items-start justify-between gap-2">
+                <h4 className="text-sm font-bold text-white">{watchedName || 'Plan Name Preview'}</h4>
+                <span className="rounded-full px-2 py-0.5 text-[10px] font-semibold border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                  Active
+                </span>
+              </div>
+              <div className="mt-2 flex items-baseline gap-1">
+                <span className="text-xl font-extrabold text-white">
+                  ₹{watchedPrice && !Number.isNaN(Number(watchedPrice)) ? Number(watchedPrice).toLocaleString('en-IN') : '0'}
+                </span>
+                <span className="text-xs text-slate-400">/ {watchedDurationDays || '30'} Days</span>
+              </div>
+              <div className="mt-2 flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-800 px-2.5 py-0.5 text-[10px] font-medium text-slate-300">
+                  <Building2 size={11} className="text-indigo-400" />
+                  {selectedBranchApplicability}
+                </span>
+              </div>
+              {parsedFeatures.length > 0 && (
+                <div className="mt-3 border-t border-slate-800/80 pt-2 flex flex-wrap gap-1.5">
+                  {parsedFeatures.slice(0, 3).map((f) => (
+                    <span key={f} className="inline-flex items-center gap-1 text-[10px] text-slate-300 bg-slate-800/60 px-2 py-0.5 rounded">
+                      <CheckCircle size={10} className="text-emerald-400" /> {f}
+                    </span>
+                  ))}
+                  {parsedFeatures.length > 3 && (
+                    <span className="text-[10px] text-slate-500 self-center">+{parsedFeatures.length - 3} more</span>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Action Buttons */}

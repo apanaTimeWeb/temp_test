@@ -18,7 +18,7 @@ const DEMO_STUDENT_NAMES = [
 const SHIFT_TYPES = ['Morning', 'Afternoon', 'Evening', 'Night', 'Full Day'];
 const PLANS = ['Full Day Dedicated Desk', 'Flexi Shift Half Day', 'Night Owl Special', 'Weekend Warrior Pass'];
 
-function generateFallbackSeatMatrix(): AdminSeatMatrixSeatMatrixViewModel[] {
+export function generateFallbackSeatMatrix(): AdminSeatMatrixSeatMatrixViewModel[] {
   const seats: AdminSeatMatrixSeatMatrixViewModel[] = [];
 
   // Downtown Central (BR-001) - 24 seats
@@ -116,6 +116,9 @@ export function useAdminSeatMatrixSeatMatrix() {
   return useQuery({
     queryKey: ADMIN_SEAT_MATRIX_QUERY_KEYS.list({ resource: 'seat-matrix', demo: isDemo }),
     queryFn: async (): Promise<AdminSeatMatrixSeatMatrixViewModel[]> => {
+      if (isDemo) {
+        return generateFallbackSeatMatrix();
+      }
       try {
         const records = await fetchAdminSeatMatrixSeatMatrix();
         if (!records || records.length === 0) {

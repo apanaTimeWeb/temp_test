@@ -9,6 +9,7 @@ import useEnquiriesPage from '@/app/frontend_admin/admin_members/members_enquiri
 import AdminEnquiriesTable from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesTable';
 import AdminEnquiriesEnquiryKanbanCard from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminEnquiriesEnquiryKanbanCard';
 import AdminMembersEnquiriesBulkWhatsAppModal from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesBulkWhatsAppModal';
+import AdminMembersEnquiriesDetailModal from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesDetailModal';
 
 import AdminEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import { buildAdminEnquiriesCsv, downloadAdminEnquiriesExcel, printAdminEnquiriesRoster } from '@/app/frontend_admin/admin_members/members_enquiries/utils/AdminMembersEnquiriesTextUtils';
@@ -26,6 +27,7 @@ export default function AdminEnquiriesPageView() {
   const [customEndDate, setCustomEndDate] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isBulkWhatsAppOpen, setIsBulkWhatsAppOpen] = useState(false);
+  const [selectedEnquiryModal, setSelectedEnquiryModal] = useState<Enquiry | null>(null);
 
   const handleDeleteSelected = () => {
     if (selectedIds.length === 0) return;
@@ -340,7 +342,7 @@ export default function AdminEnquiriesPageView() {
                           </div>
                         ) : (
                           cards.map((enq) => (
-                            <AdminEnquiriesEnquiryKanbanCard key={enq.id} enq={enq} colClass={col.cardClass} onClick={() => router.push(ADMIN_ENQUIRIES_URLS.ENQUIRY_DETAIL(enq.id))} />
+                            <AdminEnquiriesEnquiryKanbanCard key={enq.id} enq={enq} colClass={col.cardClass} onClick={() => setSelectedEnquiryModal(enq)} />
                           ))
                         )}
                       </div>
@@ -360,13 +362,24 @@ export default function AdminEnquiriesPageView() {
               selectedIds={selectedIds}
               onToggleSelectOne={toggleSelectOne}
               onToggleSelectAll={toggleSelectAll}
-              onSelectEnquiry={(enquiry) => router.push(ADMIN_ENQUIRIES_URLS.ENQUIRY_DETAIL(enquiry.id))}
+              onSelectEnquiry={(enquiry) => setSelectedEnquiryModal(enquiry)}
             />
           ) : (
             <p role="status" className="mt-12 rounded-lg border border-warning-bg bg-warning-bg p-4 text-warning-text">{t('TABLE_UNAVAILABLE')}</p>
           )
         )}
       </div>
+
+      {/* Executive Quick-View Lead Dossier Modal */}
+      <AdminMembersEnquiriesDetailModal
+        isOpen={Boolean(selectedEnquiryModal)}
+        onClose={() => setSelectedEnquiryModal(null)}
+        enquiry={selectedEnquiryModal}
+        onNavigateFullPage={(id) => {
+          setSelectedEnquiryModal(null);
+          router.push(ADMIN_ENQUIRIES_URLS.ENQUIRY_DETAIL(id));
+        }}
+      />
 
       {/* Bulk WhatsApp Queue Dialog */}
       <AdminMembersEnquiriesBulkWhatsAppModal
