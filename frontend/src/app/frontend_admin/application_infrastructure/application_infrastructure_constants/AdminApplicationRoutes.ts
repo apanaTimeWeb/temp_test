@@ -21,7 +21,6 @@ export const ADMIN_ROUTES = {
   SHIFTS_MANAGEMENT: '/admin/admin_seats_shifts_lockers/shifts_management',
   SHIFTS_GAP: '/admin/admin_seats_shifts_lockers/shifts_gap',
   LOCKERS_MATRIX: '/admin/admin_seats_shifts_lockers/lockers_matrix',
-  FINANCE_DASHBOARD: '/admin/admin_finance/finance_dashboard',
   FINANCE_PAYMENTS: '/admin/admin_finance/finance_payments',
   FINANCE_REFUNDS: '/admin/admin_finance/finance_refunds',
   FINANCE_REFERRALS: '/admin/admin_finance/finance_referrals',

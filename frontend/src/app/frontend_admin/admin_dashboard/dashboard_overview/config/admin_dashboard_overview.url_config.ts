@@ -5,7 +5,7 @@ export const ADMIN_DASHBOARD_OVERVIEW_ROUTES = {
   ROOT: '/admin/admin_dashboard/dashboard_overview',
   MEMBERS_DIRECTORY: ADMIN_ROUTES.MEMBERS_DIRECTORY,
   SEATS_MATRIX: ADMIN_ROUTES.SEATS_MATRIX,
-  FINANCE_DASHBOARD: ADMIN_ROUTES.FINANCE_DASHBOARD,
+  FINANCE_PAYMENTS: ADMIN_ROUTES.FINANCE_PAYMENTS,
 } as const;
 
 /** No dashboard-overview-specific API operations are verified by supplied source contracts. */
