@@ -7,10 +7,12 @@ export interface AdminAccountingFinancialReportPeriodRow {
   expenseMinor: number;
 }
 
-export type AdminAccountingFinancialReportPeriod = 'monthly' | 'quarterly' | 'yearly';
+export type AdminAccountingFinancialReportPeriod = 'monthly' | 'quarterly' | 'yearly' | 'custom';
 
 export interface AdminAccountsFinancialReportsDashboardProps {
   period: AdminAccountingFinancialReportPeriod;
+  customStartDate?: string;
+  customEndDate?: string;
 }
 
 export interface AdminAccountsFinancialReportsKpiCardsProps {

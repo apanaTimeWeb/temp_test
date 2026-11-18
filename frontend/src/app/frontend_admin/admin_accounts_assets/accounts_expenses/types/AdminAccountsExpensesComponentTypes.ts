@@ -29,11 +29,21 @@ export interface AdminAccountsExpensesFilterSectionProps {
   onChange: (value: AdminAccountsExpensesCategoryFilter) => void;
   onStatusChange?: (status: AdminAccountsExpensesStatusFilter) => void;
   pendingCount?: number;
+  timeRange?: 'all' | 'today' | 'this_week' | 'this_month' | 'last_month' | 'custom';
+  onTimeRangeChange?: (range: 'all' | 'today' | 'this_week' | 'this_month' | 'last_month' | 'custom') => void;
+  customStartDate?: string;
+  onCustomStartDateChange?: (val: string) => void;
+  customEndDate?: string;
+  onCustomEndDateChange?: (val: string) => void;
+  onExportCsv?: () => void;
+  onExportExcel?: () => void;
 }
 
 export interface AdminAccountsExpensesHeaderSectionProps {
   onAddExpense: () => void;
   canMutate: boolean;
+  onExportCsv?: () => void;
+  onExportExcel?: () => void;
 }
 
 export interface AdminAccountsExpensesKpiSectionProps {

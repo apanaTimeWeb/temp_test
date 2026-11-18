@@ -33,7 +33,7 @@ import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 
 // RESPONSIBILITY: Owns the expense ledger route state, approval workflow, and list/add view orchestration.
 
-type AdminExpenseTimeRange = 'all' | 'today' | 'this_week' | 'this_month' | 'custom';
+type AdminExpenseTimeRange = 'all' | 'today' | 'this_week' | 'this_month' | 'last_month' | 'custom';
 
 /** Owns transient demo ledger and approval state. Live mutations remain blocked without a verified API contract. */
 export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccountsExpensesRouteView }) {
@@ -147,6 +147,11 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
         if (timeRange === 'today') { const end = new Date(today); end.setHours(23,59,59,999); if (!(d >= today && d <= end)) return false; }
         else if (timeRange === 'this_week') { const ws = new Date(today); ws.setDate(today.getDate() - today.getDay()); if (d < ws) return false; }
         else if (timeRange === 'this_month') { const ms = new Date(today.getFullYear(), today.getMonth(), 1); if (d < ms) return false; }
+        else if (timeRange === 'last_month') {
+          const lms = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+          const lme = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999);
+          if (d < lms || d > lme) return false;
+        }
         else if (timeRange === 'custom') {
           if (customStartDate && d < new Date(customStartDate)) return false;
           if (customEndDate) { const ce = new Date(customEndDate); ce.setHours(23,59,59,999); if (d > ce) return false; }
@@ -158,8 +163,126 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
   }, [expenses, isAllBranches, selectedBranch, catFilter, statusFilter, searchQuery, timeRange, customStartDate, customEndDate]);
 
   const timeRangeLabel = useMemo(() => {
-    return timeRange === 'all' ? 'All Time' : timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'this_month' ? 'This Month' : 'Custom Range';
+    return timeRange === 'all'
+      ? 'All Time'
+      : timeRange === 'today'
+      ? 'Today'
+      : timeRange === 'this_week'
+      ? 'This Week'
+      : timeRange === 'this_month'
+      ? 'This Month'
+      : timeRange === 'last_month'
+      ? 'Last Month'
+      : 'Custom Range';
   }, [timeRange]);
+
+  const handleExportCsv = useCallback(() => {
+    const headers = [
+      'ID',
+      'Date',
+      'Description',
+      'Category',
+      'Amount (INR)',
+      'Payment Method',
+      'Paid By',
+      'Branch',
+      'Status',
+      'Approved By',
+      'Approved Date',
+      'Voucher / Receipt Ref',
+    ];
+    const rows = visibleExpenses.map((e) => [
+      e.id,
+      e.date ?? '',
+      `"${(e.description ?? '').replace(/"/g, '""')}"`,
+      `"${e.category ?? ''}"`,
+      e.amount ?? 0,
+      `"${e.paymentMethod ?? 'CASH'}"`,
+      `"${(e.paidBy ?? '').replace(/"/g, '""')}"`,
+      `"${(e.branchName ?? '').replace(/"/g, '""')}"`,
+      e.status ?? 'APPROVED',
+      `"${(e.approvedBy ?? '').replace(/"/g, '""')}"`,
+      e.approvedAt ? e.approvedAt.slice(0, 10) : '',
+      `"${e.receiptNumber ?? `EXP-${e.id}`}"`,
+    ]);
+
+    const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-accounting-expenses-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${visibleExpenses.length} expense records to CSV`);
+  }, [visibleExpenses]);
+
+  const handleExportExcel = useCallback(() => {
+    const headers = [
+      'ID',
+      'Date',
+      'Description',
+      'Category',
+      'Amount (INR)',
+      'Payment Method',
+      'Paid By',
+      'Branch',
+      'Status',
+      'Approved By',
+      'Voucher / Receipt Ref',
+    ];
+    const rows = visibleExpenses.map((e) => [
+      e.id,
+      e.date ?? '',
+      e.description ?? '',
+      e.category ?? '',
+      `₹${e.amount ?? 0}`,
+      e.paymentMethod ?? 'CASH',
+      e.paidBy ?? '',
+      e.branchName ?? '',
+      e.status ?? 'APPROVED',
+      e.approvedBy ?? 'Admin',
+      e.receiptNumber ?? `EXP-${e.id}`,
+    ]);
+
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Expenses</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #4f46e5; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #4338ca; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #f8fafc; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-accounting-expenses-${new Date().toISOString().slice(0, 10)}.xls`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${visibleExpenses.length} expense records to Excel (.xls)`);
+  }, [visibleExpenses]);
 
   return (
     <div className="space-y-6 pb-10">
@@ -174,15 +297,17 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
         <AdminAccountsExpensesHeaderSection
           onAddExpense={() => router.push(ADMIN_ACCOUNTS_EXPENSES_ROUTES.create)}
           canMutate={isDemoMode}
+          onExportCsv={handleExportCsv}
+          onExportExcel={handleExportExcel}
         />
         {/* Time Horizon Pill Bar */}
         <div className="flex flex-wrap items-center gap-2.5 rounded-xl border border-border bg-surface p-2 shadow-sm backdrop-blur-md self-start">
           <div className="flex items-center rounded-lg bg-surface-muted p-1 border border-border">
-            {(['all', 'today', 'this_week', 'this_month', 'custom'] as const).map((r) => (
+            {(['all', 'today', 'this_week', 'this_month', 'last_month', 'custom'] as const).map((r) => (
               <button key={r} type="button" onClick={() => setTimeRange(r)}
                 className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${timeRange === r ? 'bg-primary text-primary-contrast shadow-sm scale-[1.02]' : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'}`}
               >
-                {r === 'all' ? 'All Time' : r === 'today' ? 'Today' : r === 'this_week' ? 'This Week' : r === 'this_month' ? 'This Month' : <><Calendar className="h-3 w-3" />Custom</>}
+                {r === 'all' ? 'All Time' : r === 'today' ? 'Today' : r === 'this_week' ? 'This Week' : r === 'this_month' ? 'This Month' : r === 'last_month' ? 'Last Month' : <><Calendar className="h-3 w-3" />Custom</>}
               </button>
             ))}
           </div>
@@ -205,6 +330,14 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
         onChange={setCatFilter}
         onStatusChange={setStatusFilter}
         pendingCount={pendingCount}
+        timeRange={timeRange}
+        onTimeRangeChange={setTimeRange}
+        customStartDate={customStartDate}
+        onCustomStartDateChange={setCustomStartDate}
+        customEndDate={customEndDate}
+        onCustomEndDateChange={setCustomEndDate}
+        onExportCsv={handleExportCsv}
+        onExportExcel={handleExportExcel}
       />
       <AdminAccountsExpensesTableSection
         expenses={visibleExpenses}

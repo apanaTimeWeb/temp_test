@@ -2,7 +2,8 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, RotateCcw, PlusCircle, ShieldCheck, Building } from 'lucide-react';
+import { Search, RotateCcw, PlusCircle, ShieldCheck, Building, FileSpreadsheet } from 'lucide-react';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminAssetsRegisterState } from '@/app/frontend_admin/admin_accounts_assets/assets_register/hooks/useAdminAssetsRegisterState';
@@ -75,6 +76,121 @@ export function AdminAssetsRegisterPage() {
     setSearchQuery('');
   };
 
+  const handleExportCsv = () => {
+    const headers = [
+      'Asset Code',
+      'Asset Name',
+      'Category',
+      'Branch',
+      'Location',
+      'Purchase Date',
+      'Purchase Cost (INR)',
+      'Book Value (INR)',
+      'Status',
+      'Warranty Expiry',
+      'AMC Status',
+      'AMC Vendor',
+      'AMC Expiry',
+      'Serial Number',
+    ];
+    const rows = filteredRecords.map((r) => [
+      `"${r.assetCode}"`,
+      `"${r.name.replace(/"/g, '""')}"`,
+      r.category,
+      `"${r.branchName}"`,
+      `"${r.locationWithinBranch.replace(/"/g, '""')}"`,
+      r.purchaseDate,
+      (r.purchaseCost / 100).toFixed(2),
+      (r.currentBookValue / 100).toFixed(2),
+      r.status,
+      r.warrantyExpiryDate,
+      r.amcStatus,
+      `"${r.amcVendorName ?? ''}"`,
+      r.amcExpiryDate ?? '',
+      `"${r.serialNumber ?? ''}"`,
+    ]);
+    const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-asset-register-audit-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filteredRecords.length} asset records to CSV`);
+  };
+
+  const handleExportExcel = () => {
+    const headers = [
+      'Asset Code',
+      'Asset Name',
+      'Category',
+      'Branch',
+      'Location',
+      'Purchase Date',
+      'Purchase Cost (INR)',
+      'Book Value (INR)',
+      'Status',
+      'Warranty Expiry',
+      'AMC Status',
+      'AMC Vendor',
+      'AMC Expiry',
+      'Serial Number',
+    ];
+    const rows = filteredRecords.map((r) => [
+      r.assetCode,
+      r.name,
+      r.category,
+      r.branchName,
+      r.locationWithinBranch,
+      r.purchaseDate,
+      `₹${(r.purchaseCost / 100).toLocaleString('en-IN')}`,
+      `₹${(r.currentBookValue / 100).toLocaleString('en-IN')}`,
+      r.status.replace(/_/g, ' '),
+      r.warrantyExpiryDate,
+      r.amcStatus.replace(/_/g, ' '),
+      r.amcVendorName ?? 'None',
+      r.amcExpiryDate ?? '-',
+      r.serialNumber ?? '-',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Assets Audit</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #0284c7; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #0369a1; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #f0f9ff; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-asset-register-audit-${new Date().toISOString().slice(0, 10)}.xls`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filteredRecords.length} asset records to Excel (.xls)`);
+  };
+
   return (
     <div className="space-y-6">
       {/* Demo status alert */}
@@ -88,7 +204,7 @@ export function AdminAssetsRegisterPage() {
         </div>
       )}
 
-      {/* Header section with Add Asset button */}
+      {/* Header section with Export and Add Asset buttons */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-2">
           <div className="inline-flex items-center gap-2 self-start rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-semibold text-text-secondary backdrop-blur-md">
@@ -102,14 +218,34 @@ export function AdminAssetsRegisterPage() {
             {t('SUBTITLE')}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-2 text-xs sm:text-sm font-semibold text-primary-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary self-start sm:self-auto motion-safe:transition-colors shadow-sm"
-        >
-          <PlusCircle className="h-4 w-4" />
-          <span>{t('ACTIONS.ADD_ASSET')}</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-xs sm:text-sm font-semibold text-text-secondary hover:text-foreground hover:bg-card-hover transition-colors shadow-xs"
+            title="Export Asset Register as CSV"
+          >
+            <FileSpreadsheet className="h-4 w-4 text-emerald-500" />
+            <span>Export CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-2 text-xs sm:text-sm font-semibold text-text-secondary hover:text-foreground hover:bg-card-hover transition-colors shadow-xs"
+            title="Export Asset Register as Formatted Excel (.xls)"
+          >
+            <FileSpreadsheet className="h-4 w-4 text-sky-500" />
+            <span>Export Excel</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-2 text-xs sm:text-sm font-semibold text-primary-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors shadow-sm"
+          >
+            <PlusCircle className="h-4 w-4" />
+            <span>{t('ACTIONS.ADD_ASSET')}</span>
+          </button>
+        </div>
       </div>
 
       {/* KPI Cards */}

@@ -19,7 +19,7 @@ const AdminAccountsFinancialReportsApexChart = dynamic(() => import('react-apexc
 export function AdminAccountsFinancialReportsMonthlyChart({ rows, period }: AdminAccountsFinancialReportsMonthlyChartProps) {
   const locale = useLocale();
   const t = useTranslations('ADMIN_ACCOUNTING.FINANCIAL_REPORTS');
-  const periodLabel = period === 'quarterly' ? 'Quarterly Breakdown' : period === 'yearly' ? 'Annual Aggregate' : 'Monthly Trend';
+  const periodLabel = period === 'quarterly' ? 'Quarterly Breakdown' : period === 'yearly' ? 'Annual Aggregate' : period === 'custom' ? 'Custom Range Trend' : 'Monthly Trend';
 
   const options: ApexOptions = {
     chart: { type: 'bar', toolbar: { show: false }, background: 'transparent', animations: { enabled: false } },

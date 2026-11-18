@@ -76,6 +76,7 @@
       "PERIOD_MONTHLY": "Monthly",
       "PERIOD_QUARTERLY": "Quarterly",
       "PERIOD_YEARLY": "Yearly",
+      "PERIOD_CUSTOM": "Custom Range",
       "LIVE_TITLE": "Live reports unavailable",
       "LIVE_UNAVAILABLE": "No verified financial report API contract is supplied. Sample metrics are hidden.",
       "DEMO_PREVIEW": "Demo preview — figures are sample data and are not live financial records.",

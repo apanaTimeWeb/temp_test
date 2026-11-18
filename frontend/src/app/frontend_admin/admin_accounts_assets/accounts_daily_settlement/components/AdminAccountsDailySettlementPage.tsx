@@ -2,7 +2,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, RotateCcw, ShieldCheck } from 'lucide-react';
+import { Search, RotateCcw, ShieldCheck, Download, FileSpreadsheet, Printer } from 'lucide-react';
+import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
@@ -81,6 +82,203 @@ export function AdminAccountsDailySettlementPage() {
   const pendingCount = dateFilteredRecords.filter((r) => r.status === 'PENDING_APPROVAL').length;
   const flaggedCount = dateFilteredRecords.filter((r) => r.status === 'DISCREPANCY_FLAGGED').length;
   const dateModeLabel = dateMode === 'all' ? 'All Dates' : dateMode === 'today' ? 'Today (01 Nov)' : dateMode === 'yesterday' ? 'Yesterday (31 Oct)' : format(new Date(selectedDate), 'dd MMM yyyy');
+
+  const handleExportCsv = () => {
+    const headers = [
+      'Date',
+      'Shift',
+      'Branch',
+      'Manager',
+      'Opening Cash (INR)',
+      'Cash Collected (INR)',
+      'UPI Collected (INR)',
+      'Expenses Paid (INR)',
+      'Expected Closing (INR)',
+      'Actual Handover (INR)',
+      'Variance (INR)',
+      'Status',
+      'Approved By',
+    ];
+    const rows = dateFilteredRecords.map((r) => [
+      r.date,
+      `"${r.shiftName}"`,
+      `"${r.branchName}"`,
+      `"${r.managerName}"`,
+      (r.openingCash / 100).toFixed(2),
+      (r.cashCollected / 100).toFixed(2),
+      (r.upiCollected / 100).toFixed(2),
+      (r.expensesPaid / 100).toFixed(2),
+      (r.expectedClosingCash / 100).toFixed(2),
+      (r.actualHandoverCash / 100).toFixed(2),
+      (r.difference / 100).toFixed(2),
+      r.status,
+      `"${r.approvedBy ?? ''}"`,
+    ]);
+    const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-daily-settlement-history-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${dateFilteredRecords.length} settlement records to CSV`);
+  };
+
+  const handleExportExcel = () => {
+    const headers = [
+      'Date',
+      'Shift',
+      'Branch',
+      'Manager',
+      'Opening Cash (INR)',
+      'Cash Collected (INR)',
+      'UPI Collected (INR)',
+      'Expenses Paid (INR)',
+      'Expected Closing (INR)',
+      'Actual Handover (INR)',
+      'Variance (INR)',
+      'Status',
+      'Approved By',
+    ];
+    const rows = dateFilteredRecords.map((r) => [
+      r.date,
+      r.shiftName,
+      r.branchName,
+      r.managerName,
+      (r.openingCash / 100).toFixed(2),
+      (r.cashCollected / 100).toFixed(2),
+      (r.upiCollected / 100).toFixed(2),
+      (r.expensesPaid / 100).toFixed(2),
+      (r.expectedClosingCash / 100).toFixed(2),
+      (r.actualHandoverCash / 100).toFixed(2),
+      (r.difference / 100).toFixed(2),
+      r.status.replace(/_/g, ' '),
+      r.approvedBy ?? 'Pending Audit',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Settlements</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #047857; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #065f46; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #ecfdf5; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-daily-settlement-history-${new Date().toISOString().slice(0, 10)}.xls`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${dateFilteredRecords.length} settlement records to Excel (.xls)`);
+  };
+
+  const handlePrintDailySettlementSummary = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=850,height=750');
+    if (!printWindow) { window.print(); return; }
+    const totalHandover = dateFilteredRecords.reduce((sum, r) => sum + r.actualHandoverCash, 0);
+    const totalVariance = dateFilteredRecords.reduce((sum, r) => sum + r.difference, 0);
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smart Library - Daily Cash Handover Closing Summary</title>
+          <style>
+            @page { size: landscape; margin: 12mm; }
+            body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; font-size: 11px; }
+            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #059669; padding-bottom: 10px; margin-bottom: 15px; }
+            .title { font-size: 18px; font-weight: 800; color: #047857; text-transform: uppercase; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; }
+            th { background: #047857; color: #fff; padding: 8px 6px; text-align: left; }
+            td { padding: 6px; border-bottom: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background-color: #f8fafc; }
+            .footer { border-top: 1px solid #e2e8f0; margin-top: 25px; padding-top: 10px; font-size: 10px; color: #64748b; display: flex; justify-content: space-between; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="title">SMART LIBRARY NETWORK · DAILY SETTLEMENT REPORT</div>
+              <div style="font-size: 11px; color: #64748b;">Scope: ${selectedBranch ? selectedBranch.name : 'All Branches'} · Filter: ${dateModeLabel}</div>
+            </div>
+            <div style="text-align: right;">
+              <div><strong>Records:</strong> ${dateFilteredRecords.length}</div>
+              <div><strong>Total Handover Cash:</strong> ₹${(totalHandover / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
+              <div><strong>Net Variance:</strong> ₹${(totalVariance / 100).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Shift</th>
+                <th>Branch</th>
+                <th>Manager</th>
+                <th style="text-align: right;">Opening</th>
+                <th style="text-align: right;">Cash In</th>
+                <th style="text-align: right;">UPI In</th>
+                <th style="text-align: right;">Expenses</th>
+                <th style="text-align: right;">Handover</th>
+                <th style="text-align: right;">Variance</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${dateFilteredRecords.map((r) => `
+                <tr>
+                  <td>${r.date}</td>
+                  <td>${r.shiftName}</td>
+                  <td>${r.branchName}</td>
+                  <td>${r.managerName}</td>
+                  <td style="text-align: right; font-family: monospace;">₹${(r.openingCash / 100).toFixed(2)}</td>
+                  <td style="text-align: right; font-family: monospace;">₹${(r.cashCollected / 100).toFixed(2)}</td>
+                  <td style="text-align: right; font-family: monospace;">₹${(r.upiCollected / 100).toFixed(2)}</td>
+                  <td style="text-align: right; font-family: monospace; color:#b91c1c;">₹${(r.expensesPaid / 100).toFixed(2)}</td>
+                  <td style="text-align: right; font-family: monospace; font-weight: bold; color:#047857;">₹${(r.actualHandoverCash / 100).toFixed(2)}</td>
+                  <td style="text-align: right; font-family: monospace; font-weight: bold; color:${r.difference < 0 ? '#b91c1c' : '#047857'};">
+                    ₹${(r.difference / 100).toFixed(2)}
+                  </td>
+                  <td>${r.status.replace(/_/g, ' ')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+
+          <div class="footer">
+            <span>Treasury & Accounts Audit Division · Smart Library Systems</span>
+            <span>Generated on: ${new Date().toLocaleDateString('en-IN')}</span>
+          </div>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
 
   return (
     <div className="space-y-6 pb-10">
@@ -186,17 +384,50 @@ export function AdminAccountsDailySettlementPage() {
             </div>
           </div>
 
-          {/* Reset Filters button */}
-          {(branchFilter !== 'ALL' || tabFilter !== 'ALL' || searchQuery.trim()) && (
-            <button
-              type="button"
-              onClick={handleResetFilters}
-              className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary self-start sm:self-auto"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              <span>{t('FILTERS.CLEAR_FILTERS')}</span>
-            </button>
-          )}
+          <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+            {/* Reset Filters button */}
+            {(branchFilter !== 'ALL' || tabFilter !== 'ALL' || searchQuery.trim() || dateMode !== 'all') && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                <span>{t('FILTERS.CLEAR_FILTERS')}</span>
+              </button>
+            )}
+
+            {/* Export & Print Toolbar */}
+            <div className="flex items-center gap-1.5 pl-2 border-l border-border">
+              <button
+                type="button"
+                onClick={handleExportCsv}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+                title="Export daily settlement history to CSV"
+              >
+                <Download size={13} className="text-emerald-500" />
+                <span>CSV</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleExportExcel}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+                title="Export daily settlement history to Excel (.xls)"
+              >
+                <FileSpreadsheet size={13} className="text-emerald-600 dark:text-emerald-400" />
+                <span>Excel</span>
+              </button>
+              <button
+                type="button"
+                onClick={handlePrintDailySettlementSummary}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+                title="Print daily settlement summary report"
+              >
+                <Printer size={13} className="text-cyan-400" />
+                <span>Print Summary</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -16,7 +16,7 @@ export function AdminAccountsFinancialReportsKpiCards({ totalIncomeMinor, totalE
   const locale = useLocale();
   const t = useTranslations('ADMIN_ACCOUNTING.FINANCIAL_REPORTS');
   const netProfitMinor = totalIncomeMinor - totalExpenseMinor;
-  const periodLabel = period === 'quarterly' ? 'Quarterly' : period === 'yearly' ? 'Yearly' : 'Monthly';
+  const periodLabel = period === 'quarterly' ? 'Quarterly' : period === 'yearly' ? 'Yearly' : period === 'custom' ? 'Custom Range' : 'Monthly';
 
   const incomeSparkline = generateSparkline('total_income');
   const expenseSparkline = generateSparkline('total_expense');

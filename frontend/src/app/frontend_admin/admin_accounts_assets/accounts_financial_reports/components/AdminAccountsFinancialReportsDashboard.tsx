@@ -12,7 +12,11 @@ import type { AdminAccountsFinancialReportsDashboardProps } from '@/app/frontend
 
 
 /** Composes the three report sections while keeping each visual responsibility isolated. */
-export function AdminAccountsFinancialReportsDashboard({ period }: AdminAccountsFinancialReportsDashboardProps) {
+export function AdminAccountsFinancialReportsDashboard({
+  period,
+  customStartDate,
+  customEndDate,
+}: AdminAccountsFinancialReportsDashboardProps) {
   const t = useTranslations('ADMIN_ACCOUNTING.FINANCIAL_REPORTS');
   const rows = useMemo(() => {
     if (period === 'monthly') return ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES;
@@ -28,12 +32,23 @@ export function AdminAccountsFinancialReportsDashboard({ period }: AdminAccounts
         expenseMinor: group.source.reduce((sum, item) => sum + item.expenseMinor, 0),
       }));
     }
+    if (period === 'custom') {
+      const label = customStartDate && customEndDate
+        ? `${customStartDate.slice(5)} ~ ${customEndDate.slice(5)}`
+        : 'Custom Window';
+      // Represents custom window proportional aggregation
+      return [{
+        month: label,
+        incomeMinor: Math.round(ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES.reduce((sum, item) => sum + item.incomeMinor, 0) * 0.45),
+        expenseMinor: Math.round(ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES.reduce((sum, item) => sum + item.expenseMinor, 0) * 0.45),
+      }];
+    }
     return [{
       month: t('PERIOD_TOTAL'),
       incomeMinor: ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES.reduce((sum, item) => sum + item.incomeMinor, 0),
       expenseMinor: ADMIN_ACCOUNTS_FINANCIAL_REPORTS_MONTHLY_FIXTURES.reduce((sum, item) => sum + item.expenseMinor, 0),
     }];
-  }, [period, t]);
+  }, [period, customStartDate, customEndDate, t]);
 
   const totalIncomeMinor = rows.reduce((sum, row) => sum + row.incomeMinor, 0);
   const totalExpenseMinor = rows.reduce((sum, row) => sum + row.expenseMinor, 0);

@@ -1,10 +1,15 @@
 'use client';
 
-import { Plus, Receipt } from 'lucide-react';
+import { Plus, Receipt, FileSpreadsheet } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { AdminAccountsExpensesHeaderSectionProps } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/types/AdminAccountsExpensesComponentTypes';
 
-export function AdminAccountsExpensesHeaderSection({ onAddExpense, canMutate }: AdminAccountsExpensesHeaderSectionProps) {
+export function AdminAccountsExpensesHeaderSection({
+  onAddExpense,
+  canMutate,
+  onExportCsv,
+  onExportExcel,
+}: AdminAccountsExpensesHeaderSectionProps) {
   const t = useTranslations('ADMIN_ACCOUNTING.EXPENSES');
 
   return (
@@ -22,16 +27,40 @@ export function AdminAccountsExpensesHeaderSection({ onAddExpense, canMutate }: 
             Track utility bills, facility maintenance, housekeeping purchases, and branch petty cash approvals
           </p>
         </div>
-        <button
-          type="button"
-          className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-all disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={!canMutate}
-          title={!canMutate ? t('CREATE_BLOCKED') : undefined}
-          onClick={onAddExpense}
-        >
-          <Plus size={16} strokeWidth={2.5} aria-hidden="true" />
-          {t('ADD_EXPENSE')}
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          {onExportCsv && (
+            <button
+              type="button"
+              onClick={onExportCsv}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700/80 transition-all shadow-sm"
+              title="Export Expenses CSV"
+            >
+              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400" />
+              CSV
+            </button>
+          )}
+          {onExportExcel && (
+            <button
+              type="button"
+              onClick={onExportExcel}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-700/80 transition-all shadow-sm"
+              title="Export Formatted Excel Sheet (.xls)"
+            >
+              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-500" />
+              Excel
+            </button>
+          )}
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!canMutate}
+            title={!canMutate ? t('CREATE_BLOCKED') : undefined}
+            onClick={onAddExpense}
+          >
+            <Plus size={16} strokeWidth={2.5} aria-hidden="true" />
+            {t('ADD_EXPENSE')}
+          </button>
+        </div>
       </div>
     </header>
   );
