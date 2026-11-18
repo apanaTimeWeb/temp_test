@@ -33,7 +33,6 @@ export const ADMIN_ROUTES = {
   STAFF_ROLES_PERMISSIONS: '/admin/admin_staff/staff_roles_permissions',
   STAFF_ATTENDANCE: '/admin/admin_staff/staff_attendance',
   STAFF_PAYROLL: '/admin/admin_staff/staff_payroll',
-  SETTINGS_BRANCHES: '/admin/admin_settings/settings_branches',
   SETTINGS_SECURITY: '/admin/admin_settings/settings_security',
   SETTINGS_SUPPORT: '/admin/admin_settings/settings_support',
   SETTINGS_PROFILE: '/admin/admin_settings/settings_profile',

@@ -302,11 +302,6 @@ const canonicalRoutes = [
     "route": "/admin/admin_communication/communication_whatsapp_logs"
   },
   {
-    "submodule": "settings_branches",
-    "domain": "admin_settings",
-    "route": "/admin/admin_settings/settings_branches"
-  },
-  {
     "submodule": "settings_security",
     "domain": "admin_settings",
     "route": "/admin/admin_settings/settings_security"
