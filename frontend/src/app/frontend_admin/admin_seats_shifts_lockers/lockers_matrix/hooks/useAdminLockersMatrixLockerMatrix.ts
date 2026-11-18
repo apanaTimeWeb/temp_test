@@ -13,7 +13,7 @@ const DEMO_STUDENT_NAMES = [
   'Sahil Khan', 'Sanya Singhania', 'Siddharth Jain', 'Sneha Pillai', 'Tanvi Bhatia'
 ];
 
-function generateFallbackLockerMatrix(): AdminLockersLockerMatrixViewModel[] {
+export function generateFallbackLockerMatrix(): AdminLockersLockerMatrixViewModel[] {
   const lockers: AdminLockersLockerMatrixViewModel[] = [];
 
   // Downtown Central (BR-001) - Lockers L-01 to L-24
@@ -103,6 +103,9 @@ export function useAdminLockersLockerMatrix() {
   return useQuery({
     queryKey: ADMIN_LOCKERS_MATRIX_QUERY_KEYS.list({ resource: 'locker-matrix', demo: isDemo }),
     queryFn: async (): Promise<AdminLockersLockerMatrixViewModel[]> => {
+      if (isDemo) {
+        return generateFallbackLockerMatrix();
+      }
       try {
         const records = await fetchAdminLockersLockers();
         if (!records || records.length === 0) {
