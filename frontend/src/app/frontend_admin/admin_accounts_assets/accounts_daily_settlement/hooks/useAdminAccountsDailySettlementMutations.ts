@@ -60,13 +60,26 @@ export function useAdminAccountsDailySettlementMutations(
       setIsSubmitting(true);
       try {
         if (isFrontendDemoModeEnabled()) {
+          const actionText =
+            payload.resolutionAction === 'DEDUCT_SALARY'
+              ? 'Shortage scheduled for salary deduction from manager payroll'
+              : payload.resolutionAction === 'CARRY_FORWARD'
+              ? 'Shortage carried forward to tomorrow opening balance'
+              : payload.resolutionAction === 'IMMEDIATE_DEPOSIT'
+              ? 'Shortage recovered and deposited immediately by manager'
+              : 'Shortage waived as operational library loss';
+
           onRecordUpdated(payload.settlementId, {
             status: 'DISCREPANCY_FLAGGED',
-            adminNotes: `[${payload.discrepancyReason}] ${payload.adminNotes}`,
+            discrepancyReason: payload.discrepancyReason,
+            resolutionAction: payload.resolutionAction ?? 'DEDUCT_SALARY',
+            adminNotes: `[${payload.discrepancyReason}] [Resolution: ${payload.resolutionAction ?? 'DEDUCT_SALARY'}] ${payload.adminNotes}`,
           });
-          toast.success(t('MODAL_FLAG.SUCCESS_TOAST', { id: payload.settlementId }), {
-            id: `settlement-flag-${payload.settlementId}`,
-          });
+
+          toast.success(
+            `Discrepancy flagged for #${payload.settlementId}: ${actionText}`,
+            { id: `settlement-flag-${payload.settlementId}` }
+          );
           return true;
         }
 

@@ -2,7 +2,7 @@
 // Responsibility: Presentational table for Admin Finance Referrals ranking, sorting, and pagination.
 
 import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown, IndianRupee, CheckCircle2 } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, IndianRupee, CheckCircle2, Receipt } from 'lucide-react';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
@@ -23,6 +23,7 @@ interface AdminFinanceReferralsTableProps {
   expandedId: number | null;
   onToggleExpand: (id: number | null) => void;
   onRedeem?: (referrer: AdminFinanceDemoReferrer) => void;
+  onViewVoucher?: (referrer: AdminFinanceDemoReferrer) => void;
 }
 
 export function AdminFinanceReferralsTable({
@@ -39,6 +40,7 @@ export function AdminFinanceReferralsTable({
   expandedId,
   onToggleExpand,
   onRedeem,
+  onViewVoucher,
 }: AdminFinanceReferralsTableProps) {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
 
@@ -150,22 +152,36 @@ export function AdminFinanceReferralsTable({
                   <td className="py-3 px-4 text-right text-body text-text-primary font-mono">{formatAdminFinanceCurrency(r.redeemed)}</td>
                   <td className="py-3 px-4 text-right font-bold text-body text-text-primary font-mono">{formatAdminFinanceCurrency(r.balance)}</td>
                   <td className="py-3 px-4 text-right">
-                    {r.balance > 0 ? (
-                      <button
-                        type="button"
-                        onClick={() => onRedeem && onRedeem(r)}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 transition-colors shadow-xs"
-                        title="Disburse / Redeem Referral Bonus"
-                        aria-label={`Redeem referral bonus for ${r.name}`}
-                      >
-                        <IndianRupee size={12} strokeWidth={2.5} />
-                        <span>Redeem</span>
-                      </button>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] font-medium text-text-muted">
-                        <CheckCircle2 size={11} className="text-emerald-500" /> Settled
-                      </span>
-                    )}
+                    <div className="inline-flex items-center justify-end gap-1.5">
+                      {r.redeemed > 0 && onViewVoucher && (
+                        <button
+                          type="button"
+                          onClick={() => onViewVoucher(r)}
+                          className="inline-flex items-center gap-1 rounded-md border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 px-2 py-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 transition-colors shadow-xs"
+                          title="View & Print Payout Voucher / Credit Note"
+                          aria-label={`View payout voucher for ${r.name}`}
+                        >
+                          <Receipt size={12} strokeWidth={2} />
+                          <span>Voucher</span>
+                        </button>
+                      )}
+                      {r.balance > 0 ? (
+                        <button
+                          type="button"
+                          onClick={() => onRedeem && onRedeem(r)}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 transition-colors shadow-xs"
+                          title="Disburse / Redeem Referral Bonus"
+                          aria-label={`Redeem referral bonus for ${r.name}`}
+                        >
+                          <IndianRupee size={12} strokeWidth={2.5} />
+                          <span>Redeem</span>
+                        </button>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] font-medium text-text-muted">
+                          <CheckCircle2 size={11} className="text-emerald-500" /> Settled
+                        </span>
+                      )}
+                    </div>
                   </td>
                 </tr>
               );

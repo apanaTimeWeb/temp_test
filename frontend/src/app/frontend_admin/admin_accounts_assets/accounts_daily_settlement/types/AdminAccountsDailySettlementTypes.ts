@@ -2,6 +2,8 @@
 
 export type SettlementStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'DISCREPANCY_FLAGGED';
 
+export type DiscrepancyResolutionAction = 'DEDUCT_SALARY' | 'CARRY_FORWARD' | 'IMMEDIATE_DEPOSIT' | 'WRITE_OFF';
+
 export interface DailySettlementRecord {
   id: string;
   date: string;
@@ -22,6 +24,9 @@ export interface DailySettlementRecord {
   managerNotes?: string | null;
   adminNotes?: string | null;
   status: SettlementStatus;
+  discrepancyReason?: string | null;
+  resolutionAction?: DiscrepancyResolutionAction | null;
+  resolutionNotes?: string | null;
   createdAt: string;
   approvedAt?: string | null;
   approvedBy?: string | null;
@@ -56,5 +61,6 @@ export interface FlagDiscrepancyPayload {
   settlementId: string;
   discrepancyReason: string;
   adminNotes: string;
+  resolutionAction?: DiscrepancyResolutionAction;
 }
 

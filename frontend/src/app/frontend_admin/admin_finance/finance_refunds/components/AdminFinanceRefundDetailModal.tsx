@@ -14,6 +14,7 @@ interface AdminFinanceRefundDetailModalProps {
   onApprove?: (refund: AdminFinanceRefund) => void;
   onReject?: (refund: AdminFinanceRefund) => void;
   onMarkProcessed?: (refund: AdminFinanceRefund) => void;
+  onOpenDisburseModal?: (refund: AdminFinanceRefund) => void;
 }
 
 export function AdminFinanceRefundDetailModal({
@@ -23,6 +24,7 @@ export function AdminFinanceRefundDetailModal({
   onApprove,
   onReject,
   onMarkProcessed,
+  onOpenDisburseModal,
 }: AdminFinanceRefundDetailModalProps) {
   if (!isOpen || !refund) return null;
 
@@ -75,10 +77,12 @@ export function AdminFinanceRefundDetailModal({
               <div style="color: #475569;">Branch: ${refund.branchName ?? 'Downtown Central'}</div>
             </div>
             <div class="box">
-              <div class="box-title">Disbursement Channel</div>
+              <div class="box-title">Settlement & Banking Details</div>
+              <div>Receipt No: <strong>${refund.receiptNumber ?? 'RCT-REF-' + refund.id}</strong></div>
+              <div>Transaction UTR: <strong style="font-family: monospace; color: #4338ca;">${refund.transactionUtr ?? 'Pending Transfer'}</strong></div>
               <div>Method: <strong>${refund.paymentMethod ?? 'Direct UPI Transfer'}</strong></div>
               <div>Status: <strong style="text-transform: uppercase;">${refund.status}</strong></div>
-              ${refund.processedDate ? `<div>Settled Date: ${formatDate(refund.processedDate)}</div>` : ''}
+              ${refund.processedDate || refund.disbursedAt ? `<div>Settled Date: ${formatDate(refund.disbursedAt || refund.processedDate!)}</div>` : ''}
             </div>
           </div>
 
@@ -126,6 +130,7 @@ export function AdminFinanceRefundDetailModal({
     const text = `*SMART LIBRARY - SECURITY DEPOSIT REFUND*\n` +
       `---------------------------------\n` +
       `Ref ID: ${refund.id}\n` +
+      (refund.receiptNumber ? `Receipt No: ${refund.receiptNumber}\n` : '') +
       `Student Name: ${refund.studentName}\n` +
       `Smart ID: ${refund.smartId}\n` +
       `Branch: ${refund.branchName ?? 'Smart Library'}\n` +
@@ -135,6 +140,7 @@ export function AdminFinanceRefundDetailModal({
       `*Net Refund: ₹${refund.netRefund.toLocaleString('en-IN')}*\n` +
       `Status: ${refund.status.toUpperCase()}\n` +
       (refund.paymentMethod ? `Disbursement Mode: ${refund.paymentMethod}\n` : '') +
+      (refund.transactionUtr ? `Transaction UTR: ${refund.transactionUtr}\n` : '') +
       `---------------------------------\n` +
       `Smart Library Treasury & Accounts`;
     const waUrl = buildWhatsAppLink(refund.studentPhone, text);
@@ -149,7 +155,7 @@ export function AdminFinanceRefundDetailModal({
     } else if (refund.status === 'rejected') {
       msg = `Dear ${refund.studentName}, your Smart Library deposit refund request has been REJECTED. Reason: ${refund.rejectionReason || 'Pending damages or dues'}. Ref: ${refund.id}.`;
     } else if (refund.status === 'processed') {
-      msg = `Dear ${refund.studentName}, your Smart Library security deposit refund of ₹${refund.netRefund.toLocaleString('en-IN')} has been DISBURSED via ${refund.paymentMethod || 'UPI/Bank'}. Ref: ${refund.id}.`;
+      msg = `Dear ${refund.studentName}, your Smart Library security deposit refund of ₹${refund.netRefund.toLocaleString('en-IN')} has been DISBURSED via ${refund.paymentMethod || 'UPI/Bank'}! Transaction UTR: ${refund.transactionUtr || 'N/A'}. Receipt No: ${refund.receiptNumber || ('RCT-REF-' + refund.id)}.`;
     } else {
       msg = `Dear ${refund.studentName}, your Smart Library deposit refund request (Ref: ${refund.id}) is currently under review by Accounts.`;
     }
@@ -281,6 +287,43 @@ export function AdminFinanceRefundDetailModal({
             </div>
           </div>
 
+          {/* Banking / Transaction UTR & Official Receipt Card */}
+          {refund.status === 'processed' && (
+            <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/10 p-4 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+                  <Receipt className="h-4 w-4 text-emerald-600" />
+                  Official Payout Receipt Issued
+                </span>
+                <span className="font-mono text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                  {refund.receiptNumber ?? `RCT-REF-${new Date().getFullYear()}-${refund.id}`}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-xs pt-1">
+                <div>
+                  <span className="text-text-muted block">Transaction UTR / Ref No</span>
+                  <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                    {refund.transactionUtr ?? '412398572104'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-text-muted block">Disbursement Channel</span>
+                  <span className="font-medium text-text-primary">
+                    {refund.paymentMethod ?? 'UPI Instant Transfer'}
+                  </span>
+                </div>
+                {refund.beneficiaryAccount && (
+                  <div className="col-span-2">
+                    <span className="text-text-muted block">Beneficiary Account / UPI</span>
+                    <span className="font-mono font-medium text-text-primary">
+                      {refund.beneficiaryAccount}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {refund.rejectionReason && (
             <div className="rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-xs text-rose-600 dark:text-rose-400">
               <p className="font-bold">Rejection Reason:</p>
@@ -319,14 +362,23 @@ export function AdminFinanceRefundDetailModal({
                 Reject
               </button>
             )}
-            {refund.status === 'approved' && onMarkProcessed && (
+            {refund.status === 'approved' && (
               <button
                 type="button"
-                onClick={() => { onMarkProcessed(refund); onClose(); }}
+                onClick={() => {
+                  if (onOpenDisburseModal) {
+                    onOpenDisburseModal(refund);
+                    onClose();
+                  } else if (onMarkProcessed) {
+                    onMarkProcessed(refund);
+                    onClose();
+                  }
+                }}
                 className="inline-flex items-center gap-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white px-3.5 py-2 text-xs font-semibold shadow-xs transition-all"
+                title="Record transaction UTR and issue refund receipt"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
-                Mark Disbursed
+                <span>Disburse & Enter UTR</span>
               </button>
             )}
             <button

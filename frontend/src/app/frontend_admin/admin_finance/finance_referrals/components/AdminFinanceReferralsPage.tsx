@@ -19,11 +19,15 @@ import {
   type ReferralsSortField,
 } from '@/app/frontend_admin/admin_finance/finance_referrals/components/AdminFinanceReferralsTable';
 import { AdminFinanceReferralsRedeemModal } from '@/app/frontend_admin/admin_finance/finance_referrals/components/AdminFinanceReferralsRedeemModal';
+import { AdminFinanceReferralPayoutVoucherModal } from '@/app/frontend_admin/admin_finance/finance_referrals/components/AdminFinanceReferralPayoutVoucherModal';
+import type { AdminFinanceDemoReferrer, ReferralPayoutVoucher } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 
 export function AdminFinanceReferralsPage() {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
   const [referrers, setReferrers] = useState<AdminFinanceDemoReferrer[]>(ADMIN_FINANCE_DEMO_REFERRERS);
   const [redeemTarget, setRedeemTarget] = useState<AdminFinanceDemoReferrer | null>(null);
+  const [payoutVouchers, setPayoutVouchers] = useState<ReferralPayoutVoucher[]>([]);
+  const [activeVoucher, setActiveVoucher] = useState<ReferralPayoutVoucher | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
   const [search, setSearch] = useState('');
@@ -68,8 +72,37 @@ export function AdminFinanceReferralsPage() {
     referrerId: number,
     amountMinor: number,
     mode: 'fee_adjustment' | 'cash_upi',
-    notes: string
+    notes: string,
+    voucherMeta?: {
+      subChannel?: string;
+      utrReference?: string;
+      invoiceCreditNote?: string;
+    }
   ) => {
+    const target = referrers.find((r) => r.id === referrerId);
+    const newVoucher: ReferralPayoutVoucher = {
+      voucherId: `PV-REF-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+      referrerId,
+      studentName: target?.name ?? 'Student',
+      smartId: target?.smartId ?? 'SL-000',
+      branch: target?.branch ?? selectedBranch?.name ?? 'Downtown Central',
+      amountMinor,
+      mode,
+      subChannel: voucherMeta?.subChannel,
+      utrReference: voucherMeta?.utrReference,
+      invoiceCreditNote: voucherMeta?.invoiceCreditNote,
+      disbursedAt: new Date().toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      }),
+      authorizedBy: 'Smart Library Treasury & Accounts',
+      notes,
+    };
+
+    setPayoutVouchers((prev) => [newVoucher, ...prev]);
+    setActiveVoucher(newVoucher);
+
     setReferrers((prev) =>
       prev.map((r) => {
         if (r.id === referrerId) {
@@ -80,6 +113,29 @@ export function AdminFinanceReferralsPage() {
         return r;
       })
     );
+  };
+
+  const handleViewVoucher = (referrer: AdminFinanceDemoReferrer) => {
+    const existing = payoutVouchers.find((v) => v.referrerId === referrer.id);
+    if (existing) {
+      setActiveVoucher(existing);
+    } else {
+      const fallbackVoucher: ReferralPayoutVoucher = {
+        voucherId: `PV-REF-${new Date().getFullYear()}-${1000 + referrer.id}`,
+        referrerId: referrer.id,
+        studentName: referrer.name,
+        smartId: referrer.smartId,
+        branch: referrer.branch ?? selectedBranch?.name ?? 'Downtown Central',
+        amountMinor: referrer.redeemed > 0 ? referrer.redeemed : 50000,
+        mode: 'fee_adjustment',
+        subChannel: 'Fee Credit Note',
+        invoiceCreditNote: `CR-REF-${new Date().getFullYear()}-${2000 + referrer.id}`,
+        disbursedAt: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
+        authorizedBy: 'Smart Library Accounts',
+        notes: 'Historical referral reward bonus clearance adjusted against library subscription ledger',
+      };
+      setActiveVoucher(fallbackVoucher);
+    }
   };
 
   const { selectedBranch, isAllBranches } = useAdminBranch();
@@ -436,6 +492,7 @@ export function AdminFinanceReferralsPage() {
         expandedId={expanded}
         onToggleExpand={setExpanded}
         onRedeem={(ref) => setRedeemTarget(ref)}
+        onViewVoucher={handleViewVoucher}
       />
 
       {/* Interactive Referral Bonus Clearance / Disbursement Modal */}
@@ -444,6 +501,13 @@ export function AdminFinanceReferralsPage() {
         isOpen={Boolean(redeemTarget)}
         onClose={() => setRedeemTarget(null)}
         onConfirmRedeem={handleConfirmRedeem}
+      />
+
+      {/* Official Referral Payout Voucher Modal */}
+      <AdminFinanceReferralPayoutVoucherModal
+        voucher={activeVoucher}
+        isOpen={Boolean(activeVoucher)}
+        onClose={() => setActiveVoucher(null)}
       />
     </div>
   );

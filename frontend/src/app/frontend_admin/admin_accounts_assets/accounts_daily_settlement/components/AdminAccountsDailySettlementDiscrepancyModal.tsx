@@ -2,14 +2,14 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { AlertTriangle, Flag } from 'lucide-react';
+import { AlertTriangle, Flag, CreditCard, ArrowRightCircle, CheckCircle2, ShieldAlert } from 'lucide-react';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogHeader from '@/app/frontend_admin/components/ui/dialog/DialogHeader';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogFooter from '@/app/frontend_admin/components/ui/dialog/DialogFooter';
-import type { DailySettlementRecord, FlagDiscrepancyPayload } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
+import type { DailySettlementRecord, FlagDiscrepancyPayload, DiscrepancyResolutionAction } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/types/AdminAccountsDailySettlementTypes';
 import { formatPaiseToRupees, formatSettlementDate } from '@/app/frontend_admin/admin_accounts_assets/accounts_daily_settlement/utils/AdminAccountsDailySettlementFormatters';
 
 interface Props {
@@ -29,12 +29,14 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
 }: Props) {
   const t = useTranslations('ADMIN_ACCOUNTS_DAILY_SETTLEMENT.MODAL_FLAG');
   const [reason, setReason] = useState<string>('CASH_SHORTAGE');
+  const [resolutionAction, setResolutionAction] = useState<DiscrepancyResolutionAction>('DEDUCT_SALARY');
   const [notes, setNotes] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (record) {
       setReason('CASH_SHORTAGE');
+      setResolutionAction('DEDUCT_SALARY');
       setNotes('');
       setError(null);
     }
@@ -52,6 +54,7 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
     const payload: FlagDiscrepancyPayload = {
       settlementId: record.id,
       discrepancyReason: reason,
+      resolutionAction,
       adminNotes: notes.trim(),
     };
 
@@ -122,6 +125,118 @@ export function AdminAccountsDailySettlementDiscrepancyModal({
               <option value="UNAUTHORIZED_EXPENSE">{t('REASONS.UNAUTHORIZED_EXPENSE')}</option>
               <option value="RECORD_MISMATCH">{t('REASONS.RECORD_MISMATCH')}</option>
             </select>
+          </div>
+
+          {/* Recovery / Adjustment Action Strategy */}
+          <div className="space-y-2">
+            <label className="block text-xs font-semibold text-foreground">
+              Recovery & Adjustment Action (शॉर्टेज समाधान) *
+            </label>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <label
+                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 transition-all ${
+                  resolutionAction === 'DEDUCT_SALARY'
+                    ? 'border-destructive bg-destructive/10 ring-1 ring-destructive'
+                    : 'border-border bg-card hover:bg-card-hover'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="resolutionAction"
+                  value="DEDUCT_SALARY"
+                  checked={resolutionAction === 'DEDUCT_SALARY'}
+                  onChange={() => setResolutionAction('DEDUCT_SALARY')}
+                  className="mt-0.5 text-destructive focus:ring-destructive"
+                />
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                    <CreditCard className="h-3.5 w-3.5 text-destructive" />
+                    <span>Deduct from Salary</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-tight">
+                    Debit shortage from {record.managerName}&apos;s next monthly payroll disbursement.
+                  </p>
+                </div>
+              </label>
+
+              <label
+                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 transition-all ${
+                  resolutionAction === 'CARRY_FORWARD'
+                    ? 'border-amber-500 bg-amber-500/10 ring-1 ring-amber-500'
+                    : 'border-border bg-card hover:bg-card-hover'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="resolutionAction"
+                  value="CARRY_FORWARD"
+                  checked={resolutionAction === 'CARRY_FORWARD'}
+                  onChange={() => setResolutionAction('CARRY_FORWARD')}
+                  className="mt-0.5 text-amber-500 focus:ring-amber-500"
+                />
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                    <ArrowRightCircle className="h-3.5 w-3.5 text-amber-500" />
+                    <span>Carry-Forward Deficit</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-tight">
+                    Carry forward liability to tomorrow&apos;s shift opening cash balance.
+                  </p>
+                </div>
+              </label>
+
+              <label
+                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 transition-all ${
+                  resolutionAction === 'IMMEDIATE_DEPOSIT'
+                    ? 'border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500'
+                    : 'border-border bg-card hover:bg-card-hover'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="resolutionAction"
+                  value="IMMEDIATE_DEPOSIT"
+                  checked={resolutionAction === 'IMMEDIATE_DEPOSIT'}
+                  onChange={() => setResolutionAction('IMMEDIATE_DEPOSIT')}
+                  className="mt-0.5 text-emerald-500 focus:ring-emerald-500"
+                />
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                    <span>Immediate Deposit</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-tight">
+                    Manager deposited the cash shortage difference at counter immediately.
+                  </p>
+                </div>
+              </label>
+
+              <label
+                className={`flex cursor-pointer items-start gap-2.5 rounded-lg border p-2.5 transition-all ${
+                  resolutionAction === 'WRITE_OFF'
+                    ? 'border-slate-500 bg-slate-500/10 ring-1 ring-slate-500'
+                    : 'border-border bg-card hover:bg-card-hover'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="resolutionAction"
+                  value="WRITE_OFF"
+                  checked={resolutionAction === 'WRITE_OFF'}
+                  onChange={() => setResolutionAction('WRITE_OFF')}
+                  className="mt-0.5 text-slate-500 focus:ring-slate-500"
+                />
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                    <ShieldAlert className="h-3.5 w-3.5 text-slate-400" />
+                    <span>Waive / Loss Absorption</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground leading-tight">
+                    Waive deficit as authorized operational variance / library expense.
+                  </p>
+                </div>
+              </label>
+            </div>
           </div>
 
           {/* Form Input: Notes */}

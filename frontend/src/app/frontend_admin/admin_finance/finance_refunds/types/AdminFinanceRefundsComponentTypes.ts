@@ -22,6 +22,11 @@ export interface AdminFinanceRefund {
   branchId?: string;
   studentPhone?: string;
   studentEmail?: string;
+  transactionUtr?: string;
+  beneficiaryAccount?: string;
+  receiptNumber?: string;
+  disbursedAt?: string;
+  disbursedBy?: string;
 }
 
 export type AdminFinanceRefundsScenario = "ACTIVE" | "EMPTY" | "SERVER_500" | "TIMEOUT" | "UNAUTHORIZED";

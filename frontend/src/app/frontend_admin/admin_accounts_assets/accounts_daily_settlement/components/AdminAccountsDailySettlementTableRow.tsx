@@ -107,6 +107,13 @@ export function printDailySettlementVoucher(record: DailySettlementRecord) {
                 ${record.difference === 0 ? '₹0.00 (Exact Match)' : formatPaiseToRupees(record.difference)}
               </td>
             </tr>
+            ${record.resolutionAction ? `
+            <tr style="background:#fff1f2;">
+              <td><strong>Discrepancy Resolution Strategy</strong></td>
+              <td style="text-align: right; font-weight: bold; color: #9f1239;">
+                ${record.resolutionAction === 'DEDUCT_SALARY' ? 'Shortage scheduled for deduction from manager monthly payroll' : record.resolutionAction === 'CARRY_FORWARD' ? 'Shortage carried forward to tomorrow opening balance' : record.resolutionAction === 'IMMEDIATE_DEPOSIT' ? 'Difference reimbursed on spot at counter' : 'Waived as operational loss'}
+              </td>
+            </tr>` : ''}
           </tbody>
         </table>
 
@@ -228,10 +235,20 @@ export function AdminAccountsDailySettlementTableRow({
           </span>
         )}
         {record.status === 'DISCREPANCY_FLAGGED' && (
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
-            <AlertTriangle className="h-3 w-3" />
-            <span>{t('STATUS.DISCREPANCY_FLAGGED')}</span>
-          </span>
+          <div className="flex flex-col items-center gap-1">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
+              <AlertTriangle className="h-3 w-3" />
+              <span>{t('STATUS.DISCREPANCY_FLAGGED')}</span>
+            </span>
+            {record.resolutionAction && (
+              <span className="inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700 shadow-xs">
+                {record.resolutionAction === 'DEDUCT_SALARY' && 'Deduct: Salary'}
+                {record.resolutionAction === 'CARRY_FORWARD' && 'Carry Forward'}
+                {record.resolutionAction === 'IMMEDIATE_DEPOSIT' && 'Paid On-Spot'}
+                {record.resolutionAction === 'WRITE_OFF' && 'Waived / Loss'}
+              </span>
+            )}
+          </div>
         )}
       </td>
 

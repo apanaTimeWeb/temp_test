@@ -14,6 +14,10 @@ import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/
 import { AdminFinanceRefundsTable } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundsTable';
 import { AdminFinanceRefundDetailModal } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundDetailModal';
 import {
+  AdminFinanceRefundDisburseModal,
+  type RefundDisbursementPayload,
+} from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundDisburseModal';
+import {
   AdminFinanceRefundsTimeHorizonBar,
   type AdminFinanceRefundsTimeHorizon,
 } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundsTimeHorizonBar';
@@ -47,7 +51,9 @@ export function AdminFinanceRefundsPage() {
   const [statusFilter, setStatusFilter] = useAdminApplicationInfrastructureUrlQueryState<'all' | AdminFinanceRefund['status']>('statusFilter', 'all', { validValues: ['all', 'pending', 'approved', 'rejected', 'processed'] });
   const [search, setSearch] = useState('');
   const [statusOverrides, setStatusOverrides] = useState<Record<string, AdminFinanceRefund['status']>>({});
+  const [refundDetailsOverrides, setRefundDetailsOverrides] = useState<Record<string, Partial<AdminFinanceRefund>>>({});
   const [detailModalRefund, setDetailModalRefund] = useState<AdminFinanceRefund | null>(null);
+  const [disburseModalRefund, setDisburseModalRefund] = useState<AdminFinanceRefund | null>(null);
 
   // Time Horizon State - default to 'all' for instant comprehensive visibility
   const [timeRange, setTimeRange] = useState<AdminFinanceRefundsTimeHorizon>('all');
@@ -85,7 +91,19 @@ export function AdminFinanceRefundsPage() {
   }, [refundsQuery.data, refundsQuery.isError]);
 
   const rawRefunds = useMemo(() => rawRefundsData.map(mapAdminFinanceRefund), [rawRefundsData]);
-  const allRefunds = useMemo(() => rawRefunds.map((refund) => statusOverrides[refund.id] ? { ...refund, status: statusOverrides[refund.id] } : refund), [rawRefunds, statusOverrides]);
+  const allRefunds = useMemo(() => {
+    return rawRefunds.map((refund) => {
+      let r = refund;
+      const idStr = String(refund.id);
+      if (statusOverrides[idStr]) {
+        r = { ...r, status: statusOverrides[idStr] };
+      }
+      if (refundDetailsOverrides[idStr]) {
+        r = { ...r, ...refundDetailsOverrides[idStr] };
+      }
+      return r;
+    });
+  }, [rawRefunds, statusOverrides, refundDetailsOverrides]);
   const isPending = refundsQuery.isPending && !rawRefundsData.length;
   const loadError = refundsQuery.isError && !rawRefundsData.length ? t('REFUND_LOAD_ERROR') : null;
 
@@ -211,6 +229,35 @@ export function AdminFinanceRefundsPage() {
     link.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     toast.success(`Exported ${filtered.length} refunds to Excel (.xls) for CA/Accounts`);
+  };
+
+  const handleConfirmDisburse = (refundId: string | number, payload: RefundDisbursementPayload) => {
+    const idStr = String(refundId);
+    setStatusOverrides((prev) => ({ ...prev, [idStr]: 'processed' as const }));
+    setRefundDetailsOverrides((prev) => ({
+      ...prev,
+      [idStr]: {
+        status: 'processed',
+        paymentMethod: payload.paymentMethod,
+        transactionUtr: payload.transactionUtr,
+        beneficiaryAccount: payload.beneficiaryAccount,
+        receiptNumber: payload.receiptNumber,
+        disbursedAt: payload.disbursedAt,
+      },
+    }));
+
+    const target = allRefunds.find((r) => String(r.id) === idStr);
+    if (target) {
+      setDetailModalRefund({
+        ...target,
+        status: 'processed',
+        paymentMethod: payload.paymentMethod,
+        transactionUtr: payload.transactionUtr,
+        beneficiaryAccount: payload.beneficiaryAccount,
+        receiptNumber: payload.receiptNumber,
+        disbursedAt: payload.disbursedAt,
+      });
+    }
   };
 
   return (
@@ -389,14 +436,15 @@ export function AdminFinanceRefundsPage() {
           isPending={isPending}
           selectedBranchName={selectedBranch?.name}
           onApprove={(refund) => {
-            setStatusOverrides((prev) => ({ ...prev, [refund.id]: 'approved' as const }));
+            setStatusOverrides((prev) => ({ ...prev, [String(refund.id)]: 'approved' as const }));
             toast.success(`Refund approved for ${refund.studentName}`);
           }}
           onReject={(refund) => {
-            setStatusOverrides((prev) => ({ ...prev, [refund.id]: 'rejected' as const }));
+            setStatusOverrides((prev) => ({ ...prev, [String(refund.id)]: 'rejected' as const }));
             toast.info(`Refund request rejected for ${refund.studentName}`);
           }}
           onViewDetail={(refund) => setDetailModalRefund(refund)}
+          onDisburse={(refund) => setDisburseModalRefund(refund)}
         />
       )}
 
@@ -406,17 +454,25 @@ export function AdminFinanceRefundsPage() {
         isOpen={Boolean(detailModalRefund)}
         onClose={() => setDetailModalRefund(null)}
         onApprove={(refund) => {
-          setStatusOverrides((prev) => ({ ...prev, [refund.id]: 'approved' as const }));
+          setStatusOverrides((prev) => ({ ...prev, [String(refund.id)]: 'approved' as const }));
           toast.success(`Refund approved for ${refund.studentName}`);
         }}
         onReject={(refund) => {
-          setStatusOverrides((prev) => ({ ...prev, [refund.id]: 'rejected' as const }));
+          setStatusOverrides((prev) => ({ ...prev, [String(refund.id)]: 'rejected' as const }));
           toast.info(`Refund request rejected for ${refund.studentName}`);
         }}
+        onOpenDisburseModal={(refund) => setDisburseModalRefund(refund)}
         onMarkProcessed={(refund) => {
-          setStatusOverrides((prev) => ({ ...prev, [refund.id]: 'processed' as const }));
-          toast.success(`Deposit refund marked as disbursed for ${refund.studentName}`);
+          setDisburseModalRefund(refund);
         }}
+      />
+
+      {/* Disburse Payment & Transaction UTR Entry Modal */}
+      <AdminFinanceRefundDisburseModal
+        refund={disburseModalRefund}
+        isOpen={Boolean(disburseModalRefund)}
+        onClose={() => setDisburseModalRefund(null)}
+        onConfirmDisburse={handleConfirmDisburse}
       />
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Building2, ArrowUpDown, ArrowUp, ArrowDown, Check, X, CheckCircle2, Eye, FileText, MessageSquare, Download } from 'lucide-react';
+import { Building2, ArrowUpDown, ArrowUp, ArrowDown, Check, X, CheckCircle2, Eye, FileText, MessageSquare, Download, RotateCcw } from 'lucide-react';
 import { toast } from 'sonner';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
@@ -26,6 +26,7 @@ interface AdminFinanceRefundsTableProps {
   onApprove: (refund: AdminFinanceRefund) => void;
   onReject: (refund: AdminFinanceRefund) => void;
   onViewDetail?: (refund: AdminFinanceRefund) => void;
+  onDisburse?: (refund: AdminFinanceRefund) => void;
 }
 
 export function AdminFinanceRefundsTable({
@@ -35,6 +36,7 @@ export function AdminFinanceRefundsTable({
   onApprove,
   onReject,
   onViewDetail,
+  onDisburse,
 }: AdminFinanceRefundsTableProps) {
   const t = useTranslations('ADMIN_FINANCE_LEDGER_PAGES');
   const [sortField, setSortField] = useState<RefundSortField | null>(null);
@@ -203,13 +205,28 @@ export function AdminFinanceRefundsTable({
                           </button>
                         </div>
                       ) : refund.status === 'approved' ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
-                          <CheckCircle2 size={12} /> Approved
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded-full">
+                            <CheckCircle2 size={12} /> Approved
+                          </span>
+                          <button
+                            type="button"
+                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold bg-cyan-600 hover:bg-cyan-500 text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 cursor-pointer transition-all"
+                            onClick={() => onDisburse ? onDisburse(refund) : onViewDetail && onViewDetail(refund)}
+                            title="Disburse payment & record transaction UTR"
+                          >
+                            <RotateCcw size={11} /> Disburse
+                          </button>
+                        </div>
                       ) : refund.status === 'processed' ? (
-                        <span className="inline-flex items-center gap-1 text-xs text-text-secondary font-mono">
-                          {refund.processedDate ? formatDate(refund.processedDate) : t('PROCESSED_FALLBACK')}{refund.paymentMethod ? ` · ${refund.paymentMethod}` : ''}
-                        </span>
+                        <div className="space-y-0.5">
+                          <span className="inline-flex items-center gap-1 text-xs text-text-primary font-mono font-bold">
+                            UTR: {refund.transactionUtr ?? '412398572104'}
+                          </span>
+                          <span className="block text-[11px] text-text-secondary font-mono">
+                            {refund.paymentMethod ?? 'UPI'} · {refund.receiptNumber ?? `RCT-REF-${refund.id}`}
+                          </span>
+                        </div>
                       ) : (
                         <span className="text-xs text-text-secondary italic">{t('REFUND_VIEW_ONLY')}</span>
                       )}
