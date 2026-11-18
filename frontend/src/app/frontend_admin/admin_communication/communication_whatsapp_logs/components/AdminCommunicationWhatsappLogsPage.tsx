@@ -62,32 +62,83 @@ export function AdminCommunicationWhatsappLogsPage() {
   }, [filtered, isAllBranches, selectedBranch]);
 
   const colDefs: readonly DataGridColumn<AdminCommunicationWhatsappLog>[] = [
-    { field: 'dateTime', headerName: t('WHATSAPP_COLUMN_DATETIME'), width: 160, sortable: true, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="text-text-secondary text-sm">{p.value}</span> },
-    { field: 'phone', headerName: t('WHATSAPP_COLUMN_PHONE'), width: 130, sortable: true, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="font-mono text-ui text-text-secondary font-medium">{p.value}</span> },
-    { field: 'student', headerName: t('WHATSAPP_COLUMN_STUDENT'), flex: 1, minWidth: 150, sortable: true, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="font-semibold">{p.value}</span> },
-    { 
-      field: 'type', 
-      headerName: t('WHATSAPP_COLUMN_TYPE'),
+    {
+      field: 'dateTime',
+      headerName: t('WHATSAPP_COLUMN_DATETIME'),
+      width: 170,
+      sortable: true,
+      cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
+        <div className="flex h-full items-center">
+          <span className="font-mono text-xs text-text-secondary">{p.value}</span>
+        </div>
+      ),
+    },
+    {
+      field: 'phone',
+      headerName: t('WHATSAPP_COLUMN_PHONE'),
       width: 130,
       sortable: true,
       cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
-        <span data-testid={`admin_communication-whatsapp-type-${p.data.id}`} className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE[String(p.value ?? '')] ?? 'bg-surface-muted text-text-secondary border-border'} mt-2`}>
-          {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL[String(p.value ?? 'welcome')] ?? 'WHATSAPP_TYPE_UNKNOWN')}
-        </span>
+        <div className="flex h-full items-center">
+          <span className="font-mono text-xs font-semibold text-text-secondary">{p.value}</span>
+        </div>
+      ),
+    },
+    {
+      field: 'student',
+      headerName: t('WHATSAPP_COLUMN_STUDENT'),
+      flex: 1,
+      minWidth: 160,
+      sortable: true,
+      cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
+        <div className="flex h-full items-center">
+          <div>
+            <span className="font-semibold text-text-primary text-sm block">{p.value}</span>
+            {p.data.branch && (
+              <span className="text-[11px] text-text-secondary block font-medium">{p.data.branch}</span>
+            )}
+          </div>
+        </div>
+      ),
+    },
+    { 
+      field: 'type', 
+      headerName: t('WHATSAPP_COLUMN_TYPE'),
+      width: 140,
+      sortable: true,
+      cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
+        <div className="flex h-full items-center">
+          <span data-testid={`admin_communication-whatsapp-type-${p.data.id}`} className={`inline-flex items-center gap-1 rounded-full border border-transparent px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE[String(p.value ?? '')] ?? 'bg-surface-muted text-text-secondary border-border'}`}>
+            {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL[String(p.value ?? 'welcome')] ?? 'WHATSAPP_TYPE_UNKNOWN')}
+          </span>
+        </div>
       )
     },
     { 
       field: 'status', 
       headerName: t('WHATSAPP_COLUMN_STATUS'),
-      width: 120,
+      width: 130,
       sortable: true,
       cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
-        <span data-testid={`admin_communication-whatsapp-status-${p.data.id}`} className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-caption font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE[String(p.value ?? '')] ?? 'bg-surface-muted text-text-secondary border-border'} mt-2`}>
-          {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL[String(p.value ?? '')] ?? 'WHATSAPP_STATUS_UNKNOWN')}
-        </span>
+        <div className="flex h-full items-center">
+          <span data-testid={`admin_communication-whatsapp-status-${p.data.id}`} className={`inline-flex items-center gap-1 rounded-full border border-transparent px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE[String(p.value ?? '')] ?? 'bg-surface-muted text-text-secondary border-border'}`}>
+            {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL[String(p.value ?? '')] ?? 'WHATSAPP_STATUS_UNKNOWN')}
+          </span>
+        </div>
       )
     },
-    { field: 'error', headerName: t('WHATSAPP_COLUMN_ERROR'), width: 180, cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => <span className="text-danger-text text-xs truncate max-w-40 inline-block" title={typeof p.value === 'string' ? p.value : ''}>{typeof p.value === 'string' && p.value.trim() ? p.value : t('WHATSAPP_NO_ERROR')}</span> },
+    {
+      field: 'error',
+      headerName: t('WHATSAPP_COLUMN_ERROR'),
+      width: 180,
+      cellRenderer: (p: DataGridCellParams<AdminCommunicationWhatsappLog>) => (
+        <div className="flex h-full items-center">
+          <span className="text-danger-text text-xs truncate max-w-40 inline-block font-medium" title={typeof p.value === 'string' ? p.value : ''}>
+            {typeof p.value === 'string' && p.value.trim() ? p.value : t('WHATSAPP_NO_ERROR')}
+          </span>
+        </div>
+      ),
+    },
     {
       headerName: t('WHATSAPP_COLUMN_ACTIONS'),
       width: 100,
@@ -119,31 +170,96 @@ export function AdminCommunicationWhatsappLogsPage() {
       {/* View Message Modal */}
       {viewLog && (
         <Dialog open onOpenChange={(nextOpen) => { if (!nextOpen) setViewLog(null); }}>
-          <DialogContent className="relative w-full overflow-y-auto rounded-xl border border-border bg-overlay p-6 shadow-dialog max-w-[560px] space-y-4">
-            <button type="button" aria-label={t('WHATSAPP_CLOSE_DETAILS_ARIA')} data-testid="admin_communication-page-control-004" onClick={() => setViewLog(null)} className="absolute right-4 top-4 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 text-text-secondary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary hover:text-danger-text"><X size={18} strokeWidth={2}/></button>
-            <DialogTitle className="text-lg mb-4 font-bold text-text-primary">{t('WHATSAPP_LOG_DETAILS_TITLE')}</DialogTitle>
-            <DialogDescription className="sr-only">{t('WHATSAPP_LOG_DETAILS_DESCRIPTION')}</DialogDescription>
-            <div data-testid="admin_communication-page-state-005" className="flex-wrap mb-6 flex gap-2">
-              <span data-testid="admin_communication-page-state-006" className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE[viewLog.type] ?? 'bg-surface-muted text-text-secondary border-border'}`}>{t(ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL[viewLog.type] ?? 'WHATSAPP_TYPE_UNKNOWN')}</span>
-              <span data-testid="admin_communication-page-state-007" className={`inline-flex min-h-6 items-center gap-1 rounded-full border border-transparent px-2 py-1 text-badge font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE[viewLog.status] ?? 'bg-surface-muted text-text-secondary border-border'}`}>{t(ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL[viewLog.status] ?? 'WHATSAPP_STATUS_UNKNOWN')}</span>
-            </div>
-            <div className="grid-cols-1 sm:grid-cols-2 grid grid-cols-2 gap-4 mb-6 bg-page p-4 rounded-lg">
-              {([{ label: t('WHATSAPP_TO'), value: viewLog.phone }, { label: t('WHATSAPP_STUDENT'), value: viewLog.student }, { label: t('WHATSAPP_SENT_AT'), value: viewLog.dateTime }]).map(({ label, value }) => (
-                <div key={label} className="rounded-lg border border-border bg-input p-3">
-                  <p className="mb-1 text-xs font-semibold text-text-secondary uppercase tracking-wider">{label}</p>
-                  <p className="text-ui text-text-primary font-medium mt-1">{value}</p>
+          <DialogContent className="relative w-full max-w-[540px] overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 p-0 shadow-2xl">
+            {/* WhatsApp Brand Header */}
+            <div className="bg-[#075e54] px-5 py-4 text-white flex items-center justify-between shadow-md">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600/40 border border-emerald-400/30 text-white font-bold text-base shadow-inner">
+                  {viewLog.student ? viewLog.student.charAt(0).toUpperCase() : 'W'}
                 </div>
-              ))}
+                <div>
+                  <DialogTitle className="text-base font-bold text-white tracking-tight leading-none">
+                    {viewLog.student}
+                  </DialogTitle>
+                  <DialogDescription className="sr-only">{t('WHATSAPP_LOG_DETAILS_DESCRIPTION')}</DialogDescription>
+                  <p className="mt-1 flex items-center gap-2 text-xs text-emerald-100 font-mono">
+                    <span>{viewLog.phone}</span>
+                    {viewLog.branch && (
+                      <span className="rounded bg-black/20 px-1.5 py-0.5 font-sans text-[10px] text-emerald-200">
+                        {viewLog.branch}
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                aria-label={t('WHATSAPP_CLOSE_DETAILS_ARIA')}
+                data-testid="admin_communication-page-control-004"
+                onClick={() => setViewLog(null)}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-emerald-100 hover:bg-white/10 hover:text-white transition-colors"
+              >
+                <X size={18} strokeWidth={2.5}/>
+              </button>
             </div>
-            <div>
-              <p id="admin-communication-message-content-label" className="uppercase tracking-[0.07em] text-text-secondary text-sm font-semibold mb-2 block">{t('WHATSAPP_MESSAGE_CONTENT')}</p>
-              <div aria-labelledby="admin-communication-message-content-label" className="bg-page p-4 rounded-lg border border-border text-sm leading-relaxed text-text-primary whitespace-pre-wrap">{viewLog.message}</div>
+
+            {/* Chat Body & Message Bubble */}
+            <div className="relative min-h-[220px] bg-[#0b141a] p-5 space-y-4">
+              <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+              
+              {/* Date Header Pill */}
+              <div className="relative flex justify-center">
+                <span className="rounded-full bg-slate-800/80 px-3 py-1 text-[11px] font-medium text-slate-400 shadow-sm border border-slate-700/50">
+                  {viewLog.dateTime}
+                </span>
+              </div>
+
+              {/* Sent Bubble */}
+              <div className="relative ml-auto max-w-[85%] rounded-2xl rounded-tr-none bg-[#005c4b] p-3.5 text-white shadow-md">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-100 select-text">
+                  {viewLog.message}
+                </p>
+                <div className="mt-2 flex items-center justify-end gap-1.5 text-[10px] font-mono text-emerald-200/80">
+                  <span>{viewLog.dateTime.split(' ').slice(-2).join(' ')}</span>
+                  {viewLog.status === 'Delivered' ? (
+                    <span className="text-cyan-400 font-bold" title="Delivered">✓✓</span>
+                  ) : viewLog.status === 'Sent' ? (
+                    <span className="text-slate-300 font-bold" title="Sent">✓✓</span>
+                  ) : viewLog.status === 'Failed' ? (
+                    <span className="text-rose-400 font-bold" title="Failed">✕</span>
+                  ) : (
+                    <span className="text-amber-300 font-bold" title="Pending">⏱</span>
+                  )}
+                </div>
+              </div>
             </div>
-            {viewLog.error && (
-              <div className="mt-4 p-3 bg-danger-bg text-danger-text rounded-lg border border-danger-text text-sm font-medium">{t('WHATSAPP_ERROR_PREFIX')} {viewLog.error}</div>
-            )}
-            <div className="flex-wrap gap-2.5 border-border pt-3 mt-6 flex justify-end">
-              <button data-testid="admin_communication-page-control-008" type="button" onClick={() => setViewLog(null)} className="px-4 py-2 bg-page border border-border text-primary rounded hover:bg-surface-hover motion-safe:transition-colors">{t('BUTTON_CLOSE')}</button>
+
+            {/* Meta Information Bar */}
+            <div className="border-t border-slate-800 bg-slate-950/80 p-4 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className={`inline-flex items-center gap-1 rounded-full border border-transparent px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_BADGE[viewLog.type] ?? 'bg-surface-muted text-text-secondary border-border'}`}>
+                    {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_TYPE_LABEL[viewLog.type] ?? 'WHATSAPP_TYPE_UNKNOWN')}
+                  </span>
+                  <span className={`inline-flex items-center gap-1 rounded-full border border-transparent px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap ${ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_BADGE[viewLog.status] ?? 'bg-surface-muted text-text-secondary border-border'}`}>
+                    {t(ADMIN_COMMUNICATION_WHATSAPP_LOG_STATUS_LABEL[viewLog.status] ?? 'WHATSAPP_STATUS_UNKNOWN')}
+                  </span>
+                </div>
+                <button
+                  data-testid="admin_communication-page-control-008"
+                  type="button"
+                  onClick={() => setViewLog(null)}
+                  className="rounded-lg border border-slate-700 bg-slate-800 px-4 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-700 hover:text-white transition-colors"
+                >
+                  {t('BUTTON_CLOSE')}
+                </button>
+              </div>
+
+              {viewLog.error && (
+                <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-2.5 text-xs font-medium text-rose-300">
+                  <span className="font-semibold text-rose-400">{t('WHATSAPP_ERROR_PREFIX')}</span> {viewLog.error}
+                </div>
+              )}
             </div>
           </DialogContent>
         </Dialog>
@@ -247,7 +363,7 @@ export function AdminCommunicationWhatsappLogsPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-card mb-6 p-4 border border-border rounded-lg">
+      <div className="mb-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg backdrop-blur-md">
         <div className="flex flex-wrap gap-4 items-end">
           <div className="flex flex-col">
             <label htmlFor="admin-communication-wa-type-filter" className="block uppercase tracking-[0.07em] text-xs mb-1 font-semibold text-text-secondary">{t('WHATSAPP_FILTER_TYPE')}</label>
@@ -284,21 +400,23 @@ export function AdminCommunicationWhatsappLogsPage() {
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-border bg-card overflow-hidden p-4">
+      <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl backdrop-blur-md">
         {visibleLogs.length === 0 ? (
           <div data-testid="admin_communication-page-state-011" className="gap-3 py-12 flex flex-col items-center justify-center text-center">
             <div data-testid="admin_communication-page-state-012" className="text-4xl mb-4">📱</div>
             <p data-testid="admin_communication-page-state-013" className="text-lg font-semibold text-text-primary">{isDemoMode ? t('WHATSAPP_LOGS_EMPTY_DEMO') : t('WHATSAPP_LOGS_EMPTY_LIVE')}</p>
           </div>
         ) : (
-          <div className="min-w-0 overflow-x-auto rounded-lg border border-border bg-card h-96">
+          <div className="min-w-0 overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/60">
             <DataGrid
               rowData={visibleLogs}
               columnDefs={colDefs}
               rowHeight={56}
               pagination={true}
               pageSize={10}
-             page={urlTablePage0} onPageChange={setUrlTablePage0}/>
+              page={urlTablePage0}
+              onPageChange={setUrlTablePage0}
+            />
           </div>
         )}
       </div>

@@ -2,13 +2,28 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Eye, RefreshCw, CheckCircle, SearchX, Building2, AlertTriangle, ArrowUpDown, ArrowUp, ArrowDown, MessageSquare } from 'lucide-react';
+import {
+  Eye,
+  RefreshCw,
+  CheckCircle,
+  SearchX,
+  Building2,
+  AlertTriangle,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  MessageSquare,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  Tag,
+} from 'lucide-react';
 import { ADMIN_COMMUNICATION_COMPLAINT_STATUS } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
 import AdminCommunicationEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import type { CStatus, Complaint } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
 
-type ComplaintSortField = 'title' | 'branchName' | 'student' | 'status' | 'date' | 'resolvedBy' | 'resolvedDate';
+type ComplaintSortField = 'title' | 'branchName' | 'student' | 'status' | 'date';
 
 interface AdminCommunicationComplaintsTableProps {
   complaints: Complaint[];
@@ -42,7 +57,6 @@ export function AdminCommunicationComplaintsTable({
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [expandedDesc, setExpandedDesc] = useState<string[]>([]);
 
   const toggleSort = (field: ComplaintSortField) => {
     setPage(0);
@@ -53,9 +67,6 @@ export function AdminCommunicationComplaintsTable({
       setSortDirection('asc');
     }
   };
-
-  const toggleDesc = (id: string) =>
-    setExpandedDesc((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   const sortedComplaints = useMemo(() => {
     if (!sortField) return complaints;
@@ -75,31 +86,31 @@ export function AdminCommunicationComplaintsTable({
     [sortedComplaints, page, pageSize]
   );
 
-  const renderSortableHeader = (field: ComplaintSortField, label: string, align: 'left' | 'right' = 'left') => {
+  const renderSortableHeader = (field: ComplaintSortField, label: string, align: 'left' | 'right' | 'center' = 'left') => {
     const isActive = sortField === field;
     return (
       <th
         scope="col"
         aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className={`py-3 px-4 whitespace-nowrap ${align === 'right' ? 'text-right' : 'text-left'}`}
+        className={`py-3 px-4 whitespace-nowrap ${align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'}`}
       >
         <button
           type="button"
           onClick={() => toggleSort(field)}
-          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${
-            align === 'right' ? 'ml-auto' : ''
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 rounded px-1 -mx-1 ${
+            align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''
           }`}
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
           <span>{label}</span>
           {isActive ? (
             sortDirection === 'asc' ? (
-              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowUp className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
             ) : (
-              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowDown className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-slate-500 opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -107,18 +118,26 @@ export function AdminCommunicationComplaintsTable({
   };
 
   if (isLoading) {
-    return <p role="status" aria-live="polite" className="p-8 text-center text-text-secondary">{t('COMPLAINT_LOADING')}</p>;
+    return (
+      <div className="flex min-h-[300px] items-center justify-center rounded-2xl border border-slate-800 bg-slate-900/60 p-8 text-slate-400">
+        <div className="flex items-center gap-2">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
+          <span className="text-sm font-medium">{t('COMPLAINT_LOADING')}</span>
+        </div>
+      </div>
+    );
   }
 
   if (errorMessage) {
     return (
-      <div role="alert" className="p-8 text-center text-danger-text">
-        <p>{t('COMPLAINT_LOAD_ERROR_PREFIX')} {errorMessage}</p>
+      <div role="alert" className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-8 text-center text-rose-400">
+        <p className="text-sm font-semibold">{t('COMPLAINT_LOAD_ERROR_PREFIX')} {errorMessage}</p>
         <button
           type="button"
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-ui font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base mt-3"
+          className="mt-3 inline-flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-rose-500/20 px-4 py-2 text-xs font-semibold text-rose-200 hover:bg-rose-500/30 transition-all"
           onClick={onRetry}
         >
+          <RefreshCw size={14} />
           {t('COMPLAINT_RETRY')}
         </button>
       </div>
@@ -139,134 +158,98 @@ export function AdminCommunicationComplaintsTable({
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-body text-left">
-        <thead>
-          <tr className="h-12 bg-muted/60 uppercase text-xs text-text-secondary font-semibold border-b border-border">
-            <th className="py-3 px-4 text-left">{t('TABLE_NUMBER')}</th>
-            {renderSortableHeader('title', t('TABLE_TITLE'))}
-            {renderSortableHeader('branchName', 'Branch')}
-            {renderSortableHeader('student', t('TABLE_STUDENT'))}
-            <th className="py-3 px-4 text-left">{t('TABLE_DESCRIPTION')}</th>
-            {renderSortableHeader('status', t('TABLE_STATUS'))}
-            {renderSortableHeader('date', t('TABLE_DATE'))}
-            {renderSortableHeader('resolvedBy', t('TABLE_RESOLVED_BY'))}
-            {renderSortableHeader('resolvedDate', t('TABLE_RESOLVED_DATE'))}
-            <th className="py-3 px-4 text-right">{t('TABLE_ACTIONS')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginated.map((c, i) => {
-            const isExpanded = expandedDesc.includes(c.id);
-            const isLong = c.description.length > 60;
-            const globalIndex = page * pageSize + i;
-            return (
-              <tr key={c.id} className="h-12 border-b border-border text-text-primary motion-safe:transition-colors hover:bg-surface-hover even:bg-surface-zebra">
-                <td className="py-3 px-4 font-mono text-ui text-text-secondary">{globalIndex + 1}</td>
-                <td className="py-3 px-4">
-                  <div className="font-semibold text-text-primary">{c.title}</div>
-                  {c.isEscalatedToHq && (
-                    <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-rose-500/15 text-rose-400 border border-rose-500/30 px-2 py-0.5 text-[10px] font-bold">
-                      <AlertTriangle size={10} className="shrink-0" />
-                      Escalated to HQ
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl backdrop-blur-md overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-xs text-left">
+          <thead>
+            <tr className="border-b border-slate-800 bg-slate-950/70 uppercase text-xs text-slate-400 font-semibold tracking-wider">
+              <th className="py-3.5 px-4 text-left w-12">#</th>
+              {renderSortableHeader('title', 'Ticket & Category')}
+              {renderSortableHeader('branchName', 'Branch')}
+              {renderSortableHeader('student', 'Student')}
+              {renderSortableHeader('status', 'Status', 'center')}
+              {renderSortableHeader('date', 'Logged Date')}
+              <th className="py-3.5 px-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800/60 text-slate-200">
+            {paginated.map((c, i) => {
+              const globalIndex = page * pageSize + i;
+              return (
+                <tr key={c.id} className="hover:bg-slate-800/40 transition-colors">
+                  <td className="py-3.5 px-4 font-mono text-slate-500 font-medium">{globalIndex + 1}</td>
+                  <td className="py-3.5 px-4">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-white text-sm hover:text-indigo-300 transition-colors cursor-pointer" onClick={() => onView(c)}>
+                        {c.title}
+                      </span>
+                      {c.isEscalatedToHq && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/15 px-2 py-0.5 text-[10px] font-bold text-rose-400">
+                          <AlertTriangle size={10} className="shrink-0" />
+                          Escalated to HQ
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5 max-w-md">
+                      {c.description}
+                    </p>
+                  </td>
+                  <td className="py-3.5 px-4 whitespace-nowrap">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs font-semibold text-slate-300">
+                      <Building2 size={12} className="text-emerald-400 shrink-0" />
+                      <span>{c.branchName ?? 'Downtown Central'}</span>
                     </span>
-                  )}
-                </td>
-                <td className="py-3 px-4">
-                  <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2 py-0.5 text-xs font-medium text-text-primary whitespace-nowrap">
-                    <Building2 size={12} className="text-primary shrink-0" />
-                    <span>{c.branchName ?? 'Downtown Central'}</span>
-                  </span>
-                </td>
-                <td className="py-3 px-4 text-text-secondary">{c.student}</td>
-                <td className="py-3 px-4">
-                  <span id={`admin-communication-complaint-description-${c.id}`}>{isLong && !isExpanded ? c.description.slice(0, 60) + '…' : c.description}</span>
-                  {isLong && (
-                    <button
-                      type="button"
-                      aria-expanded={isExpanded}
-                      aria-controls={`admin-communication-complaint-description-${c.id}`}
-                      data-testid="admin_communication-page-control-019"
-                      onClick={() => toggleDesc(c.id)}
-                      className="inline-flex min-h-11 items-center rounded-md px-1.5 text-ui text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ml-1"
-                    >
-                      {isExpanded ? t('BUTTON_LESS') : t('BUTTON_MORE')}
-                    </button>
-                  )}
-                </td>
-                <td className="py-3 px-4">{statusBadge(c.status)}</td>
-                <td className="py-3 px-4 text-text-secondary">{formatComplaintDate(c.date)}</td>
-                <td className="py-3 px-4 text-text-secondary">{c.resolvedBy}</td>
-                <td className="py-3 px-4 text-text-secondary">{formatComplaintDate(c.resolvedDate)}</td>
-                <td className="py-3 px-4 text-right">
-                  <div className="flex items-center justify-end gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const msg = encodeURIComponent(`Hello ${c.student}, regarding your ticket "${c.title}" at Smart Library: We are contacting you to assist with your complaint.`);
-                        const popup = window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
-                        if (popup) {
-                          popup.opener = null;
-                        }
-                      }}
-                      className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 motion-safe:transition-all"
-                      title="WhatsApp student"
-                      aria-label={`WhatsApp ${c.student} regarding ${c.title}`}
-                    >
-                      <MessageSquare size={16} strokeWidth={2}/>
-                    </button>
-                    <button
-                      data-testid={`admin_communication-complaint-view-${c.id}`}
-                      onClick={() => onView(c)}
-                      className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-all"
-                      title={t('COMPLAINT_VIEW_ACTION')}
-                      aria-label={t('COMPLAINT_VIEW_ARIA', { title: c.title })}
-                    >
-                      <Eye size={16} strokeWidth={2}/>
-                    </button>
-                    {c.status === 'Open' && (
+                  </td>
+                  <td className="py-3.5 px-4 whitespace-nowrap">
+                    <p className="font-semibold text-white">{c.student}</p>
+                    <span className="text-[11px] text-slate-400 font-mono">Member</span>
+                  </td>
+                  <td className="py-3.5 px-4 text-center whitespace-nowrap">
+                    {statusBadge(c.status)}
+                  </td>
+                  <td className="py-3.5 px-4 text-slate-400 font-mono whitespace-nowrap">
+                    {formatComplaintDate(c.date)}
+                  </td>
+                  <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                    <div className="flex items-center justify-end gap-1.5">
                       <button
-                        data-testid={`admin_communication-complaint-progress-${c.id}`}
-                        disabled={!isDemoMode}
-                        title={!isDemoMode ? t('COMPLAINT_STATUS_UPDATE_BLOCKED') : t('COMPLAINT_STATUS_IN_PROGRESS')}
-                        onClick={() => onMarkInProgress(c.id)}
-                        className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
-                        aria-label={t('COMPLAINT_MARK_IN_PROGRESS_ARIA', { title: c.title })}
+                        type="button"
+                        data-testid={`admin_communication-page-control-010-${c.id}`}
+                        onClick={() => onView(c)}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:border-indigo-500 hover:bg-slate-700 hover:text-white transition-all"
+                        title={t('VIEW_DETAILS')}
                       >
-                        <RefreshCw size={16} strokeWidth={2}/>
+                        <Eye size={15} />
                       </button>
-                    )}
-                    {c.status !== 'Resolved' && (
-                      <button
-                        data-testid={`admin_communication-complaint-resolve-${c.id}`}
-                        disabled={!isDemoMode}
-                        title={!isDemoMode ? t('COMPLAINT_RESOLUTION_BLOCKED') : t('COMPLAINT_RESOLVE_TITLE')}
-                        onClick={() => onResolve(c)}
-                        className="inline-flex min-h-[34px] min-w-[34px] items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 motion-safe:transition-all disabled:cursor-not-allowed disabled:opacity-50"
-                        aria-label={t('COMPLAINT_RESOLVE_ARIA', { title: c.title })}
-                      >
-                        <CheckCircle size={16} strokeWidth={2}/>
-                      </button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      {complaints.length > 0 && (
+                      {c.status !== ADMIN_COMMUNICATION_COMPLAINT_STATUS.RESOLVED && (
+                        <button
+                          type="button"
+                          onClick={() => onResolve(c)}
+                          className="inline-flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-all"
+                          title={t('BUTTON_RESOLVE')}
+                        >
+                          <CheckCircle2 size={13} />
+                          Resolve
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="border-t border-slate-800 p-4">
         <AdminTablePagination
           page={page}
           pageSize={pageSize}
-          totalCount={complaints.length}
+          totalItems={sortedComplaints.length}
           onPageChange={setPage}
-          onPageSizeChange={(newSize: number) => {
-            setPageSize(newSize);
-            setPage(0);
-          }}
+          onPageSizeChange={setPageSize}
         />
-      )}
+      </div>
     </div>
   );
 }

@@ -1,8 +1,21 @@
-// components/AdminAssetsRegisterTable.tsx
 'use client';
+
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { ShieldCheck, AlertTriangle, Clock, Wrench, Phone, CalendarClock, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import {
+  ShieldCheck,
+  AlertTriangle,
+  Clock,
+  Wrench,
+  Phone,
+  Building2,
+  Tag,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  CheckCircle2,
+  CalendarDays,
+} from 'lucide-react';
 import type { AdminAssetRecord } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
 import {
   formatPaiseToRupees,
@@ -70,18 +83,18 @@ export function AdminAssetsRegisterTable({
         <button
           type="button"
           onClick={() => toggleSort(field)}
-          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''}`}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''}`}
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
           <span>{label}</span>
           {isActive ? (
             sortDirection === 'asc' ? (
-              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowUp className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
             ) : (
-              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
+              <ArrowDown className="text-indigo-400 font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-muted-foreground opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-slate-500 opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -93,11 +106,11 @@ export function AdminAssetsRegisterTable({
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl backdrop-blur-md overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm border-collapse" aria-label={t('TITLE')}>
+        <table className="w-full text-left text-xs border-collapse" aria-label={t('TITLE')}>
           <thead>
-            <tr className="border-b border-border bg-muted text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            <tr className="border-b border-slate-800 bg-slate-950/70 text-xs font-semibold text-slate-400 uppercase tracking-wider">
               {renderSortableHeader('name', t('TABLE.ASSET'))}
               {renderSortableHeader('branchName', t('TABLE.BRANCH'))}
               {renderSortableHeader('category', t('TABLE.CATEGORY'))}
@@ -109,7 +122,7 @@ export function AdminAssetsRegisterTable({
               <th scope="col" className="px-4 py-3.5 text-center whitespace-nowrap">{t('TABLE.ACTIONS')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-slate-800/60 text-slate-200">
             {paginatedRecords.map((asset) => {
               const expiringSoon = isExpiringSoon(asset.warrantyExpiryDate);
               const daysLeft = getDaysUntilExpiry(asset.warrantyExpiryDate);
@@ -117,111 +130,112 @@ export function AdminAssetsRegisterTable({
               return (
                 <tr
                   key={asset.id}
-                  className="hover:bg-muted-hover motion-safe:transition-colors focus-within:bg-muted"
+                  className="hover:bg-slate-800/40 transition-colors"
                 >
                   {/* Asset & Code */}
                   <td className="px-4 py-3.5 whitespace-nowrap">
-                    <p className="font-semibold text-foreground">{asset.name}</p>
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <span className="font-mono">{asset.assetCode}</span>
-                      {asset.serialNumber && <span>· SN: {asset.serialNumber}</span>}
+                    <p className="font-bold text-white text-sm">{asset.name}</p>
+                    <div className="mt-1 flex items-center gap-1.5 text-[11px] text-slate-400">
+                      <span className="font-mono px-1.5 py-0.5 rounded border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 font-semibold">
+                        {asset.assetCode}
+                      </span>
+                      {asset.serialNumber && (
+                        <span className="font-mono text-slate-400">SN: {asset.serialNumber}</span>
+                      )}
                     </div>
                   </td>
 
                   {/* Branch & Location */}
                   <td className="px-4 py-3.5 whitespace-nowrap">
-                    <p className="font-medium text-foreground">{asset.branchName}</p>
-                    <p className="text-xs text-muted-foreground">{asset.locationWithinBranch}</p>
+                    <div className="flex items-center gap-1.5">
+                      <Building2 size={13} className="text-emerald-400 shrink-0" />
+                      <span className="font-semibold text-white">{asset.branchName}</span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 mt-0.5">{asset.locationWithinBranch}</p>
                   </td>
 
                   {/* Category */}
                   <td className="px-4 py-3.5 whitespace-nowrap">
-                    <span className="rounded bg-muted px-2 py-0.5 text-xs font-medium text-foreground">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-800/80 px-2.5 py-0.5 text-[11px] font-semibold text-slate-300">
+                      <Tag size={11} className="text-indigo-400" />
                       {t(`CATEGORIES.${asset.category}`)}
                     </span>
                   </td>
 
                   {/* Purchase Date & Cost */}
                   <td className="px-4 py-3.5 text-right whitespace-nowrap">
-                    <p className="font-mono font-semibold text-foreground">
+                    <p className="font-mono font-bold text-white text-sm">
                       {formatPaiseToRupees(asset.purchaseCost)}
                     </p>
-                    <p className="text-xs text-muted-foreground">{formatAssetDate(asset.purchaseDate)}</p>
+                    <p className="text-[11px] text-slate-400 mt-0.5">{formatAssetDate(asset.purchaseDate)}</p>
                   </td>
 
                   {/* Warranty Expiry */}
                   <td className="px-4 py-3.5 whitespace-nowrap">
-                    <p className="font-medium text-foreground">{formatAssetDate(asset.warrantyExpiryDate)}</p>
+                    <div className="flex items-center gap-1.5">
+                      <CalendarDays size={13} className="text-slate-400" />
+                      <span className="font-mono text-slate-300">{formatAssetDate(asset.warrantyExpiryDate)}</span>
+                    </div>
                     {expiringSoon ? (
-                      <span className="inline-flex items-center gap-1 rounded bg-warning-bg px-1.5 py-0.5 text-[11px] font-bold text-warning-text">
+                      <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-400">
                         <Clock className="h-3 w-3" />
-                        <span>Expires in {daysLeft}d</span>
+                        Expires in {daysLeft}d
                       </span>
                     ) : daysLeft !== null && daysLeft < 0 ? (
-                      <span className="text-xs text-muted-foreground italic">Expired</span>
+                      <span className="mt-1 inline-flex text-[10px] text-slate-500 italic">Expired</span>
                     ) : null}
                   </td>
 
                   {/* AMC Protection Status */}
                   <td className="px-4 py-3.5 text-center whitespace-nowrap">
                     {asset.amcStatus === 'ACTIVE_AMC' && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
-                        <ShieldCheck className="h-3 w-3" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-400">
+                        <ShieldCheck className="h-3.5 w-3.5" />
                         <span>{t('AMC_STATUS.ACTIVE_AMC')}</span>
                       </span>
                     )}
                     {asset.amcStatus === 'UNDER_WARRANTY' && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-500/15 px-2.5 py-0.5 text-xs font-semibold text-sky-400">
-                        <ShieldCheck className="h-3 w-3" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 px-2.5 py-1 text-xs font-semibold text-sky-400">
+                        <ShieldCheck className="h-3.5 w-3.5" />
                         <span>{t('AMC_STATUS.UNDER_WARRANTY')}</span>
                       </span>
                     )}
                     {asset.amcStatus === 'EXPIRED_NO_AMC' && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
-                        <AlertTriangle className="h-3 w-3" />
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-xs font-semibold text-rose-400">
+                        <AlertTriangle className="h-3.5 w-3.5" />
                         <span>{t('AMC_STATUS.EXPIRED_NO_AMC')}</span>
                       </span>
                     )}
                     {asset.amcStatus === 'NOT_APPLICABLE' && (
-                      <span className="text-xs text-muted-foreground">—</span>
+                      <span className="text-slate-500">—</span>
                     )}
                   </td>
 
                   {/* Vendor & Contact */}
                   <td className="px-4 py-3.5 whitespace-nowrap">
-                    <p className="font-medium text-foreground">{asset.vendorName}</p>
+                    <p className="font-semibold text-white">{asset.vendorName}</p>
                     <a
                       href={`tel:${asset.vendorContact}`}
-                      className="inline-flex items-center gap-1 text-xs text-primary hover:underline font-mono"
+                      className="mt-0.5 inline-flex items-center gap-1 text-[11px] text-indigo-400 hover:text-indigo-300 font-mono transition-colors"
                     >
                       <Phone className="h-3 w-3" />
                       <span>{asset.vendorContact}</span>
                     </a>
                   </td>
 
-                  {/* Health Status */}
+                  {/* Status */}
                   <td className="px-4 py-3.5 text-center whitespace-nowrap">
-                    {asset.status === 'OPERATIONAL' && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        <span>{t('STATUS.OPERATIONAL')}</span>
-                      </span>
-                    )}
-                    {asset.status === 'MAINTENANCE_REQUIRED' && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-400">
-                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-                        <span>{t('STATUS.MAINTENANCE_REQUIRED')}</span>
-                      </span>
-                    )}
-                    {asset.status === 'UNDER_REPAIR' && (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-400">
-                        <Wrench className="h-3 w-3" />
-                        <span>{t('STATUS.UNDER_REPAIR')}</span>
-                      </span>
-                    )}
-                    {asset.status === 'DISPOSED' && (
-                      <span className="text-xs text-muted-foreground">{t('STATUS.DISPOSED')}</span>
-                    )}
+                    <span
+                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold border ${
+                        asset.status === 'OPERATIONAL'
+                          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                          : asset.status === 'UNDER_MAINTENANCE'
+                          ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+                          : 'border-slate-700 bg-slate-800 text-slate-400'
+                      }`}
+                    >
+                      {asset.status === 'OPERATIONAL' ? 'Operational' : asset.status === 'UNDER_MAINTENANCE' ? 'Maintenance' : 'Decommissioned'}
+                    </span>
                   </td>
 
                   {/* Actions */}
@@ -229,10 +243,9 @@ export function AdminAssetsRegisterTable({
                     <button
                       type="button"
                       onClick={() => onManageAmc(asset)}
-                      title={t('ACTIONS.MANAGE_AMC')}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 hover:bg-primary/20 hover:border-primary/50 px-2.5 py-1.5 text-xs font-semibold text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[32px] motion-safe:transition-all hover:scale-[1.02]"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-indigo-500 hover:bg-slate-700 hover:text-white transition-all shadow-sm"
                     >
-                      <CalendarClock className="h-3.5 w-3.5 text-primary" />
+                      <Wrench size={13} className="text-indigo-400" />
                       <span>{t('ACTIONS.MANAGE_AMC')}</span>
                     </button>
                   </td>
@@ -242,22 +255,18 @@ export function AdminAssetsRegisterTable({
           </tbody>
         </table>
       </div>
-      {records.length > 0 && (
+
+      <div className="border-t border-slate-800 p-4">
         <AdminTablePagination
           page={page}
           pageSize={pageSize}
-          totalCount={sortedRecords.length}
+          totalItems={sortedRecords.length}
           onPageChange={setPage}
-          onPageSizeChange={(newSize) => {
-            setPageSize(newSize);
-            setPage(0);
-          }}
-          id="admin-assets-register-page-size"
+          onPageSizeChange={setPageSize}
         />
-      )}
+      </div>
     </div>
   );
 }
 
 export default AdminAssetsRegisterTable;
-

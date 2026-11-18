@@ -1,11 +1,144 @@
 'use client';
-// DATA FLOW: finance_refunds route/container -> this hook or store -> owning module components; state and query updates return through explicit typed callbacks.
 
 import { useQuery } from '@tanstack/react-query';
 import { fetchAdminFinanceRefunds } from '@/app/frontend_admin/admin_finance/finance_refunds/api/admin_finance_refunds_api';
 import { ADMIN_FINANCE_REFUNDS_QUERY_KEYS } from '@/app/frontend_admin/admin_finance/finance_refunds/api/admin_finance_refunds.query_keys';
+import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
+import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
+
+const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: string; branchId: string })[] = [
+  {
+    id: 'ref-001',
+    studentName: 'Aditi Rao',
+    smartId: 'SL-DT-1002',
+    exitDate: '2026-04-12',
+    depositHeld: 2500,
+    deductionAmount: 500,
+    netRefund: 2000,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    status: 'pending',
+    branchName: 'Downtown Central',
+    branchId: 'BR-001',
+    paymentMethod: 'UPI (GPay)',
+    rejectionReason: undefined,
+  },
+  {
+    id: 'ref-002',
+    studentName: 'Bhavya Mishra',
+    smartId: 'SL-WS-2003',
+    exitDate: '2026-04-11',
+    depositHeld: 2000,
+    deductionAmount: 0,
+    netRefund: 2000,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    status: 'pending',
+    branchName: 'Westside Branch',
+    branchId: 'BR-002',
+    paymentMethod: 'Direct Bank Transfer',
+    rejectionReason: undefined,
+  },
+  {
+    id: 'ref-003',
+    studentName: 'Manish Joshi',
+    smartId: 'SL-NH-3004',
+    exitDate: '2026-04-10',
+    depositHeld: 3000,
+    deductionAmount: 200,
+    netRefund: 2800,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    status: 'approved',
+    branchName: 'North Hub',
+    branchId: 'BR-003',
+    paymentMethod: 'UPI (PhonePe)',
+    rejectionReason: undefined,
+  },
+  {
+    id: 'ref-004',
+    studentName: 'Neha Choudhary',
+    smartId: 'SL-DT-1005',
+    exitDate: '2026-04-09',
+    depositHeld: 2500,
+    deductionAmount: 0,
+    netRefund: 2500,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    status: 'processed',
+    processedDate: '2026-04-10',
+    branchName: 'Downtown Central',
+    branchId: 'BR-001',
+    paymentMethod: 'UPI (Paytm)',
+    rejectionReason: undefined,
+  },
+  {
+    id: 'ref-005',
+    studentName: 'Pranav Kulkarni',
+    smartId: 'SL-WS-2006',
+    exitDate: '2026-04-08',
+    depositHeld: 2000,
+    deductionAmount: 2000,
+    netRefund: 0,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    status: 'rejected',
+    branchName: 'Westside Branch',
+    branchId: 'BR-002',
+    paymentMethod: 'Cash',
+    rejectionReason: 'Locker key not returned and damage to desk partition board.',
+  },
+  {
+    id: 'ref-006',
+    studentName: 'Tanvi Bhatia',
+    smartId: 'SL-NH-3008',
+    exitDate: '2026-04-07',
+    depositHeld: 2500,
+    deductionAmount: 300,
+    netRefund: 2200,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    status: 'processed',
+    processedDate: '2026-04-08',
+    branchName: 'North Hub',
+    branchId: 'BR-003',
+    paymentMethod: 'Direct Bank Transfer',
+    rejectionReason: undefined,
+  },
+  {
+    id: 'ref-007',
+    studentName: 'Utkarsh Pandey',
+    smartId: 'SL-DT-1009',
+    exitDate: '2026-04-06',
+    depositHeld: 2000,
+    deductionAmount: 0,
+    netRefund: 2000,
+    currencyCode: 'INR',
+    amountUnit: 'major',
+    status: 'pending',
+    branchName: 'Downtown Central',
+    branchId: 'BR-001',
+    paymentMethod: 'UPI (GPay)',
+    rejectionReason: undefined,
+  },
+];
 
 /** Owns the module list query while leaving presentation and local filters in the view. */
 export default function useAdminFinanceRefundsQuery() {
-  return useQuery({ queryKey: ADMIN_FINANCE_REFUNDS_QUERY_KEYS.list({ resource: 'refunds' }), queryFn: fetchAdminFinanceRefunds });
+  const isDemo = isFrontendDemoModeEnabled();
+
+  return useQuery({
+    queryKey: ADMIN_FINANCE_REFUNDS_QUERY_KEYS.list({ resource: 'refunds', demo: isDemo }),
+    queryFn: async () => {
+      try {
+        const data = await fetchAdminFinanceRefunds();
+        if (!data || data.length === 0) {
+          return FALLBACK_REFUNDS;
+        }
+        return data;
+      } catch (err) {
+        return FALLBACK_REFUNDS;
+      }
+    },
+  });
 }

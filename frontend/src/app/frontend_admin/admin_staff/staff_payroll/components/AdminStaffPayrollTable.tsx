@@ -67,11 +67,11 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
   const renderSortableHeader = (field: PayrollSortField, label: string, align: 'left' | 'right' = 'left') => {
     const isActive = sortField === field;
     return (
-      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`px-4 py-3 whitespace-nowrap ${align === 'right' ? 'text-right' : 'text-left'}`}>
+      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className={`px-4 py-3.5 whitespace-nowrap ${align === 'right' ? 'text-right' : 'text-left'}`}>
         <button
           type="button"
           onClick={() => toggleSort(field)}
-          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
+          className={`group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : ''}`}
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
           <span>{label}</span>
@@ -82,7 +82,7 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
               <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
             )
           ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
+            <ArrowUpDown className="text-slate-500 opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
           )}
         </button>
       </th>
@@ -91,19 +91,19 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
 
   if (records.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card p-12 text-center">
-        <CreditCard className="h-10 w-10 text-text-disabled" />
-        <h3 className="mt-3 text-base font-semibold text-text-primary">{t('TABLE_EMPTY_TITLE')}</h3>
-        <p className="mt-1 text-sm text-text-secondary">{t('TABLE_EMPTY_DESC')}</p>
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-800 bg-slate-900/60 p-12 text-center">
+        <CreditCard className="h-10 w-10 text-slate-600" />
+        <h3 className="mt-3 text-base font-semibold text-slate-200">{t('TABLE_EMPTY_TITLE')}</h3>
+        <p className="mt-1 text-sm text-slate-400">{t('TABLE_EMPTY_DESC')}</p>
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/80 shadow-xl backdrop-blur-md">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-border bg-surface text-xs font-semibold uppercase tracking-wider text-text-secondary">
+          <thead className="border-b border-slate-800 bg-slate-950/70 text-xs font-semibold uppercase tracking-wider text-slate-400">
             <tr>
               {renderSortableHeader('staffName', t('COL_STAFF'))}
               {renderSortableHeader('branchName', t('COL_BRANCH'))}
@@ -112,73 +112,73 @@ export function AdminStaffPayrollTable({ records, onOpenSlip, onOpenDisburse }: 
               {renderSortableHeader('deductions', t('COL_DEDUCTIONS'), 'right')}
               {renderSortableHeader('netPayable', t('COL_NET_PAYABLE'), 'right')}
               {renderSortableHeader('status', t('COL_STATUS'))}
-              <th className="px-4 py-3">{t('COL_PAYMENT_INFO')}</th>
-              <th className="px-4 py-3 text-right">{t('COL_ACTIONS')}</th>
+              <th className="px-4 py-3.5">{t('COL_PAYMENT_INFO')}</th>
+              <th className="px-4 py-3.5 text-right">{t('COL_ACTIONS')}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-slate-800/60">
             {paginatedRecords.map((r) => {
               const statusBadgeClass = PAYROLL_STATUS_VARIANTS[r.status] || 'bg-surface text-text-secondary';
               const isDisbursed = r.status === 'DISBURSED';
 
               return (
-                <tr key={r.id} className="transition-colors hover:bg-surface-hover">
-                  <td className="px-4 py-3 font-medium text-text-primary">
+                <tr key={r.id} className="transition-colors hover:bg-slate-800/40">
+                  <td className="px-4 py-3.5 font-medium">
                     <div>
-                      <span className="font-semibold">{r.staffName}</span>
-                      <span className="block text-xs text-text-secondary">{r.staffId} · {r.role}</span>
+                      <span className="font-semibold text-slate-100">{r.staffName}</span>
+                      <span className="block text-xs text-slate-400">{r.staffId} · {r.role}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-text-secondary">
-                    <span className="inline-flex items-center gap-1 text-xs">
+                  <td className="px-4 py-3.5 text-slate-300">
+                    <span className="inline-flex items-center gap-1.5 text-xs rounded-md bg-slate-800/60 border border-slate-700/50 px-2 py-0.5">
                       <Building2 size={13} className="text-primary" />
                       {r.branchName}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-xs text-text-primary">
+                  <td className="px-4 py-3.5 text-right font-mono text-xs text-slate-300 font-medium">
                     ₹{r.baseSalary.toLocaleString('en-IN')}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-xs text-success-text">
+                  <td className="px-4 py-3.5 text-right font-mono text-xs text-emerald-400 font-semibold">
                     +₹{r.allowances.toLocaleString('en-IN')}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-xs text-danger-text">
+                  <td className="px-4 py-3.5 text-right font-mono text-xs text-rose-400 font-semibold">
                     <div>{r.deductions > 0 ? `-₹${r.deductions.toLocaleString('en-IN')}` : '₹0'}</div>
                     {r.advanceSalaryDeduction > 0 && (
-                      <div className="text-[10px] text-text-secondary font-sans font-normal">
+                      <div className="text-[10px] text-slate-400 font-sans font-normal">
                         (Adv: -₹{r.advanceSalaryDeduction.toLocaleString('en-IN')})
                       </div>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-right font-mono text-sm font-bold text-text-primary">
+                  <td className="px-4 py-3.5 text-right font-mono text-sm font-bold text-white bg-slate-950/25">
                     ₹{r.netPayable.toLocaleString('en-IN')}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3.5">
                     <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${statusBadgeClass}`}>
                       {t(`STATUS_${r.status}`)}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-text-secondary">
+                  <td className="px-4 py-3.5 text-slate-300">
                     {isDisbursed ? (
                       <div className="text-xs">
-                        <span className="font-medium text-text-primary">{r.paymentMethod?.replace('_', ' ')}</span>
+                        <span className="font-medium text-slate-200">{r.paymentMethod?.replace('_', ' ')}</span>
                         {r.transactionRef && (
-                          <span className="block font-mono text-[11px] text-text-disabled">
+                          <span className="block font-mono text-[11px] text-slate-500">
                             {r.transactionRef}
                           </span>
                         )}
                       </div>
                     ) : (
-                      <span className="text-xs text-text-disabled">—</span>
+                      <span className="text-xs text-slate-600">—</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3.5 text-right">
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         type="button"
                         onClick={() => onOpenSlip(r)}
                         title={t('ACTION_SLIP')}
                         aria-label={t('ACTION_SLIP')}
-                        className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-border bg-card px-2.5 py-1 text-xs font-semibold text-text-secondary hover:bg-surface-hover hover:text-text-primary hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
+                        className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs font-semibold text-slate-200 hover:bg-slate-700 hover:text-white hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-all"
                       >
                         <FileText size={14} />
                         <span className="hidden sm:inline">Slip</span>

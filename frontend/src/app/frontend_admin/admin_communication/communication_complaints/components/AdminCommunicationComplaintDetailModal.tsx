@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { X, Building2, AlertTriangle, MessageSquare } from 'lucide-react';
+import { X, Building2, AlertTriangle, MessageSquare, CheckCircle2, User, Clock, ShieldCheck } from 'lucide-react';
 import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
@@ -38,146 +38,141 @@ export function AdminCommunicationComplaintDetailModal({
 
   return (
     <>
-      {/* View Modal */}
+      {/* View Detail Modal */}
       {viewItem && (
         <Dialog open onOpenChange={(nextOpen) => { if (!nextOpen) onCloseView(); }}>
-          <DialogContent className="relative w-full overflow-y-auto rounded-xl border border-border bg-overlay p-6 shadow-dialog max-w-[500px] space-y-4">
-            <button
-              type="button"
-              aria-label={t('COMPLAINT_DIALOG_CLOSE_LABEL')}
-              data-testid="admin_communication-page-control-007"
-              onClick={onCloseView}
-              className="absolute right-4 top-4 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <X size={18} strokeWidth={2} />
-            </button>
-            <DialogTitle className="mb-1.5 text-lg font-bold text-text-primary">{viewItem.title}</DialogTitle>
+          <DialogContent className="relative w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-2xl space-y-4">
+            <div className="flex items-start justify-between border-b border-slate-800 pb-3">
+              <div>
+                <DialogTitle className="text-lg font-bold text-white flex items-center gap-2">
+                  <MessageSquare size={18} className="text-indigo-400" />
+                  {viewItem.title}
+                </DialogTitle>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Logged by <strong className="text-white">{viewItem.student}</strong> on {formatComplaintDate(viewItem.date)}
+                </p>
+              </div>
+              <button
+                type="button"
+                aria-label={t('COMPLAINT_DIALOG_CLOSE_LABEL')}
+                data-testid="admin_communication-page-control-007"
+                onClick={onCloseView}
+                className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+              >
+                <X size={18} strokeWidth={2} />
+              </button>
+            </div>
+
             <DialogDescription className="sr-only">{t('COMPLAINT_DIALOG_DESCRIPTION')}</DialogDescription>
-            <div data-testid="admin_communication-page-state-008" className="mb-3 flex flex-wrap items-center gap-2">
+
+            <div className="flex flex-wrap items-center gap-2">
               {statusBadge(viewItem.status)}
-              <span data-testid="admin_communication-page-state-009" className="inline-flex min-h-6 items-center gap-1 rounded-full border px-2 py-1 text-badge font-semibold whitespace-nowrap bg-transparent text-text-secondary border-border">
-                {formatComplaintDate(viewItem.date)}
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-800/80 px-2.5 py-1 text-xs font-semibold text-slate-300">
+                <Building2 size={12} className="text-emerald-400" />
+                {viewItem.branchName ?? 'Downtown Central'}
               </span>
               {viewItem.isEscalatedToHq && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-danger-bg text-danger-text px-2 py-0.5 text-xs font-semibold border border-border">
+                <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/30 bg-rose-500/15 px-2.5 py-1 text-xs font-bold text-rose-400">
                   <AlertTriangle size={12} className="shrink-0" />
                   Escalated to HQ
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-2 text-xs text-text-secondary">
-              <span className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2 py-0.5 font-medium text-text-primary">
-                <Building2 size={12} className="text-primary" />
-                {viewItem.branchName ?? 'Downtown Central'}
+
+            <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block mb-1.5">
+                Issue Description
               </span>
-              <span>· {t('LABEL_BY')} <strong className="text-text-primary">{viewItem.student}</strong></span>
+              <p className="text-xs text-slate-200 leading-relaxed whitespace-pre-wrap">
+                {viewItem.description}
+              </p>
             </div>
-            <div className="rounded-lg border border-border bg-card p-3 text-body text-text-primary">
-              {viewItem.description}
-            </div>
+
             {viewItem.resolvedNote && (
-              <div className="rounded-lg border border-info-bg bg-info-bg p-3 text-ui text-info-text mt-3">
-                {t('COMPLAINT_RESOLUTION_DETAILS', {
-                  note: viewItem.resolvedNote,
-                  by: viewItem.resolvedBy,
-                  date: formatComplaintDate(viewItem.resolvedDate),
-                })}
+              <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+                  <CheckCircle2 size={14} />
+                  Resolution Summary ({viewItem.resolvedBy ?? 'Branch Manager'})
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed whitespace-pre-wrap">
+                  {viewItem.resolvedNote}
+                </p>
+                {viewItem.resolvedDate && (
+                  <p className="text-[10px] text-slate-400 font-mono mt-1">
+                    Resolved at: {formatComplaintDate(viewItem.resolvedDate)}
+                  </p>
+                )}
               </div>
             )}
-            <div className="mt-4 flex flex-wrap justify-between items-center gap-2.5 border-border pt-3">
+
+            <div className="flex justify-end border-t border-slate-800 pt-3">
               <button
                 type="button"
-                onClick={() => {
-                  const msg = encodeURIComponent(`Hello ${viewItem.student}, regarding your complaint "${viewItem.title}" at Smart Library:\n${viewItem.resolvedNote ? `Resolution: ${viewItem.resolvedNote}` : 'We are actively investigating and will resolve it shortly.'}\nThank you!`);
-                  const popup = window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
-                  if (popup) {
-                    popup.opener = null;
-                  }
-                }}
-                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-success-bg bg-success-bg px-3.5 py-2 text-ui font-semibold text-success-text hover:bg-success hover:text-on-success transition-all"
-              >
-                <MessageSquare size={16} />
-                WhatsApp Student
-              </button>
-              <button
-                type="button"
-                data-testid="admin_communication-page-control-010"
                 onClick={onCloseView}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-ui font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base"
+                className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
               >
-                {t('BUTTON_CLOSE')}
+                Close Dossier
               </button>
             </div>
           </DialogContent>
         </Dialog>
       )}
 
-      {/* Resolve Modal */}
+      {/* Resolve Action Modal */}
       {resolveItem && (
         <Dialog open onOpenChange={(nextOpen) => { if (!nextOpen) onCloseResolve(); }}>
-          <DialogContent className="relative w-full overflow-y-auto rounded-xl border border-border bg-overlay p-6 shadow-dialog max-w-[480px] space-y-4">
-            <button
-              type="button"
-              aria-label={t('COMPLAINT_DIALOG_CLOSE_LABEL')}
-              data-testid="admin_communication-page-control-011"
-              onClick={onCloseResolve}
-              className="absolute right-4 top-4 inline-flex min-h-11 min-w-11 items-center justify-center rounded-md p-1 text-text-secondary hover:bg-surface-hover hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              <X size={18} strokeWidth={2} />
-            </button>
-            <DialogTitle className="mb-1.5 text-lg font-bold text-text-primary">{t('COMPLAINT_RESOLVE_TITLE')}</DialogTitle>
-            <DialogDescription className="mb-4 text-ui text-text-secondary">"{resolveItem.title}"</DialogDescription>
-            <div>
-              <label className="mb-1.5 block text-badge font-semibold uppercase tracking-[0.07em] text-text-primary" htmlFor="admin-communication-resolution-note">
-                {t('COMPLAINT_RESOLUTION_NOTE')} <span className="text-danger-text">*</span>
-              </label>
-              <textarea
-                id="admin-communication-resolution-note"
-                className="min-h-24 w-full resize-y rounded-md border border-border bg-input px-3 py-2 text-body text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50"
-                rows={3}
-                placeholder={t('COMPLAINT_RESOLUTION_NOTE_PLACEHOLDER')}
-                required
-                value={resolveNote}
-                onChange={e => onChangeResolveNote(e.target.value)}
-              />
-            </div>
-            <div className="mt-4 flex flex-wrap justify-between items-center gap-2.5 border-border pt-3">
+          <DialogContent className="relative w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-2xl space-y-4">
+            <div className="flex items-start justify-between border-b border-slate-800 pb-3">
+              <div>
+                <DialogTitle className="text-lg font-bold text-white flex items-center gap-2">
+                  <CheckCircle2 size={18} className="text-emerald-400" />
+                  Resolve Grievance
+                </DialogTitle>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Confirm remedial action taken for {resolveItem.title}
+                </p>
+              </div>
               <button
                 type="button"
-                disabled={!resolveNote.trim()}
-                onClick={() => {
-                  const msg = encodeURIComponent(`Hello ${resolveItem.student}, good news! Your complaint regarding "${resolveItem.title}" has been resolved by Smart Library Admin:\n"${resolveNote}"\nThank you for your patience!`);
-                  const popup = window.open(`https://wa.me/?text=${msg}`, '_blank', 'noopener,noreferrer');
-                  if (popup) {
-                    popup.opener = null;
-                  }
-                }}
-                className="inline-flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-success-bg bg-success-bg px-3 py-2 text-xs font-semibold text-success-text hover:bg-success hover:text-on-success transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Send resolution message on WhatsApp"
+                onClick={onCloseResolve}
+                className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
               >
-                <MessageSquare size={15} />
-                WhatsApp Update
+                <X size={18} />
               </button>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  data-testid="admin_communication-page-control-012"
-                  onClick={onCloseResolve}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-ui font-medium text-text-primary hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 motion-safe:transition-colors motion-safe:duration-base"
-                >
-                  {t('BUTTON_CANCEL')}
-                </button>
-                <button
-                  type="button"
-                  data-testid="admin_communication-page-control-013"
-                  disabled={!isDemoMode || !resolveNote.trim()}
-                  title={!isDemoMode ? t('COMPLAINT_RESOLUTION_BLOCKED') : undefined}
-                  onClick={onConfirmResolve}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-success bg-success px-4 py-2 text-body font-semibold text-on-success hover:bg-success focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-safe:transition-colors motion-safe:duration-base disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {t('BUTTON_MARK_RESOLVED')}
-                </button>
-              </div>
+            </div>
+
+            <DialogDescription className="sr-only">Resolve complaint resolution dialog</DialogDescription>
+
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                Resolution Notes / Remedial Action Taken
+              </label>
+              <textarea
+                value={resolveNote}
+                onChange={(e) => onChangeResolveNote(e.target.value)}
+                placeholder="e.g. AC technician replaced condenser capacitor. Room temperature restored to 22°C."
+                rows={3}
+                className="w-full rounded-xl border border-slate-700 bg-slate-950/70 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
+              />
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 border-t border-slate-800 pt-3">
+              <button
+                type="button"
+                onClick={onCloseResolve}
+                className="rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={onConfirmResolve}
+                disabled={!resolveNote.trim()}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-500 transition-all disabled:opacity-40"
+              >
+                <CheckCircle2 size={14} />
+                Confirm & Mark Resolved
+              </button>
             </div>
           </DialogContent>
         </Dialog>
@@ -185,5 +180,5 @@ export function AdminCommunicationComplaintDetailModal({
     </>
   );
 }
-export default AdminCommunicationComplaintDetailModal;
 
+export default AdminCommunicationComplaintDetailModal;

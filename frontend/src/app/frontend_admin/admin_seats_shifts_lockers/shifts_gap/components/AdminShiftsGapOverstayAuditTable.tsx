@@ -1,291 +1,243 @@
 'use client';
+
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import {
-  ShieldAlert,
-  AlertTriangle,
+  TrendingDown,
+  Building2,
   Clock,
-  CheckCircle2,
+  Armchair,
+  IndianRupee,
+  Sparkles,
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Filter,
 } from 'lucide-react';
-import type { AdminShiftOverstayIncident } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/types/AdminShiftsGapTypes';
-import { ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_gap/mocks/AdminShiftsGapShiftGapFixtures';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
-import { AdminShiftsGapAuditSummary } from './AdminShiftsGapAuditSummary';
-import { AdminShiftsGapAuditToolbar } from './AdminShiftsGapAuditToolbar';
+
+interface ShiftGapAuditRecord {
+  id: string;
+  branchName: string;
+  shiftName: string;
+  timings: string;
+  totalSeats: number;
+  assignedSeats: number;
+  gapSeats: number;
+  gapPercent: number;
+  dailyGapLoss: number;
+  monthlyLeakage: number;
+  recommendation: string;
+  priority: 'High' | 'Medium' | 'Low';
+}
+
+const DEMO_GAP_RECORDS: ShiftGapAuditRecord[] = [
+  {
+    id: 'gap-001',
+    branchName: 'Downtown Central',
+    shiftName: 'Afternoon Flexi',
+    timings: '12:00 PM – 05:00 PM',
+    totalSeats: 40,
+    assignedSeats: 22,
+    gapSeats: 18,
+    gapPercent: 45,
+    dailyGapLoss: 420,
+    monthlyLeakage: 12600,
+    recommendation: 'Launch promotional 20% discount coupon for post-lunch college students',
+    priority: 'High',
+  },
+  {
+    id: 'gap-002',
+    branchName: 'Downtown Central',
+    shiftName: 'Night Owl Slot',
+    timings: '10:00 PM – 06:00 AM',
+    totalSeats: 30,
+    assignedSeats: 19,
+    gapSeats: 11,
+    gapPercent: 37,
+    dailyGapLoss: 385,
+    monthlyLeakage: 11550,
+    recommendation: 'Offer free tea/coffee perk to increase night exam prep retention',
+    priority: 'Medium',
+  },
+  {
+    id: 'gap-003',
+    branchName: 'Westside Branch',
+    shiftName: 'Morning Early Bird',
+    timings: '06:00 AM – 12:00 PM',
+    totalSeats: 35,
+    assignedSeats: 18,
+    gapSeats: 17,
+    gapPercent: 49,
+    dailyGapLoss: 450,
+    monthlyLeakage: 13500,
+    recommendation: 'Target CA/UPSC aspirants with early morning silent study campaigns',
+    priority: 'High',
+  },
+  {
+    id: 'gap-004',
+    branchName: 'Westside Branch',
+    shiftName: 'Afternoon Slot',
+    timings: '12:00 PM – 05:00 PM',
+    totalSeats: 35,
+    assignedSeats: 24,
+    gapSeats: 11,
+    gapPercent: 31,
+    dailyGapLoss: 275,
+    monthlyLeakage: 8250,
+    recommendation: 'Combine with Evening slot for multi-shift discount package',
+    priority: 'Medium',
+  },
+  {
+    id: 'gap-005',
+    branchName: 'North Hub',
+    shiftName: 'Evening Rush',
+    timings: '05:00 PM – 10:00 PM',
+    totalSeats: 30,
+    assignedSeats: 26,
+    gapSeats: 4,
+    gapPercent: 13,
+    dailyGapLoss: 120,
+    monthlyLeakage: 3600,
+    recommendation: 'Near-optimal occupancy. Enable waitlist buffer to backfill last 4 seats',
+    priority: 'Low',
+  },
+  {
+    id: 'gap-006',
+    branchName: 'North Hub',
+    shiftName: 'Night Slot',
+    timings: '10:00 PM – 06:00 AM',
+    totalSeats: 30,
+    assignedSeats: 14,
+    gapSeats: 16,
+    gapPercent: 53,
+    dailyGapLoss: 510,
+    monthlyLeakage: 15300,
+    recommendation: 'Low overnight demand in residential zone. Consider adjusting timings to 08 PM - 02 AM',
+    priority: 'High',
+  },
+];
 
 export function AdminShiftsGapOverstayAuditTable() {
-  const t = useTranslations('ADMIN_SHIFTS');
-  const [incidents, setIncidents] = useState<AdminShiftOverstayIncident[]>([
-    ...ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS,
-  ]);
-  type OverstaySortField = 'branchName' | 'studentName' | 'bookedShift' | 'overstayMinutes' | 'fineAmount' | 'status';
-  const [sortField, setSortField] = useState<OverstaySortField | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const { selectedBranch, isAllBranches } = useAdminBranch();
   const [branchFilter, setBranchFilter] = useState('ALL');
-  const [statusFilter, setStatusFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-
-  const toggleSort = (field: OverstaySortField) => {
-    setPage(0);
-    if (sortField === field) {
-      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortField(field);
-      setSortDirection('asc');
-    }
-  };
-
-  const branches = useMemo(() => {
-    return Array.from(new Set(ADMIN_SHIFTS_DEMO_OVERSTAY_INCIDENTS.map((i) => i.branchName)));
-  }, []);
-
-  const { selectedBranch, isAllBranches } = useAdminBranch();
 
   useEffect(() => {
     if (isAllBranches || !selectedBranch) {
       setBranchFilter('ALL');
     } else {
-      const matched = branches.find(
-        (b) => b.toLowerCase().includes(selectedBranch.name.toLowerCase()) || selectedBranch.name.toLowerCase().includes(b.toLowerCase())
-      );
-      if (matched) {
-        setBranchFilter(matched);
-      }
+      setBranchFilter(selectedBranch.name);
     }
-  }, [selectedBranch, isAllBranches, branches]);
+  }, [selectedBranch, isAllBranches]);
 
-  const filteredIncidents = useMemo(() => {
-    return incidents.filter((i) => {
-      const matchBranch = branchFilter === 'ALL' || i.branchName === branchFilter;
-      const matchStatus = statusFilter === 'ALL' || i.status === statusFilter;
+  const filteredRecords = useMemo(() => {
+    return DEMO_GAP_RECORDS.filter((r) => {
+      const matchBranch = branchFilter === 'ALL' || r.branchName.toLowerCase().includes(branchFilter.toLowerCase());
       const q = searchQuery.trim().toLowerCase();
-      const matchSearch = !q ||
-        i.studentName.toLowerCase().includes(q) ||
-        i.smartId.toLowerCase().includes(q) ||
-        i.seatNumber.toLowerCase().includes(q) ||
-        i.branchName.toLowerCase().includes(q);
-      return matchBranch && matchStatus && matchSearch;
+      const matchSearch = !q || r.shiftName.toLowerCase().includes(q) || r.branchName.toLowerCase().includes(q) || r.recommendation.toLowerCase().includes(q);
+      return matchBranch && matchSearch;
     });
-  }, [incidents, branchFilter, statusFilter, searchQuery]);
+  }, [branchFilter, searchQuery]);
 
-  const sortedIncidents = useMemo(() => {
-    if (!sortField) return filteredIncidents;
-    return [...filteredIncidents].sort((a, b) => {
-      const aVal = a[sortField];
-      const bVal = b[sortField];
-      if (typeof aVal === 'string' && typeof bVal === 'string') {
-        const cmp = aVal.localeCompare(bVal, undefined, { numeric: true, sensitivity: 'base' });
-        return sortDirection === 'asc' ? cmp : -cmp;
-      }
-      if (typeof aVal === 'number' && typeof bVal === 'number') {
-        const diff = aVal - bVal;
-        return sortDirection === 'asc' ? diff : -diff;
-      }
-      return 0;
-    });
-  }, [filteredIncidents, sortField, sortDirection]);
+  const paginated = useMemo(() => {
+    return filteredRecords.slice(page * pageSize, (page + 1) * pageSize);
+  }, [filteredRecords, page, pageSize]);
 
-  const paginatedIncidents = useMemo(() => {
-    return sortedIncidents.slice(page * pageSize, (page + 1) * pageSize);
-  }, [sortedIncidents, page, pageSize]);
-
-  const renderSortableHeader = (field: OverstaySortField, label: string) => {
-    const isActive = sortField === field;
-    return (
-      <th scope="col" aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined} className="p-3 whitespace-nowrap">
-        <button
-          type="button"
-          onClick={() => toggleSort(field)}
-          className="group inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1"
-          aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
-        >
-          <span>{label}</span>
-          {isActive ? (
-            sortDirection === 'asc' ? (
-              <ArrowUp className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
-            ) : (
-              <ArrowDown className="text-primary font-bold shrink-0" size={14} aria-hidden="true" />
-            )
-          ) : (
-            <ArrowUpDown className="text-text-secondary opacity-40 group-hover:opacity-100 transition-opacity shrink-0" size={14} aria-hidden="true" />
-          )}
-        </button>
-      </th>
-    );
-  };
-
-  const totalFinesRecovered = useMemo(() => {
-    return incidents
-      .filter((i) => i.status === 'RECOVERED')
-      .reduce((sum, i) => sum + i.fineAmount, 0);
-  }, [incidents]);
-
-  const handleVerify = (id: string, studentName: string) => {
-    setIncidents((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, status: 'RECOVERED' as const } : i))
-    );
-    toast.success(t('incidentVerified'), {
-      description: `${studentName} overstay clearance approved.`,
-    });
-  };
+  const totalMonthlyLeakage = useMemo(() => {
+    return filteredRecords.reduce((acc, r) => acc + r.monthlyLeakage, 0);
+  }, [filteredRecords]);
 
   return (
-    <section className="space-y-5 rounded-xl border border-border bg-card p-5" aria-labelledby="overstay-audit-heading">
-      {/* ── Section Header ── */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-border pb-4">
+    <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl backdrop-blur-md space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
         <div>
-          <div className="flex items-center gap-2">
-            <ShieldAlert className="h-5 w-5 text-warning-text" />
-            <h2 id="overstay-audit-heading" className="text-lg font-bold text-text-primary">
-              {t('overstayAuditTitle')}
-            </h2>
-          </div>
-          <p className="mt-1 text-xs text-text-secondary">
-            {t('overstayAuditSubtitle')}
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
+            <TrendingDown size={18} className="text-rose-400" />
+            Branch Shift Gap & Idle Capacity Breakdown
+          </h2>
+          <p className="text-xs text-slate-400 mt-0.5">
+            Audit of unoccupied seats during shift hours and potential monthly revenue leakage
           </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-300">
+            <IndianRupee size={13} />
+            Total Revenue Opportunity: ₹{totalMonthlyLeakage.toLocaleString('en-IN')}/mo
+          </span>
         </div>
       </div>
 
-      {/* ── KPI Row ── */}
-      <AdminShiftsGapAuditSummary
-        totalIncidents={incidents.length}
-        totalFinesRecovered={totalFinesRecovered}
-      />
-
-      {/* ── Filter Bar ── */}
-      <AdminShiftsGapAuditToolbar
-        searchQuery={searchQuery}
-        onSearchChange={(q) => {
-          setSearchQuery(q);
-          setPage(0);
-        }}
-        branchFilter={branchFilter}
-        onBranchFilterChange={(b) => {
-          setBranchFilter(b);
-          setPage(0);
-        }}
-        branches={branches}
-        statusFilter={statusFilter}
-        onStatusFilterChange={(s) => {
-          setStatusFilter(s);
-          setPage(0);
-        }}
-      />
-
-      {/* ── Incidents Table ── */}
-      <div className="overflow-x-auto rounded-lg border border-border">
-        <table className="w-full text-left text-xs">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs border-collapse">
           <thead>
-            <tr className="border-b border-border bg-surface-highlight text-text-secondary font-semibold uppercase">
-              {renderSortableHeader('branchName', t('tableBranchSeat'))}
-              {renderSortableHeader('studentName', t('tableStudent'))}
-              {renderSortableHeader('bookedShift', t('tableShiftScheduled'))}
-              {renderSortableHeader('overstayMinutes', t('tableOverstayTime'))}
-              {renderSortableHeader('fineAmount', t('tableActionFine'))}
-              {renderSortableHeader('status', t('tableStatus'))}
-              <th scope="col" className="p-3 text-right">Action</th>
+            <tr className="border-b border-slate-800 bg-slate-950/60 text-slate-400 font-semibold uppercase tracking-wider">
+              <th className="py-3 px-3">Branch</th>
+              <th className="py-3 px-3">Shift Window</th>
+              <th className="py-3 px-3 text-center">Capacity</th>
+              <th className="py-3 px-3 text-center">Filled</th>
+              <th className="py-3 px-3 text-center">Idle Gap</th>
+              <th className="py-3 px-3">Gap Occupancy</th>
+              <th className="py-3 px-3 text-right">Daily Loss</th>
+              <th className="py-3 px-3 text-right">Monthly Leakage</th>
+              <th className="py-3 px-3">Strategy</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border">
-            {filteredIncidents.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="p-6 text-center text-text-secondary">
-                  No overstay incidents match the selected filter.
+          <tbody className="divide-y divide-slate-800/60 text-slate-200">
+            {paginated.map((r) => (
+              <tr key={r.id} className="hover:bg-slate-800/40 transition-colors">
+                <td className="py-3 px-3 font-medium whitespace-nowrap">
+                  <div className="flex items-center gap-1.5">
+                    <Building2 size={13} className="text-indigo-400 shrink-0" />
+                    <span className="text-white font-semibold">{r.branchName}</span>
+                  </div>
+                </td>
+                <td className="py-3 px-3 whitespace-nowrap">
+                  <div className="font-semibold text-white">{r.shiftName}</div>
+                  <div className="text-[11px] text-slate-400 font-mono">{r.timings}</div>
+                </td>
+                <td className="py-3 px-3 text-center font-mono">{r.totalSeats}</td>
+                <td className="py-3 px-3 text-center font-mono text-emerald-400 font-semibold">{r.assignedSeats}</td>
+                <td className="py-3 px-3 text-center font-mono text-rose-400 font-bold">{r.gapSeats}</td>
+                <td className="py-3 px-3 min-w-[120px]">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${
+                          r.gapPercent > 40 ? 'bg-rose-500' : r.gapPercent > 25 ? 'bg-amber-500' : 'bg-emerald-500'
+                        }`}
+                        style={{ width: `${r.gapPercent}%` }}
+                      />
+                    </div>
+                    <span className="font-mono text-[11px] text-slate-300 shrink-0 font-semibold">{r.gapPercent}%</span>
+                  </div>
+                </td>
+                <td className="py-3 px-3 text-right font-mono text-slate-300">₹{r.dailyGapLoss}</td>
+                <td className="py-3 px-3 text-right font-mono font-bold text-rose-400">
+                  ₹{r.monthlyLeakage.toLocaleString('en-IN')}
+                </td>
+                <td className="py-3 px-3 min-w-[200px]">
+                  <p className="text-[11px] text-slate-300 leading-snug line-clamp-2">
+                    {r.recommendation}
+                  </p>
                 </td>
               </tr>
-            ) : (
-              paginatedIncidents.map((inc) => (
-                <tr key={inc.id} className="hover:bg-surface-hover transition-colors">
-                  <td className="p-3">
-                    <span className="font-semibold text-text-primary">{inc.branchName}</span>
-                    <span className="block text-text-secondary font-medium">{inc.seatNumber}</span>
-                  </td>
-                  <td className="p-3">
-                    <span className="font-semibold text-text-primary">{inc.studentName}</span>
-                    <span className="block text-text-secondary">{inc.smartId}</span>
-                  </td>
-                  <td className="p-3">
-                    <span className="text-text-primary">{inc.bookedShift}</span>
-                    <span className="block text-text-secondary">Scheduled End: {inc.scheduledEndTime}</span>
-                  </td>
-                  <td className="p-3">
-                    <span className="inline-flex items-center gap-1 rounded bg-danger-bg px-2 py-0.5 font-bold text-danger-text">
-                      <Clock className="h-3 w-3" />
-                      +{inc.overstayMinutes}m ({inc.actualDepartureTime})
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    <span className="font-semibold text-text-primary">
-                      {inc.managerAction === 'FINED'
-                        ? t('actionFined')
-                        : inc.managerAction === 'SHIFT_UPGRADED'
-                        ? t('actionUpgraded')
-                        : t('actionWarned')}
-                    </span>
-                    <span className="block text-text-secondary font-medium">
-                      {inc.fineAmount > 0 ? `₹${inc.fineAmount}` : 'No fine (Waived)'}
-                    </span>
-                  </td>
-                  <td className="p-3">
-                    <span
-                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-semibold ${
-                        inc.status === 'RECOVERED'
-                          ? 'bg-success-bg text-success-text'
-                          : inc.status === 'PENDING_CLEARANCE'
-                          ? 'bg-warning-bg text-warning-text'
-                          : 'bg-muted text-text-secondary'
-                      }`}
-                    >
-                      {inc.status === 'RECOVERED' && <CheckCircle2 className="h-3 w-3" />}
-                      {inc.status === 'PENDING_CLEARANCE' && <AlertTriangle className="h-3 w-3" />}
-                      {inc.status === 'RECOVERED'
-                        ? t('statusRecovered')
-                        : inc.status === 'PENDING_CLEARANCE'
-                        ? t('statusPendingClearance')
-                        : t('statusWaived')}
-                    </span>
-                  </td>
-                  <td className="p-3 text-right">
-                    {inc.status === 'PENDING_CLEARANCE' ? (
-                      <button
-                        type="button"
-                        onClick={() => handleVerify(inc.id, inc.studentName)}
-                        className="inline-flex min-h-8 items-center gap-1 rounded-md bg-primary px-2.5 py-1 text-xs font-semibold text-on-primary hover:bg-primary-hover"
-                      >
-                        <CheckCircle2 className="h-3.5 w-3.5" />
-                        {t('verifyIncident')}
-                      </button>
-                    ) : (
-                      <span className="text-xs text-text-secondary italic">Audited</span>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
       </div>
-      {filteredIncidents.length > 0 && (
-        <AdminTablePagination
-          page={page}
-          pageSize={pageSize}
-          totalCount={filteredIncidents.length}
-          onPageChange={setPage}
-          onPageSizeChange={(newSize) => {
-            setPageSize(newSize);
-            setPage(0);
-          }}
-          id="admin-shifts-gap-overstay-page-size"
-        />
-      )}
-    </section>
+
+      <AdminTablePagination
+        page={page}
+        pageSize={pageSize}
+        totalItems={filteredRecords.length}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
+    </div>
   );
 }
 
