@@ -6,7 +6,7 @@ import { ADMIN_FINANCE_PAYMENTS_QUERY_KEYS } from '@/app/frontend_admin/admin_fi
 import type { AdminFinancePaymentApiRecord } from '@/app/frontend_admin/admin_finance/finance_payments/schemas/AdminFinancePaymentsSchema';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 
-const FALLBACK_PAYMENTS: (AdminFinancePaymentApiRecord & { branch: string })[] = [
+export const FALLBACK_PAYMENTS: (AdminFinancePaymentApiRecord & { branch: string })[] = [
   {
     id: 'pay-001',
     receiptNumber: 'REC-2026-1042',
@@ -176,9 +176,6 @@ export default function useAdminFinancePaymentsQuery() {
     queryFn: async () => {
       try {
         const data = await fetchAdminFinancePayments();
-        if (!data || data.length === 0) {
-          return FALLBACK_PAYMENTS;
-        }
         return data;
       } catch (err) {
         return FALLBACK_PAYMENTS;
