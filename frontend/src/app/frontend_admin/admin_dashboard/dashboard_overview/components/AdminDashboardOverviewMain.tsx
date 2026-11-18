@@ -266,12 +266,12 @@ export default function AdminDashboardOverviewMain() {
 
       <aside
         role="status"
-        className="rounded-2xl border border-indigo-500/15 bg-card/60 p-4 text-xs text-slate-400 backdrop-blur-sm"
+        className="sr-only"
       >
-        <h2 className="font-bold text-white text-sm">
+        <h2>
           {t('LIBRARY_DATA_PENDING_TITLE')}
         </h2>
-        <p className="mt-1 leading-relaxed">{t('LIBRARY_DATA_PENDING_DESCRIPTION')}</p>
+        <p>{t('LIBRARY_DATA_PENDING_DESCRIPTION')}</p>
       </aside>
     </div>
   );
