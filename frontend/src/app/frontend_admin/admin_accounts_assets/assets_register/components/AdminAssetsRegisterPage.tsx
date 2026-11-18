@@ -2,7 +2,7 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, RotateCcw, PlusCircle, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Search, RotateCcw, PlusCircle, ShieldCheck } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminAssetsRegisterState } from '@/app/frontend_admin/admin_accounts_assets/assets_register/hooks/useAdminAssetsRegisterState';
@@ -13,7 +13,6 @@ import AdminAssetsRegisterAddModal from '@/app/frontend_admin/admin_accounts_ass
 import AdminAssetsRegisterAmcModal from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterAmcModal';
 import AdminAssetsRegisterDetailModal from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterDetailModal';
 import { ADMIN_ASSET_CATEGORIES } from '@/app/frontend_admin/admin_accounts_assets/assets_register/config/admin_assets_register.url_config';
-import { isExpiringSoon } from '@/app/frontend_admin/admin_accounts_assets/assets_register/utils/AdminAssetsRegisterFormatters';
 import type { AdminAssetRecord } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
 
 export function AdminAssetsRegisterPage() {
@@ -65,7 +64,6 @@ export function AdminAssetsRegisterPage() {
     }
   }, [selectedBranchId, selectedBranch, isAllBranches, availableBranches, setBranchFilter]);
 
-  const expiringCount = records.filter((r) => isExpiringSoon(r.warrantyExpiryDate)).length;
   const needsServiceCount = records.filter(
     (r) => r.status === 'MAINTENANCE_REQUIRED' || r.status === 'UNDER_REPAIR'
   ).length;
@@ -127,25 +125,6 @@ export function AdminAssetsRegisterPage() {
             }`}
           >
             {t('TABS.ALL')} ({records.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setTabFilter('WARRANTY_ALERT')}
-            className={`whitespace-nowrap pb-2.5 px-3 text-xs sm:text-sm font-medium border-b-2 motion-safe:transition-colors ${
-              tabFilter === 'WARRANTY_ALERT'
-                ? 'border-primary text-primary font-semibold'
-                : 'border-transparent text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <span className="inline-flex items-center gap-1">
-              <AlertCircle className="h-3.5 w-3.5 text-amber-500" />
-              <span>{t('TABS.WARRANTY_ALERT')}</span>
-              {expiringCount > 0 && (
-                <span className="ml-1 rounded-full bg-warning-bg px-2 py-0.5 text-xs font-bold text-warning-text">
-                  {expiringCount}
-                </span>
-              )}
-            </span>
           </button>
           <button
             type="button"
