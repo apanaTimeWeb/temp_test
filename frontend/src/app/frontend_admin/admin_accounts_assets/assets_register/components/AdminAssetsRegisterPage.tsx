@@ -1,8 +1,8 @@
 // components/AdminAssetsRegisterPage.tsx
 'use client';
-import { useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, RotateCcw, PlusCircle, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Search, RotateCcw, PlusCircle, ShieldCheck, AlertCircle, Building2 } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminAssetsRegisterState } from '@/app/frontend_admin/admin_accounts_assets/assets_register/hooks/useAdminAssetsRegisterState';
@@ -11,8 +11,10 @@ import AdminAssetsRegisterKpis from '@/app/frontend_admin/admin_accounts_assets/
 import AdminAssetsRegisterTable from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterTable';
 import AdminAssetsRegisterAddModal from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterAddModal';
 import AdminAssetsRegisterAmcModal from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterAmcModal';
+import AdminAssetsRegisterDetailModal from '@/app/frontend_admin/admin_accounts_assets/assets_register/components/AdminAssetsRegisterDetailModal';
 import { ADMIN_ASSET_CATEGORIES } from '@/app/frontend_admin/admin_accounts_assets/assets_register/config/admin_assets_register.url_config';
 import { isExpiringSoon } from '@/app/frontend_admin/admin_accounts_assets/assets_register/utils/AdminAssetsRegisterFormatters';
+import type { AdminAssetRecord } from '@/app/frontend_admin/admin_accounts_assets/assets_register/types/AdminAssetsRegisterTypes';
 
 export function AdminAssetsRegisterPage() {
   const t = useTranslations('ADMIN_ASSETS_REGISTER');
@@ -37,6 +39,8 @@ export function AdminAssetsRegisterPage() {
     addRecord,
     updateRecord,
   } = useAdminAssetsRegisterState();
+
+  const [activeDetailAsset, setActiveDetailAsset] = useState<AdminAssetRecord | null>(null);
 
   const { isSubmitting, handleCreateAsset, handleUpdateAmc } =
     useAdminAssetsRegisterMutations(addRecord, updateRecord);
@@ -65,6 +69,18 @@ export function AdminAssetsRegisterPage() {
   const needsServiceCount = records.filter(
     (r) => r.status === 'MAINTENANCE_REQUIRED' || r.status === 'UNDER_REPAIR'
   ).length;
+
+  const branchCounts = useMemo(() => {
+    const counts: Record<string, number> = { ALL: records.length };
+    for (const b of availableBranches) {
+      counts[b.id] = records.filter(
+        (r) =>
+          r.branchId.toLowerCase() === b.id.toLowerCase() ||
+          r.branchName.toLowerCase().includes(b.name.toLowerCase())
+      ).length;
+    }
+    return counts;
+  }, [records, availableBranches]);
 
   const handleResetFilters = () => {
     setTabFilter('ALL');
@@ -99,7 +115,7 @@ export function AdminAssetsRegisterPage() {
         <button
           type="button"
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-2 text-xs sm:text-sm font-semibold text-primary-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary self-start sm:self-auto motion-safe:transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-2 text-xs sm:text-sm font-semibold text-primary-foreground hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary self-start sm:self-auto motion-safe:transition-colors shadow-sm"
         >
           <PlusCircle className="h-4 w-4" />
           <span>{t('ACTIONS.ADD_ASSET')}</span>
@@ -108,6 +124,63 @@ export function AdminAssetsRegisterPage() {
 
       {/* KPI Cards */}
       <AdminAssetsRegisterKpis records={records} />
+
+      {/* Branch Quick Selector Bar */}
+      <div className="flex flex-wrap items-center gap-2 p-2 bg-card rounded-xl border border-border">
+        <div className="flex items-center gap-1.5 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+          <Building2 className="h-3.5 w-3.5 text-primary" />
+          <span>{t('FILTERS.ALL_BRANCHES')}:</span>
+        </div>
+        <button
+          type="button"
+          onClick={() => setBranchFilter('ALL')}
+          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium motion-safe:transition-all ${
+            branchFilter === 'ALL'
+              ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
+              : 'bg-surface hover:bg-card-hover text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          <span>All Branches</span>
+          <span
+            className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+              branchFilter === 'ALL'
+                ? 'bg-primary-foreground/20 text-primary-foreground'
+                : 'bg-muted text-muted-foreground'
+            }`}
+          >
+            {branchCounts['ALL'] || records.length}
+          </span>
+        </button>
+        {availableBranches.map((b) => {
+          const isSelected =
+            branchFilter.toLowerCase() === b.id.toLowerCase() ||
+            branchFilter.toLowerCase() === b.name.toLowerCase();
+          const count = branchCounts[b.id] ?? 0;
+          return (
+            <button
+              key={b.id}
+              type="button"
+              onClick={() => setBranchFilter(b.id)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium motion-safe:transition-all ${
+                isSelected
+                  ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
+                  : 'bg-surface hover:bg-card-hover text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <span>{b.name}</span>
+              <span
+                className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                  isSelected
+                    ? 'bg-primary-foreground/20 text-primary-foreground'
+                    : 'bg-muted text-muted-foreground'
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
 
       {/* Tabs and Filters */}
       <div className="space-y-3">
@@ -223,7 +296,19 @@ export function AdminAssetsRegisterPage() {
       <AdminAssetsRegisterTable
         records={filteredRecords}
         onManageAmc={(asset) => setActiveAmcAsset(asset)}
+        onViewDetail={(asset) => setActiveDetailAsset(asset)}
         onResetFilters={handleResetFilters}
+      />
+
+      {/* Asset Specification & Health Card Modal */}
+      <AdminAssetsRegisterDetailModal
+        asset={activeDetailAsset}
+        isOpen={activeDetailAsset !== null}
+        onClose={() => setActiveDetailAsset(null)}
+        onManageAmc={(asset) => {
+          setActiveDetailAsset(null);
+          setActiveAmcAsset(asset);
+        }}
       />
 
       {/* Add Asset Modal */}
@@ -248,4 +333,3 @@ export function AdminAssetsRegisterPage() {
 }
 
 export default AdminAssetsRegisterPage;
-
