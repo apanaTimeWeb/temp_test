@@ -6,11 +6,13 @@ import { ADMIN_FINANCE_REFUNDS_QUERY_KEYS } from '@/app/frontend_admin/admin_fin
 import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 
-export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: string; branchId: string })[] = [
+export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: string; branchId: string; studentPhone: string; studentEmail: string })[] = [
   {
     id: 'ref-001',
     studentName: 'Aditi Rao',
     smartId: 'SL-DT-1002',
+    studentPhone: '9876543220',
+    studentEmail: 'aditi.rao@example.com',
     exitDate: '2026-04-12',
     depositHeld: 2500,
     deductionAmount: 500,
@@ -27,6 +29,8 @@ export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: stri
     id: 'ref-002',
     studentName: 'Bhavya Mishra',
     smartId: 'SL-WS-2003',
+    studentPhone: '9876543221',
+    studentEmail: 'bhavya.mishra@example.com',
     exitDate: '2026-04-11',
     depositHeld: 2000,
     deductionAmount: 0,
@@ -43,6 +47,8 @@ export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: stri
     id: 'ref-003',
     studentName: 'Manish Joshi',
     smartId: 'SL-NH-3004',
+    studentPhone: '9876543222',
+    studentEmail: 'manish.joshi@example.com',
     exitDate: '2026-04-10',
     depositHeld: 3000,
     deductionAmount: 200,
@@ -59,6 +65,8 @@ export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: stri
     id: 'ref-004',
     studentName: 'Neha Choudhary',
     smartId: 'SL-DT-1005',
+    studentPhone: '9876543223',
+    studentEmail: 'neha.choudhary@example.com',
     exitDate: '2026-04-09',
     depositHeld: 2500,
     deductionAmount: 0,
@@ -76,6 +84,8 @@ export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: stri
     id: 'ref-005',
     studentName: 'Pranav Kulkarni',
     smartId: 'SL-WS-2006',
+    studentPhone: '9876543224',
+    studentEmail: 'pranav.kulkarni@example.com',
     exitDate: '2026-04-08',
     depositHeld: 2000,
     deductionAmount: 2000,
@@ -92,6 +102,8 @@ export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: stri
     id: 'ref-006',
     studentName: 'Tanvi Bhatia',
     smartId: 'SL-NH-3008',
+    studentPhone: '9876543225',
+    studentEmail: 'tanvi.bhatia@example.com',
     exitDate: '2026-04-07',
     depositHeld: 2500,
     deductionAmount: 300,
@@ -109,6 +121,8 @@ export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: stri
     id: 'ref-007',
     studentName: 'Utkarsh Pandey',
     smartId: 'SL-DT-1009',
+    studentPhone: '9876543226',
+    studentEmail: 'utkarsh.pandey@example.com',
     exitDate: '2026-04-06',
     depositHeld: 2000,
     deductionAmount: 0,

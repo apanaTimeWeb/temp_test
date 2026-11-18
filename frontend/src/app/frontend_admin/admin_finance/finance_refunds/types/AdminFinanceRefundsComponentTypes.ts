@@ -20,6 +20,8 @@ export interface AdminFinanceRefund {
   rejectionReason?: string;
   branchName?: string;
   branchId?: string;
+  studentPhone?: string;
+  studentEmail?: string;
 }
 
 export type AdminFinanceRefundsScenario = "ACTIVE" | "EMPTY" | "SERVER_500" | "TIMEOUT" | "UNAUTHORIZED";

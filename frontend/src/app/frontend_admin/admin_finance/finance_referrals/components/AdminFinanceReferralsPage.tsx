@@ -4,9 +4,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { Search, RotateCcw, Users2 } from 'lucide-react';
+import { Search, RotateCcw, Users2, Download, FileSpreadsheet, Printer } from 'lucide-react';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_FINANCE_DEMO_REFERRERS } from '@/app/frontend_admin/admin_finance/finance_referrals/mocks/AdminFinanceReferralsDemoFixtures';
+import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import {
   AdminFinanceReferralsTimeHorizonBar,
   type AdminFinanceReferralsTimeHorizon,
@@ -16,9 +18,12 @@ import {
   AdminFinanceReferralsTable,
   type ReferralsSortField,
 } from '@/app/frontend_admin/admin_finance/finance_referrals/components/AdminFinanceReferralsTable';
+import { AdminFinanceReferralsRedeemModal } from '@/app/frontend_admin/admin_finance/finance_referrals/components/AdminFinanceReferralsRedeemModal';
 
 export function AdminFinanceReferralsPage() {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
+  const [referrers, setReferrers] = useState<AdminFinanceDemoReferrer[]>(ADMIN_FINANCE_DEMO_REFERRERS);
+  const [redeemTarget, setRedeemTarget] = useState<AdminFinanceDemoReferrer | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
   const [search, setSearch] = useState('');
@@ -59,11 +64,29 @@ export function AdminFinanceReferralsPage() {
     }
   };
 
+  const handleConfirmRedeem = (
+    referrerId: number,
+    amountMinor: number,
+    mode: 'fee_adjustment' | 'cash_upi',
+    notes: string
+  ) => {
+    setReferrers((prev) =>
+      prev.map((r) => {
+        if (r.id === referrerId) {
+          const newRedeemed = r.redeemed + amountMinor;
+          const newBalance = Math.max(0, r.balance - amountMinor);
+          return { ...r, redeemed: newRedeemed, balance: newBalance };
+        }
+        return r;
+      })
+    );
+  };
+
   const { selectedBranch, isAllBranches } = useAdminBranch();
 
   const filteredReferrers = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return ADMIN_FINANCE_DEMO_REFERRERS.filter((r) => {
+    return referrers.filter((r) => {
       const matchBranch = isAllBranches || !selectedBranch || !r.branch || r.branch.toLowerCase().includes(selectedBranch.name.toLowerCase());
       const matchSearch = !q ||
         r.name.toLowerCase().includes(q) ||
@@ -71,7 +94,7 @@ export function AdminFinanceReferralsPage() {
         r.referredNames.some((rn) => rn.toLowerCase().includes(q));
       return matchBranch && matchSearch;
     });
-  }, [search, isAllBranches, selectedBranch]);
+  }, [search, isAllBranches, selectedBranch, referrers]);
 
   // Dynamically compute horizon-scaled KPIs
   const horizonMultiplier = useMemo(() => {

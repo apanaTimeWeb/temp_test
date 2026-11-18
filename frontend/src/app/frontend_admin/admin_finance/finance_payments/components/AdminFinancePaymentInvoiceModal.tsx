@@ -1,9 +1,11 @@
 'use client';
 
 import React from 'react';
-import { X, Printer, Share2, Building2, User, FileText, Download, CheckCircle2 } from 'lucide-react';
+import { X, Printer, Share2, Building2, User, FileText, Download, CheckCircle2, Mail } from 'lucide-react';
+import { toast } from 'sonner';
 import type { AdminFinancePayment } from '@/app/frontend_admin/admin_finance/finance_payments/types/AdminFinancePaymentsComponentTypes';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
+import { downloadPaymentInvoicePdf, buildWhatsAppLink } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
 
 interface AdminFinancePaymentInvoiceModalProps {
   payment: AdminFinancePayment | null;
@@ -154,8 +156,23 @@ export function AdminFinancePaymentInvoiceModal({ payment, isOpen, onClose }: Ad
       `Status: Paid & Verified\n` +
       `---------------------------------\n` +
       `Smart Library Network Accounts`;
-    const popup = window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+    const waUrl = buildWhatsAppLink(payment.studentPhone, text);
+    const popup = window.open(waUrl, '_blank', 'noopener,noreferrer');
     if (popup) popup.opener = null;
+  };
+
+  const handleEmailInvoice = () => {
+    const email = payment.studentEmail || `${payment.studentName.toLowerCase().replace(/\s+/g, '.')}@example.com`;
+    const formattedAmount = formatAdminFinanceApiAmount(payment.amount, payment.currencyCode ?? 'INR', payment.amountUnit ?? 'major');
+    const subject = `Tax Invoice ${invoiceNumber} - Smart Library`;
+    const body = `Dear ${payment.studentName},\n\nPlease find your tax invoice details for library membership subscription:\n\nInvoice No: ${invoiceNumber}\nReceipt Ref: ${payment.receiptNumber}\nDate: ${formatDate(payment.date)}\nTotal Amount Paid: ${formattedAmount}\nBranch: ${payment.branch ?? 'Downtown Central'}\nPayment Mode: ${payment.mode.toUpperCase()}\nStatus: Paid in Full\n\nThank you for choosing Smart Library!\nAccounts Team`;
+    window.location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    toast.success(`Opening email client for ${email}`);
+  };
+
+  const handleDownloadPdf = () => {
+    downloadPaymentInvoicePdf(payment);
+    toast.success(`Downloaded Tax Invoice PDF (${invoiceNumber})`);
   };
 
   const formattedAmount = formatAdminFinanceApiAmount(payment.amount, payment.currencyCode ?? 'INR', payment.amountUnit ?? 'major');
@@ -283,14 +300,33 @@ export function AdminFinancePaymentInvoiceModal({ payment, isOpen, onClose }: Ad
           >
             Close
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={handleEmailInvoice}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 px-3.5 py-2 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:bg-sky-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500"
+              title="Email Tax Invoice to Student"
+            >
+              <Mail className="h-3.5 w-3.5" />
+              Email Receipt
+            </button>
             <button
               type="button"
               onClick={handleShareWhatsApp}
               className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              title="Share Invoice on WhatsApp"
             >
               <Share2 className="h-3.5 w-3.5" />
               Share WhatsApp
+            </button>
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 px-3.5 py-2 text-xs font-semibold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              title="Download Tax Invoice PDF"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Download PDF
             </button>
             <button
               type="button"

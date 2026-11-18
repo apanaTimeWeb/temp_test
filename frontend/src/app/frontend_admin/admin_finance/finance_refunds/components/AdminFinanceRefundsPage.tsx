@@ -6,9 +6,9 @@ import useAdminFinanceRefundsQuery, { FALLBACK_REFUNDS } from '@/app/frontend_ad
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Search, RotateCcw, IndianRupee, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { Search, RotateCcw, IndianRupee, Clock, CheckCircle2, XCircle, Download, FileSpreadsheet } from 'lucide-react';
 import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
-import { formatAdminFinanceApiAmount } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
+import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { AdminFinanceRefundsTable } from '@/app/frontend_admin/admin_finance/finance_refunds/components/AdminFinanceRefundsTable';
@@ -36,6 +36,8 @@ function mapAdminFinanceRefund(record: AdminFinanceRefundApiRecord): AdminFinanc
     rejectionReason: record.rejectionReason,
     branchName: typeof rec.branchName === 'string' ? rec.branchName : undefined,
     branchId: typeof rec.branchId === 'string' ? rec.branchId : undefined,
+    studentPhone: typeof rec.studentPhone === 'string' ? rec.studentPhone : (typeof rec.phone === 'string' ? rec.phone : '9876543220'),
+    studentEmail: typeof rec.studentEmail === 'string' ? rec.studentEmail : (typeof rec.email === 'string' ? rec.email : `${record.studentName.toLowerCase().replace(/\s+/g, '.')}@example.com`),
   };
 }
 
@@ -129,6 +131,87 @@ export function AdminFinanceRefundsPage() {
   const processedRefunds = timeFilteredRefunds.filter((refund) => refund.status === 'processed');
   const totalRefunded = processedRefunds.reduce((sum, refund) => sum + refund.netRefund, 0);
   const pendingCount = timeFilteredRefunds.filter((refund) => refund.status === 'pending').length;
+
+  const handleExportCsv = () => {
+    const headers = ['Ref ID', 'Student Name', 'Smart ID', 'Branch', 'Exit Date', 'Deposit Held (INR)', 'Deductions (INR)', 'Net Refund (INR)', 'Status', 'Payment Method', 'Processed Date', 'Rejection Reason'];
+    const rows = filtered.map((r) => [
+      r.id,
+      `"${r.studentName.replace(/"/g, '""')}"`,
+      r.smartId,
+      `"${(r.branchName ?? selectedBranch?.name ?? 'Downtown Central').replace(/"/g, '""')}"`,
+      r.exitDate ? formatDate(r.exitDate) : '—',
+      r.depositHeld,
+      r.deductionAmount,
+      r.netRefund,
+      r.status.toUpperCase(),
+      r.paymentMethod ? `"${r.paymentMethod.replace(/"/g, '""')}"` : '—',
+      r.processedDate ? formatDate(r.processedDate) : '—',
+      r.rejectionReason ? `"${r.rejectionReason.replace(/"/g, '""')}"` : '—',
+    ]);
+    const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-finance-refunds-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filtered.length} refund records to CSV`);
+  };
+
+  const handleExportExcel = () => {
+    const headers = ['Ref ID', 'Student Name', 'Smart ID', 'Branch', 'Exit Date', 'Deposit Held (INR)', 'Deductions (INR)', 'Net Refund (INR)', 'Status', 'Payment Method', 'Processed Date', 'Rejection Reason'];
+    const rows = filtered.map((r) => [
+      r.id,
+      r.studentName,
+      r.smartId,
+      r.branchName ?? selectedBranch?.name ?? 'Downtown Central',
+      r.exitDate ? formatDate(r.exitDate) : '—',
+      r.depositHeld,
+      r.deductionAmount,
+      r.netRefund,
+      r.status.toUpperCase(),
+      r.paymentMethod ?? '—',
+      r.processedDate ? formatDate(r.processedDate) : '—',
+      r.rejectionReason ?? '—',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Refunds</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #047857; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #065f46; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #ecfdf5; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-finance-refunds-${new Date().toISOString().slice(0, 10)}.xls`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filtered.length} refunds to Excel (.xls) for CA/Accounts`);
+  };
 
   return (
     <div className="space-y-6">
@@ -239,7 +322,7 @@ export function AdminFinanceRefundsPage() {
             className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-border bg-input text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <label className="sr-only" htmlFor="finance-refund-status">{t('FILTER_REFUND_STATUS')}</label>
           <select
             id="finance-refund-status"
@@ -269,6 +352,28 @@ export function AdminFinanceRefundsPage() {
               <span>Reset</span>
             </button>
           )}
+
+          {/* Export to Excel & CSV for CA / Accounting Audit */}
+          <div className="flex items-center gap-1.5 pl-2 border-l border-border">
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+              title="Export refunds to CSV"
+            >
+              <Download size={14} className="text-emerald-500" />
+              <span>CSV</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleExportExcel}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+              title="Export refunds to Excel (.xls) for CA/Accountant"
+            >
+              <FileSpreadsheet size={14} className="text-emerald-600 dark:text-emerald-400" />
+              <span>Excel (.xls)</span>
+            </button>
+          </div>
         </div>
       </div>
 

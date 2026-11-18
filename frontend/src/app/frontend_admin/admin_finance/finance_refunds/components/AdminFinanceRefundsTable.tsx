@@ -2,11 +2,13 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Building2, ArrowUpDown, ArrowUp, ArrowDown, Check, X, CheckCircle2, Eye } from 'lucide-react';
+import { Building2, ArrowUpDown, ArrowUp, ArrowDown, Check, X, CheckCircle2, Eye, FileText, MessageSquare, Download } from 'lucide-react';
+import { toast } from 'sonner';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import { getAdminFinanceRefundStatusLabelKey } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsRefundStatus';
 import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
+import { downloadRefundVoucherPdf, buildWhatsAppLink } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
 
 const ADMIN_FINANCE_REFUND_STATUS_BADGE: Record<AdminFinanceRefund['status'], string> = {
   pending: 'inline-flex min-h-6 items-center gap-1 rounded-full border border-amber-500/25 bg-amber-500/10 px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap text-amber-600 dark:text-amber-400',
@@ -212,17 +214,53 @@ export function AdminFinanceRefundsTable({
                         <span className="text-xs text-text-secondary italic">{t('REFUND_VIEW_ONLY')}</span>
                       )}
 
-                      {onViewDetail && (
+                      <div className="flex items-center gap-1.5 ml-auto">
                         <button
                           type="button"
-                          className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-elevated transition-colors shadow-xs ml-auto"
-                          onClick={() => onViewDetail(refund)}
-                          title="View refund voucher"
-                          aria-label={`View refund voucher for ${refund.studentName}`}
+                          className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/10 text-teal-600 dark:text-teal-400 hover:bg-teal-500/20 transition-colors shadow-xs"
+                          onClick={() => {
+                            downloadRefundVoucherPdf(refund);
+                            toast.success(`Downloaded clearance voucher PDF for ${refund.studentName}`);
+                          }}
+                          title="Print / Download Refund Voucher PDF"
+                          aria-label={`Download refund voucher for ${refund.studentName}`}
                         >
-                          <Eye size={13} strokeWidth={2.2} />
+                          <FileText size={13} strokeWidth={2.2} />
                         </button>
-                      )}
+                        <button
+                          type="button"
+                          className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors shadow-xs"
+                          onClick={() => {
+                            let msg = '';
+                            if (refund.status === 'approved') {
+                              msg = `Dear ${refund.studentName}, your Smart Library security deposit refund of ₹${refund.netRefund.toLocaleString('en-IN')} has been APPROVED! Method: ${refund.paymentMethod || 'UPI/Bank'}. Ref: ${refund.id}.`;
+                            } else if (refund.status === 'rejected') {
+                              msg = `Dear ${refund.studentName}, your deposit refund request has been REJECTED. Reason: ${refund.rejectionReason || 'Pending damages/dues'}. Ref: ${refund.id}.`;
+                            } else {
+                              msg = `Dear ${refund.studentName}, your security deposit refund status is currently ${refund.status.toUpperCase()}. Net amount: ₹${refund.netRefund.toLocaleString('en-IN')}. Ref: ${refund.id}.`;
+                            }
+                            const waUrl = buildWhatsAppLink(refund.studentPhone, msg);
+                            const popup = window.open(waUrl, '_blank', 'noopener,noreferrer');
+                            if (popup) popup.opener = null;
+                            toast.success(`Sent WhatsApp notification to ${refund.studentName}`);
+                          }}
+                          title="Send WhatsApp / SMS Notification"
+                          aria-label={`Send notification to ${refund.studentName}`}
+                        >
+                          <MessageSquare size={13} strokeWidth={2.2} />
+                        </button>
+                        {onViewDetail && (
+                          <button
+                            type="button"
+                            className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-elevated transition-colors shadow-xs"
+                            onClick={() => onViewDetail(refund)}
+                            title="View refund voucher dialog"
+                            aria-label={`View refund voucher for ${refund.studentName}`}
+                          >
+                            <Eye size={13} strokeWidth={2.2} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </td>
                 </tr>

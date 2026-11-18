@@ -2,7 +2,7 @@
 // Responsibility: Presentational table for Admin Finance Referrals ranking, sorting, and pagination.
 
 import { useTranslations } from 'next-intl';
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUpDown, ArrowUp, ArrowDown, IndianRupee, CheckCircle2 } from 'lucide-react';
 import { formatAdminFinanceCurrency } from '@/app/frontend_admin/admin_finance/finance_referrals/utils/AdminFinanceReferralsFormat';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
@@ -22,6 +22,7 @@ interface AdminFinanceReferralsTableProps {
   onToggleSort: (field: ReferralsSortField) => void;
   expandedId: number | null;
   onToggleExpand: (id: number | null) => void;
+  onRedeem?: (referrer: AdminFinanceDemoReferrer) => void;
 }
 
 export function AdminFinanceReferralsTable({
@@ -37,6 +38,7 @@ export function AdminFinanceReferralsTable({
   onToggleSort,
   expandedId,
   onToggleExpand,
+  onRedeem,
 }: AdminFinanceReferralsTableProps) {
   const t = useTranslations('ADMIN_FINANCE_REFERRALS');
 
@@ -81,13 +83,14 @@ export function AdminFinanceReferralsTable({
             {renderSortableHeader('bonusEarned', t('BONUS_EARNED'), 'right')}
             {renderSortableHeader('redeemed', t('REDEEMED'), 'right')}
             {renderSortableHeader('balance', t('BALANCE'), 'right')}
+            <th className="text-right py-3 px-4">Actions</th>
           </tr>
         </thead>
         <tbody>
           {isLoading ? (
             Array.from({ length: 4 }).map((_, i) => (
               <tr key={`skeleton-${i + 1}`} className="h-12 border-b border-border text-text-primary">
-                {Array.from({ length: 7 }).map((_, j) => (
+                {Array.from({ length: 8 }).map((_, j) => (
                   <td key={`skeleton-cell-${j + 1}`} className="py-3 px-4">
                     <div className="motion-safe:animate-pulse rounded-sm bg-skeleton-base h-4 w-16" />
                   </td>
@@ -96,7 +99,7 @@ export function AdminFinanceReferralsTable({
             ))
           ) : filteredCount === 0 ? (
             <tr>
-              <td colSpan={7}>
+              <td colSpan={8}>
                 <div data-testid="admin_finance-page-state-001" className="flex min-h-56 flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border bg-card p-6 text-center">
                   <div data-testid="admin_finance-page-state-002" className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-subtle text-primary">👥</div>
                   <p data-testid="admin_finance-page-state-003" className="text-section-title font-semibold text-text-primary">{t('EMPTY')}</p>
@@ -146,6 +149,24 @@ export function AdminFinanceReferralsTable({
                   <td className="py-3 px-4 text-right text-emerald-600 dark:text-emerald-400 font-bold font-mono">{formatAdminFinanceCurrency(r.bonusEarned)}</td>
                   <td className="py-3 px-4 text-right text-body text-text-primary font-mono">{formatAdminFinanceCurrency(r.redeemed)}</td>
                   <td className="py-3 px-4 text-right font-bold text-body text-text-primary font-mono">{formatAdminFinanceCurrency(r.balance)}</td>
+                  <td className="py-3 px-4 text-right">
+                    {r.balance > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => onRedeem && onRedeem(r)}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 transition-colors shadow-xs"
+                        title="Disburse / Redeem Referral Bonus"
+                        aria-label={`Redeem referral bonus for ${r.name}`}
+                      >
+                        <IndianRupee size={12} strokeWidth={2.5} />
+                        <span>Redeem</span>
+                      </button>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] font-medium text-text-muted">
+                        <CheckCircle2 size={11} className="text-emerald-500" /> Settled
+                      </span>
+                    )}
+                  </td>
                 </tr>
               );
             })

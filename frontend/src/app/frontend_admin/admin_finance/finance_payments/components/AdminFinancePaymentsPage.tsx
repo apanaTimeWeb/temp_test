@@ -6,12 +6,13 @@ import useAdminFinancePaymentsQuery, { FALLBACK_PAYMENTS } from '@/app/frontend_
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { FileText, Receipt, Search, Calendar, Download, TrendingUp, CreditCard, MessageSquare, IndianRupee, FileSpreadsheet, Printer } from 'lucide-react';
+import { FileText, Receipt, Search, Calendar, Download, TrendingUp, CreditCard, MessageSquare, IndianRupee, FileSpreadsheet, Printer, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { AdminFinancePaymentApiRecord } from '@/app/frontend_admin/admin_finance/finance_payments/schemas/AdminFinancePaymentsSchema';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsFormat';
+import { downloadPaymentInvoicePdf, buildWhatsAppLink } from '@/app/frontend_admin/admin_finance/utils/AdminFinancePdfGenerator';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_FINANCE_PAYMENTS_ROUTES } from '@/app/frontend_admin/admin_finance/finance_payments/config/admin_finance_payments.url_config';
 import { buildAdminFinancePaymentsCsv } from '@/app/frontend_admin/admin_finance/finance_payments/utils/AdminFinancePaymentsCsvUtils';
@@ -30,6 +31,7 @@ const ADMIN_FINANCE_MODE_BADGE: Record<AdminFinancePayment['mode'], string> = {
 function mapAdminFinancePayment(record: AdminFinancePaymentApiRecord): AdminFinancePayment {
   const norm = record.status?.trim().toLowerCase();
   const status: AdminFinancePayment['status'] = ['completed', 'valid', 'paid'].includes(norm ?? '') ? 'valid' : ['deleted', 'void', 'reversed'].includes(norm ?? '') ? 'deleted' : 'unknown';
+  const rec = record as Record<string, unknown>;
   return {
     id: record.id,
     receiptNumber: record.receiptNumber ?? '—',
@@ -45,7 +47,9 @@ function mapAdminFinancePayment(record: AdminFinancePaymentApiRecord): AdminFina
     receivedBy: record.receivedBy ?? '—',
     status,
     deletionReason: record.deletionReason,
-    branch: (record as Record<string, unknown>).branch as string | undefined,
+    branch: rec.branch as string | undefined,
+    studentPhone: (rec.studentPhone as string) || (rec.phone as string) || '9876543210',
+    studentEmail: (rec.studentEmail as string) || (rec.email as string) || `${record.studentName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
   };
 }
 
@@ -302,7 +306,7 @@ export function AdminFinancePaymentsPage() {
     { field: 'status', headerName: t('STATUS'), width: 130, sortable: true, cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) => <span className={`inline-flex min-h-6 items-center gap-1 rounded-full border px-2.5 py-0.5 text-badge font-semibold capitalize whitespace-nowrap ${params.data.status === 'valid' ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400'}`}>{params.data.status === 'valid' ? t('VALID') : params.data.status === 'deleted' ? t('DELETED') : t('UNKNOWN')}</span> },
     {
       headerName: t('ACTIONS'),
-      width: 170,
+      width: 230,
       sortable: false,
       cellRenderer: (params: DataGridCellParams<AdminFinancePayment>) =>
         params.data.status === 'valid' ? (
@@ -312,7 +316,7 @@ export function AdminFinancePaymentsPage() {
               className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               onClick={() => setReceiptModalPayment(params.data)}
               aria-label={t('VIEW_RECEIPT', { number: params.data.receiptNumber })}
-              title="View receipt"
+              title="View receipt (80mm)"
             >
               <Receipt size={15} strokeWidth={2.2} />
             </button>
@@ -321,18 +325,46 @@ export function AdminFinancePaymentsPage() {
               className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               onClick={() => setInvoiceModalPayment(params.data)}
               aria-label={t('VIEW_INVOICE', { number: params.data.receiptNumber })}
-              title="View invoice"
+              title="View Tax Invoice"
             >
               <FileText size={15} strokeWidth={2.2} />
             </button>
             <button
               type="button"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/10 text-teal-600 dark:text-teal-400 hover:bg-teal-500/20 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              title="Direct PDF Download"
+              aria-label={`Download PDF invoice for ${params.data.receiptNumber}`}
+              onClick={() => {
+                downloadPaymentInvoicePdf(params.data);
+                toast.success(`Downloading Tax Invoice PDF (${params.data.receiptNumber})`);
+              }}
+            >
+              <Download size={15} strokeWidth={2.2} />
+            </button>
+            <button
+              type="button"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-600 dark:text-sky-400 hover:bg-sky-500/20 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              title="Email Receipt to Student"
+              aria-label={`Email receipt ${params.data.receiptNumber} to ${params.data.studentName}`}
+              onClick={() => {
+                const email = params.data.studentEmail || `${params.data.studentName.toLowerCase().replace(/\s+/g, '.')}@example.com`;
+                const subject = `Fee Payment Receipt - ${params.data.receiptNumber} - Smart Library`;
+                const body = `Dear ${params.data.studentName},\n\nThank you for your fee payment!\n\nReceipt No: ${params.data.receiptNumber}\nDate: ${formatDate(params.data.date)}\nAmount: ${formatAdminFinanceApiAmount(params.data.amount, params.data.currencyCode, params.data.amountUnit)}\nPayment Mode: ${params.data.mode.toUpperCase()}\nStatus: Verified & Confirmed.\n\nSmart Library Accounts Division`;
+                window.location.href = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                toast.success(`Opening email client for ${email}`);
+              }}
+            >
+              <Mail size={15} strokeWidth={2.2} />
+            </button>
+            <button
+              type="button"
               className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              title="Share receipt via WhatsApp"
+              title="Share receipt via WhatsApp (auto phone prefilled)"
               aria-label={`Share receipt ${params.data.receiptNumber} with ${params.data.studentName} on WhatsApp`}
               onClick={() => {
                 const text = `Hello ${params.data.studentName}, thank you for your payment!\nReceipt No: ${params.data.receiptNumber}\nDate: ${formatDate(params.data.date)}\nAmount: ${formatAdminFinanceApiAmount(params.data.amount, params.data.currencyCode, params.data.amountUnit)}\nMode: ${params.data.mode.toUpperCase()}\nStatus: Verified & Confirmed.\nSmart Library Admin`;
-                const popup = window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+                const waUrl = buildWhatsAppLink(params.data.studentPhone, text);
+                const popup = window.open(waUrl, '_blank', 'noopener,noreferrer');
                 if (popup) popup.opener = null;
               }}
             >
