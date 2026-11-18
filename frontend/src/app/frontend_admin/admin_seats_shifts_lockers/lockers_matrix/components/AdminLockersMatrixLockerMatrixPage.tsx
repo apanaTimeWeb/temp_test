@@ -215,11 +215,10 @@ export function AdminLockersLockerMatrixPage() {
             type="button"
             onClick={() => setViewMode('grid')}
             aria-pressed={viewMode === 'grid'}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              viewMode === 'grid'
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${viewMode === 'grid'
                 ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
+              }`}
           >
             <LayoutGrid size={14} /> Grid View
           </button>
@@ -227,11 +226,10 @@ export function AdminLockersLockerMatrixPage() {
             type="button"
             onClick={() => setViewMode('table')}
             aria-pressed={viewMode === 'table'}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              viewMode === 'table'
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${viewMode === 'table'
                 ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-            }`}
+              }`}
           >
             <List size={14} /> Table View
           </button>
@@ -241,33 +239,8 @@ export function AdminLockersLockerMatrixPage() {
       {/* KPI Stats Cards */}
       <AdminLockersLockerMatrixStats {...stats} />
 
-      {/* In-Page Branch Selector & Status Toolbar */}
+      {/* Search & Status Toolbar */}
       <div className="flex flex-col gap-3.5 rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-lg backdrop-blur-md">
-        {/* Branch Selector Pills */}
-        <div className="flex flex-wrap items-center gap-2 pb-3 border-b border-slate-800">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 mr-1">
-            <Building2 size={14} className="text-indigo-400" />
-            Branch Filter:
-          </span>
-          {['All Branches', 'Downtown Central', 'Westside Branch', 'North Hub'].map((branchName) => {
-            const isSelected = activeBranchFilter === branchName;
-            return (
-              <button
-                key={branchName}
-                type="button"
-                onClick={() => setActiveBranchFilter(branchName)}
-                className={`rounded-xl px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-                  isSelected
-                    ? 'border border-indigo-500/50 bg-indigo-500/20 text-indigo-300 shadow-xs'
-                    : 'border border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700 hover:text-slate-200'
-                }`}
-              >
-                {branchName}
-              </button>
-            );
-          })}
-        </div>
-
         {/* Search & Status Filters */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
@@ -289,19 +262,18 @@ export function AdminLockersLockerMatrixPage() {
                   key={filter}
                   type="button"
                   onClick={() => setStatusFilter(filter)}
-                  className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
-                    isSelected
+                  className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${isSelected
                       ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-xs'
                       : 'border border-slate-800 bg-slate-950/60 text-slate-400 hover:text-white hover:bg-slate-800/60'
-                  }`}
+                    }`}
                 >
                   {filter === 'all'
                     ? 'All Lockers'
                     : filter === 'free'
-                    ? 'Available Free'
-                    : filter === 'occupied'
-                    ? 'Occupied'
-                    : 'Maintenance'}
+                      ? 'Available Free'
+                      : filter === 'occupied'
+                        ? 'Occupied'
+                        : 'Maintenance'}
                 </button>
               );
             })}
@@ -352,8 +324,8 @@ export function AdminLockersLockerMatrixPage() {
               const cardClasses = isFree
                 ? 'border-emerald-500/35 bg-gradient-to-br from-[#091a16]/90 via-[#0e2721]/80 to-slate-950 text-emerald-300 hover:border-emerald-400 hover:scale-[1.02] shadow-emerald-950/20'
                 : isOccupied
-                ? 'border-rose-500/35 bg-gradient-to-br from-[#1f0a10]/90 via-[#2d0e17]/80 to-slate-950 text-rose-300 hover:border-rose-400 hover:scale-[1.02] shadow-rose-950/20'
-                : 'border-amber-500/35 bg-gradient-to-br from-[#1c1408]/90 via-[#2c200c]/80 to-slate-950 text-amber-300 hover:border-amber-400 hover:scale-[1.02] shadow-amber-950/20';
+                  ? 'border-rose-500/35 bg-gradient-to-br from-[#1f0a10]/90 via-[#2d0e17]/80 to-slate-950 text-rose-300 hover:border-rose-400 hover:scale-[1.02] shadow-rose-950/20'
+                  : 'border-amber-500/35 bg-gradient-to-br from-[#1c1408]/90 via-[#2c200c]/80 to-slate-950 text-amber-300 hover:border-amber-400 hover:scale-[1.02] shadow-amber-950/20';
 
               return (
                 <button
@@ -373,9 +345,8 @@ export function AdminLockersLockerMatrixPage() {
                       <span>#{locker.id}</span>
                     </div>
                     <span
-                      className={`h-2 w-2 rounded-full ${
-                        isFree ? 'bg-emerald-400' : isOccupied ? 'bg-rose-400' : 'bg-amber-400'
-                      }`}
+                      className={`h-2 w-2 rounded-full ${isFree ? 'bg-emerald-400' : isOccupied ? 'bg-rose-400' : 'bg-amber-400'
+                        }`}
                     />
                   </div>
 

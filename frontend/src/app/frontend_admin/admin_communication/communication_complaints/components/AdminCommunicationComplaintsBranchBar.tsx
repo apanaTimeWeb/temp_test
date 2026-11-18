@@ -2,16 +2,16 @@
 
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Building2, MessageSquare, AlertCircle, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { MessageSquare, AlertCircle, RefreshCw, CheckCircle2 } from 'lucide-react';
 import { ADMIN_COMMUNICATION_COMPLAINT_STATUS } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
-import { ALL_BRANCHES_ID, type AdminBranchItem } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
+import type { AdminBranchItem } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
 import type { CStatus, Complaint } from '@/app/frontend_admin/admin_communication/communication_complaints/types/AdminCommunicationComplaintsComponentTypes';
 
 interface AdminCommunicationComplaintsBranchBarProps {
-  branches: readonly AdminBranchItem[];
-  selectedBranchId: string;
-  selectedBranch: AdminBranchItem | null | undefined;
-  setSelectedBranchId: (id: string) => void;
+  branches?: readonly AdminBranchItem[];
+  selectedBranchId?: string;
+  selectedBranch?: AdminBranchItem | null;
+  setSelectedBranchId?: (id: string) => void;
   isAllBranches: boolean;
   complaints: Complaint[];
   tab: CStatus | 'All';
@@ -20,10 +20,7 @@ interface AdminCommunicationComplaintsBranchBarProps {
 }
 
 export function AdminCommunicationComplaintsBranchBar({
-  branches,
-  selectedBranchId,
   selectedBranch,
-  setSelectedBranchId,
   isAllBranches,
   complaints,
   tab,
@@ -31,17 +28,6 @@ export function AdminCommunicationComplaintsBranchBar({
   tabs,
 }: AdminCommunicationComplaintsBranchBarProps) {
   const t = useTranslations('ADMIN_COMMUNICATION');
-
-  // Compute branch grievance counts
-  const branchCounts = useMemo(() => {
-    const counts: Record<string, number> = { [ALL_BRANCHES_ID]: complaints.length };
-    for (const b of branches) {
-      counts[b.id] = complaints.filter(
-        (c) => c.branchName && c.branchName.toLowerCase().includes(b.name.toLowerCase())
-      ).length;
-    }
-    return counts;
-  }, [branches, complaints]);
 
   // Compute status counts for currently filtered branch
   const branchFilteredComplaints = useMemo(() => {
@@ -61,63 +47,6 @@ export function AdminCommunicationComplaintsBranchBar({
 
   return (
     <div className="space-y-3 mb-6">
-      {/* Branch Quick Selector Bar */}
-      {branches.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2 p-2 bg-card rounded-xl border border-border shadow-xs">
-          <div className="flex items-center gap-1.5 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            <Building2 className="h-3.5 w-3.5 text-primary" />
-            <span>Branch:</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium motion-safe:transition-all ${
-              isAllBranches
-                ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
-                : 'bg-surface hover:bg-card-hover text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <span>All Branches</span>
-            <span
-              className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                isAllBranches
-                  ? 'bg-primary-foreground/20 text-primary-foreground'
-                  : 'bg-muted text-muted-foreground'
-              }`}
-            >
-              {branchCounts[ALL_BRANCHES_ID] ?? complaints.length}
-            </span>
-          </button>
-          {branches.map((b) => {
-            const isSelected = !isAllBranches && selectedBranchId === b.id;
-            const count = branchCounts[b.id] ?? 0;
-            return (
-              <button
-                key={b.id}
-                type="button"
-                onClick={() => setSelectedBranchId(b.id)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium motion-safe:transition-all ${
-                  isSelected
-                    ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
-                    : 'bg-surface hover:bg-card-hover text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <span>{b.name}</span>
-                <span
-                  className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                    isSelected
-                      ? 'bg-primary-foreground/20 text-primary-foreground'
-                      : 'bg-muted text-muted-foreground'
-                  }`}
-                >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      )}
-
       {/* Filter Tabs with count badges and indicators */}
       <div className="gap-1.5 rounded-xl border border-border bg-card p-1.5 inline-flex flex-wrap shadow-xs">
         {tabs.map((status) => {

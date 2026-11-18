@@ -6,7 +6,7 @@ import useAdminFinanceRefundsQuery, { FALLBACK_REFUNDS } from '@/app/frontend_ad
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Building2, Search, RotateCcw, IndianRupee, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { Search, RotateCcw, IndianRupee, Clock, CheckCircle2, XCircle } from 'lucide-react';
 import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
 import { formatAdminFinanceApiAmount } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import type { AdminFinanceRefund } from '@/app/frontend_admin/admin_finance/finance_refunds/types/AdminFinanceRefundsComponentTypes';
@@ -148,50 +148,6 @@ export function AdminFinanceRefundsPage() {
         timeRangeLabel={timeRangeLabel}
         count={timeFilteredRefunds.length}
       />
-
-      {/* In-Page Branch Selector Bar */}
-      <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          onClick={() => setSelectedBranchId('all')}
-          className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all shadow-xs ${
-            isAllBranches || selectedBranchId === 'all'
-              ? 'border-primary bg-primary text-primary-contrast shadow-sm scale-[1.02]'
-              : 'border-border bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-          }`}
-        >
-          <Building2 size={14} />
-          <span>All Branches</span>
-          <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${isAllBranches || selectedBranchId === 'all' ? 'bg-white/20 text-white' : 'bg-surface-elevated text-text-muted'}`}>
-            {allRefunds.length}
-          </span>
-        </button>
-        {branches.map((b) => {
-          const branchCount = allRefunds.filter((r) => {
-            const bName = (r.branchName ?? '').toLowerCase();
-            const sName = b.name.toLowerCase();
-            return bName.includes(sName) || sName.includes(bName) || r.branchId === b.id;
-          }).length;
-          const isSelected = !isAllBranches && (selectedBranchId === b.id || selectedBranch?.id === b.id);
-          return (
-            <button
-              key={b.id}
-              type="button"
-              onClick={() => setSelectedBranchId(b.id)}
-              className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all shadow-xs ${
-                isSelected
-                  ? 'border-primary bg-primary text-primary-contrast shadow-sm scale-[1.02]'
-                  : 'border-border bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-              }`}
-            >
-              <span>{b.name}</span>
-              <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${isSelected ? 'bg-white/20 text-white' : 'bg-surface-elevated text-text-muted'}`}>
-                {branchCount}
-              </span>
-            </button>
-          );
-        })}
-      </div>
 
       {/* 4 Premium Glassmorphic KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">

@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Owns the coupons page summary, KPI indicators, and explicit query result states.
 
 import { useTranslations } from 'next-intl';
-import { Tag, Plus, Search, Download, FileSpreadsheet, Printer, Building2, Filter } from 'lucide-react';
+import { Tag, Plus, Search, Download, FileSpreadsheet, Printer } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
@@ -35,7 +35,6 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
   const t = useTranslations('ADMIN_COUPONS');
   const [urlTablePage0, setUrlTablePage0] = useAdminApplicationInfrastructureUrlQueryState<number>('admin-coupons-admin-coupons-results-section-1-page', 0);
   const [search, setSearch] = useState('');
-  const [selectedBranchFilter, setSelectedBranchFilter] = useState('All Branches');
 
   const filteredCoupons = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -46,15 +45,9 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
         (c.status && c.status.toLowerCase().includes(q)) ||
         (c.type && c.type.toLowerCase().includes(q))
       );
-      const matchesBranch = selectedBranchFilter === 'All Branches' || (
-        !c.branchApplicability ||
-        c.branchApplicability.toLowerCase().includes('all') ||
-        c.branchApplicability.toLowerCase().includes(selectedBranchFilter.toLowerCase()) ||
-        selectedBranchFilter.toLowerCase().includes(c.branchApplicability.toLowerCase())
-      );
-      return matchesSearch && matchesBranch;
+      return matchesSearch;
     });
-  }, [coupons, search, selectedBranchFilter]);
+  }, [coupons, search]);
 
   const downloadCouponsCsv = () => {
     const headers = ['Coupon ID', 'Code', 'Discount', 'Type', 'Valid Until', 'Max Uses', 'Used Count', 'Branch', 'Status'];
@@ -268,24 +261,6 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
               aria-label="Search coupons"
               className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-800 bg-slate-950/60 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
-          </div>
-          <div className="relative">
-            <Building2 size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-            <select
-              value={selectedBranchFilter}
-              onChange={(e) => {
-                setSelectedBranchFilter(e.target.value);
-                setUrlTablePage0(0);
-              }}
-              aria-label="Filter coupons by branch"
-              className="pl-8 pr-7 py-2 text-xs rounded-xl border border-slate-800 bg-slate-950/70 text-slate-300 font-medium focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer appearance-none"
-            >
-              <option value="All Branches">All Branches ({coupons.length})</option>
-              <option value="Downtown Central">Downtown Central</option>
-              <option value="Westside Branch">Westside Branch</option>
-              <option value="North Hub">North Hub</option>
-            </select>
-            <Filter size={10} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
           </div>
         </div>
         <div className="flex items-center gap-2">

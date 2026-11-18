@@ -40,7 +40,6 @@ export function AdminShiftsShiftGapPage() {
   const [shiftFilter, setShiftFilter] = useAdminApplicationInfrastructureUrlQueryState<string>('shiftFilter', 'All', {
     validValues: ['All', 'Morning', 'Afternoon', 'Evening', 'Night', 'Full Day'],
   });
-  const [branchFilter, setBranchFilter] = useState<string>('all');
 
   const visible = useMemo(() => {
     let result = ADMIN_SHIFTS_DEMO_SHIFT_GAPS;
@@ -176,25 +175,9 @@ export function AdminShiftsShiftGapPage() {
         </div>
       </div>
 
-      {/* Toolbar: Filter and Branch Scope */}
+      {/* Toolbar: Filter and Global Scope */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg backdrop-blur-md">
         <div className="flex flex-wrap items-center gap-3">
-          {/* Branch Filter Dropdown */}
-          <div className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5">
-            <Building2 size={13} className="text-indigo-400 shrink-0" />
-            <select
-              value={branchFilter}
-              onChange={(e) => setBranchFilter(e.target.value)}
-              className="bg-transparent text-xs text-white focus:outline-none cursor-pointer font-medium"
-              aria-label="Filter gap analysis by branch"
-            >
-              <option value="all" className="bg-slate-900 text-white">All Branches (Global Network)</option>
-              <option value="Downtown Central" className="bg-slate-900 text-white">Downtown Central (24 Desks)</option>
-              <option value="Westside Branch" className="bg-slate-900 text-white">Westside Branch (12 Desks)</option>
-              <option value="North Hub" className="bg-slate-900 text-white">North Hub (12 Desks)</option>
-            </select>
-          </div>
-
           {/* Shift Filter Dropdown */}
           <div className="flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-950/80 px-3 py-1.5">
             <Filter size={13} className="text-cyan-400 shrink-0" />

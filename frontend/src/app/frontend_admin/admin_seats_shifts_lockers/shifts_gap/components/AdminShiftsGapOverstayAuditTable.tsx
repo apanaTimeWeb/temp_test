@@ -195,20 +195,12 @@ export function AdminShiftsGapOverstayAuditTable() {
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <Filter size={13} className="text-slate-400" />
-          <select
-            value={branchFilter}
-            onChange={(e) => setBranchFilter(e.target.value)}
-            className="rounded-xl border border-slate-700 bg-slate-950/70 px-3 py-1.5 text-xs text-white focus:border-indigo-500 focus:outline-none cursor-pointer font-medium"
-            aria-label="Filter gap table by branch"
-          >
-            <option value="ALL">All Branches</option>
-            <option value="Downtown Central">Downtown Central</option>
-            <option value="Westside Branch">Westside Branch</option>
-            <option value="North Hub">North Hub</option>
-          </select>
-        </div>
+        {!isAllBranches && selectedBranch && (
+          <div className="flex items-center gap-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs text-indigo-300 font-semibold">
+            <Building2 size={13} className="text-indigo-400" />
+            <span>Branch Scope: {selectedBranch.name}</span>
+          </div>
+        )}
       </div>
 
       {/* High-Contrast Non-Overlapping Table */}
@@ -259,9 +251,8 @@ export function AdminShiftsGapOverstayAuditTable() {
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-2 rounded-full bg-slate-800 overflow-hidden">
                           <div
-                            className={`h-full rounded-full transition-all duration-300 ${
-                              r.gapPercent > 40 ? 'bg-rose-500' : r.gapPercent > 25 ? 'bg-amber-500' : 'bg-emerald-500'
-                            }`}
+                            className={`h-full rounded-full transition-all duration-300 ${r.gapPercent > 40 ? 'bg-rose-500' : r.gapPercent > 25 ? 'bg-amber-500' : 'bg-emerald-500'
+                              }`}
                             style={{ width: `${r.gapPercent}%` }}
                           />
                         </div>

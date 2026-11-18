@@ -102,21 +102,9 @@ export default function AdminPlansPage() {
   const plans: AdminPlansPlan[] = isDemoMode ? demoPlans : plansQuery.data ?? [];
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'Active' | 'Inactive'>('all');
-  const [branchFilter, setBranchFilter] = useState<string>('all');
 
   const visiblePlans = useMemo(() => {
     return plans.filter((plan) => {
-      if (branchFilter !== 'all') {
-        const pBranch = (plan.branchApplicability || 'All Branches').toLowerCase();
-        const bTarget = branchFilter.toLowerCase();
-        if (bTarget === 'all branches') {
-          if (pBranch !== 'all branches') return false;
-        } else {
-          if (!pBranch.includes(bTarget) && !bTarget.includes(pBranch) && pBranch !== 'all branches') {
-            return false;
-          }
-        }
-      }
       if (!isAllBranches && selectedBranch) {
         if (plan.branchApplicability && plan.branchApplicability !== 'All Branches') {
           const bName = plan.branchApplicability.toLowerCase();
@@ -136,7 +124,7 @@ export default function AdminPlansPage() {
       }
       return true;
     });
-  }, [plans, selectedBranch, isAllBranches, statusFilter, branchFilter, searchQuery]);
+  }, [plans, selectedBranch, isAllBranches, statusFilter, searchQuery]);
 
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -434,23 +422,6 @@ export default function AdminPlansPage() {
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {/* Branch Filter */}
-          <div className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
-            <Building2 size={13} className="text-indigo-400 ml-2" />
-            <select
-              value={branchFilter}
-              onChange={(e) => setBranchFilter(e.target.value)}
-              className="bg-transparent text-xs text-white focus:outline-none pr-2 py-1 cursor-pointer font-medium"
-              aria-label="Filter plans by branch"
-            >
-              <option value="all" className="bg-slate-900 text-white">All Branches (Global & Local)</option>
-              <option value="All Branches" className="bg-slate-900 text-white">Global Network Only</option>
-              <option value="Downtown Central" className="bg-slate-900 text-white">Downtown Central</option>
-              <option value="Westside Branch" className="bg-slate-900 text-white">Westside Branch</option>
-              <option value="North Hub" className="bg-slate-900 text-white">North Hub</option>
-            </select>
-          </div>
-
           <div className="flex items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950/60 p-1">
             {(['all', 'Active', 'Inactive'] as const).map((status) => (
               <button

@@ -6,7 +6,7 @@ import useAdminFinancePaymentsQuery, { FALLBACK_PAYMENTS } from '@/app/frontend_
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { FileText, Receipt, Search, Calendar, Download, TrendingUp, CreditCard, MessageSquare, IndianRupee, FileSpreadsheet, Printer, Building2 } from 'lucide-react';
+import { FileText, Receipt, Search, Calendar, Download, TrendingUp, CreditCard, MessageSquare, IndianRupee, FileSpreadsheet, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
@@ -388,49 +388,6 @@ export function AdminFinancePaymentsPage() {
             )}
           </div>
         </div>
-      </div>
-
-      {/* In-Page Branch Filter Selector Bar */}
-      <div className="flex flex-wrap items-center gap-2">
-        <button
-          type="button"
-          onClick={() => { setSelectedBranchId('all'); setUrlTablePage0(0); }}
-          className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all shadow-xs ${
-            isAllBranches || selectedBranchId === 'all'
-              ? 'border-primary bg-primary text-primary-contrast shadow-sm scale-[1.02]'
-              : 'border-border bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-          }`}
-        >
-          <Building2 size={14} />
-          <span>All Branches</span>
-          <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${isAllBranches || selectedBranchId === 'all' ? 'bg-white/20 text-white' : 'bg-surface-elevated text-text-muted'}`}>
-            {allPayments.length}
-          </span>
-        </button>
-        {branches.map((b) => {
-          const branchCount = allPayments.filter((p) => {
-            const pBranch = (p.branch ?? '').toLowerCase();
-            return pBranch.includes(b.name.toLowerCase()) || b.name.toLowerCase().includes(pBranch);
-          }).length;
-          const isSelected = !isAllBranches && (selectedBranchId === b.id || selectedBranch?.id === b.id);
-          return (
-            <button
-              key={b.id}
-              type="button"
-              onClick={() => { setSelectedBranchId(b.id); setUrlTablePage0(0); }}
-              className={`inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all shadow-xs ${
-                isSelected
-                  ? 'border-primary bg-primary text-primary-contrast shadow-sm scale-[1.02]'
-                  : 'border-border bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-hover'
-              }`}
-            >
-              <span>{b.name}</span>
-              <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${isSelected ? 'bg-white/20 text-white' : 'bg-surface-elevated text-text-muted'}`}>
-                {branchCount}
-              </span>
-            </button>
-          );
-        })}
       </div>
 
       {/* 4 Premium Glassmorphic KPI Cards */}

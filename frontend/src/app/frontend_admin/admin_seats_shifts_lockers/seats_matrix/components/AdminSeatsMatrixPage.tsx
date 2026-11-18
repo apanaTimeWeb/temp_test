@@ -334,8 +334,8 @@ export function AdminSeatMatrixSeatMatrixPage() {
         const cls = isDt
           ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
           : isWs
-          ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
-          : 'border-indigo-500/30 bg-indigo-500/10 text-indigo-400';
+            ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+            : 'border-indigo-500/30 bg-indigo-500/10 text-indigo-400';
         return (
           <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${cls}`}>
             <Building2 size={11} /> {b}
@@ -354,10 +354,10 @@ export function AdminSeatMatrixSeatMatrixPage() {
           s === 'free'
             ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
             : s === 'occupied'
-            ? 'border-rose-500/30 bg-rose-500/10 text-rose-400'
-            : s === 'expiring'
-            ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
-            : 'border-slate-700 bg-slate-800 text-slate-400';
+              ? 'border-rose-500/30 bg-rose-500/10 text-rose-400'
+              : s === 'expiring'
+                ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+                : 'border-slate-700 bg-slate-800 text-slate-400';
         return (
           <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold uppercase ${cls}`}>
             <span className="size-1.5 rounded-full bg-current" />
@@ -462,11 +462,10 @@ export function AdminSeatMatrixSeatMatrixPage() {
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  viewMode === 'grid'
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${viewMode === 'grid'
                     ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/30'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <LayoutGrid size={14} />
                 <span>Floor Plan</span>
@@ -474,11 +473,10 @@ export function AdminSeatMatrixSeatMatrixPage() {
               <button
                 type="button"
                 onClick={() => setViewMode('table')}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  viewMode === 'table'
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${viewMode === 'table'
                     ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/30'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 <List size={14} />
                 <span>Table View</span>
@@ -588,11 +586,10 @@ export function AdminSeatMatrixSeatMatrixPage() {
                   role="tab"
                   aria-selected={isSelected}
                   onClick={() => setActiveTab(tab)}
-                  className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all ${
-                    isSelected
+                  className={`rounded-xl px-3.5 py-1.5 text-xs font-semibold transition-all ${isSelected
                       ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/30'
                       : 'border border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700 hover:text-white'
-                  }`}
+                    }`}
                 >
                   {tab === 'All' ? 'All Shifts' : tab}
                 </button>
@@ -606,25 +603,9 @@ export function AdminSeatMatrixSeatMatrixPage() {
           </div>
         </div>
 
-        {/* Row 2: In-Page Branch Selector + Status Dropdown + Search Input */}
+        {/* Row 2: Status Dropdown + Search Input */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2.5 flex-1 min-w-[280px]">
-            {/* Branch Filter Dropdown */}
-            <div className="relative">
-              <Building2 size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-              <select
-                value={activeBranchFilter}
-                onChange={(e) => setActiveBranchFilter(e.target.value)}
-                aria-label="Filter seats by branch"
-                className="pl-8 pr-7 py-2 text-xs rounded-xl border border-slate-800 bg-slate-950/70 text-slate-200 font-semibold focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
-              >
-                <option value="All Branches">All Branches ({rawSeats.length} Desks)</option>
-                <option value="Downtown Central">Downtown Central (24 Desks)</option>
-                <option value="Westside Branch">Westside Branch (12 Desks)</option>
-                <option value="North Hub">North Hub (12 Desks)</option>
-              </select>
-            </div>
-
             {/* Status Filter Dropdown */}
             <div className="relative">
               <Filter size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -730,18 +711,18 @@ export function AdminSeatMatrixSeatMatrixPage() {
                 const cardBorderBg = isFree
                   ? 'border-emerald-500/40 bg-emerald-950/20 text-emerald-300 hover:border-emerald-400 hover:bg-emerald-900/30 hover:shadow-emerald-950/40 hover:scale-[1.03]'
                   : isOccupied
-                  ? 'border-rose-500/40 bg-rose-950/20 text-rose-300 hover:border-rose-400 hover:bg-rose-900/30 hover:shadow-rose-950/40 hover:scale-[1.03]'
-                  : isExpiring
-                  ? 'border-amber-500/40 bg-amber-950/20 text-amber-300 hover:border-amber-400 hover:bg-amber-900/30 hover:shadow-amber-950/40 hover:scale-[1.03]'
-                  : 'border-slate-700 bg-slate-900/50 text-slate-400 border-dashed hover:border-slate-600 hover:scale-[1.02]';
+                    ? 'border-rose-500/40 bg-rose-950/20 text-rose-300 hover:border-rose-400 hover:bg-rose-900/30 hover:shadow-rose-950/40 hover:scale-[1.03]'
+                    : isExpiring
+                      ? 'border-amber-500/40 bg-amber-950/20 text-amber-300 hover:border-amber-400 hover:bg-amber-900/30 hover:shadow-amber-950/40 hover:scale-[1.03]'
+                      : 'border-slate-700 bg-slate-900/50 text-slate-400 border-dashed hover:border-slate-600 hover:scale-[1.02]';
 
                 const statusBadge = isFree
                   ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
                   : isOccupied
-                  ? 'border-rose-500/30 bg-rose-500/10 text-rose-400'
-                  : isExpiring
-                  ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
-                  : 'border-slate-700 bg-slate-800 text-slate-400';
+                    ? 'border-rose-500/30 bg-rose-500/10 text-rose-400'
+                    : isExpiring
+                      ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+                      : 'border-slate-700 bg-slate-800 text-slate-400';
 
                 return (
                   <button
@@ -754,8 +735,8 @@ export function AdminSeatMatrixSeatMatrixPage() {
                       seat.student
                         ? `${seat.student} (${seat.smartId || 'ID'}) · ${seat.shift || 'Full Day'} · Expires: ${seat.expiry || 'Active'}`
                         : isMaint
-                        ? 'Under Maintenance'
-                        : `Seat S-${seat.id} Available for Allocation`
+                          ? 'Under Maintenance'
+                          : `Seat S-${seat.id} Available for Allocation`
                     }
                   >
                     {/* Top Row: Seat ID + Status Badge */}
@@ -793,41 +774,37 @@ export function AdminSeatMatrixSeatMatrixPage() {
                     <div className="flex items-center justify-between w-full pt-1.5 border-t border-white/10 text-[9px] font-mono font-bold">
                       <span
                         title={`Morning: ${dots.morning ? 'Booked' : 'Free'}`}
-                        className={`px-1 rounded ${
-                          dots.morning
+                        className={`px-1 rounded ${dots.morning
                             ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
                             : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                        }`}
+                          }`}
                       >
                         M
                       </span>
                       <span
                         title={`Afternoon: ${dots.afternoon ? 'Booked' : 'Free'}`}
-                        className={`px-1 rounded ${
-                          dots.afternoon
+                        className={`px-1 rounded ${dots.afternoon
                             ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
                             : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                        }`}
+                          }`}
                       >
                         A
                       </span>
                       <span
                         title={`Evening: ${dots.evening ? 'Booked' : 'Free'}`}
-                        className={`px-1 rounded ${
-                          dots.evening
+                        className={`px-1 rounded ${dots.evening
                             ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
                             : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                        }`}
+                          }`}
                       >
                         E
                       </span>
                       <span
                         title={`Night: ${dots.night ? 'Booked' : 'Free'}`}
-                        className={`px-1 rounded ${
-                          dots.night
+                        className={`px-1 rounded ${dots.night
                             ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
                             : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                        }`}
+                          }`}
                       >
                         N
                       </span>
@@ -885,15 +862,14 @@ export function AdminSeatMatrixSeatMatrixPage() {
               </div>
 
               <span
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold uppercase ${
-                  selectedSeat.status === 'free'
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold uppercase ${selectedSeat.status === 'free'
                     ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
                     : selectedSeat.status === 'occupied'
-                    ? 'border-rose-500/30 bg-rose-500/10 text-rose-400'
-                    : selectedSeat.status === 'expiring'
-                    ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
-                    : 'border-slate-700 bg-slate-800 text-slate-400'
-                }`}
+                      ? 'border-rose-500/30 bg-rose-500/10 text-rose-400'
+                      : selectedSeat.status === 'expiring'
+                        ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+                        : 'border-slate-700 bg-slate-800 text-slate-400'
+                  }`}
               >
                 <span className="size-1.5 rounded-full bg-current" />
                 {selectedSeat.status}

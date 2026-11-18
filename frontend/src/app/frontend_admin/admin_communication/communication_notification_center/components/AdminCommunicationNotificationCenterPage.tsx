@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import { ChevronRight, ArrowRight, CheckCheck, Bell, AlertTriangle, Sparkles, Building2 } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
-import { ALL_BRANCHES_ID } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBranchConstants';
 import {
   ADMIN_COMMUNICATION_NOTIFICATION_CATEGORIES,
 } from '@/app/frontend_admin/admin_communication/communication_notification_center/config/admin_communication_notification_center.url_config';
@@ -23,7 +22,7 @@ export function AdminCommunicationNotificationCenterPage() {
   const [cat, setCat] = useState<AdminCommunicationNotificationCategory>('All');
   const [notifs, setNotifs] = useState<AdminCommunicationNotification[]>(() => isDemoMode ? ADMIN_COMMUNICATION_NOTIFICATION_FIXTURES : []);
 
-  const { branches, selectedBranchId, selectedBranch, setSelectedBranchId, isAllBranches } = useAdminBranch();
+  const { selectedBranch, isAllBranches } = useAdminBranch();
 
   if (!isDemoMode) {
     return (
@@ -41,17 +40,6 @@ export function AdminCommunicationNotificationCenterPage() {
 
   const unread = countUnreadAdminCommunicationNotifications(filtered);
   const markAllRead = () => setNotifs((previous) => markAdminCommunicationNotificationsRead(previous));
-
-  // Branch notification counts
-  const branchCounts = useMemo(() => {
-    const counts: Record<string, number> = { [ALL_BRANCHES_ID]: notifs.length };
-    for (const b of branches) {
-      counts[b.id] = notifs.filter(
-        (n) => n.branch && n.branch.toLowerCase().includes(b.name.toLowerCase())
-      ).length;
-    }
-    return counts;
-  }, [branches, notifs]);
 
   return (
     <div className="min-w-0 space-y-5">
@@ -144,63 +132,6 @@ export function AdminCommunicationNotificationCenterPage() {
           </div>
         </div>
       </div>
-
-      {/* In-Page Branch Quick Filter Pills */}
-      {branches.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2 p-2 bg-card rounded-xl border border-border shadow-xs">
-          <div className="flex items-center gap-1.5 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            <Building2 className="h-3.5 w-3.5 text-primary" />
-            <span>Branch:</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setSelectedBranchId(ALL_BRANCHES_ID)}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium motion-safe:transition-all ${
-              isAllBranches
-                ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
-                : 'bg-surface hover:bg-card-hover text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <span>All Branches</span>
-            <span
-              className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                isAllBranches
-                  ? 'bg-primary-foreground/20 text-primary-foreground'
-                  : 'bg-muted text-muted-foreground'
-              }`}
-            >
-              {branchCounts[ALL_BRANCHES_ID] ?? notifs.length}
-            </span>
-          </button>
-          {branches.map((b) => {
-            const isSelected = !isAllBranches && selectedBranchId === b.id;
-            const count = branchCounts[b.id] ?? 0;
-            return (
-              <button
-                key={b.id}
-                type="button"
-                onClick={() => setSelectedBranchId(b.id)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium motion-safe:transition-all ${
-                  isSelected
-                    ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
-                    : 'bg-surface hover:bg-card-hover text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <span>{b.name}</span>
-                <span
-                  className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                    isSelected
-                      ? 'bg-primary-foreground/20 text-primary-foreground'
-                      : 'bg-muted text-muted-foreground'
-                  }`}
-                >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      )}
 
       {/* Categories Filter Tabs */}
       <div className="flex flex-wrap gap-1.5">

@@ -2,7 +2,7 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Search, RotateCcw, PlusCircle, ShieldCheck, AlertCircle, Building2 } from 'lucide-react';
+import { Search, RotateCcw, PlusCircle, ShieldCheck, AlertCircle } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { useAdminAssetsRegisterState } from '@/app/frontend_admin/admin_accounts_assets/assets_register/hooks/useAdminAssetsRegisterState';
@@ -70,18 +70,6 @@ export function AdminAssetsRegisterPage() {
     (r) => r.status === 'MAINTENANCE_REQUIRED' || r.status === 'UNDER_REPAIR'
   ).length;
 
-  const branchCounts = useMemo(() => {
-    const counts: Record<string, number> = { ALL: records.length };
-    for (const b of availableBranches) {
-      counts[b.id] = records.filter(
-        (r) =>
-          r.branchId.toLowerCase() === b.id.toLowerCase() ||
-          r.branchName.toLowerCase().includes(b.name.toLowerCase())
-      ).length;
-    }
-    return counts;
-  }, [records, availableBranches]);
-
   const handleResetFilters = () => {
     setTabFilter('ALL');
     setBranchFilter('ALL');
@@ -124,63 +112,6 @@ export function AdminAssetsRegisterPage() {
 
       {/* KPI Cards */}
       <AdminAssetsRegisterKpis records={records} />
-
-      {/* Branch Quick Selector Bar */}
-      <div className="flex flex-wrap items-center gap-2 p-2 bg-card rounded-xl border border-border">
-        <div className="flex items-center gap-1.5 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          <Building2 className="h-3.5 w-3.5 text-primary" />
-          <span>{t('FILTERS.ALL_BRANCHES')}:</span>
-        </div>
-        <button
-          type="button"
-          onClick={() => setBranchFilter('ALL')}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium motion-safe:transition-all ${
-            branchFilter === 'ALL'
-              ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
-              : 'bg-surface hover:bg-card-hover text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          <span>All Branches</span>
-          <span
-            className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-              branchFilter === 'ALL'
-                ? 'bg-primary-foreground/20 text-primary-foreground'
-                : 'bg-muted text-muted-foreground'
-            }`}
-          >
-            {branchCounts['ALL'] || records.length}
-          </span>
-        </button>
-        {availableBranches.map((b) => {
-          const isSelected =
-            branchFilter.toLowerCase() === b.id.toLowerCase() ||
-            branchFilter.toLowerCase() === b.name.toLowerCase();
-          const count = branchCounts[b.id] ?? 0;
-          return (
-            <button
-              key={b.id}
-              type="button"
-              onClick={() => setBranchFilter(b.id)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium motion-safe:transition-all ${
-                isSelected
-                  ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
-                  : 'bg-surface hover:bg-card-hover text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <span>{b.name}</span>
-              <span
-                className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                  isSelected
-                    ? 'bg-primary-foreground/20 text-primary-foreground'
-                    : 'bg-muted text-muted-foreground'
-                }`}
-              >
-                {count}
-              </span>
-            </button>
-          );
-        })}
-      </div>
 
       {/* Tabs and Filters */}
       <div className="space-y-3">
