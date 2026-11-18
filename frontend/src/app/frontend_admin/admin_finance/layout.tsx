@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminApplicationRoutes';
 
 const SUBMODULE_NAVIGATION = [
-  { href: ADMIN_ROUTES.FINANCE_DASHBOARD, labelKey: 'SUBMODULE_FINANCE_DASHBOARD' },
   { href: ADMIN_ROUTES.FINANCE_PAYMENTS, labelKey: 'SUBMODULE_FINANCE_PAYMENTS' },
   { href: ADMIN_ROUTES.FINANCE_REFUNDS, labelKey: 'SUBMODULE_FINANCE_REFUNDS' },
   { href: ADMIN_ROUTES.FINANCE_REFERRALS, labelKey: 'SUBMODULE_FINANCE_REFERRALS' },
