@@ -165,6 +165,151 @@ export function AdminFinanceReferralsPage() {
     return () => clearTimeout(timer);
   }, []);
 
+  const handleExportCsv = () => {
+    const headers = ['Rank', 'Referrer Student', 'Smart ID', 'Branch', 'Referred Count', 'Referred Students', 'Total Bonus Earned (INR)', 'Redeemed (INR)', 'Outstanding Balance (INR)'];
+    const rows = filteredReferrers.map((r, i) => [
+      i + 1,
+      `"${r.name.replace(/"/g, '""')}"`,
+      r.smartId,
+      `"${(r.branch ?? selectedBranch?.name ?? 'Downtown Central').replace(/"/g, '""')}"`,
+      r.referredNames.length,
+      `"${r.referredNames.join(', ').replace(/"/g, '""')}"`,
+      r.bonusEarned / 100,
+      r.redeemed / 100,
+      r.balance / 100,
+    ]);
+    const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-finance-referral-leaderboard-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filteredReferrers.length} referral records to CSV`);
+  };
+
+  const handleExportExcel = () => {
+    const headers = ['Rank', 'Referrer Student', 'Smart ID', 'Branch', 'Referred Count', 'Referred Students', 'Total Bonus Earned (INR)', 'Redeemed (INR)', 'Outstanding Balance (INR)'];
+    const rows = filteredReferrers.map((r, i) => [
+      i + 1,
+      r.name,
+      r.smartId,
+      r.branch ?? selectedBranch?.name ?? 'Downtown Central',
+      r.referredNames.length,
+      r.referredNames.join(', '),
+      r.bonusEarned / 100,
+      r.redeemed / 100,
+      r.balance / 100,
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Referrals</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #4338ca; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #3730a3; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #eef2ff; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `admin-finance-referral-leaderboard-${new Date().toISOString().slice(0, 10)}.xls`;
+    link.hidden = true;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filteredReferrers.length} referral records to Excel (.xls)`);
+  };
+
+  const handlePrintLeaderboard = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=850,height=750');
+    if (!printWindow) { window.print(); return; }
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smart Library - Referral Rewards Leaderboard</title>
+          <style>
+            @page { size: A4; margin: 15mm; }
+            body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; font-size: 12px; }
+            .header { display: flex; justify-content: space-between; border-bottom: 2px solid #4f46e5; padding-bottom: 10px; margin-bottom: 15px; }
+            .title { font-size: 18px; font-weight: 800; color: #4338ca; text-transform: uppercase; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px; }
+            th { background: #4f46e5; color: #fff; padding: 8px; text-align: left; font-size: 11px; }
+            td { padding: 8px; border-bottom: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background-color: #f8fafc; }
+            .footer { border-top: 1px solid #e2e8f0; margin-top: 20px; padding-top: 10px; font-size: 10px; color: #94a3b8; text-align: center; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="title">SMART LIBRARY NETWORK</div>
+              <div style="font-size: 11px; color: #64748b;">Referral Rewards Program & Student Leaderboard · ${timeRangeLabel}</div>
+            </div>
+            <div style="text-align: right; font-size: 11px; color: #64748b;">
+              <div>Scope: ${selectedBranch ? selectedBranch.name : 'All Branches'}</div>
+              <div>Generated: ${new Date().toLocaleDateString('en-IN')}</div>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Referrer Name</th>
+                <th>Smart ID</th>
+                <th>Referred Count</th>
+                <th style="text-align: right;">Total Bonus</th>
+                <th style="text-align: right;">Redeemed</th>
+                <th style="text-align: right;">Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${filteredReferrers.map((r, i) => `
+                <tr>
+                  <td>#${i + 1}</td>
+                  <td><strong>${r.name}</strong></td>
+                  <td>${r.smartId}</td>
+                  <td>${r.referredNames.length} students</td>
+                  <td style="text-align: right; font-weight: bold; color: #15803d;">₹${(r.bonusEarned / 100).toLocaleString('en-IN')}</td>
+                  <td style="text-align: right;">₹${(r.redeemed / 100).toLocaleString('en-IN')}</td>
+                  <td style="text-align: right; font-weight: bold;">₹${(r.balance / 100).toLocaleString('en-IN')}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <div class="footer">
+            <p>Smart Library Student Ambassador & Referral Program · Certified by Accounts</p>
+          </div>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   if (!isFrontendDemoModeEnabled()) {
     return (
       <div className="rounded-lg border border-border bg-card p-6" role="status">
@@ -208,7 +353,7 @@ export function AdminFinanceReferralsPage() {
         activeCount={filteredReferrers.length}
       />
 
-      {/* Search Bar */}
+      {/* Search Bar & Export Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative w-full sm:w-72">
@@ -240,6 +385,37 @@ export function AdminFinanceReferralsPage() {
             </button>
           )}
         </div>
+
+        {/* Export & Print Toolbar */}
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+            title="Export leaderboard to CSV"
+          >
+            <Download size={14} className="text-indigo-400" />
+            <span>CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+            title="Export leaderboard to Excel (.xls)"
+          >
+            <FileSpreadsheet size={14} className="text-emerald-500" />
+            <span>Excel (.xls)</span>
+          </button>
+          <button
+            type="button"
+            onClick={handlePrintLeaderboard}
+            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors shadow-xs"
+            title="Print referral leaderboard summary"
+          >
+            <Printer size={14} className="text-cyan-400" />
+            <span>Print</span>
+          </button>
+        </div>
       </div>
 
       {/* Presentational Referrals Table */}
@@ -259,6 +435,15 @@ export function AdminFinanceReferralsPage() {
         onToggleSort={toggleSort}
         expandedId={expanded}
         onToggleExpand={setExpanded}
+        onRedeem={(ref) => setRedeemTarget(ref)}
+      />
+
+      {/* Interactive Referral Bonus Clearance / Disbursement Modal */}
+      <AdminFinanceReferralsRedeemModal
+        referrer={redeemTarget}
+        isOpen={Boolean(redeemTarget)}
+        onClose={() => setRedeemTarget(null)}
+        onConfirmRedeem={handleConfirmRedeem}
       />
     </div>
   );
