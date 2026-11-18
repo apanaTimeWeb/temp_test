@@ -27,11 +27,31 @@ const AdminDashboardReportsPrimaryApexChart = dynamic(() => import('react-apexch
 
 const ADMIN_DASHBOARD_REPORTS_KPI_ICONS: readonly LucideIcon[] = [IndianRupee, Wallet, TrendingUp, Users];
 
-const REPORT_KPI_PALETTES = [
-  { iconColor: '#34d399', bg: 'rgba(52, 211, 153, 0.14)', border: 'rgba(52, 211, 153, 0.25)' }, // Revenue / Mint Emerald
-  { iconColor: '#f87171', bg: 'rgba(248, 113, 113, 0.14)', border: 'rgba(248, 113, 113, 0.25)' }, // Expenses / Rose
-  { iconColor: '#818cf8', bg: 'rgba(129, 140, 248, 0.14)', border: 'rgba(129, 140, 248, 0.25)' }, // Net Profit / Indigo
-  { iconColor: '#22d3ee', bg: 'rgba(34, 211, 238, 0.14)', border: 'rgba(34, 211, 238, 0.25)' }, // Students / Cyan
+const REPORT_KPI_THEMES = [
+  {
+    cardBorderBg: 'border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-emerald-950/30',
+    iconBox: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
+    strokeColor: '#34d399',
+    sparkline: 'M0,32 Q15,22 55,26 T95,14 T130,18 T150,6',
+  },
+  {
+    cardBorderBg: 'border-rose-500/25 bg-gradient-to-br from-[#1f0a10]/95 via-[#1f0a10]/90 to-[#2d0e17]/80 shadow-rose-950/30',
+    iconBox: 'bg-rose-500/15 border-rose-500/30 text-rose-400',
+    strokeColor: '#f87171',
+    sparkline: 'M0,15 Q25,28 65,22 T105,32 T135,24 T150,35',
+  },
+  {
+    cardBorderBg: 'border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-indigo-950/30',
+    iconBox: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400',
+    strokeColor: '#818cf8',
+    sparkline: 'M0,32 Q15,18 55,24 T95,14 T130,20 T150,8',
+  },
+  {
+    cardBorderBg: 'border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-cyan-950/30',
+    iconBox: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400',
+    strokeColor: '#22d3ee',
+    sparkline: 'M0,30 Q20,16 60,20 T100,12 T130,16 T150,8',
+  },
 ];
 
 export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, range, locale }: AdminDashboardReportsAnalyticsPrimaryChartsGridProps) {
@@ -75,22 +95,20 @@ export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, 
           const trendKey = card.trend.value in ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_TREND_KEYS ? ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_TREND_KEYS[card.trend.value as keyof typeof ADMIN_DASHBOARD_REPORTS_ANALYTICS_KPI_TREND_KEYS] : undefined;
           const value = displayValue(card.valueKind === 'currency' ? (card.amountMinor == null ? null : adminDashboardReportsAnalyticsFormatCurrency(card.amountMinor, data.currencyCode, locale)) : (card.count == null ? null : adminDashboardReportsAnalyticsFormatNumber(card.count, locale)));
           const Icon = ADMIN_DASHBOARD_REPORTS_KPI_ICONS[index] ?? TrendingUp;
-          const palette = REPORT_KPI_PALETTES[index % REPORT_KPI_PALETTES.length] ?? REPORT_KPI_PALETTES[0];
+          const theme = REPORT_KPI_THEMES[index % REPORT_KPI_THEMES.length] ?? REPORT_KPI_THEMES[0];
           return (
             <article
               key={card.label}
-              className="rounded-2xl border border-indigo-500/20 bg-card p-5 shadow-card hover:border-indigo-500/40 hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between h-full"
+              className={`group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between h-full ${theme.cardBorderBg}`}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div
-                  className="flex h-11 w-11 items-center justify-center rounded-xl"
-                  style={{
-                    backgroundColor: palette.bg,
-                    border: `1px solid ${palette.border}`,
-                    color: palette.iconColor,
-                  }}
-                >
-                  <Icon size={20} strokeWidth={2.2} style={{ color: palette.iconColor }} aria-hidden="true" />
+              <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-white/5 blur-2xl transition-all duration-500 group-hover:bg-white/10" />
+              <svg aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+                <path d={theme.sparkline} fill="none" stroke={theme.strokeColor} strokeWidth="2.5" strokeLinecap="round" />
+              </svg>
+
+              <div className="relative z-10 flex items-start justify-between mb-4">
+                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${theme.iconBox}`}>
+                  <Icon size={20} strokeWidth={2.2} aria-hidden="true" />
                 </div>
                 <span
                   data-testid="admin_dashboard_reports-AdminDashboardReportsAnalyticsKpiCard-state-001"
@@ -104,10 +122,14 @@ export default function AdminDashboardReportsAnalyticsPrimaryChartsGrid({ data, 
                   {trendKey ? t(trendKey) : card.trend.value}
                 </span>
               </div>
-              <div>
+              <div className="relative z-10">
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{labelKey ? t(labelKey) : card.label}</p>
                 <p className="text-2xl sm:text-3xl font-black text-white tabular-nums tracking-tight mt-1">{value}</p>
-                <p className="text-xs text-slate-400 mt-1.5">{subKey ? t(subKey) : card.sub}</p>
+                <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+                  <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-slate-300 bg-white/5 border-white/10">
+                    {subKey ? t(subKey) : card.sub}
+                  </span>
+                </div>
               </div>
             </article>
           );

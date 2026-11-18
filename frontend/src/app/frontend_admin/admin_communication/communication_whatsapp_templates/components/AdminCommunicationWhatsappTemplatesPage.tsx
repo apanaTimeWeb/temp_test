@@ -100,34 +100,66 @@ export function AdminCommunicationWhatsappTemplatesPage() {
 
       {/* KPI Cards */}
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">System Templates</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
-              <FileText size={16} strokeWidth={2.2} />
+        {/* System Templates - Indigo */}
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 p-5 shadow-lg shadow-indigo-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-950/40">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-indigo-500/10 blur-2xl transition-all duration-500 group-hover:bg-indigo-500/20" />
+          <svg className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+            <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">System Templates</span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-indigo-500/15 border-indigo-500/30 text-indigo-400">
+              <FileText size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-cyan-400">{templates.length}</p>
+          <p className="mt-3 text-2xl font-bold tracking-tight text-white">{templates.length}</p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+            <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-indigo-300 bg-indigo-500/10 border-indigo-500/25">
+              Approved Layouts
+            </span>
+          </div>
         </div>
-        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-emerald-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Characters Used</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              <Sparkles size={16} strokeWidth={2.2} />
+
+        {/* Characters Used - Emerald */}
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 p-5 shadow-lg shadow-emerald-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-950/40">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl transition-all duration-500 group-hover:bg-emerald-500/20" />
+          <svg className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+            <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Characters Used</span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-emerald-500/15 border-emerald-500/30 text-emerald-400">
+              <Sparkles size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-emerald-400">
-            {charCount} <span className="text-xs text-text-secondary font-normal">/ {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS}</span>
+          <p className="mt-3 text-2xl font-bold tracking-tight text-emerald-400">
+            {charCount} <span className="text-xs text-slate-400 font-normal">/ {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS}</span>
           </p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+            <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-emerald-300 bg-emerald-500/10 border-emerald-500/25">
+              Optimal Size
+            </span>
+          </div>
         </div>
-        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-500/10 via-card to-card p-4 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-purple-500/40">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">Available Variables</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/15 text-purple-400 border border-purple-500/30">
-              <Layers size={16} strokeWidth={2.2} />
+
+        {/* Available Variables - Purple */}
+        <div className="group relative overflow-hidden rounded-2xl border border-purple-500/25 bg-gradient-to-br from-[#180c28]/95 via-[#180c28]/90 to-[#221238]/80 p-5 shadow-lg shadow-purple-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-purple-500/40 hover:shadow-xl hover:shadow-purple-950/40">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-purple-500/10 blur-2xl transition-all duration-500 group-hover:bg-purple-500/20" />
+          <svg className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+            <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#c084fc" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Available Variables</span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-purple-500/15 border-purple-500/30 text-purple-400">
+              <Layers size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="text-2xl font-bold tracking-tight text-purple-400">{ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES.length}</p>
+          <p className="mt-3 text-2xl font-bold tracking-tight text-purple-400">{ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES.length}</p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+            <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-purple-300 bg-purple-500/10 border-purple-500/25">
+              Dynamic Tokens
+            </span>
+          </div>
         </div>
       </div>
 
