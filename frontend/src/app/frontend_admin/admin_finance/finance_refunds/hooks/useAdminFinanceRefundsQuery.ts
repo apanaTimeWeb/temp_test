@@ -6,7 +6,7 @@ import { ADMIN_FINANCE_REFUNDS_QUERY_KEYS } from '@/app/frontend_admin/admin_fin
 import type { AdminFinanceRefundApiRecord } from '@/app/frontend_admin/admin_finance/finance_refunds/schemas/AdminFinanceRefundsSchema';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 
-const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: string; branchId: string })[] = [
+export const FALLBACK_REFUNDS: (AdminFinanceRefundApiRecord & { branchName: string; branchId: string })[] = [
   {
     id: 'ref-001',
     studentName: 'Aditi Rao',

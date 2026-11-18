@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Building2, ArrowUpDown, ArrowUp, ArrowDown, Check, X, CheckCircle2 } from 'lucide-react';
+import { Building2, ArrowUpDown, ArrowUp, ArrowDown, Check, X, CheckCircle2, Eye } from 'lucide-react';
 import { AdminTablePagination } from '@/app/frontend_admin/components/ui/table/AdminTablePagination';
 import { formatAdminFinanceApiAmount, formatDate } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsFormat';
 import { getAdminFinanceRefundStatusLabelKey } from '@/app/frontend_admin/admin_finance/finance_refunds/utils/AdminFinanceRefundsRefundStatus';
@@ -23,6 +23,7 @@ interface AdminFinanceRefundsTableProps {
   selectedBranchName?: string;
   onApprove: (refund: AdminFinanceRefund) => void;
   onReject: (refund: AdminFinanceRefund) => void;
+  onViewDetail?: (refund: AdminFinanceRefund) => void;
 }
 
 export function AdminFinanceRefundsTable({
@@ -31,6 +32,7 @@ export function AdminFinanceRefundsTable({
   selectedBranchName,
   onApprove,
   onReject,
+  onViewDetail,
 }: AdminFinanceRefundsTableProps) {
   const t = useTranslations('ADMIN_FINANCE_LEDGER_PAGES');
   const [sortField, setSortField] = useState<RefundSortField | null>(null);
@@ -161,13 +163,13 @@ export function AdminFinanceRefundsTable({
                     {refund.exitDate ? formatDate(refund.exitDate) : '—'}
                   </td>
                   <td className="py-3 px-4 text-right font-semibold text-body text-text-primary">
-                    {formatAdminFinanceApiAmount(refund.depositHeld, refund.currencyCode, refund.amountUnit)}
+                    {formatAdminFinanceApiAmount(refund.depositHeld, refund.currencyCode ?? 'INR', refund.amountUnit ?? 'major')}
                   </td>
                   <td className={`py-3 px-4 text-right ${refund.deductionAmount > 0 ? 'text-danger-text' : 'text-text-secondary'}`}>
-                    {refund.deductionAmount > 0 ? `-${formatAdminFinanceApiAmount(refund.deductionAmount, refund.currencyCode, refund.amountUnit)}` : t('NONE')}
+                    {refund.deductionAmount > 0 ? `-${formatAdminFinanceApiAmount(refund.deductionAmount, refund.currencyCode ?? 'INR', refund.amountUnit ?? 'major')}` : t('NONE')}
                   </td>
                   <td className="py-3 px-4 text-right font-semibold text-success-text">
-                    {formatAdminFinanceApiAmount(refund.netRefund, refund.currencyCode, refund.amountUnit)}
+                    {formatAdminFinanceApiAmount(refund.netRefund, refund.currencyCode ?? 'INR', refund.amountUnit ?? 'major')}
                   </td>
                   <td className="py-3 px-4">
                     <span className={ADMIN_FINANCE_REFUND_STATUS_BADGE[refund.status]}>
@@ -180,34 +182,48 @@ export function AdminFinanceRefundsTable({
                     ) : null}
                   </td>
                   <td className="py-3 px-4 text-caption text-text-secondary">
-                    {refund.status === 'pending' ? (
-                      <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-2">
+                      {refund.status === 'pending' ? (
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 cursor-pointer transition-all"
+                            onClick={() => onApprove(refund)}
+                          >
+                            <Check size={12} strokeWidth={2.5} /> Approve
+                          </button>
+                          <button
+                            type="button"
+                            className="inline-flex items-center gap-1 rounded-lg border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 cursor-pointer transition-all"
+                            onClick={() => onReject(refund)}
+                          >
+                            <X size={12} strokeWidth={2.5} /> Reject
+                          </button>
+                        </div>
+                      ) : refund.status === 'approved' ? (
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
+                          <CheckCircle2 size={12} /> Approved
+                        </span>
+                      ) : refund.status === 'processed' ? (
+                        <span className="inline-flex items-center gap-1 text-xs text-text-secondary font-mono">
+                          {refund.processedDate ? formatDate(refund.processedDate) : t('PROCESSED_FALLBACK')}{refund.paymentMethod ? ` · ${refund.paymentMethod}` : ''}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-text-secondary italic">{t('REFUND_VIEW_ONLY')}</span>
+                      )}
+
+                      {onViewDetail && (
                         <button
                           type="button"
-                          className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 cursor-pointer transition-all"
-                          onClick={() => onApprove(refund)}
+                          className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:text-text-primary hover:bg-surface-elevated transition-colors shadow-xs ml-auto"
+                          onClick={() => onViewDetail(refund)}
+                          title="View refund voucher"
+                          aria-label={`View refund voucher for ${refund.studentName}`}
                         >
-                          <Check size={12} strokeWidth={2.5} /> Approve
+                          <Eye size={13} strokeWidth={2.2} />
                         </button>
-                        <button
-                          type="button"
-                          className="inline-flex items-center gap-1 rounded-lg border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 cursor-pointer transition-all"
-                          onClick={() => onReject(refund)}
-                        >
-                          <X size={12} strokeWidth={2.5} /> Reject
-                        </button>
-                      </div>
-                    ) : refund.status === 'approved' ? (
-                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
-                        <CheckCircle2 size={12} /> Approved
-                      </span>
-                    ) : refund.status === 'processed' ? (
-                      <span className="inline-flex items-center gap-1 text-xs text-text-secondary font-mono">
-                        {refund.processedDate ? formatDate(refund.processedDate) : t('PROCESSED_FALLBACK')}{refund.paymentMethod ? ` · ${refund.paymentMethod}` : ''}
-                      </span>
-                    ) : (
-                      <span className="text-xs text-text-secondary italic">{t('REFUND_VIEW_ONLY')}</span>
-                    )}
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
