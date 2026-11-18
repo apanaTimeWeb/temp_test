@@ -10,7 +10,6 @@ import {
   X,
   Send,
   FileText,
-  Sparkles,
   Layers,
   CheckCheck,
   Smartphone,

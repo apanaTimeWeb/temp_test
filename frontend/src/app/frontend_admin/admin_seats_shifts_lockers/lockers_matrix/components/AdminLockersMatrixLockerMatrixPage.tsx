@@ -4,7 +4,7 @@
 import { useTranslations } from 'next-intl';
 import { useMemo, useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { KeyRound, Building2, ShieldAlert, LayoutGrid, List, Search, Filter, Lock, Unlock, Wrench, Sparkles, User } from 'lucide-react';
+import { KeyRound, Building2, ShieldAlert, LayoutGrid, List, Search, Filter, Lock, Unlock, Wrench, User } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAdminLockersLockerMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/hooks/useAdminLockersMatrixLockerMatrix';
 import { ADMIN_LOCKERS_MATRIX_QUERY_KEYS } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/api/admin_lockers_matrix.query_keys';
@@ -196,7 +196,6 @@ export function AdminLockersLockerMatrixPage() {
         <div>
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-300">
-              <Sparkles size={11} className="text-amber-400" />
               Locker Asset Custody & Allocation
             </span>
           </div>

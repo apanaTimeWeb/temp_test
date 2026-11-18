@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { CheckCircle, Clock, Percent, Building2, X, AlertTriangle, Layers, Sparkles } from 'lucide-react';
+import { CheckCircle, Clock, Percent, Building2, X, AlertTriangle, Layers } from 'lucide-react';
 import { AdminPlansFormSchema, type AdminPlansFormValues } from '@/app/frontend_admin/admin_members/members_plans/schemas/AdminMembersPlansSchema';
 import type { AdminPlansFormDialogProps } from '@/app/frontend_admin/admin_members/members_plans/types/AdminMembersPlansComponentTypes';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
@@ -166,7 +166,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div>
             <h2 id="admin-plans-form-dialog-title" className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-              <Sparkles size={20} className="text-indigo-400" />
+              <Layers size={20} className="text-indigo-400" />
               {editingPlan ? t('EDIT_PLAN') : t('CREATE_NEW_PLAN')}
             </h2>
             <p className="text-xs text-slate-400 mt-1">Configure pricing tier, branch applicability, and shift rates</p>
@@ -447,7 +447,7 @@ export default function AdminMembersPlansFormDialog({ open, editingPlan, onClose
           <div className="rounded-xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/30 via-slate-900 to-slate-950 p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
-                <Sparkles size={13} /> Live Catalog Preview
+                <Layers size={13} /> Live Catalog Preview
               </span>
               <span className="text-[10px] text-slate-400">Student & Manager Interface</span>
             </div>

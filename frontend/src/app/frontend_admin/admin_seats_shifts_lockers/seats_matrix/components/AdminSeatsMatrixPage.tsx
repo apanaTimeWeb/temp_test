@@ -13,7 +13,6 @@ import {
   Download,
   Building2,
   Search,
-  Sparkles,
   Armchair,
   CheckCircle2,
   Users,
@@ -668,7 +667,6 @@ export function AdminSeatMatrixSeatMatrixPage() {
         </div>
 
         <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-950/60 border border-slate-800 text-xs">
-          <Sparkles size={14} className="text-indigo-400 shrink-0" />
           <span className="font-semibold text-slate-300">4 Shift LEDs:</span>
           <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">M/A/E/N = Free</span>
           <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30">M/A/E/N = Booked</span>

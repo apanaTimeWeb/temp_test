@@ -15,7 +15,6 @@ import {
   MessageSquare,
   ShieldCheck,
   Building2,
-  Sparkles,
   TrendingUp,
   UserCheck,
   CheckCircle2,

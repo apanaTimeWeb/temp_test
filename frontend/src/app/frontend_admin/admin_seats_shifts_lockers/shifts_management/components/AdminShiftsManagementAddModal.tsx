@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { IndianRupee, X, Building2, Clock, Sparkles, ShieldCheck, CheckCircle2, AlertTriangle, Moon, Sun, Info } from 'lucide-react';
+import { IndianRupee, X, Building2, Clock, ShieldCheck, CheckCircle2, AlertTriangle, Moon, Sun, Info } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
 import { getLibraryPricingConfig, saveLibraryPricingConfig } from '@/lib/pricing/libraryPricingEngine';
@@ -305,7 +305,6 @@ export function AdminShiftsManagementAddModal({
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-                <Sparkles size={12} className="text-amber-400" />
                 Step 2: Quick Shift Presets (1-Click Autofill)
               </span>
               <span className="text-[10px] text-slate-500">Auto-calibrated timings</span>
@@ -483,7 +482,7 @@ export function AdminShiftsManagementAddModal({
           <div className="rounded-xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 via-slate-900 to-slate-950 p-3.5 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-300 flex items-center gap-1">
-                <Sparkles size={11} className="text-amber-400" /> Live Shift Directory Preview
+                Live Shift Directory Preview
               </span>
               <span className="text-[10px] text-slate-400">Card rendered in student catalog</span>
             </div>

@@ -12,7 +12,6 @@ import {
   AlertCircle,
   Armchair,
   IndianRupee,
-  Sparkles,
   TrendingUp,
   Building2,
   CheckCircle2,
@@ -78,7 +77,6 @@ export function AdminShiftsShiftGapPage() {
         <div>
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-300">
-              <Sparkles size={12} className="text-amber-400" />
               Seat Capacity Optimization
             </span>
           </div>

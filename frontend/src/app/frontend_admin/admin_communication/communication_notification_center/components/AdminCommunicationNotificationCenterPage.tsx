@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { ChevronRight, ArrowRight, CheckCheck, Bell, AlertTriangle, Sparkles, Building2 } from 'lucide-react';
+import { ChevronRight, ArrowRight, CheckCheck, Bell, AlertTriangle, BellRing, Building2 } from 'lucide-react';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import {
@@ -102,7 +102,7 @@ export function AdminCommunicationNotificationCenterPage() {
           <div className="relative flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">Unread</span>
             <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-amber-500/15 border-amber-500/30 text-amber-400">
-              <Sparkles size={18} strokeWidth={2.2} />
+              <BellRing size={18} strokeWidth={2.2} />
             </div>
           </div>
           <p className="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight text-amber-400 tabular-nums">{unread}</p>

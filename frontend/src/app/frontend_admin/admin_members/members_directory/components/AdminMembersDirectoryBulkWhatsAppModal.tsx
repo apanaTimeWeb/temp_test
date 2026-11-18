@@ -2,7 +2,7 @@
 // RESPONSIBILITY: AdminMembersDirectoryBulkWhatsAppModal component owned by admin_members.
 
 import { useState, useMemo, useEffect } from 'react';
-import { X, Send, CheckCircle2, MessageSquare, Sparkles, ExternalLink } from 'lucide-react';
+import { X, Send, CheckCircle2, MessageSquare, ExternalLink } from 'lucide-react';
 import type { AdminMembersMember } from '@/app/frontend_admin/admin_members/members_directory/schemas/AdminMembersDirectorySchema';
 
 export interface AdminMembersDirectoryBulkWhatsAppModalProps {
@@ -123,7 +123,6 @@ export default function AdminMembersDirectoryBulkWhatsAppModal({
           {/* Preset Buttons */}
           <div>
             <label className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-2 flex items-center gap-1.5">
-              <Sparkles size={13} className="text-amber-400" />
               Quick Templates
             </label>
             <div className="flex flex-wrap gap-2 mt-1.5">

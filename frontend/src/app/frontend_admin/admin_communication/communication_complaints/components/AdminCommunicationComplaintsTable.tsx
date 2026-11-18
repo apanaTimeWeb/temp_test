@@ -21,7 +21,6 @@ import {
   Tag,
   ShieldAlert,
   Clock,
-  Sparkles,
 } from 'lucide-react';
 import { ADMIN_COMMUNICATION_COMPLAINT_STATUS } from '@/app/frontend_admin/admin_communication/communication_complaints/config/admin_communication_complaints.url_config';
 import AdminCommunicationEmptyState from '@/app/frontend_admin/components/ui/admin-primitives/AdminPrimitiveEmptyState';

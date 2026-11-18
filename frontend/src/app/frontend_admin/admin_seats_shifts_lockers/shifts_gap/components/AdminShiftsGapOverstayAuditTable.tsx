@@ -8,7 +8,6 @@ import {
   Clock,
   Armchair,
   IndianRupee,
-  Sparkles,
   Search,
   Filter,
   Lightbulb,

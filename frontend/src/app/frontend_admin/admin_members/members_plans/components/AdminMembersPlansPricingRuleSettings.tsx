@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Percent, Sparkles, Lock, Armchair, Layers } from 'lucide-react';
+import { Percent, Lock, Armchair, Layers } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   getLibraryPricingConfig,
@@ -42,7 +42,7 @@ export function AdminMembersPlansPricingRuleSettings() {
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-400">
-              <Sparkles size={16} />
+              <Percent size={16} />
             </div>
             <h2 className="text-base font-bold text-white tracking-tight">
               Shift Multiplier & Tenure Discount Engine

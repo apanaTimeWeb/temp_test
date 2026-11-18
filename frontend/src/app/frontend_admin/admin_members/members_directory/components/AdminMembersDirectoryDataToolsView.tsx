@@ -3,7 +3,7 @@
 
 import { useMemo } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { DownloadCloud, FileText, Search, FileSpreadsheet, Filter, Sparkles, Printer } from 'lucide-react';
+import { DownloadCloud, FileText, Search, FileSpreadsheet, Filter, Printer } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { ADMIN_MEMBERS_DOCUMENT_FIXTURES, ADMIN_MEMBERS_EXPORT_PLAN_OPTIONS, ADMIN_MEMBERS_EXPORT_STATUS_OPTIONS } from '@/app/frontend_admin/admin_members/members_directory/config/admin_members_directory.url_config';
@@ -99,7 +99,6 @@ export default function AdminMembersDirectoryDataToolsView({ mode, members }: Ad
         </div>
         <div className="space-y-1">
           <label className="admin-label flex items-center gap-1.5" htmlFor="admin-members-export-plan">
-            <Sparkles size={13} className="text-purple-400" />
             <span>{t('EXPORT_FILTER_PLAN')}</span>
           </label>
           <select id="admin-members-export-plan" className="admin-input" value={planFilter} onChange={(event) => setPlanFilter(event.target.value as typeof planFilter)}>

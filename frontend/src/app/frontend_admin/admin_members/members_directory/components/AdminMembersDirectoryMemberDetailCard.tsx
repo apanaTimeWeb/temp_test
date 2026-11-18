@@ -27,7 +27,6 @@ import {
   Receipt,
   AlertTriangle,
   Calendar,
-  Sparkles,
   Printer,
   BookOpen,
   MapPin,
@@ -457,7 +456,7 @@ export function AdminMembersDirectoryMemberDetailCard({
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border border-indigo-500/40 bg-indigo-500/15 text-indigo-400 mb-2">
-                  <Sparkles size={12} /> Active Plan
+                  Active Plan
                 </span>
                 <h3 className="text-xl font-bold text-white">{member.plan}</h3>
                 <p className="text-xs text-text-secondary mt-1">
