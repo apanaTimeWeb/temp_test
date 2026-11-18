@@ -157,11 +157,6 @@ const canonicalRoutes = [
     "route": "/admin/admin_finance/finance_referrals"
   },
   {
-    "submodule": "finance_dashboard",
-    "domain": "admin_finance",
-    "route": "/admin/admin_finance/finance_dashboard"
-  },
-  {
     "submodule": "accounts_expenses",
     "domain": "admin_accounts_assets",
     "route": "/admin/admin_accounts_assets/accounts_expenses"

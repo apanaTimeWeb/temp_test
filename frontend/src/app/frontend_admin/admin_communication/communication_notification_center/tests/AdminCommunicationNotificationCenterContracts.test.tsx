@@ -81,9 +81,9 @@ describe('Admin Communication API contracts', () => {
 describe('AdminCommunicationNotificationCenter canonical routes', () => {
   it('targets accepted query-view IDs for first-party notifications', () => {
     expect(ADMIN_COMMUNICATION_NOTIFICATION_TARGET_ROUTES.CRM_ENQUIRIES).toBe('/admin/admin_members/members_enquiries?view=enquiries');
-    expect(ADMIN_COMMUNICATION_NOTIFICATION_TARGET_ROUTES.FINANCE_RENEWALS).toBe('/admin/admin_finance/finance_dashboard');
-    expect(ADMIN_COMMUNICATION_NOTIFICATION_TARGET_ROUTES.FINANCE_PAYMENT_PROMISES).toBe('/admin/admin_finance/finance_dashboard');
-    expect(ADMIN_COMMUNICATION_NOTIFICATION_TARGET_ROUTES.FINANCE_LATE_FEES).toBe('/admin/admin_finance/finance_dashboard');
+    expect(ADMIN_COMMUNICATION_NOTIFICATION_TARGET_ROUTES.FINANCE_RENEWALS).toBe('/admin/admin_finance/finance_payments');
+    expect(ADMIN_COMMUNICATION_NOTIFICATION_TARGET_ROUTES.FINANCE_PAYMENT_PROMISES).toBe('/admin/admin_finance/finance_payments');
+    expect(ADMIN_COMMUNICATION_NOTIFICATION_TARGET_ROUTES.FINANCE_LATE_FEES).toBe('/admin/admin_finance/finance_payments');
     expect(ADMIN_COMMUNICATION_NOTIFICATION_TARGET_ROUTES.SEAT_MAINTENANCE).toBe('/admin/admin_seats_shifts_lockers/seats_management');
   });
 });

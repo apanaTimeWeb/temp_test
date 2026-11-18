@@ -19,7 +19,7 @@ export const ADMIN_DASHBOARD_DESTINATIONS = [
   {
     key: 'FINANCE',
     Icon: WalletCards,
-    href: ADMIN_DASHBOARD_OVERVIEW_ROUTES.FINANCE_DASHBOARD,
+    href: ADMIN_DASHBOARD_OVERVIEW_ROUTES.FINANCE_PAYMENTS,
   },
 ] as const;
 

@@ -34,7 +34,6 @@ export const ADMIN_NAV_SUBMODULE_COLORS: Record<string, AdminNavColorMeta> = {
   SUBMODULE_LOCKERS_MATRIX: { iconColor: '#f472b6', bg: 'rgba(244, 114, 182, 0.14)' },
 
   // Finance
-  SUBMODULE_FINANCE_DASHBOARD: { iconColor: '#10b981', bg: 'rgba(16, 185, 129, 0.14)' },
   SUBMODULE_FINANCE_PAYMENTS: { iconColor: '#4ade80', bg: 'rgba(74, 222, 128, 0.14)' },
   SUBMODULE_FINANCE_REFUNDS: { iconColor: '#fb7185', bg: 'rgba(251, 113, 133, 0.14)' },
   SUBMODULE_FINANCE_REFERRALS: { iconColor: '#facc15', bg: 'rgba(250, 204, 21, 0.14)' },

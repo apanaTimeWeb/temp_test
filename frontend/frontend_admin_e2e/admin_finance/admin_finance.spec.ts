@@ -82,9 +82,3 @@ test('direct route loads finance_referrals', async ({ page }) => {
   await expect(page).toHaveURL(/\/admin\/admin_finance\/finance_referrals(?:[?#]|$)/);
   await expect(page.getByRole('heading').first()).toBeVisible();
 });
-
-test('direct route loads finance_dashboard', async ({ page }) => {
-  await page.goto('/admin/admin_finance/finance_dashboard');
-  await expect(page).toHaveURL(/\/admin\/admin_finance\/finance_dashboard(?:[?#]|$)/);
-  await expect(page.getByRole('heading').first()).toBeVisible();
-});

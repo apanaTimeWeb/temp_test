@@ -27,7 +27,7 @@ describe('Admin dashboard overview canonical route and behavior', () => {
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
       '/admin/admin_members/members_directory',
       '/admin/admin_seats_shifts_lockers/seats_matrix',
-      '/admin/admin_finance/finance_dashboard',
+      '/admin/admin_finance/finance_payments',
     ]);
     expect(screen.getByRole('status').textContent).toContain('No live Library KPI endpoint');
     expect(screen.queryByText('Catalog')).toBeNull();

@@ -9,9 +9,9 @@ export const ADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES = {
   WHATSAPP_TEMPLATES: '/admin/admin_communication/communication_whatsapp_templates',
   REPORTS: '/admin/admin_dashboard/dashboard_reports',
   CRM_ENQUIRIES: '/admin/admin_members/members_enquiries?view=enquiries',
-  FINANCE_RENEWALS: '/admin/admin_finance/finance_dashboard',
-  FINANCE_PAYMENT_PROMISES: '/admin/admin_finance/finance_dashboard',
-  FINANCE_LATE_FEES: '/admin/admin_finance/finance_dashboard',
+  FINANCE_RENEWALS: '/admin/admin_finance/finance_payments',
+  FINANCE_PAYMENT_PROMISES: '/admin/admin_finance/finance_payments',
+  FINANCE_LATE_FEES: '/admin/admin_finance/finance_payments',
   SEAT_MAINTENANCE: '/admin/admin_seats_shifts_lockers/seats_management',
 } as const;
 

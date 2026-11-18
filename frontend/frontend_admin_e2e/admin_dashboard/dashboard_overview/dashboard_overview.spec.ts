@@ -17,5 +17,5 @@ test('shows links for the target admin workspaces', async ({ page }) => {
   await expect(main.getByRole('heading', { level: 1 })).toBeVisible();
   await expect(main.locator('a[href="/admin/admin_members/members_directory"]')).toHaveCount(1);
   await expect(main.locator('a[href="/admin/admin_seats_shifts_lockers/seats_matrix"]')).toHaveCount(1);
-  await expect(main.locator('a[href="/admin/admin_finance/finance_dashboard"]')).toHaveCount(1);
+  await expect(main.locator('a[href="/admin/admin_finance/finance_payments"]')).toHaveCount(1);
 });
