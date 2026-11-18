@@ -14,11 +14,23 @@ export interface AdminCommunicationComplaintAddModalProps {
 export type CStatus = AdminCommunicationComplaintStatus;
 
 export interface Complaint {
-  id: string; title: string; student: string;
-  description: string; status: CStatus; date: string;
-  resolvedBy: string; resolvedDate: string; resolvedNote: string;
+  id: string;
+  title: string;
+  student: string;
+  description: string;
+  status: CStatus;
+  date: string;
+  resolvedBy: string;
+  resolvedDate: string;
+  resolvedNote: string;
   branchName?: string;
   isEscalatedToHq?: boolean;
+  category?: string;
+  priority?: 'URGENT' | 'HIGH' | 'MEDIUM' | 'LOW';
+  seatNumber?: string;
+  studentPhone?: string;
+  studentEmail?: string;
+  ticketNumber?: string;
 }
 
 export interface AdminCommunicationComplaintsHarnessProps {
