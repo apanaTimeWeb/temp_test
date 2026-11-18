@@ -3,7 +3,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Calendar } from 'lucide-react';
+import { Calendar, Building2 } from 'lucide-react';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_ACCOUNTING_EXPENSE_FIXTURES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/mocks/scenarios/admin_accounts_expenses.scenarios';
 import { ADMIN_ACCOUNTS_EXPENSES_ROUTES } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
@@ -18,6 +18,7 @@ import AdminAccountsExpensesFilterSection, {
 import AdminAccountsExpensesTableSection from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpensesTableSection';
 import AdminAccountsExpensesApprovalModal from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpensesApprovalModal';
 import AdminAccountsExpensesRejectionModal from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpensesRejectionModal';
+import AdminAccountsExpenseVoucherModal from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/components/AdminAccountsExpenseVoucherModal';
 import type {
   AdminAccountsExpensesRouteView,
   AdminAccountsExpensesStatusFilter,
@@ -52,6 +53,17 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
   const [timeRange, setTimeRange] = useState<AdminExpenseTimeRange>('all');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
+  const [inPageBranch, setInPageBranch] = useState<'all' | string>('all');
+  const [viewingVoucher, setViewingVoucher] = useState<AdminAccountingExpense | null>(null);
+
+  const branchCounts = useMemo(() => {
+    return {
+      all: expenses.length,
+      downtown: expenses.filter((e) => e.branchName?.includes('Downtown')).length,
+      westside: expenses.filter((e) => e.branchName?.includes('Westside')).length,
+      north: expenses.filter((e) => e.branchName?.includes('North')).length,
+    };
+  }, [expenses]);
 
   const handleAddExpense = (newExpense: AdminAccountingExpense) => {
     setExpenses((current) => [...current, newExpense]);
@@ -127,6 +139,10 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
           return false;
         }
       }
+      if (inPageBranch !== 'all') {
+        const matchesInPage = expense.branchName && expense.branchName.toLowerCase().includes(inPageBranch.toLowerCase());
+        if (!matchesInPage) return false;
+      }
       if (catFilter !== 'all' && expense.category !== catFilter) return false;
       if (statusFilter !== 'all' && (expense.status ?? 'APPROVED') !== statusFilter) return false;
       if (searchQuery.trim()) {
@@ -153,7 +169,7 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
 
       return true;
     });
-  }, [expenses, isAllBranches, selectedBranch, catFilter, statusFilter, searchQuery, timeRange, customStartDate, customEndDate]);
+  }, [expenses, isAllBranches, selectedBranch, inPageBranch, catFilter, statusFilter, searchQuery, timeRange, customStartDate, customEndDate]);
 
   const timeRangeLabel = useMemo(() => {
     return timeRange === 'all' ? 'All Time' : timeRange === 'today' ? 'Today' : timeRange === 'this_week' ? 'This Week' : timeRange === 'this_month' ? 'This Month' : 'Custom Range';
@@ -194,6 +210,37 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
         </div>
       </div>
 
+      {/* In-Page Branch Selector Quick Tabs */}
+      <div className="flex flex-wrap items-center gap-2 border-b border-border pb-3">
+        {[
+          { id: 'all', label: 'All Branches', count: branchCounts.all },
+          { id: 'Downtown Central', label: 'Downtown Central', count: branchCounts.downtown },
+          { id: 'Westside Branch', label: 'Westside Branch', count: branchCounts.westside },
+          { id: 'North Hub', label: 'North Hub', count: branchCounts.north },
+        ].map((b) => (
+          <button
+            key={b.id}
+            type="button"
+            onClick={() => setInPageBranch(b.id)}
+            className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all ${
+              inPageBranch === b.id
+                ? 'bg-rose-500/15 border border-rose-500/30 text-rose-300 shadow-sm'
+                : 'border border-border bg-surface text-text-secondary hover:bg-surface-hover hover:text-foreground'
+            }`}
+          >
+            <Building2 className="h-3.5 w-3.5" />
+            <span>{b.label}</span>
+            <span
+              className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${
+                inPageBranch === b.id ? 'bg-rose-500/25 text-rose-300' : 'bg-surface-muted text-muted-foreground'
+              }`}
+            >
+              {b.count}
+            </span>
+          </button>
+        ))}
+      </div>
+
       <AdminAccountsExpensesKpiSection expenses={expenses} visibleExpenses={visibleExpenses} timeRangeLabel={timeRangeLabel} />
       <AdminAccountsExpensesFilterSection
         value={catFilter}
@@ -209,6 +256,7 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
         onRequestDelete={setPendingDelete}
         onRequestApprove={setPendingApprove}
         onRequestReject={setPendingReject}
+        onViewVoucher={setViewingVoucher}
         canMutate={isDemoMode}
       />
       <AdminAccountingDeleteConfirmationDialog
@@ -234,6 +282,19 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
         open={pendingReject !== null}
         onConfirm={handleRejectExpense}
         onCancel={() => setPendingReject(null)}
+      />
+      <AdminAccountsExpenseVoucherModal
+        expense={viewingVoucher}
+        isOpen={viewingVoucher !== null}
+        onClose={() => setViewingVoucher(null)}
+        onApprove={(exp) => {
+          handleApproveExpense(exp.id);
+          setViewingVoucher(null);
+        }}
+        onReject={(exp) => {
+          setViewingVoucher(null);
+          setPendingReject(exp);
+        }}
       />
     </div>
   );

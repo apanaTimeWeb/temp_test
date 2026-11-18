@@ -4,7 +4,7 @@
 import { useAdminApplicationInfrastructureUrlQueryState } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_hooks/useAdminApplicationInfrastructureUrlQueryState';
 import { useMemo } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { Trash2, Check, X, ExternalLink, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { Trash2, Check, X, ExternalLink, Clock, CheckCircle2, XCircle, Eye, Building2, User, FileText } from 'lucide-react';
 import { DataGrid, type DataGridCellParams, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { AdminAccountingExpense } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas';
 import { ADMIN_ACCOUNTING_EXPENSE_MODE_BADGE } from '@/app/frontend_admin/admin_accounts_assets/accounts_expenses/config/admin_accounts_expenses.url_config';
@@ -28,6 +28,7 @@ export function AdminAccountsExpensesTableSection({
   onRequestDelete,
   onRequestApprove,
   onRequestReject,
+  onViewVoucher,
   canMutate,
 }: AdminAccountsExpensesTableSectionProps) {
   const [urlTablePage0, setUrlTablePage0] = useAdminApplicationInfrastructureUrlQueryState<number>(
@@ -39,26 +40,29 @@ export function AdminAccountsExpensesTableSection({
   const t = useTranslations('ADMIN_ACCOUNTING.EXPENSES');
 
   const columnDefs = useMemo<DataGridColumn<AdminAccountingExpense>[]>(() => [
-    { field: 'date', headerName: t('DATE'), width: 110, sortable: true },
+    { field: 'date', headerName: t('DATE'), width: 105, sortable: true },
     {
       field: 'branchName',
       headerName: t('BRANCH'),
-      width: 140,
+      width: 150,
       sortable: true,
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => (
-        <span className="font-medium text-foreground">{params.data.branchName ?? 'Main Branch'}</span>
+        <div className="flex items-center gap-1.5">
+          <Building2 className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+          <span className="font-semibold text-foreground text-xs">{params.data.branchName ?? 'Downtown Central'}</span>
+        </div>
       ),
     },
     {
       field: 'category',
       headerName: t('CATEGORY'),
-      width: 140,
+      width: 130,
       sortable: true,
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => {
         const value = String(params.value ?? '—');
         const key = CATEGORY_TRANSLATION_KEY[value as keyof typeof CATEGORY_TRANSLATION_KEY];
         return (
-          <span className="inline-flex items-center rounded-md border border-border px-2.5 py-1 text-xs font-medium bg-card text-text-secondary">
+          <span className="inline-flex items-center rounded-md border border-border px-2.5 py-1 text-xs font-medium bg-surface text-foreground">
             {key ? t(key) : value}
           </span>
         );
@@ -67,26 +71,31 @@ export function AdminAccountsExpensesTableSection({
     {
       field: 'description',
       headerName: t('DESCRIPTION'),
-      minWidth: 200,
+      minWidth: 230,
       flex: 1,
       sortable: true,
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => (
         <div className="flex flex-col py-1">
-          <div className="flex items-center gap-1.5">
-            <span className="font-medium text-foreground">{params.data.description}</span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="font-semibold text-foreground text-xs sm:text-sm">{params.data.description}</span>
             {params.data.isPettyCashRequest && (
-              <span className="rounded bg-warning-bg px-1.5 py-0.5 text-[10px] font-semibold text-warning-text">
+              <span className="rounded bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 text-[10px] font-bold text-amber-400">
                 Petty Cash
+              </span>
+            )}
+            {params.data.vendorName && (
+              <span className="rounded bg-primary-subtle border border-primary/20 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+                {params.data.vendorName}
               </span>
             )}
           </div>
           {params.data.notes && (
-            <span className="text-xs text-muted-foreground truncate" title={params.data.notes}>
+            <span className="text-xs text-muted-foreground truncate max-w-sm mt-0.5" title={params.data.notes}>
               {params.data.notes}
             </span>
           )}
           {params.data.rejectionReason && (
-            <span className="text-xs text-destructive font-medium">
+            <span className="text-xs text-rose-400 font-medium mt-0.5">
               Reason: {params.data.rejectionReason}
             </span>
           )}
@@ -99,15 +108,20 @@ export function AdminAccountsExpensesTableSection({
       width: 130,
       sortable: true,
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => (
-        <span className="font-mono font-semibold text-foreground">
-          {formatAdminAccountingCurrency(Number(params.value ?? 0), locale)}
-        </span>
+        <div className="flex flex-col">
+          <span className="font-mono text-sm font-bold text-foreground">
+            {formatAdminAccountingCurrency(Number(params.value ?? 0), locale)}
+          </span>
+          <span className="text-[10px] uppercase font-semibold text-muted-foreground">
+            {params.data.mode}
+          </span>
+        </div>
       ),
     },
     {
       field: 'status',
       headerName: t('STATUS'),
-      width: 150,
+      width: 145,
       sortable: true,
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => {
         const status = params.data.status ?? 'APPROVED';
@@ -137,38 +151,48 @@ export function AdminAccountsExpensesTableSection({
     },
     {
       field: 'paidBy',
-      headerName: t('PAID_BY'),
-      width: 140,
+      headerName: t('REQUESTED_BY') ?? t('PAID_BY'),
+      width: 160,
       sortable: true,
-      cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => (
-        <span className="text-xs text-muted-foreground">
-          {params.data.requestedBy ?? params.data.paidBy}
-        </span>
-      ),
+      cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => {
+        const name = params.data.requestedBy ?? params.data.paidBy ?? 'Branch Staff';
+        return (
+          <div className="flex items-center gap-1.5">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-surface-muted text-muted-foreground border border-border shrink-0">
+              <User className="h-3 w-3" />
+            </div>
+            <span className="text-xs font-medium text-foreground truncate" title={name}>
+              {name}
+            </span>
+          </div>
+        );
+      },
     },
     {
       field: 'receiptUrl',
-      headerName: 'Slip',
-      width: 80,
+      headerName: t('VOUCHER') ?? 'Bill / Slip',
+      width: 95,
       sortable: false,
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => {
-        if (!params.data.receiptUrl) return <span className="text-muted-foreground">—</span>;
         return (
-          <a
-            href={params.data.receiptUrl}
-            target="_blank"
-            rel="noreferrer"
-            title={t('VIEW_QUOTATION')}
-            className="inline-flex items-center justify-center p-1.5 rounded text-primary hover:bg-primary-subtle"
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onViewVoucher) onViewVoucher(params.data);
+            }}
+            title={t('VIEW_VOUCHER') ?? 'View Expense Voucher'}
+            className="inline-flex items-center gap-1 justify-center rounded-lg border border-border bg-surface px-2 py-1 text-xs font-semibold text-primary hover:bg-surface-hover hover:border-primary/40 transition-colors"
           >
-            <ExternalLink className="h-4 w-4" />
-          </a>
+            <Eye className="h-3.5 w-3.5" />
+            <span>View</span>
+          </button>
         );
       },
     },
     {
       headerName: t('ACTIONS'),
-      width: 150,
+      width: 140,
       sortable: false,
       cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => {
         const isPending = params.data.status === 'PENDING_APPROVAL';
@@ -219,7 +243,7 @@ export function AdminAccountsExpensesTableSection({
         );
       },
     },
-  ], [locale, onRequestDelete, onRequestApprove, onRequestReject, canMutate, t]);
+  ], [locale, onRequestDelete, onRequestApprove, onRequestReject, onViewVoucher, canMutate, t]);
 
   return (
     <section aria-label={t('TABLE_ARIA')} className="rounded-xl border border-border bg-card shadow-card p-4">

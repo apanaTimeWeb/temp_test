@@ -56,7 +56,7 @@ export function AdminAccountsExpensesRejectionModal({
 
           <div className="rounded-lg border border-border bg-muted p-3 text-xs space-y-1">
             <p className="font-semibold text-foreground">{expense.description}</p>
-            <p className="text-muted-foreground">Branch: {expense.branchName ?? 'Main Branch'}</p>
+            <p className="text-muted-foreground">Branch: {expense.branchName ?? 'Downtown Central'}</p>
           </div>
 
           <div className="space-y-1.5">

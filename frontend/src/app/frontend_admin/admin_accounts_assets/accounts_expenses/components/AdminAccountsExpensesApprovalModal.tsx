@@ -43,13 +43,20 @@ export function AdminAccountsExpensesApprovalModal({
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <span className="text-muted-foreground">{t('BRANCH')}:</span>
-                <p className="font-semibold text-foreground">{expense.branchName ?? 'Main Branch'}</p>
+                <p className="font-semibold text-foreground">{expense.branchName ?? 'Downtown Central'}</p>
               </div>
               <div>
                 <span className="text-muted-foreground">{t('REQUESTED_BY')}:</span>
                 <p className="font-semibold text-foreground">{expense.requestedBy ?? expense.paidBy}</p>
               </div>
             </div>
+
+            {expense.vendorName && (
+              <div className="border-t border-border pt-2">
+                <span className="text-muted-foreground">Vendor / Payee:</span>
+                <p className="font-semibold text-foreground">{expense.vendorName}</p>
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-2 border-t border-border pt-2">
               <div>
