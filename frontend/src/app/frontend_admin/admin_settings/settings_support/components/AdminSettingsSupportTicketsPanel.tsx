@@ -26,48 +26,84 @@ export default function AdminSupportTicketsPanel() {
     <div className="space-y-6">
       {/* Support KPI Cards */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('TICKETS_TITLE')}</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Ticket size={16} strokeWidth={2.2} />
+        {/* Total Raised - Indigo */}
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 p-5 shadow-lg shadow-indigo-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-950/40">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-indigo-500/10 blur-2xl transition-all duration-500 group-hover:bg-indigo-500/20" />
+          <svg className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+            <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t('TICKETS_TITLE')}</span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-indigo-500/15 border-indigo-500/30 text-indigo-400">
+              <Ticket size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-text-primary">{kpis.total}</p>
-          <span className="text-xs text-text-muted">Total Raised</span>
+          <p className="mt-3 text-2xl font-bold tracking-tight text-white">{kpis.total}</p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+            <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-indigo-300 bg-indigo-500/10 border-indigo-500/25">
+              Total Raised
+            </span>
+          </div>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('TICKET_OPEN')}</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning-bg text-warning-text">
-              <AlertCircle size={16} strokeWidth={2.2} />
+        {/* Open Tickets - Amber */}
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 p-5 shadow-lg shadow-amber-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-950/40">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-all duration-500 group-hover:bg-amber-500/20" />
+          <svg className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+            <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t('TICKET_OPEN')}</span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-amber-500/15 border-amber-500/30 text-amber-400">
+              <AlertCircle size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-warning-text">{kpis.open}</p>
-          <span className="text-xs text-text-muted">Awaiting Action</span>
+          <p className="mt-3 text-2xl font-bold tracking-tight text-amber-400">{kpis.open}</p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+            <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-amber-300 bg-amber-500/10 border-amber-500/25">
+              Awaiting Action
+            </span>
+          </div>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('TICKET_RESOLVED')}</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success-bg text-success-text">
-              <CheckCircle2 size={16} strokeWidth={2.2} />
+        {/* Resolved - Emerald */}
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 p-5 shadow-lg shadow-emerald-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-500/40 hover:shadow-xl hover:shadow-emerald-950/40">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl transition-all duration-500 group-hover:bg-emerald-500/20" />
+          <svg className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+            <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t('TICKET_RESOLVED')}</span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-emerald-500/15 border-emerald-500/30 text-emerald-400">
+              <CheckCircle2 size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-2xl font-bold tracking-tight text-success-text">{kpis.resolved}</p>
-          <span className="text-xs text-text-muted">Closed & Verified</span>
+          <p className="mt-3 text-2xl font-bold tracking-tight text-emerald-400">{kpis.resolved}</p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+            <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-emerald-300 bg-emerald-500/10 border-emerald-500/25">
+              Closed & Verified
+            </span>
+          </div>
         </div>
 
-        <div className="group relative overflow-hidden rounded-xl border border-border bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">{t('STATUS_HEADING')}</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-info-bg text-info-text">
-              <HelpCircle size={16} strokeWidth={2.2} />
+        {/* Status - Cyan */}
+        <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 p-5 shadow-lg shadow-cyan-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-cyan-500/40 hover:shadow-xl hover:shadow-cyan-950/40">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-cyan-500/10 blur-2xl transition-all duration-500 group-hover:bg-cyan-500/20" />
+          <svg className="pointer-events-none absolute right-0 bottom-0 h-16 w-36 opacity-25 overflow-visible transition-opacity duration-300 group-hover:opacity-40" viewBox="0 0 150 40" fill="none">
+            <path d="M0,32 Q15,18 55,24 T95,14 T130,20 T150,8" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{t('STATUS_HEADING')}</span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-cyan-500/15 border-cyan-500/30 text-cyan-400">
+              <HelpCircle size={18} strokeWidth={2.2} />
             </div>
           </div>
-          <p className="mt-2 text-xl font-bold tracking-tight text-info-text">Active</p>
-          <span className="text-xs text-text-muted">Helpdesk Operational</span>
+          <p className="mt-3 text-2xl font-bold tracking-tight text-cyan-400">Active</p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+            <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-cyan-300 bg-cyan-500/10 border-cyan-500/25">
+              Helpdesk Operational
+            </span>
+          </div>
         </div>
       </div>
 

@@ -54,7 +54,7 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
       `"${c.code}"`,
       c.discount,
       `"${c.type}"`,
-      `"${c.validUntil || ''}"`,
+      `"${c.expiry || ''}"`,
       c.maxUses ?? '',
       c.usedCount ?? 0,
       `"${(c.branchApplicability || 'All Branches').replaceAll('"', '""')}"`,
@@ -80,7 +80,7 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
       c.code,
       c.type === 'Percent' ? `${c.discount}%` : `₹${c.discount}`,
       c.type,
-      c.validUntil || '—',
+      c.expiry || '—',
       c.maxUses ?? 'Unlimited',
       c.usedCount ?? 0,
       c.branchApplicability || 'All Branches',
@@ -178,7 +178,7 @@ export default function AdminCouponsOverviewSection({ isDemoMode, onCreateCoupon
                   <td><strong style="font-family:monospace; color:#6b21a8;">${c.code}</strong></td>
                   <td>${c.type === 'Percent' ? `${c.discount}%` : `₹${c.discount}`}</td>
                   <td>${c.type}</td>
-                  <td>${c.validUntil || '—'}</td>
+                  <td>${c.expiry || '—'}</td>
                   <td>${c.maxUses ?? 'Unlimited'}</td>
                   <td>${c.usedCount ?? 0}</td>
                   <td>${c.branchApplicability || 'All Branches'}</td>
