@@ -4,26 +4,19 @@ import Dialog from '@/app/frontend_admin/components/ui/dialog/Dialog';
 import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogContent';
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
-import { useRef, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
   X,
   Send,
   FileText,
   Layers,
   CheckCheck,
-  Smartphone,
   MessageSquare,
   ShieldCheck,
-  Check,
-  Paperclip,
-  Smile,
-  Mic,
   Copy,
-  Sliders,
   Search,
   CheckCircle2,
   Clock,
-  ArrowUpRight,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { ADMIN_BRAND_CONFIG } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_constants/AdminBrandConfig';
@@ -38,7 +31,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
   const t = useTranslations('ADMIN_COMMUNICATION');
   const {
     templates,
-    setTemplates,
     activeId,
     setActiveId,
     showTest,
@@ -49,16 +41,9 @@ export function AdminCommunicationWhatsappTemplatesPage() {
     setToast,
     toastTimeoutRef,
   } = useAdminCommunicationWhatsappTemplateState();
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Studio modal state for editing & phone simulation
-  const [isStudioOpen, setIsStudioOpen] = useState(false);
-  const [studioTab, setStudioTab] = useState<'editor' | 'preview'>('editor');
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-  const active = templates.find((t) => t.id === activeId) ?? templates[0];
-  const charCount = active.body.length;
 
   const showToast = (message: string) => {
     if (toastTimeoutRef.current !== null) window.clearTimeout(toastTimeoutRef.current);
@@ -67,24 +52,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
       setToast('');
       toastTimeoutRef.current = null;
     }, 3000);
-  };
-
-  const updateBody = (body: string) =>
-    setTemplates((prev) => prev.map((item) => (item.id === activeId ? { ...item, body } : item)));
-
-  const insertVar = (v: string) => {
-    const el = textareaRef.current;
-    if (!el) {
-      updateBody(active.body + v);
-      return;
-    }
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    updateBody(active.body.slice(0, start) + v + active.body.slice(end));
-    setTimeout(() => {
-      el.focus();
-      el.setSelectionRange(start + v.length, start + v.length);
-    }, 0);
   };
 
   const handleTest = () => {
@@ -105,11 +72,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
     }
   };
 
-  const openStudioForTemplate = (id: string) => {
-    setActiveId(id);
-    setIsStudioOpen(true);
-  };
-
   const openTestForTemplate = (id: string) => {
     setActiveId(id);
     setShowTest(true);
@@ -125,8 +87,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
       .replace(/{phone}/g, '+91 98765 43210')
       .replace(/{seat}/g, 'S-08');
   };
-
-  const preview = formatPreview(active.body);
 
   // Extract unique categories
   const categories = useMemo(() => {
@@ -244,17 +204,11 @@ export function AdminCommunicationWhatsappTemplatesPage() {
           <p className="mt-1 text-xs text-slate-400">{t('WHATSAPP_TEMPLATES_SUBTITLE')}</p>
         </div>
 
-        {/* Quick Launch Studio Button */}
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setIsStudioOpen(true)}
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-emerald-950/40 hover:from-emerald-500 hover:to-teal-500 transition-all cursor-pointer"
-          >
-            <Sliders size={14} />
-            <span>Launch Template Studio</span>
-            <ArrowUpRight size={14} className="opacity-70" />
-          </button>
+          <span className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400">
+            <ShieldCheck size={14} />
+            <span>Official Admin Templates</span>
+          </span>
         </div>
       </div>
 
@@ -365,9 +319,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
         {filteredTemplates.map((template) => {
           const isSelected = activeId === template.id;
           const templatePreview = formatPreview(template.body);
-          const lines = templatePreview.split('\n').filter((l) => l.trim().length > 0);
-          const headline = lines[0] || '';
-          const snippet = lines.slice(1, 4).join('\n');
 
           return (
             <div
@@ -412,13 +363,26 @@ export function AdminCommunicationWhatsappTemplatesPage() {
                 )}
               </div>
 
-              {/* Message Snippet Preview */}
+              {/* Live WhatsApp Bubble Preview */}
               <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-                <div className="rounded-xl border border-slate-800 bg-[#0b141a]/90 p-3 text-[11px] font-sans leading-relaxed text-slate-200 space-y-1.5">
-                  <p className="font-bold text-emerald-300 truncate">{headline.replace(/\*/g, '')}</p>
-                  <p className="line-clamp-4 text-slate-300 whitespace-pre-wrap font-sans">
-                    {snippet.replace(/\*/g, '')}
-                  </p>
+                <div className="rounded-2xl border border-slate-800 bg-[#0b141a] p-3.5 shadow-inner">
+                  {/* WhatsApp Bubble Header */}
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800/70 text-[10px] text-slate-400">
+                    <span className="font-semibold text-emerald-400 flex items-center gap-1">
+                      <ShieldCheck size={12} />
+                      {ADMIN_BRAND_CONFIG.displayName || 'Smart Library'}
+                    </span>
+                    <span className="font-mono text-slate-500">Official Account</span>
+                  </div>
+
+                  {/* Message Content */}
+                  <div className="max-h-60 overflow-y-auto pr-1 text-[11.5px] leading-relaxed text-slate-200">
+                    <p className="whitespace-pre-wrap font-sans break-words">{templatePreview}</p>
+                    <div className="mt-2 flex items-center justify-end gap-1 text-[9px] text-emerald-300/80">
+                      <span>10:42 AM</span>
+                      <CheckCheck size={13} className="text-cyan-400" />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Tokens & Char count */}
@@ -439,30 +403,22 @@ export function AdminCommunicationWhatsappTemplatesPage() {
                 <button
                   type="button"
                   onClick={() => copyTemplateToClipboard(template.body, t(template.labelKey))}
-                  className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition-all cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
                   title="Copy raw template"
                   aria-label="Copy template"
                 >
-                  <Copy size={14} />
+                  <Copy size={13} />
+                  <span>Copy Template</span>
                 </button>
 
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => openTestForTemplate(template.id)}
-                    className="inline-flex items-center gap-1 rounded-xl border border-slate-700 bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
-                  >
-                    <Send size={12} />
-                    <span>Test</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => openStudioForTemplate(template.id)}
                     className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-emerald-500 transition-all cursor-pointer"
                   >
-                    <Sliders size={12} />
-                    <span>Customize & Preview</span>
+                    <Send size={12} />
+                    <span>Test Dispatch</span>
                   </button>
                 </div>
               </div>
@@ -470,233 +426,6 @@ export function AdminCommunicationWhatsappTemplatesPage() {
           );
         })}
       </div>
-
-      {/* WhatsApp Template Studio & Live Smartphone Simulator Modal */}
-      {isStudioOpen && (
-        <Dialog open onOpenChange={setIsStudioOpen}>
-          <DialogContent className="relative w-full max-w-4xl rounded-2xl sm:rounded-3xl border border-slate-800 bg-[#0d131f] p-4 sm:p-6 text-white shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 sm:pb-4">
-              <div className="flex items-center gap-3">
-                <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-lg sm:text-xl shrink-0">
-                  {active.icon}
-                </div>
-                <div>
-                  <DialogTitle className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <span>{t(active.labelKey)}</span>
-                  </DialogTitle>
-                  <DialogDescription className="text-[11px] sm:text-xs text-slate-400">
-                    Live WhatsApp Business Template Studio with responsive real-time recipient preview.
-                  </DialogDescription>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setIsStudioOpen(false)}
-                className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 hover:text-white transition-all cursor-pointer"
-                aria-label="Close studio"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* Quick Switcher Tabs Inside Studio */}
-            <div className="flex flex-wrap gap-1.5 border-b border-slate-800 pb-3">
-              {templates.map((tmpl) => (
-                <button
-                  key={tmpl.id}
-                  type="button"
-                  data-testid={`admin_communication-template-${tmpl.id}`}
-                  onClick={() => setActiveId(tmpl.id)}
-                  className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
-                    activeId === tmpl.id
-                      ? 'border border-emerald-500 bg-emerald-500/20 text-emerald-300 shadow-sm'
-                      : 'border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-white hover:border-slate-700'
-                  }`}
-                >
-                  <span>{tmpl.icon}</span>
-                  <span>{t(tmpl.labelKey)}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Mobile View Toggle (Editor vs Preview) */}
-            <div className="flex lg:hidden rounded-xl bg-slate-900 border border-slate-800 p-1">
-              <button
-                type="button"
-                onClick={() => setStudioTab('editor')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  studioTab === 'editor'
-                    ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <FileText size={14} />
-                <span>Template Editor</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setStudioTab('preview')}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  studioTab === 'preview'
-                    ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <Smartphone size={14} />
-                <span>Live Preview</span>
-              </button>
-            </div>
-
-            {/* Studio Workspace: Editor (7 cols) | Live WhatsApp Preview (5 cols) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-              {/* Column 1: Template Editor */}
-              <div className={`space-y-4 lg:col-span-7 ${studioTab === 'editor' ? 'block' : 'hidden lg:block'}`}>
-                <div className="flex items-center justify-between">
-                  <label
-                    className="block text-xs font-semibold uppercase tracking-wider text-slate-300"
-                    htmlFor="admin-communication-template-body"
-                  >
-                    {t('WHATSAPP_MESSAGE_BODY')}
-                  </label>
-                  <span
-                    className={`text-[11px] font-mono px-2.5 py-0.5 rounded-full border ${
-                      charCount > ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS
-                        ? 'border-red-500/50 bg-red-500/10 text-red-400'
-                        : 'border-slate-700 bg-slate-800 text-slate-300'
-                    }`}
-                  >
-                    {charCount} / {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS} chars
-                  </span>
-                </div>
-
-                <textarea
-                  id="admin-communication-template-body"
-                  ref={textareaRef}
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-950/80 p-3.5 sm:p-4 text-xs font-mono text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 resize-y leading-relaxed shadow-inner"
-                  rows={8}
-                  value={active.body}
-                  onChange={(e) => updateBody(e.target.value)}
-                  maxLength={ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_MAX_CHARACTERS}
-                />
-
-                {/* Dynamic Token Inserters */}
-                <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-3.5 space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                    <Layers size={13} className="text-indigo-400" />
-                    {t('WHATSAPP_INSERT_VARIABLE')} (Click to insert at cursor)
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES.map((v) => (
-                      <button
-                        data-testid={`admin_communication-template-variable-${v
-                          .replace(/[^a-z0-9]+/gi, '-')
-                          .toLowerCase()}`}
-                        key={v}
-                        type="button"
-                        onClick={() => insertVar(v)}
-                        className="rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-1 text-xs font-mono font-semibold text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-500/50 transition-all cursor-pointer"
-                      >
-                        {v}
-                      </button>
-                    ))}
-                  </div>
-                  <p className="text-[11px] text-slate-400 pt-0.5">
-                    Tokens are resolved dynamically with recipient member records during automated dispatch.
-                  </p>
-                </div>
-
-                {/* Action Bar */}
-                <div className="flex items-center justify-between border-t border-slate-800 pt-3.5">
-                  <button
-                    type="button"
-                    onClick={() => copyTemplateToClipboard(active.body, t(active.labelKey))}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
-                  >
-                    <Copy size={13} />
-                    <span>Copy Text</span>
-                  </button>
-
-                  <div className="flex items-center gap-2 sm:gap-2.5">
-                    <button
-                      type="button"
-                      data-testid="admin_communication-page-control-006"
-                      onClick={() => setShowTest(true)}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3.5 sm:px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-all shadow-sm cursor-pointer"
-                    >
-                      <Send size={13} />
-                      {t('WHATSAPP_TEMPLATE_TEST_BUTTON')}
-                    </button>
-                    <button
-                      type="button"
-                      data-testid="admin_communication-page-control-007"
-                      disabled
-                      title={t('WHATSAPP_SAVE_UNAVAILABLE_TITLE')}
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 sm:px-4 py-2 text-xs font-semibold text-white opacity-90 shadow-md shadow-emerald-600/20"
-                    >
-                      <Check size={14} />
-                      Save Changes
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Column 2: Sleek Live WhatsApp Preview */}
-              <div className={`flex flex-col items-center justify-start lg:col-span-5 w-full ${studioTab === 'preview' ? 'block' : 'hidden lg:block'}`}>
-                <div className="w-full max-w-[360px] rounded-2xl border border-slate-700/80 bg-[#0b141a] shadow-2xl overflow-hidden text-white flex flex-col mx-auto">
-                  {/* WhatsApp App Header */}
-                  <div className="bg-[#1f2c34] px-3.5 py-3 flex items-center justify-between border-b border-slate-800/80 shrink-0">
-                    <div className="flex items-center gap-2.5">
-                      <div className="h-8 w-8 rounded-full bg-emerald-600 flex items-center justify-center font-bold text-xs text-white ring-1 ring-emerald-400/40 shrink-0">
-                        {ADMIN_BRAND_CONFIG.displayName ? ADMIN_BRAND_CONFIG.displayName.slice(0, 2).toUpperCase() : 'SL'}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-bold text-slate-100 truncate">
-                            {ADMIN_BRAND_CONFIG.displayName || 'Smart Library'}
-                          </span>
-                          <ShieldCheck size={13} className="text-emerald-400 shrink-0" />
-                        </div>
-                        <span className="text-[10px] text-emerald-400 block font-medium leading-tight">
-                          Official Business Account
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-[10px] font-mono text-slate-400 px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700">
-                      Live
-                    </span>
-                  </div>
-
-                  {/* Chat Area with WhatsApp Message Bubble */}
-                  <div className="p-3.5 min-h-[260px] sm:min-h-[300px] max-h-[400px] overflow-y-auto flex flex-col justify-end bg-gradient-to-b from-[#0b141a] via-[#0b141a] to-[#080d11]">
-                    <div className="relative self-end max-w-[95%] sm:max-w-[92%] rounded-2xl rounded-tr-xs bg-[#005c4b] p-3 text-[11.5px] leading-relaxed text-slate-100 shadow-md">
-                      <p className="whitespace-pre-wrap font-sans break-words">{preview}</p>
-                      <div className="mt-2 flex items-center justify-end gap-1.5 text-[9px] text-emerald-200/90">
-                        <span>10:42 AM</span>
-                        <CheckCheck size={13} className="text-cyan-300" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* WhatsApp Preview Status Bar */}
-                  <div className="bg-[#121b22] px-3 py-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-400">
-                    <span className="flex items-center gap-1 text-emerald-400">
-                      <CheckCircle2 size={12} /> Live Render
-                    </span>
-                    <span className="text-slate-500 font-mono">End-to-End Encrypted</span>
-                  </div>
-                </div>
-
-                <p className="text-[11px] text-slate-400 mt-2.5 flex items-center gap-1.5">
-                  <Smartphone size={13} className="text-emerald-400" />
-                  Live recipient preview simulation
-                </p>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
     </div>
   );
 }
