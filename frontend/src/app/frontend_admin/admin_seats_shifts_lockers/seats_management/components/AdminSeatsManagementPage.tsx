@@ -8,7 +8,8 @@ import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { ChevronDown, Search, Wrench, Armchair, CheckCircle2, AlertOctagon } from 'lucide-react';
+import { ChevronDown, Search, Wrench, Armchair, CheckCircle2, AlertOctagon, Download, FileSpreadsheet, Printer } from 'lucide-react';
+import { toast } from 'sonner';
 import { DataGrid, type DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import {
@@ -69,6 +70,139 @@ export function AdminSeatsManagementPage() {
     return matchesSearch && matchesAdminSeatsFilter(seat.status, statusFilter);
   });
 
+  const exportMasterCsv = () => {
+    const headers = ['Seat Number', 'Branch', 'Status', 'Assigned Student', 'Last Maintenance'];
+    const rows = filtered.map((s) => [
+      `"${s.seatNo}"`,
+      `"${s.branch.replaceAll('"', '""')}"`,
+      `"${s.status}"`,
+      `"${(s.assignedTo || '—').replaceAll('"', '""')}"`,
+      `"${s.lastMaintenance || '—'}"`,
+    ]);
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `seats-master-inventory-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filtered.length} seats to CSV`);
+  };
+
+  const exportMasterExcel = () => {
+    const headers = ['Seat Number', 'Branch', 'Status', 'Assigned Student', 'Last Maintenance'];
+    const rows = filtered.map((s) => [
+      s.seatNo,
+      s.branch,
+      s.status,
+      s.assignedTo || '—',
+      s.lastMaintenance || '—',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>SeatsInventory</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #0e7490; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #155e75; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #ecfeff; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `seats-master-inventory-${new Date().toISOString().slice(0, 10)}.xls`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${filtered.length} seats to Excel (.xls)`);
+  };
+
+  const printMasterRoster = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=950,height=750');
+    if (!printWindow) { window.print(); return; }
+    const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smart Library - Seats Master Inventory Roster</title>
+          <style>
+            @page { size: landscape; margin: 10mm; }
+            body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0e7490; padding-bottom: 10px; margin-bottom: 12px; }
+            .title { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #0e7490; }
+            .subtitle { font-size: 12px; color: #64748b; margin-top: 2px; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; }
+            th { background-color: #cffafe; color: #155e75; text-align: left; padding: 6px; border: 1px solid #a5f3fc; font-weight: 700; text-transform: uppercase; font-size: 10px; }
+            td { padding: 6px; border: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background-color: #f8fafc; }
+            .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+            .badge-working { background: #dcfce7; color: #15803d; }
+            .badge-maintenance { background: #fef3c7; color: #b45309; }
+            .badge-broken { background: #fee2e2; color: #b91c1c; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="title">Smart Library Network · Seats Master Inventory Roster</div>
+              <div class="subtitle">Branch: ${selectedBranch ? selectedBranch.name : 'All Branches'} · Total Seats: ${filtered.length}</div>
+            </div>
+            <div style="font-size: 11px; text-align: right; color: #475569;">
+              <div><strong>Generated:</strong> ${dateStr}</div>
+              <div><strong>Scope:</strong> Master Inventory Asset Audit</div>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Seat Number</th>
+                <th>Branch</th>
+                <th>Operational Status</th>
+                <th>Assigned Student</th>
+                <th>Last Maintenance Log</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${filtered.map((s) => `
+                <tr>
+                  <td><strong style="color:#0891b2;">${s.seatNo}</strong></td>
+                  <td>${s.branch}</td>
+                  <td><span class="badge badge-${s.status.toLowerCase()}">${s.status}</span></td>
+                  <td>${s.assignedTo || '—'}</td>
+                  <td>${s.lastMaintenance || '—'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   const colDefs = useMemo<readonly DataGridColumn<Seat>[]>(() => [
     { field: 'seatNo', headerName: t('seatNumber'), flex: 1, sortable: true, cellRenderer: renderSeatNoCell },
     { field: 'branch', headerName: t('branch'), flex: 2, sortable: true, cellRenderer: renderBranchCell },
@@ -112,7 +246,7 @@ export function AdminSeatsManagementPage() {
   return (
     <div className="min-w-0 space-y-6">
       {!isDemoMode && <p role="status" className="mb-4 rounded-md border border-warning-bg bg-warning-bg p-3 text-warning-text">{t('liveSeatNotice')}</p>}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-0.5 text-xs font-semibold text-cyan-300">
@@ -122,6 +256,39 @@ export function AdminSeatsManagementPage() {
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{t('seatsTitle')}</h1>
           <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">{t('seatsSubtitle')}</p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={exportMasterCsv}
+            disabled={filtered.length === 0}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1.5 text-xs font-semibold text-cyan-300 hover:text-white hover:bg-cyan-500/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+            title="Export Seats Master to CSV"
+          >
+            <Download size={14} className="text-cyan-400" />
+            <span>Export CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={exportMasterExcel}
+            disabled={filtered.length === 0}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-300 hover:text-white hover:bg-emerald-500/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+            title="Export Seats Master to Excel (.xls)"
+          >
+            <FileSpreadsheet size={14} className="text-emerald-400" />
+            <span>Excel</span>
+          </button>
+          <button
+            type="button"
+            onClick={printMasterRoster}
+            disabled={filtered.length === 0}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
+            title="Print Master Inventory Roster"
+          >
+            <Printer size={14} className="text-slate-400" />
+            <span>Print</span>
+          </button>
         </div>
       </div>
 

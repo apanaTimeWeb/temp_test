@@ -3,13 +3,16 @@
 
 import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { Download, Plus, Printer, Upload, Search, Building2, IndianRupee, Clock, CheckCircle2, Users, TrendingUp, Moon } from 'lucide-react';
+import { Download, Plus, Printer, Upload, Search, Building2, IndianRupee, Clock, CheckCircle2, Users, TrendingUp, Moon, Edit3, Trash2, Power, FileSpreadsheet } from 'lucide-react';
+import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
 import { ADMIN_SHIFTS_DEMO_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/mocks/scenarios/admin_shifts_management.scenarios';
 import type { AdminShiftsShift } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/types/AdminShiftsManagementTypes';
 import { serializeAdminShiftsCsv } from '@/app/frontend_admin/admin_seats_shifts_lockers/shifts_management/utils/AdminShiftsManagementCsvUtils';
 import { AdminShiftsManagementAddModal } from './AdminShiftsManagementAddModal';
+import { AdminShiftsManagementEditModal } from './AdminShiftsManagementEditModal';
+import { AdminShiftsManagementImportModal } from './AdminShiftsManagementImportModal';
 
 function getShiftDurationHours(startTime: string, endTime: string): number {
   if (!startTime || !endTime) return 0;
@@ -45,6 +48,36 @@ export function AdminShiftsManagementPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [editingShift, setEditingShift] = useState<AdminShiftsShift | null>(null);
+
+  const handleToggleShiftActive = (shiftId: string) => {
+    setShifts((prev) =>
+      prev.map((s) => (s.id === shiftId ? { ...s, active: !s.active } : s))
+    );
+    const target = shifts.find((s) => s.id === shiftId);
+    if (target?.active) {
+      toast.info(`Shift "${target.name}" deactivated`);
+    } else {
+      toast.success(`Shift "${target?.name}" activated`);
+    }
+  };
+
+  const handleDeleteShift = (shiftId: string) => {
+    const target = shifts.find((s) => s.id === shiftId);
+    setShifts((prev) => prev.filter((s) => s.id !== shiftId));
+    toast.success(`Shift "${target?.name || shiftId}" deleted`);
+  };
+
+  const handleSaveShift = (updatedShift: AdminShiftsShift) => {
+    setShifts((prev) =>
+      prev.map((s) => (s.id === updatedShift.id ? updatedShift : s))
+    );
+  };
+
+  const handleImportShifts = (newShifts: AdminShiftsShift[]) => {
+    setShifts((prev) => [...prev, ...newShifts]);
+  };
 
   const visibleShifts = useMemo(() => {
     return shifts.filter((shift) => {
@@ -122,9 +155,9 @@ return (
         <button
           type="button"
           data-testid="admin_shifts-page-control-001"
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-3 py-2 font-medium text-primary motion-safe:transition-colors motion-safe:duration-base hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 justify-start"
-          disabled
-          title={t('demoShiftImportUnavailable')}
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-border bg-card px-3 py-2 font-medium text-primary motion-safe:transition-colors motion-safe:duration-base hover:bg-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary justify-start cursor-pointer"
+          onClick={() => setIsImportModalOpen(true)}
+          title="Bulk Import Shifts from CSV"
         >
           <Upload size={18} strokeWidth={2} />{t('import')}
         </button>
@@ -314,6 +347,43 @@ return (
                     />
                   </div>
                 </div>
+
+                {/* Shift Card Action Controls: Edit, Active/Inactive Toggle, Delete */}
+                <div className="flex items-center justify-between gap-2 pt-3 border-t border-border">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setEditingShift(shift)}
+                      className="inline-flex min-h-8 items-center gap-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-1 text-xs font-semibold text-indigo-400 hover:text-white hover:bg-indigo-500/25 transition-colors cursor-pointer"
+                      title="Edit shift timetable or monthly price"
+                    >
+                      <Edit3 size={13} />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleToggleShiftActive(shift.id)}
+                      className={`inline-flex min-h-8 items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+                        shift.active
+                          ? 'border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/25'
+                          : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/25'
+                      }`}
+                      title={shift.active ? 'Deactivate shift' : 'Activate shift'}
+                    >
+                      <Power size={13} />
+                      <span>{shift.active ? 'Deactivate' : 'Activate'}</span>
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteShift(shift.id)}
+                    className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:text-white hover:bg-rose-500/25 transition-colors cursor-pointer"
+                    title={`Delete shift ${shift.name}`}
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -326,6 +396,20 @@ return (
       onClose={() => setIsAddModalOpen(false)}
       onAddShift={(newShift) => setShifts((prev) => [...prev, newShift])}
       selectedBranchName={selectedBranch?.name}
+    />
+
+    <AdminShiftsManagementEditModal
+      isOpen={Boolean(editingShift)}
+      onClose={() => setEditingShift(null)}
+      shift={editingShift}
+      onSaveShift={handleSaveShift}
+    />
+
+    <AdminShiftsManagementImportModal
+      isOpen={isImportModalOpen}
+      onClose={() => setIsImportModalOpen(false)}
+      onImportShifts={handleImportShifts}
+      defaultBranchName={selectedBranch?.name || 'All Branches'}
     />
   </div>
 );

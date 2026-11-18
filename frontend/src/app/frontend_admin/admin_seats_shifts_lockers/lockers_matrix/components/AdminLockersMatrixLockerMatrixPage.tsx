@@ -4,9 +4,9 @@
 import { useTranslations } from 'next-intl';
 import { useMemo, useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { KeyRound, Building2, ShieldAlert, LayoutGrid, List, Search, Filter, Lock, Unlock, Wrench, User } from 'lucide-react';
+import { KeyRound, Building2, ShieldAlert, LayoutGrid, List, Search, Filter, Lock, Unlock, Wrench, User, Download, FileSpreadsheet, Printer, Settings } from 'lucide-react';
 import { toast } from 'sonner';
-import { useAdminLockersLockerMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/hooks/useAdminLockersMatrixLockerMatrix';
+import { useAdminLockersLockerMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers\lockers_matrix/hooks/useAdminLockersMatrixLockerMatrix';
 import { ADMIN_LOCKERS_MATRIX_QUERY_KEYS } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/api/admin_lockers_matrix.query_keys';
 import type { AdminLockersLockerMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/types/AdminLockersMatrixTypes';
 import AdminLockersLockerMatrixStats from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/components/AdminLockersMatrixLockerMatrixStats';
@@ -16,6 +16,7 @@ import {
   AdminLockersMatrixDetailModal,
   ADMIN_LOCKER_MATRIX_STATUS_CLASS,
 } from '@/app/frontend_admin/admin_seats_shifts_lockers/lockers_matrix/components/AdminLockersMatrixDetailModal';
+import { AdminLockersMatrixSettingsModal, type LockerPricingPolicy } from './AdminLockersMatrixSettingsModal';
 
 const LEGEND_ITEMS: Array<{ label: string; cls: string; dot: string }> = [
   { cls: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400', dot: 'bg-emerald-400', label: 'statusFree' },
@@ -35,6 +36,14 @@ export function AdminLockersLockerMatrixPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'free' | 'occupied' | 'maintenance'>('all');
   const [selectedLocker, setSelectedLocker] = useState<AdminLockersLockerMatrixViewModel | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [pricingPolicy, setPricingPolicy] = useState<LockerPricingPolicy>({
+    monthlyRent: 200,
+    securityDeposit: 500,
+    lostKeyFee: 150,
+    lateFeePerDay: 20,
+    branchName: 'All Branches',
+  });
 
   const lockerMatrixQuery = useAdminLockersLockerMatrix();
   const lockers = lockerMatrixQuery.data ?? [];
@@ -189,6 +198,161 @@ export function AdminLockersLockerMatrixPage() {
     setSelectedLocker(null);
   };
 
+  const downloadLockersCsv = () => {
+    const headers = ['Locker Number', 'Branch', 'Status', 'Assigned Student', 'Smart ID', 'Phone', 'Shift Plan', 'Expiry Date', 'Allotted By', 'Allotted Date'];
+    const rows = visibleLockers.map((l) => [
+      `"${l.id}"`,
+      `"${(l.branchName || 'Downtown Central').replaceAll('"', '""')}"`,
+      `"${l.status}"`,
+      `"${(l.student || '—').replaceAll('"', '""')}"`,
+      `"${l.smartId || '—'}"`,
+      `"${l.phone || '—'}"`,
+      `"${(l.shift || '—').replaceAll('"', '""')}"`,
+      `"${l.expiry || '—'}"`,
+      `"${(l.allottedByManager || '—').replaceAll('"', '""')}"`,
+      `"${l.allottedDate || '—'}"`,
+    ]);
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `lockers-allotment-report-${activeBranchFilter.replaceAll(' ', '_')}-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${visibleLockers.length} locker records to CSV`);
+  };
+
+  const downloadLockersExcel = () => {
+    const headers = ['Locker Number', 'Branch', 'Status', 'Assigned Student', 'Smart ID', 'Phone', 'Shift Plan', 'Expiry Date', 'Allotted By', 'Allotted Date'];
+    const rows = visibleLockers.map((l) => [
+      `#${l.id}`,
+      l.branchName || 'Downtown Central',
+      l.status,
+      l.student || '—',
+      l.smartId || '—',
+      l.phone || '—',
+      l.shift || '—',
+      l.expiry || '—',
+      l.allottedByManager || '—',
+      l.allottedDate || '—',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Lockers</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #312e81; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #4338ca; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #eef2ff; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `lockers-allotment-report-${activeBranchFilter.replaceAll(' ', '_')}-${new Date().toISOString().slice(0, 10)}.xls`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${visibleLockers.length} locker records to Excel (.xls)`);
+  };
+
+  const printLockersRoster = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=950,height=750');
+    if (!printWindow) { window.print(); return; }
+    const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smart Library - Locker Allotment & Custody Roster</title>
+          <style>
+            @page { size: landscape; margin: 10mm; }
+            body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #4338ca; padding-bottom: 10px; margin-bottom: 12px; }
+            .title { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #4338ca; }
+            .subtitle { font-size: 12px; color: #64748b; margin-top: 2px; }
+            .policy { font-size: 11px; padding: 8px 12px; background: #e0e7ff; border-radius: 6px; margin-bottom: 12px; color: #3730a3; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; }
+            th { background-color: #e0e7ff; color: #3730a3; text-align: left; padding: 6px; border: 1px solid #c7d2fe; font-weight: 700; text-transform: uppercase; font-size: 10px; }
+            td { padding: 6px; border: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background-color: #f8fafc; }
+            .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+            .badge-free { background: #dcfce7; color: #15803d; }
+            .badge-occupied { background: #fee2e2; color: #b91c1c; }
+            .badge-maintenance { background: #fef3c7; color: #b45309; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="title">Smart Library Network · Locker Asset Custody & Allotment Roster</div>
+              <div class="subtitle">Branch: ${activeBranchFilter} · Total Lockers: ${visibleLockers.length} · Free: ${stats.free} · Occupied: ${stats.occupied}</div>
+            </div>
+            <div style="font-size: 11px; text-align: right; color: #475569;">
+              <div><strong>Generated:</strong> ${dateStr}</div>
+              <div><strong>Custodian:</strong> Front Desk Administration</div>
+            </div>
+          </div>
+          <div class="policy">
+            <strong>Active Policy:</strong> Monthly Rent: ₹${pricingPolicy.monthlyRent} · Key Security Deposit: ₹${pricingPolicy.securityDeposit} (Refundable) · Lost Key Replacement: ₹${pricingPolicy.lostKeyFee}
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Locker #</th>
+                <th>Branch</th>
+                <th>Status</th>
+                <th>Student Name</th>
+                <th>Smart ID</th>
+                <th>Phone</th>
+                <th>Shift Plan</th>
+                <th>Expiry Date</th>
+                <th>Allotted By</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${visibleLockers.map((l) => `
+                <tr>
+                  <td><strong style="color:#4338ca;">#${l.id}</strong></td>
+                  <td>${l.branchName || 'Downtown Central'}</td>
+                  <td><span class="badge badge-${l.status}">${l.status}</span></td>
+                  <td>${l.student || '—'}</td>
+                  <td>${l.smartId || '—'}</td>
+                  <td>${l.phone || '—'}</td>
+                  <td>${l.shift || '—'}</td>
+                  <td>${l.expiry || '—'}</td>
+                  <td>${l.allottedByManager || '—'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   return (
     <div className="min-w-0 space-y-6">
       {/* Header Section */}
@@ -208,29 +372,79 @@ export function AdminLockersLockerMatrixPage() {
           </p>
         </div>
 
-        {/* View Mode Toggle */}
-        <div className="inline-flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+        {/* Controls Toolbar: Mode Toggle, Settings, Export CSV/Excel, Print */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* View Mode Toggle */}
+          <div className="inline-flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              aria-pressed={viewMode === 'grid'}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${viewMode === 'grid'
+                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-xs'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                }`}
+            >
+              <LayoutGrid size={14} /> Grid View
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('table')}
+              aria-pressed={viewMode === 'table'}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${viewMode === 'table'
+                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-xs'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                }`}
+            >
+              <List size={14} /> Table View
+            </button>
+          </div>
+
+          {/* Rent & Caution Deposit Settings */}
           <button
             type="button"
-            onClick={() => setViewMode('grid')}
-            aria-pressed={viewMode === 'grid'}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${viewMode === 'grid'
-                ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-xs'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-              }`}
+            onClick={() => setIsSettingsOpen(true)}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-1.5 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-500/20 transition-all shadow-xs cursor-pointer"
+            title="Configure Monthly Rent & Refundable Security Deposit"
           >
-            <LayoutGrid size={14} /> Grid View
+            <Settings size={14} className="text-indigo-400" />
+            <span>Settings (₹{pricingPolicy.monthlyRent}/mo)</span>
           </button>
+
+          {/* Export CSV */}
           <button
             type="button"
-            onClick={() => setViewMode('table')}
-            aria-pressed={viewMode === 'table'}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${viewMode === 'table'
-                ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white shadow-xs'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
-              }`}
+            onClick={downloadLockersCsv}
+            disabled={visibleLockers.length === 0}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1.5 text-xs font-semibold text-cyan-300 hover:text-white hover:bg-cyan-500/20 transition-all shadow-xs cursor-pointer disabled:opacity-40"
+            title="Export Locker Allotment List to CSV"
           >
-            <List size={14} /> Table View
+            <Download size={14} className="text-cyan-400" />
+            <span>Export CSV</span>
+          </button>
+
+          {/* Export Excel */}
+          <button
+            type="button"
+            onClick={downloadLockersExcel}
+            disabled={visibleLockers.length === 0}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-300 hover:text-white hover:bg-emerald-500/20 transition-all shadow-xs cursor-pointer disabled:opacity-40"
+            title="Export Locker Allotment List to Excel (.xls)"
+          >
+            <FileSpreadsheet size={14} className="text-emerald-400" />
+            <span>Excel</span>
+          </button>
+
+          {/* Print */}
+          <button
+            type="button"
+            onClick={printLockersRoster}
+            disabled={visibleLockers.length === 0}
+            className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-700 transition-all shadow-xs cursor-pointer disabled:opacity-40"
+            title="Print Locker Custody & Allotment Roster"
+          >
+            <Printer size={14} className="text-slate-400" />
+            <span>Print</span>
           </button>
         </div>
       </div>
@@ -460,6 +674,14 @@ export function AdminLockersLockerMatrixPage() {
           Lockers are physical branch assets governed by branch-level custody. Physical key handovers, locker allotment at admission, and key deposits are managed on-site by Branch Managers. Central Admin oversees network-wide inventory, branch utilization ratios, and scheduled maintenance audits.
         </p>
       </div>
+
+      {/* Locker Pricing & Caution Deposit Policy Modal */}
+      <AdminLockersMatrixSettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        currentPolicy={pricingPolicy}
+        onSavePolicy={(updated) => setPricingPolicy(updated)}
+      />
     </div>
   );
 }

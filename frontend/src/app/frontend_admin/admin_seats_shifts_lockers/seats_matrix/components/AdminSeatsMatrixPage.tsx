@@ -26,10 +26,13 @@ import {
   ShieldAlert,
   ChevronRight,
   ArrowUpDown,
+  FileSpreadsheet,
+  Layers,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { AdminSeatMatrixSeatMatrixViewModel } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/types/AdminSeatsMatrixTypes';
 import { useAdminSeatMatrixSeatMatrix, generateFallbackSeatMatrix } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/hooks/useAdminSeatsMatrixSeatMatrix';
+import AdminSeatsMatrixBulkGenerateModal from './AdminSeatsMatrixBulkGenerateModal';
 import { ADMIN_SEAT_MATRIX_SHIFTS } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/config/admin_seats_matrix.url_config';
 import { ADMIN_SEAT_MATRIX_QUERY_KEYS } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/api/admin_seats_matrix.query_keys';
 import { buildAdminSeatMatrixSeatMatrixCsv, downloadAdminSeatMatrixCsv } from '@/app/frontend_admin/admin_seats_shifts_lockers/seats_matrix/utils/AdminSeatsMatrixExportUtils';
@@ -91,6 +94,7 @@ export function AdminSeatMatrixSeatMatrixPage() {
   const seatDetailDialogRef = useRef<HTMLDivElement>(null);
   useAdminSeatMatrixDialogFocus(Boolean(selectedSeat), () => setSelectedSeat(null), seatDetailDialogRef);
   const [date, setDate] = useState(() => format(new Date(), 'yyyy-MM-dd'));
+  const [isBulkGenerateOpen, setIsBulkGenerateOpen] = useState(false);
 
   // Allocation Form State
   const [assignStudent, setAssignStudent] = useState('');
@@ -310,6 +314,153 @@ export function AdminSeatMatrixSeatMatrixPage() {
     toast.success(`Exported ${visible.length} seat records to CSV`);
   };
 
+  // Formatted Excel (.xls) Export
+  const downloadExcel = () => {
+    const headers = ['Seat ID', 'Branch', 'Status', 'Student Name', 'Smart ID', 'Phone', 'Shift', 'Plan', 'Locker', 'Valid From', 'Expires'];
+    const rows = visible.map((seat) => [
+      `S-${seat.id}`,
+      seat.branchName || 'Downtown Central',
+      seat.status,
+      seat.student || '—',
+      seat.smartId || '—',
+      seat.phone || '—',
+      seat.shift || '—',
+      seat.plan || '—',
+      seat.locker || '—',
+      seat.validFrom || '—',
+      seat.expiry || '—',
+    ]);
+    const html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>SeatMatrix</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+        <style>
+          table { border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 12px; }
+          th { background-color: #312e81; color: #ffffff; font-weight: bold; padding: 10px; border: 1px solid #4338ca; text-align: left; }
+          td { padding: 8px; border: 1px solid #cbd5e1; }
+          tr:nth-child(even) { background-color: #eef2ff; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead><tr>${headers.map((h) => `<th>${h}</th>`).join('')}</tr></thead>
+          <tbody>
+            ${rows.map((row) => `<tr>${row.map((cell) => `<td>${String(cell ?? '').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}</td>`).join('')}</tr>`).join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `.trim();
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `smart-library-seat-matrix-${activeBranchFilter.replaceAll(' ', '_')}-${date}.xls`;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast.success(`Exported ${visible.length} seat records to Excel (.xls)`);
+  };
+
+  // Printable Floor Plan & Master Roster
+  const printSeatMatrixRoster = () => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=950,height=750');
+    if (!printWindow) { window.print(); return; }
+    const dateStr = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Smart Library - Seat Matrix & Floor Plan Roster</title>
+          <style>
+            @page { size: landscape; margin: 10mm; }
+            body { font-family: system-ui, -apple-system, sans-serif; color: #0f172a; margin: 0; padding: 15px; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #4338ca; padding-bottom: 10px; margin-bottom: 12px; }
+            .title { font-size: 18px; font-weight: 800; text-transform: uppercase; color: #4338ca; }
+            .subtitle { font-size: 12px; color: #64748b; margin-top: 2px; }
+            .kpis { display: flex; gap: 16px; margin-bottom: 12px; }
+            .kpi { padding: 8px 12px; background: #eef2ff; border-radius: 6px; font-size: 11px; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; }
+            th { background-color: #e0e7ff; color: #3730a3; text-align: left; padding: 6px; border: 1px solid #c7d2fe; font-weight: 700; text-transform: uppercase; font-size: 10px; }
+            td { padding: 6px; border: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background-color: #f8fafc; }
+            .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; text-transform: uppercase; }
+            .badge-free { background: #dcfce7; color: #15803d; }
+            .badge-occupied { background: #fee2e2; color: #b91c1c; }
+            .badge-maintenance { background: #fef3c7; color: #b45309; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="title">Smart Library Network · Seat Matrix Master Roster</div>
+              <div class="subtitle">Branch: ${activeBranchFilter} · Total Desks: ${visible.length}</div>
+            </div>
+            <div style="font-size: 11px; text-align: right; color: #475569;">
+              <div><strong>Generated:</strong> ${dateStr}</div>
+              <div><strong>Authority:</strong> Central Operations Desk</div>
+            </div>
+          </div>
+          <div class="kpis">
+            <div class="kpi">Total Desks: <strong>${stats.total}</strong></div>
+            <div class="kpi">Available Free: <strong style="color:#15803d">${stats.free}</strong></div>
+            <div class="kpi">Occupied: <strong style="color:#b91c1c">${stats.occupied}</strong></div>
+            <div class="kpi">Occupancy Rate: <strong>${stats.occupancyRate}%</strong></div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Seat ID</th>
+                <th>Branch</th>
+                <th>Status</th>
+                <th>Student Name</th>
+                <th>Smart ID</th>
+                <th>Phone</th>
+                <th>Shift</th>
+                <th>Plan Type</th>
+                <th>Locker</th>
+                <th>Expiry Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${visible.map((s) => `
+                <tr>
+                  <td><strong style="color:#4338ca;">S-${s.id}</strong></td>
+                  <td>${s.branchName || 'Downtown Central'}</td>
+                  <td><span class="badge badge-${s.status}">${s.status}</span></td>
+                  <td>${s.student || '—'}</td>
+                  <td>${s.smartId || '—'}</td>
+                  <td>${s.phone || '—'}</td>
+                  <td>${s.shift || '—'}</td>
+                  <td>${s.plan || '—'}</td>
+                  <td>${s.locker || '—'}</td>
+                  <td>${s.expiry || '—'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.open();
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
+  // Bulk Generate Action Handler
+  const handleBulkGenerateSeats = (newSeats: AdminSeatMatrixSeatMatrixViewModel[]) => {
+    queryClient.setQueryData<AdminSeatMatrixSeatMatrixViewModel[]>(queryKey, (current) => {
+      const list = current && current.length > 0 ? current : generateFallbackSeatMatrix();
+      const existingIds = new Set(list.map((s) => s.id));
+      const filtered = newSeats.filter((s) => !existingIds.has(s.id));
+      return [...list, ...filtered];
+    });
+  };
+
   // Table Columns
   const tableColumns = useMemo<readonly DataGridColumn<AdminSeatMatrixSeatMatrixViewModel>[]>(() => [
     {
@@ -482,6 +633,17 @@ export function AdminSeatMatrixSeatMatrixPage() {
               </button>
             </div>
 
+            {/* Bulk Generate Seats */}
+            <button
+              type="button"
+              className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 to-indigo-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm shadow-indigo-500/25 hover:from-indigo-600 hover:to-indigo-700 transition-all cursor-pointer"
+              onClick={() => setIsBulkGenerateOpen(true)}
+              title="Bulk Generate consecutive desks for new hall/branch"
+            >
+              <Layers size={14} />
+              <span>Bulk Generate Seats</span>
+            </button>
+
             <button
               type="button"
               className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3.5 py-1.5 text-xs font-medium text-cyan-300 hover:text-white hover:bg-cyan-500/20 transition-colors shadow-xs"
@@ -493,9 +655,18 @@ export function AdminSeatMatrixSeatMatrixPage() {
             </button>
             <button
               type="button"
+              className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-medium text-emerald-300 hover:text-white hover:bg-emerald-500/20 transition-colors shadow-xs"
+              onClick={downloadExcel}
+              title="Export Formatted Seat Matrix to Excel (.xls)"
+            >
+              <FileSpreadsheet size={14} strokeWidth={2} className="text-emerald-400" />
+              <span>Excel</span>
+            </button>
+            <button
+              type="button"
               className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800/80 px-3.5 py-1.5 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700 transition-colors shadow-xs"
-              onClick={() => window.print()}
-              title="Print Floor Plan"
+              onClick={printSeatMatrixRoster}
+              title="Print Floor Plan & Seat Matrix Roster"
             >
               <Printer size={14} strokeWidth={2} className="text-slate-400" />
               <span>Print</span>
@@ -1140,6 +1311,15 @@ export function AdminSeatMatrixSeatMatrixPage() {
           </div>
         </div>
       )}
+
+      {/* Bulk Generate Seats Modal */}
+      <AdminSeatsMatrixBulkGenerateModal
+        isOpen={isBulkGenerateOpen}
+        onClose={() => setIsBulkGenerateOpen(false)}
+        onGenerate={handleBulkGenerateSeats}
+        defaultBranchName={selectedBranch?.name || activeBranchFilter !== 'All Branches' ? activeBranchFilter : 'Downtown Central'}
+        existingSeatIds={rawSeats.map((s) => s.id)}
+      />
     </div>
   );
 }
