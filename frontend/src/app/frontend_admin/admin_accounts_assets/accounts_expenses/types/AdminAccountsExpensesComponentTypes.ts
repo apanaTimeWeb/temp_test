@@ -49,6 +49,7 @@ export interface AdminAccountsExpensesTableSectionProps {
   onRequestDelete: (expense: AdminAccountingExpense) => void;
   onRequestApprove?: (expense: AdminAccountingExpense) => void;
   onRequestReject?: (expense: AdminAccountingExpense) => void;
+  onViewVoucher?: (expense: AdminAccountingExpense) => void;
   canMutate: boolean;
 }
 

@@ -55,6 +55,8 @@ export function createAdminAccountingExpenseFormSchema(t: AdminAccountingExpense
     paidBy: z.string().trim().min(1, t('VALIDATION_PAID_BY_REQUIRED')),
     mode: z.enum(['cash', 'upi', 'card', 'bank']),
     notes: z.string().trim(),
+    branchName: z.string().trim().optional(),
+    vendorName: z.string().trim().optional(),
   });
 }
 
@@ -77,6 +79,8 @@ export const AdminAccountingExpenseRecordSchema = z.object({
   status: ExpenseApprovalStatusSchema.optional().default('APPROVED'),
   branchName: z.string().optional().default('Karol Bagh Central'),
   requestedBy: z.string().optional(),
+  vendorName: z.string().optional(),
+  voucherNo: z.string().optional(),
   receiptUrl: z.string().nullable().optional(),
   isPettyCashRequest: z.boolean().optional().default(false),
   rejectionReason: z.string().nullable().optional(),
