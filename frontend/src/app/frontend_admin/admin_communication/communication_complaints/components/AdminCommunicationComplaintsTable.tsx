@@ -245,7 +245,7 @@ export function AdminCommunicationComplaintsTable({
         <AdminTablePagination
           page={page}
           pageSize={pageSize}
-          totalItems={sortedComplaints.length}
+          totalRows={sortedComplaints.length}
           onPageChange={setPage}
           onPageSizeChange={setPageSize}
         />

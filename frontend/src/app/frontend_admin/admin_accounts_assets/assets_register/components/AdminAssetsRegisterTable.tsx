@@ -229,12 +229,18 @@ export function AdminAssetsRegisterTable({
                       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold border ${
                         asset.status === 'OPERATIONAL'
                           ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-                          : asset.status === 'UNDER_MAINTENANCE'
+                          : asset.status === 'MAINTENANCE_REQUIRED' || asset.status === 'UNDER_REPAIR'
                           ? 'border-amber-500/30 bg-amber-500/10 text-amber-400'
                           : 'border-slate-700 bg-slate-800 text-slate-400'
                       }`}
                     >
-                      {asset.status === 'OPERATIONAL' ? 'Operational' : asset.status === 'UNDER_MAINTENANCE' ? 'Maintenance' : 'Decommissioned'}
+                      {asset.status === 'OPERATIONAL'
+                        ? 'Operational'
+                        : asset.status === 'MAINTENANCE_REQUIRED'
+                        ? 'Maintenance Req.'
+                        : asset.status === 'UNDER_REPAIR'
+                        ? 'Under Repair'
+                        : 'Disposed'}
                     </span>
                   </td>
 
@@ -260,7 +266,7 @@ export function AdminAssetsRegisterTable({
         <AdminTablePagination
           page={page}
           pageSize={pageSize}
-          totalItems={sortedRecords.length}
+          totalRows={sortedRecords.length}
           onPageChange={setPage}
           onPageSizeChange={setPageSize}
         />

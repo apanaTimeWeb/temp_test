@@ -107,33 +107,44 @@ export default function AdminSupportTicketsPanel() {
         </div>
       </div>
 
-      <section className="admin-card" aria-labelledby="admin-support-tickets-title">
-      <div className="flex items-center justify-between gap-3">
-        <h2 id="admin-support-tickets-title" className="text-base font-semibold text-text-primary">{t('TICKETS_TITLE')}</h2>
-        <button type="button" data-testid="admin_support-AdminSettingsSupportMain-control-002" className="admin-btn-primary min-h-11" onClick={() => setShowCreateForm(true)}>
-          <Plus size={18} strokeWidth={2} aria-hidden="true" /> {t('CREATE_TICKET')}
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 shadow-xl backdrop-blur-md" aria-labelledby="admin-support-tickets-title">
+      <div className="flex items-center justify-between gap-3 mb-5">
+        <div>
+          <h2 id="admin-support-tickets-title" className="text-lg font-bold text-white">{t('TICKETS_TITLE')}</h2>
+          <p className="text-xs text-slate-400 mt-0.5">Executive operational support & incident tickets</p>
+        </div>
+        <button type="button" data-testid="admin_support-AdminSettingsSupportMain-control-002" className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-on-primary hover:bg-primary-hover shadow-md hover:scale-105 motion-safe:transition-all" onClick={() => setShowCreateForm(true)}>
+          <Plus size={16} strokeWidth={2.2} aria-hidden="true" /> {t('CREATE_TICKET')}
         </button>
       </div>
-      <div className="mt-4 space-y-3">
+      <div className="space-y-3">
         {ADMIN_SUPPORT_DEMO_TICKETS.map((ticket) => (
-          <article key={ticket.id} className="flex flex-col gap-3 rounded-md border border-border p-4 sm:flex-row sm:items-center sm:justify-between">
+          <article key={ticket.id} className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-950/60 p-4 transition-all hover:border-slate-700 hover:bg-slate-800/40 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex min-w-0 items-start gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-input text-text-secondary" aria-hidden="true"><Ticket size={18} strokeWidth={2} /></div>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400" aria-hidden="true">
+                <Ticket size={18} strokeWidth={2} />
+              </div>
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="font-semibold text-text-primary">{t(ticket.subjectKey)}</h3>
-                  <span className={`admin-badge ${ticket.status === 'open' ? 'admin-badge-warning' : 'admin-badge-success'}`}>{t(ticket.status === 'open' ? 'TICKET_OPEN' : 'TICKET_RESOLVED')}</span>
+                  <h3 className="font-semibold text-slate-100">{t(ticket.subjectKey)}</h3>
+                  <span className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold ${ticket.status === 'open' ? 'border-amber-500/30 bg-amber-500/10 text-amber-400' : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'}`}>
+                    {t(ticket.status === 'open' ? 'TICKET_OPEN' : 'TICKET_RESOLVED')}
+                  </span>
                 </div>
-                <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-text-secondary">
-                  <span>#{ticket.id}</span>
-                  <span>{t('FIELD_CATEGORY')}: {t(ticket.categoryKey)}</span>
-                  <span className={ticket.priority === 'high' ? 'text-danger-text' : 'text-primary'}>{t('FIELD_PRIORITY')}: {t(ticket.priority === 'high' ? 'PRIORITY_HIGH' : 'PRIORITY_LOW')}</span>
+                <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-400 font-mono">
+                  <span className="font-semibold text-slate-300">#{ticket.id}</span>
+                  <span className="font-sans text-slate-400">{t('FIELD_CATEGORY')}: <span className="text-slate-300">{t(ticket.categoryKey)}</span></span>
+                  <span className={`font-sans rounded-full px-2 py-0.2 border text-[11px] font-semibold ${ticket.priority === 'high' ? 'border-rose-500/30 bg-rose-500/10 text-rose-400' : 'border-slate-700 bg-slate-800/70 text-slate-300'}`}>
+                    {t('FIELD_PRIORITY')}: {t(ticket.priority === 'high' ? 'PRIORITY_HIGH' : 'PRIORITY_LOW')}
+                  </span>
                 </div>
               </div>
             </div>
-            <div className="flex shrink-0 items-center gap-3 text-xs text-text-secondary">
-              <span className="inline-flex items-center gap-1"><MessageSquare size={16} strokeWidth={2} aria-hidden="true" /> {ticket.replies} {t('REPLIES')}</span>
-              <span>{t(ticket.dateKey)}</span>
+            <div className="flex shrink-0 items-center gap-4 text-xs text-slate-400">
+              <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-800/70 px-2.5 py-1 border border-slate-700/60 text-slate-300">
+                <MessageSquare size={14} strokeWidth={2} aria-hidden="true" className="text-primary" /> {ticket.replies} {t('REPLIES')}
+              </span>
+              <span className="font-mono text-slate-400">{t(ticket.dateKey)}</span>
             </div>
           </article>
         ))}

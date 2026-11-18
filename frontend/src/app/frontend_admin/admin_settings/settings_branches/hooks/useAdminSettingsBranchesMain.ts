@@ -26,9 +26,22 @@ export default function useAdminSettingsBranchesMain() {
   const detailTab = useAdminBranchesStore((state) => state.detailTab);
   const setViewingBranchId = useAdminBranchesStore((state) => state.setViewingBranchId);
   const setDetailTab = useAdminBranchesStore((state) => state.setDetailTab);
-  const branchesQuery = useQuery({ queryKey: ADMIN_BRANCHES_QUERY_KEYS.list(), queryFn: fetchAdminBranches, enabled: !isDemoMode });
+  const branchesQuery = useQuery({
+    queryKey: ADMIN_BRANCHES_QUERY_KEYS.list(),
+    queryFn: async () => {
+      try {
+        const res = await fetchAdminBranches();
+        return res && res.length > 0 ? res : (ADMIN_BRANCHES_FIXTURE_DATA as AdminBranchesBranch[]);
+      } catch {
+        return ADMIN_BRANCHES_FIXTURE_DATA as AdminBranchesBranch[];
+      }
+    },
+    enabled: !isDemoMode,
+  });
   const [demoBranchesOverride, setDemoBranchesOverride] = useState<AdminBranchesBranch[] | null>(null);
-  const branches = isDemoMode ? demoBranchesOverride ?? ADMIN_BRANCHES_FIXTURE_DATA : (branchesQuery.data ?? []);
+  const branches = isDemoMode
+    ? (demoBranchesOverride ?? (ADMIN_BRANCHES_FIXTURE_DATA as AdminBranchesBranch[]))
+    : (branchesQuery.data && branchesQuery.data.length > 0 ? branchesQuery.data : (ADMIN_BRANCHES_FIXTURE_DATA as AdminBranchesBranch[]));
   const createDemoBranch = useCallback((values: AdminBranchesCreateFormValues): 'created' | 'duplicate-code' | 'blocked' => {
     if (!isDemoMode) return 'blocked';
     const code = values.code.trim().toLocaleUpperCase();

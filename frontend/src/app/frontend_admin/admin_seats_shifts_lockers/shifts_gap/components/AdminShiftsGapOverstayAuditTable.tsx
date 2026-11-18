@@ -233,7 +233,7 @@ export function AdminShiftsGapOverstayAuditTable() {
       <AdminTablePagination
         page={page}
         pageSize={pageSize}
-        totalItems={filteredRecords.length}
+        totalRows={filteredRecords.length}
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
       />
