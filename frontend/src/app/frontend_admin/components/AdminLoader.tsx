@@ -259,8 +259,6 @@ export interface AdminPageLoaderProps extends AdminLoaderProps {
 }
 
 export function AdminPageLoader({
-  label = 'Loading',
-  screenReaderText,
   message,
   className = '',
   ...props
@@ -268,13 +266,8 @@ export function AdminPageLoader({
   return (
     <div
       className={`min-h-[60vh] flex flex-col items-center justify-center w-full gap-4 p-8 ${className}`.trim()}
-      role="status"
-      aria-label={label}
-      aria-live="polite"
-      aria-busy="true"
     >
-      <span className="sr-only">{screenReaderText || label}</span>
-      <AdminLoader label={label} screenReaderText={screenReaderText} {...props} />
+      <AdminLoader {...props} />
       {message && (
         <p className="text-sm font-medium text-slate-400 tracking-wide animate-pulse">
           {message}

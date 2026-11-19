@@ -1,17 +1,16 @@
 'use client';
-import { useTranslations } from 'next-intl';
 
-// RESPONSIBILITY: Renders the Next.js native loading skeleton for the admin_settings module.
-// DATA FLOW: Next.js Router -> loading.tsx
+import { useTranslations } from 'next-intl';
+import { AdminPageLoader } from '@/app/frontend_admin/components/AdminLoader';
 
 export default function Loading() {
   const t = useTranslations('ADMIN_PROFILE');
   return (
-    <div className="flex h-full w-full items-center justify-center p-8" role="status" aria-label={t('ROUTE_LOADING')}>
-      <div className="motion-safe:animate-pulse space-y-4 w-full max-w-3xl">
-        <div className="h-8 bg-surface-muted rounded w-1/4"></div>
-        <div className="h-64 bg-surface-muted rounded w-full"></div>
-      </div>
-    </div>
+    <AdminPageLoader
+      size="md"
+      icon="user"
+      variant="contra"
+      label={t('ROUTE_LOADING')}
+    />
   );
 }
