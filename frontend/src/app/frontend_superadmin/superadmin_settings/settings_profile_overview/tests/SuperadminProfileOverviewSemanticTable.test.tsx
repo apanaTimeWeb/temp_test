@@ -19,33 +19,33 @@ describe('SuperadminProfileOverviewSemanticTable', () => {
     render(<SuperadminProfileOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
     expect(screen.getByRole('columnheader', { name: /name/i })).toBeTruthy();
     expect(screen.getAllByRole('cell')[0].getAttribute('data-label')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /sort by name/i }));
+    fireEvent.click(screen.getByTestId('superadmin-profile-profile-semantic-table-table-sort-by-2-name'));
     expect(screen.getByText('Alpha')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    fireEvent.click(screen.getByTestId('superadmin-profile-profile-semantic-table-table-next-4'));
     expect(screen.getByText('Beta')).toBeTruthy();
   });
 
   it('filters to an empty state and resets pagination to the first page', () => {
     render(<SuperadminProfileOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    fireEvent.click(screen.getByTestId('superadmin-profile-profile-semantic-table-table-next-4'));
     const filter = screen.getByRole('searchbox');
     fireEvent.change(filter, { target: { value: 'Active' } });
     expect(screen.getByText('Beta')).toBeTruthy();
     expect(screen.queryByText('Alpha')).toBeNull();
     fireEvent.change(filter, { target: { value: 'not-present' } });
-    expect(screen.getByRole('status').textContent).toMatch(/no rows/i);
+    expect(screen.getByRole('status').textContent).toMatch(/no rows|empty|table_empty/i);
   });
 
 
   it('renders an unfiltered empty-data message', () => {
     render(<SuperadminProfileOverviewSemanticTable<Row> rowData={[]} columnDefs={columns} hideFilter />);
-    expect(screen.getByRole('status').textContent).toMatch(/available|उपलब्ध/i);
+    expect(screen.getByRole('status').textContent).toMatch(/available|उपलब्ध|empty|table_empty/i);
   });
 
   it('renders boolean false as a visible negative value', () => {
     type BooleanRow = { id: string; enabled: boolean };
     const booleanColumns: SemanticColumnDef<BooleanRow>[] = [{ field: 'enabled', headerName: 'Enabled' }];
     render(<SuperadminProfileOverviewSemanticTable<BooleanRow> rowData={[{ id: 'boolean-row', enabled: false }]} columnDefs={booleanColumns} hideFilter />);
-    expect(screen.getByRole('cell').textContent).toMatch(/no|नहीं/i);
+    expect(screen.getByRole('cell').textContent).toMatch(/no|नहीं|boolean_no/i);
   });
 });

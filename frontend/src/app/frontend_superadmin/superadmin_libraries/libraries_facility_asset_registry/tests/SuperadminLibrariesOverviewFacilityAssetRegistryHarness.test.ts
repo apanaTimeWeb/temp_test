@@ -6,7 +6,7 @@ import { SUPERADMIN_ACCOUNTING_ASSETS_QUERY_KEYS } from '@/app/frontend_superadm
 
 describe('facility_asset_registry standalone contract', () => {
   it('keeps the public route inside its owning domain', () => {
-    expect(__SUPERADMIN_LIBRARIES_FACILITY_ASSET_REGISTRY_ROUTES.SUPERADMIN_LIBRARIES_OVERVIEW_FACILITY_ASSET_REGISTRY_ACCOUNTING_ASSETS_URLS.PAGE).toContain('/superadmin/superadmin_accounting');
+    expect(__SUPERADMIN_LIBRARIES_FACILITY_ASSET_REGISTRY_ROUTES.SUPERADMIN_LIBRARIES_OVERVIEW_FACILITY_ASSET_REGISTRY_ACCOUNTING_ASSETS_URLS.PAGE).toContain('/superadmin/superadmin_libraries');
     expect(__SUPERADMIN_LIBRARIES_FACILITY_ASSET_REGISTRY_ROUTES.SUPERADMIN_LIBRARIES_OVERVIEW_FACILITY_ASSET_REGISTRY_ACCOUNTING_ASSETS_URLS.SCREEN).toBe("/superadmin/superadmin_libraries/libraries_overview?view=facility_asset_registry");
   });
   it('uses an isolated query-key namespace', () => {

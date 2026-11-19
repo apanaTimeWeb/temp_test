@@ -2,9 +2,14 @@
 // FLOW: Test runner -> superadmin_libraries/libraries_library_capacity_gap_filling/tests/SuperadminLibrariesOverviewLibraryCapacityGapFillingPreviewDisclosure.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const pageClient = readFileSync(new URL('../components/SuperadminLibrariesOverviewLibraryCapacityGapFillingPageClient.tsx', import.meta.url), 'utf8');
-const englishCatalog = JSON.parse(readFileSync(new URL('../locales/superadmin_libraries_overview_library_capacity_gap_filling_en.json', import.meta.url), 'utf8')) as Record<string, unknown>;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const pageClient = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOverviewLibraryCapacityGapFillingPageClient.tsx'), 'utf8');
+const englishCatalog = JSON.parse(readFileSync(resolve(__dirname, '../locales/superadmin_libraries_overview_library_capacity_gap_filling_en.json'), 'utf8')) as Record<string, unknown>;
 
 describe('libraries_library_capacity_gap_filling preview disclosure contract', () => {
   it('visibly discloses preview-only data and does not invent a backend call', () => {

@@ -2,8 +2,13 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_SETTINGS_APPEARANCE_CANONICAL_SCENARIOS } from '../mocks/scenarios/SuperadminSettingsAppearanceMockScenarios';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const read = (relativePath: string) => readFileSync(new URL(relativePath, import.meta.url), 'utf8');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const read = (relativePath: string) => readFileSync(resolve(__dirname, relativePath), 'utf8');
 
 describe('settings_appearance canonical mock scenario catalog', () => {
   it('declares the required eight scenario states without inventing backend contracts', () => {

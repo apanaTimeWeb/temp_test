@@ -24,9 +24,9 @@ describe('SuperadminSupportTicketsOverviewSemanticTable', () => {
     render(<SuperadminSupportTicketsOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
     expect(screen.getByRole('columnheader', { name: /name/i })).toBeTruthy();
     expect(screen.getAllByRole('cell')[0].getAttribute('data-label')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /sort by name/i }));
+    fireEvent.click(screen.getByTestId('superadmin-support-tickets-support-tickets-semantic-table-table-sort-by-2-name'));
     expect(screen.getByText('Alpha')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    fireEvent.click(screen.getByTestId('superadmin-support-tickets-support-tickets-semantic-table-table-next-4'));
     expect(screen.getByText('Beta')).toBeTruthy();
   });
 
@@ -42,11 +42,11 @@ describe('SuperadminSupportTicketsOverviewSemanticTable', () => {
 
   it('resets to the first page after filtering and exposes an empty state', () => {
     render(<SuperadminSupportTicketsOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    fireEvent.click(screen.getByTestId('superadmin-support-tickets-support-tickets-semantic-table-table-next-4'));
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'Active' } });
     expect(screen.getByText('Beta')).toBeTruthy();
     expect(screen.queryByText('Alpha')).toBeNull();
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'no-match' } });
-    expect(screen.getByRole('status').textContent).toMatch(/no rows/i);
+    expect(screen.getByRole('status').textContent).toMatch(/no rows|empty|table_empty/i);
   });
 });

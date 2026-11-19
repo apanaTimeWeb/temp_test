@@ -9,18 +9,23 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import enMessages from '../locales/superadmin_support_complaints_en.json';
 import hiMessages from '../locales/superadmin_support_complaints_hi.json';
 import { useSuperadminSupportComplaintsConfirm } from '../hooks/useSuperadminSupportComplaintsConfirm';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 afterEach(() => { cleanup(); document.body.innerHTML = ''; vi.restoreAllMocks(); });
 
 function renderConfirm(locale: 'en' | 'hi') {
-  const messages = locale === 'hi' ? hiMessages : enMessages;
+  
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const messages = locale === 'hi' ? hiMessages : enMessages;
   const wrapper = ({ children }: PropsWithChildren) => createElement(NextIntlClientProvider, { locale, messages }, children);
   return renderHook(() => useSuperadminSupportComplaintsConfirm(), { wrapper });
 }
 
 describe('useSuperadminSupportComplaintsConfirm contract', () => {
   it('routes Add Complaint Escape and backdrop dismissal through the dirty-form confirmation', () => {
-    const page = readFileSync(new URL('../components/SuperadminSupportComplaintsPageClient.tsx', import.meta.url), 'utf8');
+    const page = readFileSync(resolve(__dirname, '../components/SuperadminSupportComplaintsPageClient.tsx'), 'utf8');
     expect(page).toContain('useSuperadminSupportComplaintsDialog(showAdd, () => { void requestCloseAdd(); })');
     expect(page).toContain('if (event.target === event.currentTarget) void requestCloseAdd();');
     expect(page).toContain('if (await confirmLeave()) setShowAdd(false)');

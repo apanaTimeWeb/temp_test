@@ -5,5 +5,5 @@ import { SUPERADMIN_SUPPORT_COMPLAINTS_API as __SUPERADMIN_SUPPORT_COMPLAINTS_AP
 
 /** Error-state scenario for the verified COMPLAINTS_LIST read contract; no endpoint is added. */
 export const SUPERADMIN_SUPPORT_COMPLAINTS_ERROR_MSW_HANDLERS = [
-  http.get(__SUPERADMIN_SUPPORT_COMPLAINTS_API.COMPLAINTS_LIST, () => HttpResponse.json({ success: false, message: 'Service temporarily unavailable', data: null, error: 'SERVICE_UNAVAILABLE', errorCode: 'SUPPORT.COMPLAINTS.UNAVAILABLE', statusCode: 503, requestId: 'msw-service-unavailable' }, { status: 503 })),
+  http.get(`*${__SUPERADMIN_SUPPORT_COMPLAINTS_API.COMPLAINTS_LIST}`, () => HttpResponse.json({ success: false, message: 'Service temporarily unavailable', data: null, error: 'SERVICE_UNAVAILABLE', errorCode: 'SUPPORT.COMPLAINTS.UNAVAILABLE', statusCode: 503, requestId: 'msw-service-unavailable' }, { status: 503 })),
 ];

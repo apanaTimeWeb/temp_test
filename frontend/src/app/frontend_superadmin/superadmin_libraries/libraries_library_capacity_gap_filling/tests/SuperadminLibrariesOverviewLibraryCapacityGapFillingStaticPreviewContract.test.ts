@@ -1,12 +1,17 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_SYSTEM_SAMPLE_SEAT_GAPS } from '@/app/frontend_superadmin/superadmin_libraries/libraries_library_capacity_gap_filling/mocks/fixtures/SuperadminLibrariesOverviewLibraryCapacityGapFillingMockFixtures';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const pageClient = readFileSync(new URL('../components/SuperadminLibrariesOverviewLibraryCapacityGapFillingPageClient.tsx', import.meta.url), 'utf8');
-const hook = readFileSync(new URL('../hooks/useSuperadminLibrariesCapacityGapFillingState.ts', import.meta.url), 'utf8');
-const skeleton = readFileSync(new URL('../components/SuperadminLibrariesOverviewLibraryCapacityGapFillingRouteSkeleton.tsx', import.meta.url), 'utf8');
-const routePage = readFileSync(new URL('../page.tsx', import.meta.url), 'utf8');
-const main = readFileSync(new URL('../components/SuperadminLibrariesOverviewLibraryCapacityGapFillingMain.tsx', import.meta.url), 'utf8');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const pageClient = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOverviewLibraryCapacityGapFillingPageClient.tsx'), 'utf8');
+const hook = readFileSync(resolve(__dirname, '../hooks/useSuperadminLibrariesCapacityGapFillingState.ts'), 'utf8');
+const skeleton = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOverviewLibraryCapacityGapFillingRouteSkeleton.tsx'), 'utf8');
+const routePage = readFileSync(resolve(__dirname, '../page.tsx'), 'utf8');
+const main = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOverviewLibraryCapacityGapFillingMain.tsx'), 'utf8');
 
 describe('library capacity gap-filling static preview boundary', () => {
   it('makes no date or shift filtering claim when source samples contain neither field', () => {

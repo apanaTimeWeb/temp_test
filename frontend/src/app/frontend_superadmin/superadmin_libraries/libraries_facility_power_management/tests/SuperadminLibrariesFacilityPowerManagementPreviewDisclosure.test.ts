@@ -2,8 +2,13 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ALERT_LOG, SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ZONES } from '@/app/frontend_superadmin/superadmin_libraries/libraries_facility_power_management/mocks/fixtures/SuperadminLibrariesOverviewFacilityPowerManagementMockFixtures';
 import * as scenarioMetadata from '@/app/frontend_superadmin/superadmin_libraries/libraries_facility_power_management/mocks/scenarios/SuperadminLibrariesOverviewFacilityPowerManagementfacility_power_management.MockScenarios';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const pageClient = readFileSync(new URL('../components/SuperadminLibrariesOverviewFacilityPowerManagementPageClient.tsx', import.meta.url), 'utf8');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const pageClient = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOverviewFacilityPowerManagementPageClient.tsx'), 'utf8');
 
 describe('facility power management illustrative preview provenance', () => {
   it('uses locale keys for every synthetic zone and alert-log label', () => {

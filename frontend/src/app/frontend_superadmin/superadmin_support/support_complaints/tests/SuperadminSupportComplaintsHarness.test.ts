@@ -10,12 +10,17 @@ import { readFileSync } from 'node:fs';
 import { SUPERADMIN_SUPPORT_COMPLAINTS_ERROR_MSW_HANDLERS } from '@/app/frontend_superadmin/superadmin_support/support_complaints/mocks/handlers/SuperadminSupportComplaintsErrorMockHandlers';
 import { SUPERADMIN_SUPPORT_COMPLAINTS_MSW_HANDLERS } from '@/app/frontend_superadmin/superadmin_support/support_complaints/mocks/handlers/SuperadminSupportComplaintsMockHandlers';
 import { COMMUNICATION_COMPLAINTS_MOCK_SERVER, setupCommunicationComplaintsMockServer } from '@/app/frontend_superadmin/superadmin_support/support_complaints/tests/harness/bootstrap';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 setupCommunicationComplaintsMockServer();
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 describe('support_complaints standalone contract', () => {
   it('uses the canonical status registry and exposes pressed state for the active filter', () => {
-    const page = readFileSync(new URL('../components/SuperadminSupportComplaintsPageClient.tsx', import.meta.url), 'utf8');
+    const page = readFileSync(resolve(__dirname, '../components/SuperadminSupportComplaintsPageClient.tsx'), 'utf8');
     expect(SUPERADMIN_SUPPORT_COMPLAINT_STATUS_FILTERS).toContain(SUPERADMIN_SUPPORT_COMPLAINT_STATUS.IN_PROGRESS);
     expect(page).toContain('aria-pressed={tab === t}');
     expect(page).toContain('c.status === SUPERADMIN_SUPPORT_COMPLAINT_STATUS.OPEN');

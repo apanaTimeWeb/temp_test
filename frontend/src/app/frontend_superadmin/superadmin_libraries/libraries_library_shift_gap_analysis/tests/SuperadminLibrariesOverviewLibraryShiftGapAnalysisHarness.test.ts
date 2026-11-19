@@ -6,7 +6,7 @@ import { SUPERADMIN_ACCOUNTING_SHIFT_GAP_ANALYZER_QUERY_KEYS } from '@/app/front
 
 describe('library_shift_gap_analysis standalone contract', () => {
   it('keeps the public route inside its owning domain', () => {
-    expect(__SUPERADMIN_LIBRARIES_LIBRARY_SHIFT_GAP_ANALYSIS_ROUTES.SUPERADMIN_LIBRARIES_OVERVIEW_LIBRARY_SHIFT_GAP_ANALYSIS_ACCOUNTING_SHIFT_GAP_ANALYZER_URLS.PAGE).toContain('/superadmin/superadmin_accounting');
+    expect(__SUPERADMIN_LIBRARIES_LIBRARY_SHIFT_GAP_ANALYSIS_ROUTES.SUPERADMIN_LIBRARIES_OVERVIEW_LIBRARY_SHIFT_GAP_ANALYSIS_ACCOUNTING_SHIFT_GAP_ANALYZER_URLS.PAGE).toContain('/superadmin/superadmin_libraries');
     expect(__SUPERADMIN_LIBRARIES_LIBRARY_SHIFT_GAP_ANALYSIS_ROUTES.SUPERADMIN_LIBRARIES_OVERVIEW_LIBRARY_SHIFT_GAP_ANALYSIS_ACCOUNTING_SHIFT_GAP_ANALYZER_URLS.SCREEN).toBe("/superadmin/superadmin_libraries/libraries_overview?view=library_shift_gap_analysis");
   });
   it('uses an isolated query-key namespace', () => {

@@ -3,7 +3,12 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_LIBRARY_CAPACITY_SCALING_RECOMMENDATIONS_CANONICAL_SCENARIOS } from '../mocks/scenarios/SuperadminLibrariesOverviewLibraryCapacityScalingRecommendationslibrary_capacity_scaling_recommendations.MockScenarios';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 describe('library_capacity_scaling_recommendations canonical mock scenario catalog', () => {
   it('declares the required eight scenario states without inventing backend contracts', () => {
     expect(SUPERADMIN_LIBRARY_CAPACITY_SCALING_RECOMMENDATIONS_CANONICAL_SCENARIOS.map((scenario) => scenario.id)).toEqual([
@@ -22,7 +27,7 @@ describe('library_capacity_scaling_recommendations canonical mock scenario catal
   });
 
   it('does not retain the unreferenced legacy four-state scenario export', () => {
-    const source = readFileSync(new URL('../mocks/scenarios/SuperadminLibrariesOverviewLibraryCapacityScalingRecommendationslibrary_capacity_scaling_recommendations.MockScenarios.ts', import.meta.url), 'utf8');
+    const source = readFileSync(resolve(__dirname, '../mocks/scenarios/SuperadminLibrariesOverviewLibraryCapacityScalingRecommendationslibrary_capacity_scaling_recommendations.MockScenarios.ts'), 'utf8');
     expect(source).not.toContain('SUPERADMIN_SYSTEM_AUTO_SCALE_SCENARIOS');
   });
 });

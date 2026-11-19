@@ -1,8 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { getSuperadminLibraryCapacityAnalysisStatusCopyKey } from '@/app/frontend_superadmin/superadmin_libraries/libraries_library_capacity_analysis/utils/superadmin_libraries_library_capacity_analysis.status';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const pageClient = readFileSync(new URL('../components/SuperadminLibrariesOverviewLibraryCapacityAnalysisPageClient.tsx', import.meta.url), 'utf8');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const pageClient = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOverviewLibraryCapacityAnalysisPageClient.tsx'), 'utf8');
 
 describe('library capacity-analysis status and preview contract', () => {
   it('keeps vacancy and maintenance as distinct statuses', () => {

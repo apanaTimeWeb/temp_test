@@ -3,7 +3,7 @@
 import { delay, http, HttpResponse } from 'msw';
 import { SUPERADMIN_SUPPORT_COMPLAINTS_API as __API } from '@/app/frontend_superadmin/superadmin_support/support_complaints/config/superadmin_support_complaints.url_config';
 
-const endpoint = __API.COMPLAINTS_LIST;
+const endpoint = `*${__API.COMPLAINTS_LIST}`;
 const paginationMeta = (total: number) => ({
   total,
   page: 1,

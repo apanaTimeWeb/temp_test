@@ -67,8 +67,8 @@ describe('SUPERADMIN_SUPPORT_TICKETS locale catalogs', () => {
     }
   });
   it('covers source-referenced COPY keys in both locale catalogs', () => {
-    const moduleRoot = join(process.cwd(), 'frontend_superadmin', 'superadmin_support');
-    const collect = (directory: string): string[] => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => entry.isDirectory() ? collect(join(directory, entry.name)) : /\.(tsx?|jsx?)$/.test(entry.name) ? [readFileSync(join(directory, entry.name), 'utf8')] : []);
+    const moduleRoot = join(__dirname, '..');
+    const collect = (directory: string): string[] => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => entry.isDirectory() ? collect(join(directory, entry.name)) : /\.(tsx?|jsx?)$/.test(entry.name) && !entry.name.includes('.test.') ? [readFileSync(join(directory, entry.name), 'utf8')] : []);
     const source = collect(moduleRoot).join('\n');
     const keys = [...source.matchAll(/(?:t|tCopy)\(\s*['"]COPY\.([A-Z0-9_]+)['"]/g)].map((match) => match[1]);
     expect(keys.length).toBeGreaterThan(0);

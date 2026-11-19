@@ -9,7 +9,7 @@ describe('SuperadminSupportTicketsStableRowKey', () => {
     expect(stableRowKey({ uuid: 'uuid-2' })).toBe('uuid:uuid-2');
   });
   it('falls back deterministically when no supported identifier exists', () => {
-    expect(stableRowKey({ label: 'sample', count: 2 })).toBe('{"label":"sample","count":2}');
+    expect(stableRowKey({ label: 'sample', count: 2 })).toBe('{"count":2,"label":"sample"}');
   });
   it('returns the same fallback key regardless of property insertion order', () => {
     expect(stableRowKey({ alpha: 1, beta: { z: 2, a: 1 } })).toBe(stableRowKey({ beta: { a: 1, z: 2 }, alpha: 1 }));

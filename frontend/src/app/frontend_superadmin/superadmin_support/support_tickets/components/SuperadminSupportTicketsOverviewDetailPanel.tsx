@@ -31,10 +31,12 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({ tkt, onClo
   const isDirtyRef = useRef(isDirty);
   isDirtyRef.current = isDirty;
 
+  const tRef = useRef(t);
+  tRef.current = t;
   const requestClose = useCallback(async () => {
-    if (isDirtyRef.current && !await confirm(t('COPY.UNSAVED_CHANGES_WARNING'))) return;
+    if (isDirtyRef.current && !await confirm(tRef.current('COPY.UNSAVED_CHANGES_WARNING'))) return;
     onClose();
-  }, [confirm, onClose, t]);
+  }, [confirm, onClose]);
 
   // Effect contract: manage keyboard focus, Escape/Tab behavior, and focus restoration for the active SUPERADMIN_SUPPORT_TICKETS_DETAIL_PANEL_DIALOG or drawer; dependency set [requestClose] is the deliberate re-run boundary.
   useEffect(() => {

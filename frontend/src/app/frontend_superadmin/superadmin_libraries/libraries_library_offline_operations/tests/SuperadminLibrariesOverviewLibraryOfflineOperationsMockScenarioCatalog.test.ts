@@ -3,7 +3,12 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_LIBRARY_OFFLINE_OPERATIONS_CANONICAL_SCENARIOS } from '../mocks/scenarios/SuperadminLibrariesOverviewLibraryOfflineOperationslibrary_offline_operations.MockScenarios';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 describe('library_offline_operations canonical mock scenario catalog', () => {
   it('declares the required eight scenario states without inventing backend contracts', () => {
     expect(SUPERADMIN_LIBRARY_OFFLINE_OPERATIONS_CANONICAL_SCENARIOS.map((scenario) => scenario.id)).toEqual([
@@ -22,7 +27,7 @@ describe('library_offline_operations canonical mock scenario catalog', () => {
   });
 
   it('does not retain the unreferenced legacy four-state scenario export', () => {
-    const source = readFileSync(new URL('../mocks/scenarios/SuperadminLibrariesOverviewLibraryOfflineOperationslibrary_offline_operations.MockScenarios.ts', import.meta.url), 'utf8');
+    const source = readFileSync(resolve(__dirname, '../mocks/scenarios/SuperadminLibrariesOverviewLibraryOfflineOperationslibrary_offline_operations.MockScenarios.ts'), 'utf8');
     expect(source).not.toContain('SUPERADMIN_SYSTEM_OFFLINE_SCENARIOS');
   });
 });

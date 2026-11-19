@@ -40,7 +40,7 @@ function leafPaths(value: unknown, prefix = ''): string[] {
 
 describe(`${namespace} locale catalogs`, () => {
   it('lists every archived module test in the feature map', () => {
-    const testFiles = Object.keys(import.meta.glob('../**/*.test.{ts,tsx}')).map((file) => file.replace(/^\.\.\//, ''));
+    const testFiles = Object.keys(import.meta.glob('../**/*.test.{ts,tsx}')).map((file) => file.replace(/^\.\.\//, '').replace(/^\.\//, 'tests/'));
     for (const file of testFiles) expect(featureMap, `Feature map omits ${file}`).toContain(file);
   });
 

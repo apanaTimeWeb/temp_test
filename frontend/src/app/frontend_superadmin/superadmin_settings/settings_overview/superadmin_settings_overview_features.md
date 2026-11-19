@@ -116,6 +116,7 @@ Screen/component evidence:
 
 | Test file | Verification status |
 | --- | --- |
+| `tests/RBG24_ActiveBranchContract.test.ts` | Source present; execution not asserted |
 | `tests/SuperadminCanonicalMockScenarioHarness.test.tsx` | Source present; execution not asserted |
 | `tests/SuperadminSettingsOverviewAsyncStateContract.test.ts` | Source present; execution not asserted |
 | `tests/SuperadminSettingsOverviewConfirmHookContract.test.tsx` | Source present; execution not asserted |

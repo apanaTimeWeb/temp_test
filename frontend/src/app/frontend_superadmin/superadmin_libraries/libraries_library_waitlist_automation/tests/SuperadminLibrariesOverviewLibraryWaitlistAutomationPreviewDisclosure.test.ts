@@ -2,10 +2,15 @@
 // FLOW: Test runner -> superadmin_libraries/libraries_library_waitlist_automation/tests/SuperadminLibrariesOverviewLibraryWaitlistAutomationPreviewDisclosure.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const pageClient = readFileSync(new URL('../components/SuperadminLibrariesOverviewLibraryWaitlistAutomationPageClient.tsx', import.meta.url), 'utf8');
-const englishCatalog = JSON.parse(readFileSync(new URL('../locales/superadmin_libraries_overview_library_waitlist_automation_en.json', import.meta.url), 'utf8')) as Record<string, unknown>;
-const hindiCatalog = JSON.parse(readFileSync(new URL('../locales/superadmin_libraries_overview_library_waitlist_automation_hi.json', import.meta.url), 'utf8')) as Record<string, unknown>;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const pageClient = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOverviewLibraryWaitlistAutomationPageClient.tsx'), 'utf8');
+const englishCatalog = JSON.parse(readFileSync(resolve(__dirname, '../locales/superadmin_libraries_overview_library_waitlist_automation_en.json'), 'utf8')) as Record<string, unknown>;
+const hindiCatalog = JSON.parse(readFileSync(resolve(__dirname, '../locales/superadmin_libraries_overview_library_waitlist_automation_hi.json'), 'utf8')) as Record<string, unknown>;
 
 describe('libraries_library_waitlist_automation preview disclosure contract', () => {
   it('visibly discloses preview-only data and does not invent a backend call', () => {
@@ -17,7 +22,7 @@ describe('libraries_library_waitlist_automation preview disclosure contract', ()
   });
 
   it('keeps client-side validation local and the save action disabled without an API contract', () => {
-    const page = readFileSync(new URL('../components/SuperadminLibrariesOverviewLibraryWaitlistAutomationPageClient.tsx', import.meta.url), 'utf8');
+    const page = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOverviewLibraryWaitlistAutomationPageClient.tsx'), 'utf8');
     expect(page).toContain('waitlist-settings-preview-form');
     expect(page).toContain('waitlist-validate-preview-btn');
     expect(page).toContain("id=\"save-waitlist-config-btn\" variant=\"primary\" disabled");

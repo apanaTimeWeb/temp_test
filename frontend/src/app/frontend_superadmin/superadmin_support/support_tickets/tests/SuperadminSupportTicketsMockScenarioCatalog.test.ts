@@ -3,7 +3,12 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_SUPPORT_TICKETS_CANONICAL_SCENARIOS } from '../mocks/scenarios/SuperadminSupportTicketsOverviewsupport_tickets.MockScenarios';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 describe('support_tickets canonical mock scenario catalog', () => {
   it('declares the required eight scenario states without inventing backend contracts', () => {
     expect(SUPERADMIN_SUPPORT_TICKETS_CANONICAL_SCENARIOS.map((scenario) => scenario.id)).toEqual([
@@ -26,7 +31,7 @@ describe('support_tickets canonical mock scenario catalog', () => {
 
 describe('RBG source-coverage assertions', () => {
   it('keeps declared rendered field identifiers present in the owning PageClient source', () => {
-    const pageSource = readFileSync(new URL('../components/SuperadminSupportTicketsOverviewPageClient.tsx', import.meta.url), 'utf8');
+    const pageSource = readFileSync(resolve(__dirname, '../components/SuperadminSupportTicketsOverviewPageClient.tsx'), 'utf8');
     const renderedFields = ["age", "assignee", "id", "priority", "status", "subject", "tenant"];
     expect(renderedFields.length).toBeGreaterThan(0);
     for (const field of renderedFields) expect(pageSource).toContain(field);

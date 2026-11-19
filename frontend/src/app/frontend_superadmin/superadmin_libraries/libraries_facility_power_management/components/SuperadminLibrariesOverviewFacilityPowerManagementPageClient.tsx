@@ -33,6 +33,7 @@ import { SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ALERT_LOG } from '@/app/frontend_
 export default function SuperadminLibrariesOverviewFacilityPowerManagementPageClient() {
   const tCopy = useTranslations('SUPERADMIN_SYSTEM');
   const { threshold, setThreshold, alertsEnabled, setAlertsEnabled } = useSuperadminLibrariesFacilityPowerManagementState();
+  const SAMPLE_ALERT_LOG = SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ALERT_LOG;
 
   const getZoneStatus = (occ: number) => {
     if (occ < threshold) return { labelKey: 'COPY.LOW_CONSOLIDATION_SUGGESTED', variant: 'warning' as const };
@@ -41,17 +42,17 @@ export default function SuperadminLibrariesOverviewFacilityPowerManagementPageCl
 
   return (
     <div>
-      {((SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ALERT_LOG as unknown as unknown[]).length === 0) && <SuperadminLibrariesOverviewFacilityPowerManagementEmptyState />}
+      {(SAMPLE_ALERT_LOG?.length === 0) && <SuperadminLibrariesOverviewFacilityPowerManagementEmptyState />}
 
       <div className="w-full rounded-2xl border border-sky-500/25 bg-[#0c1828]/95 p-5 sm:p-6 shadow-md mb-6">
         <div className="flex items-center gap-2 text-slate-400 text-xs font-medium tracking-wide mb-2">
           <span>{tCopy("COPY.SYSTEM")}</span>
-          <ChevronRight aria-hidden="true" size={12} strokeWidth={2} />
+          <ChevronRight aria-hidden="true" size={18} strokeWidth={2} />
           <span className="text-sky-400">{tCopy("COPY.POWER_SAVING")}</span>
         </div>
         <div className="flex items-center gap-3 mb-1">
           <div className="p-2.5 rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400 shrink-0">
-            <Zap aria-hidden="true" size={22} strokeWidth={2} />
+            <Zap aria-hidden="true" size={18} strokeWidth={2} />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">{tCopy("COPY.POWER_SAVING_MODE")}</h1>
         </div>
@@ -99,7 +100,8 @@ export default function SuperadminLibrariesOverviewFacilityPowerManagementPageCl
 
       {/* Zone Status Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ZONES.map((zone) => {
+        {SUPERADMIN_SYSTEM_POWER_SAVING_SAMPLE_ZONES.map((rawZone) => {
+          const zone = { ...rawZone, name: tCopy(rawZone.nameKey) };
           const status = getZoneStatus(zone.occupancy);
           const isLow = zone.occupancy < threshold;
           return (
@@ -107,7 +109,7 @@ export default function SuperadminLibrariesOverviewFacilityPowerManagementPageCl
               <CardContent>
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <p className="text-sm font-semibold text-primary">{tCopy(zone.nameKey)}</p>
+                    <p className="text-sm font-semibold text-primary">{zone.name}</p>
                     <p className="text-xs text-secondary">{zone.current} / {zone.capacity} {tCopy("COPY.SEATS_OCCUPIED")}</p>
                   </div>
                   <Badge variant={status.variant}>{tCopy(status.labelKey)}</Badge>
@@ -117,7 +119,7 @@ export default function SuperadminLibrariesOverviewFacilityPowerManagementPageCl
                     <span>{tCopy("COPY.OCCUPANCY")}</span>
                     <span className={isLow ? 'text-info font-semibold' : 'text-success font-semibold'}>{zone.occupancy}%</span>
                   </div>
-                  <Progress value={zone.occupancy} ariaLabel={`${tCopy("COPY.OCCUPANCY")}: ${tCopy(zone.nameKey)}`} barClassName={isLow ? 'bg-info-bg' : 'bg-success text-on-success'} />
+                  <Progress value={zone.occupancy} ariaLabel={`${tCopy("COPY.OCCUPANCY")}: ${zone.name}`} barClassName={isLow ? 'bg-info-bg' : 'bg-success text-on-success'} />
                 </div>
                 {isLow && (
                   <div className="mt-3 p-2.5 rounded-lg bg-info-bg border border-border text-xs text-info">

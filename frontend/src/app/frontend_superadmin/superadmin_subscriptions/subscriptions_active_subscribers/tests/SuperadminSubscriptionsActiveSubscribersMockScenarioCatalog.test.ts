@@ -3,7 +3,12 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_SUBSCRIPTIONS_ACTIVE_SUBSCRIBERS_CANONICAL_SCENARIOS } from '../mocks/scenarios/SuperadminSubscriptionsActiveSubscribersMockScenarios';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 describe('subscriptions_active_subscribers canonical mock scenario catalog', () => {
   it('declares the required eight scenario states without inventing backend contracts', () => {
     expect(SUPERADMIN_SUBSCRIPTIONS_ACTIVE_SUBSCRIBERS_CANONICAL_SCENARIOS.map((scenario) => scenario.id)).toEqual([
@@ -26,7 +31,7 @@ describe('subscriptions_active_subscribers canonical mock scenario catalog', () 
 
 describe('RBG source-coverage assertions', () => {
   it('keeps declared rendered field identifiers present in the owning PageClient source', () => {
-    const pageSource = readFileSync(new URL('../components/SuperadminSubscriptionsActiveSubscribersPageClient.tsx', import.meta.url), 'utf8');
+    const pageSource = readFileSync(resolve(__dirname, '../components/SuperadminSubscriptionsActiveSubscribersPageClient.tsx'), 'utf8');
     const renderedFields = ["Active Subscribers", "SaaS Pricing Plans", "branches", "members", "mrr", "name", "plan", "price", "status", "storage", "tenant"];
     expect(renderedFields.length).toBeGreaterThan(0);
     for (const field of renderedFields) expect(pageSource).toContain(field);

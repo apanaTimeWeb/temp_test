@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const source = readFileSync(new URL('../components/SuperadminLibrariesOverviewLibraryCapacityScalingRecommendationsPageClient.tsx', import.meta.url), 'utf8');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const source = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOverviewLibraryCapacityScalingRecommendationsPageClient.tsx'), 'utf8');
 
 describe('capacity recommendation warning semantic surface', () => {
   it('uses the warning surface token for both warning recommendation cards', () => {
