@@ -12,7 +12,7 @@ import type { SuperadminUsersFormValues } from '@/app/frontend_superadmin/supera
 import { SUPERADMIN_USERS_INITIAL_USERS, SUPERADMIN_USERS_INITIAL_SESSIONS, SUPERADMIN_USERS_ROLE_PERMISSIONS } from '@/app/frontend_superadmin/superadmin_users/users_directory/mocks/fixtures/SuperadminUsersDirectoryMockFixtures';
 import SuperadminUsersDirectoryContent from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectoryContent';
 import SuperadminUsersDirectoryModal from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectoryModal';
-import { Plus, ShieldCheck, ShieldAlert, Download, Smartphone, Monitor, Globe, LogOut, CheckCircle, AlertTriangle, Pencil, Ban, KeyRound, Users, Activity, TrendingUp, Check } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Download, Smartphone, Monitor, Globe, LogOut, CheckCircle, AlertTriangle, Pencil, Ban, KeyRound, Users, Activity, TrendingUp, Check } from 'lucide-react';
 import type { SemanticColumnDef as ColDef } from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectorySemanticTable';
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_USERS_TABS } from '@/app/frontend_superadmin/superadmin_users/users_directory/constants/SuperadminUsersDirectoryConstants';
@@ -50,11 +50,6 @@ export default function SuperadminUsersDirectoryPageClient() {
   const [showModal, setShowModal] = useState(false);
   const [editUser, setEditUser] = useState<SuperadminUserData | null>(null);
   const showToast = useCallback((msg: string) => { toast.message(msg, { id: 'superadmin:superadmin_users:SuperadminUsersDirectoryPageClient:feedback' }); }, []);
-
-  const handleOpenAdd = useCallback(() => {
-    setEditUser(null);
-    setShowModal(true);
-  }, []);
 
   const handleOpenEdit = useCallback((user: SuperadminUserData) => {
     setEditUser(user);
@@ -285,15 +280,6 @@ export default function SuperadminUsersDirectoryPageClient() {
           >
             <Download size={15} className="text-indigo-400" />
             <span>{t("COPY.EXPORT_SAMPLE_USERS_CSV")}</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleOpenAdd}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all active:scale-95 cursor-pointer"
-            data-testid="superadmin-users-users-overview-add-user-6"
-          >
-            <Plus size={16} />
-            <span>{t("COPY.ADD_USER")}</span>
           </button>
         </div>
       </div>
