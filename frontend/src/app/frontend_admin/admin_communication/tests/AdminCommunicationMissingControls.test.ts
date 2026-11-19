@@ -221,6 +221,7 @@ describe('Admin Communication Missing Controls & Enhancements', () => {
           phone: '9876543211',
           type: 'receipt',
           status: 'Delivered',
+          error: '',
           message: 'Payment received receipt',
           branch: 'Downtown',
         },
@@ -232,7 +233,7 @@ describe('Admin Communication Missing Controls & Enhancements', () => {
           ? {
               ...log,
               status: 'Sent' as const,
-              error: undefined,
+              error: '',
               dateTime: '2026-04-18 11:30',
             }
           : log
@@ -240,7 +241,7 @@ describe('Admin Communication Missing Controls & Enhancements', () => {
 
       const retriedItem = retriedLogs.find((l) => l.id === '1');
       expect(retriedItem?.status).toBe('Sent');
-      expect(retriedItem?.error).toBeUndefined();
+      expect(retriedItem?.error).toBe('');
       expect(retriedItem?.dateTime).toBe('2026-04-18 11:30');
     });
 
@@ -253,6 +254,7 @@ describe('Admin Communication Missing Controls & Enhancements', () => {
           phone: '9876543210',
           type: 'fee_reminder',
           status: 'Delivered',
+          error: '',
           message: 'Fee reminder message',
           branch: 'Downtown',
         },
@@ -297,6 +299,7 @@ describe('Admin Communication Missing Controls & Enhancements', () => {
           phone: '9876543210',
           type: 'fee_reminder',
           status: 'Delivered',
+          error: '',
           message: 'Fee reminder message',
           branch: 'Downtown',
         },

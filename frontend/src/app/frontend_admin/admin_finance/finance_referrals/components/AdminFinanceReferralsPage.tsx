@@ -8,7 +8,6 @@ import { Search, RotateCcw, Users2, Download, FileSpreadsheet, Printer } from 'l
 import { toast } from 'sonner';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_FINANCE_DEMO_REFERRERS } from '@/app/frontend_admin/admin_finance/finance_referrals/mocks/AdminFinanceReferralsDemoFixtures';
-import type { AdminFinanceDemoReferrer } from '@/app/frontend_admin/admin_finance/finance_referrals/types/AdminFinanceReferralsTypes';
 import {
   AdminFinanceReferralsTimeHorizonBar,
   type AdminFinanceReferralsTimeHorizon,

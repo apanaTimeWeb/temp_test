@@ -367,7 +367,7 @@ export function AdminCommunicationComplaintsPage() {
                 <td>${c.seatNumber ?? '-'}</td>
                 <td>${c.title}</td>
                 <td>${c.category ?? 'General'}</td>
-                <td><span class="badge ${c.status === 'Open' ? 'open' : c.status === 'In-Progress' ? 'in-prog' : 'resolved'}">${c.status}</span></td>
+                <td><span class="badge ${c.status === 'Open' ? 'open' : c.status === 'In Progress' ? 'in-prog' : 'resolved'}">${c.status}</span></td>
                 <td>${c.date}</td>
                 <td>${c.status === 'Resolved' ? `${c.resolvedNote} (By ${c.resolvedBy})` : 'Pending'}</td>
               </tr>

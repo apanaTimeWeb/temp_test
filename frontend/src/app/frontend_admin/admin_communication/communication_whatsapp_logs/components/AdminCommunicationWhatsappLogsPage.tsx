@@ -161,7 +161,7 @@ export function AdminCommunicationWhatsappLogsPage() {
           ? {
               ...log,
               status: 'Sent' as const,
-              error: undefined,
+              error: '',
               dateTime: new Date().toISOString().replace('T', ' ').slice(0, 19),
             }
           : log
@@ -173,7 +173,7 @@ export function AdminCommunicationWhatsappLogsPage() {
           ? {
               ...prev,
               status: 'Sent',
-              error: undefined,
+              error: '',
               dateTime: new Date().toISOString().replace('T', ' ').slice(0, 19),
             }
           : null

@@ -197,13 +197,13 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
       `"${(e.description ?? '').replace(/"/g, '""')}"`,
       `"${e.category ?? ''}"`,
       e.amount ?? 0,
-      `"${e.paymentMethod ?? 'CASH'}"`,
+      `"${e.mode ?? 'cash'}"`,
       `"${(e.paidBy ?? '').replace(/"/g, '""')}"`,
       `"${(e.branchName ?? '').replace(/"/g, '""')}"`,
       e.status ?? 'APPROVED',
       `"${(e.approvedBy ?? '').replace(/"/g, '""')}"`,
       e.approvedAt ? e.approvedAt.slice(0, 10) : '',
-      `"${e.receiptNumber ?? `EXP-${e.id}`}"`,
+      `"${e.voucherNo ?? `EXP-${e.id}`}"`,
     ]);
 
     const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
@@ -240,12 +240,12 @@ export function AdminAccountsExpensesPage({ view = 'list' }: { view?: AdminAccou
       e.description ?? '',
       e.category ?? '',
       `₹${e.amount ?? 0}`,
-      e.paymentMethod ?? 'CASH',
+      e.mode ?? 'cash',
       e.paidBy ?? '',
       e.branchName ?? '',
       e.status ?? 'APPROVED',
       e.approvedBy ?? 'Admin',
-      e.receiptNumber ?? `EXP-${e.id}`,
+      e.voucherNo ?? `EXP-${e.id}`,
     ]);
 
     const html = `

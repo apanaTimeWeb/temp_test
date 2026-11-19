@@ -137,7 +137,7 @@ export function AdminStaffAttendanceOverviewSection({ model }: Props) {
       const presentCount = attendancePunches.filter((p) => p === 'P' || p === 'L').length;
       const lateCount = attendancePunches.filter((p) => p === 'L').length;
       const absentCount = attendancePunches.filter((p) => p === 'A').length;
-      const leavesCount = attendancePunches.filter((p) => p === 'LV').length;
+      const leavesCount = attendancePunches.filter((p) => (p as string) === 'LV').length;
       const workingDays = daysInMonth - Math.floor(daysInMonth / 7);
       const totalHours = Math.round(presentCount * 8.25);
       const ratePercent = Math.round((presentCount / workingDays) * 100);

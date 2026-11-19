@@ -220,7 +220,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
   const branchFilteredMembers = useMemo(() => {
     if (isAllBranches || !selectedBranch) return dummyMembers;
     const branchNameLower = selectedBranch.name.toLowerCase().trim();
-    return dummyMembers.filter((m) =>
+    return dummyMembers.filter((m: AdminMembersMember) =>
       m.branch ? m.branch.toLowerCase().trim() === branchNameLower || m.branch.toLowerCase().includes(branchNameLower) : false
     );
   }, [isAllBranches, selectedBranch, dummyMembers]);
@@ -229,7 +229,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
     setSelectedMemberIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
   const toggleSelectAll = () => {
-    const allIds = branchFilteredMembers.map((m) => m.id);
+    const allIds = branchFilteredMembers.map((m: AdminMembersMember) => m.id);
     setSelectedMemberIds((prev) => (prev.length === allIds.length ? [] : allIds));
   };
   const clearSelection = () => setSelectedMemberIds([]);
@@ -305,7 +305,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
       <AdminMembersDirectoryBulkWhatsAppModal
         isOpen={isBulkWhatsAppOpen}
         onClose={() => setIsBulkWhatsAppOpen(false)}
-        members={selectedMemberIds.length > 0 ? branchFilteredMembers.filter((m) => selectedMemberIds.includes(m.id)) : branchFilteredMembers}
+        members={selectedMemberIds.length > 0 ? branchFilteredMembers.filter((m: AdminMembersMember) => selectedMemberIds.includes(m.id)) : branchFilteredMembers}
       />
 
       {/* MEMBER EDIT MODAL */}
@@ -329,7 +329,7 @@ export function AdminMembersDirectoryViewMAINDASHBOARDVIEWSSection({ model }: Ad
           member={model.viewingMember}
           detailTab={model.detailTab}
           isDemoMode={isDemoMode}
-          onSelectTab={model.setDetailTab}
+          onSelectTab={(tab) => model.setDetailTab(tab as any)}
         />
       )}
     </div>

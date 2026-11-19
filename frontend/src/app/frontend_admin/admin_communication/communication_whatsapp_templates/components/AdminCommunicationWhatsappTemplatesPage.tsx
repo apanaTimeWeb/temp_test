@@ -357,15 +357,15 @@ export function AdminCommunicationWhatsappTemplatesPage() {
                   Click token to insert:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES.map((v) => (
+                  {ADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_VARIABLES.map((token) => (
                     <button
-                      key={v.token}
+                      key={token}
                       type="button"
-                      onClick={() => setFormBody((prev) => `${prev} ${v.token}`)}
+                      onClick={() => setFormBody((prev) => `${prev} ${token}`)}
                       className="rounded-lg border border-slate-700 bg-slate-800/80 px-2 py-0.5 text-[11px] font-mono text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-500/40 transition-colors"
-                      title={v.description}
+                      title={`Insert ${token}`}
                     >
-                      {v.token}
+                      {token}
                     </button>
                   ))}
                 </div>

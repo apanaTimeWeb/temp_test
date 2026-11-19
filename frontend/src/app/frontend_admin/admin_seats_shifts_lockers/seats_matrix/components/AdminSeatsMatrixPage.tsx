@@ -992,7 +992,7 @@ export function AdminSeatMatrixSeatMatrixPage() {
               rowData={visible}
               columnDefs={tableColumns}
               pagination
-              pageSize={20}
+              pageSize={25}
               emptyMessage="No desks found matching active criteria"
             />
           </div>
