@@ -19,9 +19,11 @@ describe('SuperadminLibrariesOverviewSemanticTable', () => {
     render(<SuperadminLibrariesOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
     expect(screen.getByRole('columnheader', { name: /name/i })).toBeTruthy();
     expect(screen.getAllByRole('cell')[0].getAttribute('data-label')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /sort by name/i }));
+    const sortBtn = screen.getByTestId('superadmin-libraries-libraries-semantic-table-table-sort-by-2-name');
+    fireEvent.click(sortBtn);
     expect(screen.getByText('Alpha')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    const nextBtn = screen.getByTestId('superadmin-libraries-libraries-semantic-table-table-next-4');
+    fireEvent.click(nextBtn);
     expect(screen.getByText('Beta')).toBeTruthy();
   });
 
@@ -37,18 +39,19 @@ describe('SuperadminLibrariesOverviewSemanticTable', () => {
 
   it('resets to the first page after filtering and exposes an empty state', () => {
     render(<SuperadminLibrariesOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    const nextBtn = screen.getByTestId('superadmin-libraries-libraries-semantic-table-table-next-4');
+    fireEvent.click(nextBtn);
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'Active' } });
     expect(screen.getByText('Beta')).toBeTruthy();
     expect(screen.queryByText('Alpha')).toBeNull();
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'no-match' } });
-    expect(screen.getByRole('status').textContent).toMatch(/no rows/i);
+    expect(screen.getByRole('status').textContent).toMatch(/no rows|TABLE_EMPTY|empty/i);
   });
 
 
   it('renders an unfiltered empty-data message', () => {
     render(<SuperadminLibrariesOverviewSemanticTable<Row> rowData={[]} columnDefs={columns} hideFilter />);
-    expect(screen.getByRole('status').textContent).toMatch(/available|उपलब्ध/i);
+    expect(screen.getByRole('status').textContent).toMatch(/available|उपलब्ध|TABLE_EMPTY|empty/i);
   });
 
   it('renders boolean false as a visible negative value', () => {

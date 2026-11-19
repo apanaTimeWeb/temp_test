@@ -2,21 +2,24 @@
 // FLOW: Test runner -> superadmin_plans/plans_pricing_catalog/tests/SuperadminPlansPricingCatalogAsyncStateContract.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const COMPONENTS = new URL('../components/', import.meta.url);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const COMPONENTS = resolve(__dirname, '../components');
 
 describe('plans_pricing_catalog async-state contract', () => {
   it('uses an accessible reduced-motion-safe loading skeleton', () => {
-    const source = readFileSync(new URL('SuperadminPlansPricingCatalogListSkeleton.tsx', COMPONENTS), 'utf8');
+    const source = readFileSync(resolve(COMPONENTS, 'SuperadminPlansPricingCatalogListSkeleton.tsx'), 'utf8');
     expect(source).toContain('role="status"');
     expect(source).toContain('aria-busy="true"');
     expect(source).toContain('motion-reduce:animate-none');
     expect(source).toContain('key={key}');
   });
   it('provides safe localized error recovery and wires route boundaries', () => {
-    const fallback = readFileSync(new URL('SuperadminPlansPricingCatalogErrorFallback.tsx', COMPONENTS), 'utf8');
-    const loading = readFileSync(new URL('../loading.tsx', import.meta.url), 'utf8');
-    const error = readFileSync(new URL('../error.tsx', import.meta.url), 'utf8');
+    const fallback = readFileSync(resolve(COMPONENTS, 'SuperadminPlansPricingCatalogErrorFallback.tsx'), 'utf8');
+    const loading = readFileSync(resolve(__dirname, '../loading.tsx'), 'utf8');
+    const error = readFileSync(resolve(__dirname, '../error.tsx'), 'utf8');
     expect(fallback).toContain('role="alert"');
     expect(fallback).toContain('COPY.MODULE_ROUTE_ERROR_MESSAGE');
     expect(fallback).not.toContain('error.stack');

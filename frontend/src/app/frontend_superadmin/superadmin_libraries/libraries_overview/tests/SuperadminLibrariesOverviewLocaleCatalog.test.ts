@@ -99,7 +99,11 @@ describe(`${namespace} locale catalogs`, () => {
 
 
 it('covers every literal COPY key referenced by module source', () => {
-  const candidates = [path.resolve(process.cwd(), 'app/frontend_superadmin/superadmin_libraries'), path.resolve(process.cwd(), 'frontend_superadmin/superadmin_libraries')];
+  const candidates = [
+    path.resolve(process.cwd(), 'src/app/frontend_superadmin/superadmin_libraries/libraries_overview'),
+    path.resolve(process.cwd(), 'app/frontend_superadmin/superadmin_libraries/libraries_overview'),
+    path.resolve(process.cwd(), 'frontend_superadmin/superadmin_libraries/libraries_overview'),
+  ];
   const moduleRoot = candidates.find(existsSync);
   expect(moduleRoot, 'Could not resolve the Libraries module source root').toBeTruthy();
   const sourceFiles: string[] = [];

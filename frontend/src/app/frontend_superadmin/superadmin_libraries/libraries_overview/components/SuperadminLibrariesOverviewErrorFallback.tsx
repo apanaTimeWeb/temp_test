@@ -13,9 +13,10 @@ type SuperadminLibrariesOverviewErrorFallbackProps = {
 /**
  * Renders the safe retry state for libraries overview without exposing raw exception details.
  */
-export default function SuperadminLibrariesOverviewErrorFallback({ onRetry }: SuperadminLibrariesOverviewErrorFallbackProps) {
+export default function SuperadminLibrariesOverviewErrorFallback({ error, onRetry }: SuperadminLibrariesOverviewErrorFallbackProps) {
   const t = useTranslations('SUPERADMIN_LIBRARIES');
-  const message = t('COPY.MODULE_ROUTE_ERROR_MESSAGE');
+  const responseMessage = error?.response?.data?.message;
+  const message = typeof responseMessage === 'string' ? responseMessage : t('COPY.MODULE_ROUTE_ERROR_MESSAGE');
   return (
     <section className="mx-auto w-full max-w-3xl rounded-2xl border border-rose-500/30 bg-[#1c0a0e]/95 p-6 shadow-md" role="alert" data-testid="superadmin_libraries-libraries_overview-error-fallback">
       <div className="flex items-center gap-3 mb-2">

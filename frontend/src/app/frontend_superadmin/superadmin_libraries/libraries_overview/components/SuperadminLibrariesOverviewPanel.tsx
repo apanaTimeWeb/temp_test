@@ -358,6 +358,44 @@ export default function SuperadminLibrariesOverviewPanel({ lib, mode, onClose, o
                   </div>
                 </div>
               </div>
+
+              {/* Multi-Branch Infrastructure Breakdown (1 Admin -> N Branches) */}
+              <div className="space-y-2.5 border-t border-border/80 pt-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <Building size={13} className="text-indigo-400" />
+                    <span>Managed Branches ({lib.branches})</span>
+                  </h3>
+                  <span className="text-[10px] font-semibold text-indigo-300 bg-indigo-500/15 border border-indigo-500/30 px-2 py-0.5 rounded-full">
+                    Multi-Branch Admin
+                  </span>
+                </div>
+                <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+                  {Array.from({ length: lib.branches }, (_, idx) => {
+                    const branchName = idx === 0 ? `${lib.name} - Central Campus` : `${lib.name} - Branch #${idx + 1}`;
+                    const branchCity = idx === 0 ? lib.location : `${lib.location} Zone ${idx + 1}`;
+                    const branchSeats = Math.round(lib.students / Math.max(1, lib.branches)) || 120;
+                    const managerName = idx === 0 ? `${lib.owner} (Owner)` : `Branch Manager #${idx + 1}`;
+                    return (
+                      <div key={`br-${lib.id}-${idx}`} className="p-2.5 rounded-xl border border-slate-800 bg-slate-900/60 flex items-center justify-between gap-2 hover:border-indigo-500/30 transition-colors">
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-white truncate">{branchName}</p>
+                          <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-400 flex-wrap">
+                            <span className="flex items-center gap-1"><MapPin size={10} className="text-indigo-400" /> {branchCity}</span>
+                            <span>•</span>
+                            <span className="flex items-center gap-1"><Users size={10} className="text-sky-400" /> {branchSeats} Seats</span>
+                            <span>•</span>
+                            <span className="text-[10px] text-slate-500">{managerName}</span>
+                          </div>
+                        </div>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shrink-0">
+                          Active
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           )}
         </div>

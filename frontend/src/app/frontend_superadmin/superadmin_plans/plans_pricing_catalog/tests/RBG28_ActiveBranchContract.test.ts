@@ -2,16 +2,20 @@
 // FLOW: Test runner -> superadmin_plans/plans_pricing_catalog/tests/RBG28_ActiveBranchContract.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 describe('RBG-28 active route branch contract', () => {
   it('preserves the active route and excludes unreachable sibling render branches', () => {
-    const source = readFileSync(new URL('../components/SuperadminPlansPricingCatalogPageClient.tsx', import.meta.url), 'utf8');
+    const source = readFileSync(resolve(__dirname, '../components/SuperadminPlansPricingCatalogPageClient.tsx'), 'utf8');
     expect(source).toContain("activeTab");
     expect(source).not.toContain("activeTab === 'Active Subscribers' &&");
   });
 
   it('removes unreachable sibling artifacts from the active route leaf', () => {
-    const source = readFileSync(new URL('../components/SuperadminPlansPricingCatalogPageClient.tsx', import.meta.url), 'utf8');
+    const source = readFileSync(resolve(__dirname, '../components/SuperadminPlansPricingCatalogPageClient.tsx'), 'utf8');
     expect(source).not.toContain('SuperadminPlansPricingCatalogSemanticTable');
     expect(source).not.toContain('useSuperadminPlansPricingCatalogSemanticTableState');
   });

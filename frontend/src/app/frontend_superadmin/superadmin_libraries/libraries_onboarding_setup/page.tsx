@@ -4,7 +4,6 @@ import { notFound, redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { getTranslations } from 'next-intl/server';
 import SuperadminLibrariesOnboardingSetupScreen from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/components/SuperadminLibrariesOnboardingSetupScreen';
-import SuperadminLibrariesOnboardingSetupWorkflowNavigation from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/components/SuperadminLibrariesOnboardingSetupWorkflowNavigation';
 import { SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/config/superadmin_libraries_onboarding_setup.url_config';
 
 type SearchParams = Record<string, string | string[] | undefined>;
@@ -43,7 +42,6 @@ export default async function LibrariesOnboardingSetupRoutePage({ searchParams }
   if (view && !['student_bulk_import', 'student_smart_id'].includes(view)) notFound();
   return (
     <div className="min-w-0" data-feature-module="superadmin_libraries" data-feature-route="libraries_onboarding_setup">
-      <SuperadminLibrariesOnboardingSetupWorkflowNavigation currentView={view} />
       <Suspense fallback={fallback}>
         <SuperadminLibrariesOnboardingSetupScreen id={id} />
       </Suspense>

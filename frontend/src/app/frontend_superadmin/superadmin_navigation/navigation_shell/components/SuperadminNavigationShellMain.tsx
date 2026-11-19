@@ -35,11 +35,6 @@ export default function SuperadminNavigationShellMain({ children }: { children: 
     );
   }
 
-  // Setup wizard is explicitly standalone
-  if (pathname.startsWith(SUPERADMIN_NAVIGATION_ROUTES.libraries_onboarding_setup)) {
-    return <div className="superadmin-theme">{children}</div>;
-  }
-
   return (
     <div className="superadmin-theme" data-density={density}>
       <div className="sa-shell">

@@ -115,7 +115,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
         <tbody>
           {visibleRows.length === 0 ? (
             <tr>
-              <td colSpan={Math.max(1, columns.length)} className="px-4 py-10 text-center text-secondary" role="status">
+              <td colSpan={Math.max(1, columns.length)} className="px-4 py-10 text-center text-secondary">
                 <SuperadminLibrariesOverviewEmptyState filtered={(rowData?.length ?? 0) !== 0 && Boolean(filterText.trim())} />
               </td>
             </tr>
