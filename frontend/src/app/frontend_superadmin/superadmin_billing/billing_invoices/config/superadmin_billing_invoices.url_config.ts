@@ -5,8 +5,16 @@ const SUPERADMIN_BILLING_INVOICES_URLS = {
   DASHBOARD_OVERVIEW: '/superadmin/superadmin_dashboard/dashboard_overview',
 } as const;
 
+const CANONICAL_OWNER_ROUTE = '/superadmin/superadmin_billing/billing_invoices';
+
+const SUPERADMIN_BILLING_INVOICES_WORKFLOW_URLS = {
+  member_invoices: `${CANONICAL_OWNER_ROUTE}?view=member_invoices`,
+  member_receipts: `${CANONICAL_OWNER_ROUTE}?view=member_receipts`,
+} as const;
+
 export const SUPERADMIN_BILLING_INVOICES_ROUTES = {
   SUPERADMIN_BILLING_INVOICES_URLS: SUPERADMIN_BILLING_INVOICES_URLS,
+  SUPERADMIN_BILLING_INVOICES_WORKFLOW_URLS: SUPERADMIN_BILLING_INVOICES_WORKFLOW_URLS,
 } as const;
 
 export const SUPERADMIN_BILLING_INVOICES_API = {} as const;

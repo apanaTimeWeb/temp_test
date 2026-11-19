@@ -73,6 +73,7 @@
       "MODULE_ROUTE_ERROR_MESSAGE": "पृष्ठ प्रदर्शित करते समय अप्रत्याशित त्रुटि हुई। इस पृष्ठ को फिर से आज़माएँ।",
       "RETRY_MODULE_ROUTE": "फिर से प्रयास करें",
       "LOADING_MODULE": "मॉड्यूल की सामग्री लोड हो रही है",
+      "MODULE_ROUTE_LOADING": "फ़ीचर लोड हो रहा है…",
       "FLAT_AMOUNT": "निश्चित राशि",
       "PROMO_WRITE_UNAVAILABLE_NO_APPROVED_BILLING_API_CONTRACT": "उपलब्ध नहीं: स्वीकृत billing write API अनुबंध मिलने तक promo बदलाव बंद हैं।",
       "BOOLEAN_TRUE": "हाँ",

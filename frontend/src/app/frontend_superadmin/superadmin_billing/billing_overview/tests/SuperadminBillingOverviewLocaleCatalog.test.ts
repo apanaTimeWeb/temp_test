@@ -45,8 +45,8 @@ describe(`${namespace} locale catalogs`, () => {
   });
 
   it('keeps the documented catalog leaf inventory in sync', () => {
-    expect(leafPaths(english)).toHaveLength(82);
-    expect(leafPaths(hindi)).toHaveLength(82);
+    expect(leafPaths(english)).toHaveLength(108);
+    expect(leafPaths(hindi)).toHaveLength(108);
   });
 
   it('contains every literal COPY and VALIDATION key referenced by module source', () => {

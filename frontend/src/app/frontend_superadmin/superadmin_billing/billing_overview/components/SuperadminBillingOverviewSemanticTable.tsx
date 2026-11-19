@@ -46,7 +46,7 @@ export default function SuperadminBillingOverviewSemanticTable<T extends object>
           </button> : (column.headerName ?? field)}
         </th>;
       })}</tr></thead>
-      <tbody>{visibleRows.length === 0 ? <tr><td colSpan={Math.max(1, columns.length)} className="px-4 py-8 text-center text-secondary" role="status">{(rowData?.length ?? 0) === 0 ? <SuperadminBillingOverviewEmptyState /> : <SuperadminBillingOverviewEmptyState filtered />}</td></tr> : visibleRows.map((row) => <tr key={getRowId ? getRowId({ data: row }) : stableRowKey(row)} className={`border-b border-border last:border-b-0 hover:bg-surface-hover ${Object.entries(rowClassRules ?? {}).filter(([, matches]) => matches({ data: row })).map(([className]) => className).join(' ')}`}>{columns.map((column, index) => {
+      <tbody>{visibleRows.length === 0 ? <tr><td colSpan={Math.max(1, columns.length)} className="px-4 py-8 text-center text-secondary">{(rowData?.length ?? 0) === 0 ? <SuperadminBillingOverviewEmptyState /> : <SuperadminBillingOverviewEmptyState filtered />}</td></tr> : visibleRows.map((row) => <tr key={getRowId ? getRowId({ data: row }) : stableRowKey(row)} className={`border-b border-border last:border-b-0 hover:bg-surface-hover ${Object.entries(rowClassRules ?? {}).filter(([, matches]) => matches({ data: row })).map(([className]) => className).join(' ')}`}>{columns.map((column, index) => {
         const field = column.field ?? `column-${index}`;
         const raw = column.valueGetter ? column.valueGetter({ data: row, value: undefined, colDef: { field } }) : (row as unknown as Record<string, unknown>)[field];
         const value = typeof raw === 'string' || typeof raw === 'number' || typeof raw === 'boolean' ? raw : raw == null ? undefined : String(raw);

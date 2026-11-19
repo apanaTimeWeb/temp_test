@@ -5,5 +5,5 @@ import { SUPERADMIN_BILLING_MEMBER_PAYMENTS_API as __SUPERADMIN_BILLING_MEMBER_P
 
 /** Error-state scenario for the verified PAYMENTS_LIST read contract; no endpoint is added. */
 export const SUPERADMIN_FINANCE_PAYMENTS_ERROR_MSW_HANDLERS = [
-  http.get(__SUPERADMIN_BILLING_MEMBER_PAYMENTS_API.PAYMENTS_LIST, () => HttpResponse.json({ success: false, message: 'Service temporarily unavailable', data: null, error: 'SERVICE_UNAVAILABLE', errorCode: 'BILLING.PAYMENTS.UNAVAILABLE', statusCode: 503, requestId: 'msw-service-unavailable' }, { status: 503 })),
+  http.get(`*${__SUPERADMIN_BILLING_MEMBER_PAYMENTS_API.PAYMENTS_LIST}`, () => HttpResponse.json({ success: false, message: 'Service temporarily unavailable', data: null, error: 'SERVICE_UNAVAILABLE', errorCode: 'BILLING.PAYMENTS.UNAVAILABLE', statusCode: 503, requestId: 'msw-service-unavailable' }, { status: 503 })),
 ];

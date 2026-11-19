@@ -6,5 +6,5 @@ import { SUPERADMIN_MEMBER_PAYMENT_FIXTURES } from '@/app/frontend_superadmin/su
 
 /** Read-only handler for the verified PAYMENTS_LIST contract; financial writes are intentionally absent. */
 export const SUPERADMIN_FINANCE_PAYMENTS_MSW_HANDLERS = [
-  http.get(__SUPERADMIN_BILLING_MEMBER_PAYMENTS_API.PAYMENTS_LIST, () => HttpResponse.json({ success: true, message: 'Loaded sample payment records.', data: SUPERADMIN_MEMBER_PAYMENT_FIXTURES, meta: { total: SUPERADMIN_MEMBER_PAYMENT_FIXTURES.length, page: 1, limit: Math.max(SUPERADMIN_MEMBER_PAYMENT_FIXTURES.length, 1), totalPages: Math.ceil(SUPERADMIN_MEMBER_PAYMENT_FIXTURES.length / Math.max(SUPERADMIN_MEMBER_PAYMENT_FIXTURES.length, 1)), hasNextPage: false, hasPrevPage: false }, requestId: 'msw-superadmin-payments-list' })),
+  http.get(`*${__SUPERADMIN_BILLING_MEMBER_PAYMENTS_API.PAYMENTS_LIST}`, () => HttpResponse.json({ success: true, message: 'Loaded sample payment records.', data: SUPERADMIN_MEMBER_PAYMENT_FIXTURES, meta: { total: SUPERADMIN_MEMBER_PAYMENT_FIXTURES.length, page: 1, limit: Math.max(SUPERADMIN_MEMBER_PAYMENT_FIXTURES.length, 1), totalPages: Math.ceil(SUPERADMIN_MEMBER_PAYMENT_FIXTURES.length / Math.max(SUPERADMIN_MEMBER_PAYMENT_FIXTURES.length, 1)), hasNextPage: false, hasPrevPage: false }, requestId: 'msw-superadmin-payments-list' })),
 ];

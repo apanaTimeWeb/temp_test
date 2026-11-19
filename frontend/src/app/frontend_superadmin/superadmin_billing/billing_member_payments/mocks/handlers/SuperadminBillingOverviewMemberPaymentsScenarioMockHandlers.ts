@@ -3,7 +3,7 @@
 import { delay, http, HttpResponse } from 'msw';
 import { SUPERADMIN_BILLING_MEMBER_PAYMENTS_API as __API } from '@/app/frontend_superadmin/superadmin_billing/billing_member_payments/config/superadmin_billing_member_payments.url_config';
 
-const endpoint = __API.PAYMENTS_LIST;
+const endpoint = `*${__API.PAYMENTS_LIST}`;
 const paginationMeta = (total: number) => ({
   total,
   page: 1,

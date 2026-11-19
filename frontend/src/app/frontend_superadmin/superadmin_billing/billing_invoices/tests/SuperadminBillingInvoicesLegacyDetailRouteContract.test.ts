@@ -2,8 +2,13 @@
 // FLOW: Test runner -> superadmin_billing/billing_invoices/tests/SuperadminBillingInvoicesLegacyDetailRouteContract.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const routeSource = readFileSync(new URL('../page.tsx', import.meta.url), 'utf8');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const routeSource = readFileSync(resolve(__dirname, '../page.tsx'), 'utf8');
 
 describe('billing_invoices legacy detail route adapters', () => {
   it('redirects legacy invoice and receipt details to their owning leaf workflows', () => {

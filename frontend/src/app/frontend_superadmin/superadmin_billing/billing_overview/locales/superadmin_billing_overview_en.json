@@ -73,6 +73,7 @@
       "MODULE_ROUTE_ERROR_MESSAGE": "The page encountered an unexpected rendering error. Retry this route.",
       "RETRY_MODULE_ROUTE": "Retry",
       "LOADING_MODULE": "Loading module content",
+      "MODULE_ROUTE_LOADING": "Loading feature…",
       "FLAT_AMOUNT": "Flat",
       "PROMO_WRITE_UNAVAILABLE_NO_APPROVED_BILLING_API_CONTRACT": "Unavailable: promo changes are disabled until an approved billing write API contract is supplied.",
       "BOOLEAN_TRUE": "Yes",

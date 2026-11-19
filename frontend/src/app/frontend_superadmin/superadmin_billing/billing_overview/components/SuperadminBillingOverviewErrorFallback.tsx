@@ -14,9 +14,10 @@ type SuperadminBillingOverviewErrorFallbackProps = {
  * Renders the safe retry state for billing overview without exposing raw exception details.
  * @param parameter Input required by the declared feature contract. Declared type: SuperadminBillingOverviewErrorFallbackProps.
  */
-export default function SuperadminBillingOverviewErrorFallback({ onRetry }: SuperadminBillingOverviewErrorFallbackProps) {
+export default function SuperadminBillingOverviewErrorFallback({ error, onRetry }: SuperadminBillingOverviewErrorFallbackProps) {
   const t = useTranslations('SUPERADMIN_BILLING');
-  const message = t('COPY.MODULE_ROUTE_ERROR_MESSAGE');
+  const responseMessage = error?.response?.data?.message;
+  const message = typeof responseMessage === 'string' && responseMessage.trim() ? responseMessage : t('COPY.MODULE_ROUTE_ERROR_MESSAGE');
   return (
     <section className="mx-auto w-full max-w-3xl rounded-xl border border-border bg-danger-bg p-6 text-danger" role="alert" data-testid="superadmin_billing-billing_overview-error-fallback">
       <h2 className="text-lg font-semibold">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>

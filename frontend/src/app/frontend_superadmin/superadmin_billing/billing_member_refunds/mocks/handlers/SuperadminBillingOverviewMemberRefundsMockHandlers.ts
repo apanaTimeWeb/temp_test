@@ -6,5 +6,5 @@ import { SUPERADMIN_MEMBER_REFUND_FIXTURES } from '@/app/frontend_superadmin/sup
 
 /** Read-only handler for the verified REFUNDS_LIST contract; financial writes are intentionally absent. */
 export const SUPERADMIN_FINANCE_REFUNDS_MSW_HANDLERS = [
-  http.get(__SUPERADMIN_BILLING_MEMBER_REFUNDS_API.REFUNDS_LIST, () => HttpResponse.json({ success: true, message: 'Loaded sample refund records.', data: SUPERADMIN_MEMBER_REFUND_FIXTURES, meta: { total: SUPERADMIN_MEMBER_REFUND_FIXTURES.length, page: 1, limit: Math.max(SUPERADMIN_MEMBER_REFUND_FIXTURES.length, 1), totalPages: Math.ceil(SUPERADMIN_MEMBER_REFUND_FIXTURES.length / Math.max(SUPERADMIN_MEMBER_REFUND_FIXTURES.length, 1)), hasNextPage: false, hasPrevPage: false }, requestId: 'msw-superadmin-refunds-list' })),
+  http.get(`*${__SUPERADMIN_BILLING_MEMBER_REFUNDS_API.REFUNDS_LIST}`, () => HttpResponse.json({ success: true, message: 'Loaded sample refund records.', data: SUPERADMIN_MEMBER_REFUND_FIXTURES, meta: { total: SUPERADMIN_MEMBER_REFUND_FIXTURES.length, page: 1, limit: Math.max(SUPERADMIN_MEMBER_REFUND_FIXTURES.length, 1), totalPages: Math.ceil(SUPERADMIN_MEMBER_REFUND_FIXTURES.length / Math.max(SUPERADMIN_MEMBER_REFUND_FIXTURES.length, 1)), hasNextPage: false, hasPrevPage: false }, requestId: 'msw-superadmin-refunds-list' })),
 ];
