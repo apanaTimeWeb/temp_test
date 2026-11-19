@@ -282,7 +282,13 @@ export default function PublicAuthSignInPage() {
 
       const matchedRole = ROLES.find((r) => r.id === data.role);
       const mockToken = btoa(JSON.stringify({ role: data.role, email: data.email, exp: Date.now() + 900000 }));
-      const mockUser = { id: `${data.role}-001`, name: matchedRole?.label ?? data.role, email: data.email, role: data.role, phone: '' };
+      const mockUser = {
+        id: `${data.role}-001`,
+        name: data.role === 'admin' ? 'John' : data.role === 'manager' ? 'Ram' : (matchedRole?.label ?? data.role),
+        email: data.email,
+        role: data.role,
+        phone: '',
+      };
 
       if (typeof window !== 'undefined') {
         localStorage.setItem('access_token', mockToken);

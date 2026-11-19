@@ -82,7 +82,7 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState<HeaderNotificationItem[]>(DEFAULT_HEADER_NOTIFICATIONS);
   const [hour, setHour] = useState<number>(-1);
-  const [userName, setUserName] = useState<string>('Admin');
+  const [userName, setUserName] = useState<string>('John');
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const notificationsMenuRef = useRef<HTMLDivElement>(null);
 
@@ -93,8 +93,15 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
         const stored = localStorage.getItem('user');
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (parsed?.name) {
+          if (
+            parsed?.name &&
+            !['superadmin', 'super admin', 'admin', 'administrator'].includes(
+              String(parsed.name).trim().toLowerCase()
+            )
+          ) {
             setUserName(parsed.name);
+          } else {
+            setUserName('John');
           }
         }
       }
@@ -368,7 +375,7 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
                 </div>
                 <div className="admin-profile-dropdown-meta">
                   <p className="admin-profile-dropdown-name">{userName}</p>
-                  <p className="admin-profile-dropdown-email">admin@libraryos.com</p>
+                  <p className="admin-profile-dropdown-email">john@libraryos.com</p>
                 </div>
               </div>
 
@@ -453,8 +460,8 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
                 <User size={20} strokeWidth={2.2} />
               </div>
               <div className="text-left flex-1 min-w-0">
-                <p className="text-xs font-semibold text-white truncate">Administrator</p>
-                <p className="text-[11px] text-slate-400 truncate">admin@libraryos.com</p>
+                <p className="text-xs font-semibold text-white truncate">John (Administrator)</p>
+                <p className="text-[11px] text-slate-400 truncate">john@libraryos.com</p>
               </div>
               <span className="text-[10px] font-bold text-amber-400 bg-amber-400/10 border border-amber-400/30 rounded px-1.5 py-0.5">
                 ADMIN
