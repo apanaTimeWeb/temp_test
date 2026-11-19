@@ -185,14 +185,11 @@ export function AdminNavigationSidebar({
               onClick={mobileOpen ? closeMobile : undefined}
             >
               <span className="admin-sidebar-brand-mark" aria-hidden="true">
-                <BookOpen size={18} strokeWidth={2} className="text-white transition-transform duration-300 group-hover:scale-110" />
+                <BookOpen size={18} strokeWidth={2.2} className="text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
               </span>
               <span className="admin-sidebar-brand-name flex items-center">
                 <span className="text-white font-extrabold tracking-tight">Library</span>
                 <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">OS</span>
-                <span className="ml-2 inline-flex items-center rounded-md border border-indigo-500/30 bg-indigo-500/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-indigo-300">
-                  HQ
-                </span>
               </span>
             </Link>
           )}
