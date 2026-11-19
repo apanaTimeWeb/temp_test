@@ -50,7 +50,7 @@ describe('WhatsApp template PageClient editor', () => {
 
   it('maps all seven semantic template icon keys to visible Lucide icon components', () => {
     renderPage();
-    const templateButtons = ['Welcome', 'Fee reminder', 'Renewal', 'Receipt', 'Notice', 'Absentee', 'Payment promise'];
+    const templateButtons = ['Welcome', 'Fee reminder', 'Renewal', 'Receipt', 'Notice', 'Absentee', 'Payment'];
     for (const label of templateButtons) {
       const button = screen.getByRole('button', { name: new RegExp(label, 'i') });
       const icon = button.querySelector('svg');

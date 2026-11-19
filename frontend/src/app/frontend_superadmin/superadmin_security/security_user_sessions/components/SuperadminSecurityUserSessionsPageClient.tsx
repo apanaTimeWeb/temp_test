@@ -19,15 +19,9 @@ import { SUPERADMIN_USERS_INITIAL_SESSIONS } from '@/app/frontend_superadmin/sup
 import SuperadminSecurityUserSessionsSemanticTable from '@/app/frontend_superadmin/superadmin_security/security_user_sessions/components/SuperadminSecurityUserSessionsSemanticTable';
 import type { SemanticCellParams, SemanticColumnDef } from '@/app/frontend_superadmin/superadmin_security/security_user_sessions/types/SuperadminSecurityUserSessionsSemanticTableTypes';
 import type { SuperadminSessionData } from '@/app/frontend_superadmin/superadmin_security/security_user_sessions/types/SuperadminSecurityUserSessionsTypes';
-import { SUPERADMIN_USERS_TABS } from '@/app/frontend_superadmin/superadmin_security/security_user_sessions/constants/SuperadminSecurityUserSessionsConstants';
 
 export default function SuperadminSecurityUserSessionsPageClient() {
   const t = useTranslations('SUPERADMIN_USERS');
-  const routes: Record<string, string> = {
-    'All Users': SUPERADMIN_NAVIGATION_ROUTES.users_directory,
-    'Roles & Permissions': SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions,
-    'User Sessions': SUPERADMIN_NAVIGATION_ROUTES.security_user_sessions,
-  };
 
   const totalSessions = SUPERADMIN_USERS_INITIAL_SESSIONS.length;
   const activeSessions = SUPERADMIN_USERS_INITIAL_SESSIONS.filter((s) => s.status === 'Active').length;
@@ -173,7 +167,7 @@ export default function SuperadminSecurityUserSessionsPageClient() {
               <span>/</span>
               <span>{t('COPY.SUPER_ADMIN')}</span>
               <span>/</span>
-              <span className="text-indigo-400">{t('COPY.USERS_ACCESS')}</span>
+              <span className="text-indigo-400">Security</span>
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shadow-inner">
@@ -201,30 +195,6 @@ export default function SuperadminSecurityUserSessionsPageClient() {
           </div>
         </div>
       </div>
-
-      {/* Navigation Sub-tabs */}
-      <nav className="flex items-center gap-2 border-b border-border/80 pb-3 overflow-x-auto" aria-label={t('COPY.USER_ACCESS_VIEWS')}>
-        {SUPERADMIN_USERS_TABS.map((tab) => {
-          const href = routes[tab.name] ?? '#';
-          const isCurrent = tab.name === 'User Sessions';
-          return (
-            <a
-              key={tab.name}
-              href={href}
-              aria-current={isCurrent ? 'page' : undefined}
-              className={`inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                isCurrent
-                  ? 'border border-indigo-400 bg-indigo-500/15 text-indigo-200 shadow-xs'
-                  : 'text-slate-400 hover:bg-surface-hover hover:text-slate-200'
-              }`}
-              data-testid={`superadmin-security-user-sessions-route-link-${tab.name.toLowerCase().replace(/[^a-z]+/g, '-')}`}
-            >
-              <tab.icon size={15} className={isCurrent ? 'text-indigo-400' : 'text-slate-400'} aria-hidden="true" />
-              <span>{t(tab.labelKey)}</span>
-            </a>
-          );
-        })}
-      </nav>
 
       {/* KPI Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">

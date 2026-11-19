@@ -12,7 +12,7 @@ export function useSuperadminSecurityUserSessionsSemanticTableState<T extends ob
   paginationPageSize: number;
   paginationEnabled?: boolean;
 }) {
-  const { rowData, paginationPageSize, paginationEnabled = false } = args;
+  const { rowData, paginationPageSize, paginationEnabled = true } = args;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
