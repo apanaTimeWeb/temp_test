@@ -1,28 +1,6 @@
-import { Suspense } from 'react';
-import { getTranslations } from 'next-intl/server';
-import SuperadminUsersOverviewScreen from '@/app/frontend_superadmin/superadmin_users/users_overview/components/SuperadminUsersOverviewScreen';
+import { redirect } from 'next/navigation';
+import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes';
 
-type SearchParams = Record<string, string | string[] | undefined>;
-function firstValue(value: string | string[] | undefined): string | undefined { return Array.isArray(value) ? value[0] : value; }
-
-export default async function UsersOverviewRoutePage({ searchParams }: { searchParams?: Promise<SearchParams> | SearchParams }) {
-  const query = searchParams ? await searchParams : {};
-  const id = firstValue(query.id);
-  const view = firstValue(query.view);
-  const tCopy = await getTranslations('SUPERADMIN_USERS');
-  const fallback = <div className="rounded-xl border border-border bg-card p-6 text-secondary" role="status">{tCopy('COPY.MODULE_ROUTE_LOADING')}</div>;
-
-  // Canonical workflow views dispatch
-  if (view === 'member_referrals' ||
-      view === 'member_trust_score') {
-    // Route dispatches into the unified overview screen with view parameter
-  }
-
-  return (
-    <div className="min-w-0" data-feature-module="superadmin_users" data-feature-route="users_overview">
-      <Suspense fallback={fallback}>
-        <SuperadminUsersOverviewScreen id={id} />
-      </Suspense>
-    </div>
-  );
+export default function UsersOverviewRoutePage() {
+  redirect(SUPERADMIN_NAVIGATION_ROUTES.users_directory);
 }
