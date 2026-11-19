@@ -115,7 +115,7 @@ export default function SuperadminUsersOverviewModal({ showModal, editUser, onCl
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      className="sa-wizard-modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) requestCloseRef.current();
       }}

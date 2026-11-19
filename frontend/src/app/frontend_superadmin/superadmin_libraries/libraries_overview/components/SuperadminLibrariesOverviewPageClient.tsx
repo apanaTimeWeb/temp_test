@@ -4,18 +4,15 @@ import { toast } from 'sonner';
 import SuperadminLibrariesOverviewSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewSemanticTable';
 
 import { useCallback, useMemo, useState } from 'react';
-import Link from 'next/link';
 import {
-  Edit2, Eye, Plus, ShieldAlert, Building2, Store, Users, IndianRupee,
-  TrendingUp, Rocket, MapPin, Building, RotateCcw, Search, X, CheckCircle
+  Edit2, Eye, ShieldAlert, Building2, Store, Users, IndianRupee,
+  TrendingUp, MapPin, Building, RotateCcw, Search, X, CheckCircle
 } from 'lucide-react';
 import { useSuperadminLibrariesOverview } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/hooks/useSuperadminLibrariesOverview';
 import SuperadminLibrariesOverviewPanel from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewPanel';
 import type { SuperadminLibrariesLibrary, SuperadminLibrariesPanelMode } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 import { SUPERADMIN_LIBRARIES_TOASTS } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/constants/SuperadminLibrariesOverviewConstants';
 import { SuperadminLibrariesFormatMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewFormattingUtilities';
-import { SUPERADMIN_LIBRARIES_OVERVIEW_ROUTES } from "@/app/frontend_superadmin/superadmin_libraries/libraries_overview/config/superadmin_libraries_overview.url_config";
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes';
 import { useTranslations, useLocale } from 'next-intl';
 
 const PLAN_STYLES: Record<string, string> = {
@@ -275,61 +272,6 @@ export default function SuperadminLibrariesOverviewPageClient() {
 
   return (
     <div className="w-full max-w-full min-w-0 pb-10">
-      {/* ─── Hero / Header Banner ─── */}
-      <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 p-5 sm:p-6 shadow-md transition-all mb-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-          {/* Left: Titles & Meta Chips */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 flex-wrap text-xs">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Live Tenants Directory
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-                <Building2 size={11} className="text-indigo-400" />
-                Multi-Tenant Enterprise Scope
-              </span>
-            </div>
-
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-                <Building2 className="text-indigo-400 shrink-0" size={28} />
-                {t("COPY.REGISTERED_LIBRARIES")}
-              </h1>
-            </div>
-
-            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
-              Global directory of licensed library facilities, branch infrastructure, capacity metrics, and multi-tenant operating subscriptions.
-            </p>
-          </div>
-
-          {/* Right: Actions */}
-          <div className="flex items-center flex-wrap gap-2.5 w-full sm:w-auto shrink-0 sm:self-start lg:self-center">
-            <Link
-              href={SUPERADMIN_NAVIGATION_ROUTES.libraries_onboarding_setup}
-              className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
-            >
-              <Rocket size={14} className="text-indigo-400" />
-              <span>Setup Wizard</span>
-            </Link>
-
-            <Link
-              href={SUPERADMIN_LIBRARIES_OVERVIEW_ROUTES.SUPERADMIN_LIBRARIES_URLS.ADD_LIBRARY}
-              className="inline-flex items-center gap-1.5 min-h-10 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/50 transition-all hover:scale-[1.02] cursor-pointer"
-              data-testid="superadmin-libraries-libraries_overview-link-1"
-            >
-              <Plus size={15} className="text-white" />
-              <span>{t("COPY.ADD_LIBRARY")}</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Preview Warning Notice */}
-      <p className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-200" role="status">
-        {t("COPY.SAMPLE_LIBRARY_FIXTURE_DATA_ONLY_EDITS_AND_STATUS_CHANGES_ARE_LOCAL_PREVIEWS_NO_VERIFIED_LIBRARY_API_INTEGRATION_IS_SUPPLIED")}
-      </p>
-
       {error && (
         <div className="mb-6 rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs sm:text-sm text-rose-200" role="alert">
           {error}

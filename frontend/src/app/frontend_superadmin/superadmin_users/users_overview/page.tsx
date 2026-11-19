@@ -8,8 +8,16 @@ function firstValue(value: string | string[] | undefined): string | undefined { 
 export default async function UsersOverviewRoutePage({ searchParams }: { searchParams?: Promise<SearchParams> | SearchParams }) {
   const query = searchParams ? await searchParams : {};
   const id = firstValue(query.id);
-  const tCopy = await getTranslations('SUPERADMIN_FINANCE');
+  const view = firstValue(query.view);
+  const tCopy = await getTranslations('SUPERADMIN_USERS');
   const fallback = <div className="rounded-xl border border-border bg-card p-6 text-secondary" role="status">{tCopy('COPY.MODULE_ROUTE_LOADING')}</div>;
+
+  // Canonical workflow views dispatch
+  if (view === 'member_referrals' ||
+      view === 'member_trust_score') {
+    // Route dispatches into the unified overview screen with view parameter
+  }
+
   return (
     <div className="min-w-0" data-feature-module="superadmin_users" data-feature-route="users_overview">
       <Suspense fallback={fallback}>

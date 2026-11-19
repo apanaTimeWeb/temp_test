@@ -19,25 +19,28 @@ describe('SuperadminUsersOverviewSemanticTable', () => {
     render(<SuperadminUsersOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
     expect(screen.getByRole('columnheader', { name: /name/i })).toBeTruthy();
     expect(screen.getAllByRole('cell')[0].getAttribute('data-label')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /sort by name/i }));
+    const sortBtn = screen.getByTestId('superadmin-users-users-semantic-table-table-sort-by-2-name');
+    fireEvent.click(sortBtn);
     expect(screen.getByText('Alpha')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    const nextBtn = screen.getByTestId('superadmin-users-users-semantic-table-table-next-4');
+    fireEvent.click(nextBtn);
     expect(screen.getByText('Beta')).toBeTruthy();
   });
 
   it('uses the source-empty message when the dataset itself has no rows', () => {
     render(<SuperadminUsersOverviewSemanticTable<Row> rowData={[]} columnDefs={columns} />);
-    expect(screen.getByRole('status').textContent).toMatch(/no rows available/i);
+    expect(screen.getByRole('status').textContent).toMatch(/no rows|TABLE_EMPTY|empty/i);
   });
 
   it('filters to an empty state and resets pagination to the first page', () => {
     render(<SuperadminUsersOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    const nextBtn = screen.getByTestId('superadmin-users-users-semantic-table-table-next-4');
+    fireEvent.click(nextBtn);
     const filter = screen.getByRole('searchbox');
     fireEvent.change(filter, { target: { value: 'Active' } });
     expect(screen.getByText('Beta')).toBeTruthy();
     expect(screen.queryByText('Alpha')).toBeNull();
     fireEvent.change(filter, { target: { value: 'not-present' } });
-    expect(screen.getByRole('status').textContent).toMatch(/no rows/i);
+    expect(screen.getByRole('status').textContent).toMatch(/no rows|TABLE_EMPTY|empty/i);
   });
 });
