@@ -2,17 +2,25 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { z } from 'zod';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import {
   Eye, EyeOff, BookOpen, CheckCircle, Lock,
   Shield, Zap, Users, Sparkles, LayoutGrid, Clock,
 } from 'lucide-react';
 import { PublicAuthBlockerOverlay, PublicAuthButtonLoader } from '@/app/public_auth/auth_sign_in/components/PublicAuthSignInLoader';
+import { usePublicAuthLoginMutation } from '@/app/public_auth/auth_sign_in/hooks/usePublicAuthSignInMutation';
+import { usePublicAuthIdempotencyKey } from '@/app/public_auth/auth_sign_in/hooks/usePublicAuthSignInIdempotencyKey';
+import { PublicAuthApiError, getPublicAuthApiErrorMessage } from '@/app/public_auth/auth_sign_in/api/PublicAuthSignInApi';
+import { PUBLIC_AUTH_INTERNAL_URLS, PUBLIC_AUTH_ROLE_REDIRECTS } from '@/app/public_auth/auth_sign_in/config/public_auth_sign_in_url_config';
+import { PUBLIC_AUTH_SIGN_IN_DEMO } from '@/app/public_auth/auth_sign_in/mocks/fixtures/PublicAuthSignInFixtures';
+import { createPublicAuthLoginSchema, type PublicAuthLoginFormData } from '@/app/public_auth/auth_sign_in/schemas/PublicAuthSignInValidationSchemas';
+import type { PublicAuthRole } from '@/app/public_auth/auth_sign_in/utils/PublicAuthSignInConstants';
 
 interface RoleConfig {
-  id: 'superadmin' | 'admin' | 'manager';
+  id: PublicAuthRole;
   label: string;
   email: string;
   password: string;
@@ -28,7 +36,7 @@ const ROLES: RoleConfig[] = [
     email: 'superadmin@library.com',
     password: 'Password@123',
     icon: '👑',
-    redirectTo: '/superadmin/superadmin_dashboard',
+    redirectTo: PUBLIC_AUTH_ROLE_REDIRECTS.superadmin,
     setupComplete: true,
   },
   {
@@ -37,7 +45,7 @@ const ROLES: RoleConfig[] = [
     email: 'admin@library.com',
     password: 'Password@123',
     icon: '⚡',
-    redirectTo: '/admin',
+    redirectTo: PUBLIC_AUTH_ROLE_REDIRECTS.admin,
     setupComplete: true,
   },
   {
@@ -46,29 +54,16 @@ const ROLES: RoleConfig[] = [
     email: 'manager@library.com',
     password: 'Password@123',
     icon: '👥',
-    redirectTo: '/manager',
+    redirectTo: PUBLIC_AUTH_ROLE_REDIRECTS.manager,
     setupComplete: true,
   },
 ];
-
-const loginSchema = z.object({
-  email: z.string().min(1, 'Email is required'),
-  password: z.string().min(1, 'Password is required'),
-  role: z.enum(['superadmin', 'admin', 'manager']),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
 
 const ROLE_DEST_LABEL: Record<string, string> = {
   superadmin: 'Setup Library Profile & Platform Analytics',
   admin: 'Branch Dashboard & Seats-Shifts-Lockers',
   manager: 'Daily Ops, Attendance & Members',
 };
-
-function getRedirectUrl(role: RoleConfig): string {
-  if (role.id === 'superadmin' && !role.setupComplete) return '/superadmin/superadmin_setup-wizard';
-  return role.redirectTo;
-}
 
 const LOGIN_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -227,9 +222,6 @@ const LOGIN_CSS = `
   ::-webkit-scrollbar-track { background: #030712; }
   ::-webkit-scrollbar-thumb { background: #2d2d5e; border-radius: 10px; }
 
-  @keyframes spin-slow { to { transform: rotate(360deg); } }
-  .spin-slow { animation: spin-slow 20s linear infinite; }
-
   .submit-btn {
     position: relative;
     overflow: hidden;
@@ -258,52 +250,113 @@ const roleColors: Record<string, string> = {
 };
 
 export default function PublicAuthSignInPage() {
+  const t = useTranslations('AUTH');
+  const router = useRouter();
   const [showPw, setShowPw] = useState(false);
   const [selectedRole, setSelectedRole] = useState<RoleConfig>(ROLES[0]);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
-  const { register, handleSubmit, setValue, setError, formState: { errors, isSubmitting } } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-    // Auto-fill SuperAdmin credentials by default
-    defaultValues: { email: ROLES[0].email, password: ROLES[0].password, role: 'superadmin' },
+  const isProduction = process.env.NODE_ENV === 'production';
+  const demoFillEnabled = !isProduction && process.env.NEXT_PUBLIC_AUTH_DEMO_FILL_ENABLED === 'true';
+
+  const { getKey, clearKey } = usePublicAuthIdempotencyKey();
+  const loginMutation = usePublicAuthLoginMutation();
+
+  const validationSchema = useMemo(() => createPublicAuthLoginSchema({
+    emailRequired: t('VALIDATION.emailRequired'),
+    passwordRequired: t('VALIDATION.passwordRequired'),
+  }), [t]);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<PublicAuthLoginFormData>({
+    resolver: zodResolver(validationSchema),
+    defaultValues: {
+      email: ROLES[0].email,
+      password: ROLES[0].password,
+      role: 'superadmin',
+    },
   });
+
+  // Watch input changes to clear idempotency key
+  useEffect(() => {
+    const subscription = watch(() => clearKey());
+    return () => subscription.unsubscribe();
+  }, [watch, clearKey]);
 
   const handleRoleSelect = (role: RoleConfig) => {
     setSelectedRole(role);
-    // Auto-fill credentials for the selected role
-    setValue('email', role.email, { shouldValidate: false });
-    setValue('password', role.password, { shouldValidate: false });
-    setValue('role', role.id as LoginFormData['role']);
+    setValue('email', role.email, { shouldValidate: false, shouldDirty: true });
+    setValue('password', role.password, { shouldValidate: false, shouldDirty: true });
+    setValue('role', role.id, { shouldValidate: true, shouldDirty: true });
   };
 
-  const onSubmit = async (data: LoginFormData) => {
-    try {
-      // ── Frontend-only mock authentication ──────────────────────────────
-      // Find matching role credential from hardcoded list
-      const matchedRole = ROLES.find(
-        (r) => r.id === data.role && r.email.toLowerCase() === data.email.toLowerCase() && r.password === data.password
-      );
+  const handleDemoFill = () => {
+    setValue('email', PUBLIC_AUTH_SIGN_IN_DEMO.email, { shouldValidate: true, shouldDirty: true });
+    setValue('password', PUBLIC_AUTH_SIGN_IN_DEMO.password, { shouldValidate: true, shouldDirty: true });
+    setValue('role', PUBLIC_AUTH_SIGN_IN_DEMO.role, { shouldValidate: true, shouldDirty: true });
+    const matched = ROLES.find((r) => r.id === PUBLIC_AUTH_SIGN_IN_DEMO.role);
+    if (matched) setSelectedRole(matched);
+  };
 
-      if (!matchedRole) {
-        throw new Error('Invalid email or password. Please check your credentials.');
+  const isBusy = loginMutation.isPending || isSubmitting;
+
+  const onSubmit = async (data: PublicAuthLoginFormData) => {
+    try {
+      const idempotencyKey = await getKey();
+      await loginMutation.mutateAsync({
+        payload: { email: data.email, password: data.password, role: data.role },
+        idempotencyKey,
+      });
+      clearKey();
+
+      const matchedRole = ROLES.find((r) => r.id === data.role);
+      const mockToken = btoa(JSON.stringify({ role: data.role, email: data.email, exp: Date.now() + 900000 }));
+      const mockUser = { id: `${data.role}-001`, name: matchedRole?.label ?? data.role, email: data.email, role: data.role, phone: '' };
+
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('access_token', mockToken);
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        document.cookie = `access_token=${mockToken}; path=/; SameSite=Strict; max-age=900`;
       }
 
-      // Simulate a JWT token (mock)
-      const mockToken = btoa(JSON.stringify({ role: matchedRole.id, email: data.email, exp: Date.now() + 900000 }));
-      const mockUser = { id: `${matchedRole.id}-001`, name: matchedRole.label, email: data.email, role: matchedRole.id, phone: '' };
-
-      // Store in localStorage + cookie (same as real auth flow)
-      localStorage.setItem('access_token', mockToken);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      document.cookie = `access_token=${mockToken}; path=/; SameSite=Strict; max-age=900`;
-
-      // Show success popup and delay redirect
       setLoginSuccess(true);
+      const target = PUBLIC_AUTH_ROLE_REDIRECTS[data.role] ?? '/admin';
+      router.replace(target);
+
       setTimeout(() => {
-        window.location.href = getRedirectUrl(matchedRole);
-      }, 1500);
-    } catch (err: any) {
-      setError('root', { message: err.message || 'Invalid credentials. Please try again.' });
+        if (typeof window !== 'undefined' && window.location.pathname.startsWith('/public_auth')) {
+          window.location.href = target;
+        }
+      }, 1000);
+    } catch (error) {
+      const fieldMap: Record<string, keyof PublicAuthLoginFormData> = { email: 'email', password: 'password', role: 'role' };
+      const validationErrors = error instanceof PublicAuthApiError ? error.validationErrors : [];
+      let hasUnknownField = false;
+      for (const validationError of validationErrors) {
+        const field = fieldMap[validationError.field];
+        if (field) {
+          setError(field, { type: 'server', message: t('errors.requestFailed') });
+        } else {
+          hasUnknownField = true;
+        }
+      }
+      if (validationErrors.length === 0 || hasUnknownField) {
+        setError('root.server', {
+          type: 'server',
+          message: getPublicAuthApiErrorMessage(error, {
+            configuration: t('errors.configuration'),
+            connection: t('errors.connection'),
+            requestFailed: t('errors.requestFailed'),
+            unexpected: t('errors.unexpected'),
+          }),
+        });
+      }
     }
   };
 
@@ -311,7 +364,7 @@ export default function PublicAuthSignInPage() {
     <main className="login-bg flex min-h-screen text-white overflow-hidden">
       <style dangerouslySetInnerHTML={{ __html: LOGIN_CSS }} />
 
-      {/* Background */}
+      {/* Background Orbs */}
       <div className="absolute inset-0 dot-grid opacity-50" />
       <div className="aurora-orb-1" style={{ top: '-15%', left: '-10%' }} />
       <div className="aurora-orb-2" style={{ bottom: '-10%', right: '-8%' }} />
@@ -326,26 +379,24 @@ export default function PublicAuthSignInPage() {
         <div className="flex items-center gap-3">
           <div className="relative w-11 h-11">
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl blur-md opacity-80" />
-            <div className="relative w-11 h-11 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="relative w-11 h-11 bg-gradient-to-br from-indigo-500 via-indigo-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg border border-white/20">
               <BookOpen className="w-5 h-5 text-white" />
             </div>
           </div>
-          <span className="text-2xl font-black tracking-tight">
+          <span className="text-2xl font-black tracking-tight text-white">
             Library<span className="gradient-text">OS</span>
           </span>
         </div>
 
         {/* Center Content */}
         <div className="space-y-10 max-w-xl">
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-bold px-4 py-2 rounded-full">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             2,400+ study libraries trust LibraryOS
           </div>
 
-          {/* Hero Text */}
           <div className="space-y-4">
-            <h1 className="text-5xl font-black tracking-tight leading-[1.08]">
+            <h1 className="text-5xl font-black tracking-tight leading-[1.08] text-white">
               Welcome back to<br />
               <span className="gradient-text">The Smartest</span><br />
               Study Library Platform
@@ -428,22 +479,37 @@ export default function PublicAuthSignInPage() {
           <div className="lg:hidden flex justify-center items-center gap-3 mb-10">
             <div className="relative w-10 h-10">
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl blur-md opacity-70" />
-              <div className="relative w-10 h-10 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center">
+              <div className="relative w-10 h-10 bg-gradient-to-br from-indigo-500 via-indigo-600 to-cyan-500 rounded-xl flex items-center justify-center border border-white/20">
                 <BookOpen className="w-5 h-5 text-white" />
               </div>
             </div>
-            <span className="text-2xl font-black tracking-tight">Library<span className="gradient-text">OS</span></span>
+            <span className="text-2xl font-black tracking-tight text-white">Library<span className="gradient-text">OS</span></span>
           </div>
 
           <div className="glass-login rounded-3xl p-8 md:p-10">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 mb-5">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 mb-5 shadow-lg shadow-indigo-500/10">
                 <Lock size={24} className="text-indigo-400" />
               </div>
-              <h2 className="text-3xl font-black tracking-tight mb-2">Welcome Back</h2>
+              <h2 className="text-3xl font-black tracking-tight mb-2 text-white">Welcome Back</h2>
               <p className="text-slate-400 text-sm">Select your role and sign in to continue</p>
             </div>
+
+            {/* Non-production Demo Fill Button */}
+            {demoFillEnabled && (
+              <div className="mb-5 flex justify-end">
+                <button
+                  data-testid="auth-login-demo-fill"
+                  type="button"
+                  disabled={isBusy}
+                  onClick={handleDemoFill}
+                  className="rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {t('COMMON.demoFill')}
+                </button>
+              </div>
+            )}
 
             {/* Role Selector */}
             <div className="grid grid-cols-3 gap-2 mb-7 p-1.5 rounded-2xl" style={{ background: 'rgba(10,10,25,0.6)', border: '1px solid rgba(255,255,255,0.05)' }}>
@@ -454,6 +520,9 @@ export default function PublicAuthSignInPage() {
                     key={role.id}
                     type="button"
                     id={`role-btn-${role.id}`}
+                    data-testid={`auth-login-role-${role.id}-select`}
+                    aria-pressed={isActive}
+                    disabled={isBusy}
                     onClick={() => handleRoleSelect(role)}
                     className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all duration-300 flex flex-col items-center gap-1.5 role-tab ${isActive ? 'role-tab-active' : ''}`}
                   >
@@ -475,64 +544,116 @@ export default function PublicAuthSignInPage() {
 
             {/* Login Form */}
             <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
-              <input type="hidden" {...register('role')} />
+              <input
+                type="hidden"
+                data-testid="auth-login-role-value"
+                {...register('role')}
+                value={selectedRole.id}
+              />
 
               {/* Email */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-300 uppercase tracking-wider">Email Address</label>
+                <label htmlFor="login-email" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  Email Address
+                  <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
+                  <span className="sr-only">{t('COMMON.required')}</span>
+                </label>
                 <input
                   id="login-email"
+                  data-testid="auth-login-email-input"
                   type="text"
+                  required
+                  autoComplete="username"
                   placeholder="Enter your email"
+                  disabled={isBusy}
                   {...register('email')}
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={errors.email ? 'auth-login-email-error' : undefined}
                   className={`input-field w-full rounded-xl px-4 py-3.5 text-sm ${errors.email ? 'input-error' : ''}`}
                 />
-                {errors.email && <p className="text-rose-400 text-xs font-medium mt-1 flex items-center gap-1"><span>⚠</span>{errors.email.message}</p>}
+                {errors.email && (
+                  <p
+                    id="auth-login-email-error"
+                    data-testid="auth-login-email-validation-error"
+                    className="text-rose-400 text-xs font-medium mt-1 flex items-center gap-1"
+                    role="alert"
+                  >
+                    <span>⚠</span>{errors.email.message}
+                  </p>
+                )}
               </div>
 
               {/* Password */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-xs font-bold text-slate-300 uppercase tracking-wider">Password</label>
-                  <Link href="/auth/forgot-password" className="text-xs text-indigo-400 font-semibold hover:text-indigo-300 transition-colors">
+                  <label htmlFor="login-password" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                    Password
+                    <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
+                    <span className="sr-only">{t('COMMON.required')}</span>
+                  </label>
+                  <Link href={PUBLIC_AUTH_INTERNAL_URLS.FORGOT_PASSWORD} className="text-xs text-indigo-400 font-semibold hover:text-indigo-300 transition-colors">
                     Forgot password?
                   </Link>
                 </div>
                 <div className="relative">
                   <input
                     id="login-password"
+                    data-testid="auth-login-password-input"
                     type={showPw ? 'text' : 'password'}
+                    required
+                    autoComplete="current-password"
                     placeholder="Enter your password"
+                    disabled={isBusy}
                     {...register('password')}
+                    aria-invalid={Boolean(errors.password)}
+                    aria-describedby={errors.password ? 'auth-login-password-error' : undefined}
                     className={`input-field w-full rounded-xl px-4 py-3.5 text-sm pr-12 ${errors.password ? 'input-error' : ''}`}
                   />
                   <button
                     type="button"
+                    data-testid="auth-login-password-toggle"
+                    disabled={isBusy}
+                    aria-label={showPw ? t('PASSWORD.hide') : t('PASSWORD.show')}
+                    aria-pressed={showPw}
                     onClick={() => setShowPw(!showPw)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
                   >
                     {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
-                {errors.password && <p className="text-rose-400 text-xs font-medium mt-1 flex items-center gap-1"><span>⚠</span>{errors.password.message}</p>}
+                {errors.password && (
+                  <p
+                    id="auth-login-password-error"
+                    data-testid="auth-login-password-validation-error"
+                    className="text-rose-400 text-xs font-medium mt-1 flex items-center gap-1"
+                    role="alert"
+                  >
+                    <span>⚠</span>{errors.password.message}
+                  </p>
+                )}
               </div>
 
-              {/* Root Error */}
-              {errors.root && (
-                <div className="bg-rose-500/10 border border-rose-500/25 text-rose-300 text-sm px-4 py-3 rounded-xl flex items-start gap-2">
+              {/* Root Server Error */}
+              {errors.root?.server?.message && (
+                <div
+                  data-testid="auth-login-server-error-state"
+                  className="bg-rose-500/10 border border-rose-500/25 text-rose-300 text-sm px-4 py-3 rounded-xl flex items-start gap-2"
+                  role="alert"
+                >
                   <span className="shrink-0 mt-0.5">⚠️</span>
-                  <span>{errors.root.message}</span>
+                  <span>{errors.root.server.message}</span>
                 </div>
               )}
 
-              {/* Submit */}
+              {/* Submit Button */}
               <button
                 id="login-submit-btn"
+                data-testid="auth-login-submit"
                 type="submit"
-                disabled={isSubmitting || loginSuccess}
+                disabled={isBusy || loginSuccess}
                 className="submit-btn shimmer-btn glow-indigo w-full text-white font-black text-sm py-4 rounded-xl transition-all active:scale-[0.98] mt-2 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
-                {isSubmitting || loginSuccess ? (
+                {isBusy || loginSuccess ? (
                   <PublicAuthButtonLoader />
                 ) : (
                   <>
@@ -548,7 +669,7 @@ export default function PublicAuthSignInPage() {
             <div className="mt-8 pt-6 border-t border-white/5 space-y-4">
               <p className="text-sm text-slate-400 text-center">
                 New to LibraryOS?{' '}
-                <Link href="/auth/signup" className="text-indigo-400 font-bold hover:text-indigo-300 transition-colors">
+                <Link href={PUBLIC_AUTH_INTERNAL_URLS.SIGNUP} className="text-indigo-400 font-bold hover:text-indigo-300 transition-colors">
                   Create an account
                 </Link>
               </p>
