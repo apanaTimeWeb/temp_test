@@ -134,7 +134,8 @@
       "STATUS_SAMPLE": "Sample",
       "CONFIRM_DIALOG_TITLE": "Confirm action",
       "CONFIRM_DIALOG_CANCEL": "Cancel",
-      "CONFIRM_DIALOG_CONTINUE": "Continue"
+      "CONFIRM_DIALOG_CONTINUE": "Continue",
+      "MODULE_ROUTE_LOADING": "Loading feature…"
     }
   },
   "SUPERADMIN_FINANCE": {

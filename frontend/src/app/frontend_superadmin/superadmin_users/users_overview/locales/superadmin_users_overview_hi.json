@@ -134,7 +134,8 @@
       "STATUS_SAMPLE": "नमूना",
       "CONFIRM_DIALOG_TITLE": "कार्रवाई की पुष्टि करें",
       "CONFIRM_DIALOG_CANCEL": "रद्द करें",
-      "CONFIRM_DIALOG_CONTINUE": "जारी रखें"
+      "CONFIRM_DIALOG_CONTINUE": "जारी रखें",
+      "MODULE_ROUTE_LOADING": "फ़ीचर लोड हो रहा है…"
     }
   },
   "SUPERADMIN_FINANCE": {
