@@ -1,10 +1,14 @@
 // RESPONSIBILITY: Define source-level test coverage for security overview using declared fixtures/contracts; it does not claim host runtime execution.
 // FLOW: Test runner -> superadmin_security/security_overview/tests/SuperadminSecurityOverviewLocaleCatalog.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import english from '@/app/frontend_superadmin/superadmin_security/security_overview/locales/superadmin_security_overview_en.json';
 import hindi from '@/app/frontend_superadmin/superadmin_security/security_overview/locales/superadmin_security_overview_hi.json';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const namespace = 'SUPERADMIN_SECURITY';
 const schemaValidationKeys = [
@@ -56,7 +60,7 @@ describe(`${namespace} locale catalogs`, () => {
     }
   });
   it('covers source-referenced COPY keys in both locale catalogs', () => {
-    const moduleRoot = join(process.cwd(), 'frontend_superadmin', 'superadmin_security', 'security_overview');
+    const moduleRoot = resolve(__dirname, '..');
     const collect = (directory: string): string[] => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => entry.isDirectory() ? collect(join(directory, entry.name)) : /\.(tsx?|jsx?)$/.test(entry.name) ? [readFileSync(join(directory, entry.name), 'utf8')] : []);
     const source = collect(moduleRoot).join('\n');
     const keys = [...source.matchAll(/(?:t|tCopy)\(\s*['"]COPY\.([A-Z0-9_]+)['"]/g)].map((match) => match[1]);

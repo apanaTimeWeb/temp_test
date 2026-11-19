@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_SECURITY_FAILED_LOGINS, SUPERADMIN_SECURITY_SESSIONS, SUPERADMIN_SECURITY_API_KEYS, SUPERADMIN_SECURITY_IP_RULES } from '@/app/frontend_superadmin/superadmin_security/security_overview/mocks/fixtures/SuperadminSecurityOverviewPreviewMockFixtures';
+import { SUPERADMIN_SECURITY_TABS } from '@/app/frontend_superadmin/superadmin_security/security_overview/constants/SuperadminSecurityOverviewConstants';
 
 const CONTROL_CARDS = [
   {
@@ -238,7 +239,7 @@ export default function SuperadminSecurityOverviewPageClient() {
           <h2 id="superadmin-security-control-leaves-title" className="text-base sm:text-lg font-bold text-slate-100">
             {t('COPY.SECURITY_CENTER_SECTIONS')}
           </h2>
-          <span className="text-xs text-slate-400">7 Security Modules</span>
+          <span className="text-xs text-slate-400">{SUPERADMIN_SECURITY_TABS.length} Security Modules</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

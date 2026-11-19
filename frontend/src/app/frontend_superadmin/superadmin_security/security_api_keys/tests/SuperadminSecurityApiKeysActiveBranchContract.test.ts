@@ -1,15 +1,19 @@
 // RESPONSIBILITY: Verify that the independently routed API Keys leaf contains only its own active workflow contract.
 // FLOW: Test runner -> source contracts and fixtures -> API Keys-only branch assertions; runtime execution remains host-dependent.
 import { existsSync, readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-const LEAF = new URL('../', import.meta.url);
-const COMPONENTS = new URL('../components/', import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const LEAF = resolve(__dirname, '..');
+const COMPONENTS = resolve(__dirname, '../components');
 
 describe('security_api_keys active-route branch contract', () => {
   it('retains API Keys navigation and excludes unreachable sibling form state and handlers', () => {
-    const page = readFileSync(new URL('SuperadminSecurityApiKeysPageClient.tsx', COMPONENTS), 'utf8');
-    const panel = readFileSync(new URL('SuperadminSecurityApiKeysOperationsPanels.tsx', COMPONENTS), 'utf8');
+    const page = readFileSync(resolve(COMPONENTS, 'SuperadminSecurityApiKeysPageClient.tsx'), 'utf8');
+    const panel = readFileSync(resolve(COMPONENTS, 'SuperadminSecurityApiKeysOperationsPanels.tsx'), 'utf8');
     expect(page).toContain("const activeTab = 'API Keys'");
     expect(page).toContain('SUPERADMIN_SECURITY_TABS.map');
     expect(page).toContain('SuperadminSecurityApiKeysOperationsPanels apiKeys={SUPERADMIN_SECURITY_API_KEYS}');
@@ -23,13 +27,13 @@ describe('security_api_keys active-route branch contract', () => {
   });
 
   it('removes API Keys leaf copies of sibling Login Security and Password Policy contracts', () => {
-    expect(existsSync(new URL('schemas/SuperadminSecurityApiKeysPolicySchema.ts', LEAF))).toBe(false);
-    expect(existsSync(new URL('types/SuperadminSecurityApiKeysTypes.ts', LEAF))).toBe(false);
-    expect(existsSync(new URL('constants/SuperadminSecurityApiKeysStaticConstants.ts', LEAF))).toBe(false);
+    expect(existsSync(resolve(LEAF, 'schemas/SuperadminSecurityApiKeysPolicySchema.ts'))).toBe(false);
+    expect(existsSync(resolve(LEAF, 'types/SuperadminSecurityApiKeysTypes.ts'))).toBe(false);
+    expect(existsSync(resolve(LEAF, 'constants/SuperadminSecurityApiKeysStaticConstants.ts'))).toBe(false);
   });
 
   it('keeps only redacted API-key sample records in this leaf fixture', () => {
-    const fixtures = readFileSync(new URL('mocks/fixtures/SuperadminSecurityApiKeysPreviewMockFixtures.ts', LEAF), 'utf8');
+    const fixtures = readFileSync(resolve(LEAF, 'mocks/fixtures/SuperadminSecurityApiKeysPreviewMockFixtures.ts'), 'utf8');
     expect(fixtures).toContain('SUPERADMIN_SECURITY_API_KEYS');
     for (const siblingFixture of ['SUPERADMIN_SECURITY_IP_RULES', 'SUPERADMIN_SECURITY_SESSIONS', 'SUPERADMIN_SECURITY_FAILED_LOGINS', 'SUPERADMIN_SECURITY_MFA_PREVIEW', 'SUPERADMIN_SECURITY_LOGIN_PREVIEW_DEFAULTS', 'SUPERADMIN_SECURITY_PASSWORD_PREVIEW_DEFAULTS']) {
       expect(fixtures).not.toContain(siblingFixture);

@@ -2,10 +2,15 @@
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import SuperadminSecurityUserSessionsSemanticTable from '../components/SuperadminSecurityUserSessionsSemanticTable';
 import { MOCK_SCALE_TIER_1_SMALL, MOCK_SCALE_TIER_2_STANDARD, MOCK_SCALE_TIER_3_STRESS } from '../mocks/fixtures/superadmin_security_user_sessions.scale-stress-fixtures';
 import type { SemanticColumnDef } from '../types/SuperadminSecurityUserSessionsSemanticTableTypes';
 import type { SuperadminSessionData } from '../types/SuperadminSecurityUserSessionsTypes';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string, values?: Record<string, unknown>) => values ? `${key}:${String(values.column ?? '')}:${String(values.direction ?? '')}` : key,
@@ -52,7 +57,7 @@ describe('security_user_sessions semantic table rendering', () => {
   });
 
   it('owns the mobile card transformation at 767px without editing shared navigation CSS', () => {
-    const css = readFileSync(new URL('../components/SuperadminSecurityUserSessionsSemanticTable.module.css', import.meta.url), 'utf8');
+    const css = readFileSync(resolve(__dirname, '../components/SuperadminSecurityUserSessionsSemanticTable.module.css'), 'utf8');
     expect(css).toContain('@media (max-width: 767px)');
     expect(css).toContain('data-label');
     expect(css).toContain('grid-template-columns');

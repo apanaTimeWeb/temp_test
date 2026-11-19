@@ -2,21 +2,25 @@
 // FLOW: Test runner -> superadmin_security/security_threats/tests/SuperadminSecurityThreatsAsyncStateContract.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const COMPONENTS = new URL('../components/', import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const COMPONENTS = resolve(__dirname, '../components');
 
 describe('security_threats async-state contract', () => {
   it('uses an accessible reduced-motion-safe loading skeleton', () => {
-    const source = readFileSync(new URL('SuperadminSecurityThreatsListSkeleton.tsx', COMPONENTS), 'utf8');
+    const source = readFileSync(resolve(COMPONENTS, 'SuperadminSecurityThreatsListSkeleton.tsx'), 'utf8');
     expect(source).toContain('role="status"');
     expect(source).toContain('aria-busy="true"');
     expect(source).toContain('motion-reduce:animate-none');
     expect(source).toContain('key={key}');
   });
   it('provides safe localized error recovery and wires route boundaries', () => {
-    const fallback = readFileSync(new URL('SuperadminSecurityThreatsErrorFallback.tsx', COMPONENTS), 'utf8');
-    const loading = readFileSync(new URL('../loading.tsx', import.meta.url), 'utf8');
-    const error = readFileSync(new URL('../error.tsx', import.meta.url), 'utf8');
+    const fallback = readFileSync(resolve(COMPONENTS, 'SuperadminSecurityThreatsErrorFallback.tsx'), 'utf8');
+    const loading = readFileSync(resolve(__dirname, '../loading.tsx'), 'utf8');
+    const error = readFileSync(resolve(__dirname, '../error.tsx'), 'utf8');
     expect(fallback).toContain('role="alert"');
     expect(fallback).toContain('COPY.MODULE_ROUTE_ERROR_MESSAGE');
     expect(fallback).not.toContain('error.stack');
@@ -25,8 +29,8 @@ describe('security_threats async-state contract', () => {
     expect(error).not.toContain('...props');
   });
   it('keeps sibling security workflows route-separated from this Audit & Threats leaf', () => {
-    const pageClient = readFileSync(new URL('SuperadminSecurityThreatsPageClient.tsx', COMPONENTS), 'utf8');
-    const operations = readFileSync(new URL('SuperadminSecurityThreatsOperationsPanels.tsx', COMPONENTS), 'utf8');
+    const pageClient = readFileSync(resolve(COMPONENTS, 'SuperadminSecurityThreatsPageClient.tsx'), 'utf8');
+    const operations = readFileSync(resolve(COMPONENTS, 'SuperadminSecurityThreatsOperationsPanels.tsx'), 'utf8');
     expect(pageClient).toContain("const activeTab = 'Audit & Threats'");
     expect(pageClient).toContain('onClick={() => navigateToWorkflow(tab.name)}');
     expect(pageClient).toContain('SUPERADMIN_NAVIGATION_ROUTES.security_login_security');
@@ -40,5 +44,4 @@ describe('security_threats async-state contract', () => {
     expect(operations).not.toContain("activeTab === 'Active Sessions'");
     expect(operations).not.toContain('SuperadminSecurityThreatsPolicyPanels');
   });
-
 });

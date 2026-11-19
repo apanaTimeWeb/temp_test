@@ -1,8 +1,12 @@
 // RESPONSIBILITY: Guard App Router ownership of this leaf's URL-backed filter and pagination state.
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-const hook = readFileSync(new URL('../hooks/useSuperadminSecurityUserSessionsSemanticTableState.ts', import.meta.url), 'utf8');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const hook = readFileSync(resolve(__dirname, '../hooks/useSuperadminSecurityUserSessionsSemanticTableState.ts'), 'utf8');
 
 describe('security_user_sessions URL state contract', () => {
   it('uses Next App Router navigation and preserves unrelated query keys', () => {
