@@ -280,13 +280,6 @@ export default function SuperadminLibrariesOverviewPageClient() {
             </div>
 
             <div>
-              <div className="sa-breadcrumb text-xs text-slate-400 mb-1 flex items-center gap-1.5" aria-label={t("COPY.BREADCRUMB")}>
-                <span>{t("COPY.LIBRARY_OS")}</span>
-                <span aria-hidden="true">/</span>
-                <span>{t("COPY.SUPER_ADMIN")}</span>
-                <span aria-hidden="true">/</span>
-                <span className="text-indigo-300 font-medium">{t("COPY.LIBRARIES")}</span>
-              </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
                 <Building2 className="text-indigo-400 shrink-0" size={28} />
                 {t("COPY.REGISTERED_LIBRARIES")}
