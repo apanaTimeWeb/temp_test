@@ -54,7 +54,6 @@ export const ADMIN_NAV_SUBMODULE_COLORS: Record<string, AdminNavColorMeta> = {
 
   // Staff
   SUBMODULE_STAFF_DIRECTORY: { iconColor: '#818cf8', bg: 'rgba(129, 140, 248, 0.14)' },
-  SUBMODULE_STAFF_ROLES_PERMISSIONS: { iconColor: '#a855f7', bg: 'rgba(168, 85, 247, 0.14)' },
   SUBMODULE_STAFF_ATTENDANCE: { iconColor: '#4ade80', bg: 'rgba(74, 222, 128, 0.14)' },
   SUBMODULE_STAFF_PAYROLL: { iconColor: '#facc15', bg: 'rgba(250, 204, 21, 0.14)' },
 

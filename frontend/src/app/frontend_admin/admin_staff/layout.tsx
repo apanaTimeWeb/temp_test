@@ -7,7 +7,8 @@ import { ADMIN_ROUTES } from '@/app/frontend_admin/application_infrastructure/ap
 
 const SUBMODULE_NAVIGATION = [
   { href: ADMIN_ROUTES.STAFF_DIRECTORY, labelKey: 'SUBMODULE_STAFF_DIRECTORY' },
-  { href: ADMIN_ROUTES.STAFF_ROLES_PERMISSIONS, labelKey: 'SUBMODULE_STAFF_ROLES_PERMISSIONS' }
+  { href: ADMIN_ROUTES.STAFF_ATTENDANCE, labelKey: 'SUBMODULE_STAFF_ATTENDANCE' },
+  { href: ADMIN_ROUTES.STAFF_PAYROLL, labelKey: 'SUBMODULE_STAFF_PAYROLL' }
 ] as const;
 
 export default function AdminStaffLayout({ children }: { children: ReactNode }) {

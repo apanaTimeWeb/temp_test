@@ -32,7 +32,6 @@ export const ADMIN_ROUTES = {
   ACCOUNTS_SEAT_GAP_REPORT: '/admin/admin_accounts_assets/accounts_seat_gap_report',
   ASSETS_REGISTER: '/admin/admin_accounts_assets/assets_register',
   STAFF_DIRECTORY: '/admin/admin_staff/staff_directory',
-  STAFF_ROLES_PERMISSIONS: '/admin/admin_staff/staff_roles_permissions',
   STAFF_ATTENDANCE: '/admin/admin_staff/staff_attendance',
   STAFF_PAYROLL: '/admin/admin_staff/staff_payroll',
   SETTINGS_SECURITY: '/admin/admin_settings/settings_security',
