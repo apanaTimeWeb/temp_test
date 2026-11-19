@@ -1,10 +1,13 @@
 // RESPONSIBILITY: Define source-level test coverage for users member referrals using declared fixtures/contracts; it does not claim host runtime execution.
 // FLOW: Test runner -> superadmin_users/users_member_referrals/tests/SuperadminUsersOverviewMemberReferralsPreviewDisclosure.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { resolve, dirname } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const pageClient = readFileSync(new URL('../components/SuperadminUsersOverviewMemberReferralsPageClient.tsx', import.meta.url), 'utf8');
-const englishCatalog = JSON.parse(readFileSync(new URL('../locales/superadmin_users_overview_member_referrals_en.json', import.meta.url), 'utf8')) as Record<string, unknown>;
+const here = dirname(fileURLToPath(import.meta.url));
+const pageClient = readFileSync(resolve(here, '../components/SuperadminUsersOverviewMemberReferralsPageClient.tsx'), 'utf8');
+const englishCatalog = JSON.parse(readFileSync(resolve(here, '../locales/superadmin_users_overview_member_referrals_en.json'), 'utf8')) as Record<string, unknown>;
 
 describe('users_member_referrals preview disclosure contract', () => {
   it('visibly discloses preview-only data and does not invent a backend call', () => {

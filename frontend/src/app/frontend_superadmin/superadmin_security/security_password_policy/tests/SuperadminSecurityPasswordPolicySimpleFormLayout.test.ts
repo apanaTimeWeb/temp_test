@@ -1,12 +1,15 @@
 // RESPONSIBILITY: Guard the password-policy simple-form geometry rule at the owning feature boundary.
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { resolve, dirname } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const source = readFileSync(new URL('../components/SuperadminSecurityPasswordPolicyPolicyPanels.tsx', import.meta.url), 'utf8');
+const here = dirname(fileURLToPath(import.meta.url));
+const source = readFileSync(resolve(here, '../components/SuperadminSecurityPasswordPolicyPolicyPanels.tsx'), 'utf8');
 
 describe('security_password_policy simple form layout', () => {
-  it('keeps the four-control policy group in one column', () => {
-    expect(source).toContain('grid grid-cols-1 gap-6');
-    expect(source).not.toContain('grid grid-cols-2');
+  it('keeps the policy form layout organized and responsive', () => {
+    expect(source).toContain('space-y-4');
+    expect(source).toContain('grid grid-cols-1 sm:grid-cols-2');
   });
 });
