@@ -134,13 +134,8 @@ export default function ManagerNavigationHeader({ collapsed, onMobileOpen }: Man
                   }}
                   data-testid="manager-logout-open"
                 >
-                  <div className="mgr-profile-logout-icon" aria-hidden="true">
-                    <LogOut size={16} strokeWidth={2} />
-                  </div>
-                  <div className="mgr-profile-logout-text">
-                    <span className="mgr-profile-logout-label">{tManagerUi('log_out') || 'Log out'}</span>
-                    <span className="mgr-profile-logout-sub">Sign out of portal</span>
-                  </div>
+                  <LogOut size={14} strokeWidth={2} />
+                  <span>{tManagerUi('log_out') || 'Log out'}</span>
                 </button>
               </div>
             </div>
