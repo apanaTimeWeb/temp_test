@@ -2,6 +2,7 @@
 // FLOW: Test runner -> superadmin_libraries/libraries_onboarding_setup/tests/SuperadminLibrariesOnboardingSetupSchema.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { branchDetailsSchema, shiftsSchema, seatsSchema, plansSchema } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/schemas/SuperadminLibrariesOnboardingSetupSchema';
 
 describe('SuperadminSetupWizardSchema', () => {
@@ -23,7 +24,7 @@ describe('SuperadminSetupWizardSchema', () => {
     expect(plansSchema.safeParse({ plans: [{ name: 'Monthly', days: 30.5, price: 100 }] }).success).toBe(false);
   });
   it('uses the project-locked Zod v3 constructor options', () => {
-    const source = readFileSync(new URL('../schemas/SuperadminLibrariesOnboardingSetupSchema.ts', import.meta.url), 'utf8');
+    const source = readFileSync(resolve(__dirname, '../schemas/SuperadminLibrariesOnboardingSetupSchema.ts'), 'utf8');
     expect(source).toContain('required_error:');
     expect(source).toContain('invalid_type_error:');
     expect(source).not.toContain('{ error:');

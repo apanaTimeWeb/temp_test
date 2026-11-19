@@ -6,8 +6,8 @@ import { SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_QUERY_KEYS } from '@/app/frontend
 
 describe('libraries_onboarding_setup standalone contract', () => {
   it('keeps the public route inside its owning domain', () => {
-    expect(__SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES.SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_WORKFLOW_URLS.STUDENT_BULK_IMPORT).toBe('/superadmin/superadmin_libraries/libraries_onboarding_setup');
-    expect(__SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES.SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_WORKFLOW_URLS.STUDENT_SMART_ID).toBe("/superadmin/superadmin_libraries/libraries_onboarding_setup");
+    expect(__SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES.SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_WORKFLOW_URLS.STUDENT_BULK_IMPORT).toBe('/superadmin/superadmin_libraries/libraries_onboarding_setup?view=student_bulk_import');
+    expect(__SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_ROUTES.SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_WORKFLOW_URLS.STUDENT_SMART_ID).toBe("/superadmin/superadmin_libraries/libraries_onboarding_setup?view=student_smart_id");
   });
   it('uses an isolated query-key namespace', () => {
     expect(SUPERADMIN_LIBRARIES_ONBOARDING_SETUP_QUERY_KEYS.all).toEqual(["superadmin", "superadmin_libraries", "libraries_onboarding_setup"]);

@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const step1 = readFileSync(new URL('../components/SuperadminLibrariesOnboardingSetupStep1Form.tsx', import.meta.url), 'utf8');
-const step3 = readFileSync(new URL('../components/SuperadminLibrariesOnboardingSetupStep3Form.tsx', import.meta.url), 'utf8');
+const step1 = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOnboardingSetupStep1Form.tsx'), 'utf8');
+const step3 = readFileSync(resolve(__dirname, '../components/SuperadminLibrariesOnboardingSetupStep3Form.tsx'), 'utf8');
 
 describe('onboarding validation accessibility contracts', () => {
   it('connects Step 1 name, address and city errors to their controls', () => {
