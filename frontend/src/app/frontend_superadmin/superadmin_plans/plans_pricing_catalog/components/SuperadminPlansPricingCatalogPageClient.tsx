@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SUPERADMIN_SUBSCRIPTIONS_PLAN_SCHEMA } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/schemas/SuperadminPlansPricingCatalogPlanSchema';
 import type { SuperadminSubscriptionPlan, SuperadminSubscriptionPlanFormValues } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/types/SuperadminPlansPricingCatalogTypes';
 import { SUPERADMIN_SUBSCRIPTIONS_SAMPLE_PLANS } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/mocks/fixtures/SuperadminPlansPricingCatalogMockFixtures';
-import { Users, Package, Plus, X, Layers, CheckCircle2, IndianRupee, Building2, HardDrive, Edit3 } from 'lucide-react';
+import { Users, Package, Plus, X, Layers, CheckCircle2, IndianRupee, Building2, Edit3, Calendar, Check } from 'lucide-react';
 import { formatSuperadminSubscriptionsMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/utils/SuperadminPlansPricingCatalogFormatters';
 import { useTranslations, useLocale } from 'next-intl';
 
@@ -35,6 +35,7 @@ export default function SuperadminPlansPricingCatalogPageClient() {
 
   const translateValidationMessage = useSuperadminPlansPricingCatalogValidationMessage();
   const [plans, setPlans] = useState<SuperadminSubscriptionPlan[]>(() => [...SUPERADMIN_SUBSCRIPTIONS_SAMPLE_PLANS]);
+  const [selectedCycle, setSelectedCycle] = useState<'monthly' | 'half_yearly' | 'annual'>('monthly');
   const localPlanSequenceRef = useRef(0);
   // Modal State
   const [showModal, setShowModal] = useState(false);
@@ -43,7 +44,7 @@ export default function SuperadminPlansPricingCatalogPageClient() {
   const modalOpenerRef = useRef<HTMLElement | null>(null);
   const { register, handleSubmit, reset, formState: { errors, isSubmitting, isDirty } } = useForm<SuperadminSubscriptionPlanFormValues>({
     resolver: zodResolver(SUPERADMIN_SUBSCRIPTIONS_PLAN_SCHEMA),
-    defaultValues: { name: '', price: 0, branches: 1, members: 1, storage: '' },
+    defaultValues: { name: '', price: 0, priceHalfYearly: undefined, priceAnnual: undefined, branches: 1, members: 150 },
   });
 
   const showToast = useCallback((msg: string) => { toast.message(msg, { id: 'superadmin:superadmin_subscriptions:SuperadminPlansPricingCatalogPageClient:feedback' }); }, []);
@@ -51,14 +52,21 @@ export default function SuperadminPlansPricingCatalogPageClient() {
   const handleOpenAdd = useCallback(() => {
     if (document.activeElement instanceof HTMLElement) modalOpenerRef.current = document.activeElement;
     setEditPlan(null);
-    reset({ name: '', price: 0, branches: 1, members: 1, storage: '' });
+    reset({ name: '', price: 0, priceHalfYearly: undefined, priceAnnual: undefined, branches: 1, members: 150 });
     setShowModal(true);
   }, [reset]);
 
   const handleOpenEdit = useCallback((plan: SuperadminSubscriptionPlan) => {
     if (document.activeElement instanceof HTMLElement) modalOpenerRef.current = document.activeElement;
     setEditPlan(plan);
-    reset({ name: plan.name, price: plan.price, branches: plan.branches, members: plan.members, storage: plan.storage });
+    reset({
+      name: plan.name,
+      price: plan.price,
+      priceHalfYearly: plan.priceHalfYearly ?? Math.round(plan.price * 6 * 0.9),
+      priceAnnual: plan.priceAnnual ?? Math.round(plan.price * 10),
+      branches: plan.branches,
+      members: plan.members,
+    });
     setShowModal(true);
   }, [reset]);
 
@@ -69,7 +77,23 @@ export default function SuperadminPlansPricingCatalogPageClient() {
 
   const handleSavePlan = useCallback((formValues: SuperadminSubscriptionPlanFormValues) => {
     // Create/update only the in-memory preview; durable billing mutations remain unavailable.
-    const previewValues = { ...formValues, name: formValues.name.trim(), storage: formValues.storage.trim() };
+    const monthlyPrice = Number(formValues.price);
+    const halfPrice = formValues.priceHalfYearly && Number(formValues.priceHalfYearly) > 0
+      ? Number(formValues.priceHalfYearly)
+      : Math.round(monthlyPrice * 6 * 0.9);
+    const annualPrice = formValues.priceAnnual && Number(formValues.priceAnnual) > 0
+      ? Number(formValues.priceAnnual)
+      : Math.round(monthlyPrice * 10);
+
+    const previewValues = {
+      ...formValues,
+      name: formValues.name.trim(),
+      price: monthlyPrice,
+      priceHalfYearly: halfPrice,
+      priceAnnual: annualPrice,
+      branches: Number(formValues.branches),
+      members: Number(formValues.members),
+    };
     if (editPlan) {
       setPlans((currentPlans) => currentPlans.map((plan) =>
         plan.id === editPlan.id ? { ...plan, ...previewValues } : plan
@@ -87,7 +111,7 @@ export default function SuperadminPlansPricingCatalogPageClient() {
     }
     setShowModal(false);
     setEditPlan(null);
-    reset({ name: '', price: 0, branches: 1, members: 1, storage: '' });
+    reset({ name: '', price: 0, priceHalfYearly: undefined, priceAnnual: undefined, branches: 1, members: 150 });
   }, [editPlan, reset, showToast, t]);
 
   // Effect contract: manage keyboard focus, guarded Escape/Tab behavior, and focus restoration for the active dialog
@@ -262,14 +286,98 @@ export default function SuperadminPlansPricingCatalogPageClient() {
         </div>
       </div>
 
+      {/* Billing Frequency Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-5 rounded-2xl border border-indigo-500/25 bg-gradient-to-r from-card/95 via-card/90 to-card/70 shadow-md backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400">
+            <Calendar className="h-5 w-5" />
+          </div>
+          <div>
+            <h2 className="text-sm sm:text-base font-bold text-slate-100 flex items-center gap-2">
+              <span>{t("COPY.BILLING_CYCLE")}</span>
+            </h2>
+            <p className="text-xs text-slate-400">
+              Choose your payment cadence: Monthly, 6 Months, or Annual
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center p-1 bg-slate-900/90 rounded-xl border border-indigo-500/25 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={() => setSelectedCycle('monthly')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              selectedCycle === 'monthly'
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+            data-testid="superadmin-subscriptions-cycle-monthly"
+          >
+            {t("COPY.CYCLE_MONTHLY")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedCycle('half_yearly')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              selectedCycle === 'half_yearly'
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+            data-testid="superadmin-subscriptions-cycle-half-yearly"
+          >
+            <span>{t("COPY.CYCLE_HALF_YEARLY")}</span>
+            <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+              Save 10%
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedCycle('annual')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              selectedCycle === 'annual'
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+            data-testid="superadmin-subscriptions-cycle-annual"
+          >
+            <span>{t("COPY.CYCLE_ANNUALLY")}</span>
+            <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              Save ~17%
+            </span>
+          </button>
+        </div>
+      </div>
+
       {/* Plan Cards Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {plans.map((p) => {
           const isPop = p.isPopular;
+          const monthlyPrice = p.price;
+          const halfYearlyPrice = p.priceHalfYearly ?? Math.round(p.price * 6 * 0.9);
+          const annualPrice = p.priceAnnual ?? Math.round(p.price * 10);
+
+          const displayPrice = selectedCycle === 'monthly'
+            ? monthlyPrice
+            : selectedCycle === 'half_yearly'
+              ? halfYearlyPrice
+              : annualPrice;
+
+          const cycleUnit = selectedCycle === 'monthly'
+            ? `/${t("COPY.MO")}`
+            : selectedCycle === 'half_yearly'
+              ? '/6 mo'
+              : '/yr';
+
+          const effectiveMonthly = selectedCycle === 'half_yearly'
+            ? `(₹${Math.round(halfYearlyPrice / 6).toLocaleString()}/mo)`
+            : selectedCycle === 'annual'
+              ? `(₹${Math.round(annualPrice / 12).toLocaleString()}/mo)`
+              : null;
+
           return (
             <div
               key={p.id}
-              className={`relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-gradient-to-br via-slate-900/90 to-slate-900/90 p-6 shadow-xl backdrop-blur-md transition-all hover:scale-[1.01] ${
+              className={`relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-gradient-to-br via-slate-900/90 to-slate-900/90 p-5 sm:p-6 shadow-xl backdrop-blur-md transition-all hover:scale-[1.01] ${
                 isPop
                   ? 'border-indigo-400 shadow-indigo-500/15 ring-1 ring-indigo-400/40 from-indigo-950/40'
                   : 'border-indigo-500/20 from-slate-950/40'
@@ -288,20 +396,27 @@ export default function SuperadminPlansPricingCatalogPageClient() {
                   <h3 className="text-xl font-bold text-slate-100">{p.name}</h3>
                 </div>
 
-                <div className="my-5 flex items-baseline gap-1.5 border-b border-indigo-500/15 pb-5">
-                  <span className="text-3xl sm:text-4xl font-black text-slate-100">
-                    {formatSuperadminSubscriptionsMajorPreviewCurrency(p.price, 'INR', locale)}
-                  </span>
-                  <span className="text-xs font-semibold text-indigo-400/80">/{t("COPY.MO")}</span>
+                <div className="my-4 flex flex-col border-b border-indigo-500/15 pb-4">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-100">
+                      {formatSuperadminSubscriptionsMajorPreviewCurrency(displayPrice, 'INR', locale)}
+                    </span>
+                    <span className="text-xs font-semibold text-indigo-400/80">{cycleUnit}</span>
+                  </div>
+                  {effectiveMonthly && (
+                    <span className="text-[11px] text-emerald-400 font-medium mt-0.5">
+                      Effective {effectiveMonthly}
+                    </span>
+                  )}
                 </div>
 
-                <div className="space-y-3.5 mb-6 text-sm">
+                <div className="space-y-3 mb-5 text-sm">
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-2 text-slate-400">
                       <Building2 className="h-4 w-4 text-indigo-400" />
                       <span>{t("COPY.BRANCHES")}</span>
                     </span>
-                    <span className="font-semibold text-slate-100">{p.branches}</span>
+                    <span className="font-semibold text-slate-100">{p.branches} {p.branches === 1 ? 'Branch' : 'Branches'}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-2 text-slate-400">
@@ -310,12 +425,24 @@ export default function SuperadminPlansPricingCatalogPageClient() {
                     </span>
                     <span className="font-semibold text-slate-100">{p.members.toLocaleString()}</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2 text-slate-400">
-                      <HardDrive className="h-4 w-4 text-amber-400" />
-                      <span>{t("COPY.STORAGE")}</span>
-                    </span>
-                    <span className="font-semibold text-slate-100">{p.storage}</span>
+                </div>
+
+                {/* Available Durations Breakdown */}
+                <div className="mb-5 pt-3 border-t border-indigo-500/15">
+                  <div className="text-[10px] uppercase font-bold text-slate-400 mb-2">Duration Pricing</div>
+                  <div className="grid grid-cols-3 gap-1.5 text-center">
+                    <div className={`p-1.5 rounded-lg border transition-all ${selectedCycle === 'monthly' ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300 font-bold' : 'bg-slate-900/60 border-border/30 text-slate-400'}`}>
+                      <div className="text-[9px] uppercase font-semibold text-slate-400">Monthly</div>
+                      <div className="text-slate-100 font-bold text-[11px] mt-0.5">{formatSuperadminSubscriptionsMajorPreviewCurrency(monthlyPrice, 'INR', locale)}</div>
+                    </div>
+                    <div className={`p-1.5 rounded-lg border transition-all ${selectedCycle === 'half_yearly' ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300 font-bold' : 'bg-slate-900/60 border-border/30 text-slate-400'}`}>
+                      <div className="text-[9px] uppercase font-semibold text-slate-400">6 Mo</div>
+                      <div className="text-slate-100 font-bold text-[11px] mt-0.5">{formatSuperadminSubscriptionsMajorPreviewCurrency(halfYearlyPrice, 'INR', locale)}</div>
+                    </div>
+                    <div className={`p-1.5 rounded-lg border transition-all ${selectedCycle === 'annual' ? 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300 font-bold' : 'bg-slate-900/60 border-border/30 text-slate-400'}`}>
+                      <div className="text-[9px] uppercase font-semibold text-slate-400">Annual</div>
+                      <div className="text-slate-100 font-bold text-[11px] mt-0.5">{formatSuperadminSubscriptionsMajorPreviewCurrency(annualPrice, 'INR', locale)}</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -384,27 +511,6 @@ export default function SuperadminPlansPricingCatalogPageClient() {
                     {errors.name && <p id="subscription-plan-name-error" role="alert" className="mt-1 text-xs text-rose-400">{translateValidationMessage(errors.name.message)}</p>}
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="subscription-plan-price">
-                      {t("COPY.PRICE_MO")}
-                    </label>
-                    <input
-                      id="subscription-plan-price"
-                      type="number"
-                      min={0.01}
-                      max={1000000}
-                      step="0.01"
-                      className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                      aria-invalid={!!errors.price}
-                      aria-describedby={errors.price ? 'subscription-plan-price-error' : undefined}
-                      {...register('price', { valueAsNumber: true })}
-                      data-testid="superadmin-subscriptions-subscriptions-overview-subscription-plan-price-7"
-                    />
-                    {errors.price && <p id="subscription-plan-price-error" role="alert" className="mt-1 text-xs text-rose-400">{translateValidationMessage(errors.price.message)}</p>}
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="subscription-plan-branches">
                       {t("COPY.MAX_BRANCHES")}
                     </label>
@@ -422,40 +528,84 @@ export default function SuperadminPlansPricingCatalogPageClient() {
                     />
                     {errors.branches && <p id="subscription-plan-branches-error" role="alert" className="mt-1 text-xs text-rose-400">{translateValidationMessage(errors.branches.message)}</p>}
                   </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="subscription-plan-members">
-                      {t("COPY.MAX_MEMBERS")}
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="subscription-plan-price">
+                      {t("COPY.PRICE_MO")}
                     </label>
                     <input
-                      id="subscription-plan-members"
+                      id="subscription-plan-price"
                       type="number"
-                      min={1}
-                      max={10000000}
-                      step={1}
+                      min={0.01}
+                      max={1000000}
+                      step="0.01"
                       className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                      aria-invalid={!!errors.members}
-                      aria-describedby={errors.members ? 'subscription-plan-members-error' : undefined}
-                      {...register('members', { valueAsNumber: true })}
-                      data-testid="superadmin-subscriptions-subscriptions-overview-subscription-plan-members-9"
+                      aria-invalid={!!errors.price}
+                      aria-describedby={errors.price ? 'subscription-plan-price-error' : undefined}
+                      {...register('price', { valueAsNumber: true })}
+                      data-testid="superadmin-subscriptions-subscriptions-overview-subscription-plan-price-7"
                     />
-                    {errors.members && <p id="subscription-plan-members-error" role="alert" className="mt-1 text-xs text-rose-400">{translateValidationMessage(errors.members.message)}</p>}
+                    {errors.price && <p id="subscription-plan-price-error" role="alert" className="mt-1 text-xs text-rose-400">{translateValidationMessage(errors.price.message)}</p>}
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="subscription-plan-storage">
-                      {t("COPY.STORAGE")}
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="subscription-plan-price-half">
+                      {t("COPY.PRICE_HALF_YEARLY")}
                     </label>
                     <input
-                      id="subscription-plan-storage"
-                      type="text"
-                      maxLength={40}
+                      id="subscription-plan-price-half"
+                      type="number"
+                      min={0.01}
+                      max={5000000}
+                      step="0.01"
+                      placeholder="e.g. 5394"
                       className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                      aria-invalid={!!errors.storage}
-                      aria-describedby={errors.storage ? 'subscription-plan-storage-error' : undefined}
-                      {...register('storage')}
-                      data-testid="superadmin-subscriptions-subscriptions-overview-subscription-plan-storage-10"
+                      aria-invalid={!!errors.priceHalfYearly}
+                      aria-describedby={errors.priceHalfYearly ? 'subscription-plan-price-half-error' : undefined}
+                      {...register('priceHalfYearly', { valueAsNumber: true })}
+                      data-testid="superadmin-subscriptions-subscriptions-overview-subscription-plan-price-half-10"
                     />
-                    {errors.storage && <p id="subscription-plan-storage-error" role="alert" className="mt-1 text-xs text-rose-400">{translateValidationMessage(errors.storage.message)}</p>}
+                    {errors.priceHalfYearly && <p id="subscription-plan-price-half-error" role="alert" className="mt-1 text-xs text-rose-400">{translateValidationMessage(errors.priceHalfYearly.message)}</p>}
                   </div>
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="subscription-plan-price-annual">
+                      {t("COPY.PRICE_ANNUAL")}
+                    </label>
+                    <input
+                      id="subscription-plan-price-annual"
+                      type="number"
+                      min={0.01}
+                      max={10000000}
+                      step="0.01"
+                      placeholder="e.g. 9990"
+                      className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                      aria-invalid={!!errors.priceAnnual}
+                      aria-describedby={errors.priceAnnual ? 'subscription-plan-price-annual-error' : undefined}
+                      {...register('priceAnnual', { valueAsNumber: true })}
+                      data-testid="superadmin-subscriptions-subscriptions-overview-subscription-plan-price-annual-11"
+                    />
+                    {errors.priceAnnual && <p id="subscription-plan-price-annual-error" role="alert" className="mt-1 text-xs text-rose-400">{translateValidationMessage(errors.priceAnnual.message)}</p>}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5" htmlFor="subscription-plan-members">
+                    {t("COPY.MAX_MEMBERS")}
+                  </label>
+                  <input
+                    id="subscription-plan-members"
+                    type="number"
+                    min={1}
+                    max={10000000}
+                    step={1}
+                    className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3.5 py-2 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    aria-invalid={!!errors.members}
+                    aria-describedby={errors.members ? 'subscription-plan-members-error' : undefined}
+                    {...register('members', { valueAsNumber: true })}
+                    data-testid="superadmin-subscriptions-subscriptions-overview-subscription-plan-members-9"
+                  />
+                  {errors.members && <p id="subscription-plan-members-error" role="alert" className="mt-1 text-xs text-rose-400">{translateValidationMessage(errors.members.message)}</p>}
                 </div>
               </div>
 

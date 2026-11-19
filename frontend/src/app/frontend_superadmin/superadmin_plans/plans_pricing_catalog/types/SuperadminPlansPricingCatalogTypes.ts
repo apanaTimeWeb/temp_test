@@ -34,13 +34,23 @@ export interface SuperadminSubscriptionPlan {
   id: string;
   name: string;
   price: number;
+  priceHalfYearly?: number;
+  priceAnnual?: number;
   branches: number;
   members: number;
-  storage: string;
+  storage?: string;
   isPopular: boolean;
 }
 
 /**
  * Defines the public SuperadminSubscriptionPlanFormValues contract for plans pricing catalog. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
  */
-export type SuperadminSubscriptionPlanFormValues = Pick<SuperadminSubscriptionPlan, 'name' | 'price' | 'branches' | 'members' | 'storage'>;
+export type SuperadminSubscriptionPlanFormValues = {
+  name: string;
+  price: number;
+  priceHalfYearly?: number;
+  priceAnnual?: number;
+  branches: number;
+  members: number;
+  storage?: string;
+};
