@@ -11,6 +11,8 @@ const translations: Record<string, string> = {
   GOOD_MORNING: 'Good morning',
   GOOD_AFTERNOON: 'Good afternoon',
   GOOD_EVENING: 'Good evening',
+  GOOD_NIGHT: 'Good night',
+  WELCOME: 'Welcome',
   ADMIN_GREETING: 'Admin',
   NOTIFICATIONS_UNAVAILABLE: 'Notifications unavailable',
   NOTIFICATIONS_BLOCKED: 'Notifications API/route is not supplied; there are no notifications to display.',

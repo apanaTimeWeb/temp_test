@@ -187,10 +187,15 @@ export function AdminNavigationSidebar({
               <span className="admin-sidebar-brand-mark" aria-hidden="true">
                 <BookOpen size={18} strokeWidth={2.2} className="text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
               </span>
-              <span className="admin-sidebar-brand-name flex items-center">
-                <span className="text-white font-extrabold tracking-tight">Library</span>
-                <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">OS</span>
-              </span>
+              <div className="flex flex-col min-w-0 justify-center">
+                <span className="admin-sidebar-brand-name flex items-center leading-none">
+                  <span className="text-white font-extrabold tracking-tight">Library</span>
+                  <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">OS</span>
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 leading-none mt-1">
+                  Admin
+                </span>
+              </div>
             </Link>
           )}
         </div>

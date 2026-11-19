@@ -81,8 +81,38 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState<HeaderNotificationItem[]>(DEFAULT_HEADER_NOTIFICATIONS);
+  const [hour, setHour] = useState<number>(-1);
+  const [userName, setUserName] = useState<string>('Admin');
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const notificationsMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setHour(new Date().getHours());
+    try {
+      if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('user');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed?.name) {
+            setUserName(parsed.name);
+          }
+        }
+      }
+    } catch {
+      // fallback to default
+    }
+  }, []);
+
+  const greeting =
+    hour < 0
+      ? (t('WELCOME') || 'Welcome')
+      : hour < 12
+        ? t('GOOD_MORNING')
+        : hour < 17
+          ? t('GOOD_AFTERNOON')
+          : hour < 21
+            ? t('GOOD_EVENING')
+            : (t('GOOD_NIGHT') || 'Good Night');
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -320,7 +350,8 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
               <User size={17} strokeWidth={2.2} />
             </div>
             <div className="admin-avatar-details hidden sm:flex">
-              <strong>{t('ADMIN_GREETING')}</strong>
+              <span>{greeting}</span>
+              <strong>{userName}</strong>
             </div>
             <ChevronDown
               size={13}
@@ -336,7 +367,7 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
                   <User size={20} strokeWidth={2.2} />
                 </div>
                 <div className="admin-profile-dropdown-meta">
-                  <p className="admin-profile-dropdown-name">{t('ADMIN_GREETING')}</p>
+                  <p className="admin-profile-dropdown-name">{userName}</p>
                   <p className="admin-profile-dropdown-email">admin@libraryos.com</p>
                 </div>
               </div>

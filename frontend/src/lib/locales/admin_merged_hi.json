@@ -680,6 +680,8 @@
     "GOOD_MORNING": "सुप्रभात",
     "GOOD_AFTERNOON": "नमस्कार",
     "GOOD_EVENING": "शुभ संध्या",
+    "GOOD_NIGHT": "शुभ रात्रि",
+    "WELCOME": "स्वागत है",
     "ADMIN_GREETING": "एडमिन",
     "NOTIFICATIONS_UNAVAILABLE": "सूचनाएँ उपलब्ध नहीं हैं",
     "NOTIFICATIONS_BLOCKED": "सूचना API/रूट उपलब्ध नहीं है; दिखाने के लिए कोई सूचना नहीं है।",
