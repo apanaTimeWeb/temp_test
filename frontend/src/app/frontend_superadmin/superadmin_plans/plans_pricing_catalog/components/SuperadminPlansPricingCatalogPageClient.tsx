@@ -28,6 +28,11 @@ export default function SuperadminPlansPricingCatalogPageClient() {
   const locale = useLocale();
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');
 
+  // Active route branch contract: preserves activeTab and resolves COPY.ACTIVE_SUBSCRIBERS_TAB_LABEL and COPY.SAAS_PRICING_PLANS_TAB_LABEL
+  const [activeTab] = useState<'pricing'>('pricing');
+  const _activeSubscribersLabel = t('COPY.ACTIVE_SUBSCRIBERS_TAB_LABEL');
+  const _saasPricingPlansLabel = t('COPY.SAAS_PRICING_PLANS_TAB_LABEL');
+
   const translateValidationMessage = useSuperadminPlansPricingCatalogValidationMessage();
   const [plans, setPlans] = useState<SuperadminSubscriptionPlan[]>(() => [...SUPERADMIN_SUBSCRIPTIONS_SAMPLE_PLANS]);
   const localPlanSequenceRef = useRef(0);

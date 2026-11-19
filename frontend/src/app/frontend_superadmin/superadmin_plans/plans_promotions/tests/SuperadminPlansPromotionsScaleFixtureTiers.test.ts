@@ -10,8 +10,11 @@ import {
 import { SUPERADMIN_BILLING_SAMPLE_PROMOS } from '../mocks/fixtures/SuperadminPlansPromotionsSampleMockFixtures';
 import type { SuperadminBillingPromoSample } from '../types/SuperadminPlansPromotionsTypes';
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const PAGE_CLIENT = new URL('../components/SuperadminPlansPromotionsPageClient.tsx', import.meta.url);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const PAGE_CLIENT = resolve(__dirname, '../components/SuperadminPlansPromotionsPageClient.tsx');
 
 function assertPromotionCardShape(promo: SuperadminBillingPromoSample) {
   expect(typeof promo.id).toBe('string');
@@ -46,7 +49,7 @@ describe('plans_promotions deterministic scale fixture tiers', () => {
 
   it('keeps the stress tier compatible with the active promotion card list contract', () => {
     const page = readFileSync(PAGE_CLIENT, 'utf8');
-    expect(page).toContain('promos.map(p => (');
+    expect(page).toMatch(/promos\.map\(\s*\(?p\)?\s*=>/);
     for (const field of ['p.code', 'p.discountAmountMinor', 'p.discountCurrencyCode', 'p.expiry', 'p.uses', 'p.maxUses', 'p.status']) {
       expect(page).toContain(field);
     }
