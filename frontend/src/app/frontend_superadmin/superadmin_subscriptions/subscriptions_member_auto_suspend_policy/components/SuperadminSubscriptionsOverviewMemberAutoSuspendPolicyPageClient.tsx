@@ -97,6 +97,7 @@ export default function SuperadminSubscriptionsOverviewMemberAutoSuspendPolicyPa
               <p className="mt-1 text-xs sm:text-sm text-slate-400">
                 {tCopy("COPY.MANAGE_AUTOMATIC_SUSPENSION_AND_STUDENT_RESTORATION")}
               </p>
+              <p className="mt-2 text-xs text-slate-400" role="status">{tCopy("COPY.SUSPENSION_FIGURES_AND_ROWS_ARE_SAMPLE_RECORDS_POLICY_UPDATES_REST_62F2EDBE")}</p>
             </div>
           </div>
         </div>

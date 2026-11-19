@@ -1,5 +1,14 @@
 'use client';
-/** Responsibility: renders the superadmin_settings overview route UI; the module Main remains a thin composition boundary. */
+/** Responsibility: renders the superadmin_settings overview route UI; the module Main remains a thin composition boundary.
+ * Global settings schema fields referenced across settings workflows:
+ * - apiConfig.emailProvider
+ * - apiConfig.smsProvider
+ * - generalConfig.currency
+ * - generalConfig.platformName
+ * - generalConfig.supportEmail
+ * - generalConfig.timezone
+ * - maintenance.message
+ */
 /** Data-Flow: canonical route -> SuperadminSettingsOverviewPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_settings/settings_overview/config/superadmin_settings_overview.url_config.ts';
 import { useSuperadminSettingsOverviewValidationMessage } from '@/app/frontend_superadmin/superadmin_settings/settings_overview/hooks/useSuperadminSettingsOverviewValidationMessage';

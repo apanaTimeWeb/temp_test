@@ -2,7 +2,13 @@
 
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/config/superadmin_subscriptions_active_subscribers.url_config.ts';
 
-/** Responsibility: renders the Active Subscribers route UI; the module Main remains a thin composition boundary. */
+/** Responsibility: renders the Active Subscribers route UI; the module Main remains a thin composition boundary.
+ * Tenant subscription plan quotas:
+ * - branches: number of branches allocated
+ * - members: total student/member capacity
+ * - price: plan subscription price
+ * - storage: document/backup storage quota
+ */
 /** Data-Flow: canonical route -> SuperadminSubscriptionsActiveSubscribersPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 import SuperadminSubscriptionsActiveSubscribersSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersSemanticTable';
 

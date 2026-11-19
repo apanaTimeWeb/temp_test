@@ -1,4 +1,5 @@
-import { redirect } from 'next/navigation';
+import SuperadminLibrariesOverviewLibraryCapacityGapFillingMain from '@/app/frontend_superadmin/superadmin_libraries/libraries_library_capacity_gap_filling/components/SuperadminLibrariesOverviewLibraryCapacityGapFillingMain';
+
 export default function LibrariesLibraryCapacityGapFillingPage() {
-  redirect('/superadmin/superadmin_libraries/libraries_overview');
+  return <SuperadminLibrariesOverviewLibraryCapacityGapFillingMain />;
 }
