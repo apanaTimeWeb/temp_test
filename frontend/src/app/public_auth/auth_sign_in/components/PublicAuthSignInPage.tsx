@@ -7,8 +7,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
-  Eye, EyeOff, BookOpen, CheckCircle, Lock,
-  Shield, Zap, Users, Sparkles, LayoutGrid, Clock,
+  Eye, EyeOff, BookOpen, Lock,
+  Shield, Zap, Users, LayoutGrid, Clock,
 } from 'lucide-react';
 import { PublicAuthBlockerOverlay, PublicAuthButtonLoader } from '@/app/public_auth/auth_sign_in/components/PublicAuthSignInLoader';
 import { usePublicAuthLoginMutation } from '@/app/public_auth/auth_sign_in/hooks/usePublicAuthSignInMutation';
@@ -60,193 +60,158 @@ const ROLES: RoleConfig[] = [
 ];
 
 const ROLE_DEST_LABEL: Record<string, string> = {
-  superadmin: 'Setup Library Profile & Platform Analytics',
-  admin: 'Branch Dashboard & Seats-Shifts-Lockers',
-  manager: 'Daily Ops, Attendance & Members',
+  superadmin: 'Multi-Branch & Platform Administration',
+  admin: 'Branch Dashboard, Seats, Shifts & Lockers',
+  manager: 'Daily Operations, Attendance & Admissions',
 };
 
 const LOGIN_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
   * { box-sizing: border-box; }
 
   .login-bg {
     background: #030712;
-    font-family: 'Inter', sans-serif;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.12) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(34, 211, 238, 0.04) 0px, transparent 50%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
 
   .dot-grid {
-    background-image: radial-gradient(rgba(99,102,241,0.12) 1px, transparent 1px);
-    background-size: 28px 28px;
+    background-image: radial-gradient(rgba(99, 102, 241, 0.12) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 80%);
+    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 80%);
   }
 
   .aurora-orb-1 {
     position: absolute;
-    width: 700px; height: 700px;
-    background: radial-gradient(ellipse, rgba(99,102,241,0.18) 0%, transparent 65%);
+    width: 650px; height: 650px;
+    background: radial-gradient(ellipse, rgba(99, 102, 241, 0.14) 0%, transparent 65%);
     border-radius: 50%;
     pointer-events: none;
-    animation: orb-float 14s ease-in-out infinite alternate;
+    animation: orb-float 16s ease-in-out infinite alternate;
   }
   .aurora-orb-2 {
     position: absolute;
     width: 500px; height: 500px;
-    background: radial-gradient(ellipse, rgba(139,92,246,0.14) 0%, transparent 65%);
+    background: radial-gradient(ellipse, rgba(139, 92, 246, 0.12) 0%, transparent 65%);
     border-radius: 50%;
     pointer-events: none;
-    animation: orb-float 18s ease-in-out infinite alternate-reverse;
-  }
-  .aurora-orb-3 {
-    position: absolute;
-    width: 400px; height: 400px;
-    background: radial-gradient(ellipse, rgba(34,211,238,0.08) 0%, transparent 65%);
-    border-radius: 50%;
-    pointer-events: none;
-    animation: orb-float 10s ease-in-out infinite alternate;
+    animation: orb-float 20s ease-in-out infinite alternate-reverse;
   }
 
   @keyframes orb-float {
-    0% { transform: translate(0,0) scale(1); }
-    100% { transform: translate(50px, 30px) scale(1.08); }
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, 24px) scale(1.06); }
   }
 
   .glass-login {
-    background: rgba(8,8,22,0.75);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border: 1px solid rgba(99,102,241,0.2);
-    box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 60px rgba(99,102,241,0.08);
+    background: rgba(11, 13, 33, 0.84);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 0 40px -10px rgba(99, 102, 241, 0.12);
   }
 
   .glass-left {
-    background: rgba(5,5,18,0.6);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-right: 1px solid rgba(99,102,241,0.1);
+    background: rgba(6, 7, 22, 0.65);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
   }
 
-  .gradient-text {
-    background: linear-gradient(135deg, #a78bfa 0%, #6366f1 40%, #22d3ee 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-
-  .shimmer-btn {
-    background: linear-gradient(90deg, #6366f1, #8b5cf6, #22d3ee, #6366f1);
-    background-size: 200% auto;
-    animation: shimmer 3s linear infinite;
-  }
-
-  .glow-indigo {
-    box-shadow: 0 0 30px rgba(99,102,241,0.5), 0 0 60px rgba(99,102,241,0.15);
+  .brand-logo-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #06b6d4 100%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 4px 14px rgba(99, 102, 241, 0.4);
+    flex-shrink: 0;
   }
 
   .input-field {
-    background: rgba(10,10,28,0.8);
-    border: 1px solid rgba(99,102,241,0.2);
-    color: #fff;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    background: rgba(14, 16, 40, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    color: #ffffff;
+    transition: all 0.2s ease;
     outline: none;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
   }
 
   .input-field::placeholder {
-    color: rgba(148,163,184,0.5);
+    color: rgba(148, 163, 184, 0.45);
   }
 
   .input-field:focus {
+    background: rgba(18, 20, 48, 0.95);
     border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.10);
   }
 
   .input-error {
     border-color: #ef4444 !important;
-    box-shadow: 0 0 0 3px rgba(239,68,68,0.1) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
   }
 
   input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 50px #0a0a1c inset !important;
-    -webkit-text-fill-color: #fff !important;
+    -webkit-box-shadow: 0 0 0 50px #0e1028 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
   }
 
   .role-tab {
-    color: rgba(148,163,184,0.7);
+    color: rgba(148, 163, 184, 0.75);
     border: 1px solid transparent;
-    transition: all 0.25s ease;
+    background: transparent;
+    transition: all 0.2s ease;
   }
 
   .role-tab:hover {
-    color: #fff;
-    background: rgba(99,102,241,0.08);
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
   }
 
   .role-tab-active {
-    background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(139,92,246,0.2));
-    border-color: rgba(99,102,241,0.4) !important;
-    color: #fff;
-    box-shadow: 0 4px 20px rgba(99,102,241,0.2);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.24), rgba(139, 92, 246, 0.18));
+    border-color: rgba(99, 102, 241, 0.40) !important;
+    color: #ffffff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 2px 10px rgba(99, 102, 241, 0.2);
   }
-
-  .feature-pill {
-    background: rgba(99,102,241,0.08);
-    border: 1px solid rgba(99,102,241,0.2);
-    transition: all 0.25s;
-  }
-
-  .feature-pill:hover {
-    background: rgba(99,102,241,0.15);
-    border-color: rgba(99,102,241,0.4);
-    transform: translateY(-2px);
-  }
-
-  @keyframes float-card {
-    0%,100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-
-  .float-card-1 { animation: float-card 6s ease-in-out infinite; }
-  .float-card-2 { animation: float-card 8s ease-in-out infinite 1s; }
-  .float-card-3 { animation: float-card 7s ease-in-out infinite 2s; }
-
-  .stat-card {
-    background: rgba(15,15,35,0.8);
-    border: 1px solid rgba(255,255,255,0.06);
-    backdrop-filter: blur(12px);
-  }
-
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #030712; }
-  ::-webkit-scrollbar-thumb { background: #2d2d5e; border-radius: 10px; }
 
   .submit-btn {
     position: relative;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #4338ca 100%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 20px -3px rgba(99, 102, 241, 0.5);
+    transition: all 0.2s ease;
     overflow: hidden;
   }
-  .submit-btn::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-    transition: left 0.5s;
+  .submit-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 10px 25px -3px rgba(99, 102, 241, 0.65);
   }
-  .submit-btn:hover::before { left: 100%; }
+  .submit-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+  }
 `;
 
 const roleIcons: Record<string, ReactNode> = {
-  superadmin: <Shield size={16} className="text-violet-400" />,
-  admin: <Zap size={16} className="text-cyan-400" />,
-  manager: <Users size={16} className="text-emerald-400" />,
+  superadmin: <Shield size={15} className="text-violet-400" />,
+  admin: <Zap size={15} className="text-cyan-400" />,
+  manager: <Users size={15} className="text-emerald-400" />,
 };
 
 const roleColors: Record<string, string> = {
-  superadmin: 'from-violet-500/20 to-purple-500/10 border-violet-500/30',
-  admin: 'from-cyan-500/20 to-blue-500/10 border-cyan-500/30',
-  manager: 'from-emerald-500/20 to-teal-500/10 border-emerald-500/30',
+  superadmin: 'from-violet-500/20 via-purple-500/10 to-transparent border-violet-500/30 text-violet-300',
+  admin: 'from-cyan-500/20 via-blue-500/10 to-transparent border-cyan-500/30 text-cyan-300',
+  manager: 'from-emerald-500/20 via-teal-500/10 to-transparent border-emerald-500/30 text-emerald-300',
 };
 
 export default function PublicAuthSignInPage() {
@@ -361,150 +326,134 @@ export default function PublicAuthSignInPage() {
   };
 
   return (
-    <main className="login-bg flex min-h-screen text-white overflow-hidden">
+    <main className="login-bg min-h-screen lg:h-screen lg:max-h-screen lg:overflow-hidden flex text-white relative">
       <style dangerouslySetInnerHTML={{ __html: LOGIN_CSS }} />
 
-      {/* Background Orbs */}
-      <div className="absolute inset-0 dot-grid opacity-50" />
-      <div className="aurora-orb-1" style={{ top: '-15%', left: '-10%' }} />
-      <div className="aurora-orb-2" style={{ bottom: '-10%', right: '-8%' }} />
-      <div className="aurora-orb-3" style={{ top: '40%', left: '30%' }} />
+      {/* Subtle Background Lighting */}
+      <div className="absolute inset-0 dot-grid opacity-35 pointer-events-none" />
+      <div className="aurora-orb-1" style={{ top: '-20%', left: '-10%' }} />
+      <div className="aurora-orb-2" style={{ bottom: '-15%', right: '-10%' }} />
 
       {/* SUCCESS / REDIRECT OVERLAY */}
       {loginSuccess && <PublicAuthBlockerOverlay />}
 
-      {/* ── LEFT BRAND PANEL ── */}
-      <section className="hidden lg:flex lg:w-[55%] flex-col justify-between p-14 relative z-10 glass-left">
-        {/* Logo */}
+      {/* ── LEFT BRAND PANEL (Desktop single-viewport fit) ── */}
+      <section className="hidden lg:flex lg:w-[52%] xl:w-[55%] flex-col justify-between p-8 xl:p-12 h-full glass-left relative z-10">
+        {/* Brand Header */}
         <div className="flex items-center gap-3">
-          <div className="relative w-11 h-11">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl blur-md opacity-80" />
-            <div className="relative w-11 h-11 bg-gradient-to-br from-indigo-500 via-indigo-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg border border-white/20">
-              <BookOpen className="w-5 h-5 text-white" />
-            </div>
-          </div>
-          <span className="text-2xl font-black tracking-tight text-white">
-            Library<span className="gradient-text">OS</span>
+          <span className="brand-logo-mark" aria-hidden="true">
+            <BookOpen size={18} strokeWidth={2.2} className="text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
+          </span>
+          <span className="text-xl font-extrabold tracking-tight text-white flex items-center">
+            <span>Library</span>
+            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">OS</span>
           </span>
         </div>
 
-        {/* Center Content */}
-        <div className="space-y-10 max-w-xl">
-          <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-bold px-4 py-2 rounded-full">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            2,400+ study libraries trust LibraryOS
+        {/* Center Content: Pure real-project operations */}
+        <div className="max-w-lg space-y-5 my-auto">
+          <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-[11px] font-semibold px-3 py-1 rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            Study Library Management System
           </div>
 
-          <div className="space-y-4">
-            <h1 className="text-5xl font-black tracking-tight leading-[1.08] text-white">
-              Welcome back to<br />
-              <span className="gradient-text">The Smartest</span><br />
-              Study Library Platform
+          <div className="space-y-2">
+            <h1 className="text-3xl xl:text-4xl font-extrabold tracking-tight text-white leading-tight">
+              Unified Operations for<br />
+              <span className="bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                Study Libraries &amp; Reading Rooms
+              </span>
             </h1>
-            <p className="text-slate-400 text-lg leading-relaxed">
-              Manage seats, shifts, lockers, biometric attendance, and fee collections — all from one powerful operating system built for modern Indian study libraries &amp; reading rooms.
+            <p className="text-slate-400 text-xs xl:text-sm leading-relaxed">
+              Complete operational management for library branches — controlling seats &amp; shifts matrix, student admissions, smart lockers, attendance logs, and daily fee settlements.
             </p>
           </div>
 
-          {/* Feature Pills */}
-          <div className="flex flex-wrap gap-3">
-            {[
-              { icon: <CheckCircle size={13} />, label: 'Seats & Shifts Matrix', color: 'text-cyan-400' },
-              { icon: <CheckCircle size={13} />, label: 'Smart ID & Biometrics', color: 'text-emerald-400' },
-              { icon: <CheckCircle size={13} />, label: 'Locker Allocation', color: 'text-violet-400' },
-              { icon: <CheckCircle size={13} />, label: 'WhatsApp Automation', color: 'text-amber-400' },
-              { icon: <CheckCircle size={13} />, label: 'Multi-Branch Network', color: 'text-rose-400' },
-              { icon: <CheckCircle size={13} />, label: 'Fee & Daily Settlement', color: 'text-indigo-400' },
-            ].map((f) => (
-              <div key={f.label} className="feature-pill flex items-center gap-2 px-4 py-2 rounded-xl cursor-default">
-                <span className={f.color}>{f.icon}</span>
-                <span className="text-xs font-semibold text-slate-300">{f.label}</span>
+          {/* 4 Core Real-System Modules */}
+          <div className="grid grid-cols-2 gap-2.5 pt-1">
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 space-y-1">
+              <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+                <LayoutGrid size={14} />
+                <span>Seats &amp; Shifts Matrix</span>
               </div>
-            ))}
-          </div>
+              <p className="text-[11px] text-slate-400 leading-normal">
+                Real-time desk occupancy, shift rosters, and vacancy management.
+              </p>
+            </div>
 
-          {/* Floating Stat Cards */}
-          <div className="relative h-36">
-            <div className="stat-card rounded-2xl p-4 absolute left-0 top-0 float-card-1 w-56">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-                  <LayoutGrid size={16} className="text-cyan-400" />
-                </div>
-                <div>
-                  <div className="text-xs text-slate-400">Study Desks Managed</div>
-                  <div className="text-xl font-black text-white">50,000+</div>
-                </div>
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 space-y-1">
+              <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
+                <Users size={14} />
+                <span>Student Admissions</span>
               </div>
+              <p className="text-[11px] text-slate-400 leading-normal">
+                New admissions, digital ID generation, and member records.
+              </p>
             </div>
-            <div className="stat-card rounded-2xl p-4 absolute left-60 top-4 float-card-2 w-56">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                  <Users size={16} className="text-emerald-400" />
-                </div>
-                <div>
-                  <div className="text-xs text-slate-400">Enrolled Students</div>
-                  <div className="text-xl font-black text-white">1.8L+</div>
-                </div>
+
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 space-y-1">
+              <div className="flex items-center gap-2 text-violet-400 font-bold text-xs">
+                <Lock size={14} />
+                <span>Locker Management</span>
               </div>
+              <p className="text-[11px] text-slate-400 leading-normal">
+                Locker allocation, key security, and plan expiry tracking.
+              </p>
             </div>
-            <div className="stat-card rounded-2xl p-4 absolute left-28 top-16 float-card-3 w-56">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-violet-500/20 flex items-center justify-center">
-                  <Clock size={16} className="text-violet-400" />
-                </div>
-                <div>
-                  <div className="text-xs text-slate-400">Daily Shift Check-ins</div>
-                  <div className="text-xl font-black text-white">85K+</div>
-                </div>
+
+            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 space-y-1">
+              <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
+                <Clock size={14} />
+                <span>Attendance &amp; Accounts</span>
               </div>
+              <p className="text-[11px] text-slate-400 leading-normal">
+                QR &amp; biometric logs, fee receipts, and daily cash settlements.
+              </p>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between">
-          <p className="text-slate-500 text-sm">&copy; {new Date().getFullYear()} LibraryOS. All rights reserved.</p>
-          <div className="flex gap-4 text-xs text-slate-500">
-            <a href="#" className="hover:text-white transition-colors">Privacy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms</a>
-          </div>
+        <div className="flex items-center justify-between text-xs text-slate-500 pt-3">
+          <p>&copy; {new Date().getFullYear()} LibraryOS. All rights reserved.</p>
+          <span className="text-[11px] text-slate-500">Enterprise Operations Portal</span>
         </div>
       </section>
 
-      {/* ── RIGHT AUTH PANEL ── */}
-      <section className="w-full lg:w-[45%] flex items-center justify-center p-6 md:p-10 relative z-10">
-        <div className="w-full max-w-md">
+      {/* ── RIGHT AUTH PANEL (Compact premium login section, NO SCROLL) ── */}
+      <section className="w-full lg:w-[48%] xl:w-[45%] flex items-center justify-center p-4 sm:p-6 lg:p-8 h-full relative z-10">
+        <div className="w-full max-w-[380px] xl:max-w-[390px]">
 
           {/* Mobile Logo */}
-          <div className="lg:hidden flex justify-center items-center gap-3 mb-10">
-            <div className="relative w-10 h-10">
-              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl blur-md opacity-70" />
-              <div className="relative w-10 h-10 bg-gradient-to-br from-indigo-500 via-indigo-600 to-cyan-500 rounded-xl flex items-center justify-center border border-white/20">
-                <BookOpen className="w-5 h-5 text-white" />
-              </div>
-            </div>
-            <span className="text-2xl font-black tracking-tight text-white">Library<span className="gradient-text">OS</span></span>
+          <div className="lg:hidden flex justify-center items-center gap-2.5 mb-5">
+            <span className="brand-logo-mark" aria-hidden="true">
+              <BookOpen size={18} strokeWidth={2.2} className="text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]" />
+            </span>
+            <span className="text-xl font-extrabold tracking-tight text-white flex items-center">
+              <span>Library</span>
+              <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">OS</span>
+            </span>
           </div>
 
-          <div className="glass-login rounded-3xl p-8 md:p-10">
+          <div className="glass-login rounded-2xl p-6 sm:p-7">
             {/* Header */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 mb-5 shadow-lg shadow-indigo-500/10">
-                <Lock size={24} className="text-indigo-400" />
+            <div className="text-center mb-4">
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500/20 via-purple-500/15 to-cyan-500/10 border border-indigo-500/30 mb-2.5 shadow-md shadow-indigo-500/10">
+                <Lock size={18} className="text-indigo-400" />
               </div>
-              <h2 className="text-3xl font-black tracking-tight mb-2 text-white">Welcome Back</h2>
-              <p className="text-slate-400 text-sm">Select your role and sign in to continue</p>
+              <h2 className="text-xl font-extrabold tracking-tight text-white">Sign In</h2>
+              <p className="text-slate-400 text-xs mt-0.5">Select your role to access your workspace</p>
             </div>
 
             {/* Non-production Demo Fill Button */}
             {demoFillEnabled && (
-              <div className="mb-5 flex justify-end">
+              <div className="mb-3 flex justify-end">
                 <button
                   data-testid="auth-login-demo-fill"
                   type="button"
                   disabled={isBusy}
                   onClick={handleDemoFill}
-                  className="rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="rounded-full border border-indigo-500/30 bg-indigo-500/15 px-3 py-0.5 text-[11px] font-semibold text-indigo-300 hover:bg-indigo-500/25 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
                 >
                   {t('COMMON.demoFill')}
                 </button>
@@ -512,7 +461,7 @@ export default function PublicAuthSignInPage() {
             )}
 
             {/* Role Selector */}
-            <div className="grid grid-cols-3 gap-2 mb-7 p-1.5 rounded-2xl" style={{ background: 'rgba(10,10,25,0.6)', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <div className="grid grid-cols-3 gap-1.5 mb-3 p-1 rounded-xl bg-[rgba(10,10,28,0.7)] border border-white/[0.08]">
               {ROLES.map((role) => {
                 const isActive = selectedRole.id === role.id;
                 return (
@@ -524,7 +473,7 @@ export default function PublicAuthSignInPage() {
                     aria-pressed={isActive}
                     disabled={isBusy}
                     onClick={() => handleRoleSelect(role)}
-                    className={`py-2.5 px-2 rounded-xl text-xs font-bold transition-all duration-300 flex flex-col items-center gap-1.5 role-tab ${isActive ? 'role-tab-active' : ''}`}
+                    className={`py-2 px-1 rounded-lg text-xs font-bold transition-all duration-200 flex flex-col items-center gap-1 role-tab cursor-pointer ${isActive ? 'role-tab-active' : ''}`}
                   >
                     <span>{roleIcons[role.id]}</span>
                     <span>{role.label}</span>
@@ -534,16 +483,16 @@ export default function PublicAuthSignInPage() {
             </div>
 
             {/* Role Info Banner */}
-            <div className={`bg-gradient-to-r ${roleColors[selectedRole.id]} border rounded-xl p-3 flex items-center gap-3 mb-6`}>
-              <span className="text-lg">{selectedRole.icon}</span>
-              <div>
-                <div className="text-xs font-black text-white">{selectedRole.label} Portal</div>
-                <div className="text-[11px] text-slate-400">Will redirect to: {ROLE_DEST_LABEL[selectedRole.id]}</div>
+            <div className={`bg-gradient-to-r ${roleColors[selectedRole.id]} border rounded-lg px-3 py-1.5 flex items-center gap-2 mb-3.5 text-xs`}>
+              <span className="text-sm shrink-0">{selectedRole.icon}</span>
+              <div className="min-w-0 flex-1">
+                <span className="font-bold text-white text-[11px] block truncate">{selectedRole.label} Portal</span>
+                <span className="text-[10px] text-slate-400 block truncate">Destination: {ROLE_DEST_LABEL[selectedRole.id]}</span>
               </div>
             </div>
 
             {/* Login Form */}
-            <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-3">
               <input
                 type="hidden"
                 data-testid="auth-login-role-value"
@@ -552,8 +501,8 @@ export default function PublicAuthSignInPage() {
               />
 
               {/* Email */}
-              <div className="space-y-1.5">
-                <label htmlFor="login-email" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+              <div className="space-y-1">
+                <label htmlFor="login-email" className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">
                   Email Address
                   <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
                   <span className="sr-only">{t('COMMON.required')}</span>
@@ -569,7 +518,7 @@ export default function PublicAuthSignInPage() {
                   {...register('email')}
                   aria-invalid={Boolean(errors.email)}
                   aria-describedby={errors.email ? 'auth-login-email-error' : undefined}
-                  className={`input-field w-full rounded-xl px-4 py-3.5 text-sm ${errors.email ? 'input-error' : ''}`}
+                  className={`input-field w-full rounded-lg px-3.5 py-2.5 text-sm ${errors.email ? 'input-error' : ''}`}
                 />
                 {errors.email && (
                   <p
@@ -584,14 +533,14 @@ export default function PublicAuthSignInPage() {
               </div>
 
               {/* Password */}
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <div className="flex justify-between items-center">
-                  <label htmlFor="login-password" className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  <label htmlFor="login-password" className="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">
                     Password
                     <span aria-hidden="true" className="ml-1 text-indigo-400">*</span>
                     <span className="sr-only">{t('COMMON.required')}</span>
                   </label>
-                  <Link href={PUBLIC_AUTH_INTERNAL_URLS.FORGOT_PASSWORD} className="text-xs text-indigo-400 font-semibold hover:text-indigo-300 transition-colors">
+                  <Link href={PUBLIC_AUTH_INTERNAL_URLS.FORGOT_PASSWORD} className="text-[11px] text-indigo-400 font-medium hover:text-indigo-300 transition-colors">
                     Forgot password?
                   </Link>
                 </div>
@@ -607,7 +556,7 @@ export default function PublicAuthSignInPage() {
                     {...register('password')}
                     aria-invalid={Boolean(errors.password)}
                     aria-describedby={errors.password ? 'auth-login-password-error' : undefined}
-                    className={`input-field w-full rounded-xl px-4 py-3.5 text-sm pr-12 ${errors.password ? 'input-error' : ''}`}
+                    className={`input-field w-full rounded-lg px-3.5 py-2.5 text-sm pr-10 ${errors.password ? 'input-error' : ''}`}
                   />
                   <button
                     type="button"
@@ -616,9 +565,9 @@ export default function PublicAuthSignInPage() {
                     aria-label={showPw ? t('PASSWORD.hide') : t('PASSWORD.show')}
                     aria-pressed={showPw}
                     onClick={() => setShowPw(!showPw)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors cursor-pointer"
                   >
-                    {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                    {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
                 </div>
                 {errors.password && (
@@ -637,7 +586,7 @@ export default function PublicAuthSignInPage() {
               {errors.root?.server?.message && (
                 <div
                   data-testid="auth-login-server-error-state"
-                  className="bg-rose-500/10 border border-rose-500/25 text-rose-300 text-sm px-4 py-3 rounded-xl flex items-start gap-2"
+                  className="bg-rose-500/10 border border-rose-500/25 text-rose-300 text-xs px-3 py-2 rounded-lg flex items-start gap-2"
                   role="alert"
                 >
                   <span className="shrink-0 mt-0.5">⚠️</span>
@@ -651,46 +600,28 @@ export default function PublicAuthSignInPage() {
                 data-testid="auth-login-submit"
                 type="submit"
                 disabled={isBusy || loginSuccess}
-                className="submit-btn shimmer-btn glow-indigo w-full text-white font-black text-sm py-4 rounded-xl transition-all active:scale-[0.98] mt-2 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+                className="submit-btn w-full text-white font-bold text-sm py-2.5 rounded-xl transition-all mt-1 flex justify-center items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isBusy || loginSuccess ? (
                   <PublicAuthButtonLoader />
                 ) : (
                   <>
-                    <Lock size={16} />
+                    <Lock size={14} />
                     <span>Sign In</span>
-                    <Sparkles size={14} />
                   </>
                 )}
               </button>
             </form>
 
-            {/* Footer Links */}
-            <div className="mt-8 pt-6 border-t border-white/5 space-y-4">
-              <p className="text-sm text-slate-400 text-center">
+            {/* Footer Link */}
+            <div className="mt-4 pt-3 border-t border-white/[0.08] text-center">
+              <p className="text-xs text-slate-400">
                 New to LibraryOS?{' '}
-                <Link href={PUBLIC_AUTH_INTERNAL_URLS.SIGNUP} className="text-indigo-400 font-bold hover:text-indigo-300 transition-colors">
+                <Link href={PUBLIC_AUTH_INTERNAL_URLS.SIGNUP} className="text-indigo-400 font-semibold hover:text-indigo-300 transition-colors">
                   Create an account
                 </Link>
               </p>
-              <p className="text-xs text-slate-500 text-center">
-                Protected by enterprise-grade SSL encryption
-              </p>
             </div>
-          </div>
-
-          {/* Trust Badges */}
-          <div className="flex items-center justify-center gap-6 mt-6">
-            {[
-              { icon: <Shield size={13} />, label: 'SSL Secured' },
-              { icon: <Zap size={13} />, label: '99.9% Uptime' },
-              { icon: <CheckCircle size={13} />, label: 'GDPR Compliant' },
-            ].map((badge) => (
-              <div key={badge.label} className="flex items-center gap-1.5 text-slate-500 text-xs">
-                <span className="text-indigo-400/60">{badge.icon}</span>
-                {badge.label}
-              </div>
-            ))}
           </div>
         </div>
       </section>

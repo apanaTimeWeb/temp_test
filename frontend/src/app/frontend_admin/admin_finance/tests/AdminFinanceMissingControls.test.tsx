@@ -293,6 +293,6 @@ describe('AdminFinanceReferrals Controls & Redeem Modal', () => {
     const submitBtn = screen.getByRole('button', { name: /Confirm Disbursement/i });
     fireEvent.click(submitBtn);
 
-    expect(handleConfirm).toHaveBeenCalledWith(1, 20000, 'fee_adjustment', expect.any(String));
+    expect(handleConfirm).toHaveBeenCalledWith(1, 20000, 'fee_adjustment', expect.any(String), expect.anything());
   });
 });

@@ -343,10 +343,11 @@ export function AdminFinanceReferralsRedeemModal({
             <button
               type="submit"
               data-testid="admin-confirm-referral-disbursement-btn"
+              aria-label="Confirm Disbursement & Generate Voucher"
               className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 text-xs font-semibold shadow-xs transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
             >
               <CheckCircle2 className="h-4 w-4" />
-              <span>Confirm & Generate Voucher</span>
+              <span>Confirm Disbursement & Generate Voucher</span>
             </button>
           </div>
         </form>
