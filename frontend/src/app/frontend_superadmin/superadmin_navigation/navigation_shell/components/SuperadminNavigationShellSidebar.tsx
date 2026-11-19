@@ -60,14 +60,14 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
               className="text-white transition-transform duration-300 group-hover:scale-110 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
             />
           </span>
-          <div className="flex items-center gap-1.5 min-w-0">
+          <div className="flex flex-col min-w-0 justify-center">
             <span className="sa-sidebar-brand-name flex items-center leading-none text-white font-extrabold tracking-tight text-base sm:text-[17px]">
               <span>Library</span>
               <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">
                 OS
               </span>
             </span>
-            <span className="text-[9px] font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 border border-amber-400/30 rounded px-1.5 py-0.5 shrink-0 whitespace-nowrap">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 leading-none mt-1">
               Super Admin
             </span>
           </div>

@@ -4,6 +4,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import messages from '@/app/frontend_admin/admin_settings/settings_profile/locales/admin_settings_profile_en.json';
 import AdminSettingsProfileReadOnlyPanels from '@/app/frontend_admin/admin_settings/settings_profile/components/AdminSettingsProfileReadOnlyPanels';
+import { ADMIN_PROFILE_NAVIGATION_ITEMS } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config';
 
 const { toastMock } = vi.hoisted(() => {
   const toastMock = { info: vi.fn(), error: vi.fn(), success: vi.fn() };
@@ -68,5 +69,12 @@ describe('AdminSettingsProfileReadOnlyPanels SuperAdmin SaaS Plan & Branch Entit
     // Profile overview should render without the subscription plan section
     expect(screen.queryByTestId('admin-superadmin-plan-section')).toBeNull();
     expect(screen.getByText('Verified Administrator')).toBeTruthy();
+  });
+
+  it('places Platform Subscription directly below Profile Overview in navigation items', () => {
+    expect(ADMIN_PROFILE_NAVIGATION_ITEMS[0].id).toBe('profile');
+    expect(ADMIN_PROFILE_NAVIGATION_ITEMS[1].id).toBe('subscription');
+    expect(ADMIN_PROFILE_NAVIGATION_ITEMS[1].label).toBe('Platform Subscription');
+    expect(ADMIN_PROFILE_NAVIGATION_ITEMS[1].labelKey).toBe('NAV_SUBSCRIPTION');
   });
 });
