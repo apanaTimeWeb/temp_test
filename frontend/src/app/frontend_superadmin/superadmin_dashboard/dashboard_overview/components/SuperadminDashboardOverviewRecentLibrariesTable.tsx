@@ -51,7 +51,10 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
           <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shrink-0 shadow-xs">
             {p.data?.initials}
           </div>
-          <span className="font-semibold text-white text-sm">{p.data?.name}</span>
+          <div>
+            <span className="font-semibold text-white text-sm block leading-tight">{p.data?.name}</span>
+            {p.data?.city && <span className="text-[11px] text-slate-400 block mt-0.5">{p.data.city}</span>}
+          </div>
         </div>
       ),
     },
@@ -59,18 +62,35 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
       headerName: t('COPY.OWNER'),
       field: 'owner',
       flex: 1.5,
-      minWidth: 130,
+      minWidth: 140,
       cellRenderer: (p: ICellRendererParams<Library>) => (
-        <span className="text-slate-300 text-xs sm:text-sm">{p.data?.owner}</span>
+        <span className="text-slate-200 text-xs sm:text-sm font-medium">{p.data?.owner}</span>
       ),
+    },
+    {
+      headerName: 'Branches',
+      field: 'branches' as keyof Library,
+      flex: 1.1,
+      minWidth: 120,
+      cellRenderer: (p: ICellRendererParams<Library>) => {
+        const count = p.data?.branches ?? 1;
+        return (
+          <div className="flex items-center gap-1.5">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+              <Building2 size={12} className="text-indigo-400" />
+              <span>{count} {count > 1 ? 'Branches' : 'Branch'}</span>
+            </span>
+          </div>
+        );
+      },
     },
     {
       headerName: t('COPY.STUDENTS'),
       field: 'students',
-      flex: 0.8,
-      minWidth: 90,
+      flex: 0.9,
+      minWidth: 100,
       cellRenderer: (p: ICellRendererParams<Library>) => (
-        <span className="font-bold text-white text-xs sm:text-sm">{p.data?.students?.toLocaleString() ?? 0}</span>
+        <span className="font-bold text-white text-xs sm:text-sm">{p.data?.students?.toLocaleString() ?? 0} seats</span>
       ),
     },
     {
@@ -118,6 +138,23 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
         if (value === '1 month ago') return <span className="text-xs text-slate-400">{t('COPY.ONE_MONTH_AGO')}</span>;
         return <span className="text-xs text-slate-400">{value || t('COPY.ILLUSTRATIVE_TIME')}</span>;
       },
+    },
+    {
+      headerName: 'Action',
+      field: 'name',
+      flex: 0.8,
+      minWidth: 90,
+      sortable: false,
+      filter: false,
+      cellRenderer: (p: ICellRendererParams<Library>) => (
+        <Link
+          href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES}
+          className="inline-flex min-h-8 px-2.5 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs"
+          title={`Manage ${p.data?.name}`}
+        >
+          <span>Manage</span>
+        </Link>
+      ),
     },
   ], [t]);
 

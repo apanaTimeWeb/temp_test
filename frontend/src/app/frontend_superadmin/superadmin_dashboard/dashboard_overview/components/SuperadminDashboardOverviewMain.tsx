@@ -1,7 +1,7 @@
 'use client';
 /** Responsibility: Superadmin Dashboard Main; owns the dashboard route composition boundary and responsive layout. */
 import Link from 'next/link';
-import { Activity, LayoutDashboard, ShieldCheck, RefreshCw, AlertCircle } from 'lucide-react';
+import { Activity, LayoutDashboard, ShieldCheck, RefreshCw, AlertCircle, Building2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import SuperadminDashboardOverviewKpiCard from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewKpiCard';
 import SuperadminDashboardOverviewSystemHealthPanel from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewSystemHealthPanel';
@@ -77,11 +77,19 @@ export default function SuperadminDashboardOverviewMain() {
 
             <Link
               href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.AUDIT_LOGS}
-              className="inline-flex items-center gap-1.5 min-h-10 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/50 transition-all hover:scale-[1.02] cursor-pointer"
+              className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
               data-testid="superadmin-dashboard-dashboard_overview-link-1"
             >
-              <Activity size={15} className="text-white" />
+              <Activity size={14} className="text-indigo-400" />
               <span>{t('COPY.VIEW_AUDIT_LOGS')}</span>
+            </Link>
+
+            <Link
+              href={SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES_ONBOARDING}
+              className="inline-flex items-center gap-1.5 min-h-10 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs font-bold shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              <Building2 size={15} className="text-white" />
+              <span>Onboard Tenant</span>
             </Link>
           </div>
         </div>

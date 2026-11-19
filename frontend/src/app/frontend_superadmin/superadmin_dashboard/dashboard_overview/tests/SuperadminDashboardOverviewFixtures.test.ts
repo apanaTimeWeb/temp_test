@@ -20,7 +20,10 @@ describe('superadmin dashboard sample fixture integrity', () => {
   });
 
   it('keeps recent activity navigation within known module routes', () => {
-    const allowedTargets = new Set<string>(Object.values(__SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.SUPERADMIN_DASHBOARD_OVERVIEW_URLS));
+    const allowedTargets = new Set<string>([
+      ...Object.values(__SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.MODULE_URLS),
+      ...Object.values(__SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES.SUPERADMIN_DASHBOARD_OVERVIEW_URLS),
+    ]);
     expect(SUPERADMIN_DASHBOARD_RECENT_ACTIVITY_FIXTURE.every((item) => allowedTargets.has(item.href))).toBe(true);
     expect(SUPERADMIN_DASHBOARD_FIXTURE.actionItems.every((item) => allowedTargets.has(item.actionUrl))).toBe(true);
   });

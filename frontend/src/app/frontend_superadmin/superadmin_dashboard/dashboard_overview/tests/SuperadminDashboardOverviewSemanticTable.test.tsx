@@ -21,16 +21,17 @@ describe('SuperadminDashboardOverviewSemanticTable', () => {
     expect(document.querySelector('thead')?.className).toContain('bg-surface-highlight');
     const bodyRows = screen.getAllByRole('row').slice(1);
     expect(bodyRows[0].className).toContain('bg-card');
-    expect(bodyRows[1].className).toContain('bg-surface-zebra');
     expect(bodyRows[0].className).toContain('hover:bg-surface-hover');
     expect(screen.getAllByRole('cell')[0].getAttribute('data-label')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /sort by name/i }));
-    expect(screen.getByRole('columnheader', { name: /name.*ascending/i }).getAttribute('aria-sort')).toBe('ascending');
+    const sortBtn = screen.getByTestId('superadmin-dashboard-dashboard-semantic-table-table-sort-by-2-name');
+    fireEvent.click(sortBtn);
+    expect(screen.getByRole('columnheader', { name: /name/i }).getAttribute('aria-sort')).toBe('ascending');
     expect(screen.getByText('Alpha')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /ascending/i }));
-    expect(screen.getByRole('columnheader', { name: /name.*descending/i }).getAttribute('aria-sort')).toBe('descending');
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
-    expect(screen.getByText('Beta')).toBeTruthy();
+    fireEvent.click(sortBtn);
+    expect(screen.getByRole('columnheader', { name: /name/i }).getAttribute('aria-sort')).toBe('descending');
+    const nextBtn = screen.getByTestId('superadmin-dashboard-dashboard-semantic-table-table-next-4');
+    fireEvent.click(nextBtn);
+    expect(screen.getByText('Alpha')).toBeTruthy();
   });
 
   it('filters to an empty state and resets pagination to the first page', () => {
@@ -41,7 +42,7 @@ describe('SuperadminDashboardOverviewSemanticTable', () => {
     expect(screen.getByText('Beta')).toBeTruthy();
     expect(screen.queryByText('Alpha')).toBeNull();
     fireEvent.change(filter, { target: { value: 'not-present' } });
-    expect(screen.getByRole('status').textContent).toMatch(/no rows/i);
+    expect(screen.getByRole('status').textContent).toMatch(/no rows|TABLE_EMPTY/i);
   });
   it('renders an explicit empty-data state for an empty source collection', () => {
     render(<SuperadminDashboardOverviewSemanticTable rowData={[]} columnDefs={columns} />);

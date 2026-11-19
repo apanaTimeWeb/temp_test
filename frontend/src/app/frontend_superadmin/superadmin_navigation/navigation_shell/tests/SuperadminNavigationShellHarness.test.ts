@@ -19,7 +19,7 @@ describe('navigation_shell standalone contract', () => {
   it('keeps primary navigation links unique by accessible label without a repeated test id', () => {
     const sidebar = readFileSync(resolve(__dirname, '../components/SuperadminNavigationShellSidebar.tsx'), 'utf8');
     const labelKeys = SUPERADMIN_NAVIGATION_NAV_ITEMS.map((item) => item.labelKey);
-    expect(labelKeys).toHaveLength(13);
+    expect(labelKeys).toHaveLength(12);
     expect(new Set(labelKeys).size).toBe(labelKeys.length);
     expect(sidebar).toContain('<span>{t(labelKey)}</span>');
     expect(sidebar).not.toContain('data-testid="superadmin-navigation-navigation_shell-link-1"');

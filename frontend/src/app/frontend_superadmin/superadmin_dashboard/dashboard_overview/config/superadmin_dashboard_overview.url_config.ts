@@ -5,6 +5,7 @@ const SUPERADMIN_DASHBOARD_URLS = {
   PAGE: '/superadmin/superadmin_dashboard',
   AUDIT_LOGS: '/superadmin/superadmin_system/audit_logs',
   LIBRARIES: '/superadmin/superadmin_libraries',
+  LIBRARIES_ONBOARDING: '/superadmin/superadmin_libraries/libraries_onboarding_setup',
   SUBSCRIPTIONS: '/superadmin/superadmin_subscriptions',
   SUPPORT_TICKETS: '/superadmin/superadmin_support',
   SYSTEM_HEALTH: '/superadmin/superadmin_system/system_health_overview',

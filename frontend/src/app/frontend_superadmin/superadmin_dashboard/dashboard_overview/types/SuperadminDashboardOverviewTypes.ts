@@ -71,6 +71,8 @@ export interface SuperadminDashboardRecentLibrary {
   initials: string;
   name: string;
   owner: string;
+  branches?: number;
+  city?: string;
   students: number;
   status: 'active' | 'setup' | 'inactive';
   plan: string;

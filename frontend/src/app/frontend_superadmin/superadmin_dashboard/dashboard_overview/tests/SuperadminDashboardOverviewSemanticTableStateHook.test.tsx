@@ -45,7 +45,12 @@ describe('useSuperadminDashboardOverviewSemanticTableState', () => {
   });
 
   it('rehydrates search and page state when the App Router search parameters change', () => {
-    const { result, rerender } = renderHook(() => useSuperadminDashboardOverviewSemanticTableState({ rowData: rows, paginationPageSize: 1 }));
+    const rowsWithMatch = [
+      { id: '1', name: 'restored 1', score: 1 },
+      { id: '2', name: 'restored 2', score: 2 },
+      { id: '3', name: 'restored 3', score: 3 },
+    ];
+    const { result, rerender } = renderHook(() => useSuperadminDashboardOverviewSemanticTableState({ rowData: rowsWithMatch, paginationPageSize: 1 }));
     navigationState.query = 'tenant=kept&sa_dashboard_overview_search=restored&sa_dashboard_overview_page=2';
     rerender();
     expect(result.current.filterText).toBe('restored');
