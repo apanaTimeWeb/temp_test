@@ -1,8 +1,13 @@
 // RESPONSIBILITY: Define source-level test coverage for system audit logs using declared fixtures/contracts; it does not claim host runtime execution.
 // FLOW: Test runner -> superadmin_system/system_audit_logs/tests/SuperadminAuditLogsMockScenarioCatalog.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_AUDIT_LOGS_CANONICAL_SCENARIOS } from '../mocks/scenarios/SuperadminAuditLogsOverviewaudit_logs.MockScenarios';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('audit_logs canonical mock scenario catalog', () => {
   it('declares the required eight scenario states without inventing backend contracts', () => {
@@ -26,7 +31,7 @@ describe('audit_logs canonical mock scenario catalog', () => {
 
 describe('RBG source-coverage assertions', () => {
   it('keeps declared rendered field identifiers present in the owning PageClient source', () => {
-    const pageSource = readFileSync(new URL('../components/SuperadminAuditLogsOverviewPageClient.tsx', import.meta.url), 'utf8');
+    const pageSource = readFileSync(resolve(__dirname, '../components/SuperadminAuditLogsOverviewPageClient.tsx'), 'utf8');
     const renderedFields = ["action", "id", "ip", "target", "time", "user"];
     expect(renderedFields.length).toBeGreaterThan(0);
     for (const field of renderedFields) expect(pageSource).toContain(field);

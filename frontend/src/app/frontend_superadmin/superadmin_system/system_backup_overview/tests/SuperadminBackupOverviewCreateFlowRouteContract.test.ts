@@ -3,4 +3,4 @@
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_SYSTEM_BACKUP_OVERVIEW_ROUTES as __SUPERADMIN_SYSTEM_BACKUP_OVERVIEW_ROUTES } from "@/app/frontend_superadmin/superadmin_system/system_backup_overview/config/superadmin_backup_overview.url_config";
 
-describe('backup_create_flow route contract', () => { it('owns its canonical refreshable route', () => { expect(__SUPERADMIN_SYSTEM_BACKUP_OVERVIEW_ROUTES.SUPERADMIN_BACKUP_OVERVIEW_URLS.PAGE).toBe('/superadmin/superadmin_system/backup_overview?view=create'); expect(__SUPERADMIN_SYSTEM_BACKUP_OVERVIEW_ROUTES.SUPERADMIN_BACKUP_OVERVIEW_URLS.SCREEN).toBe(__SUPERADMIN_SYSTEM_BACKUP_OVERVIEW_ROUTES.SUPERADMIN_BACKUP_OVERVIEW_URLS.PAGE); }); });
+describe('backup_create_flow route contract', () => { it('owns its canonical refreshable route', () => { expect(__SUPERADMIN_SYSTEM_BACKUP_OVERVIEW_ROUTES.SUPERADMIN_BACKUP_CREATE_URLS.PAGE).toBe('/superadmin/superadmin_system/backup_overview?view=create'); expect(__SUPERADMIN_SYSTEM_BACKUP_OVERVIEW_ROUTES.SUPERADMIN_BACKUP_CREATE_URLS.SCREEN).toBe(__SUPERADMIN_SYSTEM_BACKUP_OVERVIEW_ROUTES.SUPERADMIN_BACKUP_CREATE_URLS.PAGE); }); });

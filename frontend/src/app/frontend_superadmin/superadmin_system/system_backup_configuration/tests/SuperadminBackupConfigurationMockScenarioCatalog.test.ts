@@ -1,8 +1,13 @@
 // RESPONSIBILITY: Define source-level test coverage for system backup configuration using declared fixtures/contracts; it does not claim host runtime execution.
 // FLOW: Test runner -> superadmin_system/system_backup_configuration/tests/SuperadminBackupConfigurationMockScenarioCatalog.test.ts -> module-local test harness/fixtures -> assertions and regression evidence.
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_BACKUP_CONFIGURATION_CANONICAL_SCENARIOS } from '../mocks/scenarios/SuperadminBackupConfigurationbackup_configuration.MockScenarios';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 describe('backup_configuration canonical mock scenario catalog', () => {
   it('declares the required eight scenario states without inventing backend contracts', () => {
@@ -26,7 +31,7 @@ describe('backup_configuration canonical mock scenario catalog', () => {
 
 describe('RBG source-coverage assertions', () => {
   it('keeps declared rendered field identifiers present in the owning PageClient source', () => {
-    const pageSource = readFileSync(new URL('../components/SuperadminBackupConfigurationPageClient.tsx', import.meta.url), 'utf8');
+    const pageSource = readFileSync(resolve(__dirname, '../components/SuperadminBackupConfigurationPageClient.tsx'), 'utf8');
     const renderedFields = ["COPY.BACKUP_MANAGER", "COPY.TOTAL_BACKUPS", "COPY.SUCCESSFUL_SAMPLE", "COPY.FAILED_SAMPLE", "COPY.AUTOMATIC_BACKUP_SCHEDULE", "COPY.ENABLE_NIGHTLY_BACKUPS", "COPY.BACKUP_TIME_24HR", "COPY.RETENTION_PERIOD_DAYS", "COPY.CLOUD_PROVIDER", "COPY.SAVE_SCHEDULE", "COPY.SAVE_CLOUD_CONFIG"];
     expect(renderedFields.length).toBeGreaterThan(0);
     for (const field of renderedFields) expect(pageSource).toContain(field);

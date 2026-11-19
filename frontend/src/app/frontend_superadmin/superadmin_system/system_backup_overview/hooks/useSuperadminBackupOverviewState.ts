@@ -17,8 +17,9 @@ const SUPERADMIN_NAVIGATION_ROUTES = {
  * @returns The module-owned state/actions or utility result consumed by the caller.
  */
 export function useSuperadminBackupOverviewState(initialTab: SuperadminBackupTab = 'create') {
-  const [activeTab] = useState<SuperadminBackupTab>(initialTab);
+  const [activeTab, setActiveTabState] = useState<SuperadminBackupTab>(initialTab);
   const setActiveTab = useCallback((tab: SuperadminBackupTab) => {
+    setActiveTabState(tab);
     const routes: Record<SuperadminBackupTab, string> = { create: SUPERADMIN_NAVIGATION_ROUTES.backup_overview__create, history: SUPERADMIN_NAVIGATION_ROUTES.backup_history, restore: SUPERADMIN_NAVIGATION_ROUTES.backup_history__restore, schedule: SUPERADMIN_NAVIGATION_ROUTES.backup_schedules };
     const target = new URL(routes[tab], window.location.origin); const query = new URLSearchParams(window.location.search); query.delete('view'); query.forEach((value, key) => { if (!target.searchParams.has(key)) target.searchParams.append(key, value); }); window.location.assign(target.pathname + target.search + target.hash);
   }, []);
