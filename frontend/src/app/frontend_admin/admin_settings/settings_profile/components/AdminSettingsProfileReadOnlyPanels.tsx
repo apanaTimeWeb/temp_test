@@ -1,11 +1,11 @@
 'use client';
 // RESPONSIBILITY: Owns the profile overview, login-history, and sessions read-only presentation states.
 
-import { ArrowDown, ArrowUp, ArrowUpDown, Camera, LogOut, Mail, MonitorSmartphone, Phone, ShieldCheck, CheckCircle2, Building2, Sparkles, Clock, Globe, Shield } from 'lucide-react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Camera, LogOut, Mail, MonitorSmartphone, Phone, ShieldCheck, CheckCircle2, Building2, Sparkles, Clock, Globe, Shield, Crown, Zap, Layers, Armchair, MessageSquare, Users, FileText } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { ADMIN_PROFILE_DEMO_ACCOUNT, ADMIN_PROFILE_DEMO_LOGIN_HISTORY, ADMIN_PROFILE_DEMO_SESSIONS } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
+import { ADMIN_PROFILE_DEMO_ACCOUNT, ADMIN_PROFILE_DEMO_LOGIN_HISTORY, ADMIN_PROFILE_DEMO_SESSIONS, ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION } from '@/app/frontend_admin/admin_settings/settings_profile/mocks/AdminSettingsProfileFixtures';
 import type { AdminSettingsProfileReadOnlyPanelsProps } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 
 /**
@@ -182,6 +182,222 @@ export default function AdminSettingsProfileReadOnlyPanels({ view }: AdminSettin
             </div>
           </div>
         </div>
+
+        {/* SuperAdmin SaaS Platform Subscription & Branch Plan Section */}
+        <section
+          className="relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0b0c22] via-[#0e1030] to-[#080918] p-6 shadow-xl sm:p-8"
+          aria-labelledby="superadmin-saas-plan-title"
+          data-testid="admin-superadmin-plan-section"
+        >
+          {/* Background Ambient Glow */}
+          <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-indigo-500/15 blur-3xl" aria-hidden="true" />
+          <div className="pointer-events-none absolute -left-16 -bottom-16 h-64 w-64 rounded-full bg-purple-500/10 blur-3xl" aria-hidden="true" />
+
+          {/* Section Header */}
+          <div className="relative flex flex-col gap-4 border-b border-indigo-500/20 pb-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/30">
+                <Crown size={24} strokeWidth={2.2} />
+              </div>
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 border border-indigo-500/30 px-2.5 py-0.5 rounded-full">
+                    SuperAdmin SaaS License
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Active Plan • Auto-Renew Enabled
+                  </span>
+                </div>
+                <h2 id="superadmin-saas-plan-title" className="text-xl sm:text-2xl font-extrabold text-white">
+                  {ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.planName}
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-400">
+                  Purchased from <strong className="text-indigo-300">{ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.provider}</strong> to operate and govern library branches.
+                </p>
+              </div>
+            </div>
+
+            {/* Price & Renewal Badge */}
+            <div className="flex flex-col sm:items-end gap-1 shrink-0 rounded-xl bg-white/[0.03] border border-white/5 p-3.5">
+              <span className="text-xs text-slate-400 font-medium">Subscription Fee</span>
+              <span className="text-lg sm:text-xl font-extrabold text-white font-mono">
+                {ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.priceFormatted}
+              </span>
+              <span className="text-[11px] font-medium text-amber-400 flex items-center gap-1">
+                <Clock size={12} /> Valid till {ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.expiryDate} ({ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.daysRemaining} days left)
+              </span>
+            </div>
+          </div>
+
+          {/* Plan Contract Meta Row */}
+          <div className="relative mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3.5 flex items-center gap-3">
+              <div className="h-9 w-9 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0">
+                <ShieldCheck size={18} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] text-slate-400 uppercase font-semibold">License Key</p>
+                <p className="text-xs font-mono font-bold text-white truncate">{ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.licenseKey}</p>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3.5 flex items-center gap-3">
+              <div className="h-9 w-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                <CheckCircle2 size={18} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] text-slate-400 uppercase font-semibold">SLA Guarantee</p>
+                <p className="text-xs font-semibold text-white truncate">{ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.slaUptime}</p>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3.5 flex items-center gap-3">
+              <div className="h-9 w-9 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center shrink-0">
+                <Zap size={18} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] text-slate-400 uppercase font-semibold">Billing Mode</p>
+                <p className="text-xs font-semibold text-white truncate">{ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.billingCycle} • Purchased {ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.purchasedDate}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Quotas & Entitlement Progress Bars */}
+          <div className="relative mt-6">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
+              <Layers size={14} className="text-indigo-400" />
+              SaaS Quota & Resource Entitlements
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+              {/* Branch Quota */}
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-2">
+                    <span className="text-slate-400 font-medium flex items-center gap-1.5">
+                      <Building2 size={13} className="text-indigo-400" /> Branch Licenses
+                    </span>
+                    <span className="font-bold text-white font-mono">
+                      {ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.branches.used}/{ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.branches.total}
+                    </span>
+                  </div>
+                  <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
+                      style={{ width: `${(ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.branches.used / ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.branches.total) * 100}%` }}
+                    />
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-400 mt-2">2 branch slots available</p>
+              </div>
+
+              {/* Seats Quota */}
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-2">
+                    <span className="text-slate-400 font-medium flex items-center gap-1.5">
+                      <Armchair size={13} className="text-sky-400" /> Total Seats Allotted
+                    </span>
+                    <span className="font-bold text-white font-mono">
+                      {ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.seats.used}/{ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.seats.total}
+                    </span>
+                  </div>
+                  <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-sky-500 to-indigo-500 rounded-full"
+                      style={{ width: `${(ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.seats.used / ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.seats.total) * 100}%` }}
+                    />
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-400 mt-2">120 seats headroom</p>
+              </div>
+
+              {/* WhatsApp Messages Quota */}
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-2">
+                    <span className="text-slate-400 font-medium flex items-center gap-1.5">
+                      <MessageSquare size={13} className="text-emerald-400" /> WhatsApp / SMS API
+                    </span>
+                    <span className="font-bold text-white font-mono">
+                      {ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.messages.used.toLocaleString()}/{ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.messages.total.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full"
+                      style={{ width: `${(ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.messages.used / ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.messages.total) * 100}%` }}
+                    />
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-400 mt-2">1,550 messages remaining</p>
+              </div>
+
+              {/* Staff Accounts Quota */}
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-2">
+                    <span className="text-slate-400 font-medium flex items-center gap-1.5">
+                      <Users size={13} className="text-purple-400" /> Staff & Managers
+                    </span>
+                    <span className="font-bold text-white font-mono">
+                      {ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.staff.used}/{ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.staff.total}
+                    </span>
+                  </div>
+                  <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                      style={{ width: `${(ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.staff.used / ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.quotas.staff.total) * 100}%` }}
+                    />
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-400 mt-2">8 account slots open</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Included Features List */}
+          <div className="relative mt-6 pt-5 border-t border-white/10">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
+              <Sparkles size={14} className="text-amber-400" />
+              Features Granted by SuperAdmin
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              {ADMIN_SUPERADMIN_SAAS_SUBSCRIPTION.features.map((feat) => (
+                <div key={feat} className="flex items-center gap-2 text-xs text-slate-300 bg-white/[0.02] border border-white/5 rounded-lg px-3 py-2">
+                  <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                  <span>{feat}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Action Footer */}
+          <div className="relative mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+            <div className="text-xs text-slate-400">
+              Need more branches or extra seat capacity? Contact SuperAdmin for custom enterprise scaling.
+            </div>
+            <div className="flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => toast.success('Downloading SuperAdmin SaaS Invoice #INV-2026-092...')}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all cursor-pointer"
+              >
+                <FileText size={14} />
+                <span>Download Invoice</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => toast.success('Upgrade request sent to SuperAdmin! Our team will contact you shortly.')}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 rounded-xl shadow-md shadow-indigo-500/25 transition-all cursor-pointer"
+              >
+                <Crown size={14} />
+                <span>Contact SuperAdmin to Upgrade</span>
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
