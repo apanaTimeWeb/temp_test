@@ -3,11 +3,11 @@
 import { useCallback } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { AdminSecurityTab } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
-const TABS: readonly AdminSecurityTab[] = ['dashboard', 'login-security', 'active-sessions', 'failed-logins', 'blocked-users', 'device-sessions', 'events', 'audit-trail'];
+const TABS: readonly AdminSecurityTab[] = ['active-sessions', 'login-security', 'device-sessions', 'failed-logins', 'blocked-users', 'events', 'audit-trail'];
 export default function useAdminSecurityTabState() {
   const router = useRouter(); const pathname = usePathname(); const searchParams = useSearchParams();
   const value = searchParams.get('view');
-  const activeTab: AdminSecurityTab = TABS.includes(value as AdminSecurityTab) ? value as AdminSecurityTab : 'dashboard';
+  const activeTab: AdminSecurityTab = TABS.includes(value as AdminSecurityTab) ? value as AdminSecurityTab : 'active-sessions';
   const setActiveTab = useCallback((tab: AdminSecurityTab) => { const next = new URLSearchParams(searchParams.toString()); next.set('view', tab); router.push(`${pathname}?${next.toString()}`, { scroll: false }); }, [pathname, router, searchParams]);
   return [activeTab, setActiveTab] as const;
 }

@@ -357,35 +357,35 @@ export default function ManagerAccountsSeatGapReportPage({ view, id }: ManagerAc
         </div>
 
         {/* Average Gap Days */}
-        <div className="group relative overflow-hidden p-5 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-cyan-500/40 bg-gradient-to-br from-cyan-950/80 via-[#0e2540] to-cyan-900/60 shadow-lg shadow-cyan-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-cyan-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
           <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+            <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
           <div className="relative z-10">
-            <p className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+            <p className="text-xs font-semibold text-cyan-300 uppercase tracking-wider">
               {tManagerUi('avg_gap_days')}
             </p>
-            <p className="text-2xl sm:text-3xl font-extrabold text-white mt-1 font-sans">{avgGapDays} Days</p>
-            <span className="text-[11px] text-slate-400 font-medium">Mean vacancy duration</span>
+            <p className="text-2xl sm:text-3xl font-extrabold text-cyan-400 mt-1 font-sans">{avgGapDays} Days</p>
+            <span className="text-[11px] text-cyan-200/70 font-medium">Mean vacancy duration</span>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
+          <div className="w-11 h-11 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <Clock size={22} />
           </div>
         </div>
 
         {/* Under Maintenance */}
-        <div className="group relative overflow-hidden p-5 rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0e2540] to-sky-900/60 shadow-lg shadow-sky-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
+        <div className="group relative overflow-hidden p-5 rounded-2xl border border-purple-500/40 bg-gradient-to-br from-purple-950/80 via-[#24133f] to-purple-900/60 shadow-lg shadow-purple-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-purple-400/60 hover:shadow-xl flex items-center justify-between cursor-default select-none">
           <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" />
+            <path d="M0,30 Q20,10 45,22 T90,12 T130,18 T150,8" fill="none" stroke="#c084fc" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
           <div className="relative z-10">
-            <p className="text-xs font-semibold text-sky-400 uppercase tracking-wider">
+            <p className="text-xs font-semibold text-purple-300 uppercase tracking-wider">
               {tManagerUi('under_maintenance')}
             </p>
-            <p className="text-2xl sm:text-3xl font-extrabold text-sky-400 mt-1 font-sans">{maintenanceCount}</p>
-            <span className="text-[11px] text-slate-400 font-medium">Temporarily unavailable</span>
+            <p className="text-2xl sm:text-3xl font-extrabold text-purple-300 mt-1 font-sans">{maintenanceCount}</p>
+            <span className="text-[11px] text-purple-200/70 font-medium">Temporarily unavailable</span>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
+          <div className="w-11 h-11 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/40 flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 shadow-xs relative z-10">
             <Wrench size={22} />
           </div>
         </div>

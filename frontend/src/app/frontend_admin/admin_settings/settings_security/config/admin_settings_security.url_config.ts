@@ -46,12 +46,11 @@ export interface AdminSecurityNavigationItem {
 
 /** Navigation is owned by this feature; labels resolve in the ADMIN_SECURITY catalog. */
 export const ADMIN_SECURITY_NAV_ITEMS: readonly AdminSecurityNavigationItem[] = [
-  { id: 'dashboard', labelKey: 'NAV_DASHBOARD', icon: Shield },
-  { id: 'login-security', labelKey: 'NAV_LOGIN_SECURITY', icon: KeyRound },
   { id: 'active-sessions', labelKey: 'NAV_ACTIVE_SESSIONS', icon: MonitorSmartphone },
+  { id: 'login-security', labelKey: 'NAV_LOGIN_SECURITY', icon: KeyRound },
+  { id: 'device-sessions', labelKey: 'NAV_DEVICE_SESSIONS', icon: Laptop },
   { id: 'failed-logins', labelKey: 'NAV_FAILED_LOGINS', icon: XOctagon },
   { id: 'blocked-users', labelKey: 'NAV_BLOCKED_USERS', icon: Ban },
-  { id: 'device-sessions', labelKey: 'NAV_DEVICE_SESSIONS', icon: Laptop },
   { id: 'events', labelKey: 'NAV_EVENTS', icon: BellRing },
   { id: 'audit-trail', labelKey: 'NAV_AUDIT_TRAIL', icon: ShieldAlert },
 ] as const;

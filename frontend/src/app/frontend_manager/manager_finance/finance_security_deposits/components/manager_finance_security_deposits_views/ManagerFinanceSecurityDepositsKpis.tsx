@@ -22,27 +22,27 @@ export function ManagerFinanceSecurityDepositsKpis({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Active Escrow Pool */}
-      <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/60 hover:shadow-xl flex flex-col justify-between">
+      <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/40 bg-gradient-to-br from-cyan-950/80 via-[#0e2540] to-cyan-900/60 p-5 shadow-lg shadow-cyan-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-cyan-400/60 hover:shadow-xl flex flex-col justify-between">
         <svg aria-hidden="true" className="absolute bottom-0 right-0 w-28 h-14 opacity-15 group-hover:opacity-30 motion-safe:transition-opacity pointer-events-none" viewBox="0 0 150 45">
-          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M0,32 Q25,12 50,26 T95,15 T135,24 T150,6" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
         </svg>
         <div className="relative z-10">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Active Escrow Pool</span>
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
+            <span className="text-xs font-semibold text-cyan-300 uppercase tracking-wider">Active Escrow Pool</span>
+            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center transition-transform group-hover:scale-110 shadow-xs">
               <ShieldCheck size={20} />
             </div>
           </div>
           <div className="mt-3">
             <div className="flex items-center justify-between gap-2">
-              <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-sans">
+              <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-cyan-300 font-sans">
                 ₹{totalEscrow.toLocaleString('en-IN')}
               </div>
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+              <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
                 {isScopedHorizon ? timeHorizonLabel : 'In Escrow'}
               </span>
             </div>
-            <p className="mt-1 text-xs text-slate-400">Secured caution funds in vault</p>
+            <p className="mt-1 text-xs text-cyan-200/70">Secured caution funds in vault</p>
           </div>
         </div>
       </div>

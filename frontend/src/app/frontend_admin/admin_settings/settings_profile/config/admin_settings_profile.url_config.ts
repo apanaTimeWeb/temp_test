@@ -1,5 +1,5 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
-import { Clock, Edit3, Key, MonitorSmartphone, Settings, Shield, User, ShieldAlert, XOctagon, Ban, Building2 } from 'lucide-react';
+import { Building2, Edit3, Key, User } from 'lucide-react';
 import type { AdminProfileNavigationItem } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 
 /** Canonical route and API contract for admin_settings_profile; API entries are source-observed only. */
@@ -27,14 +27,6 @@ export const ADMIN_PROFILE_NAVIGATION_ITEMS: readonly AdminProfileNavigationItem
   { id: 'edit', labelKey: 'NAV_EDIT', label: 'Edit Profile', icon: Edit3 },
   { id: 'branches', labelKey: 'NAV_BRANCHES', label: 'Active Branches', icon: Building2 },
   { id: 'password', labelKey: 'NAV_PASSWORD', label: 'Change Password', icon: Key },
-  { id: '2fa', labelKey: 'NAV_TWO_FACTOR', label: 'Two-Factor Authentication', icon: Shield },
-  { id: 'dashboard', labelKey: 'NAV_DASHBOARD', label: 'Security Dashboard', icon: ShieldAlert },
-  { id: 'sessions', labelKey: 'NAV_SESSIONS', label: 'Active Sessions', icon: MonitorSmartphone },
-  { id: 'failed-logins', labelKey: 'NAV_FAILED_LOGINS', label: 'Failed Logins', icon: XOctagon },
-  { id: 'blocked-users', labelKey: 'NAV_BLOCKED_USERS', label: 'Blocked Accounts', icon: Ban },
-  { id: 'audit-trail', labelKey: 'NAV_AUDIT_TRAIL', label: 'Audit Trail', icon: Clock },
-  { id: 'history', labelKey: 'NAV_HISTORY', label: 'Login History', icon: Clock },
-  { id: 'security', labelKey: 'NAV_SECURITY', label: 'Security Settings', icon: Settings },
 ] as const;
 
 /**

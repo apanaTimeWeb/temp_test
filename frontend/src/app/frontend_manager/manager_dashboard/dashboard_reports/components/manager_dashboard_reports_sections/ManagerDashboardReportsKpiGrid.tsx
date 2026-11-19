@@ -18,48 +18,58 @@ const getReportTheme = (icon: string) => {
   switch (icon) {
     case 'Users':
       return {
-        cardBg: 'border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-lg shadow-indigo-950/30 hover:border-indigo-500/40 hover:shadow-indigo-950/40',
-        iconBox: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400',
-        badge: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/25',
+        cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60 hover:shadow-indigo-950/60',
+        iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
+        badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+        valColor: 'text-white',
+        titleColor: 'text-indigo-300',
         stroke: '#818cf8',
         accent: 'text-indigo-400',
-        glow: 'bg-indigo-500/10 group-hover:bg-indigo-500/20',
+        glow: 'bg-indigo-500/20 group-hover:bg-indigo-500/30',
       };
     case 'CalendarCheck':
       return {
-        cardBg: 'border-emerald-500/25 bg-gradient-to-br from-[#091a16]/95 via-[#091a16]/90 to-[#0e2721]/80 shadow-lg shadow-emerald-950/30 hover:border-emerald-500/40 hover:shadow-emerald-950/40',
-        iconBox: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
-        badge: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/25',
+        cardBg: 'border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0e2c21] to-emerald-900/60 shadow-lg shadow-emerald-950/40 hover:border-emerald-400/60 hover:shadow-emerald-950/60',
+        iconBox: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400',
+        badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+        valColor: 'text-emerald-400',
+        titleColor: 'text-emerald-300',
         stroke: '#34d399',
         accent: 'text-emerald-400',
-        glow: 'bg-emerald-500/10 group-hover:bg-emerald-500/20',
+        glow: 'bg-emerald-500/20 group-hover:bg-emerald-500/30',
       };
     case 'UserPlus':
       return {
-        cardBg: 'border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 shadow-lg shadow-cyan-950/30 hover:border-cyan-500/40 hover:shadow-cyan-950/40',
-        iconBox: 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400',
-        badge: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/25',
+        cardBg: 'border-cyan-500/40 bg-gradient-to-br from-cyan-950/80 via-[#0e2540] to-cyan-900/60 shadow-lg shadow-cyan-950/40 hover:border-cyan-400/60 hover:shadow-cyan-950/60',
+        iconBox: 'bg-cyan-500/20 border-cyan-500/40 text-cyan-400',
+        badge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+        valColor: 'text-cyan-400',
+        titleColor: 'text-cyan-300',
         stroke: '#22d3ee',
         accent: 'text-cyan-400',
-        glow: 'bg-cyan-500/10 group-hover:bg-cyan-500/20',
+        glow: 'bg-cyan-500/20 group-hover:bg-cyan-500/30',
       };
     case 'Phone':
       return {
-        cardBg: 'border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 shadow-lg shadow-amber-950/30 hover:border-amber-500/40 hover:shadow-amber-950/40',
-        iconBox: 'bg-amber-500/15 border-amber-500/30 text-amber-400',
-        badge: 'bg-amber-500/10 text-amber-300 border-amber-500/25',
+        cardBg: 'border-amber-500/40 bg-gradient-to-br from-amber-950/80 via-[#261708] to-amber-900/60 shadow-lg shadow-amber-950/40 hover:border-amber-400/60 hover:shadow-amber-950/60',
+        iconBox: 'bg-amber-500/20 border-amber-500/40 text-amber-400',
+        badge: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+        valColor: 'text-amber-400',
+        titleColor: 'text-amber-300',
         stroke: '#fbbf24',
         accent: 'text-amber-400',
-        glow: 'bg-amber-500/10 group-hover:bg-amber-500/20',
+        glow: 'bg-amber-500/20 group-hover:bg-amber-500/30',
       };
     default:
       return {
-        cardBg: 'border-indigo-500/25 bg-gradient-to-br from-[#0c0f28]/95 via-[#0c0f28]/90 to-[#12163a]/80 shadow-lg shadow-indigo-950/30 hover:border-indigo-500/40 hover:shadow-indigo-950/40',
-        iconBox: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400',
-        badge: 'bg-indigo-500/10 text-indigo-300 border-indigo-500/25',
+        cardBg: 'border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#181c4b] to-indigo-900/60 shadow-lg shadow-indigo-950/40 hover:border-indigo-400/60 hover:shadow-indigo-950/60',
+        iconBox: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400',
+        badge: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+        valColor: 'text-white',
+        titleColor: 'text-indigo-300',
         stroke: '#818cf8',
         accent: 'text-indigo-400',
-        glow: 'bg-indigo-500/10 group-hover:bg-indigo-500/20',
+        glow: 'bg-indigo-500/20 group-hover:bg-indigo-500/30',
       };
   }
 };
@@ -129,14 +139,14 @@ export function ManagerDashboardReportsKpiGrid({
 
               <div className="mt-4">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-sans tabular-nums">
+                  <p className={`text-2xl sm:text-3xl font-extrabold tracking-tight font-sans tabular-nums ${theme.valColor}`}>
                     {card.value}
                   </p>
                   <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full border ${theme.badge}`}>
                     [{dateRange}]
                   </span>
                 </div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mt-1.5">
+                <p className={`text-xs font-semibold uppercase tracking-wider mt-1.5 ${theme.titleColor}`}>
                   {card.title}
                 </p>
               </div>

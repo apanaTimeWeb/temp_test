@@ -10,8 +10,7 @@ import { ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES, ADMIN_SECURITY_EVENT_FIXTURES, 
 import { filterAdminSecurityEvents } from '@/app/frontend_admin/admin_settings/settings_security/utils/AdminSettingsSecurityEventUtils';
 import type { AdminSecurityEventFilter } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import AdminSecurityDashboardPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDashboardPanel';
-import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityFailedLoginsPanel';
+import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSecurityFailedLoginsPanel';
 import AdminSecurityDeviceSessionsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDeviceSessionsPanel';
 import AdminSettingsSecurityAuditTrailPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityAuditTrailPanel';
 
@@ -47,7 +46,6 @@ export default function AdminSecurityPage() {
           ))}
         </nav>
         <div className="min-w-0">{!isDemoMode ? <section data-testid="admin_security-AdminSettingsSecurityMain-state-api-unavailable" className="admin-card p-6" role="status" aria-live="polite"><h2 className="text-section-title font-semibold text-text-primary">{t('LIVE_UNAVAILABLE_TITLE')}</h2><p className="mt-2 text-text-secondary">{t('LIVE_UNAVAILABLE_DESCRIPTION')}</p></section> : <>
-          {activeTab === 'dashboard' && <AdminSecurityDashboardPanel />}
           {activeTab === 'login-security' && <section className="admin-card p-6" aria-labelledby="admin-security-policy-title">
             <h2 id="admin-security-policy-title" className="text-section-title font-semibold text-text-primary">{t('LOGIN_SECURITY_TITLE')}</h2>
             <p className="mt-1 text-sm text-text-secondary">{t('LOGIN_SECURITY_DESCRIPTION')}</p>
