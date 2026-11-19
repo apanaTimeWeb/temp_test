@@ -386,8 +386,8 @@ export default function ManagerCommunicationComplaintsPage({
         ) : isError ? (
           <div className="mc-empty" role="alert" aria-live="assertive">
             <p className="mc-empty__title">{tManagerUi('unable_to_load_complaints')}</p>
-            <button type="button" className="mc-btn-ghost mt-3 inline-flex items-center gap-1.5" onClick={() => refetch()} disabled={isFetching}>
-              {isFetching ? <ButtonLoader icon="message-square-warning" /> : null}
+            <button type="button" className="mc-btn-ghost mt-3 inline-flex items-center gap-1.5" onClick={() => refetch()} disabled={isPending}>
+              {isPending ? <ButtonLoader icon="message-square-warning" /> : null}
               <span>{tManagerUi('retry')}</span>
             </button>
           </div>

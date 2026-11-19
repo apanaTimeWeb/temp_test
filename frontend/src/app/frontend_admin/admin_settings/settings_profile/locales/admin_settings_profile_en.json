@@ -1,6 +1,7 @@
 {
   "ADMIN_PROFILE": {
     "NAV_PROFILE": "Profile overview",
+    "NAV_SUBSCRIPTION": "Platform Subscription",
     "NAV_EDIT": "Edit profile",
     "NAV_BRANCHES": "Active branches",
     "NAV_PASSWORD": "Change password",

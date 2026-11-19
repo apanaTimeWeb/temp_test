@@ -1,5 +1,5 @@
 /** Canonical module routes/API endpoints and cohesive module-owned configuration constants. */
-import { Building2, Edit3, Key, User } from 'lucide-react';
+import { Building2, Crown, Edit3, Key, User } from 'lucide-react';
 import type { AdminProfileNavigationItem } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 
 /** Canonical route and API contract for admin_settings_profile; API entries are source-observed only. */
@@ -24,6 +24,7 @@ export const MODULE_URLS = ADMIN_PROFILE_URLS;
 /** Role/module-owned navigation metadata; translations are supplied by ADMIN_PROFILE locale catalogs. */
 export const ADMIN_PROFILE_NAVIGATION_ITEMS: readonly AdminProfileNavigationItem[] = [
   { id: 'profile', labelKey: 'NAV_PROFILE', label: 'Profile Overview', icon: User },
+  { id: 'subscription', labelKey: 'NAV_SUBSCRIPTION', label: 'Platform Subscription', icon: Crown },
   { id: 'edit', labelKey: 'NAV_EDIT', label: 'Edit Profile', icon: Edit3 },
   { id: 'branches', labelKey: 'NAV_BRANCHES', label: 'Active Branches', icon: Building2 },
   { id: 'password', labelKey: 'NAV_PASSWORD', label: 'Change Password', icon: Key },

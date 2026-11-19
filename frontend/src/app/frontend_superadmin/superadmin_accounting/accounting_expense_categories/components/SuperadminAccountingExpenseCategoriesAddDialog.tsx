@@ -20,6 +20,7 @@ type Props = {
 export default function SuperadminAccountingExpenseCategoriesAddDialog({ open, nameInputRef, form, onClose, onSubmit, translateValidationMessage }: Props) {
   const tCopy = useTranslations('SUPERADMIN_ACCOUNTING');
   if (!open) return null;
+  const nameRegistration = form.register('name');
   return (
     <div className="acct-dialog-overlay" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
       <div id="accounting-expense-category-dialog" role="dialog" aria-modal="true" aria-labelledby="accounting-expense-category-title" className="acct-dialog">
@@ -28,7 +29,23 @@ export default function SuperadminAccountingExpenseCategoriesAddDialog({ open, n
         <form className="space-y-3" noValidate onSubmit={onSubmit} data-testid="superadmin-superadmin-accounting-expense-categories-page-client-form-line-130">
           <div>
             <label htmlFor="expense-category-name" className="acct-label">{tCopy('COPY.CATEGORY_NAME')} <span className="acct-text-danger">*</span></label>
-            <input ref={nameInputRef} id="expense-category-name" name="name" autoComplete="off" className="acct-input" placeholder={tCopy('COPY.E_G_RENT')} aria-invalid={Boolean(form.formState.errors.name)} aria-describedby={form.formState.errors.name ? 'expense-category-name-error' : undefined} {...form.register('name')} data-testid="superadmin-accounting-accounting-expense-categories-expense-category-name-4" />
+            <input
+              {...nameRegistration}
+              ref={(e) => {
+                nameRegistration.ref(e);
+                if (nameInputRef && 'current' in nameInputRef) {
+                  (nameInputRef as React.MutableRefObject<HTMLInputElement | null>).current = e;
+                }
+              }}
+              id="expense-category-name"
+              name="name"
+              autoComplete="off"
+              className="acct-input"
+              placeholder={tCopy('COPY.E_G_RENT')}
+              aria-invalid={Boolean(form.formState.errors.name)}
+              aria-describedby={form.formState.errors.name ? 'expense-category-name-error' : undefined}
+              data-testid="superadmin-accounting-accounting-expense-categories-expense-category-name-4"
+            />
             {form.formState.errors.name && <p id="expense-category-name-error" role="alert" className="acct-text-danger text-xs">{translateValidationMessage(form.formState.errors.name.message)}</p>}
           </div>
           <div>

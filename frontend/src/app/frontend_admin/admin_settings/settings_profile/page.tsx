@@ -158,6 +158,7 @@ export default function AdminProfilePage() {
           ) : (
             <>
               {activeTab === 'profile' && <AdminSettingsProfileReadOnlyPanels view="profile" />}
+              {activeTab === 'subscription' && <AdminSettingsProfileReadOnlyPanels view="subscription" />}
               {activeTab === 'edit' && <AdminProfileEditForm onDirtyChange={setProfileDraftDirty} />}
               {activeTab === 'branches' && <AdminProfileActiveBranchesPanel />}
               {activeTab === 'password' && (

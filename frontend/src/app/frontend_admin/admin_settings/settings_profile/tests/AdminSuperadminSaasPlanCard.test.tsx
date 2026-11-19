@@ -12,10 +12,10 @@ const { toastMock } = vi.hoisted(() => {
 vi.mock('sonner', () => ({ default: toastMock, toast: toastMock, Toaster: () => null }));
 
 describe('AdminSettingsProfileReadOnlyPanels SuperAdmin SaaS Plan & Branch Entitlement', () => {
-  it('renders SuperAdmin SaaS license details and quota progress bars', () => {
+  it('renders SuperAdmin SaaS license details and quota progress bars under subscription view', () => {
     render(
       <NextIntlClientProvider locale="en" messages={messages}>
-        <AdminSettingsProfileReadOnlyPanels view="profile" />
+        <AdminSettingsProfileReadOnlyPanels view="subscription" />
       </NextIntlClientProvider>
     );
 
@@ -56,5 +56,17 @@ describe('AdminSettingsProfileReadOnlyPanels SuperAdmin SaaS Plan & Branch Entit
     expect(toastMock.success).toHaveBeenCalledWith(
       'Downloading SuperAdmin SaaS Invoice #INV-2026-092...'
     );
+  });
+
+  it('keeps profile view clean and focused on personal profile overview', () => {
+    render(
+      <NextIntlClientProvider locale="en" messages={messages}>
+        <AdminSettingsProfileReadOnlyPanels view="profile" />
+      </NextIntlClientProvider>
+    );
+
+    // Profile overview should render without the subscription plan section
+    expect(screen.queryByTestId('admin-superadmin-plan-section')).toBeNull();
+    expect(screen.getByText('Verified Administrator')).toBeTruthy();
   });
 });

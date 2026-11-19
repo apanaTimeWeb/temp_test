@@ -602,9 +602,8 @@
 
   /* Root shell */
   .sa-wizard-shell {
-    min-height: 100vh;
-    display: flex;
-    background: linear-gradient(135deg, #080b1a 0%, #0a0d20 40%, #060810 100%);
+    width: 100%;
+    min-width: 0;
     color: var(--text-primary);
   }
 
@@ -2173,12 +2172,12 @@
     top: calc(100% + 12px);
     right: 0;
     width: 380px;
-    background: var(--bg-card);
+    background: #0b0e24;
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    box-shadow: var(--shadow-dialog);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), 0 0 25px rgba(99, 102, 241, 0.15);
     z-index: 100;
     display: flex;
     flex-direction: column;

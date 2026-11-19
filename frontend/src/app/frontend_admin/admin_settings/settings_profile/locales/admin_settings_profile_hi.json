@@ -1,6 +1,7 @@
 {
   "ADMIN_PROFILE": {
     "NAV_PROFILE": "प्रोफ़ाइल अवलोकन",
+    "NAV_SUBSCRIPTION": "प्लेटफ़ॉर्म सब्सक्रिप्शन",
     "NAV_EDIT": "प्रोफ़ाइल संपादित करें",
     "NAV_BRANCHES": "सक्रिय शाखाएँ",
     "NAV_PASSWORD": "पासवर्ड बदलें",
