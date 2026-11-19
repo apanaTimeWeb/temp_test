@@ -652,6 +652,28 @@ describe("Consolidated from AdminStaffDirectoryCreateManagerForm.test.tsx", () =
             suite1_expect(Array.from(branchSelect.options).map((option) => option.value)).toEqual(['', 'b1', 'b2']);
             suite1_expect(branchSelect.value).toBe('');
         });
+
+        suite1_it('provisions manager credentials modal upon successful creation with WhatsApp and Print actions', async () => {
+            suite1_render(
+                <Suite1_NextIntlClientProvider locale="en" messages={suite1_staffMessages}>
+                    <Suite1_AdminStaffDirectoryCreateManagerForm onCreate={() => 'created'} canCreate={true} />
+                </Suite1_NextIntlClientProvider>
+            );
+
+            suite0_suite0_fireEvent.change(suite1_screen.getByLabelText(suite1_staffMessages.ADMIN_STAFF_DIRECTORY.FULL_NAME), { target: { value: 'Rakesh Verma' } });
+            suite0_suite0_fireEvent.change(suite1_screen.getByLabelText(suite1_staffMessages.ADMIN_STAFF_DIRECTORY.USERNAME), { target: { value: 'rakeshv' } });
+            suite0_suite0_fireEvent.change(suite1_screen.getByLabelText(suite1_staffMessages.ADMIN_STAFF_DIRECTORY.EMAIL), { target: { value: 'rakesh.verma@example.com' } });
+            suite0_suite0_fireEvent.change(suite1_screen.getByLabelText(suite1_staffMessages.ADMIN_STAFF_DIRECTORY.PHONE), { target: { value: '9876543210' } });
+            suite0_suite0_fireEvent.change(suite1_screen.getByRole('combobox', { name: suite1_staffMessages.ADMIN_STAFF_DIRECTORY.BRANCH_ASSIGNMENT }), { target: { value: 'b1' } });
+
+            suite0_suite0_fireEvent.click(suite1_screen.getByRole('button', { name: new RegExp(suite1_staffMessages.ADMIN_STAFF_DIRECTORY.CREATE_MANAGER_DEMO, 'i') }));
+
+            const dialogTitle = await suite1_screen.findByText('Branch Manager Appointed & Access Credentials');
+            suite1_expect(dialogTitle).toBeTruthy();
+            suite1_expect(suite1_screen.getByText('Send on WhatsApp')).toBeTruthy();
+            suite1_expect(suite1_screen.getByText('Print Letter')).toBeTruthy();
+            suite1_expect(suite1_screen.getByText('@rakeshv')).toBeTruthy();
+        });
     });
 
 });

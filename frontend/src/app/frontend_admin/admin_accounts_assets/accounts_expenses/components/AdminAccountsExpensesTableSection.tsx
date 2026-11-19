@@ -105,18 +105,29 @@ export function AdminAccountsExpensesTableSection({
     {
       field: 'amount',
       headerName: t('AMOUNT'),
-      width: 130,
+      width: 140,
       sortable: true,
-      cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => (
-        <div className="flex flex-col">
-          <span className="font-mono text-sm font-bold text-foreground">
-            {formatAdminAccountingCurrency(Number(params.value ?? 0), locale)}
-          </span>
-          <span className="text-[10px] uppercase font-semibold text-muted-foreground">
-            {params.data.mode}
-          </span>
-        </div>
-      ),
+      cellRenderer: (params: DataGridCellParams<AdminAccountingExpense>) => {
+        const minorAmount = Number(params.value ?? 0);
+        const isHighValue = minorAmount > 200000;
+        return (
+          <div className="flex flex-col">
+            <span className="font-mono text-sm font-bold text-foreground">
+              {formatAdminAccountingCurrency(minorAmount, locale)}
+            </span>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <span className="text-[10px] uppercase font-semibold text-muted-foreground">
+                {params.data.mode}
+              </span>
+              {isHighValue && (
+                <span className="inline-flex items-center rounded bg-amber-500/15 border border-amber-500/30 px-1 py-0.2 text-[9px] font-bold text-amber-400" title="High value (> ₹2,000) - requires Admin approval">
+                  &gt; ₹2k Admin
+                </span>
+              )}
+            </div>
+          </div>
+        );
+      },
     },
     {
       field: 'status',

@@ -1,7 +1,7 @@
 'use client';
 // RESPONSIBILITY: AdminStaffDirectoryCreateManagerForm component owned by admin_staff_directory; responsibility folder: admin_staff_directory_create_manager_form.
 
-import { Camera, UserPlus } from 'lucide-react';
+import { Camera, UserPlus, Key, ShieldCheck, Printer, MessageSquare, Copy, Check } from 'lucide-react';
 import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -32,6 +32,15 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
   const { branches } = useAdminBranch();
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
+  const [createdManagerCreds, setCreatedManagerCreds] = useState<{
+    fullName: string;
+    username: string;
+    tempPassword: string;
+    branchName: string;
+    phone: string;
+    email: string;
+  } | null>(null);
+  const [copiedKey, setCopiedKey] = useState(false);
 
   const branchOptions: ComboboxOption[] = useMemo(() => {
     return branches.map((b) => ({
@@ -65,6 +74,71 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
   useAdminStaffDirectoryUnsavedChangesGuard(form.formState.isDirty, handleBlockedNavigation, form.formState.isSubmitting);
   const discardDraft = () => { const destination = pendingHref; form.reset(); setPendingHref(null); setShowDiscardDialog(false); if (destination) router.push(destination); };
 
+  const printAppointmentLetter = (creds: {
+    fullName: string;
+    username: string;
+    tempPassword: string;
+    branchName: string;
+    phone: string;
+    email: string;
+  }) => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=800,height=650');
+    if (!printWindow) return;
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Appointment Letter - ${creds.fullName}</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; color: #1e293b; line-height: 1.5; }
+            .header { border-bottom: 2px solid #0f172a; padding-bottom: 16px; margin-bottom: 24px; }
+            .header h1 { margin: 0; color: #0f172a; font-size: 22px; }
+            .header p { margin: 4px 0 0; color: #64748b; font-size: 13px; }
+            .ref { font-weight: bold; font-family: monospace; color: #0284c7; margin-bottom: 16px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13px; }
+            td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; }
+            td:first-child { font-weight: 600; color: #475569; width: 180px; }
+            .cred-box { background: #f8fafc; border: 1px dashed #94a3b8; border-radius: 8px; padding: 14px; margin: 16px 0; }
+            .footer { margin-top: 48px; border-top: 1px solid #cbd5e1; padding-top: 24px; display: flex; justify-content: space-between; font-size: 12px; color: #64748b; }
+            .sig-box { width: 200px; text-align: center; }
+            .sig-line { border-top: 1px solid #334155; margin-top: 48px; padding-top: 4px; font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>SMART LIBRARY MANAGEMENT NETWORK</h1>
+            <p>Official Branch Manager Appointment & Credential Letter</p>
+          </div>
+          <div class="ref">REF: APPT-MGR-${Date.now().toString().slice(-6)}</div>
+          <p>Dear <strong>${creds.fullName}</strong>,</p>
+          <p>We are pleased to appoint you as the <strong>Branch Operations Manager</strong> for <strong>${creds.branchName}</strong>. You are authorized to manage daily student check-ins, cash counter handovers, seating rosters, and operational inquiries.</p>
+          
+          <div class="cred-box">
+            <div style="font-weight: bold; margin-bottom: 8px; color: #0f172a;">Your Official Login Credentials:</div>
+            <table>
+              <tr><td>Username:</td><td><strong>@${creds.username}</strong></td></tr>
+              <tr><td>Temporary Password:</td><td><strong>${creds.tempPassword}</strong></td></tr>
+              <tr><td>Assigned Branch:</td><td><strong>${creds.branchName}</strong></td></tr>
+              <tr><td>Manager Portal URL:</td><td>https://smartlibrary.app/manager/login</td></tr>
+            </table>
+            <div style="font-size: 11px; color: #64748b;">* Note: You will be prompted to set a new password on your initial login. Never share these credentials.</div>
+          </div>
+
+          <div class="footer">
+            <div class="sig-box">
+              <div class="sig-line">Employee Signature</div>
+            </div>
+            <div class="sig-box">
+              <div class="sig-line">Master Admin Authorization</div>
+            </div>
+          </div>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   return (
     <div className="admin-card p-8">
       <h2 className="admin-shared-section-title">{t('FORM_TITLE')}</h2>
@@ -74,6 +148,17 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
         onSubmit={form.handleSubmit((values) => {
           const result = onCreate(values);
           if (result === 'created') {
+            const rawBranch = values.branchId as string;
+            const branchName = branchOptions.find((b) => b.value === rawBranch)?.label || (rawBranch === 'b2' ? 'Westside Branch' : 'Downtown Central');
+            const tempPassword = `Mgr@${values.username.slice(0, 4).toUpperCase()}2026`;
+            setCreatedManagerCreds({
+              fullName: values.fullName.trim(),
+              username: values.username.trim(),
+              tempPassword,
+              branchName,
+              phone: values.phone.trim(),
+              email: values.email.trim(),
+            });
             toast.success(t('DEMO_MANAGER_CREATED', { name: values.fullName.trim() }), { id: 'admin_staff-staff_directory-components-AdminStaffDirectoryCreateManagerForm-toast-44-1' });
             form.reset();
           } else if (result === 'duplicate') {
@@ -179,6 +264,95 @@ export default function AdminStaffDirectoryCreateManagerForm({ onCreate, canCrea
           <DialogFooter>
             <button type="button" className="min-h-11 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={() => { setShowDiscardDialog(false); setPendingHref(null); }}>{t('UNSAVED_CHANGES_STAY')}</button>
             <button type="button" className="min-h-11 rounded-md bg-danger px-4 py-2 text-sm font-semibold text-on-danger focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" onClick={discardDraft}>{t('UNSAVED_CHANGES_LEAVE')}</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={Boolean(createdManagerCreds)} onOpenChange={(open) => { if (!open) setCreatedManagerCreds(null); }}>
+        <DialogContent className="space-y-4 max-w-lg">
+          <div className="flex items-center gap-2 text-primary font-bold text-base">
+            <ShieldCheck size={20} className="text-emerald-400" />
+            <DialogTitle>Branch Manager Appointed & Access Credentials</DialogTitle>
+          </div>
+          <DialogDescription>
+            The new manager account has been provisioned. Provide these initial credentials to the branch manager to enable their shift access.
+          </DialogDescription>
+
+          {createdManagerCreds && (
+            <div className="space-y-3 rounded-xl border border-border bg-surface-muted p-4 text-xs">
+              <div className="flex justify-between border-b border-border pb-2">
+                <span className="text-text-secondary">Appointed Manager:</span>
+                <span className="font-semibold text-text-primary">{createdManagerCreds.fullName}</span>
+              </div>
+              <div className="flex justify-between border-b border-border pb-2">
+                <span className="text-text-secondary">Assigned Branch:</span>
+                <span className="font-semibold text-emerald-400">{createdManagerCreds.branchName}</span>
+              </div>
+              <div className="flex justify-between border-b border-border pb-2">
+                <span className="text-text-secondary">Login Username:</span>
+                <span className="font-mono font-bold text-text-primary">@{createdManagerCreds.username}</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <span className="text-text-secondary">Temporary Password:</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">
+                    {createdManagerCreds.tempPassword}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (navigator?.clipboard) {
+                        navigator.clipboard.writeText(createdManagerCreds.tempPassword);
+                        setCopiedKey(true);
+                        toast.success('Password copied to clipboard!');
+                        setTimeout(() => setCopiedKey(false), 2000);
+                      }
+                    }}
+                    className="p-1 rounded text-text-secondary hover:text-text-primary"
+                    title="Copy Password"
+                  >
+                    {copiedKey ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-lg bg-amber-500/10 border border-amber-500/25 p-2.5 text-[11px] text-amber-300">
+                ⚠️ <strong>Security Mandatory:</strong> The manager will be required to change their password upon first logging in. All branch operations, cash balances, and student approvals will be permanently audited under this ID.
+              </div>
+            </div>
+          )}
+
+          <DialogFooter className="flex flex-col sm:flex-row gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (!createdManagerCreds) return;
+                const cleanPhone = createdManagerCreds.phone.replace(/\D/g, '');
+                const phone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
+                const msg = encodeURIComponent(
+                  `*Smart Library Management - Manager Credentials*\n\nHello ${createdManagerCreds.fullName},\nYou have been appointed as Operations Manager at *${createdManagerCreds.branchName}*.\n\n*Login URL:* https://smartlibrary.app/manager/login\n*Username:* @${createdManagerCreds.username}\n*Temp Password:* ${createdManagerCreds.tempPassword}\n\nPlease change your password upon your first login.\n- Head Office Administration`
+                );
+                window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+              }}
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-colors"
+            >
+              <MessageSquare size={14} /> Send on WhatsApp
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (createdManagerCreds) printAppointmentLetter(createdManagerCreds);
+              }}
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-border bg-card hover:bg-surface-hover text-text-primary font-semibold text-xs transition-colors"
+            >
+              <Printer size={14} /> Print Letter
+            </button>
+            <button
+              type="button"
+              onClick={() => setCreatedManagerCreds(null)}
+              className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-primary hover:bg-primary-hover text-on-primary font-semibold text-xs transition-colors"
+            >
+              Done
+            </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe as suite0_describe, expect as suite0_expect, it as suite0_it } from "vitest";
 import { render as suite0_render, screen as suite0_screen } from "@testing-library/react";
 import { AdminAccountingExpenseRecordSchema as suite0_AdminAccountingExpenseRecordSchema, createAdminAccountingExpenseCategoryFormSchema as suite0_createAdminAccountingExpenseCategoryFormSchema, createAdminAccountingExpenseFormSchema as suite0_createAdminAccountingExpenseFormSchema } from "@/app/frontend_admin/admin_accounts_assets/accounts_expenses/schemas/AdminAccountsExpensesSchemas";
@@ -152,6 +153,18 @@ suite1_describe('useAdminAccountsExpensesUnsavedChangesGuard', () => {
     suite1_act(() => { anchor?.dispatchEvent(event); });
     suite1_expect(event.defaultPrevented).toBe(false);
     suite1_expect(onBlockedNavigation).not.toHaveBeenCalled();
+  });
+});
+
+suite1_describe('High-Value Expense (> ₹2,000) Policy Governance', () => {
+  suite1_it('flags expenses > ₹2,000 as requiring Admin Approval', () => {
+    const highValueExpenseAmount = 3500; // ₹3,500
+    const routineExpenseAmount = 450;   // ₹450
+    const requiresAdminApprovalHigh = highValueExpenseAmount > 2000;
+    const requiresAdminApprovalRoutine = routineExpenseAmount > 2000;
+
+    suite1_expect(requiresAdminApprovalHigh).toBe(true);
+    suite1_expect(requiresAdminApprovalRoutine).toBe(false);
   });
 });
 

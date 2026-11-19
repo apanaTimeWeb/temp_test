@@ -6,6 +6,7 @@ import AdminMembersDirectoryBulkImportModal from '@/app/frontend_admin/admin_mem
 import AdminMembersEnquiriesImportModal from '@/app/frontend_admin/admin_members/members_enquiries/components/AdminMembersEnquiriesImportModal';
 import AdminMembersCouponsFlyerModal from '@/app/frontend_admin/admin_members/members_coupons/components/AdminMembersCouponsFlyerModal';
 import AdminMembersDirectoryDataToolsView from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryDataToolsView';
+import { AdminMembersDirectoryMemberDetailCard } from '@/app/frontend_admin/admin_members/members_directory/components/AdminMembersDirectoryMemberDetailCard';
 import { ADMIN_MEMBERS_FIXTURES } from '@/app/frontend_admin/admin_members/members_directory/mocks/AdminMembersDirectoryFixtures';
 import type { AdminCouponsCoupon } from '@/app/frontend_admin/admin_members/members_coupons/schemas/AdminMembersCouponsSchema';
 
@@ -127,6 +128,41 @@ describe('Admin Members - Newly Added Controls Regression Suite', () => {
       const downloadButtons = screen.getAllByRole('button', { name: /Download/i });
       expect(downloadButtons.length).toBeGreaterThan(0);
       expect((downloadButtons[0] as HTMLButtonElement).disabled).toBe(false);
+    });
+  });
+
+  describe('Fee Waiver & Special Concession Governance', () => {
+    it('allows Admin to grant special fee waiver and displays concession credit in payment ledger', () => {
+      const sampleMember = ADMIN_MEMBERS_FIXTURES[0];
+      render(
+        <NextIntlClientProvider locale="en" messages={{ ADMIN_MEMBERS: { STATUS_ACTIVE: 'Active', UNKNOWN_DATE: 'Unknown' } }}>
+          <AdminMembersDirectoryMemberDetailCard
+            member={sampleMember}
+            detailTab="paymentHistory"
+            isDemoMode={true}
+          />
+        </NextIntlClientProvider>
+      );
+
+      // Verify the Admin Exclusive Callout is displayed
+      expect(screen.getByText(/Admin Exclusive Authority: Fee Concessions & Waivers/i)).toBeTruthy();
+
+      // Open Waiver modal
+      const grantBtn = screen.getByRole('button', { name: /Grant Fee Waiver \/ Discount/i });
+      fireEvent.click(grantBtn);
+
+      // Verify modal is open
+      expect(screen.getByText(/Admin Sanction: Grant Special Fee Waiver/i)).toBeTruthy();
+      expect(screen.getByText(/Signing Authority:/i)).toBeTruthy();
+
+      // Authorize waiver
+      const authorizeBtn = screen.getByRole('button', { name: /Authorize & Credit Memo/i });
+      fireEvent.click(authorizeBtn);
+
+      // Verify the Concession Order slip modal appears
+      expect(screen.getByText('Official Concession Order')).toBeTruthy();
+      expect(screen.getByText(/Sanctioned under Executive Admin Power/i)).toBeTruthy();
+      expect(screen.getByRole('button', { name: /Print Order Letter/i })).toBeTruthy();
     });
   });
 });

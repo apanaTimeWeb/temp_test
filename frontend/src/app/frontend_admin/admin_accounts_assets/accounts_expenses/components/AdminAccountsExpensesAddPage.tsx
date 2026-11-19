@@ -63,6 +63,8 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
       toast.error(t('CREATE_BLOCKED'), { id: 'admin-accounts-expenses-create-blocked' });
       return;
     }
+    const enteredAmount = Number(values.amount);
+    const requiresAdminApproval = enteredAmount > 2000;
     const newExpense: AdminAccountingExpense = {
       id: Date.now(),
       date: values.date,
@@ -72,7 +74,7 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
       paidBy: values.paidBy,
       mode: values.mode,
       notes: values.notes,
-      status: 'APPROVED',
+      status: requiresAdminApproval ? 'PENDING_APPROVAL' : 'APPROVED',
       branchName: values.branchName || 'Downtown Central',
       requestedBy: values.paidBy,
       vendorName: values.vendorName || undefined,
@@ -81,7 +83,11 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
     };
     onSaveExpense(newExpense);
     form.reset(values);
-    toast.info(t('DEMO_SAVED'), { id: 'admin-accounts-expenses-demo-saved' });
+    if (requiresAdminApproval) {
+      toast.info('High-value expense (> ₹2,000) queued in Pending Approval for Admin Review.', { id: 'admin-accounts-expenses-demo-saved' });
+    } else {
+      toast.info(t('DEMO_SAVED'), { id: 'admin-accounts-expenses-demo-saved' });
+    }
     router.push(ADMIN_ACCOUNTS_EXPENSES_ROUTES.route);
   });
 
@@ -132,6 +138,17 @@ export default function AdminAccountsExpensesAddPage({ onSaveExpense, onCancel }
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-amount">{t('AMOUNT_INR')}</label>
           <input id="expense-amount" type="number" min="0.01" step="0.01" required aria-invalid={Boolean(form.formState.errors.amount)} aria-describedby={form.formState.errors.amount ? 'expense-amount-error' : undefined} className="mt-1 min-h-11 w-full rounded-md border border-border bg-input px-3 py-2 text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary" {...form.register('amount', { valueAsNumber: true })} />
           {form.formState.errors.amount && <p id="expense-amount-error" role="alert" className="mt-1 text-caption text-danger-text">{form.formState.errors.amount.message}</p>}
+          {(form.watch('amount') ?? 0) > 2000 && (
+            <div className="mt-2.5 flex items-start gap-2.5 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-300">
+              <span className="text-base leading-none">🛡️</span>
+              <div className="space-y-0.5">
+                <p className="font-semibold text-amber-200">High-Value Expense Governance (&gt; ₹2,000)</p>
+                <p className="text-[11px] text-amber-300/85">
+                  Amounts over ₹2,000 (such as electricity bills, major repairs, furniture) are placed in <strong>Pending Approval</strong> and require Admin sign-off before payout.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
         <div>
           <label className="block text-sm font-medium text-text-secondary" htmlFor="expense-paid-by">{t('PAID_BY')}</label>

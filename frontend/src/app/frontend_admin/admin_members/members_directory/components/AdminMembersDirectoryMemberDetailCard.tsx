@@ -164,12 +164,117 @@ export function AdminMembersDirectoryMemberDetailCard({
     { id: `REN-2026-${memberIdClean}1`, date: '01 Aug 2026', plan: member.plan, extendedTo: '31 Aug 2026', amount: '₹6,500', mode: 'Cash', staff: 'Accounts Desk', status: 'Completed' },
   ];
 
-  const paymentRecords = [
-    { id: `RCP-2026-${memberIdClean}4`, date: '01 Nov 2026', title: `Monthly Subscription Fee (${member.plan})`, amount: '₹6,500', mode: 'UPI (Ref: UPI/391082)', ref: 'UPI-9842109', status: 'Paid' },
-    { id: `RCP-2026-${memberIdClean}3`, date: '01 Oct 2026', title: `Monthly Subscription Fee (${member.plan})`, amount: '₹6,500', mode: 'UPI (Ref: UPI/281093)', ref: 'UPI-8719203', status: 'Paid' },
-    { id: `RCP-2026-${memberIdClean}2`, date: '01 Sep 2026', title: `Monthly Subscription Fee (${member.plan})`, amount: '₹6,500', mode: 'Card (Ref: TXN-94021)', ref: 'CARD-591024', status: 'Paid' },
-    { id: `RCP-2026-${memberIdClean}1`, date: '01 Aug 2026', title: 'Security Deposit & Personal Locker Allotment', amount: '₹2,000', mode: 'Cash (Receipt Voucher)', ref: 'CASH-0814', status: 'Paid' },
-  ];
+  const [paymentRecords, setPaymentRecords] = useState([
+    { id: `RCP-2026-${memberIdClean}4`, date: '01 Nov 2026', title: `Monthly Subscription Fee (${member.plan})`, amount: '₹6,500', mode: 'UPI (Ref: UPI/391082)', ref: 'UPI-9842109', status: 'Paid', isWaiver: false, category: 'Subscription', reason: '' },
+    { id: `RCP-2026-${memberIdClean}3`, date: '01 Oct 2026', title: `Monthly Subscription Fee (${member.plan})`, amount: '₹6,500', mode: 'UPI (Ref: UPI/281093)', ref: 'UPI-8719203', status: 'Paid', isWaiver: false, category: 'Subscription', reason: '' },
+    { id: `RCP-2026-${memberIdClean}2`, date: '01 Sep 2026', title: `Monthly Subscription Fee (${member.plan})`, amount: '₹6,500', mode: 'Card (Ref: TXN-94021)', ref: 'CARD-591024', status: 'Paid', isWaiver: false, category: 'Subscription', reason: '' },
+    { id: `RCP-2026-${memberIdClean}1`, date: '01 Aug 2026', title: 'Security Deposit & Personal Locker Allotment', amount: '₹2,000', mode: 'Cash (Receipt Voucher)', ref: 'CASH-0814', status: 'Paid', isWaiver: false, category: 'Deposit', reason: '' },
+  ]);
+  const [showWaiverModal, setShowWaiverModal] = useState(false);
+  const [waiverCategory, setWaiverCategory] = useState<'EWS_ASSISTANCE' | 'MERIT_SCHOLARSHIP' | 'LATE_FEE_WAIVER' | 'SPECIAL_ADMIN_DISCRETION'>('EWS_ASSISTANCE');
+  const [waiverAmount, setWaiverAmount] = useState('1000');
+  const [waiverReason, setWaiverReason] = useState('EWS verification completed by Admin; concession sanctioned.');
+  const [previewWaiverSlip, setPreviewWaiverSlip] = useState<{ id: string; date: string; title: string; amount: string; category: string; reason: string } | null>(null);
+
+  const totalWaivedAmount = paymentRecords
+    .filter((p) => p.isWaiver)
+    .reduce((sum, p) => sum + (parseInt(p.amount.replace(/\D/g, ''), 10) || 0), 0);
+
+  const handleGrantWaiver = () => {
+    const amt = parseInt(waiverAmount, 10);
+    if (!amt || amt <= 0) {
+      toast.error('Please enter a valid concession amount');
+      return;
+    }
+    const catLabels = {
+      EWS_ASSISTANCE: 'EWS Financial Concession',
+      MERIT_SCHOLARSHIP: 'Merit Scholarship Concession',
+      LATE_FEE_WAIVER: 'Late Fee Penalty Waive-Off',
+      SPECIAL_ADMIN_DISCRETION: 'Admin Discretion Discount',
+    };
+    const newWaiver = {
+      id: `WAV-2026-${memberIdClean}${Math.floor(10 + Math.random() * 89)}`,
+      date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+      title: `Special Admin Credit: ${catLabels[waiverCategory]}`,
+      amount: `-₹${amt.toLocaleString('en-IN')}`,
+      mode: 'Admin Credit Memo (Ref: ADM-AUTH)',
+      ref: 'AUTH-SUPER-ADMIN',
+      status: 'Approved by Admin',
+      isWaiver: true,
+      category: catLabels[waiverCategory],
+      reason: waiverReason || 'Authorized under administrative powers',
+    };
+    setPaymentRecords((prev) => [newWaiver, ...prev]);
+    setShowWaiverModal(false);
+    toast.success(`Fee waiver of ₹${amt.toLocaleString('en-IN')} successfully authorized by Admin!`);
+    setPreviewWaiverSlip({
+      id: newWaiver.id,
+      date: newWaiver.date,
+      title: newWaiver.title,
+      amount: `₹${amt.toLocaleString('en-IN')}`,
+      category: catLabels[waiverCategory],
+      reason: waiverReason || 'Authorized under administrative powers',
+    });
+  };
+
+  const printWaiverSlip = (slip: { id: string; date: string; title: string; amount: string; category: string; reason: string }) => {
+    if (typeof window === 'undefined') return;
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    if (!printWindow) return;
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Special Concession Order - ${slip.id}</title>
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; color: #1e293b; }
+            .header { border-bottom: 2px solid #0284c7; padding-bottom: 16px; margin-bottom: 24px; }
+            .header h1 { margin: 0; color: #0f172a; font-size: 24px; }
+            .header p { margin: 4px 0 0; color: #64748b; font-size: 13px; }
+            .badge { display: inline-block; background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px; margin-bottom: 16px; }
+            .meta { margin-bottom: 24px; width: 100%; border-collapse: collapse; }
+            .meta td { padding: 6px 12px; font-size: 14px; border-bottom: 1px solid #f1f5f9; }
+            .meta td:first-child { font-weight: 600; color: #475569; width: 200px; }
+            .amount-box { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 16px; margin: 20px 0; text-align: center; }
+            .amount-box .val { font-size: 28px; font-weight: 800; color: #15803d; }
+            .footer { margin-top: 48px; border-top: 1px solid #cbd5e1; padding-top: 24px; display: flex; justify-content: space-between; font-size: 12px; color: #64748b; }
+            .sig { text-align: right; }
+            .sig-line { width: 180px; border-top: 1px solid #334155; margin-top: 40px; text-align: center; padding-top: 4px; font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>SMART LIBRARY MANAGEMENT NETWORK</h1>
+            <p>Official Discretionary Fee Concession & Waiver Order</p>
+          </div>
+          <div class="badge">OFFICIAL ADMIN CREDIT ORDER: ${slip.id}</div>
+          <table class="meta">
+            <tr><td>Order Reference:</td><td><strong>${slip.id}</strong></td></tr>
+            <tr><td>Student Name:</td><td><strong>${member.name} (${member.id})</strong></td></tr>
+            <tr><td>Branch Allotted:</td><td>${member.branch || 'Downtown Central'}</td></tr>
+            <tr><td>Waiver Category:</td><td>${slip.category}</td></tr>
+            <tr><td>Sanction Date:</td><td>${slip.date}</td></tr>
+            <tr><td>Admin Justification:</td><td>${slip.reason}</td></tr>
+          </table>
+          <div class="amount-box">
+            <div style="font-size: 13px; font-weight: 600; color: #166534; text-transform: uppercase;">Sanctioned Waiver / Discount Amount</div>
+            <div class="val">${slip.amount}</div>
+            <div style="font-size: 12px; color: #15803d; margin-top: 4px;">Adjusted against student dues via Admin Credit Authority</div>
+          </div>
+          <div class="footer">
+            <div>
+              <p>Issued by: Central Operations Administration</p>
+              <p>Policy: Section 4(B) - Discretionary Concession Rules</p>
+            </div>
+            <div class="sig">
+              <div class="sig-line">Master Admin Authorization</div>
+            </div>
+          </div>
+          <script>window.onload = function() { window.print(); };</script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
 
   const lostRecords = [
     { id: `INC-${memberIdClean}01`, date: '12 Sep 2026', item: 'RFID Smart Access Card', type: 'Misplaced Keycard', fine: '₹150', status: 'Settled & Reissued', note: `New RFID card issued (Tag: RFID-${memberIdClean}9). Settled at reception.` },
@@ -829,8 +934,28 @@ export function AdminMembersDirectoryMemberDetailCard({
       {/* -------------------- 5. PAYMENT HISTORY TAB -------------------- */}
       {detailTab === 'paymentHistory' && (
         <div className="space-y-5">
+          {/* Admin Discretionary Authority Callout */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3.5 rounded-xl border border-sky-500/30 bg-sky-500/10">
+            <div>
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={16} className="text-sky-400" />
+                <span className="text-xs font-bold text-sky-200">Admin Exclusive Authority: Fee Concessions & Waivers</span>
+              </div>
+              <p className="text-[11px] text-sky-300/80 mt-0.5">
+                Branch managers cannot alter fee rates or grant discounts. Use official Admin authority to sanction EWS, merit scholarships, or late fee waivers.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowWaiverModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-xs transition-colors shrink-0 shadow-sm"
+            >
+              <Award size={14} /> Grant Fee Waiver / Discount
+            </button>
+          </div>
+
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/5 p-4">
               <p className="text-xs font-semibold uppercase text-emerald-400">Total Billed</p>
               <p className="mt-1 text-2xl font-bold text-white font-mono">₹28,000</p>
@@ -840,6 +965,11 @@ export function AdminMembersDirectoryMemberDetailCard({
               <p className="text-xs font-semibold uppercase text-cyan-400">Total Paid</p>
               <p className="mt-1 text-2xl font-bold text-white font-mono">₹28,000</p>
               <p className="text-xs text-text-secondary mt-0.5">100% payments settled</p>
+            </div>
+            <div className="rounded-xl border border-sky-500/25 bg-sky-500/5 p-4">
+              <p className="text-xs font-semibold uppercase text-sky-400">Total Waived</p>
+              <p className="mt-1 text-2xl font-bold text-sky-300 font-mono">₹{totalWaivedAmount.toLocaleString('en-IN')}</p>
+              <p className="text-xs text-text-secondary mt-0.5">Admin credit notes</p>
             </div>
             <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/5 p-4">
               <p className="text-xs font-semibold uppercase text-emerald-400">Balance Due</p>
@@ -853,7 +983,7 @@ export function AdminMembersDirectoryMemberDetailCard({
             <table className="w-full text-left text-xs">
               <thead className="border-b border-border bg-surface-muted text-text-secondary uppercase">
                 <tr>
-                  <th className="p-3 font-semibold">Receipt No</th>
+                  <th className="p-3 font-semibold">Receipt / Memo No</th>
                   <th className="p-3 font-semibold">Date</th>
                   <th className="p-3 font-semibold">Particulars</th>
                   <th className="p-3 font-semibold">Amount</th>
@@ -864,34 +994,67 @@ export function AdminMembersDirectoryMemberDetailCard({
               </thead>
               <tbody className="divide-y divide-border">
                 {paymentRecords.map((p) => (
-                  <tr key={p.id} className="hover:bg-surface-hover/50 transition-colors">
-                    <td className="p-3 font-mono font-semibold text-text-primary">{p.id}</td>
+                  <tr key={p.id} className={p.isWaiver ? 'bg-sky-500/5 hover:bg-sky-500/10 transition-colors' : 'hover:bg-surface-hover/50 transition-colors'}>
+                    <td className="p-3 font-mono font-semibold text-text-primary">
+                      <div className="flex items-center gap-1.5">
+                        {p.isWaiver && <Award size={13} className="text-sky-400 shrink-0" />}
+                        <span>{p.id}</span>
+                      </div>
+                    </td>
                     <td className="p-3 text-text-secondary">{p.date}</td>
-                    <td className="p-3 font-medium text-text-primary">{p.title}</td>
-                    <td className="p-3 font-bold text-emerald-400 font-mono">{p.amount}</td>
+                    <td className="p-3 font-medium text-text-primary">
+                      {p.title}
+                      {p.reason && <p className="text-[11px] text-sky-400/80 font-normal mt-0.5">{p.reason}</p>}
+                    </td>
+                    <td className={`p-3 font-bold font-mono ${p.isWaiver ? 'text-sky-300' : 'text-emerald-400'}`}>{p.amount}</td>
                     <td className="p-3 text-text-secondary">{p.mode}</td>
                     <td className="p-3">
-                      <span className="inline-flex rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-400">
+                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-semibold border ${
+                        p.isWaiver
+                          ? 'border-sky-500/30 bg-sky-500/15 text-sky-300'
+                          : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                      }`}>
                         {p.status}
                       </span>
                     </td>
                     <td className="p-3">
                       <div className="flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => setPreviewReceipt({ id: p.id, date: p.date, title: p.title, amount: p.amount, mode: p.mode, ref: p.ref })}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-border bg-card text-[11px] font-semibold text-sky-400 hover:bg-surface-hover transition-colors"
-                        >
-                          <Receipt size={12} /> Receipt
-                        </button>
+                        {p.isWaiver ? (
+                          <button
+                            type="button"
+                            onClick={() => setPreviewWaiverSlip({
+                              id: p.id,
+                              date: p.date,
+                              title: p.title,
+                              amount: p.amount.replace('-', ''),
+                              category: p.category || 'Special Concession',
+                              reason: p.reason || 'Admin Approved',
+                            })}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-sky-500/30 bg-sky-500/10 text-[11px] font-semibold text-sky-300 hover:bg-sky-500/20 transition-colors"
+                          >
+                            <FileText size={12} /> Concession Order
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setPreviewReceipt({ id: p.id, date: p.date, title: p.title, amount: p.amount, mode: p.mode, ref: p.ref })}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-border bg-card text-[11px] font-semibold text-sky-400 hover:bg-surface-hover transition-colors"
+                          >
+                            <Receipt size={12} /> Receipt
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={() => {
-                            const msg = encodeURIComponent(`Smart Library Receipt: ${p.id}\nMember: ${member.name}\nAmount: ${p.amount}\nDate: ${p.date}\nStatus: Verified.`);
+                            const msg = encodeURIComponent(
+                              p.isWaiver
+                                ? `Smart Library Concession Order: ${p.id}\nStudent: ${member.name} (${member.id})\nApproved Waiver: ${p.amount}\nCategory: ${p.category}\nAuthorized by Master Admin.`
+                                : `Smart Library Receipt: ${p.id}\nMember: ${member.name}\nAmount: ${p.amount}\nDate: ${p.date}\nStatus: Verified.`
+                            );
                             window.open(`https://wa.me/?text=${msg}`, '_blank');
                           }}
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-[11px] font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
-                          title="Share Receipt on WhatsApp"
+                          title={p.isWaiver ? 'Share Concession on WhatsApp' : 'Share Receipt on WhatsApp'}
                         >
                           <MessageSquare size={12} />
                         </button>
@@ -1191,6 +1354,162 @@ export function AdminMembersDirectoryMemberDetailCard({
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 text-black font-semibold text-xs hover:bg-emerald-400"
               >
                 <Download size={13} /> Download PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------- ADMIN SPECIAL FEE WAIVER MODAL -------------------- */}
+      {showWaiverModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay-backdrop backdrop-blur-sm" onClick={() => setShowWaiverModal(false)}>
+          <div className="relative w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-2xl space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={18} className="text-sky-400" />
+                <h4 className="text-sm font-bold text-text-primary">Admin Sanction: Grant Special Fee Waiver</h4>
+              </div>
+              <button type="button" onClick={() => setShowWaiverModal(false)} className="text-text-secondary hover:text-text-primary p-1">
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 p-3 text-xs text-sky-200">
+              <p className="font-semibold">Member: {member.name} ({member.id}) · Plan: {member.plan}</p>
+              <p className="text-[11px] text-sky-300/80 mt-0.5">
+                Fee concessions and late fee write-offs are reserved for Master Admin approval. An official credit memo will be generated.
+              </p>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="block text-text-secondary font-medium mb-1">Concession Category / Scheme</label>
+                <select
+                  value={waiverCategory}
+                  onChange={(e) => setWaiverCategory(e.target.value as any)}
+                  className="w-full rounded-lg border border-border bg-input px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-sky-500"
+                >
+                  <option value="EWS_ASSISTANCE">EWS Financial Hardship Concession (आर्थिक रूप से कमजोर छात्र)</option>
+                  <option value="MERIT_SCHOLARSHIP">Merit Scholarship Concession (मेधावी छात्र छात्रवृत्ति)</option>
+                  <option value="LATE_FEE_WAIVER">Late Fee Penalty Full/Partial Waive-Off (विलंब शुल्क माफी)</option>
+                  <option value="SPECIAL_ADMIN_DISCRETION">Admin Discretion Special Discount (विशेष एडमिन छूट)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-text-secondary font-medium mb-1">Waiver / Discount Amount (₹)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-2 text-text-secondary font-bold">₹</span>
+                  <input
+                    type="number"
+                    min="50"
+                    step="50"
+                    value={waiverAmount}
+                    onChange={(e) => setWaiverAmount(e.target.value)}
+                    className="w-full pl-8 pr-3 py-2 rounded-lg border border-border bg-input text-text-primary font-mono font-bold focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    placeholder="e.g. 1000"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-text-secondary font-medium mb-1">Administrative Justification / Approval Notes</label>
+                <textarea
+                  rows={2}
+                  value={waiverReason}
+                  onChange={(e) => setWaiverReason(e.target.value)}
+                  className="w-full rounded-lg border border-border bg-input px-3 py-2 text-text-primary focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  placeholder="Reason for concession, income certificate / rank proof ref..."
+                />
+              </div>
+
+              <div className="rounded-lg bg-surface-muted border border-border p-2.5 flex items-center justify-between text-[11px]">
+                <span className="text-text-secondary">Signing Authority:</span>
+                <span className="font-semibold text-sky-400">Master Operations Admin (Logged-in)</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
+              <button
+                type="button"
+                onClick={() => setShowWaiverModal(false)}
+                className="px-3 py-2 rounded-lg border border-border bg-card text-xs font-semibold text-text-secondary hover:bg-surface-hover"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleGrantWaiver}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-sky-500 text-slate-950 font-bold text-xs hover:bg-sky-400 shadow-md"
+              >
+                <Check size={14} /> Authorize & Credit Memo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------- CONCESSION ORDER PREVIEW MODAL -------------------- */}
+      {previewWaiverSlip && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-overlay-backdrop backdrop-blur-sm" onClick={() => setPreviewWaiverSlip(null)}>
+          <div className="relative w-full max-w-md rounded-2xl border border-sky-500/30 bg-card p-6 shadow-2xl space-y-4" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <div className="flex items-center gap-2">
+                <Award size={18} className="text-sky-400" />
+                <h4 className="text-sm font-bold text-text-primary">Official Concession Order</h4>
+              </div>
+              <button type="button" onClick={() => setPreviewWaiverSlip(null)} className="text-text-secondary hover:text-text-primary p-1">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="space-y-3 text-xs">
+              <div className="flex justify-between border-b border-border pb-2">
+                <span className="text-text-secondary">Order Reference:</span>
+                <span className="font-mono font-bold text-sky-400">{previewWaiverSlip.id}</span>
+              </div>
+              <div className="flex justify-between border-b border-border pb-2">
+                <span className="text-text-secondary">Beneficiary Student:</span>
+                <span className="font-semibold text-white">{member.name} ({member.id})</span>
+              </div>
+              <div className="flex justify-between border-b border-border pb-2">
+                <span className="text-text-secondary">Concession Type:</span>
+                <span className="text-white font-medium">{previewWaiverSlip.category}</span>
+              </div>
+              <div className="flex justify-between border-b border-border pb-2">
+                <span className="text-text-secondary">Sanction Date:</span>
+                <span className="text-white">{previewWaiverSlip.date}</span>
+              </div>
+              <div className="flex justify-between border-b border-border pb-2">
+                <span className="text-text-secondary">Justification:</span>
+                <span className="text-white text-right max-w-xs">{previewWaiverSlip.reason}</span>
+              </div>
+              <div className="flex justify-between pt-1 text-sm font-bold">
+                <span className="text-text-primary">Approved Discount / Waiver:</span>
+                <span className="text-sky-300 font-mono text-base">{previewWaiverSlip.amount}</span>
+              </div>
+              <div className="rounded-lg bg-sky-500/10 border border-sky-500/25 p-2 text-center text-[11px] text-sky-300 font-semibold">
+                ✓ Sanctioned under Executive Admin Power · Dues Adjusted
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
+              <button
+                type="button"
+                onClick={() => {
+                  printWaiverSlip(previewWaiverSlip);
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border bg-card text-xs font-semibold text-text-primary hover:bg-surface-hover"
+              >
+                <Printer size={13} /> Print Order Letter
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const msg = encodeURIComponent(`Smart Library Official Concession Notice:\nOrder: ${previewWaiverSlip.id}\nBeneficiary: ${member.name} (${member.id})\nApproved Concession: ${previewWaiverSlip.amount}\nCategory: ${previewWaiverSlip.category}\nAuthorized by Master Admin.`);
+                  window.open(`https://wa.me/?text=${msg}`, '_blank');
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-semibold text-xs hover:bg-emerald-400"
+              >
+                <MessageSquare size={13} /> WhatsApp Student
               </button>
             </div>
           </div>
