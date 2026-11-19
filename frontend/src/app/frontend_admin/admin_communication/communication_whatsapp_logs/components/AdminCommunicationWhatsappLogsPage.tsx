@@ -27,6 +27,7 @@ import {
   RotateCcw,
   Download,
   FileSpreadsheet,
+  Send,
 } from 'lucide-react';
 import { DataGrid } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
 import type { DataGridCellParams, DataGridColumn } from '@/app/frontend_admin/components/ui/data-grid/DataGrid';
@@ -811,30 +812,83 @@ export function AdminCommunicationWhatsappLogsPage() {
       <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg backdrop-blur-md space-y-4">
         {/* Quick Status Tabs Bar */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-2">
             {[
-              { id: 'All', label: 'All Statuses', count: visibleLogs.length },
-              { id: 'Delivered', label: 'Delivered', count: visibleLogs.filter((l) => l.status === 'Delivered').length },
-              { id: 'Sent', label: 'Sent', count: visibleLogs.filter((l) => l.status === 'Sent').length },
-              { id: 'Pending', label: 'Pending', count: visibleLogs.filter((l) => l.status === 'Pending').length },
-              { id: 'Failed', label: 'Failed', count: visibleLogs.filter((l) => l.status === 'Failed').length },
-            ].map((st) => (
-              <button
-                key={st.id}
-                type="button"
-                onClick={() => setStatusFilter(st.id)}
-                className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
-                  statusFilter === st.id
-                    ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 shadow-sm'
-                    : 'bg-slate-800/60 border border-slate-700/60 text-slate-400 hover:text-white hover:bg-slate-800'
-                }`}
-              >
-                <span>{st.label}</span>
-                <span className="rounded-full bg-slate-950/60 px-1.5 py-0.2 text-[10px] font-mono text-slate-300">
-                  {st.count}
-                </span>
-              </button>
-            ))}
+              {
+                id: 'All',
+                label: 'All Statuses',
+                count: visibleLogs.length,
+                icon: MessageSquare,
+                selectedBox: 'bg-indigo-600 border-indigo-400 text-white shadow-md shadow-indigo-950/50',
+                unselectedBox: 'bg-indigo-950/50 border-indigo-500/30 text-indigo-300 hover:bg-indigo-900/60',
+                selectedBadge: 'bg-white text-indigo-950 font-extrabold shadow-xs',
+                unselectedBadge: 'bg-indigo-500/20 border-indigo-400/40 text-indigo-200 font-bold',
+              },
+              {
+                id: 'Delivered',
+                label: 'Delivered',
+                count: visibleLogs.filter((l) => l.status === 'Delivered').length,
+                icon: CheckCheck,
+                selectedBox: 'bg-emerald-600 border-emerald-400 text-white shadow-md shadow-emerald-950/50',
+                unselectedBox: 'bg-emerald-950/50 border-emerald-500/30 text-emerald-300 hover:bg-emerald-900/60',
+                selectedBadge: 'bg-white text-emerald-950 font-extrabold shadow-xs',
+                unselectedBadge: 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200 font-bold',
+              },
+              {
+                id: 'Sent',
+                label: 'Sent',
+                count: visibleLogs.filter((l) => l.status === 'Sent').length,
+                icon: Send,
+                selectedBox: 'bg-sky-600 border-sky-400 text-white shadow-md shadow-sky-950/50',
+                unselectedBox: 'bg-sky-950/50 border-sky-500/30 text-sky-300 hover:bg-sky-900/60',
+                selectedBadge: 'bg-white text-sky-950 font-extrabold shadow-xs',
+                unselectedBadge: 'bg-sky-500/20 border-sky-400/40 text-sky-200 font-bold',
+              },
+              {
+                id: 'Pending',
+                label: 'Pending',
+                count: visibleLogs.filter((l) => l.status === 'Pending').length,
+                icon: Clock,
+                selectedBox: 'bg-amber-600 border-amber-400 text-white shadow-md shadow-amber-950/50',
+                unselectedBox: 'bg-amber-950/50 border-amber-500/30 text-amber-300 hover:bg-amber-900/60',
+                selectedBadge: 'bg-white text-amber-950 font-extrabold shadow-xs',
+                unselectedBadge: 'bg-amber-500/20 border-amber-400/40 text-amber-200 font-bold',
+              },
+              {
+                id: 'Failed',
+                label: 'Failed',
+                count: visibleLogs.filter((l) => l.status === 'Failed').length,
+                icon: AlertCircle,
+                selectedBox: 'bg-rose-600 border-rose-400 text-white shadow-md shadow-rose-950/50',
+                unselectedBox: 'bg-rose-950/50 border-rose-500/30 text-rose-300 hover:bg-rose-900/60',
+                selectedBadge: 'bg-white text-rose-950 font-extrabold shadow-xs',
+                unselectedBadge: 'bg-rose-500/20 border-rose-400/40 text-rose-200 font-bold',
+              },
+            ].map((st) => {
+              const isSelected = statusFilter === st.id;
+              const Icon = st.icon;
+              return (
+                <button
+                  key={st.id}
+                  type="button"
+                  data-testid={`admin_communication-status-filter-${st.id.toLowerCase()}`}
+                  onClick={() => setStatusFilter(st.id)}
+                  className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold border transition-all cursor-pointer ${
+                    isSelected ? st.selectedBox : st.unselectedBox
+                  }`}
+                >
+                  <Icon size={14} className={isSelected ? 'text-white' : 'opacity-90'} />
+                  <span>{st.label}</span>
+                  <span
+                    className={`inline-flex items-center justify-center min-w-[22px] px-1.5 py-0.5 rounded-lg text-[11px] font-mono border ${
+                      isSelected ? st.selectedBadge : st.unselectedBadge
+                    }`}
+                  >
+                    {st.count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {hasActiveFilters && (
