@@ -12,7 +12,6 @@ import DialogContent from '@/app/frontend_admin/components/ui/dialog/DialogConte
 import DialogDescription from '@/app/frontend_admin/components/ui/dialog/DialogDescription';
 import DialogTitle from '@/app/frontend_admin/components/ui/dialog/DialogTitle';
 import {
-  ChevronRight,
   Eye,
   X,
   MessageSquare,
@@ -694,12 +693,7 @@ export function AdminCommunicationWhatsappLogsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            <span>{t('BREADCRUMB_COMMUNICATION')}</span>
-            <ChevronRight size={14} />
-            <span className="text-slate-200">{t('WHATSAPP_LOGS_TITLE')}</span>
-          </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
             <div className="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
               <MessageSquare size={18} />
             </div>
