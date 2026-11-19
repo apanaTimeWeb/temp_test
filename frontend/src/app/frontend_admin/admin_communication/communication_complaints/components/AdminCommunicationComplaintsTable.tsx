@@ -202,16 +202,14 @@ export function AdminCommunicationComplaintsTable({
       <th
         scope="col"
         aria-sort={isActive ? (sortDirection === 'asc' ? 'ascending' : 'descending') : undefined}
-        className={`py-3.5 px-4 whitespace-nowrap text-xs font-semibold uppercase tracking-wider text-muted-foreground ${
-          align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'
-        }`}
+        className={`py-3.5 px-4 whitespace-nowrap text-xs font-semibold uppercase tracking-wider text-muted-foreground ${align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : 'text-left'
+          }`}
       >
         <button
           type="button"
           onClick={() => toggleSort(field)}
-          className={`group inline-flex items-center gap-1.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${
-            align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''
-          }`}
+          className={`group inline-flex items-center gap-1.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 -mx-1 ${align === 'right' ? 'ml-auto' : align === 'center' ? 'mx-auto' : ''
+            }`}
           aria-label={`${label}, sort ${isActive ? (sortDirection === 'asc' ? 'descending' : 'ascending') : 'ascending'}`}
         >
           <span>{label}</span>
