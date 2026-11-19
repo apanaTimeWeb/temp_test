@@ -116,4 +116,34 @@ describe('AdminShellHeader logout modal viewport centering contract', () => {
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(screen.queryByRole('dialog')).toBeNull();
   });
+
+  it('toggles notifications popover on bell button click and closes on Escape', () => {
+    render(
+      <AdminBranchProvider>
+        <AdminShellHeader />
+      </AdminBranchProvider>,
+    );
+
+    const bellBtn = screen.getByTestId('admin_header-AdminShellHeader-control-002');
+    expect(screen.queryByTestId('admin-notifications-dropdown')).toBeNull();
+
+    // Click to open
+    fireEvent.click(bellBtn);
+    const dropdown = screen.getByTestId('admin-notifications-dropdown');
+    expect(dropdown).toBeTruthy();
+    expect(screen.getByText('Notifications')).toBeTruthy();
+    expect(screen.getByTestId('admin-notifications-view-all')).toHaveAttribute(
+      'href',
+      '/admin/admin_communication/communication_notification_center'
+    );
+
+    // Mark all read
+    const markAllBtn = screen.getByRole('button', { name: /Mark all read/i });
+    fireEvent.click(markAllBtn);
+    expect(screen.getByText('All caught up')).toBeTruthy();
+
+    // Press Escape closes dropdown
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByTestId('admin-notifications-dropdown')).toBeNull();
+  });
 });

@@ -277,6 +277,25 @@
   from { opacity: 0; transform: translateY(-6px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.admin-notifications-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  background: rgba(11, 12, 32, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7), 0 0 30px rgba(99, 102, 241, 0.1);
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  animation: admin-dropdown-fade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
 .admin-profile-dropdown-header {
   display: flex;
   align-items: center;

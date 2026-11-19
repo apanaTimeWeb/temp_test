@@ -8,7 +8,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Building2, Bell, Menu, LogOut, User, ChevronDown } from 'lucide-react';
+import { Building2, Bell, Menu, LogOut, User, ChevronDown, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { AdminShellThemeToggle } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminShellThemeToggle';
 import { useAdminBranch } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/AdminBranchProvider';
@@ -20,12 +20,82 @@ import SelectValue from '@/components/ui/select/SelectValue';
 import Button from '@/components/ui/button/Button';
 import type { AdminShellHeaderProps } from '@/app/frontend_admin/application_infrastructure/application_infrastructure_components/types/AdminApplicationInfrastructureApplicationInfrastructureComponentsComponentTypes';
 
+interface HeaderNotificationItem {
+  id: string;
+  title: string;
+  description: string;
+  time: string;
+  category: string;
+  priority: 'high' | 'medium' | 'info';
+  read: boolean;
+  branch: string;
+}
+
+const DEFAULT_HEADER_NOTIFICATIONS: HeaderNotificationItem[] = [
+  {
+    id: 'notif-1',
+    title: '3 Desk Subscriptions Expiring',
+    description: 'Renewals due within 48 hours for Downtown Central desks.',
+    time: '10m ago',
+    category: 'Finance',
+    priority: 'high',
+    read: false,
+    branch: 'Downtown Central',
+  },
+  {
+    id: 'notif-2',
+    title: 'New Student Walk-in Inquiries',
+    description: '2 walk-in visitor leads registered at Westside reception.',
+    time: '45m ago',
+    category: 'CRM',
+    priority: 'medium',
+    read: false,
+    branch: 'Westside Branch',
+  },
+  {
+    id: 'notif-3',
+    title: 'Daily Cash Settlement Pending',
+    description: 'Morning shift cash counter closing handover awaits approval.',
+    time: '2h ago',
+    category: 'Accounts',
+    priority: 'high',
+    read: false,
+    branch: 'North Hub',
+  },
+  {
+    id: 'notif-4',
+    title: 'Digital Notice Broadcasted',
+    description: 'Library holiday schedule notice successfully delivered.',
+    time: '1d ago',
+    category: 'Notice',
+    priority: 'info',
+    read: true,
+    branch: 'All Branches',
+  },
+];
+
 export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderProps) {
   const t = useTranslations('ADMIN_SHELL');
   const { branches, selectedBranchId, setSelectedBranchId } = useAdminBranch();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<HeaderNotificationItem[]>(DEFAULT_HEADER_NOTIFICATIONS);
   const profileMenuRef = useRef<HTMLDivElement>(null);
+  const notificationsMenuRef = useRef<HTMLDivElement>(null);
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const handleMarkAllAsRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    toast.success('All notifications marked as read');
+  };
+
+  const handleMarkAsRead = (id: string) => {
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+    );
+  };
 
   const handleSignOut = useCallback(() => {
     try {
@@ -47,29 +117,33 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
     window.location.href = '/public_auth/auth_sign_in';
   }, []);
 
-  // Close profile menu when clicking outside
+  // Close menus when clicking outside
   useEffect(() => {
-    if (!isProfileOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
-      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (profileMenuRef.current && !profileMenuRef.current.contains(target)) {
         setIsProfileOpen(false);
+      }
+      if (notificationsMenuRef.current && !notificationsMenuRef.current.contains(target)) {
+        setIsNotificationsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isProfileOpen]);
+  }, []);
 
-  // Close logout modal when pressing Escape
+  // Close modals and dropdowns when pressing Escape
   useEffect(() => {
-    if (!showLogoutModal) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setShowLogoutModal(false);
+        setIsProfileOpen(false);
+        setIsNotificationsOpen(false);
       }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [showLogoutModal]);
+  }, []);
 
   return (
     <header className={`admin-header ${collapsed ? 'admin-header-collapsed' : 'admin-header-expanded'}`} data-testid="admin-header">
@@ -111,16 +185,120 @@ export function AdminShellHeader({ onMobileOpen, collapsed }: AdminShellHeaderPr
       <div className="admin-header-right flex items-center gap-2.5 sm:gap-3">
         <AdminShellThemeToggle />
 
-        <button
-          type="button"
-          data-testid="admin_header-AdminShellHeader-control-002"
-          className="admin-bell-btn"
-          aria-label={t('NOTIFICATIONS_UNAVAILABLE')}
-          title={t('NOTIFICATIONS_BLOCKED')}
-        >
-          <Bell size={18} strokeWidth={2} aria-hidden="true" />
-          <span className="admin-bell-dot" aria-hidden="true" />
-        </button>
+        {/* Notifications Popover */}
+        <div ref={notificationsMenuRef} className="relative">
+          <button
+            type="button"
+            data-testid="admin_header-AdminShellHeader-control-002"
+            className="admin-bell-btn focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+            onClick={() => {
+              setIsNotificationsOpen((prev) => !prev);
+              setIsProfileOpen(false);
+            }}
+            aria-expanded={isNotificationsOpen}
+            aria-haspopup="true"
+            aria-label={unreadCount > 0 ? `${unreadCount} unread notifications` : 'Notifications'}
+            title={unreadCount > 0 ? `${unreadCount} unread notifications` : 'Notifications'}
+          >
+            <Bell size={18} strokeWidth={2} aria-hidden="true" />
+            {unreadCount > 0 && <span className="admin-bell-dot" aria-hidden="true" />}
+          </button>
+
+          {isNotificationsOpen && (
+            <div
+              className="admin-notifications-dropdown"
+              role="region"
+              aria-label="Notifications Dropdown"
+              data-testid="admin-notifications-dropdown"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 py-3 border-b border-indigo-500/20 bg-indigo-950/40">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-xs uppercase tracking-wider text-white">
+                    Notifications
+                  </span>
+                  {unreadCount > 0 ? (
+                    <span className="rounded-full bg-indigo-500/20 border border-indigo-500/40 px-2 py-0.5 text-[10px] font-semibold text-indigo-300">
+                      {unreadCount} New
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-slate-800 border border-slate-700 px-2 py-0.5 text-[10px] font-medium text-slate-400">
+                      All caught up
+                    </span>
+                  )}
+                </div>
+                {unreadCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleMarkAllAsRead}
+                    className="text-[11px] font-medium text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
+                  >
+                    Mark all read
+                  </button>
+                )}
+              </div>
+
+              {/* Notification Items List */}
+              <div className="max-h-72 overflow-y-auto divide-y divide-white/5">
+                {notifications.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => handleMarkAsRead(item.id)}
+                    className={`p-3.5 hover:bg-white/[0.04] transition-colors cursor-pointer flex gap-3 text-left ${
+                      !item.read ? 'bg-indigo-500/[0.06]' : ''
+                    }`}
+                  >
+                    <div className="mt-1 shrink-0">
+                      <span
+                        className={`inline-block h-2 w-2 rounded-full ${
+                          !item.read
+                            ? item.priority === 'high'
+                              ? 'bg-rose-400 shadow-sm shadow-rose-400/50'
+                              : 'bg-indigo-400 shadow-sm shadow-indigo-400/50'
+                            : 'bg-slate-600'
+                        }`}
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-1 mb-0.5">
+                        <p className={`text-xs font-semibold truncate ${!item.read ? 'text-white' : 'text-slate-300'}`}>
+                          {item.title}
+                        </p>
+                        <span className="text-[10px] text-slate-400 shrink-0 font-mono">
+                          {item.time}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                        {item.description}
+                      </p>
+                      <div className="mt-1.5 flex items-center gap-2">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700/60 font-medium">
+                          {item.branch}
+                        </span>
+                        <span className="text-[10px] text-indigo-400/80 font-medium">
+                          {item.category}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer: View All in Notification Center */}
+              <div className="p-2 border-t border-indigo-500/20 bg-indigo-950/30">
+                <Link
+                  href={ADMIN_ROUTES.COMMUNICATION_NOTIFICATION_CENTER}
+                  onClick={() => setIsNotificationsOpen(false)}
+                  data-testid="admin-notifications-view-all"
+                  className="flex items-center justify-center gap-1.5 w-full py-2 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 rounded-xl transition-all"
+                >
+                  <span>View All in Notification Center</span>
+                  <ChevronRight size={13} />
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
 
         <div
           ref={profileMenuRef}
