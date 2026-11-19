@@ -27,11 +27,15 @@
     "ERROR_BOUNDARY_TITLE": "This section could not be displayed",
     "ERROR_BOUNDARY_FALLBACK": "Something went wrong while displaying this section. Try again to reload it.",
     "ERROR_BOUNDARY_RETRY": "Try again",
-    "MODULE_MEMBERS": "Members",
+    "MODULE_MEMBERS": "Members & Admissions",
     "MODULE_STUDENTS": "Students",
-    "MODULE_BRANCHES": "Branches",
+    "MODULE_BRANCHES": "Branches & Infrastructure",
     "MODULE_DASHBOARD": "Dashboard",
-    "MODULE_REPORTS": "Reports",
+    "MODULE_REPORTS": "Reports & Analytics",
+    "MODULE_SEATS": "Seats, Shifts & Lockers",
+    "MODULE_FINANCE": "Finance & Cash Handover",
+    "MODULE_COMMUNICATION": "Communication & Notices",
+    "MODULE_STAFF": "Staff Operations & Payroll",
     "MODULE_UNKNOWN": "Other module",
     "LIVE_UNAVAILABLE": "Live permission data is disabled because no verified backend API endpoint is defined. Demo preview remains available when demo mode is enabled."
   }

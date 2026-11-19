@@ -14,8 +14,21 @@ import type { AdminStaffRolesPermissionsMatrixTableProps } from '@/app/frontend_
 export default function AdminStaffRolesPermissionsMatrixTable({ modules, demoMode, onToggle }: AdminStaffRolesPermissionsMatrixTableProps) {
   const t = useTranslations('ADMIN_STAFF_ROLES_PERMISSIONS');
   const roleLabels: Record<AdminStaffRolesPermissionsRole, string> = { manager: t('ROLE_MANAGER') };
-  const moduleLabelKeys: Record<string, string> = { members: 'MODULE_MEMBERS', students: 'MODULE_STUDENTS', branches: 'MODULE_BRANCHES', dashboard: 'MODULE_DASHBOARD', reports: 'MODULE_REPORTS' };
-  const getModuleLabel = (moduleId: string) => { const key = moduleLabelKeys[moduleId.trim().toLowerCase()]; return key ? t(key) : t('MODULE_UNKNOWN'); };
+  const moduleLabelKeys: Record<string, string> = {
+    members: 'MODULE_MEMBERS',
+    students: 'MODULE_STUDENTS',
+    branches: 'MODULE_BRANCHES',
+    dashboard: 'MODULE_DASHBOARD',
+    reports: 'MODULE_REPORTS',
+    seats: 'MODULE_SEATS',
+    finance: 'MODULE_FINANCE',
+    communication: 'MODULE_COMMUNICATION',
+    staff: 'MODULE_STAFF',
+  };
+  const getModuleLabel = (moduleId: string) => {
+    const key = moduleLabelKeys[moduleId.trim().toLowerCase()];
+    return key ? t(key) : moduleId.charAt(0).toUpperCase() + moduleId.slice(1);
+  };
 
   return (
     <div className="overflow-x-auto rounded-lg border border-border bg-card">

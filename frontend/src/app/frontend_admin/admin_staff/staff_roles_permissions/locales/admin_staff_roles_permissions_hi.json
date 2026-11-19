@@ -1,6 +1,6 @@
 {
   "ADMIN_STAFF_ROLES_PERMISSIONS": {
-    "BREADCRUMB": "स्मार्ट जिम 360 › एडमिन › अनुमतियाँ",
+    "BREADCRUMB": "स्मार्ट लाइब्रेरी › एडमिन › अनुमतियाँ",
     "PAGE_TITLE": "भूमिका अनुमतियाँ",
     "PAGE_SUBTITLE": "शाखाओं में मैनेजर क्या कर सकते हैं, इसकी समीक्षा करें।",
     "SAVE_CHANGES": "बदलाव सहेजें",
@@ -27,11 +27,15 @@
     "ERROR_BOUNDARY_TITLE": "यह अनुभाग प्रदर्शित नहीं हो सका",
     "ERROR_BOUNDARY_FALLBACK": "इस अनुभाग को प्रदर्शित करते समय कुछ गलत हुआ। इसे फिर से लोड करने के लिए दोबारा प्रयास करें।",
     "ERROR_BOUNDARY_RETRY": "फिर से प्रयास करें",
-    "MODULE_MEMBERS": "सदस्य",
-    "MODULE_STUDENTS": "छात्र",
-    "MODULE_BRANCHES": "शाखाएँ",
-    "MODULE_DASHBOARD": "डैशबोर्ड",
-    "MODULE_REPORTS": "रिपोर्ट",
+    "MODULE_MEMBERS": "सदस्य और प्रवेश (Members & Admissions)",
+    "MODULE_STUDENTS": "छात्र (Students)",
+    "MODULE_BRANCHES": "शाखाएँ और इंफ्रास्ट्रक्चर (Branches)",
+    "MODULE_DASHBOARD": "डैशबोर्ड (Dashboard)",
+    "MODULE_REPORTS": "रिपोर्ट्स और एनालिटिक्स (Reports)",
+    "MODULE_SEATS": "सीटें, शिफ्ट और लॉकर (Seats, Shifts & Lockers)",
+    "MODULE_FINANCE": "फाइनेंस और कैश समाधान (Finance & Cash Handover)",
+    "MODULE_COMMUNICATION": "कम्युनिकेशन और नोटिस (Communication)",
+    "MODULE_STAFF": "स्टाफ ऑपरेशन्स और वेतन (Staff & Payroll)",
     "MODULE_UNKNOWN": "अन्य मॉड्यूल",
     "LIVE_UNAVAILABLE": "लाइव अनुमति डेटा उपलब्ध नहीं है क्योंकि सत्यापित बैकएंड API एंडपॉइंट परिभाषित नहीं है। डेमो मोड चालू होने पर प्रीव्यू उपलब्ध है।"
   }
