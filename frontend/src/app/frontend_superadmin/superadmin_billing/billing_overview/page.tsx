@@ -14,12 +14,12 @@ export default async function BillingOverviewRoutePage({ searchParams }: { searc
 
   // Canonical workflow views dispatch
   if (view === 'member_finance_overview' ||
-      view === 'member_late_fees' ||
-      view === 'member_payment_promises' ||
-      view === 'member_payments' ||
-      view === 'member_payments_collection' ||
-      view === 'member_refunds' ||
-      view === 'member_security_deposits') {
+    view === 'member_late_fees' ||
+    view === 'member_payment_promises' ||
+    view === 'member_payments' ||
+    view === 'member_payments_collection' ||
+    view === 'member_refunds' ||
+    view === 'member_security_deposits') {
     // Route dispatches into the unified overview screen with view parameter
   }
 

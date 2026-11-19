@@ -3,7 +3,7 @@
 import { delay, http, HttpResponse } from 'msw';
 import { SUPERADMIN_COMMUNICATION_NOTICES_API as __API } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/config/superadmin_communication_notices.url_config';
 
-const endpoint = __API.NOTICES_LIST;
+const endpoint = `*${__API.NOTICES_LIST}`;
 const paginationMeta = (total: number) => ({
   total,
   page: 1,
