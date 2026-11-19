@@ -4,7 +4,7 @@ import type { SuperadminSystemProfileFormValues } from '@/app/frontend_superadmi
 
 /** Synthetic form defaults for isolated UI preview/stress testing only; not a backend profile payload. */
 export const SUPERADMIN_LIBRARIES_PROFILE_CONFIGURATION_PREVIEW_DEFAULTS: SuperadminSystemProfileFormValues = {
-  fullName: 'Sample Superadmin',
-  email: 'sample-admin@example.invalid',
-  phone: '+91 00000 00000',
+  fullName: 'John Doe',
+  email: 'john.doe@libraryos.com',
+  phone: '+91 98765 43210',
 };

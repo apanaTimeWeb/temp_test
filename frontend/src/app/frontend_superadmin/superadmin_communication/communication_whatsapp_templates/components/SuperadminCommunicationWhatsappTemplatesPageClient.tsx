@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useState, useRef, useMemo } from 'react';
 import { useSuperadminCommunicationWhatsappTemplatesDialog } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_templates/hooks/useSuperadminCommunicationWhatsappTemplatesDialog';
 import { SUPERADMIN_COMMUNICATION_WHATSAPP_TEMPLATE_PREVIEWS } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_templates/mocks/fixtures/SuperadminCommunicationWhatsappTemplatesWhatsappTemplateMockFixtures';
-import { ChevronRight, X, Send, Save, Hand, Wallet, Repeat, Receipt, Megaphone, CalendarDays, Handshake, type LucideIcon } from 'lucide-react';
+import { X, Send, Save, Hand, Wallet, Repeat, Receipt, Megaphone, CalendarDays, Handshake, type LucideIcon } from 'lucide-react';
 import type { SuperadminCommunicationWhatsappTemplateIcon, SuperadminCommunicationWhatsappTemplatesPageClientProps } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_templates/types/superadmin_communication_whatsapp_templates.types';
 import { useTranslations } from 'next-intl';
 import { SuperadminCommunicationWhatsappTemplatesEmptyState } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_templates/components/SuperadminCommunicationWhatsappTemplatesEmptyState';
@@ -111,9 +111,6 @@ export default function SuperadminCommunicationWhatsappTemplatesPageClient({ id 
       )}
 
       <div className="mb-8">
-        <div className="eng-breadcrumb">
-          <span>{tCopy("COPY.COMMUNICATION")}</span><ChevronRight size={12} /><span>{tCopy("COPY.WHATSAPP_TEMPLATES")}</span>
-        </div>
         <h1 className="eng-page-title">{tCopy("COPY.WHATSAPP_TEMPLATES_2")}</h1>
         <p className="eng-page-subtitle">{tCopy("COPY.EDIT_SYNTHETIC_TEMPLATE_TEXT_FOR_LOCAL_PREVIEW_ONLY_SAVING_DOES_NOT_PUBLISH_TEMPLATES_OR_SEND_MESSAGES")}</p>
       </div>

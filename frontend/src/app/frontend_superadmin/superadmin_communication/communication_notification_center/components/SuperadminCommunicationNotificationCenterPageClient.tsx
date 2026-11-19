@@ -3,7 +3,7 @@
 /** Data-Flow: canonical route -> SuperadminCommunicationNotificationCenterPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 import { useEffect } from 'react';
 import { useSuperadminCommunicationNotificationCenterState } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/hooks/useSuperadminCommunicationNotificationCenterState';
-import { ChevronRight, ArrowRight, CheckCheck } from 'lucide-react';
+import { ArrowRight, CheckCheck } from 'lucide-react';
 import type { SuperadminCommunicationNotificationFilter as Category } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
 import { SUPERADMIN_COMMUNICATION_NOTIFICATION_FILTERS as CATS, SUPERADMIN_COMMUNICATION_NOTIFICATION_ICON_CLASS as ICON_CLS } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/constants/SuperadminCommunicationNotificationCenterNotificationConstants';
 import { useTranslations } from 'next-intl';
@@ -46,9 +46,6 @@ export default function SuperadminCommunicationNotificationCenterPageClient({ id
   return (
     <div className="eng-page" data-resource-id={id || undefined}>
       <div className="mb-8">
-        <div className="eng-breadcrumb">
-          <span>{tCopy("COPY.COMMUNICATION")}</span><ChevronRight size={12} /><span>{tCopy("COPY.NOTIFICATION_CENTER")}</span>
-        </div>
         <div className="flex items-center justify-between">
           <div>
             <h1 className="eng-page-title">{tCopy("COPY.NOTIFICATION_CENTER_2")}</h1>

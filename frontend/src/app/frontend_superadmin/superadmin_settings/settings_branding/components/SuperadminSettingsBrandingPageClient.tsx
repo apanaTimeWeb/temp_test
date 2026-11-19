@@ -17,7 +17,7 @@ import { SuperadminSettingsBrandingCardFooter as CardFooter } from '@/app/fronte
 import { SuperadminSettingsBrandingButton as Button } from '@/app/frontend_superadmin/superadmin_settings/settings_branding/components/SuperadminSettingsBrandingButton';
 import { SuperadminSettingsBrandingInput as Input } from '@/app/frontend_superadmin/superadmin_settings/settings_branding/components/SuperadminSettingsBrandingInput';
 import { SuperadminSettingsBrandingLabel as Label } from '@/app/frontend_superadmin/superadmin_settings/settings_branding/components/SuperadminSettingsBrandingLabel';
-import { Palette, ChevronRight, Upload, RotateCcw, Save } from 'lucide-react';
+import { Palette, Upload, RotateCcw, Save } from 'lucide-react';
 import { useSuperadminSettingsBrandingUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_settings/settings_branding/hooks/useSuperadminSettingsBrandingUnsavedChangesGuard';
 import { SUPERADMIN_SYSTEM_BRANDING_PAGE_CLIENT_BRANDING_DEFAULTS } from '@/app/frontend_superadmin/superadmin_settings/settings_branding/constants/SuperadminSettingsBrandingStaticConstants';
 
@@ -88,9 +88,6 @@ export default function SuperadminSettingsBrandingPageClient() {
   return (
     <div>
       <div className="mb-8">
-        <div className="flex items-center gap-2 text-secondary text-xs font-medium tracking-wide mb-1">
-          <span>{tCopy("COPY.SYSTEM")}</span><ChevronRight size={12} /><span>{tCopy("COPY.BRANDING")}</span>
-        </div>
         <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
           <Palette size={28} className="text-primary" />
           {tCopy("COPY.BRANDING_AND_WHITE_LABEL")}</h1>

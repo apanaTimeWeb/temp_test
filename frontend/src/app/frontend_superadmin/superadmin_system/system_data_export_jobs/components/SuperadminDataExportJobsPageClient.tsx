@@ -13,7 +13,7 @@ import { SuperadminDataExportJobsCardContent as CardContent } from '@/app/fronte
 import { SuperadminDataExportJobsCardFooter as CardFooter } from '@/app/frontend_superadmin/superadmin_system/system_data_export_jobs/components/SuperadminDataExportJobsCardFooter';
 import { SuperadminDataExportJobsButton as Button } from '@/app/frontend_superadmin/superadmin_system/system_data_export_jobs/components/SuperadminDataExportJobsButton';
 import { SuperadminDataExportJobsBadge as Badge } from '@/app/frontend_superadmin/superadmin_system/system_data_export_jobs/components/SuperadminDataExportJobsBadge';
-import { Download, FileSpreadsheet, ChevronRight, CheckCircle } from 'lucide-react';
+import { Download, FileSpreadsheet, CheckCircle } from 'lucide-react';
 import { SuperadminSystemCreateExportManifestCsv, SuperadminSystemDownloadExportManifestCsv, type SuperadminSystemExportManifestEntry } from '@/app/frontend_superadmin/superadmin_system/system_data_export_jobs/utils/SuperadminDataExportJobsExportUtilities';
 import { SUPERADMIN_SYSTEM_DATA_EXPORT_PAGE_CLIENT_EXPORT_MODULES, SUPERADMIN_SYSTEM_DATA_EXPORT_QUICK_EXPORTS } from '@/app/frontend_superadmin/superadmin_system/system_data_export_jobs/constants/SuperadminDataExportJobsStaticConstants';
 
@@ -99,9 +99,6 @@ export default function SuperadminDataExportJobsPageClient() {
   return (
     <div>
       <div className="mb-8">
-        <div className="flex items-center gap-2 text-secondary text-xs font-medium tracking-wide mb-1">
-          <span>{tCopy("COPY.SYSTEM")}</span><ChevronRight size={12} /><span>{tCopy("COPY.DATA_EXPORT")}</span>
-        </div>
         <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
           <Download size={28} className="text-primary" />
           {tCopy("COPY.DATA_EXPORT")}</h1>

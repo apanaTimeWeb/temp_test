@@ -13,7 +13,7 @@ import { useSuperadminSupportComplaintsQuery } from '@/app/frontend_superadmin/s
 import type { SuperadminSupportComplaint as Complaint, SuperadminSupportComplaintStatus as CStatus, SuperadminSupportComplaintStatusFilter } from '@/app/frontend_superadmin/superadmin_support/support_complaints/types/SuperadminSupportComplaintsTypes';
 import { SUPERADMIN_SUPPORT_COMPLAINTS_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_support/support_complaints/api/superadmin_support_complaints.query_keys';
 import { useQueryClient } from '@tanstack/react-query';
-import { ChevronRight, Plus, X, Eye, RefreshCw, CheckCircle } from 'lucide-react';
+import { Plus, X, Eye, RefreshCw, CheckCircle } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import SuperadminSupportComplaintsListSkeleton from '@/app/frontend_superadmin/superadmin_support/support_complaints/components/SuperadminSupportComplaintsListSkeleton';
 import { formatSuperadminSupportComplaintDate } from '@/app/frontend_superadmin/superadmin_support/support_complaints/utils/SuperadminSupportComplaintsDateFormatter';
@@ -195,9 +195,6 @@ export default function SuperadminSupportComplaintsPageClient({ id }: { id?: str
 
       {/* Header */}
       <div className="mb-8">
-        <div className="eng-breadcrumb">
-          <span>{tCopy("COPY.COMMUNICATION")}</span><ChevronRight size={12} /><span>{tCopy("COPY.COMPLAINTS")}</span>
-        </div>
         <div className="flex items-center justify-between">
           <div>
             <h1 className="eng-page-title">{tCopy("COPY.COMPLAINTS_2")}</h1>

@@ -16,7 +16,7 @@ import { SuperadminBackupConfigurationCardFooter as CardFooter } from '@/app/fro
 import { SuperadminBackupConfigurationButton as Button } from '@/app/frontend_superadmin/superadmin_system/system_backup_configuration/components/SuperadminBackupConfigurationButton';
 import { SuperadminBackupConfigurationKpiCard as KpiCard } from '@/app/frontend_superadmin/superadmin_system/system_backup_configuration/components/SuperadminBackupConfigurationKpiCard';
 import { SuperadminBackupConfigurationSwitch as Switch } from '@/app/frontend_superadmin/superadmin_system/system_backup_configuration/components/SuperadminBackupConfigurationSwitch';
-import { Database, ChevronRight, Clock, HardDrive, Shield, Cloud } from 'lucide-react';
+import { Database, Clock, HardDrive, Shield, Cloud } from 'lucide-react';
 import { SUPERADMIN_BACKUP_PROVIDER_OPTIONS } from '@/app/frontend_superadmin/superadmin_system/system_backup_configuration/constants/SuperadminBackupConfigurationStaticConstants';
 import { SUPERADMIN_SYSTEM_BACKUP_STATUS } from '@/app/frontend_superadmin/superadmin_system/system_backup_configuration/constants/SuperadminBackupConfigurationBackupConstants';
 
@@ -40,9 +40,6 @@ export default function SuperadminBackupConfigurationPageClient() {
 
       <p className="mb-5 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{operationMessage}</p>
       <div className="mb-8">
-        <div className="flex items-center gap-2 text-secondary text-xs font-medium tracking-wide mb-1">
-          <span>{tCopy("COPY.SYSTEM")}</span><ChevronRight size={12} /><span>{tCopy("COPY.BACKUPS")}</span>
-        </div>
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-3xl font-bold text-primary flex items-center gap-3">

@@ -11,7 +11,7 @@ import { SUPERADMIN_COMMUNICATION_WHATSAPP_SAMPLE_LOGS } from '@/app/frontend_su
 import { filterSuperadminCommunicationWhatsappLogs } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_logs/utils/SuperadminCommunicationWhatsappLogsWhatsappLogUtilities';
 import { maskSensitiveData } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_logs/utils/SuperadminCommunicationWhatsappLogsWhatsappLogUtilities';
 import { useEffect, useRef, useState } from 'react';
-import { ChevronRight, Eye, X } from 'lucide-react';
+import { Eye, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_COMMUNICATION_WHATSAPP_LOGS_PAGE_CLIENT_SELECTOR } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_logs/constants/SuperadminCommunicationWhatsappLogsStaticConstants';
 
@@ -200,9 +200,6 @@ export default function SuperadminCommunicationWhatsappLogsPageClient({ id }: { 
       )}
 
       <div className="mb-8">
-        <div className="eng-breadcrumb">
-          <span>{tCopy("COPY.COMMUNICATION")}</span><ChevronRight size={12} /><span>{tCopy("COPY.WHATSAPP_LOGS")}</span>
-        </div>
         <h1 className="eng-page-title">{tCopy("COPY.WHATSAPP_LOGS_2")}</h1>
         <p className="eng-page-subtitle">{tCopy("COPY.SYNTHETIC_SAMPLE_MESSAGE_LOGS_ONLY_NO_MESSAGES_WERE_SENT_LIVE_MESSAGING_HISTORY_WAS_NOT_SUPPLIED")}</p>
       </div>

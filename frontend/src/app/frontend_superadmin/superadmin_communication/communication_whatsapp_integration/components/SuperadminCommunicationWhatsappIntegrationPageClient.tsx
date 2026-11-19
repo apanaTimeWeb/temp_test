@@ -20,7 +20,7 @@ import SuperadminCommunicationWhatsappIntegrationWhatsappSummary from '@/app/fro
 import SuperadminCommunicationWhatsappIntegrationWhatsappMessageLogs from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_integration/components/SuperadminCommunicationWhatsappIntegrationWhatsappMessageLogs';
 import { SUPERADMIN_WHATSAPP_PROVIDERS, SUPERADMIN_WHATSAPP_SAMPLE_LOGS } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_integration/mocks/fixtures/SuperadminCommunicationWhatsappIntegrationWhatsappMockFixtures';
 import {
-  MessageSquare, ChevronRight, CheckCircle, Phone, Zap, Copy
+  MessageSquare, CheckCircle, Phone, Zap, Copy
 } from 'lucide-react';
 import { SUPERADMIN_SYSTEM_WHATSAPP_INTEGRATION_PAGE_CLIENT_WEBHOOK_URL } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_integration/constants/SuperadminCommunicationWhatsappIntegrationStaticConstants';
 import { SUPERADMIN_SYSTEM_WHATSAPP_INTEGRATION_PAGE_CLIENT_TEST_STATUS } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_integration/constants/SuperadminCommunicationWhatsappIntegrationStaticConstants';
@@ -50,9 +50,6 @@ export default function SuperadminCommunicationWhatsappIntegrationPageClient() {
       {(SUPERADMIN_WHATSAPP_SAMPLE_LOGS.length === 0) && <SuperadminCommunicationWhatsappIntegrationEmptyState filtered />}
 
       <div className="mb-8">
-        <div className="flex items-center gap-2 text-secondary text-xs font-medium tracking-wide mb-1">
-          <span>{tCopy("COPY.SYSTEM")}</span><ChevronRight size={12} /><span>{tCopy("COPY.WHATSAPP_INTEGRATION")}</span>
-        </div>
         <h1 className="text-3xl font-bold text-primary flex items-center gap-3">
           <MessageSquare size={28} className="text-primary" />
           {tCopy("COPY.WHATSAPP_INTEGRATION")}</h1>
