@@ -508,14 +508,8 @@ export function AdminCommunicationNoticesPage() {
         </div>
       </div>
 
-      {/* Multi-Branch Notice Filter Pills & Search */}
+      {/* Notice Search Bar (Branch filtering is governed solely via the global Admin Shell Header) */}
       <AdminCommunicationNoticesBranchBar
-        branches={branches}
-        selectedBranchId={selectedBranchId}
-        selectedBranch={selectedBranch}
-        setSelectedBranchId={setSelectedBranchId}
-        isAllBranches={isAllBranches}
-        totalNotices={notices.length}
         search={search}
         onSearchChange={setSearch}
       />

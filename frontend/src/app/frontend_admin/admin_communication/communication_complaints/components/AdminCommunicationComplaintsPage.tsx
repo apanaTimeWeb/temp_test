@@ -533,12 +533,9 @@ export function AdminCommunicationComplaintsPage() {
         </div>
       </div>
 
-      {/* Multi-Branch Complaint Filter Pills, Search Bar & Status Filter Tabs */}
+      {/* Complaint Status Filter Tabs, Search Bar & Export Controls (Branch filtering is governed solely via the global Admin Shell Header) */}
       <AdminCommunicationComplaintsBranchBar
-        branches={branches}
-        selectedBranchId={selectedBranchId}
         selectedBranch={selectedBranch}
-        setSelectedBranchId={setSelectedBranchId}
         isAllBranches={isAllBranches}
         complaints={complaints}
         tab={tab}
