@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
   Eye, EyeOff, BookOpen, Lock,
-  Shield, Zap, Users,
+  Shield, Zap, Users, MessageCircle,
 } from 'lucide-react';
 import { PublicAuthBlockerOverlay, PublicAuthButtonLoader } from '@/app/public_auth/auth_sign_in/components/PublicAuthSignInLoader';
 import { usePublicAuthLoginMutation } from '@/app/public_auth/auth_sign_in/hooks/usePublicAuthSignInMutation';
