@@ -7,12 +7,12 @@ import { toast } from 'sonner';
 import type { SemanticCellParams as ICellRendererParams } from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectorySemanticTable';
 
 import { useCallback, useState, useMemo } from 'react';
-import type { SuperadminUserData, SuperadminSessionData, SuperadminUsersStatus } from '@/app/frontend_superadmin/superadmin_users/users_directory/types/SuperadminUsersDirectoryTypes';
+import type { SuperadminUserData, SuperadminUsersStatus } from '@/app/frontend_superadmin/superadmin_users/users_directory/types/SuperadminUsersDirectoryTypes';
 import type { SuperadminUsersFormValues } from '@/app/frontend_superadmin/superadmin_users/users_directory/schemas/SuperadminUsersDirectorySchema';
-import { SUPERADMIN_USERS_INITIAL_USERS, SUPERADMIN_USERS_INITIAL_SESSIONS, SUPERADMIN_USERS_ROLE_PERMISSIONS } from '@/app/frontend_superadmin/superadmin_users/users_directory/mocks/fixtures/SuperadminUsersDirectoryMockFixtures';
+import { SUPERADMIN_USERS_INITIAL_USERS, SUPERADMIN_USERS_ROLE_PERMISSIONS } from '@/app/frontend_superadmin/superadmin_users/users_directory/mocks/fixtures/SuperadminUsersDirectoryMockFixtures';
 import SuperadminUsersDirectoryContent from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectoryContent';
 import SuperadminUsersDirectoryModal from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectoryModal';
-import { ShieldCheck, ShieldAlert, Download, Smartphone, Monitor, Globe, LogOut, CheckCircle, AlertTriangle, Pencil, Ban, KeyRound, Users, Activity, TrendingUp, Check } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Download, CheckCircle, AlertTriangle, Pencil, Ban, KeyRound, Users, TrendingUp, Check } from 'lucide-react';
 import type { SemanticColumnDef as ColDef } from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectorySemanticTable';
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_USERS_TABS } from '@/app/frontend_superadmin/superadmin_users/users_directory/constants/SuperadminUsersDirectoryConstants';
@@ -37,16 +37,14 @@ export default function SuperadminUsersDirectoryPageClient() {
   
   const navigateToWorkflow = (key: string) => {
     const routes: Record<string, string> = {
-    "All Users": SUPERADMIN_NAVIGATION_ROUTES.users_directory,
-    "Roles & Permissions": SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions,
-    "User Sessions": SUPERADMIN_NAVIGATION_ROUTES.security_user_sessions
+      "All Users": SUPERADMIN_NAVIGATION_ROUTES.users_directory,
+      "Roles & Permissions": SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions,
     };
     const route = routes[key];
     if (route) { const target = new URL(route, window.location.origin); const query = new URLSearchParams(window.location.search); query.delete('view'); query.forEach((value, key) => { if (!target.searchParams.has(key)) target.searchParams.append(key, value); }); window.location.assign(target.pathname + target.search + target.hash); }
   };
-  const [activeTab] = useState<'All Users' | 'Roles & Permissions' | 'User Sessions'>('All Users');
+  const [activeTab] = useState<'All Users' | 'Roles & Permissions'>('All Users');
   const [users] = useState<SuperadminUserData[]>(SUPERADMIN_USERS_INITIAL_USERS);
-  const [sessions] = useState<SuperadminSessionData[]>(SUPERADMIN_USERS_INITIAL_SESSIONS);
   const [showModal, setShowModal] = useState(false);
   const [editUser, setEditUser] = useState<SuperadminUserData | null>(null);
   const showToast = useCallback((msg: string) => { toast.message(msg, { id: 'superadmin:superadmin_users:SuperadminUsersDirectoryPageClient:feedback' }); }, []);
@@ -88,10 +86,6 @@ export default function SuperadminUsersDirectoryPageClient() {
 
   const handleResetPassword = useCallback((name: string) => {
     showToast(t("COPY.PASSWORD_RESET_UNAVAILABLE_FOR_USER", { name }));
-  }, [showToast, t]);
-
-  const handleRevokeSession = useCallback((id: string) => {
-    showToast(t("COPY.SESSION_REVOCATION_UNAVAILABLE", { id }));
   }, [showToast, t]);
 
   const userCols = useMemo<ColDef<SuperadminUserData>[]>(() => [
@@ -198,56 +192,6 @@ export default function SuperadminUsersDirectoryPageClient() {
     }
   ], [t, handleOpenEdit, toggleStatus, handleResetPassword]);
 
-  const sessionCols = useMemo<ColDef<SuperadminSessionData>[]>(() => [
-    { field: 'user', headerName: t("COPY.TABLE_COLUMN_USER"), flex: 1, cellClass: 'sa-cell-primary-bold', cellRenderer: (p: ICellRendererParams<SuperadminSessionData, string>) => <span className="font-semibold text-slate-100">{p.value ?? ''}</span> },
-    { 
-      field: 'device', headerName: t("COPY.TABLE_COLUMN_DEVICE_BROWSER"), flex: 1.5, cellClass: 'sa-cell-muted',
-      cellRenderer: (p: ICellRendererParams<SuperadminSessionData, string>) => (
-        <div className="flex items-center gap-2 h-full text-slate-300">
-          {(p.value ?? '').includes('Mac') || (p.value ?? '').includes('Windows') ? <Monitor size={14} className="text-indigo-400" /> : <Smartphone size={14} className="text-indigo-400" />}
-          <span>{p.value ?? ''}</span>
-        </div>
-      )
-    },
-    { field: 'ip', headerName: t("COPY.TABLE_COLUMN_IP_ADDRESS"), flex: 1, cellClass: 'sa-cell-muted-sm font-mono', cellRenderer: (p: ICellRendererParams<SuperadminSessionData, string>) => <span className="font-mono text-slate-400 text-xs">{p.value ?? ''}</span> },
-    { 
-      field: 'location', headerName: t("COPY.TABLE_COLUMN_LOCATION"), flex: 1, cellClass: 'sa-cell-muted',
-      cellRenderer: (p: ICellRendererParams<SuperadminSessionData, string>) => (
-        <div className="flex items-center gap-2 h-full text-slate-300">
-          <Globe size={14} className="text-sky-400" /> <span>{p.value ?? ''}</span>
-        </div>
-      )
-    },
-    { field: 'lastActive', headerName: t("COPY.TABLE_COLUMN_LAST_ACTIVE"), flex: 1, cellClass: 'sa-cell-muted', cellRenderer: (p: ICellRendererParams<SuperadminSessionData, string>) => <span className="text-slate-400 text-xs">{p.value ?? ''}</span> },
-    {
-      field: 'status', headerName: t("COPY.TABLE_COLUMN_STATUS"), flex: 0.8,
-      cellRenderer: (p: ICellRendererParams<SuperadminSessionData, string>) => (
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
-          p.value === 'Active' ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
-        }`}>
-          <span className={`h-1.5 w-1.5 rounded-full ${p.value === 'Active' ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`} />
-          {p.value === 'Active' ? t("COPY.STATUS_ACTIVE") : t("COPY.STATUS_REVOKED")}
-        </span>
-      )
-    },
-    {
-      headerName: t("COPY.TABLE_COLUMN_ACTION"), flex: 1,
-      cellRenderer: (p: ICellRendererParams<SuperadminSessionData, unknown>) => (
-        p.data?.status === 'Active' && p.data ? (
-          <button
-            type="button"
-            onClick={() => handleRevokeSession(p.data.id)}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 text-xs font-semibold cursor-pointer transition-colors"
-            data-testid={`superadmin-users-users-overview-kill-session-4-${getSuperadminInteractiveTestIdSuffix(p.data)}`}
-          >
-            <LogOut size={12} className="text-rose-400" />
-            <span>{t("COPY.KILL_SESSION")}</span>
-          </button>
-        ) : <span className="text-slate-500 text-xs">{t("COPY.REVOKED")}</span>
-      )
-    }
-  ], [t, handleRevokeSession]);
-
   const activeCount = users.filter((u) => u.status === 'Active').length;
   const twoFactorCount = users.filter((u) => u.twoFactor).length;
 
@@ -284,8 +228,8 @@ export default function SuperadminUsersDirectoryPageClient() {
         </div>
       </div>
 
-      {/* 4 KPI Cards */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4" aria-label={t("COPY.USERS_OVERVIEW_SUMMARY")}>
+      {/* 3 KPI Cards */}
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-4" aria-label={t("COPY.USERS_OVERVIEW_SUMMARY")}>
         {/* KPI 1: Total Users (Indigo) */}
         <div className="relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 via-card/90 to-card p-5 shadow-sm transition-all hover:border-indigo-500/50">
           <div className="flex items-center justify-between">
@@ -344,23 +288,6 @@ export default function SuperadminUsersDirectoryPageClient() {
             <div className="h-full bg-gradient-to-r from-sky-500 to-sky-400 rounded-full" style={{ width: `${(twoFactorCount / Math.max(1, users.length)) * 100}%` }} />
           </div>
         </div>
-
-        {/* KPI 4: Active Sessions (Amber) */}
-        <div className="relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/40 via-card/90 to-card p-5 shadow-sm transition-all hover:border-amber-500/50">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-amber-300/80 uppercase tracking-wider">{t("COPY.SESSION_COUNT")}</span>
-            <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
-              <Activity size={18} />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-slate-100 tabular-nums">{sessions.length}</span>
-            <span className="text-xs text-amber-400 font-medium">Concurrent</span>
-          </div>
-          <div className="mt-3 h-1.5 w-full rounded-full bg-amber-950/60 overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full" style={{ width: '70%' }} />
-          </div>
-        </div>
       </section>
 
       {/* Warning banner */}
@@ -401,8 +328,6 @@ export default function SuperadminUsersDirectoryPageClient() {
           activeTab={activeTab}
           users={users}
           userCols={userCols}
-          sessions={sessions}
-          sessionCols={sessionCols}
           rolePermissions={SUPERADMIN_USERS_ROLE_PERMISSIONS}
         />
       </div>

@@ -29,26 +29,6 @@ export interface SuperadminUserData extends SuperadminUsersFormValues {
 }
 
 /**
- * Defines the public SuperadminSessionData contract for users directory. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
- * @property id Stable identifier for the associated record. Declared type: string.
- * @property user Value defined by the existing feature-local contract. Declared type: string.
- * @property device Value defined by the existing feature-local contract. Declared type: string.
- * @property ip Value defined by the existing feature-local contract. Declared type: string.
- * @property location Value defined by the existing feature-local contract. Declared type: string.
- * @property lastActive Value defined by the existing feature-local contract. Declared type: string.
- * @property status Status value as represented by the existing feature contract. Declared type: 'Active' | 'Revoked'.
- */
-export interface SuperadminSessionData {
-  id: string;
-  user: string;
-  device: string;
-  ip: string;
-  location: string;
-  lastActive: string;
-  status: 'Active' | 'Revoked';
-}
-
-/**
  * Defines the public SuperadminUserFormData contract for users directory. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
  */
 export type SuperadminUserFormData = SuperadminUsersFormValues;
@@ -70,19 +50,15 @@ export interface SuperadminRolePermissionRow {
 
 /**
  * Defines the public SuperadminUsersContentProps contract for users directory. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
- * @property activeTab Value defined by the existing feature-local contract. Declared type: 'All Users' | 'Roles & Permissions' | 'User Sessions'.
+ * @property activeTab Value defined by the existing feature-local contract. Declared type: 'All Users' | 'Roles & Permissions'.
  * @property users Value defined by the existing feature-local contract. Declared type: SuperadminUserData[].
  * @property userCols Value defined by the existing feature-local contract. Declared type: ColDef<SuperadminUserData>[].
- * @property sessions Value defined by the existing feature-local contract. Declared type: SuperadminSessionData[].
- * @property sessionCols Value defined by the existing feature-local contract. Declared type: ColDef<SuperadminSessionData>[].
  * @property rolePermissions Value defined by the existing feature-local contract. Declared type: SuperadminRolePermissionRow[].
  */
 export interface SuperadminUsersContentProps {
-  activeTab: 'All Users' | 'Roles & Permissions' | 'User Sessions';
+  activeTab: 'All Users' | 'Roles & Permissions';
   users: SuperadminUserData[];
   userCols: ColDef<SuperadminUserData>[];
-  sessions: SuperadminSessionData[];
-  sessionCols: ColDef<SuperadminSessionData>[];
   rolePermissions: SuperadminRolePermissionRow[];
 }
 

@@ -17,7 +17,6 @@ export default function SuperadminUsersRolesPermissionsPageClient() {
     const routes: Record<string, string> = {
       'All Users': SUPERADMIN_NAVIGATION_ROUTES.users_directory,
       'Roles & Permissions': SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions,
-      'User Sessions': SUPERADMIN_NAVIGATION_ROUTES.security_user_sessions,
     };
     const route = routes[key];
     if (!route) return;

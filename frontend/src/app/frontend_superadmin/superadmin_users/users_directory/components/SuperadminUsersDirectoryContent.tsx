@@ -1,14 +1,14 @@
 /** Responsibility: Superadmin Users Content; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
 /** Data-Flow: owning users-directory page -> active tab, typed user/session rows, columns and permission data -> feature-local semantic tables and localized role labels; this content component does not persist user or session changes. */
 import SuperadminUsersDirectorySemanticTable from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectorySemanticTable';
-import { CheckCircle, LogOut, X } from 'lucide-react';
-import type { SuperadminUsersContentProps, SuperadminSessionData, SuperadminUserData } from '@/app/frontend_superadmin/superadmin_users/users_directory/types/SuperadminUsersDirectoryTypes';
+import { CheckCircle, X } from 'lucide-react';
+import type { SuperadminUsersContentProps, SuperadminUserData } from '@/app/frontend_superadmin/superadmin_users/users_directory/types/SuperadminUsersDirectoryTypes';
 import { useTranslations } from 'next-intl';
 /**
  * Renders the `superadmin_users` view owned by `SuperadminUsersDirectoryContent`.
  * Keeps rendering and interaction state within the owning feature module; preserves the existing route and user-facing labels.
  */
-export default function SuperadminUsersDirectoryContent({ activeTab, users, userCols, sessions, sessionCols, rolePermissions }: SuperadminUsersContentProps) {
+export default function SuperadminUsersDirectoryContent({ activeTab, users, userCols, rolePermissions }: SuperadminUsersContentProps) {
   const t = useTranslations('SUPERADMIN_USERS');
   const getRolePermissionModuleLabel = (module: string) => {
     switch (module) {
@@ -33,37 +33,6 @@ export default function SuperadminUsersDirectoryContent({ activeTab, users, user
             suppressCellFocus={false}
             getRowId={(params) => params.data.id}
           />
-        </div>
-      )}
-
-      {activeTab === 'User Sessions' && (
-        <div className="flex-1 w-full flex flex-col">
-          <div className="p-4 sm:p-5 border-b border-border/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/40">
-            <div>
-              <h3 className="text-sm font-bold text-slate-100">{t("COPY.ACTIVE_SESSIONS_AUDIT")}</h3>
-              <p className="text-xs text-slate-400 mt-0.5">{t("COPY.MONITOR_ACTIVE_USER_SESSIONS_AND_FORCEFULLY_REVOKE_ACCESS_IF_NECESSARY")}</p>
-            </div>
-            <button
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold cursor-not-allowed"
-              type="button"
-              disabled
-              title={t("COPY.UNAVAILABLE_THE_SESSION_MANAGEMENT_API_CONTRACT_IS_NOT_SUPPLIED")}
-              data-testid="superadmin-users-users-content-unavailable-the-session-management-api-contract-is-not-supplied-1"
-            >
-              <LogOut size={13} className="text-rose-400" />
-              <span>{t("COPY.REVOKE_ALL_IDLE_UNAVAILABLE")}</span>
-            </button>
-          </div>
-          <div className="flex-1">
-            <SuperadminUsersDirectorySemanticTable<SuperadminSessionData>
-              rowData={sessions}
-              columnDefs={sessionCols}
-              headerHeight={48}
-              rowHeight={56}
-              suppressCellFocus={false}
-              getRowId={(params) => params.data.id}
-            />
-          </div>
         </div>
       )}
 
