@@ -1,7 +1,5 @@
 'use client';
 
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/config/superadmin_subscriptions_active_subscribers.url_config.ts';
-
 /** Responsibility: renders the Active Subscribers route UI; the module Main remains a thin composition boundary.
  * Tenant subscription plan quotas:
  * - branches: number of branches allocated
@@ -38,29 +36,8 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
   const locale = useLocale();
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');
   
-  const navigateToWorkflow = (key: string) => {
-    const routes: Record<string, string> = {
-      "Active Subscribers": SUPERADMIN_NAVIGATION_ROUTES.subscriptions_active_subscribers,
-      "SaaS Pricing Plans": SUPERADMIN_NAVIGATION_ROUTES.plans_pricing_catalog,
-    };
-    const route = routes[key];
-    if (route) {
-      const target = new URL(route, window.location.origin);
-      const query = new URLSearchParams(window.location.search);
-      query.delete('view');
-      query.forEach((value, key) => {
-        if (!target.searchParams.has(key)) target.searchParams.append(key, value);
-      });
-      window.location.assign(target.pathname + target.search + target.hash);
-    }
-  };
   const [activeTab] = useState("Active Subscribers");
   const [subs] = useState(SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS);
-
-  const tabs = useMemo(() => [
-    { name: 'Active Subscribers', icon: Users },
-    { name: 'SaaS Pricing Plans', icon: Package },
-  ], []);
 
   const colDefs = useMemo<SemanticColumnDef[]>(() => [
     {
@@ -269,27 +246,6 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
             <div className="h-full bg-gradient-to-r from-rose-500 to-pink-500" style={{ width: '15%' }} />
           </div>
         </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-indigo-500/20 pb-2 overflow-x-auto hide-scrollbar" role="navigation" aria-label={t("COPY.SUBSCRIPTION_SECTIONS")}>
-        {tabs.map((tab) => (
-          <button
-            type="button"
-            key={tab.name}
-            aria-current={activeTab === tab.name ? 'page' : undefined}
-            onClick={() => navigateToWorkflow(tab.name)}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === tab.name
-                ? 'border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-            }`}
-            data-testid={`superadmin-subscriptions-subscriptions-overview-set-active-tab-3-${String(tab.name)}`}
-          >
-            <tab.icon size={15} className={activeTab === tab.name ? 'text-indigo-400' : 'text-slate-400'} />
-            <span>{tab.name}</span>
-          </button>
-        ))}
       </div>
 
       {/* Table Container */}

@@ -2,7 +2,6 @@
 
 /** Responsibility: renders the subscriptions overview owned by the canonical subscriptions route. */
 /** Data-Flow: canonical route -> subscriber fixtures -> localized semantic table; pricing-plan workflows are owned by the plans/pricing-catalog feature. */
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/config/superadmin_subscriptions_overview.url_config.ts';
 import { useMemo } from 'react';
 import SuperadminSubscriptionsOverviewSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/components/SuperadminSubscriptionsOverviewSemanticTable';
 import { SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_overview/mocks/fixtures/SuperadminSubscriptionsOverviewMockFixtures';
@@ -24,21 +23,6 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
   const locale = useLocale();
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');
   const subscribers = SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS;
-
-  const navigateToWorkflow = (route: string) => {
-    const target = new URL(route, window.location.origin);
-    const query = new URLSearchParams(window.location.search);
-    query.delete('view');
-    query.forEach((value, key) => {
-      if (!target.searchParams.has(key)) target.searchParams.append(key, value);
-    });
-    window.location.assign(target.pathname + target.search + target.hash);
-  };
-
-  const tabs = [
-    { name: t('COPY.NAV_SUBSCRIPTIONS_ACTIVE_SUBSCRIBERS'), icon: Users, route: SUPERADMIN_NAVIGATION_ROUTES.subscriptions_active_subscribers, current: true },
-    { name: t('COPY.NAV_SAAS_PRICING_PLANS'), icon: Package, route: SUPERADMIN_NAVIGATION_ROUTES.plans_pricing_catalog, current: false },
-  ];
 
   const colDefs = useMemo<SemanticColumnDef[]>(() => [
     {
@@ -248,27 +232,6 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
           </div>
         </div>
       </div>
-
-      {/* Workflow Navigation */}
-      <nav className="flex items-center gap-2 border-b border-indigo-500/20 pb-2 overflow-x-auto hide-scrollbar" aria-label={t('COPY.SUBSCRIPTION_SECTIONS')}>
-        {tabs.map((tab) => (
-          <button
-            key={tab.route}
-            type="button"
-            aria-current={tab.current ? 'page' : undefined}
-            onClick={() => navigateToWorkflow(tab.route)}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-              tab.current
-                ? 'border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-            }`}
-            data-testid={`superadmin-subscriptions-subscriptions-overview-navigate-${tab.current ? 'active-subscribers' : 'pricing-plans'}`}
-          >
-            <tab.icon size={15} className={tab.current ? 'text-indigo-400' : 'text-slate-400'} aria-hidden="true" />
-            <span>{tab.name}</span>
-          </button>
-        ))}
-      </nav>
 
       {/* Main Table Container */}
       <div className="rounded-2xl border border-indigo-500/20 bg-[#0c0f28]/95 shadow-md backdrop-blur-md overflow-hidden">

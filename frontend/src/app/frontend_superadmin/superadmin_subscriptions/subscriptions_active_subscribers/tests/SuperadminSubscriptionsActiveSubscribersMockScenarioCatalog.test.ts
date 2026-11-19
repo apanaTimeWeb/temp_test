@@ -32,7 +32,7 @@ describe('subscriptions_active_subscribers canonical mock scenario catalog', () 
 describe('RBG source-coverage assertions', () => {
   it('keeps declared rendered field identifiers present in the owning PageClient source', () => {
     const pageSource = readFileSync(resolve(__dirname, '../components/SuperadminSubscriptionsActiveSubscribersPageClient.tsx'), 'utf8');
-    const renderedFields = ["Active Subscribers", "SaaS Pricing Plans", "branches", "members", "mrr", "name", "plan", "price", "status", "storage", "tenant"];
+    const renderedFields = ["Active Subscribers", "branches", "members", "mrr", "name", "plan", "price", "status", "storage", "tenant"];
     expect(renderedFields.length).toBeGreaterThan(0);
     for (const field of renderedFields) expect(pageSource).toContain(field);
   });

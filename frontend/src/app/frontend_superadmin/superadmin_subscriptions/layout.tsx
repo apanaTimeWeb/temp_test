@@ -6,11 +6,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { CreditCard, Users } from 'lucide-react';
+import { CreditCard } from 'lucide-react';
 
 const TAB_ICONS = {
   subscriptions_overview: CreditCard,
-  subscriptions_active_subscribers: Users,
 } as const;
 
 export default function DomainLayout({ children }: { children: ReactNode }) {
@@ -18,7 +17,6 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');
   const routes = [
     { key: 'subscriptions_overview', label: t('COPY.NAV_SUBSCRIPTIONS_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.subscriptions_overview },
-    { key: 'subscriptions_active_subscribers', label: t('COPY.NAV_SUBSCRIPTIONS_ACTIVE_SUBSCRIBERS'), href: SUPERADMIN_NAVIGATION_ROUTES.subscriptions_active_subscribers },
   ] as const;
   return (
     <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
