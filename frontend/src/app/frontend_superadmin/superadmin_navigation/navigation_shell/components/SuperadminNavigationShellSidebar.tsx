@@ -5,24 +5,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SUPERADMIN_NAVIGATION_NAV_ITEMS } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/constants/SuperadminNavigationShellItems';
 import { useTranslations } from 'next-intl';
-import { BookOpen, Search, X } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes';
-import { useMemo, useState } from 'react';
 
 export default function SuperadminNavigationShellSidebar({ open = false, mobileViewport = false }: SuperadminNavigationSidebarProps) {
   const t = useTranslations('SUPERADMIN_SHELL');
   const pathname = usePathname();
-  const [searchQuery, setSearchQuery] = useState('');
   const mobileNavigationHidden = mobileViewport && !open;
-
-  const filteredItems = useMemo(() => {
-    if (!searchQuery.trim()) return SUPERADMIN_NAVIGATION_NAV_ITEMS;
-    const q = searchQuery.toLowerCase().trim();
-    return SUPERADMIN_NAVIGATION_NAV_ITEMS.filter((item) => {
-      const label = (t(item.labelKey) ?? '').toLowerCase();
-      return label.includes(q) || item.href.toLowerCase().includes(q);
-    });
-  }, [searchQuery, t]);
 
   const colors = [
     { bg: 'rgba(250,204,21,0.15)',  color: '#facc15' },
@@ -74,29 +63,6 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
         </Link>
       </div>
 
-      {/* ─── Quick Module Search Filter ─── */}
-      <div className="px-2 pt-3 pb-2">
-        <div className="relative flex items-center">
-          <Search size={14} className="absolute left-3 text-slate-400 pointer-events-none" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search modules..."
-            className="w-full pl-8 pr-7 py-1.5 text-xs rounded-xl bg-white/[0.04] border border-white/[0.08] text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 transition-colors"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="absolute right-2 text-slate-400 hover:text-white"
-            >
-              <X size={13} />
-            </button>
-          )}
-        </div>
-      </div>
-
       <div className="sa-sidebar-divider my-2" />
 
       {/* ─── Primary Navigation Links ─── */}
@@ -105,7 +71,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
         className="sa-sidebar-nav flex-1 space-y-1 overflow-y-auto px-1"
         aria-label={t('COPY.SUPER_ADMIN_PRIMARY_NAVIGATION')}
       >
-        {filteredItems.map(({ href, icon: Icon, labelKey }, idx) => {
+        {SUPERADMIN_NAVIGATION_NAV_ITEMS.map(({ href, icon: Icon, labelKey }, idx) => {
           const isActive = pathname === href || pathname.startsWith(href + '/');
           const c = colors[idx % colors.length];
 
