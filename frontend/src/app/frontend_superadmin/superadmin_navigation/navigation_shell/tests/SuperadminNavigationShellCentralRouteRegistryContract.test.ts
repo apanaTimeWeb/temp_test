@@ -2,9 +2,9 @@
 // FLOW: Vitest -> filesystem scan of role shell entry files -> central registry import assertions.
 import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
-const ROLE_ROOT = new URL('../../../', import.meta.url);
+const ROLE_ROOT = resolve(__dirname, '../../../');
 
 function collectShellEntryFiles(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -16,7 +16,7 @@ function collectShellEntryFiles(directory: string): string[] {
 
 describe('Superadmin central route registry contract', () => {
   it('keeps domain shell navigation route maps centralized in the role navigation config', () => {
-    const rootPath = decodeURIComponent(ROLE_ROOT.pathname);
+    const rootPath = ROLE_ROOT;
     const shellFiles = collectShellEntryFiles(rootPath).filter((file) => {
       const source = readFileSync(file, 'utf8');
       return source.includes('SUPERADMIN_NAVIGATION_ROUTES');

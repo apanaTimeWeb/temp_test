@@ -12,6 +12,7 @@ export default defineConfig({
       'src/app/public_auth/**/*.{test,spec}.{ts,tsx}',
       'src/app/frontend_manager/**/*.{test,spec}.{ts,tsx}',
       'src/app/frontend_admin/**/*.{test,spec}.{ts,tsx}',
+      'src/app/frontend_superadmin/**/*.{test,spec}.{ts,tsx}',
       'src/components/**/*.{test,spec}.{ts,tsx}',
     ],
   },
