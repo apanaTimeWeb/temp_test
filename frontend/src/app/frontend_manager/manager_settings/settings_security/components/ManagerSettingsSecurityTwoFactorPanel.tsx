@@ -188,7 +188,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
                   </svg>
                 ) : (
                   <div className="flex items-center justify-center w-full h-full" role="status">
-                    <LibraryLoader size="sm" icon="key-round" />
+                    <LibraryLoader size="sm" icon="key-round" variant="contra" />
                   </div>
                 )}
               </div>

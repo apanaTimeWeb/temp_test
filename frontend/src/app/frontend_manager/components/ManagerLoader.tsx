@@ -112,6 +112,19 @@ const MGR_LOADER_CSS = `
     pointer-events: none;
     background: radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(139, 92, 246, 0.2) 45%, rgba(34, 211, 238, 0.1) 70%, transparent 85%);
   }
+  .library-loader-box .loader-ring {
+    width: 100%;
+    height: 100%;
+    animation: spinCW 1.4s linear infinite;
+  }
+  .library-loader-box .inner-svg {
+    position: absolute;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none;
+    animation: spinCCW 2.4s linear infinite;
+  }
   .library-loader-box .loader-icon {
     color: #FFFFFF !important;
   }
@@ -150,7 +163,7 @@ interface LoaderProps {
 export function LibraryLoader({
   size = 'md',
   icon = 'book',
-  variant = 'default',
+  variant = 'contra',
   className = '',
   label = 'Loading',
 }: LoaderProps) {
@@ -158,7 +171,7 @@ export function LibraryLoader({
   const variantClass = variant !== 'default' ? ` ${variant}` : '';
   const Icon = ICONS[icon] ?? Book;
 
-  const showInnerRing = variant === 'contra' || variant === 'default';
+  const showInnerRing = true;
 
   return (
     <div

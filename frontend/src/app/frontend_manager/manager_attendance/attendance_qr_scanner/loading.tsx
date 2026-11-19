@@ -6,7 +6,7 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       size="md"
       icon="qr-code"
-      variant="breath"
+      variant="contra"
     />
   );
 }

@@ -252,7 +252,7 @@ export function ManagerMembersIdCardGeneratorIdCardClient() {
               <div className="mgr-idcard-student-list">
                 {isPending ? (
                   <div className="mgr-loading-state flex items-center justify-center p-6" role="status">
-                    <LibraryLoader size="sm" icon="id-card" />
+                    <LibraryLoader size="sm" icon="id-card" variant="contra" />
                   </div>
                 ) : filtered.length === 0 ? <ManagerMembersIdCardGeneratorEmptyState className="mgr-empty-state"><div className="mgr-empty-icon"><Search size={36} strokeWidth={2} /></div><p className="mgr-empty-title">{tManagerUi('no_students_found')}</p></ManagerMembersIdCardGeneratorEmptyState> : paginatedStudents.map((student: ManagerStudent) => {
                   const initials = student.name.split(' ').map((part) => part[0]).join('').slice(0, 2).toUpperCase();

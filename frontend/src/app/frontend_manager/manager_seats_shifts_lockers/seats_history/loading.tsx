@@ -6,7 +6,7 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       size="md"
       icon="history"
-      variant="default"
+      variant="contra"
     />
   );
 }

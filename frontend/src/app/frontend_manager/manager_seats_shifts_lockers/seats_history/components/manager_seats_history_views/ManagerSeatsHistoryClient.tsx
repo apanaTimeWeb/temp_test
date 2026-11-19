@@ -524,7 +524,7 @@ export function ManagerSeatsHistoryClient() {
         </div>
       ) : historyQuery.isPending ? (
         <div className="ss-empty-state p-12 rounded-2xl bg-card border border-border flex items-center justify-center" role="status">
-          <LibraryLoader size="md" icon="history" variant="default" />
+          <LibraryLoader size="md" icon="history" variant="contra" />
         </div>
       ) : filtered.length === 0 ? (
         <ManagerSeatsHistoryEmptyState className="ss-empty-state p-12 rounded-2xl bg-card border border-border text-center space-y-2">

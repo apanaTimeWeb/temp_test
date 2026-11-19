@@ -243,7 +243,7 @@ function renderSvgIcon(icon: LoaderIcon) {
 export function LibraryLoader({
   size = 'md',
   icon = 'book',
-  variant = 'default',
+  variant = 'contra',
   className = '',
   label = 'Loading',
   hideAura = false,
@@ -276,24 +276,14 @@ export function LibraryLoader({
       {/* Aura Glow */}
       {!hideAura && !isXs && <div className="loader-aura" aria-hidden="true" />}
 
-      {/* Outer Rotating Ring */}
-      {variant === 'contra' ? (
-        <>
-          <svg className="loader-ring" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-            <circle cx="50" cy="50" r="44" stroke="#6366F1" strokeWidth="2.5" strokeDasharray="4 6" opacity="0.35" vectorEffect="non-scaling-stroke" />
-            <circle cx="50" cy="50" r="44" stroke="url(#libGrad)" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke" />
-          </svg>
-          <svg className="inner-svg" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-            <circle cx="50" cy="50" r="35" stroke="#22D3EE" strokeWidth="1.8" strokeDasharray="6 10" opacity="0.75" vectorEffect="non-scaling-stroke" />
-          </svg>
-        </>
-      ) : (
-        <svg className="loader-ring" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-          <circle cx="50" cy="50" r="44" stroke="#6366F1" strokeWidth="2.5" strokeDasharray="4 6" opacity="0.35" vectorEffect="non-scaling-stroke" />
-          <circle cx="50" cy="50" r="44" stroke="url(#libGrad)" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke" />
-          <circle cx="50" cy="50" r="35" stroke="#22D3EE" strokeWidth="1.8" strokeDasharray="6 10" opacity="0.75" vectorEffect="non-scaling-stroke" />
-        </svg>
-      )}
+      {/* Outer Rotating Ring + Inner Counter Rotating Ring (Double Ring) */}
+      <svg className="loader-ring" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <circle cx="50" cy="50" r="44" stroke="#6366F1" strokeWidth="2.5" strokeDasharray="4 6" opacity="0.35" vectorEffect="non-scaling-stroke" />
+        <circle cx="50" cy="50" r="44" stroke="url(#libGrad)" strokeWidth="3.2" strokeLinecap="round" strokeDasharray="95 180" vectorEffect="non-scaling-stroke" />
+      </svg>
+      <svg className="inner-svg" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <circle cx="50" cy="50" r="35" stroke="#22D3EE" strokeWidth="1.8" strokeDasharray="6 10" opacity="0.75" vectorEffect="non-scaling-stroke" />
+      </svg>
 
       {/* Center Semantic Icon */}
       <div className={`loader-icon ${color ?? ''}`.trim()} aria-hidden="true">

@@ -6,7 +6,7 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       size="md"
       icon="building"
-      variant="default"
+      variant="contra"
     />
   );
 }

@@ -6,7 +6,7 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       size="md"
       icon="chart-bar"
-      variant="default"
+      variant="contra"
     />
   );
 }

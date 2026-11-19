@@ -6,7 +6,7 @@ export default function ManagerFeatureLoading() {
     <ManagerPageLoader
       size="md"
       icon="message-circle"
-      variant="default"
+      variant="contra"
     />
   );
 }
