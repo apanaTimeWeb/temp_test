@@ -6,7 +6,7 @@ import { useSuperadminUsersOverviewMemberTrustScoreUrlFilter } from '@/app/front
 
 import { useTranslations } from 'next-intl';
 
-import { ShieldCheck, ShieldX, Users, Award, RotateCcw, Sparkles } from 'lucide-react';
+import { ShieldCheck, ShieldX, Users, Award, RotateCcw } from 'lucide-react';
 import { SUPERADMIN_FINANCE_TRUST_SCORE_PAGE_CLIENT_TRUST_TONE_TEXT_CLASS } from '@/app/frontend_superadmin/superadmin_users/users_member_trust_score/constants/SuperadminUsersOverviewMemberTrustScoreStaticConstants';
 import { SUPERADMIN_FINANCE_TRUST_SCORE_PAGE_CLIENT_BADGE_ICON } from '@/app/frontend_superadmin/superadmin_users/users_member_trust_score/constants/SuperadminUsersOverviewMemberTrustScoreStaticConstants';
 import { SUPERADMIN_MEMBER_TRUST_SCORE_THRESHOLDS } from '@/app/frontend_superadmin/superadmin_users/users_member_trust_score/constants/SuperadminUsersOverviewMemberTrustScoreStaticConstants';
@@ -80,7 +80,7 @@ export default function SuperadminUsersOverviewMemberTrustScorePageClient() {
       </div>
 
       <p className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 p-3.5 text-xs sm:text-sm text-indigo-300 flex items-start gap-2.5" role="status">
-        <Sparkles size={16} className="text-indigo-400 shrink-0 mt-0.5" />
+        <ShieldCheck size={16} className="text-indigo-400 shrink-0 mt-0.5" />
         <span>{tCopy("COPY.PREVIEW_ONLY_DISCLOSURE")}</span>
       </p>
 

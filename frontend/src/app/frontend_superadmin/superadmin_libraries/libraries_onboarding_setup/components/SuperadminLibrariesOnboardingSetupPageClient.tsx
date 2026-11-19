@@ -7,7 +7,7 @@ import { useCallback, useState } from 'react';
 import {
   BookOpen, Check, ChevronRight, ChevronLeft,
   Rocket, SkipForward, Building2, Clock, Armchair,
-  CreditCard, CheckCircle, Lightbulb, Sparkles,
+  CreditCard, CheckCircle, Lightbulb,
 } from 'lucide-react';
 import type { BranchDetailsData, ShiftsData, SeatsData, PlansData } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/types/SuperadminLibrariesOnboardingSetupTypes';
 import { SUPERADMIN_SETUP_WIZARD_STEPS as STEPS } from '@/app/frontend_superadmin/superadmin_libraries/libraries_onboarding_setup/constants/SuperadminLibrariesOnboardingSetupConstants';
@@ -62,7 +62,7 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
   };
 
   return (
-    <div className="sa-wizard-shell w-full max-w-5xl mx-auto space-y-6 pb-12">
+    <div className="sa-wizard-shell w-full max-w-full min-w-0 space-y-6 pb-12">
       <p className="sr-only" role="status">{tCopy("COPY.SETUP_WIZARD_IS_PREVIEW_ONLY_UNTIL_A_VERIFIED_SETUP_PERSISTENCE_API_IS_SUPPLIED")}</p>
 
       {/* Skip confirmation modal */}
@@ -87,8 +87,7 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base sm:text-lg font-bold text-slate-100">{tCopy("COPY.SETUP_WIZARD")}</h1>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-                  <Sparkles size={11} className="text-indigo-400" />
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
                   {tCopy("COPY.STEP")} {step} {tCopy("COPY.OF")} {STEPS.length}
                 </span>
               </div>

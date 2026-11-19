@@ -33,7 +33,7 @@ import {
   Smartphone,
   Laptop,
   Check,
-  Sparkles,
+  Award,
   AlertCircle
 } from 'lucide-react';
 import { useSuperadminLibrariesProfileConfigurationUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_libraries/libraries_profile_configuration/hooks/useSuperadminLibrariesProfileConfigurationUnsavedChangesGuard';
@@ -92,7 +92,7 @@ export default function SuperadminLibrariesProfileConfigurationPageClient() {
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto pb-16">
+    <div className="space-y-8 w-full max-w-full min-w-0 pb-16">
       {/* ── Top Hero Header (No breadcrumb, sleek cyber-luxury layout) ── */}
       <div className="relative overflow-hidden rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-card via-card/95 to-indigo-950/25 p-6 sm:p-8 shadow-xl shadow-black/20">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 h-56 w-56 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
@@ -122,7 +122,7 @@ export default function SuperadminLibrariesProfileConfigurationPageClient() {
               Verified Superadmin
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-300 shadow-xs">
-              <Sparkles size={13} className="text-indigo-400" />
+              <Award size={13} className="text-indigo-400" />
               Root Authority
             </span>
           </div>
@@ -212,7 +212,7 @@ export default function SuperadminLibrariesProfileConfigurationPageClient() {
                   <p className="text-[11px] text-slate-400 pt-0.5">Recommended format: Square JPG or PNG, minimum 400x400px.</p>
                   {avatarUploadMessage && (
                     <p className="text-xs text-indigo-300 font-medium pt-1 flex items-center gap-1.5">
-                      <Sparkles size={13} /> {avatarUploadMessage}
+                      <Check size={13} className="text-emerald-400" /> {avatarUploadMessage}
                     </p>
                   )}
                 </div>

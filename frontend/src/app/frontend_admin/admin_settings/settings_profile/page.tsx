@@ -61,7 +61,7 @@ export default function AdminProfilePage() {
   const getTabLabel = (item: AdminProfileNavigationItem) => {
     try {
       const localized = t(item.labelKey);
-      if (localized && localized !== item.labelKey) {
+      if (localized && localized !== item.labelKey && !localized.includes('.')) {
         return localized;
       }
     } catch {}

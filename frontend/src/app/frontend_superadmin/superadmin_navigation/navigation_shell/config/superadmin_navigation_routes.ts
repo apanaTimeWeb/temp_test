@@ -2,6 +2,9 @@
 // FLOW: Navigation registry -> route links/redirects; values were verified against owning URL config constants to avoid cross-leaf imports.
 
 export const SUPERADMIN_NAVIGATION_ROUTES = {
+  accounting_daily_settlement: '/superadmin/superadmin_accounting/accounting_daily_settlement',
+  accounting_expense_categories: '/superadmin/superadmin_accounting/accounting_expense_categories',
+  accounting_expenses: '/superadmin/superadmin_accounting/accounting_expenses',
   accounting_financial_reports: '/superadmin/superadmin_accounting/accounting_financial_reports',
   analytics_financials: '/superadmin/superadmin_analytics/analytics_financials',
   analytics_library_growth: '/superadmin/superadmin_analytics/analytics_library_growth',
@@ -17,12 +20,17 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   billing_invoices: '/superadmin/superadmin_billing/billing_invoices',
   billing_overview: '/superadmin/superadmin_billing/billing_overview',
   communication_notices: '/superadmin/superadmin_communication/communication_notices',
+  communication_notification_center: '/superadmin/superadmin_communication/communication_notification_center',
   communication_whatsapp_integration: '/superadmin/superadmin_communication/communication_whatsapp_integration',
+  communication_whatsapp_logs: '/superadmin/superadmin_communication/communication_whatsapp_logs',
+  communication_whatsapp_templates: '/superadmin/superadmin_communication/communication_whatsapp_templates',
   dashboard_overview: '/superadmin/superadmin_dashboard/dashboard_overview',
   data_export_jobs: '/superadmin/superadmin_system/data_export_jobs',
   libraries_onboarding_setup: '/superadmin/superadmin_libraries/libraries_onboarding_setup',
   libraries_overview: '/superadmin/superadmin_libraries/libraries_overview',
   libraries_profile_configuration: '/superadmin/superadmin_libraries/libraries_profile_configuration',
+  libraries_student_bulk_import: '/superadmin/superadmin_libraries/libraries_student_bulk_import',
+  libraries_student_smart_id: '/superadmin/superadmin_libraries/libraries_student_smart_id',
   plans_pricing_catalog: '/superadmin/superadmin_plans/plans_pricing_catalog',
   plans_promotions: '/superadmin/superadmin_plans/plans_promotions',
   profile_active_sessions: '/superadmin/superadmin_settings/profile_active_sessions',
@@ -69,6 +77,8 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   support_tickets: '/superadmin/superadmin_support/support_tickets',
   system_health_overview: '/superadmin/superadmin_system/system_health_overview',
   users_directory: '/superadmin/superadmin_users/users_directory',
+  users_member_referrals: '/superadmin/superadmin_users/users_member_referrals',
+  users_member_trust_score: '/superadmin/superadmin_users/users_member_trust_score',
   users_overview: '/superadmin/superadmin_users/users_overview',
   users_roles_permissions: '/superadmin/superadmin_users/users_roles_permissions',
 } as const;

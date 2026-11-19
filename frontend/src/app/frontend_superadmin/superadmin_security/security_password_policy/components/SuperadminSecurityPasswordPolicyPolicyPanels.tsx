@@ -2,7 +2,7 @@
 /** Responsibility: Superadmin Security Policy Panels; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
 /** Data-Flow: leaf-owned props or hook state -> SuperadminSecurityPasswordPolicyPolicyPanels formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
 import { useSuperadminSecurityPasswordPolicyValidationMessage } from '@/app/frontend_superadmin/superadmin_security/security_password_policy/hooks/useSuperadminSecurityPasswordPolicyValidationMessage';
-import { KeyRound, Sparkles, Hash, Calendar, ShieldCheck } from 'lucide-react';
+import { KeyRound, Hash, Calendar, ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { SuperadminSecurityPolicyPanelsProps } from '@/app/frontend_superadmin/superadmin_security/security_password_policy/types/SuperadminSecurityPasswordPolicyPolicyPanelsComponentTypes';
 
@@ -61,7 +61,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
             <div className="flex items-center justify-between p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md transition-all hover:border-indigo-500/30">
               <div className="flex items-center gap-3.5">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400">
-                  <Sparkles size={20} aria-hidden="true" />
+                  <ShieldCheck size={20} aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-slate-100">{tCopy("COPY.REQUIRE_SPECIAL_CHARACTER")}</h3>

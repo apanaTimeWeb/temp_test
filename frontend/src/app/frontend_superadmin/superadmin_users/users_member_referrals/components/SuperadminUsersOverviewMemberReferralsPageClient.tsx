@@ -7,7 +7,7 @@ import { useSuperadminUsersMemberReferralsExpandedState } from '@/app/frontend_s
 import { useTranslations, useLocale } from 'next-intl';
 
 import { formatMajorUnitPreviewCurrency } from '@/app/frontend_superadmin/superadmin_users/users_member_referrals/utils/SuperadminUsersOverviewMemberReferralsFormatters';
-import { Users, Trophy, IndianRupee, Share2, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { Users, Trophy, IndianRupee, Share2, Award, ChevronDown, ChevronUp } from 'lucide-react';
 import type { Referrer } from '@/app/frontend_superadmin/superadmin_users/users_member_referrals/types/SuperadminUsersOverviewMemberReferralsPageClientComponentTypes';
 import { SUPERADMIN_USERS_MEMBER_REFERRALS_MOCK_REFERRERS } from '@/app/frontend_superadmin/superadmin_users/users_member_referrals/mocks/fixtures/SuperadminUsersOverviewMemberReferralsMockFixtures';
 import { useSuperadminUsersMemberReferralsPreviewScenario } from '@/app/frontend_superadmin/superadmin_users/users_member_referrals/state/SuperadminUsersMemberReferralsPreviewScenario';
@@ -52,7 +52,7 @@ export default function SuperadminUsersOverviewMemberReferralsPageClient() {
       </div>
 
       <p className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 p-3.5 text-xs sm:text-sm text-indigo-300 flex items-start gap-2.5" role="status">
-        <Sparkles size={16} className="text-indigo-400 shrink-0 mt-0.5" />
+        <Award size={16} className="text-indigo-400 shrink-0 mt-0.5" />
         <span>{tCopy("COPY.PREVIEW_ONLY_DISCLOSURE")}</span>
       </p>
 

@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { Building2, Sparkles, Sliders, ArrowUpRight } from 'lucide-react';
+import { Building2, Rocket, Sliders, ArrowUpRight } from 'lucide-react';
 
 interface LibraryNavRouteConfig {
   key: 'libraries_overview' | 'libraries_onboarding_setup' | 'libraries_profile_configuration';
@@ -65,7 +65,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
       badge: '5-Step Wizard',
       description: 'Branch Launch Flow',
       href: SUPERADMIN_NAVIGATION_ROUTES.libraries_onboarding_setup,
-      icon: Sparkles,
+      icon: Rocket,
       theme: {
         activeCard:
           'border-emerald-400/80 bg-gradient-to-br from-emerald-950/90 via-slate-900/90 to-teal-950/80 shadow-lg shadow-emerald-500/25 ring-1 ring-emerald-400/40',
@@ -106,7 +106,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   ];
 
   return (
-    <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
+    <div className="w-full max-w-full min-w-0 px-0 sm:px-1 py-1">
       {/* ── Secondary Navigation: High-Impact Colorful Button Cards ── */}
       <nav
         aria-label={t('COPY.NAVIGATION_SECONDARY')}

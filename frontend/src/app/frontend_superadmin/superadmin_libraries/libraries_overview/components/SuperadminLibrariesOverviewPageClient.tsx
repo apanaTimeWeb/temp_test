@@ -7,7 +7,7 @@ import { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   Edit2, Eye, Plus, ShieldAlert, Building2, Store, Users, IndianRupee,
-  TrendingUp, Sparkles, MapPin, Building, RotateCcw, Search, X, CheckCircle
+  TrendingUp, Rocket, MapPin, Building, RotateCcw, Search, X, CheckCircle
 } from 'lucide-react';
 import { useSuperadminLibrariesOverview } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/hooks/useSuperadminLibrariesOverview';
 import SuperadminLibrariesOverviewPanel from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewPanel';
@@ -197,7 +197,7 @@ export default function SuperadminLibrariesOverviewPageClient() {
       headerName: t("COPY.TABLE_COLUMN_ACTIONS"),
       field: 'id',
       flex: 1.2,
-      minWidth: 140,
+      minWidth: 155,
       sortable: false,
       filter: false,
       cellRenderer: (params: SemanticCellParams<SuperadminLibrariesLibrary>) => {
@@ -205,10 +205,10 @@ export default function SuperadminLibrariesOverviewPageClient() {
         const testIdSuffix = getSuperadminInteractiveTestIdSuffix(params.data);
 
         return (
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              className="p-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer"
+              className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
               aria-label={t("COPY.VIEW_LIBRARY_ARIA_LABEL", { name: params.data.name })}
               onClick={(event) => {
                 event.stopPropagation();
@@ -218,11 +218,11 @@ export default function SuperadminLibrariesOverviewPageClient() {
               title="View Library Details"
               data-testid={`superadmin-libraries-libraries-overview-view-library-aria-label-1-${testIdSuffix}`}
             >
-              <Eye size={14} aria-hidden="true" />
+              <Eye size={16} strokeWidth={2} aria-hidden="true" />
             </button>
             <button
               type="button"
-              className="p-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer"
+              className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
               aria-label={t("COPY.EDIT_LIBRARY_PREVIEW_ARIA_LABEL", { name: params.data.name })}
               onClick={(event) => {
                 event.stopPropagation();
@@ -232,11 +232,11 @@ export default function SuperadminLibrariesOverviewPageClient() {
               title="Edit Library Settings"
               data-testid={`superadmin-libraries-libraries-overview-edit-library-preview-aria-label-2-${testIdSuffix}`}
             >
-              <Edit2 size={14} aria-hidden="true" />
+              <Edit2 size={16} strokeWidth={2} aria-hidden="true" />
             </button>
             <button
               type="button"
-              className="p-1.5 rounded-lg border border-rose-500/30 bg-rose-500/15 text-rose-300 hover:text-white hover:bg-rose-600/30 transition-all shadow-xs active:scale-95 cursor-pointer"
+              className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/15 text-rose-300 hover:text-white hover:bg-rose-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
               aria-label={t("COPY.TOGGLE_LIBRARY_STATUS_PREVIEW_ARIA_LABEL", { name: params.data.name })}
               onClick={(event) => {
                 event.stopPropagation();
@@ -245,7 +245,7 @@ export default function SuperadminLibrariesOverviewPageClient() {
               title="Toggle Operating Status"
               data-testid={`superadmin-libraries-libraries-overview-toggle-library-status-preview-aria-label-3-${testIdSuffix}`}
             >
-              <ShieldAlert size={14} aria-hidden="true" />
+              <ShieldAlert size={16} strokeWidth={2} aria-hidden="true" />
             </button>
           </div>
         );
@@ -292,12 +292,12 @@ export default function SuperadminLibrariesOverviewPageClient() {
           </div>
 
           {/* Right: Actions */}
-          <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
+          <div className="flex items-center flex-wrap gap-2.5 w-full sm:w-auto shrink-0 sm:self-start lg:self-center">
             <Link
               href={SUPERADMIN_NAVIGATION_ROUTES.libraries_onboarding_setup}
               className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
             >
-              <Sparkles size={14} className="text-indigo-400" />
+              <Rocket size={14} className="text-indigo-400" />
               <span>Setup Wizard</span>
             </Link>
 
