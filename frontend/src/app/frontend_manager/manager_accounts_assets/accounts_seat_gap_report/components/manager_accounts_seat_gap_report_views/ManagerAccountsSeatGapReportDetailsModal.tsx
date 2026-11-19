@@ -201,10 +201,10 @@ export function ManagerAccountsSeatGapReportDetailsModal({
                   onClose();
                   onToggleStatus(seat);
                 }}
-                className={`inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold shadow-xs cursor-pointer transition-all ${
+                className={`inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold shadow-xs cursor-pointer transition-all border ${
                   seat.status === 'vacant'
-                    ? 'bg-amber-500 hover:bg-amber-600 !text-black'
-                    : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    ? 'border-amber-500/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25'
+                    : 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'
                 }`}
               >
                 {seat.status === 'vacant' ? (

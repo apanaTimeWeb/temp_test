@@ -197,7 +197,7 @@ export function ManagerAssetsRegisterDetailsModal({
                   onClose();
                   onScheduleMaintenance(asset);
                 }}
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-600 !text-black shadow-xs cursor-pointer transition-all"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold border border-amber-500/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25 shadow-xs cursor-pointer transition-all"
               >
                 <Wrench size={14} /> Send to Maintenance
               </button>

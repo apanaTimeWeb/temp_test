@@ -295,8 +295,8 @@ export function ManagerAssetsMaintenanceTable({
                             onClick={() => onUpdateStatus(l.id, l.status)}
                             className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-xs transition-all cursor-pointer ${
                               l.status === 'pending'
-                                ? 'bg-amber-500 hover:bg-amber-600 !text-black'
-                                : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                                ? 'border border-amber-500/40 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25'
+                                : 'border border-emerald-500/40 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'
                             }`}
                             title={
                               l.status === 'pending'

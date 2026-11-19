@@ -291,7 +291,7 @@ export function ManagerLockersManagementClient() {
                 type="button"
                 data-testid="manager-filter-expired-lockers-btn"
                 onClick={() => setStatusFilter('Expired')}
-                className="px-3 py-1 rounded-lg text-xs font-bold bg-amber-500 text-black hover:bg-amber-400 transition-colors cursor-pointer shrink-0"
+                className="px-3 py-1 rounded-lg text-xs font-bold border border-amber-500/40 bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 transition-colors cursor-pointer shrink-0"
               >
                 View Expired Lockers
               </button>
