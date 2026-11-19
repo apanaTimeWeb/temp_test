@@ -23,7 +23,7 @@ export function ManagerNavigationSidebarLogoutModal({
   }, []);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !mounted) return;
     const dialog = logoutDialogRef.current;
     if (!dialog) return;
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -60,7 +60,7 @@ export function ManagerNavigationSidebarLogoutModal({
       document.removeEventListener('keydown', handleKeyDown);
       if (previousFocus?.isConnected) previousFocus.focus();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, mounted]);
 
   if (!isOpen || !mounted) return null;
 
