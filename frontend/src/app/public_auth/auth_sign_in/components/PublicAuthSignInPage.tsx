@@ -578,14 +578,20 @@ export default function PublicAuthSignInPage() {
               </button>
             </form>
 
-            {/* Footer Link */}
-            <div className="mt-4 pt-3 border-t border-white/[0.08] text-center">
-              <p className="text-xs text-slate-400">
-                New to LibraryOS?{' '}
-                <Link href={PUBLIC_AUTH_INTERNAL_URLS.SIGNUP} className="text-indigo-400 font-semibold hover:text-indigo-300 transition-colors">
-                  Create an account
-                </Link>
-              </p>
+            {/* Footer WhatsApp Enquiry */}
+            <div className="mt-4 pt-3 border-t border-white/[0.08] flex items-center justify-between gap-2 text-xs">
+              <span className="text-slate-400 text-[11px]">Need access or have an enquiry?</span>
+              <a
+                href="https://wa.me/?text=Hello%20LibraryOS%2C%20I%20would%20like%20to%20enquire%20about%20LibraryOS%20Multi-Branch%20Study%20Library%20Management%20System."
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="auth-login-whatsapp-enquiry"
+                aria-label="Enquire on WhatsApp"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all cursor-pointer shadow-xs"
+              >
+                <MessageCircle size={13} className="text-emerald-400" />
+                <span>WhatsApp Enquiry</span>
+              </a>
             </div>
           </div>
         </div>
