@@ -9,7 +9,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
  * @returns The module-owned state/actions or utility result consumed by the caller.
  */
 export function useSuperadminUsersDirectorySemanticTableState<T extends object>(args: { rowData?: readonly T[] | null; paginationPageSize: number; paginationEnabled?: boolean }) {
-  const { rowData, paginationPageSize, paginationEnabled = false } = args;
+  const { rowData, paginationPageSize, paginationEnabled = true } = args;
   const [sort, setSort] = useState<{ field: string; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(0);
   const [filterText, setFilterText] = useState('');
