@@ -10,7 +10,7 @@ import { compareSuperadminSupportTicketAges } from '@/app/frontend_superadmin/su
  * @returns The module-owned state/actions or utility result consumed by the caller.
  */
 export function useSuperadminSupportTicketsOverviewSemanticTableState<T extends object>(args: { rowData?: readonly T[] | null; paginationPageSize: number; pageIndex?: number; onPageChange?: (pageIndex: number) => void; paginationEnabled?: boolean; filterEnabled?: boolean }) {
-  const { rowData, paginationPageSize, pageIndex, onPageChange, paginationEnabled = false, filterEnabled = true } = args;
+  const { rowData, paginationPageSize, pageIndex, onPageChange, paginationEnabled = true, filterEnabled = true } = args;
   const [sort, setSort] = useState<{ field: string; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(0);
   const [filterText, setFilterText] = useState('');

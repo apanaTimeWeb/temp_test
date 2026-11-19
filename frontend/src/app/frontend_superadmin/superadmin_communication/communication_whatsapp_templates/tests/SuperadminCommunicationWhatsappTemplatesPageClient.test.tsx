@@ -2,19 +2,25 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NextIntlClientProvider } from 'next-intl';
+import { Toaster } from 'sonner';
 import { describe, expect, it } from 'vitest';
 import messages from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_templates/locales/superadmin_communication_whatsapp_templates_en.json';
 import SuperadminCommunicationWhatsappTemplatesPageClient from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_templates/components/SuperadminCommunicationWhatsappTemplatesPageClient';
 
 function renderPage() {
-  return render(<NextIntlClientProvider locale="en" messages={messages}><SuperadminCommunicationWhatsappTemplatesPageClient /></NextIntlClientProvider>);
+  return render(
+    <NextIntlClientProvider locale="en" messages={messages}>
+      <Toaster />
+      <SuperadminCommunicationWhatsappTemplatesPageClient />
+    </NextIntlClientProvider>
+  );
 }
 
 describe('WhatsApp template PageClient editor', () => {
   it('keeps edits per template and interpolates preview sample values', async () => {
     const user = userEvent.setup(); renderPage();
     const editor = screen.getByLabelText('Message Body') as HTMLTextAreaElement;
-    await user.clear(editor); await user.type(editor, 'Hello {name} — {amount}');
+    fireEvent.change(editor, { target: { value: 'Hello {name} — {amount}' } });
     expect(screen.getByText('Hello Sample Student A — 1000')).toBeTruthy();
     await user.click(screen.getByRole('button', { name: /Fee reminder/i }));
     await user.click(screen.getByRole('button', { name: /Welcome/i }));
@@ -50,7 +56,7 @@ describe('WhatsApp template PageClient editor', () => {
 
   it('maps all seven semantic template icon keys to visible Lucide icon components', () => {
     renderPage();
-    const templateButtons = ['Welcome', 'Fee reminder', 'Renewal', 'Receipt', 'Notice', 'Absentee', 'Payment'];
+    const templateButtons = ['Welcome Message', 'Fee Reminder', 'Renewal Alert', 'Payment Receipt', 'Notice', 'Absentee', 'PTP Payment'];
     for (const label of templateButtons) {
       const button = screen.getByRole('button', { name: new RegExp(label, 'i') });
       const icon = button.querySelector('svg');

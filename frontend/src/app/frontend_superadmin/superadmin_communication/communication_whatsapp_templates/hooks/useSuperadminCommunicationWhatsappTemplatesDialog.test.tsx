@@ -13,7 +13,7 @@ function DialogFixture({ onClose }: { onClose: () => void }) {
 describe('useSuperadminCommunicationWhatsappTemplatesDialog', () => {
   it('traps Tab at the dialog boundary and restores focus after Escape', () => {
     const onClose = vi.fn(); render(<DialogFixture onClose={onClose} />);
-    const trigger = screen.getByRole('button', { name: 'Open dialog' }); fireEvent.click(trigger);
+    const trigger = screen.getByRole('button', { name: 'Open dialog' }); trigger.focus(); fireEvent.click(trigger);
     const first = screen.getByRole('button', { name: 'First' }); const last = screen.getByRole('button', { name: 'Last' });
     Object.defineProperty(first, 'offsetParent', { configurable: true, value: document.body });
     Object.defineProperty(last, 'offsetParent', { configurable: true, value: document.body });

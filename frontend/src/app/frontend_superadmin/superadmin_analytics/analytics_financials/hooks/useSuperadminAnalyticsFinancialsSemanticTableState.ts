@@ -9,7 +9,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
  * @returns The module-owned state/actions or utility result consumed by the caller.
  */
 export function useSuperadminAnalyticsFinancialsSemanticTableState<T extends object>(args: { rowData?: readonly T[] | null; paginationPageSize: number; pageIndex?: number; onPageChange?: (pageIndex: number) => void; paginationEnabled?: boolean }) {
-  const { rowData, paginationPageSize, pageIndex, onPageChange, paginationEnabled = false } = args;
+  const { rowData, paginationPageSize, pageIndex, onPageChange, paginationEnabled = true } = args;
   const [sort, setSort] = useState<{ field: string; direction: 'asc' | 'desc' } | null>(null);
   const [page, setPage] = useState(0);
   const [filterText, setFilterText] = useState('');

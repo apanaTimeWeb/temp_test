@@ -14,9 +14,10 @@ type SuperadminAnalyticsLibraryGrowthErrorFallbackProps = {
  * Renders the safe retry state for analytics library growth without exposing raw exception details.
  * @param parameter Input required by the declared feature contract. Declared type: SuperadminAnalyticsLibraryGrowthErrorFallbackProps.
  */
-export default function SuperadminAnalyticsLibraryGrowthErrorFallback({ onRetry }: SuperadminAnalyticsLibraryGrowthErrorFallbackProps) {
+export default function SuperadminAnalyticsLibraryGrowthErrorFallback({ error, onRetry }: SuperadminAnalyticsLibraryGrowthErrorFallbackProps) {
   const t = useTranslations('SUPERADMIN_REPORTS');
-  const message = t('COPY.MODULE_ROUTE_ERROR_MESSAGE');
+  const responseMessage = error?.response?.data?.message;
+  const message = typeof responseMessage === 'string' ? responseMessage : t('COPY.MODULE_ROUTE_ERROR_MESSAGE');
   return (
     <section className="mx-auto w-full max-w-3xl rounded-xl border border-border bg-danger-bg p-6 text-danger" role="alert" data-testid="superadmin_analytics-analytics_library_growth-error-fallback">
       <h2 className="text-lg font-semibold">{t('COPY.MODULE_ROUTE_ERROR_TITLE')}</h2>
