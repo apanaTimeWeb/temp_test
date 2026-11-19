@@ -326,11 +326,11 @@ export function ManagerSettingsBranchInfoWifiModal({
             <div className="lg:col-span-6 space-y-4">
               {/* Quick Actions Row */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {/* Print Button (Amber) */}
+                {/* Print Button (Indigo Gradient) */}
                 <button
                   type="button"
                   onClick={handlePrintStandee}
-                  className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-md cursor-pointer hover:shadow-amber-500/20"
+                  className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500/40 text-white font-bold text-xs transition-all shadow-md shadow-indigo-950/40 cursor-pointer"
                   title="Print Desk Standee for reception"
                 >
                   <Printer size={15} />
@@ -512,7 +512,7 @@ export function ManagerSettingsBranchInfoWifiModal({
                       </button>
                       <button
                         type="submit"
-                        className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold cursor-pointer"
+                        className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500/40 text-white text-xs font-bold cursor-pointer shadow-md shadow-indigo-950/40 transition-all"
                       >
                         Apply & Update QR
                       </button>

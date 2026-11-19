@@ -95,7 +95,7 @@ export function ManagerSettingsSecurityPasswordForm() {
     <div className="max-w-xl mx-auto space-y-5">
       <div className="flex items-center justify-between border-b border-white/5 pb-3">
         <div className="flex items-center gap-2">
-          <KeyRound className="h-5 w-5 text-amber-400" />
+          <KeyRound className="h-5 w-5 text-indigo-400" />
           <h2 className="text-sm sm:text-base font-bold text-white">
             Change Password
           </h2>
@@ -144,7 +144,7 @@ export function ManagerSettingsSecurityPasswordForm() {
               placeholder="Enter current password"
               autoComplete="current-password"
               required
-              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
             <button
               type="button"
@@ -175,7 +175,7 @@ export function ManagerSettingsSecurityPasswordForm() {
               placeholder="Minimum 8 characters with symbol & number"
               autoComplete="new-password"
               required
-              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
             <button
               type="button"
@@ -260,7 +260,7 @@ export function ManagerSettingsSecurityPasswordForm() {
               placeholder="Re-enter new password"
               autoComplete="new-password"
               required
-              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+              className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
             />
             <button
               type="button"
@@ -297,7 +297,7 @@ export function ManagerSettingsSecurityPasswordForm() {
           <button
             type="submit"
             disabled={isSubmitting || !checks.length || !checks.matches}
-            className="inline-flex items-center gap-2 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 text-xs font-bold text-slate-950 transition-all cursor-pointer shadow-sm"
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2 text-xs font-bold text-white transition-all cursor-pointer shadow-md shadow-indigo-950/40"
           >
             {isSubmitting ? <ButtonLoader icon="key-round" /> : <ShieldCheck size={14} />}
             {isSubmitting ? 'Updating...' : 'Update Password'}

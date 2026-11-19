@@ -64,7 +64,7 @@ export function ManagerSettingsSecurityTabs({
               onClick={() => onTabChange(tab.id)}
               className={`group inline-flex items-center gap-2 border-b-2 py-3 px-3 text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
                 isActive
-                  ? 'border-amber-400 text-amber-300'
+                  ? 'border-indigo-500 text-indigo-400'
                   : 'border-transparent text-slate-400 hover:border-slate-600 hover:text-slate-200'
               }`}
               aria-current={isActive ? 'page' : undefined}
@@ -72,19 +72,19 @@ export function ManagerSettingsSecurityTabs({
               <Icon
                 size={16}
                 className={`transition-colors ${
-                  isActive ? 'text-amber-400' : 'text-slate-500 group-hover:text-slate-300'
+                  isActive ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'
                 }`}
               />
               <span>{tab.label}</span>
 
               {tab.badge !== undefined && (
                 <span
-                  className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
                     tab.badgeVariant === 'success'
                       ? 'bg-emerald-500/20 text-emerald-300'
                       : tab.badgeVariant === 'warning'
                       ? 'bg-amber-500/20 text-amber-300'
-                      : 'bg-white/10 text-slate-300'
+                      : 'bg-indigo-500/20 text-indigo-300'
                   }`}
                 >
                   {tab.badge}

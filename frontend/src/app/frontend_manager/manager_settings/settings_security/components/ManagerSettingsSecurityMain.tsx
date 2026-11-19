@@ -76,7 +76,7 @@ export function ManagerSettingsSecurityMain({ initialTab }: ManagerSettingsSecur
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-1 border-b border-white/5">
         <div>
           <h1 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2.5 tracking-tight">
-            <ShieldCheck className="text-amber-400 shrink-0" size={24} />
+            <ShieldCheck className="text-indigo-400 shrink-0" size={24} />
             <span>Security & Authentication</span>
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -93,7 +93,7 @@ export function ManagerSettingsSecurityMain({ initialTab }: ManagerSettingsSecur
       />
 
       {/* Main Tabbed Container */}
-      <div className="rounded-xl border border-white/10 bg-[#0e1133]/40 shadow-lg overflow-hidden">
+      <div className="rounded-2xl border border-indigo-500/20 bg-card shadow-card overflow-hidden">
         {/* Tabs */}
         <ManagerSettingsSecurityTabs
           activeTab={activeTab}

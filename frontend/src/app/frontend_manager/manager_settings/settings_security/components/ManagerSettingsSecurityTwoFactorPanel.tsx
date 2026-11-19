@@ -154,7 +154,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
             <button
               type="button"
               onClick={() => setIsSettingUp(true)}
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500/40 text-white transition-all cursor-pointer shadow-md shadow-indigo-950/40"
             >
               <Smartphone size={13} />
               <span>Enable 2FA Now</span>
@@ -188,7 +188,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
                   </svg>
                 ) : (
                   <div className="flex items-center justify-center w-full h-full" role="status">
-                    <LibraryLoader size="sm" icon="key-round" hideAura={true} />
+                    <LibraryLoader size="sm" icon="key-round" />
                   </div>
                 )}
               </div>
@@ -205,7 +205,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
                   Or enter Secret Key manually:
                 </label>
                 <div className="flex items-center gap-1.5">
-                  <div className="flex-1 rounded-lg border border-white/10 bg-slate-900/60 px-2.5 py-1.5 font-mono text-xs font-bold tracking-wider text-amber-300">
+                  <div className="flex-1 rounded-lg border border-white/10 bg-slate-900/60 px-2.5 py-1.5 font-mono text-xs font-bold tracking-wider text-indigo-300">
                     {twoFactor.secretKey}
                   </div>
                   <button
@@ -237,7 +237,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
                       setVerificationError('');
                     }}
                     placeholder="000000"
-                    className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-center font-mono text-base font-bold tracking-widest text-white placeholder:text-slate-600 focus:border-amber-400 focus:outline-none"
+                    className="w-full rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-center font-mono text-base font-bold tracking-widest text-white placeholder:text-slate-600 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                     required
                   />
                   {verificationError && (
@@ -248,7 +248,7 @@ export function ManagerSettingsSecurityTwoFactorPanel({
                 <button
                   type="submit"
                   disabled={verificationCode.trim().length !== 6}
-                  className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-xs font-bold text-slate-950 transition-all cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-2 text-xs font-bold text-white transition-all cursor-pointer shadow-md shadow-indigo-950/40"
                 >
                   <ShieldCheck size={14} />
                   Verify and Enable 2FA

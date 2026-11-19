@@ -37,7 +37,7 @@ export default function SuperadminAccountingDailySettlementPageClient() {
     Night: tCopy('COPY.NIGHT'),
   };
   const translateShift = (value: string) => shiftLabels[value] ?? tCopy('COPY.SHIFT');
-  const [date, setDate] = useSuperadminAccountingDailySettlementUrlFilter('settlementDate', SUPERADMIN_ACCOUNTING_SETTLEMENT_SAMPLE_DATE);
+  const [date, setDate] = useSuperadminAccountingDailySettlementUrlFilter<string>('settlementDate', SUPERADMIN_ACCOUNTING_SETTLEMENT_SAMPLE_DATE);
   const [entries, setEntries] = useState<SuperadminAccountingSettlementEntry[]>(() => SUPERADMIN_ACCOUNTING_SAMPLE_SETTLEMENTS.map((entry) => ({ ...entry })));
   const visibleEntries = entries.filter((entry) => entry.date === date);
 

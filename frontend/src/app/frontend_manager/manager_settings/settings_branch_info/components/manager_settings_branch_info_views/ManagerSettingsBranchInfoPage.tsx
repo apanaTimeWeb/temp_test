@@ -574,7 +574,7 @@ export default function ManagerSettingsBranchInfoPage() {
               <button
                 type="button"
                 onClick={() => setIsWifiModalOpen(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-sm cursor-pointer"
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-600 border border-indigo-500/40 text-white font-bold text-xs transition-all shadow-md shadow-indigo-950/40 cursor-pointer"
               >
                 <Printer size={13} />
                 <span>{t('print_front_desk_standee', 'Print Desk Standee')}</span>
