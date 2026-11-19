@@ -83,7 +83,7 @@ describe(`${namespace} locale catalogs`, () => {
     }
   });
   it('covers source-referenced COPY keys in both locale catalogs', () => {
-    const moduleRoot = join(process.cwd(), 'frontend_superadmin', 'superadmin_subscriptions', 'subscriptions_overview');
+    const moduleRoot = join(process.cwd(), 'src', 'app', 'frontend_superadmin', 'superadmin_subscriptions', 'subscriptions_overview');
     const collect = (directory: string): string[] => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => entry.isDirectory() ? collect(join(directory, entry.name)) : /\.(tsx?|jsx?)$/.test(entry.name) ? [readFileSync(join(directory, entry.name), 'utf8')] : []);
     const source = collect(moduleRoot).join('\n');
     const keys = [...source.matchAll(/(?:t|tCopy)\(\s*['"]COPY\.([A-Z0-9_]+)['"]/g)].map((match) => match[1]);
@@ -91,7 +91,7 @@ describe(`${namespace} locale catalogs`, () => {
     for (const key of new Set(keys)) { expect((getNamespace(english).COPY as Record<string, string>)).toHaveProperty(key); expect((getNamespace(hindi).COPY as Record<string, string>)).toHaveProperty(key); }
   });
   it('documents this leaf English/Hindi locale catalog paths', () => {
-    const moduleRoot = join(process.cwd(), 'frontend_superadmin', 'superadmin_subscriptions', 'subscriptions_overview');
+    const moduleRoot = join(process.cwd(), 'src', 'app', 'frontend_superadmin', 'superadmin_subscriptions', 'subscriptions_overview');
     const featureMap = readFileSync(join(moduleRoot, 'superadmin_subscriptions_overview_features.md'), 'utf8');
     expect(featureMap).toContain('superadmin_subscriptions_overview_en.json');
     expect(featureMap).toContain('superadmin_subscriptions_overview_hi.json');

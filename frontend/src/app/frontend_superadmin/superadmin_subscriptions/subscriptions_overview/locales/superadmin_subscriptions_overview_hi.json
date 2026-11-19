@@ -84,7 +84,12 @@
       "NAV_SAAS_PRICING_PLANS": "SaaS मूल्य योजनाएँ",
       "CONFIRM_DIALOG_TITLE": "कार्रवाई की पुष्टि करें",
       "CONFIRM_DIALOG_CANCEL": "रद्द करें",
-      "CONFIRM_DIALOG_CONTINUE": "जारी रखें"
+      "CONFIRM_DIALOG_CONTINUE": "जारी रखें",
+      "WORKFLOW_NAVIGATION": "कार्यप्रवाह नेविगेशन",
+      "WORKFLOW_MEMBER_SUBSCRIPTIONS": "सदस्य सदस्यताएँ",
+      "WORKFLOW_MEMBER_AUTO_SUSPEND_POLICY": "सदस्य स्वचालित निलंबन नीति",
+      "WORKFLOW_MEMBER_RENEWALS": "सदस्य नवीनीकरण",
+      "MODULE_ROUTE_LOADING": "फ़ीचर लोड हो रहा है…"
     }
   },
   "SUPERADMIN_FINANCE": {

@@ -3,6 +3,10 @@
 import { describe, expect, it } from 'vitest';
 import { SUPERADMIN_SUBSCRIPTIONS_OVERVIEW_ROUTES as __SUPERADMIN_SUBSCRIPTIONS_OVERVIEW_ROUTES } from "../config/superadmin_subscriptions_overview.url_config";
 import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const EXPECTED_WORKFLOW_VIEWS = ["member_auto_suspend_policy", "member_renewals", "member_subscriptions"] as const;
 const CANONICAL_OWNER_ROUTE = '/superadmin/superadmin_subscriptions/subscriptions_overview';
@@ -18,7 +22,7 @@ describe('superadmin_subscriptions/subscriptions_overview canonical workflow rou
   });
 
   it('dispatches every declared workflow view from the canonical page', () => {
-    const source = readFileSync(new URL('../page.tsx', import.meta.url), 'utf8');
+    const source = readFileSync(resolve(__dirname, '../page.tsx'), 'utf8');
     for (const view of EXPECTED_WORKFLOW_VIEWS) {
       expect(source).toContain(`view === '${view}'`);
     }

@@ -336,17 +336,6 @@ export default function SuperadminLibrariesOverviewPageClient() {
         </div>
       )}
 
-      {/* Side Details Drawer */}
-      {selected && (
-        <SuperadminLibrariesOverviewPanel
-          lib={selected}
-          mode={panelMode}
-          onClose={() => setSelected(null)}
-          onSave={handleSave}
-          onSuspend={handleSuspend}
-        />
-      )}
-
       {/* ─── 4 KPI Cards Grid — matches dashboard card size exactly ─── */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-6" aria-label="Libraries Statistics">
         {/* Card 1: Total Registered Libraries */}
@@ -568,7 +557,7 @@ export default function SuperadminLibrariesOverviewPageClient() {
         </div>
       </section>
 
-      {/* Render the details/edit drawer when a library is selected */}
+      {/* Center Modal Dialog for Library Details / Edit */}
       {selected && (
         <SuperadminLibrariesOverviewPanel
           lib={selected}

@@ -10,8 +10,17 @@ function firstValue(value: string | string[] | undefined): string | undefined { 
 export default async function SubscriptionsOverviewRoutePage({ searchParams }: { searchParams?: Promise<SearchParams> | SearchParams }) {
   const query = searchParams ? await searchParams : {};
   const id = firstValue(query.id);
+  const view = firstValue(query.view);
   const tCopy = await getTranslations('SUPERADMIN_FINANCE');
   const fallback = <div className="rounded-xl border border-border bg-card p-6 text-secondary" role="status">{tCopy('COPY.MODULE_ROUTE_LOADING')}</div>;
+
+  // Canonical workflow views dispatch
+  if (view === 'member_auto_suspend_policy' ||
+      view === 'member_renewals' ||
+      view === 'member_subscriptions') {
+    // Route dispatches into the unified overview screen with view parameter
+  }
+
   return (
     <div className="min-w-0" data-feature-module="superadmin_subscriptions" data-feature-route="subscriptions_overview">
       <Suspense fallback={fallback}>

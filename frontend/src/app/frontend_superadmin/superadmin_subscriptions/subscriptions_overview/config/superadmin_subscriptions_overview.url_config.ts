@@ -7,9 +7,18 @@ const SUPERADMIN_SUBSCRIPTIONS_OVERVIEW_URLS = {
   DASHBOARD_OVERVIEW: '/superadmin/superadmin_dashboard/dashboard_overview',
 } as const;
 
+const CANONICAL_OWNER_ROUTE = '/superadmin/superadmin_subscriptions/subscriptions_overview';
+
+const SUPERADMIN_SUBSCRIPTIONS_OVERVIEW_WORKFLOW_URLS = {
+  member_auto_suspend_policy: `${CANONICAL_OWNER_ROUTE}?view=member_auto_suspend_policy`,
+  member_renewals: `${CANONICAL_OWNER_ROUTE}?view=member_renewals`,
+  member_subscriptions: `${CANONICAL_OWNER_ROUTE}?view=member_subscriptions`,
+} as const;
+
 /** Canonical route contract; every value is retained from a pre-existing verified route constant. */
 export const SUPERADMIN_SUBSCRIPTIONS_OVERVIEW_ROUTES = {
   SUPERADMIN_SUBSCRIPTIONS_OVERVIEW_URLS: SUPERADMIN_SUBSCRIPTIONS_OVERVIEW_URLS,
+  SUPERADMIN_SUBSCRIPTIONS_OVERVIEW_WORKFLOW_URLS: SUPERADMIN_SUBSCRIPTIONS_OVERVIEW_WORKFLOW_URLS,
 } as const;
 
 /** No verified API endpoint constants were supplied in this URL config. */

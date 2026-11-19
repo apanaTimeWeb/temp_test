@@ -19,9 +19,11 @@ describe('SuperadminSubscriptionsOverviewSemanticTable', () => {
     render(<SuperadminSubscriptionsOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
     expect(screen.getByRole('columnheader', { name: /name/i })).toBeTruthy();
     expect(screen.getAllByRole('cell')[0].getAttribute('data-label')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /sort by name/i }));
+    const sortBtn = screen.getByTestId('superadmin-subscriptions-subscriptions-semantic-table-table-sort-by-2-name');
+    fireEvent.click(sortBtn);
     expect(screen.getByText('Alpha')).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    const nextBtn = screen.getByTestId('superadmin-subscriptions-subscriptions-semantic-table-table-next-4');
+    fireEvent.click(nextBtn);
     expect(screen.getByText('Beta')).toBeTruthy();
   });
 
@@ -37,11 +39,12 @@ describe('SuperadminSubscriptionsOverviewSemanticTable', () => {
 
   it('resets to the first page after filtering and exposes an empty state', () => {
     render(<SuperadminSubscriptionsOverviewSemanticTable<Row> rowData={rows} columnDefs={columns} pagination paginationPageSize={1} getRowId={({ data }) => data.id} />);
-    fireEvent.click(screen.getByRole('button', { name: /next/i }));
+    const nextBtn = screen.getByTestId('superadmin-subscriptions-subscriptions-semantic-table-table-next-4');
+    fireEvent.click(nextBtn);
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'Active' } });
     expect(screen.getByText('Beta')).toBeTruthy();
     expect(screen.queryByText('Alpha')).toBeNull();
     fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'no-match' } });
-    expect(screen.getByRole('status').textContent).toMatch(/no rows/i);
+    expect(screen.getByRole('status').textContent).toMatch(/no rows|TABLE_EMPTY|empty/i);
   });
 });

@@ -107,7 +107,7 @@ export default function SuperadminSubscriptionsOverviewSemanticTable<T extends o
         <tbody className="divide-y divide-indigo-500/10">
           {visibleRows.length === 0 ? (
             <tr>
-              <td colSpan={Math.max(1, columns.length)} className="px-4 py-12 text-center text-slate-400" role="status">
+              <td colSpan={Math.max(1, columns.length)} className="px-4 py-12 text-center text-slate-400">
                 <SuperadminSubscriptionsOverviewEmptyState filtered />
               </td>
             </tr>

@@ -84,7 +84,12 @@
       "NAV_SAAS_PRICING_PLANS": "SaaS Pricing Plans",
       "CONFIRM_DIALOG_TITLE": "Confirm action",
       "CONFIRM_DIALOG_CANCEL": "Cancel",
-      "CONFIRM_DIALOG_CONTINUE": "Continue"
+      "CONFIRM_DIALOG_CONTINUE": "Continue",
+      "WORKFLOW_NAVIGATION": "Workflow navigation",
+      "WORKFLOW_MEMBER_SUBSCRIPTIONS": "Member Subscriptions",
+      "WORKFLOW_MEMBER_AUTO_SUSPEND_POLICY": "Member Auto Suspend Policy",
+      "WORKFLOW_MEMBER_RENEWALS": "Member Renewals",
+      "MODULE_ROUTE_LOADING": "Loading feature…"
     }
   },
   "SUPERADMIN_FINANCE": {
