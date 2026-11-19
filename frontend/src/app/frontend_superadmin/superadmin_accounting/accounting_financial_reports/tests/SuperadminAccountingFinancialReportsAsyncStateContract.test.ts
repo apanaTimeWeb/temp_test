@@ -29,7 +29,7 @@ describe('accounting_financial_reports async-state contract', () => {
     expect(error).not.toContain('...props');
   });
   it('styles chart tooltips with light/dark semantic tokens rather than a fixed theme', () => {
-    const source = readFileSync(resolve(COMPONENTS, 'SuperadminAccountingFinancialReportsPageClient.tsx'), 'utf8');
+    const source = readFileSync(resolve(COMPONENTS, 'SuperadminAccountingFinancialReportsIncomeExpenseChart.tsx'), 'utf8');
     expect(source).toContain("cssClass: 'accounting-financial-reports-tooltip'");
     expect(source).toContain('var(--chart-tooltip-bg)');
     expect(source).toContain('var(--bg-popover)');

@@ -56,8 +56,28 @@ describe(`${namespace} locale catalogs`, () => {
 
 
 it('covers every literal COPY key referenced by report source', () => {
-  const candidates = [path.resolve(process.cwd(), 'app/frontend_superadmin/superadmin_analytics'), path.resolve(process.cwd(), 'frontend_superadmin/superadmin_analytics')]; const moduleRoot = candidates.find(existsSync); expect(moduleRoot).toBeTruthy();
-  const files: string[] = []; const visit = (dir: string) => { for (const entry of readdirSync(dir, { withFileTypes: true })) { const full = path.join(dir, entry.name); if (entry.isDirectory()) visit(full); else if (/\.(tsx?|jsx?)$/.test(entry.name) && !entry.name.includes('.test.')) files.push(full); } }; visit(moduleRoot!);
+  const candidates = [
+    path.resolve(process.cwd(), 'src/app/frontend_superadmin/superadmin_analytics/analytics_overview'),
+    path.resolve(process.cwd(), 'app/frontend_superadmin/superadmin_analytics/analytics_overview'),
+    path.resolve(process.cwd(), 'frontend_superadmin/superadmin_analytics/analytics_overview'),
+    path.resolve(__dirname, '..'),
+  ];
+  const moduleRoot = candidates.find(existsSync);
+  expect(moduleRoot, 'Could not resolve the analytics overview module source root').toBeTruthy();
+  const files: string[] = [];
+  const visit = (dir: string) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) visit(full);
+      else if (/\.(tsx?|jsx?)$/.test(entry.name) && !entry.name.includes('.test.')) files.push(full);
+    }
+  };
+  visit(moduleRoot!);
   const keys = new Set(files.flatMap(file => [...readFileSync(file, 'utf8').matchAll(/COPY\.([A-Z0-9_]+)/g)].map(match => match[1])));
-  const en = (getNamespace(english).COPY ?? {}) as Record<string,string>; const hi = (getNamespace(hindi).COPY ?? {}) as Record<string,string>; for (const key of keys) { expect(en[key], `Missing English COPY.${key}`).toBeTruthy(); expect(hi[key], `Missing Hindi COPY.${key}`).toBeTruthy(); }
+  const en = (getNamespace(english).COPY ?? {}) as Record<string, string>;
+  const hi = (getNamespace(hindi).COPY ?? {}) as Record<string, string>;
+  for (const key of keys) {
+    expect(en[key], `Missing English COPY.${key}`).toBeTruthy();
+    expect(hi[key], `Missing Hindi COPY.${key}`).toBeTruthy();
+  }
 });
