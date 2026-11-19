@@ -49,8 +49,12 @@ export default function SuperadminLibrariesOverviewPageClient() {
   const [planFilter, setPlanFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  const showToast = useCallback((message: string) => {
-    toast.message(message, { id: 'superadmin:superadmin_libraries:SuperadminLibrariesOverviewPageClient:feedback' });
+  const showToast = useCallback((message: string, isError = false) => {
+    if (isError) {
+      toast.error(message, { id: 'superadmin:superadmin_libraries:SuperadminLibrariesOverviewPageClient:feedback' });
+    } else {
+      toast.success(message, { id: 'superadmin:superadmin_libraries:SuperadminLibrariesOverviewPageClient:feedback' });
+    }
   }, []);
 
   const totalRevenue = libraries.reduce((sum, library) => sum + library.revenue, 0);
@@ -82,9 +86,9 @@ export default function SuperadminLibrariesOverviewPageClient() {
       await updateLibrary(updated.id, updated);
       setSelected(updated);
       setPanelMode('view');
-      showToast(SUPERADMIN_LIBRARIES_TOASTS.UPDATE_SUCCESS(updated.name));
+      showToast(`Library "${updated.name}" updated successfully!`);
     } catch {
-      showToast(SUPERADMIN_LIBRARIES_TOASTS.UPDATE_ERROR);
+      showToast(SUPERADMIN_LIBRARIES_TOASTS.UPDATE_ERROR, true);
     }
   }, [showToast, updateLibrary]);
 
@@ -93,12 +97,12 @@ export default function SuperadminLibrariesOverviewPageClient() {
       const current = libraries.find((library) => library.id === id);
       if (!current) throw new Error('Sample library not found.');
       await toggleStatus(id);
-      setSelected((previous) => previous?.id === id
-        ? { ...previous, status: previous.status === 'Active' ? 'Maintenance' : 'Active' }
-        : previous);
-      showToast(SUPERADMIN_LIBRARIES_TOASTS.STATUS_SUCCESS);
+      const nextStatus = current.status === 'Active' ? 'Maintenance' : 'Active';
+      const updatedLib = { ...current, status: nextStatus };
+      setSelected((previous) => previous?.id === id ? updatedLib : previous);
+      showToast(`Library "${current.name}" status changed to ${nextStatus}!`);
     } catch {
-      showToast(SUPERADMIN_LIBRARIES_TOASTS.STATUS_ERROR);
+      showToast(SUPERADMIN_LIBRARIES_TOASTS.STATUS_ERROR, true);
     }
   }, [libraries, showToast, toggleStatus]);
 
@@ -236,16 +240,24 @@ export default function SuperadminLibrariesOverviewPageClient() {
             </button>
             <button
               type="button"
-              className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/15 text-rose-300 hover:text-white hover:bg-rose-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+              className={`inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 transition-all ${
+                params.data.status === 'Active'
+                  ? 'border-rose-500/30 bg-rose-500/15 text-rose-300 hover:text-white hover:bg-rose-600/30 focus-visible:ring-rose-400'
+                  : 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 focus-visible:ring-emerald-400'
+              }`}
               aria-label={t("COPY.TOGGLE_LIBRARY_STATUS_PREVIEW_ARIA_LABEL", { name: params.data.name })}
               onClick={(event) => {
                 event.stopPropagation();
                 void handleSuspend(params.data.id);
               }}
-              title="Toggle Operating Status"
+              title={params.data.status === 'Active' ? 'Put into Maintenance' : 'Activate Library'}
               data-testid={`superadmin-libraries-libraries-overview-toggle-library-status-preview-aria-label-3-${testIdSuffix}`}
             >
-              <ShieldAlert size={16} strokeWidth={2} aria-hidden="true" />
+              {params.data.status === 'Active' ? (
+                <ShieldAlert size={16} strokeWidth={2} aria-hidden="true" />
+              ) : (
+                <CheckCircle size={16} strokeWidth={2} aria-hidden="true" />
+              )}
             </button>
           </div>
         );
@@ -555,6 +567,17 @@ export default function SuperadminLibrariesOverviewPageClient() {
           )}
         </div>
       </section>
+
+      {/* Render the details/edit drawer when a library is selected */}
+      {selected && (
+        <SuperadminLibrariesOverviewPanel
+          lib={selected}
+          mode={panelMode}
+          onClose={() => setSelected(null)}
+          onSave={handleSave}
+          onSuspend={handleSuspend}
+        />
+      )}
     </div>
   );
 }
