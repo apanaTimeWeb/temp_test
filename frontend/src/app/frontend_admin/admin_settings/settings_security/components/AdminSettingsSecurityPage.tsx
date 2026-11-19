@@ -10,7 +10,7 @@ import { ADMIN_SECURITY_ACTIVE_SESSION_FIXTURES, ADMIN_SECURITY_EVENT_FIXTURES, 
 import { filterAdminSecurityEvents } from '@/app/frontend_admin/admin_settings/settings_security/utils/AdminSettingsSecurityEventUtils';
 import type { AdminSecurityEventFilter } from '@/app/frontend_admin/admin_settings/settings_security/types/AdminSettingsSecurityTypes';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
-import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSecurityFailedLoginsPanel';
+import AdminSecurityFailedLoginsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityFailedLoginsPanel';
 import AdminSecurityDeviceSessionsPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityDeviceSessionsPanel';
 import AdminSettingsSecurityAuditTrailPanel from '@/app/frontend_admin/admin_settings/settings_security/components/AdminSettingsSecurityAuditTrailPanel';
 

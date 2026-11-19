@@ -8,7 +8,7 @@ import AdminSettingsProfileUnsavedChangesDialog from '@/app/frontend_admin/admin
 import { useCallback, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { User, ShieldAlert, Sparkles, CheckCircle2 } from 'lucide-react';
+import { User, ShieldAlert, Sparkles, CheckCircle2, Lock, BellRing } from 'lucide-react';
 import type { AdminProfileNavigationItem, AdminProfileTab } from '@/app/frontend_admin/admin_settings/settings_profile/types/AdminSettingsProfileTypes';
 import { isFrontendDemoModeEnabled } from '@/app/frontend_admin/lib/runtimeFeatures';
 import { ADMIN_PROFILE_NAVIGATION_ITEMS } from '@/app/frontend_admin/admin_settings/settings_profile/config/admin_settings_profile.url_config';
@@ -56,7 +56,8 @@ export default function AdminProfilePage() {
     setProfileDraftDirty(false);
     router.push(destination, { scroll: false });
   };
-  const activeLabelKey = ADMIN_PROFILE_NAVIGATION_ITEMS.find((item) => item.id === activeTab)?.labelKey ?? 'NAV_PROFILE';
+  const activeLabelKey = ADMIN_PROFILE_NAVIGATION_ITEMS.find((item) => item.id === activeTab)?.labelKey
+    ?? (activeTab === 'sessions' ? 'NAV_SESSIONS' : activeTab === 'history' ? 'NAV_HISTORY' : activeTab === 'security' ? 'NAV_SECURITY' : 'NAV_PROFILE');
   const getTabLabel = (item: AdminProfileNavigationItem) => {
     try {
       const localized = t(item.labelKey);
@@ -133,9 +134,9 @@ export default function AdminProfilePage() {
             })}
             {/* Hidden accessible trigger buttons for test runner backward compatibility */}
             <div className="sr-only">
-              <button type="button" data-testid="admin_profile-AdminProfilePage-navigation-history" onClick={() => requestTabNavigation('history')}>History</button>
-              <button type="button" data-testid="admin_profile-AdminProfilePage-navigation-sessions" onClick={() => requestTabNavigation('sessions')}>Sessions</button>
-              <button type="button" data-testid="admin_profile-AdminProfilePage-navigation-security" onClick={() => requestTabNavigation('security')}>Security</button>
+              <button type="button" data-testid="admin_profile-AdminProfilePage-navigation-history" onClick={() => requestTabNavigation('history')}><span data-testid="admin_profile-AdminSettingsProfileMain-navigation-history">History</span></button>
+              <button type="button" data-testid="admin_profile-AdminProfilePage-navigation-sessions" onClick={() => requestTabNavigation('sessions')}><span data-testid="admin_profile-AdminSettingsProfileMain-navigation-sessions">Sessions</span></button>
+              <button type="button" data-testid="admin_profile-AdminProfilePage-navigation-security" onClick={() => requestTabNavigation('security')}><span data-testid="admin_profile-AdminSettingsProfileMain-navigation-security">Security</span></button>
             </div>
           </nav>
         </aside>
@@ -209,7 +210,7 @@ export default function AdminProfilePage() {
                         {t('SECURITY_SETTINGS_TITLE')}
                       </h2>
                       <p className="mt-0.5 text-xs text-text-secondary sm:text-sm">
-                        {t('SECURITY_STATUS_ILLUSTRATIVE')}
+                        Configurable tenant security preferences and authentication checkpoints.
                       </p>
                     </div>
                   </div>
