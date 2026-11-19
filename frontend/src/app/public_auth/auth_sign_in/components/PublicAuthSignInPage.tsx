@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
   Eye, EyeOff, BookOpen, Lock,
-  Shield, Zap, Users, LayoutGrid, Clock,
+  Shield, Zap, Users,
 } from 'lucide-react';
 import { PublicAuthBlockerOverlay, PublicAuthButtonLoader } from '@/app/public_auth/auth_sign_in/components/PublicAuthSignInLoader';
 import { usePublicAuthLoginMutation } from '@/app/public_auth/auth_sign_in/hooks/usePublicAuthSignInMutation';
@@ -350,65 +350,30 @@ export default function PublicAuthSignInPage() {
           </span>
         </div>
 
-        {/* Center Content: Pure real-project operations */}
-        <div className="max-w-lg space-y-5 my-auto">
-          <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-[11px] font-semibold px-3 py-1 rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+        {/* Center Content: User's exact multi-branch copy */}
+        <div className="max-w-xl space-y-6 my-auto">
+          <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            Study Library Management System
+            Multi-Branch Study Library Management System
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             <h1 className="text-3xl xl:text-4xl font-extrabold tracking-tight text-white leading-tight">
-              Unified Operations for<br />
+              One Platform. Every Branch.<br />
               <span className="bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300 bg-clip-text text-transparent">
-                Study Libraries &amp; Reading Rooms
+                Complete Control.
               </span>
             </h1>
-            <p className="text-slate-400 text-xs xl:text-sm leading-relaxed">
-              Complete operational management for library branches — controlling seats &amp; shifts matrix, student admissions, smart lockers, attendance logs, and daily fee settlements.
+
+            <p className="text-slate-300/90 text-sm xl:text-base leading-relaxed">
+              Manage your entire study library operation from one centralized platform. Oversee multiple branches, manage student admissions and memberships, organize seats and shifts, track attendance, assign smart lockers, and monitor fees, finance and daily operations — all in one place.
             </p>
           </div>
 
-          {/* 4 Core Real-System Modules */}
-          <div className="grid grid-cols-2 gap-2.5 pt-1">
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 space-y-1">
-              <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
-                <LayoutGrid size={14} />
-                <span>Seats &amp; Shifts Matrix</span>
-              </div>
-              <p className="text-[11px] text-slate-400 leading-normal">
-                Real-time desk occupancy, shift rosters, and vacancy management.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 space-y-1">
-              <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
-                <Users size={14} />
-                <span>Student Admissions</span>
-              </div>
-              <p className="text-[11px] text-slate-400 leading-normal">
-                New admissions, digital ID generation, and member records.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 space-y-1">
-              <div className="flex items-center gap-2 text-violet-400 font-bold text-xs">
-                <Lock size={14} />
-                <span>Locker Management</span>
-              </div>
-              <p className="text-[11px] text-slate-400 leading-normal">
-                Locker allocation, key security, and plan expiry tracking.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3 space-y-1">
-              <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
-                <Clock size={14} />
-                <span>Attendance &amp; Accounts</span>
-              </div>
-              <p className="text-[11px] text-slate-400 leading-normal">
-                QR &amp; biometric logs, fee receipts, and daily cash settlements.
-              </p>
+          <div className="pt-1">
+            <div className="inline-flex items-center gap-2.5 rounded-xl border border-indigo-500/25 bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-transparent px-4 py-2.5 text-xs font-bold text-white shadow-sm">
+              <span className="flex h-2 w-2 rounded-full bg-indigo-400 shadow-[0_0_8px_#818cf8]" />
+              <span>Designed for Modern Study Libraries &amp; Reading Rooms.</span>
             </div>
           </div>
         </div>
@@ -416,7 +381,7 @@ export default function PublicAuthSignInPage() {
         {/* Footer */}
         <div className="flex items-center justify-between text-xs text-slate-500 pt-3">
           <p>&copy; {new Date().getFullYear()} LibraryOS. All rights reserved.</p>
-          <span className="text-[11px] text-slate-500">Enterprise Operations Portal</span>
+          <span className="text-[11px] text-slate-500">Multi-Branch Platform</span>
         </div>
       </section>
 
