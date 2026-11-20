@@ -1,0 +1,240 @@
+'use client';
+
+import type { SuperadminLibrariesLibrary } from '../types/SuperadminLibrariesOverviewTypes';
+
+/**
+ * Escapes a single CSV cell value according to RFC 4180.
+ */
+function escapeCsvValue(val: unknown): string {
+  if (val === null || val === undefined) return '""';
+  const str = String(val);
+  return `"${str.replace(/"/g, '""')}"`;
+}
+
+/**
+ * Exports libraries to a clean CSV file.
+ */
+export function downloadSuperadminLibrariesCsv(
+  libraries: SuperadminLibrariesLibrary[],
+  filename = 'superadmin_libraries_directory.csv'
+): void {
+  const headers = [
+    'Library ID',
+    'Library Name',
+    'Location',
+    'Branches',
+    'Active Students',
+    'Plan',
+    'Status',
+    'Revenue (INR)',
+    'Owner',
+    'Email',
+    'Phone',
+    'GST Number',
+    'Joined Date',
+    'Next Renewal',
+  ];
+
+  const rows = libraries.map((lib) => [
+    escapeCsvValue(lib.id),
+    escapeCsvValue(lib.name),
+    escapeCsvValue(lib.location),
+    escapeCsvValue(lib.branches),
+    escapeCsvValue(lib.students),
+    escapeCsvValue(lib.plan),
+    escapeCsvValue(lib.status),
+    escapeCsvValue(lib.revenue),
+    escapeCsvValue(lib.owner),
+    escapeCsvValue(lib.email),
+    escapeCsvValue(lib.phone || 'N/A'),
+    escapeCsvValue(lib.gstNumber || 'N/A'),
+    escapeCsvValue(lib.joinedAt),
+    escapeCsvValue(lib.nextRenewal),
+  ]);
+
+  const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
+  const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/**
+ * Exports libraries to an Excel-compatible (.xls) HTML document with styling.
+ */
+export function downloadSuperadminLibrariesExcel(
+  libraries: SuperadminLibrariesLibrary[],
+  filename = 'superadmin_libraries_directory.xls'
+): void {
+  const tableRows = libraries
+    .map(
+      (lib, idx) => `
+    <tr style="background-color: ${idx % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+      <td style="padding: 8px; border: 1px solid #cbd5e1; font-weight: bold;">${lib.name}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1;">${lib.location}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;">${lib.branches}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right;">${lib.students?.toLocaleString() ?? 0}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;">${lib.plan}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: center; color: ${lib.status === 'Active' ? '#059669' : '#d97706'}; font-weight: bold;">${lib.status}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1; text-align: right; font-weight: bold;">₹${lib.revenue?.toLocaleString('en-IN') ?? 0}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1;">${lib.owner}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1;">${lib.email}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1;">${lib.phone || 'N/A'}</td>
+      <td style="padding: 8px; border: 1px solid #cbd5e1;">${lib.nextRenewal}</td>
+    </tr>`
+    )
+    .join('');
+
+  const html = `
+  <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+  <head>
+    <!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Registered Libraries</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+    <meta http-equiv="content-type" content="text/plain; charset=UTF-8"/>
+    <style>
+      body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; }
+      table { border-collapse: collapse; width: 100%; }
+      th { background-color: #4f46e5; color: #ffffff; padding: 10px; font-weight: bold; border: 1px solid #4338ca; text-align: left; }
+    </style>
+  </head>
+  <body>
+    <h2>Smart Library SaaS - Registered Facilities Directory</h2>
+    <p>Export Date: ${new Date().toLocaleString('en-IN')} | Total Facilities: ${libraries.length}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Library Name</th>
+          <th>Location</th>
+          <th>Branches</th>
+          <th>Active Students</th>
+          <th>Plan</th>
+          <th>Status</th>
+          <th>LTV Revenue</th>
+          <th>Owner Name</th>
+          <th>Contact Email</th>
+          <th>Contact Phone</th>
+          <th>Next Renewal</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>
+    </table>
+  </body>
+  </html>`;
+
+  const blob = new Blob(['\uFEFF' + html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/**
+ * Opens a print-formatted window to print the libraries roster.
+ */
+export function printSuperadminLibrariesRoster(
+  libraries: SuperadminLibrariesLibrary[],
+  title = 'Registered Facilities Directory'
+): void {
+  const printWindow = window.open('', '_blank', 'width=1100,height=800');
+  if (!printWindow) return;
+
+  const totalRev = libraries.reduce((sum, l) => sum + (l.revenue || 0), 0);
+  const totalStudents = libraries.reduce((sum, l) => sum + (l.students || 0), 0);
+  const totalBranches = libraries.reduce((sum, l) => sum + (l.branches || 0), 0);
+
+  const rowsHtml = libraries
+    .map(
+      (lib, idx) => `
+    <tr style="background: ${idx % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-weight: 600;">${lib.name}</td>
+      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; color: #475569;">${lib.location}</td>
+      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: center;">${lib.branches}</td>
+      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: right;">${lib.students?.toLocaleString() ?? 0}</td>
+      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: center;"><span style="display:inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: #e0e7ff; color: #3730a3;">${lib.plan}</span></td>
+      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: center;"><span style="display:inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: ${lib.status === 'Active' ? '#dcfce7; color: #15803d;' : '#fef3c7; color: #b45309;'}">${lib.status}</span></td>
+      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 600;">₹${lib.revenue?.toLocaleString('en-IN') ?? 0}</td>
+      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0;">${lib.owner}</td>
+      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #475569;">${lib.email}<br/><span style="color:#0284c7;">${lib.phone || ''}</span></td>
+    </tr>`
+    )
+    .join('');
+
+  const html = `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>${title} - Smart Library SaaS</title>
+      <meta charset="utf-8" />
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #0f172a; margin: 24px; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #4f46e5; padding-bottom: 16px; margin-bottom: 20px; }
+        .title { font-size: 22px; font-weight: 700; color: #1e1b4b; margin: 0; }
+        .subtitle { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .kpis { display: flex; gap: 16px; margin-bottom: 20px; }
+        .kpi { flex: 1; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .kpi-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600; }
+        .kpi-val { font-size: 18px; font-weight: 700; color: #0f172a; margin-top: 2px; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th { background: #1e1b4b; color: #ffffff; text-align: left; padding: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+        @media print {
+          body { margin: 0; }
+          .no-print { display: none; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div>
+          <h1 class="title">${title}</h1>
+          <p class="subtitle">Smart Library SaaS SuperAdmin Console • Generated: ${new Date().toLocaleString('en-IN')}</p>
+        </div>
+        <div class="no-print">
+          <button onclick="window.print()" style="background:#4f46e5;color:#fff;border:none;padding:8px 16px;border-radius:6px;font-weight:600;cursor:pointer;">Print Roster</button>
+        </div>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><div class="kpi-label">Total Facilities</div><div class="kpi-val">${libraries.length}</div></div>
+        <div class="kpi"><div class="kpi-label">Active Branches</div><div class="kpi-val">${totalBranches}</div></div>
+        <div class="kpi"><div class="kpi-label">Active Students</div><div class="kpi-val">${totalStudents.toLocaleString()}</div></div>
+        <div class="kpi"><div class="kpi-label">Cumulative LTV Revenue</div><div class="kpi-val">₹${totalRev.toLocaleString('en-IN')}</div></div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Library Name</th>
+            <th>Location</th>
+            <th style="text-align: center;">Branches</th>
+            <th style="text-align: right;">Students</th>
+            <th style="text-align: center;">Plan</th>
+            <th style="text-align: center;">Status</th>
+            <th style="text-align: right;">LTV Revenue</th>
+            <th>Owner</th>
+            <th>Contact Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+    </body>
+  </html>`;
+
+  printWindow.document.write(html);
+  printWindow.document.close();
+  printWindow.focus();
+  setTimeout(() => {
+    printWindow.print();
+  }, 500);
+}

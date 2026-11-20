@@ -100,10 +100,34 @@ export default function SuperadminCommunicationNoticesPageClient({ id }: { id?: 
       width: 140,
       sortable: false,
       cellRenderer: (params: ICellRendererParams) => (
-        <div className="h-full flex items-center gap-2">
-          <button type="button" onClick={() => openEdit(params.data)} className="eng-btn-icon hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-reduce:transition-none motion-safe:duration-200" title={tCopy("COPY.EDIT")} data-testid={`superadmin-communication-communication-notices-edit-1-${getSuperadminInteractiveTestIdSuffix(params.data)}`}><Edit2 size={14} /></button>
-          <button type="button" onClick={() => setBroadcastItem(params.data)} className="eng-btn-icon hover:bg-primary hover:text-on-primary motion-safe:transition-colors motion-reduce:transition-none motion-safe:duration-200" title={tCopy("COPY.BROADCAST")} data-testid={`superadmin-communication-communication-notices-broadcast-2-${getSuperadminInteractiveTestIdSuffix(params.data)}`}><Send size={14} /></button>
-          <button type="button" onClick={() => setDeleteItem(params.data)} className="eng-btn-icon eng-btn-icon--danger hover:bg-danger hover:text-on-danger motion-safe:transition-colors motion-reduce:transition-none motion-safe:duration-200" title={tCopy("COPY.DELETE")} data-testid={`superadmin-communication-communication-notices-delete-3-${getSuperadminInteractiveTestIdSuffix(params.data)}`}><Trash2 size={14} /></button>
+        <div className="h-full flex items-center gap-1.5 py-1">
+          <button
+            type="button"
+            onClick={() => openEdit(params.data)}
+            className="p-1.5 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+            title={tCopy("COPY.EDIT")}
+            data-testid={`superadmin-communication-communication-notices-edit-1-${getSuperadminInteractiveTestIdSuffix(params.data)}`}
+          >
+            <Edit2 size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setBroadcastItem(params.data)}
+            className="p-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+            title={tCopy("COPY.BROADCAST")}
+            data-testid={`superadmin-communication-communication-notices-broadcast-2-${getSuperadminInteractiveTestIdSuffix(params.data)}`}
+          >
+            <Send size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setDeleteItem(params.data)}
+            className="p-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+            title={tCopy("COPY.DELETE")}
+            data-testid={`superadmin-communication-communication-notices-delete-3-${getSuperadminInteractiveTestIdSuffix(params.data)}`}
+          >
+            <Trash2 size={13} />
+          </button>
         </div>
       )
     }

@@ -30,6 +30,8 @@ export default function SuperadminUsersDirectoryContent({ activeTab, users, user
             columnDefs={userCols}
             headerHeight={48}
             rowHeight={56}
+            pagination={true}
+            paginationPageSize={10}
             suppressCellFocus={false}
             getRowId={(params) => params.data.id}
           />

@@ -26,6 +26,7 @@ export interface SuperadminUserData extends SuperadminUsersFormValues {
   id: string;
   status: SuperadminUsersStatus;
   lastLogin: string;
+  phone?: string;
 }
 
 /**

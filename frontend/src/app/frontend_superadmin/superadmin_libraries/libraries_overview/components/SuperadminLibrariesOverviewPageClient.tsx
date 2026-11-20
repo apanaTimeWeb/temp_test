@@ -6,13 +6,19 @@ import SuperadminLibrariesOverviewSemanticTable, { type SemanticColumnDef, type 
 import { useCallback, useMemo, useState } from 'react';
 import {
   Edit2, Eye, ShieldAlert, Building2, Store, Users, IndianRupee,
-  TrendingUp, MapPin, Building, RotateCcw, Search, X, CheckCircle
+  TrendingUp, MapPin, Building, RotateCcw, Search, X, CheckCircle,
+  Download, FileSpreadsheet, Printer, MessageSquare, Mail, PhoneCall
 } from 'lucide-react';
 import { useSuperadminLibrariesOverview } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/hooks/useSuperadminLibrariesOverview';
 import SuperadminLibrariesOverviewPanel from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewPanel';
 import type { SuperadminLibrariesLibrary, SuperadminLibrariesPanelMode } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 import { SUPERADMIN_LIBRARIES_TOASTS } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/constants/SuperadminLibrariesOverviewConstants';
 import { SuperadminLibrariesFormatMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewFormattingUtilities';
+import {
+  downloadSuperadminLibrariesCsv,
+  downloadSuperadminLibrariesExcel,
+  printSuperadminLibrariesRoster,
+} from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewExportUtils';
 import { useTranslations, useLocale } from 'next-intl';
 
 const PLAN_STYLES: Record<string, string> = {
@@ -77,6 +83,22 @@ export default function SuperadminLibrariesOverviewPageClient() {
     setPlanFilter('all');
     setStatusFilter('all');
   };
+
+  // Export handlers
+  const handleExportCsv = useCallback(() => {
+    downloadSuperadminLibrariesCsv(filteredLibraries, 'superadmin_libraries_directory.csv');
+    showToast(`Exported ${filteredLibraries.length} facility record(s) to CSV`);
+  }, [filteredLibraries, showToast]);
+
+  const handleExportExcel = useCallback(() => {
+    downloadSuperadminLibrariesExcel(filteredLibraries, 'superadmin_libraries_directory.xls');
+    showToast(`Exported ${filteredLibraries.length} facility record(s) to Excel (.xls)`);
+  }, [filteredLibraries, showToast]);
+
+  const handlePrintRoster = useCallback(() => {
+    printSuperadminLibrariesRoster(filteredLibraries, 'Smart Library Registered Facilities');
+    showToast(`Prepared ${filteredLibraries.length} facility record(s) for printing`);
+  }, [filteredLibraries, showToast]);
 
   const handleSave = useCallback(async (updated: SuperadminLibrariesLibrary) => {
     try {

@@ -13,7 +13,7 @@ import { useSuperadminSupportComplaintsQuery } from '@/app/frontend_superadmin/s
 import type { SuperadminSupportComplaint as Complaint, SuperadminSupportComplaintStatus as CStatus, SuperadminSupportComplaintStatusFilter } from '@/app/frontend_superadmin/superadmin_support/support_complaints/types/SuperadminSupportComplaintsTypes';
 import { SUPERADMIN_SUPPORT_COMPLAINTS_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_support/support_complaints/api/superadmin_support_complaints.query_keys';
 import { useQueryClient } from '@tanstack/react-query';
-import { Plus, X, Eye, RefreshCw, CheckCircle } from 'lucide-react';
+import { Plus, X, Eye, RefreshCw, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import SuperadminSupportComplaintsListSkeleton from '@/app/frontend_superadmin/superadmin_support/support_complaints/components/SuperadminSupportComplaintsListSkeleton';
 import { formatSuperadminSupportComplaintDate } from '@/app/frontend_superadmin/superadmin_support/support_complaints/utils/SuperadminSupportComplaintsDateFormatter';
@@ -73,6 +73,10 @@ export default function SuperadminSupportComplaintsPageClient({ id }: { id?: str
   const showToast = (msg: string) => { toast.message(msg, { id: 'superadmin:superadmin_communication:SuperadminSupportComplaintsPageClient:feedback' }); };
 
   const filtered = tab === 'All' ? complaints : complaints.filter(c => c.status === tab);
+  const [complaintPage, setComplaintPage] = useState(0);
+  const complaintPageSize = 10;
+  const totalComplaintPages = Math.max(1, Math.ceil(filtered.length / complaintPageSize));
+  const paginatedFiltered = filtered.slice(complaintPage * complaintPageSize, (complaintPage + 1) * complaintPageSize);
 
   const handleAdd = (_values: SuperadminSupportComplaintFormValues) => {
     showToast(tCopy('COPY.TOAST_COMPLAINT_WRITE_API_UNAVAILABLE'));
@@ -232,12 +236,12 @@ export default function SuperadminSupportComplaintsPageClient({ id }: { id?: str
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((c, i) => {
+                {paginatedFiltered.map((c, i) => {
                   const isExpanded = expandedDesc.includes(c.id);
                   const isLong = c.description.length > 60;
                   return (
                     <tr key={c.id}>
-                      <td className="eng-td-mono" data-label="#">{i + 1}</td>
+                      <td className="eng-td-mono" data-label="#">{complaintPage * complaintPageSize + i + 1}</td>
                       <td className="eng-td-bold" data-label={tCopy("COPY.TITLE")}>{c.title || tCopy('COPY.UNTITLED_COMPLAINT')}</td>
                       <td data-label={tCopy("COPY.STUDENT")} className={c.isAnonymous ? 'eng-td-italic-muted' : ''}>{c.isAnonymous ? tCopy('COPY.ANONYMOUS') : c.student || tCopy('COPY.UNKNOWN')}</td>
                       <td data-label={tCopy("COPY.DESCRIPTION")}>
@@ -274,6 +278,50 @@ export default function SuperadminSupportComplaintsPageClient({ id }: { id?: str
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {filtered.length > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-border bg-slate-900/40 text-xs text-slate-400">
+            <span>
+              Showing {complaintPage * complaintPageSize + 1} to {Math.min((complaintPage + 1) * complaintPageSize, filtered.length)} of {filtered.length} complaints
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+                disabled={complaintPage === 0}
+                onClick={() => setComplaintPage((p) => Math.max(0, p - 1))}
+              >
+                <ChevronLeft size={14} />
+                <span>Previous</span>
+              </button>
+
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalComplaintPages }).map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setComplaintPage(idx)}
+                    className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      complaintPage === idx ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    }`}
+                  >
+                    {idx + 1}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+                disabled={complaintPage + 1 >= totalComplaintPages}
+                onClick={() => setComplaintPage((p) => Math.min(totalComplaintPages - 1, p + 1))}
+              >
+                <span>Next</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
           </div>
         )}
       </div>
