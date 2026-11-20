@@ -18,11 +18,6 @@ export default function SuperadminSystemHealthOverviewHeaderStatus() {
       <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/60 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg mb-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-xs text-slate-400">
-              <span>{t("COPY.LIBRARY_OS")}</span><span aria-hidden="true">/</span>
-              <span>{t("COPY.SUPER_ADMIN")}</span><span aria-hidden="true">/</span>
-              <span className="text-emerald-300 font-medium">{t("COPY.SYSTEM_HEALTH")}</span>
-            </div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-100 flex items-center gap-2.5">
               <Activity className="text-emerald-400" size={24} aria-hidden="true" />
               {t("COPY.SYSTEM_HEALTH_TELEMETRY")}

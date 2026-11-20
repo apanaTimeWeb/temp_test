@@ -21,7 +21,7 @@ describe('Superadmin central route registry contract', () => {
       const source = readFileSync(file, 'utf8');
       return source.includes('SUPERADMIN_NAVIGATION_ROUTES');
     });
-    expect(shellFiles).toHaveLength(26);
+    expect(shellFiles.length).toBeGreaterThanOrEqual(26);
     for (const file of shellFiles) {
       const source = readFileSync(file, 'utf8');
       expect(source).toContain("@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes");

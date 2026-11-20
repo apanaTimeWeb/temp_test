@@ -71,9 +71,6 @@ const translateValidationMessage = useSuperadminSettingsMaintenanceModeValidatio
     <div className="sa-page-animate">
       <form onSubmit={handleSubmit(handleSave)} noValidate data-testid="superadmin-superadmin-settings-overview-page-client-form-line-50">
       <div className="flex flex-col gap-1 mb-8">
-        <div className="sa-breadcrumb">
-          <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span><span>{tCopy("COPY.SYSTEM_SETTINGS")}</span>
-        </div>
         <div className="flex items-center justify-between mt-2">
           <h1 className="sa-page-title flex items-center gap-3">
             <Settings className="text-primary" size={28} /> {tCopy("COPY.SYSTEM_SETTINGS")}

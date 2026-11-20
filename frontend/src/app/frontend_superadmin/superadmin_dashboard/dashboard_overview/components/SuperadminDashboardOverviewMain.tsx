@@ -45,13 +45,6 @@ export default function SuperadminDashboardOverviewMain() {
             </div>
 
             <div>
-              <div className="sa-breadcrumb text-xs text-slate-400 mb-1 flex items-center gap-1.5">
-                <span>{t('COPY.LIBRARY_OS')}</span>
-                <span>/</span>
-                <span>{t('COPY.SUPER_ADMIN')}</span>
-                <span>/</span>
-                <span className="text-indigo-300 font-medium">{t('COPY.DASHBOARD')}</span>
-              </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
                 <LayoutDashboard className="text-indigo-400 shrink-0" size={28} />
                 {t('COPY.PLATFORM_OVERVIEW')}

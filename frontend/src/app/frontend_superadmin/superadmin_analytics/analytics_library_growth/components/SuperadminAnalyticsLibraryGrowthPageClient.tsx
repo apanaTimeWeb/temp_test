@@ -103,7 +103,6 @@ const router = useRouter();
       </div>
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <div className="sa-breadcrumb"><span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span><span>{tCopy("COPY.REPORTS_ANALYTICS")}</span></div>
           <h1 className="sa-page-title mt-2 flex items-center gap-3"><Activity className="text-primary" size={24} /> {tCopy("COPY.GLOBAL_SAAS_ANALYTICS")}</h1>
           <p className="text-sm text-secondary">{tCopy("COPY.EXPLORE_THE_AVAILABLE_LOCAL_PREVIEW_DATASET_BY_DATE_RANGE_AND_REPORT_TYPE")}</p>
         </div>

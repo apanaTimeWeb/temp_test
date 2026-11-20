@@ -35,7 +35,6 @@ const { activeTab, setActiveTab, showPreviewNotice } = useSuperadminBackupSchedu
       {(SUPERADMIN_BACKUP_SAMPLE_HISTORY.length === 0) && <SuperadminBackupSchedulesEmptyState filtered />}
 
       <div className="flex flex-col gap-1 mb-8">
-        <div className="sa-breadcrumb"><span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span><span>{tCopy("COPY.BACKUP_RESTORE")}</span></div>
         <div className="flex items-center justify-between mt-2"><h1 className="sa-page-title flex items-center gap-3"><Database className="text-success" size={28} aria-hidden="true" />{tCopy("COPY.DISASTER_RECOVERY_BACKUPS")}</h1></div>
       </div>
       <p className="mb-5 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy("COPY.SAMPLE_BACKUP_METADATA_ONLY_REAL_BACKUP_CREATION_DOWNLOAD_RESTORE_AND_SCHEDULING_ARE_UNAVAILABLE_BECAUSE_NO_APPROVED_BACKEND_CONTRACTS_ARE_SUPPLIED")}</p>

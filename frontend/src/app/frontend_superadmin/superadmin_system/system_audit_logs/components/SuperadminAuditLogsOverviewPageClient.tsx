@@ -158,9 +158,6 @@ export default function SuperadminAuditLogsOverviewPageClient() {
       {selected && <SuperadminAuditLogsOverviewDetailDrawer log={selected} onClose={closeSelected} />}
 
       <div className="flex flex-col gap-1 mb-8">
-        <div className="sa-breadcrumb">
-          <span>{t("COPY.LIBRARY_OS")}</span><span>/</span><span>{t("COPY.SUPER_ADMIN")}</span><span>/</span><span>{t("COPY.AUDIT_LOGS")}</span>
-        </div>
         <h1 className="sa-page-title">{t("COPY.SYSTEM_AUDIT_LOGS_SAMPLE")}</h1>
         <p className="text-sm text-secondary" role="note">{t("COPY.SAMPLE_AUDIT_DATA_ONLY_THIS_ARCHIVE_IS_NOT_CONNECTED_TO_A_LIVE_AUDIT_STREAM_THESE_ROWS_DO_NOT_VERIFY_REAL_OPERATIONS")}</p>
       </div>

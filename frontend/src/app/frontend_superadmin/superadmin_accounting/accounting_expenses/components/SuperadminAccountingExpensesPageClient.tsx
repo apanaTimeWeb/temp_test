@@ -160,10 +160,6 @@ export default function SuperadminAccountingExpensesPageClient() {
       <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-950/60 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-xs text-slate-400">
-              <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span>
-              <span className="text-amber-300 font-medium">{tCopy("COPY.EXPENSE_LEDGER")}</span>
-            </div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{tCopy("COPY.EXPENSE_LEDGER")}</h1>
             <p className="text-xs text-slate-400">{tCopy("COPY.TRACK_ALL_LIBRARY_OPERATIONAL_EXPENSES")}</p>
           </div>

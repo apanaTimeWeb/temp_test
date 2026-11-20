@@ -79,13 +79,6 @@ export default function SuperadminSecurityThreatsPageClient() {
       <div className="rounded-2xl border border-border/80 bg-gradient-to-r from-card via-card/90 to-card/60 p-5 sm:p-6 shadow-sm backdrop-blur-md">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-              <span>{tCopy("COPY.LIBRARY_OS")}</span>
-              <span>/</span>
-              <span>{tCopy("COPY.SUPER_ADMIN")}</span>
-              <span>/</span>
-              <span className="text-indigo-400">{tCopy("COPY.SECURITY_CENTER")}</span>
-            </div>
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400 shadow-inner">
                 <ShieldX size={24} aria-hidden="true" />

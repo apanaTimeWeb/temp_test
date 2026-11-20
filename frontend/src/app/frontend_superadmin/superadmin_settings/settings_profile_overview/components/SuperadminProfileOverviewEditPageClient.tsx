@@ -145,9 +145,6 @@ const router = useRouter();
 
       <p className="mb-5 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy("COPY.SESSION_LOGIN_HISTORY_AND_RECOVERY_CODE_PLACEHOLDERS_ARE_SAMPLE_DATA_NOT_VALID_CREDENTIALS_OR_CURRENT_ACCOUNT_TELEMETRY_PROFILE_PASSWORD_MFA_CHANGES_AND_SESSION_REVOCATION_REMAIN_UNAVAILABLE_UNTIL_THE_HOST_API_CONTRACT_IS_PROVIDED")}</p>
       <div className="flex flex-col gap-1 mb-8">
-        <div className="sa-breadcrumb">
-          <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span><span>{tCopy("COPY.MY_PROFILE")}</span>
-        </div>
         <div className="flex items-center justify-between mt-2">
           <h1 className="sa-page-title flex items-center gap-3">
             <User className="text-primary" size={28} /> {tCopy("COPY.MY_PROFILE")}

@@ -94,9 +94,6 @@ export default function SuperadminBillingInvoicesPageClient() {
     <div className="sa-page-animate relative">
 
       <div className="flex flex-col gap-1 mb-8">
-        <div className="sa-breadcrumb">
-          <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span><span>{tCopy("COPY.BILLING")}</span>
-        </div>
         <div className="flex items-center justify-between mt-2">
           <h1 className="sa-page-title">{tCopy("COPY.BILLING_REVENUE")}</h1>
           <div className="flex items-center gap-3">

@@ -74,10 +74,6 @@ const translateValidationMessage = useSuperadminSettingsOverviewValidationMessag
       <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/80 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg mb-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-xs text-slate-400">
-              <span>{tCopy("COPY.LIBRARY_OS")}</span><span>/</span><span>{tCopy("COPY.SUPER_ADMIN")}</span><span>/</span>
-              <span className="text-indigo-300 font-medium">{tCopy("COPY.SYSTEM_SETTINGS")}</span>
-            </div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-100 flex items-center gap-2.5">
               <Settings className="text-indigo-400" size={24} /> {tCopy("COPY.SYSTEM_SETTINGS")}
             </h1>
