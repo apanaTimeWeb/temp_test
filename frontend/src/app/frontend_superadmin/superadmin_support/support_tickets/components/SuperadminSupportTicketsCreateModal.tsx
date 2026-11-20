@@ -76,7 +76,11 @@ export default function SuperadminSupportTicketsCreateModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-[70] overflow-y-auto flex items-start justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+      style={{
+        paddingTop: 'calc(var(--layout-header-height, 64px) + 20px)',
+        paddingBottom: '32px',
+      }}
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -86,7 +90,7 @@ export default function SuperadminSupportTicketsCreateModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="create-ticket-title"
-        className="w-full max-w-xl rounded-2xl border border-indigo-500/30 bg-[#0a0d22] p-6 shadow-2xl shadow-indigo-950/50 space-y-5 text-white max-h-[90vh] overflow-y-auto"
+        className="w-full max-w-xl rounded-2xl border border-indigo-500/30 bg-[#0a0d22] p-6 shadow-2xl shadow-indigo-950/50 space-y-5 text-white max-h-[calc(100dvh-120px)] overflow-y-auto my-auto"
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-indigo-500/20 pb-4">
