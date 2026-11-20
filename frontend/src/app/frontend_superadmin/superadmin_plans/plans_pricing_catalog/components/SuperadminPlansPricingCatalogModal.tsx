@@ -3,9 +3,11 @@
 import { useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Package, X, Sparkles, Building2, Users, Database, Shield, MessageSquare, Check } from 'lucide-react';
+import { Package, X } from 'lucide-react';
 import { SUPERADMIN_SUBSCRIPTIONS_PLAN_SCHEMA } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/schemas/SuperadminPlansPricingCatalogPlanSchema';
 import type { SuperadminSubscriptionPlan, SuperadminSubscriptionPlanFormValues } from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/types/SuperadminPlansPricingCatalogTypes';
+import SuperadminPlansPricingCatalogModalLimits from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/components/SuperadminPlansPricingCatalogModalLimits';
+import SuperadminPlansPricingCatalogModalFeatures from '@/app/frontend_superadmin/superadmin_plans/plans_pricing_catalog/components/SuperadminPlansPricingCatalogModalFeatures';
 
 interface SuperadminPlansPricingCatalogModalProps {
   isOpen: boolean;
@@ -261,129 +263,11 @@ export default function SuperadminPlansPricingCatalogModal({
             </div>
           </div>
 
-          {/* Branch, User & Member Limits */}
-          <div className="pt-2 border-t border-indigo-500/15">
-            <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2.5">Capacity & Entitlements</h4>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1" htmlFor="subscription-plan-branches">
-                  {t('COPY.MAX_BRANCHES')}
-                </label>
-                <input
-                  id="subscription-plan-branches"
-                  type="number"
-                  min={1}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
-                  {...register('branches', { valueAsNumber: true })}
-                  data-testid="superadmin-subscriptions-subscriptions-overview-subscription-plan-branches-8"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Max Admins</label>
-                <input
-                  type="number"
-                  min={1}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
-                  {...register('adminUsers', { valueAsNumber: true })}
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Max Staff</label>
-                <input
-                  type="number"
-                  min={1}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
-                  {...register('staffUsers', { valueAsNumber: true })}
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1" htmlFor="subscription-plan-members">
-                  {t('COPY.MAX_MEMBERS')}
-                </label>
-                <input
-                  id="subscription-plan-members"
-                  type="number"
-                  min={1}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
-                  {...register('members', { valueAsNumber: true })}
-                  data-testid="superadmin-subscriptions-subscriptions-overview-subscription-plan-members-9"
-                />
-              </div>
-            </div>
-          </div>
+          {/* Limits subcomponent */}
+          <SuperadminPlansPricingCatalogModalLimits register={register} t={t} />
 
-          {/* Storage & Messaging */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label className="block text-[11px] font-semibold text-slate-300 mb-1">Storage Limit</label>
-              <input
-                type="text"
-                placeholder="e.g. 25 GB"
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
-                {...register('storage')}
-              />
-            </div>
-            <div>
-              <label className="block text-[11px] font-semibold text-slate-300 mb-1">SMS Credits / mo</label>
-              <input
-                type="number"
-                min={0}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
-                {...register('smsCredits', { valueAsNumber: true })}
-              />
-            </div>
-            <div>
-              <label className="block text-[11px] font-semibold text-slate-300 mb-1">WhatsApp Credits / mo</label>
-              <input
-                type="number"
-                min={0}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500"
-                {...register('whatsappCredits', { valueAsNumber: true })}
-              />
-            </div>
-          </div>
-
-          {/* Policies & Features */}
-          <div className="pt-2 border-t border-indigo-500/15">
-            <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2.5">Policies & Advanced Features</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Backup Policy</label>
-                <select className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500" {...register('backupPolicy')}>
-                  <option value="Daily">Daily Automated Backup</option>
-                  <option value="Weekly">Weekly Backup</option>
-                  <option value="Realtime">Real-time Continuous Replication</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-300 mb-1">Support Level</label>
-                <select className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-1.5 text-xs text-slate-100 focus:border-indigo-500" {...register('supportLevel')}>
-                  <option value="Standard">Standard (Email 24-48h)</option>
-                  <option value="Priority">Priority (Chat + 12h SLA)</option>
-                  <option value="Dedicated 24/7">Dedicated 24/7 Account Manager</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-              <label className="flex items-center gap-2 p-2 rounded-lg bg-slate-900/60 border border-border/40 cursor-pointer">
-                <input type="checkbox" className="rounded text-indigo-600" {...register('apiAccess')} />
-                <span className="text-slate-200">API Access</span>
-              </label>
-              <label className="flex items-center gap-2 p-2 rounded-lg bg-slate-900/60 border border-border/40 cursor-pointer">
-                <input type="checkbox" className="rounded text-indigo-600" {...register('exportAccess')} />
-                <span className="text-slate-200">Data Export</span>
-              </label>
-              <label className="flex items-center gap-2 p-2 rounded-lg bg-slate-900/60 border border-border/40 cursor-pointer">
-                <input type="checkbox" className="rounded text-indigo-600" {...register('advancedReports')} />
-                <span className="text-slate-200">Adv Reports</span>
-              </label>
-              <label className="flex items-center gap-2 p-2 rounded-lg bg-slate-900/60 border border-border/40 cursor-pointer">
-                <input type="checkbox" className="rounded text-indigo-600" {...register('freeTrial')} />
-                <span className="text-slate-200">Free Trial</span>
-              </label>
-            </div>
-          </div>
+          {/* Features & Policies subcomponent */}
+          <SuperadminPlansPricingCatalogModalFeatures register={register} />
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-indigo-500/20">
             <button
