@@ -35,7 +35,7 @@ function getSuperadminInteractiveTestIdSuffix(value: unknown): string {
 export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
   const locale = useLocale();
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');
-  
+
   const [activeTab] = useState("Active Subscribers");
   const [subs] = useState(SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS);
 
@@ -87,13 +87,12 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
         const isDue = val === 'Due Soon';
         return (
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold border ${
-              isPaid
+            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold border ${isPaid
                 ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-400'
                 : isDue
-                ? 'border-amber-500/30 bg-amber-500/15 text-amber-400'
-                : 'border-rose-500/30 bg-rose-500/15 text-rose-400'
-            }`}
+                  ? 'border-amber-500/30 bg-amber-500/15 text-amber-400'
+                  : 'border-rose-500/30 bg-rose-500/15 text-rose-400'
+              }`}
           >
             {isPaid ? <CheckCircle size={11} /> : isDue ? <Clock size={11} /> : <AlertCircle size={11} />}
             {isPaid ? t('COPY.STATUS_PAID') : isDue ? t('COPY.STATUS_DUE_SOON') : t('COPY.STATUS_OVERDUE')}

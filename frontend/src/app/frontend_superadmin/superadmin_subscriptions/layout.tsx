@@ -30,11 +30,10 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
                 <Link
                   href={route.href}
                   aria-current={active ? 'page' : undefined}
-                  className={`inline-flex min-h-10 items-center gap-2 rounded-t-xl border-b-2 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 cursor-pointer ${
-                    active
+                  className={`inline-flex min-h-10 items-center gap-2 rounded-t-xl border-b-2 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 cursor-pointer ${active
                       ? 'border-indigo-400 bg-indigo-500/10 text-indigo-300 shadow-xs'
                       : 'border-transparent text-slate-400 hover:bg-surface-hover hover:text-slate-200'
-                  }`}
+                    }`}
                   data-testid={`superadmin_subscriptions-secondary-link-${route.key}`}
                 >
                   <Icon size={15} className={active ? 'text-indigo-400' : 'text-slate-400'} />

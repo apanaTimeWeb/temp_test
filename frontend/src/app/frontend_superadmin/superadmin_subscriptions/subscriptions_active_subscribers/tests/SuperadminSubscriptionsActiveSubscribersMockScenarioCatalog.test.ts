@@ -15,15 +15,15 @@ describe('subscriptions_active_subscribers canonical mock scenario catalog', () 
       'ACTIVE', 'EMPTY', 'SERVER_500', 'TIMEOUT', 'UNAUTHORIZED', 'LOADING', 'MUTATION_FAILURE', 'UNAVAILABLE_MUTATION',
     ]);
     expect(Object.fromEntries(SUPERADMIN_SUBSCRIPTIONS_ACTIVE_SUBSCRIBERS_CANONICAL_SCENARIOS.map((scenario) => [scenario.id, scenario.executableWithoutBackendContract]))).toEqual({
-  "ACTIVE": true,
-  "EMPTY": true,
-  "SERVER_500": false,
-  "TIMEOUT": false,
-  "UNAUTHORIZED": false,
-  "LOADING": true,
-  "MUTATION_FAILURE": false,
-  "UNAVAILABLE_MUTATION": true
-});
+      "ACTIVE": true,
+      "EMPTY": true,
+      "SERVER_500": false,
+      "TIMEOUT": false,
+      "UNAUTHORIZED": false,
+      "LOADING": true,
+      "MUTATION_FAILURE": false,
+      "UNAVAILABLE_MUTATION": true
+    });
   });
 });
 
