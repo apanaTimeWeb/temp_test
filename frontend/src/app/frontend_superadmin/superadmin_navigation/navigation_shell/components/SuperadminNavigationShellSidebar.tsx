@@ -50,7 +50,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
             />
           </span>
           <div className="flex flex-col min-w-0 justify-center">
-            <span className="sa-sidebar-brand-name flex items-center leading-none text-white font-extrabold tracking-tight text-base sm:text-[17px]">
+            <span className="sa-sidebar-brand-name flex items-center leading-none text-white font-extrabold tracking-tight text-sm sm:text-[15px]">
               <span>Library</span>
               <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent font-black ml-0.5">
                 OS
