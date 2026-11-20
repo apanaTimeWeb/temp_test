@@ -7,7 +7,6 @@ import { SUPERADMIN_ANALYTICS_SUBSCRIPTION_MIX_ROUTES as __SUPERADMIN_ANALYTICS_
 import { useSuperadminAnalyticsSubscriptionMixUrlFilter } from '@/app/frontend_superadmin/superadmin_analytics/analytics_subscription_mix/hooks/useSuperadminAnalyticsSubscriptionMixUrlFilter';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Activity, Calendar, Download, Eye, Filter, Users, X } from 'lucide-react';
 import SuperadminReportsSubscriptionMixAnalyticsChart from '@/app/frontend_superadmin/superadmin_analytics/analytics_subscription_mix/components/SuperadminAnalyticsSubscriptionMixAnalyticsChart';
 import { SUPERADMIN_REPORT_TENANT_FIXTURES, type SuperadminReportTenant } from '@/app/frontend_superadmin/superadmin_analytics/analytics_subscription_mix/mocks/fixtures/SuperadminAnalyticsSubscriptionMixMockFixtures';
@@ -53,7 +52,6 @@ export default function SuperadminAnalyticsSubscriptionMixPageClient() {
     const route = routes[key];
     if (route) { const target = new URL(route, window.location.origin); const query = new URLSearchParams(window.location.search); query.delete('view'); query.forEach((value, key) => { if (!target.searchParams.has(key)) target.searchParams.append(key, value); }); window.location.assign(target.pathname + target.search + target.hash); }
   };
-const router = useRouter();
   const [activeTab] = useState<SuperadminReportsTab>('Subscription Mix');
   const [dateRange, setDateRange] = useSuperadminAnalyticsSubscriptionMixUrlFilter<SuperadminReportsDateRange>('dateRange', 'Last 6 Months', SUPERADMIN_REPORTS_OVERVIEW_PAGE_CLIENT_DATE_RANGES);
   const [tenantFilter, setTenantFilter] = useSuperadminAnalyticsSubscriptionMixUrlFilter<SuperadminReportsTenantFilter>('tenantStatus', 'All', ['All', 'Active', 'Churn Risk']);
@@ -140,7 +138,6 @@ const router = useRouter();
           <div><h2 className="text-lg font-semibold">{tCopy("COPY.TENANT_PREVIEW_ROWS")}</h2><p className="mt-1 text-sm text-secondary">{tCopy("COPY.VIEWING")} {filteredTenants.length} {tCopy("COPY.SAMPLE_TENANTS")}</p></div>
           <div className="flex flex-wrap gap-2">
             <button type="button" className="sa-btn-ghost sa-btn-ghost--sm" onClick={() => setTenantFilter(tenantFilter === 'All' ? 'Active' : tenantFilter === 'Active' ? 'Churn Risk' : 'All')} data-testid="superadmin-reports-reports-overview-filter-5"><Filter size={14} aria-hidden="true" /> {tCopy("COPY.FILTER")} {tenantFilter === 'All' ? tCopy('COPY.TENANT_FILTER_ALL') : tenantFilter === 'Active' ? tCopy('COPY.TENANT_STATUS_ACTIVE') : tCopy('COPY.TENANT_STATUS_CHURN_RISK')}</button>
-            <button type="button" className="sa-btn-ghost sa-btn-ghost--sm" onClick={() => router.push(__SUPERADMIN_ANALYTICS_SUBSCRIPTION_MIX_ROUTES.MODULE_URLS.LIBRARIES_PAGE)} data-testid="superadmin-reports-reports-overview-view-libraries-6">{tCopy("COPY.VIEW_LIBRARIES")}</button>
           </div>
         </div>
         <div className="h-88 w-full" aria-label={tCopy("COPY.SAMPLE_TENANT_DATA_TABLE")}>

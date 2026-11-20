@@ -19,6 +19,20 @@ import type { SuperadminLibrariesPlan, SuperadminLibrariesStatus } from '@/app/f
  * @property joinedAt Value defined by the existing feature-local contract. Declared type: string.
  * @property nextRenewal Value defined by the existing feature-local contract. Declared type: string.
  */
+export interface SuperadminBranchRecord {
+  id: string;
+  name: string;
+  code: string;
+  city: string;
+  address: string;
+  seats: number;
+  shifts: number;
+  managerName?: string;
+  managerPhone?: string;
+  managerEmail?: string;
+  status: 'Active' | 'Maintenance' | 'Opening Soon';
+}
+
 export interface SuperadminLibrariesLibrary {
   id: string;
   name: string;
@@ -34,6 +48,9 @@ export interface SuperadminLibrariesLibrary {
   revenue: number;
   joinedAt: string;
   nextRenewal: string;
+  adminPanelEnabled?: boolean;
+  branchList?: SuperadminBranchRecord[];
+  managerModules?: Record<string, boolean>;
 }
 
 /**

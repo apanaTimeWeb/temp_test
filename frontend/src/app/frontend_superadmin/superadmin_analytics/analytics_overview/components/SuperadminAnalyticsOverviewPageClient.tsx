@@ -7,7 +7,6 @@ import { SUPERADMIN_ANALYTICS_OVERVIEW_ROUTES as __SUPERADMIN_ANALYTICS_OVERVIEW
 import { useSuperadminAnalyticsOverviewUrlFilter } from '@/app/frontend_superadmin/superadmin_analytics/analytics_overview/hooks/useSuperadminAnalyticsOverviewUrlFilter';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Activity, Calendar, Download, Eye, Filter, Users, X } from 'lucide-react';
 import SuperadminAnalyticsOverviewAnalyticsChart from '@/app/frontend_superadmin/superadmin_analytics/analytics_overview/components/SuperadminAnalyticsOverviewAnalyticsChart';
 import { SUPERADMIN_REPORT_TENANT_FIXTURES, type SuperadminReportTenant } from '@/app/frontend_superadmin/superadmin_analytics/analytics_overview/mocks/fixtures/SuperadminAnalyticsOverviewMockFixtures';
@@ -53,7 +52,6 @@ export default function SuperadminAnalyticsOverviewPageClient() {
     const route = routes[key];
     if (route) { const target = new URL(route, window.location.origin); const query = new URLSearchParams(window.location.search); query.delete('view'); query.forEach((value, key) => { if (!target.searchParams.has(key)) target.searchParams.append(key, value); }); window.location.assign(target.pathname + target.search + target.hash); }
   };
-const router = useRouter();
   const [activeTab, setActiveTab] = useState<SuperadminReportsTab>('Financials');
   const [dateRange, setDateRange] = useSuperadminAnalyticsOverviewUrlFilter<SuperadminReportsDateRange>('dateRange', 'Last 6 Months', SUPERADMIN_REPORTS_OVERVIEW_PAGE_CLIENT_DATE_RANGES);
   const [tenantFilter, setTenantFilter] = useSuperadminAnalyticsOverviewUrlFilter<SuperadminReportsTenantFilter>('tenantStatus', 'All', ['All', 'Active', 'Churn Risk']);
@@ -182,7 +180,6 @@ const router = useRouter();
             <button type="button" className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/20 transition-all cursor-pointer" onClick={() => setTenantFilter(tenantFilter === 'All' ? 'Active' : tenantFilter === 'Active' ? 'Churn Risk' : 'All')} data-testid="superadmin-reports-reports-overview-filter-5">
               <Filter size={13} aria-hidden="true" /> {tCopy("COPY.FILTER")} {tenantFilter === 'All' ? tCopy('COPY.TENANT_FILTER_ALL') : tenantFilter === 'Active' ? tCopy('COPY.TENANT_STATUS_ACTIVE') : tCopy('COPY.TENANT_STATUS_CHURN_RISK')}
             </button>
-            <button type="button" className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-all cursor-pointer" onClick={() => router.push(__SUPERADMIN_ANALYTICS_OVERVIEW_ROUTES.MODULE_URLS.LIBRARIES_PAGE)} data-testid="superadmin-reports-reports-overview-view-libraries-6">{tCopy("COPY.VIEW_LIBRARIES")}</button>
           </div>
         </div>
         <div className="h-88 w-full" aria-label={tCopy("COPY.SAMPLE_TENANT_DATA_TABLE")}>

@@ -7,11 +7,14 @@ import { useCallback, useMemo, useState } from 'react';
 import {
   Edit2, Eye, ShieldAlert, Building2, Store, Users, IndianRupee,
   TrendingUp, MapPin, Building, RotateCcw, Search, X, CheckCircle,
-  Download, FileSpreadsheet, Printer, MessageSquare, Mail, PhoneCall
+  Download, FileSpreadsheet, Printer, MessageSquare, Mail, PhoneCall,
+  Sliders, KeyRound, AlertCircle
 } from 'lucide-react';
 import { useSuperadminLibrariesOverview } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/hooks/useSuperadminLibrariesOverview';
 import SuperadminLibrariesOverviewPanel from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewPanel';
-import type { SuperadminLibrariesLibrary, SuperadminLibrariesPanelMode } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
+import SuperadminLibrariesBranchManagerModal from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesBranchManagerModal';
+import SuperadminLibrariesManagerModulesModal from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesManagerModulesModal';
+import type { SuperadminLibrariesLibrary, SuperadminLibrariesPanelMode, SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 import { SUPERADMIN_LIBRARIES_TOASTS } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/constants/SuperadminLibrariesOverviewConstants';
 import { SuperadminLibrariesFormatMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewFormattingUtilities';
 import {
@@ -51,6 +54,8 @@ export default function SuperadminLibrariesOverviewPageClient() {
   const [searchQuery, setSearchQuery] = useState('');
   const [planFilter, setPlanFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [branchModalLib, setBranchModalLib] = useState<SuperadminLibrariesLibrary | null>(null);
+  const [modulesModalLib, setModulesModalLib] = useState<SuperadminLibrariesLibrary | null>(null);
 
   const showToast = useCallback((message: string, isError = false) => {
     if (isError) {
@@ -59,6 +64,37 @@ export default function SuperadminLibrariesOverviewPageClient() {
       toast.success(message, { id: 'superadmin:superadmin_libraries:SuperadminLibrariesOverviewPageClient:feedback' });
     }
   }, []);
+
+  const handleToggleAdminPanel = useCallback(async (tenantId: string) => {
+    const current = libraries.find((l) => l.id === tenantId);
+    if (!current) return;
+    const nextState = !(current.adminPanelEnabled ?? true);
+    await updateLibrary(tenantId, { adminPanelEnabled: nextState });
+    setBranchModalLib((prev) => (prev?.id === tenantId ? { ...prev, adminPanelEnabled: nextState } : prev));
+    showToast(
+      `Admin Panel for "${current.name}" is now ${nextState ? 'ENABLED (Multi-Branch Owner Panel)' : 'DISABLED (Manager-Only Direct Desk Mode)'}`
+    );
+  }, [libraries, showToast, updateLibrary]);
+
+  const handleAddBranch = useCallback(async (tenantId: string, newBranch: SuperadminBranchRecord) => {
+    const current = libraries.find((l) => l.id === tenantId);
+    if (!current) return;
+    const currentBranches = current.branchList || [];
+    const updatedBranches = [...currentBranches, newBranch];
+    await updateLibrary(tenantId, {
+      branchList: updatedBranches,
+      branches: updatedBranches.length,
+    });
+    setBranchModalLib((prev) => (prev?.id === tenantId ? { ...prev, branchList: updatedBranches, branches: updatedBranches.length } : prev));
+    showToast(`Branch "${newBranch.name}" created under Admin "${current.owner}"!`);
+  }, [libraries, showToast, updateLibrary]);
+
+  const handleSaveModules = useCallback(async (tenantId: string, updatedModules: Record<string, boolean>) => {
+    const current = libraries.find((l) => l.id === tenantId);
+    if (!current) return;
+    await updateLibrary(tenantId, { managerModules: updatedModules });
+    showToast(`Manager sidebar modules updated for "${current.name}"!`);
+  }, [libraries, showToast, updateLibrary]);
 
   const totalRevenue = libraries.reduce((sum, library) => sum + library.revenue, 0);
   const activeCount = libraries.filter((l) => l.status === 'Active').length;
@@ -148,6 +184,27 @@ export default function SuperadminLibrariesOverviewPageClient() {
                   {plan}
                 </span>
                 <span className="text-[11px] text-slate-400">{params.data?.owner}</span>
+              </div>
+              <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                <span
+                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold border uppercase tracking-wider ${
+                    params.data?.adminPanelEnabled ?? true
+                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                      : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                  }`}
+                >
+                  {params.data?.adminPanelEnabled ?? true ? 'Admin: ON' : 'Admin: OFF'}
+                </span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (params.data) setBranchModalLib(params.data);
+                  }}
+                  className="text-[10px] text-sky-400 hover:text-sky-300 hover:underline flex items-center gap-0.5 font-medium cursor-pointer"
+                >
+                  {params.data?.branchList?.length || params.data?.branches || 1} Branches
+                </button>
               </div>
             </div>
           </div>
@@ -325,11 +382,54 @@ export default function SuperadminLibrariesOverviewPageClient() {
                 <PhoneCall size={14} strokeWidth={2} aria-hidden="true" />
               </a>
             )}
+
+            {/* Manage Branches */}
+            <button
+              type="button"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-sky-500/30 bg-sky-500/15 text-sky-300 hover:text-white hover:bg-sky-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+              onClick={(event) => {
+                event.stopPropagation();
+                if (params.data) setBranchModalLib(params.data);
+              }}
+              title="Manage Branches"
+            >
+              <Building2 size={14} strokeWidth={2} aria-hidden="true" />
+            </button>
+
+            {/* Configure Manager Modules */}
+            <button
+              type="button"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+              onClick={(event) => {
+                event.stopPropagation();
+                if (params.data) setModulesModalLib(params.data);
+              }}
+              title="Configure Manager Modules"
+            >
+              <Sliders size={14} strokeWidth={2} aria-hidden="true" />
+            </button>
+
+            {/* Toggle Admin Panel Master Switch */}
+            <button
+              type="button"
+              className={`inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 ${
+                params.data.adminPanelEnabled ?? true
+                  ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 focus-visible:ring-emerald-400'
+                  : 'border-amber-500/30 bg-amber-500/15 text-amber-300 hover:text-white hover:bg-amber-600/30 focus-visible:ring-amber-400'
+              }`}
+              onClick={(event) => {
+                event.stopPropagation();
+                void handleToggleAdminPanel(params.data!.id);
+              }}
+              title={params.data.adminPanelEnabled ?? true ? 'Turn Admin Panel OFF (Manager Only)' : 'Turn Admin Panel ON'}
+            >
+              <KeyRound size={14} strokeWidth={2} aria-hidden="true" />
+            </button>
           </div>
         );
       },
     },
-  ], [handleSuspend, locale, showToast, t]);
+  ], [handleSuspend, handleToggleAdminPanel, locale, showToast, t]);
 
   if (loading) {
     return (
@@ -609,6 +709,25 @@ export default function SuperadminLibrariesOverviewPageClient() {
           onClose={() => setSelected(null)}
           onSave={handleSave}
           onSuspend={handleSuspend}
+        />
+      )}
+
+      {/* Multi-Branch Management Modal */}
+      {branchModalLib && (
+        <SuperadminLibrariesBranchManagerModal
+          lib={branchModalLib}
+          onClose={() => setBranchModalLib(null)}
+          onAddBranch={handleAddBranch}
+          onToggleAdminPanel={handleToggleAdminPanel}
+        />
+      )}
+
+      {/* Manager Sidebar Modules Control Modal */}
+      {modulesModalLib && (
+        <SuperadminLibrariesManagerModulesModal
+          lib={modulesModalLib}
+          onClose={() => setModulesModalLib(null)}
+          onSaveModules={handleSaveModules}
         />
       )}
     </div>

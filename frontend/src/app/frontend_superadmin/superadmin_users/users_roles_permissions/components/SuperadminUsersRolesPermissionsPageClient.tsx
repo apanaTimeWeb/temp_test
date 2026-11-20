@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { SUPERADMIN_USERS_TABS } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/constants/SuperadminUsersRolesPermissionsConstants';
 import { SUPERADMIN_USERS_ROLE_PERMISSIONS } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/mocks/fixtures/SuperadminUsersRolesPermissionsMockFixtures';
 import SuperadminUsersRolesPermissionsContent from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminUsersRolesPermissionsContent';
+import SuperadminUsersManagerFeatureMatrix from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminUsersManagerFeatureMatrix';
 import { ShieldCheck, AlertTriangle, Crown, Building2, UserCheck } from 'lucide-react';
 
 export default function SuperadminUsersRolesPermissionsPageClient() {
@@ -127,6 +128,9 @@ export default function SuperadminUsersRolesPermissionsPageClient() {
       </nav>
 
       <SuperadminUsersRolesPermissionsContent rolePermissions={SUPERADMIN_USERS_ROLE_PERMISSIONS} />
+
+      {/* Real Manager Panel Sidebar Feature Matrix Controller */}
+      <SuperadminUsersManagerFeatureMatrix />
     </div>
   );
 }

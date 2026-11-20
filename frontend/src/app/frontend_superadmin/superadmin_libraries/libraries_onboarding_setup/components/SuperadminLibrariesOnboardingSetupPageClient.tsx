@@ -247,6 +247,22 @@ export default function SuperadminLibrariesOnboardingSetupPageClient() {
                   </p>
                 </div>
               </div>
+
+              {/* Tenant & Single Admin Identity Banner */}
+              <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/10 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                <div>
+                  <span className="font-semibold text-slate-300">Tenant / Single Admin Identity:</span>
+                  <p className="text-white font-bold">{branch.name} Owner Account</p>
+                </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2.5 py-0.5 rounded-full font-bold text-[11px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                    Admin Panel: Enabled
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full font-bold text-[11px] bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+                    Manager Desk: 8 Modules Active
+                  </span>
+                </div>
+              </div>
               <div className="flex flex-wrap gap-2.5 pt-2 border-t border-border/60">
                 <span className="sa-wizard-summary-badge sa-wizard-summary-badge--shifts inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
                   <Clock size={13} className="text-emerald-400" /> {shifts.shifts.length} {tCopy("COPY.SHIFTS_ADDED")}

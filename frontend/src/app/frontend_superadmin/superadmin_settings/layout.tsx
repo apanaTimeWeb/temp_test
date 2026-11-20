@@ -37,16 +37,16 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
     { key: 'settings_maintenance_mode', label: t('COPY.NAV_SETTINGS_MAINTENANCE_MODE'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode },
     { key: 'settings_storage', label: t('COPY.NAV_SETTINGS_STORAGE'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_storage },
     { key: 'profile_overview', label: t('COPY.NAV_PROFILE_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.profile_overview },
-    { key: 'profile_active_sessions', label: t('COPY.NAV_PROFILE_ACTIVE_SESSIONS'), href: SUPERADMIN_NAVIGATION_ROUTES.profile_active_sessions },
-    { key: 'profile_login_history', label: t('COPY.NAV_PROFILE_LOGIN_HISTORY'), href: SUPERADMIN_NAVIGATION_ROUTES.profile_login_history },
-    { key: 'profile_security', label: t('COPY.NAV_PROFILE_SECURITY'), href: SUPERADMIN_NAVIGATION_ROUTES.profile_security },
   ] as const;
   return (
     <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
       <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-6 border-b border-border/80" data-testid="superadmin_settings-secondary-navigation">
         <ul className="flex min-w-0 flex-wrap gap-2" role="list">
           {routes.map((route) => {
-            const active = pathname === route.href || pathname.startsWith(route.href + '/');
+            const active =
+              route.key === 'profile_overview'
+                ? pathname.includes('/profile_')
+                : pathname === route.href || pathname.startsWith(route.href + '/');
             const Icon = TAB_ICONS[route.key as keyof typeof TAB_ICONS] ?? Settings;
             return (
               <li key={route.key} className="min-w-0">
