@@ -219,8 +219,8 @@ export default function SuperadminLibrariesOverviewPageClient() {
     {
       headerName: t("COPY.TABLE_COLUMN_ACTIONS"),
       field: 'id',
-      flex: 1.2,
-      minWidth: 155,
+      flex: 2,
+      minWidth: 260,
       sortable: false,
       filter: false,
       cellRenderer: (params: SemanticCellParams<SuperadminLibrariesLibrary>) => {
@@ -228,10 +228,10 @@ export default function SuperadminLibrariesOverviewPageClient() {
         const testIdSuffix = getSuperadminInteractiveTestIdSuffix(params.data);
 
         return (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 flex-wrap">
             <button
               type="button"
-              className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:text-white hover:bg-indigo-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
               aria-label={t("COPY.VIEW_LIBRARY_ARIA_LABEL", { name: params.data.name })}
               onClick={(event) => {
                 event.stopPropagation();
@@ -241,11 +241,11 @@ export default function SuperadminLibrariesOverviewPageClient() {
               title="View Library Details"
               data-testid={`superadmin-libraries-libraries-overview-view-library-aria-label-1-${testIdSuffix}`}
             >
-              <Eye size={16} strokeWidth={2} aria-hidden="true" />
+              <Eye size={14} strokeWidth={2} aria-hidden="true" />
             </button>
             <button
               type="button"
-              className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
               aria-label={t("COPY.EDIT_LIBRARY_PREVIEW_ARIA_LABEL", { name: params.data.name })}
               onClick={(event) => {
                 event.stopPropagation();
@@ -255,11 +255,11 @@ export default function SuperadminLibrariesOverviewPageClient() {
               title="Edit Library Settings"
               data-testid={`superadmin-libraries-libraries-overview-edit-library-preview-aria-label-2-${testIdSuffix}`}
             >
-              <Edit2 size={16} strokeWidth={2} aria-hidden="true" />
+              <Edit2 size={14} strokeWidth={2} aria-hidden="true" />
             </button>
             <button
               type="button"
-              className={`inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg border shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 transition-all ${
+              className={`inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 transition-all ${
                 params.data.status === 'Active'
                   ? 'border-rose-500/30 bg-rose-500/15 text-rose-300 hover:text-white hover:bg-rose-600/30 focus-visible:ring-rose-400'
                   : 'border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 focus-visible:ring-emerald-400'
@@ -273,16 +273,63 @@ export default function SuperadminLibrariesOverviewPageClient() {
               data-testid={`superadmin-libraries-libraries-overview-toggle-library-status-preview-aria-label-3-${testIdSuffix}`}
             >
               {params.data.status === 'Active' ? (
-                <ShieldAlert size={16} strokeWidth={2} aria-hidden="true" />
+                <ShieldAlert size={14} strokeWidth={2} aria-hidden="true" />
               ) : (
-                <CheckCircle size={16} strokeWidth={2} aria-hidden="true" />
+                <CheckCircle size={14} strokeWidth={2} aria-hidden="true" />
               )}
             </button>
+
+            {/* Quick WhatsApp */}
+            <button
+              type="button"
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              aria-label={`Send WhatsApp to ${params.data.owner}`}
+              onClick={(event) => {
+                event.stopPropagation();
+                const raw = params.data.phone || '9876543210';
+                let digits = raw.replace(/\D/g, '');
+                if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+                const phone = digits.length === 10 ? `91${digits}` : digits;
+                const msg = `Hello ${params.data.owner}, greetings from Smart Library SaaS SuperAdmin regarding your facility "${params.data.name}".`;
+                const popup = window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
+                if (popup) popup.opener = null;
+                showToast(`Opened WhatsApp chat for ${params.data.owner}`);
+              }}
+              title="Chat on WhatsApp"
+            >
+              <MessageSquare size={14} strokeWidth={2} aria-hidden="true" />
+            </button>
+
+            {/* Quick Email */}
+            {params.data.email && (
+              <a
+                href={`mailto:${params.data.email}?subject=${encodeURIComponent(`Smart Library SaaS - Notice for ${params.data.name}`)}&body=${encodeURIComponent(`Dear ${params.data.owner},\n\n`)}`}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+                aria-label={`Send email to ${params.data.owner}`}
+                title="Send Email"
+              >
+                <Mail size={14} strokeWidth={2} aria-hidden="true" />
+              </a>
+            )}
+
+            {/* Quick Call */}
+            {params.data.phone && params.data.phone !== 'Not supplied' && (
+              <a
+                href={`tel:${params.data.phone.replace(/\D/g, '')}`}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 transition-all shadow-xs active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+                aria-label={`Call ${params.data.owner}`}
+                title="Call Facility Owner"
+              >
+                <PhoneCall size={14} strokeWidth={2} aria-hidden="true" />
+              </a>
+            )}
           </div>
         );
       },
     },
-  ], [handleSuspend, locale, t]);
+  ], [handleSuspend, locale, showToast, t]);
 
   if (loading) {
     return (
@@ -480,7 +527,40 @@ export default function SuperadminLibrariesOverviewPageClient() {
           </button>
         )}
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2 flex-wrap">
+          {/* Export CSV */}
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-500/30 bg-teal-500/10 text-teal-300 hover:bg-teal-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+            title="Export filtered libraries to CSV"
+          >
+            <Download size={13} className="text-teal-400" />
+            <span>CSV</span>
+          </button>
+
+          {/* Export Excel */}
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+            title="Export filtered libraries to Excel (.xls)"
+          >
+            <FileSpreadsheet size={13} className="text-indigo-400" />
+            <span>Excel</span>
+          </button>
+
+          {/* Print Roster */}
+          <button
+            type="button"
+            onClick={handlePrintRoster}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+            title="Print facilities roster"
+          >
+            <Printer size={13} className="text-sky-400" />
+            <span>Print</span>
+          </button>
+
           <span className="text-xs text-slate-400 font-medium px-2 py-1 rounded-md bg-surface border border-border">
             {filteredLibraries.length} of {libraries.length} Libraries
           </span>

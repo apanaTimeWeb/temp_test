@@ -6,13 +6,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { LayoutDashboard, DollarSign, TrendingUp, PieChart } from 'lucide-react';
+import { BarChart2 } from 'lucide-react';
 
 const TAB_ICONS = {
-  analytics_overview: LayoutDashboard,
-  analytics_financials: DollarSign,
-  analytics_library_growth: TrendingUp,
-  analytics_subscription_mix: PieChart,
+  analytics_overview: BarChart2,
 } as const;
 
 export default function DomainLayout({ children }: { children: ReactNode }) {
@@ -20,16 +17,13 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   const t = useTranslations('SUPERADMIN_REPORTS');
   const routes = [
     { key: 'analytics_overview', label: t('COPY.NAV_ANALYTICS_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.analytics_overview },
-    { key: 'analytics_financials', label: t('COPY.NAV_ANALYTICS_FINANCIALS'), href: SUPERADMIN_NAVIGATION_ROUTES.analytics_financials },
-    { key: 'analytics_library_growth', label: t('COPY.NAV_ANALYTICS_LIBRARY_GROWTH'), href: SUPERADMIN_NAVIGATION_ROUTES.analytics_library_growth },
-    { key: 'analytics_subscription_mix', label: t('COPY.NAV_ANALYTICS_SUBSCRIPTION_MIX'), href: SUPERADMIN_NAVIGATION_ROUTES.analytics_subscription_mix },
   ] as const;
   return (
     <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
       <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-6 border-b border-border/80" data-testid="superadmin_analytics-secondary-navigation">
         <ul className="flex min-w-0 flex-wrap gap-2" role="list">
           {routes.map((route) => {
-            const active = pathname === route.href || pathname.startsWith(route.href + '/');
+            const active = pathname === route.href || pathname.startsWith(route.href + '/') || pathname.includes('/superadmin_analytics');
             const Icon = TAB_ICONS[route.key as keyof typeof TAB_ICONS] ?? LayoutDashboard;
             return (
               <li key={route.key} className="min-w-0">

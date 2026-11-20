@@ -54,7 +54,7 @@ export default function SuperadminAnalyticsOverviewPageClient() {
     if (route) { const target = new URL(route, window.location.origin); const query = new URLSearchParams(window.location.search); query.delete('view'); query.forEach((value, key) => { if (!target.searchParams.has(key)) target.searchParams.append(key, value); }); window.location.assign(target.pathname + target.search + target.hash); }
   };
 const router = useRouter();
-  const [activeTab] = useState<SuperadminReportsTab>('Financials');
+  const [activeTab, setActiveTab] = useState<SuperadminReportsTab>('Financials');
   const [dateRange, setDateRange] = useSuperadminAnalyticsOverviewUrlFilter<SuperadminReportsDateRange>('dateRange', 'Last 6 Months', SUPERADMIN_REPORTS_OVERVIEW_PAGE_CLIENT_DATE_RANGES);
   const [tenantFilter, setTenantFilter] = useSuperadminAnalyticsOverviewUrlFilter<SuperadminReportsTenantFilter>('tenantStatus', 'All', ['All', 'Active', 'Churn Risk']);
   const [selectedTenant, setSelectedTenant] = useState<SuperadminReportTenant | null>(null);
@@ -155,7 +155,7 @@ const router = useRouter();
       <section className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg">
         <div className="flex gap-2 overflow-x-auto border-b border-indigo-500/20 bg-indigo-500/5 p-3" role="navigation" aria-label={tCopy("COPY.REPORT_TYPE")}>
           {SUPERADMIN_REPORTS_OVERVIEW_PAGE_CLIENT_REPORT_TABS.map(({ name, icon: Icon }) => (
-            <button type="button" key={name} aria-current={activeTab === name ? 'page' : undefined} onClick={() => navigateToWorkflow(name)}
+            <button type="button" key={name} aria-current={activeTab === name ? 'page' : undefined} onClick={() => setActiveTab(name)}
               className={`flex min-h-9 items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                 activeTab === name ? 'bg-indigo-500/20 border border-indigo-500/40 text-indigo-300' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
               }`}
