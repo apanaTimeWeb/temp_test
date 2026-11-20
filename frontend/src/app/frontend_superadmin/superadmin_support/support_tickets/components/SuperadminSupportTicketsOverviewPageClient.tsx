@@ -6,7 +6,7 @@ import SuperadminSupportTicketsOverviewSemanticTable, { type SemanticColumnDef, 
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   MessageSquare, AlertTriangle, Paperclip, Tag, FileText,
-  Search, X, RotateCcw, FileSpreadsheet, Printer, Mail, PhoneCall, Download, Ticket
+  Search, X, RotateCcw, FileSpreadsheet, Printer, Mail, PhoneCall, Download
 } from 'lucide-react';
 import { SUPERADMIN_SUPPORT_TICKETS_FIXTURES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/mocks/fixtures/SuperadminSupportTicketsOverviewMockFixtures';
 import type { SuperadminSupportTicket, SuperadminSupportTicketsFilter } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
@@ -205,7 +205,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
         return (
           <div className="flex items-center gap-1.5 flex-wrap">
             <button
-              type="button" 
+              type="button"
               className="w-8 h-8 min-w-8 min-h-8 rounded-lg bg-info-bg border border-border text-info flex items-center justify-center hover:bg-info text-on-info hover:text-primary motion-safe:transition-colors motion-reduce:transition-none cursor-pointer"
               onClick={e => { e.stopPropagation(); setSelected(tkt); }}
               aria-label={t("COPY.OPEN_TICKET_ARIA_LABEL", { id: tkt.id ?? t('COPY.UNKNOWN') })}
@@ -322,11 +322,10 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
           <div className="flex gap-1.5 flex-wrap">
             {SUPERADMIN_SUPPORT_TICKETS_FILTERS.map((f) => (
               <button type="button" key={f} aria-pressed={filter === f} onClick={() => setFilter(f)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  filter === f
-                    ? 'border border-indigo-500/40 bg-indigo-500/20 text-indigo-300'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                }`}
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${filter === f
+                  ? 'border border-indigo-500/40 bg-indigo-500/20 text-indigo-300'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                  }`}
                 data-testid={`superadmin-support-tickets-support-tickets-overview-set-filter-3-${String(f)}`}>
                 {f === 'All' ? t('COPY.FILTER_ALL') : f === 'Open' ? t('COPY.STATUS_OPEN') : f === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : t('COPY.STATUS_RESOLVED')}
               </button>
