@@ -18,6 +18,8 @@ import {
   Check,
   MessageSquare,
   ShieldCheck,
+  Building2,
+  Headphones,
 } from 'lucide-react';
 import type { SuperadminSupportTicketsDetailPanelProps } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 import { SUPERADMIN_SUPPORT_TICKETS_ASSIGNEE_OPTIONS } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
@@ -88,6 +90,8 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({ tkt, onClo
     }
   };
 
+  const hasThreadReplies = tkt.replies > 0 || status === 'In-Progress' || status === 'Resolved';
+
   return (
     <div
       className="fixed inset-0 z-[70] overflow-y-auto bg-black/80 backdrop-blur-md flex justify-center items-start px-3 sm:px-6 motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none"
@@ -104,13 +108,13 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({ tkt, onClo
         role="dialog"
         aria-modal="true"
         aria-labelledby="superadmin-support-ticket-detail-title"
-        className="bg-[#0b0f24] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/80 w-full max-w-4xl flex flex-col overflow-hidden text-slate-100 my-auto"
-        style={{ maxHeight: 'calc(100dvh - 120px)' }}
+        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/90 w-full max-w-4xl flex flex-col overflow-hidden text-slate-100 my-auto"
+        style={{ maxHeight: 'calc(100dvh - 110px)' }}
         onClick={(e) => e.stopPropagation()}
         data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-73"
       >
-        {/* Header */}
-        <div className="p-5 sm:p-6 border-b border-indigo-500/20 bg-gradient-to-r from-[#11173d] via-[#0d1330] to-[#0b0f24] flex items-start justify-between gap-4">
+        {/* Header - Fixed at Top */}
+        <div className="p-5 sm:p-6 border-b border-indigo-500/20 bg-gradient-to-r from-[#11173d] via-[#0d1330] to-[#0a0e27] flex items-start justify-between gap-4 shrink-0">
           <div className="space-y-2.5 min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="font-mono text-xs font-bold text-indigo-300 bg-indigo-500/15 px-2.5 py-1 rounded-lg border border-indigo-500/30 shadow-xs">
@@ -156,7 +160,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({ tkt, onClo
 
             <div className="flex items-center gap-3 sm:gap-4 text-xs text-slate-400 flex-wrap pt-0.5">
               <span className="flex items-center gap-1.5 font-medium text-slate-300">
-                <User size={13} className="text-indigo-400 shrink-0" />
+                <Building2 size={13} className="text-indigo-400 shrink-0" />
                 <span className="text-slate-400">Tenant:</span>
                 <strong className="text-slate-200">{tkt.tenant}</strong>
                 {tkt.contact && <span className="text-slate-400">({tkt.contact})</span>}
@@ -180,8 +184,8 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({ tkt, onClo
           </button>
         </div>
 
-        {/* Quick Controls Bar (Responsive 3-column toolbar: satisfying contract) */}
-        <div className="px-5 sm:px-6 py-3 bg-[#080c21]/90 border-b border-indigo-500/20">
+        {/* Quick Controls Bar (Responsive 3-column toolbar: satisfying contract) - Fixed at Top */}
+        <div className="px-5 sm:px-6 py-3 bg-[#080c21] border-b border-indigo-500/20 shrink-0">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-center">
             {/* Column 1: Assignee */}
             <div className="flex items-center gap-2">
@@ -241,165 +245,197 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({ tkt, onClo
           </div>
         </div>
 
-        {/* Body: Dedicated Chat & Conversation Thread */}
-        <div className="flex-1 overflow-hidden flex flex-col p-5 sm:p-6 bg-[#070a1e]/60 min-h-0">
-          {/* Section Banner */}
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-indigo-500/15 shrink-0">
-            <div className="flex items-center gap-2">
-              <MessageSquare size={14} className="text-indigo-400" />
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Conversation Thread</span>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-                {tkt.replies > 1 ? '2 messages' : '1 message'}
+        {/* Scrollable Content Body (Full natural height: Conversation + Composer never collapse) */}
+        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
+          {/* Conversation Thread Card */}
+          <div className="rounded-2xl border border-indigo-500/25 bg-[#070b22]/90 p-4 sm:p-5 shadow-lg space-y-5">
+            {/* Thread Header Banner */}
+            <div className="flex items-center justify-between pb-3 border-b border-indigo-500/15">
+              <div className="flex items-center gap-2">
+                <MessageSquare size={16} className="text-indigo-400" />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+                  Conversation Thread
+                </h3>
+                <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
+                  {hasThreadReplies ? (tkt.replies > 2 ? `${tkt.replies} messages` : '2 messages') : '1 message'}
+                </span>
+              </div>
+              <span className="text-[11px] text-slate-400 hidden sm:flex items-center gap-1.5">
+                <ShieldCheck size={13} className="text-emerald-400" /> SaaS Support Helpdesk Thread
               </span>
             </div>
-            <span className="text-[11px] text-slate-400 hidden sm:flex items-center gap-1.5">
-              <ShieldCheck size={13} className="text-emerald-400" /> SaaS Support Helpdesk Thread
-            </span>
-          </div>
 
-          {/* Scrollable Chat Area */}
-          <div className="flex-1 overflow-y-auto space-y-4 pr-1 sm:pr-2" style={{ maxHeight: '340px' }}>
-            {/* Tenant Inbound Query Message */}
-            <div className="flex items-start gap-3.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500/30 to-purple-500/30 border border-indigo-500/40 flex items-center justify-center shrink-0 shadow-sm text-indigo-300 font-bold text-xs">
-                {tkt.tenant.charAt(0)}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2 mb-1.5">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-bold text-slate-200">{tkt.tenant}</span>
-                    <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">
-                      Tenant Admin
-                    </span>
-                  </div>
-                  <span className="text-[11px] text-slate-400 font-medium shrink-0">
-                    {tkt.age} {t("COPY.AGO")}
-                  </span>
+            {/* Message Stream */}
+            <div className="space-y-4">
+              {/* Message 1: Inbound Tenant Admin Query */}
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500/30 to-purple-500/30 border border-indigo-500/40 flex items-center justify-center shrink-0 shadow-sm text-indigo-300 font-bold text-sm">
+                  {tkt.tenant.charAt(0)}
                 </div>
-                
-                <div className="bg-[#0e1538] border border-indigo-500/25 rounded-2xl rounded-tl-sm p-4 text-xs sm:text-sm text-slate-200 leading-relaxed shadow-sm space-y-3">
-                  <p>{tkt.desc}</p>
-                  
-                  {tkt.hasAttachment && (
-                    <div className="pt-2 border-t border-indigo-500/15">
-                      <div className="inline-flex items-center gap-2.5 px-3 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/25 text-indigo-200 text-xs hover:bg-indigo-500/15 transition-colors">
-                        <Paperclip size={14} className="text-indigo-400 shrink-0" />
-                        <span className="font-medium truncate max-w-xs">{t("COPY.SAMPLE_ATTACHMENT_ERROR_SCREENSHOT_PNG_DOWNLOAD_UNAVAILABLE")}</span>
-                        <span className="text-[10px] text-slate-400 font-mono shrink-0">1.4 MB</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Support Agent Outbound Reply */}
-            {tkt.replies > 1 && (
-              <div className="flex items-start gap-3.5 flex-row-reverse">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500/30 to-teal-500/30 border border-emerald-500/40 flex items-center justify-center shrink-0 shadow-sm text-emerald-300 font-bold text-xs">
-                  {t("COPY.S")}
-                </div>
-                <div className="flex-1 min-w-0 flex flex-col items-end">
-                  <div className="flex items-center justify-between w-full mb-1.5 flex-row-reverse">
-                    <div className="flex items-center gap-2 flex-wrap flex-row-reverse">
-                      <span className="text-xs font-bold text-emerald-300">{t("COPY.SUPPORT_AGENT")}</span>
-                      <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                        Staff Responder
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-bold text-slate-100">{tkt.tenant}</span>
+                      <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-md bg-indigo-950/60 text-indigo-300 border border-indigo-500/30">
+                        Tenant Admin {tkt.contact ? `• ${tkt.contact}` : ''}
                       </span>
                     </div>
                     <span className="text-[11px] text-slate-400 font-medium shrink-0">
                       {tkt.age} {t("COPY.AGO")}
                     </span>
                   </div>
-                  <div className="bg-[#082218]/90 border border-emerald-500/30 rounded-2xl rounded-tr-sm p-4 text-xs sm:text-sm text-slate-100 leading-relaxed shadow-sm w-full">
-                    <p>{t("COPY.WE_ARE_LOOKING_INTO_THIS_ISSUE_RIGHT_NOW_COULD_YOU_PLEASE_CONFIRM_IF_THIS_HAPPENS_ON_MOBILE_APP_AS_WELL")}</p>
+
+                  <div className="bg-[#0e1538] border border-indigo-500/30 rounded-2xl rounded-tl-sm p-4 text-xs sm:text-sm text-slate-200 leading-relaxed shadow-sm space-y-3">
+                    <p className="whitespace-pre-wrap">{tkt.desc}</p>
+
+                    {tkt.hasAttachment && (
+                      <div className="pt-2 border-t border-indigo-500/15">
+                        <div className="inline-flex items-center gap-2.5 px-3 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/25 text-indigo-200 text-xs hover:bg-indigo-500/15 transition-colors">
+                          <Paperclip size={14} className="text-indigo-400 shrink-0" />
+                          <span className="font-medium truncate max-w-xs">{t("COPY.SAMPLE_ATTACHMENT_ERROR_SCREENSHOT_PNG_DOWNLOAD_UNAVAILABLE")}</span>
+                          <span className="text-[10px] text-slate-400 font-mono shrink-0">1.4 MB</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
+
+              {/* Message 2: Support Staff Response */}
+              {hasThreadReplies && (
+                <div className="flex items-start gap-3.5 flex-row-reverse">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/30 to-teal-500/30 border border-emerald-500/40 flex items-center justify-center shrink-0 shadow-sm text-emerald-300 font-bold text-sm">
+                    <Headphones size={18} />
+                  </div>
+                  <div className="flex-1 min-w-0 flex flex-col items-end">
+                    <div className="flex items-center justify-between w-full mb-1.5 flex-row-reverse">
+                      <div className="flex items-center gap-2 flex-wrap flex-row-reverse">
+                        <span className="text-xs font-bold text-emerald-300">
+                          {assignee !== 'Unassigned' ? assignee : t("COPY.SUPPORT_AGENT")}
+                        </span>
+                        <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-md bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                          Staff Responder
+                        </span>
+                      </div>
+                      <span className="text-[11px] text-slate-400 font-medium shrink-0">
+                        {tkt.age} {t("COPY.AGO")}
+                      </span>
+                    </div>
+
+                    <div className="bg-[#082218]/90 border border-emerald-500/30 rounded-2xl rounded-tr-sm p-4 text-xs sm:text-sm text-slate-100 leading-relaxed shadow-sm w-full">
+                      <p>
+                        {status === 'Resolved'
+                          ? 'We investigated the ledger export discrepancy and verified the sync routine. The fix has been deployed to your branch terminal, and the issue is resolved.'
+                          : t("COPY.WE_ARE_LOOKING_INTO_THIS_ISSUE_RIGHT_NOW_COULD_YOU_PLEASE_CONFIRM_IF_THIS_HAPPENS_ON_MOBILE_APP_AS_WELL")}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Message 3: Tenant Follow-up when replies > 2 */}
+              {tkt.replies > 2 && (
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500/30 to-purple-500/30 border border-indigo-500/40 flex items-center justify-center shrink-0 shadow-sm text-indigo-300 font-bold text-sm">
+                    {tkt.tenant.charAt(0)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <span className="text-xs font-bold text-slate-100">{tkt.tenant}</span>
+                      <span className="text-[11px] text-slate-400 font-medium shrink-0">
+                        Recent
+                      </span>
+                    </div>
+                    <div className="bg-[#0e1538] border border-indigo-500/30 rounded-2xl rounded-tl-sm p-4 text-xs sm:text-sm text-slate-200 leading-relaxed shadow-sm">
+                      <p>Thank you for the quick follow-up. Please let us know if any further logs are required from our end.</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Reply / Note Composer Card */}
+          <div className="rounded-2xl border border-indigo-500/25 bg-[#0b0f2a] p-4 sm:p-5 shadow-lg space-y-3">
+            {operationMessage && (
+              <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200 flex items-center gap-2" role="alert">
+                <span>{operationMessage}</span>
+              </div>
             )}
-          </div>
-        </div>
 
-        {/* Reply / Note Composer (Pinned at Bottom) */}
-        <div className="p-4 sm:p-5 border-t border-indigo-500/25 bg-gradient-to-b from-[#0b0f2a] to-[#080b1e] shrink-0">
-          {operationMessage && (
-            <div className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200 flex items-center gap-2" role="alert">
-              <span>{operationMessage}</span>
-            </div>
-          )}
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-indigo-500/20">
+                <button
+                  type="button" 
+                  aria-pressed={!isInternalNote}
+                  className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                    !isInternalNote ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  }`}
+                  onClick={() => setIsInternalNote(false)}
+                  data-testid="superadmin-support-tickets-support-tickets-detail-public-reply-5"
+                >
+                  <Send size={12} />
+                  <span>{t("COPY.PUBLIC_REPLY")}</span>
+                </button>
+                <button
+                  type="button" 
+                  aria-pressed={isInternalNote}
+                  className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                    isInternalNote ? 'bg-amber-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                  }`}
+                  onClick={() => setIsInternalNote(true)}
+                  data-testid="superadmin-support-tickets-support-tickets-detail-internal-note-hidden-6"
+                >
+                  <Lock size={12} />
+                  <span>{t("COPY.INTERNAL_NOTE_HIDDEN")}</span>
+                </button>
+              </div>
 
-          <div className="flex items-center justify-between gap-2 mb-2.5">
-            <div className="flex items-center gap-1.5 bg-slate-900/80 p-1 rounded-xl border border-indigo-500/20">
-              <button
-                type="button" 
-                aria-pressed={!isInternalNote}
-                className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
-                  !isInternalNote ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                }`}
-                onClick={() => setIsInternalNote(false)}
-                data-testid="superadmin-support-tickets-support-tickets-detail-public-reply-5"
-              >
-                <Send size={12} />
-                <span>{t("COPY.PUBLIC_REPLY")}</span>
-              </button>
-              <button
-                type="button" 
-                aria-pressed={isInternalNote}
-                className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
-                  isInternalNote ? 'bg-amber-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                }`}
-                onClick={() => setIsInternalNote(true)}
-                data-testid="superadmin-support-tickets-support-tickets-detail-internal-note-hidden-6"
-              >
-                <Lock size={12} />
-                <span>{t("COPY.INTERNAL_NOTE_HIDDEN")}</span>
-              </button>
+              <span className="text-[11px] text-slate-400">
+                {isInternalNote ? '🔒 Visible only to platform team' : '✉️ Visible to tenant admin'}
+              </span>
             </div>
 
-            <span className="text-[11px] text-slate-400 hidden sm:inline">
-              {isInternalNote ? '🔒 Visible only to platform team' : '✉️ Visible to tenant admin'}
-            </span>
-          </div>
-          
-          <div className={`relative rounded-xl border transition-colors ${isInternalNote ? 'border-amber-500/40 bg-amber-950/20 text-amber-200' : 'border-indigo-500/30 bg-[#070b22] text-slate-100'} p-3 shadow-inner`}>
-            <label htmlFor="superadmin-support-ticket-reply-text" className="sr-only">
-              {isInternalNote ? t('COPY.INTERNAL_NOTE_TEXT') : t('COPY.PUBLIC_REPLY_TEXT')}
-            </label>
-            <textarea
-              id="superadmin-support-ticket-reply-text"
-              maxLength={5000}
-              rows={3}
-              className="w-full bg-transparent text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 outline-none resize-none min-h-[65px]"
-              placeholder={isInternalNote ? t('COPY.TYPE_PRIVATE_NOTE_PLACEHOLDER') : t('COPY.TYPE_REPLY_TO_TENANT_PLACEHOLDER')}
-              value={replyText}
-              onChange={e => { setReplyText(e.target.value); setOperationMessage(''); }}
-              data-testid="superadmin-support-tickets-support-tickets-detail-superadmin-support-ticket-reply-text-7"
-            />
-            <div className="flex items-center justify-between pt-2 border-t border-indigo-500/15 mt-1.5">
-              <button
-                type="button"
-                disabled
-                aria-label={t("COPY.ATTACH_FILE_UNAVAILABLE")}
-                title={t("COPY.UNAVAILABLE_ATTACHMENT_UPLOAD_IS_NOT_IMPLEMENTED_IN_THE_SUPPLIED_HOST_API_CONTRACT")}
-                className="text-slate-500 opacity-60 p-1.5 rounded-lg hover:bg-slate-800 cursor-not-allowed flex items-center gap-1 text-xs"
-                data-testid="superadmin-support-tickets-support-tickets-detail-attach-file-unavailable-8"
-              >
-                <Paperclip size={14} />
-                <span className="text-[11px] hidden sm:inline">Attach file</span>
-              </button>
-              
-              <button
-                type="button" 
-                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
-                  isInternalNote ? 'bg-amber-600 hover:bg-amber-500 text-white' : 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white'
-                }`}
-                onClick={handleSendReply}
-                disabled={!replyText.trim()}
-                data-testid="superadmin-support-tickets-support-tickets-detail-add-note-9"
-              >
-                <Send size={13} />
-                <span>{isInternalNote ? t('COPY.ADD_NOTE') : t('COPY.SEND_REPLY')}</span>
-              </button>
+            <div className={`relative rounded-xl border transition-colors ${isInternalNote ? 'border-amber-500/40 bg-amber-950/20 text-amber-200' : 'border-indigo-500/30 bg-[#070b22] text-slate-100'} p-3 shadow-inner`}>
+              <label htmlFor="superadmin-support-ticket-reply-text" className="sr-only">
+                {isInternalNote ? t('COPY.INTERNAL_NOTE_TEXT') : t('COPY.PUBLIC_REPLY_TEXT')}
+              </label>
+              <textarea
+                id="superadmin-support-ticket-reply-text"
+                maxLength={5000}
+                rows={3}
+                className="w-full bg-transparent text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 outline-none resize-none min-h-[75px]"
+                placeholder={isInternalNote ? t('COPY.TYPE_PRIVATE_NOTE_PLACEHOLDER') : t('COPY.TYPE_REPLY_TO_TENANT_PLACEHOLDER')}
+                value={replyText}
+                onChange={e => { setReplyText(e.target.value); setOperationMessage(''); }}
+                data-testid="superadmin-support-tickets-support-tickets-detail-superadmin-support-ticket-reply-text-7"
+              />
+              <div className="flex items-center justify-between pt-2 border-t border-indigo-500/15 mt-1.5">
+                <button
+                  type="button"
+                  disabled
+                  aria-label={t("COPY.ATTACH_FILE_UNAVAILABLE")}
+                  title={t("COPY.UNAVAILABLE_ATTACHMENT_UPLOAD_IS_NOT_IMPLEMENTED_IN_THE_SUPPLIED_HOST_API_CONTRACT")}
+                  className="text-slate-500 opacity-60 p-1.5 rounded-lg hover:bg-slate-800 cursor-not-allowed flex items-center gap-1.5 text-xs"
+                  data-testid="superadmin-support-tickets-support-tickets-detail-attach-file-unavailable-8"
+                >
+                  <Paperclip size={14} />
+                  <span className="text-[11px] hidden sm:inline">Attach file</span>
+                </button>
+
+                <button
+                  type="button" 
+                  className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+                    isInternalNote ? 'bg-amber-600 hover:bg-amber-500 text-white' : 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white'
+                  }`}
+                  onClick={handleSendReply}
+                  disabled={!replyText.trim()}
+                  data-testid="superadmin-support-tickets-support-tickets-detail-add-note-9"
+                >
+                  <Send size={13} />
+                  <span>{isInternalNote ? t('COPY.ADD_NOTE') : t('COPY.SEND_REPLY')}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

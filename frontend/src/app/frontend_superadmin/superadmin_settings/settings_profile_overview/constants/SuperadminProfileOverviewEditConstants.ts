@@ -12,9 +12,4 @@ export const SUPERADMIN_PROFILE_DEFAULT_VALUES: SuperadminProfileEditFormValues 
 export const SUPERADMIN_PROFILE_TABS: readonly { name: SuperadminProfileTab; iconName: 'user' | 'user-cog' | 'key-round' | 'fingerprint' | 'history' | 'monitor-smartphone' | 'shield' }[] = [
   { name: 'Profile', iconName: 'user' },
   { name: 'Edit Profile', iconName: 'user-cog' },
-  { name: 'Change Password', iconName: 'key-round' },
-  { name: '2FA', iconName: 'fingerprint' },
-  { name: 'Login History', iconName: 'history' },
-  { name: 'Active Sessions', iconName: 'monitor-smartphone' },
-  { name: 'Security Settings', iconName: 'shield' },
 ];

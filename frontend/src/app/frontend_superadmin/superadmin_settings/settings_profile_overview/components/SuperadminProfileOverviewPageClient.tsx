@@ -221,7 +221,29 @@ const router = useRouter();
         <div id="superadmin-profile-tabpanel"  aria-labelledby={`superadmin-profile-tab-${activeTab.toLowerCase().replaceAll(' ', '-')}`} tabIndex={0} className="md:col-span-8 lg:col-span-9 sa-card p-6 min-h-136">
           
           {['Profile', 'Edit Profile', 'Change Password'].includes(activeTab) ? (
-            <SuperadminProfileOverviewBasicPanels activeTab={activeTab} onSave={handleSave} onDirtyChange={setProfileFormDirty} />
+            <>
+              <SuperadminProfileOverviewBasicPanels activeTab={activeTab} onSave={handleSave} onDirtyChange={setProfileFormDirty} />
+              <div className="mt-8 p-4 rounded-2xl border border-indigo-500/20 bg-indigo-500/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 shrink-0">
+                    <Shield size={20} />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-primary">Security & Access Management</h4>
+                    <p className="text-xs text-secondary mt-0.5">
+                      Password policies, Two-Factor Authentication (2FA), Active Sessions, and Login Security are centrally managed under the Security & Access Control sidebar.
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={SUPERADMIN_NAVIGATION_ROUTES.superadmin_security}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shrink-0 transition-all shadow-sm"
+                >
+                  <span>Go to Security</span>
+                  <ChevronRight size={14} />
+                </a>
+              </div>
+            </>
           ) : (
             <SuperadminProfileOverviewSecurityPanels
               activeTab={activeTab}
