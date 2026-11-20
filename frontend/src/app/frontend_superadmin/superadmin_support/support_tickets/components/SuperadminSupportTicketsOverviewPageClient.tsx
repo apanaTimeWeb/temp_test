@@ -7,7 +7,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   MessageSquare, AlertTriangle, Paperclip, Tag, FileText,
   Search, X, RotateCcw, FileSpreadsheet, Printer, Mail, PhoneCall, Download,
-  Ticket
+  Ticket, User, Clock
 } from 'lucide-react';
 import { SUPERADMIN_SUPPORT_TICKETS_FIXTURES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/mocks/fixtures/SuperadminSupportTicketsOverviewMockFixtures';
 import type { SuperadminSupportTicket, SuperadminSupportTicketsFilter } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
