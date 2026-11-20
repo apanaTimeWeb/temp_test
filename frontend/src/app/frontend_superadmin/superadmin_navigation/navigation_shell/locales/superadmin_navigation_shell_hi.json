@@ -92,7 +92,12 @@
       "LIBRARY_OPERATIONS": "लाइब्रेरी संचालन",
       "MEMBER_FINANCE": "सदस्य वित्त",
       "PLANS": "प्लान और मूल्य निर्धारण",
-      "STUDENT_OPERATIONS": "विद्यार्थी संचालन"
+      "STUDENT_OPERATIONS": "विद्यार्थी संचालन",
+      "BRANCH_MANAGEMENT": "शाखा प्रबंधन",
+      "FEATURE_MODULE_CONTROL": "सुविधा एवं मॉड्यूल नियंत्रण",
+      "USAGE_LIMIT_MONITORING": "उपयोग एवं सीमा निगरानी",
+      "INTEGRATION_API_MANAGEMENT": "एकीकरण एवं एपीआई प्रबंधन",
+      "DATA_BACKUP_MANAGEMENT": "डेटा एवं बैकअप प्रबंधन"
     }
   }
 }

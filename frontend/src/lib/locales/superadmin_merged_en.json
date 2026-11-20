@@ -2198,7 +2198,12 @@
       "LIBRARY_OPERATIONS": "Library Operations",
       "MEMBER_FINANCE": "Member Finance",
       "PLANS": "Plans & Pricing",
-      "STUDENT_OPERATIONS": "Student Operations"
+      "STUDENT_OPERATIONS": "Student Operations",
+      "BRANCH_MANAGEMENT": "Branch Management",
+      "FEATURE_MODULE_CONTROL": "Feature & Module Control",
+      "USAGE_LIMIT_MONITORING": "Usage & Limit Monitoring",
+      "INTEGRATION_API_MANAGEMENT": "Integration & API Management",
+      "DATA_BACKUP_MANAGEMENT": "Data & Backup Management"
     }
   },
   "SUPERADMIN_SUBSCRIPTIONS": {
