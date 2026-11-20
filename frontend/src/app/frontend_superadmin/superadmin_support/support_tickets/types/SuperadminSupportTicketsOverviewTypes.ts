@@ -13,6 +13,9 @@ export interface SuperadminSupportTicket {
   replies: number;
   hasAttachment: boolean;
   desc: string;
+  phone?: string;
+  email?: string;
+  contact?: string;
 }
 
 /**

@@ -4,11 +4,18 @@ import { toast } from 'sonner';
 /** Data-Flow: canonical route -> SuperadminSupportTicketsOverviewPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 import SuperadminSupportTicketsOverviewSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsOverviewSemanticTable';
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { MessageSquare, AlertTriangle, Paperclip, Tag, FileText } from 'lucide-react';
+import {
+  MessageSquare, AlertTriangle, Paperclip, Tag, FileText,
+  Search, X, RotateCcw, FileSpreadsheet, Printer, Mail, PhoneCall, Download
+} from 'lucide-react';
 import { SUPERADMIN_SUPPORT_TICKETS_FIXTURES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/mocks/fixtures/SuperadminSupportTicketsOverviewMockFixtures';
 import type { SuperadminSupportTicket, SuperadminSupportTicketsFilter } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 import { SUPERADMIN_SUPPORT_TICKETS_FILTERS, SUPERADMIN_SUPPORT_TICKETS_SAMPLE_AVERAGE_RESPONSE } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
 import { buildSuperadminSupportTicketsPreviewCsv, downloadSuperadminSupportTicketsPreviewCsv, filterSuperadminSupportTickets } from '@/app/frontend_superadmin/superadmin_support/support_tickets/utils/SuperadminSupportTicketsOverviewUtilities';
+import {
+  downloadSuperadminSupportTicketsExcel,
+  printSuperadminSupportTicketsRoster
+} from '@/app/frontend_superadmin/superadmin_support/support_tickets/utils/SuperadminSupportTicketsOverviewExportUtils';
 import SuperadminSupportTicketsOverviewDetailPanel from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsOverviewDetailPanel';
 import SuperadminSupportTicketsOverviewKpiCards from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsOverviewKpiCards';
 import { useTranslations } from 'next-intl';
@@ -35,6 +42,9 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
   const [tickets, setTickets] = useState<SuperadminSupportTicket[]>(SUPERADMIN_SUPPORT_TICKETS_FIXTURES);
   const [filter, setFilter] = useState<SuperadminSupportTicketsFilter>('All');
   const [urlStateReady, setUrlStateReady] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState<string>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   // Effect contract: keep local filter state synchronized with browser back/forward navigation and remove the listener on cleanup; dependency set [] (intentional mount-only effect) is the deliberate re-run boundary.
   useEffect(() => {
     const allowed: SuperadminSupportTicketsFilter[] = ['All', ...SUPERADMIN_SUPPORT_TICKETS_FILTERS.filter((item) => item !== 'All')];
@@ -72,7 +82,46 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
     showToast(t("COPY.DOWNLOADED_A_SAMPLE_SUPPORT_TICKET_CSV_ONLY_NO_LIVE_TICKET_DATA_WAS_EXPORTED"));
   };
 
-  const filtered = filterSuperadminSupportTickets(tickets, filter);
+  const filtered = useMemo(() => {
+    let result = filterSuperadminSupportTickets(tickets, filter);
+    if (priorityFilter !== 'all') {
+      result = result.filter((tkt) => tkt.priority.toLowerCase() === priorityFilter.toLowerCase());
+    }
+    if (categoryFilter !== 'all') {
+      result = result.filter((tkt) => tkt.category.toLowerCase() === categoryFilter.toLowerCase());
+    }
+    const q = searchQuery.trim().toLowerCase();
+    if (q) {
+      result = result.filter((tkt) => {
+        const matchesId = tkt.id.toLowerCase().includes(q);
+        const matchesSubj = tkt.subject.toLowerCase().includes(q);
+        const matchesTenant = tkt.tenant.toLowerCase().includes(q);
+        const matchesAssignee = tkt.assignee.toLowerCase().includes(q);
+        const matchesDesc = tkt.desc.toLowerCase().includes(q);
+        const matchesContact = tkt.contact ? tkt.contact.toLowerCase().includes(q) : false;
+        return matchesId || matchesSubj || matchesTenant || matchesAssignee || matchesDesc || matchesContact;
+      });
+    }
+    return result;
+  }, [tickets, filter, priorityFilter, categoryFilter, searchQuery]);
+
+  const hasActiveFilters = Boolean(searchQuery || priorityFilter !== 'all' || categoryFilter !== 'all' || filter !== 'All');
+  const resetAllFilters = () => {
+    setSearchQuery('');
+    setPriorityFilter('all');
+    setCategoryFilter('all');
+    setFilter('All');
+  };
+
+  const exportSampleTicketsExcel = () => {
+    downloadSuperadminSupportTicketsExcel(filtered, 'superadmin_support_tickets.xls');
+    showToast(`Exported ${filtered.length} ticket(s) to Excel (.xls)`);
+  };
+
+  const printTicketsRoster = () => {
+    printSuperadminSupportTicketsRoster(filtered, 'Helpdesk Support Tickets');
+    showToast(`Prepared ${filtered.length} ticket(s) for printing`);
+  };
 
   // KPI calculations
   const openCount = tickets.filter(t => t.status === 'Open').length;
@@ -142,20 +191,76 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
       ),
     },
     {
-      headerName: '', field: 'id', flex: 0.5, minWidth: 70, sortable: false, filter: false,
-      cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
-        <button type="button" 
-          className="w-11 h-11 min-w-11 min-h-11 rounded-lg bg-info-bg border border-border text-info flex items-center justify-center hover:bg-info text-on-info hover:text-primary motion-safe:transition-colors motion-reduce:transition-none"
-          onClick={e => { e.stopPropagation(); if (p.data) setSelected(p.data); }}
-          aria-label={t("COPY.OPEN_TICKET_ARIA_LABEL", { id: p.data?.id ?? t('COPY.UNKNOWN') })}
-          title={t("COPY.OPEN_TICKET")}
-         data-testid={`superadmin-support-tickets-support-tickets-overview-open-ticket-aria-label-1-${getSuperadminInteractiveTestIdSuffix(p.data)}`}>
-          <MessageSquare size={14} />
-        </button>
-      ),
-    },
-  ], [t]);
+      headerName: '', field: 'id', flex: 1.4, minWidth: 160, sortable: false, filter: false,
+      cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => {
+        if (!p.data) return null;
+        const tkt = p.data;
+        const testIdSuffix = getSuperadminInteractiveTestIdSuffix(p.data);
+        const rawPhone = tkt.phone || '9876543210';
+        let digits = rawPhone.replace(/\D/g, '');
+        if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+        const waPhone = digits.length === 10 ? `91${digits}` : digits;
+        const waMsg = `Hello ${tkt.contact || tkt.tenant}, regarding your Support Ticket ${tkt.id} ("${tkt.subject}") on Smart Library SaaS.`;
 
+        return (
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <button
+              type="button" 
+              className="w-8 h-8 min-w-8 min-h-8 rounded-lg bg-info-bg border border-border text-info flex items-center justify-center hover:bg-info text-on-info hover:text-primary motion-safe:transition-colors motion-reduce:transition-none cursor-pointer"
+              onClick={e => { e.stopPropagation(); setSelected(tkt); }}
+              aria-label={t("COPY.OPEN_TICKET_ARIA_LABEL", { id: tkt.id ?? t('COPY.UNKNOWN') })}
+              title={t("COPY.OPEN_TICKET")}
+              data-testid={`superadmin-support-tickets-support-tickets-overview-open-ticket-aria-label-1-${testIdSuffix}`}
+            >
+              <MessageSquare size={13} />
+            </button>
+
+            {/* Quick WhatsApp */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                const popup = window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener,noreferrer');
+                if (popup) popup.opener = null;
+                showToast(`Opened WhatsApp for Ticket ${tkt.id}`);
+              }}
+              className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs cursor-pointer"
+              title={`WhatsApp reply to ${tkt.tenant}`}
+              aria-label={`WhatsApp for ticket ${tkt.id}`}
+            >
+              <MessageSquare size={12} className="text-emerald-400" />
+            </button>
+
+            {/* Quick Email */}
+            {tkt.email && (
+              <a
+                href={`mailto:${tkt.email}?subject=${encodeURIComponent(`[Ticket ${tkt.id}] ${tkt.subject}`)}&body=${encodeURIComponent(`Dear ${tkt.contact || tkt.tenant},\n\nRegarding your ticket "${tkt.subject}" (${tkt.id}):\n\n`)}`}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs cursor-pointer"
+                title={`Email reply to ${tkt.tenant}`}
+                aria-label={`Email for ticket ${tkt.id}`}
+              >
+                <Mail size={12} className="text-purple-400" />
+              </a>
+            )}
+
+            {/* Quick Call */}
+            {tkt.phone && (
+              <a
+                href={`tel:${tkt.phone.replace(/\D/g, '')}`}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 transition-all shadow-xs cursor-pointer"
+                title={`Call ${tkt.tenant}`}
+                aria-label={`Call for ticket ${tkt.id}`}
+              >
+                <PhoneCall size={12} className="text-teal-400" />
+              </a>
+            )}
+          </div>
+        );
+      },
+    },
+  ], [t, showToast]);
 
   return (
     <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
@@ -167,11 +272,23 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
           <div className="space-y-1.5">
             <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{t("COPY.SAAS_SUPPORT_HELPDESK")}</h1>
           </div>
-          <button type="button"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-rose-500/30 bg-rose-500/15 text-xs font-semibold text-rose-300 hover:bg-rose-500/25 transition-all active:scale-95 cursor-pointer"
-            onClick={exportSampleTickets} data-testid="superadmin-support-tickets-support-tickets-overview-export-logs-2">
-            <FileText size={14} /> {t("COPY.EXPORT_LOGS")}
-          </button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button type="button"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 text-xs font-semibold text-rose-300 hover:bg-rose-500/25 transition-all active:scale-95 cursor-pointer"
+              onClick={exportSampleTickets} data-testid="superadmin-support-tickets-support-tickets-overview-export-logs-2">
+              <FileText size={14} /> {t("COPY.EXPORT_LOGS")}
+            </button>
+            <button type="button"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 transition-all active:scale-95 cursor-pointer"
+              onClick={exportSampleTicketsExcel} title="Export Excel (.xls)">
+              <FileSpreadsheet size={14} className="text-indigo-400" /> Excel
+            </button>
+            <button type="button"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-sky-500/30 bg-sky-500/15 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 transition-all active:scale-95 cursor-pointer"
+              onClick={printTicketsRoster} title="Print Tickets Roster">
+              <Printer size={14} className="text-sky-400" /> Print
+            </button>
+          </div>
         </div>
       </div>
 
@@ -183,11 +300,11 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
 
       {/* Table with filter */}
       <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg">
-        <div className="flex items-center gap-3 p-4 border-b border-indigo-500/20 bg-indigo-500/5">
-          <div className="flex gap-2 flex-wrap">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 border-b border-indigo-500/20 bg-indigo-500/5 flex-wrap">
+          <div className="flex gap-1.5 flex-wrap">
             {SUPERADMIN_SUPPORT_TICKETS_FILTERS.map((f) => (
               <button type="button" key={f} aria-pressed={filter === f} onClick={() => setFilter(f)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                   filter === f
                     ? 'border border-indigo-500/40 bg-indigo-500/20 text-indigo-300'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
@@ -197,6 +314,68 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               </button>
             ))}
           </div>
+
+          {/* Search box */}
+          <div className="relative flex-1 min-w-[180px] w-full sm:w-auto">
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
+            <input
+              type="search"
+              placeholder="Search by ticket ID, subject, tenant..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-8 pr-7 py-1.5 text-xs rounded-xl border border-indigo-500/25 bg-input text-white placeholder:text-secondary focus:border-indigo-400 focus:outline-none transition-all"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors cursor-pointer p-0.5"
+              >
+                <X size={12} />
+              </button>
+            )}
+          </div>
+
+          {/* Priority filter */}
+          <select
+            aria-label="Filter by priority"
+            value={priorityFilter}
+            onChange={(e) => setPriorityFilter(e.target.value)}
+            className="rounded-xl border border-indigo-500/25 bg-card px-2.5 py-1.5 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer w-full sm:w-auto"
+          >
+            <option value="all">All Priorities</option>
+            <option value="High">High Priority</option>
+            <option value="Medium">Medium Priority</option>
+            <option value="Low">Low Priority</option>
+          </select>
+
+          {/* Category filter */}
+          <select
+            aria-label="Filter by category"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="rounded-xl border border-indigo-500/25 bg-card px-2.5 py-1.5 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer w-full sm:w-auto"
+          >
+            <option value="all">All Categories</option>
+            <option value="Billing">Billing</option>
+            <option value="Bug">Bug</option>
+            <option value="Account">Account</option>
+            <option value="Support">Support</option>
+          </select>
+
+          {/* Reset button */}
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={resetAllFilters}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 transition-all cursor-pointer"
+              title="Reset active filters"
+            >
+              <RotateCcw size={12} />
+              <span>Reset</span>
+            </button>
+          )}
+
           <span className="ml-auto text-xs font-medium text-slate-400">{filtered.length} {t("COPY.MATCHING_TICKETS")}</span>
         </div>
         <div className="sa-support-ticket-chart" role="region" aria-label={t("COPY.SAMPLE_SUPPORT_TICKETS_TABLE")}>
