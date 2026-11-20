@@ -9,7 +9,6 @@ import type { ReactNode } from 'react';
 import {
   ShieldCheck,
   Activity,
-  Users,
   ShieldAlert,
   KeyRound,
   Smartphone,
@@ -21,7 +20,6 @@ import {
 const TAB_ICONS = {
   security_overview: ShieldCheck,
   security_active_sessions: Activity,
-  security_user_sessions: Users,
   security_threats: ShieldAlert,
   security_password_policy: KeyRound,
   security_mfa: Smartphone,
@@ -40,7 +38,6 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   const routes = [
     { key: 'security_overview', label: t('COPY.NAV_SECURITY_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.security_overview },
     { key: 'security_active_sessions', label: t('COPY.NAV_SECURITY_ACTIVE_SESSIONS'), href: SUPERADMIN_NAVIGATION_ROUTES.security_active_sessions },
-    { key: 'security_user_sessions', label: t('COPY.NAV_SECURITY_USER_SESSIONS'), href: SUPERADMIN_NAVIGATION_ROUTES.security_user_sessions },
     { key: 'security_threats', label: t('COPY.NAV_SECURITY_THREATS'), href: SUPERADMIN_NAVIGATION_ROUTES.security_threats },
     { key: 'security_password_policy', label: t('COPY.NAV_SECURITY_PASSWORD_POLICY'), href: SUPERADMIN_NAVIGATION_ROUTES.security_password_policy },
     { key: 'security_mfa', label: t('COPY.NAV_SECURITY_MFA'), href: SUPERADMIN_NAVIGATION_ROUTES.security_mfa },
@@ -54,7 +51,10 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
       <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-6 border-b border-border/80" data-testid="superadmin_security-secondary-navigation">
         <ul className="flex min-w-0 flex-wrap gap-2" role="list">
           {routes.map((route) => {
-            const active = pathname === route.href || pathname.startsWith(route.href + '/');
+            const active =
+              route.key === 'security_active_sessions'
+                ? pathname.includes('sessions')
+                : pathname === route.href || pathname.startsWith(route.href + '/');
             const Icon = TAB_ICONS[route.key as keyof typeof TAB_ICONS] ?? ShieldCheck;
             return (
               <li key={route.key} className="min-w-0">
