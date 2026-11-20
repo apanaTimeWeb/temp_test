@@ -41,6 +41,15 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
                 >
                   <Icon size={15} className={active ? 'text-indigo-400' : 'text-slate-400'} />
                   <span>{route.label}</span>
+                  {route.key === 'support_tickets' ? (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 border border-rose-500/30 text-rose-300">
+                      Software Helpdesk
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-800 border border-slate-700 text-slate-400">
+                      Branch Audit
+                    </span>
+                  )}
                 </Link>
               </li>
             );

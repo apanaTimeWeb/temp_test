@@ -280,7 +280,14 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
       <div className="rounded-2xl border border-rose-500/25 bg-gradient-to-br from-rose-950/60 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 text-[11px] font-semibold text-rose-300">
+              <Ticket size={13} className="text-rose-400" />
+              <span>SaaS Platform & Software Helpdesk</span>
+            </div>
             <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{t("COPY.SAAS_SUPPORT_HELPDESK")}</h1>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Dedicated technical helpline for Library Owners, Admins & Managers — Software bugs, UPI payment issues, Biometric QR sync, and platform billing.
+            </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <button
@@ -289,7 +296,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 text-xs font-semibold text-white hover:from-rose-500 hover:to-indigo-500 shadow-md shadow-rose-950/30 transition-all active:scale-95 cursor-pointer"
             >
               <Ticket size={14} strokeWidth={2.2} />
-              <span>+ Log Support Ticket</span>
+              <span>+ Log Software Ticket</span>
             </button>
             <button type="button"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 text-xs font-semibold text-rose-300 hover:bg-rose-500/25 transition-all active:scale-95 cursor-pointer"

@@ -216,6 +216,12 @@ export default function SuperadminSupportComplaintsPageClient({ id }: { id?: str
 
       {/* Contract & Preview Notice Ribbons */}
       <div className="space-y-2">
+        <div className="rounded-xl border border-sky-500/25 bg-sky-500/10 p-3 text-xs text-sky-300/90 flex items-start gap-2">
+          <Building2 size={15} className="text-sky-400 shrink-0 mt-0.5" />
+          <div>
+            <span className="font-semibold text-white">Branch Operations Notice:</span> Student physical complaints (AC, Locker, WiFi, Noise, Chairs) are handled directly at the library branch desk by Managers and supervised by Library Admins. Superadmin only handles SaaS software bugs & technical support tickets.
+          </div>
+        </div>
         <p className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 p-3 text-xs text-indigo-300 flex items-center gap-2" role="status">
           <ShieldAlert size={14} className="shrink-0 text-indigo-400" />
           <span>{tCopy('COPY.TOAST_COMPLAINT_WRITE_API_UNAVAILABLE')}</span>

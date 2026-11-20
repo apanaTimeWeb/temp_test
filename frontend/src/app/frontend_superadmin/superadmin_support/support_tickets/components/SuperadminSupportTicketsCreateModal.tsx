@@ -96,10 +96,10 @@ export default function SuperadminSupportTicketsCreateModal({
             </div>
             <div>
               <h2 id="create-ticket-title" className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                Log Support Ticket / Issue
+                Log Software Support Ticket / Incident
               </h2>
               <p className="text-xs text-slate-400">
-                Raise an internal support ticket or operational incident on behalf of a library
+                Log a software bug, payment failure, or hardware integration incident on behalf of a Library Admin
               </p>
             </div>
           </div>
@@ -192,10 +192,10 @@ export default function SuperadminSupportTicketsCreateModal({
                 onChange={(e) => setCategory(e.target.value as 'Billing' | 'Bug' | 'Account' | 'Support')}
                 className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white focus:border-indigo-400 focus:outline-none cursor-pointer"
               >
-                <option value="Support">Support & Onboarding</option>
-                <option value="Billing">Billing & Subscription</option>
-                <option value="Bug">Technical Bug / Crash</option>
-                <option value="Account">Account & Access</option>
+                <option value="Bug">Software Bug / UI Crash</option>
+                <option value="Billing">Payment Gateway / Fees UPI Failure</option>
+                <option value="Support">Biometric Device & Hardware Sync</option>
+                <option value="Account">Account & Branch Access</option>
               </select>
             </div>
 
