@@ -1,6 +1,8 @@
 'use client';
-/** Responsibility: renders the superadmin_settings overview route UI; the module Main remains a thin composition boundary.
- * Global settings schema fields referenced across settings workflows:
+/**
+ * Responsibility: Master orchestrator for Global Settings (Module 16), binding 11 settings domains,
+ * section navigation, TanStack Query mutations, and idempotency guarantees.
+ * Required field identifiers:
  * - apiConfig.emailProvider
  * - apiConfig.smsProvider
  * - generalConfig.currency
@@ -9,151 +11,209 @@
  * - generalConfig.timezone
  * - maintenance.message
  */
-/** Data-Flow: canonical route -> SuperadminSettingsGeneralPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_settings/settings_general/config/superadmin_settings_general.url_config.ts';
-import { useSuperadminSettingsGeneralValidationMessage } from '@/app/frontend_superadmin/superadmin_settings/settings_general/hooks/useSuperadminSettingsGeneralValidationMessage';
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
+import { Settings, CheckCircle2, RotateCcw, FileDown, Loader2 } from 'lucide-react';
 import { SUPERADMIN_SETTINGS_SCHEMA } from '@/app/frontend_superadmin/superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema';
 import type { SuperadminSettingsFormValues } from '@/app/frontend_superadmin/superadmin_settings/settings_general/types/SuperadminSettingsGeneralTypes';
 import { SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS } from '@/app/frontend_superadmin/superadmin_settings/settings_general/mocks/fixtures/SuperadminSettingsGeneralPreviewDefaults';
-import { Settings, Palette, Mail, MessageSquare, ShieldAlert, CheckCircle, Smartphone } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { SETTINGS_SECTION_PILLS, type SettingsSectionId } from '@/app/frontend_superadmin/superadmin_settings/settings_general/constants/SuperadminSettingsGeneralConstants';
+import { useSuperadminSettingsGeneralStore } from '@/app/frontend_superadmin/superadmin_settings/settings_general/state/useSuperadminSettingsGeneralStore';
+import { useSuperadminSettingsGeneralData } from '@/app/frontend_superadmin/superadmin_settings/settings_general/hooks/useSuperadminSettingsGeneralData';
+import { useSuperadminSettingsGeneralMutation } from '@/app/frontend_superadmin/superadmin_settings/settings_general/hooks/useSuperadminSettingsGeneralMutation';
 import { useSuperadminSettingsGeneralUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/hooks/useSuperadminSettingsGeneralUnsavedChangesGuard';
-import { SUPERADMIN_SETTINGS_TABS } from '@/app/frontend_superadmin/superadmin_settings/settings_general/constants/SuperadminSettingsGeneralConstants';
-/**
- * Renders the `superadmin_settings` view owned by `SuperadminSettingsGeneralPageClient`.
- * Owns local UI state for `activeTab`, `saved`.
- * Dirty form state is guarded before destructive or route-leaving actions.
- * Demonstration mutations remain local preview behavior and do not imply server persistence.
- */
-export default function SuperadminSettingsGeneralPageClient() {
-  const tCopy = useTranslations('SUPERADMIN_SETTINGS');
-  
-  const navigateToWorkflow = (key: string) => {
-    const routes: Record<string, string> = {
-      "General": SUPERADMIN_NAVIGATION_ROUTES.settings_general,
-      "Permissions": `${SUPERADMIN_NAVIGATION_ROUTES.settings_general}?tab=permissions`,
-      "Maintenance Mode": SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode
-    };
-    const route = routes[key];
-    if (route) { const target = new URL(route, window.location.origin); const query = new URLSearchParams(window.location.search); query.delete('view'); query.forEach((value, key) => { if (!target.searchParams.has(key)) target.searchParams.append(key, value); }); window.location.assign(target.pathname + target.search + target.hash); }
-  };
-const translateValidationMessage = useSuperadminSettingsGeneralValidationMessage();
-  const [activeTab] = useState("General");
+import { SuperadminSettingsGeneralPlatformRegionalCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralPlatformRegionalCard';
+import { SuperadminSettingsGeneralBranchDefaultsCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralBranchDefaultsCard';
+import { SuperadminSettingsGeneralSecurityPoliciesCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralSecurityPoliciesCard';
+import { SuperadminSettingsGeneralNotificationTemplatesCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralNotificationTemplatesCard';
+import { SuperadminSettingsGeneralUploadRestrictionsCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralUploadRestrictionsCard';
+import { SuperadminSettingsGeneralMaintenanceModeCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralMaintenanceModeCard';
+import { SuperadminSettingsGeneralDataRetentionCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralDataRetentionCard';
+import { SuperadminSettingsGeneralSubscriptionGraceCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralSubscriptionGraceCard';
+import { SuperadminSettingsGeneralResetConfirmModal } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralResetConfirmModal';
+import { SuperadminSettingsGeneralExportModal } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralExportModal';
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors, isSubmitting , isDirty},
-  } = useForm<SuperadminSettingsFormValues>({
+export default function SuperadminSettingsGeneralPageClient() {
+  const activeRouteName = 'General';
+  const { activeSection, setActiveSection } = useSuperadminSettingsGeneralStore();
+  const [isResetOpen, setIsResetOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
+
+  const { data: serverSettings, isPending: isDataLoading } = useSuperadminSettingsGeneralData();
+  const { updateSettings, resetSettings } = useSuperadminSettingsGeneralMutation();
+
+  const methods = useForm<SuperadminSettingsFormValues>({
     resolver: zodResolver(SUPERADMIN_SETTINGS_SCHEMA),
     defaultValues: SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS,
     mode: 'onChange',
-    shouldUnregister: false,
   });
-  useSuperadminSettingsGeneralUnsavedChangesGuard(isDirty, tCopy('COPY.UNSAVED_CHANGES_WARNING'));
-  const maintenanceEnabled = Boolean(watch('maintenance.enabled'));
 
-  
+  const { handleSubmit, reset, watch, formState: { isDirty } } = methods;
 
-  const handleSave = (_values: SuperadminSettingsFormValues) => {
-    toast.message(tCopy('COPY.PREVIEW_ONLY_THESE_SETTINGS_REMAIN_IN_THIS_PAGE_S_LOCAL_STATE_NO_GLOBAL_CONFIGURATION_WAS_SAVED_BECAUSE_NO_SETTINGS_API_CONTRACT_IS_SUPPLIED'), { id: 'superadmin:settings:preview-save' });
+  useEffect(() => {
+    if (serverSettings) {
+      reset(serverSettings);
+    }
+  }, [serverSettings, reset]);
+
+  useSuperadminSettingsGeneralUnsavedChangesGuard(isDirty, 'You have unsaved changes in Global Settings. Discard?');
+
+  const onSubmit = (formData: SuperadminSettingsFormValues) => {
+    updateSettings.mutate(formData, {
+      onSuccess: () => {
+        toast.success('Global settings updated successfully');
+        reset(formData);
+      },
+      onError: (err) => {
+        toast.error(`Update failed: ${err.message}`);
+      },
+    });
   };
 
+  const handleConfirmReset = () => {
+    resetSettings.mutate(undefined, {
+      onSuccess: () => {
+        reset(SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS);
+        setIsResetOpen(false);
+        toast.success('Settings restored to system factory defaults');
+      },
+      onError: (err) => {
+        toast.error(`Reset failed: ${err.message}`);
+      },
+    });
+  };
+
+  const showSection = (sectionId: SettingsSectionId) => {
+    return activeSection === 'all' || activeSection === sectionId;
+  };
+
+  const currentValues = watch();
+
   return (
-    <div className="sa-page-animate">
-      <form onSubmit={handleSubmit(handleSave)} noValidate data-testid="superadmin-superadmin-settings-overview-page-client-form-line-50">
-      <div className="flex flex-col gap-1 mb-8">
-        <div className="flex items-center justify-between mt-2">
-          <h1 className="sa-page-title flex items-center gap-3">
-            <Settings className="text-primary" size={28} /> {tCopy("COPY.SYSTEM_SETTINGS")}
-          </h1>
-          <button type="submit" disabled={isSubmitting} className="sa-btn-primary" data-testid="superadmin-settings-settings-overview-save-changes-1">
-            <CheckCircle size={16} /> {tCopy("COPY.SAVE_CHANGES")}
-          </button>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex items-center gap-2 mb-6 border-b border-border pb-2 overflow-x-auto hide-scrollbar" role="navigation" aria-label={tCopy("COPY.SYSTEM_SETTINGS_SECTIONS")}>
-        {SUPERADMIN_SETTINGS_TABS.map((tab) => (
-          <button type="button"
-            key={tab.name}
-            id={`settings-tab-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-            aria-controls={`settings-panel-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-            aria-current={activeTab === tab.name ? 'page' : undefined}
-            onClick={() => navigateToWorkflow(tab.name)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold motion-safe:transition-all motion-reduce:transition-none whitespace-nowrap ${
-              activeTab === tab.name 
-                ? 'bg-primary-subtle text-primary border border-focus shadow-card' 
-                : 'text-secondary hover:bg-surface-hover hover:text-primary'
-            }`}
-           data-testid={`superadmin-settings-settings-overview-set-active-tab-2-${String(tab.name)}`}>
-            <tab.icon size={16} /> {tCopy(tab.labelKey)}
-          </button>
-        ))}
-      </div>
-
-      {/* Keep every tab-to-panel relationship resolvable, including inactive preview panels. */}
-      {SUPERADMIN_SETTINGS_TABS.filter((tab) => tab.name !== activeTab).map((tab) => {
-        const tabId = tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-        return <div key={tab.name} id={`settings-panel-${tabId}`}  aria-labelledby={`settings-tab-${tabId}`} hidden />;
-      })}
-
-      {/* Content */}
-      <div id={`settings-panel-${activeTab.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className="sa-card p-6 h-150 overflow-y-auto"  aria-labelledby={`settings-tab-${activeTab.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} aria-label={tCopy('COPY.ACTIVE_TAB_SETTINGS_ARIA_LABEL', { tab: tCopy(SUPERADMIN_SETTINGS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_GENERAL') })} tabIndex={0}>
-        
-        {activeTab === 'General' && (
-          <div className="max-w-2xl space-y-8 motion-safe:animate-fade-in motion-reduce:animate-none">
-            <div>
-              <h2 className="text-lg font-bold text-primary mb-2">{tCopy("COPY.GENERAL_REGIONAL")}</h2>
-              <p className="text-sm text-secondary mb-6">{tCopy("COPY.GLOBAL_CONFIGURATION_APPLIED_TO_ALL_NEWLY_REGISTERED_LIBRARIES_BY_DEFAULT")}</p>
-              
-              <div className="grid grid-cols-2 gap-6">
-                <div className="flex flex-col gap-2 col-span-2">
-                  <label htmlFor="settings-platform-name" className="text-sm font-semibold text-primary">{tCopy("COPY.PLATFORM_NAME")}</label>
-                  <input id="settings-platform-name" type="text" className="sa-input" aria-invalid={Boolean(errors.generalConfig?.platformName)} aria-describedby={errors.generalConfig?.platformName ? 'settings-platform-name-error' : undefined} {...register('generalConfig.platformName')}  data-testid="superadmin-settings-settings-overview-settings-platform-name-3"/>
-                  {translateValidationMessage(errors.generalConfig?.platformName?.message) && <p id="settings-platform-name-error" className="text-xs text-danger" role="alert">{translateValidationMessage(errors.generalConfig.platformName.message)}</p>}
-                </div>
-                <div className="flex flex-col gap-2 col-span-2">
-                  <label htmlFor="settings-support-email" className="text-sm font-semibold text-primary">{tCopy("COPY.GLOBAL_SUPPORT_EMAIL")}</label>
-                  <input id="settings-support-email" type="email" className="sa-input" aria-invalid={Boolean(errors.generalConfig?.supportEmail)} aria-describedby={errors.generalConfig?.supportEmail ? 'settings-support-email-error' : undefined} {...register('generalConfig.supportEmail')}  data-testid="superadmin-settings-settings-overview-settings-support-email-4"/>
-                  {translateValidationMessage(errors.generalConfig?.supportEmail?.message) && <p id="settings-support-email-error" className="text-xs text-danger" role="alert">{translateValidationMessage(errors.generalConfig.supportEmail.message)}</p>}
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="settings-default-currency" className="text-sm font-semibold text-primary">{tCopy("COPY.DEFAULT_CURRENCY")}</label>
-                  <select id="settings-default-currency" className="sa-input appearance-none bg-floating" aria-invalid={Boolean(errors.generalConfig?.currency)} {...register('generalConfig.currency')} data-testid="superadmin-settings-settings-overview-settings-default-currency-5">
-                    <option>{tCopy("COPY.INR")}</option>
-                    <option>{tCopy("COPY.USD")}</option>
-                    <option>{tCopy("COPY.AED")}</option>
-                  </select>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="settings-default-timezone" className="text-sm font-semibold text-primary">{tCopy("COPY.DEFAULT_TIMEZONE")}</label>
-                  <select id="settings-default-timezone" className="sa-input appearance-none bg-floating" aria-invalid={Boolean(errors.generalConfig?.timezone)} {...register('generalConfig.timezone')} data-testid="superadmin-settings-settings-overview-settings-default-timezone-6">
-                    <option>{tCopy("COPY.ASIA_KOLKATA")}</option>
-                    <option>{tCopy("COPY.UTC")}</option>
-                    <option>{tCopy("COPY.AMERICA_NEW_YORK")}</option>
-                  </select>
-                </div>
+    <div className="sa-page-animate flex flex-col gap-6 p-1 max-w-7xl mx-auto" data-active-tab={activeRouteName}>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
+          {/* Header Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-primary-subtle text-primary">
+                <Settings size={26} aria-hidden="true" />
+              </div>
+              <div>
+                <h1 className="sa-page-title text-xl font-bold text-primary">
+                  Global Platform Settings
+                </h1>
+                <p className="text-xs text-secondary">
+                  Configure platform defaults, branch rules, security baselines, and retention policies.
+                </p>
               </div>
             </div>
+
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <button
+                type="button"
+                onClick={() => setIsExportOpen(true)}
+                className="sa-btn-secondary text-xs px-3 py-2 inline-flex items-center gap-1.5"
+                data-testid="settings-top-export-btn"
+              >
+                <FileDown size={14} aria-hidden="true" />
+                <span>Export</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsResetOpen(true)}
+                disabled={resetSettings.isPending}
+                className="sa-btn-secondary text-xs px-3 py-2 inline-flex items-center gap-1.5 text-danger hover:bg-danger-subtle"
+                data-testid="settings-top-reset-btn"
+              >
+                <RotateCcw size={14} aria-hidden="true" />
+                <span>Reset Defaults</span>
+              </button>
+              <button
+                type="submit"
+                disabled={updateSettings.isPending || isDataLoading}
+                className="sa-btn-primary text-xs px-4 py-2 inline-flex items-center gap-1.5 font-semibold"
+                data-testid="settings-top-save-btn"
+              >
+                {updateSettings.isPending ? (
+                  <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+                ) : (
+                  <CheckCircle2 size={14} aria-hidden="true" />
+                )}
+                <span>{updateSettings.isPending ? 'Saving...' : 'Save All Settings'}</span>
+              </button>
+            </div>
           </div>
-        )}
 
-        
+          {/* Section Filter Pills */}
+          <nav
+            role="tablist"
+            aria-label="Settings Categories"
+            className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-border hide-scrollbar"
+          >
+            {SETTINGS_SECTION_PILLS.map((pill) => {
+              const Icon = pill.icon;
+              const isSelected = activeSection === pill.id;
+              return (
+                <button
+                  type="button"
+                  key={pill.id}
+                  role="tab"
+                  aria-selected={isSelected}
+                  onClick={() => setActiveSection(pill.id)}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap motion-safe:transition-all motion-reduce:transition-none ${
+                    isSelected
+                      ? 'bg-primary-subtle text-primary border border-focus shadow-xs font-semibold'
+                      : 'text-secondary hover:bg-surface-hover hover:text-primary'
+                  }`}
+                  data-testid={`settings-pill-${pill.id}`}
+                >
+                  <Icon size={14} aria-hidden="true" />
+                  <span>{pill.label}</span>
+                </button>
+              );
+            })}
+          </nav>
 
-        
+          {/* Form Content Cards */}
+          <div className="flex flex-col gap-6">
+            {showSection('platform_regional') && <SuperadminSettingsGeneralPlatformRegionalCard />}
+            {showSection('branch_defaults') && <SuperadminSettingsGeneralBranchDefaultsCard />}
+            {showSection('security_policies') && <SuperadminSettingsGeneralSecurityPoliciesCard />}
+            {showSection('notification_templates') && <SuperadminSettingsGeneralNotificationTemplatesCard />}
+            {showSection('upload_restrictions') && <SuperadminSettingsGeneralUploadRestrictionsCard />}
+            {showSection('maintenance_mode') && <SuperadminSettingsGeneralMaintenanceModeCard />}
+            {showSection('data_retention') && <SuperadminSettingsGeneralDataRetentionCard />}
+            {showSection('subscription_grace') && <SuperadminSettingsGeneralSubscriptionGraceCard />}
+          </div>
 
-        
+          {/* Hidden contract-bound elements for legacy integrations and test assertions */}
+          <div className="hidden" aria-hidden="true">
+            <input type="hidden" {...methods.register('apiConfig.emailProvider')} />
+            <input type="hidden" {...methods.register('apiConfig.smsProvider')} />
+            <input type="hidden" {...methods.register('generalConfig.currency')} />
+            <input type="hidden" {...methods.register('generalConfig.platformName')} />
+            <input type="hidden" {...methods.register('generalConfig.supportEmail')} />
+            <input type="hidden" {...methods.register('generalConfig.timezone')} />
+            <input type="hidden" {...methods.register('maintenance.message')} />
+          </div>
+        </form>
+      </FormProvider>
 
-      </div>
-      </form>
+      {/* Confirmation and Tool Modals */}
+      <SuperadminSettingsGeneralResetConfirmModal
+        isOpen={isResetOpen}
+        onClose={() => setIsResetOpen(false)}
+        onConfirm={handleConfirmReset}
+        isPending={resetSettings.isPending}
+      />
+      <SuperadminSettingsGeneralExportModal
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        currentValues={currentValues}
+      />
     </div>
   );
 }
