@@ -1,126 +1,201 @@
 'use client';
-
-/** Responsibility: renders the canonical roles-and-permissions route only. */
-/** Data-Flow: canonical roles route -> role-permission sample fixture -> read-only localized matrix; server enforcement remains authoritative. */
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/config/superadmin_users_roles_permissions.url_config.ts';
-import { useTranslations } from 'next-intl';
-import { SUPERADMIN_USERS_TABS } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/constants/SuperadminUsersRolesPermissionsConstants';
-import SuperadminUsersManagerFeatureMatrix from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminUsersManagerFeatureMatrix';
-import { ShieldCheck, Crown, Building2, UserCheck } from 'lucide-react';
+// RESPONSIBILITY: Master coordinator for Role & Permission Management (Module 04) adhering to WEB_FRONTEND_ARCHITECTURE_AND_DEVELOPMENT_RULES_V1 (< 300 lines).
+import { useState } from 'react';
+import { useSuperadminRolesPermissions } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/hooks/useSuperadminRolesPermissions';
+import SuperadminRolesOverviewHeader from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminRolesOverviewHeader';
+import SuperadminRolesKpiCards from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminRolesKpiCards';
+import SuperadminRolesListTable from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminRolesListTable';
+import SuperadminUserSecurityAccountsTable from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminUserSecurityAccountsTable';
+import SuperadminRolePermissionEditorModal from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminRolePermissionEditorModal';
+import SuperadminRoleCreateModal from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminRoleCreateModal';
+import SuperadminUserSecurityAuditModal from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminUserSecurityAuditModal';
+import type { RoleDefinition, UserSecurityAccount } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/types/SuperadminRolesPermissionsManagementTypes';
 
 export default function SuperadminUsersRolesPermissionsPageClient() {
-  const t = useTranslations('SUPERADMIN_USERS');
-  const activeTab = 'Roles & Permissions';
+  const {
+    roles,
+    filteredRoles,
+    userAccounts,
+    roleCategoryFilter,
+    setRoleCategoryFilter,
+    searchQuery,
+    setSearchQuery,
+    createRole,
+    duplicateRole,
+    updateRolePermissions,
+    deleteCustomRole,
+    toggleAccountLock,
+    triggerPasswordReset,
+    resetMfa,
+    revokeSession,
+    revokeAllSessions,
+    grantTemporaryPermission,
+  } = useSuperadminRolesPermissions();
 
-  const navigateToWorkflow = (key: string) => {
-    const routes: Record<string, string> = {
-      'All Users': SUPERADMIN_NAVIGATION_ROUTES.users_directory,
-      'Roles & Permissions': SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions,
-    };
-    const route = routes[key];
-    if (!route) return;
-    const target = new URL(route, window.location.origin);
-    const query = new URLSearchParams(window.location.search);
-    query.delete('view');
-    query.forEach((value, queryKey) => {
-      if (!target.searchParams.has(queryKey)) target.searchParams.append(queryKey, value);
-    });
-    window.location.assign(target.pathname + target.search + target.hash);
+  const [activeTab, setActiveTab] = useState<'roles_matrix' | 'user_security'>('roles_matrix');
+  const [editingRole, setEditingRole] = useState<RoleDefinition | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [cloneTemplateId, setCloneTemplateId] = useState<string | undefined>(undefined);
+  const [roleToDelete, setRoleToDelete] = useState<string | null>(null);
+  const [selectedSecurityUser, setSelectedSecurityUser] = useState<UserSecurityAccount | null>(null);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 4000);
   };
 
+  const handleDuplicate = (role: RoleDefinition) => {
+    setCloneTemplateId(role.id);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleDeleteRole = (roleId: string) => {
+    setRoleToDelete(roleId);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!roleToDelete) return;
+    const res = deleteCustomRole(roleToDelete);
+    if (res.success) {
+      showToast('Custom role deleted successfully.');
+    } else {
+      showToast(res.error || 'Failed to delete role');
+    }
+    setRoleToDelete(null);
+  };
+
+  // Sync selected user when userAccounts updates
+  const activeSecurityUser = selectedSecurityUser
+    ? userAccounts.find((u) => u.id === selectedSecurityUser.id) || selectedSecurityUser
+    : null;
+
   return (
-    <div className="w-full max-w-full min-w-0 space-y-6">
+    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+      {/* Toast Notification */}
+      {toastMsg && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed top-5 right-5 z-50 rounded-xl border border-indigo-500/50 bg-indigo-950/90 text-indigo-200 px-4 py-3 shadow-xl flex items-center gap-2 backdrop-blur-md animate-fade-in"
+        >
+          <span className="w-2 h-2 rounded-full bg-indigo-400 animate-ping" />
+          <span className="text-sm font-semibold">{toastMsg}</span>
+        </div>
+      )}
+
       {/* Hero Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-card/90 border border-border/80 shadow-sm backdrop-blur-sm">
-        <div className="flex items-center gap-3.5">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 shadow-sm">
-            <ShieldCheck size={24} />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-100 tracking-tight">{t('COPY.USERS_ACCESS_CONTROL')}</h1>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>RBAC Active</span>
-              </span>
+      <SuperadminRolesOverviewHeader
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onCreateRole={() => {
+          setCloneTemplateId(undefined);
+          setIsCreateModalOpen(true);
+        }}
+        totalRolesCount={roles.length}
+        totalUsersCount={userAccounts.length}
+      />
+
+      {/* KPI Cards */}
+      <SuperadminRolesKpiCards roles={roles} userAccounts={userAccounts} />
+
+      {/* Main Tab Content */}
+      {activeTab === 'roles_matrix' ? (
+        <SuperadminRolesListTable
+          roles={filteredRoles}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          categoryFilter={roleCategoryFilter}
+          setCategoryFilter={setRoleCategoryFilter}
+          onEditPermissions={(role) => setEditingRole(role)}
+          onDuplicateRole={handleDuplicate}
+          onDeleteRole={handleDeleteRole}
+        />
+      ) : (
+        <SuperadminUserSecurityAccountsTable
+          users={userAccounts}
+          onOpenSecurityModal={(u) => setSelectedSecurityUser(u)}
+          onToggleLock={(uid) => {
+            toggleAccountLock(uid);
+            showToast('Account lock state updated.');
+          }}
+          onTriggerPasswordReset={(uid) => {
+            const msg = triggerPasswordReset(uid);
+            showToast(msg);
+          }}
+        />
+      )}
+
+      {/* Matrix Editor Modal */}
+      {editingRole && (
+        <SuperadminRolePermissionEditorModal
+          role={editingRole}
+          onClose={() => setEditingRole(null)}
+          onSave={(roleId, updatedMatrix) => {
+            updateRolePermissions(roleId, updatedMatrix);
+            setEditingRole(null);
+            showToast(`Permissions updated for role "${editingRole.name}"!`);
+          }}
+        />
+      )}
+
+      {/* Create / Clone Role Modal */}
+      <SuperadminRoleCreateModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        existingRoles={roles}
+        preselectedTemplateId={cloneTemplateId}
+        onSubmit={(data) => {
+          const res = createRole(data);
+          if (res.success) {
+            setIsCreateModalOpen(false);
+            showToast(`New role "${data.name}" created successfully!`);
+          }
+          return res;
+        }}
+      />
+
+      {/* User Security & Active Sessions Modal */}
+      {activeSecurityUser && (
+        <SuperadminUserSecurityAuditModal
+          user={activeSecurityUser}
+          onClose={() => setSelectedSecurityUser(null)}
+          onToggleLock={toggleAccountLock}
+          onTriggerPasswordReset={triggerPasswordReset}
+          onResetMfa={resetMfa}
+          onRevokeSession={revokeSession}
+          onRevokeAllSessions={revokeAllSessions}
+          onGrantTemporaryPermission={grantTemporaryPermission}
+        />
+      )}
+
+      {/* Delete Custom Role Confirmation Dialog */}
+      {roleToDelete && (
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl border border-rose-500/30 bg-[#0f172a] p-6 text-white space-y-4 shadow-2xl">
+            <h3 className="text-base font-bold text-white">Delete Custom Role</h3>
+            <p className="text-xs text-slate-300">
+              Are you sure you want to delete this custom role? This cannot be undone and will revoke custom permissions.
+            </p>
+            <div className="flex justify-end gap-2.5 pt-2">
+              <button
+                type="button"
+                onClick={() => setRoleToDelete(null)}
+                className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:bg-slate-700 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-md shadow-rose-950/50 cursor-pointer"
+              >
+                Confirm Delete
+              </button>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">Role definitions, operational privileges, and manager feature access controls.</p>
           </div>
         </div>
-      </div>
-
-      {/* 3 Role Scope Overview Cards */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4" aria-label="Role Scope Overview">
-        {/* Role 1: SuperAdmin (Purple) */}
-        <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-950/40 via-card/90 to-card p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-purple-300/80 uppercase tracking-wider">{t('COPY.SUPERADMIN')}</span>
-            <div className="p-2 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400">
-              <Crown size={16} />
-            </div>
-          </div>
-          <div className="mt-2.5">
-            <p className="text-base font-bold text-slate-100">Global System Authority</p>
-            <p className="text-xs text-purple-300/70 mt-1">Full control across all 6 SaaS core modules and configurations.</p>
-          </div>
-        </div>
-
-        {/* Role 2: Tenant Admin (Indigo) */}
-        <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/40 via-card/90 to-card p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-indigo-300/80 uppercase tracking-wider">{t('COPY.ADMIN_TENANT')}</span>
-            <div className="p-2 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
-              <Building2 size={16} />
-            </div>
-          </div>
-          <div className="mt-2.5">
-            <p className="text-base font-bold text-slate-100">Tenant / Branch Scoped</p>
-            <p className="text-xs text-indigo-300/70 mt-1">Library, Billing, Shift, and Student management for their tenant.</p>
-          </div>
-        </div>
-
-        {/* Role 3: Manager (Sky) */}
-        <div className="rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/40 via-card/90 to-card p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-sky-300/80 uppercase tracking-wider">{t('COPY.MANAGER')}</span>
-            <div className="p-2 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400">
-              <UserCheck size={16} />
-            </div>
-          </div>
-          <div className="mt-2.5">
-            <p className="text-base font-bold text-slate-100">Operational Desk Scoped</p>
-            <p className="text-xs text-sky-300/70 mt-1">Day-to-day seat check-ins, shift management, and student CRM.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Navigation Tabs */}
-      <nav className="flex items-center gap-2 border-b border-border/80 pb-2 overflow-x-auto" aria-label={t('COPY.USER_ACCESS_VIEWS')}>
-        {SUPERADMIN_USERS_TABS.map((tab) => {
-          const active = activeTab === tab.name;
-          const TabIcon = tab.icon;
-          return (
-            <button
-              key={tab.name}
-              type="button"
-              aria-current={active ? 'page' : undefined}
-              onClick={() => navigateToWorkflow(tab.name)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                active 
-                  ? 'border border-indigo-400 bg-indigo-500/10 text-indigo-300 shadow-xs' 
-                  : 'text-slate-400 hover:bg-surface-hover hover:text-slate-200'
-              }`}
-              data-testid={`superadmin-users-roles-permissions-navigate-${tab.name.toLowerCase().replace(/[^a-z]+/g, '-')}`}
-            >
-              <TabIcon size={15} aria-hidden="true" className={active ? 'text-indigo-400' : 'text-slate-400'} />
-              <span>{t(tab.labelKey)}</span>
-            </button>
-          );
-        })}
-      </nav>
-
-      {/* Real Manager Panel Sidebar Feature Matrix Controller */}
-      <SuperadminUsersManagerFeatureMatrix />
+      )}
     </div>
   );
 }

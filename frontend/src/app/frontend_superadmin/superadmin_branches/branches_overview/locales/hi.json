@@ -1,0 +1,23 @@
+{
+  "COPY": {
+    "PAGE_TITLE": "शाखा प्रबंधन और पूर्ण नियंत्रण",
+    "PAGE_SUBTITLE": "सभी लाइब्रेरी खातों की भौतिक शाखाओं का केंद्रीकृत नियंत्रण",
+    "CREATE_BRANCH": "नई शाखा बनाएं",
+    "SEARCH_PLACEHOLDER": "शाखा का नाम, कोड, शहर या प्रबंधक खोजें...",
+    "ALL_LIBRARIES": "सभी लाइब्रेरी",
+    "ALL_STATUSES": "सभी स्थितियां",
+    "ACTIVE": "सक्रिय",
+    "SUSPENDED": "निलंबित",
+    "DEACTIVATED": "निष्क्रिय",
+    "CLOSED": "बंद / संग्रहीत",
+    "EXPORT_CSV": "CSV निर्यात",
+    "EXPORT_EXCEL": "Excel निर्यात",
+    "PRINT_ROSTER": "सूची प्रिंट करें",
+    "MODULE_ROUTE_LOADING": "शाखा निर्देशिका लोड हो रही है...",
+    "MODULE_NOT_FOUND_TITLE": "शाखा पृष्ठ नहीं मिला",
+    "MODULE_NOT_FOUND_MESSAGE": "अनुरोधित शाखा पृष्ठ उपलब्ध नहीं है।",
+    "BACK_TO_DASHBOARD": "डैशबोर्ड पर वापस जाएं",
+    "ERROR_TITLE": "शाखा रिकॉर्ड लोड करने में विफल",
+    "RETRY": "पुनः प्रयास करें"
+  }
+}

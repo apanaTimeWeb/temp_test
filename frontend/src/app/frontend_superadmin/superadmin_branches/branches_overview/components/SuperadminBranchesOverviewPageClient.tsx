@@ -14,6 +14,7 @@ import SuperadminBranchesOverviewTransferManagerModal from '@/app/frontend_super
 import SuperadminBranchesOverviewDetailsModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewDetailsModal';
 import SuperadminBranchesOverviewActivityModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewActivityModal';
 import SuperadminBranchesOverviewReportsModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewReportsModal';
+import SuperadminBranchesOverviewSuspendModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewSuspendModal';
 import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 
 export default function SuperadminBranchesOverviewPageClient() {
@@ -39,6 +40,7 @@ export default function SuperadminBranchesOverviewPageClient() {
 
   // Modals state
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [suspendTarget, setSuspendTarget] = useState<SuperadminBranchRecord | null>(null);
   const [safetyCloseTarget, setSafetyCloseTarget] = useState<SuperadminBranchRecord | null>(null);
   const [transferTarget, setTransferTarget] = useState<SuperadminBranchRecord | null>(null);
   const [detailsTarget, setDetailsTarget] = useState<SuperadminBranchRecord | null>(null);
@@ -46,7 +48,7 @@ export default function SuperadminBranchesOverviewPageClient() {
   const [reportsTarget, setReportsTarget] = useState<SuperadminBranchRecord | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Check URL query param ?action=create
+  // Check URL query param ?action=create or ?tab=lifecycle
   useEffect(() => {
     if (searchParams?.get('action') === 'create') {
       setIsCreateOpen(true);
@@ -83,11 +85,7 @@ export default function SuperadminBranchesOverviewPageClient() {
   };
 
   const handleSuspend = (branch: SuperadminBranchRecord) => {
-    const reason = window.prompt(`Enter reason for temporarily suspending branch "${branch.name}":`, 'Compliance review pending');
-    if (reason && reason.trim()) {
-      suspendBranch(branch.id, reason.trim());
-      showToast(`Branch "${branch.name}" suspended. Sibling branches remain operational.`);
-    }
+    setSuspendTarget(branch);
   };
 
   return (
@@ -235,6 +233,17 @@ export default function SuperadminBranchesOverviewPageClient() {
         <SuperadminBranchesOverviewReportsModal
           branch={reportsTarget}
           onClose={() => setReportsTarget(null)}
+        />
+      )}
+
+      {suspendTarget && (
+        <SuperadminBranchesOverviewSuspendModal
+          branch={suspendTarget}
+          onClose={() => setSuspendTarget(null)}
+          onConfirm={(branchId, reason) => {
+            suspendBranch(branchId, reason);
+            showToast(`Branch "${suspendTarget.name}" suspended. Sibling branches remain operational.`);
+          }}
         />
       )}
     </div>

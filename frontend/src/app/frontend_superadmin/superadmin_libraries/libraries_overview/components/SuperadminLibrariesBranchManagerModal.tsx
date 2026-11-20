@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import {
-  X, Building2, MapPin, Armchair, Clock, UserCheck, Plus, Check,
-  KeyRound, ShieldCheck, AlertCircle, Phone, Mail, Store, Shield
+  X, Building2, MapPin, Armchair, Clock, UserCheck, Plus,
+  KeyRound, ShieldCheck, AlertCircle, Phone, Mail, Store
 } from 'lucide-react';
 import type { SuperadminLibrariesLibrary, SuperadminBranchRecord } from '../types/SuperadminLibrariesOverviewTypes';
+import SuperadminLibrariesBranchAddForm from './SuperadminLibrariesBranchAddForm';
 
 interface SuperadminLibrariesBranchManagerModalProps {
   lib: SuperadminLibrariesLibrary;
@@ -21,16 +22,6 @@ export default function SuperadminLibrariesBranchManagerModal({
   onToggleAdminPanel,
 }: SuperadminLibrariesBranchManagerModalProps) {
   const [showAddForm, setShowAddForm] = useState(false);
-  const [branchName, setBranchName] = useState('');
-  const [branchCode, setBranchCode] = useState('');
-  const [city, setCity] = useState(lib.location || '');
-  const [address, setAddress] = useState('');
-  const [seats, setSeats] = useState(100);
-  const [shifts, setShifts] = useState(3);
-  const [managerName, setManagerName] = useState('');
-  const [managerPhone, setManagerPhone] = useState('');
-  const [managerEmail, setManagerEmail] = useState('');
-  const [formError, setFormError] = useState('');
 
   const branches = lib.branchList || [
     {
@@ -48,35 +39,13 @@ export default function SuperadminLibrariesBranchManagerModal({
     },
   ];
 
-  const handleCreateBranch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!branchName.trim()) {
-      setFormError('Please enter a branch name.');
-      return;
-    }
+  const handleCreateBranch = (newBranchData: Omit<SuperadminBranchRecord, 'id'>) => {
     const newBranch: SuperadminBranchRecord = {
+      ...newBranchData,
       id: `br-${lib.id}-${Date.now().toString(36)}`,
-      name: branchName.trim(),
-      code: branchCode.trim() || `BR-0${branches.length + 1}`,
-      city: city.trim() || lib.location,
-      address: address.trim() || `${city} Campus`,
-      seats: Number(seats) || 100,
-      shifts: Number(shifts) || 3,
-      managerName: managerName.trim() || 'Assigned by Admin',
-      managerPhone: managerPhone.trim() || lib.phone,
-      managerEmail: managerEmail.trim() || lib.email,
-      status: 'Active',
     };
-
     onAddBranch(lib.id, newBranch);
-    setBranchName('');
-    setBranchCode('');
-    setAddress('');
-    setManagerName('');
-    setManagerPhone('');
-    setManagerEmail('');
     setShowAddForm(false);
-    setFormError('');
   };
 
   const isAdminPanelEnabled = lib.adminPanelEnabled ?? true;
@@ -112,7 +81,7 @@ export default function SuperadminLibrariesBranchManagerModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors cursor-pointer"
             title="Close dialog"
           >
             <X size={18} />
@@ -179,124 +148,14 @@ export default function SuperadminLibrariesBranchManagerModal({
 
           {/* Add Branch Inline Form */}
           {showAddForm && (
-            <form onSubmit={handleCreateBranch} className="rounded-xl border border-indigo-500/30 bg-[#0e1333] p-4 space-y-3.5 animate-in fade-in duration-150">
-              <div className="flex items-center justify-between pb-2 border-b border-indigo-500/20">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-300">New Branch Details</h4>
-                <button
-                  type="button"
-                  onClick={() => setShowAddForm(false)}
-                  className="text-slate-400 hover:text-white text-xs"
-                >
-                  Cancel
-                </button>
-              </div>
-
-              {formError && (
-                <p className="text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 p-2 rounded-lg">{formError}</p>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Branch Name *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Gomti Nagar Branch"
-                    value={branchName}
-                    onChange={(e) => setBranchName(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-indigo-500/30 bg-input text-white focus:outline-none focus:border-indigo-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Branch Code / Tag</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. GN-02"
-                    value={branchCode}
-                    onChange={(e) => setBranchCode(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-indigo-500/30 bg-input text-white focus:outline-none focus:border-indigo-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">City</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Lucknow"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-indigo-500/30 bg-input text-white focus:outline-none focus:border-indigo-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Street Address</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Sector 4, Main Market"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-indigo-500/30 bg-input text-white focus:outline-none focus:border-indigo-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Seat Capacity</label>
-                  <input
-                    type="number"
-                    min="10"
-                    max="2000"
-                    value={seats}
-                    onChange={(e) => setSeats(Number(e.target.value))}
-                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-indigo-500/30 bg-input text-white focus:outline-none focus:border-indigo-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Daily Shifts</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="6"
-                    value={shifts}
-                    onChange={(e) => setShifts(Number(e.target.value))}
-                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-indigo-500/30 bg-input text-white focus:outline-none focus:border-indigo-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Assigned Branch Manager</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Priya Sharma"
-                    value={managerName}
-                    onChange={(e) => setManagerName(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-indigo-500/30 bg-input text-white focus:outline-none focus:border-indigo-400"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">Manager Phone</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. +91 98765 43210"
-                    value={managerPhone}
-                    onChange={(e) => setManagerPhone(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs rounded-lg border border-indigo-500/30 bg-input text-white focus:outline-none focus:border-indigo-400"
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddForm(false)}
-                  className="px-3 py-1.5 text-xs rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm"
-                >
-                  Provision Branch
-                </button>
-              </div>
-            </form>
+            <SuperadminLibrariesBranchAddForm
+              libraryLocation={lib.location}
+              defaultPhone={lib.phone}
+              defaultEmail={lib.email}
+              totalExistingBranches={branches.length}
+              onCancel={() => setShowAddForm(false)}
+              onSubmit={handleCreateBranch}
+            />
           )}
 
           {/* Branches List */}
