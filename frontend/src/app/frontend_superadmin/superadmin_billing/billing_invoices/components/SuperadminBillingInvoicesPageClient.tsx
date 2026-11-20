@@ -1,17 +1,12 @@
 'use client';
 
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/config/superadmin_billing_invoices.url_config.ts';
-
 import { toast } from 'sonner';
 /** Responsibility: renders the superadmin_billing overview route UI; the module Main remains a thin composition boundary. */
 /** Data-Flow: canonical route -> SuperadminBillingInvoicesPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 import type { SemanticCellParams as ICellRendererParams } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesSemanticTable';
 import SuperadminBillingInvoicesSemanticTable from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesSemanticTable';
 
-
 import { useState, useMemo } from 'react';
-
-
 
 import type { SemanticColumnDef as ColDef } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesSemanticTable';
 import { CheckCircle, Download, AlertCircle } from 'lucide-react';
@@ -21,9 +16,6 @@ import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/s
 import { SUPERADMIN_BILLING_SAMPLE_INVOICES } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/mocks/fixtures/SuperadminBillingInvoicesSampleMockFixtures';
 import SuperadminBillingInvoicesKpiCards from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/components/SuperadminBillingInvoicesKpiCards';
 import { useLocale, useTranslations } from 'next-intl';
-
-import { SUPERADMIN_BILLING_TABS } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/constants/SuperadminBillingInvoicesConstants';
-
 
 /** Derives a stable, non-index row identity for repeated interactive table controls. */
 function getSuperadminInteractiveTestIdSuffix(value: unknown): string {
@@ -44,15 +36,7 @@ export default function SuperadminBillingInvoicesPageClient() {
   const locale = useLocale();
   const samplePdfLocaleSupported = locale.toLowerCase().startsWith('en');
   
-  const navigateToWorkflow = (key: string) => {
-    const routes: Record<string, string> = {
-    "invoices": SUPERADMIN_NAVIGATION_ROUTES.billing_invoices,
-    "promos": SUPERADMIN_NAVIGATION_ROUTES.plans_promotions
-    };
-    const route = routes[key];
-    if (route) { const target = new URL(route, window.location.origin); const query = new URLSearchParams(window.location.search); query.delete('view'); query.forEach((value, key) => { if (!target.searchParams.has(key)) target.searchParams.append(key, value); }); window.location.assign(target.pathname + target.search + target.hash); }
-  };
-  const [activeTab] = useState<'invoices' | 'promos'>("invoices");
+  const [activeTab] = useState<'invoices'>("invoices");
   const [invoices] = useState<SuperadminBillingInvoiceSample[]>(SUPERADMIN_BILLING_SAMPLE_INVOICES);
 
   const showToast = (msg: string) => { toast.message(msg, { id: 'superadmin:superadmin_billing:SuperadminBillingInvoicesPageClient:feedback' }); };
@@ -126,22 +110,6 @@ export default function SuperadminBillingInvoicesPageClient() {
       </div>
 
       <p className="mb-4 rounded-lg border border-border bg-warning-bg p-3 text-sm text-warning" role="status">{tCopy("COPY.INVOICE_AND_PROMOTION_ENTRIES_ARE_LOCAL_DEMONSTRATION_DATA_PROMO_CHANGES_ARE_PREVIEWS_AND_ARE_NOT_LIVE_BILLING_CHANGES")}</p>
-
-      <div className="flex items-center gap-2 mb-6 border-b border-border pb-2 overflow-x-auto hide-scrollbar">
-        {SUPERADMIN_BILLING_TABS.map((tab) => (
-          <button type="button"
-            key={tab.id}
-            onClick={() => navigateToWorkflow(tab.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold motion-safe:transition-all motion-reduce:transition-none whitespace-nowrap ${
-              activeTab === tab.id 
-                ? 'bg-info-bg text-primary border border-border shadow-card' 
-                : 'text-secondary hover:bg-surface-hover hover:text-primary'
-            }`}
-           data-testid={`superadmin-billing-billing-overview-set-active-tab-4-${String(tab.id)}`}>
-            <tab.icon size={16} /> {tCopy(tab.labelKey)}
-          </button>
-        ))}
-      </div>
 
       {activeTab === 'invoices' && <SuperadminBillingInvoicesKpiCards />}
 

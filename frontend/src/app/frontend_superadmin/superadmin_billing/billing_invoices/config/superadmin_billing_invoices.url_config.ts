@@ -21,5 +21,4 @@ export const SUPERADMIN_BILLING_INVOICES_API = {} as const;
 
 export const SUPERADMIN_NAVIGATION_ROUTES = {
   billing_invoices: '/superadmin/superadmin_billing/billing_invoices',
-  plans_promotions: '/superadmin/superadmin_plans/plans_promotions',
 } as const;
