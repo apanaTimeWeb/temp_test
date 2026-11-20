@@ -133,66 +133,122 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
 
   const colDefs = useMemo<SemanticColumnDef[]>(() => [
     {
-      headerName: t('COPY.TABLE_COLUMN_SUBJECT_ID'), field: 'subject', flex: 2, minWidth: 250,
+      headerName: t('COPY.TABLE_COLUMN_SUBJECT_ID'), field: 'subject', flex: 2, minWidth: 260,
       cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
-        <div className="py-2">
-          <p className="font-bold text-primary leading-tight flex items-center gap-2">
-            {p.data?.slaBreach && p.data?.status !== 'Resolved' && <AlertTriangle size={12} className="text-danger motion-safe:animate-pulse" />}
-            {p.data?.subject}
-            {p.data && <button type="button" className="ml-auto text-xs underline text-info focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary" aria-label={t('COPY.OPEN_TICKET_ARIA_LABEL', { id: p.data.id })} onClick={(event) => { event.stopPropagation(); setSelected(p.data!); }} data-testid="superadmin-support_tickets-support_tickets-button-1">{t('COPY.OPEN_TICKET')}</button>}
-          </p>
-          <div className="flex items-center gap-3 mt-1.5">
-            <span className="text-xs font-mono text-info bg-info-bg px-1.5 py-0.5 rounded border border-border">{p.data?.id}</span>
-            <span className="flex items-center gap-1 text-xs text-secondary"><Tag size={10} /> {t(`COPY.CATEGORY_${String(p.data?.category ?? 'General').toUpperCase()}` as 'COPY.CATEGORY_BILLING' | 'COPY.CATEGORY_BUG' | 'COPY.CATEGORY_ACCOUNT' | 'COPY.CATEGORY_GENERAL' | 'COPY.CATEGORY_SUPPORT')}</span>
-            {p.data?.hasAttachment && <span className="flex items-center gap-1 text-xs text-secondary"><Paperclip size={10} /></span>}
+        <div className="py-1">
+          <div className="flex items-center gap-2">
+            {p.data?.slaBreach && p.data?.status !== 'Resolved' && (
+              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 shrink-0">
+                <AlertTriangle size={11} className="mr-1 text-rose-400 motion-safe:animate-pulse" /> SLA
+              </span>
+            )}
+            <button
+              type="button"
+              className="text-sm font-semibold text-slate-100 hover:text-indigo-300 transition-colors text-left truncate cursor-pointer"
+              onClick={(e) => { e.stopPropagation(); setSelected(p.data!); }}
+              title={p.data?.subject}
+              data-testid="superadmin-support_tickets-support_tickets-button-1"
+            >
+              {p.data?.subject}
+            </button>
+          </div>
+          <div className="flex items-center gap-2 mt-1 flex-wrap">
+            <span className="text-[11px] font-mono font-medium text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/25 shrink-0">
+              {p.data?.id}
+            </span>
+            <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 bg-slate-800/60 px-2 py-0.5 rounded border border-slate-700/50 shrink-0">
+              <Tag size={10} className="text-slate-400" />
+              {t(`COPY.CATEGORY_${String(p.data?.category ?? 'General').toUpperCase()}` as 'COPY.CATEGORY_BILLING' | 'COPY.CATEGORY_BUG' | 'COPY.CATEGORY_ACCOUNT' | 'COPY.CATEGORY_GENERAL' | 'COPY.CATEGORY_SUPPORT')}
+            </span>
+            {p.data?.hasAttachment && (
+              <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 bg-slate-800/60 px-1.5 py-0.5 rounded border border-slate-700/50 shrink-0" title="Has Attachment">
+                <Paperclip size={10} />
+              </span>
+            )}
           </div>
         </div>
       ),
     },
     {
-      headerName: t('COPY.TABLE_COLUMN_TENANT'), field: 'tenant', flex: 1.5, minWidth: 150,
+      headerName: t('COPY.TABLE_COLUMN_TENANT'), field: 'tenant', flex: 1.5, minWidth: 160,
       cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
-        <div className="flex items-center gap-2 h-full">
-          <div className="w-6 h-6 rounded-full bg-surface-hover border border-border flex items-center justify-center text-xs font-bold text-secondary">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center text-xs font-bold text-indigo-300 shrink-0 shadow-xs">
             {String(p.value ?? '').charAt(0)}
           </div>
-          <span className="text-sm text-primary font-medium">{p.value}</span>
+          <div className="min-w-0">
+            <p className="text-xs font-semibold text-slate-100 truncate">{p.value}</p>
+            {p.data?.contact && (
+              <p className="text-[11px] text-slate-400 truncate flex items-center gap-1">
+                <User size={10} className="text-slate-500 shrink-0" />
+                {p.data.contact}
+              </p>
+            )}
+          </div>
         </div>
-      )
+      ),
     },
     {
       headerName: t('COPY.TABLE_COLUMN_ASSIGNEE'), field: 'assignee', flex: 1, minWidth: 130,
-      cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
-        <span className={`text-xs font-medium ${p.value === 'Unassigned' ? 'text-disabled italic' : 'text-success'}`}>
-          {p.value === 'Unassigned' ? t('COPY.ASSIGNEE_UNASSIGNED') : p.value === 'Sample Agent A' ? t('COPY.ASSIGNEE_SAMPLE_AGENT_A') : t('COPY.ASSIGNEE_SAMPLE_AGENT_B')}
-        </span>
-      )
+      cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => {
+        const isUnassigned = p.value === 'Unassigned';
+        return (
+          <div className="flex items-center gap-1.5">
+            <span className={`w-2 h-2 rounded-full ${isUnassigned ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'} shrink-0`} />
+            <span className={`text-xs font-medium ${isUnassigned ? 'text-amber-300/80 italic' : 'text-slate-200'}`}>
+              {isUnassigned ? t('COPY.ASSIGNEE_UNASSIGNED') : p.value === 'Sample Agent A' ? t('COPY.ASSIGNEE_SAMPLE_AGENT_A') : t('COPY.ASSIGNEE_SAMPLE_AGENT_B')}
+            </span>
+          </div>
+        );
+      },
     },
     {
-      headerName: t('COPY.TABLE_COLUMN_STATUS'), field: 'status', flex: 1, minWidth: 110,
+      headerName: t('COPY.TABLE_COLUMN_STATUS'), field: 'status', flex: 1, minWidth: 120, cellClass: 'text-center',
+      cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => {
+        const val = p.value;
+        const style = val === 'Resolved'
+          ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+          : val === 'Open'
+          ? 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+          : 'bg-amber-500/15 text-amber-300 border-amber-500/30';
+        return (
+          <div className="flex justify-center">
+            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${style}`}>
+              {val === 'Open' ? t('COPY.STATUS_OPEN') : val === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : t('COPY.STATUS_RESOLVED')}
+            </span>
+          </div>
+        );
+      },
+    },
+    {
+      headerName: t('COPY.TABLE_COLUMN_PRIORITY'), field: 'priority', flex: 0.9, minWidth: 100, cellClass: 'text-center',
+      cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => {
+        const prio = p.data?.priority;
+        const style = prio === 'High'
+          ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+          : prio === 'Medium'
+          ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
+          : 'bg-slate-500/20 text-slate-300 border-slate-500/30';
+        return (
+          <div className="flex justify-center">
+            <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold border ${style}`}>
+              {prio === 'High' ? t('COPY.PRIORITY_HIGH') : prio === 'Medium' ? t('COPY.PRIORITY_MEDIUM') : t('COPY.PRIORITY_LOW')}
+            </span>
+          </div>
+        );
+      },
+    },
+    {
+      headerName: t('COPY.TABLE_COLUMN_AGE'), field: 'age', flex: 0.8, minWidth: 90, cellClass: 'text-center',
       cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
-        <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${p.value === 'Resolved' ? 'bg-success-bg text-success border border-border' :
-          p.value === 'Open' ? 'bg-danger-bg text-danger border border-border' : 'bg-warning-bg text-warning border border-border'
-          }`}>
-          {p.value === 'Open' ? t('COPY.STATUS_OPEN') : p.value === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : t('COPY.STATUS_RESOLVED')}
-        </span>
+        <div className="flex items-center justify-center gap-1 text-xs text-slate-400 font-medium">
+          <Clock size={11} className="text-slate-500" />
+          <span>{p.value}</span>
+        </div>
       ),
     },
     {
-      headerName: t('COPY.TABLE_COLUMN_PRIORITY'), field: 'priority', flex: 0.8, minWidth: 100,
-      cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
-        <span className={`text-xs font-bold ${p.data?.priority === 'High' ? 'text-danger' : p.data?.priority === 'Medium' ? 'text-warning' : 'text-secondary'
-          }`}>{p.value === 'High' ? t('COPY.PRIORITY_HIGH') : p.value === 'Medium' ? t('COPY.PRIORITY_MEDIUM') : t('COPY.PRIORITY_LOW')}</span>
-      ),
-    },
-    {
-      headerName: t('COPY.TABLE_COLUMN_AGE'), field: 'age', flex: 0.8, minWidth: 100,
-      cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
-        <span className="text-xs text-secondary">{p.value}</span>
-      ),
-    },
-    {
-      headerName: '', field: 'id', flex: 1.4, minWidth: 160, sortable: false, filter: false,
+      headerName: 'Actions', field: 'actions', flex: 1.6, minWidth: 200, sortable: false, filter: false, cellClass: 'text-right',
       cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => {
         if (!p.data) return null;
         const tkt = p.data;
@@ -204,16 +260,18 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
         const waMsg = `Hello ${tkt.contact || tkt.tenant}, regarding your Support Ticket ${tkt.id} ("${tkt.subject}") on Smart Library SaaS.`;
 
         return (
-          <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="flex items-center justify-end gap-1.5 flex-nowrap whitespace-nowrap">
+            {/* Details Button */}
             <button
               type="button"
-              className="w-8 h-8 min-w-8 min-h-8 rounded-lg bg-info-bg border border-border text-info flex items-center justify-center hover:bg-info text-on-info hover:text-primary motion-safe:transition-colors motion-reduce:transition-none cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/25 hover:text-white text-xs font-semibold transition-all cursor-pointer shadow-xs shrink-0 whitespace-nowrap"
               onClick={e => { e.stopPropagation(); setSelected(tkt); }}
               aria-label={t("COPY.OPEN_TICKET_ARIA_LABEL", { id: tkt.id ?? t('COPY.UNKNOWN') })}
               title={t("COPY.OPEN_TICKET")}
               data-testid={`superadmin-support-tickets-support-tickets-overview-open-ticket-aria-label-1-${testIdSuffix}`}
             >
-              <MessageSquare size={13} />
+              <MessageSquare size={13} className="text-indigo-400" />
+              <span>Details</span>
             </button>
 
             {/* Quick WhatsApp */}
@@ -225,7 +283,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
                 if (popup) popup.opener = null;
                 showToast(`Opened WhatsApp for Ticket ${tkt.id}`);
               }}
-              className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs cursor-pointer"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs cursor-pointer shrink-0"
               title={`WhatsApp reply to ${tkt.tenant}`}
               aria-label={`WhatsApp for ticket ${tkt.id}`}
             >
@@ -237,7 +295,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               <a
                 href={`mailto:${tkt.email}?subject=${encodeURIComponent(`[Ticket ${tkt.id}] ${tkt.subject}`)}&body=${encodeURIComponent(`Dear ${tkt.contact || tkt.tenant},\n\nRegarding your ticket "${tkt.subject}" (${tkt.id}):\n\n`)}`}
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs cursor-pointer"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs cursor-pointer shrink-0"
                 title={`Email reply to ${tkt.tenant}`}
                 aria-label={`Email for ticket ${tkt.id}`}
               >
@@ -250,7 +308,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               <a
                 href={`tel:${tkt.phone.replace(/\D/g, '')}`}
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex min-h-7 min-w-7 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 transition-all shadow-xs cursor-pointer"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 transition-all shadow-xs cursor-pointer shrink-0"
                 title={`Call ${tkt.tenant}`}
                 aria-label={`Call for ticket ${tkt.id}`}
               >
@@ -290,27 +348,27 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               Dedicated technical helpline for Library Owners, Admins & Managers — Software bugs, UPI payment issues, Biometric QR sync, and platform billing.
             </p>
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
             <button
               type="button"
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 text-xs font-semibold text-white hover:from-rose-500 hover:to-indigo-500 shadow-md shadow-rose-950/30 transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 text-xs font-semibold text-white hover:from-rose-500 hover:to-indigo-500 shadow-md shadow-rose-950/30 transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
             >
               <Ticket size={14} strokeWidth={2.2} />
               <span>+ Log Software Ticket</span>
             </button>
             <button type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 text-xs font-semibold text-rose-300 hover:bg-rose-500/25 transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 text-xs font-semibold text-rose-300 hover:bg-rose-500/25 transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
               onClick={exportSampleTickets} data-testid="superadmin-support-tickets-support-tickets-overview-export-logs-2">
               <FileText size={14} /> {t("COPY.EXPORT_LOGS")}
             </button>
             <button type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
               onClick={exportSampleTicketsExcel} title="Export Excel (.xls)">
               <FileSpreadsheet size={14} className="text-indigo-400" /> Excel
             </button>
             <button type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-sky-500/30 bg-sky-500/15 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 transition-all active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-sky-500/30 bg-sky-500/15 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
               onClick={printTicketsRoster} title="Print Tickets Roster">
               <Printer size={14} className="text-sky-400" /> Print
             </button>
@@ -326,82 +384,92 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
 
       {/* Table with filter */}
       <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 border-b border-indigo-500/20 bg-indigo-500/5 flex-wrap">
-          <div className="flex gap-1.5 flex-wrap">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-4 border-b border-indigo-500/20 bg-indigo-500/5">
+          {/* Status Filters - horizontal group */}
+          <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-slate-900/80 border border-indigo-500/20 shrink-0">
             {SUPERADMIN_SUPPORT_TICKETS_FILTERS.map((f) => (
-              <button type="button" key={f} aria-pressed={filter === f} onClick={() => setFilter(f)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${filter === f
-                  ? 'border border-indigo-500/40 bg-indigo-500/20 text-indigo-300'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                  }`}
-                data-testid={`superadmin-support-tickets-support-tickets-overview-set-filter-3-${String(f)}`}>
+              <button
+                type="button"
+                key={f}
+                aria-pressed={filter === f}
+                onClick={() => setFilter(f)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                  filter === f
+                    ? 'bg-indigo-600 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                }`}
+                data-testid={`superadmin-support-tickets-support-tickets-overview-set-filter-3-${String(f)}`}
+              >
                 {f === 'All' ? t('COPY.FILTER_ALL') : f === 'Open' ? t('COPY.STATUS_OPEN') : f === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : t('COPY.STATUS_RESOLVED')}
               </button>
             ))}
           </div>
 
-          {/* Search box */}
-          <div className="relative flex-1 min-w-[180px] w-full sm:w-auto">
-            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
-            <input
-              type="search"
-              placeholder="Search by ticket ID, subject, tenant..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-7 py-1.5 text-xs rounded-xl border border-indigo-500/25 bg-input text-white placeholder:text-secondary focus:border-indigo-400 focus:outline-none transition-all"
-            />
-            {searchQuery && (
+          {/* Search & dropdown filters in a clean horizontal row */}
+          <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap flex-1 lg:max-w-2xl">
+            {/* Search box */}
+            <div className="relative flex-1 min-w-[200px]">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <input
+                type="search"
+                placeholder="Search ticket ID, subject, tenant..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-7 py-1.5 text-xs rounded-xl border border-indigo-500/25 bg-slate-950 text-white placeholder:text-slate-400 focus:border-indigo-400 focus:outline-none transition-all"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors cursor-pointer p-0.5"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+
+            {/* Priority filter */}
+            <select
+              aria-label="Filter by priority"
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value)}
+              className="rounded-xl border border-indigo-500/25 bg-slate-950 px-3 py-1.5 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer shrink-0"
+            >
+              <option value="all">All Priorities</option>
+              <option value="High">High Priority</option>
+              <option value="Medium">Medium Priority</option>
+              <option value="Low">Low Priority</option>
+            </select>
+
+            {/* Category filter */}
+            <select
+              aria-label="Filter by category"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="rounded-xl border border-indigo-500/25 bg-slate-950 px-3 py-1.5 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer shrink-0"
+            >
+              <option value="all">All Categories</option>
+              <option value="Billing">Billing</option>
+              <option value="Bug">Bug</option>
+              <option value="Account">Account</option>
+              <option value="Support">Support</option>
+            </select>
+
+            {/* Reset button */}
+            {hasActiveFilters && (
               <button
                 type="button"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors cursor-pointer p-0.5"
+                onClick={resetAllFilters}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 transition-all cursor-pointer shrink-0 whitespace-nowrap"
+                title="Reset active filters"
               >
-                <X size={12} />
+                <RotateCcw size={12} />
+                <span>Reset</span>
               </button>
             )}
           </div>
 
-          {/* Priority filter */}
-          <select
-            aria-label="Filter by priority"
-            value={priorityFilter}
-            onChange={(e) => setPriorityFilter(e.target.value)}
-            className="rounded-xl border border-indigo-500/25 bg-card px-2.5 py-1.5 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer w-full sm:w-auto"
-          >
-            <option value="all">All Priorities</option>
-            <option value="High">High Priority</option>
-            <option value="Medium">Medium Priority</option>
-            <option value="Low">Low Priority</option>
-          </select>
-
-          {/* Category filter */}
-          <select
-            aria-label="Filter by category"
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="rounded-xl border border-indigo-500/25 bg-card px-2.5 py-1.5 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer w-full sm:w-auto"
-          >
-            <option value="all">All Categories</option>
-            <option value="Billing">Billing</option>
-            <option value="Bug">Bug</option>
-            <option value="Account">Account</option>
-            <option value="Support">Support</option>
-          </select>
-
-          {/* Reset button */}
-          {hasActiveFilters && (
-            <button
-              type="button"
-              onClick={resetAllFilters}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 transition-all cursor-pointer"
-              title="Reset active filters"
-            >
-              <RotateCcw size={12} />
-              <span>Reset</span>
-            </button>
-          )}
-
-          <span className="ml-auto text-xs font-medium text-slate-400">{filtered.length} {t("COPY.MATCHING_TICKETS")}</span>
+          <span className="text-xs font-medium text-slate-400 shrink-0 whitespace-nowrap">{filtered.length} {t("COPY.MATCHING_TICKETS")}</span>
         </div>
         <div className="sa-support-ticket-chart" role="region" aria-label={t("COPY.SAMPLE_SUPPORT_TICKETS_TABLE")}>
           <SuperadminSupportTicketsOverviewSemanticTable rowData={filtered} sourceRowCount={tickets.length} columnDefs={colDefs} pagination paginationPageSize={15} getRowId={({ data }) => data.id} hideFilter />

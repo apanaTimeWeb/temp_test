@@ -14,14 +14,15 @@ export type { SemanticCellParams, SemanticColumnDef } from '@/app/frontend_super
 
 function getColumnWidthClass(width?: number, minWidth?: number, field?: string): string {
   const key = (field ?? '').toLowerCase();
-  if (/action|actions|operation|operations/.test(key)) return 'w-20';
-  if (/status|role|priority|severity/.test(key)) return 'w-28';
-  if (/date|time|created|updated|joined|lastactive|lastlogin/.test(key)) return 'w-32';
+  if (/action|actions|operation|operations/.test(key)) return 'w-52 min-w-[200px] text-right';
+  if (/status|role/.test(key)) return 'w-32 text-center';
+  if (/priority|severity/.test(key)) return 'w-28 text-center';
+  if (/date|time|created|updated|joined|lastactive|lastlogin|age/.test(key)) return 'w-28 text-center';
   if (/amount|price|revenue|mrr|balance|total|payment|students|count/.test(key)) return 'w-32 text-right';
-  if (/^id$|_id$|id$|reference|ref$|txn/.test(key)) return 'w-24';
-  if (/name|subject|title|description|message/.test(key)) return 'min-w-40';
-  if (width !== undefined) return width <= 100 ? 'w-24' : width <= 140 ? 'w-28' : width <= 180 ? 'w-32' : 'w-48';
-  if (minWidth !== undefined) return minWidth <= 100 ? 'min-w-24' : minWidth <= 140 ? 'min-w-32' : minWidth <= 180 ? 'min-w-40' : 'min-w-48';
+  if (/^id$|_id$|id$|reference|ref$|txn/.test(key)) return 'w-28 text-left';
+  if (/name|subject|title|description|message/.test(key)) return 'min-w-[280px] text-left';
+  if (width !== undefined) return width <= 100 ? 'w-28' : width <= 140 ? 'w-32' : width <= 180 ? 'w-40' : 'w-48';
+  if (minWidth !== undefined) return minWidth <= 100 ? 'min-w-28' : minWidth <= 140 ? 'min-w-36' : minWidth <= 180 ? 'min-w-44' : 'min-w-56';
   return 'min-w-32';
 }
 
@@ -80,22 +81,28 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
       )}
 
       <table className="sa-semantic-table w-full border-collapse text-left text-sm">
-        <thead className="bg-slate-900/80 text-slate-300">
+        <thead className="bg-slate-900/90 text-slate-300">
           <tr>
             {columns.map((column, index) => {
               const field = column.field ?? `column-${index}`;
               const canSort = column.sortable !== false && Boolean(column.field);
               const isSorted = sort?.field === field;
+              const colKey = field.toLowerCase();
+              const isActions = /action|actions|operation|operations/.test(colKey);
+              const isCenter = /status|priority|severity|age|date|time/.test(colKey) || (typeof column.cellClass === 'string' && column.cellClass.includes('text-center'));
+              const isRight = isActions || (typeof column.cellClass === 'string' && column.cellClass.includes('text-right'));
+              const headerAlignClass = isRight ? 'justify-end text-right' : isCenter ? 'justify-center text-center' : 'justify-start text-left';
+
               return (
                 <th
                   key={field}
                   scope="col"
-                  className={`border-b border-border px-4 py-3 font-semibold text-xs uppercase tracking-wider text-slate-300 ${getColumnWidthClass(column.width, column.minWidth, field)}`}
+                  className={`border-b border-border px-4 py-3.5 font-semibold text-xs uppercase tracking-wider text-slate-300 ${isRight ? 'text-right' : isCenter ? 'text-center' : 'text-left'} ${getColumnWidthClass(column.width, column.minWidth, field)}`}
                 >
                   {canSort ? (
                     <button
                       type="button"
-                      className="inline-flex items-center gap-1.5 text-left font-semibold text-xs uppercase tracking-wider text-slate-300 hover:text-indigo-300 transition-colors cursor-pointer"
+                      className={`inline-flex items-center gap-1.5 font-semibold text-xs uppercase tracking-wider text-slate-300 hover:text-indigo-300 transition-colors cursor-pointer w-full ${headerAlignClass}`}
                       onClick={() => {
                         setSort((current) =>
                           current?.field === field ? { field, direction: current.direction === 'asc' ? 'desc' : 'asc' } : { field, direction: 'asc' }
@@ -114,7 +121,9 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
                       )}
                     </button>
                   ) : (
-                    column.headerName ?? field
+                    <div className={`w-full inline-flex items-center ${headerAlignClass}`}>
+                      <span>{column.headerName ?? field}</span>
+                    </div>
                   )}
                 </th>
               );
@@ -153,6 +162,12 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
               >
                 {columns.map((column, index) => {
                   const field = column.field ?? `column-${index}`;
+                  const colKey = field.toLowerCase();
+                  const isActions = /action|actions|operation|operations/.test(colKey);
+                  const isCenter = /status|priority|severity|age|date|time/.test(colKey) || (typeof column.cellClass === 'string' && column.cellClass.includes('text-center'));
+                  const isRight = isActions || (typeof column.cellClass === 'string' && column.cellClass.includes('text-right'));
+                  const alignTdClass = isRight ? 'text-right' : isCenter ? 'text-center' : 'text-left';
+
                   const raw = column.valueGetter
                     ? column.valueGetter({ data: row, value: undefined, colDef: { field } })
                     : (row as unknown as Record<string, unknown>)[field];
@@ -164,7 +179,7 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
                     : value;
                   const cellClass = typeof column.cellClass === 'function' ? column.cellClass() : column.cellClass;
                   return (
-                    <td key={field} data-label={column.headerName ?? field} className={`px-4 py-3 align-middle text-slate-200 ${cellClass ?? ''}`}>
+                    <td key={field} data-label={column.headerName ?? field} className={`px-4 py-3 align-middle text-slate-200 ${alignTdClass} ${cellClass ?? ''}`}>
                       {displayValue(content as ReactNode)}
                     </td>
                   );

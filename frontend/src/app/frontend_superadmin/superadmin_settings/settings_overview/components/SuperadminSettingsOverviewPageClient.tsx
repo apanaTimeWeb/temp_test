@@ -65,9 +65,10 @@ import {
   FileText,
   Trash2,
   Undo2,
-  Cpu,
-  BarChart3,
+  TrendingUp,
+  Building2,
   Flame,
+  Store,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSuperadminSettingsOverviewUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_settings/settings_overview/hooks/useSuperadminSettingsOverviewUnsavedChangesGuard';
@@ -184,7 +185,6 @@ export default function SuperadminSettingsOverviewPageClient() {
 
   const [whatsappModalOpen, setWhatsappModalOpen] = useState(false);
   const [whatsappVerifying, setWhatsappVerifying] = useState(false);
-  const [whatsappVerified, setWhatsappVerified] = useState(true);
 
   const [cacheModalOpen, setCacheModalOpen] = useState(false);
   const [cachePurging, setCachePurging] = useState(false);
@@ -251,7 +251,6 @@ export default function SuperadminSettingsOverviewPageClient() {
     setWhatsappVerifying(true);
     setTimeout(() => {
       setWhatsappVerifying(false);
-      setWhatsappVerified(true);
       toast.success('Meta Graph API Webhook connection is active (HTTP 200 OK)');
     }, 1000);
   };
@@ -382,81 +381,82 @@ export default function SuperadminSettingsOverviewPageClient() {
   }, [filteredAuditLogs, auditPage, auditPageSize]);
 
   return (
-    <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
-      <form onSubmit={handleSubmit(handleSave)} noValidate data-testid="superadmin-superadmin-settings-overview-page-client-form-line-50">
+    <div className="w-full max-w-full min-w-0 pb-16">
+      <form
+        onSubmit={handleSubmit(handleSave)}
+        noValidate
+        className="w-full max-w-full min-w-0 flex flex-col gap-8 sm:gap-10"
+        data-testid="superadmin-superadmin-settings-overview-page-client-form-line-50"
+      >
 
-        {/* ========================================================================= */}
-        {/* EXECUTIVE HEADER - COLORFUL, MODERN & FULLY RESPONSIVE                   */}
-        {/* ========================================================================= */}
-        <header className="rounded-3xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/90 via-[#0b0e24] to-[#040612] p-5 sm:p-7 shadow-2xl shadow-indigo-950/50 backdrop-blur-xl relative overflow-hidden">
-          {/* Ambient colorful decorative orb gradients */}
-          <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gradient-to-br from-indigo-600/20 to-purple-600/10 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-gradient-to-tr from-cyan-600/20 to-emerald-600/10 blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+        {/* ─── 1. HERO HEADER (Exact Superadmin Dashboard theme & spacing) ─── */}
+        <header className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg transition-all">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+            {/* Left: Titles & Meta Chips */}
             <div className="space-y-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/40 bg-indigo-500/15 px-3 py-1 text-xs font-semibold text-indigo-300 shadow-sm">
-                  <Sliders className="h-3.5 w-3.5 text-indigo-400" />
-                  Core Engine v2.4 Pro
+              <div className="flex items-center gap-2 flex-wrap text-xs">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Live Platform Engine
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full shadow-sm">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Workspace Active
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
+                  <ShieldCheck size={12} className="text-indigo-400" />
+                  Super Admin Scope
                 </span>
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-purple-300 bg-purple-500/10 border border-purple-500/30 px-2.5 py-1 rounded-full">
+                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-300 bg-purple-500/15 border border-purple-500/30 px-2.5 py-0.5 rounded-full">
                   <Flame size={12} className="text-purple-400" />
-                  High Performance
+                  v2.4 High Performance
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-indigo-600 to-indigo-500 text-white shadow-lg shadow-indigo-600/30">
-                  <Settings size={26} />
-                </div>
-                <span>{tCopy('COPY.SYSTEM_SETTINGS')}</span>
-              </h1>
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
+                  <Settings className="text-indigo-400 shrink-0" size={28} />
+                  <span>{tCopy('COPY.SYSTEM_SETTINGS')}</span>
+                </h1>
+              </div>
+
               <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                Platform Identity, Global Communication Gateways, Object Storage, Edge CDN Caching & Lockdown Controls.
+                Global platform configuration, regional parameters, third-party communication APIs, object storage & system lockdown.
               </p>
             </div>
 
-            {/* Quick Action Toolbar with Colorful, Interactive Buttons */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            {/* Right: Actions with Colorful Distinct Themes */}
+            <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
               <button
                 type="button"
                 onClick={() => setResetModalOpen(true)}
-                className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-300 hover:text-white hover:bg-slate-800 text-xs font-semibold shadow-md transition-all active:scale-95 cursor-pointer"
                 title="Reset to defaults"
+                className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-amber-500/40 bg-amber-500/15 text-xs font-semibold text-amber-300 hover:text-white hover:bg-amber-600/30 hover:border-amber-400 transition-all shadow-sm active:scale-95 cursor-pointer"
               >
-                <RotateCcw size={15} className="text-amber-400" />
+                <RotateCcw size={14} className="text-amber-400" />
                 <span>Reset Defaults</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setExportModalOpen(true)}
-                className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25 text-xs font-semibold shadow-md shadow-indigo-500/10 transition-all active:scale-95 cursor-pointer"
                 title="Open Export Center"
+                className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
               >
-                <Download size={15} className="text-indigo-400" />
+                <Download size={14} className="text-indigo-400" />
                 <span>Export Center</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="hidden sm:inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-300 hover:text-white hover:bg-slate-800 text-xs font-semibold shadow-md transition-all active:scale-95 cursor-pointer"
                 title="Print Platform Summary"
+                className="hidden sm:inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-sky-500/40 bg-sky-500/20 text-xs font-semibold text-sky-300 hover:text-white hover:bg-sky-600/30 hover:border-sky-400 transition-all shadow-sm active:scale-95 cursor-pointer"
               >
-                <Printer size={15} className="text-sky-400" />
+                <Printer size={14} className="text-sky-400" />
                 <span>Print</span>
               </button>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/30 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
+                className="inline-flex items-center gap-2 min-h-10 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs font-bold shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer"
                 data-testid="superadmin-settings-settings-overview-save-changes-1"
               >
                 <CheckCircle size={16} />
@@ -466,143 +466,232 @@ export default function SuperadminSettingsOverviewPageClient() {
           </div>
         </header>
 
-        {/* ========================================================================= */}
-        {/* COLORFUL 4-KPI HEALTH METRIC CARDS                                       */}
-        {/* ========================================================================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-6">
-          {/* Card 1: Platform Identity (Indigo/Blue Gradient) */}
-          <div className="rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/70 via-slate-900/80 to-blue-950/60 p-5 shadow-lg shadow-indigo-500/10 flex flex-col justify-between hover:border-indigo-400 transition-all">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-indigo-300">Platform Identity</span>
-              <div className="p-2.5 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 text-white shadow-md shadow-indigo-500/30">
-                <Globe size={18} />
+        {/* ─── 2. TOP KPI CARDS GRID (Exact Dashboard Design, Fully Responsive, No Touching) ─── */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-8" aria-label="Platform Health Indicators">
+          {/* Card 1: Platform Identity (Store / Indigo Theme from Dashboard) */}
+          <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg shadow-indigo-950/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:border-indigo-400/60 flex flex-col justify-between min-h-[190px]">
+            {/* Sparkline decoration */}
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,32 Q15,22 35,18 T75,14 T115,8 T150,4" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round" />
+            </svg>
+
+            <div className="flex items-start justify-between relative z-10 gap-3">
+              <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Platform Identity</p>
+              <div className="p-2.5 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-indigo-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                <Globe aria-hidden="true" size={20} />
               </div>
             </div>
-            <div className="mt-4">
-              <p className="text-xl font-extrabold text-white truncate">{watch('generalConfig.platformName') || 'Library OS'}</p>
-              <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-300">
-                <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-500/30">
-                  {watch('generalConfig.currency')}
+
+            <div className="relative z-10 mt-3 sm:mt-4">
+              <p className="sa-kpi-value text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white truncate">
+                {watch('generalConfig.platformName') || 'Library OS'}
+              </p>
+
+              <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 shadow-xs">
+                  <Building2 size={12} className="text-indigo-400" />
+                  <span>{watch('generalConfig.currency')}</span>
                 </span>
-                <span>•</span>
-                <span className="font-mono text-slate-400 truncate">{watch('generalConfig.timezone')}</span>
+                <span className="text-xs font-medium text-slate-400">{watch('generalConfig.timezone')}</span>
               </div>
-            </div>
-            <div className="mt-4 pt-3 border-t border-indigo-500/20 flex items-center justify-between text-xs">
-              <span className="text-slate-400">Tenant Self-Reg:</span>
-              <span className={`font-bold px-2 py-0.5 rounded-full text-[11px] ${selfRegistration ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-800 text-slate-400'}`}>
-                {selfRegistration ? 'Enabled' : 'Disabled'}
-              </span>
+
+              {/* Dashboard-style Progress Bar */}
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                  <span>Engine Health</span>
+                  <span>100% Core</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-400 w-full transition-all duration-700" />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Card 2: Gateway Integrations (Cyan/Teal Gradient) */}
-          <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-cyan-950/70 via-slate-900/80 to-teal-950/60 p-5 shadow-lg shadow-cyan-500/10 flex flex-col justify-between hover:border-cyan-400 transition-all">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-cyan-300">Gateway Integrations</span>
-              <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500 to-teal-500 text-white shadow-md shadow-cyan-500/30">
-                <Zap size={18} />
+          {/* Card 2: Gateway Integrations (Groups / Emerald Theme from Dashboard) */}
+          <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0f2d22] to-emerald-900/60 p-5 sm:p-6 shadow-lg shadow-emerald-950/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:border-emerald-400/60 flex flex-col justify-between min-h-[190px]">
+            {/* Sparkline decoration */}
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,30 Q20,20 40,24 T80,16 T120,10 T150,6" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
+            </svg>
+
+            <div className="flex items-start justify-between relative z-10 gap-3">
+              <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Gateway Integrations</p>
+              <div className="p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                <Zap aria-hidden="true" size={20} />
               </div>
             </div>
-            <div className="mt-4">
-              <p className="text-xl font-extrabold text-white truncate">{currentEmailProvider} & {currentSmsProvider}</p>
-              <div className="flex items-center gap-2 mt-1.5 text-xs text-emerald-400 font-semibold">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Operational (Latency 38ms)</span>
+
+            <div className="relative z-10 mt-3 sm:mt-4">
+              <p className="sa-kpi-value text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white truncate">
+                {currentEmailProvider} & {currentSmsProvider}
+              </p>
+
+              <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-xs">
+                  <TrendingUp size={12} className="text-emerald-400" />
+                  <span>38ms Latency</span>
+                </span>
+                <span className="text-xs font-medium text-slate-400">SMS: ₹14,250 (71k)</span>
               </div>
-            </div>
-            <div className="mt-4 pt-3 border-t border-cyan-500/20 flex items-center justify-between text-xs">
-              <span className="text-slate-400">SMS Balance:</span>
-              <span className="font-mono text-cyan-300 font-bold bg-cyan-500/15 px-2 py-0.5 rounded border border-cyan-500/30">₹14,250 (71k)</span>
+
+              {/* Dashboard-style Progress Bar */}
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                  <span>Gateway Uptime</span>
+                  <span>99.8%</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 w-[99.8%] transition-all duration-700" />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Card 3: Storage & CDN (Purple/Fuchsia Gradient) */}
-          <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-950/70 via-slate-900/80 to-fuchsia-950/60 p-5 shadow-lg shadow-purple-500/10 flex flex-col justify-between hover:border-purple-400 transition-all">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-purple-300">Storage & Media CDN</span>
-              <div className="p-2.5 rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-600 text-white shadow-md shadow-purple-500/30">
-                <HardDrive size={18} />
+          {/* Card 3: Storage & Media CDN (Currency / Amber Theme from Dashboard) */}
+          <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0f2540] to-sky-900/60 p-5 sm:p-6 shadow-lg shadow-sky-950/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:border-sky-400/60 flex flex-col justify-between min-h-[190px]">
+            {/* Sparkline decoration */}
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,34 Q18,24 38,20 T78,12 T118,8 T150,4" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
+            </svg>
+
+            <div className="flex items-start justify-between relative z-10 gap-3">
+              <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Storage & Media CDN</p>
+              <div className="p-2.5 rounded-xl border border-sky-500/40 bg-sky-500/20 text-sky-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                <HardDrive aria-hidden="true" size={20} />
               </div>
             </div>
-            <div className="mt-4">
-              <div className="flex items-baseline justify-between">
-                <p className="text-xl font-extrabold text-white">42.8 GB</p>
-                <span className="text-xs text-purple-300 font-mono font-bold">/ 100 GB (42.8%)</span>
+
+            <div className="relative z-10 mt-3 sm:mt-4">
+              <p className="sa-kpi-value text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
+                42.8 GB <span className="text-base text-sky-300 font-semibold">/ 100 GB</span>
+              </p>
+
+              <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30 shadow-xs">
+                  <span>42.8% Capacity</span>
+                </span>
+                <span className="text-xs font-medium text-slate-400">AWS S3 (Mumbai) • 99.2% Hit</span>
               </div>
-              <div className="w-full bg-slate-900/90 h-2 rounded-full mt-2.5 overflow-hidden p-0.5 border border-purple-500/20">
-                <div className="bg-gradient-to-r from-purple-500 via-fuchsia-500 to-indigo-500 h-full rounded-full transition-all" style={{ width: '42.8%' }} />
+
+              {/* Dashboard-style Progress Bar */}
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                  <span>Capacity Used</span>
+                  <span>42.8%</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-sky-500 to-sky-400 transition-all duration-700"
+                    style={{ width: '42.8%' }}
+                    role="progressbar"
+                    aria-valuenow={43}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="mt-4 pt-3 border-t border-purple-500/20 flex items-center justify-between text-xs">
-              <span className="text-slate-400">Cloudflare Edge:</span>
-              <span className="font-bold text-fuchsia-300 bg-purple-500/15 px-2 py-0.5 rounded border border-purple-500/30">99.2% Hit Rate</span>
             </div>
           </div>
 
-          {/* Card 4: Security & System State (Emerald or Amber/Rose Gradient) */}
-          <div className={`rounded-2xl border ${maintenanceEnabled ? 'border-amber-500/50 bg-gradient-to-br from-amber-950/80 via-slate-900/90 to-rose-950/80 shadow-amber-500/20' : 'border-emerald-500/30 bg-gradient-to-br from-emerald-950/70 via-slate-900/80 to-teal-950/60 shadow-emerald-500/10'} p-5 shadow-lg flex flex-col justify-between transition-all`}>
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-300">System State & Security</span>
-              <div className={`p-2.5 rounded-xl ${maintenanceEnabled ? 'bg-gradient-to-br from-amber-500 to-rose-600 shadow-amber-500/40 animate-bounce' : 'bg-gradient-to-br from-emerald-500 to-teal-600 shadow-emerald-500/30'} text-white shadow-md`}>
-                <ShieldAlert size={18} />
+          {/* Card 4: System State & Security (Pending Actions / Rose or Amber Theme from Dashboard) */}
+          <div className={`sa-kpi-card group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between min-h-[190px] ${
+            maintenanceEnabled
+              ? 'border-amber-500/60 bg-gradient-to-br from-amber-950/90 via-[#3a1e05] to-rose-950/80 shadow-amber-950/60 hover:border-amber-400/80 animate-pulse'
+              : 'border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#2d0f18] to-rose-900/60 shadow-rose-950/50 hover:border-rose-400/60'
+          }`}>
+            {/* Sparkline decoration */}
+            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+              <path d="M0,36 Q16,26 36,22 T76,14 T116,8 T150,4" fill="none" stroke={maintenanceEnabled ? '#fbbf24' : '#f87171'} strokeWidth="3" strokeLinecap="round" />
+            </svg>
+
+            <div className="flex items-start justify-between relative z-10 gap-3">
+              <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">System State & Security</p>
+              <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${
+                maintenanceEnabled ? 'bg-amber-500/25 border-amber-500/50 text-amber-300' : 'bg-rose-500/20 border-rose-500/40 text-rose-400'
+              }`}>
+                <ShieldAlert aria-hidden="true" size={20} className={maintenanceEnabled ? 'text-amber-400' : 'text-rose-400'} />
               </div>
             </div>
-            <div className="mt-4">
-              <p className={`text-xl font-extrabold ${maintenanceEnabled ? 'text-amber-300' : 'text-emerald-300'}`}>
+
+            <div className="relative z-10 mt-3 sm:mt-4">
+              <p className={`sa-kpi-value text-2xl sm:text-3xl font-extrabold tracking-tight ${maintenanceEnabled ? 'text-amber-300' : 'text-white'}`}>
                 {maintenanceEnabled ? tCopy('COPY.MAINTENANCE_OFFLINE') : tCopy('COPY.MAINTENANCE_ONLINE')}
               </p>
-              <div className="flex items-center gap-1.5 mt-1.5 text-xs text-slate-300">
-                <ShieldCheck size={14} className="text-emerald-400 shrink-0" />
-                <span>SuperAdmin 2FA Enforced</span>
+
+              <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
+                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border shadow-xs ${
+                  maintenanceEnabled
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                    : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                }`}>
+                  <ShieldCheck size={12} className={maintenanceEnabled ? 'text-amber-400' : 'text-emerald-400'} />
+                  <span>{maintenanceEnabled ? 'Lockdown Armed' : 'Normal Engine'}</span>
+                </span>
+                <span className="text-xs font-medium text-slate-400">2FA Enforced • 0 Breaches</span>
+              </div>
+
+              {/* Dashboard-style Progress Bar */}
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                  <span>Security Perimeter</span>
+                  <span>100% Guarded</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                  <div className={`h-full rounded-full transition-all duration-700 ${maintenanceEnabled ? 'bg-gradient-to-r from-amber-500 to-rose-500 w-full' : 'bg-gradient-to-r from-emerald-500 to-teal-400 w-full'}`} />
+                </div>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-border/40 flex items-center justify-between text-xs">
-              <span className="text-slate-400">Security Guard:</span>
-              <span className="font-bold text-emerald-400 bg-emerald-500/15 px-2 py-0.5 rounded border border-emerald-500/30">0 Critical Breaches</span>
+          </div>
+        </section>
+
+        {/* ─── 3. SUB-NAVIGATION TABS (Distinct Separation & Smooth Glow) ─── */}
+        <section className="border-b border-indigo-500/20 pb-4" role="navigation" aria-label={tCopy('COPY.SYSTEM_SETTINGS_SECTIONS')}>
+          <div className="flex items-center justify-between gap-3 overflow-x-auto pb-1">
+            <div className="flex items-center gap-2 sm:gap-3">
+              {SUPERADMIN_SETTINGS_TABS.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.name;
+                const tabColors: Record<string, string> = {
+                  'General': 'text-indigo-400',
+                  'Appearance': 'text-purple-400',
+                  'APIs & Integrations': 'text-cyan-400',
+                  'Storage': 'text-sky-400',
+                  'Maintenance Mode': 'text-amber-400',
+                };
+                const iconColor = tabColors[tab.name] ?? 'text-indigo-400';
+                return (
+                  <button
+                    type="button"
+                    key={tab.name}
+                    id={`settings-tab-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                    aria-controls={`settings-panel-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                    aria-current={isActive ? 'page' : undefined}
+                    onClick={() => setActiveTab(tab.name)}
+                    className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
+                      isActive
+                        ? 'border border-indigo-400/80 bg-gradient-to-r from-indigo-600/30 via-indigo-500/20 to-purple-600/30 text-white shadow-md shadow-indigo-500/20'
+                        : 'border border-slate-800 bg-slate-900/60 text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-700'
+                    }`}
+                    data-testid={`superadmin-settings-settings-overview-set-active-tab-2-${String(tab.name)}`}
+                  >
+                    <Icon size={16} className={isActive ? 'text-white' : iconColor} />
+                    <span>{tCopy(tab.labelKey)}</span>
+                  </button>
+                );
+              })}
             </div>
-          </div>
-        </div>
 
-        {/* ========================================================================= */}
-        {/* SUB-NAVIGATION TABS - RESPONSIVE, COLORFUL, WITH GLOWING ACTIVE PILL      */}
-        {/* ========================================================================= */}
-        <div className="flex items-center justify-between gap-3 mb-6 border-b border-indigo-500/25 pb-3 overflow-x-auto" role="navigation" aria-label={tCopy('COPY.SYSTEM_SETTINGS_SECTIONS')}>
-          <div className="flex items-center gap-2">
-            {SUPERADMIN_SETTINGS_TABS.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.name;
-              return (
-                <button
-                  type="button"
-                  key={tab.name}
-                  id={`settings-tab-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-                  aria-controls={`settings-panel-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-                  aria-current={isActive ? 'page' : undefined}
-                  onClick={() => setActiveTab(tab.name)}
-                  className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
-                    isActive
-                      ? 'border border-indigo-400 bg-gradient-to-r from-indigo-600/30 via-indigo-500/20 to-purple-600/30 text-white shadow-md shadow-indigo-500/20'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 border border-transparent'
-                  }`}
-                  data-testid={`superadmin-settings-settings-overview-set-active-tab-2-${String(tab.name)}`}
-                >
-                  <Icon size={16} className={isActive ? 'text-indigo-400' : 'text-slate-500'} />
-                  <span>{tCopy(tab.labelKey)}</span>
-                </button>
-              );
-            })}
+            <button
+              type="button"
+              onClick={() => navigateToWorkflow(activeTab)}
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-bold px-3.5 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/25 transition-all cursor-pointer shrink-0"
+            >
+              <span>Open Dedicated View</span>
+              <ExternalLink size={13} />
+            </button>
           </div>
-
-          <button
-            type="button"
-            onClick={() => navigateToWorkflow(activeTab)}
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-bold px-3 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 transition-all cursor-pointer shrink-0"
-          >
-            <span>Open Dedicated View</span>
-            <ExternalLink size={13} />
-          </button>
-        </div>
+        </section>
 
         {/* Hidden panels for accessibility compliance */}
         {SUPERADMIN_SETTINGS_TABS.filter((tab) => tab.name !== activeTab).map((tab) => {
@@ -610,39 +699,39 @@ export default function SuperadminSettingsOverviewPageClient() {
           return <div key={tab.name} id={`settings-panel-${tabId}`} aria-labelledby={`settings-tab-${tabId}`} hidden />;
         })}
 
-        {/* ========================================================================= */}
-        {/* ACTIVE CONTENT PANEL CONTAINER                                           */}
-        {/* ========================================================================= */}
-        <div
+        {/* ─── 4. ACTIVE CONTENT PANEL CONTAINER (Generous Padding & Spacing) ─── */}
+        <section
           id={`settings-panel-${activeTab.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-          className="rounded-3xl border border-indigo-500/25 bg-gradient-to-b from-[#0b0e26] via-[#080a1a] to-[#040610] p-6 sm:p-8 shadow-2xl mb-8 min-h-[460px] relative backdrop-blur-md"
+          className="rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102a] via-[#080b1e] to-[#040612] p-6 sm:p-8 shadow-2xl min-h-[480px] relative backdrop-blur-md"
           aria-labelledby={`settings-tab-${activeTab.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
           aria-label={tCopy('COPY.ACTIVE_TAB_SETTINGS_ARIA_LABEL', { tab: tCopy(SUPERADMIN_SETTINGS_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_GENERAL') })}
           tabIndex={0}
         >
           {/* TAB 1: General & Regional Panel */}
           {activeTab === 'General' && (
-            <div className="max-w-4xl space-y-6">
+            <div className="max-w-4xl space-y-6 sm:space-y-8">
               <div>
-                <div className="flex items-center gap-2.5 mb-1.5">
-                  <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                    <Globe size={18} />
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="p-2.5 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                    <Globe size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-white">{tCopy('COPY.GENERAL_REGIONAL')}</h2>
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-bold text-white">{tCopy('COPY.GENERAL_REGIONAL')}</h2>
+                    <p className="text-xs sm:text-sm text-slate-400">{tCopy('COPY.GLOBAL_CONFIGURATION_APPLIED_TO_ALL_NEWLY_REGISTERED_LIBRARIES_BY_DEFAULT')}</p>
+                  </div>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-400 mb-6">{tCopy('COPY.GLOBAL_CONFIGURATION_APPLIED_TO_ALL_NEWLY_REGISTERED_LIBRARIES_BY_DEFAULT')}</p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                   {/* Platform Name */}
                   <div className="flex flex-col gap-2 md:col-span-2">
                     <label htmlFor="settings-platform-name" className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
                       <span>{tCopy('COPY.PLATFORM_NAME')}</span>
-                      <span className="text-[11px] text-slate-500 font-normal">Header brand identity across all library branches</span>
+                      <span className="text-[11px] text-slate-400 font-normal">Header brand identity across all library branches</span>
                     </label>
                     <input
                       id="settings-platform-name"
                       type="text"
-                      className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/80 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium"
+                      className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium"
                       aria-invalid={Boolean(errors.generalConfig?.platformName)}
                       aria-describedby={errors.generalConfig?.platformName ? 'settings-platform-name-error' : undefined}
                       {...register('generalConfig.platformName')}
@@ -659,12 +748,12 @@ export default function SuperadminSettingsOverviewPageClient() {
                   <div className="flex flex-col gap-2 md:col-span-2">
                     <label htmlFor="settings-support-email" className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
                       <span>{tCopy('COPY.GLOBAL_SUPPORT_EMAIL')}</span>
-                      <span className="text-[11px] text-slate-500 font-normal">Receives system alerts, license invoices & escalated tickets</span>
+                      <span className="text-[11px] text-slate-400 font-normal">Receives system alerts, license invoices & escalated tickets</span>
                     </label>
                     <input
                       id="settings-support-email"
                       type="email"
-                      className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/80 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium"
+                      className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium"
                       aria-invalid={Boolean(errors.generalConfig?.supportEmail)}
                       aria-describedby={errors.generalConfig?.supportEmail ? 'settings-support-email-error' : undefined}
                       {...register('generalConfig.supportEmail')}
@@ -740,7 +829,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                       max={10000}
                       value={memberCapacity}
                       onChange={(e) => setMemberCapacity(Number(e.target.value))}
-                      className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/80 px-4 py-3 text-sm text-white focus:border-indigo-400 focus:outline-none font-mono"
+                      className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-4 py-3 text-sm text-white focus:border-indigo-400 focus:outline-none font-mono"
                     />
                   </div>
 
@@ -757,17 +846,17 @@ export default function SuperadminSettingsOverviewPageClient() {
                         type="text"
                         value={hotlinePhone}
                         onChange={(e) => setHotlinePhone(e.target.value)}
-                        className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/80 px-4 py-3 text-sm text-white focus:border-indigo-400 focus:outline-none font-mono"
+                        className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-4 py-3 text-sm text-white focus:border-indigo-400 focus:outline-none font-mono"
                       />
                     </div>
                   </div>
 
                   {/* Tenant Self-Registration Switch */}
-                  <div className="md:col-span-2 flex items-center justify-between p-4.5 rounded-2xl border border-indigo-500/25 bg-slate-900/60 shadow-sm">
+                  <div className="md:col-span-2 flex items-center justify-between p-5 rounded-2xl border border-indigo-500/30 bg-slate-900/70 shadow-sm mt-2">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold text-white">Library Tenant Self-Registration</span>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                           Automated Onboarding
                         </span>
                       </div>
@@ -793,20 +882,22 @@ export default function SuperadminSettingsOverviewPageClient() {
 
           {/* TAB 2: Appearance & Theming Panel */}
           {activeTab === 'Appearance' && (
-            <div className="max-w-4xl space-y-6">
+            <div className="max-w-4xl space-y-6 sm:space-y-8">
               <div>
-                <div className="flex items-center gap-2.5 mb-1.5">
-                  <div className="p-2 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                    <Palette size={18} />
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                    <Palette size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-white">Theme & Visual Experience</h2>
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-bold text-white">Theme & Visual Experience</h2>
+                    <p className="text-xs sm:text-sm text-slate-400">Choose default appearance themes, brand neon accent palettes, and accessibility density settings.</p>
+                  </div>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-400 mb-6">Choose default appearance themes, brand neon accent palettes, and accessibility density settings.</p>
 
                 {/* Theme Selection Cards */}
-                <div className="space-y-3 mb-6">
+                <div className="space-y-3 mt-6 mb-8">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Base Theme Selection</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                     <div
                       onClick={() => {
                         setSelectedTheme('cyber');
@@ -814,7 +905,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                       }}
                       className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                         selectedTheme === 'cyber'
-                          ? 'border-indigo-500 bg-gradient-to-b from-indigo-950/60 to-slate-900/90 shadow-xl shadow-indigo-500/20 ring-2 ring-indigo-500/40'
+                          ? 'border-indigo-500 bg-gradient-to-b from-indigo-950/70 to-slate-900/90 shadow-xl shadow-indigo-500/20 ring-2 ring-indigo-500/40'
                           : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
                       }`}
                     >
@@ -837,7 +928,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                       }}
                       className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                         selectedTheme === 'midnight'
-                          ? 'border-indigo-500 bg-gradient-to-b from-indigo-950/60 to-slate-900/90 shadow-xl shadow-indigo-500/20 ring-2 ring-indigo-500/40'
+                          ? 'border-indigo-500 bg-gradient-to-b from-indigo-950/70 to-slate-900/90 shadow-xl shadow-indigo-500/20 ring-2 ring-indigo-500/40'
                           : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
                       }`}
                     >
@@ -858,7 +949,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                       }}
                       className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
                         selectedTheme === 'aurora'
-                          ? 'border-indigo-500 bg-gradient-to-b from-indigo-950/60 to-slate-900/90 shadow-xl shadow-indigo-500/20 ring-2 ring-indigo-500/40'
+                          ? 'border-indigo-500 bg-gradient-to-b from-indigo-950/70 to-slate-900/90 shadow-xl shadow-indigo-500/20 ring-2 ring-indigo-500/40'
                           : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
                       }`}
                     >
@@ -875,7 +966,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                 </div>
 
                 {/* Brand Accent Palette Swatches */}
-                <div className="space-y-3 mb-6">
+                <div className="space-y-3 mb-8">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Brand Accent Color</span>
                     <span className="text-xs text-indigo-300 font-bold">Selected: {selectedAccent}</span>
@@ -908,7 +999,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                 </div>
 
                 {/* Typography & Density Options */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4 border-t border-indigo-500/10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-indigo-500/20">
                   <div className="flex flex-col gap-2">
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
                       System Font Family
@@ -926,7 +1017,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                   </div>
 
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3.5 rounded-xl border border-indigo-500/20 bg-slate-900/50">
+                    <div className="flex items-center justify-between p-4 rounded-xl border border-indigo-500/20 bg-slate-900/50">
                       <span className="text-xs font-bold text-slate-200">High Contrast Mode</span>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
@@ -939,7 +1030,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                       </label>
                     </div>
 
-                    <div className="flex items-center justify-between p-3.5 rounded-xl border border-indigo-500/20 bg-slate-900/50">
+                    <div className="flex items-center justify-between p-4 rounded-xl border border-indigo-500/20 bg-slate-900/50">
                       <span className="text-xs font-bold text-slate-200">Compact Table Density</span>
                       <label className="relative inline-flex items-center cursor-pointer">
                         <input
@@ -959,22 +1050,24 @@ export default function SuperadminSettingsOverviewPageClient() {
 
           {/* TAB 3: APIs & Integrations Panel */}
           {isCurrentTab('APIs & Integrations') && (
-            <div className="max-w-4xl space-y-6">
+            <div className="max-w-4xl space-y-6 sm:space-y-8">
               <div>
-                <div className="flex items-center gap-2.5 mb-1.5">
-                  <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
-                    <Zap size={18} />
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+                    <Zap size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-white">{tCopy('COPY.COMMUNICATION_APIS')}</h2>
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-bold text-white">{tCopy('COPY.COMMUNICATION_APIS')}</h2>
+                    <p className="text-xs sm:text-sm text-slate-400">{tCopy('COPY.CONFIGURE_THE_GATEWAYS_USED_FOR_SENDING_TRANSACTIONAL_EMAILS_SMS_AND_WHATSAPP_MESSAGES')}</p>
+                  </div>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-400 mb-6">{tCopy('COPY.CONFIGURE_THE_GATEWAYS_USED_FOR_SENDING_TRANSACTIONAL_EMAILS_SMS_AND_WHATSAPP_MESSAGES')}</p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                   {/* Email Provider Card with Modal Trigger */}
-                  <div className="p-5 rounded-2xl border border-indigo-500/30 bg-slate-900/60 shadow-md space-y-3">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md space-y-4">
                     <div className="flex items-center justify-between">
                       <label htmlFor="settings-email-provider" className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                        <Mail size={15} className="text-indigo-400" />
+                        <Mail size={16} className="text-indigo-400" />
                         <span>{tCopy('COPY.EMAIL_PROVIDER')}</span>
                       </label>
                       <button
@@ -1004,10 +1097,10 @@ export default function SuperadminSettingsOverviewPageClient() {
                   </div>
 
                   {/* SMS Gateway Card with Modal Trigger */}
-                  <div className="p-5 rounded-2xl border border-cyan-500/30 bg-slate-900/60 shadow-md space-y-3">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-cyan-500/40 bg-slate-900/70 shadow-md space-y-4">
                     <div className="flex items-center justify-between">
                       <label htmlFor="settings-sms-provider" className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                        <MessageSquare size={15} className="text-cyan-400" />
+                        <MessageSquare size={16} className="text-cyan-400" />
                         <span>{tCopy('COPY.SMS_GATEWAY')}</span>
                       </label>
                       <button
@@ -1037,10 +1130,10 @@ export default function SuperadminSettingsOverviewPageClient() {
                   </div>
 
                   {/* WhatsApp Business API Card with Interactive Webhook Inspector */}
-                  <div className="p-5 rounded-2xl border border-emerald-500/30 bg-slate-900/60 shadow-md md:col-span-2 space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-emerald-500/40 bg-slate-900/70 shadow-md md:col-span-2 space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                        <PhoneCall size={15} className="text-emerald-400" />
+                        <PhoneCall size={16} className="text-emerald-400" />
                         <span>{tCopy('COPY.WHATSAPP_BUSINESS_API')} (Cloud Graph v21.0)</span>
                       </span>
                       <div className="flex items-center gap-2">
@@ -1109,17 +1202,17 @@ export default function SuperadminSettingsOverviewPageClient() {
                           {showApiSecret ? <EyeOff size={15} /> : <Eye size={15} />}
                         </button>
                       </div>
-                      <p className="text-[11px] text-slate-500">
+                      <p className="text-[11px] text-slate-400">
                         {tCopy('COPY.CREDENTIAL_ENTRY_IS_DISABLED_IN_THIS_SOURCE_ONLY_PREVIEW_DO_NOT_ENTER_SECRETS_UNTIL_A_SECURE_APPROVED_SERVER_SIDE_INTEGRATION_IS_CONNECTED')}
                       </p>
                     </div>
                   </div>
 
                   {/* Payment Gateway Configuration */}
-                  <div className="p-5 rounded-2xl border border-indigo-500/30 bg-slate-900/60 shadow-md md:col-span-2 space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md md:col-span-2 space-y-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                        <Key size={15} className="text-indigo-400" />
+                        <Key size={16} className="text-indigo-400" />
                         <span>Platform Payment Collection Gateway</span>
                       </span>
                       <div className="flex items-center gap-2.5">
@@ -1139,7 +1232,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div
                         onClick={() => setSelectedPaymentGateway('razorpay')}
                         className={`p-4 rounded-xl border cursor-pointer transition-all ${
@@ -1193,19 +1286,21 @@ export default function SuperadminSettingsOverviewPageClient() {
 
           {/* TAB 4: Storage & Cloud Backups Panel */}
           {activeTab === 'Storage' && (
-            <div className="max-w-4xl space-y-6">
+            <div className="max-w-4xl space-y-6 sm:space-y-8">
               <div>
-                <div className="flex items-center gap-2.5 mb-1.5">
-                  <div className="p-2 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                    <Database size={18} />
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                    <Database size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-white">Object Storage & Media Configuration</h2>
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-bold text-white">Object Storage & Media Configuration</h2>
+                    <p className="text-xs sm:text-sm text-slate-400">Manage cloud file storage buckets for digital books, student KYC documents, and automated database snapshots.</p>
+                  </div>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-400 mb-6">Manage cloud file storage buckets for digital books, student KYC documents, and automated database snapshots.</p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                   {/* Primary S3 Bucket Card */}
-                  <div className="p-5 rounded-2xl border border-indigo-500/30 bg-slate-900/60 shadow-md space-y-2">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md space-y-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Primary Cloud Bucket</span>
                     <p className="text-base font-bold text-white font-mono">libraryos-production-media</p>
                     <div className="flex items-center justify-between text-xs text-indigo-400 font-mono pt-1">
@@ -1215,7 +1310,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                   </div>
 
                   {/* Max File Size Limit Card */}
-                  <div className="p-5 rounded-2xl border border-indigo-500/30 bg-slate-900/60 shadow-md space-y-3">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Max File Size Limit</span>
                       <span className="text-sm font-bold text-indigo-300 font-mono">{maxUploadLimitMb} MB</span>
@@ -1233,7 +1328,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                   </div>
 
                   {/* Cloudflare Edge Caching Card with Modal */}
-                  <div className="p-5 rounded-2xl border border-indigo-500/30 bg-slate-900/60 shadow-md md:col-span-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md md:col-span-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2.5">
                         <span className="text-sm font-bold text-white">Cloudflare Edge CDN Caching</span>
@@ -1254,7 +1349,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                   </div>
 
                   {/* Automated Backups Card with Modal */}
-                  <div className="p-5 rounded-2xl border border-purple-500/30 bg-slate-900/60 shadow-md md:col-span-2 space-y-4">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-purple-500/40 bg-slate-900/70 shadow-md md:col-span-2 space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="space-y-1">
                         <span className="text-sm font-bold text-white">Automated Daily Database Snapshots</span>
@@ -1306,17 +1401,19 @@ export default function SuperadminSettingsOverviewPageClient() {
 
           {/* TAB 5: Maintenance Mode Panel */}
           {isCurrentTab('Maintenance Mode') && (
-            <div className="max-w-4xl space-y-6">
+            <div className="max-w-4xl space-y-6 sm:space-y-8">
               <div>
-                <div className="flex items-center gap-2.5 mb-1.5">
-                  <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                    <ShieldAlert size={18} />
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                    <ShieldAlert size={20} />
                   </div>
-                  <h2 className="text-lg font-bold text-white">{tCopy('COPY.SYSTEM_MAINTENANCE_MODE')}</h2>
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-bold text-white">{tCopy('COPY.SYSTEM_MAINTENANCE_MODE')}</h2>
+                    <p className="text-xs sm:text-sm text-slate-400">{tCopy('COPY.ENABLING_THIS_WILL_BLOCK_ALL_LIBRARY_ADMINS_AND_STUDENTS_FROM_LOGGING_IN_ONLY_SUPERADMINS_WILL_HAVE_ACCESS_TO_THE_PLATFORM')}</p>
+                  </div>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-400 mb-6">{tCopy('COPY.ENABLING_THIS_WILL_BLOCK_ALL_LIBRARY_ADMINS_AND_STUDENTS_FROM_LOGGING_IN_ONLY_SUPERADMINS_WILL_HAVE_ACCESS_TO_THE_PLATFORM')}</p>
 
-                <div className="space-y-5">
+                <div className="space-y-6 mt-6">
                   {/* Warning Banner / Lockdown Switch */}
                   <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl border transition-all ${
                     maintenanceEnabled
@@ -1348,7 +1445,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                   <div className="flex flex-col gap-2">
                     <label htmlFor="settings-maintenance-message" className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
                       <span>{tCopy('COPY.MESSAGE_SHOWN_TO_USERS')}</span>
-                      <span className="text-[11px] text-slate-500">Max 500 characters</span>
+                      <span className="text-[11px] text-slate-400">Max 500 characters</span>
                     </label>
                     <textarea
                       id="settings-maintenance-message"
@@ -1365,7 +1462,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                   </div>
 
                   {/* Downtime duration and IP Whitelist */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
                         Estimated Downtime Duration
@@ -1399,15 +1496,15 @@ export default function SuperadminSettingsOverviewPageClient() {
                         placeholder="e.g. 103.24.120.0/24, 182.74.88.10/32"
                         className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-4 py-2.5 text-xs text-slate-200 font-mono focus:border-indigo-400 focus:outline-none"
                       />
-                      <span className="text-[11px] text-slate-500">SuperAdmins connecting from these IPs bypass the maintenance gate.</span>
+                      <span className="text-[11px] text-slate-400">SuperAdmins connecting from these IPs bypass the maintenance gate.</span>
                     </div>
                   </div>
 
                   {/* Emergency Lockdown Action Modal Trigger */}
-                  <div className="p-5 rounded-2xl border border-rose-500/30 bg-slate-900/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="p-5 sm:p-6 rounded-2xl border border-rose-500/40 bg-slate-900/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-2">
                     <div className="space-y-1">
                       <span className="text-sm font-bold text-white flex items-center gap-2">
-                        <AlertTriangle size={15} className="text-rose-400" />
+                        <AlertTriangle size={16} className="text-rose-400" />
                         <span>Force Revoke Active User Sessions</span>
                       </span>
                       <p className="text-xs text-slate-400">Purge Redis session caches and forcefully terminate 1,420 active student & admin tokens.</p>
@@ -1425,13 +1522,11 @@ export default function SuperadminSettingsOverviewPageClient() {
               </div>
             </div>
           )}
-        </div>
+        </section>
 
-        {/* ========================================================================= */}
-        {/* AUDIT LOG TABLE - SEARCH, FILTER, COMPLETE PAGINATION & ROW ACTIONS       */}
-        {/* ========================================================================= */}
-        <div className="rounded-3xl border border-slate-800 bg-card/95 shadow-xl overflow-hidden backdrop-blur-md">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 border-b border-slate-800 bg-slate-900/70">
+        {/* ─── 5. AUDIT LOG TABLE (Clear Separation & Spacing) ─── */}
+        <section className="rounded-2xl border border-slate-800 bg-card/95 shadow-xl overflow-hidden backdrop-blur-md" aria-label="Configuration Change History">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-5 sm:p-6 border-b border-slate-800 bg-slate-900/70">
             <div>
               <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2.5">
                 <Clock size={18} className="text-indigo-400" />
@@ -1611,7 +1706,7 @@ export default function SuperadminSettingsOverviewPageClient() {
               </button>
             </div>
           </div>
-        </div>
+        </section>
 
       </form>
 
@@ -2153,7 +2248,7 @@ export default function SuperadminSettingsOverviewPageClient() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-5">
               <div
                 onClick={handleExportJson}
                 className="p-4 rounded-2xl border border-indigo-500/30 bg-slate-900/60 hover:bg-indigo-500/10 cursor-pointer transition-all flex flex-col justify-between"

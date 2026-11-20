@@ -39,8 +39,8 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
     { key: 'profile_overview', label: t('COPY.NAV_PROFILE_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.profile_overview },
   ] as const;
   return (
-    <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
-      <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-6 border-b border-border/80" data-testid="superadmin_settings-secondary-navigation">
+    <div className="w-full max-w-full min-w-0 px-3 sm:px-6 lg:px-8 py-4">
+      <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-8 border-b border-border/80" data-testid="superadmin_settings-secondary-navigation">
         <ul className="flex min-w-0 flex-wrap gap-2" role="list">
           {routes.map((route) => {
             const active =
