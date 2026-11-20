@@ -6,14 +6,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { Bell, BellRing, MessageCircle, ScrollText, LayoutTemplate } from 'lucide-react';
+import { Bell, BellRing, MessageSquare, ScrollText, LayoutTemplate } from 'lucide-react';
 
-const TAB_ICONS = {
-  communication_notices: Bell,
-  communication_notification_center: BellRing,
-  communication_whatsapp_integration: MessageCircle,
-  communication_whatsapp_logs: ScrollText,
-  communication_whatsapp_templates: LayoutTemplate,
+const TAB_CONFIG = {
+  communication_notices: { icon: Bell, activeColor: 'text-sky-400', border: 'border-sky-400', bg: 'bg-sky-500/10' },
+  communication_notification_center: { icon: BellRing, activeColor: 'text-violet-400', border: 'border-violet-400', bg: 'bg-violet-500/10' },
+  communication_whatsapp_integration: { icon: MessageSquare, activeColor: 'text-emerald-400', border: 'border-emerald-400', bg: 'bg-emerald-500/10' },
+  communication_whatsapp_logs: { icon: ScrollText, activeColor: 'text-teal-400', border: 'border-teal-400', bg: 'bg-teal-500/10' },
+  communication_whatsapp_templates: { icon: LayoutTemplate, activeColor: 'text-amber-400', border: 'border-amber-400', bg: 'bg-amber-500/10' },
 } as const;
 
 export default function DomainLayout({ children }: { children: ReactNode }) {
@@ -26,26 +26,28 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
     { key: 'communication_whatsapp_logs', label: t('COPY.NAV_COMMUNICATION_WHATSAPP_LOGS'), href: SUPERADMIN_NAVIGATION_ROUTES.communication_whatsapp_logs },
     { key: 'communication_whatsapp_templates', label: t('COPY.NAV_COMMUNICATION_WHATSAPP_TEMPLATES'), href: SUPERADMIN_NAVIGATION_ROUTES.communication_whatsapp_templates },
   ] as const;
+
   return (
     <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
       <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-6 border-b border-border/80" data-testid="superadmin_communication-secondary-navigation">
         <ul className="flex min-w-0 flex-wrap gap-2" role="list">
           {routes.map((route) => {
             const active = pathname === route.href || pathname.startsWith(route.href + '/');
-            const Icon = TAB_ICONS[route.key as keyof typeof TAB_ICONS] ?? Bell;
+            const cfg = TAB_CONFIG[route.key as keyof typeof TAB_CONFIG] ?? TAB_CONFIG.communication_notices;
+            const Icon = cfg.icon;
             return (
               <li key={route.key} className="min-w-0">
                 <Link
                   href={route.href}
                   aria-current={active ? 'page' : undefined}
-                  className={`inline-flex min-h-10 items-center gap-2 rounded-t-xl border-b-2 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 cursor-pointer ${
+                  className={`inline-flex min-h-10 items-center gap-2 rounded-t-xl border-b-2 px-3.5 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 cursor-pointer ${
                     active
-                      ? 'border-indigo-400 bg-indigo-500/10 text-indigo-300 shadow-xs'
-                      : 'border-transparent text-slate-400 hover:bg-surface-hover hover:text-slate-200'
+                      ? `${cfg.border} ${cfg.bg} ${cfg.activeColor} shadow-xs font-bold`
+                      : 'border-transparent text-muted-foreground hover:bg-muted/40 hover:text-foreground'
                   }`}
                   data-testid={`superadmin_communication-secondary-link-${route.key}`}
                 >
-                  <Icon size={15} className={active ? 'text-indigo-400' : 'text-slate-400'} />
+                  <Icon size={16} className={active ? cfg.activeColor : 'text-muted-foreground'} />
                   <span>{route.label}</span>
                 </Link>
               </li>

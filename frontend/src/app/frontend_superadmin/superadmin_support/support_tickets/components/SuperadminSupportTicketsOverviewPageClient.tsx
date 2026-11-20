@@ -7,7 +7,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   MessageSquare, AlertTriangle, Paperclip, Tag, FileText,
   Search, X, RotateCcw, FileSpreadsheet, Printer, Mail, PhoneCall, Download,
-  Ticket, User, Clock
+  Ticket, User, Clock, Eye
 } from 'lucide-react';
 import { SUPERADMIN_SUPPORT_TICKETS_FIXTURES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/mocks/fixtures/SuperadminSupportTicketsOverviewMockFixtures';
 import type { SuperadminSupportTicket, SuperadminSupportTicketsFilter } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
@@ -261,17 +261,17 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
 
         return (
           <div className="flex items-center justify-end gap-1.5 flex-nowrap whitespace-nowrap">
-            {/* Details Button */}
+            {/* View / Open Ticket Button */}
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/25 hover:text-white text-xs font-semibold transition-all cursor-pointer shadow-xs shrink-0 whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/25 hover:text-white text-xs font-semibold transition-all cursor-pointer shadow-xs shrink-0 whitespace-nowrap"
               onClick={e => { e.stopPropagation(); setSelected(tkt); }}
               aria-label={t("COPY.OPEN_TICKET_ARIA_LABEL", { id: tkt.id ?? t('COPY.UNKNOWN') })}
               title={t("COPY.OPEN_TICKET")}
               data-testid={`superadmin-support-tickets-support-tickets-overview-open-ticket-aria-label-1-${testIdSuffix}`}
             >
-              <MessageSquare size={13} className="text-indigo-400" />
-              <span>Details</span>
+              <Eye size={13} className="text-indigo-400" />
+              <span>View</span>
             </button>
 
             {/* Quick WhatsApp */}
