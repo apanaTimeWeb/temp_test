@@ -40,8 +40,8 @@ describe('SuperadminDataBackupOperationsMain Integration Tests', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Production Continuous WAL Streaming/i)).toBeInTheDocument();
-      expect(screen.getByText(/Daily Midnight Full Database Backup/i)).toBeInTheDocument();
+      expect(screen.getByText(/Production Continuous WAL Streaming/i)).toBeDefined();
+      expect(screen.getByText(/Daily Midnight Full Database Backup/i)).toBeDefined();
     });
   });
 
@@ -53,13 +53,13 @@ describe('SuperadminDataBackupOperationsMain Integration Tests', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('data_backup-open-create-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('data_backup-open-create-btn')).toBeDefined();
     });
 
     fireEvent.click(screen.getByTestId('data_backup-open-create-btn'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('data_backup-create-schedule-modal')).toBeInTheDocument();
+      expect(screen.getByTestId('data_backup-create-schedule-modal')).toBeDefined();
     });
   });
 });

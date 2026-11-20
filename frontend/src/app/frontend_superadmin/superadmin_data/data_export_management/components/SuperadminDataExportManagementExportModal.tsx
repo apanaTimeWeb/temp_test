@@ -9,7 +9,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { X, Download, ShieldLock } from 'lucide-react';
+import { X, Download, ShieldCheck } from 'lucide-react';
 import type {
   TenantOption,
   BranchOption,

@@ -1,0 +1,115 @@
+// components/SuperadminIntegrationsOverviewGatewayGrid.tsx
+// RESPONSIBILITY: Render categorized filter pills, search input, and responsive grid of gateway cards.
+// DATA FLOW: Gateways array -> SuperadminIntegrationsOverviewGatewayGrid -> GatewayCards.
+'use client';
+
+import { RotateCcw, Search, X } from 'lucide-react';
+import React from 'react';
+import { INTEGRATION_CATEGORIES } from '../constants/superadmin_integrations_overview.constants';
+import type { IntegrationGatewayItem } from '../types/superadmin_integrations_overview.types';
+import { SuperadminIntegrationsOverviewEmptyState } from './SuperadminIntegrationsOverviewEmptyState';
+import { SuperadminIntegrationsOverviewGatewayCard } from './SuperadminIntegrationsOverviewGatewayCard';
+
+interface SuperadminIntegrationsOverviewGatewayGridProps {
+  gateways: IntegrationGatewayItem[];
+  selectedCategory: string;
+  searchQuery: string;
+  onSelectCategory: (cat: string) => void;
+  onSearchChange: (q: string) => void;
+  onResetFilters: () => void;
+  onConfigure: (gw: IntegrationGatewayItem) => void;
+  onToggle: (id: string, currentEnabled: boolean) => void;
+  onTestPing: (id: string) => void;
+  togglingGatewayId?: string | null;
+  pingingGatewayId?: string | null;
+}
+
+export const SuperadminIntegrationsOverviewGatewayGrid: React.FC<
+  SuperadminIntegrationsOverviewGatewayGridProps
+> = ({
+  gateways,
+  selectedCategory,
+  searchQuery,
+  onSelectCategory,
+  onSearchChange,
+  onResetFilters,
+  onConfigure,
+  onToggle,
+  onTestPing,
+  togglingGatewayId,
+  pingingGatewayId,
+}) => {
+  return (
+    <div className="space-y-5" data-testid="superadmin-integrations-gateway-grid">
+      {/* Category Pills & Search Bar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3.5">
+        {/* Category Filter Pills */}
+        <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" role="tablist">
+          {INTEGRATION_CATEGORIES.map((cat) => {
+            const isSelected = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                onClick={() => onSelectCategory(cat.id)}
+                className={`px-3 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer select-none ${
+                  isSelected
+                    ? 'bg-purple-600 text-white shadow-xs font-bold'
+                    : 'bg-card border border-border/70 text-muted-foreground hover:bg-muted/40 hover:text-foreground'
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Live Search Input */}
+        <div className="relative w-full md:w-72 shrink-0">
+          <Search
+            size={15}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+          />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Search providers, gateways..."
+            className="w-full rounded-xl border border-border bg-card pl-9 pr-8 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => onSearchChange('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-0.5"
+              title="Clear search"
+            >
+              <X size={13} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Grid or Empty State */}
+      {gateways.length === 0 ? (
+        <SuperadminIntegrationsOverviewEmptyState onResetFilters={onResetFilters} />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {gateways.map((gw) => (
+            <SuperadminIntegrationsOverviewGatewayCard
+              key={gw.id}
+              gateway={gw}
+              onConfigure={onConfigure}
+              onToggle={onToggle}
+              onTestPing={onTestPing}
+              isToggling={togglingGatewayId === gw.id}
+              isPinging={pingingGatewayId === gw.id}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};

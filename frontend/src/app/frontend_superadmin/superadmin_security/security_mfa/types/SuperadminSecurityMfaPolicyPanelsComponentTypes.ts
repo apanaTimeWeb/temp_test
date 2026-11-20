@@ -4,15 +4,31 @@
 import type { FieldErrors, UseFormRegister } from 'react-hook-form';
 import type { SuperadminSecurityLoginRules, SuperadminSecurityPasswordPolicy } from '@/app/frontend_superadmin/superadmin_security/security_mfa/types/SuperadminSecurityMfaTypes';
 
+export interface MfaEnrollmentAccount {
+  id: string;
+  name: string;
+  email: string;
+  role: 'SuperAdmin' | 'Admin' | 'BranchManager';
+  mfaEnabled: boolean;
+  method: string;
+  enrolledAt: string;
+  lastVerified: string;
+  status: 'Enforced' | 'Active' | 'Pending_Grace' | 'Exempt';
+}
+
+export interface MfaPolicyState {
+  enabled: boolean;
+  method: string;
+  enforceSuperadminsOnly?: boolean;
+  requireForAdmins?: boolean;
+  stepUpAuth?: boolean;
+  gracePeriodDays?: number;
+  recoveryCodesGenerated?: boolean;
+  recoveryCodes?: string[];
+}
+
 /**
- * Defines the public SuperadminSecurityPolicyPanelsProps contract for security mfa. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
- * @property activeTab Value defined by the existing feature-local contract. Declared type: string.
- * @property loginRegister Value defined by the existing feature-local contract. Declared type: UseFormRegister<SuperadminSecurityLoginRules>.
- * @property loginErrors User-safe error or explanatory message; raw exception details are not implied. Declared type: FieldErrors<SuperadminSecurityLoginRules>.
- * @property passwordRegister Value defined by the existing feature-local contract. Declared type: UseFormRegister<SuperadminSecurityPasswordPolicy>.
- * @property passwordErrors User-safe error or explanatory message; raw exception details are not implied. Declared type: FieldErrors<SuperadminSecurityPasswordPolicy>.
- * @property twoFA Value defined by the existing feature-local contract. Declared type: { enabled: boolean; method: string; }.
- * @property handleSave Value defined by the existing feature-local contract. Declared type: () => void.
+ * Defines the public SuperadminSecurityPolicyPanelsProps contract for security mfa. Optionality and nullability follow the declared fields.
  */
 export interface SuperadminSecurityPolicyPanelsProps {
   activeTab: string;
@@ -20,6 +36,13 @@ export interface SuperadminSecurityPolicyPanelsProps {
   loginErrors: FieldErrors<SuperadminSecurityLoginRules>;
   passwordRegister: UseFormRegister<SuperadminSecurityPasswordPolicy>;
   passwordErrors: FieldErrors<SuperadminSecurityPasswordPolicy>;
-  twoFA: { enabled: boolean; method: string };
+  twoFA: MfaPolicyState;
+  onToggleMfa?: (enabled: boolean) => void;
+  onSelectMethod?: (method: string) => void;
+  onToggleEnforceSuperadmin?: (enforce: boolean) => void;
+  onToggleRequireAdmins?: (require: boolean) => void;
+  onToggleStepUp?: (stepUp: boolean) => void;
+  onGenerateRecoveryCodes?: () => void;
+  enrollmentAccounts?: MfaEnrollmentAccount[];
   handleSave: () => void;
 }

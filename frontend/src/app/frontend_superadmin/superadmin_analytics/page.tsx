@@ -3,8 +3,6 @@
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes';
 import { redirect } from 'next/navigation';
 
-
-
 type SearchParams = Record<string, string | string[] | undefined>;
 
 /** Canonical domain entry: redirect to the first approved submodule and preserve URL state. */
@@ -16,5 +14,5 @@ export default async function DomainIndexPage({ searchParams }: { searchParams?:
     else if (value !== undefined) params.set(key, value);
   }
   const suffix = params.toString();
-  redirect(SUPERADMIN_NAVIGATION_ROUTES.analytics_overview + (suffix ? `?${suffix}` : ''));
+  redirect(SUPERADMIN_NAVIGATION_ROUTES.analytics_platform_reports + (suffix ? `?${suffix}` : ''));
 }

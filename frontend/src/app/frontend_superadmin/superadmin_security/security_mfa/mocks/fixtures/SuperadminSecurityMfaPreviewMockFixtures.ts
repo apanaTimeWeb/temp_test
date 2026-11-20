@@ -22,4 +22,33 @@ export const SUPERADMIN_SECURITY_FAILED_LOGINS = [
 
 export const SUPERADMIN_SECURITY_LOGIN_PREVIEW_DEFAULTS = { maxFailed: 5, lockDuration: 30, sessionTimeout: 60, forceLogout: false };
 export const SUPERADMIN_SECURITY_PASSWORD_PREVIEW_DEFAULTS = { upper: true, symbol: true, length: 12, expiry: 90 };
-export const SUPERADMIN_SECURITY_MFA_PREVIEW = { enabled: true, method: 'Authenticator App (Google/Authy)' };
+export const SUPERADMIN_SECURITY_MFA_PREVIEW = {
+  enabled: true,
+  method: 'Authenticator App (Google/Authy)',
+  enforceSuperadminsOnly: true,
+  requireForAdmins: true,
+  stepUpAuth: true,
+  gracePeriodDays: 7,
+  recoveryCodesGenerated: true,
+  recoveryCodes: [
+    'A9F2-K41P-9921',
+    'M39A-77L0-4412',
+    '88BC-12QX-5531',
+    'KL99-01WW-7823',
+    'Z55P-9988-1209',
+    'V771-4402-9981',
+    'B221-6677-3310',
+    'QQ44-8899-2211',
+    'X009-5511-7788',
+    'R332-1144-8899',
+  ],
+};
+
+export const SUPERADMIN_MFA_ACCOUNTS_PREVIEW = [
+  { id: 'usr-sa-001', name: 'Chief Security Officer', email: 'cso@libraryos.com', role: 'SuperAdmin' as const, mfaEnabled: true, method: 'TOTP (Google Authenticator)', enrolledAt: '2026-01-10', lastVerified: 'Active today, 08:30 AM', status: 'Enforced' as const },
+  { id: 'usr-sa-002', name: 'Emergency SuperAdmin 1 (Break-Glass)', email: 'emergency.sa1@libraryos.com', role: 'SuperAdmin' as const, mfaEnabled: true, method: 'FIDO2 Security Key (YubiKey)', enrolledAt: '2026-01-01', lastVerified: '2026-11-19 14:22', status: 'Enforced' as const },
+  { id: 'usr-sa-003', name: 'Emergency SuperAdmin 2 (Break-Glass)', email: 'emergency.sa2@libraryos.com', role: 'SuperAdmin' as const, mfaEnabled: true, method: 'Hardware Token + TOTP', enrolledAt: '2026-01-01', lastVerified: '2026-11-15 11:10', status: 'Enforced' as const },
+  { id: 'usr-sa-004', name: 'Operations SuperAdmin', email: 'ops.superadmin@libraryos.com', role: 'SuperAdmin' as const, mfaEnabled: true, method: 'TOTP (Authy)', enrolledAt: '2026-03-12', lastVerified: 'Active today, 09:15 AM', status: 'Enforced' as const },
+  { id: 'usr-adm-005', name: 'Library Central Admin', email: 'admin.delhi@libraryos.com', role: 'Admin' as const, mfaEnabled: true, method: 'SMS OTP (+91 98*** **210)', enrolledAt: '2026-05-18', lastVerified: 'Yesterday, 17:40', status: 'Active' as const },
+  { id: 'usr-adm-006', name: 'Mumbai Branch Lead', email: 'admin.mumbai@libraryos.com', role: 'Admin' as const, mfaEnabled: false, method: 'Pending Setup', enrolledAt: '—', lastVerified: 'Never', status: 'Pending_Grace' as const },
+];

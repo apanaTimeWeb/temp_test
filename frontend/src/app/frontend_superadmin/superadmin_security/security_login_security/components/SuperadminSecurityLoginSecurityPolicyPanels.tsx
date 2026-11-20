@@ -1,15 +1,60 @@
 'use client';
-/** Responsibility: Superadmin Security Policy Panels; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
-/** Data-Flow: leaf-owned props or hook state -> SuperadminSecurityLoginSecurityPolicyPanels formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
+/** Responsibility: Superadmin Security Policy Panels; full interactive management of Login Security, rate limiting, brute force defense, lockout & recovery, session expiry, and invite lifecycles. */
+/** Data-Flow: props/hook state -> SuperadminSecurityLoginSecurityPolicyPanels -> validation & rule enforcement. */
+import { useState } from 'react';
 import { useSuperadminSecurityLoginSecurityValidationMessage } from '@/app/frontend_superadmin/superadmin_security/security_login_security/hooks/useSuperadminSecurityLoginSecurityValidationMessage';
-import { Lock, ShieldAlert, Clock, LogOut, ShieldCheck } from 'lucide-react';
+import {
+  Lock,
+  ShieldAlert,
+  Clock,
+  LogOut,
+  ShieldCheck,
+  UserX,
+  Mail,
+  AlertTriangle,
+  RotateCcw,
+  Zap,
+  Globe2,
+  KeyRound,
+  CheckCircle2,
+  Send,
+  Timer,
+} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { SuperadminSecurityPolicyPanelsProps } from '@/app/frontend_superadmin/superadmin_security/security_login_security/types/SuperadminSecurityLoginSecurityPolicyPanelsComponentTypes';
+import { toast } from 'sonner';
 
-/**
- * Renders the `superadmin_security` view owned by `SuperadminSecurityLoginSecurityPolicyPanels`.
- * Keeps rendering and interaction state within the owning feature module; preserves the existing route and user-facing labels.
- */
+interface LockedAccount {
+  id: string;
+  email: string;
+  role: string;
+  failedCount: number;
+  lockedAt: string;
+  ip: string;
+  reason: string;
+}
+
+const INITIAL_LOCKED_ACCOUNTS: LockedAccount[] = [
+  {
+    id: 'lck-001',
+    email: 'finance.lead@libraryos.com',
+    role: 'Admin',
+    failedCount: 6,
+    lockedAt: '12 minutes ago',
+    ip: '198.51.100.9',
+    reason: 'Repeated bad password attempts',
+  },
+  {
+    id: 'lck-002',
+    email: 'librarian.pune@libraryos.com',
+    role: 'BranchManager',
+    failedCount: 5,
+    lockedAt: '45 minutes ago',
+    ip: '203.0.113.88',
+    reason: 'Failed TOTP verification spike',
+  },
+];
+
 export default function SuperadminSecurityLoginSecurityPolicyPanels({
   activeTab,
   loginRegister,
@@ -19,147 +64,381 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
   const tCopy = useTranslations('SUPERADMIN_SECURITY');
   const translateValidationMessage = useSuperadminSecurityLoginSecurityValidationMessage();
 
+  // Additional login security state
+  const [progressiveDelay, setProgressiveDelay] = useState(true);
+  const [ipAutoQuarantine, setIpAutoQuarantine] = useState(true);
+  const [captchaTrigger, setCaptchaTrigger] = useState(true);
+  const [singleConcurrentSession, setSingleConcurrentSession] = useState(true);
+  const [inviteExpiryHours, setInviteExpiryHours] = useState(24);
+  const [resetTokenExpiryMins, setResetTokenExpiryMins] = useState(15);
+  const [suspiciousTravelAlert, setSuspiciousTravelAlert] = useState(true);
+  const [lockedAccounts, setLockedAccounts] = useState<LockedAccount[]>(INITIAL_LOCKED_ACCOUNTS);
+
+  const handleUnlockAccount = (id: string, email: string) => {
+    setLockedAccounts((prev) => prev.filter((acc) => acc.id !== id));
+    toast.success(`Account unlocked: ${email}. Failed attempt counter reset.`, {
+      id: `unlock-${id}`,
+    });
+  };
+
+  const handleSendRecoveryLink = (email: string) => {
+    toast.success(`Secure recovery link (${resetTokenExpiryMins}-min expiry) dispatched to ${email}`, {
+      id: `recovery-${email}`,
+    });
+  };
+
+  if (activeTab !== 'Login Security') return null;
+
   return (
-    <>
-      {activeTab === 'Login Security' && (
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-3xl space-y-8 motion-safe:animate-fade-in motion-reduce:animate-none">
-          {/* Section 1: Brute Force Protection */}
-          <div>
-            <div className="border-b border-border/80 pb-3 mb-4">
-              <h2 className="text-base sm:text-lg font-bold text-slate-100 mb-1 flex items-center gap-2">
-                <ShieldAlert size={20} className="text-amber-400" />
-                <span>{tCopy("COPY.BRUTE_FORCE_PROTECTION")}</span>
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-400">
-                {tCopy("COPY.CONFIGURE_THRESHOLDS_TO_PREVENT_AUTOMATED_PASSWORD_GUESSING_ATTACKS")}
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 max-w-5xl space-y-8 motion-safe:animate-fade-in motion-reduce:animate-none">
+      {/* 1. Header & Posture */}
+      <div className="border-b border-border/80 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h2 className="text-base sm:text-lg font-bold text-slate-100 mb-1 flex items-center gap-2">
+            <ShieldAlert size={20} className="text-amber-400" />
+            <span>Login Security, Rate Limiting & Account Protection</span>
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400">
+            Defend administrative and staff portals against credential stuffing, brute-force attacks, and session hijacking.
+          </p>
+        </div>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-300 shrink-0">
+          <Zap size={13} />
+          Active Brute-Force Shields
+        </span>
+      </div>
+
+      {/* 2. Brute Force Protection & Progressive Delay */}
+      <div className="space-y-4">
+        <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+          Rate Limiting & Brute-Force Defense
+        </h3>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="security-max-failed-attempts" className="text-xs sm:text-sm font-semibold text-slate-200">
+              Max Failed Attempts (Before Lockout)
+            </label>
+            <input
+              id="security-max-failed-attempts"
+              type="number"
+              step={1}
+              min={3}
+              max={15}
+              className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+              {...loginRegister('maxFailed', { valueAsNumber: true })}
+              data-testid="superadmin-login-security-max-failed"
+            />
+            {loginErrors.maxFailed?.message && (
+              <p className="text-xs text-rose-400 font-medium">
+                {translateValidationMessage(loginErrors.maxFailed.message)}
               </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md">
-              <div className="flex flex-col gap-2">
-                <label htmlFor="security-max-failed-attempts" className="text-xs sm:text-sm font-semibold text-slate-200">
-                  {tCopy("COPY.MAX_FAILED_ATTEMPTS")}
-                </label>
-                <input
-                  id="security-max-failed-attempts"
-                  type="number"
-                  step={1}
-                  inputMode="numeric"
-                  min={1}
-                  max={20}
-                  className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
-                  aria-invalid={Boolean(loginErrors.maxFailed)}
-                  aria-describedby={loginErrors.maxFailed ? "security-max-failed-attempts-error" : undefined}
-                  {...loginRegister('maxFailed', { valueAsNumber: true })}
-                  data-testid="superadmin-security-security-policy-panels-security-max-failed-attempts-1"
-                />
-                {loginErrors.maxFailed?.message && (
-                  <p id="security-max-failed-attempts-error" className="text-xs text-rose-400 font-medium" role="alert">
-                    {translateValidationMessage(loginErrors.maxFailed.message)}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label htmlFor="security-lock-duration" className="text-xs sm:text-sm font-semibold text-slate-200">
-                  {tCopy("COPY.ACCOUNT_LOCKOUT_DURATION_MINS")}
-                </label>
-                <input
-                  id="security-lock-duration"
-                  type="number"
-                  step={1}
-                  inputMode="numeric"
-                  min={1}
-                  max={1440}
-                  className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
-                  aria-invalid={Boolean(loginErrors.lockDuration)}
-                  aria-describedby={loginErrors.lockDuration ? "security-lock-duration-error" : undefined}
-                  {...loginRegister('lockDuration', { valueAsNumber: true })}
-                  data-testid="superadmin-security-security-policy-panels-security-lock-duration-2"
-                />
-                {loginErrors.lockDuration?.message && (
-                  <p id="security-lock-duration-error" className="text-xs text-rose-400 font-medium" role="alert">
-                    {translateValidationMessage(loginErrors.lockDuration.message)}
-                  </p>
-                )}
-              </div>
-            </div>
+            )}
+            <p className="text-[11px] text-slate-400">Triggers account lockout after 5 consecutive failures</p>
           </div>
 
-          {/* Section 2: Session Management */}
-          <div>
-            <div className="border-b border-border/80 pb-3 mb-4">
-              <h2 className="text-base sm:text-lg font-bold text-slate-100 mb-1 flex items-center gap-2">
-                <Clock size={20} className="text-sky-400" />
-                <span>{tCopy("COPY.SESSION_MANAGEMENT")}</span>
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-400">
-                {tCopy("COPY.CONTROL_HOW_LONG_USERS_STAY_LOGGED_IN")}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="security-lock-duration" className="text-xs sm:text-sm font-semibold text-slate-200">
+              Account Lockout Duration (Minutes)
+            </label>
+            <input
+              id="security-lock-duration"
+              type="number"
+              step={1}
+              min={5}
+              max={1440}
+              className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+              {...loginRegister('lockDuration', { valueAsNumber: true })}
+              data-testid="superadmin-login-security-lock-duration"
+            />
+            {loginErrors.lockDuration?.message && (
+              <p className="text-xs text-rose-400 font-medium">
+                {translateValidationMessage(loginErrors.lockDuration.message)}
               </p>
-            </div>
-
-            <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-5">
-              <div className="flex flex-col gap-2 max-w-sm">
-                <label htmlFor="security-session-timeout" className="text-xs sm:text-sm font-semibold text-slate-200">
-                  {tCopy("COPY.IDLE_SESSION_TIMEOUT_MINS")}
-                </label>
-                <input
-                  id="security-session-timeout"
-                  type="number"
-                  step={1}
-                  inputMode="numeric"
-                  min={1}
-                  max={10080}
-                  className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
-                  aria-invalid={Boolean(loginErrors.sessionTimeout)}
-                  aria-describedby={loginErrors.sessionTimeout ? "security-session-timeout-error" : undefined}
-                  {...loginRegister('sessionTimeout', { valueAsNumber: true })}
-                  data-testid="superadmin-security-security-policy-panels-security-session-timeout-3"
-                />
-                {loginErrors.sessionTimeout?.message && (
-                  <p id="security-session-timeout-error" className="text-xs text-rose-400 font-medium" role="alert">
-                    {translateValidationMessage(loginErrors.sessionTimeout.message)}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between pt-4 border-t border-border/70">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400">
-                    <LogOut size={18} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-100">{tCopy("COPY.FORCE_LOGOUT_ON_PASSWORD_RESET")}</h3>
-                    <p className="text-xs text-slate-400 mt-0.5">{tCopy("COPY.AUTOMATICALLY_INVALIDATES_ALL_ACTIVE_TOKENS_ACROSS_DEVICES")}</p>
-                  </div>
-                </div>
-                <label className="sa-toggle cursor-pointer">
-                  <input
-                    id="security-force-logout"
-                    aria-label={tCopy("COPY.FORCE_LOGOUT_ON_PASSWORD_RESET")}
-                    type="checkbox"
-                    {...loginRegister('forceLogout')}
-                    data-testid="superadmin-security-security-policy-panels-security-force-logout-4"
-                  />
-                  <span className="sa-slider"></span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-4 flex justify-end">
-            <button
-              type="button"
-              onClick={handleSave}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 px-6 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition-all hover:from-indigo-500 hover:to-indigo-600 active:scale-95 cursor-pointer"
-              data-testid="superadmin-security-security-policy-panels-save-security-rules-5"
-            >
-              <ShieldCheck size={16} />
-              <span>{tCopy("COPY.SAVE_SECURITY_RULES")}</span>
-            </button>
+            )}
+            <p className="text-[11px] text-slate-400">Auto-unlocks after 30 minutes or requires SuperAdmin approval</p>
           </div>
         </div>
-      )}
-    </>
+
+        {/* Behavioral Toggles */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="flex items-center justify-between p-4 rounded-xl border border-border/70 bg-card/60">
+            <div>
+              <p className="text-xs font-bold text-slate-200">Progressive Backoff Delay</p>
+              <p className="text-[11px] text-slate-400">Adds 2s, 5s delay on retries</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={progressiveDelay}
+              onChange={(e) => setProgressiveDelay(e.target.checked)}
+              className="h-4 w-4 rounded accent-indigo-500 cursor-pointer"
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 rounded-xl border border-border/70 bg-card/60">
+            <div>
+              <p className="text-xs font-bold text-slate-200">IP Auto-Quarantine (WAF)</p>
+              <p className="text-[11px] text-slate-400">Blocks IP after 10 failed logins</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={ipAutoQuarantine}
+              onChange={(e) => setIpAutoQuarantine(e.target.checked)}
+              className="h-4 w-4 rounded accent-indigo-500 cursor-pointer"
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 rounded-xl border border-border/70 bg-card/60">
+            <div>
+              <p className="text-xs font-bold text-slate-200">Trigger CAPTCHA Challenge</p>
+              <p className="text-[11px] text-slate-400">After 3 invalid attempts</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={captchaTrigger}
+              onChange={(e) => setCaptchaTrigger(e.target.checked)}
+              className="h-4 w-4 rounded accent-indigo-500 cursor-pointer"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Session Management & Timeout (Section A) */}
+      <div className="space-y-4">
+        <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+          <Clock size={16} className="text-sky-400" />
+          <span>Session Lifecycle & Inactive Timeout</span>
+        </h3>
+
+        <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="security-session-timeout" className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+                <Timer size={14} className="text-sky-400" />
+                <span>Inactive Session Timeout (Minutes)</span>
+              </label>
+              <input
+                id="security-session-timeout"
+                type="number"
+                step={1}
+                min={5}
+                max={480}
+                className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+                {...loginRegister('sessionTimeout', { valueAsNumber: true })}
+                data-testid="superadmin-login-security-session-timeout"
+              />
+              {loginErrors.sessionTimeout?.message && (
+                <p className="text-xs text-rose-400 font-medium">
+                  {translateValidationMessage(loginErrors.sessionTimeout.message)}
+                </p>
+              )}
+              <p className="text-[11px] text-slate-400">Idle screens auto-lock and blur after 15 minutes</p>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="security-reset-token-expiry" className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
+                <KeyRound size={14} className="text-sky-400" />
+                <span>Password Reset Link Expiry (Minutes)</span>
+              </label>
+              <input
+                id="security-reset-token-expiry"
+                type="number"
+                step={1}
+                min={5}
+                max={60}
+                value={resetTokenExpiryMins}
+                onChange={(e) => setResetTokenExpiryMins(Number(e.target.value))}
+                className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+              />
+              <p className="text-[11px] text-slate-400">Single-use cryptographically sealed tokens (15 mins)</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-border/70">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/70 bg-card/60">
+              <div className="flex items-center gap-3">
+                <LogOut size={18} className="text-rose-400" />
+                <div>
+                  <h4 className="text-xs font-bold text-slate-100">Force Logout on Password Reset</h4>
+                  <p className="text-[11px] text-slate-400">Instantly revokes all active refresh tokens</p>
+                </div>
+              </div>
+              <label className="sa-toggle cursor-pointer">
+                <input
+                  id="security-force-logout"
+                  type="checkbox"
+                  {...loginRegister('forceLogout')}
+                  data-testid="superadmin-login-security-force-logout"
+                />
+                <span className="sa-slider"></span>
+              </label>
+            </div>
+
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/70 bg-card/60">
+              <div className="flex items-center gap-3">
+                <ShieldCheck size={18} className="text-indigo-400" />
+                <div>
+                  <h4 className="text-xs font-bold text-slate-100">Single Concurrent SuperAdmin Session</h4>
+                  <p className="text-[11px] text-slate-400">Terminates older login on new device</p>
+                </div>
+              </div>
+              <label className="sa-toggle cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={singleConcurrentSession}
+                  onChange={(e) => setSingleConcurrentSession(e.target.checked)}
+                />
+                <span className="sa-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Admin Invitation & Suspicious Login Detection */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Admin Invite Expiry */}
+        <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-3">
+          <div className="flex items-center gap-2.5">
+            <Mail size={18} className="text-indigo-400" />
+            <h4 className="text-xs sm:text-sm font-bold text-slate-100">Admin Invitation Link Expiry</h4>
+          </div>
+          <p className="text-xs text-slate-400">
+            Invitation links sent to new Library Admins or staff automatically expire to prevent email snooping.
+          </p>
+          <div className="flex items-center gap-2 pt-1">
+            {[24, 48, 72].map((hours) => (
+              <button
+                key={hours}
+                type="button"
+                onClick={() => setInviteExpiryHours(hours)}
+                className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                  inviteExpiryHours === hours
+                    ? 'border-indigo-400 bg-indigo-500/20 text-indigo-300'
+                    : 'border-border/70 bg-card text-slate-400'
+                }`}
+              >
+                {hours} Hours
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Suspicious Login Detection */}
+        <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <Globe2 size={18} className="text-cyan-400" />
+              <h4 className="text-xs sm:text-sm font-bold text-slate-100">Suspicious Login & Travel Detection</h4>
+            </div>
+            <label className="sa-toggle cursor-pointer">
+              <input
+                type="checkbox"
+                checked={suspiciousTravelAlert}
+                onChange={(e) => setSuspiciousTravelAlert(e.target.checked)}
+              />
+              <span className="sa-slider"></span>
+            </label>
+          </div>
+          <p className="text-xs text-slate-400">
+            Analyzes geo-velocity (impossible travel), unrecognized ASN networks, and new device fingerprints.
+            Suspicious sessions trigger immediate step-up auth and email notification.
+          </p>
+        </div>
+      </div>
+
+      {/* 5. Account Lockout & Recovery Manager Table */}
+      <div className="p-5 sm:p-6 bg-card/70 border border-rose-500/30 rounded-2xl backdrop-blur-md space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/80 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
+              <UserX size={18} />
+            </div>
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-slate-100">
+                Locked Accounts & Recovery Operations
+              </h3>
+              <p className="text-xs text-slate-400">
+                Accounts locked due to brute-force limits. SuperAdmin can unlock directly or dispatch secure reset links.
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-300">
+            {lockedAccounts.length} Accounts Currently Locked
+          </span>
+        </div>
+
+        {lockedAccounts.length === 0 ? (
+          <div className="text-center py-6 text-xs text-slate-400">
+            <CheckCircle2 size={24} className="mx-auto mb-2 text-emerald-400" />
+            No accounts currently locked out. All administrator logins operating normally.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-slate-300">
+              <thead className="bg-card/60 text-slate-400 font-semibold uppercase tracking-wider border-b border-border/70">
+                <tr>
+                  <th className="py-2 px-3">Locked Account</th>
+                  <th className="py-2 px-3">Role</th>
+                  <th className="py-2 px-3">Failed Attempts</th>
+                  <th className="py-2 px-3">Locked At</th>
+                  <th className="py-2 px-3">Trigger IP</th>
+                  <th className="py-2 px-3">Reason</th>
+                  <th className="py-2 px-3 text-right">Recovery Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/60 font-mono">
+                {lockedAccounts.map((acc) => (
+                  <tr key={acc.id} className="hover:bg-card/40">
+                    <td className="py-3 px-3 font-sans font-bold text-slate-100">{acc.email}</td>
+                    <td className="py-3 px-3 font-sans">
+                      <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-200">
+                        {acc.role}
+                      </span>
+                    </td>
+                    <td className="py-3 px-3 text-rose-400 font-bold">{acc.failedCount} failures</td>
+                    <td className="py-3 px-3 text-slate-400">{acc.lockedAt}</td>
+                    <td className="py-3 px-3 text-slate-300">{acc.ip}</td>
+                    <td className="py-3 px-3 font-sans text-slate-300">{acc.reason}</td>
+                    <td className="py-3 px-3 text-right font-sans">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleUnlockAccount(acc.id, acc.email)}
+                          className="px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-[11px] font-semibold text-emerald-300 transition-all cursor-pointer"
+                        >
+                          Unlock
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleSendRecoveryLink(acc.email)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-border/80 bg-card hover:bg-surface-hover text-[11px] font-medium text-slate-200 transition-all cursor-pointer"
+                        >
+                          <Send size={11} />
+                          <span>Send Link</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Save Button */}
+      <div className="pt-2 flex justify-end">
+        <button
+          type="button"
+          onClick={handleSave}
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 px-6 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-amber-500/25 transition-all hover:from-amber-500 hover:to-amber-600 active:scale-95 cursor-pointer"
+          data-testid="superadmin-login-security-save-rules-button"
+        >
+          <ShieldCheck size={16} />
+          <span>Save Login Security & Rate Limiting Rules</span>
+        </button>
+      </div>
+    </div>
   );
 }

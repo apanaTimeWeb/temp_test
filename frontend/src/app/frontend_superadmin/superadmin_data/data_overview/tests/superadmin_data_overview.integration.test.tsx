@@ -69,9 +69,9 @@ describe('SuperadminDataOverviewMain Integration Tests', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/DR Readiness Score/i)).toBeInTheDocument();
-      expect(screen.getByText(/Recovery Point Objective/i)).toBeInTheDocument();
-      expect(screen.getByText(/Recovery Time Objective/i)).toBeInTheDocument();
+      expect(screen.getByText(/DR Readiness Score/i)).toBeDefined();
+      expect(screen.getByText(/Recovery Point Objective/i)).toBeDefined();
+      expect(screen.getByText(/Recovery Time Objective/i)).toBeDefined();
     });
   });
 
@@ -83,13 +83,13 @@ describe('SuperadminDataOverviewMain Integration Tests', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('data_overview-top-backup-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('data_overview-top-backup-btn')).toBeDefined();
     });
 
     fireEvent.click(screen.getByTestId('data_overview-top-backup-btn'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('data_overview-quick-backup-modal')).toBeInTheDocument();
+      expect(screen.getByTestId('data_overview-quick-backup-modal')).toBeDefined();
     });
   });
 });

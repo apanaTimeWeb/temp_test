@@ -1,0 +1,73 @@
+{
+  "SUPERADMIN_INTEGRATIONS": {
+    "PAGE_TITLE": "Integration & API Management",
+    "PAGE_SUBTITLE": "Enterprise Gateway Hub: Control payment gateways, SMS, WhatsApp, Email, Cloud Storage, Barcode/QR, Biometrics, Webhooks, API keys, rate limits, and access logs.",
+    "SEARCH_PLACEHOLDER": "Search integrations by provider name, type, or service...",
+    "EMPTY_TITLE": "No Integrations Found",
+    "EMPTY_SUBTITLE": "No integration providers match the selected filters. Try resetting your search.",
+    "RESET_FILTERS": "Reset Filters",
+    "CONFIGURE": "Configure",
+    "TEST_CONNECTION": "Test Ping",
+    "ACTIVE": "Active",
+    "DISABLED": "Disabled",
+    "SANDBOX": "Sandbox",
+    "PRODUCTION": "Production",
+    "LAST_PING": "Last Ping",
+    "TABS": {
+      "GATEWAYS": "Connected Providers",
+      "WEBHOOKS": "Webhooks & Retries",
+      "API_KEYS": "API Keys & Security",
+      "LOGS": "Integration Logs",
+      "ENTITLEMENTS": "Plan Entitlements"
+    },
+    "STATS": {
+      "TOTAL_PROVIDERS": "Total Providers",
+      "ACTIVE_CONNECTIONS": "Active Live",
+      "FAILED_WEBHOOKS": "Pending Retries",
+      "ACTIVE_KEYS": "API Keys Active",
+      "TODAY_REQUESTS": "Requests Today"
+    },
+    "WEBHOOKS": {
+      "TITLE": "Platform Webhooks & Event Streams",
+      "SUBTITLE": "Manage outgoing HTTP callbacks dispatched on system triggers and retry failed deliveries.",
+      "ADD_ENDPOINT": "Add Webhook Endpoint",
+      "RETRY_TITLE": "Failed Webhook Retries Queue",
+      "RETRY_NOW": "Retry Delivery Now",
+      "ATTEMPTS": "Attempts",
+      "STATUS_CODE": "Status Code"
+    },
+    "API_KEYS": {
+      "TITLE": "Platform API Keys & Rate Limiting",
+      "SUBTITLE": "Manage machine-to-machine developer credentials, key rotation, RPM limits, and IP firewalls.",
+      "GENERATE_NEW": "Generate API Key",
+      "ROTATE": "Rotate Key",
+      "REVOKE": "Revoke Key",
+      "KEY_NAME": "Key Name",
+      "CREATED": "Created",
+      "LAST_USED": "Last Used",
+      "IP_ALLOWLIST": "IP Allowlist",
+      "RATE_LIMITS_TITLE": "Global API Rate Limits & Quotas",
+      "RPM": "Requests / Minute (RPM)",
+      "DAILY_QUOTA": "Daily Quota",
+      "BURST_LIMIT": "Burst Allowance",
+      "ENFORCE_IP": "Enforce IP Allowlist"
+    },
+    "LOGS": {
+      "TITLE": "Live Integration Audit Logs",
+      "SUBTITLE": "Detailed HTTP traffic logs, status codes, latency diagnostics, and payload inspector.",
+      "DIRECTION": "Direction",
+      "PROVIDER": "Provider",
+      "ENDPOINT": "Endpoint",
+      "LATENCY": "Latency",
+      "STATUS": "Status",
+      "VIEW_PAYLOAD": "Inspect Payloads"
+    },
+    "ENTITLEMENTS": {
+      "TITLE": "Integration Access Entitlements per Plan",
+      "SUBTITLE": "Enable or disable third-party integrations across subscription tiers.",
+      "PLAN": "Subscription Plan",
+      "TIER": "Tier Level",
+      "TOGGLE_ACCESS": "Feature Access"
+    }
+  }
+}

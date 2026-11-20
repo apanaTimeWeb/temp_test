@@ -39,10 +39,11 @@ export function useSuperadminSettingsGeneralMutation() {
   });
 
   return {
+    updateSettings: saveMutation,
+    resetSettings: resetMutation,
     saveSettings: saveMutation.mutate,
     saveSettingsAsync: saveMutation.mutateAsync,
     isSaving: saveMutation.isPending,
-    resetSettings: resetMutation.mutate,
     isResetting: resetMutation.isPending,
   };
 }

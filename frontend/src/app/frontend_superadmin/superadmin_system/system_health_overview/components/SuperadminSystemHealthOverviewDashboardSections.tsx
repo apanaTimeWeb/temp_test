@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sliders, Server, Database, Globe, Shield, Rocket } from 'lucide-react';
 import SuperadminSystemHealthOverviewNetworkMetrics from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewNetworkMetrics';
 import SuperadminSystemHealthOverviewInfrastructure from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewInfrastructure';
@@ -27,6 +27,16 @@ export default function SuperadminSystemHealthOverviewDashboardSections({
   refreshTrigger = 0,
 }: DashboardSectionsProps) {
   const [activeCategory, setActiveCategory] = useState<HealthCategoryId>('all');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab') as HealthCategoryId | null;
+      if (tab && HEALTH_CATEGORIES.some((c) => c.id === tab)) {
+        setActiveCategory(tab);
+      }
+    }
+  }, []);
 
   const isVisible = (cat: HealthCategoryId) => {
     return activeCategory === 'all' || activeCategory === cat;

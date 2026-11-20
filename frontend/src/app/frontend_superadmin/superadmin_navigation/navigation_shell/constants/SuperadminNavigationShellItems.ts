@@ -180,6 +180,7 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     description: 'Branches, users, members, storage, messages, API usage',
     subItems: [
       { id: 'use_overview', label: 'Usage Overview & Quotas', href: SUPERADMIN_NAVIGATION_ROUTES.usage_overview },
+      { id: 'use_quota_requests', label: 'Branch & Quota Requests', href: SUPERADMIN_NAVIGATION_ROUTES.usage_quota_requests },
       { id: 'use_branches_users', label: 'Branches & Users Limits', href: `${SUPERADMIN_NAVIGATION_ROUTES.usage_overview}?tab=branches-users` },
       { id: 'use_members', label: 'Members & Active Students', href: `${SUPERADMIN_NAVIGATION_ROUTES.usage_overview}?tab=members` },
       { id: 'use_storage', label: 'Storage Consumption', href: `${SUPERADMIN_NAVIGATION_ROUTES.usage_overview}?tab=storage` },
@@ -215,10 +216,10 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     colorText: '#a3e635',
     description: 'Business, branch, billing, usage aur platform reports',
     subItems: [
-      { id: 'rep_business', label: 'Business Growth Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_library_growth },
-      { id: 'rep_branch', label: 'Branch Performance Reports', href: `${SUPERADMIN_NAVIGATION_ROUTES.analytics_overview}?tab=branch-reports` },
-      { id: 'rep_billing', label: 'Billing & Revenue Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_financials },
-      { id: 'rep_usage', label: 'Usage & Capacity Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_subscription_mix },
+      { id: 'rep_platform', label: 'Platform Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_platform_reports },
+      { id: 'rep_billing', label: 'Billing Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_billing_reports },
+      { id: 'rep_usage', label: 'Usage Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_usage_reports },
+      { id: 'rep_security', label: 'Security Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_security_reports },
     ],
   },
   {

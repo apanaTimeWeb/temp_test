@@ -38,10 +38,10 @@ export const SUPERADMIN_SETTINGS_GENERAL_API = {
 
 /** Leaf-local navigation route map. */
 export const SUPERADMIN_NAVIGATION_ROUTES = {
-  settings_appearance: '/superadmin/superadmin_settings/settings_appearance',
+  settings_appearance: '/superadmin/superadmin_settings/settings_branding',
   settings_general: '/superadmin/superadmin_settings/settings_general',
   settings_branding: '/superadmin/superadmin_settings/settings_branding',
-  settings_integrations: '/superadmin/superadmin_settings/settings_integrations',
+  settings_integrations: '/superadmin/superadmin_integrations/integrations_overview',
   settings_maintenance_mode: '/superadmin/superadmin_settings/settings_maintenance_mode',
-  settings_storage: '/superadmin/superadmin_settings/settings_storage',
+  settings_storage: '/superadmin/superadmin_data/data_overview',
 } as const;

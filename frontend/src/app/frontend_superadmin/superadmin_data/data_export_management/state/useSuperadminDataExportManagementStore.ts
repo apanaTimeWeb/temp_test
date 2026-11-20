@@ -16,7 +16,7 @@ interface ExportManagementState {
   filterStatus: string;
 
   // Actions
-  openExportModal: (scope?: ExportScope, tenantId?: string, branchId?: string) => void;
+  openExportModal: (scope?: ExportScope, tenantId?: string | null, branchId?: string | null) => void;
   closeExportModal: () => void;
   setFilterScope: (scope: string) => void;
   setFilterStatus: (status: string) => void;

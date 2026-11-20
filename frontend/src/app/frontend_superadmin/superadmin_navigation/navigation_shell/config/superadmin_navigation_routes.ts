@@ -46,6 +46,7 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   // 08 Usage & Limit Monitoring
   superadmin_usage: '/superadmin/superadmin_usage/usage_overview',
   usage_overview: '/superadmin/superadmin_usage/usage_overview',
+  usage_quota_requests: '/superadmin/superadmin_usage/usage_quota_requests',
 
   // 09 Security & Audit Logs
   superadmin_security: '/superadmin/superadmin_security/security_overview',
@@ -61,8 +62,12 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   audit_logs: '/superadmin/superadmin_system/system_audit_logs',
 
   // 10 Reports & Analytics
-  superadmin_analytics: '/superadmin/superadmin_analytics/analytics_overview',
+  superadmin_analytics: '/superadmin/superadmin_analytics/analytics_platform_reports',
   analytics_overview: '/superadmin/superadmin_analytics/analytics_overview',
+  analytics_platform_reports: '/superadmin/superadmin_analytics/analytics_platform_reports',
+  analytics_billing_reports: '/superadmin/superadmin_analytics/analytics_billing_reports',
+  analytics_usage_reports: '/superadmin/superadmin_analytics/analytics_usage_reports',
+  analytics_security_reports: '/superadmin/superadmin_analytics/analytics_security_reports',
   analytics_financials: '/superadmin/superadmin_analytics/analytics_financials',
   analytics_library_growth: '/superadmin/superadmin_analytics/analytics_library_growth',
   analytics_subscription_mix: '/superadmin/superadmin_analytics/analytics_subscription_mix',

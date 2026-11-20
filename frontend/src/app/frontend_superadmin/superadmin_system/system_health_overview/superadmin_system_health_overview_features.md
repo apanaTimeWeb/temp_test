@@ -140,6 +140,7 @@ Screen/component evidence:
 | `tests/SuperadminSystemHealthOverviewQueryKeys.test.ts` | Source present; execution not asserted |
 | `tests/SuperadminSystemHealthOverviewRouteBoundaries.test.tsx` | Source present; execution not asserted |
 | `tests/SuperadminSystemHealthOverviewScaleFixtureTiers.test.ts` | Source present; execution not asserted |
+| `tests/SuperadminSystemHealthOverviewTechnicalMonitoringContract.test.tsx` | Source present; execution not asserted |
 | `tests/harness/SuperadminSystemHealthOverviewHarness.tsx` | Source present; execution not asserted |
 | `tests/harness/bootstrap.ts` | Source present; execution not asserted |
 
