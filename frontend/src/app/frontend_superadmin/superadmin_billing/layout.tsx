@@ -9,8 +9,7 @@ import type { ReactNode } from 'react';
 import { Receipt, LayoutDashboard } from 'lucide-react';
 
 const TAB_ICONS = {
-  billing_overview: LayoutDashboard,
-  billing_invoices: Receipt,
+  billing_overview: Receipt,
 } as const;
 
 export default function DomainLayout({ children }: { children: ReactNode }) {
@@ -18,7 +17,6 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   const t = useTranslations('SUPERADMIN_BILLING');
   const routes = [
     { key: 'billing_overview', label: t('COPY.NAV_BILLING_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.billing_overview },
-    { key: 'billing_invoices', label: t('COPY.NAV_BILLING_INVOICES'), href: SUPERADMIN_NAVIGATION_ROUTES.billing_invoices },
   ] as const;
   return (
     <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
