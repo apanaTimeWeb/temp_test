@@ -11,8 +11,8 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   libraries_overview: '/superadmin/superadmin_libraries/libraries_overview',
   libraries_onboarding_setup: '/superadmin/superadmin_libraries/libraries_onboarding_setup',
   libraries_profile_configuration: '/superadmin/superadmin_libraries/libraries_profile_configuration',
-  libraries_student_bulk_import: '/superadmin/superadmin_libraries/libraries_student_bulk_import',
-  libraries_student_smart_id: '/superadmin/superadmin_libraries/libraries_student_smart_id',
+  libraries_student_bulk_import: '/superadmin/superadmin_libraries/libraries_overview',
+  libraries_student_smart_id: '/superadmin/superadmin_libraries/libraries_overview',
 
   // 03 Branch Management
   superadmin_branches: '/superadmin/superadmin_branches/branches_overview',
@@ -23,8 +23,8 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   users_overview: '/superadmin/superadmin_users/users_overview',
   users_directory: '/superadmin/superadmin_users/users_directory',
   users_roles_permissions: '/superadmin/superadmin_users/users_roles_permissions',
-  users_member_referrals: '/superadmin/superadmin_users/users_member_referrals',
-  users_member_trust_score: '/superadmin/superadmin_users/users_member_trust_score',
+  users_member_referrals: '/superadmin/superadmin_users/users_overview',
+  users_member_trust_score: '/superadmin/superadmin_users/users_overview',
 
   // 05 Plans & Subscription
   superadmin_plans: '/superadmin/superadmin_plans/plans_pricing_catalog',
@@ -84,16 +84,22 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   superadmin_integrations: '/superadmin/superadmin_integrations/integrations_overview',
   integrations_overview: '/superadmin/superadmin_integrations/integrations_overview',
 
-  // 14 Data & Backup Management
+  // 14 Data, Backup & Disaster Recovery
   superadmin_data: '/superadmin/superadmin_data/data_overview',
   data_overview: '/superadmin/superadmin_data/data_overview',
-  backup_overview: '/superadmin/superadmin_system/system_backup_overview',
-  backup_overview__create: '/superadmin/superadmin_system/system_backup_overview?view=create',
-  backup_configuration: '/superadmin/superadmin_system/system_backup_configuration',
-  backup_history: '/superadmin/superadmin_system/system_backup_history',
-  backup_history__restore: '/superadmin/superadmin_system/system_backup_history?view=restore',
-  backup_schedules: '/superadmin/superadmin_system/system_backup_schedules',
-  data_export_jobs: '/superadmin/superadmin_system/system_data_export_jobs',
+  data_backup_operations: '/superadmin/superadmin_data/data_backup_operations',
+  data_restore_operations: '/superadmin/superadmin_data/data_restore_operations',
+  data_export_management: '/superadmin/superadmin_data/data_export_management',
+  data_import_migration: '/superadmin/superadmin_data/data_import_migration',
+  data_archive_retention: '/superadmin/superadmin_data/data_archive_retention',
+  // Backward compatibility aliases
+  backup_overview: '/superadmin/superadmin_data/data_overview',
+  backup_overview__create: '/superadmin/superadmin_data/data_backup_operations?action=create',
+  backup_configuration: '/superadmin/superadmin_data/data_backup_operations',
+  backup_history: '/superadmin/superadmin_data/data_restore_operations',
+  backup_history__restore: '/superadmin/superadmin_data/data_restore_operations?action=restore',
+  backup_schedules: '/superadmin/superadmin_data/data_backup_operations',
+  data_export_jobs: '/superadmin/superadmin_data/data_export_management',
 
   // 15 System Health & Monitoring
   superadmin_system: '/superadmin/superadmin_system/system_health_overview',
@@ -103,27 +109,27 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   superadmin_settings: '/superadmin/superadmin_settings/settings_general',
   settings_general: '/superadmin/superadmin_settings/settings_general',
   settings_general__settings_library_configuration: '/superadmin/superadmin_settings/settings_general?view=settings_library_configuration',
-  settings_overview: '/superadmin/superadmin_settings/settings_overview',
-  settings_appearance: '/superadmin/superadmin_settings/settings_appearance',
+  settings_overview: '/superadmin/superadmin_settings/settings_general',
+  settings_appearance: '/superadmin/superadmin_settings/settings_branding',
   settings_branding: '/superadmin/superadmin_settings/settings_branding',
   settings_integrations: '/superadmin/superadmin_integrations/integrations_overview',
   settings_maintenance_mode: '/superadmin/superadmin_settings/settings_maintenance_mode',
   settings_storage: '/superadmin/superadmin_data/data_overview',
-  profile_overview: '/superadmin/superadmin_settings/profile_overview',
-  profile_overview__details: '/superadmin/superadmin_settings/profile_overview?view=details',
-  profile_overview__edit: '/superadmin/superadmin_settings/profile_overview?view=edit',
-  profile_security: '/superadmin/superadmin_settings/profile_security',
-  profile_security__change_password: '/superadmin/superadmin_settings/profile_security?view=change-password',
-  profile_security__two_factor: '/superadmin/superadmin_settings/profile_security?view=two-factor',
-  profile_active_sessions: '/superadmin/superadmin_settings/profile_active_sessions',
-  profile_login_history: '/superadmin/superadmin_settings/profile_login_history',
+  profile_overview: '/superadmin/superadmin_users/users_overview',
+  profile_overview__details: '/superadmin/superadmin_users/users_overview?view=details',
+  profile_overview__edit: '/superadmin/superadmin_users/users_overview?view=edit',
+  profile_security: '/superadmin/superadmin_security/security_password_policy',
+  profile_security__change_password: '/superadmin/superadmin_security/security_password_policy',
+  profile_security__two_factor: '/superadmin/superadmin_security/security_mfa',
+  profile_active_sessions: '/superadmin/superadmin_security/security_active_sessions',
+  profile_login_history: '/superadmin/superadmin_security/security_login_security',
 
-  // Legacy/compatibility
-  superadmin_accounting: '/superadmin/superadmin_accounting',
-  accounting_daily_settlement: '/superadmin/superadmin_accounting/accounting_daily_settlement',
-  accounting_expense_categories: '/superadmin/superadmin_accounting/accounting_expense_categories',
-  accounting_expenses: '/superadmin/superadmin_accounting/accounting_expenses',
-  accounting_financial_reports: '/superadmin/superadmin_accounting/accounting_financial_reports',
+  // Legacy/compatibility mapped to canonical modules
+  superadmin_accounting: '/superadmin/superadmin_billing/billing_overview',
+  accounting_daily_settlement: '/superadmin/superadmin_billing/billing_overview',
+  accounting_expense_categories: '/superadmin/superadmin_billing/billing_overview',
+  accounting_expenses: '/superadmin/superadmin_billing/billing_overview',
+  accounting_financial_reports: '/superadmin/superadmin_analytics/analytics_financials',
 } as const;
 
 /**

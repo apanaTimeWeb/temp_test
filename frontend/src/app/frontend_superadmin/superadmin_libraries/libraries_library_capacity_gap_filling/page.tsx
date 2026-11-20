@@ -1,5 +1,0 @@
-import SuperadminLibrariesOverviewLibraryCapacityGapFillingMain from '@/app/frontend_superadmin/superadmin_libraries/libraries_library_capacity_gap_filling/components/SuperadminLibrariesOverviewLibraryCapacityGapFillingMain';
-
-export default function LibrariesLibraryCapacityGapFillingPage() {
-  return <SuperadminLibrariesOverviewLibraryCapacityGapFillingMain />;
-}
