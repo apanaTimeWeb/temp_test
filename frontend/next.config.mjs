@@ -132,6 +132,11 @@ const nextConfig = {
         destination: '/auth/login',
         permanent: false,
       },
+      {
+        source: '/superadmin/superadmin_support/support_complaints',
+        destination: '/superadmin/superadmin_support/support_tickets',
+        permanent: false,
+      },
     ];
   },
 };
