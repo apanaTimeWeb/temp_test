@@ -6,7 +6,7 @@ import SuperadminSupportTicketsOverviewSemanticTable, { type SemanticColumnDef, 
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   MessageSquare, AlertTriangle, Paperclip, Tag, FileText,
-  Search, X, RotateCcw, FileSpreadsheet, Printer, Mail, PhoneCall, Download
+  Search, X, RotateCcw, FileSpreadsheet, Printer, Mail, PhoneCall, Download, Ticket
 } from 'lucide-react';
 import { SUPERADMIN_SUPPORT_TICKETS_FIXTURES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/mocks/fixtures/SuperadminSupportTicketsOverviewMockFixtures';
 import type { SuperadminSupportTicket, SuperadminSupportTicketsFilter } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
@@ -18,6 +18,7 @@ import {
 } from '@/app/frontend_superadmin/superadmin_support/support_tickets/utils/SuperadminSupportTicketsOverviewExportUtils';
 import SuperadminSupportTicketsOverviewDetailPanel from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsOverviewDetailPanel';
 import SuperadminSupportTicketsOverviewKpiCards from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsOverviewKpiCards';
+import SuperadminSupportTicketsCreateModal from '@/app/frontend_superadmin/superadmin_support/support_tickets/components/SuperadminSupportTicketsCreateModal';
 import { useTranslations } from 'next-intl';
 
 
@@ -45,6 +46,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
   const [searchQuery, setSearchQuery] = useState('');
   const [priorityFilter, setPriorityFilter] = useState<string>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [showCreateModal, setShowCreateModal] = useState(false);
   // Effect contract: keep local filter state synchronized with browser back/forward navigation and remove the listener on cleanup; dependency set [] (intentional mount-only effect) is the deliberate re-run boundary.
   useEffect(() => {
     const allowed: SuperadminSupportTicketsFilter[] = ['All', ...SUPERADMIN_SUPPORT_TICKETS_FILTERS.filter((item) => item !== 'All')];
@@ -263,6 +265,16 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
   return (
     <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
       {selected && <SuperadminSupportTicketsOverviewDetailPanel key={selected.id} tkt={selected} onClose={handleCloseDetail} onSave={handleSave} />}
+      {showCreateModal && (
+        <SuperadminSupportTicketsCreateModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          onCreateTicket={(newTicket) => {
+            setTickets((prev) => [newTicket, ...prev]);
+            showToast(`Support Ticket ${newTicket.id} created successfully for ${newTicket.tenant}`);
+          }}
+        />
+      )}
 
       {/* Hero Header */}
       <div className="rounded-2xl border border-rose-500/25 bg-gradient-to-br from-rose-950/60 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-lg">
@@ -271,6 +283,14 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
             <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{t("COPY.SAAS_SUPPORT_HELPDESK")}</h1>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              onClick={() => setShowCreateModal(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 text-xs font-semibold text-white hover:from-rose-500 hover:to-indigo-500 shadow-md shadow-rose-950/30 transition-all active:scale-95 cursor-pointer"
+            >
+              <Ticket size={14} strokeWidth={2.2} />
+              <span>+ Log Support Ticket</span>
+            </button>
             <button type="button"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 text-xs font-semibold text-rose-300 hover:bg-rose-500/25 transition-all active:scale-95 cursor-pointer"
               onClick={exportSampleTickets} data-testid="superadmin-support-tickets-support-tickets-overview-export-logs-2">

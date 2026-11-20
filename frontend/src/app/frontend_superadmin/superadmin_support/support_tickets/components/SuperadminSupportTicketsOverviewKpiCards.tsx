@@ -1,6 +1,6 @@
 /** Responsibility: Superadmin Support Tickets Kpi Cards; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
 /** Data-Flow: leaf-owned props or hook state -> SuperadminSupportTicketsOverviewKpiCards formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
-import { Clock, Flag, MessageSquare } from 'lucide-react';
+import { Clock, Flag, MessageSquare, Zap } from 'lucide-react';
 import type { SuperadminSupportTicketsKpiCardsProps } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 import { useTranslations } from 'next-intl';
 
@@ -11,26 +11,61 @@ import { useTranslations } from 'next-intl';
 export default function SuperadminSupportTicketsOverviewKpiCards({ openCount, slaBreachCount, avgResponse }: SuperadminSupportTicketsKpiCardsProps) {
   const t = useTranslations('SUPERADMIN_SUPPORT_TICKETS');
   return (
-    <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" aria-label={t("COPY.SAMPLE_SUPPORT_TICKET_METRICS")}>
-      <div className="sa-card relative overflow-hidden group">
-        <div className="absolute inset-0 bg-danger-bg opacity-0 group-hover:opacity-100 motion-safe:transition-opacity motion-reduce:transition-none" />
-        <div className="flex justify-between items-start relative z-10">
-          <div><p className="text-sm font-medium text-secondary mb-1">{t("COPY.SAMPLE_OPEN_TICKETS")}</p><h3 className="text-3xl font-bold text-primary">{openCount}</h3></div>
-          <div className="p-3 bg-surface-hover rounded-xl border border-border"><MessageSquare size={20} className="text-danger" aria-hidden="true" /></div>
+    <section className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" aria-label={t("COPY.SAMPLE_SUPPORT_TICKET_METRICS")}>
+      {/* Open Tickets - Rose */}
+      <div className="group relative overflow-hidden rounded-2xl border border-rose-500/25 bg-gradient-to-br from-[#1c0810]/95 via-[#1c0810]/90 to-[#2c0c1a]/80 p-5 shadow-lg shadow-rose-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-rose-500/40 hover:shadow-xl hover:shadow-rose-950/40">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-rose-500/10 blur-2xl transition-all duration-500 group-hover:bg-rose-500/20" />
+        <div className="relative flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            {t("COPY.SAMPLE_OPEN_TICKETS")}
+          </span>
+          <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-rose-500/15 border-rose-500/30 text-rose-400">
+            <MessageSquare size={18} strokeWidth={2.2} />
+          </div>
+        </div>
+        <p className="mt-3 text-3xl font-bold tracking-tight text-rose-400">{openCount}</p>
+        <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+          <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-rose-300 bg-rose-500/10 border-rose-500/25">
+            Awaiting Resolution
+          </span>
         </div>
       </div>
-      <div className="sa-card relative overflow-hidden group">
-        <div className="absolute inset-0 bg-warning-bg opacity-0 group-hover:opacity-100 motion-safe:transition-opacity motion-reduce:transition-none" />
-        <div className="flex justify-between items-start relative z-10">
-          <div><p className="text-sm font-medium text-secondary mb-1">{t("COPY.SAMPLE_SLA_BREACHES")}</p><h3 className="text-3xl font-bold text-primary">{slaBreachCount}</h3></div>
-          <div className="p-3 bg-surface-hover rounded-xl border border-border"><Flag size={20} className="text-warning" aria-hidden="true" /></div>
+
+      {/* SLA Breaches - Amber */}
+      <div className="group relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/80 p-5 shadow-lg shadow-amber-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-amber-500/40 hover:shadow-xl hover:shadow-amber-950/40">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-all duration-500 group-hover:bg-amber-500/20" />
+        <div className="relative flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            {t("COPY.SAMPLE_SLA_BREACHES")}
+          </span>
+          <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-amber-500/15 border-amber-500/30 text-amber-400">
+            <Flag size={18} strokeWidth={2.2} />
+          </div>
+        </div>
+        <p className="mt-3 text-3xl font-bold tracking-tight text-amber-400">{slaBreachCount}</p>
+        <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+          <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-amber-300 bg-amber-500/10 border-amber-500/25">
+            {slaBreachCount > 0 ? 'Urgent Action Required' : 'All SLAs Intact'}
+          </span>
         </div>
       </div>
-      <div className="sa-card relative overflow-hidden group">
-        <div className="absolute inset-0 bg-primary-subtle opacity-0 group-hover:opacity-100 motion-safe:transition-opacity motion-reduce:transition-none" />
-        <div className="flex justify-between items-start relative z-10">
-          <div><p className="text-sm font-medium text-secondary mb-1">{t("COPY.SAMPLE_AVG_RESPONSE_TIME")}</p><h3 className="text-3xl font-bold text-primary">{avgResponse}</h3></div>
-          <div className="p-3 bg-surface-hover rounded-xl border border-border"><Clock size={20} className="text-info" aria-hidden="true" /></div>
+
+      {/* Avg Response - Cyan/Indigo */}
+      <div className="group relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-[#081822]/95 via-[#081822]/90 to-[#0d2636]/80 p-5 shadow-lg shadow-cyan-950/30 transition-all duration-300 hover:scale-[1.01] hover:border-cyan-500/40 hover:shadow-xl hover:shadow-cyan-950/40">
+        <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-cyan-500/10 blur-2xl transition-all duration-500 group-hover:bg-cyan-500/20" />
+        <div className="relative flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            {t("COPY.SAMPLE_AVG_RESPONSE_TIME")}
+          </span>
+          <div className="p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs bg-cyan-500/15 border-cyan-500/30 text-cyan-400">
+            <Clock size={18} strokeWidth={2.2} />
+          </div>
+        </div>
+        <p className="mt-3 text-3xl font-bold tracking-tight text-cyan-400">{avgResponse}</p>
+        <div className="mt-2.5 flex items-center gap-1.5 text-xs text-slate-400">
+          <span className="inline-flex items-center gap-1 font-semibold rounded-full px-2 py-0.5 border text-cyan-300 bg-cyan-500/10 border-cyan-500/25">
+            <Zap size={11} /> 24/7 Priority Support Desk
+          </span>
         </div>
       </div>
     </section>
