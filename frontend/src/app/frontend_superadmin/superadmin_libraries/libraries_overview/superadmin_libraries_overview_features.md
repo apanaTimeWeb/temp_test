@@ -20,6 +20,12 @@ portability_score: "NOT_VERIFIED"
 
 - Screen adapter: `superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewScreen.tsx`.
 - Main client component: `superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewPageClient.tsx`.
+- Overview Header & Primary CTA: `superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewHeader.tsx`.
+- Create Library Account Modal: `superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateAccountModal.tsx`.
+- Step A Form (Organization Details): `superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateStepOrganization.tsx`.
+- Step B Form (Main Admin Account): `superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateStepAdmin.tsx`.
+- Step C Form (Branches Provisioning): `superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateStepBranches.tsx`.
+- Step D Form (Automated Provisioning & Invitation): `superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateStepProvisioning.tsx`.
 - Route view key: `overview`.
 
 ## Navigation Contract

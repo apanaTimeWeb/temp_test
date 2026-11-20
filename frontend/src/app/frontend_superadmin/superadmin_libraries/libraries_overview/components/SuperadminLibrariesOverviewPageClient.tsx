@@ -100,6 +100,11 @@ export default function SuperadminLibrariesOverviewPageClient() {
     showToast(`Manager sidebar modules updated for "${current.name}"!`);
   }, [libraries, showToast, updateLibrary]);
 
+  const handleLibraryCreated = useCallback((newLib: SuperadminLibrariesLibrary, result: LibraryProvisioningResult) => {
+    libraries.unshift(newLib);
+    showToast(`Library "${newLib.name}" provisioned with Tenant ID "${result.tenantId}" and ${result.branchesCreatedCount} branch(es)!`);
+  }, [libraries, showToast]);
+
   const totalRevenue = libraries.reduce((sum, library) => sum + library.revenue, 0);
   const activeCount = libraries.filter((l) => l.status === 'Active').length;
   const totalStudents = libraries.reduce((sum, l) => sum + (l.students || 0), 0);
@@ -450,6 +455,22 @@ export default function SuperadminLibrariesOverviewPageClient() {
           {error}
         </div>
       )}
+
+      {/* ─── Hero Header with Create Library Action (SuperAdmin Only) & Export Tools ─── */}
+      <SuperadminLibrariesOverviewHeader
+        onCreateNew={() => setIsCreateModalOpen(true)}
+        onExportCsv={handleExportCsv}
+        onExportExcel={handleExportExcel}
+        onPrintRoster={handlePrintRoster}
+      />
+
+      {/* ─── Create Library Account & Admin Panel Provisioning Modal ─── */}
+      <SuperadminLibrariesCreateAccountModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onLibraryCreated={handleLibraryCreated}
+        existingCodes={libraries.map((l) => l.id)}
+      />
 
       {/* ─── 4 KPI Cards Grid — matches dashboard card size exactly ─── */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-6" aria-label="Libraries Statistics">
