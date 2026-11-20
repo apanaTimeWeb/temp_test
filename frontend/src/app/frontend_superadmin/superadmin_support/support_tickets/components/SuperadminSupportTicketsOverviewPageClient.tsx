@@ -126,7 +126,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
   // KPI calculations
   const openCount = tickets.filter(t => t.status === 'Open').length;
   const slaBreachCount = tickets.filter(t => t.slaBreach && t.status !== 'Resolved').length;
-  
+
 
   const colDefs = useMemo<SemanticColumnDef[]>(() => [
     {
@@ -146,7 +146,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
         </div>
       ),
     },
-    { 
+    {
       headerName: t('COPY.TABLE_COLUMN_TENANT'), field: 'tenant', flex: 1.5, minWidth: 150,
       cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
         <div className="flex items-center gap-2 h-full">
@@ -168,10 +168,9 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
     {
       headerName: t('COPY.TABLE_COLUMN_STATUS'), field: 'status', flex: 1, minWidth: 110,
       cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
-        <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-          p.value === 'Resolved' ? 'bg-success-bg text-success border border-border' :
+        <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${p.value === 'Resolved' ? 'bg-success-bg text-success border border-border' :
           p.value === 'Open' ? 'bg-danger-bg text-danger border border-border' : 'bg-warning-bg text-warning border border-border'
-        }`}>
+          }`}>
           {p.value === 'Open' ? t('COPY.STATUS_OPEN') : p.value === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : t('COPY.STATUS_RESOLVED')}
         </span>
       ),
@@ -179,9 +178,8 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
     {
       headerName: t('COPY.TABLE_COLUMN_PRIORITY'), field: 'priority', flex: 0.8, minWidth: 100,
       cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
-        <span className={`text-xs font-bold ${
-          p.data?.priority === 'High' ? 'text-danger' : p.data?.priority === 'Medium' ? 'text-warning' : 'text-secondary'
-        }`}>{p.value === 'High' ? t('COPY.PRIORITY_HIGH') : p.value === 'Medium' ? t('COPY.PRIORITY_MEDIUM') : t('COPY.PRIORITY_LOW')}</span>
+        <span className={`text-xs font-bold ${p.data?.priority === 'High' ? 'text-danger' : p.data?.priority === 'Medium' ? 'text-warning' : 'text-secondary'
+          }`}>{p.value === 'High' ? t('COPY.PRIORITY_HIGH') : p.value === 'Medium' ? t('COPY.PRIORITY_MEDIUM') : t('COPY.PRIORITY_LOW')}</span>
       ),
     },
     {
