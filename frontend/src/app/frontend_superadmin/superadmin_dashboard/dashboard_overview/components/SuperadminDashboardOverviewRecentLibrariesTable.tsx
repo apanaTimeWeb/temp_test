@@ -167,7 +167,7 @@ export default function SuperadminDashboardOverviewRecentLibrariesTable({ data }
             <Building2 size={18} className="text-indigo-400" />
           </div>
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-white">{t("COPY.RECENTLY_REGISTERED_LIBRARIES")}</h2>
+            <h2 className="text-base sm:text-lg font-bold text-white">Recent Library Accounts</h2>
             <p className="text-xs text-slate-400">Newly onboarded tenant partners</p>
           </div>
         </div>

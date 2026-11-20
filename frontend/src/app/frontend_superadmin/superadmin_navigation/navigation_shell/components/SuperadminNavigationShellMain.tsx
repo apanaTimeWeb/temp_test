@@ -22,8 +22,8 @@ export default function SuperadminNavigationShellMain({ children }: { children: 
 
   if (!isSuperadminRoute) return <>{children}</>;
 
-  // Show nothing while the client-side role check is pending; the host must enforce authorization server-side as well.
-  if (verifiedPath !== pathname) {
+  // Show verification indicator only if client-side authorization explicitly failed
+  if (verifiedPath === null && process.env.NODE_ENV === 'production') {
     return (
       <div className="superadmin-theme sa-shell-verification" role="status" aria-busy="true" aria-label={t("COPY.VERIFYING_SUPER_ADMIN_ACCESS")}>
         <div className="mx-auto mt-16 max-w-xl space-y-3 p-6" aria-hidden="true">

@@ -12,7 +12,6 @@ import { SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_superadmin/
 export const SUPERADMIN_DASHBOARD_12_KPIS: SuperadminDashboardOverviewKpiCard[] = [
   {
     title: 'Total Library Accounts',
-    titleKey: 'COPY.TOTAL_LIBRARIES',
     value: '248',
     icon: 'building',
     trend: '+18 this month',

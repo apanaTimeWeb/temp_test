@@ -75,7 +75,7 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     description: 'Nayi Library Account aur uska Admin Panel create/manage karna',
     subItems: [
       { id: 'lib_list', label: 'All Library Accounts', href: SUPERADMIN_NAVIGATION_ROUTES.libraries_overview },
-      { id: 'lib_create', label: 'Create Library Account', href: SUPERADMIN_NAVIGATION_ROUTES.libraries_onboarding_setup },
+      { id: 'lib_create', label: 'Create Library Account', href: `${SUPERADMIN_NAVIGATION_ROUTES.libraries_overview}?action=create` },
       { id: 'lib_profile', label: 'Profile & Configuration', href: SUPERADMIN_NAVIGATION_ROUTES.libraries_profile_configuration },
       { id: 'lib_admin_setup', label: 'Admin Panel Provisioning', href: `${SUPERADMIN_NAVIGATION_ROUTES.libraries_overview}?view=admin-setup` },
     ],

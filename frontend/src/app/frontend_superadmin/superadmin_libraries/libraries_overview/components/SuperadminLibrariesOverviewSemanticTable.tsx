@@ -1,9 +1,9 @@
 'use client';
 import SuperadminLibrariesOverviewEmptyState from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewEmptyState';
-/** Responsibility: Superadmin Libraries Semantic Table; renders an accessible, sortable, filterable table with responsive horizontal overflow and rich UI patterns. */
+/** Responsibility: Superadmin Libraries Semantic Table; renders an accessible, sortable, paginated table with single-line horizontal actions and responsive controls. */
 import { useTranslations } from 'next-intl';
-import { type ReactNode } from 'react';
-import { Search, X } from 'lucide-react';
+import { type ReactNode, useState, useEffect } from 'react';
+import { Search, X, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 import type { SemanticCellParams, SemanticColumnDef, SemanticTableProps } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewSemanticTableTypes';
 import { stableRowKey } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewStableRowKey';
@@ -13,25 +13,22 @@ export type { SemanticCellParams, SemanticColumnDef } from '@/app/frontend_super
 
 function getColumnWidthClass(width?: number, minWidth?: number, field?: string): string {
   const key = (field ?? '').toLowerCase();
-  if (/action|actions|operation|operations/.test(key)) return 'w-28';
+  if (/action|actions|operation|operations/.test(key)) return 'min-w-[360px]';
   if (/status|role|priority|severity/.test(key)) return 'w-28';
   if (/date|time|created|updated|joined|lastactive|lastlogin/.test(key)) return 'w-32';
   if (/amount|price|revenue|mrr|balance|total|payment|students|count/.test(key)) return 'w-32 text-right';
   if (/^id$|_id$|id$|reference|ref$|txn/.test(key)) return 'w-24';
-  if (/name|subject|title|description|message/.test(key)) return 'min-w-44';
+  if (/name|subject|title|description|message/.test(key)) return 'min-w-48';
   if (width !== undefined) return width <= 100 ? 'w-24' : width <= 140 ? 'w-28' : width <= 180 ? 'w-32' : 'w-48';
   if (minWidth !== undefined) return minWidth <= 100 ? 'min-w-24' : minWidth <= 140 ? 'min-w-32' : minWidth <= 180 ? 'min-w-40' : 'min-w-48';
   return 'min-w-32';
 }
 
-/**
- * Performs the superadmin libraries overview semantic table operation within libraries overview.
- */
 export default function SuperadminLibrariesOverviewSemanticTable<T extends object>({
   rowData,
   columnDefs,
   pagination = false,
-  paginationPageSize = 10,
+  paginationPageSize = 5,
   className = '',
   getRowId,
   rowClassRules,
@@ -41,8 +38,27 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
   onPageChange,
 }: SemanticTableProps<T>) {
   const tCopy = useTranslations('SUPERADMIN_LIBRARIES');
-  const { sort, setSort, setPage, filterText, setFilterText, sortedRows, pageCount, activePage, visibleRows } = useSuperadminLibrariesOverviewSemanticTableState({ rowData, paginationPageSize, pageIndex, onPageChange, paginationEnabled: pagination });
+  const [currentPageSize, setCurrentPageSize] = useState(paginationPageSize);
+
+  useEffect(() => {
+    setCurrentPageSize(paginationPageSize);
+  }, [paginationPageSize]);
+
+  const {
+    sort, setSort, setPage, filterText, setFilterText,
+    sortedRows, pageCount, activePage, visibleRows,
+  } = useSuperadminLibrariesOverviewSemanticTableState({
+    rowData,
+    paginationPageSize: currentPageSize,
+    pageIndex,
+    onPageChange,
+    paginationEnabled: pagination,
+  });
+
   const columns = (columnDefs ?? []).filter((column) => !column.hide);
+
+  const startRecord = sortedRows.length === 0 ? 0 : activePage * currentPageSize + 1;
+  const endRecord = Math.min((activePage + 1) * currentPageSize, sortedRows.length);
 
   return (
     <div className={`overflow-x-auto w-full min-w-0 ${className}`} role="region" aria-label={tCopy('COPY.TABLE_ARIA_LABEL')} tabIndex={0}>
@@ -74,7 +90,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
       )}
 
       <table className="sa-semantic-table w-full border-collapse text-left text-sm">
-        <thead className="bg-surface-highlight text-secondary">
+        <thead className="bg-[#0b0e25] border-b border-indigo-500/30 text-slate-300">
           <tr>
             {columns.map((column, index) => {
               const field = column.field ?? `column-${index}`;
@@ -87,7 +103,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
                   key={field}
                   scope="col"
                   aria-sort={canSort ? ariaSort : undefined}
-                  className={`border-b border-border px-4 py-3.5 font-semibold text-xs uppercase tracking-wider text-slate-300 ${getColumnWidthClass(column.width, column.minWidth, field)}`}
+                  className={`border-b border-indigo-500/25 px-4 py-3.5 font-bold text-xs uppercase tracking-wider text-slate-300 whitespace-nowrap ${getColumnWidthClass(column.width, column.minWidth, field)}`}
                 >
                   {canSort ? (
                     <button
@@ -112,10 +128,10 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
             })}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-indigo-500/10">
           {visibleRows.length === 0 ? (
             <tr>
-              <td colSpan={Math.max(1, columns.length)} className="px-4 py-10 text-center text-secondary">
+              <td colSpan={Math.max(1, columns.length)} className="px-4 py-12 text-center text-secondary">
                 <SuperadminLibrariesOverviewEmptyState filtered={(rowData?.length ?? 0) !== 0 && Boolean(filterText.trim())} />
               </td>
             </tr>
@@ -131,7 +147,7 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
                   }
                 }}
                 tabIndex={onRowClick ? 0 : undefined}
-                className={`border-b border-border last:border-b-0 hover:bg-surface-hover transition-colors ${onRowClick ? 'cursor-pointer' : ''} ${Object.entries(rowClassRules ?? {}).filter(([, matches]) => matches({ data: row })).map(([className]) => className).join(' ')}`}
+                className={`hover:bg-indigo-950/30 transition-colors ${onRowClick ? 'cursor-pointer' : ''} ${Object.entries(rowClassRules ?? {}).filter(([, matches]) => matches({ data: row })).map(([cName]) => cName).join(' ')}`}
                 data-testid="superadmin-superadmin-libraries-overview-semantic-table-tr-line-43"
               >
                 {columns.map((column, index) => {
@@ -153,31 +169,97 @@ export default function SuperadminLibrariesOverviewSemanticTable<T extends objec
         </tbody>
       </table>
 
+      {/* ── Rich Full-Featured Interactive Pagination ── */}
       {pagination && (
-        <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-t border-border bg-card/60 text-xs text-secondary">
-          <span>
-            {sortedRows.length === 0
-              ? tCopy('COPY.TABLE_ROWS_ZERO')
-              : tCopy('COPY.TABLE_ROWS_RANGE', { start: activePage * paginationPageSize + 1, end: Math.min((activePage + 1) * paginationPageSize, sortedRows.length), total: sortedRows.length })}
-          </span>
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3.5 border-t border-indigo-500/20 bg-[#090b20] text-xs text-slate-300">
+          <div className="flex items-center gap-3">
+            <span className="font-medium text-slate-400">
+              {sortedRows.length === 0
+                ? tCopy('COPY.TABLE_ROWS_ZERO')
+                : `Showing ${startRecord} to ${endRecord} of ${sortedRows.length} libraries`}
+            </span>
+            <div className="flex items-center gap-1.5 ml-2">
+              <span className="text-[11px] text-slate-400">Per page:</span>
+              <select
+                aria-label="Rows per page"
+                value={currentPageSize}
+                onChange={(e) => {
+                  const newSize = Number(e.target.value);
+                  setCurrentPageSize(newSize);
+                  setPage(0);
+                  onPageChange?.(0);
+                }}
+                className="rounded-lg border border-indigo-500/30 bg-card px-2 py-1 text-xs text-white cursor-pointer focus:ring-1 focus:ring-indigo-400 outline-none"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            {/* First Page */}
             <button
               type="button"
-              className="px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer font-medium"
+              className="p-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              disabled={activePage === 0}
+              onClick={() => { setPage(0); onPageChange?.(0); }}
+              title="First page"
+            >
+              <ChevronsLeft size={14} />
+            </button>
+
+            {/* Previous Page */}
+            <button
+              type="button"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer font-medium"
               disabled={activePage === 0}
               onClick={() => { const nextPage = Math.max(0, activePage - 1); setPage(nextPage); onPageChange?.(nextPage); }}
               data-testid="superadmin-libraries-libraries-semantic-table-table-previous-3"
             >
-              {tCopy('COPY.TABLE_PREVIOUS')}
+              <ChevronLeft size={13} />
+              <span>{tCopy('COPY.TABLE_PREVIOUS')}</span>
             </button>
+
+            {/* Numbered Page Buttons */}
+            {Array.from({ length: pageCount }).map((_, i) => (
+              <button
+                key={`page-btn-${i}`}
+                type="button"
+                onClick={() => { setPage(i); onPageChange?.(i); }}
+                className={`min-w-8 h-8 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  activePage === i
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/40 border border-indigo-400'
+                    : 'border border-indigo-500/20 bg-indigo-500/5 text-slate-300 hover:bg-indigo-500/20 hover:text-white'
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+
+            {/* Next Page */}
             <button
               type="button"
-              className="px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer font-medium"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer font-medium"
               disabled={activePage + 1 >= pageCount}
               onClick={() => { const nextPage = Math.min(pageCount - 1, activePage + 1); setPage(nextPage); onPageChange?.(nextPage); }}
               data-testid="superadmin-libraries-libraries-semantic-table-table-next-4"
             >
-              {tCopy('COPY.TABLE_NEXT')}
+              <span>{tCopy('COPY.TABLE_NEXT')}</span>
+              <ChevronRight size={13} />
+            </button>
+
+            {/* Last Page */}
+            <button
+              type="button"
+              className="p-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-600/30 hover:text-white transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              disabled={activePage + 1 >= pageCount}
+              onClick={() => { const last = Math.max(0, pageCount - 1); setPage(last); onPageChange?.(last); }}
+              title="Last page"
+            >
+              <ChevronsRight size={14} />
             </button>
           </div>
         </div>
