@@ -60,6 +60,7 @@
       "TAB_APIS_INTEGRATIONS": "APIs & Integrations",
       "TAB_STORAGE": "Storage",
       "TAB_MAINTENANCE_MODE": "Maintenance Mode",
+      "TAB_PERMISSIONS": "Permissions & Security",
       "ACTIVE_TAB_SETTINGS_ARIA_LABEL": "{tab} settings",
       "MAINTENANCE_OFFLINE": "Offline",
       "MAINTENANCE_ONLINE": "Online",

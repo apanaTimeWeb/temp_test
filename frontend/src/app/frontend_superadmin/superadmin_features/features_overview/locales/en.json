@@ -1,0 +1,22 @@
+{
+  "title": "07. Feature & Module Control",
+  "subtitle": "Granular 3-level governance (Platform Default, Plan Entitlements, Account/Branch Overrides) with API Guard enforcement.",
+  "scope": {
+    "title": "Control Scope",
+    "platformDefaults": "🌐 System-Wide Platform Defaults",
+    "selectTenant": "Select Tenant Organization",
+    "selectBranch": "All Branches or Specific Branch"
+  },
+  "levels": {
+    "platform": "Platform Default",
+    "plan": "Plan Entitlement",
+    "override": "Account / Branch Override"
+  },
+  "apiGuard": {
+    "title": "Backend API Denial Enforcement Simulator",
+    "description": "Simulates backend middleware gatekeeper. When a feature is disabled, the API responds with HTTP 403 Forbidden.",
+    "runTest": "Execute Live Request Probe",
+    "forbidden": "HTTP 403 FEATURE_DISABLED",
+    "allowed": "HTTP 200 SUCCESS"
+  }
+}

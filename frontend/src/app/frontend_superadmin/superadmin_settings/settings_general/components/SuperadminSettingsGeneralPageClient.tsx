@@ -52,6 +52,7 @@ export default function SuperadminSettingsGeneralPageClient() {
 
   const { handleSubmit, reset, watch, formState: { isDirty } } = methods;
 
+
   useEffect(() => {
     if (serverSettings) {
       reset(serverSettings);

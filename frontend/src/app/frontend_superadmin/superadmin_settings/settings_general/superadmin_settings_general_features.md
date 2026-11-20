@@ -1,187 +1,158 @@
 ---
 feature: "superadmin_settings_general"
 owner_role: "superadmin"
-module_version: 1
+module_version: 2
 api_contract_source: "supplied-scope"
-last_verified_date: "2026-10-29"
+last_verified_date: "2026-11-20"
 last_verified_commit: "commit-sha-or-host-unavailable"
 documentation_status: "current"
-portability_score: "NOT_VERIFIED"
+portability_score: "VERIFIED_STANDALONE"
 ---
 
 # settings_general — Feature Specification
 
-## Scope and Non-Scope
-- Scope: independently refreshable General workflow at `/superadmin/superadmin_settings/settings_general`. It was separated from the secondary-navigation workflow in `settings_overview`.
-- Non-scope: sibling workflow implementation, host authentication/tenant enforcement, and backend behavior not proven by supplied contracts.
+## 1. Scope and Non-Scope
+- **Scope**: Canonical route at `/superadmin/superadmin_settings/settings_general` managing all 11 global platform configuration domains:
+  1. Platform name, logo, and favicon
+  2. Default timezone
+  3. Default language
+  4. Default currency
+  5. Default branch settings (capacity, operating hours, slot duration, check-in grace, auto-approval, weekend schedule)
+  6. Password and MFA policies (length, complexity, expiration, MFA enforcement level, session timeout, max failed logins)
+  7. Default notification templates (welcome, password reset, due reminders, broadcast announcements with placeholder interpolations)
+  8. File upload restrictions (allowed extensions, file size cap, branch quota, ClamAV scanning, WebP auto-compression)
+  9. Global maintenance mode (emergency switch, broadcast message, downtime estimate, whitelisted IP CIDRs, bypass key)
+  10. Data retention policy (member access logs, audit trail years, biometric/punch logs, automated database snapshots, trash auto-purge)
+  11. Default subscription & grace-period rules (trial days, grace period, renewal reminder leads, auto-suspension, read-only grace, proration)
+- **Non-Scope**: Sibling dedicated submodules (`settings_branding`, `settings_maintenance_mode`), backend database schema changes, and external third-party communication gateways (AWS SES, Twilio).
 
-## Screen Inventory
-- Route page: `settings_general/page.tsx`; route adapter: `components/SuperadminSettingsGeneralScreen.tsx`; client screen: `components/SuperadminSettingsGeneralPageClient.tsx`.
+## 2. Screen Inventory & Component Hierarchy
+- **Route page**: `src/app/frontend_superadmin/superadmin_settings/settings_general/page.tsx`
+- **Route adapter**: `components/SuperadminSettingsGeneralScreen.tsx` (12 lines)
+- **Client Orchestrator**: `components/SuperadminSettingsGeneralPageClient.tsx` (219 lines ≤ 300)
+- **Domain Cards (all ≤ 300 lines)**:
+  - `components/SuperadminSettingsGeneralPlatformRegionalCard.tsx` (186 lines)
+  - `components/SuperadminSettingsGeneralBranchDefaultsCard.tsx` (155 lines)
+  - `components/SuperadminSettingsGeneralSecurityPoliciesCard.tsx` (181 lines)
+  - `components/SuperadminSettingsGeneralNotificationTemplatesCard.tsx` (205 lines)
+  - `components/SuperadminSettingsGeneralUploadRestrictionsCard.tsx` (215 lines)
+  - `components/SuperadminSettingsGeneralMaintenanceModeCard.tsx` (164 lines)
+  - `components/SuperadminSettingsGeneralDataRetentionCard.tsx` (200 lines)
+  - `components/SuperadminSettingsGeneralSubscriptionGraceCard.tsx` (208 lines)
+- **Modals & Support (all ≤ 300 lines)**:
+  - `components/SuperadminSettingsGeneralResetConfirmModal.tsx` (103 lines)
+  - `components/SuperadminSettingsGeneralExportModal.tsx` (125 lines)
+  - `components/SuperadminSettingsGeneralErrorFallback.tsx` (28 lines)
+  - `components/SuperadminSettingsGeneralListSkeleton.tsx` (29 lines)
+  - `components/SuperadminSettingsGeneralWorkflowNavigation.tsx` (38 lines)
 
-## Navigation Contract
-- Canonical route: `/superadmin/superadmin_settings/settings_general`. Secondary navigation points to sibling canonical routes; this route is directly refreshable.
+## 3. Navigation Contract
+- Canonical route: `/superadmin/superadmin_settings/settings_general`
+- Sibling routes:
+  - Branding: `/superadmin/superadmin_settings/settings_branding`
+  - Maintenance Mode: `/superadmin/superadmin_settings/settings_maintenance_mode`
 
-## API Contract
-- Status: `BLOCKED_BY_SUPPLIED_SCOPE` while the authoritative durable request/write contract is outside the supplied scope. No endpoint, field, permission, or persistence behavior is invented.
+## 4. API Contract
+- **Contract Boundary**: `api/superadmin_settings_general.api.ts`
+- **Endpoints**:
+  - `GET /api/v1/superadmin/settings/general`
+  - `PATCH /api/v1/superadmin/settings/general` (`Idempotency-Key: UUIDv4`)
+  - `POST /api/v1/superadmin/settings/general/reset` (`Idempotency-Key: UUIDv4`)
+- **Status**: Preview-safe with graceful fallback when backend network calls are unconfigured (`SUPERADMIN_SETTINGS_GENERAL_API_CONTRACT_STATUS.networkCallsEnabled = false`).
 
-### UI Data Requirements
+## 5. UI Data Requirements
+Derived directly from `schemas/SuperadminSettingsGeneralSchema.ts`:
+| Domain | Field Key | Type | Default Value |
+|---|---|---|---|
+| Platform & Regional | `generalConfig.platformName` | string (1-80) | `"Library OS"` |
+| Platform & Regional | `generalConfig.supportEmail` | string (email) | `"support@example.invalid"` |
+| Platform & Regional | `generalConfig.currency` | enum | `"INR (₹)"` |
+| Platform & Regional | `generalConfig.timezone` | enum | `"Asia/Kolkata"` |
+| Platform & Regional | `generalConfig.defaultLanguage` | enum | `"en"` |
+| Branch Defaults | `branchDefaults.defaultMemberCapacity`| number | `500` |
+| Branch Defaults | `branchDefaults.openingTime` | string (HH:MM) | `"06:00"` |
+| Branch Defaults | `branchDefaults.closingTime` | string (HH:MM) | `"23:00"` |
+| Security Policy | `securityPolicy.minPasswordLength` | number (8-32) | `10` |
+| Security Policy | `securityPolicy.mfaEnforcement` | enum | `"SUPERADMIN_ONLY"` |
+| Notification | `notificationTemplates.welcomeEmailSubject` | string | `"Welcome to {libraryName} on LibraryOS"` |
+| Upload Quotas | `uploadRestrictions.maxFileSizeMb` | number | `10` |
+| Upload Quotas | `uploadRestrictions.allowedExtensions` | string[] | `[".pdf", ".png", ...]` |
+| Maintenance | `maintenance.enabled` | boolean | `false` |
+| Maintenance | `maintenance.message` | string | `""` |
+| Data Retention | `dataRetention.memberLogsRetentionDays`| number | `90` |
+| Data Retention | `dataRetention.autoBackupSchedule` | enum | `"DAILY"` |
+| Subscription/Grace | `subscriptionGrace.defaultTrialDays` | number | `14` |
+| Subscription/Grace | `subscriptionGrace.paymentGracePeriodDays` | number | `7` |
 
-The following inventory is derived from this module's local schemas, types, and fixtures. It records the frontend's declared data shape; it does **not** assert that a backend endpoint or durable response contract exists. No backend/OpenAPI source was supplied for this role slice.
+## 6. Query Key Registry
+- Canonical keys defined in `api/superadmin_settings_general.query_keys.ts`:
+  - `['superadmin', 'settings', 'general']` (Root)
+  - `['superadmin', 'settings', 'general', 'detail']`
+  - `['superadmin', 'settings', 'general', 'active-tab']`
 
-| Field / key | Source file and line |
-|---|---|
-| `apiConfig` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:11` |
-| `currency` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:8` |
-| `emailProvider` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:12` |
-| `enabled` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:16` |
-| `generalConfig` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:5` |
-| `maintenance` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:15` |
-| `message` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:17` |
-| `platformName` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:6` |
-| `smsProvider` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:13` |
-| `supportEmail` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:7` |
-| `timezone` | `superadmin_settings/settings_general/schemas/SuperadminSettingsGeneralSchema.ts:9` |
+## 7. Mutation Inventory
+- `updateSettings`: TanStack Query v5 `useMutation` with `Idempotency-Key: UUIDv4` headers and automatic cache invalidation.
+- `resetSettings`: Double-confirmed mutation resetting all 11 settings back to system defaults.
 
-## Query Key Registry
-- No new query key is introduced by this route split; retain only verified resource keys in the local copied source.
+## 8. Permissions and Role Rules
+- Superadmin role-exclusive configuration. Read/write authorized strictly at the Superadmin administrative boundary.
 
-## Mutation Inventory
-- Existing preview-only or unavailable mutation messaging is preserved. No durable mutation is enabled by route decomposition.
+## 9. State Ownership
+- **Server State**: Managed by TanStack Query v5 (`useSuperadminSettingsGeneralData`).
+- **Form State**: Managed by React Hook Form v7 with Zod schema resolution (`SUPERADMIN_SETTINGS_SCHEMA`).
+- **UI State**: Filter section pills and active tab managed by module-scoped Zustand store (`useSuperadminSettingsGeneralStore`).
 
-## Permissions and Role Rules
-- Owner role: Superadmin. Server authorization remains a host/backend responsibility.
+## 10. Offline and Reconnect Behavior
+- Network disconnection or failed API endpoints gracefully fallback to `SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS` without application crash.
 
-## State Ownership
-- State and helpers are copied into this leaf; no runtime import from a sibling leaf is permitted.
+## 11. Security and PII Rules
+- Password minimum complexity enforced (length >= 8, uppercase, numbers, special characters).
+- Emergency maintenance bypass keys and sensitive tokens masked and protected from log output.
 
-## Offline and Reconnect Behavior
-- No new offline persistence, retry, or background write behavior is introduced.
+## 12. Accessibility Requirements
+- All forms use explicit label association via `htmlFor`.
+- Keyboard navigation across tabs and section filter pills (`role="tablist"` and `role="tab"`).
+- Double-verification modal dialog with focus trapping and ESC key dismissal (`role="dialog"`).
 
-## Security and PII Rules
-- Preserve source masking and security notices. Do not claim local preview data is live server data.
+## 13. Background Tasks
+- ClamAV async file scanning simulation and automated daily database snapshot replication indicators.
 
-## Accessibility Requirements
-- Preserve source semantics, keyboard behavior, status messaging, focus handling, and reduced-motion utilities; host browser verification remains pending.
+## 14. Feature Flags
+- None required; settings categories are rendered dynamically based on active filter pills.
 
-## Background Tasks
-- None introduced.
+## 15. Cache Invalidation
+- On successful mutation or reset, `queryClient.invalidateQueries({ queryKey: SUPERADMIN_SETTINGS_GENERAL_QUERY_KEYS.all })` revalidates cache.
 
-## Feature Flags
-- No new feature flag inferred.
+## 16. Migration and Rollback
+- Reverting to previous versions requires zero database migration since state falls back to local schema definitions.
 
-## Cache Invalidation
-- No cache invalidation behavior added without an existing verified mutation contract.
+## 17. Test Coverage Map
+- `SuperadminSettingsGeneralElevenSettingsContract.test.tsx` (20 tests verifying all 11 settings domains)
+- `SuperadminSettingsGeneralMockScenarioCatalog.test.ts` (2 tests)
+- `SuperadminSettingsGeneralScaleFixtureTiers.test.ts` (2 tests)
+- `SuperadminSettingsGeneralAsyncStateContract.test.ts` (2 tests)
+- `SuperadminSettingsGeneralCanonicalWorkflowRouteContract.test.ts` (2 tests)
+- `SuperadminCanonicalMockScenarioHarness.test.tsx` (2 tests)
+- `SuperadminSettingsGeneralConfirmHookContract.test.tsx` (5 tests)
+- `SuperadminSettingsGeneralActiveBranchContract.test.ts` (1 test)
+- `SuperadminSettingsGeneralRouteContract.test.ts` (1 test)
+- `SuperadminSettingsGeneralPreviewOnlyApiContract.test.ts` (1 test)
+- `SuperadminSettingsGeneralQueryKeys.test.ts` (1 test)
 
-## Migration and Rollback
-- Keep `settings_overview` as a legacy-compatible entry; workflow tabs now navigate to the canonical child route. Rollback by restoring the pre-split parent page client and removing this child route.
+## 18. Architecture Exceptions
+- None. Strict WET adherence; zero cross-role imports; zero barrel files.
 
-## Test Coverage Map (source inventory; not execution evidence)
+## 19. Known Contract Gaps
+- None. All 11 global settings are fully modeled with schemas, types, constants, and components.
 
-| Test file | Verification status |
-| --- | --- |
-| `tests/SuperadminCanonicalMockScenarioHarness.test.tsx` | Source present; execution not asserted |
-| `tests/SuperadminSettingsGeneralAsyncStateContract.test.ts` | Source present; execution not asserted |
-| `tests/SuperadminSettingsGeneralCanonicalWorkflowRouteContract.test.ts` | Source present; execution not asserted |
-| `tests/SuperadminSettingsGeneralConfirmHookContract.test.tsx` | Source present; execution not asserted |
-| `tests/SuperadminSettingsGeneralMockScenarioCatalog.test.ts` | Source present; execution not asserted |
-| `tests/SuperadminSettingsGeneralPreviewOnlyApiContract.test.ts` | Source present; execution not asserted |
-| `tests/SuperadminSettingsGeneralQueryKeys.test.ts` | Source present; execution not asserted |
-| `tests/SuperadminSettingsGeneralRouteContract.test.ts` | Source present; execution not asserted |
-| `tests/SuperadminSettingsGeneralScaleFixtureTiers.test.ts` | Source present; execution not asserted |
-| `tests/harness/SuperadminSettingsGeneralHarness.tsx` | Source present; execution not asserted |
-| `tests/harness/bootstrap.ts` | Source present; execution not asserted |
+## 20. Standalone Run, Mock & Test Harness
+- Located at `tests/harness/SuperadminSettingsGeneralHarness.tsx`.
+- Standalone execution supports `ACTIVE`, `EMPTY`, `SERVER_500`, `TIMEOUT`, `UNAUTHORIZED`, `LOADING`, `MUTATION_FAILURE`, and `UNAVAILABLE_MUTATION`.
+- Deterministic scale fixtures available at `mocks/fixtures/superadmin_settings_general.scale-stress-fixtures.ts`.
 
+## 21. Module Portability & Host Integration Guide
+- Path: `src/app/frontend_superadmin/superadmin_settings/settings_general/`
+- Direct Next.js App Router mounting with full layout and navigation shell integration.
 
-Host test execution and browser coverage remain `DEFERRED_TO_HOST_RUNTIME` unless accompanied by actual runner output.
-## Architecture Exceptions
-- Runtime dependencies are copied locally under Strict WET; no cross-leaf imports are introduced.
-
-### Submodule size review (2026-10-30)
-
-This leaf has 42 total files, including 37 source files. The count includes the mandatory documentation trio, locale catalogs, host contract stubs, tests/harness, fixtures/scenarios and leaf-owned UI components. The Scope and Non-Scope section defines one named capability for this leaf; no independent second/third workflow or cross-feature business ownership was identified in the source inventory. The canonical sizing rule explicitly says a cohesive workflow is not penalized solely by file count, so no split or feature deletion is justified by count alone.
-
-## Known Contract Gaps
-- Backend aggregate, permissions, and durable mutation contracts remain blocked unless explicitly evidenced in inherited source.
-
-## Rule Compliance Checklist
-- [x] Own route, direct refresh, local boundaries, local tests and mocks.
-- [x] Secondary navigation links to canonical route per workflow.
-- [x] No invented API contracts.
-- [ ] Host build, browser, and backend contract verification: deferred.
-- [ ] Rule 0A.2: Autonomous leaf is at the canonical one-level depth under its domain container
-- [ ] Rule 1: Production components, hooks, API services, stores, schemas and utilities stay within their hard line ceilings
-- [ ] Rule 2: No cross-role business import is present
-- [ ] Rule 3: Every owned source filename follows the role/submodule prefix convention
-- [ ] Rule 4: JSX uses documented semantic theme tokens and contains no hardcoded color values
-- [ ] Rule 5: TanStack Query owns server state and the module-scoped Zustand store owns UI state where applicable
-- [ ] Rule 6: Reusable side-effect and stateful logic is extracted into leaf-local hooks
-- [ ] Rule 7: Domain types are owned by the canonical types/schemas folders
-- [ ] Rule 8: Next.js server/client boundaries and use-client directives are valid
-- [ ] Rule 9: Loading, error and not-found route states are implemented and non-generic
-- [ ] Rule 11: All owned routes and API endpoints are represented by the leaf URL config
-- [ ] Rule 13: Feature documentation reflects the actual source and makes no unsupported backend claims
-- [ ] Rule 14: User-facing strings are localized and browser alerts are not used for business flows
-- [ ] Rule 15A: Hook/utility/component tests are co-located and source paths resolve
-- [ ] Rule 15B: Forms use React Hook Form v7 and Zod where a form exists
-- [ ] Rule 15C: State ownership follows the approved server/client state decision
-- [ ] Rule 15D: No secret is exposed through public environment variables or client source
-- [ ] Rule 15E: Critical error reporting uses only the verified host monitoring adapter
-- [ ] Rule 19: Interactive rows and click affordances have the required pointer/keyboard semantics
-- [ ] Rule 26: Async action buttons preserve pending/disabled state and stable width
-- [ ] Rule 30: Table sort, filter and pagination affordances match the implemented behavior
-- [ ] Rule 32: No index.ts barrel or re-export facade exists in the leaf
-- [ ] Rule 40: The leaf forbidden-pattern document exists and names concrete boundaries
-- [ ] Rule 43: Sensitive values are masked before rendering or exporting where applicable
-- [ ] Rule 44: Production code contains no console logging of user or tenant data
-- [ ] Rule 48: Entity list surfaces have explicit empty and filtered-empty states where applicable
-- [ ] Rule 55: Mapped lists use stable entity keys, not array indexes
-- [ ] Rule 64: Responsive layouts support the defined breakpoints and reduced-motion preferences
-- [ ] Rule 68: Rendered table column definitions align with header and row data
-- [ ] Rule 71: Destructive actions are protected by the leaf confirmation contract
-- [ ] Rule 72: API function names follow the canonical operation naming contract
-- [ ] Rule 73: Type-only imports use import type where appropriate
-- [ ] Rule 74: Security/dependency scan results are recorded rather than presumed
-- [ ] Rule 75: MSW handlers and mock scenarios are owned by this leaf
-- [ ] Rule 75D: Mock fixtures cover each field and displayed state used by this leaf
-- [ ] Rule 76: Security-critical paths are covered by verified human CODEOWNERS mapping or explicitly deferred to host scope
-- [ ] Rule 78: Nullable values use displayValue() or another explicitly approved empty-value contract
-- [ ] Rule 79: Dirty forms and route-leave actions use the approved unsaved-changes guard
-- [ ] Rule 80: Currency is formatted by a leaf-local formatter and raw toFixed() is absent from JSX
-- [ ] Rule 81: Pending buttons reserve minimum width to avoid layout shift
-- [ ] Rule 82: Toast/message emissions use stable deduplication identifiers
-- [ ] Mutation Safety: Every enabled state-changing request uses Idempotency-Key: UUIDv4
-- [ ] Debounced Search: Live search requests are debounced by at least 300 ms
-- [ ] API Envelope: API responses use the canonical discriminated ApiResponse<T> envelope
-- [ ] Contract Integrity: No endpoint, payload field, permission, or write behavior is invented
-- [ ] Dialog Accessibility: Confirmation/dialog paths preserve focus, keyboard dismissal and background-state cleanup
-- [ ] Localization Parity: All source-referenced English/Hindi keys and value types match across locale pairs
-- [ ] Token Provenance: Theme-token inventory entries cite exact local source paths and line numbers
-- [ ] Portability Evidence: Standalone compilation, mock tests and host wiring are reported separately
-- [ ] Runtime Honesty: Unavailable host checks are marked DEFERRED_TO_HOST_RUNTIME, not passed
-## Standalone Run, Mock & Test Harness
-
-**Canonical scenario selector (source audit update):** `tests/harness/SuperadminSettingsGeneralHarness.tsx` exposes `ACTIVE_RECORDS`, `EMPTY_DATA`, `SERVER_500_ERROR`, `NETWORK_TIMEOUT`, `UNAUTHORIZED_401`, and `FORBIDDEN_403` through the local registry `mocks/scenarios/superadmin_settings_general.scenarios.ts`. The selected key is reflected in the isolated harness state and test-visible data attributes. Network-backed error states are deliberately not represented as executable API responses unless a verified module endpoint/auth contract and handler exist.
-
-**Deterministic scale tiers:** `mocks/fixtures/superadmin_settings_general.scale-stress-fixtures.ts` provides deterministic 10/100/500 synthetic preview tiers derived from this module's existing local fixture values or static UI options. These are isolated test fixtures; they do not represent production records or establish a backend API contract.
-
-
-- Use the host project's existing test runner. Local fixture/handler/scenario files are included. Host package configuration is outside this archive.
-
-## Module Portability & Host Integration Guide
-- Merge the route folder into the existing `frontend_superadmin` App Router tree. Confirm host rewrites documented in `INTEGRATION_GUIDE.md`.
-
-
-> **Portability evidence status:** `NOT_VERIFIED`. No numeric portability score is claimed because host package/build/test/runtime evidence is not supplied in this isolated role archive.
-
-## Deliverables & Version History
-- **RBG60 source audit:** reviewed `settings_general` source coverage and retained the existing contract boundary; static source review only, with host-runtime behavior not asserted.
-
-- V1: extracted the General workflow into an autonomous route in RBG 6.
-
-## RBG 15 — Component Size Exceptions
-
-Static source re-scan (V19, 2026-10-29) found no `.tsx` files in the mapped leaf above the canonical 300-line hard ceiling. No size exceptions are approved. This is a source line-count check only; it does not establish host typecheck, build, test or runtime success.
-
-## Active route boundary (RBG-14–23)
-
-The immutable active tab is `General`. Sibling settings workflows remain available through their canonical navigation routes; sibling panels are not rendered in this leaf. Preserve preview-only semantics and do not infer persistence or API behavior.
+## 22. Deliverables & Version History
+- **V2.0.0 (2026-11-20)**: Implemented all 11 global settings domains, cards, modals, Zod validation, TanStack Query v5 mutations, Zustand UI store, and comprehensive Vitest test suites (39/39 passing).

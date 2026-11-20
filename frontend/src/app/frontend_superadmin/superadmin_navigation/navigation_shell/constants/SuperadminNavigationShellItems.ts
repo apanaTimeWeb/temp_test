@@ -303,10 +303,11 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     colorText: '#2dd4bf',
     description: 'Server, database, API, queue, error aur uptime monitoring',
     subItems: [
-      { id: 'sys_server', label: 'Server & Infrastructure', href: `${SUPERADMIN_NAVIGATION_ROUTES.system_health_overview}?tab=server` },
-      { id: 'sys_db', label: 'Database & Cache Health', href: `${SUPERADMIN_NAVIGATION_ROUTES.system_health_overview}?tab=database` },
-      { id: 'sys_api_queue', label: 'API & Queue Workers', href: `${SUPERADMIN_NAVIGATION_ROUTES.system_health_overview}?tab=queues` },
-      { id: 'sys_uptime', label: 'Error Logs & Uptime Tracker', href: `${SUPERADMIN_NAVIGATION_ROUTES.system_health_overview}?tab=errors` },
+      { id: 'sys_server', label: 'Server & Application Status', href: `${SUPERADMIN_NAVIGATION_ROUTES.system_health_overview}?tab=server` },
+      { id: 'sys_db', label: 'Database & Storage Capacity', href: `${SUPERADMIN_NAVIGATION_ROUTES.system_health_overview}?tab=database` },
+      { id: 'sys_api_queue', label: 'API, Webhooks & Queues', href: `${SUPERADMIN_NAVIGATION_ROUTES.system_health_overview}?tab=queues` },
+      { id: 'sys_security_maintenance', label: 'Security Alerts & Maintenance', href: `${SUPERADMIN_NAVIGATION_ROUTES.system_health_overview}?tab=security` },
+      { id: 'sys_releases', label: 'Releases & Feature Controls', href: `${SUPERADMIN_NAVIGATION_ROUTES.system_health_overview}?tab=releases` },
     ],
   },
   {

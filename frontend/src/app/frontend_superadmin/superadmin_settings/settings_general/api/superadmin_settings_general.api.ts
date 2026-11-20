@@ -3,6 +3,7 @@
 import { apiFetch, type ApiResponse } from '@/lib/api';
 import type { SuperadminSettingsFormValues } from '@/app/frontend_superadmin/superadmin_settings/settings_general/types/SuperadminSettingsGeneralTypes';
 import { SUPERADMIN_SETTINGS_GENERAL_API } from '@/app/frontend_superadmin/superadmin_settings/settings_general/config/superadmin_settings_general.url_config';
+import { SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS } from '@/app/frontend_superadmin/superadmin_settings/settings_general/mocks/fixtures/SuperadminSettingsGeneralPreviewDefaults';
 
 /**
  * API boundary status for settings_general.
@@ -19,6 +20,13 @@ export const SUPERADMIN_SETTINGS_GENERAL_API_CONTRACT_STATUS = {
  * Fetches the global settings payload across all 11 settings domains.
  */
 export async function fetchSuperadminSettingsGeneral(): Promise<ApiResponse<SuperadminSettingsFormValues>> {
+  if (!SUPERADMIN_SETTINGS_GENERAL_API_CONTRACT_STATUS.networkCallsEnabled) {
+    return {
+      success: true,
+      data: SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS,
+      message: 'Preview-only fixture loaded',
+    };
+  }
   return apiFetch<SuperadminSettingsFormValues>(SUPERADMIN_SETTINGS_GENERAL_API.get, {
     method: 'GET',
     headers: {
@@ -37,6 +45,13 @@ export async function updateSuperadminSettingsGeneral(
   idempotencyKey?: string
 ): Promise<ApiResponse<SuperadminSettingsFormValues>> {
   const key = idempotencyKey ?? (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'idemp-default-key');
+  if (!SUPERADMIN_SETTINGS_GENERAL_API_CONTRACT_STATUS.networkCallsEnabled) {
+    return {
+      success: true,
+      data: payload,
+      message: `Preview settings updated with idempotency key: ${key}`,
+    };
+  }
   return apiFetch<SuperadminSettingsFormValues>(SUPERADMIN_SETTINGS_GENERAL_API.update, {
     method: 'PATCH',
     headers: {
@@ -54,6 +69,13 @@ export async function resetSuperadminSettingsGeneral(
   idempotencyKey?: string
 ): Promise<ApiResponse<SuperadminSettingsFormValues>> {
   const key = idempotencyKey ?? (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'idemp-reset-key');
+  if (!SUPERADMIN_SETTINGS_GENERAL_API_CONTRACT_STATUS.networkCallsEnabled) {
+    return {
+      success: true,
+      data: SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS,
+      message: `Preview settings reset with idempotency key: ${key}`,
+    };
+  }
   return apiFetch<SuperadminSettingsFormValues>(SUPERADMIN_SETTINGS_GENERAL_API.reset, {
     method: 'POST',
     headers: {

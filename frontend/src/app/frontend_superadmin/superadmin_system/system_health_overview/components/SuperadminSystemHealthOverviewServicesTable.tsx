@@ -1,9 +1,11 @@
 'use client';
 import { useState, useMemo } from 'react';
-import { Server, Activity, Search, ChevronLeft, ChevronRight, CheckCircle, AlertTriangle, RefreshCw, Cpu, HardDrive, Eye, RotateCw, Sparkles, Filter } from 'lucide-react';
+import { Server, Search, RefreshCw, Filter } from 'lucide-react';
 import { toast } from 'sonner';
 import SuperadminSystemHealthOverviewInspectModal from './SuperadminSystemHealthOverviewInspectModal';
 import SuperadminSystemHealthOverviewRestartModal from './SuperadminSystemHealthOverviewRestartModal';
+import { SuperadminSystemHealthOverviewServicesTableRow } from './SuperadminSystemHealthOverviewServicesTableRow';
+import { SuperadminSystemHealthOverviewServicesPagination } from './SuperadminSystemHealthOverviewServicesPagination';
 
 export interface ServiceNode {
   id: string;
@@ -107,7 +109,6 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
   return (
     <>
       <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-b from-[#0b0e24] via-slate-900/90 to-[#080b1a] shadow-xl overflow-hidden mb-6">
-        {/* Table Header Controls */}
         <div className="flex flex-col gap-4 p-5 sm:p-6 border-b border-border/80 bg-slate-900/50">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
@@ -134,7 +135,6 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
             </button>
           </div>
 
-          {/* Category Filter Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
             {CATEGORIES.map((cat) => {
               const count = cat === 'All' ? services.length : services.filter((s) => s.category === cat).length;
@@ -159,7 +159,6 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
             })}
           </div>
 
-          {/* Search & Status Bar */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2 border-t border-border/40">
             <div className="relative flex-1 sm:max-w-xs">
               <Search size={14} className="text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -197,7 +196,6 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
           </div>
         </div>
 
-        {/* Table */}
         <div className="overflow-x-auto w-full">
           <table className="w-full text-left text-xs border-collapse">
             <thead className="bg-slate-900/90 text-slate-400 uppercase tracking-wider font-semibold border-b border-border/80">
@@ -221,178 +219,33 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
                 </tr>
               ) : (
                 paginatedNodes.map((item) => (
-                  <tr key={item.id} className="hover:bg-emerald-500/5 transition-colors group">
-                    <td className="px-5 py-3.5">
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-                        <div>
-                          <span className="font-bold text-slate-100 block group-hover:text-emerald-300 transition-colors">
-                            {item.name}
-                          </span>
-                          <span className="text-[11px] text-slate-400">{item.category}</span>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td className="px-5 py-3.5 font-mono text-slate-300 text-[11px]">
-                      <span className="px-2 py-0.5 rounded-md bg-slate-800/80 border border-slate-700/60">
-                        {item.node}
-                      </span>
-                    </td>
-
-                    <td className="px-5 py-3.5 font-mono font-bold text-emerald-400">
-                      <span className="flex items-center gap-1.5">
-                        <Activity size={12} className="text-emerald-500" />
-                        {item.latency}
-                      </span>
-                    </td>
-
-                    <td className="px-5 py-3.5 min-w-44">
-                      <div className="flex items-center justify-between text-[11px] mb-1">
-                        <span className="text-slate-400">{item.memory}</span>
-                        <span className={`font-bold ${item.cpu > 80 ? 'text-amber-400' : 'text-slate-200'}`}>
-                          {item.cpu}% CPU
-                        </span>
-                      </div>
-                      <div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
-                        <div
-                          className={`h-full rounded-full transition-all duration-300 ${
-                            item.cpu > 80
-                              ? 'bg-amber-400'
-                              : 'bg-gradient-to-r from-emerald-500 to-teal-400'
-                          }`}
-                          style={{ width: `${item.cpu}%` }}
-                        />
-                      </div>
-                    </td>
-
-                    <td className="px-5 py-3.5 font-mono text-slate-300 font-semibold">{item.uptime}</td>
-
-                    <td className="px-5 py-3.5">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${
-                          item.status === 'Healthy'
-                            ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
-                            : item.status === 'Degraded'
-                            ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
-                            : 'bg-slate-500/15 text-slate-300 border-slate-500/30'
-                        }`}
-                      >
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            item.status === 'Healthy' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
-                          }`}
-                        />
-                        <span>{item.status}</span>
-                      </span>
-                    </td>
-
-                    <td className="px-5 py-3.5 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => handlePing(item.name, item.id)}
-                          disabled={pingingId === item.id}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
-                          title="Send ping heartbeat probe"
-                        >
-                          <RefreshCw size={11} className={pingingId === item.id ? 'animate-spin' : ''} />
-                          <span>{pingingId === item.id ? 'Pinging' : 'Ping'}</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setInspectingService(item)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95"
-                          title="Inspect node telemetry & logs"
-                        >
-                          <Eye size={11} />
-                          <span>Inspect</span>
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => setRestartingService(item)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95"
-                          title="Graceful restart worker"
-                        >
-                          <RotateCw size={11} />
-                          <span>Restart</span>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                  <SuperadminSystemHealthOverviewServicesTableRow
+                    key={item.id}
+                    item={item}
+                    pingingId={pingingId}
+                    onPing={handlePing}
+                    onInspect={(svc) => setInspectingService(svc)}
+                    onRestart={(svc) => setRestartingService(svc)}
+                  />
                 ))
               )}
             </tbody>
           </table>
         </div>
 
-        {/* Pagination Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3.5 border-t border-border/80 bg-slate-900/40 text-xs text-slate-400">
-          <div className="flex items-center gap-3">
-            <span>
-              {filteredNodes.length === 0
-                ? 'Showing 0 services'
-                : `Showing ${page * pageSize + 1} to ${Math.min((page + 1) * pageSize, filteredNodes.length)} of ${filteredNodes.length} services`}
-            </span>
-            <div className="flex items-center gap-1.5 ml-2">
-              <span className="text-[11px] text-slate-500">Rows:</span>
-              <select
-                value={pageSize}
-                onChange={(e) => {
-                  setPageSize(Number(e.target.value));
-                  setPage(0);
-                }}
-                className="rounded-lg border border-border/80 bg-slate-900 px-2 py-0.5 text-xs text-slate-300 focus:outline-none cursor-pointer"
-              >
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
-              disabled={page === 0}
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-            >
-              <ChevronLeft size={14} />
-              <span>Previous</span>
-            </button>
-
-            <div className="flex items-center gap-1">
-              {Array.from({ length: totalPages }).map((_, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setPage(idx)}
-                  className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    page === idx ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                  }`}
-                >
-                  {idx + 1}
-                </button>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
-              disabled={page + 1 >= totalPages}
-              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-            >
-              <span>Next</span>
-              <ChevronRight size={14} />
-            </button>
-          </div>
-        </div>
+        <SuperadminSystemHealthOverviewServicesPagination
+          page={page}
+          pageSize={pageSize}
+          totalItems={filteredNodes.length}
+          totalPages={totalPages}
+          onPageChange={(p) => setPage(p)}
+          onPageSizeChange={(size) => {
+            setPageSize(size);
+            setPage(0);
+          }}
+        />
       </div>
 
-      {/* Inspect Modal */}
       <SuperadminSystemHealthOverviewInspectModal
         service={inspectingService}
         onClose={() => setInspectingService(null)}
@@ -400,7 +253,6 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
         onRestartRequest={(svc) => setRestartingService(svc)}
       />
 
-      {/* Restart Confirmation Modal */}
       <SuperadminSystemHealthOverviewRestartModal
         service={restartingService}
         onClose={() => setRestartingService(null)}

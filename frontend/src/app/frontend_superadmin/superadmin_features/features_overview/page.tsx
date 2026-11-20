@@ -1,11 +1,22 @@
+// RESPONSIBILITY: Server entry page for SuperAdmin Feature & Module Governance.
 import { Suspense } from 'react';
-import SuperadminFeaturesOverviewScreen from './components/SuperadminFeaturesOverviewScreen';
+import SuperadminFeaturesOverviewPageClient from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesOverviewPageClient';
+import SuperadminFeaturesOverviewListSkeleton from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesOverviewListSkeleton';
+
+export const metadata = {
+  title: '07. Feature & Module Control | SuperAdmin Platform',
+  description: 'Multi-tenant 3-tier module governance with backend API Guard denial enforcement.',
+};
 
 export default function SuperadminFeaturesOverviewPage() {
   return (
-    <div className="min-w-0" data-feature-module="superadmin_features" data-feature-route="features_overview">
-      <Suspense fallback={<div className="rounded-xl border border-border bg-card p-6 text-neutral-400">Loading feature controls...</div>}>
-        <SuperadminFeaturesOverviewScreen />
+    <div
+      className="min-w-0 space-y-6"
+      data-feature-module="superadmin_features"
+      data-feature-route="features_overview"
+    >
+      <Suspense fallback={<SuperadminFeaturesOverviewListSkeleton />}>
+        <SuperadminFeaturesOverviewPageClient />
       </Suspense>
     </div>
   );
