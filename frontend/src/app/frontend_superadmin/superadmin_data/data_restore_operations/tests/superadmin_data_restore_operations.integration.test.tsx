@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { SuperadminDataRestoreOperationsHarness } from './harness/SuperadminDataRestoreOperationsHarness';
 import { SuperadminDataRestoreOperationsMain } from '../components/SuperadminDataRestoreOperationsMain';
@@ -21,7 +21,7 @@ describe('SuperadminDataRestoreOperations Integration Tests', () => {
     await waitFor(() => {
       expect(
         screen.getByText(/Multi-Tenant Isolation Assurance \(Zero-Bleed Law\)/i)
-      ).toBeInTheDocument();
+      ).toBeDefined();
     });
   });
 
@@ -35,8 +35,8 @@ describe('SuperadminDataRestoreOperations Integration Tests', () => {
     await waitFor(() => {
       expect(
         screen.getByText(/Automated Restore Verification & Sandbox Drills/i)
-      ).toBeInTheDocument();
-      expect(screen.getByText(/Trigger Disaster Drill/i)).toBeInTheDocument();
+      ).toBeDefined();
+      expect(screen.getByText(/Trigger Disaster Drill/i)).toBeDefined();
     });
   });
 
@@ -50,8 +50,27 @@ describe('SuperadminDataRestoreOperations Integration Tests', () => {
     await waitFor(() => {
       expect(
         screen.getByText(/Backup Snapshot History Catalog/i)
-      ).toBeInTheDocument();
-      expect(screen.getByText('SNP-2026-11-20-001')).toBeInTheDocument();
+      ).toBeDefined();
+      expect(screen.getByText('SNP-2026-11-20-001')).toBeDefined();
+    });
+  });
+
+  it('opens double-verification restore modal when Restore is clicked', async () => {
+    render(
+      <SuperadminDataRestoreOperationsHarness>
+        <SuperadminDataRestoreOperationsMain />
+      </SuperadminDataRestoreOperationsHarness>
+    );
+
+    await waitFor(() => {
+      expect(screen.getAllByText('Restore').length).toBeGreaterThan(0);
+    });
+
+    fireEvent.click(screen.getAllByText('Restore')[0]);
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /Authorize Point-in-Time Restore/i })).toBeDefined();
+      expect(screen.getByText(/CONFIRM-RESTORE/i)).toBeDefined();
     });
   });
 });

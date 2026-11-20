@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { SuperadminDataExportManagementHarness } from './harness/SuperadminDataExportManagementHarness';
 import { SuperadminDataExportManagementMain } from '../components/SuperadminDataExportManagementMain';
@@ -22,8 +22,8 @@ describe('SuperadminDataExportManagement Integration Tests', () => {
     await waitFor(() => {
       expect(
         screen.getByRole('heading', { name: /Tenant Library Data Export/i })
-      ).toBeInTheDocument();
-      expect(screen.getByText(/Export Library Tenant Data/i)).toBeInTheDocument();
+      ).toBeDefined();
+      expect(screen.getByText(/Export Library Tenant Data/i)).toBeDefined();
     });
   });
 
@@ -37,8 +37,8 @@ describe('SuperadminDataExportManagement Integration Tests', () => {
     await waitFor(() => {
       expect(
         screen.getByRole('heading', { name: /Branch-Specific Data Extraction/i })
-      ).toBeInTheDocument();
-      expect(screen.getByText(/Export Branch Data/i)).toBeInTheDocument();
+      ).toBeDefined();
+      expect(screen.getByText(/Export Branch Data/i)).toBeDefined();
     });
   });
 
@@ -52,9 +52,28 @@ describe('SuperadminDataExportManagement Integration Tests', () => {
     await waitFor(() => {
       expect(
         screen.getByRole('heading', { name: /Export Jobs & Download Center/i })
-      ).toBeInTheDocument();
-      expect(screen.getByText('EXP-2026-11-20-001')).toBeInTheDocument();
+      ).toBeDefined();
+      expect(screen.getByText('EXP-2026-11-20-001')).toBeDefined();
       expect(screen.getAllByText('Ready').length).toBeGreaterThan(0);
+    });
+  });
+
+  it('opens export configuration modal when initiate export button is clicked', async () => {
+    render(
+      <SuperadminDataExportManagementHarness>
+        <SuperadminDataExportManagementMain />
+      </SuperadminDataExportManagementHarness>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Export Library Tenant Data/i)).toBeDefined();
+    });
+
+    fireEvent.click(screen.getByText(/Export Library Tenant Data/i));
+
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /Configure Data Export Job/i })).toBeDefined();
+      expect(screen.getByText(/Data Entities to Include/i)).toBeDefined();
     });
   });
 });
