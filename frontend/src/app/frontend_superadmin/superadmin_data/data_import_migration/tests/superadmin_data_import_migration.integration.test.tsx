@@ -22,8 +22,9 @@ describe('SuperadminDataImportMigration Integration Tests', () => {
     await waitFor(() => {
       expect(
         screen.getByRole('heading', { name: /Library Migration Ingestion Wizard/i })
-      ).toBeInTheDocument();
-      expect(screen.getByText(/Run Pre-flight Dry Run/i)).toBeInTheDocument();
+      ).toBeDefined();
+      expect(screen.getByText(/Run Pre-flight Dry Run/i)).toBeDefined();
+      expect(screen.getByText(/Destination Library Tenant/i)).toBeDefined();
     });
   });
 
@@ -37,8 +38,8 @@ describe('SuperadminDataImportMigration Integration Tests', () => {
     await waitFor(() => {
       expect(
         screen.getByRole('heading', { name: /Migration Batches & Rollback History/i })
-      ).toBeInTheDocument();
-      expect(screen.getByText('MIG-2026-11-20-001')).toBeInTheDocument();
+      ).toBeDefined();
+      expect(screen.getByText('MIG-2026-11-20-001')).toBeDefined();
       expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
     });
   });
