@@ -77,147 +77,270 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({ tkt, onClo
   };
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-overlay backdrop-blur-sm motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none" style={{ padding: "max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left))" }} onClick={requestClose} data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-72">
-      <div ref={dialogRef} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="superadmin-support-ticket-detail-title" className="bg-page border border-border rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col overflow-hidden" style={{ maxHeight: "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 48px)" }} onClick={e => e.stopPropagation()} data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-73">
-        
+    <div
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md flex justify-center items-start p-3 sm:p-5 pt-4 sm:pt-8 motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none"
+      style={{ padding: "max(24px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left))" }}
+      onClick={requestClose}
+      data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-72"
+    >
+      <div
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="superadmin-support-ticket-detail-title"
+        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-indigo-950/80 w-full max-w-3xl flex flex-col overflow-hidden text-slate-100 my-auto sm:my-4"
+        style={{ maxHeight: "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 48px)" }}
+        onClick={(e) => e.stopPropagation()}
+        data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-73"
+      >
         {/* Header */}
-        <div className="p-5 border-b border-border flex items-start justify-between bg-surface-highlight">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <span className="font-mono text-xs text-info bg-info-bg px-2 py-0.5 rounded border border-border">{tkt.id}</span>
-              <span className={`flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full ${
-                status === 'Resolved' ? 'text-success bg-success-bg' : status === 'Open' ? 'text-danger bg-danger-bg' : 'text-warning bg-warning-bg'
-              }`}>
+        <div className="p-5 sm:p-6 border-b border-indigo-500/25 flex items-start justify-between bg-gradient-to-r from-[#10173b] via-[#0d1330] to-[#0a0e27]">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <span className="font-mono text-xs font-bold text-indigo-300 bg-indigo-500/15 px-2.5 py-1 rounded-lg border border-indigo-500/30 shadow-xs">
+                {tkt.id}
+              </span>
+              <span
+                className={`inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border shadow-xs ${
+                  status === 'Resolved'
+                    ? 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30'
+                    : status === 'Open'
+                    ? 'text-rose-300 bg-rose-500/15 border-rose-500/30'
+                    : 'text-amber-300 bg-amber-500/15 border-amber-500/30'
+                }`}
+              >
                 {status === 'Open' ? t('COPY.STATUS_OPEN') : status === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : t('COPY.STATUS_RESOLVED')}
               </span>
-              {tkt.slaBreach && <span className="flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full text-danger bg-danger-bg motion-safe:animate-pulse"><Flag size={10}/> {t("COPY.SLA_BREACH")}</span>}
+              {tkt.slaBreach && (
+                <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full text-rose-300 bg-rose-500/15 border border-rose-500/30 motion-safe:animate-pulse shadow-xs">
+                  <Flag size={11} className="text-rose-400" /> {t("COPY.SLA_BREACH")}
+                </span>
+              )}
             </div>
-            <h2 id="superadmin-support-ticket-detail-title" className="text-xl font-bold text-primary">{tkt.subject}</h2>
-            <div className="flex items-center gap-4 mt-2 text-xs text-secondary">
-              <span className="flex items-center gap-1"><User size={12} /> {tkt.tenant}</span>
-              <span className="flex items-center gap-1"><Clock size={12} /> {t("COPY.OPENED")} {tkt.age} {t("COPY.AGO")}</span>
-              <span className="flex items-center gap-1">{getCategoryIcon(tkt.category)} {t(`COPY.CATEGORY_${String(tkt.category).toUpperCase()}` as 'COPY.CATEGORY_BILLING' | 'COPY.CATEGORY_BUG' | 'COPY.CATEGORY_ACCOUNT' | 'COPY.CATEGORY_GENERAL' | 'COPY.CATEGORY_SUPPORT')}</span>
+            <h2 id="superadmin-support-ticket-detail-title" className="text-lg sm:text-xl font-bold text-slate-100 tracking-tight">
+              {tkt.subject}
+            </h2>
+            <div className="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
+              <span className="flex items-center gap-1.5 font-medium text-slate-300">
+                <User size={13} className="text-indigo-400" /> {tkt.tenant} {tkt.contact ? `(${tkt.contact})` : ''}
+              </span>
+              <span className="flex items-center gap-1.5 font-medium text-slate-400">
+                <Clock size={13} className="text-indigo-400" /> {t("COPY.OPENED")} {tkt.age} {t("COPY.AGO")}
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-medium text-[11px]">
+                {getCategoryIcon(tkt.category)} {t(`COPY.CATEGORY_${String(tkt.category).toUpperCase()}` as 'COPY.CATEGORY_BILLING' | 'COPY.CATEGORY_BUG' | 'COPY.CATEGORY_ACCOUNT' | 'COPY.CATEGORY_GENERAL' | 'COPY.CATEGORY_SUPPORT')}
+              </span>
             </div>
           </div>
-          <button type="button" aria-label={t("COPY.CLOSE_TICKET_DETAILS")} className="text-secondary hover:text-primary p-1 rounded hover:bg-surface-hover motion-safe:transition-colors motion-reduce:transition-none" onClick={requestClose} data-testid="superadmin-support-tickets-support-tickets-detail-close-ticket-details-1"><X size={20} /></button>
+          <button
+            type="button"
+            aria-label={t("COPY.CLOSE_TICKET_DETAILS")}
+            className="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800/80 border border-transparent hover:border-slate-700/80 transition-all cursor-pointer"
+            onClick={requestClose}
+            data-testid="superadmin-support-tickets-support-tickets-detail-close-ticket-details-1"
+          >
+            <X size={18} />
+          </button>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-6">
-          
+        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
           {/* Quick Actions & Meta */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 rounded-xl bg-surface-hover border border-border">
-            <div>
-              <p className="text-xs uppercase tracking-wider text-secondary font-semibold mb-1">{t("COPY.ASSIGNEE")}</p>
-              <select aria-label={t("COPY.TICKET_ASSIGNEE_LOCAL_PREVIEW_ONLY")} className="bg-transparent text-sm text-primary font-medium outline-none cursor-pointer w-full" value={assignee} onChange={e => setAssignee(e.target.value)} data-testid="superadmin-support-tickets-support-tickets-detail-ticket-assignee-local-preview-only-2">
-                {SUPERADMIN_SUPPORT_TICKETS_ASSIGNEE_OPTIONS.map((option) => <option key={option} value={option}>{t(option === 'Unassigned' ? 'COPY.ASSIGNEE_UNASSIGNED' : option === 'Sample Agent A' ? 'COPY.ASSIGNEE_SAMPLE_AGENT_A' : 'COPY.ASSIGNEE_SAMPLE_AGENT_B')}</option>)}
-              </select>
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-950/90 border border-indigo-500/20 shadow-md">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="space-y-1.5">
+                <p className="text-[11px] uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1.5">
+                  <User size={12} className="text-indigo-400" />
+                  <span>{t("COPY.ASSIGNEE")}</span>
+                </p>
+                <div className="relative">
+                  <select
+                    aria-label={t("COPY.TICKET_ASSIGNEE_LOCAL_PREVIEW_ONLY")}
+                    className="w-full rounded-xl border border-indigo-500/30 bg-slate-950 px-3 py-2 text-xs font-semibold text-slate-200 outline-none hover:border-indigo-400 focus:border-indigo-400 transition-colors cursor-pointer shadow-xs"
+                    value={assignee}
+                    onChange={e => setAssignee(e.target.value)}
+                    data-testid="superadmin-support-tickets-support-tickets-detail-ticket-assignee-local-preview-only-2"
+                  >
+                    {SUPERADMIN_SUPPORT_TICKETS_ASSIGNEE_OPTIONS.map((option) => (
+                      <option key={option} value={option}>
+                        {t(option === 'Unassigned' ? 'COPY.ASSIGNEE_UNASSIGNED' : option === 'Sample Agent A' ? 'COPY.ASSIGNEE_SAMPLE_AGENT_A' : 'COPY.ASSIGNEE_SAMPLE_AGENT_B')}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <p className="text-[11px] uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1.5">
+                  <Flag size={12} className="text-amber-400" />
+                  <span>{t("COPY.PRIORITY")}</span>
+                </p>
+                <div className="pt-1">
+                  <span
+                    className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-bold border shadow-xs ${
+                      tkt.priority === 'High'
+                        ? 'text-rose-300 bg-rose-500/15 border-rose-500/30'
+                        : tkt.priority === 'Medium'
+                        ? 'text-amber-300 bg-amber-500/15 border-amber-500/30'
+                        : 'text-slate-300 bg-slate-800/80 border-slate-700/80'
+                    }`}
+                  >
+                    {t(tkt.priority === 'High' ? 'COPY.PRIORITY_HIGH' : tkt.priority === 'Medium' ? 'COPY.PRIORITY_MEDIUM' : 'COPY.PRIORITY_LOW')}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <p className="text-[11px] uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1.5">
+                  <Clock size={12} className="text-emerald-400" />
+                  <span>{t("COPY.UPDATE_STATUS")}</span>
+                </p>
+                <div className="relative">
+                  <select
+                    aria-label={t("COPY.TICKET_STATUS_LOCAL_PREVIEW_ONLY")}
+                    className="w-full rounded-xl border border-indigo-500/30 bg-slate-950 px-3 py-2 text-xs font-semibold text-slate-200 outline-none hover:border-indigo-400 focus:border-indigo-400 transition-colors cursor-pointer shadow-xs"
+                    value={status}
+                    onChange={e => setStatus(e.target.value)}
+                    data-testid="superadmin-support-tickets-support-tickets-detail-ticket-status-local-preview-only-3"
+                  >
+                    <option value="Open">{t("COPY.OPEN")}</option>
+                    <option value="In-Progress">{t("COPY.IN_PROGRESS")}</option>
+                    <option value="Resolved">{t("COPY.RESOLVED")}</option>
+                  </select>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-secondary font-semibold mb-1">{t("COPY.PRIORITY")}</p>
-              <span className={`text-sm font-bold ${tkt.priority === 'High' ? 'text-danger' : tkt.priority === 'Medium' ? 'text-warning' : 'text-secondary'}`}>{t(tkt.priority === 'High' ? 'COPY.PRIORITY_HIGH' : tkt.priority === 'Medium' ? 'COPY.PRIORITY_MEDIUM' : 'COPY.PRIORITY_LOW')}</span>
+
+            <div className="mt-4 pt-3 border-t border-indigo-500/20 flex justify-end">
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-indigo-950/40 transition-all cursor-pointer active:scale-95"
+                onClick={() => {
+                  onSave({ ...tkt, status, assignee });
+                  setOperationMessage(t('COPY.LOCAL_PREVIEW_APPLIED_MESSAGE'));
+                }}
+                data-testid="superadmin-support-tickets-support-tickets-detail-apply-local-preview-changes-4"
+              >
+                <span>{t("COPY.APPLY_LOCAL_PREVIEW_CHANGES")}</span>
+              </button>
             </div>
-            <div>
-              <p className="text-xs uppercase tracking-wider text-secondary font-semibold mb-1">{t("COPY.UPDATE_STATUS")}</p>
-              <select aria-label={t("COPY.TICKET_STATUS_LOCAL_PREVIEW_ONLY")} className="bg-transparent text-sm text-primary font-medium outline-none cursor-pointer w-full" value={status} onChange={e => setStatus(e.target.value)} data-testid="superadmin-support-tickets-support-tickets-detail-ticket-status-local-preview-only-3">
-                <option value="Open">{t("COPY.OPEN")}</option>
-                <option value="In-Progress">{t("COPY.IN_PROGRESS")}</option>
-                <option value="Resolved">{t("COPY.RESOLVED")}</option>
-              </select>
-            </div>
-          </div>
-          <div className="mt-3 flex justify-end">
-            <button
-              type="button"
-              className="rounded-lg border border-border bg-surface-hover px-4 py-2 text-sm font-semibold text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-              onClick={() => {
-                onSave({ ...tkt, status, assignee });
-                setOperationMessage(t('COPY.LOCAL_PREVIEW_APPLIED_MESSAGE'));
-              }}
-             data-testid="superadmin-support-tickets-support-tickets-detail-apply-local-preview-changes-4">
-              {t("COPY.APPLY_LOCAL_PREVIEW_CHANGES")}
-            </button>
           </div>
 
           {/* Original Message */}
-          <div className="flex gap-4">
-            <div className="w-10 h-10 rounded-full bg-info-bg flex items-center justify-center shrink-0 border border-border">
-              <span className="text-info font-bold text-sm">{tkt.tenant.charAt(0)}</span>
+          <div className="flex items-start gap-3.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500/30 to-purple-500/30 border border-indigo-500/40 flex items-center justify-center shrink-0 shadow-xs">
+              <span className="text-indigo-300 font-bold text-xs">{tkt.tenant.charAt(0)}</span>
             </div>
-            <div className="flex-1">
-              <div className="bg-surface-hover border border-border rounded-2xl rounded-tl-none p-4 text-sm text-primary leading-relaxed">
-                {tkt.desc}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-xs font-bold text-slate-200">{tkt.tenant}</span>
+                <span className="text-[11px] text-slate-400">• {tkt.age} {t("COPY.AGO")}</span>
+              </div>
+              <div className="bg-slate-900/80 border border-indigo-500/25 rounded-2xl rounded-tl-sm p-4 text-xs sm:text-sm text-slate-200 leading-relaxed shadow-sm">
+                <p>{tkt.desc}</p>
                 {tkt.hasAttachment && (
-                  <div className="mt-4 flex items-center gap-2 p-2 rounded-lg bg-floating border border-border w-max">
-                    <Paperclip size={14} className="text-info" />
-                    <span className="text-xs text-info font-medium">{t("COPY.SAMPLE_ATTACHMENT_ERROR_SCREENSHOT_PNG_DOWNLOAD_UNAVAILABLE")}</span>
+                  <div className="mt-3.5 inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs">
+                    <Paperclip size={13} className="text-indigo-400 shrink-0" />
+                    <span className="font-medium truncate">{t("COPY.SAMPLE_ATTACHMENT_ERROR_SCREENSHOT_PNG_DOWNLOAD_UNAVAILABLE")}</span>
                   </div>
                 )}
               </div>
-              <p className="text-xs text-secondary mt-1.5 ml-1">{tkt.age} {t("COPY.AGO")}</p>
             </div>
           </div>
 
-          {/* Thread (Mock) */}
+          {/* Thread (Mock reply if replies > 1) */}
           {tkt.replies > 1 && (
-            <div className="flex gap-4 flex-row-reverse">
-              <div className="w-10 h-10 rounded-full bg-success-bg flex items-center justify-center shrink-0 border border-border">
-                <span className="text-success font-bold text-sm">{t("COPY.S")}</span>
+            <div className="flex items-start gap-3.5 flex-row-reverse">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500/30 to-teal-500/30 border border-emerald-500/40 flex items-center justify-center shrink-0 shadow-xs">
+                <span className="text-emerald-300 font-bold text-xs">{t("COPY.S")}</span>
               </div>
-              <div className="flex-1 flex flex-col items-end">
-                <div className="bg-success-bg border border-border rounded-2xl rounded-tr-none p-4 text-sm text-primary leading-relaxed">
-                  {t("COPY.WE_ARE_LOOKING_INTO_THIS_ISSUE_RIGHT_NOW_COULD_YOU_PLEASE_CONFIRM_IF_THIS_HAPPENS_ON_MOBILE_APP_AS_WELL")}
+              <div className="flex-1 min-w-0 flex flex-col items-end">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-xs font-bold text-emerald-300">{t("COPY.SUPPORT_AGENT")}</span>
+                  <span className="text-[11px] text-slate-400">• {tkt.age} {t("COPY.AGO")}</span>
                 </div>
-                <p className="text-xs text-secondary mt-1.5 mr-1">{t("COPY.SUPPORT_AGENT")} {tkt.age} {t("COPY.AGO")}</p>
+                <div className="bg-emerald-950/25 border border-emerald-500/25 rounded-2xl rounded-tr-sm p-4 text-xs sm:text-sm text-slate-200 leading-relaxed shadow-sm text-right">
+                  <p>{t("COPY.WE_ARE_LOOKING_INTO_THIS_ISSUE_RIGHT_NOW_COULD_YOU_PLEASE_CONFIRM_IF_THIS_HAPPENS_ON_MOBILE_APP_AS_WELL")}</p>
+                </div>
               </div>
             </div>
           )}
-
         </div>
 
         {/* Reply Box */}
-        <div className="p-5 border-t border-border bg-floating">
-          {operationMessage && <p className="mb-3 rounded-md border border-border bg-warning-bg p-3 text-sm text-warning" role="alert">{operationMessage}</p>}
-          <div className="flex items-center gap-4 mb-3">
-            <button type="button" 
-              aria-pressed={!isInternalNote} className={`text-xs font-semibold px-3 py-1.5 rounded-full motion-safe:transition-colors motion-reduce:transition-none ${!isInternalNote ? 'bg-info-bg text-info' : 'text-secondary hover:text-primary'}`}
+        <div className="p-5 sm:p-6 border-t border-indigo-500/25 bg-gradient-to-b from-[#0b0f2a] to-[#080b1e]">
+          {operationMessage && (
+            <p className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200 flex items-center gap-2" role="alert">
+              <span>{operationMessage}</span>
+            </p>
+          )}
+          <div className="flex items-center gap-2 mb-3">
+            <button
+              type="button" 
+              aria-pressed={!isInternalNote}
+              className={`text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs ${
+                !isInternalNote ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              }`}
               onClick={() => setIsInternalNote(false)}
-             data-testid="superadmin-support-tickets-support-tickets-detail-public-reply-5">
+              data-testid="superadmin-support-tickets-support-tickets-detail-public-reply-5"
+            >
               {t("COPY.PUBLIC_REPLY")}
             </button>
-            <button type="button" 
-              aria-pressed={isInternalNote} className={`text-xs font-semibold px-3 py-1.5 rounded-full motion-safe:transition-colors motion-reduce:transition-none ${isInternalNote ? 'bg-warning-bg text-warning' : 'text-secondary hover:text-primary'}`}
+            <button
+              type="button" 
+              aria-pressed={isInternalNote}
+              className={`text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-xs ${
+                isInternalNote ? 'bg-amber-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              }`}
               onClick={() => setIsInternalNote(true)}
-             data-testid="superadmin-support-tickets-support-tickets-detail-internal-note-hidden-6">
+              data-testid="superadmin-support-tickets-support-tickets-detail-internal-note-hidden-6"
+            >
               {t("COPY.INTERNAL_NOTE_HIDDEN")}
             </button>
           </div>
           
-          <div className={`relative rounded-xl border ${isInternalNote ? 'border-border bg-warning-bg text-warning' : 'border-border bg-info-bg'} p-1`}>
-            <label htmlFor="superadmin-support-ticket-reply-text" className="sr-only">{isInternalNote ? t('COPY.INTERNAL_NOTE_TEXT') : t('COPY.PUBLIC_REPLY_TEXT')}</label>
-            <textarea id="superadmin-support-ticket-reply-text" maxLength={5000}
-              className="w-full bg-transparent text-sm text-primary p-3 outline-none resize-none min-h-25"
+          <div className={`relative rounded-2xl border ${isInternalNote ? 'border-amber-500/30 bg-amber-950/20 text-amber-200' : 'border-indigo-500/30 bg-slate-950 text-slate-100'} p-3 shadow-inner`}>
+            <label htmlFor="superadmin-support-ticket-reply-text" className="sr-only">
+              {isInternalNote ? t('COPY.INTERNAL_NOTE_TEXT') : t('COPY.PUBLIC_REPLY_TEXT')}
+            </label>
+            <textarea
+              id="superadmin-support-ticket-reply-text"
+              maxLength={5000}
+              rows={3}
+              className="w-full bg-transparent text-xs sm:text-sm text-slate-100 placeholder:text-slate-400 outline-none resize-none min-h-[75px]"
               placeholder={isInternalNote ? t('COPY.TYPE_PRIVATE_NOTE_PLACEHOLDER') : t('COPY.TYPE_REPLY_TO_TENANT_PLACEHOLDER')}
               value={replyText}
               onChange={e => { setReplyText(e.target.value); setOperationMessage(''); }}
-             data-testid="superadmin-support-tickets-support-tickets-detail-superadmin-support-ticket-reply-text-7"/>
-            <div className="flex items-center justify-between p-2">
-              <button type="button" disabled aria-label={t("COPY.ATTACH_FILE_UNAVAILABLE")} title={t("COPY.UNAVAILABLE_ATTACHMENT_UPLOAD_IS_NOT_IMPLEMENTED_IN_THE_SUPPLIED_HOST_API_CONTRACT")} className="text-secondary opacity-60 p-2 rounded cursor-not-allowed" data-testid="superadmin-support-tickets-support-tickets-detail-attach-file-unavailable-8"><Paperclip size={16} /></button>
+              data-testid="superadmin-support-tickets-support-tickets-detail-superadmin-support-ticket-reply-text-7"
+            />
+            <div className="flex items-center justify-between pt-2 border-t border-indigo-500/15 mt-2">
+              <button
+                type="button"
+                disabled
+                aria-label={t("COPY.ATTACH_FILE_UNAVAILABLE")}
+                title={t("COPY.UNAVAILABLE_ATTACHMENT_UPLOAD_IS_NOT_IMPLEMENTED_IN_THE_SUPPLIED_HOST_API_CONTRACT")}
+                className="text-slate-400 opacity-60 p-1.5 rounded-lg hover:bg-slate-800 cursor-not-allowed"
+                data-testid="superadmin-support-tickets-support-tickets-detail-attach-file-unavailable-8"
+              >
+                <Paperclip size={15} />
+              </button>
               
-              <button type="button" 
-                className={`flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-bold motion-safe:transition-all motion-reduce:transition-none shadow-lg ${
-                  isInternalNote ? 'bg-warning-bg text-warning hover:bg-warning-bg hover:text-warning text-warning' : 'bg-info text-on-info hover:bg-info hover:text-on-info'
-                } disabled:opacity-50`}
+              <button
+                type="button" 
+                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+                  isInternalNote ? 'bg-amber-600 hover:bg-amber-500 text-white' : 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white'
+                }`}
                 onClick={handleSendReply}
                 disabled={!replyText.trim()}
-               data-testid="superadmin-support-tickets-support-tickets-detail-add-note-9">
-                <Send size={16} />
-                {isInternalNote ? t('COPY.ADD_NOTE') : t('COPY.SEND_REPLY')}
+                data-testid="superadmin-support-tickets-support-tickets-detail-add-note-9"
+              >
+                <Send size={13} />
+                <span>{isInternalNote ? t('COPY.ADD_NOTE') : t('COPY.SEND_REPLY')}</span>
               </button>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
