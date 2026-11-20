@@ -6,10 +6,21 @@ const SUPERADMIN_DASHBOARD_URLS = {
   AUDIT_LOGS: '/superadmin/superadmin_system/audit_logs',
   LIBRARIES: '/superadmin/superadmin_libraries',
   LIBRARIES_ONBOARDING: '/superadmin/superadmin_libraries/libraries_onboarding_setup',
+  BRANCHES: '/superadmin/superadmin_branches/branches_overview',
+  USERS: '/superadmin/superadmin_users/users_overview',
+  PLANS: '/superadmin/superadmin_plans/plans_pricing_catalog',
   SUBSCRIPTIONS: '/superadmin/superadmin_subscriptions',
-  SUPPORT_TICKETS: '/superadmin/superadmin_support',
-  SYSTEM_HEALTH: '/superadmin/superadmin_system/system_health_overview',
   BILLING: '/superadmin/superadmin_billing',
+  FEATURES: '/superadmin/superadmin_features/features_overview',
+  USAGE: '/superadmin/superadmin_usage/usage_overview',
+  SECURITY: '/superadmin/superadmin_security/security_overview',
+  REPORTS: '/superadmin/superadmin_reports/reports_overview',
+  SUPPORT_TICKETS: '/superadmin/superadmin_support',
+  NOTIFICATIONS: '/superadmin/superadmin_notifications/notifications_overview',
+  INTEGRATIONS: '/superadmin/superadmin_integrations/integrations_overview',
+  DATA: '/superadmin/superadmin_data/data_overview',
+  SYSTEM_HEALTH: '/superadmin/superadmin_system/system_health_overview',
+  SETTINGS: '/superadmin/superadmin_settings/settings_overview',
 } as const;
 
 /** Required typed grouping alias consumed by the module. */

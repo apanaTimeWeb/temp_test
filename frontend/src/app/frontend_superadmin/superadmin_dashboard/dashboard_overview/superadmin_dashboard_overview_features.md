@@ -20,6 +20,14 @@ portability_score: "NOT_VERIFIED"
 
 - Screen adapter: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewScreen.tsx`.
 - Main client component: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewMain.tsx`. It reads the contract availability through `hooks/useSuperadminDashboardOverviewAvailability.ts`; it does not import production fixture records.
+- Metric Filters Bar: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewFiltersBar.tsx`.
+- 12 Top KPIs Grid: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewTopKpis.tsx`.
+- Pending Requests Panel: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewPendingRequests.tsx`.
+- Critical Alerts Panel: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewCriticalAlerts.tsx`.
+- Infrastructure Health & Support Panel: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewInfrastructureHealth.tsx`.
+- Activity Logins & Superadmin Audit: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewRecentActivityAudit.tsx`.
+- Recent Libraries Table: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewRecentLibrariesTable.tsx`.
+- Recent Branches Table: `superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewRecentBranchesTable.tsx`.
 - Route view key: `overview`.
 
 ## Navigation Contract

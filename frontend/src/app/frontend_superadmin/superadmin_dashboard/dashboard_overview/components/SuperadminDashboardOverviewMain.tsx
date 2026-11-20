@@ -1,33 +1,86 @@
 'use client';
-/** Responsibility: Superadmin Dashboard Main; owns the dashboard route composition boundary and responsive layout. */
+/** Responsibility: Superadmin Dashboard Main; owns the dashboard route composition boundary, global telemetry filters, and modular operational sections. */
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Activity, LayoutDashboard, ShieldCheck, RefreshCw, AlertCircle, Building2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import SuperadminDashboardOverviewKpiCard from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewKpiCard';
-import SuperadminDashboardOverviewSystemHealthPanel from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewSystemHealthPanel';
-import SuperadminDashboardOverviewActionItemsPanel from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewActionItemsPanel';
+
+import SuperadminDashboardOverviewFiltersBar from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewFiltersBar';
+import SuperadminDashboardOverviewTopKpis from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewTopKpis';
+import SuperadminDashboardOverviewPendingRequests from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewPendingRequests';
+import SuperadminDashboardOverviewCriticalAlerts from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewCriticalAlerts';
+import SuperadminDashboardOverviewInfrastructureHealth from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewInfrastructureHealth';
+import SuperadminDashboardOverviewRecentActivityAudit from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewRecentActivityAudit';
 import SuperadminDashboardOverviewRecentLibrariesTable from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewRecentLibrariesTable';
+import SuperadminDashboardOverviewRecentBranchesTable from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewRecentBranchesTable';
 import SuperadminDashboardOverviewRecentActivityFeed from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/components/SuperadminDashboardOverviewRecentActivityFeed';
+
 import { useSuperadminDashboardOverviewAvailability } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/hooks/useSuperadminDashboardOverviewAvailability';
 import { SUPERADMIN_DASHBOARD_OVERVIEW_ROUTES } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/config/superadmin_dashboard_overview.url_config';
-import { SUPERADMIN_DASHBOARD_INITIAL_DATA, SUPERADMIN_DASHBOARD_INITIAL_ACTIVITIES } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/constants/SuperadminDashboardOverviewData';
-import { useState } from 'react';
+import {
+  SUPERADMIN_DASHBOARD_12_KPIS,
+  SUPERADMIN_DASHBOARD_INITIAL_DATA,
+  SUPERADMIN_DASHBOARD_PENDING_BRANCHES,
+  SUPERADMIN_DASHBOARD_PENDING_UPGRADES,
+  SUPERADMIN_DASHBOARD_PLATFORM_ALERTS,
+  SUPERADMIN_DASHBOARD_INFRA_HEALTH,
+  SUPERADMIN_DASHBOARD_ADMIN_LOGINS,
+  SUPERADMIN_DASHBOARD_SUPERADMIN_ACTIVITIES,
+  SUPERADMIN_DASHBOARD_RECENT_BRANCHES,
+  SUPERADMIN_DASHBOARD_OPEN_TICKETS,
+  SUPERADMIN_DASHBOARD_INITIAL_ACTIVITIES,
+} from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/constants/SuperadminDashboardOverviewData';
+import type { SuperadminDashboardFilterState } from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/types/SuperadminDashboardOverviewTypes';
+
+const INITIAL_FILTERS: SuperadminDashboardFilterState = {
+  timeRange: '30d',
+  account: 'all',
+  branch: 'all',
+  plan: 'all',
+  status: 'all',
+};
 
 export default function SuperadminDashboardOverviewMain() {
   const t = useTranslations('SUPERADMIN_DASHBOARD');
   const { available } = useSuperadminDashboardOverviewAvailability();
   const [refreshing, setRefreshing] = useState(false);
-
-  const data = SUPERADMIN_DASHBOARD_INITIAL_DATA;
-  const activities = SUPERADMIN_DASHBOARD_INITIAL_ACTIVITIES;
+  const [filters, setFilters] = useState<SuperadminDashboardFilterState>(INITIAL_FILTERS);
 
   const handleRefresh = () => {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 600);
   };
 
+  const handleResetFilters = () => {
+    setFilters(INITIAL_FILTERS);
+  };
+
+  // Filter KPI cards or tables when dimension filters are selected
+  const activeKpis = useMemo(() => {
+    if (filters.status === 'suspended') {
+      return SUPERADMIN_DASHBOARD_12_KPIS.map((kpi) =>
+        kpi.icon === 'power_off' ? { ...kpi, alert: '12 Filtered Suspended' } : kpi
+      );
+    }
+    return SUPERADMIN_DASHBOARD_12_KPIS;
+  }, [filters]);
+
+  const activeLibraries = useMemo(() => {
+    if (filters.plan !== 'all') {
+      return SUPERADMIN_DASHBOARD_INITIAL_DATA.recentLibraries.filter(
+        (lib) => lib.plan.toLowerCase() === filters.plan.toLowerCase()
+      );
+    }
+    if (filters.status !== 'all') {
+      return SUPERADMIN_DASHBOARD_INITIAL_DATA.recentLibraries.filter(
+        (lib) => lib.status.toLowerCase() === filters.status.toLowerCase()
+      );
+    }
+    return SUPERADMIN_DASHBOARD_INITIAL_DATA.recentLibraries;
+  }, [filters]);
+
   return (
-    <main className="w-full max-w-full min-w-0 pb-10">
+    <main className="w-full max-w-full min-w-0 pb-12">
       {/* ─── Hero / Header Banner ─── */}
       <div className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg transition-all mb-6">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
@@ -109,27 +162,46 @@ export default function SuperadminDashboardOverviewMain() {
         </div>
       )}
 
-      {/* ─── Top KPI Cards Grid (Fully Responsive: mob 1-col, tab 2-col, laptop 4-col) ─── */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mb-6" aria-label="Key Performance Indicators">
-        {data.kpiCards.map((kpi) => (
-          <SuperadminDashboardOverviewKpiCard key={kpi.title || kpi.icon} {...kpi} />
-        ))}
+      {/* ─── Metric Dimension & Time Range Filters ─── */}
+      <SuperadminDashboardOverviewFiltersBar
+        filters={filters}
+        onChange={setFilters}
+        onReset={handleResetFilters}
+      />
+
+      {/* ─── 12 Top KPI Cards Grid (Clickable to detailed listings) ─── */}
+      <SuperadminDashboardOverviewTopKpis cards={activeKpis} />
+
+      {/* ─── Pending Requests: Branch Creation & Upgrade Requests ─── */}
+      <SuperadminDashboardOverviewPendingRequests
+        branchRequests={SUPERADMIN_DASHBOARD_PENDING_BRANCHES}
+        upgradeRequests={SUPERADMIN_DASHBOARD_PENDING_UPGRADES}
+      />
+
+      {/* ─── Critical Operational Alerts (Payment Failures, Expiring Subs, Failed Logins, Job Failures) ─── */}
+      <SuperadminDashboardOverviewCriticalAlerts alerts={SUPERADMIN_DASHBOARD_PLATFORM_ALERTS} />
+
+      {/* ─── Infrastructure Health (Server, DB, Backup) & Open Support Tickets with SLA ─── */}
+      <SuperadminDashboardOverviewInfrastructureHealth
+        health={SUPERADMIN_DASHBOARD_INFRA_HEALTH}
+        tickets={SUPERADMIN_DASHBOARD_OPEN_TICKETS}
+      />
+
+      {/* ─── Latest Admin Logins & Root SuperAdmin Activity Audit ─── */}
+      <SuperadminDashboardOverviewRecentActivityAudit
+        adminLogins={SUPERADMIN_DASHBOARD_ADMIN_LOGINS}
+        superadminActivities={SUPERADMIN_DASHBOARD_SUPERADMIN_ACTIVITIES}
+      />
+
+      {/* ─── Recent Tables: Recent Libraries & Recently Created Branches ─── */}
+      <section className="space-y-6 mb-6" aria-label="Tenant Registrations and Branch Deployments">
+        <SuperadminDashboardOverviewRecentLibrariesTable data={activeLibraries} />
+        <SuperadminDashboardOverviewRecentBranchesTable branches={SUPERADMIN_DASHBOARD_RECENT_BRANCHES} />
       </section>
 
-      {/* ─── Middle Section: System Health (7-col) + Action Items (5-col) ─── */}
-      <section className="grid grid-cols-12 gap-5 lg:gap-6 mb-6" aria-label="System Health and Actions">
-        <SuperadminDashboardOverviewSystemHealthPanel data={data.systemHealth} />
-        <SuperadminDashboardOverviewActionItemsPanel data={data.actionItems} />
-      </section>
-
-      {/* ─── Bottom Section: Recent Libraries Table ─── */}
-      <section className="mb-6" aria-label="Recent Tenant Registrations">
-        <SuperadminDashboardOverviewRecentLibrariesTable data={data.recentLibraries} />
-      </section>
-
-      {/* ─── Bottom Section: Recent Activity Timeline Feed ─── */}
+      {/* ─── Platform Activity Event Stream ─── */}
       <section aria-label="Platform Event Audit Log">
-        <SuperadminDashboardOverviewRecentActivityFeed items={activities} />
+        <SuperadminDashboardOverviewRecentActivityFeed items={SUPERADMIN_DASHBOARD_INITIAL_ACTIVITIES} />
       </section>
     </main>
   );

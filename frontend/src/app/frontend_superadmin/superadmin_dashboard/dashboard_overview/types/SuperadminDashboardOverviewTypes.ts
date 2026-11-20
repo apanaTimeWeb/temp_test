@@ -15,6 +15,8 @@ export interface SuperadminDashboardOverviewKpiCard {
   progress?: number;
   alert?: string;
   alertKey?: string;
+  href?: string;
+  colorTheme?: string;
 }
 
 /**
@@ -138,3 +140,16 @@ export interface SuperadminDashboardRecentLibrariesTableProps { data: Superadmin
  * @property items Value defined by the existing feature-local contract. Declared type: SuperadminDashboardRecentActivityItem[].
  */
 export interface SuperadminDashboardRecentActivityFeedProps { items: SuperadminDashboardRecentActivityItem[]; }
+
+// Re-export operational contracts from dedicated sub-type container
+export type {
+  SuperadminDashboardPendingBranchRequest,
+  SuperadminDashboardPendingUpgradeRequest,
+  SuperadminDashboardPlatformAlert,
+  SuperadminDashboardAdminLoginRecord,
+  SuperadminDashboardAuditRecord,
+  SuperadminDashboardRecentBranch,
+  SuperadminDashboardSupportTicketItem,
+  SuperadminDashboardInfrastructureHealthExtended,
+  SuperadminDashboardFilterState,
+} from '@/app/frontend_superadmin/superadmin_dashboard/dashboard_overview/types/SuperadminDashboardOverviewOperationalTypes';

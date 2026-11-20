@@ -1,8 +1,25 @@
 // RESPONSIBILITY: Define stable module-owned constants for dashboard overview; it does not perform I/O or mutate feature state.
 // FLOW: Feature consumers -> superadmin_dashboard/dashboard_overview/constants/SuperadminDashboardOverviewStaticConstants.ts -> typed constants -> component/hook/config behavior.
-import { AlertTriangle, CreditCard, Headphones, CloudUpload, CircleHelp, Landmark, Users, IndianRupee, Clock3 } from 'lucide-react';
-
-
+import {
+  AlertTriangle,
+  CreditCard,
+  Headphones,
+  CloudUpload,
+  CircleHelp,
+  Landmark,
+  Users,
+  IndianRupee,
+  Clock3,
+  GitBranch,
+  UserCheck,
+  HardDrive,
+  CheckCircle2,
+  PowerOff,
+  Receipt,
+  ShieldCheck,
+  Building2,
+  Lock,
+} from 'lucide-react';
 
 /** Static module-owned options/status mapping extracted from SuperadminDashboardOverviewRecentLibrariesTable.tsx. */
 export const SUPERADMIN_DASHBOARD_RECENT_LIBRARIES_TABLE_PLAN_CLS = {
@@ -23,11 +40,19 @@ export const SUPERADMIN_DASHBOARD_ACTION_ITEMS_PANEL_ICON_MAP = {
   '🔵': CircleHelp,
 };
 
-
 /** Static module-owned options/status mapping extracted from SuperadminDashboardOverviewKpiCard.tsx. */
 export const SUPERADMIN_DASHBOARD_KPI_CARD_ICON_MAP = {
   store: Landmark,
   groups: Users,
   currency_rupee: IndianRupee,
   pending_actions: Clock3,
+  git_branch: GitBranch,
+  user_check: UserCheck,
+  hard_drive: HardDrive,
+  check_circle: CheckCircle2,
+  power_off: PowerOff,
+  receipt: Receipt,
+  shield_check: ShieldCheck,
+  building: Building2,
+  lock: Lock,
 };

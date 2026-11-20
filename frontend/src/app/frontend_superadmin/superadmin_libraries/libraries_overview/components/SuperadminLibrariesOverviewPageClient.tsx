@@ -14,6 +14,9 @@ import { useSuperadminLibrariesOverview } from '@/app/frontend_superadmin/supera
 import SuperadminLibrariesOverviewPanel from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewPanel';
 import SuperadminLibrariesBranchManagerModal from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesBranchManagerModal';
 import SuperadminLibrariesManagerModulesModal from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesManagerModulesModal';
+import SuperadminLibrariesOverviewHeader from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesOverviewHeader';
+import SuperadminLibrariesCreateAccountModal from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateAccountModal';
+import type { LibraryProvisioningResult } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesCreateAccountTypes';
 import type { SuperadminLibrariesLibrary, SuperadminLibrariesPanelMode, SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
 import { SUPERADMIN_LIBRARIES_TOASTS } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/constants/SuperadminLibrariesOverviewConstants';
 import { SuperadminLibrariesFormatMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesOverviewFormattingUtilities';
@@ -56,6 +59,7 @@ export default function SuperadminLibrariesOverviewPageClient() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [branchModalLib, setBranchModalLib] = useState<SuperadminLibrariesLibrary | null>(null);
   const [modulesModalLib, setModulesModalLib] = useState<SuperadminLibrariesLibrary | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const showToast = useCallback((message: string, isError = false) => {
     if (isError) {
