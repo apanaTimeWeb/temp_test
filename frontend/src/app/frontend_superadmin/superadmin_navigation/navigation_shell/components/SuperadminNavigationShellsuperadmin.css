@@ -74,7 +74,7 @@
   /* Layout */
   --layout-sidebar-width:    260px;
   --layout-header-height:    64px;
-  --layout-content-padding:  24px;
+  --layout-content-padding:  16px;
 
   /* Font sizes */
   --font-size-body:          14px;
@@ -2460,7 +2460,7 @@
 .superadmin-theme progress::-moz-progress-bar { background: var(--primary); border-radius: var(--radius-full); }
 .sa-dashboard-recent-libraries-chart { height: 300px; }
 .sa-audit-log-chart, .sa-libraries-grid-height { height: 420px; }
-.sa-support-ticket-chart { height: 30rem; }
+.sa-support-ticket-chart { height: auto; min-height: 0; }
 .sa-loading-block { padding: var(--layout-content-padding); color: var(--text-secondary); }
 .sa-dialog--dark { background: var(--bg-overlay); border: 1px solid var(--border); }
 .sa-wizard-modal--narrow { max-width: 360px; }

@@ -21,10 +21,7 @@ import type { SuperadminSettingsFormValues } from '@/app/frontend_superadmin/sup
 import { SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS } from '@/app/frontend_superadmin/superadmin_settings/settings_overview/mocks/fixtures/SuperadminSettingsOverviewPreviewDefaults';
 import {
   Settings,
-  Palette,
   CheckCircle,
-  Database,
-  Mail,
   ShieldAlert,
   Globe,
   Download,
@@ -35,40 +32,16 @@ import {
   ExternalLink,
   ShieldCheck,
   Server,
-  Zap,
-  Sliders,
-  Bell,
-  HardDrive,
   Lock,
   Clock,
-  UserCheck,
-  FileSpreadsheet,
   Printer,
   X,
-  RefreshCw,
-  SlidersHorizontal,
-  Layers,
-  Activity,
-  Check,
   AlertTriangle,
-  Key,
-  PhoneCall,
-  MessageSquare,
-  Copy,
-  Eye,
-  EyeOff,
-  Cloud,
-  CheckCircle2,
-  Sparkles,
-  Send,
-  Radio,
-  FileText,
-  Trash2,
   Undo2,
-  TrendingUp,
   Building2,
-  Flame,
-  Store,
+  TrendingUp,
+  Activity,
+  Phone,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSuperadminSettingsOverviewUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_settings/settings_overview/hooks/useSuperadminSettingsOverviewUnsavedChangesGuard';
@@ -77,7 +50,7 @@ import { SUPERADMIN_SETTINGS_TABS } from '@/app/frontend_superadmin/superadmin_s
 interface AuditLogEntry {
   id: string;
   timestamp: string;
-  category: 'General' | 'APIs' | 'Storage' | 'Maintenance' | 'Appearance';
+  category: 'General' | 'Maintenance';
   setting: string;
   modifiedBy: string;
   oldVal: string;
@@ -87,26 +60,17 @@ interface AuditLogEntry {
 
 const INITIAL_AUDIT_LOGS: AuditLogEntry[] = [
   { id: 'cfg-1', timestamp: '2026-11-20 12:45', category: 'General', setting: 'Platform Name', modifiedBy: 'superadmin@libraryos.com', oldVal: 'Library SaaS', newVal: 'Library OS', status: 'Applied' },
-  { id: 'cfg-2', timestamp: '2026-11-20 11:20', category: 'APIs', setting: 'Email Provider', modifiedBy: 'superadmin@libraryos.com', oldVal: 'SMTP Custom', newVal: 'AWS SES', status: 'Active' },
+  { id: 'cfg-2', timestamp: '2026-11-20 11:20', category: 'General', setting: 'Global Support Email', modifiedBy: 'superadmin@libraryos.com', oldVal: 'admin@libraryos.com', newVal: 'support@example.invalid', status: 'Active' },
   { id: 'cfg-3', timestamp: '2026-11-19 18:30', category: 'General', setting: 'Default Currency', modifiedBy: 'rohit.admin@libraryos.com', oldVal: 'USD ($)', newVal: 'INR (₹)', status: 'Applied' },
-  { id: 'cfg-4', timestamp: '2026-11-19 15:10', category: 'Storage', setting: 'S3 Primary Bucket', modifiedBy: 'devops@libraryos.com', oldVal: 'lib-assets-dev', newVal: 'lib-assets-prod', status: 'Applied' },
-  { id: 'cfg-5', timestamp: '2026-11-19 09:40', category: 'APIs', setting: 'SMS Gateway', modifiedBy: 'superadmin@libraryos.com', oldVal: 'Fast2SMS', newVal: 'Twilio', status: 'Active' },
+  { id: 'cfg-4', timestamp: '2026-11-19 15:10', category: 'General', setting: 'Default Member Capacity', modifiedBy: 'devops@libraryos.com', oldVal: '250', newVal: '500', status: 'Applied' },
+  { id: 'cfg-5', timestamp: '2026-11-19 09:40', category: 'Maintenance', setting: 'Emergency Lockdown Switch', modifiedBy: 'security@libraryos.com', oldVal: 'Enabled', newVal: 'Disabled', status: 'Active' },
   { id: 'cfg-6', timestamp: '2026-11-18 22:15', category: 'Maintenance', setting: 'Maintenance Mode Banner', modifiedBy: 'superadmin@libraryos.com', oldVal: 'Scheduled system upgrade', newVal: 'Core cluster optimization', status: 'Applied' },
-  { id: 'cfg-7', timestamp: '2026-11-18 14:05', category: 'Appearance', setting: 'Brand Accent Palette', modifiedBy: 'ui-admin@libraryos.com', oldVal: 'Indigo Default', newVal: 'Cyber Indigo Pro', status: 'Applied' },
+  { id: 'cfg-7', timestamp: '2026-11-18 14:05', category: 'General', setting: 'Date Display Format', modifiedBy: 'ui-admin@libraryos.com', oldVal: 'YYYY-MM-DD', newVal: 'DD/MM/YYYY', status: 'Applied' },
   { id: 'cfg-8', timestamp: '2026-11-17 19:50', category: 'General', setting: 'Default Timezone', modifiedBy: 'superadmin@libraryos.com', oldVal: 'UTC', newVal: 'Asia/Kolkata', status: 'Applied' },
-  { id: 'cfg-9', timestamp: '2026-11-17 10:30', category: 'Storage', setting: 'Max Upload Limit', modifiedBy: 'devops@libraryos.com', oldVal: '25 MB', newVal: '50 MB', status: 'Applied' },
-  { id: 'cfg-10', timestamp: '2026-11-16 16:45', category: 'APIs', setting: 'WhatsApp Business Webhook', modifiedBy: 'integrations@libraryos.com', oldVal: 'v1.4 API', newVal: 'v2.1 API Graph', status: 'Active' },
-  { id: 'cfg-11', timestamp: '2026-11-15 13:20', category: 'General', setting: 'Global Support Email', modifiedBy: 'superadmin@libraryos.com', oldVal: 'help@example.com', newVal: 'support@example.invalid', status: 'Applied' },
-  { id: 'cfg-12', timestamp: '2026-11-14 08:15', category: 'Maintenance', setting: 'Emergency Lockdown Switch', modifiedBy: 'security@libraryos.com', oldVal: 'Enabled', newVal: 'Disabled', status: 'Applied' },
-];
-
-const ACCENT_COLORS = [
-  { name: 'Indigo Neon', hex: '#6366f1', border: 'border-indigo-500', bg: 'bg-indigo-500', glow: 'shadow-indigo-500/40' },
-  { name: 'Cyber Violet', hex: '#a855f7', border: 'border-purple-500', bg: 'bg-purple-500', glow: 'shadow-purple-500/40' },
-  { name: 'Emerald Green', hex: '#10b981', border: 'border-emerald-500', bg: 'bg-emerald-500', glow: 'shadow-emerald-500/40' },
-  { name: 'Electric Cyan', hex: '#06b6d4', border: 'border-cyan-500', bg: 'bg-cyan-500', glow: 'shadow-cyan-500/40' },
-  { name: 'Rose Crimson', hex: '#f43f5e', border: 'border-rose-500', bg: 'bg-rose-500', glow: 'shadow-rose-500/40' },
-  { name: 'Amber Glow', hex: '#f59e0b', border: 'border-amber-500', bg: 'bg-amber-500', glow: 'shadow-amber-500/40' },
+  { id: 'cfg-9', timestamp: '2026-11-17 10:30', category: 'Maintenance', setting: 'Estimated Downtime Duration', modifiedBy: 'devops@libraryos.com', oldVal: '15 Minutes', newVal: '30 Minutes', status: 'Applied' },
+  { id: 'cfg-10', timestamp: '2026-11-16 16:45', category: 'General', setting: 'Tenant Self-Registration', modifiedBy: 'superadmin@libraryos.com', oldVal: 'Disabled', newVal: 'Enabled', status: 'Active' },
+  { id: 'cfg-11', timestamp: '2026-11-15 13:20', category: 'General', setting: 'Platform Support Hotline', modifiedBy: 'superadmin@libraryos.com', oldVal: '+91 99999 00000', newVal: '+91 98765 43210', status: 'Applied' },
+  { id: 'cfg-12', timestamp: '2026-11-14 08:15', category: 'Maintenance', setting: 'Whitelisted SuperAdmin IP CIDRs', modifiedBy: 'security@libraryos.com', oldVal: '10.0.0.0/8', newVal: '103.24.120.0/24, 182.74.88.10/32', status: 'Applied' },
 ];
 
 export default function SuperadminSettingsOverviewPageClient() {
@@ -115,9 +79,6 @@ export default function SuperadminSettingsOverviewPageClient() {
   const navigateToWorkflow = (key: string) => {
     const routes: Record<string, string> = {
       'General': SUPERADMIN_NAVIGATION_ROUTES.settings_general,
-      'Appearance': SUPERADMIN_NAVIGATION_ROUTES.settings_appearance,
-      'APIs & Integrations': SUPERADMIN_NAVIGATION_ROUTES.settings_integrations,
-      'Storage': SUPERADMIN_NAVIGATION_ROUTES.settings_storage,
       'Maintenance Mode': SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode,
     };
     const route = routes[key];
@@ -136,75 +97,33 @@ export default function SuperadminSettingsOverviewPageClient() {
   const [activeTab, setActiveTab] = useState('General');
   const isCurrentTab = (name: string) => activeTab === name;
 
-  // Visual customizer state
-  const [selectedTheme, setSelectedTheme] = useState<'cyber' | 'midnight' | 'aurora'>('cyber');
-  const [selectedAccent, setSelectedAccent] = useState('Indigo Neon');
-  const [fontFamily, setFontFamily] = useState('Inter');
-  const [highContrast, setHighContrast] = useState(false);
-  const [compactDensity, setCompactDensity] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
   // General tab options
   const [dateFormat, setDateFormat] = useState('DD/MM/YYYY');
   const [selfRegistration, setSelfRegistration] = useState(true);
   const [memberCapacity, setMemberCapacity] = useState(500);
   const [hotlinePhone, setHotlinePhone] = useState('+91 98765 43210');
 
-  // APIs options
-  const [showApiSecret, setShowApiSecret] = useState(false);
-  const [selectedPaymentGateway, setSelectedPaymentGateway] = useState<'razorpay' | 'stripe' | 'cashfree'>('razorpay');
-  const [paymentSandbox, setPaymentSandbox] = useState(true);
-
-  // Storage options
-  const [maxUploadLimitMb, setMaxUploadLimitMb] = useState(50);
-  const [autoDailyBackup, setAutoDailyBackup] = useState(true);
-  const [backupRetentionDays, setBackupRetentionDays] = useState('30');
-
   // Maintenance options
   const [estimatedDowntime, setEstimatedDowntime] = useState('30 Minutes');
   const [whitelistedIps, setWhitelistedIps] = useState('103.24.120.0/24, 182.74.88.10/32');
 
   // Audit Logs State
-  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(INITIAL_AUDIT_LOGS);
+  const [auditLogs] = useState<AuditLogEntry[]>(INITIAL_AUDIT_LOGS);
   const [auditSearch, setAuditSearch] = useState('');
   const [auditCategory, setAuditCategory] = useState<string>('All');
   const [auditPage, setAuditPage] = useState(0);
   const [auditPageSize, setAuditPageSize] = useState(5);
 
-  // --------------------------------------------------------------------------
-  // MODAL STATES (For rich, colorful interactive popups for every button)
-  // --------------------------------------------------------------------------
-  const [emailModalOpen, setEmailModalOpen] = useState(false);
-  const [emailTestingState, setEmailTestingState] = useState<'idle' | 'running' | 'success'>('idle');
-  const [testEmailAddress, setTestEmailAddress] = useState('superadmin@libraryos.com');
-
-  const [smsModalOpen, setSmsModalOpen] = useState(false);
-  const [smsSendingState, setSmsSendingState] = useState<'idle' | 'sending' | 'sent'>('idle');
-  const [testSmsPhone, setTestSmsPhone] = useState('+91 98765 43210');
-  const [testSmsText, setTestSmsText] = useState('Library OS Alert: Transactional SMS gateway connection ping verified successfully.');
-
-  const [whatsappModalOpen, setWhatsappModalOpen] = useState(false);
-  const [whatsappVerifying, setWhatsappVerifying] = useState(false);
-
-  const [cacheModalOpen, setCacheModalOpen] = useState(false);
-  const [cachePurging, setCachePurging] = useState(false);
-  const [cachePurged, setCachePurged] = useState(false);
-
-  const [snapshotModalOpen, setSnapshotModalOpen] = useState(false);
-  const [snapshotProgress, setSnapshotProgress] = useState(0);
-  const [snapshotRunning, setSnapshotRunning] = useState(false);
-
+  // Modals state
   const [resetModalOpen, setResetModalOpen] = useState(false);
   const [lockdownModalOpen, setLockdownModalOpen] = useState(false);
   const [exportModalOpen, setExportModalOpen] = useState(false);
-
   const [rollbackModalOpen, setRollbackModalOpen] = useState(false);
   const [selectedAuditEntry, setSelectedAuditEntry] = useState<AuditLogEntry | null>(null);
 
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
     reset,
     formState: { errors, isSubmitting, isDirty },
@@ -218,8 +137,6 @@ export default function SuperadminSettingsOverviewPageClient() {
   useSuperadminSettingsOverviewUnsavedChangesGuard(isDirty, tCopy('COPY.UNSAVED_CHANGES_WARNING'));
 
   const maintenanceEnabled = Boolean(watch('maintenance.enabled'));
-  const currentEmailProvider = watch('apiConfig.emailProvider');
-  const currentSmsProvider = watch('apiConfig.smsProvider');
 
   const handleSave = (_values: SuperadminSettingsFormValues) => {
     toast.message(
@@ -228,65 +145,9 @@ export default function SuperadminSettingsOverviewPageClient() {
     );
   };
 
-  // Run Email Test
-  const handleRunEmailTest = () => {
-    setEmailTestingState('running');
-    setTimeout(() => {
-      setEmailTestingState('success');
-      toast.success(`SMTP ping verified! TLS 1.3 handshake completed in 38ms to ${testEmailAddress}`);
-    }, 1200);
-  };
-
-  // Run SMS Test
-  const handleRunSmsTest = () => {
-    setSmsSendingState('sending');
-    setTimeout(() => {
-      setSmsSendingState('sent');
-      toast.success(`Test SMS dispatched via ${currentSmsProvider} to ${testSmsPhone}`);
-    }, 1100);
-  };
-
-  // Run WhatsApp Verification
-  const handleVerifyWhatsapp = () => {
-    setWhatsappVerifying(true);
-    setTimeout(() => {
-      setWhatsappVerifying(false);
-      toast.success('Meta Graph API Webhook connection is active (HTTP 200 OK)');
-    }, 1000);
-  };
-
-  // Run Cache Purge
-  const handleExecuteCachePurge = () => {
-    setCachePurging(true);
-    setCachePurged(false);
-    setTimeout(() => {
-      setCachePurging(false);
-      setCachePurged(true);
-      toast.success('Purged 428 MB from Cloudflare Edge PoPs and Redis memory.');
-    }, 1300);
-  };
-
-  // Run Database Snapshot
-  const handleStartSnapshot = () => {
-    setSnapshotRunning(true);
-    setSnapshotProgress(15);
-    setTimeout(() => setSnapshotProgress(45), 500);
-    setTimeout(() => setSnapshotProgress(80), 1000);
-    setTimeout(() => {
-      setSnapshotProgress(100);
-      setSnapshotRunning(false);
-      toast.success('Snapshot snapshot-libraryos-20261120.sql.gz (1.2 GB) created on S3 Glacier');
-    }, 1500);
-  };
-
   // Execute Reset
   const handleExecuteReset = () => {
     reset(SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS);
-    setSelectedTheme('cyber');
-    setSelectedAccent('Indigo Neon');
-    setFontFamily('Inter');
-    setHighContrast(false);
-    setCompactDensity(false);
     setDateFormat('DD/MM/YYYY');
     setSelfRegistration(true);
     setMemberCapacity(500);
@@ -306,21 +167,10 @@ export default function SuperadminSettingsOverviewPageClient() {
     const data = {
       ...watch(),
       preferences: {
-        theme: selectedTheme,
-        accent: selectedAccent,
-        fontFamily,
-        highContrast,
-        compactDensity,
-        sidebarCollapsed,
         dateFormat,
         selfRegistration,
         memberCapacity,
         hotlinePhone,
-        paymentGateway: selectedPaymentGateway,
-        paymentSandbox,
-        maxUploadLimitMb,
-        autoDailyBackup,
-        backupRetentionDays,
         estimatedDowntime,
         whitelistedIps,
       },
@@ -388,264 +238,249 @@ export default function SuperadminSettingsOverviewPageClient() {
         className="w-full max-w-full min-w-0 flex flex-col gap-8 sm:gap-10"
         data-testid="superadmin-superadmin-settings-overview-page-client-form-line-50"
       >
+        {/* Hidden inputs to preserve schema & mock scenario catalog contract */}
+        <input type="hidden" {...register('apiConfig.emailProvider')} />
+        <input type="hidden" {...register('apiConfig.smsProvider')} />
 
-        {/* ─── 1. HERO HEADER (Exact Superadmin Dashboard theme & spacing) ─── */}
-        <header className="w-full max-w-full min-w-0 rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg transition-all">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-            {/* Left: Titles & Meta Chips */}
+        {/* ─── 1. TOP HEADER SECTION (With Colorful Action Buttons) ─── */}
+        <header className="rounded-2xl border border-indigo-500/30 bg-gradient-to-r from-[#0d102b] via-[#090b20] to-[#050614] p-5 sm:p-7 shadow-xl relative overflow-hidden backdrop-blur-md">
+          {/* Subtle decorative glow */}
+          <div className="absolute -right-20 -top-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute right-1/3 -bottom-20 w-60 h-60 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div className="space-y-2">
-              <div className="flex items-center gap-2 flex-wrap text-xs">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Live Platform Engine
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 shadow-xs">
+                  <Settings size={13} className="text-indigo-400" />
+                  <span>Platform System Control</span>
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-                  <ShieldCheck size={12} className="text-indigo-400" />
-                  Super Admin Scope
-                </span>
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-300 bg-purple-500/15 border border-purple-500/30 px-2.5 py-0.5 rounded-full">
-                  <Flame size={12} className="text-purple-400" />
-                  v2.4 High Performance
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  <CheckCircle size={12} />
+                  <span>Cloud Production</span>
                 </span>
               </div>
-
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-                  <Settings className="text-indigo-400 shrink-0" size={28} />
-                  <span>{tCopy('COPY.SYSTEM_SETTINGS')}</span>
-                </h1>
-              </div>
-
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+                {tCopy('COPY.SYSTEM_SETTINGS')}
+              </h1>
               <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                Global platform configuration, regional parameters, third-party communication APIs, object storage & system lockdown.
+                Configure global defaults, system identifiers, and platform-wide operational parameters.
               </p>
             </div>
 
-            {/* Right: Actions with Colorful Distinct Themes */}
-            <div className="flex items-center flex-wrap gap-2.5 sm:self-start lg:self-center">
+            {/* Colorful Action Buttons Group */}
+            <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
+              {/* Reset to Defaults */}
               <button
                 type="button"
                 onClick={() => setResetModalOpen(true)}
                 title="Reset to defaults"
-                className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-amber-500/40 bg-amber-500/15 text-xs font-semibold text-amber-300 hover:text-white hover:bg-amber-600/30 hover:border-amber-400 transition-all shadow-sm active:scale-95 cursor-pointer"
+                className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-amber-500/40 bg-amber-500/15 text-xs font-semibold text-amber-300 hover:text-white hover:bg-amber-600/30 hover:border-amber-400 transition-all shadow-xs active:scale-95 cursor-pointer"
               >
-                <RotateCcw size={14} className="text-amber-400" />
-                <span>Reset Defaults</span>
+                <RotateCcw size={15} />
+                <span>Reset to Defaults</span>
               </button>
 
+              {/* Export Config Hub Modal */}
               <button
                 type="button"
                 onClick={() => setExportModalOpen(true)}
-                title="Open Export Center"
-                className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-xs font-semibold text-indigo-300 hover:text-white hover:bg-indigo-600/30 hover:border-indigo-400 transition-all shadow-sm active:scale-95 cursor-pointer"
+                title="Export Platform Config"
+                className="inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-cyan-500/40 bg-cyan-500/15 text-xs font-semibold text-cyan-300 hover:text-white hover:bg-cyan-600/30 hover:border-cyan-400 transition-all shadow-xs active:scale-95 cursor-pointer"
               >
-                <Download size={14} className="text-indigo-400" />
-                <span>Export Center</span>
+                <Download size={15} />
+                <span>Export Hub</span>
               </button>
 
-              <button
-                type="button"
-                onClick={() => window.print()}
-                title="Print Platform Summary"
-                className="hidden sm:inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-xl border border-sky-500/40 bg-sky-500/20 text-xs font-semibold text-sky-300 hover:text-white hover:bg-sky-600/30 hover:border-sky-400 transition-all shadow-sm active:scale-95 cursor-pointer"
-              >
-                <Printer size={14} className="text-sky-400" />
-                <span>Print</span>
-              </button>
-
+              {/* Save Platform Changes */}
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-2 min-h-10 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white text-xs font-bold shadow-md shadow-emerald-950/50 transition-all hover:scale-[1.02] cursor-pointer"
+                className="inline-flex items-center gap-2 min-h-10 px-5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-xs sm:text-sm font-bold text-white shadow-lg shadow-indigo-600/30 hover:from-indigo-500 hover:to-purple-500 hover:shadow-indigo-600/50 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                 data-testid="superadmin-settings-settings-overview-save-changes-1"
               >
                 <CheckCircle size={16} />
-                <span>{tCopy('COPY.SAVE_CHANGES')}</span>
+                <span>{isSubmitting ? 'Saving...' : tCopy('COPY.SAVE_CHANGES')}</span>
               </button>
             </div>
           </div>
         </header>
 
-        {/* ─── 2. TOP KPI CARDS GRID (Exact Dashboard Design, Fully Responsive, No Touching) ─── */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-8" aria-label="Platform Health Indicators">
-          {/* Card 1: Platform Identity (Store / Indigo Theme from Dashboard) */}
-          <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg shadow-indigo-950/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:border-indigo-400/60 flex flex-col justify-between min-h-[190px]">
-            {/* Sparkline decoration */}
-            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
-              <path d="M0,32 Q15,22 35,18 T75,14 T115,8 T150,4" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round" />
-            </svg>
+        {/* ─── 2. SUPERADMIN DASHBOARD-STYLE KPI CARDS (Generous Gap, Never Touches) ─── */}
+        <section aria-label="Settings Platform Health Metrics">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-8">
+            {/* Card 1: Platform Identity (Indigo Theme from Dashboard) */}
+            <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-indigo-950/80 via-[#1a1f4e] to-indigo-900/60 p-5 sm:p-6 shadow-lg shadow-indigo-950/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:border-indigo-400/60 flex flex-col justify-between min-h-[190px]">
+              {/* Sparkline decoration */}
+              <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+                <path d="M0,32 Q25,12 50,22 T100,10 T150,18" fill="none" stroke="#818cf8" strokeWidth="3" strokeLinecap="round" />
+              </svg>
 
-            <div className="flex items-start justify-between relative z-10 gap-3">
-              <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Platform Identity</p>
-              <div className="p-2.5 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-indigo-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
-                <Globe aria-hidden="true" size={20} />
-              </div>
-            </div>
-
-            <div className="relative z-10 mt-3 sm:mt-4">
-              <p className="sa-kpi-value text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white truncate">
-                {watch('generalConfig.platformName') || 'Library OS'}
-              </p>
-
-              <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 shadow-xs">
-                  <Building2 size={12} className="text-indigo-400" />
-                  <span>{watch('generalConfig.currency')}</span>
-                </span>
-                <span className="text-xs font-medium text-slate-400">{watch('generalConfig.timezone')}</span>
-              </div>
-
-              {/* Dashboard-style Progress Bar */}
-              <div className="mt-4">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Engine Health</span>
-                  <span>100% Core</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
-                  <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-400 w-full transition-all duration-700" />
+              <div className="flex items-start justify-between relative z-10 gap-3">
+                <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Platform Identity</p>
+                <div className="p-2.5 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-indigo-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                  <Globe aria-hidden="true" size={20} />
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Card 2: Gateway Integrations (Groups / Emerald Theme from Dashboard) */}
-          <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0f2d22] to-emerald-900/60 p-5 sm:p-6 shadow-lg shadow-emerald-950/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:border-emerald-400/60 flex flex-col justify-between min-h-[190px]">
-            {/* Sparkline decoration */}
-            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
-              <path d="M0,30 Q20,20 40,24 T80,16 T120,10 T150,6" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
-            </svg>
+              <div className="relative z-10 mt-3 sm:mt-4">
+                <p className="sa-kpi-value text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white truncate">
+                  {watch('generalConfig.platformName') || 'Library OS'}
+                </p>
 
-            <div className="flex items-start justify-between relative z-10 gap-3">
-              <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Gateway Integrations</p>
-              <div className="p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
-                <Zap aria-hidden="true" size={20} />
-              </div>
-            </div>
-
-            <div className="relative z-10 mt-3 sm:mt-4">
-              <p className="sa-kpi-value text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white truncate">
-                {currentEmailProvider} & {currentSmsProvider}
-              </p>
-
-              <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-xs">
-                  <TrendingUp size={12} className="text-emerald-400" />
-                  <span>38ms Latency</span>
-                </span>
-                <span className="text-xs font-medium text-slate-400">SMS: ₹14,250 (71k)</span>
-              </div>
-
-              {/* Dashboard-style Progress Bar */}
-              <div className="mt-4">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Gateway Uptime</span>
-                  <span>99.8%</span>
+                <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 shadow-xs">
+                    <Building2 size={12} className="text-indigo-400" />
+                    <span>{watch('generalConfig.currency')}</span>
+                  </span>
+                  <span className="text-xs font-medium text-slate-400">{watch('generalConfig.timezone')}</span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
-                  <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 w-[99.8%] transition-all duration-700" />
+
+                {/* Dashboard-style Progress Bar */}
+                <div className="mt-4">
+                  <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                    <span>Engine Health</span>
+                    <span>100% Core</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-400 w-full transition-all duration-700" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 3: Storage & Media CDN (Currency / Amber Theme from Dashboard) */}
-          <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0f2540] to-sky-900/60 p-5 sm:p-6 shadow-lg shadow-sky-950/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:border-sky-400/60 flex flex-col justify-between min-h-[190px]">
-            {/* Sparkline decoration */}
-            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
-              <path d="M0,34 Q18,24 38,20 T78,12 T118,8 T150,4" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
-            </svg>
+            {/* Card 2: Operational Health (Emerald Theme from Dashboard) */}
+            <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0f2d22] to-emerald-900/60 p-5 sm:p-6 shadow-lg shadow-emerald-950/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:border-emerald-400/60 flex flex-col justify-between min-h-[190px]">
+              {/* Sparkline decoration */}
+              <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+                <path d="M0,30 Q20,20 40,24 T80,16 T120,10 T150,6" fill="none" stroke="#34d399" strokeWidth="3" strokeLinecap="round" />
+              </svg>
 
-            <div className="flex items-start justify-between relative z-10 gap-3">
-              <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Storage & Media CDN</p>
-              <div className="p-2.5 rounded-xl border border-sky-500/40 bg-sky-500/20 text-sky-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
-                <HardDrive aria-hidden="true" size={20} />
-              </div>
-            </div>
-
-            <div className="relative z-10 mt-3 sm:mt-4">
-              <p className="sa-kpi-value text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
-                42.8 GB <span className="text-base text-sky-300 font-semibold">/ 100 GB</span>
-              </p>
-
-              <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30 shadow-xs">
-                  <span>42.8% Capacity</span>
-                </span>
-                <span className="text-xs font-medium text-slate-400">AWS S3 (Mumbai) • 99.2% Hit</span>
-              </div>
-
-              {/* Dashboard-style Progress Bar */}
-              <div className="mt-4">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Capacity Used</span>
-                  <span>42.8%</span>
+              <div className="flex items-start justify-between relative z-10 gap-3">
+                <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Operational Health</p>
+                <div className="p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 text-emerald-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                  <Activity aria-hidden="true" size={20} />
                 </div>
-                <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-sky-500 to-sky-400 transition-all duration-700"
-                    style={{ width: '42.8%' }}
-                    role="progressbar"
-                    aria-valuenow={43}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                  />
+              </div>
+
+              <div className="relative z-10 mt-3 sm:mt-4">
+                <p className="sa-kpi-value text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white truncate">
+                  99.98% SLA
+                </p>
+
+                <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-xs">
+                    <TrendingUp size={12} className="text-emerald-400" />
+                    <span>Active Production</span>
+                  </span>
+                  <span className="text-xs font-medium text-slate-400">Zero Critical Failures</span>
+                </div>
+
+                {/* Dashboard-style Progress Bar */}
+                <div className="mt-4">
+                  <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                    <span>Cluster Availability</span>
+                    <span>99.98%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 w-[99.98%] transition-all duration-700" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 4: System State & Security (Pending Actions / Rose or Amber Theme from Dashboard) */}
-          <div className={`sa-kpi-card group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between min-h-[190px] ${
-            maintenanceEnabled
-              ? 'border-amber-500/60 bg-gradient-to-br from-amber-950/90 via-[#3a1e05] to-rose-950/80 shadow-amber-950/60 hover:border-amber-400/80 animate-pulse'
-              : 'border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#2d0f18] to-rose-900/60 shadow-rose-950/50 hover:border-rose-400/60'
-          }`}>
-            {/* Sparkline decoration */}
-            <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
-              <path d="M0,36 Q16,26 36,22 T76,14 T116,8 T150,4" fill="none" stroke={maintenanceEnabled ? '#fbbf24' : '#f87171'} strokeWidth="3" strokeLinecap="round" />
-            </svg>
+            {/* Card 3: Regional & Localization Engine (Sky Theme from Dashboard) */}
+            <div className="sa-kpi-card group relative overflow-hidden rounded-2xl border border-sky-500/40 bg-gradient-to-br from-sky-950/80 via-[#0f2540] to-sky-900/60 p-5 sm:p-6 shadow-lg shadow-sky-950/50 transition-all duration-300 hover:scale-[1.01] hover:shadow-xl hover:border-sky-400/60 flex flex-col justify-between min-h-[190px]">
+              {/* Sparkline decoration */}
+              <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+                <path d="M0,34 Q18,24 38,20 T78,12 T118,8 T150,4" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
+              </svg>
 
-            <div className="flex items-start justify-between relative z-10 gap-3">
-              <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">System State & Security</p>
-              <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${
-                maintenanceEnabled ? 'bg-amber-500/25 border-amber-500/50 text-amber-300' : 'bg-rose-500/20 border-rose-500/40 text-rose-400'
-              }`}>
-                <ShieldAlert aria-hidden="true" size={20} className={maintenanceEnabled ? 'text-amber-400' : 'text-rose-400'} />
+              <div className="flex items-start justify-between relative z-10 gap-3">
+                <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">Regional & Locale</p>
+                <div className="p-2.5 rounded-xl border border-sky-500/40 bg-sky-500/20 text-sky-400 shrink-0 transition-transform group-hover:scale-110 shadow-xs">
+                  <Server aria-hidden="true" size={20} />
+                </div>
+              </div>
+
+              <div className="relative z-10 mt-3 sm:mt-4">
+                <p className="sa-kpi-value text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white truncate">
+                  {watch('generalConfig.currency') || 'INR (₹)'}
+                </p>
+
+                <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30 shadow-xs">
+                    <span>{dateFormat}</span>
+                  </span>
+                  <span className="text-xs font-medium text-slate-400">{memberCapacity} Limit / Branch</span>
+                </div>
+
+                {/* Dashboard-style Progress Bar */}
+                <div className="mt-4">
+                  <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                    <span>Regional Setup</span>
+                    <span>100% Configured</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-sky-400 w-full transition-all duration-700" />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="relative z-10 mt-3 sm:mt-4">
-              <p className={`sa-kpi-value text-2xl sm:text-3xl font-extrabold tracking-tight ${maintenanceEnabled ? 'text-amber-300' : 'text-white'}`}>
-                {maintenanceEnabled ? tCopy('COPY.MAINTENANCE_OFFLINE') : tCopy('COPY.MAINTENANCE_ONLINE')}
-              </p>
+            {/* Card 4: System State & Security (Rose or Amber Theme from Dashboard) */}
+            <div className={`sa-kpi-card group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between min-h-[190px] ${
+              maintenanceEnabled
+                ? 'border-amber-500/60 bg-gradient-to-br from-amber-950/90 via-[#3a1e05] to-rose-950/80 shadow-amber-950/60 hover:border-amber-400/80 animate-pulse'
+                : 'border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#2d0f18] to-rose-900/60 shadow-rose-950/50 hover:border-rose-400/60'
+            }`}>
+              {/* Sparkline decoration */}
+              <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
+                <path d="M0,36 Q16,26 36,22 T76,14 T116,8 T150,4" fill="none" stroke={maintenanceEnabled ? '#fbbf24' : '#f87171'} strokeWidth="3" strokeLinecap="round" />
+              </svg>
 
-              <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
-                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border shadow-xs ${
-                  maintenanceEnabled
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                    : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+              <div className="flex items-start justify-between relative z-10 gap-3">
+                <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">System State & Security</p>
+                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${
+                  maintenanceEnabled ? 'bg-amber-500/25 border-amber-500/50 text-amber-300' : 'bg-rose-500/20 border-rose-500/40 text-rose-400'
                 }`}>
-                  <ShieldCheck size={12} className={maintenanceEnabled ? 'text-amber-400' : 'text-emerald-400'} />
-                  <span>{maintenanceEnabled ? 'Lockdown Armed' : 'Normal Engine'}</span>
-                </span>
-                <span className="text-xs font-medium text-slate-400">2FA Enforced • 0 Breaches</span>
+                  <ShieldAlert aria-hidden="true" size={20} className={maintenanceEnabled ? 'text-amber-400' : 'text-rose-400'} />
+                </div>
               </div>
 
-              {/* Dashboard-style Progress Bar */}
-              <div className="mt-4">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
-                  <span>Security Perimeter</span>
-                  <span>100% Guarded</span>
+              <div className="relative z-10 mt-3 sm:mt-4">
+                <p className={`sa-kpi-value text-2xl sm:text-3xl font-extrabold tracking-tight ${maintenanceEnabled ? 'text-amber-300' : 'text-white'}`}>
+                  {maintenanceEnabled ? tCopy('COPY.MAINTENANCE_OFFLINE') : tCopy('COPY.MAINTENANCE_ONLINE')}
+                </p>
+
+                <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
+                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border shadow-xs ${
+                    maintenanceEnabled
+                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                      : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                  }`}>
+                    <ShieldCheck size={12} className={maintenanceEnabled ? 'text-amber-400' : 'text-emerald-400'} />
+                    <span>{maintenanceEnabled ? 'Lockdown Armed' : 'Normal Engine'}</span>
+                  </span>
+                  <span className="text-xs font-medium text-slate-400">2FA Enforced • 0 Breaches</span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
-                  <div className={`h-full rounded-full transition-all duration-700 ${maintenanceEnabled ? 'bg-gradient-to-r from-amber-500 to-rose-500 w-full' : 'bg-gradient-to-r from-emerald-500 to-teal-400 w-full'}`} />
+
+                {/* Dashboard-style Progress Bar */}
+                <div className="mt-4">
+                  <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 mb-1">
+                    <span>Security Perimeter</span>
+                    <span>100% Guarded</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full transition-all duration-700 ${maintenanceEnabled ? 'bg-gradient-to-r from-amber-500 to-rose-500 w-full' : 'bg-gradient-to-r from-emerald-500 to-teal-400 w-full'}`} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ─── 3. SUB-NAVIGATION TABS (Distinct Separation & Smooth Glow) ─── */}
+        {/* ─── 3. SUB-NAVIGATION TABS (Only General & Maintenance Mode) ─── */}
         <section className="border-b border-indigo-500/20 pb-4" role="navigation" aria-label={tCopy('COPY.SYSTEM_SETTINGS_SECTIONS')}>
           <div className="flex items-center justify-between gap-3 overflow-x-auto pb-1">
             <div className="flex items-center gap-2 sm:gap-3">
@@ -654,9 +489,6 @@ export default function SuperadminSettingsOverviewPageClient() {
                 const isActive = activeTab === tab.name;
                 const tabColors: Record<string, string> = {
                   'General': 'text-indigo-400',
-                  'Appearance': 'text-purple-400',
-                  'APIs & Integrations': 'text-cyan-400',
-                  'Storage': 'text-sky-400',
                   'Maintenance Mode': 'text-amber-400',
                 };
                 const iconColor = tabColors[tab.name] ?? 'text-indigo-400';
@@ -836,11 +668,11 @@ export default function SuperadminSettingsOverviewPageClient() {
                   {/* Hotline Phone */}
                   <div className="flex flex-col gap-2 md:col-span-2">
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                      Platform Support Hotline / WhatsApp
+                      Platform Support Hotline / Emergency Contact
                     </label>
                     <div className="flex items-center gap-2">
                       <div className="p-3 rounded-xl border border-indigo-500/30 bg-slate-900/90 text-indigo-400">
-                        <PhoneCall size={18} />
+                        <Phone size={18} />
                       </div>
                       <input
                         type="text"
@@ -852,7 +684,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                   </div>
 
                   {/* Tenant Self-Registration Switch */}
-                  <div className="md:col-span-2 flex items-center justify-between p-5 rounded-2xl border border-indigo-500/30 bg-slate-900/70 shadow-sm mt-2">
+                  <div className="md:col-span-2 flex items-center justify-between p-5 rounded-2xl border border-indigo-500/30 bg-slate-900/70 shadow-xs mt-2">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-bold text-white">Library Tenant Self-Registration</span>
@@ -880,526 +712,7 @@ export default function SuperadminSettingsOverviewPageClient() {
             </div>
           )}
 
-          {/* TAB 2: Appearance & Theming Panel */}
-          {activeTab === 'Appearance' && (
-            <div className="max-w-4xl space-y-6 sm:space-y-8">
-              <div>
-                <div className="flex items-center gap-2.5 mb-2">
-                  <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                    <Palette size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-lg sm:text-xl font-bold text-white">Theme & Visual Experience</h2>
-                    <p className="text-xs sm:text-sm text-slate-400">Choose default appearance themes, brand neon accent palettes, and accessibility density settings.</p>
-                  </div>
-                </div>
-
-                {/* Theme Selection Cards */}
-                <div className="space-y-3 mt-6 mb-8">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Base Theme Selection</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                    <div
-                      onClick={() => {
-                        setSelectedTheme('cyber');
-                        toast.success('Theme changed to Cyber Dark Pro');
-                      }}
-                      className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
-                        selectedTheme === 'cyber'
-                          ? 'border-indigo-500 bg-gradient-to-b from-indigo-950/70 to-slate-900/90 shadow-xl shadow-indigo-500/20 ring-2 ring-indigo-500/40'
-                          : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm font-bold text-white">Cyber Dark Pro</p>
-                          {selectedTheme === 'cyber' && <CheckCircle2 size={16} className="text-indigo-400" />}
-                        </div>
-                        <p className="text-xs text-slate-400 mt-2 leading-relaxed">Deep slate background with neon indigo glow borders and glass cards.</p>
-                      </div>
-                      <span className="mt-4 text-[11px] font-bold text-indigo-300 flex items-center gap-1">
-                        <Sparkles size={12} /> Active Default
-                      </span>
-                    </div>
-
-                    <div
-                      onClick={() => {
-                        setSelectedTheme('midnight');
-                        toast.success('Theme changed to Midnight Slate');
-                      }}
-                      className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
-                        selectedTheme === 'midnight'
-                          ? 'border-indigo-500 bg-gradient-to-b from-indigo-950/70 to-slate-900/90 shadow-xl shadow-indigo-500/20 ring-2 ring-indigo-500/40'
-                          : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm font-bold text-white">Midnight Slate</p>
-                          {selectedTheme === 'midnight' && <CheckCircle2 size={16} className="text-indigo-400" />}
-                        </div>
-                        <p className="text-xs text-slate-400 mt-2 leading-relaxed">Neutral dark monochrome with high contrast text for night shifts.</p>
-                      </div>
-                      <span className="mt-4 text-[11px] text-slate-400">High Contrast Monochrome</span>
-                    </div>
-
-                    <div
-                      onClick={() => {
-                        setSelectedTheme('aurora');
-                        toast.success('Theme changed to Aurora Indigo');
-                      }}
-                      className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${
-                        selectedTheme === 'aurora'
-                          ? 'border-indigo-500 bg-gradient-to-b from-indigo-950/70 to-slate-900/90 shadow-xl shadow-indigo-500/20 ring-2 ring-indigo-500/40'
-                          : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <p className="text-sm font-bold text-white">Aurora Indigo</p>
-                          {selectedTheme === 'aurora' && <CheckCircle2 size={16} className="text-indigo-400" />}
-                        </div>
-                        <p className="text-xs text-slate-400 mt-2 leading-relaxed">Vibrant purple & indigo gradient accents with high energy glow.</p>
-                      </div>
-                      <span className="mt-4 text-[11px] text-purple-300">Gradient Edition</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Brand Accent Palette Swatches */}
-                <div className="space-y-3 mb-8">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Brand Accent Color</span>
-                    <span className="text-xs text-indigo-300 font-bold">Selected: {selectedAccent}</span>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    {ACCENT_COLORS.map((col) => {
-                      const isSelected = selectedAccent === col.name;
-                      return (
-                        <button
-                          key={col.name}
-                          type="button"
-                          onClick={() => {
-                            setSelectedAccent(col.name);
-                            toast.success(`Theme accent updated to ${col.name}`);
-                          }}
-                          className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
-                            isSelected
-                              ? `${col.border} bg-slate-900/90 ring-2 ring-indigo-500/60 shadow-lg ${col.glow}`
-                              : 'border-slate-800 bg-slate-900/50 hover:bg-slate-800/60'
-                          }`}
-                        >
-                          <div className={`w-4 h-4 rounded-full ${col.bg} flex items-center justify-center shrink-0 shadow-sm`}>
-                            {isSelected && <Check size={11} className="text-white font-bold" />}
-                          </div>
-                          <span className="text-xs font-bold text-slate-200 truncate">{col.name}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Typography & Density Options */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-indigo-500/20">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                      System Font Family
-                    </label>
-                    <select
-                      value={fontFamily}
-                      onChange={(e) => setFontFamily(e.target.value)}
-                      className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-4 py-3 text-sm text-slate-100 focus:border-indigo-400 focus:outline-none font-semibold"
-                    >
-                      <option value="Inter">Inter (System Default)</option>
-                      <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
-                      <option value="Geist">Geist Modern Mono/Sans</option>
-                      <option value="Roboto">Roboto Professional</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between p-4 rounded-xl border border-indigo-500/20 bg-slate-900/50">
-                      <span className="text-xs font-bold text-slate-200">High Contrast Mode</span>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={highContrast}
-                          onChange={(e) => setHighContrast(e.target.checked)}
-                          className="sr-only peer"
-                        />
-                        <div className="w-10 h-5.5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600"></div>
-                      </label>
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 rounded-xl border border-indigo-500/20 bg-slate-900/50">
-                      <span className="text-xs font-bold text-slate-200">Compact Table Density</span>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={compactDensity}
-                          onChange={(e) => setCompactDensity(e.target.checked)}
-                          className="sr-only peer"
-                        />
-                        <div className="w-10 h-5.5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600"></div>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: APIs & Integrations Panel */}
-          {isCurrentTab('APIs & Integrations') && (
-            <div className="max-w-4xl space-y-6 sm:space-y-8">
-              <div>
-                <div className="flex items-center gap-2.5 mb-2">
-                  <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
-                    <Zap size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-lg sm:text-xl font-bold text-white">{tCopy('COPY.COMMUNICATION_APIS')}</h2>
-                    <p className="text-xs sm:text-sm text-slate-400">{tCopy('COPY.CONFIGURE_THE_GATEWAYS_USED_FOR_SENDING_TRANSACTIONAL_EMAILS_SMS_AND_WHATSAPP_MESSAGES')}</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                  {/* Email Provider Card with Modal Trigger */}
-                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md space-y-4">
-                    <div className="flex items-center justify-between">
-                      <label htmlFor="settings-email-provider" className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                        <Mail size={16} className="text-indigo-400" />
-                        <span>{tCopy('COPY.EMAIL_PROVIDER')}</span>
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setEmailModalOpen(true)}
-                        className="text-xs font-bold text-indigo-300 hover:text-white px-3 py-1.5 rounded-xl bg-indigo-500/20 hover:bg-indigo-500/30 border border-indigo-500/30 transition-all cursor-pointer flex items-center gap-1.5"
-                      >
-                        <Radio size={13} className="text-emerald-400 animate-pulse" />
-                        <span>Test Email Modal</span>
-                      </button>
-                    </div>
-                    <select
-                      id="settings-email-provider"
-                      className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-4 py-3 text-sm text-slate-100 focus:border-indigo-400 focus:outline-none font-semibold"
-                      {...register('apiConfig.emailProvider')}
-                    >
-                      <option value="AWS SES">{tCopy('COPY.AWS_SES')} (Production Verified)</option>
-                      <option value="SendGrid">{tCopy('COPY.SENDGRID')} (Transactional API)</option>
-                      <option value="SMTP Custom">{tCopy('COPY.SMTP_CUSTOM')} (Custom Server)</option>
-                    </select>
-                    <div className="flex items-center justify-between text-xs pt-1">
-                      <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
-                        <CheckCircle size={13} /> Active connection verified
-                      </span>
-                      <span className="text-slate-400 font-mono">Ping: 38ms</span>
-                    </div>
-                  </div>
-
-                  {/* SMS Gateway Card with Modal Trigger */}
-                  <div className="p-5 sm:p-6 rounded-2xl border border-cyan-500/40 bg-slate-900/70 shadow-md space-y-4">
-                    <div className="flex items-center justify-between">
-                      <label htmlFor="settings-sms-provider" className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                        <MessageSquare size={16} className="text-cyan-400" />
-                        <span>{tCopy('COPY.SMS_GATEWAY')}</span>
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => setSmsModalOpen(true)}
-                        className="text-xs font-bold text-cyan-300 hover:text-white px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 transition-all cursor-pointer flex items-center gap-1.5"
-                      >
-                        <Send size={13} className="text-cyan-400" />
-                        <span>Dispatch Test SMS</span>
-                      </button>
-                    </div>
-                    <select
-                      id="settings-sms-provider"
-                      className="w-full rounded-xl border border-cyan-500/30 bg-slate-900/90 px-4 py-3 text-sm text-slate-100 focus:border-cyan-400 focus:outline-none font-semibold"
-                      {...register('apiConfig.smsProvider')}
-                    >
-                      <option value="Twilio">{tCopy('COPY.TWILIO')} (Global Delivery)</option>
-                      <option value="Fast2SMS">{tCopy('COPY.FAST2SMS')} (India DLT Approved)</option>
-                      <option value="Msg91">{tCopy('COPY.MSG91')} (Enterprise Premium)</option>
-                    </select>
-                    <div className="flex items-center justify-between text-xs pt-1">
-                      <span className="text-cyan-400 font-semibold flex items-center gap-1.5">
-                        <Zap size={13} /> Balance: ₹14,250
-                      </span>
-                      <span className="text-slate-400 font-mono">~71,250 Credits</span>
-                    </div>
-                  </div>
-
-                  {/* WhatsApp Business API Card with Interactive Webhook Inspector */}
-                  <div className="p-5 sm:p-6 rounded-2xl border border-emerald-500/40 bg-slate-900/70 shadow-md md:col-span-2 space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                        <PhoneCall size={16} className="text-emerald-400" />
-                        <span>{tCopy('COPY.WHATSAPP_BUSINESS_API')} (Cloud Graph v21.0)</span>
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setWhatsappModalOpen(true)}
-                          className="text-xs font-bold text-emerald-300 hover:text-white px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 transition-all cursor-pointer flex items-center gap-1.5"
-                        >
-                          <MessageSquare size={13} className="text-emerald-400" />
-                          <span>Interactive Chat Preview</span>
-                        </button>
-                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                          Webhook Active
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <span className="text-xs text-slate-400 font-semibold">Phone Number ID</span>
-                        <input
-                          type="text"
-                          defaultValue="109283749102938"
-                          readOnly
-                          className="w-full rounded-xl border border-slate-700 bg-slate-900/90 px-3.5 py-2.5 text-xs text-slate-200 font-mono"
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <span className="text-xs text-slate-400 font-semibold">Webhook Callback URL</span>
-                        <div className="flex items-center gap-1.5">
-                          <input
-                            type="text"
-                            defaultValue="https://api.libraryos.com/v1/webhooks/whatsapp"
-                            readOnly
-                            className="w-full rounded-xl border border-slate-700 bg-slate-900/90 px-3.5 py-2.5 text-xs text-slate-200 font-mono truncate"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              navigator.clipboard.writeText('https://api.libraryos.com/v1/webhooks/whatsapp');
-                              toast.info('Webhook URL copied to clipboard');
-                            }}
-                            className="p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer"
-                            title="Copy Webhook URL"
-                          >
-                            <Copy size={14} />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <span className="text-xs text-slate-400 font-semibold">Meta System User Access Token</span>
-                      <div className="relative">
-                        <input
-                          type={showApiSecret ? 'text' : 'password'}
-                          defaultValue="EAAKl98234jaskdf092384jsdfk029348sdjfk98234jkasdf"
-                          disabled
-                          className="w-full rounded-xl border border-indigo-500/20 bg-slate-900/40 px-4 py-2.5 text-xs text-slate-400 font-mono cursor-not-allowed pr-10"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowApiSecret(!showApiSecret)}
-                          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
-                        >
-                          {showApiSecret ? <EyeOff size={15} /> : <Eye size={15} />}
-                        </button>
-                      </div>
-                      <p className="text-[11px] text-slate-400">
-                        {tCopy('COPY.CREDENTIAL_ENTRY_IS_DISABLED_IN_THIS_SOURCE_ONLY_PREVIEW_DO_NOT_ENTER_SECRETS_UNTIL_A_SECURE_APPROVED_SERVER_SIDE_INTEGRATION_IS_CONNECTED')}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Payment Gateway Configuration */}
-                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md md:col-span-2 space-y-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-                        <Key size={16} className="text-indigo-400" />
-                        <span>Platform Payment Collection Gateway</span>
-                      </span>
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-xs text-slate-300 font-semibold">Sandbox Test Mode</span>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={paymentSandbox}
-                            onChange={(e) => {
-                              setPaymentSandbox(e.target.checked);
-                              toast.info(`Payment mode set to ${e.target.checked ? 'Sandbox (Test Mode)' : 'Live Production'}`);
-                            }}
-                            className="sr-only peer"
-                          />
-                          <div className="w-10 h-5.5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600"></div>
-                        </label>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div
-                        onClick={() => setSelectedPaymentGateway('razorpay')}
-                        className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                          selectedPaymentGateway === 'razorpay'
-                            ? 'border-indigo-500 bg-indigo-500/20 shadow-md shadow-indigo-500/20'
-                            : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-bold text-white">Razorpay</span>
-                          {selectedPaymentGateway === 'razorpay' && <CheckCircle2 size={16} className="text-indigo-400" />}
-                        </div>
-                        <span className="text-xs text-slate-400 mt-1 block">UPI AutoPay, NetBanking, Cards</span>
-                      </div>
-
-                      <div
-                        onClick={() => setSelectedPaymentGateway('stripe')}
-                        className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                          selectedPaymentGateway === 'stripe'
-                            ? 'border-indigo-500 bg-indigo-500/20 shadow-md shadow-indigo-500/20'
-                            : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-bold text-white">Stripe</span>
-                          {selectedPaymentGateway === 'stripe' && <CheckCircle2 size={16} className="text-indigo-400" />}
-                        </div>
-                        <span className="text-xs text-slate-400 mt-1 block">Global Cards, Apple Pay, SEPA</span>
-                      </div>
-
-                      <div
-                        onClick={() => setSelectedPaymentGateway('cashfree')}
-                        className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                          selectedPaymentGateway === 'cashfree'
-                            ? 'border-indigo-500 bg-indigo-500/20 shadow-md shadow-indigo-500/20'
-                            : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-bold text-white">Cashfree</span>
-                          {selectedPaymentGateway === 'cashfree' && <CheckCircle2 size={16} className="text-indigo-400" />}
-                        </div>
-                        <span className="text-xs text-slate-400 mt-1 block">Instant Payouts & Subscriptions</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 4: Storage & Cloud Backups Panel */}
-          {activeTab === 'Storage' && (
-            <div className="max-w-4xl space-y-6 sm:space-y-8">
-              <div>
-                <div className="flex items-center gap-2.5 mb-2">
-                  <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                    <Database size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-lg sm:text-xl font-bold text-white">Object Storage & Media Configuration</h2>
-                    <p className="text-xs sm:text-sm text-slate-400">Manage cloud file storage buckets for digital books, student KYC documents, and automated database snapshots.</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                  {/* Primary S3 Bucket Card */}
-                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md space-y-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Primary Cloud Bucket</span>
-                    <p className="text-base font-bold text-white font-mono">libraryos-production-media</p>
-                    <div className="flex items-center justify-between text-xs text-indigo-400 font-mono pt-1">
-                      <span>AWS S3 (ap-south-1 Mumbai)</span>
-                      <span className="text-emerald-400 font-bold">Healthy • 99.99% SLA</span>
-                    </div>
-                  </div>
-
-                  {/* Max File Size Limit Card */}
-                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Max File Size Limit</span>
-                      <span className="text-sm font-bold text-indigo-300 font-mono">{maxUploadLimitMb} MB</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={10}
-                      max={200}
-                      step={5}
-                      value={maxUploadLimitMb}
-                      onChange={(e) => setMaxUploadLimitMb(Number(e.target.value))}
-                      className="w-full accent-indigo-500 cursor-pointer"
-                    />
-                    <span className="text-[11px] text-slate-400 block">Allowed formats: PDF, EPUB, JPG, PNG, WEBP</span>
-                  </div>
-
-                  {/* Cloudflare Edge Caching Card with Modal */}
-                  <div className="p-5 sm:p-6 rounded-2xl border border-indigo-500/40 bg-slate-900/70 shadow-md md:col-span-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2.5">
-                        <span className="text-sm font-bold text-white">Cloudflare Edge CDN Caching</span>
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                          99.2% Cache Hit Rate
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-400 leading-relaxed">Asset delivery optimization & edge distribution active across 280+ global PoPs (TTL: 30 days).</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setCacheModalOpen(true)}
-                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-indigo-500/40 bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25 text-xs font-bold transition-all shrink-0 cursor-pointer shadow-md"
-                    >
-                      <RefreshCw size={14} className="text-indigo-400" />
-                      <span>Purge CDN Modal</span>
-                    </button>
-                  </div>
-
-                  {/* Automated Backups Card with Modal */}
-                  <div className="p-5 sm:p-6 rounded-2xl border border-purple-500/40 bg-slate-900/70 shadow-md md:col-span-2 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-1">
-                        <span className="text-sm font-bold text-white">Automated Daily Database Snapshots</span>
-                        <p className="text-xs text-slate-400">Point-in-time PostgreSQL recovery with encrypted multi-region cold storage replication.</p>
-                      </div>
-                      <label className="relative inline-flex items-center cursor-pointer ml-3 shrink-0">
-                        <input
-                          type="checkbox"
-                          checked={autoDailyBackup}
-                          onChange={(e) => {
-                            setAutoDailyBackup(e.target.checked);
-                            toast.info(`Automated backup ${e.target.checked ? 'activated' : 'deactivated'}`);
-                          }}
-                          className="sr-only peer"
-                        />
-                        <div className="w-12 h-6.5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5.5 after:w-5.5 after:transition-all peer-checked:bg-purple-600"></div>
-                      </label>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-3 border-t border-slate-800">
-                      <div className="flex items-center gap-2.5 text-xs text-slate-300">
-                        <span className="font-semibold">Retention Duration:</span>
-                        <select
-                          value={backupRetentionDays}
-                          onChange={(e) => setBackupRetentionDays(e.target.value)}
-                          className="rounded-xl border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-slate-200 focus:outline-none font-semibold"
-                        >
-                          <option value="7">7 Days</option>
-                          <option value="14">14 Days</option>
-                          <option value="30">30 Days (Recommended)</option>
-                          <option value="90">90 Days (Enterprise)</option>
-                        </select>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => setSnapshotModalOpen(true)}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-purple-500/40 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25 text-xs font-bold transition-all cursor-pointer shadow-md"
-                      >
-                        <HardDrive size={14} className="text-purple-400" />
-                        <span>Instant Snapshot Modal</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: Maintenance Mode Panel */}
+          {/* TAB 2: Maintenance Mode Panel */}
           {isCurrentTab('Maintenance Mode') && (
             <div className="max-w-4xl space-y-6 sm:space-y-8">
               <div>
@@ -1573,10 +886,7 @@ export default function SuperadminSettingsOverviewPageClient() {
               >
                 <option value="All">All Categories</option>
                 <option value="General">General</option>
-                <option value="APIs">APIs</option>
-                <option value="Storage">Storage</option>
                 <option value="Maintenance">Maintenance</option>
-                <option value="Appearance">Appearance</option>
               </select>
             </div>
           </div>
@@ -1642,530 +952,74 @@ export default function SuperadminSettingsOverviewPageClient() {
             </table>
           </div>
 
-          {/* Interactive Pagination Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-5 py-4 border-t border-slate-800 bg-slate-900/50 text-xs text-slate-400">
-            <div className="flex items-center gap-4">
-              <span className="font-medium">
-                {filteredAuditLogs.length === 0
-                  ? 'Showing 0 records'
-                  : `Showing ${auditPage * auditPageSize + 1} to ${Math.min((auditPage + 1) * auditPageSize, filteredAuditLogs.length)} of ${filteredAuditLogs.length} changes`}
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] text-slate-400">Rows:</span>
-                <select
-                  value={auditPageSize}
-                  onChange={(e) => {
-                    setAuditPageSize(Number(e.target.value));
-                    setAuditPage(0);
-                  }}
-                  className="rounded-lg border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-200 focus:outline-none font-semibold"
-                >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                </select>
-              </div>
-            </div>
-
+          {/* Pagination */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 border-t border-slate-800 bg-slate-900/40 text-xs">
+            <span className="text-slate-400">
+              Showing {filteredAuditLogs.length === 0 ? 0 : auditPage * auditPageSize + 1} to {Math.min((auditPage + 1) * auditPageSize, filteredAuditLogs.length)} of {filteredAuditLogs.length} audit entries
+            </span>
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-bold transition-all cursor-pointer"
                 disabled={auditPage === 0}
                 onClick={() => setAuditPage((p) => Math.max(0, p - 1))}
+                className="p-1.5 rounded-lg border border-slate-800 text-slate-300 hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
               >
-                <ChevronLeft size={15} />
-                <span>Previous</span>
+                <ChevronLeft size={16} />
               </button>
-
-              <div className="flex items-center gap-1">
-                {Array.from({ length: totalAuditPages }).map((_, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setAuditPage(idx)}
-                    className={`w-8 h-8 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      auditPage === idx
-                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-600/30'
-                        : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                    }`}
-                  >
-                    {idx + 1}
-                  </button>
-                ))}
-              </div>
-
+              <span className="px-2 font-bold text-white">
+                Page {auditPage + 1} of {totalAuditPages}
+              </span>
               <button
                 type="button"
-                className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-bold transition-all cursor-pointer"
-                disabled={auditPage + 1 >= totalAuditPages}
+                disabled={auditPage >= totalAuditPages - 1}
                 onClick={() => setAuditPage((p) => Math.min(totalAuditPages - 1, p + 1))}
+                className="p-1.5 rounded-lg border border-slate-800 text-slate-300 hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
               >
-                <span>Next</span>
-                <ChevronRight size={15} />
+                <ChevronRight size={16} />
               </button>
             </div>
           </div>
         </section>
-
       </form>
 
-      {/* ========================================================================= */}
-      {/* RICH, COLORFUL INTERACTIVE MODALS FOR ALL BUTTONS                        */}
-      {/* ========================================================================= */}
+      {/* ─── 6. INTERACTIVE MODALS ─── */}
 
-      {/* 1. TEST EMAIL MODAL */}
-      {emailModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl border border-indigo-500/40 bg-gradient-to-b from-[#0f142e] to-[#070914] p-6 shadow-2xl shadow-indigo-500/20 relative">
-            <button
-              onClick={() => {
-                setEmailModalOpen(false);
-                setEmailTestingState('idle');
-              }}
-              className="absolute right-5 top-5 p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800"
-            >
-              <X size={18} />
-            </button>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                <Mail size={22} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Test Email Gateway Handshake</h3>
-                <p className="text-xs text-slate-400">Validate outbound SES / SMTP deliverability and TLS 1.3 latency</p>
-              </div>
-            </div>
-
-            <div className="space-y-4 my-5">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-300 uppercase tracking-wider">Test Recipient Email</label>
-                <input
-                  type="email"
-                  value={testEmailAddress}
-                  onChange={(e) => setTestEmailAddress(e.target.value)}
-                  className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-4 py-2.5 text-sm text-white focus:border-indigo-400 focus:outline-none"
-                />
-              </div>
-
-              <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/50 space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Selected Gateway:</span>
-                  <span className="text-indigo-300 font-bold">{currentEmailProvider}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Sender Identity:</span>
-                  <span className="text-slate-200 font-mono">noreply@libraryos.com</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Encryption:</span>
-                  <span className="text-emerald-400 font-bold">STARTTLS / TLS 1.3 Enforced</span>
-                </div>
-              </div>
-
-              {emailTestingState === 'running' && (
-                <div className="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs flex items-center gap-3 animate-pulse">
-                  <RefreshCw size={16} className="animate-spin text-indigo-400" />
-                  <span>Negotiating TLS handshake with AWS SES endpoint...</span>
-                </div>
-              )}
-
-              {emailTestingState === 'success' && (
-                <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2.5">
-                  <CheckCircle size={16} className="text-emerald-400 shrink-0" />
-                  <span>Handshake OK! Diagnostic email queued with Message-ID #ses-920194.</span>
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={() => {
-                  setEmailModalOpen(false);
-                  setEmailTestingState('idle');
-                }}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                onClick={handleRunEmailTest}
-                disabled={emailTestingState === 'running'}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer flex items-center gap-2"
-              >
-                <Send size={14} />
-                <span>Send Diagnostic Email</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 2. DISPATCH TEST SMS MODAL */}
-      {smsModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl border border-cyan-500/40 bg-gradient-to-b from-[#0a1a2e] to-[#040914] p-6 shadow-2xl shadow-cyan-500/20 relative">
-            <button
-              onClick={() => {
-                setSmsModalOpen(false);
-                setSmsSendingState('idle');
-              }}
-              className="absolute right-5 top-5 p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800"
-            >
-              <X size={18} />
-            </button>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
-                <MessageSquare size={22} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Dispatch Test SMS Message</h3>
-                <p className="text-xs text-slate-400">Trigger simulated SMS via {currentSmsProvider} gateway</p>
-              </div>
-            </div>
-
-            <div className="space-y-4 my-5">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-300 uppercase tracking-wider">Mobile Number</label>
-                <input
-                  type="text"
-                  value={testSmsPhone}
-                  onChange={(e) => setTestSmsPhone(e.target.value)}
-                  className="w-full rounded-xl border border-cyan-500/30 bg-slate-900/90 px-4 py-2.5 text-sm text-white font-mono focus:border-cyan-400 focus:outline-none"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center text-xs">
-                  <label className="font-bold text-slate-300 uppercase tracking-wider">SMS Message Body</label>
-                  <span className="text-slate-400 font-mono">{testSmsText.length}/160 Chars (1 SMS credit)</span>
-                </div>
-                <textarea
-                  rows={3}
-                  value={testSmsText}
-                  onChange={(e) => setTestSmsText(e.target.value)}
-                  className="w-full rounded-xl border border-cyan-500/30 bg-slate-900/90 px-4 py-2.5 text-xs text-white focus:border-cyan-400 focus:outline-none resize-none font-sans"
-                />
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 text-xs space-y-1.5">
-                <div className="flex justify-between">
-                  <span className="text-slate-400">DLT Template ID:</span>
-                  <span className="text-cyan-300 font-mono font-bold">1407161829304918234</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Header / Sender:</span>
-                  <span className="text-white font-mono font-bold">LIBROS</span>
-                </div>
-              </div>
-
-              {smsSendingState === 'sending' && (
-                <div className="p-3.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs flex items-center gap-3 animate-pulse">
-                  <RefreshCw size={16} className="animate-spin text-cyan-400" />
-                  <span>Dispatching through {currentSmsProvider} SMPP cluster...</span>
-                </div>
-              )}
-
-              {smsSendingState === 'sent' && (
-                <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2.5">
-                  <CheckCircle size={16} className="text-emerald-400 shrink-0" />
-                  <span>Delivered! SMS SID: sm_8923049182390 verified by operator.</span>
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={() => {
-                  setSmsModalOpen(false);
-                  setSmsSendingState('idle');
-                }}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                onClick={handleRunSmsTest}
-                disabled={smsSendingState === 'sending'}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/30 transition-all cursor-pointer flex items-center gap-2"
-              >
-                <Send size={14} />
-                <span>Send SMS Ping</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 3. WHATSAPP CHAT PREVIEW MODAL */}
-      {whatsappModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl border border-emerald-500/40 bg-gradient-to-b from-[#0a2419] to-[#04120c] p-6 shadow-2xl shadow-emerald-500/20 relative">
-            <button
-              onClick={() => setWhatsappModalOpen(false)}
-              className="absolute right-5 top-5 p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800"
-            >
-              <X size={18} />
-            </button>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                <PhoneCall size={22} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">WhatsApp Cloud API Simulator</h3>
-                <p className="text-xs text-slate-400">Meta Graph Webhook v21.0 Live Message Bubble Preview</p>
-              </div>
-            </div>
-
-            {/* Realistic WhatsApp Chat Box */}
-            <div className="p-4 rounded-2xl bg-[#0b141a] border border-emerald-900/50 my-5 space-y-3">
-              <div className="flex items-center gap-2 pb-2 border-b border-slate-800">
-                <div className="w-7 h-7 rounded-full bg-emerald-600 flex items-center justify-center text-white text-xs font-bold">
-                  L
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-white">Library OS Notifications</p>
-                  <p className="text-[10px] text-emerald-400">Official Business Account</p>
-                </div>
-              </div>
-
-              {/* Chat Bubble */}
-              <div className="bg-[#005c4b] text-white p-3.5 rounded-2xl rounded-tl-none max-w-[85%] text-xs shadow-md space-y-1">
-                <p className="font-bold text-emerald-200">Hello Library Member! 📚</p>
-                <p className="text-slate-100">Your membership fee receipt for <strong>November 2026 (₹800)</strong> has been successfully generated.</p>
-                <div className="pt-1 flex items-center justify-between text-[10px] text-emerald-200">
-                  <span>Invoice #INV-2026-904</span>
-                  <span>12:45 PM ✓✓</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-xs pt-2">
-              <span className="text-slate-400">Webhook Status:</span>
-              <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                <CheckCircle size={14} /> Verified (HTTP 200)
-              </span>
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-5 border-t border-emerald-900/40">
-              <button
-                type="button"
-                onClick={() => setWhatsappModalOpen(false)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                onClick={handleVerifyWhatsapp}
-                disabled={whatsappVerifying}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition-all cursor-pointer flex items-center gap-2"
-              >
-                <RefreshCw size={14} className={whatsappVerifying ? 'animate-spin' : ''} />
-                <span>{whatsappVerifying ? 'Pinging Meta...' : 'Verify Webhook Handshake'}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 4. PURGE CDN CACHE MODAL */}
-      {cacheModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl border border-indigo-500/40 bg-gradient-to-b from-[#0d122e] to-[#050714] p-6 shadow-2xl shadow-indigo-500/20 relative">
-            <button
-              onClick={() => {
-                setCacheModalOpen(false);
-                setCachePurged(false);
-              }}
-              className="absolute right-5 top-5 p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800"
-            >
-              <X size={18} />
-            </button>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                <RefreshCw size={22} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Purge Global CDN Edge Cache</h3>
-                <p className="text-xs text-slate-400">Invalidate cached assets across all 280+ Cloudflare Edge PoPs</p>
-              </div>
-            </div>
-
-            <div className="space-y-4 my-5">
-              <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Edge Zone:</span>
-                  <span className="text-white font-mono font-bold">libraryos.com (Enterprise)</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Estimated Cache Size:</span>
-                  <span className="text-purple-300 font-mono font-bold">428.4 MB (12,490 assets)</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Scope:</span>
-                  <span className="text-indigo-300 font-bold">Everything (Images, CSS, Fonts, PDFs)</span>
-                </div>
-              </div>
-
-              {cachePurging && (
-                <div className="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs flex items-center gap-3 animate-pulse">
-                  <RefreshCw size={16} className="animate-spin text-indigo-400" />
-                  <span>Broadcasting purge headers to global edge nodes...</span>
-                </div>
-              )}
-
-              {cachePurged && (
-                <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2.5">
-                  <CheckCircle size={16} className="text-emerald-400 shrink-0" />
-                  <span>Purge confirmed! Global edge nodes are pulling fresh content.</span>
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={() => {
-                  setCacheModalOpen(false);
-                  setCachePurged(false);
-                }}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleExecuteCachePurge}
-                disabled={cachePurging}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/30 transition-all cursor-pointer flex items-center gap-2"
-              >
-                <Trash2 size={14} />
-                <span>Execute Edge Purge</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 5. DATABASE SNAPSHOT MODAL */}
-      {snapshotModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl border border-purple-500/40 bg-gradient-to-b from-[#180e2e] to-[#0a0514] p-6 shadow-2xl shadow-purple-500/20 relative">
-            <button
-              onClick={() => {
-                setSnapshotModalOpen(false);
-                setSnapshotProgress(0);
-              }}
-              className="absolute right-5 top-5 p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800"
-            >
-              <X size={18} />
-            </button>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-2xl bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                <HardDrive size={22} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white">Trigger Database Snapshot</h3>
-                <p className="text-xs text-slate-400">Create encrypted point-in-time PostgreSQL snapshot on S3 Glacier</p>
-              </div>
-            </div>
-
-            <div className="space-y-4 my-5">
-              <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Database Engine:</span>
-                  <span className="text-white font-mono font-bold">PostgreSQL 16.2 Enterprise</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Snapshot Tag:</span>
-                  <span className="text-purple-300 font-mono font-bold">snap-prod-{new Date().toISOString().split('T')[0]}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Target Region:</span>
-                  <span className="text-slate-200">ap-south-1 (Mumbai)</span>
-                </div>
-              </div>
-
-              {snapshotRunning && (
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs text-purple-300">
-                    <span>Compressing & streaming tables...</span>
-                    <span>{snapshotProgress}%</span>
-                  </div>
-                  <div className="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden p-0.5 border border-purple-500/30">
-                    <div className="bg-gradient-to-r from-purple-500 to-indigo-500 h-full rounded-full transition-all duration-300" style={{ width: `${snapshotProgress}%` }} />
-                  </div>
-                </div>
-              )}
-
-              {snapshotProgress === 100 && (
-                <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2.5">
-                  <CheckCircle size={16} className="text-emerald-400 shrink-0" />
-                  <span>Snapshot snapshot-libraryos-20261120.sql.gz (1.2 GB) successfully saved.</span>
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-              <button
-                type="button"
-                onClick={() => {
-                  setSnapshotModalOpen(false);
-                  setSnapshotProgress(0);
-                }}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleStartSnapshot}
-                disabled={snapshotRunning}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-purple-600/30 transition-all cursor-pointer flex items-center gap-2"
-              >
-                <HardDrive size={14} />
-                <span>{snapshotRunning ? 'Generating...' : 'Initiate Snapshot Now'}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 6. RESET TO DEFAULTS CONFIRMATION MODAL */}
+      {/* 1. RESET TO DEFAULTS CONFIRMATION MODAL */}
       {resetModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
           <div className="w-full max-w-md rounded-3xl border border-amber-500/40 bg-gradient-to-b from-[#261b0a] to-[#0e0904] p-6 shadow-2xl shadow-amber-500/20 relative">
+            <button
+              onClick={() => setResetModalOpen(false)}
+              className="absolute right-5 top-5 p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800"
+            >
+              <X size={18} />
+            </button>
             <div className="flex items-center gap-3 mb-4">
               <div className="p-3 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                <AlertTriangle size={22} />
+                <RotateCcw size={22} />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-white">Reset Configuration?</h3>
-                <p className="text-xs text-slate-400">Restore all local platform parameters to initial defaults</p>
+                <h3 className="text-lg font-bold text-white">Reset Configuration</h3>
+                <p className="text-xs text-slate-400">Restore factory baseline defaults</p>
               </div>
             </div>
 
             <p className="text-xs text-slate-300 leading-relaxed my-4">
-              This will discard all uncommitted edits across General settings, brand appearance, API routes, and maintenance mode parameters.
+              Are you sure you want to reset all current edits back to standard platform defaults? Any unsaved changes in currency, timezone, or maintenance message will be discarded.
             </p>
 
-            <div className="flex items-center justify-end gap-3 pt-4 border-t border-amber-900/40">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
               <button
                 type="button"
                 onClick={() => setResetModalOpen(false)}
                 className="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:text-white"
               >
-                Keep Current Values
+                Cancel
               </button>
               <button
                 type="button"
                 onClick={handleExecuteReset}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-rose-600 hover:from-amber-500 hover:to-rose-500 text-white text-xs font-bold shadow-lg shadow-amber-600/30 transition-all cursor-pointer"
+                className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow-lg shadow-amber-600/30 transition-all cursor-pointer"
               >
                 Confirm Reset
               </button>
@@ -2174,10 +1028,10 @@ export default function SuperadminSettingsOverviewPageClient() {
         </div>
       )}
 
-      {/* 7. EMERGENCY LOCKDOWN / PURGE SESSIONS MODAL */}
+      {/* 2. SECURITY LOCKDOWN MODAL */}
       {lockdownModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl border border-rose-500/50 bg-gradient-to-b from-[#2e0d16] to-[#120408] p-6 shadow-2xl shadow-rose-500/30 relative">
+          <div className="w-full max-w-lg rounded-3xl border border-rose-500/50 bg-gradient-to-b from-[#2a0e14] to-[#0d0407] p-6 shadow-2xl shadow-rose-500/30 relative">
             <button
               onClick={() => setLockdownModalOpen(false)}
               className="absolute right-5 top-5 p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800"
@@ -2185,26 +1039,28 @@ export default function SuperadminSettingsOverviewPageClient() {
               <X size={18} />
             </button>
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-2xl bg-rose-500/20 text-rose-400 border border-rose-500/40">
-                <ShieldAlert size={24} />
+              <div className="p-3 rounded-2xl bg-rose-500/25 text-rose-400 border border-rose-500/40">
+                <AlertTriangle size={24} />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-white">Emergency Session Invalidation</h3>
-                <p className="text-xs text-rose-300">Security Lockdown & Active Token Revocation</p>
+                <p className="text-xs text-rose-300 font-semibold">Immediate Security Procedure</p>
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-rose-950/40 border border-rose-500/30 text-xs space-y-2 text-rose-200 my-4">
-              <p className="font-bold flex items-center gap-2 text-rose-300">
-                <AlertTriangle size={15} />
-                <span>1,420 Active Sessions Will Be Immediately Terminated</span>
+            <div className="space-y-3 my-4">
+              <p className="text-xs text-slate-300 leading-relaxed">
+                This will trigger an emergency Redis token invalidation broadcast across all clusters. The following actions will execute immediately:
               </p>
-              <p className="text-slate-300 leading-relaxed">
-                All connected students, library managers, and librarians across all 28 branches will be forcibly logged out. Only authenticated SuperAdmins connecting from whitelisted IP CIDRs will retain access.
-              </p>
+              <ul className="text-xs text-slate-300 space-y-1.5 list-disc pl-5">
+                <li><strong className="text-rose-300">1,420 Active Sessions</strong> terminated instantly.</li>
+                <li>All active branch library managers will be signed out.</li>
+                <li>Student check-in kiosks will switch to emergency offline queue mode.</li>
+                <li>Only SuperAdmins with 2FA passkeys will remain authenticated.</li>
+              </ul>
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-rose-900/40">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
               <button
                 type="button"
                 onClick={() => setLockdownModalOpen(false)}
@@ -2216,22 +1072,22 @@ export default function SuperadminSettingsOverviewPageClient() {
                 type="button"
                 onClick={() => {
                   setLockdownModalOpen(false);
-                  toast.error('Global security lockdown executed: 1,420 user sessions revoked.');
+                  toast.success('Emergency broadcast transmitted. 1,420 user sessions revoked.');
                 }}
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white text-xs font-extrabold shadow-lg shadow-rose-600/40 transition-all cursor-pointer flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white text-xs font-bold shadow-lg shadow-rose-600/30 transition-all cursor-pointer flex items-center gap-2"
               >
-                <AlertTriangle size={14} />
-                <span>Execute Lockdown Now</span>
+                <Lock size={14} />
+                <span>Execute Emergency Revocation</span>
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* 8. EXPORT PLATFORM CONFIGURATION MODAL */}
+      {/* 3. PLATFORM EXPORT CENTER MODAL */}
       {exportModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl border border-indigo-500/40 bg-gradient-to-b from-[#0f142e] to-[#070914] p-6 shadow-2xl shadow-indigo-500/20 relative">
+          <div className="w-full max-w-lg rounded-3xl border border-cyan-500/40 bg-gradient-to-b from-[#0a1c2e] to-[#040c14] p-6 shadow-2xl shadow-cyan-500/20 relative">
             <button
               onClick={() => setExportModalOpen(false)}
               className="absolute right-5 top-5 p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800"
@@ -2239,38 +1095,38 @@ export default function SuperadminSettingsOverviewPageClient() {
               <X size={18} />
             </button>
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+              <div className="p-3 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
                 <Download size={22} />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-white">Platform Export Center</h3>
-                <p className="text-xs text-slate-400">Download configurations, audit logs, or print statements</p>
+                <p className="text-xs text-slate-400">Download configurations and audit reports</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5">
               <div
                 onClick={handleExportJson}
-                className="p-4 rounded-2xl border border-indigo-500/30 bg-slate-900/60 hover:bg-indigo-500/10 cursor-pointer transition-all flex flex-col justify-between"
+                className="p-4 rounded-2xl border border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20 transition-all cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <Download size={18} className="text-indigo-400 mb-2" />
-                  <p className="text-xs font-bold text-white">JSON Format</p>
-                  <p className="text-[11px] text-slate-400 mt-1">Full system schema with custom parameters.</p>
+                  <Download size={18} className="text-cyan-400 mb-2" />
+                  <p className="text-xs font-bold text-white">JSON Bundle</p>
+                  <p className="text-[11px] text-slate-400 mt-1">Full state backup for migration or CI deployment.</p>
                 </div>
-                <span className="text-[10px] text-indigo-300 font-bold mt-3">Download JSON →</span>
+                <span className="text-[10px] text-cyan-300 font-bold mt-3">Download JSON →</span>
               </div>
 
               <div
                 onClick={handleExportCsv}
-                className="p-4 rounded-2xl border border-emerald-500/30 bg-slate-900/60 hover:bg-emerald-500/10 cursor-pointer transition-all flex flex-col justify-between"
+                className="p-4 rounded-2xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 transition-all cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <FileSpreadsheet size={18} className="text-emerald-400 mb-2" />
-                  <p className="text-xs font-bold text-white">Audit CSV</p>
-                  <p className="text-[11px] text-slate-400 mt-1">Tabular history of all setting changes.</p>
+                  <Download size={18} className="text-indigo-400 mb-2" />
+                  <p className="text-xs font-bold text-white">CSV Audit Log</p>
+                  <p className="text-[11px] text-slate-400 mt-1">Audit trail history formatted for Excel.</p>
                 </div>
-                <span className="text-[10px] text-emerald-300 font-bold mt-3">Download CSV →</span>
+                <span className="text-[10px] text-indigo-300 font-bold mt-3">Download CSV →</span>
               </div>
 
               <div
@@ -2278,7 +1134,7 @@ export default function SuperadminSettingsOverviewPageClient() {
                   setExportModalOpen(false);
                   window.print();
                 }}
-                className="p-4 rounded-2xl border border-sky-500/30 bg-slate-900/60 hover:bg-sky-500/10 cursor-pointer transition-all flex flex-col justify-between"
+                className="p-4 rounded-2xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 transition-all cursor-pointer flex flex-col justify-between"
               >
                 <div>
                   <Printer size={18} className="text-sky-400 mb-2" />
@@ -2302,7 +1158,7 @@ export default function SuperadminSettingsOverviewPageClient() {
         </div>
       )}
 
-      {/* 9. ROLLBACK AUDIT ENTRY MODAL */}
+      {/* 4. ROLLBACK AUDIT ENTRY MODAL */}
       {rollbackModalOpen && selectedAuditEntry && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
           <div className="w-full max-w-md rounded-3xl border border-indigo-500/40 bg-gradient-to-b from-[#0f142e] to-[#070914] p-6 shadow-2xl shadow-indigo-500/20 relative">

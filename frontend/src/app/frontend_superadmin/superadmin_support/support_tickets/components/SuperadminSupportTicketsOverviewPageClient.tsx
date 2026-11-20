@@ -383,8 +383,8 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
       <SuperadminSupportTicketsOverviewKpiCards openCount={openCount} slaBreachCount={slaBreachCount} avgResponse={SUPERADMIN_SUPPORT_TICKETS_SAMPLE_AVERAGE_RESPONSE} />
 
       {/* Table with filter */}
-      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-4 border-b border-indigo-500/20 bg-indigo-500/5">
+      <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] overflow-hidden shadow-xl">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-4 border-b border-indigo-500/20 bg-indigo-500/10">
           {/* Status Filters - horizontal group */}
           <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-slate-900/80 border border-indigo-500/20 shrink-0">
             {SUPERADMIN_SUPPORT_TICKETS_FILTERS.map((f) => (
@@ -471,7 +471,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
 
           <span className="text-xs font-medium text-slate-400 shrink-0 whitespace-nowrap">{filtered.length} {t("COPY.MATCHING_TICKETS")}</span>
         </div>
-        <div className="sa-support-ticket-chart" role="region" aria-label={t("COPY.SAMPLE_SUPPORT_TICKETS_TABLE")}>
+        <div className="w-full min-w-full overflow-x-auto" role="region" aria-label={t("COPY.SAMPLE_SUPPORT_TICKETS_TABLE")}>
           <SuperadminSupportTicketsOverviewSemanticTable rowData={filtered} sourceRowCount={tickets.length} columnDefs={colDefs} pagination paginationPageSize={15} getRowId={({ data }) => data.id} hideFilter />
         </div>
       </div>

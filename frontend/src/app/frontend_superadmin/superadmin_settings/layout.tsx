@@ -17,12 +17,9 @@ const TAB_ICONS = {
   profile_active_sessions: Shield,
   profile_login_history: History,
   profile_security: Shield,
-  settings_appearance: Palette,
   settings_branding: Bookmark,
   settings_general: Settings,
-  settings_integrations: Plug,
   settings_maintenance_mode: Wrench,
-  settings_storage: HardDrive,
 } as const;
 
 export default function DomainLayout({ children }: { children: ReactNode }) {
@@ -31,11 +28,8 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   const routes = [
     { key: 'settings_overview', label: t('COPY.NAV_SETTINGS_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_overview },
     { key: 'settings_general', label: t('COPY.NAV_SETTINGS_GENERAL'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_general },
-    { key: 'settings_appearance', label: t('COPY.NAV_SETTINGS_APPEARANCE'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_appearance },
     { key: 'settings_branding', label: t('COPY.NAV_SETTINGS_BRANDING'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_branding },
-    { key: 'settings_integrations', label: t('COPY.NAV_SETTINGS_INTEGRATIONS'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_integrations },
     { key: 'settings_maintenance_mode', label: t('COPY.NAV_SETTINGS_MAINTENANCE_MODE'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode },
-    { key: 'settings_storage', label: t('COPY.NAV_SETTINGS_STORAGE'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_storage },
     { key: 'profile_overview', label: t('COPY.NAV_PROFILE_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.profile_overview },
   ] as const;
   return (
