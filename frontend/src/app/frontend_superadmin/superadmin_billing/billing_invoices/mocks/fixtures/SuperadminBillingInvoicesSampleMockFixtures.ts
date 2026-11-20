@@ -4,9 +4,9 @@ import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/s
 
 /** Synthetic data for UI preview only. Never represents real customers, tax IDs, or transactions. */
 export const SUPERADMIN_BILLING_SAMPLE_INVOICES: SuperadminBillingInvoiceSample[] = [
-  { id: 'SAMPLE-REC-001', tenant: 'Sample Tenant A', date: '10 Apr, 2026', amount: 2999, status: 'Paid', method: 'UPI', gst: 'SAMPLE-GST-NOT-REAL' },
-  { id: 'SAMPLE-REC-002', tenant: 'Sample Tenant B', date: '01 Apr, 2026', amount: 999, status: 'Overdue', method: '—', gst: 'SAMPLE-GST-NOT-REAL' },
-  { id: 'SAMPLE-REC-003', tenant: 'Sample Tenant C', date: '28 Mar, 2026', amount: 999, status: 'Paid', method: 'Card', gst: 'SAMPLE-GST-NOT-REAL' },
+  { id: 'SAMPLE-REC-001', tenant: 'Sample Tenant A', date: '10 Apr, 2026', amount: 2999, status: 'Paid', method: 'UPI', gst: 'SAMPLE-GST-NOT-REAL', phone: '+91 98765 43210', email: 'accounts@tenant-a.com', contact: 'Anil Kumar' },
+  { id: 'SAMPLE-REC-002', tenant: 'Sample Tenant B', date: '01 Apr, 2026', amount: 999, status: 'Overdue', method: '—', gst: 'SAMPLE-GST-NOT-REAL', phone: '+91 98234 56789', email: 'billing@tenant-b.in', contact: 'Sunita Mehra' },
+  { id: 'SAMPLE-REC-003', tenant: 'Sample Tenant C', date: '28 Mar, 2026', amount: 999, status: 'Paid', method: 'Card', gst: 'SAMPLE-GST-NOT-REAL', phone: '+91 97123 45678', email: 'finance@tenant-c.org', contact: 'Ramesh Gupta' },
 ];
 
 

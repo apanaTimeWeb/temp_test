@@ -10,10 +10,20 @@
 /** Data-Flow: canonical route -> SuperadminSubscriptionsActiveSubscribersPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 import SuperadminSubscriptionsActiveSubscribersSemanticTable, { type SemanticColumnDef, type SemanticCellParams } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/components/SuperadminSubscriptionsActiveSubscribersSemanticTable';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
+import { toast } from 'sonner';
 import { SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/mocks/fixtures/SuperadminSubscriptionsActiveSubscribersMockFixtures';
-import { Users, Package, Building2, Clock, AlertCircle, CheckCircle, TrendingUp, ShieldCheck } from 'lucide-react';
+import type { SuperadminSubscriptionRecord } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/types/SuperadminSubscriptionsActiveSubscribersTypes';
+import {
+  Users, Package, Building2, Clock, AlertCircle, CheckCircle, TrendingUp, ShieldCheck,
+  Search, X, RotateCcw, Download, FileSpreadsheet, Printer, MessageSquare, Mail, PhoneCall
+} from 'lucide-react';
 import { formatSuperadminSubscriptionsMajorPreviewCurrency } from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/utils/SuperadminSubscriptionsActiveSubscribersFormatters';
+import {
+  downloadSuperadminSubscriptionsCsv,
+  downloadSuperadminSubscriptionsExcel,
+  printSuperadminSubscriptionsRoster
+} from '@/app/frontend_superadmin/superadmin_subscriptions/subscriptions_active_subscribers/utils/SuperadminSubscriptionsActiveSubscribersExportUtils';
 import { useTranslations, useLocale } from 'next-intl';
 
 /** Derives a stable, non-index row identity for repeated interactive table controls. */
@@ -37,7 +47,56 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
   const t = useTranslations('SUPERADMIN_SUBSCRIPTIONS');
 
   const [activeTab] = useState("Active Subscribers");
-  const [subs] = useState(SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS);
+  const [subs] = useState<SuperadminSubscriptionRecord[]>(SUPERADMIN_SUBSCRIPTIONS_SAMPLE_SUBSCRIBERS);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [planFilter, setPlanFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [cycleFilter, setCycleFilter] = useState('all');
+
+  const showToast = useCallback((msg: string) => {
+    toast.message(msg, { id: 'superadmin:subscriptions:feedback' });
+  }, []);
+
+  const filteredSubs = useMemo(() => {
+    return subs.filter((sub) => {
+      if (planFilter !== 'all' && sub.plan.toLowerCase() !== planFilter.toLowerCase()) return false;
+      if (statusFilter !== 'all' && sub.status.toLowerCase() !== statusFilter.toLowerCase()) return false;
+      if (cycleFilter !== 'all' && sub.cycle.toLowerCase() !== cycleFilter.toLowerCase()) return false;
+      const q = searchQuery.trim().toLowerCase();
+      if (q) {
+        const matchesTenant = sub.tenant.toLowerCase().includes(q);
+        const matchesPlan = sub.plan.toLowerCase().includes(q);
+        const matchesStatus = sub.status.toLowerCase().includes(q);
+        const matchesContact = sub.billingContact ? sub.billingContact.toLowerCase().includes(q) : false;
+        const matchesPhone = sub.phone ? sub.phone.toLowerCase().includes(q) : false;
+        if (!matchesTenant && !matchesPlan && !matchesStatus && !matchesContact && !matchesPhone) return false;
+      }
+      return true;
+    });
+  }, [subs, searchQuery, planFilter, statusFilter, cycleFilter]);
+
+  const hasActiveFilters = Boolean(searchQuery || planFilter !== 'all' || statusFilter !== 'all' || cycleFilter !== 'all');
+  const resetFilters = () => {
+    setSearchQuery('');
+    setPlanFilter('all');
+    setStatusFilter('all');
+    setCycleFilter('all');
+  };
+
+  const handleExportCsv = useCallback(() => {
+    downloadSuperadminSubscriptionsCsv(filteredSubs, 'superadmin_subscriptions_export.csv');
+    showToast(`Exported ${filteredSubs.length} subscription record(s) to CSV`);
+  }, [filteredSubs, showToast]);
+
+  const handleExportExcel = useCallback(() => {
+    downloadSuperadminSubscriptionsExcel(filteredSubs, 'superadmin_subscriptions_export.xls');
+    showToast(`Exported ${filteredSubs.length} subscription record(s) to Excel (.xls)`);
+  }, [filteredSubs, showToast]);
+
+  const handlePrintRoster = useCallback(() => {
+    printSuperadminSubscriptionsRoster(filteredSubs, 'Active Subscribers Directory');
+    showToast(`Prepared ${filteredSubs.length} subscriber record(s) for printing`);
+  }, [filteredSubs, showToast]);
 
   const colDefs = useMemo<SemanticColumnDef[]>(() => [
     {
@@ -102,23 +161,73 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
     },
     {
       headerName: t('COPY.TABLE_COLUMN_ACTIONS'),
-      flex: 1,
+      flex: 1.8,
+      minWidth: 240,
       cellRenderer: (p: SemanticCellParams) => {
         if (!p.data) return null;
+        const sub = p.data as unknown as SuperadminSubscriptionRecord;
+        const testIdSuffix = getSuperadminInteractiveTestIdSuffix(p.data);
+        const phone = sub.phone || '9876543210';
+        let digits = phone.replace(/\D/g, '');
+        if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+        const waPhone = digits.length === 10 ? `91${digits}` : digits;
+        const waMsg = `Hello ${sub.billingContact || sub.tenant}, greeting from Smart Library SuperAdmin regarding your ${sub.plan} plan subscription.`;
+
         return (
-          <button
-            type="button"
-            disabled
-            title={t("COPY.UNAVAILABLE_PAYMENT_STATUS_IS_SERVER_OWNED_AND_NO_STATUS_MUTATION_API_CONTRACT_IS_SUPPLIED")}
-            className="inline-flex items-center gap-1 rounded-xl border border-indigo-500/20 bg-indigo-500/5 px-2.5 py-1 text-xs font-semibold text-slate-400 opacity-60 cursor-not-allowed"
-            data-testid={`superadmin-subscriptions-subscriptions-overview-unavailable-payment-status-is-server-owned-and-no-status-mutation-api-contract-is-supplied-1-${getSuperadminInteractiveTestIdSuffix(p.data)}`}
-          >
-            {t("COPY.CHANGE_UNAVAILABLE")}
-          </button>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <button
+              type="button"
+              disabled
+              title={t("COPY.UNAVAILABLE_PAYMENT_STATUS_IS_SERVER_OWNED_AND_NO_STATUS_MUTATION_API_CONTRACT_IS_SUPPLIED")}
+              className="inline-flex items-center gap-1 rounded-xl border border-indigo-500/20 bg-indigo-500/5 px-2.5 py-1 text-xs font-semibold text-slate-400 opacity-60 cursor-not-allowed"
+              data-testid={`superadmin-subscriptions-subscriptions-overview-unavailable-payment-status-is-server-owned-and-no-status-mutation-api-contract-is-supplied-1-${testIdSuffix}`}
+            >
+              {t("COPY.CHANGE_UNAVAILABLE")}
+            </button>
+
+            {/* Quick WhatsApp */}
+            <button
+              type="button"
+              onClick={() => {
+                const popup = window.open(`https://wa.me/${waPhone}?text=${encodeURIComponent(waMsg)}`, '_blank', 'noopener,noreferrer');
+                if (popup) popup.opener = null;
+                showToast(`Opened WhatsApp chat for ${sub.tenant}`);
+              }}
+              className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs cursor-pointer"
+              title={`WhatsApp message to ${sub.tenant}`}
+              aria-label={`WhatsApp ${sub.tenant}`}
+            >
+              <MessageSquare size={13} className="text-emerald-400" />
+            </button>
+
+            {/* Quick Email */}
+            {sub.email && (
+              <a
+                href={`mailto:${sub.email}?subject=${encodeURIComponent(`Smart Library SaaS Subscription Notice - ${sub.tenant}`)}&body=${encodeURIComponent(`Dear ${sub.billingContact || sub.tenant},\n\n`)}`}
+                className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs cursor-pointer"
+                title={`Send email to ${sub.tenant}`}
+                aria-label={`Email ${sub.tenant}`}
+              >
+                <Mail size={13} className="text-purple-400" />
+              </a>
+            )}
+
+            {/* Quick Call */}
+            {sub.phone && (
+              <a
+                href={`tel:${sub.phone.replace(/\D/g, '')}`}
+                className="inline-flex min-h-8 min-w-8 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 transition-all shadow-xs cursor-pointer"
+                title={`Call ${sub.tenant}`}
+                aria-label={`Call ${sub.tenant}`}
+              >
+                <PhoneCall size={13} className="text-teal-400" />
+              </a>
+            )}
+          </div>
         );
       },
     },
-  ], [t, locale]);
+  ], [t, locale, showToast]);
 
   const totalMrr = subs.reduce((acc, row) => acc + (typeof row.mrr === 'number' ? row.mrr : 0), 0);
   const paidCount = subs.filter((row) => row.status === 'Paid').length;
@@ -247,12 +356,121 @@ export default function SuperadminSubscriptionsActiveSubscribersPageClient() {
         </div>
       </div>
 
+      {/* Search & Filter Toolbar */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-4 rounded-2xl border border-indigo-500/25 bg-[#0c0f28]/95 shadow-md flex-wrap">
+        {/* Search Input */}
+        <div className="relative flex-1 min-w-[200px] w-full sm:w-auto">
+          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />
+          <input
+            type="search"
+            placeholder="Search by tenant, plan, contact..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-indigo-500/25 bg-input text-white placeholder:text-secondary focus:border-indigo-400 focus:outline-none transition-all"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary transition-colors cursor-pointer p-0.5"
+            >
+              <X size={12} />
+            </button>
+          )}
+        </div>
+
+        {/* Plan Filter */}
+        <select
+          aria-label="Filter by plan"
+          value={planFilter}
+          onChange={(e) => setPlanFilter(e.target.value)}
+          className="rounded-xl border border-indigo-500/25 bg-card px-3 py-2 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer w-full sm:w-auto"
+        >
+          <option value="all">All Plans</option>
+          <option value="Enterprise">Enterprise</option>
+          <option value="Pro">Pro</option>
+          <option value="Starter">Starter</option>
+        </select>
+
+        {/* Status Filter */}
+        <select
+          aria-label="Filter by status"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="rounded-xl border border-indigo-500/25 bg-card px-3 py-2 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer w-full sm:w-auto"
+        >
+          <option value="all">All Statuses</option>
+          <option value="Paid">Paid</option>
+          <option value="Due Soon">Due Soon</option>
+          <option value="Overdue">Overdue</option>
+        </select>
+
+        {/* Cycle Filter */}
+        <select
+          aria-label="Filter by billing cycle"
+          value={cycleFilter}
+          onChange={(e) => setCycleFilter(e.target.value)}
+          className="rounded-xl border border-indigo-500/25 bg-card px-3 py-2 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer w-full sm:w-auto"
+        >
+          <option value="all">All Cycles</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Yearly">Yearly</option>
+        </select>
+
+        {/* Reset Filter Button */}
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 transition-all cursor-pointer"
+            title="Reset filters"
+          >
+            <RotateCcw size={12} />
+            <span>Reset</span>
+          </button>
+        )}
+
+        {/* Export Toolbar */}
+        <div className="ml-auto flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-teal-500/30 bg-teal-500/10 text-teal-300 hover:bg-teal-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+            title="Export CSV"
+          >
+            <Download size={13} className="text-teal-400" />
+            <span>CSV</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+            title="Export Excel (.xls)"
+          >
+            <FileSpreadsheet size={13} className="text-indigo-400" />
+            <span>Excel</span>
+          </button>
+          <button
+            type="button"
+            onClick={handlePrintRoster}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-sky-500/30 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20 text-xs font-semibold transition-all cursor-pointer shadow-xs"
+            title="Print roster"
+          >
+            <Printer size={13} className="text-sky-400" />
+            <span>Print</span>
+          </button>
+          <span className="text-xs text-slate-400 font-medium px-2 py-1 rounded-md bg-surface border border-border">
+            {filteredSubs.length} of {subs.length} Subscribers
+          </span>
+        </div>
+      </div>
+
       {/* Table Container */}
       <div className="rounded-2xl border border-indigo-500/20 bg-[#0c0f28]/95 shadow-md backdrop-blur-md overflow-hidden">
         {activeTab === 'Active Subscribers' && (
           <div className="w-full">
             <SuperadminSubscriptionsActiveSubscribersSemanticTable
-              rowData={subs as unknown as readonly Record<string, unknown>[]}
+              rowData={filteredSubs as unknown as readonly Record<string, unknown>[]}
               columnDefs={colDefs}
               pagination
               paginationPageSize={10}

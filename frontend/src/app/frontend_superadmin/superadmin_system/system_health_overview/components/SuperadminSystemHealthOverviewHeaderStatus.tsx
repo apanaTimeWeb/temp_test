@@ -1,6 +1,6 @@
 /** Responsibility: Superadmin System Health Header Status; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
 /** Data-Flow: leaf-owned props or hook state -> SuperadminSystemHealthOverviewHeaderStatus formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
-import { Activity, RefreshCw, ShieldCheck } from 'lucide-react';
+import { Activity, RefreshCw, ShieldCheck, Download } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 /**
@@ -23,12 +23,22 @@ export default function SuperadminSystemHealthOverviewHeaderStatus() {
               {t("COPY.SYSTEM_HEALTH_TELEMETRY")}
             </h1>
           </div>
-          <button type="button"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs font-semibold text-slate-400 cursor-not-allowed opacity-60"
-            disabled title={t("COPY.LIVE_TELEMETRY_INTEGRATION_IS_NOT_INCLUDED_IN_THIS_SOURCE_ARCHIVE")}
-            data-testid="superadmin-system-health-system-health-header-status-live-telemetry-integration-is-not-included-in-this-source-archive-1">
-            <RefreshCw size={14} aria-hidden="true" /> {t("COPY.LIVE_TELEMETRY_UNAVAILABLE")}
-          </button>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs font-semibold shadow-sm transition-all active:scale-95 cursor-pointer"
+            >
+              <Download size={14} />
+              <span>Export Snapshot</span>
+            </button>
+            <button type="button"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-700/60 bg-slate-800/40 text-xs font-semibold text-slate-400 cursor-not-allowed opacity-60"
+              disabled title={t("COPY.LIVE_TELEMETRY_INTEGRATION_IS_NOT_INCLUDED_IN_THIS_SOURCE_ARCHIVE")}
+              data-testid="superadmin-system-health-system-health-header-status-live-telemetry-integration-is-not-included-in-this-source-archive-1">
+              <RefreshCw size={14} aria-hidden="true" /> {t("COPY.LIVE_TELEMETRY_UNAVAILABLE")}
+            </button>
+          </div>
         </div>
       </div>
 

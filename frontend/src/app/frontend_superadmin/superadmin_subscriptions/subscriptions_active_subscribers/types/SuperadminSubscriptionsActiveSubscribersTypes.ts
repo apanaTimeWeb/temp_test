@@ -18,6 +18,9 @@ export interface SuperadminSubscriptionRecord {
   cycle: 'Monthly' | 'Yearly';
   mrr: number;
   status: SuperadminSubscriptionPaymentStatus;
+  phone?: string;
+  email?: string;
+  billingContact?: string;
 }
 
 

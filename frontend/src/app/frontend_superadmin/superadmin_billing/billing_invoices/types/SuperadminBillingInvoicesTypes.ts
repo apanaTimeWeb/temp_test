@@ -8,5 +8,8 @@ export interface SuperadminBillingInvoiceSample {
   status: 'Paid' | 'Overdue';
   method: string;
   gst: string;
+  phone?: string;
+  email?: string;
+  contact?: string;
 }
 

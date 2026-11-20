@@ -6,15 +6,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { Activity, ScrollText, Settings2, History, Clock, Download, DatabaseBackup } from 'lucide-react';
+import { Activity, ScrollText, Download, DatabaseBackup } from 'lucide-react';
 
 const TAB_ICONS = {
   system_health_overview: Activity,
   audit_logs: ScrollText,
   backup_overview: DatabaseBackup,
-  backup_configuration: Settings2,
-  backup_history: History,
-  backup_schedules: Clock,
   data_export_jobs: Download,
 } as const;
 
@@ -25,9 +22,6 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
     { key: 'system_health_overview', label: t('COPY.NAV_SYSTEM_HEALTH_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.system_health_overview },
     { key: 'audit_logs', label: t('COPY.NAV_AUDIT_LOGS'), href: SUPERADMIN_NAVIGATION_ROUTES.audit_logs },
     { key: 'backup_overview', label: t('COPY.NAV_BACKUP_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.backup_overview },
-    { key: 'backup_configuration', label: t('COPY.NAV_BACKUP_CONFIGURATION'), href: SUPERADMIN_NAVIGATION_ROUTES.backup_configuration },
-    { key: 'backup_history', label: t('COPY.NAV_BACKUP_HISTORY'), href: SUPERADMIN_NAVIGATION_ROUTES.backup_history },
-    { key: 'backup_schedules', label: t('COPY.NAV_BACKUP_SCHEDULES'), href: SUPERADMIN_NAVIGATION_ROUTES.backup_schedules },
     { key: 'data_export_jobs', label: t('COPY.NAV_DATA_EXPORT_JOBS'), href: SUPERADMIN_NAVIGATION_ROUTES.data_export_jobs },
   ] as const;
   return (
@@ -35,7 +29,10 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
       <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-6 border-b border-border/80" data-testid="superadmin_system-secondary-navigation">
         <ul className="flex min-w-0 flex-wrap gap-2" role="list">
           {routes.map((route) => {
-            const active = pathname === route.href || pathname.startsWith(route.href + '/');
+            const active =
+              route.key === 'backup_overview'
+                ? pathname.includes('/backup_') || pathname.includes('/system_backup')
+                : pathname === route.href || pathname.startsWith(route.href + '/');
             const Icon = TAB_ICONS[route.key as keyof typeof TAB_ICONS] ?? Activity;
             return (
               <li key={route.key} className="min-w-0">

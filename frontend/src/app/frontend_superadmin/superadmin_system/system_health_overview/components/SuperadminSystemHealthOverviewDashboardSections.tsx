@@ -3,6 +3,7 @@
 import SuperadminSystemHealthOverviewNetworkMetrics from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewNetworkMetrics';
 import SuperadminSystemHealthOverviewInfrastructure from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewInfrastructure';
 import SuperadminSystemHealthOverviewIntegrations from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewIntegrations';
+import SuperadminSystemHealthOverviewServicesTable from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewServicesTable';
 
 /**
  * Performs the superadmin system health overview dashboard sections operation within system health overview; inputs and outputs follow the declared TypeScript contract.
@@ -11,6 +12,7 @@ export default function SuperadminSystemHealthOverviewDashboardSections() {
   return (
     <>
       <SuperadminSystemHealthOverviewNetworkMetrics />
+      <SuperadminSystemHealthOverviewServicesTable />
       <SuperadminSystemHealthOverviewInfrastructure />
       <SuperadminSystemHealthOverviewIntegrations />
     </>
