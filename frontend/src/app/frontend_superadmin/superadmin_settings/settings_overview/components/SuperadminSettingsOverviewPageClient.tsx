@@ -513,15 +513,6 @@ export default function SuperadminSettingsOverviewPageClient() {
                 );
               })}
             </div>
-
-            <button
-              type="button"
-              onClick={() => navigateToWorkflow(activeTab)}
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-bold px-3.5 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/25 transition-all cursor-pointer shrink-0"
-            >
-              <span>Open Dedicated View</span>
-              <ExternalLink size={13} />
-            </button>
           </div>
         </section>
 

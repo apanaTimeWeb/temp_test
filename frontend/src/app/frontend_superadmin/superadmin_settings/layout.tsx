@@ -6,20 +6,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import {
-  LayoutDashboard, User, History, Shield, Palette, Bookmark,
-  Settings, Plug, Wrench, HardDrive,
-} from 'lucide-react';
+import { LayoutDashboard, User, Palette } from 'lucide-react';
 
-const TAB_ICONS = {
-  settings_overview: LayoutDashboard,
-  profile_overview: User,
-  profile_active_sessions: Shield,
-  profile_login_history: History,
-  profile_security: Shield,
-  settings_branding: Bookmark,
-  settings_general: Settings,
-  settings_maintenance_mode: Wrench,
+const TAB_CONFIG = {
+  settings_overview: { icon: LayoutDashboard, activeColor: 'text-indigo-400', border: 'border-indigo-400', bg: 'bg-indigo-500/10' },
+  settings_branding: { icon: Palette, activeColor: 'text-purple-400', border: 'border-purple-400', bg: 'bg-purple-500/10' },
+  profile_overview: { icon: User, activeColor: 'text-emerald-400', border: 'border-emerald-400', bg: 'bg-emerald-500/10' },
 } as const;
 
 export default function DomainLayout({ children }: { children: ReactNode }) {
@@ -27,11 +19,10 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   const t = useTranslations('SUPERADMIN_PROFILE');
   const routes = [
     { key: 'settings_overview', label: t('COPY.NAV_SETTINGS_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_overview },
-    { key: 'settings_general', label: t('COPY.NAV_SETTINGS_GENERAL'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_general },
     { key: 'settings_branding', label: t('COPY.NAV_SETTINGS_BRANDING'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_branding },
-    { key: 'settings_maintenance_mode', label: t('COPY.NAV_SETTINGS_MAINTENANCE_MODE'), href: SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode },
     { key: 'profile_overview', label: t('COPY.NAV_PROFILE_OVERVIEW'), href: SUPERADMIN_NAVIGATION_ROUTES.profile_overview },
   ] as const;
+
   return (
     <div className="w-full max-w-full min-w-0 px-3 sm:px-6 lg:px-8 py-4">
       <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-8 border-b border-border/80" data-testid="superadmin_settings-secondary-navigation">
@@ -41,20 +32,21 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
               route.key === 'profile_overview'
                 ? pathname.includes('/profile_')
                 : pathname === route.href || pathname.startsWith(route.href + '/');
-            const Icon = TAB_ICONS[route.key as keyof typeof TAB_ICONS] ?? Settings;
+            const cfg = TAB_CONFIG[route.key as keyof typeof TAB_CONFIG] ?? TAB_CONFIG.settings_overview;
+            const Icon = cfg.icon;
             return (
               <li key={route.key} className="min-w-0">
                 <Link
                   href={route.href}
                   aria-current={active ? 'page' : undefined}
-                  className={`inline-flex min-h-10 items-center gap-2 rounded-t-xl border-b-2 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 cursor-pointer ${
+                  className={`inline-flex min-h-10 items-center gap-2 rounded-t-xl border-b-2 px-3.5 sm:px-4 py-2.5 text-xs sm:text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 cursor-pointer ${
                     active
-                      ? 'border-indigo-400 bg-indigo-500/10 text-indigo-300 shadow-xs'
-                      : 'border-transparent text-slate-400 hover:bg-surface-hover hover:text-slate-200'
+                      ? `${cfg.border} ${cfg.bg} ${cfg.activeColor} shadow-xs font-bold`
+                      : 'border-transparent text-muted-foreground hover:bg-muted/40 hover:text-foreground'
                   }`}
                   data-testid={`superadmin_settings-secondary-link-${route.key}`}
                 >
-                  <Icon size={15} className={active ? 'text-indigo-400' : 'text-slate-400'} />
+                  <Icon size={16} className={active ? cfg.activeColor : 'text-muted-foreground'} />
                   <span>{route.label}</span>
                 </Link>
               </li>

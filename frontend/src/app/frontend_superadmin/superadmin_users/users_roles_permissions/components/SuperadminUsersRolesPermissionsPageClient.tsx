@@ -5,10 +5,8 @@
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/config/superadmin_users_roles_permissions.url_config.ts';
 import { useTranslations } from 'next-intl';
 import { SUPERADMIN_USERS_TABS } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/constants/SuperadminUsersRolesPermissionsConstants';
-import { SUPERADMIN_USERS_ROLE_PERMISSIONS } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/mocks/fixtures/SuperadminUsersRolesPermissionsMockFixtures';
-import SuperadminUsersRolesPermissionsContent from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminUsersRolesPermissionsContent';
 import SuperadminUsersManagerFeatureMatrix from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminUsersManagerFeatureMatrix';
-import { ShieldCheck, AlertTriangle, Crown, Building2, UserCheck } from 'lucide-react';
+import { ShieldCheck, Crown, Building2, UserCheck } from 'lucide-react';
 
 export default function SuperadminUsersRolesPermissionsPageClient() {
   const t = useTranslations('SUPERADMIN_USERS');
@@ -46,7 +44,7 @@ export default function SuperadminUsersRolesPermissionsPageClient() {
                 <span>RBAC Active</span>
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">{t('COPY.ROLE_BASED_ACCESS_CONTROL_RBAC_MATRIX')}</p>
+            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">Role definitions, operational privileges, and manager feature access controls.</p>
           </div>
         </div>
       </div>
@@ -96,12 +94,6 @@ export default function SuperadminUsersRolesPermissionsPageClient() {
         </div>
       </section>
 
-      {/* Warning banner */}
-      <p className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs sm:text-sm text-amber-300 flex items-start gap-2.5" role="status">
-        <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
-        <span>{t('COPY.RBAC_PERMISSION_MATRIX_IS_ILLUSTRATIVE_AND_READ_ONLY_UNTIL_A_VERIFIED_WRITE_API_CONTRACT_IS_SUPPLIED')}</span>
-      </p>
-
       {/* Navigation Tabs */}
       <nav className="flex items-center gap-2 border-b border-border/80 pb-2 overflow-x-auto" aria-label={t('COPY.USER_ACCESS_VIEWS')}>
         {SUPERADMIN_USERS_TABS.map((tab) => {
@@ -126,8 +118,6 @@ export default function SuperadminUsersRolesPermissionsPageClient() {
           );
         })}
       </nav>
-
-      <SuperadminUsersRolesPermissionsContent rolePermissions={SUPERADMIN_USERS_ROLE_PERMISSIONS} />
 
       {/* Real Manager Panel Sidebar Feature Matrix Controller */}
       <SuperadminUsersManagerFeatureMatrix />
