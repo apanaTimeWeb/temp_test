@@ -66,7 +66,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
       {/* ─── Primary Navigation Links ─── */}
       <nav
         id="superadmin-primary-navigation"
-        className="sa-sidebar-nav flex-1 space-y-1 overflow-y-auto px-1 pt-2"
+        className="sa-sidebar-nav flex-1 space-y-1 overflow-y-auto px-1 pt-11"
         aria-label={t('COPY.SUPER_ADMIN_PRIMARY_NAVIGATION')}
       >
         {SUPERADMIN_NAVIGATION_NAV_ITEMS.map(({ href, icon: Icon, labelKey }, idx) => {

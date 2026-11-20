@@ -10,7 +10,6 @@
  * - maintenance.message
  */
 /** Data-Flow: canonical route -> SuperadminSettingsOverviewPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_settings/settings_overview/config/superadmin_settings_overview.url_config.ts';
 import { useSuperadminSettingsOverviewValidationMessage } from '@/app/frontend_superadmin/superadmin_settings/settings_overview/hooks/useSuperadminSettingsOverviewValidationMessage';
 import { useState, useMemo } from 'react';
 import { toast } from 'sonner';
@@ -29,7 +28,6 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
-  ExternalLink,
   ShieldCheck,
   Server,
   Lock,
@@ -75,24 +73,6 @@ const INITIAL_AUDIT_LOGS: AuditLogEntry[] = [
 
 export default function SuperadminSettingsOverviewPageClient() {
   const tCopy = useTranslations('SUPERADMIN_SETTINGS');
-
-  const navigateToWorkflow = (key: string) => {
-    const routes: Record<string, string> = {
-      'General': SUPERADMIN_NAVIGATION_ROUTES.settings_general,
-      'Maintenance Mode': SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode,
-    };
-    const route = routes[key];
-    if (route) {
-      const target = new URL(route, window.location.origin);
-      const query = new URLSearchParams(window.location.search);
-      query.delete('view');
-      query.forEach((value, k) => {
-        if (!target.searchParams.has(k)) target.searchParams.append(k, value);
-      });
-      window.location.assign(target.pathname + target.search + target.hash);
-    }
-  };
-
   const translateValidationMessage = useSuperadminSettingsOverviewValidationMessage();
   const [activeTab, setActiveTab] = useState('General');
   const isCurrentTab = (name: string) => activeTab === name;
@@ -429,11 +409,10 @@ export default function SuperadminSettingsOverviewPageClient() {
             </div>
 
             {/* Card 4: System State & Security (Rose or Amber Theme from Dashboard) */}
-            <div className={`sa-kpi-card group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between min-h-[190px] ${
-              maintenanceEnabled
+            <div className={`sa-kpi-card group relative overflow-hidden rounded-2xl border p-5 sm:p-6 shadow-md transition-all duration-300 hover:scale-[1.01] hover:shadow-xl flex flex-col justify-between min-h-[190px] ${maintenanceEnabled
                 ? 'border-amber-500/60 bg-gradient-to-br from-amber-950/90 via-[#3a1e05] to-rose-950/80 shadow-amber-950/60 hover:border-amber-400/80 animate-pulse'
                 : 'border-rose-500/40 bg-gradient-to-br from-rose-950/80 via-[#2d0f18] to-rose-900/60 shadow-rose-950/50 hover:border-rose-400/60'
-            }`}>
+              }`}>
               {/* Sparkline decoration */}
               <svg aria-hidden="true" className="absolute bottom-0 right-0 w-36 h-20 opacity-20 group-hover:opacity-35 transition-opacity duration-500 pointer-events-none" viewBox="0 0 150 45">
                 <path d="M0,36 Q16,26 36,22 T76,14 T116,8 T150,4" fill="none" stroke={maintenanceEnabled ? '#fbbf24' : '#f87171'} strokeWidth="3" strokeLinecap="round" />
@@ -441,9 +420,8 @@ export default function SuperadminSettingsOverviewPageClient() {
 
               <div className="flex items-start justify-between relative z-10 gap-3">
                 <p className="text-xs sm:text-sm font-semibold text-slate-300 uppercase tracking-wider">System State & Security</p>
-                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${
-                  maintenanceEnabled ? 'bg-amber-500/25 border-amber-500/50 text-amber-300' : 'bg-rose-500/20 border-rose-500/40 text-rose-400'
-                }`}>
+                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform group-hover:scale-110 shadow-xs ${maintenanceEnabled ? 'bg-amber-500/25 border-amber-500/50 text-amber-300' : 'bg-rose-500/20 border-rose-500/40 text-rose-400'
+                  }`}>
                   <ShieldAlert aria-hidden="true" size={20} className={maintenanceEnabled ? 'text-amber-400' : 'text-rose-400'} />
                 </div>
               </div>
@@ -454,11 +432,10 @@ export default function SuperadminSettingsOverviewPageClient() {
                 </p>
 
                 <div className="mt-3.5 flex items-center gap-2.5 flex-wrap">
-                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border shadow-xs ${
-                    maintenanceEnabled
+                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold border shadow-xs ${maintenanceEnabled
                       ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
                       : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
-                  }`}>
+                    }`}>
                     <ShieldCheck size={12} className={maintenanceEnabled ? 'text-amber-400' : 'text-emerald-400'} />
                     <span>{maintenanceEnabled ? 'Lockdown Armed' : 'Normal Engine'}</span>
                   </span>
@@ -500,11 +477,10 @@ export default function SuperadminSettingsOverviewPageClient() {
                     aria-controls={`settings-panel-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
                     aria-current={isActive ? 'page' : undefined}
                     onClick={() => setActiveTab(tab.name)}
-                    className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${
-                      isActive
+                    className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap cursor-pointer ${isActive
                         ? 'border border-indigo-400/80 bg-gradient-to-r from-indigo-600/30 via-indigo-500/20 to-purple-600/30 text-white shadow-md shadow-indigo-500/20'
                         : 'border border-slate-800 bg-slate-900/60 text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-700'
-                    }`}
+                      }`}
                     data-testid={`superadmin-settings-settings-overview-set-active-tab-2-${String(tab.name)}`}
                   >
                     <Icon size={16} className={isActive ? 'text-white' : iconColor} />
@@ -719,11 +695,10 @@ export default function SuperadminSettingsOverviewPageClient() {
 
                 <div className="space-y-6 mt-6">
                   {/* Warning Banner / Lockdown Switch */}
-                  <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl border transition-all ${
-                    maintenanceEnabled
+                  <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-2xl border transition-all ${maintenanceEnabled
                       ? 'border-amber-500/60 bg-gradient-to-r from-amber-950/40 via-amber-900/20 to-rose-950/40 shadow-xl shadow-amber-500/20 ring-2 ring-amber-500/40'
                       : 'border-slate-800 bg-slate-900/60'
-                  }`}>
+                    }`}>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2.5">
                         <span className="text-base font-bold text-amber-200">{tCopy('COPY.ENABLE_MAINTENANCE')}</span>
@@ -777,11 +752,10 @@ export default function SuperadminSettingsOverviewPageClient() {
                             key={dur}
                             type="button"
                             onClick={() => setEstimatedDowntime(dur)}
-                            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                              estimatedDowntime === dur
+                            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${estimatedDowntime === dur
                                 ? 'bg-amber-500/30 text-amber-200 border border-amber-500/60 shadow-md'
                                 : 'border border-slate-800 bg-slate-900/70 text-slate-400 hover:text-white'
-                            }`}
+                              }`}
                           >
                             {dur}
                           </button>

@@ -1,16 +1,43 @@
-/** Responsibility: Superadmin System Health Main; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
-/** Data-Flow: leaf-owned props or hook state -> SuperadminSystemHealthOverviewMain formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
+'use client';
+import { useState, useEffect, useCallback } from 'react';
 import SuperadminSystemHealthOverviewHeaderStatus from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewHeaderStatus';
 import SuperadminSystemHealthOverviewDashboardSections from '@/app/frontend_superadmin/superadmin_system/system_health_overview/components/SuperadminSystemHealthOverviewDashboardSections';
 
-/**
- * Performs the superadmin system health overview main operation within system health overview; inputs and outputs follow the declared TypeScript contract.
- */
 export default function SuperadminSystemHealthOverviewMain() {
+  const [autoRefreshInterval, setAutoRefreshInterval] = useState<number>(15);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    setLastUpdated(new Date());
+    setRefreshTrigger((prev) => prev + 1);
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 400);
+  }, []);
+
+  useEffect(() => {
+    if (autoRefreshInterval <= 0) return;
+    const interval = setInterval(() => {
+      setLastUpdated(new Date());
+      setRefreshTrigger((prev) => prev + 1);
+    }, autoRefreshInterval * 1000);
+
+    return () => clearInterval(interval);
+  }, [autoRefreshInterval]);
+
   return (
-    <div className="sa-page-animate pb-12">
-      <SuperadminSystemHealthOverviewHeaderStatus />
-      <SuperadminSystemHealthOverviewDashboardSections />
+    <div className="sa-page-animate pb-16 min-w-0 max-w-full">
+      <SuperadminSystemHealthOverviewHeaderStatus
+        onRefresh={handleRefresh}
+        lastUpdated={lastUpdated}
+        isRefreshing={isRefreshing}
+        autoRefreshInterval={autoRefreshInterval}
+        setAutoRefreshInterval={setAutoRefreshInterval}
+      />
+      <SuperadminSystemHealthOverviewDashboardSections refreshTrigger={refreshTrigger} />
     </div>
   );
 }

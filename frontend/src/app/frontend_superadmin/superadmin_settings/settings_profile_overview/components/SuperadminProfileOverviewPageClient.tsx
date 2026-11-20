@@ -6,7 +6,7 @@ import { useSuperadminProfileOverviewConfirm } from '@/app/frontend_superadmin/s
 /** Data-Flow: canonical route -> SuperadminProfileOverviewPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
 import { SUPERADMIN_SETTINGS_PROFILE_OVERVIEW_ROUTES as __SUPERADMIN_SETTINGS_PROFILE_OVERVIEW_ROUTES } from "@/app/frontend_superadmin/superadmin_settings/settings_profile_overview/config/superadmin_profile_overview.url_config";
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { User, UserCog, KeyRound, Fingerprint, History, MonitorSmartphone, LogOut, CheckCircle, Shield } from 'lucide-react';
+import { User, UserCog, KeyRound, Fingerprint, History, MonitorSmartphone, LogOut, CheckCircle, Shield, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import type { SemanticColumnDef as ColDef, SemanticCellParams as ICellRendererParams } from '@/app/frontend_superadmin/superadmin_settings/settings_profile_overview/components/SuperadminProfileOverviewSemanticTable';
 import { clearAuthState } from '@/lib/auth';
@@ -27,21 +27,21 @@ import { SUPERADMIN_PROFILE_SAMPLE_LOGIN_HISTORY, SUPERADMIN_PROFILE_SAMPLE_SESS
 export default function SuperadminProfileOverviewPageClient() {
   const confirm = useSuperadminProfileOverviewConfirm();
   const tCopy = useTranslations('SUPERADMIN_PROFILE');
-  
+
   const navigateToWorkflow = (key: string) => {
     const routes: Record<string, string> = {
-    "Profile": SUPERADMIN_NAVIGATION_ROUTES.profile_overview__details,
-    "Edit Profile": SUPERADMIN_NAVIGATION_ROUTES.profile_overview__edit,
-    "Change Password": SUPERADMIN_NAVIGATION_ROUTES.profile_security__change_password,
-    "2FA": SUPERADMIN_NAVIGATION_ROUTES.profile_security__two_factor,
-    "Login History": SUPERADMIN_NAVIGATION_ROUTES.profile_login_history,
-    "Active Sessions": SUPERADMIN_NAVIGATION_ROUTES.profile_active_sessions,
-    "Security Settings": SUPERADMIN_NAVIGATION_ROUTES.profile_security
+      "Profile": SUPERADMIN_NAVIGATION_ROUTES.profile_overview__details,
+      "Edit Profile": SUPERADMIN_NAVIGATION_ROUTES.profile_overview__edit,
+      "Change Password": SUPERADMIN_NAVIGATION_ROUTES.profile_security__change_password,
+      "2FA": SUPERADMIN_NAVIGATION_ROUTES.profile_security__two_factor,
+      "Login History": SUPERADMIN_NAVIGATION_ROUTES.profile_login_history,
+      "Active Sessions": SUPERADMIN_NAVIGATION_ROUTES.profile_active_sessions,
+      "Security Settings": SUPERADMIN_NAVIGATION_ROUTES.profile_security
     };
     const route = routes[key];
     if (route) { const target = new URL(route, window.location.origin); const query = new URLSearchParams(window.location.search); query.delete('view'); query.forEach((value, key) => { if (!target.searchParams.has(key)) target.searchParams.append(key, value); }); window.location.assign(target.pathname + target.search + target.hash); }
   };
-const router = useRouter();
+  const router = useRouter();
   const [activeTab] = useState<SuperadminProfileTab>('Profile');
   const [notice, setNotice] = useState('');
   const [showLogout, setShowLogout] = useState(false);
@@ -76,12 +76,12 @@ const router = useRouter();
   }, [showLogout]);
   const [twoFactorEnabled] = useState(true);
   const [loginAlerts] = useState(true);
-  
-  
-  
 
 
-  
+
+
+
+
   const tabs = SUPERADMIN_PROFILE_TABS.map(({ name, iconName }) => ({
     name,
     label: tCopy(({ Profile: 'COPY.TAB_PROFILE', 'Edit Profile': 'COPY.TAB_EDIT_PROFILE', 'Change Password': 'COPY.TAB_CHANGE_PASSWORD', '2FA': 'COPY.TAB_TWO_FACTOR', 'Login History': 'COPY.TAB_LOGIN_HISTORY', 'Active Sessions': 'COPY.TAB_ACTIVE_SESSIONS', 'Security Settings': 'COPY.TAB_SECURITY_SETTINGS' } as const)[name]),
@@ -114,7 +114,8 @@ const router = useRouter();
     { headerName: tCopy('COPY.TABLE_COLUMN_IP_ADDRESS'), field: 'ip', flex: 1, cellClass: 'text-secondary' },
     { headerName: tCopy('COPY.TABLE_COLUMN_LOCATION'), field: 'location', flex: 1.5, cellClass: 'text-primary' },
     { headerName: tCopy('COPY.TABLE_COLUMN_BROWSER'), field: 'browser', flex: 1, cellClass: 'text-secondary' },
-    { headerName: tCopy('COPY.TABLE_COLUMN_STATUS'), field: 'status', flex: 1,
+    {
+      headerName: tCopy('COPY.TABLE_COLUMN_STATUS'), field: 'status', flex: 1,
       cellRenderer: (p: ICellRendererParams<SuperadminProfileLoginHistoryItem>) => (
         <span className={`sa-badge ${p.value === 'Success' ? 'sa-badge--success' : 'sa-badge--danger'}`}>
           {p.value === 'Success' ? tCopy('COPY.LOGIN_STATUS_SUCCESS') : tCopy('COPY.LOGIN_STATUS_FAILED')}
@@ -156,7 +157,7 @@ const router = useRouter();
       </div>
 
       {/* Tabs */}
-      <div role="navigation" aria-label={tCopy("COPY.PROFILE_AND_SECURITY_SETTINGS")} className="flex items-center gap-2 mb-6 border-b border-border pb-2 overflow-x-auto hide-scrollbar"  data-testid="superadmin-superadmin-profile-overview-page-client-div-line-147">
+      <div role="navigation" aria-label={tCopy("COPY.PROFILE_AND_SECURITY_SETTINGS")} className="flex items-center gap-2 mb-6 border-b border-border pb-2 overflow-x-auto hide-scrollbar" data-testid="superadmin-superadmin-profile-overview-page-client-div-line-147">
         {tabs.map((tab) => (
           <button
             key={tab.name}
@@ -165,12 +166,11 @@ const router = useRouter();
             aria-current={activeTab === tab.name ? 'page' : undefined}
             aria-controls="superadmin-profile-tabpanel"
             onClick={() => requestTabChange(tab.name)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold motion-safe:transition-all motion-reduce:transition-none whitespace-nowrap ${
-              activeTab === tab.name 
-                ? 'bg-primary-subtle text-primary border border-focus shadow-card' 
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold motion-safe:transition-all motion-reduce:transition-none whitespace-nowrap ${activeTab === tab.name
+                ? 'bg-primary-subtle text-primary border border-focus shadow-card'
                 : 'text-secondary hover:bg-surface-hover hover:text-primary'
-            }`}
-           data-testid={`superadmin-profile-profile-overview-set-active-tab-4-${String(tab.name)}`}>
+              }`}
+            data-testid={`superadmin-profile-profile-overview-set-active-tab-4-${String(tab.name)}`}>
             <tab.icon size={16} /> {tab.label}
           </button>
         ))}
@@ -178,7 +178,7 @@ const router = useRouter();
 
       {/* Content */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        
+
         {/* Left Sidebar Profile Card (Always visible) */}
         <div className="md:col-span-4 lg:col-span-3">
           <div className="sa-card p-6 flex flex-col items-center text-center sticky top-6">
@@ -191,9 +191,9 @@ const router = useRouter();
             </div>
             <h2 className="text-xl font-bold text-primary">{tCopy("COPY.SUPER_ADMIN")}</h2>
             <p className="text-xs text-primary font-bold tracking-widest uppercase mt-1">{tCopy("COPY.PLATFORM_OWNER")}</p>
-            
+
             <div className="w-full h-px bg-surface-hover my-5" />
-            
+
             <div className="w-full space-y-4 text-left">
               <div>
                 <p className="text-xs text-secondary mb-1">{tCopy("COPY.EMAIL_ADDRESS")}</p>
@@ -218,8 +218,8 @@ const router = useRouter();
         </div>
 
         {/* Right Content Area */}
-        <div id="superadmin-profile-tabpanel"  aria-labelledby={`superadmin-profile-tab-${activeTab.toLowerCase().replaceAll(' ', '-')}`} tabIndex={0} className="md:col-span-8 lg:col-span-9 sa-card p-6 min-h-136">
-          
+        <div id="superadmin-profile-tabpanel" aria-labelledby={`superadmin-profile-tab-${activeTab.toLowerCase().replaceAll(' ', '-')}`} tabIndex={0} className="md:col-span-8 lg:col-span-9 sa-card p-6 min-h-136">
+
           {['Profile', 'Edit Profile', 'Change Password'].includes(activeTab) ? (
             <>
               <SuperadminProfileOverviewBasicPanels activeTab={activeTab} onSave={handleSave} onDirtyChange={setProfileFormDirty} />
