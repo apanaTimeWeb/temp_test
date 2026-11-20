@@ -16,5 +16,5 @@ export default async function DomainIndexPage({ searchParams }: { searchParams?:
     else if (value !== undefined) params.set(key, value);
   }
   const suffix = params.toString();
-  redirect(SUPERADMIN_NAVIGATION_ROUTES.settings_overview + (suffix ? `?${suffix}` : ''));
+  redirect(SUPERADMIN_NAVIGATION_ROUTES.settings_general + (suffix ? `?${suffix}` : ''));
 }

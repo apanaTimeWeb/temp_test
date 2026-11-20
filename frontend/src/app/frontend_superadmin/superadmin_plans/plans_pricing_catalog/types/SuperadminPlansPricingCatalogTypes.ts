@@ -40,6 +40,18 @@ export interface SuperadminSubscriptionPlan {
   members: number;
   storage?: string;
   isPopular: boolean;
+  adminUsers?: number;
+  staffUsers?: number;
+  smsCredits?: number;
+  whatsappCredits?: number;
+  apiAccess?: boolean;
+  exportAccess?: boolean;
+  advancedReports?: boolean;
+  backupPolicy?: 'Daily' | 'Weekly' | 'Realtime';
+  supportLevel?: 'Standard' | 'Priority' | 'Dedicated 24/7';
+  freeTrial?: boolean;
+  trialDays?: number;
+  tierType?: 'Starter' | 'Professional' | 'Enterprise' | 'Custom';
 }
 
 /**
@@ -53,4 +65,16 @@ export type SuperadminSubscriptionPlanFormValues = {
   branches: number;
   members: number;
   storage?: string;
+  adminUsers?: number;
+  staffUsers?: number;
+  smsCredits?: number;
+  whatsappCredits?: number;
+  apiAccess?: boolean;
+  exportAccess?: boolean;
+  advancedReports?: boolean;
+  backupPolicy?: 'Daily' | 'Weekly' | 'Realtime';
+  supportLevel?: 'Standard' | 'Priority' | 'Dedicated 24/7';
+  freeTrial?: boolean;
+  trialDays?: number;
+  tierType?: 'Starter' | 'Professional' | 'Enterprise' | 'Custom';
 };

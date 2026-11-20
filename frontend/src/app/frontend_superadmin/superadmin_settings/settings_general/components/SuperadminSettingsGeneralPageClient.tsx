@@ -34,11 +34,9 @@ export default function SuperadminSettingsGeneralPageClient() {
   
   const navigateToWorkflow = (key: string) => {
     const routes: Record<string, string> = {
-    "General": SUPERADMIN_NAVIGATION_ROUTES.settings_general,
-    "Appearance": SUPERADMIN_NAVIGATION_ROUTES.settings_appearance,
-    "APIs & Integrations": SUPERADMIN_NAVIGATION_ROUTES.settings_integrations,
-    "Storage": SUPERADMIN_NAVIGATION_ROUTES.settings_storage,
-    "Maintenance Mode": SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode
+      "General": SUPERADMIN_NAVIGATION_ROUTES.settings_general,
+      "Permissions": `${SUPERADMIN_NAVIGATION_ROUTES.settings_general}?tab=permissions`,
+      "Maintenance Mode": SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode
     };
     const route = routes[key];
     if (route) { const target = new URL(route, window.location.origin); const query = new URLSearchParams(window.location.search); query.delete('view'); query.forEach((value, key) => { if (!target.searchParams.has(key)) target.searchParams.append(key, value); }); window.location.assign(target.pathname + target.search + target.hash); }
