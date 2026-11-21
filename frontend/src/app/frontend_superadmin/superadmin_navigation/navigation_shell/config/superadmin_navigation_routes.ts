@@ -118,7 +118,6 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   settings_appearance: '/superadmin/superadmin_settings/settings_branding',
   settings_branding: '/superadmin/superadmin_settings/settings_branding',
   settings_integrations: '/superadmin/superadmin_integrations/integrations_overview',
-  settings_maintenance_mode: '/superadmin/superadmin_settings/settings_maintenance_mode',
   settings_storage: '/superadmin/superadmin_data/data_overview',
   profile_overview: '/superadmin/superadmin_users/users_overview',
   profile_overview__details: '/superadmin/superadmin_users/users_overview?view=details',

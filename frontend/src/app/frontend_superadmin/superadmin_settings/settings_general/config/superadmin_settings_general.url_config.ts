@@ -26,7 +26,6 @@ export const SUPERADMIN_SETTINGS_GENERAL_ROUTES = {
   SUPERADMIN_SETTINGS_GENERAL_WORKFLOW_URLS,
   root: '/superadmin/superadmin_settings/settings_general' as const,
   branding: '/superadmin/superadmin_settings/settings_branding' as const,
-  maintenance: '/superadmin/superadmin_settings/settings_maintenance_mode' as const,
 } as const;
 
 /** Canonical API endpoint constants for settings general. */
@@ -42,6 +41,5 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   settings_general: '/superadmin/superadmin_settings/settings_general',
   settings_branding: '/superadmin/superadmin_settings/settings_branding',
   settings_integrations: '/superadmin/superadmin_integrations/integrations_overview',
-  settings_maintenance_mode: '/superadmin/superadmin_settings/settings_maintenance_mode',
   settings_storage: '/superadmin/superadmin_data/data_overview',
 } as const;

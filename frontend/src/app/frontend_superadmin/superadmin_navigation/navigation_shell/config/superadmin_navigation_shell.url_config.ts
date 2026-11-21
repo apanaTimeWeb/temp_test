@@ -206,7 +206,6 @@ const SUPERADMIN_SETTINGS_URLS = {
   GENERAL: '/superadmin/superadmin_settings/settings_general',
   INTEGRATIONS: '/superadmin/superadmin_settings/settings_integrations',
   LIBRARY_CONFIGURATION: '/superadmin/superadmin_settings/settings_general?view=settings_library_configuration',
-  MAINTENANCE_MODE: '/superadmin/superadmin_settings/settings_maintenance_mode',
   OVERVIEW: '/superadmin/superadmin_settings/settings_overview',
   STORAGE: '/superadmin/superadmin_settings/settings_storage',
 } as const;

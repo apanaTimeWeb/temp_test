@@ -4,10 +4,8 @@
  * Flow: FormProvider context -> SuperadminSettingsGeneralMaintenanceModeCard -> maintenance state updates.
  */
 import { useFormContext } from 'react-hook-form';
-import { ShieldAlert, AlertTriangle, KeyRound, Network, Clock, ExternalLink } from 'lucide-react';
-import Link from 'next/link';
+import { ShieldAlert, AlertTriangle, KeyRound, Network, Clock } from 'lucide-react';
 import type { SuperadminSettingsFormValues } from '@/app/frontend_superadmin/superadmin_settings/settings_general/types/SuperadminSettingsGeneralTypes';
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_settings/settings_general/config/superadmin_settings_general.url_config';
 
 export function SuperadminSettingsGeneralMaintenanceModeCard() {
   const {
@@ -38,14 +36,6 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
             </p>
           </div>
         </div>
-        <Link
-          href={SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode}
-          className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline font-semibold"
-          data-testid="settings-maintenance-deep-link"
-        >
-          <span>Dedicated Dashboard</span>
-          <ExternalLink size={13} aria-hidden="true" />
-        </Link>
       </div>
 
       {/* Emergency Alert Banner when enabled */}

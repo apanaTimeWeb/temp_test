@@ -5,12 +5,11 @@ import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadm
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { Sliders, Palette, ShieldAlert } from 'lucide-react';
+import { Sliders, Palette } from 'lucide-react';
 
 const TAB_CONFIG = {
   settings_general: { icon: Sliders, activeColor: 'text-amber-400', border: 'border-amber-400', bg: 'bg-amber-500/10' },
   settings_branding: { icon: Palette, activeColor: 'text-purple-400', border: 'border-purple-400', bg: 'bg-purple-500/10' },
-  settings_maintenance_mode: { icon: ShieldAlert, activeColor: 'text-rose-400', border: 'border-rose-400', bg: 'bg-rose-500/10' },
 } as const;
 
 export default function DomainLayout({ children }: { children: ReactNode }) {
@@ -18,7 +17,6 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   const routes = [
     { key: 'settings_general', label: 'Platform Rules & Defaults', href: SUPERADMIN_NAVIGATION_ROUTES.settings_general },
     { key: 'settings_branding', label: 'Branding & White-label', href: SUPERADMIN_NAVIGATION_ROUTES.settings_branding },
-    { key: 'settings_maintenance_mode', label: 'System Maintenance & Mode', href: SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode },
   ] as const;
 
   return (

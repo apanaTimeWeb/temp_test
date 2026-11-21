@@ -325,7 +325,6 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
       { id: 'set_rules', label: 'Platform Rules & Defaults', href: SUPERADMIN_NAVIGATION_ROUTES.settings_general },
       { id: 'set_permissions', label: 'Global Permissions & Policies', href: `${SUPERADMIN_NAVIGATION_ROUTES.settings_general}?tab=permissions` },
       { id: 'set_branding', label: 'Platform Branding & White-label', href: SUPERADMIN_NAVIGATION_ROUTES.settings_branding },
-      { id: 'set_maint', label: 'System Maintenance & Mode', href: SUPERADMIN_NAVIGATION_ROUTES.settings_maintenance_mode },
     ],
   },
 ];
