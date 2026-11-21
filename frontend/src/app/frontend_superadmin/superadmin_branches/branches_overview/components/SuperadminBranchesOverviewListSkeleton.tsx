@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function SuperadminBranchesOverviewListSkeleton() {
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6 animate-pulse">
+    <div className="w-full max-w-full min-w-0 space-y-6 pb-12 animate-pulse">
       {/* Header skeleton */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl border border-indigo-500/20 bg-slate-900/50">
         <div className="space-y-2">

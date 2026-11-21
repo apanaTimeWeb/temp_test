@@ -16,7 +16,7 @@ export default function SuperadminBranchesOverviewHeader({
   onPrint,
 }: SuperadminBranchesOverviewHeaderProps) {
   return (
-    <div className="w-full max-w-full min-w-0 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0f2d22] to-emerald-900/60 p-5 sm:p-6 shadow-lg mb-6">
+    <div className="w-full max-w-full min-w-0 rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/80 via-[#0f2d22] to-emerald-900/60 p-5 sm:p-6 shadow-lg">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div className="space-y-2">
           <div className="flex items-center gap-2 flex-wrap text-xs">
@@ -40,7 +40,7 @@ export default function SuperadminBranchesOverviewHeader({
             </h1>
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-300 w-full leading-relaxed">
             Centralized branch lifecycle across all Library Accounts. Create branches, update entitlements, transfer managers, execute safe closures with pre-flight checks, and monitor branch-level audit logs.
           </p>
         </div>

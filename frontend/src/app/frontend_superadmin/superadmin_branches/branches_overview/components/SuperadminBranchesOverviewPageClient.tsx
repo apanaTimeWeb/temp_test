@@ -86,7 +86,7 @@ export default function SuperadminBranchesOverviewPageClient() {
   };
 
   return (
-    <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-4 space-y-6">
+    <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
       {/* Toast Notification */}
       {toastMessage && (
         <div

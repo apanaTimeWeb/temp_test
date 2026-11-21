@@ -31,7 +31,7 @@ export default function SuperadminBranchesOverviewFilterBar({
   const hasFilters = search !== '' || selectedLibraryId !== 'all' || statusFilter !== 'all';
 
   return (
-    <div className="flex flex-wrap items-center gap-2.5 mb-5 p-3.5 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 w-full shadow-md">
+    <div className="flex flex-wrap items-center gap-2.5 p-3.5 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 w-full shadow-md">
       {/* Search Input */}
       <div className="relative flex-1 min-w-[220px]">
         <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none" />

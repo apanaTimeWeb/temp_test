@@ -15,7 +15,7 @@ export default function SuperadminBranchesOverviewKpiCards({ branches }: Superad
   const totalSeats = branches.reduce((sum, b) => sum + (b.capacity || 0), 0);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4 mb-6" aria-label="Branch Statistics">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4" aria-label="Branch Statistics">
       {/* Total Branches */}
       <div className="rounded-xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/60 to-slate-900/80 p-4 shadow-sm">
         <div className="flex items-center justify-between text-slate-300 mb-2">
