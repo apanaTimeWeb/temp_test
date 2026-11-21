@@ -23,7 +23,7 @@ export default function SuperadminUsersDirectoryContent({ activeTab, users, user
   };
   return (
     <div className="overflow-hidden rounded-2xl border border-border/80 bg-card/90 shadow-sm flex flex-col min-h-[480px]">
-      {activeTab === 'All Users' && (
+      {activeTab !== 'Roles & Permissions' ? (
         <div className="flex-1 w-full">
           <SuperadminUsersDirectorySemanticTable<SuperadminUserData>
             rowData={users}
@@ -36,13 +36,19 @@ export default function SuperadminUsersDirectoryContent({ activeTab, users, user
             getRowId={(params) => params.data.id}
           />
         </div>
-      )}
-
-      {activeTab === 'Roles & Permissions' && (
+      ) : (
         <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-          <div className="mb-6">
-            <h3 className="text-base font-bold text-slate-100">{t("COPY.ROLE_BASED_ACCESS_CONTROL_RBAC_MATRIX")}</h3>
-            <p className="text-xs sm:text-sm text-slate-400 mt-0.5">{t("COPY.DEFINE_WHICH_ROLES_HAVE_ACCESS_TO_SPECIFIC_SAAS_MODULES")}</p>
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 className="text-base font-bold text-slate-100">{t("COPY.ROLE_BASED_ACCESS_CONTROL_RBAC_MATRIX")}</h3>
+              <p className="text-xs sm:text-sm text-slate-400 mt-0.5">{t("COPY.DEFINE_WHICH_ROLES_HAVE_ACCESS_TO_SPECIFIC_SAAS_MODULES")}</p>
+            </div>
+            <a
+              href="/superadmin/superadmin_users/users_roles_permissions"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 transition-all cursor-pointer shrink-0"
+            >
+              Open Full Roles Matrix →
+            </a>
           </div>
           
           <div className="border border-border/80 rounded-2xl overflow-hidden bg-slate-900/40">
@@ -75,17 +81,6 @@ export default function SuperadminUsersDirectoryContent({ activeTab, users, user
                 ))}
               </tbody>
             </table>
-          </div>
-          <div className="mt-6 flex justify-end">
-            <button
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-semibold text-xs sm:text-sm shadow-md shadow-indigo-500/25 opacity-50 cursor-not-allowed"
-              type="button"
-              disabled
-              title={t("COPY.UNAVAILABLE_NO_RBAC_WRITE_API_CONTRACT_IS_SUPPLIED")}
-              data-testid="superadmin-users-users-content-unavailable-no-rbac-write-api-contract-is-supplied-2"
-            >
-              {t("COPY.SAVE_RBAC_CHANGES_UNAVAILABLE")}
-            </button>
           </div>
         </div>
       )}

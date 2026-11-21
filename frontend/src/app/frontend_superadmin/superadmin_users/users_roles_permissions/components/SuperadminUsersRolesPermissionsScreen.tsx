@@ -6,7 +6,7 @@ import SuperadminUsersRolesPermissionsPageClient from '@/app/frontend_superadmin
  * Composes the users roles permissions screen from its leaf-owned presentation and interaction components.
  * @param parameter Input required by the declared feature contract. Declared type: { id?: string; }.
  */
-export default function SuperadminUsersRolesPermissionsScreen({ id }: { id?: string }) {
+export default function SuperadminUsersRolesPermissionsScreen({ id, initialTab }: { id?: string; initialTab?: 'roles_matrix' | 'user_security' }) {
   void id;
-  return <SuperadminUsersRolesPermissionsPageClient />;
+  return <SuperadminUsersRolesPermissionsPageClient initialTab={initialTab} />;
 }

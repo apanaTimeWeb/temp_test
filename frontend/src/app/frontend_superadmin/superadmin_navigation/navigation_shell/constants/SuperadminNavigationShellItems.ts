@@ -109,9 +109,8 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     description: 'Admin login, user invitations, roles, access aur security',
     subItems: [
       { id: 'user_dir', label: 'Admin Users Directory', href: SUPERADMIN_NAVIGATION_ROUTES.users_directory },
-      { id: 'user_invites', label: 'User Invitations', href: `${SUPERADMIN_NAVIGATION_ROUTES.users_overview}?tab=invitations` },
-      { id: 'roles_perm', label: 'Roles & Permissions', href: SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions },
-      { id: 'account_sec', label: 'Access & Account Security', href: `${SUPERADMIN_NAVIGATION_ROUTES.users_overview}?tab=security` },
+      { id: 'roles_perm', label: 'Roles & Permissions Matrix', href: SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions },
+      { id: 'account_sec', label: 'Access & Account Security', href: `${SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions}?tab=user_security` },
     ],
   },
   {
@@ -158,10 +157,10 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     icon: Sliders,
     colorBg: 'rgba(52,211,153,0.15)',
     colorText: '#34d399',
-    description: 'Books, Members, Seats, Finance, Accounts, Communication enable/disable',
+    description: 'Lockers, Members, Seats, Finance, Accounts, Communication enable/disable',
     subItems: [
       { id: 'feat_catalog', label: 'Module Directory & Status', href: SUPERADMIN_NAVIGATION_ROUTES.features_overview },
-      { id: 'feat_books', label: 'Books Module Control', href: `${SUPERADMIN_NAVIGATION_ROUTES.features_overview}?module=books` },
+      { id: 'feat_lockers', label: 'Lockers Module Control', href: `${SUPERADMIN_NAVIGATION_ROUTES.features_overview}?module=lockers` },
       { id: 'feat_members', label: 'Members & Attendance Module', href: `${SUPERADMIN_NAVIGATION_ROUTES.features_overview}?module=members` },
       { id: 'feat_seats', label: 'Seats & Shifts Matrix Module', href: `${SUPERADMIN_NAVIGATION_ROUTES.features_overview}?module=seats` },
       { id: 'feat_finance', label: 'Finance & Accounts Module', href: `${SUPERADMIN_NAVIGATION_ROUTES.features_overview}?module=finance` },

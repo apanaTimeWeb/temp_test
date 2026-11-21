@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Master coordinator for Role & Permission Management (Module 04) adhering to WEB_FRONTEND_ARCHITECTURE_AND_DEVELOPMENT_RULES_V1 (< 300 lines).
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSuperadminRolesPermissions } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/hooks/useSuperadminRolesPermissions';
 import SuperadminRolesOverviewHeader from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminRolesOverviewHeader';
 import SuperadminRolesKpiCards from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminRolesKpiCards';
@@ -11,7 +11,11 @@ import SuperadminRoleCreateModal from '@/app/frontend_superadmin/superadmin_user
 import SuperadminUserSecurityAuditModal from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/components/SuperadminUserSecurityAuditModal';
 import type { RoleDefinition, UserSecurityAccount } from '@/app/frontend_superadmin/superadmin_users/users_roles_permissions/types/SuperadminRolesPermissionsManagementTypes';
 
-export default function SuperadminUsersRolesPermissionsPageClient() {
+export default function SuperadminUsersRolesPermissionsPageClient({
+  initialTab = 'roles_matrix',
+}: {
+  initialTab?: 'roles_matrix' | 'user_security';
+} = {}) {
   const {
     roles,
     filteredRoles,
@@ -32,7 +36,18 @@ export default function SuperadminUsersRolesPermissionsPageClient() {
     grantTemporaryPermission,
   } = useSuperadminRolesPermissions();
 
-  const [activeTab, setActiveTab] = useState<'roles_matrix' | 'user_security'>('roles_matrix');
+  const [activeTab, setActiveTab] = useState<'roles_matrix' | 'user_security'>(initialTab);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const tabParam = new URLSearchParams(window.location.search).get('tab');
+      if (tabParam === 'user_security' || tabParam === 'security') {
+        setActiveTab('user_security');
+      } else if (tabParam === 'roles_matrix') {
+        setActiveTab('roles_matrix');
+      }
+    }
+  }, []);
   const [editingRole, setEditingRole] = useState<RoleDefinition | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [cloneTemplateId, setCloneTemplateId] = useState<string | undefined>(undefined);

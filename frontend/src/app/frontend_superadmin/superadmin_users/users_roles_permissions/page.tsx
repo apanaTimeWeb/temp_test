@@ -14,10 +14,12 @@ function firstValue(value: string | string[] | undefined): string | undefined { 
 export default async function SuperadminUsersRolesPermissionsRoutePage({ searchParams }: { searchParams?: Promise<SearchParams> | SearchParams }) {
   const query = searchParams ? await searchParams : {};
   const id = firstValue(query.id);
+  const tab = firstValue(query.tab);
+  const initialTab = tab === 'user_security' || tab === 'security' ? 'user_security' : 'roles_matrix';
   const tCopy = await getTranslations("SUPERADMIN_USERS");
   return <div className="w-full max-w-full min-w-0" data-feature-module="superadmin_users" data-feature-route="users_roles_permissions">
     <Suspense fallback={<div className="rounded-xl border border-border bg-card p-6 text-secondary" role="status">{tCopy("COPY.MODULE_ROUTE_LOADING")}</div>}>
-      <SuperadminUsersRolesPermissionsScreen id={id} />
+      <SuperadminUsersRolesPermissionsScreen id={id} initialTab={initialTab} />
     </Suspense>
   </div>;
 }

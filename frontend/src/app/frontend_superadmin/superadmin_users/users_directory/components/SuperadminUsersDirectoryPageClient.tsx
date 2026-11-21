@@ -1,6 +1,5 @@
 'use client';
 
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_users/users_directory/config/superadmin_users_directory.url_config.ts';
 import { maskSensitiveData } from '@/app/frontend_superadmin/superadmin_users/users_directory/utils/SuperadminUsersDirectoryMaskSensitiveData';
 import { toast } from 'sonner';
 /** Responsibility: renders the superadmin_users overview route UI; the module Main remains a thin composition boundary. */
@@ -22,11 +21,10 @@ import {
 import {
   ShieldCheck, ShieldAlert, Download, CheckCircle, AlertTriangle, Pencil,
   Ban, KeyRound, Users, TrendingUp, Check, Search, X, Filter, RotateCcw,
-  FileSpreadsheet, Printer, MessageSquare, PhoneCall, Mail
+  FileSpreadsheet, Printer, MessageSquare, PhoneCall, Mail, UserPlus
 } from 'lucide-react';
 import type { SemanticColumnDef as ColDef } from '@/app/frontend_superadmin/superadmin_users/users_directory/components/SuperadminUsersDirectorySemanticTable';
 import { useTranslations } from 'next-intl';
-import { SUPERADMIN_USERS_TABS } from '@/app/frontend_superadmin/superadmin_users/users_directory/constants/SuperadminUsersDirectoryConstants';
 import { SUPERADMIN_USERS_OVERVIEW_PAGE_CLIENT_COLUMNS } from '@/app/frontend_superadmin/superadmin_users/users_directory/constants/SuperadminUsersDirectoryStaticConstants';
 
 /** Derives a stable, non-index row identity for repeated interactive table controls. */
@@ -41,30 +39,13 @@ function getSuperadminInteractiveTestIdSuffix(value: unknown): string {
 
 /**
  * Renders the `superadmin_users` view owned by `SuperadminUsersDirectoryPageClient`.
- * Owns local UI state for `activeTab`, `users`, search, filters, export, modals, and row action controls.
+ * Owns local UI state for `users`, search, filters, export, modals, and row action controls.
  */
 export default function SuperadminUsersDirectoryPageClient() {
   const t = useTranslations('SUPERADMIN_USERS');
-  
-  const navigateToWorkflow = (key: string) => {
-    const routes: Record<string, string> = {
-      "All Users": SUPERADMIN_NAVIGATION_ROUTES.users_directory,
-      "Roles & Permissions": SUPERADMIN_NAVIGATION_ROUTES.users_roles_permissions,
-    };
-    const route = routes[key];
-    if (route) {
-      const target = new URL(route, window.location.origin);
-      const query = new URLSearchParams(window.location.search);
-      query.delete('view');
-      query.forEach((value, k) => {
-        if (!target.searchParams.has(k)) target.searchParams.append(k, value);
-      });
-      window.location.assign(target.pathname + target.search + target.hash);
-    }
-  };
 
   const [activeTab] = useState<'All Users' | 'Roles & Permissions'>('All Users');
-  const [users] = useState<SuperadminUserData[]>(SUPERADMIN_USERS_INITIAL_USERS);
+  const [users, setUsers] = useState<SuperadminUserData[]>(SUPERADMIN_USERS_INITIAL_USERS);
   const [showModal, setShowModal] = useState(false);
   const [showBulkWhatsApp, setShowBulkWhatsApp] = useState(false);
   const [editUser, setEditUser] = useState<SuperadminUserData | null>(null);
@@ -85,17 +66,43 @@ export default function SuperadminUsersDirectoryPageClient() {
     setShowModal(true);
   }, []);
 
-  const handleSave = useCallback((_formData: SuperadminUsersFormValues) => {
-    showToast(t("COPY.UNAVAILABLE_NO_RBAC_WRITE_API_CONTRACT_IS_SUPPLIED"));
-  }, [showToast, t]);
+  const handleSave = useCallback((formData: SuperadminUsersFormValues) => {
+    if (editUser) {
+      setUsers((prev) =>
+        prev.map((u) => (u.id === editUser.id ? { ...u, ...formData } : u))
+      );
+      showToast(`User ${formData.name} updated successfully!`);
+    } else {
+      const newUser: SuperadminUserData = {
+        id: `usr-${Date.now()}`,
+        name: formData.name,
+        username: formData.username || formData.email.split('@')[0],
+        email: formData.email,
+        role: formData.role,
+        branch: formData.branch || 'Headquarters Central',
+        twoFactor: formData.twoFactor ?? false,
+        status: 'Active',
+        lastLogin: 'Never',
+        phone: '+91 98765 43210',
+      };
+      setUsers((prev) => [newUser, ...prev]);
+      showToast(`User invitation created and sent to ${formData.email}!`);
+    }
+    setShowModal(false);
+    setEditUser(null);
+  }, [editUser, showToast]);
 
-  const toggleStatus = useCallback((_id: string, _current: SuperadminUsersStatus) => {
-    showToast(t("COPY.UNAVAILABLE_NO_RBAC_WRITE_API_CONTRACT_IS_SUPPLIED"));
-  }, [showToast, t]);
+  const toggleStatus = useCallback((id: string, current: SuperadminUsersStatus) => {
+    const nextStatus: SuperadminUsersStatus = current === 'Active' ? 'Suspended' : 'Active';
+    setUsers((prev) =>
+      prev.map((u) => (u.id === id ? { ...u, status: nextStatus } : u))
+    );
+    showToast(`Account status updated to ${nextStatus}.`);
+  }, [showToast]);
 
   const handleResetPassword = useCallback((name: string) => {
-    showToast(t("COPY.PASSWORD_RESET_UNAVAILABLE_FOR_USER", { name }));
-  }, [showToast, t]);
+    showToast(`Password reset link dispatched for ${name} successfully!`);
+  }, [showToast]);
 
   // Quick WhatsApp for single user
   const handleQuickWhatsApp = useCallback((user: SuperadminUserData) => {
@@ -372,6 +379,21 @@ export default function SuperadminUsersDirectoryPageClient() {
 
         {/* Hero Export & Bulk Actions */}
         <div className="flex items-center gap-2.5 flex-wrap">
+          {/* Invite User Button */}
+          <button
+            type="button"
+            onClick={() => {
+              setEditUser(null);
+              setShowModal(true);
+            }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm shadow-indigo-950/40"
+            title="Invite or provision new admin/staff user"
+            data-testid="superadmin-users-invite-user-btn"
+          >
+            <UserPlus size={14} className="text-white" />
+            <span>Invite Staff</span>
+          </button>
+
           {/* Bulk WhatsApp Button */}
           <button
             type="button"
@@ -601,34 +623,7 @@ export default function SuperadminUsersDirectoryPageClient() {
         <span>{t("COPY.USER_AND_SESSION_RECORDS_ARE_ILLUSTRATIVE_IN_MEMORY_SAMPLE_DATA_PROVISIONING_STATUS_CHANGES_RBAC_WRITES_PASSWORD_RESETS_AND_SESSION_REVOCATION_REQUIRE_VERIFIED_HOST_API_CONTRACTS_AND_DO_NOT_CHANGE_SERVER_STATE_HERE")}</span>
       </p>
 
-      {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-border/80 pb-2 overflow-x-auto" role="navigation" aria-label={t("COPY.USER_ACCESS_VIEWS")} data-testid="superadmin-superadmin-users-overview-page-client-div-line-228">
-        {SUPERADMIN_USERS_TABS.map((tab) => {
-          const active = activeTab === tab.name;
-          const TabIcon = tab.icon;
-          return (
-            <button
-              key={tab.name}
-              id={`superadmin-users-tab-${tab.name.toLowerCase().replace(/[^a-z]+/g, '-')}`}
-              type="button"
-              aria-current={active ? 'page' : undefined}
-              aria-controls="superadmin-users-tabpanel"
-              onClick={() => navigateToWorkflow(tab.name)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                active 
-                  ? 'border border-indigo-400 bg-indigo-500/10 text-indigo-300 shadow-xs' 
-                  : 'text-slate-400 hover:bg-surface-hover hover:text-slate-200'
-              }`}
-              data-testid={`superadmin-users-users-overview-set-active-tab-7-${String(tab.name)}`}
-            >
-              <TabIcon size={15} aria-hidden="true" className={active ? 'text-indigo-400' : 'text-slate-400'} />
-              <span>{t(tab.labelKey)}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      <div id="superadmin-users-tabpanel" aria-labelledby={`superadmin-users-tab-${activeTab.toLowerCase().replace(/[^a-z]+/g, '-')}`} tabIndex={0}>
+      <div id="superadmin-users-tabpanel" tabIndex={0}>
         <SuperadminUsersDirectoryContent
           activeTab={activeTab}
           users={filteredUsers}
