@@ -2545,3 +2545,67 @@
 .superadmin-theme .sa-confirm-dialog::backdrop {
   background-color: var(--overlay-backdrop);
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SUPERADMIN PRINT MEDIA OVERRIDES: 1-Page Landscape, High-Legibility
+   ───────────────────────────────────────────────────────────────────────────── */
+@media print {
+  @page {
+    size: landscape;
+    margin: 8mm 6mm;
+  }
+
+  .superadmin-theme,
+  .superadmin-theme body {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #0f172a !important;
+  }
+
+  .superadmin-theme #superadmin-navigation-sidebar,
+  .superadmin-theme .sa-sidebar,
+  .superadmin-theme nav,
+  .superadmin-theme header,
+  .superadmin-theme button,
+  .superadmin-theme input,
+  .superadmin-theme select,
+  .superadmin-theme textarea,
+  .superadmin-theme .no-print,
+  .superadmin-theme [role="status"],
+  .superadmin-theme .fixed,
+  .superadmin-theme .sticky {
+    display: none !important;
+  }
+
+  .superadmin-theme main,
+  .superadmin-theme .sa-main-content,
+  .superadmin-theme #main-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .superadmin-theme table {
+    width: 100% !important;
+    max-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    font-size: 8pt !important;
+  }
+
+  .superadmin-theme th {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 4px 6px !important;
+  }
+
+  .superadmin-theme td {
+    border: 1px solid #e2e8f0 !important;
+    padding: 4px 6px !important;
+    color: #0f172a !important;
+  }
+}
+
