@@ -17,8 +17,6 @@ const SUPERADMIN_COMMUNICATION_NOTICES_URLS = {
   COMPLAINTS_PAGE: '/superadmin/superadmin_support/support_complaints',
   NOTICES_PAGE: '/superadmin/superadmin_communication/communication_notices',
   NOTIFICATION_CENTER_PAGE: '/superadmin/superadmin_communication/communication_notification_center',
-  WHATSAPP_LOGS_PAGE: '/superadmin/superadmin_communication/communication_whatsapp_logs',
-  WHATSAPP_TEMPLATES_PAGE: '/superadmin/superadmin_communication/communication_whatsapp_templates',
 
   // Existing cross-module public page routes.
   FINANCE_RENEWALS_PAGE: '/superadmin/superadmin_subscriptions/subscriptions_overview?view=member_renewals',

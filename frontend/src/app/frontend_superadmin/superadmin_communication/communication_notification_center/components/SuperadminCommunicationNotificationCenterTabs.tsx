@@ -59,16 +59,16 @@ export function SuperadminCommunicationNotificationCenterTabs() {
   const failedCount = notifications?.filter((n) => n.status === 'FAILED' || n.status === 'BOUNCED').length ?? 0;
 
   const tabs: TabItem[] = [
-    { id: 'overview', label: 'Overview', icon: BellRing },
-    { id: 'templates', label: 'Templates', icon: FileText, badge: '10' },
+    { id: 'overview', label: 'Notification Cockpit', icon: BellRing },
+    { id: 'templates', label: 'Multi-Channel Templates', icon: FileText, badge: '10' },
     {
       id: 'logs',
-      label: 'Delivery Logs',
+      label: 'Delivery Audit Logs',
       icon: History,
       badge: failedCount > 0 ? `${failedCount} Failed` : undefined,
       badgeClass: 'bg-rose-500/20 text-rose-300 border border-rose-500/40',
     },
-    { id: 'usage', label: 'Usage & Quotas', icon: BarChart3 },
+    { id: 'usage', label: 'Usage Analytics', icon: BarChart3 },
   ];
 
   return (

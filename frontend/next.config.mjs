@@ -137,6 +137,16 @@ const nextConfig = {
         destination: '/superadmin/superadmin_support/support_tickets',
         permanent: false,
       },
+      {
+        source: '/superadmin/superadmin_communication/communication_whatsapp_logs',
+        destination: '/superadmin/superadmin_communication/communication_notification_center?tab=logs',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_communication/communication_whatsapp_templates',
+        destination: '/superadmin/superadmin_communication/communication_notification_center?tab=templates',
+        permanent: false,
+      },
     ];
   },
 };
