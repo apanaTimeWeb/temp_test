@@ -250,11 +250,11 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     colorText: '#22d3ee',
     description: 'Email, SMS, WhatsApp, payment reminders, announcements',
     subItems: [
+      { id: 'notif_overview', label: 'Notification Cockpit', href: SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center },
+      { id: 'notif_templates', label: 'Multi-Channel Templates', href: `${SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center}?tab=templates` },
+      { id: 'notif_logs', label: 'Delivery Audit Logs', href: `${SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center}?tab=logs` },
+      { id: 'notif_usage', label: 'Usage & Quotas', href: `${SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center}?tab=usage` },
       { id: 'notif_announcements', label: 'Platform Announcements', href: SUPERADMIN_NAVIGATION_ROUTES.communication_notices },
-      { id: 'notif_email', label: 'Email Notifications & Templates', href: `${SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center}?tab=email` },
-      { id: 'notif_sms', label: 'SMS Notifications', href: `${SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center}?tab=sms` },
-      { id: 'notif_whatsapp', label: 'WhatsApp Notifications', href: SUPERADMIN_NAVIGATION_ROUTES.communication_whatsapp_integration },
-      { id: 'notif_reminders', label: 'Payment Reminders', href: `${SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center}?tab=payment-reminders` },
     ],
   },
   {

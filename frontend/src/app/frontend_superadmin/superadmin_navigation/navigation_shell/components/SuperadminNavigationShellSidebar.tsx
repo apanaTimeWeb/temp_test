@@ -62,7 +62,7 @@ export default function SuperadminNavigationShellSidebar({ open = false, mobileV
       id="superadmin-navigation-sidebar"
       className={`sa-sidebar ${open ? 'sa-sidebar--open' : ''}`}
       aria-hidden={mobileNavigationHidden || undefined}
-      inert={mobileNavigationHidden || undefined}
+      inert={mobileNavigationHidden ? 'true' : undefined}
     >
       {/* ─── Fixed Header: Brand & Scope Bar ─── */}
       <div className="shrink-0 border-b border-white/[0.08] bg-black/40 backdrop-blur-xl z-10">

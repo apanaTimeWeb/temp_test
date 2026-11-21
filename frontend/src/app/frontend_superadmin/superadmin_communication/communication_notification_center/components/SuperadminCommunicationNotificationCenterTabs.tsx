@@ -30,10 +30,18 @@ export function SuperadminCommunicationNotificationCenterTabs() {
   // Sync tab with URL search param on mount & change
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const requestedTab = params.get('tab') as NotificationCenterTab | null;
-    const validTabs: NotificationCenterTab[] = ['overview', 'templates', 'logs', 'usage'];
-    if (requestedTab && validTabs.includes(requestedTab) && requestedTab !== activeTab) {
-      setActiveTab(requestedTab);
+    const requestedTab = params.get('tab');
+    if (!requestedTab) return;
+
+    if (requestedTab === 'email' || requestedTab === 'sms') {
+      if (activeTab !== 'templates') setActiveTab('templates');
+    } else if (requestedTab === 'payment-reminders') {
+      if (activeTab !== 'overview') setActiveTab('overview');
+    } else {
+      const validTabs: NotificationCenterTab[] = ['overview', 'templates', 'logs', 'usage'];
+      if (validTabs.includes(requestedTab as NotificationCenterTab) && requestedTab !== activeTab) {
+        setActiveTab(requestedTab as NotificationCenterTab);
+      }
     }
   }, [setActiveTab, activeTab]);
 

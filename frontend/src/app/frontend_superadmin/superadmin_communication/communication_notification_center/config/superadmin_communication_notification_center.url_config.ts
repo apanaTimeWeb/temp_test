@@ -26,7 +26,6 @@ export const SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES = {
   usage: '/superadmin/superadmin_communication/communication_notification_center?tab=usage',
   // Sibling routes for navigation reference
   notices: '/superadmin/superadmin_communication/communication_notices',
-  whatsappIntegration: '/superadmin/superadmin_communication/communication_whatsapp_integration',
   whatsappLogs: '/superadmin/superadmin_communication/communication_whatsapp_logs',
   whatsappTemplates: '/superadmin/superadmin_communication/communication_whatsapp_templates',
   // Legacy compatibility exports

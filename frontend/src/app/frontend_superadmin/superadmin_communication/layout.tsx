@@ -6,12 +6,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import { Bell, BellRing, MessageSquare, ScrollText, LayoutTemplate } from 'lucide-react';
+import { Bell, BellRing, ScrollText, LayoutTemplate } from 'lucide-react';
 
 const TAB_CONFIG = {
   communication_notices: { icon: Bell, activeColor: 'text-sky-400', border: 'border-sky-400', bg: 'bg-sky-500/10' },
   communication_notification_center: { icon: BellRing, activeColor: 'text-violet-400', border: 'border-violet-400', bg: 'bg-violet-500/10' },
-  communication_whatsapp_integration: { icon: MessageSquare, activeColor: 'text-emerald-400', border: 'border-emerald-400', bg: 'bg-emerald-500/10' },
   communication_whatsapp_logs: { icon: ScrollText, activeColor: 'text-teal-400', border: 'border-teal-400', bg: 'bg-teal-500/10' },
   communication_whatsapp_templates: { icon: LayoutTemplate, activeColor: 'text-amber-400', border: 'border-amber-400', bg: 'bg-amber-500/10' },
 } as const;
@@ -22,7 +21,6 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   const routes = [
     { key: 'communication_notices', label: t('COPY.NAV_COMMUNICATION_NOTICES'), href: SUPERADMIN_NAVIGATION_ROUTES.communication_notices },
     { key: 'communication_notification_center', label: t('COPY.NAV_COMMUNICATION_NOTIFICATION_CENTER'), href: SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center },
-    { key: 'communication_whatsapp_integration', label: t('COPY.NAV_COMMUNICATION_WHATSAPP_INTEGRATION'), href: SUPERADMIN_NAVIGATION_ROUTES.communication_whatsapp_integration },
     { key: 'communication_whatsapp_logs', label: t('COPY.NAV_COMMUNICATION_WHATSAPP_LOGS'), href: SUPERADMIN_NAVIGATION_ROUTES.communication_whatsapp_logs },
     { key: 'communication_whatsapp_templates', label: t('COPY.NAV_COMMUNICATION_WHATSAPP_TEMPLATES'), href: SUPERADMIN_NAVIGATION_ROUTES.communication_whatsapp_templates },
   ] as const;
