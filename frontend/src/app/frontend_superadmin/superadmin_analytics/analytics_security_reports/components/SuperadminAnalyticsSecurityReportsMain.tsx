@@ -3,14 +3,14 @@
 // FLOW: useSuperadminAnalyticsSecurityReports -> SuperadminAnalyticsSecurityReportsMain -> Child presentation components.
 
 import React from 'react';
-import { ShieldAlert, RefreshCw, X, Download } from 'lucide-react';
+import { ShieldAlert, RefreshCw, Download } from 'lucide-react';
 import { useSuperadminAnalyticsSecurityReports } from '../hooks/useSuperadminAnalyticsSecurityReports';
 import { SuperadminAnalyticsSecurityReportsKpiGrid } from './SuperadminAnalyticsSecurityReportsKpiGrid';
 import { SuperadminAnalyticsSecurityReportsCharts } from './SuperadminAnalyticsSecurityReportsCharts';
 import { SuperadminAnalyticsSecurityReportsFilterBar } from './SuperadminAnalyticsSecurityReportsFilterBar';
 import { SuperadminAnalyticsSecurityReportsTable } from './SuperadminAnalyticsSecurityReportsTable';
 import { SuperadminAnalyticsSecurityReportsExportModal } from './SuperadminAnalyticsSecurityReportsExportModal';
-import { formatSecurityEventLabel } from '../utils/SuperadminAnalyticsSecurityReportsFormatters';
+import { SuperadminAnalyticsSecurityReportsDetailModal } from './SuperadminAnalyticsSecurityReportsDetailModal';
 
 export function SuperadminAnalyticsSecurityReportsMain() {
   const {
@@ -92,7 +92,7 @@ export function SuperadminAnalyticsSecurityReportsMain() {
         </div>
       )}
 
-      {/* ── 1. KPI Metric Summary Grid (Total Logins, Failed Logins, Locked Accounts, Permission Changes, Exports, Suspicious) ── */}
+      {/* ── 1. KPI Metric Summary Grid ── */}
       <SuperadminAnalyticsSecurityReportsKpiGrid kpis={reportData?.kpis} />
 
       {/* ── 2. Security Trends & Threat Vector Distribution ── */}
@@ -123,79 +123,13 @@ export function SuperadminAnalyticsSecurityReportsMain() {
         onPageChange={(page) => updateFilter('page', page)}
       />
 
-      {/* ── Security Event Detail Slide-Over ── */}
-      {selectedRecord && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="w-full max-w-lg p-6 rounded-3xl border border-indigo-500/30 bg-[#0a0d24]/95 text-white shadow-2xl shadow-indigo-950/60 backdrop-blur-xl space-y-4 animate-in fade-in-50 zoom-in-95">
-            <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
-              <div>
-                <h3 className="text-base font-bold text-white tracking-tight">
-                  {formatSecurityEventLabel(selectedRecord.eventType)}
-                </h3>
-                <p className="text-xs text-slate-400">{selectedRecord.timestamp} • <span className="text-rose-400 font-semibold">{selectedRecord.severity} Severity</span></p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedRecord(null)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] cursor-pointer transition-colors"
-              >
-                <X size={16} />
-              </button>
-            </div>
+      {/* ── 5. Security Event Detail Modal (Full Forensic Payload & Telemetry) ── */}
+      <SuperadminAnalyticsSecurityReportsDetailModal
+        record={selectedRecord}
+        onClose={() => setSelectedRecord(null)}
+      />
 
-            <div className="space-y-2 text-xs">
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Target Library</span>
-                <span className="font-semibold text-white">{selectedRecord.libraryName} ({selectedRecord.libraryCode})</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Branch Unit</span>
-                <span className="font-semibold text-white">{selectedRecord.branchName}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">User / Actor</span>
-                <span className="font-semibold text-white">{selectedRecord.adminName} ({selectedRecord.adminEmail})</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Subscription Plan</span>
-                <span className="font-medium text-white">{selectedRecord.plan}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Operating Status</span>
-                <span className="font-semibold text-emerald-400">{selectedRecord.status}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Origin IP Address</span>
-                <span className="font-mono text-rose-400 font-bold">{selectedRecord.ipAddress}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Geo Location</span>
-                <span className="font-medium text-white">{selectedRecord.location}</span>
-              </div>
-              <div className="py-2">
-                <span className="text-slate-400 block mb-1 font-medium">Audit Details / Payload</span>
-                <p className="p-3 rounded-xl bg-slate-950/60 border border-indigo-500/20 font-mono text-[11px] text-slate-200 leading-relaxed">
-                  {selectedRecord.details}
-                </p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setSelectedRecord(null)}
-              className="w-full py-2.5 rounded-xl text-xs font-semibold bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 hover:text-white transition-all cursor-pointer"
-            >
-              Close Event Details
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ── Export & Print Modal (Excel, PDF, CSV, Print, Download) ── */}
+      {/* ── 6. Export & Print Modal (Excel, PDF, CSV, Print, Download) ── */}
       <SuperadminAnalyticsSecurityReportsExportModal
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}

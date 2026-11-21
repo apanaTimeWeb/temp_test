@@ -1,5 +1,5 @@
 'use client';
-// RESPONSIBILITY: Render tabular billing invoice records with status badges and detail actions.
+// RESPONSIBILITY: Render tabular billing invoice records focusing on essential metrics with Cyber-Luxury styling.
 
 import React, { useState } from 'react';
 import { Eye, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -52,6 +52,7 @@ export function SuperadminAnalyticsBillingReportsTable({
 
   return (
     <div className="rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 backdrop-blur-md overflow-hidden shadow-2xl shadow-indigo-950/40">
+      {/* ── Table Header Banner ── */}
       <div className="p-4 sm:p-5 border-b border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-950/40">
         <div>
           <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
@@ -60,25 +61,24 @@ export function SuperadminAnalyticsBillingReportsTable({
               {records.length} records
             </span>
           </h3>
-          <p className="text-[11px] text-slate-400 mt-0.5">Real-time payment settlements, SaaS invoices, and subscription collections</p>
+          <p className="text-[11px] text-slate-400 mt-0.5">High-level payment settlements, SaaS invoices, and subscription collections</p>
         </div>
         <span className="text-xs text-slate-400 font-medium">
           Page <span className="text-white font-semibold">{currentPage}</span> of <span className="text-white font-semibold">{totalPages}</span>
         </span>
       </div>
 
+      {/* ── Focused Essential Columns Table ── */}
       <div className="overflow-x-auto scrollbar-thin">
         <table className="w-full text-left text-xs" role="table">
           <thead className="bg-slate-950/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-indigo-500/20 font-bold">
             <tr>
               <th className="py-3.5 px-4">Invoice #</th>
-              <th className="py-3.5 px-4">Library / Branch</th>
-              <th className="py-3.5 px-4">Plan</th>
-              <th className="py-3.5 px-4">Cycle</th>
+              <th className="py-3.5 px-4">Library & Branch</th>
+              <th className="py-3.5 px-4">Subscription Plan</th>
               <th className="py-3.5 px-4 text-right">Amount</th>
               <th className="py-3.5 px-4 text-center">Status</th>
-              <th className="py-3.5 px-4">Method / Txn</th>
-              <th className="py-3.5 px-4">Date</th>
+              <th className="py-3.5 px-4">Invoice Date</th>
               <th className="py-3.5 px-4 text-right">Action</th>
             </tr>
           </thead>
@@ -94,27 +94,46 @@ export function SuperadminAnalyticsBillingReportsTable({
                     isSelected ? 'bg-amber-500/10' : ''
                   }`}
                 >
-                  <td className="py-3.5 px-4 font-mono text-[11px] text-amber-400 font-bold">{r.invoiceNumber}</td>
-                  <td className="py-3.5 px-4">
-                    <p className="font-bold text-white">{r.libraryName}</p>
-                    <p className="text-[10px] text-slate-400">{r.branchName}</p>
+                  {/* Invoice # */}
+                  <td className="py-3.5 px-4 font-mono text-[11px] text-amber-400 font-bold whitespace-nowrap">
+                    {r.invoiceNumber}
                   </td>
-                  <td className="py-3.5 px-4 text-slate-300 font-medium">{r.planName}</td>
-                  <td className="py-3.5 px-4 text-slate-400 font-mono text-[10px] uppercase">{r.billingCycle}</td>
-                  <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-400 text-xs">
+
+                  {/* Library & Branch */}
+                  <td className="py-3.5 px-4">
+                    <p className="font-bold text-white leading-tight">{r.libraryName}</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">{r.branchName}</p>
+                  </td>
+
+                  {/* Subscription Plan & Cycle */}
+                  <td className="py-3.5 px-4">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-medium text-slate-200">{r.planName}</span>
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-slate-900 border border-indigo-500/20 text-slate-400">
+                        {r.billingCycle}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Amount */}
+                  <td className="py-3.5 px-4 text-right font-mono font-bold text-emerald-400 text-xs whitespace-nowrap">
                     {formatBillingCurrency(r.amountMinor)}
                   </td>
-                  <td className="py-3.5 px-4 text-center">
+
+                  {/* Status */}
+                  <td className="py-3.5 px-4 text-center whitespace-nowrap">
                     <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border shadow-xs ${statusCfg.bg} ${statusCfg.text}`}>
                       {r.paymentStatus}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4">
-                    <p className="text-slate-200 text-[11px] font-medium">{r.paymentMethod.replace(/_/g, ' ')}</p>
-                    <p className="text-[10px] font-mono text-slate-500 truncate max-w-[120px]">{r.transactionId}</p>
+
+                  {/* Invoice Date */}
+                  <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap font-mono text-[11px]">
+                    {r.invoiceDate}
                   </td>
-                  <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap font-mono text-[11px]">{r.invoiceDate}</td>
-                  <td className="py-3.5 px-4 text-right">
+
+                  {/* Action: View full details in popup */}
+                  <td className="py-3.5 px-4 text-right whitespace-nowrap">
                     <button
                       type="button"
                       onClick={() => onSelectRecord(r)}
@@ -132,6 +151,7 @@ export function SuperadminAnalyticsBillingReportsTable({
         </table>
       </div>
 
+      {/* ── Pagination ── */}
       {totalPages > 1 && (
         <div className="p-3.5 border-t border-indigo-500/20 flex items-center justify-between text-xs text-slate-400 bg-slate-950/40">
           <span>

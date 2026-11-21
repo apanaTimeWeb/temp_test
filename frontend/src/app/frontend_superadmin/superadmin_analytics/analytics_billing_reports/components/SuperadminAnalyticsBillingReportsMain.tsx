@@ -3,14 +3,14 @@
 // FLOW: useSuperadminAnalyticsBillingReports -> SuperadminAnalyticsBillingReportsMain -> Child presentation components.
 
 import React from 'react';
-import { Receipt, RefreshCw, X, Download } from 'lucide-react';
+import { Receipt, RefreshCw, Download } from 'lucide-react';
 import { useSuperadminAnalyticsBillingReports } from '../hooks/useSuperadminAnalyticsBillingReports';
 import { SuperadminAnalyticsBillingReportsKpiGrid } from './SuperadminAnalyticsBillingReportsKpiGrid';
 import { SuperadminAnalyticsBillingReportsCharts } from './SuperadminAnalyticsBillingReportsCharts';
 import { SuperadminAnalyticsBillingReportsFilterBar } from './SuperadminAnalyticsBillingReportsFilterBar';
 import { SuperadminAnalyticsBillingReportsTable } from './SuperadminAnalyticsBillingReportsTable';
 import { SuperadminAnalyticsBillingReportsExportModal } from './SuperadminAnalyticsBillingReportsExportModal';
-import { formatBillingCurrency } from '../utils/SuperadminAnalyticsBillingReportsFormatters';
+import { SuperadminAnalyticsBillingReportsDetailModal } from './SuperadminAnalyticsBillingReportsDetailModal';
 
 export function SuperadminAnalyticsBillingReportsMain() {
   const {
@@ -123,84 +123,13 @@ export function SuperadminAnalyticsBillingReportsMain() {
         onPageChange={(page: number) => updateFilter('page', page)}
       />
 
-      {/* ── Record Detail Slide-Over / Modal ── */}
-      {selectedRecord && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="w-full max-w-lg p-6 rounded-3xl border border-indigo-500/30 bg-[#0a0d24]/95 text-white shadow-2xl shadow-indigo-950/60 backdrop-blur-xl space-y-4 animate-in fade-in-50 zoom-in-95">
-            <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
-              <div>
-                <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
-                  <span>Invoice</span>
-                  <span className="font-mono text-amber-400">{selectedRecord.invoiceNumber}</span>
-                </h3>
-                <p className="text-xs text-slate-400">{selectedRecord.libraryName}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedRecord(null)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] cursor-pointer transition-colors"
-              >
-                <X size={16} />
-              </button>
-            </div>
+      {/* ── 5. Record Detail Modal (Full Transaction & Accounting Details) ── */}
+      <SuperadminAnalyticsBillingReportsDetailModal
+        record={selectedRecord}
+        onClose={() => setSelectedRecord(null)}
+      />
 
-            <div className="space-y-2 text-xs">
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Branch</span>
-                <span className="font-semibold text-white">{selectedRecord.branchName}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Plan</span>
-                <span className="font-semibold text-white">{selectedRecord.planName}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Cycle</span>
-                <span className="font-semibold text-white uppercase font-mono">{selectedRecord.billingCycle}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Amount</span>
-                <span className="font-bold text-emerald-400 font-mono text-sm">
-                  {formatBillingCurrency(selectedRecord.amountMinor)}
-                </span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Status</span>
-                <span className="font-semibold text-amber-400">{selectedRecord.paymentStatus}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Payment Method</span>
-                <span className="font-semibold text-white">{selectedRecord.paymentMethod.replace(/_/g, ' ')}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Transaction ID</span>
-                <span className="font-mono text-slate-300">{selectedRecord.transactionId}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Invoice Date</span>
-                <span className="text-slate-200 font-mono">{selectedRecord.invoiceDate}</span>
-              </div>
-              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
-                <span className="text-slate-400">Due Date</span>
-                <span className="text-slate-200 font-mono">{selectedRecord.dueDate}</span>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setSelectedRecord(null)}
-              className="w-full py-2.5 rounded-xl text-xs font-semibold bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 hover:text-white transition-all cursor-pointer"
-            >
-              Close Details
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ── Export & Print Modal (Excel, PDF, CSV, Print, Download) ── */}
+      {/* ── 6. Export & Print Modal (Excel, PDF, CSV, Print, Download) ── */}
       <SuperadminAnalyticsBillingReportsExportModal
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}

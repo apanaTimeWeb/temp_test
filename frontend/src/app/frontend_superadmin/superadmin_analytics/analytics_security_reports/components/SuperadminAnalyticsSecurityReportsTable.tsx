@@ -1,5 +1,5 @@
 'use client';
-// RESPONSIBILITY: Tabular display of security events, audit trails, and authentication anomalies with pagination.
+// RESPONSIBILITY: Render tabular security event audit records focusing on essential metrics with Cyber-Luxury styling.
 
 import React from 'react';
 import { Eye, ChevronLeft, ChevronRight, ShieldAlert, ShieldCheck, Lock, Key, FileOutput, AlertTriangle } from 'lucide-react';
@@ -72,6 +72,7 @@ export function SuperadminAnalyticsSecurityReportsTable({
       className="rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 backdrop-blur-md overflow-hidden shadow-2xl shadow-indigo-950/40"
       data-testid="security-reports-table-container"
     >
+      {/* ── Table Header Banner ── */}
       <div className="p-4 sm:p-5 border-b border-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-950/40">
         <div>
           <h3 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
@@ -80,25 +81,24 @@ export function SuperadminAnalyticsSecurityReportsTable({
               {records.length} events
             </span>
           </h3>
-          <p className="text-[11px] text-slate-400 mt-0.5">Authentication anomalies, permission changes, exports, and intrusion prevention</p>
+          <p className="text-[11px] text-slate-400 mt-0.5">High-priority authentication events, risk severity, and access monitoring</p>
         </div>
         <span className="text-xs text-slate-400 font-medium">
           Page <span className="text-white font-semibold">{currentPage}</span> of <span className="text-white font-semibold">{totalPages}</span>
         </span>
       </div>
 
+      {/* ── Focused Essential Columns Table ── */}
       <div className="overflow-x-auto scrollbar-thin">
         <table className="w-full text-left text-xs" data-testid="security-reports-table">
           <thead>
             <tr className="bg-slate-950/80 text-slate-400 uppercase text-[10px] tracking-wider border-b border-indigo-500/20 font-bold">
               <th className="py-3.5 px-4">Timestamp</th>
-              <th className="py-3.5 px-4">Event Type</th>
-              <th className="py-3.5 px-4">Severity</th>
-              <th className="py-3.5 px-4">Library / Branch</th>
-              <th className="py-3.5 px-4">Admin / Account</th>
-              <th className="py-3.5 px-4">IP Address / Location</th>
-              <th className="py-3.5 px-4">Details</th>
-              <th className="py-3.5 px-4 text-center">Action</th>
+              <th className="py-3.5 px-4">Security Event</th>
+              <th className="py-3.5 px-4 text-center">Severity</th>
+              <th className="py-3.5 px-4">Library & Branch</th>
+              <th className="py-3.5 px-4">User / Actor</th>
+              <th className="py-3.5 px-4 text-right">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-indigo-500/10">
@@ -117,7 +117,7 @@ export function SuperadminAnalyticsSecurityReportsTable({
                     <span className="font-mono text-slate-400 text-[11px]">{r.timestamp}</span>
                   </td>
 
-                  {/* Event Type */}
+                  {/* Event Type with Icon */}
                   <td className="py-3.5 px-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
                       {getEventIcon(r.eventType)}
@@ -128,9 +128,9 @@ export function SuperadminAnalyticsSecurityReportsTable({
                   </td>
 
                   {/* Severity */}
-                  <td className="py-3.5 px-4">
+                  <td className="py-3.5 px-4 text-center whitespace-nowrap">
                     <span
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${getSeverityBadge(
+                      className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${getSeverityBadge(
                         r.severity
                       )}`}
                     >
@@ -141,38 +141,18 @@ export function SuperadminAnalyticsSecurityReportsTable({
                   {/* Library & Branch */}
                   <td className="py-3.5 px-4">
                     <div>
-                      <p className="font-bold text-white">{r.libraryName}</p>
-                      <p className="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
-                        <span className="font-mono text-rose-400 font-semibold">{r.libraryCode}</span>
-                        <span>•</span>
-                        <span>{r.branchName}</span>
-                      </p>
+                      <p className="font-bold text-white leading-tight">{r.libraryName}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">{r.branchName}</p>
                     </div>
                   </td>
 
-                  {/* Admin / Account */}
-                  <td className="py-3.5 px-4">
-                    <div>
-                      <p className="font-medium text-slate-200">{r.adminName}</p>
-                      <p className="text-[11px] text-slate-400 font-mono">{r.adminEmail}</p>
-                    </div>
-                  </td>
-
-                  {/* IP Address & Location */}
+                  {/* Actor / User */}
                   <td className="py-3.5 px-4 whitespace-nowrap">
-                    <div>
-                      <span className="font-mono text-white font-semibold">{r.ipAddress}</span>
-                      <p className="text-[10px] text-slate-400">{r.location}</p>
-                    </div>
+                    <span className="font-medium text-slate-200">{r.adminName}</span>
                   </td>
 
-                  {/* Details */}
-                  <td className="py-3.5 px-4 max-w-xs truncate text-slate-300 text-[11px]">
-                    {r.details}
-                  </td>
-
-                  {/* Action */}
-                  <td className="py-3.5 px-4 text-center">
+                  {/* Action: View full audit payload in popup */}
+                  <td className="py-3.5 px-4 text-right whitespace-nowrap">
                     <button
                       type="button"
                       onClick={() => onSelectRecord(r)}
