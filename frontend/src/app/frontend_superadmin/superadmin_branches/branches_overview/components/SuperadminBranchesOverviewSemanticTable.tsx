@@ -136,10 +136,10 @@ export default function SuperadminBranchesOverviewSemanticTable({
                       <span className="text-[10px] text-slate-400 block truncate">{branch.managerPhone}</span>
                     </td>
 
-                    {/* Capacity & Physical Assets */}
+                    {/* Capacity & Operational Assets */}
                     <td className="px-4 py-3.5 text-right font-medium text-slate-200">
                       <div><strong className="text-amber-300">{branch.capacity}</strong> seats</div>
-                      <div className="text-[11px] text-cyan-300">{branch.physicalBooks} physical books</div>
+                      <div className="text-[11px] text-cyan-300">{branch.activeMembers} active students</div>
                     </td>
 
                     {/* Status */}

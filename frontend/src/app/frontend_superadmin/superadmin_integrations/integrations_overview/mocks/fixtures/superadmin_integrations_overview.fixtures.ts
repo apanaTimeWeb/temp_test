@@ -144,7 +144,7 @@ export const MOCK_INTEGRATION_GATEWAYS: IntegrationGatewayItem[] = [
     lastPing: '10 mins ago',
     isEnabled: true,
     credentialsMasked: { barcodeFormat: 'Code128', qrFormat: 'StandardUPI_v2', thermalProtocol: 'ESC/POS' },
-    notes: 'Generates book labels, digital member ID cards, and seat check-in QRs.',
+    notes: 'Generates locker tags, digital member ID cards, and seat check-in QRs.',
   },
   // 6. Attendance & Biometric Devices
   {

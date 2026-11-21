@@ -53,7 +53,7 @@ function quoteCsvCell(value: unknown): string {
 
 /** Builds RFC-4180 compliant CSV string for Superadmin Branches with UTF-8 BOM. */
 export function buildSuperadminBranchesCsv(branches: readonly SuperadminBranchRecord[]): string {
-  const headerLabels = ['ID', 'Branch Code', 'Branch Name', 'Tenant / Library', 'City', 'Status', 'Capacity', 'Outstanding Books', 'Member Dues (INR)'];
+  const headerLabels = ['ID', 'Branch Code', 'Branch Name', 'Tenant / Library', 'City', 'Status', 'Capacity', 'Enrolled Students', 'Member Dues (INR)'];
   const rows = [
     headerLabels.map(quoteCsvCell).join(','),
     ...branches.map((b) => [
@@ -64,7 +64,7 @@ export function buildSuperadminBranchesCsv(branches: readonly SuperadminBranchRe
       b.city,
       formatBranchStatusLabel(b.status),
       b.capacity,
-      b.outstandingBooks,
+      b.activeMembers,
       b.memberDues,
     ].map(quoteCsvCell).join(',')),
   ];
@@ -89,7 +89,7 @@ export function downloadSuperadminBranchesCsv(branches: readonly SuperadminBranc
 
 /** Builds an HTML/XML Excel spreadsheet from branch records. */
 export function buildSuperadminBranchesExcel(branches: readonly SuperadminBranchRecord[]): string {
-  const headers = ['ID', 'Branch Code', 'Branch Name', 'Tenant / Library', 'City', 'Status', 'Capacity', 'Outstanding Books', 'Member Dues (INR)'];
+  const headers = ['ID', 'Branch Code', 'Branch Name', 'Tenant / Library', 'City', 'Status', 'Capacity', 'Enrolled Students', 'Member Dues (INR)'];
   const rows = branches.map((b) => [
     b.id,
     b.code,
@@ -98,7 +98,7 @@ export function buildSuperadminBranchesExcel(branches: readonly SuperadminBranch
     b.city,
     formatBranchStatusLabel(b.status),
     b.capacity,
-    b.outstandingBooks,
+    b.activeMembers,
     formatCurrencyInr(b.memberDues),
   ]);
 
@@ -218,7 +218,7 @@ export function printSuperadminBranchesRoster(branches: readonly SuperadminBranc
               <th style="width: 12%;">City</th>
               <th style="width: 10%;">Status</th>
               <th style="width: 8%;">Capacity</th>
-              <th style="width: 9%;">Books</th>
+              <th style="width: 9%;">Students</th>
               <th style="width: 9%;">Dues (INR)</th>
             </tr>
           </thead>
@@ -231,7 +231,7 @@ export function printSuperadminBranchesRoster(branches: readonly SuperadminBranc
                 <td>${b.city}</td>
                 <td><span class="badge ${b.status === 'active' ? 'badge-active' : b.status === 'suspended' ? 'badge-suspended' : 'badge-closed'}">${formatBranchStatusLabel(b.status)}</span></td>
                 <td>${b.capacity}</td>
-                <td>${b.outstandingBooks}</td>
+                <td>${b.activeMembers}</td>
                 <td>${formatCurrencyInr(b.memberDues)}</td>
               </tr>
             `).join('')}

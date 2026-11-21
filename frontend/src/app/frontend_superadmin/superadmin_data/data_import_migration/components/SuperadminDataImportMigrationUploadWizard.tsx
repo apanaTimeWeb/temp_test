@@ -102,7 +102,7 @@ export function SuperadminDataImportMigrationUploadWizard({
               className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500"
             >
               <option value="PATRONS">Patrons & Memberships</option>
-              <option value="BOOKS_CATALOG">Books & Resource Catalog (MARC21 / CSV)</option>
+              <option value="SEATS_LOCKERS_INVENTORY">Seats & Lockers Layout Matrix (CSV / Excel)</option>
               <option value="CIRCULATION_HISTORY">Historical Checkouts & Loans</option>
               <option value="FINES_FEES">Fines & Historical Fee Invoices</option>
             </select>

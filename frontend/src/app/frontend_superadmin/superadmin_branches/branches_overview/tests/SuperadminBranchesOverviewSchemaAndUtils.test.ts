@@ -78,10 +78,9 @@ describe('Superadmin Branches Overview Schemas, Utils & API Contract', () => {
       expect(SuperadminBranchTransferManagerSchema.safeParse(invalidTransfer).success).toBe(false);
     });
 
-    it('enforces pre-flight safety check in branch closure schema (0 books, 0 dues)', () => {
+    it('enforces pre-flight safety check in branch closure schema (0 dues)', () => {
       const safeClose = {
         branchId: 'br-01',
-        outstandingBooks: 0,
         memberDues: 0,
         closureNotes: 'Lease expired and assets transferred to central branch',
       };
@@ -89,7 +88,6 @@ describe('Superadmin Branches Overview Schemas, Utils & API Contract', () => {
 
       const unsafeClose = {
         branchId: 'br-01',
-        outstandingBooks: 2,
         memberDues: 500,
         closureNotes: 'Closing anyway',
       };

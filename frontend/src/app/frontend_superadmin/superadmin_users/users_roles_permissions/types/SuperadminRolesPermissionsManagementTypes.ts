@@ -6,7 +6,7 @@ export type RoleAccessScope = 'platform_wide' | 'tenant_all_branches' | 'single_
 
 export type SystemModuleKey =
   | 'members'
-  | 'books_catalog'
+  | 'lockers_management'
   | 'branch_operations'
   | 'seats_shifts'
   | 'finance_billing'

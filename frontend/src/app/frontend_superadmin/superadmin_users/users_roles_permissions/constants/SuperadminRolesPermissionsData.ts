@@ -17,10 +17,10 @@ for (const m of Object.keys(superadminPermissions) as SystemModuleKey[]) {
   }
 }
 
-// 2. Branch Manager: Members (view, create, edit), Books (view, issue/return/edit), Finance (view), Accounts (none), Staff (assigned staff), Settings (none)
+// 2. Branch Manager: Members (view, create, edit), Lockers (view, create, edit), Finance (view), Accounts (none), Staff (assigned staff), Settings (none)
 const branchManagerPermissions = buildRoleMatrix({
   members: { view: true, create: true, edit: true, print: true, download: true },
-  books_catalog: { view: true, create: true, edit: true, approve: true, print: true },
+  lockers_management: { view: true, create: true, edit: true, approve: true, print: true },
   branch_operations: { view: true, create: true, edit: true, print: true },
   seats_shifts: { view: true, create: true, edit: true, approve: true },
   finance_billing: { view: true, print: true },
@@ -55,7 +55,7 @@ export const INITIAL_ROLES: RoleDefinition[] = [
     temporaryExpiryAllowed: true,
     permissions: buildRoleMatrix({
       members: { view: true, print: true },
-      books_catalog: { view: true },
+      lockers_management: { view: true },
       branch_operations: { view: true },
       finance_billing: { view: true, approve: true, reject: true },
       communication: { view: true, create: true },
@@ -90,7 +90,7 @@ export const INITIAL_ROLES: RoleDefinition[] = [
     temporaryExpiryAllowed: false,
     permissions: buildRoleMatrix({
       members: { view: true, create: true, edit: true, delete_archive: true, export: true, print: true, download: true },
-      books_catalog: { view: true, create: true, edit: true, delete_archive: true, approve: true, export: true },
+      lockers_management: { view: true, create: true, edit: true, delete_archive: true, approve: true, export: true },
       branch_operations: { view: true, create: true, edit: true, manage_settings: true },
       seats_shifts: { view: true, create: true, edit: true, manage_settings: true },
       finance_billing: { view: true, create: true, edit: true, export: true, print: true },
@@ -106,7 +106,7 @@ export const INITIAL_ROLES: RoleDefinition[] = [
     id: 'role-branch-manager',
     name: 'Branch Manager',
     roleCategory: 'tenant_library',
-    description: 'Operational desk manager for assigned branch only (Members, Seats, Issue Books).',
+    description: 'Operational desk manager for assigned branch only (Members, Seats, Shifts, Lockers).',
     scope: 'single_branch',
     userCount: 28,
     isSystemRole: true,
@@ -118,14 +118,14 @@ export const INITIAL_ROLES: RoleDefinition[] = [
     id: 'role-librarian',
     name: 'Librarian',
     roleCategory: 'tenant_library',
-    description: 'Approved library catalog modules: physical book copies, barcode issue & returns.',
+    description: 'Study space operations: seat allocations, lockers & shifts.',
     scope: 'single_branch',
     userCount: 19,
     isSystemRole: true,
     temporaryExpiryAllowed: true,
     permissions: buildRoleMatrix({
       members: { view: true },
-      books_catalog: { view: true, create: true, edit: true, approve: true, print: true, download: true },
+      lockers_management: { view: true, create: true, edit: true, approve: true, print: true, download: true },
       reports_analytics: { view: true, print: true },
     }),
     updatedAt: '2026-11-15',

@@ -103,7 +103,7 @@ export const MOCK_ARCHIVED_RECORDS: ArchivedRecordItem[] = [
   },
   {
     id: 'arc-003',
-    entityType: 'WEEDED_BOOK_CATALOGS',
+    entityType: 'ARCHIVED_SEAT_LOGS',
     tenantId: 'tnt-mumbai-suburb',
     tenantName: 'Mumbai Metro Library Network',
     recordIdentifier: 'CAT-WEED-2023-412',

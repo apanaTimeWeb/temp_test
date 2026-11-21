@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Display branch-level analytics and reports.
-import { X, BarChart2, IndianRupee, Users, Armchair, BookOpen } from 'lucide-react';
+import { X, BarChart2, IndianRupee, Users, Armchair } from 'lucide-react';
 import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 
 interface SuperadminBranchesOverviewReportsModalProps {
@@ -66,16 +66,16 @@ export default function SuperadminBranchesOverviewReportsModal({ branch, onClose
             <span className="text-sm font-bold text-emerald-300">{branch.activeMembers}</span>
           </div>
 
-          {/* Physical Inventory Copies */}
+          {/* Configured Study Units */}
           <div className="p-3.5 rounded-xl border border-indigo-500/30 bg-indigo-950/20 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <BookOpen size={16} className="text-indigo-400" />
+              <Armchair size={16} className="text-indigo-400" />
               <div>
-                <p className="text-xs font-semibold text-white">Physical Book Copies Managed</p>
-                <p className="text-[11px] text-slate-400">Stored branch-wise for accurate accounting</p>
+                <p className="text-xs font-semibold text-white">Study Desks & Operational Units</p>
+                <p className="text-[11px] text-slate-400">Configured study hall infrastructure</p>
               </div>
             </div>
-            <span className="text-sm font-bold text-indigo-300">{branch.physicalBooks} copies</span>
+            <span className="text-sm font-bold text-indigo-300">{branch.capacity} seats</span>
           </div>
         </div>
 

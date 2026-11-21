@@ -63,8 +63,8 @@ describe('SuperadminBranchesOverview UI Components', () => {
     expect(setSearch).toHaveBeenCalledWith('Apex');
   });
 
-  it('enforces pre-flight blockers in CloseSafetyModal when books/dues are outstanding', () => {
-    const branchWithDues = INITIAL_BRANCHES_DATA.find((b) => b.outstandingBooks > 0 || b.memberDues > 0)!;
+  it('enforces pre-flight blockers in CloseSafetyModal when dues are outstanding', () => {
+    const branchWithDues = INITIAL_BRANCHES_DATA.find((b) => b.memberDues > 0)!;
     const onClose = vi.fn();
     const onConfirm = vi.fn();
 
@@ -111,14 +111,14 @@ describe('SuperadminBranchesOverview UI Components', () => {
     expect(onConfirm).toHaveBeenCalledWith(branchNoDues.id, 'End of lease');
   });
 
-  it('renders DetailsModal with physical asset vs shared catalogue split', () => {
+  it('renders DetailsModal with physical asset vs operational split', () => {
     const branch = INITIAL_BRANCHES_DATA[0];
     const onClose = vi.fn();
 
     render(<SuperadminBranchesOverviewDetailsModal branch={branch} onClose={onClose} />);
     expect(screen.getByText(branch.name)).toBeInTheDocument();
     expect(screen.getByText('Seat Capacity')).toBeInTheDocument();
-    expect(screen.getByText('Physical Books')).toBeInTheDocument();
+    expect(screen.getByText('Operating Shifts')).toBeInTheDocument();
     expect(screen.getByText(/Allowed Branch Operational Modules/i)).toBeInTheDocument();
   });
 

@@ -13,10 +13,10 @@ describe('Superadmin Features Overview - Client Interactive Controls', () => {
 
     // Verify key modules are visible
     expect(screen.getByText('Dashboard')).toBeDefined();
-    expect(screen.getByText('Books')).toBeDefined();
+    expect(screen.getByText('Locker Management')).toBeDefined();
     expect(screen.getByText('Members')).toBeDefined();
     expect(screen.getByText('Seat Management')).toBeDefined();
-    expect(screen.getByText('Issue & Return')).toBeDefined();
+    expect(screen.getByText('Attendance & Biometrics')).toBeDefined();
     expect(screen.getByText('Finance')).toBeDefined();
     expect(screen.getByText('Accounts')).toBeDefined();
     expect(screen.getByText('Communication')).toBeDefined();
@@ -116,12 +116,12 @@ describe('Superadmin Features Overview - Client Interactive Controls', () => {
     const scopeSelect = screen.getByDisplayValue(/Platform-Wide Defaults/i);
     fireEvent.change(scopeSelect, { target: { value: 'tenant_patna' } });
 
-    const booksToggle = screen.getByLabelText('Toggle Books for current library');
-    expect(booksToggle).toBeDefined();
-    const initialChecked = booksToggle.getAttribute('aria-checked');
+    const lockersToggle = screen.getByLabelText('Toggle Locker Management for current library');
+    expect(lockersToggle).toBeDefined();
+    const initialChecked = lockersToggle.getAttribute('aria-checked');
 
     // Click toggle
-    fireEvent.click(booksToggle);
-    expect(booksToggle.getAttribute('aria-checked')).toBe(initialChecked === 'true' ? 'false' : 'true');
+    fireEvent.click(lockersToggle);
+    expect(lockersToggle.getAttribute('aria-checked')).toBe(initialChecked === 'true' ? 'false' : 'true');
   });
 });

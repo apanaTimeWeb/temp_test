@@ -33,7 +33,6 @@ export type SuperadminBranchTransferManagerFormValues = z.infer<typeof Superadmi
 
 export const SuperadminBranchCloseSafetySchema = z.object({
   branchId: z.string().min(1, 'Branch ID is required'),
-  outstandingBooks: z.number().max(0, 'All books must be returned or written off before closing'),
   memberDues: z.number().max(0, 'All member dues must be settled (₹0) before closing'),
   closureNotes: z.string().min(5, 'Mandatory closure reason and archival justification required'),
 });

@@ -113,7 +113,7 @@ export default function SuperadminBranchesOverviewCreateModal({
       weeklyHolidays,
       capacity,
       activeMembers: 0,
-      physicalBooks: 1500,
+      physicalBooks: 0,
       outstandingBooks: 0,
       memberDues: 0,
       cashBalance: 5000,

@@ -141,7 +141,7 @@ export default function SuperadminRoleCreateModal({
             <label className="block font-semibold text-slate-300 mb-1">Role Description / Purpose</label>
             <textarea
               rows={2}
-              placeholder="e.g. Assigned to morning librarians handling seat check-ins and book reservations..."
+              placeholder="e.g. Assigned to morning supervisors handling seat check-ins and member admissions..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full rounded-xl border border-indigo-500/30 bg-input p-2.5 text-xs text-white focus:border-indigo-400 outline-none"

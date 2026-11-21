@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Enforce administrative safety checks and SuperAdmin software decommissioning rules before closing/archiving a branch.
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { AlertTriangle, BookOpen, IndianRupee, Wallet, X, XCircle, CheckCircle2, ShieldCheck, UserX, Database, Layers } from 'lucide-react';
+import { AlertTriangle, Users, IndianRupee, Wallet, X, XCircle, CheckCircle2, ShieldCheck, UserX, Database, Layers } from 'lucide-react';
 import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
@@ -28,9 +28,8 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
 
   useModalScrollLock(Boolean(mounted));
 
-  const hasOutstandingBooks = branch.outstandingBooks > 0;
   const hasMemberDues = branch.memberDues > 0;
-  const hasBlocker = hasOutstandingBooks || hasMemberDues;
+  const hasBlocker = hasMemberDues;
   const canSubmit = !hasBlocker || isSuperadminOverride;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -39,7 +38,9 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
       setErrorMsg('Cannot proceed with closure while unresolved liabilities exist.');
       return;
     }
-    const res = onConfirmClose(branch.id, closingNotes || 'Standard branch closure and archive', isSuperadminOverride);
+    const res = isSuperadminOverride
+      ? onConfirmClose(branch.id, closingNotes || 'Standard branch closure and archive', true)
+      : onConfirmClose(branch.id, closingNotes || 'Standard branch closure and archive');
     if (!res.success) {
       setErrorMsg(res.error || 'Closure failed');
     } else {
@@ -88,7 +89,7 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
             </div>
             <p className="text-[11px] text-slate-300 leading-relaxed">
               SuperAdmin controls <strong>software licenses, admin quota allocation, and branch manager credentials</strong>.
-              Internal student book returns and member fee recoveries are operational duties delegated to the Library Admin.
+              Internal student fee collection and physical asset custody remain operational duties managed by the Library Admin.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-[11px]">
               <div className="p-2 rounded-lg bg-slate-950/50 border border-border/40 flex items-center gap-1.5 text-slate-300">
@@ -108,21 +109,17 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
 
           {/* Condition Checklist Cards */}
           <div className="space-y-2.5">
-            {/* 1. Outstanding Books Check */}
-            <div className={`p-3 rounded-xl border flex items-center justify-between ${
-              hasOutstandingBooks ? 'border-rose-500/40 bg-rose-500/10' : 'border-emerald-500/30 bg-emerald-500/10'
-            }`}>
+            {/* 1. Active Student Enrollments Check */}
+            <div className="p-3 rounded-xl border border-indigo-500/30 bg-indigo-500/10 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <BookOpen size={16} className={hasOutstandingBooks ? 'text-rose-400' : 'text-emerald-400'} />
+                <Users size={16} className="text-indigo-400" />
                 <div>
-                  <p className="text-xs font-semibold text-white">Outstanding Issued Books</p>
-                  <p className="text-[11px] text-slate-400">Must be returned or transferred to parent catalogue</p>
+                  <p className="text-xs font-semibold text-white">Active Student Enrollments</p>
+                  <p className="text-[11px] text-slate-400">Student accounts will be archived; seat plans soft-closed</p>
                 </div>
               </div>
-              <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
-                hasOutstandingBooks ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'
-              }`}>
-                {branch.outstandingBooks} pending
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300">
+                {branch.activeMembers} enrolled
               </span>
             </div>
 
@@ -134,7 +131,7 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
                 <IndianRupee size={16} className={hasMemberDues ? 'text-rose-400' : 'text-emerald-400'} />
                 <div>
                   <p className="text-xs font-semibold text-white">Unpaid Member Dues</p>
-                  <p className="text-[11px] text-slate-400">All fees must be collected or formally waived</p>
+                  <p className="text-[11px] text-slate-400">All fees must be collected or formally waived by library admin</p>
                 </div>
               </div>
               <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
@@ -165,7 +162,7 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
               <div className="p-3 rounded-xl border border-rose-500/30 bg-rose-950/40 flex items-start gap-2.5 text-xs text-rose-300">
                 <AlertTriangle size={16} className="text-rose-400 shrink-0 mt-0.5" />
                 <p>
-                  <strong>Closure Blocked:</strong> Resolve all outstanding book returns ({branch.outstandingBooks}) and clear pending member dues (₹{branch.memberDues}) before closing.
+                  <strong>Closure Blocked:</strong> Clear pending member dues (₹{branch.memberDues.toLocaleString()}) before standard closing.
                 </p>
               </div>
 
@@ -179,7 +176,7 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
                     className="mt-0.5 rounded border-emerald-500/40 text-emerald-500 focus:ring-emerald-400 cursor-pointer"
                   />
                   <span>
-                    SuperAdmin Software Override: Decommission branch software instance & manager credentials now (Student book returns and fee recovery remain assigned to the Library Admin).
+                    SuperAdmin Software Override: Decommission branch software instance & manager credentials now (Student fee collection remains assigned to the Library Admin).
                   </span>
                 </label>
               </div>
@@ -193,41 +190,48 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
             </div>
           )}
 
-          {errorMsg && <p className="text-xs text-rose-400">{errorMsg}</p>}
+          {/* Archival Notes Input */}
+          <div className="space-y-1.5 pt-2">
+            <label className="block text-slate-300 font-semibold">
+              Mandatory Archival Reason / Closure Justification:
+            </label>
+            <textarea
+              value={closingNotes}
+              onChange={(e) => setClosingNotes(e.target.value)}
+              placeholder="e.g. Lease expired, operations merged into central hub, management decision..."
+              className="w-full h-20 p-2.5 rounded-xl border border-slate-700 bg-slate-900/90 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-rose-500"
+              required
+            />
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3 pt-1">
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Audit Notes / Closure Reason</label>
-              <textarea
-                rows={2}
-                value={closingNotes}
-                onChange={(e) => setClosingNotes(e.target.value)}
-                placeholder="e.g. Lease expired, relocated to new premises, or operational consolidation..."
-                className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/80 p-2.5 text-xs text-white placeholder:text-slate-500 focus:border-rose-400 outline-none"
-              />
-            </div>
+          {errorMsg && (
+            <p className="text-xs text-rose-400 font-semibold bg-rose-500/10 p-2.5 rounded-lg border border-rose-500/20">
+              {errorMsg}
+            </p>
+          )}
+        </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={!canSubmit}
-                className={`px-4 py-2 rounded-xl text-xs font-bold text-white shadow-md transition-all cursor-pointer ${
-                  canSubmit
-                    ? 'bg-rose-600 hover:bg-rose-500 active:scale-95'
-                    : 'bg-rose-900/40 text-slate-400 border border-rose-500/20 cursor-not-allowed opacity-40'
-                }`}
-              >
-                Confirm Soft-Close & Archive
-              </button>
-            </div>
-          </form>
+        {/* Action Buttons */}
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-rose-500/20">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 font-semibold text-xs transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!canSubmit}
+            className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
+              canSubmit
+                ? 'bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-900/40 cursor-pointer'
+                : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+            }`}
+          >
+            Confirm Soft-Close & Archive
+          </button>
         </div>
       </div>
     </div>

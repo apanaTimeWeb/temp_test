@@ -1,6 +1,6 @@
 'use client';
 // RESPONSIBILITY: Render hero header with primary Create Branch CTA and export actions.
-import { GitBranch, Plus, ShieldCheck, Download, FileSpreadsheet, Printer, BookOpen } from 'lucide-react';
+import { GitBranch, Plus, ShieldCheck, Download, FileSpreadsheet, Printer, Armchair } from 'lucide-react';
 
 interface SuperadminBranchesOverviewHeaderProps {
   onCreateBranch: () => void;
@@ -25,8 +25,8 @@ export default function SuperadminBranchesOverviewHeader({
               Multi-Branch Architecture
             </span>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-              <BookOpen size={11} className="text-indigo-400" />
-              Shared Catalog • Branch Physical Assets
+              <Armchair size={11} className="text-indigo-400" />
+              Multi-Branch Infrastructure • Study Hall Operations
             </span>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
               <ShieldCheck size={11} /> SuperAdmin Control

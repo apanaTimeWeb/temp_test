@@ -69,7 +69,7 @@ export function SuperadminDataArchiveRetentionArchiveCatalog({
             <option value="ALL">All Archived Types</option>
             <option value="CLOSED_PATRONS">Closed Patrons</option>
             <option value="EXPIRED_CIRCULATION_LOGS">Expired Circulations</option>
-            <option value="WEEDED_BOOK_CATALOGS">Weeded Book Catalogs</option>
+            <option value="ARCHIVED_SEAT_LOGS">Archived Seat & Shift Logs</option>
           </select>
 
           {/* Storage Tier Filter */}

@@ -25,7 +25,7 @@ export const EXPORT_STATUS = {
 } as const;
 
 export const EXPORT_DATA_ENTITIES = [
-  { id: 'catalogs', label: 'Book & Resource Catalogs', defaultChecked: true },
+  { id: 'catalogs', label: 'Seat & Locker Inventories', defaultChecked: true },
   { id: 'patrons', label: 'Patron Profiles & Memberships', defaultChecked: true },
   { id: 'circulations', label: 'Circulation & Loan History', defaultChecked: true },
   { id: 'financials', label: 'Fines, Invoices & Fee Ledger', defaultChecked: true },

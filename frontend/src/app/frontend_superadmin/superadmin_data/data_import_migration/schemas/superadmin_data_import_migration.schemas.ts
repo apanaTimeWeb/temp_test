@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 export const PreflightValidateSchema = z.object({
   tenantId: z.string().min(1, 'Target library tenant must be selected'),
-  entityType: z.enum(['BOOKS_CATALOG', 'PATRONS', 'CIRCULATION_HISTORY', 'FINES_FEES']),
+  entityType: z.enum(['SEATS_LOCKERS_INVENTORY', 'PATRONS', 'CIRCULATION_HISTORY', 'FINES_FEES']),
   duplicateStrategy: z.enum(['SKIP', 'OVERWRITE', 'ERROR']),
   fileName: z.string().min(1, 'A migration file must be uploaded'),
   fileSizeBytes: z.number().positive('File size must be greater than zero'),
@@ -17,7 +17,7 @@ export const PreflightValidateSchema = z.object({
 export const CommitImportSchema = z.object({
   preflightId: z.string().min(1, 'Preflight ID is required'),
   tenantId: z.string().min(1, 'Tenant ID is required'),
-  entityType: z.enum(['BOOKS_CATALOG', 'PATRONS', 'CIRCULATION_HISTORY', 'FINES_FEES']),
+  entityType: z.enum(['SEATS_LOCKERS_INVENTORY', 'PATRONS', 'CIRCULATION_HISTORY', 'FINES_FEES']),
   duplicateStrategy: z.enum(['SKIP', 'OVERWRITE', 'ERROR']),
   takeRollbackSnapshot: z.boolean().default(true),
 });

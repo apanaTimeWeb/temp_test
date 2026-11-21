@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 // RESPONSIBILITY: Render layout boundary for SuperAdmin Feature & Module Control.
-// Books, Members, Seats, Finance, Accounts, Communication jaise modules enable/disable karna.
+// Lockers, Members, Seats, Finance, Accounts, Communication jaise modules enable/disable karna.
 
 export default function SuperadminFeaturesLayout({ children }: { children: ReactNode }) {
   return (

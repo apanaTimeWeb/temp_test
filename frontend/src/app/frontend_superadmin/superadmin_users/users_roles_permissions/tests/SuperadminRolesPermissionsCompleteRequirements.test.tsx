@@ -202,7 +202,7 @@ describe('Module 04: Admin, Manager aur Staff Permission Management', () => {
 
       expect(screen.getByText(/Action-Level Permissions Editor/i)).toBeInTheDocument();
       expect(screen.getByText('Members & Students')).toBeInTheDocument();
-      expect(screen.getByText('Books & Shared Catalog')).toBeInTheDocument();
+      expect(screen.getByText('Lockers & Assets')).toBeInTheDocument();
       expect(screen.getByText('Finance & Subscriptions')).toBeInTheDocument();
 
       const saveBtn = screen.getByRole('button', { name: /Save Permissions Matrix/i });

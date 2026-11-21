@@ -32,8 +32,8 @@ describe('Superadmin Features Overview - API Denial Enforcement Contract', () =>
 
   it('should return HTTP 200 OK with success payload when access is allowed', () => {
     const allowedEffective: EffectiveAccessResult = {
-      moduleId: 'mod_books',
-      moduleName: 'Books & Catalogue',
+      moduleId: 'mod_lockers',
+      moduleName: 'Locker Management',
       isPlatformAllowed: true,
       isPlanAllowed: true,
       override: null,
@@ -42,7 +42,7 @@ describe('Superadmin Features Overview - API Denial Enforcement Contract', () =>
     };
 
     const result = simulateApiGuardEvaluation(
-      '/api/v1/library/books/search',
+      '/api/v1/library/lockers/allocations',
       allowedEffective,
       'Apex Study Library Group'
     );
@@ -50,7 +50,7 @@ describe('Superadmin Features Overview - API Denial Enforcement Contract', () =>
     expect(result.allowed).toBe(true);
     expect(result.httpStatus).toBe(200);
     expect(result.responsePayload.success).toBe(true);
-    expect(result.responsePayload.message).toContain('Authorized. Endpoint [/api/v1/library/books/search] executed successfully');
+    expect(result.responsePayload.message).toContain('Authorized. Endpoint [/api/v1/library/lockers/allocations] executed successfully');
   });
 
   it('should include evaluated hierarchy flags in simulation result', () => {

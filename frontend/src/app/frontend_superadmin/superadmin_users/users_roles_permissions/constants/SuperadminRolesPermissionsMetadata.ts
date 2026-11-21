@@ -22,7 +22,7 @@ export const PERMISSION_ACTIONS: PermissionActionMeta[] = [
 
 export const SYSTEM_MODULES: SystemModuleMeta[] = [
   { key: 'members', label: 'Members & Students', category: 'Desk Operations', description: 'Registration, seat admissions, verification & profiles' },
-  { key: 'books_catalog', label: 'Books & Shared Catalog', category: 'Library Asset', description: 'Central titles catalog, physical branch copies, issue & returns' },
+  { key: 'lockers_management', label: 'Lockers & Assets', category: 'Library Asset', description: 'Locker numbering matrix, locker keys custody, student deposit tracking' },
   { key: 'branch_operations', label: 'Branch Operations', category: 'Branch Desk', description: 'Shift timings, entry QR scans, lockers & daily attendance' },
   { key: 'seats_shifts', label: 'Seats & Shifts Matrix', category: 'Branch Desk', description: 'Visual floor map, seat allocation & reserved desks' },
   { key: 'finance_billing', label: 'Finance & Subscriptions', category: 'Financial Control', description: 'SaaS tenant subscriptions, invoice collection & receipts' },
@@ -35,7 +35,7 @@ export const SYSTEM_MODULES: SystemModuleMeta[] = [
 
 export function createEmptyPermissionMatrix(): ModulePermissionMatrix {
   const allModules: SystemModuleKey[] = [
-    'members', 'books_catalog', 'branch_operations', 'seats_shifts', 'finance_billing',
+    'members', 'lockers_management', 'branch_operations', 'seats_shifts', 'finance_billing',
     'accounts_expenses', 'staff_management', 'communication', 'reports_analytics', 'system_settings',
   ];
   const allActions: ActionPermissionKey[] = [

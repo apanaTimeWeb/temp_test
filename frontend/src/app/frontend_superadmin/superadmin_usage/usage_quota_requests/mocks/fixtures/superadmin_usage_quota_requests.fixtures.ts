@@ -58,7 +58,7 @@ export const MOCK_QUOTA_REQUESTS_LIST: QuotaUpgradeRequestRecord[] = [
     requestedLimit: 50,
     unit: 'GB',
     businessJustification:
-      'Digital student ID badges and high-res book covers reached 24 GB of 25 GB limit. Upgrading cloud document storage ceiling.',
+      'Digital student ID badges and verification document uploads reached 24 GB of 25 GB limit. Upgrading cloud document storage ceiling.',
     submittedBy: {
       name: 'Amit Saxena',
       email: 'amit@apexlib.invalid',

@@ -62,7 +62,7 @@ export const MOCK_IMPORT_BATCHES: ImportBatchRecord[] = [
     batchNumber: 'MIG-2026-11-20-001',
     tenantId: 'tnt-delhi-central',
     tenantName: 'Delhi Central Library',
-    entityType: 'BOOKS_CATALOG',
+    entityType: 'SEATS_LOCKERS_INVENTORY',
     originalFileName: 'koha_catalog_export_final.mrc',
     totalRecords: 14500,
     importedRecords: 14482,

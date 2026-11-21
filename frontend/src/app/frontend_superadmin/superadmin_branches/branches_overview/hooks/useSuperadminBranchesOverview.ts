@@ -68,7 +68,6 @@ export function useSuperadminBranchesOverview() {
     const target = branches.find((b) => b.id === id);
     if (!target) return { success: false, error: 'Branch not found' };
     if (!forceSoftwareDecommission) {
-      if (target.outstandingBooks > 0) return { success: false, error: `Cannot close branch! ${target.outstandingBooks} physical books are currently issued. Return or transfer books first.` };
       if (target.memberDues > 0) return { success: false, error: `Cannot close branch! ₹${target.memberDues} in member dues are pending settlement.` };
     }
     updateStatus(

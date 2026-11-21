@@ -134,8 +134,8 @@ describe('Superadmin Features Overview - 3-Level Governance Resolution', () => {
         id: 'ovr_tenant_wide',
         tenantId: 'tenant_apex',
         tenantName: 'Apex Group',
-        moduleId: 'mod_books',
-        moduleName: 'Books',
+        moduleId: 'mod_lockers',
+        moduleName: 'Locker Management',
         overrideStatus: 'Force_Enabled',
         reason: 'Tenant wide grant',
         updatedAt: '2026-11-20T00:00:00Z',
@@ -147,8 +147,8 @@ describe('Superadmin Features Overview - 3-Level Governance Resolution', () => {
         tenantName: 'Apex Group',
         branchId: 'br_suspended_branch',
         branchName: 'Suspended Branch',
-        moduleId: 'mod_books',
-        moduleName: 'Books',
+        moduleId: 'mod_lockers',
+        moduleName: 'Locker Management',
         overrideStatus: 'Force_Disabled',
         reason: 'Branch audit pending',
         updatedAt: '2026-11-20T00:00:00Z',
@@ -158,7 +158,7 @@ describe('Superadmin Features Overview - 3-Level Governance Resolution', () => {
 
     // Query for branch 'br_suspended_branch'
     const branchResult = computeEffectiveAccess({
-      moduleId: 'mod_books',
+      moduleId: 'mod_lockers',
       platformStates: baseStates,
       tenantPlanTier: 'Professional',
       tenantId: 'tenant_apex',
@@ -172,7 +172,7 @@ describe('Superadmin Features Overview - 3-Level Governance Resolution', () => {
 
     // Query without branch (tenant-wide)
     const tenantResult = computeEffectiveAccess({
-      moduleId: 'mod_books',
+      moduleId: 'mod_lockers',
       platformStates: baseStates,
       tenantPlanTier: 'Professional',
       tenantId: 'tenant_apex',

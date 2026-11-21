@@ -11,10 +11,10 @@ describe('Superadmin Features Overview - 16 Library Modules Registry', () => {
     const keys = ALL_16_LIBRARY_MODULES.map((m) => m.key);
     const requiredKeys = [
       'dashboard',
-      'books',
+      'lockers',
       'members',
       'seats',
-      'issue_return',
+      'attendance',
       'finance',
       'accounts',
       'communication',
@@ -37,10 +37,10 @@ describe('Superadmin Features Overview - 16 Library Modules Registry', () => {
     const names = ALL_16_LIBRARY_MODULES.map((m) => m.name);
     const expectedNames = [
       'Dashboard',
-      'Books',
+      'Locker Management',
       'Members',
       'Seat Management',
-      'Issue & Return',
+      'Attendance & Biometrics',
       'Finance',
       'Accounts',
       'Communication',

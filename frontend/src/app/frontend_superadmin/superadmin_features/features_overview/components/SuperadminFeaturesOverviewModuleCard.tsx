@@ -24,6 +24,8 @@ import {
   QrCode,
   LayoutDashboard,
   KeyRound,
+  Box,
+  Fingerprint,
 } from 'lucide-react';
 import type {
   ModuleDefinition,
@@ -61,6 +63,8 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Send,
   QrCode,
   KeyRound,
+  Box,
+  Fingerprint,
 };
 
 export default function SuperadminFeaturesOverviewModuleCard({

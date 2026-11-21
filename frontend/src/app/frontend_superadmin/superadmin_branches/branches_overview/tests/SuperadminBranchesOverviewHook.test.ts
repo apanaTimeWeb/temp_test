@@ -42,7 +42,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
         cashBalance: 0,
         physicalBooks: 0,
         isArchived: false,
-        allowedModules: { bookCatalog: true },
+        allowedModules: { lockers: true },
       });
       expect(res.success).toBe(false);
       expect(res.error).toContain('already exists');
@@ -81,7 +81,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
         cashBalance: 0,
         physicalBooks: 0,
         isArchived: false,
-        allowedModules: { bookCatalog: true, seatBooking: true },
+        allowedModules: { lockers: true, seatBooking: true },
       });
       expect(res.success).toBe(true);
     });
@@ -123,7 +123,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
         cashBalance: 0,
         physicalBooks: 0,
         isArchived: false,
-        allowedModules: { books: true, members: true },
+        allowedModules: { lockers: true, members: true },
       });
       expect(res.success).toBe(false);
       expect(res.error).toContain('Branch limit reached');
@@ -131,10 +131,10 @@ describe('useSuperadminBranchesOverview Hook', () => {
     });
   });
 
-  it('blocks branch closure if outstanding books or member dues exist', () => {
+  it('blocks branch closure if member dues exist', () => {
     const { result } = renderHook(() => useSuperadminBranchesOverview());
-    // Branch with outstanding books and dues
-    const branchWithLiabilities = result.current.branches.find((b) => b.outstandingBooks > 0 || b.memberDues > 0);
+    // Branch with pending member dues
+    const branchWithLiabilities = result.current.branches.find((b) => b.memberDues > 0);
     expect(branchWithLiabilities).toBeDefined();
 
     act(() => {
@@ -144,10 +144,10 @@ describe('useSuperadminBranchesOverview Hook', () => {
     });
   });
 
-  it('allows closing a branch when all books and dues are clear', () => {
+  it('allows closing a branch when dues are clear', () => {
     const { result } = renderHook(() => useSuperadminBranchesOverview());
     // Find branch with 0 liabilities or create one
-    let cleanBranch = result.current.branches.find((b) => b.outstandingBooks === 0 && b.memberDues === 0 && b.status === 'active');
+    let cleanBranch = result.current.branches.find((b) => b.memberDues === 0 && b.status === 'active');
     
     if (!cleanBranch) {
       act(() => {

@@ -2,7 +2,7 @@
 // RESPONSIBILITY: Render complete branch profile and operational details.
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Building2, MapPin, Phone, Mail, Clock, Calendar, BookOpen, Armchair, Wallet, ShieldCheck } from 'lucide-react';
+import { X, Building2, MapPin, Phone, Mail, Clock, Calendar, Armchair, Wallet, ShieldCheck } from 'lucide-react';
 import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
@@ -59,8 +59,8 @@ export default function SuperadminBranchesOverviewDetailsModal({ branch, onClose
               <p className="text-sm font-bold text-amber-300 mt-1 flex items-center gap-1"><Armchair size={14} />{branch.capacity} seats</p>
             </div>
             <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/60">
-              <p className="text-[11px] text-slate-400 uppercase font-semibold">Physical Books</p>
-              <p className="text-sm font-bold text-cyan-300 mt-1 flex items-center gap-1"><BookOpen size={14} />{branch.physicalBooks} copies</p>
+              <p className="text-[11px] text-slate-400 uppercase font-semibold">Operating Shifts</p>
+              <p className="text-sm font-bold text-cyan-300 mt-1 flex items-center gap-1"><Clock size={14} />{branch.workingHours ? 'Configured' : 'Full Day'}</p>
             </div>
             <div className="p-3 rounded-xl border border-indigo-500/20 bg-card/60">
               <p className="text-[11px] text-slate-400 uppercase font-semibold">Petty Cash</p>
