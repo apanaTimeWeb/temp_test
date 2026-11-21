@@ -145,35 +145,10 @@ export default function SuperadminSecurityMfaPageClient() {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-border/80 pb-3 overflow-x-auto" role="navigation" aria-label={tCopy("COPY.SECURITY_CENTER_SECTIONS")}>
-        {SUPERADMIN_SECURITY_TABS.map((tab) => {
-          const isActive = activeTab === tab.name;
-          return (
-            <button
-              type="button"
-              key={tab.name}
-              id={`security-tab-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-              aria-current={isActive ? 'page' : undefined}
-              onClick={() => navigateToWorkflow(tab.name)}
-              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                isActive
-                  ? 'border border-indigo-400 bg-indigo-500/15 text-indigo-200 shadow-xs'
-                  : 'text-slate-400 hover:bg-surface-hover hover:text-slate-200'
-              }`}
-              data-testid={`superadmin-security-security-overview-set-active-tab-1-${String(tab.name)}`}
-            >
-              <tab.icon size={15} className={isActive ? 'text-indigo-400' : 'text-slate-400'} />
-              <span>{tCopy(tab.labelKey)}</span>
-            </button>
-          );
-        })}
-      </div>
-
       {/* Content */}
       <div
         className="rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-sm overflow-hidden min-h-[420px] flex flex-col"
-        aria-label={tCopy('COPY.ACTIVE_TAB_SETTINGS_ARIA_LABEL', { tab: tCopy(SUPERADMIN_SECURITY_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_LOGIN_SECURITY') })}
+        aria-label="2FA and MFA Settings"
         tabIndex={0}
       >
         <SuperadminSecurityMfaPolicyPanels

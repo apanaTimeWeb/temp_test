@@ -27,8 +27,6 @@ export default function SuperadminSecurityLoginSecurityPageClient() {
   const showToast = (msg: string) => {
     toast.message(msg, { id: 'superadmin:superadmin_security:SuperadminSecurityLoginSecurityPageClient:feedback' });
   };
-    toast.message(msg, { id: 'superadmin:superadmin_security:SuperadminSecurityLoginSecurityPageClient:feedback' });
-  };
 
   const loginForm = useForm<SuperadminSecurityLoginRules>({
     resolver: zodResolver(SUPERADMIN_SECURITY_LOGIN_SCHEMA),

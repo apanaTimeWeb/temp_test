@@ -32,9 +32,7 @@ describe('security_threats async-state contract', () => {
     const pageClient = readFileSync(resolve(COMPONENTS, 'SuperadminSecurityThreatsPageClient.tsx'), 'utf8');
     const operations = readFileSync(resolve(COMPONENTS, 'SuperadminSecurityThreatsOperationsPanels.tsx'), 'utf8');
     expect(pageClient).toContain("const activeTab = 'Audit & Threats'");
-    expect(pageClient).toContain('onClick={() => navigateToWorkflow(tab.name)}');
-    expect(pageClient).toContain('SUPERADMIN_NAVIGATION_ROUTES.security_login_security');
-    expect(pageClient).toContain('SUPERADMIN_NAVIGATION_ROUTES.security_password_policy');
+    expect(pageClient).not.toContain('onClick={() => navigateToWorkflow(tab.name)}');
     expect(pageClient).not.toContain('SuperadminSecurityThreatsPolicyPanels');
     expect(pageClient).not.toContain('SUPERADMIN_SECURITY_LOGIN_SCHEMA');
     expect(operations).toContain('failedLogins.map');

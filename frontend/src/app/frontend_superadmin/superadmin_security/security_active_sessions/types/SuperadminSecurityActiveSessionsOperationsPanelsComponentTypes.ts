@@ -53,7 +53,7 @@ export interface SuperadminSecurityOperationsPanelsProps {
   newIp: string;
   setNewIp: (value: string) => void;
   ipRules: readonly SuperadminSecurityIpRule[];
-  apiKeys: readonly SuperadminSecurityApiKey[];
+  apiKeys?: readonly SuperadminSecurityApiKey[];
   sessions: readonly SuperadminSecuritySession[];
   failedLogins: readonly SuperadminSecurityFailedLogin[];
   handleAddIp: () => void;
