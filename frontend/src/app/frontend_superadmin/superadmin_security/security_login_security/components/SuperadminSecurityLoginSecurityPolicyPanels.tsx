@@ -114,7 +114,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
           Rate Limiting & Brute-Force Defense
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-5 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-xl">
           <div className="flex flex-col gap-2">
             <label htmlFor="security-max-failed-attempts" className="text-xs sm:text-sm font-semibold text-slate-200">
               Max Failed Attempts (Before Lockout)
@@ -125,7 +125,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
               step={1}
               min={3}
               max={15}
-              className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+              className="rounded-xl border border-indigo-500/30 bg-[#07091a]/85 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400/50"
               {...loginRegister('maxFailed', { valueAsNumber: true })}
               data-testid="superadmin-login-security-max-failed"
             />
@@ -147,7 +147,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
               step={1}
               min={5}
               max={1440}
-              className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+              className="rounded-xl border border-indigo-500/30 bg-[#07091a]/85 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400/50"
               {...loginRegister('lockDuration', { valueAsNumber: true })}
               data-testid="superadmin-login-security-lock-duration"
             />
@@ -162,7 +162,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
 
         {/* Behavioral Toggles */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="flex items-center justify-between p-4 rounded-xl border border-border/70 bg-card/60">
+          <div className="flex items-center justify-between p-4 rounded-xl border border-indigo-500/20 bg-[#07091a]/60 hover:border-indigo-500/40 transition-all">
             <div>
               <p className="text-xs font-bold text-slate-200">Progressive Backoff Delay</p>
               <p className="text-[11px] text-slate-400">Adds 2s, 5s delay on retries</p>
@@ -175,7 +175,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 rounded-xl border border-border/70 bg-card/60">
+          <div className="flex items-center justify-between p-4 rounded-xl border border-indigo-500/20 bg-[#07091a]/60 hover:border-indigo-500/40 transition-all">
             <div>
               <p className="text-xs font-bold text-slate-200">IP Auto-Quarantine (WAF)</p>
               <p className="text-[11px] text-slate-400">Blocks IP after 10 failed logins</p>
@@ -188,7 +188,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 rounded-xl border border-border/70 bg-card/60">
+          <div className="flex items-center justify-between p-4 rounded-xl border border-indigo-500/20 bg-[#07091a]/60 hover:border-indigo-500/40 transition-all">
             <div>
               <p className="text-xs font-bold text-slate-200">Trigger CAPTCHA Challenge</p>
               <p className="text-[11px] text-slate-400">After 3 invalid attempts</p>
@@ -210,7 +210,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
           <span>Session Lifecycle & Inactive Timeout</span>
         </h3>
 
-        <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-5">
+        <div className="p-4 sm:p-5 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-xl space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <label htmlFor="security-session-timeout" className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
@@ -223,7 +223,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
                 step={1}
                 min={5}
                 max={480}
-                className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+                className="rounded-xl border border-indigo-500/30 bg-[#07091a]/85 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400/50"
                 {...loginRegister('sessionTimeout', { valueAsNumber: true })}
                 data-testid="superadmin-login-security-session-timeout"
               />
@@ -248,14 +248,14 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
                 max={60}
                 value={resetTokenExpiryMins}
                 onChange={(e) => setResetTokenExpiryMins(Number(e.target.value))}
-                className="rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+                className="rounded-xl border border-indigo-500/30 bg-[#07091a]/85 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400/50"
               />
               <p className="text-[11px] text-slate-400">Single-use cryptographically sealed tokens (15 mins)</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-border/70">
-            <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/70 bg-card/60">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-indigo-500/20">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-indigo-500/20 bg-[#07091a]/60 hover:border-indigo-500/40 transition-all">
               <div className="flex items-center gap-3">
                 <LogOut size={18} className="text-rose-400" />
                 <div>
@@ -274,7 +274,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
               </label>
             </div>
 
-            <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/70 bg-card/60">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-indigo-500/20 bg-[#07091a]/60 hover:border-indigo-500/40 transition-all">
               <div className="flex items-center gap-3">
                 <ShieldCheck size={18} className="text-indigo-400" />
                 <div>
@@ -298,7 +298,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
       {/* 4. Admin Invitation & Suspicious Login Detection */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Admin Invite Expiry */}
-        <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-3">
+        <div className="p-4 sm:p-5 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-xl space-y-3">
           <div className="flex items-center gap-2.5">
             <Mail size={18} className="text-indigo-400" />
             <h4 className="text-xs sm:text-sm font-bold text-slate-100">Admin Invitation Link Expiry</h4>
@@ -314,8 +314,8 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
                 onClick={() => setInviteExpiryHours(hours)}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer active:scale-95 shadow-xs ${
                   inviteExpiryHours === hours
-                    ? 'border-indigo-400 bg-indigo-500/20 text-indigo-300'
-                    : 'border-border/70 bg-card text-slate-400 hover:border-slate-600'
+                    ? 'border-indigo-400 bg-indigo-500/25 text-indigo-300 shadow-sm shadow-indigo-500/20'
+                    : 'border-indigo-500/20 bg-[#07091a]/80 text-slate-400 hover:border-indigo-500/40 hover:text-slate-200'
                 }`}
               >
                 {hours} Hours
@@ -325,7 +325,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
         </div>
 
         {/* Suspicious Login Detection */}
-        <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-3">
+        <div className="p-4 sm:p-5 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-xl space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <Globe2 size={18} className="text-cyan-400" />
@@ -348,8 +348,8 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
       </div>
 
       {/* 5. Account Lockout & Recovery Manager Table */}
-      <div className="p-5 sm:p-6 bg-card/70 border border-rose-500/30 rounded-2xl backdrop-blur-md space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/80 pb-3">
+      <div className="p-5 sm:p-6 border border-rose-500/30 bg-gradient-to-b from-[#180d1e]/85 to-[#0e0714]/90 rounded-2xl shadow-2xl backdrop-blur-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-500/20 pb-3">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
               <UserX size={18} />
@@ -376,20 +376,20 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-card/60 text-slate-400 font-semibold uppercase tracking-wider border-b border-border/70">
+              <thead className="bg-[#0a0d26]/80 text-slate-300 font-semibold uppercase tracking-wider border-b border-indigo-500/20">
                 <tr>
-                  <th className="py-2 px-3">Locked Account</th>
-                  <th className="py-2 px-3">Role</th>
-                  <th className="py-2 px-3">Failed Attempts</th>
-                  <th className="py-2 px-3">Locked At</th>
-                  <th className="py-2 px-3">Trigger IP</th>
-                  <th className="py-2 px-3">Reason</th>
-                  <th className="py-2 px-3 text-right">Recovery Actions</th>
+                  <th className="py-2.5 px-3">Locked Account</th>
+                  <th className="py-2.5 px-3">Role</th>
+                  <th className="py-2.5 px-3">Failed Attempts</th>
+                  <th className="py-2.5 px-3">Locked At</th>
+                  <th className="py-2.5 px-3">Trigger IP</th>
+                  <th className="py-2.5 px-3">Reason</th>
+                  <th className="py-2.5 px-3 text-right">Recovery Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border/60 font-mono">
+              <tbody className="divide-y divide-indigo-500/10 font-mono">
                 {lockedAccounts.map((acc) => (
-                  <tr key={acc.id} className="hover:bg-card/40">
+                  <tr key={acc.id} className="hover:bg-indigo-950/20 transition-colors">
                     <td className="py-3 px-3 font-sans font-bold text-slate-100">{acc.email}</td>
                     <td className="py-3 px-3 font-sans">
                       <span className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-200">
