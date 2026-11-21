@@ -79,38 +79,65 @@ export function SuperadminCommunicationNoticesHeader({
       </div>
 
       {/* Live KPI Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-6 pt-6 border-t border-indigo-500/20 relative z-10">
-        <div className="p-4 rounded-2xl bg-slate-950/70 border border-indigo-500/25 shadow-inner">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Notices</span>
-            <div className="p-1.5 rounded-lg bg-sky-500/10 text-sky-400">
-              <Bell className="w-4 h-4" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-6 border-t border-indigo-500/20 relative z-10">
+        {/* 1. Total Notices - Indigo / Sky */}
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c0f2a]/95 via-[#090d24]/90 to-[#141a45]/85 p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/50 hover:shadow-xl hover:shadow-indigo-950/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-indigo-500/15 blur-2xl transition-all duration-500 group-hover:bg-indigo-500/25" />
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
+              Total Notices
+            </span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-indigo-500/20 bg-indigo-500/20 border-indigo-500/40 text-indigo-300">
+              <Bell size={18} strokeWidth={2.3} />
             </div>
           </div>
-          <div className="text-2xl font-black text-white mt-1.5">{stats.total}</div>
-          <div className="text-[11px] text-slate-400 mt-0.5">Showing {matchedCount} matching filters</div>
+          <p className="mt-3 text-3xl font-black tracking-tight text-indigo-200">{stats.total}</p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs">
+            <span className="inline-flex items-center gap-1.5 font-semibold rounded-full px-2.5 py-0.5 border text-indigo-300 bg-indigo-500/15 border-indigo-500/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+              {matchedCount} matching filters
+            </span>
+          </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 shadow-inner">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Active Notices</span>
-            <div className="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-400">
-              <CheckCircle2 className="w-4 h-4" />
+        {/* 2. Active Broadcasts - Emerald / Green */}
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-[#061e14]/95 via-[#061810]/90 to-[#0a2e1d]/85 p-5 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/50 hover:shadow-xl hover:shadow-emerald-950/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-emerald-500/15 blur-2xl transition-all duration-500 group-hover:bg-emerald-500/25" />
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400/90">
+              Active Broadcasts
+            </span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-emerald-500/20 bg-emerald-500/20 border-emerald-500/40 text-emerald-400">
+              <CheckCircle2 size={18} strokeWidth={2.3} />
             </div>
           </div>
-          <div className="text-2xl font-black text-emerald-300 mt-1.5">{stats.active}</div>
-          <div className="text-[11px] text-emerald-400/80 mt-0.5">Currently visible to libraries</div>
+          <p className="mt-3 text-3xl font-black tracking-tight text-emerald-300">{stats.active}</p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs">
+            <span className="inline-flex items-center gap-1.5 font-semibold rounded-full px-2.5 py-0.5 border text-emerald-300 bg-emerald-500/15 border-emerald-500/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Currently Live to Libraries
+            </span>
+          </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-700/50 shadow-inner">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Expired Notices</span>
-            <div className="p-1.5 rounded-lg bg-slate-800 text-slate-400">
-              <Clock className="w-4 h-4" />
+        {/* 3. Expired Notices - Amber */}
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/85 p-5 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/50 hover:shadow-xl hover:shadow-amber-950/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-28 w-28 rounded-full bg-amber-500/15 blur-2xl transition-all duration-500 group-hover:bg-amber-500/25" />
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400/90">
+              Expired Notices
+            </span>
+            <div className="p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md shadow-amber-500/20 bg-amber-500/20 border-amber-500/40 text-amber-400">
+              <Clock size={18} strokeWidth={2.3} />
             </div>
           </div>
-          <div className="text-2xl font-black text-slate-300 mt-1.5">{stats.expired}</div>
-          <div className="text-[11px] text-slate-400 mt-0.5">Archived from board</div>
+          <p className="mt-3 text-3xl font-black tracking-tight text-amber-300">{stats.expired}</p>
+          <div className="mt-2.5 flex items-center gap-1.5 text-xs">
+            <span className="inline-flex items-center gap-1.5 font-semibold rounded-full px-2.5 py-0.5 border text-amber-300 bg-amber-500/15 border-amber-500/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              Archived from Board
+            </span>
+          </div>
         </div>
       </div>
     </div>

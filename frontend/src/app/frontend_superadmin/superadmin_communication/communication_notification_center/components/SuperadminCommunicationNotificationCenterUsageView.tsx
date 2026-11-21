@@ -29,22 +29,31 @@ export function SuperadminCommunicationNotificationCenterUsageView() {
       channel: 'Email',
       icon: Mail,
       data: usage.channels.email,
-      accent: 'sky',
+      cardBg: 'bg-gradient-to-br from-[#0c1333]/95 via-[#090e28]/90 to-[#12224d]/85 border-sky-500/30 hover:border-sky-400/50 shadow-sky-950/30',
+      iconStyle: 'shadow-sky-500/20 bg-sky-500/20 border-sky-500/40 text-sky-400',
+      badgeStyle: 'text-sky-300 bg-sky-500/15 border-sky-500/30',
+      blurColor: 'bg-sky-500/15 group-hover:bg-sky-500/25',
       quotaColor: 'bg-gradient-to-r from-sky-500 to-indigo-500',
     },
     {
       channel: 'SMS',
       icon: MessageSquare,
       data: usage.channels.sms,
-      accent: 'emerald',
-      quotaColor: 'bg-gradient-to-r from-emerald-500 to-teal-500',
+      cardBg: 'bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/85 border-amber-500/30 hover:border-amber-400/50 shadow-amber-950/30',
+      iconStyle: 'shadow-amber-500/20 bg-amber-500/20 border-amber-500/40 text-amber-400',
+      badgeStyle: 'text-amber-300 bg-amber-500/15 border-amber-500/30',
+      blurColor: 'bg-amber-500/15 group-hover:bg-amber-500/25',
+      quotaColor: 'bg-gradient-to-r from-amber-500 to-orange-500',
     },
     {
       channel: 'WhatsApp',
       icon: PhoneCall,
       data: usage.channels.whatsapp,
-      accent: 'teal',
-      quotaColor: 'bg-gradient-to-r from-teal-500 to-cyan-500',
+      cardBg: 'bg-gradient-to-br from-[#061e14]/95 via-[#061810]/90 to-[#0a2e1d]/85 border-emerald-500/30 hover:border-emerald-400/50 shadow-emerald-950/30',
+      iconStyle: 'shadow-emerald-500/20 bg-emerald-500/20 border-emerald-500/40 text-emerald-400',
+      badgeStyle: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30',
+      blurColor: 'bg-emerald-500/15 group-hover:bg-emerald-500/25',
+      quotaColor: 'bg-gradient-to-r from-emerald-500 to-teal-500',
     },
   ];
 
@@ -74,16 +83,17 @@ export function SuperadminCommunicationNotificationCenterUsageView() {
 
       {/* 3 Channel Quota Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {channels.map(({ channel, icon: Icon, data, quotaColor }) => (
+        {channels.map(({ channel, icon: Icon, data, cardBg, iconStyle, badgeStyle, blurColor, quotaColor }) => (
           <div
             key={channel}
-            className="p-5 rounded-2xl bg-[#0b0f28]/90 border border-indigo-500/20 hover:border-indigo-400/40 shadow-xl backdrop-blur-md space-y-4 transition-all"
+            className={`group relative overflow-hidden p-5 rounded-2xl border shadow-xl backdrop-blur-md space-y-4 transition-all duration-300 hover:scale-[1.01] ${cardBg}`}
             data-testid={`quota-card-${channel.toLowerCase()}`}
           >
-            <div className="flex items-center justify-between">
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 w-28 h-28 rounded-full blur-2xl transition-all duration-500 ${blurColor}`} />
+            <div className="relative flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="p-2.5 rounded-xl bg-slate-900/90 border border-indigo-500/30 text-indigo-400 shadow-inner">
-                  <Icon className="w-5 h-5" />
+                <div className={`p-2.5 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md ${iconStyle}`}>
+                  <Icon className="w-5 h-5" strokeWidth={2.3} />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-white">{channel}</h3>
@@ -91,16 +101,16 @@ export function SuperadminCommunicationNotificationCenterUsageView() {
                 </div>
               </div>
 
-              <span className="text-xs font-bold text-slate-200 bg-slate-900 px-2.5 py-1 rounded-lg border border-indigo-500/20">
+              <span className={`text-xs font-bold px-2.5 py-1 rounded-full border shadow-xs ${badgeStyle}`}>
                 {data.quotaUsedPercent}% used
               </span>
             </div>
 
             {/* Quota Progress Bar */}
-            <div className="space-y-1.5">
-              <div className="h-2.5 w-full rounded-full bg-slate-900/90 border border-indigo-500/20 overflow-hidden p-0.5">
+            <div className="space-y-1.5 relative">
+              <div className="h-2.5 w-full rounded-full bg-slate-950/80 border border-indigo-500/20 overflow-hidden p-0.5">
                 <div
-                  className={`h-full rounded-full ${quotaColor} shadow-sm`}
+                  className={`h-full rounded-full ${quotaColor} shadow-sm transition-all duration-500`}
                   style={{ width: `${Math.min(data.quotaUsedPercent, 100)}%` }}
                 />
               </div>
@@ -111,7 +121,7 @@ export function SuperadminCommunicationNotificationCenterUsageView() {
             </div>
 
             {/* Metrics Breakdown */}
-            <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-indigo-500/20 text-xs">
+            <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-indigo-500/20 text-xs relative">
               <div>
                 <span className="text-2xs text-slate-400 block">Delivery Rate</span>
                 <span className="font-bold text-emerald-400">{data.deliverySuccessRate}%</span>
@@ -120,9 +130,9 @@ export function SuperadminCommunicationNotificationCenterUsageView() {
                 <span className="text-2xs text-slate-400 block">Failed / Bounced</span>
                 <span className="font-bold text-rose-400">{data.failedCount}</span>
               </div>
-              <div className="col-span-2 pt-1 border-t border-indigo-500/10">
-                <span className="text-2xs text-slate-400 block">Estimated Spend</span>
-                <span className="font-bold text-white">
+              <div className="col-span-2 pt-1.5 border-t border-indigo-500/10 flex items-center justify-between">
+                <span className="text-2xs text-slate-400">Estimated Spend:</span>
+                <span className="font-bold text-white text-xs">
                   ₹{(data.costInMinorUnits / 100).toFixed(2)}
                 </span>
               </div>
