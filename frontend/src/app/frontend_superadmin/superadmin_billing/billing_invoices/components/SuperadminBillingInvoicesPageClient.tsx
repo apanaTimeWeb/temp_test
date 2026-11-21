@@ -27,7 +27,7 @@ function getSuperadminInteractiveTestIdSuffix(value: unknown): string {
   return 'missing-domain-id';
 }
 
-export default function SuperadminBillingInvoicesPageClient() {
+export default function SuperadminBillingInvoicesPageClient({ initialFilter }: { initialFilter?: string } = {}) {
   const tCopy = useTranslations('SUPERADMIN_BILLING');
   const locale = useLocale();
   const samplePdfLocaleSupported = locale.toLowerCase().startsWith('en');
@@ -35,7 +35,7 @@ export default function SuperadminBillingInvoicesPageClient() {
   const [activeTab] = useState<'invoices'>('invoices');
   const [invoices, setInvoices] = useState<SuperadminBillingInvoiceSample[]>(() => [...SUPERADMIN_BILLING_SAMPLE_INVOICES]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState(initialFilter === 'outstanding' ? 'Overdue' : 'all');
   const [methodFilter, setMethodFilter] = useState('all');
 
   const [selectedInvoice, setSelectedInvoice] = useState<SuperadminBillingInvoiceSample | null>(null);

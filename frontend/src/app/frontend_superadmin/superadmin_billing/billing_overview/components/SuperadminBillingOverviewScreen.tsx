@@ -7,6 +7,7 @@ import SuperadminBillingOverviewPageClient from '@/app/frontend_superadmin/super
  * Composes the billing overview screen from its leaf-owned presentation and interaction components.
  * @param parameter Input required by the declared feature contract. Declared type: { id?: string; }.
  */
-export default function SuperadminBillingOverviewScreen({ id }: { id?: string }) {
-  return <SuperadminBillingOverviewPageClient />;
+export default function SuperadminBillingOverviewScreen({ id, initialTab }: { id?: string; initialTab?: string }) {
+  void id;
+  return <SuperadminBillingOverviewPageClient initialTab={initialTab} />;
 }

@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ShieldAlert, ShieldCheck, RefreshCw, X, CheckCircle, AlertTriangle,
   Clock, ArrowRight, Database, Download, Lock, Check
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface SuperadminPaymentFailureRulesModalProps {
   isOpen: boolean;
@@ -16,12 +18,19 @@ export default function SuperadminPaymentFailureRulesModal({
   isOpen,
   onClose,
 }: SuperadminPaymentFailureRulesModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [graceDays, setGraceDays] = useState(7);
   const [maxRetries, setMaxRetries] = useState(3);
   const [isVerifyingWebhook, setIsVerifyingWebhook] = useState(false);
   const [isSimulatingIdempotency, setIsSimulatingIdempotency] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useModalScrollLock(Boolean(isOpen && mounted));
+
+  if (!isOpen || !mounted) return null;
 
   const handleTestWebhookReverify = () => {
     setIsVerifyingWebhook(true);
@@ -96,8 +105,11 @@ export default function SuperadminPaymentFailureRulesModal({
     },
   ];
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto" onClick={onClose}>
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 overflow-y-auto"
+      onClick={onClose}
+    >
       <div
         className="w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-2xl border border-indigo-500/30 bg-[#0c0f28] p-5 sm:p-6 shadow-2xl space-y-4"
         role="dialog"
@@ -112,13 +124,17 @@ export default function SuperadminPaymentFailureRulesModal({
               <p className="text-xs text-slate-400">Strict automated failure handling and zero-data-loss architecture policies</p>
             </div>
           </div>
-          <button type="button" onClick={onClose} className="text-slate-400 hover:text-white p-1">
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+          >
             <X size={18} />
           </button>
         </div>
 
         {/* Safety Rule Box */}
-        <div className="p-4 rounded-xl border border-emerald-500/40 bg-gradient-to-r from-emerald-950/40 to-slate-900 p-4 space-y-2">
+        <div className="rounded-xl border border-emerald-500/40 bg-gradient-to-r from-emerald-950/40 to-slate-900 p-4 space-y-2">
           <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
             <ShieldCheck size={18} />
             <span>Immutable Safety Rule: Zero Data Loss on Payment Failure</span>
@@ -153,7 +169,7 @@ export default function SuperadminPaymentFailureRulesModal({
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-slate-100">{item.condition}</span>
-                    <span className={`px-2 py-0.2 rounded-full text-[10px] font-semibold border ${item.badge}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${item.badge}`}>
                       {item.status}
                     </span>
                   </div>
@@ -197,7 +213,7 @@ export default function SuperadminPaymentFailureRulesModal({
               type="button"
               disabled={isVerifyingWebhook}
               onClick={handleTestWebhookReverify}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25 font-semibold active:scale-95 cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-300 hover:bg-indigo-500/25 font-semibold active:scale-95 cursor-pointer disabled:opacity-50 transition-all"
             >
               <RefreshCw size={12} className={isVerifyingWebhook ? 'animate-spin' : ''} />
               <span>{isVerifyingWebhook ? 'Re-verifying...' : 'Re-verify Webhook'}</span>
@@ -206,7 +222,7 @@ export default function SuperadminPaymentFailureRulesModal({
               type="button"
               disabled={isSimulatingIdempotency}
               onClick={handleTestIdempotency}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 font-semibold active:scale-95 cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 font-semibold active:scale-95 cursor-pointer disabled:opacity-50 transition-all"
             >
               <Check size={12} />
               <span>Test Idempotency</span>
@@ -214,7 +230,7 @@ export default function SuperadminPaymentFailureRulesModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-1.5 rounded-xl border border-border/80 bg-slate-800 text-slate-200 font-semibold hover:bg-slate-700"
+              className="px-3.5 py-1.5 rounded-xl border border-border/80 bg-slate-800 text-slate-200 font-semibold hover:bg-slate-700 transition-colors cursor-pointer"
             >
               Done
             </button>
@@ -223,4 +239,6 @@ export default function SuperadminPaymentFailureRulesModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

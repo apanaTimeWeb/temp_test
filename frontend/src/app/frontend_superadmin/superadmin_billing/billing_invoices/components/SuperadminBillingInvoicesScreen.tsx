@@ -6,7 +6,7 @@ import SuperadminBillingInvoicesPageClient from '@/app/frontend_superadmin/super
  * Composes the billing invoices screen from its leaf-owned presentation and interaction components.
  * @param parameter Input required by the declared feature contract. Declared type: { id?: string; }.
  */
-export default function SuperadminBillingInvoicesScreen({ id }: { id?: string }) {
+export default function SuperadminBillingInvoicesScreen({ id, initialFilter }: { id?: string; initialFilter?: string }) {
   void id;
-  return <SuperadminBillingInvoicesPageClient />;
+  return <SuperadminBillingInvoicesPageClient initialFilter={initialFilter} />;
 }

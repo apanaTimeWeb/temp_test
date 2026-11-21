@@ -24,6 +24,7 @@ function buildRedirectUrl(destination: string, query: SearchParams, targetView?:
 export default async function BillingInvoicesRoutePage({ searchParams }: { searchParams?: Promise<SearchParams> | SearchParams }) {
   const query = searchParams ? await searchParams : {};
   const id = firstValue(query.id);
+  const filter = firstValue(query.filter);
   const view = firstValue(query.view);
   const tCopy = await getTranslations('SUPERADMIN_BILLING');
   const fallback = <div className="rounded-xl border border-border bg-card p-6 text-secondary" role="status">{tCopy('COPY.MODULE_ROUTE_LOADING')}</div>;
@@ -41,7 +42,7 @@ export default async function BillingInvoicesRoutePage({ searchParams }: { searc
   return (
     <div className="min-w-0" data-feature-module="superadmin_billing" data-feature-route="billing_invoices">
       <Suspense fallback={fallback}>
-        <SuperadminBillingInvoicesScreen id={id} />
+        <SuperadminBillingInvoicesScreen id={id} initialFilter={filter} />
       </Suspense>
     </div>
   );

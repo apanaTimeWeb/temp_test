@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Printer, Download, Mail, MessageSquare, X, CheckCircle, AlertCircle, Building2, ShieldCheck } from 'lucide-react';
 import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/types/SuperadminBillingInvoicesTypes';
 import { SuperadminBillingDownloadSampleInvoicePdf } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/utils/SuperadminBillingInvoicesSamplePdf';
@@ -20,9 +22,20 @@ export default function SuperadminBillingInvoiceDetailModal({
   onSendEmail,
   onSendWhatsApp,
 }: SuperadminBillingInvoiceDetailModalProps) {
-  useModalScrollLock(Boolean(isOpen && invoice));
+  const [mounted, setMounted] = useState(false);
 
-  if (!isOpen || !invoice) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useModalScrollLock(Boolean(isOpen && invoice && mounted));
+
+  if (!isOpen || !invoice || !mounted) return null;
+
+  const isPaid = invoice.status === 'Paid';
+  const subtotal = invoice.subtotal ?? (invoice.amount ? Math.round(invoice.amount / 1.18) : 2999);
+  const totalTax = invoice.amount ? invoice.amount - subtotal : Math.round(subtotal * 0.18);
+  const isIntraState = Boolean(invoice.cgst && invoice.sgst);
 
   const handlePrint = () => {
     if (typeof window === 'undefined') return;
@@ -150,96 +163,98 @@ export default function SuperadminBillingInvoiceDetailModal({
           </script>
         </body>
       </html>
-    `.trim();
-
-    printWindow.document.open();
+    `;
     printWindow.document.write(html);
     printWindow.document.close();
   };
 
   const handleDownload = () => {
-    try {
-      SuperadminBillingDownloadSampleInvoicePdf(invoice);
-    } catch {
-      // PDF preview fallback
-    }
+    SuperadminBillingDownloadSampleInvoicePdf(invoice);
   };
 
-  const isPaid = invoice.status === 'Paid';
-  const subtotal = invoice.subtotal ?? Math.round(invoice.amount / 1.18);
-  const totalTax = invoice.amount - subtotal;
-  const isIntraState = Boolean(invoice.cgst && invoice.sgst);
-
-  return (
+  const modalContent = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl rounded-2xl border border-indigo-500/30 bg-[#0c0f28] p-6 sm:p-7 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 ease-out"
+        className="w-full max-w-3xl max-h-[92vh] overflow-y-auto rounded-2xl border border-indigo-500/30 bg-[#0c0f28] p-5 sm:p-6 shadow-2xl space-y-4"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Bar */}
+        {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20">
           <div className="flex items-center gap-2">
-            <h2 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
-              <span>Tax Invoice</span>
-              <span className="font-mono text-indigo-400">#{invoice.id}</span>
-            </h2>
-            <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold border ${
-              isPaid ? 'border-emerald-500/30 bg-emerald-500/15 text-emerald-400' : 'border-amber-500/30 bg-amber-500/15 text-amber-400'
-            }`}>
-              {isPaid ? <CheckCircle size={11} /> : <AlertCircle size={11} />} {invoice.status}
-            </span>
+            <Building2 size={20} className="text-indigo-400" />
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-100">Tax Invoice & Billing Record</h2>
+              <p className="text-xs text-slate-400 font-mono">Invoice #{invoice.id}</p>
+            </div>
           </div>
-          <button type="button" onClick={onClose} className="text-slate-400 hover:text-white p-1">
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+          >
             <X size={18} />
           </button>
         </div>
 
-        {/* Printable Invoice Sheet */}
-        <div className="rounded-xl border border-border/80 bg-slate-900/90 p-5 space-y-5 text-xs">
-          {/* Header & Seller */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-border/60 pb-4">
+        {/* Invoice Summary Card */}
+        <div className="rounded-xl border border-indigo-500/20 bg-slate-900/60 p-4 space-y-4">
+          <div className="flex flex-col sm:flex-row justify-between gap-3 border-b border-border/40 pb-3">
             <div>
-              <div className="flex items-center gap-2 font-black text-base text-slate-100">
-                <Building2 className="text-indigo-400 h-5 w-5" />
-                <span>SMART LIBRARY SAAS PLATFORM</span>
-              </div>
-              <p className="text-slate-400 text-[11px] mt-0.5">Cloud Library ERP & Management Solutions</p>
-              <p className="text-slate-400 text-[11px]">GSTIN: 07AAACS9988D1Z2 · SAC: 998313 (IT SaaS)</p>
+              <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Billed To (Tenant)</span>
+              <h3 className="text-sm sm:text-base font-bold text-slate-100">{invoice.tenant}</h3>
+              {invoice.legalName && <p className="text-xs text-slate-300 font-medium">{invoice.legalName}</p>}
+              <p className="text-xs text-slate-400">{invoice.billingAddress || 'Central Premises'}</p>
+              <p className="text-xs text-slate-400">{invoice.cityStatePin || 'India'}</p>
             </div>
-            <div className="text-right">
-              <span className="text-[10px] uppercase font-bold text-slate-400">Invoice Details</span>
-              <p className="text-slate-100 font-bold">Date: {invoice.date}</p>
-              <p className="text-slate-300">Due Date: {invoice.dueDate || 'Upon Receipt'}</p>
-              <p className="text-indigo-400 font-semibold">Payment: {invoice.method} ({invoice.gateway || 'Razorpay'})</p>
+            <div className="sm:text-right space-y-1">
+              <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Payment Status</span>
+              <div>
+                <span
+                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold border ${
+                    isPaid
+                      ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                      : invoice.status === 'Overdue'
+                      ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+                      : 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                  }`}
+                >
+                  {isPaid ? <CheckCircle size={12} /> : <AlertCircle size={12} />}
+                  <span>{invoice.status}</span>
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">Issue Date: <strong className="text-slate-200">{invoice.date}</strong></p>
+              <p className="text-xs text-slate-400">Due Date: <strong className="text-slate-200">{invoice.dueDate || 'Upon Receipt'}</strong></p>
             </div>
           </div>
 
-          {/* Billed To */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <span className="text-[10px] uppercase font-bold text-slate-400">Billed To (Customer):</span>
-              <h3 className="font-bold text-slate-100 text-sm mt-0.5">{invoice.tenant}</h3>
-              {invoice.legalName && <p className="text-slate-300">{invoice.legalName}</p>}
-              <p className="text-slate-400">{invoice.billingAddress || 'Central Premises'}</p>
-              <p className="text-slate-400">{invoice.cityStatePin || 'India'}</p>
+          {/* Tax & Gateway Profile */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+            <div className="p-2.5 rounded-lg bg-slate-950/40 border border-border/40">
+              <span className="text-slate-400 block text-[10px] uppercase font-bold">GSTIN Number</span>
+              <span className="text-slate-200 font-mono font-medium">{invoice.gst || 'Unregistered'}</span>
             </div>
-            <div>
-              <span className="text-[10px] uppercase font-bold text-slate-400">Customer Tax Profile:</span>
-              <p className="text-slate-200 font-mono mt-0.5">GSTIN: {invoice.gst}</p>
-              <p className="text-slate-300">Contact: {invoice.contact || 'Account Admin'}</p>
-              <p className="text-slate-400">Email: {invoice.email || 'billing@customer.com'}</p>
-              <p className="text-slate-400">Phone: {invoice.phone || '+91 98765 43210'}</p>
+            <div className="p-2.5 rounded-lg bg-slate-950/40 border border-border/40">
+              <span className="text-slate-400 block text-[10px] uppercase font-bold">Payment Gateway</span>
+              <span className="text-slate-200 font-medium">{invoice.gateway || 'Razorpay'}</span>
+            </div>
+            <div className="p-2.5 rounded-lg bg-slate-950/40 border border-border/40">
+              <span className="text-slate-400 block text-[10px] uppercase font-bold">Payment Method</span>
+              <span className="text-slate-200 font-medium">{invoice.method || 'Online'}</span>
+            </div>
+            <div className="p-2.5 rounded-lg bg-slate-950/40 border border-border/40">
+              <span className="text-slate-400 block text-[10px] uppercase font-bold">Billing Cycle</span>
+              <span className="text-slate-200 font-medium">{invoice.billingCycle || 'Monthly'}</span>
             </div>
           </div>
 
           {/* Line Items Table */}
           <div className="overflow-x-auto rounded-lg border border-border/60">
-            <table className="w-full text-left">
+            <table className="w-full text-left text-xs">
               <thead className="bg-slate-800/80 text-[11px] uppercase font-bold text-slate-400">
                 <tr>
                   <th className="p-2.5">Item & Description</th>
@@ -270,10 +285,10 @@ export default function SuperadminBillingInvoiceDetailModal({
                 <ShieldCheck size={12} /> Computer Generated Invoice · No signature required.
               </p>
               <p>Place of Supply: Inter-State / Intra-State SaaS Provisioning.</p>
-              {invoice.creditNoteId && <p className="text-amber-300">Credit Note Ref: {invoice.creditNoteId}</p>}
+              {invoice.creditNoteId && <p className="text-amber-300 font-medium">Credit Note Ref: {invoice.creditNoteId}</p>}
             </div>
 
-            <div className="space-y-1.5 min-w-[200px] text-right">
+            <div className="space-y-1.5 min-w-[200px] text-right text-xs">
               <div className="flex justify-between text-slate-400">
                 <span>Subtotal:</span>
                 <span className="font-mono text-slate-200">₹{subtotal.toLocaleString('en-IN')}</span>
@@ -310,7 +325,7 @@ export default function SuperadminBillingInvoiceDetailModal({
               <button
                 type="button"
                 onClick={() => onSendEmail(invoice)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25 text-xs font-semibold cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:bg-purple-500/25 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
               >
                 <Mail size={13} />
                 <span>Email Customer</span>
@@ -320,7 +335,7 @@ export default function SuperadminBillingInvoiceDetailModal({
               <button
                 type="button"
                 onClick={() => onSendWhatsApp(invoice)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
               >
                 <MessageSquare size={13} />
                 <span>WhatsApp</span>
@@ -332,7 +347,7 @@ export default function SuperadminBillingInvoiceDetailModal({
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border/80 bg-slate-800 text-slate-200 hover:bg-slate-700 text-xs font-semibold cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-border/80 bg-slate-800 text-slate-200 hover:bg-slate-700 text-xs font-semibold cursor-pointer transition-colors"
             >
               <Printer size={13} />
               <span>Print</span>
@@ -340,7 +355,7 @@ export default function SuperadminBillingInvoiceDetailModal({
             <button
               type="button"
               onClick={handleDownload}
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white text-xs font-semibold shadow-md active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 text-white text-xs font-semibold shadow-md active:scale-95 cursor-pointer transition-all"
             >
               <Download size={13} />
               <span>Download PDF</span>
@@ -350,4 +365,6 @@ export default function SuperadminBillingInvoiceDetailModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

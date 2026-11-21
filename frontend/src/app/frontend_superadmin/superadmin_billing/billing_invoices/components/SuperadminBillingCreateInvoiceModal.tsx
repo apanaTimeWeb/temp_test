@@ -1,8 +1,114 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { PlusCircle, X, Check, Calculator, Building2 } from 'lucide-react';
 import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/types/SuperadminBillingInvoicesTypes';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
+
+export interface LibraryTenantOption {
+  name: string;
+  legalName: string;
+  gst: string;
+  billingAddress: string;
+  cityStatePin: string;
+  email: string;
+  phone: string;
+  defaultTaxType: 'intra' | 'inter';
+}
+
+export const CANONICAL_LIBRARY_TENANTS: LibraryTenantOption[] = [
+  {
+    name: 'City Central Library',
+    legalName: 'Central Library Educational Society',
+    gst: '09AAATC1234F1Z5',
+    billingAddress: '42 MG Road, Hazratganj',
+    cityStatePin: 'Lucknow, Uttar Pradesh - 226001',
+    email: 'accounts@citycentral.org',
+    phone: '+91 98765 43210',
+    defaultTaxType: 'intra',
+  },
+  {
+    name: 'Apex Knowledge Hub',
+    legalName: 'Apex Knowledge Systems LLP',
+    gst: '29AABCA9876Q1ZM',
+    billingAddress: '15 Infotech Park, Whitefield',
+    cityStatePin: 'Bengaluru, Karnataka - 560066',
+    email: 'billing@apexstudy.in',
+    phone: '+91 98111 22334',
+    defaultTaxType: 'inter',
+  },
+  {
+    name: 'Heritage National Archive',
+    legalName: 'Heritage Documentation Trust',
+    gst: '08AAATH4567M1Z2',
+    billingAddress: '78 Heritage Square',
+    cityStatePin: 'Jaipur, Rajasthan - 302001',
+    email: 'accounts@heritagelib.gov.in',
+    phone: '+91 98450 12345',
+    defaultTaxType: 'inter',
+  },
+  {
+    name: 'Silicon Valley Institute Lib',
+    legalName: 'SVI Education Foundation',
+    gst: '36AAATS9912K1ZY',
+    billingAddress: 'Plot 88 Cyber Gateway',
+    cityStatePin: 'Hyderabad, Telangana - 500081',
+    email: 'finance@svinstitute.edu',
+    phone: '+91 97123 45678',
+    defaultTaxType: 'inter',
+  },
+  {
+    name: 'Pragya Competitive Study Point',
+    legalName: 'Pragya Career Academy Pvt Ltd',
+    gst: '10AAACP5566L1Z9',
+    billingAddress: 'Boring Road Crossing, Kidwaipuri',
+    cityStatePin: 'Patna, Bihar - 800001',
+    email: 'admin@pragyastudy.com',
+    phone: '+91 99341 55678',
+    defaultTaxType: 'inter',
+  },
+  {
+    name: 'Zenith University Library',
+    legalName: 'Zenith Higher Education Society',
+    gst: '09AAATZ7788R1ZW',
+    billingAddress: 'Campus Sector 62',
+    cityStatePin: 'Noida, Uttar Pradesh - 201309',
+    email: 'librarian@zenithuniv.ac.in',
+    phone: '+91 98188 77665',
+    defaultTaxType: 'intra',
+  },
+  {
+    name: 'Pinnacle Study Space',
+    legalName: 'Pinnacle Learning Spaces LLP',
+    gst: '27AABCP1122D1ZM',
+    billingAddress: 'FC Road, Shivajinagar',
+    cityStatePin: 'Pune, Maharashtra - 411005',
+    email: 'accounts@pinnaclestudy.in',
+    phone: '+91 98220 33445',
+    defaultTaxType: 'inter',
+  },
+  {
+    name: 'Metro Reading Lounge',
+    legalName: 'Metro Readers Foundation',
+    gst: '19AAATM3344P1ZB',
+    billingAddress: 'Salt Lake Sector V',
+    cityStatePin: 'Kolkata, West Bengal - 700091',
+    email: 'billing@metroreading.org',
+    phone: '+91 98301 22334',
+    defaultTaxType: 'inter',
+  },
+  {
+    name: 'Vedic Grantha Kendra',
+    legalName: 'Vedic Heritage Trust',
+    gst: '09AAATV5544J1ZQ',
+    billingAddress: 'Assi Ghat Road',
+    cityStatePin: 'Varanasi, Uttar Pradesh - 221005',
+    email: 'contact@vedicgrantha.org',
+    phone: '+91 94150 99887',
+    defaultTaxType: 'intra',
+  },
+];
 
 interface SuperadminBillingCreateInvoiceModalProps {
   isOpen: boolean;
@@ -17,22 +123,62 @@ export default function SuperadminBillingCreateInvoiceModal({
   onCreate,
   nextInvoiceSequence,
 }: SuperadminBillingCreateInvoiceModalProps) {
+  const [mounted, setMounted] = useState(false);
+  const defaultLib = CANONICAL_LIBRARY_TENANTS[0];
+
   const [invoiceId, setInvoiceId] = useState(`INV-2026-${String(nextInvoiceSequence).padStart(4, '0')}`);
-  const [tenant, setTenant] = useState('');
-  const [legalName, setLegalName] = useState('');
-  const [billingAddress, setBillingAddress] = useState('');
-  const [cityStatePin, setCityStatePin] = useState('');
-  const [gst, setGst] = useState('');
-  const [taxType, setTaxType] = useState<'intra' | 'inter'>('inter');
-  const [subtotal, setSubtotal] = useState(2999);
+  const [selectedLibraryOption, setSelectedLibraryOption] = useState<string>(defaultLib.name);
+  const [tenant, setTenant] = useState(defaultLib.name);
+  const [legalName, setLegalName] = useState(defaultLib.legalName);
+  const [billingAddress, setBillingAddress] = useState(defaultLib.billingAddress);
+  const [cityStatePin, setCityStatePin] = useState(defaultLib.cityStatePin);
+  const [gst, setGst] = useState(defaultLib.gst);
+  const [taxType, setTaxType] = useState<'intra' | 'inter'>(defaultLib.defaultTaxType);
+  const [subtotal, setSubtotal] = useState(15000);
   const [discount, setDiscount] = useState(0);
   const [method, setMethod] = useState('UPI');
   const [status, setStatus] = useState<'Paid' | 'Pending' | 'Overdue'>('Paid');
-  const [billingCycle, setBillingCycle] = useState<'Monthly' | 'Annual'>('Monthly');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [billingCycle, setBillingCycle] = useState<'Monthly' | 'Annual'>('Annual');
+  const [email, setEmail] = useState(defaultLib.email);
+  const [phone, setPhone] = useState(defaultLib.phone);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useModalScrollLock(Boolean(isOpen && mounted));
+
+  // Sync sequence id when nextInvoiceSequence changes
+  useEffect(() => {
+    setInvoiceId(`INV-2026-${String(nextInvoiceSequence).padStart(4, '0')}`);
+  }, [nextInvoiceSequence]);
+
+  const handleLibraryChange = (selectedName: string) => {
+    setSelectedLibraryOption(selectedName);
+    if (selectedName === '__custom__') {
+      setTenant('');
+      setLegalName('');
+      setGst('');
+      setBillingAddress('');
+      setCityStatePin('');
+      setEmail('');
+      setPhone('');
+    } else {
+      const match = CANONICAL_LIBRARY_TENANTS.find((lib) => lib.name === selectedName);
+      if (match) {
+        setTenant(match.name);
+        setLegalName(match.legalName);
+        setGst(match.gst);
+        setBillingAddress(match.billingAddress);
+        setCityStatePin(match.cityStatePin);
+        setEmail(match.email);
+        setPhone(match.phone);
+        setTaxType(match.defaultTaxType);
+      }
+    }
+  };
+
+  if (!isOpen || !mounted) return null;
 
   const taxableAmount = Math.max(0, subtotal - discount);
   const cgst = taxType === 'intra' ? Math.round(taxableAmount * 0.09) : 0;
@@ -61,7 +207,7 @@ export default function SuperadminBillingCreateInvoiceModal({
       status,
       method,
       gateway: method === 'Card' ? 'Stripe' : 'Razorpay',
-      gst: gst.trim() || '07AABCS1429B1ZB',
+      gst: gst.trim() || '09AAATC1234F1Z5',
       email: email.trim() || 'billing@library.org',
       phone: phone.trim() || '+91 98765 43210',
       contact: 'Finance Manager',
@@ -83,10 +229,13 @@ export default function SuperadminBillingCreateInvoiceModal({
     onClose();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto" onClick={onClose}>
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 overflow-y-auto"
+      onClick={onClose}
+    >
       <div
-        className="w-full max-w-xl rounded-2xl border border-indigo-500/30 bg-[#0c0f28] p-5 sm:p-6 shadow-2xl space-y-4"
+        className="w-full max-w-xl max-h-[92vh] overflow-y-auto rounded-2xl border border-indigo-500/30 bg-[#0c0f28] p-5 sm:p-6 shadow-2xl space-y-4"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
@@ -94,16 +243,19 @@ export default function SuperadminBillingCreateInvoiceModal({
         <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20">
           <div className="flex items-center gap-2">
             <PlusCircle size={20} className="text-indigo-400" />
-            <h2 className="text-base sm:text-lg font-bold text-slate-100">Create Platform Tax Invoice</h2>
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-100">Create Platform Tax Invoice</h2>
+              <p className="text-[11px] text-slate-400">Generate GST-compliant SaaS invoice with automated tax calculations</p>
+            </div>
           </div>
-          <button type="button" onClick={onClose} className="text-slate-400 hover:text-white p-1">
+          <button type="button" onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer">
             <X size={18} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          {/* Invoice ID & Sequence */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Invoice ID & Tenant / Library Dropdown */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold uppercase tracking-wider text-slate-300 mb-1">
                 Invoice Number (Sequential)
@@ -117,22 +269,46 @@ export default function SuperadminBillingCreateInvoiceModal({
               />
             </div>
             <div>
-              <label className="block font-semibold uppercase tracking-wider text-slate-300 mb-1">
-                Tenant / Library Name *
+              <label className="block font-semibold uppercase tracking-wider text-slate-300 mb-1 flex items-center gap-1">
+                <Building2 size={12} className="text-indigo-400" />
+                <span>Tenant / Library *</span>
+              </label>
+              <select
+                value={selectedLibraryOption}
+                onChange={(e) => handleLibraryChange(e.target.value)}
+                data-testid="superadmin-billing-create-invoice-tenant-select"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100 focus:border-indigo-500 cursor-pointer"
+              >
+                {CANONICAL_LIBRARY_TENANTS.map((lib) => (
+                  <option key={lib.name} value={lib.name}>
+                    {lib.name} ({lib.cityStatePin.split(',')[0]})
+                  </option>
+                ))}
+                <option value="__custom__">➕ Other / Custom Library...</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Custom Tenant Name Input (if custom selected) */}
+          {selectedLibraryOption === '__custom__' && (
+            <div className="p-3 rounded-xl border border-indigo-500/20 bg-indigo-950/20">
+              <label className="block font-semibold text-indigo-300 mb-1">
+                Custom Library Name *
               </label>
               <input
                 type="text"
                 required
-                placeholder="e.g. Apex Central Library"
+                placeholder="e.g. Apex Knowledge Lounge"
                 value={tenant}
                 onChange={(e) => setTenant(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
+                data-testid="superadmin-billing-create-invoice-custom-tenant-input"
+                className="w-full rounded-xl border border-indigo-500/35 bg-slate-900/80 px-3 py-2 text-slate-100 focus:border-indigo-500"
               />
             </div>
-          </div>
+          )}
 
           {/* Legal Business Name & GSTIN */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold text-slate-300 mb-1">Legal / Registered Entity Name</label>
               <input
@@ -140,7 +316,7 @@ export default function SuperadminBillingCreateInvoiceModal({
                 placeholder="e.g. Apex Knowledge Systems Pvt Ltd"
                 value={legalName}
                 onChange={(e) => setLegalName(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
               />
             </div>
             <div>
@@ -151,13 +327,13 @@ export default function SuperadminBillingCreateInvoiceModal({
                 maxLength={15}
                 value={gst}
                 onChange={(e) => setGst(e.target.value.toUpperCase())}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 uppercase font-mono"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 uppercase font-mono focus:border-indigo-500"
               />
             </div>
           </div>
 
           {/* Billing Address */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block font-semibold text-slate-300 mb-1">Billing Street Address</label>
               <input
@@ -165,28 +341,52 @@ export default function SuperadminBillingCreateInvoiceModal({
                 placeholder="e.g. Plot 15, Knowledge Park"
                 value={billingAddress}
                 onChange={(e) => setBillingAddress(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
               />
             </div>
             <div>
               <label className="block font-semibold text-slate-300 mb-1">City, State & PIN</label>
               <input
                 type="text"
-                placeholder="e.g. Noida, UP - 201301"
+                placeholder="e.g. Lucknow, Uttar Pradesh - 226001"
                 value={cityStatePin}
                 onChange={(e) => setCityStatePin(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
+              />
+            </div>
+          </div>
+
+          {/* Email & Phone */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block font-semibold text-slate-300 mb-1">Billing Contact Email</label>
+              <input
+                type="email"
+                placeholder="e.g. accounts@library.org"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
+              />
+            </div>
+            <div>
+              <label className="block font-semibold text-slate-300 mb-1">Billing Contact Phone</label>
+              <input
+                type="tel"
+                placeholder="e.g. +91 98765 43210"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/60 px-3 py-2 text-slate-100 focus:border-indigo-500"
               />
             </div>
           </div>
 
           {/* Tax Calculation & Subtotal */}
           <div className="p-3 rounded-xl border border-indigo-500/20 bg-slate-900/50 space-y-2">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <span className="font-bold text-slate-200 flex items-center gap-1.5">
                 <Calculator size={13} className="text-indigo-400" /> GST Tax Calculation
               </span>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <label className="flex items-center gap-1 cursor-pointer">
                   <input
                     type="radio"
@@ -218,7 +418,7 @@ export default function SuperadminBillingCreateInvoiceModal({
                   min={1}
                   value={subtotal}
                   onChange={(e) => setSubtotal(Number(e.target.value))}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900 px-3 py-1.5 text-slate-100"
+                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900 px-3 py-1.5 text-slate-100 font-mono"
                 />
               </div>
               <div>
@@ -228,24 +428,24 @@ export default function SuperadminBillingCreateInvoiceModal({
                   min={0}
                   value={discount}
                   onChange={(e) => setDiscount(Number(e.target.value))}
-                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900 px-3 py-1.5 text-slate-100"
+                  className="w-full rounded-xl border border-indigo-500/25 bg-slate-900 px-3 py-1.5 text-slate-100 font-mono"
                 />
               </div>
               <div className="text-right flex flex-col justify-end">
                 <span className="text-[11px] text-slate-400">Total with 18% GST:</span>
-                <span className="text-base font-black text-emerald-400">₹{totalAmount.toLocaleString('en-IN')}</span>
+                <span className="text-base font-black text-emerald-400 font-mono">₹{totalAmount.toLocaleString('en-IN')}</span>
               </div>
             </div>
           </div>
 
           {/* Payment Method, Status & Cadence */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block font-semibold text-slate-300 mb-1">Payment Method</label>
               <select
                 value={method}
                 onChange={(e) => setMethod(e.target.value)}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100 cursor-pointer"
               >
                 <option value="UPI">UPI (GooglePay / PhonePe)</option>
                 <option value="Card">Credit / Debit Card</option>
@@ -258,7 +458,7 @@ export default function SuperadminBillingCreateInvoiceModal({
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as 'Paid' | 'Pending' | 'Overdue')}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100 cursor-pointer"
               >
                 <option value="Paid">Paid</option>
                 <option value="Pending">Pending Verification</option>
@@ -270,7 +470,7 @@ export default function SuperadminBillingCreateInvoiceModal({
               <select
                 value={billingCycle}
                 onChange={(e) => setBillingCycle(e.target.value as 'Monthly' | 'Annual')}
-                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-900/90 px-3 py-2 text-slate-100 cursor-pointer"
               >
                 <option value="Monthly">Monthly</option>
                 <option value="Annual">Annual Pre-paid</option>
@@ -282,13 +482,13 @@ export default function SuperadminBillingCreateInvoiceModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-border/80 bg-card/80 px-4 py-2 font-semibold text-slate-300 hover:bg-slate-800"
+              className="rounded-xl border border-border/80 bg-card/80 px-4 py-2 font-semibold text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 px-5 py-2 font-semibold text-white shadow-md active:scale-95"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 px-5 py-2 font-semibold text-white shadow-md active:scale-95 transition-all cursor-pointer"
             >
               <Check size={14} />
               <span>Generate Tax Invoice</span>
@@ -298,4 +498,6 @@ export default function SuperadminBillingCreateInvoiceModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
