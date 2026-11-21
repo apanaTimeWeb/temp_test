@@ -266,11 +266,10 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
             return (
               <div
                 key={dep.commitSha}
-                className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 flex flex-col justify-between ${
-                  isLive
+                className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 flex flex-col justify-between ${isLive
                     ? 'border border-emerald-500/40 bg-gradient-to-br from-emerald-950/30 via-slate-900/80 to-[#080d1e] shadow-lg shadow-emerald-500/5'
                     : 'border border-slate-800/80 bg-slate-900/50 hover:border-slate-700/80 hover:bg-slate-900/70'
-                }`}
+                  }`}
               >
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -282,11 +281,10 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                   </div>
 
                   <span
-                    className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider border shrink-0 ${
-                      isLive
+                    className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider border shrink-0 ${isLive
                         ? 'border-emerald-500/40 bg-emerald-500/20 text-emerald-300 shadow-xs'
                         : 'border-slate-700 bg-slate-800/70 text-slate-400'
-                    }`}
+                      }`}
                   >
                     {dep.status}
                   </span>
@@ -384,58 +382,50 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                   <div className="switch-area flex flex-col items-center sm:items-end gap-2 shrink-0">
                     {/* Switch Status Pill */}
                     <div
-                      className={`switch-status inline-flex items-center gap-1.5 font-mono text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full border transition-all duration-300 select-none shadow-xs ${
-                        active
-                          ? 'armed bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-emerald-500/20'
-                          : 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-rose-500/20'
-                      }`}
+                            ? 'armed bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-emerald-500/20'
+                            : 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-rose-500/20'
+                          }`}
                     >
                       <span
-                        className={`h-2 w-2 rounded-full ${
-                          active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                        className = {`h-1.5 w-1.5 rounded-full ${active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
                         }`}
-                      />
-                      <span>{active ? 'SWITCH ARMED' : 'SAFE MODE'}</span>
-                    </div>
+                    />
+                    <span>{active ? 'SWITCH ARMED' : 'SAFE MODE'}</span>
+                  </div>
 
-                    {/* Exact 160px x 72px Oblong Pill Slider Switch with 58px Knob */}
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={active}
-                      aria-label={active ? `Disarm kill switch for ${label}` : `Arm kill switch for ${label}`}
-                      aria-pressed={active}
-                      onClick={() => toggleFlag(key, label)}
-                      className={`premium-switch relative flex items-center w-[160px] h-[72px] p-[7px] rounded-[50px] border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
-                        active
-                          ? 'is-armed bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.45),inset_0_2px_4px_rgba(0,0,0,0.25)]'
-                          : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_3px_8px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
-                      }`}
+                  {/* Mini Oblong Pill Slider Switch with White Knob & Power Symbol */}
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={active}
+                    aria-label={active ? `Disarm kill switch for ${label}` : `Arm kill switch for ${label}`}
+                    aria-pressed={active}
+                    onClick={() => toggleFlag(key, label)}
+                            ? 'is-armed bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_16px_rgba(16,185,129,0.45),inset_0_1px_2px_rgba(0,0,0,0.25)]'
+                            : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_2px_5px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
+                        }`}
                     >
                       {/* Recessed internal circuit track glow */}
                       <div
-                        className={`pointer-events-none absolute inset-x-4 top-1/2 -translate-y-1/2 h-2 rounded-full transition-all duration-300 ${
-                          active
-                            ? 'bg-gradient-to-r from-emerald-400 to-teal-300 opacity-60 shadow-[0_0_10px_rgba(16,185,129,0.9)]'
-                            : 'bg-slate-950/80 opacity-40'
+                    className = {`pointer-events-none absolute inset-x-2.5 top-1/2 -translate-y-1/2 h-1.5 rounded-full transition-all duration-300 ${active
+                          ? 'bg-gradient-to-r from-emerald-400 to-teal-300 opacity-60 shadow-[0_0_6px_rgba(16,185,129,0.8)]'
+                          : 'bg-slate-950/80 opacity-40'
                         }`}
                       />
 
-                      {/* 58px x 58px Tactile White Chrome Knob with 26px Power Icon ⏻ */}
-                      <span
-                        aria-hidden="true"
-                        className={`switch-knob relative z-10 flex items-center justify-center w-[58px] h-[58px] min-w-[58px] min-h-[58px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_4px_14px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
-                          active
-                            ? 'translate-x-[88px] text-emerald-600'
+                  {/* Tactile White Chrome Knob with Power Icon ⏻ */}
+                  <span
+                    aria-hidden="true"
+                            ? 'translate-x-[40px] text-emerald-600'
                             : 'translate-x-0 text-slate-800'
                         }`}
                       >
-                        <span className="text-[26px] leading-none select-none font-bold drop-shadow-xs">⏻</span>
+                        <span className="text-[14px] leading-none select-none font-bold drop-shadow-xs">⏻</span>
                       </span>
                     </button>
 
                     {/* Switch Hint */}
-                    <span className="switch-hint font-mono text-[10px] font-extrabold uppercase tracking-wider text-slate-400 transition-colors select-none">
+                    <span className="switch-hint font-mono text-[9px] font-extrabold uppercase tracking-wider text-slate-400 transition-colors select-none">
                       {active ? 'CLICK TO DISARM' : 'CLICK TO ARM'}
                     </span>
                   </div>
@@ -446,27 +436,26 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                   <div className="flex items-center gap-2">
                     <span
                       className={`h-2.5 w-2.5 rounded-full transition-all ${
-                        active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
-                      }`}
+                    active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                  }`}
                     />
-                    <span
-                      className={`font-bold tracking-tight text-xs ${
-                        active ? 'text-emerald-300' : 'text-rose-400'
+                  <span
+                    className={`font-bold tracking-tight text-xs ${active ? 'text-emerald-300' : 'text-rose-400'
                       }`}
-                    >
-                      {active ? 'Operational (ON)' : 'Killswitch Active (OFF)'}
-                    </span>
-                  </div>
-
-                  <span className="font-mono text-slate-200 font-bold text-xs bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-lg shrink-0">
-                    {active ? activeMetric : disabledMetric}
+                  >
+                    {active ? 'Operational (ON)' : 'Killswitch Active (OFF)'}
                   </span>
                 </div>
+
+                <span className="font-mono text-slate-200 font-bold text-xs bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-lg shrink-0">
+                  {active ? activeMetric : disabledMetric}
+                </span>
               </div>
-            );
+              </div>
+        );
           })}
-        </div>
       </div>
-    </section>
+    </div>
+    </section >
   );
 }
