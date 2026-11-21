@@ -19,6 +19,8 @@ export type SuperadminSettingsGeneralSettingsLibraryConfigurationConfirmOptions 
   confirmLabel?: string;
   cancelLabel?: string;
   destructive?: boolean;
+  description?: string;
+  isDestructive?: boolean;
 };
 
 /** Uses the native modal-dialog focus/keyboard model with design-system semantic tokens. 
@@ -63,7 +65,7 @@ export function useSuperadminSettingsGeneralSettingsLibraryConfigurationConfirm(
       const body = document.createElement('p');
       body.id = descriptionId;
       body.className = 'text-sm leading-6 text-secondary';
-      body.textContent = message;
+      body.textContent = options.description || message;
       const actions = document.createElement('div');
       actions.className = 'flex flex-wrap justify-end gap-3';
       const cancelButton = document.createElement('button');

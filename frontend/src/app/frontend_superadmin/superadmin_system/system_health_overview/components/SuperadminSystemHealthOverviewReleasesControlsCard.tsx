@@ -338,34 +338,48 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                       </div>
                     </div>
 
-                    {/* Mini Toggle Switch – ON/OFF Control */}
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <span
-                        className={`font-mono text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded tracking-wider transition-colors duration-200 select-none ${active
-                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs'
-                            : 'bg-slate-800/90 text-slate-400 border border-slate-700/80'
+                    {/* Premium Kill Switch Area (from Emergency Kill Switch design) */}
+                    <div className="switch-area flex flex-col items-end gap-1 shrink-0">
+                      <div className="flex items-center gap-1.5">
+                        <div
+                          className={`switch-status font-mono text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded tracking-wider transition-colors duration-200 select-none ${
+                            active
+                              ? 'armed bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs'
+                              : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
                           }`}
-                      >
-                        {active ? 'ON' : 'OFF'}
-                      </span>
+                        >
+                          {active ? 'SWITCH ARMED' : 'SAFE MODE'}
+                        </div>
 
-                      <button
-                        type="button"
-                        role="switch"
-                        aria-checked={active}
-                        aria-label={`Toggle Switch - ON/OFF control for ${label}`}
-                        onClick={() => toggleFlag(key, label)}
-                        className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950 ${active
-                            ? 'bg-emerald-500 shadow-xs shadow-emerald-500/40 ring-1 ring-emerald-400/30'
-                            : 'bg-slate-700 hover:bg-slate-600 ring-1 ring-slate-600/50'
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={active}
+                          aria-label={active ? `Disarm kill switch for ${label}` : `Arm kill switch for ${label}`}
+                          aria-pressed={active}
+                          onClick={() => toggleFlag(key, label)}
+                          className={`premium-switch relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full p-0.5 transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950 ${
+                            active
+                              ? 'is-armed bg-gradient-to-r from-emerald-600 to-teal-500 border border-emerald-400/40 shadow-xs shadow-emerald-500/40'
+                              : 'bg-slate-800 border border-slate-700 hover:bg-slate-700'
                           }`}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${active ? 'translate-x-4' : 'translate-x-0'
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={`switch-knob pointer-events-none inline-flex h-5 w-5 transform items-center justify-center rounded-full transition-transform duration-200 ease-in-out ${
+                              active
+                                ? 'translate-x-5 bg-white text-emerald-600 shadow-md font-bold'
+                                : 'translate-x-0 bg-slate-400 text-slate-900 shadow-sm font-bold'
                             }`}
-                        />
-                      </button>
+                          >
+                            <span className="text-[10px] leading-none select-none font-bold">⏻</span>
+                          </span>
+                        </button>
+                      </div>
+
+                      <span className="switch-hint text-[8px] font-mono tracking-tight text-slate-400 uppercase select-none">
+                        {active ? 'CLICK TO DISARM' : 'CLICK TO ARM'}
+                      </span>
                     </div>
                   </div>
 

@@ -67,7 +67,8 @@ export async function updateSuperadminSettingsGeneral(
 /**
  * Resets global settings to system factory defaults.
  */
-export async function resetSuperadminSettingsGeneral(): Promise<ApiResponse<SuperadminSettingsFormValues>> {
+export async function resetSuperadminSettingsGeneral(idempotencyKey?: string): Promise<ApiResponse<SuperadminSettingsFormValues>> {
+  const key = idempotencyKey ?? (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'idemp-reset-key');
   if (!SUPERADMIN_SETTINGS_GENERAL_API_CONTRACT_STATUS.networkCallsEnabled) {
     return {
       success: true,
@@ -80,6 +81,7 @@ export async function resetSuperadminSettingsGeneral(): Promise<ApiResponse<Supe
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Idempotency-Key': key,
     },
   });
 }
