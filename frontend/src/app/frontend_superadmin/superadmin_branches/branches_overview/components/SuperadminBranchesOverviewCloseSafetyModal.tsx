@@ -39,9 +39,7 @@ export default function SuperadminBranchesOverviewCloseSafetyModal({
       setErrorMsg('Cannot proceed with closure while unresolved liabilities exist.');
       return;
     }
-    const res = isSuperadminOverride
-      ? onConfirmClose(branch.id, closingNotes || 'Standard branch closure and archive', true)
-      : onConfirmClose(branch.id, closingNotes || 'Standard branch closure and archive');
+    const res = onConfirmClose(branch.id, closingNotes || 'Standard branch closure and archive', isSuperadminOverride);
     if (!res.success) {
       setErrorMsg(res.error || 'Closure failed');
     } else {
