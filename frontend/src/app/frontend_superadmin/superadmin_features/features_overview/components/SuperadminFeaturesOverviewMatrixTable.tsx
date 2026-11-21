@@ -1,4 +1,4 @@
-// RESPONSIBILITY: Matrix comparison table view across all 16 modules and 3 governance tiers.
+// RESPONSIBILITY: Matrix comparison table view across all 16 modules and 3 governance tiers with SuperAdmin controls.
 import React from 'react';
 import {
   ShieldCheck,
@@ -7,6 +7,7 @@ import {
   Terminal,
   Check,
   X,
+  RotateCcw,
 } from 'lucide-react';
 import type {
   ModuleDefinition,
@@ -20,16 +21,22 @@ interface MatrixTableProps {
     state: PlatformModuleState;
     effective: EffectiveAccessResult;
   }>;
+  isGlobalScope?: boolean;
   onTogglePlatformDefault: (id: string) => void;
   onTogglePlanEntitlement: (id: string, tier: 'Starter' | 'Professional' | 'Enterprise') => void;
+  onToggleLibraryModule?: (id: string) => void;
+  onResetLibraryModule?: (id: string) => void;
   onOpenOverride: (mod: ModuleDefinition) => void;
   onOpenApiGuard: (mod: ModuleDefinition) => void;
 }
 
 export default function SuperadminFeaturesOverviewMatrixTable({
   items,
+  isGlobalScope = false,
   onTogglePlatformDefault,
   onTogglePlanEntitlement,
+  onToggleLibraryModule,
+  onResetLibraryModule,
   onOpenOverride,
   onOpenApiGuard,
 }: MatrixTableProps) {
@@ -39,11 +46,12 @@ export default function SuperadminFeaturesOverviewMatrixTable({
         <table className="w-full text-left text-xs">
           <thead className="bg-neutral-900/80 border-b border-border text-neutral-400 font-semibold uppercase tracking-wider">
             <tr>
-              <th className="py-3 px-4">Module (16 Total)</th>
+              <th className="py-3 px-4">Library Module</th>
               <th className="py-3 px-3 text-center">Category</th>
+              <th className="py-3 px-3 text-center">SuperAdmin Control</th>
               <th className="py-3 px-3 text-center">L1: Platform Default</th>
-              <th className="py-3 px-3 text-center">Starter Plan</th>
-              <th className="py-3 px-3 text-center">Pro Plan</th>
+              <th className="py-3 px-3 text-center">Starter</th>
+              <th className="py-3 px-3 text-center">Pro</th>
               <th className="py-3 px-3 text-center">Enterprise</th>
               <th className="py-3 px-4 text-center">Effective Access</th>
               <th className="py-3 px-4 text-right">Actions</th>
@@ -52,6 +60,7 @@ export default function SuperadminFeaturesOverviewMatrixTable({
           <tbody className="divide-y divide-border/60">
             {items.map(({ module: mod, state, effective }) => {
               const isEffectiveAllowed = effective.effectiveAllowed;
+              const isPlatformOn = state.platformDefault;
 
               return (
                 <tr
@@ -71,18 +80,57 @@ export default function SuperadminFeaturesOverviewMatrixTable({
                     </span>
                   </td>
 
+                  {/* SuperAdmin Control for Library Account */}
+                  <td className="py-3 px-3 text-center">
+                    <div className="flex items-center justify-center gap-1.5">
+                      {!isPlatformOn ? (
+                        <span className="px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold">
+                          Killswitch
+                        </span>
+                      ) : onToggleLibraryModule ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => onToggleLibraryModule(mod.id)}
+                            className={`px-2.5 py-1 rounded text-[11px] font-semibold flex items-center gap-1 transition-colors ${
+                              isEffectiveAllowed
+                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
+                                : 'bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30'
+                            }`}
+                          >
+                            {isEffectiveAllowed ? <Check size={12} /> : <X size={12} />}
+                            <span>{isEffectiveAllowed ? 'Enabled' : 'Disabled'}</span>
+                          </button>
+
+                          {effective.override && onResetLibraryModule && (
+                            <button
+                              type="button"
+                              onClick={() => onResetLibraryModule(mod.id)}
+                              title="Reset to plan default"
+                              className="p-1 rounded text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+                            >
+                              <RotateCcw size={12} />
+                            </button>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-neutral-500 text-[11px]">—</span>
+                      )}
+                    </div>
+                  </td>
+
                   {/* L1: Platform Default */}
                   <td className="py-3 px-3 text-center">
                     <button
                       type="button"
                       onClick={() => onTogglePlatformDefault(mod.id)}
-                      className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors ${
+                      className={`px-2 py-0.5 rounded text-[10px] font-semibold transition-colors ${
                         state.platformDefault
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                          : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                          ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30'
+                          : 'bg-neutral-800 text-neutral-400 border border-neutral-700'
                       }`}
                     >
-                      {state.platformDefault ? 'ON' : 'OFF (Killswitch)'}
+                      {state.platformDefault ? 'ON' : 'KILLSWITCH'}
                     </button>
                   </td>
 
@@ -98,7 +146,7 @@ export default function SuperadminFeaturesOverviewMatrixTable({
                       }`}
                       title="Toggle Starter entitlement"
                     >
-                      {state.starterPlanAllowed ? <Check size={16} /> : <X size={16} />}
+                      {state.starterPlanAllowed ? <Check size={15} /> : <X size={15} />}
                     </button>
                   </td>
 
@@ -114,7 +162,7 @@ export default function SuperadminFeaturesOverviewMatrixTable({
                       }`}
                       title="Toggle Pro entitlement"
                     >
-                      {state.professionalPlanAllowed ? <Check size={16} /> : <X size={16} />}
+                      {state.professionalPlanAllowed ? <Check size={15} /> : <X size={15} />}
                     </button>
                   </td>
 
@@ -130,7 +178,7 @@ export default function SuperadminFeaturesOverviewMatrixTable({
                       }`}
                       title="Toggle Enterprise entitlement"
                     >
-                      {state.enterprisePlanAllowed ? <Check size={16} /> : <X size={16} />}
+                      {state.enterprisePlanAllowed ? <Check size={15} /> : <X size={15} />}
                     </button>
                   </td>
 

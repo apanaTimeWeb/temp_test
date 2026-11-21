@@ -39,6 +39,11 @@ export default function SuperadminFeaturesOverviewPageClient() {
     setSearchQuery,
     togglePlatformDefault,
     togglePlanEntitlement,
+    toggleLibraryModule,
+    resetModuleOverride,
+    enableAllForCurrentScope,
+    disableAllForCurrentScope,
+    resetAllForCurrentScope,
     saveOverride,
     removeOverride,
     openOverrideModalForModule,
@@ -110,6 +115,9 @@ export default function SuperadminFeaturesOverviewPageClient() {
         selectedBranch={selectedBranch}
         onSelectTenant={setSelectedTenantId}
         onSelectBranch={setSelectedBranchId}
+        onEnableAll={enableAllForCurrentScope}
+        onDisableAll={disableAllForCurrentScope}
+        onResetAll={resetAllForCurrentScope}
       />
 
       {/* Category Tabs & Search Bar */}
@@ -135,6 +143,8 @@ export default function SuperadminFeaturesOverviewPageClient() {
               effective={effective}
               isGlobalScope={isGlobalScope}
               onTogglePlatformDefault={handleTogglePlatform}
+              onToggleLibraryModule={toggleLibraryModule}
+              onResetLibraryModule={resetModuleOverride}
               onOpenOverride={openOverrideModalForModule}
               onOpenApiGuard={openApiGuardModalForModule}
             />
@@ -143,8 +153,11 @@ export default function SuperadminFeaturesOverviewPageClient() {
       ) : (
         <SuperadminFeaturesOverviewMatrixTable
           items={filteredModules}
+          isGlobalScope={isGlobalScope}
           onTogglePlatformDefault={handleTogglePlatform}
           onTogglePlanEntitlement={togglePlanEntitlement}
+          onToggleLibraryModule={toggleLibraryModule}
+          onResetLibraryModule={resetModuleOverride}
           onOpenOverride={openOverrideModalForModule}
           onOpenApiGuard={openApiGuardModalForModule}
         />

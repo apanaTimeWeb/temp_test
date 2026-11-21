@@ -1,9 +1,12 @@
-// RESPONSIBILITY: Unit tests for 3-level governance resolution logic.
+// RESPONSIBILITY: Unit tests for 3-level governance resolution logic and SuperAdmin library controls.
 import { describe, it, expect } from 'vitest';
 import {
   computeEffectiveAccess,
   isPlanEntitled,
+  simulateApiGuardEvaluation,
+  batchSimulateAllEndpoints,
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/utils/superadmin_features_overview_utils';
+import { ALL_16_LIBRARY_MODULES } from '@/app/frontend_superadmin/superadmin_features/features_overview/constants/superadmin_features_overview.constants';
 import {
   INITIAL_PLATFORM_MODULE_STATES,
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/mocks/fixtures/superadmin_features_overview.fixtures';
@@ -33,6 +36,13 @@ describe('Superadmin Features Overview - 3-Level Governance Resolution', () => {
       platformDefault: false, // Globally killed across platform
       starterPlanAllowed: true,
       professionalPlanAllowed: true,
+      enterprisePlanAllowed: true,
+    },
+    {
+      moduleId: 'mod_api_access',
+      platformDefault: true,
+      starterPlanAllowed: false,
+      professionalPlanAllowed: false,
       enterprisePlanAllowed: true,
     },
   ];
@@ -159,5 +169,68 @@ describe('Superadmin Features Overview - 3-Level Governance Resolution', () => {
     expect(branchResult.effectiveAllowed).toBe(false);
     expect(branchResult.override?.overrideStatus).toBe('Force_Disabled');
     expect(branchResult.reason).toContain('Branch audit pending');
+
+    // Query without branch (tenant-wide)
+    const tenantResult = computeEffectiveAccess({
+      moduleId: 'mod_books',
+      platformStates: baseStates,
+      tenantPlanTier: 'Professional',
+      tenantId: 'tenant_apex',
+      overrides,
+    });
+
+    expect(tenantResult.effectiveAllowed).toBe(true);
+    expect(tenantResult.override?.overrideStatus).toBe('Force_Enabled');
+  });
+
+  it('Evaluates all 16 modules correctly for Enterprise tier vs Starter tier', () => {
+    const enterpriseModules = ALL_16_LIBRARY_MODULES.map((mod) =>
+      computeEffectiveAccess({
+        moduleId: mod.id,
+        platformStates: INITIAL_PLATFORM_MODULE_STATES,
+        tenantPlanTier: 'Enterprise',
+        tenantId: 'tenant_enterprise',
+        overrides: [],
+      })
+    );
+
+    // In Enterprise tier with default settings, all 16 are entitled
+    const allowedEnterprise = enterpriseModules.filter((m) => m.effectiveAllowed);
+    expect(allowedEnterprise.length).toBe(16);
+
+    // In Starter tier, advanced modules (accounts, staff, analytics, whatsapp, api_access) are excluded by default
+    const starterModules = ALL_16_LIBRARY_MODULES.map((mod) =>
+      computeEffectiveAccess({
+        moduleId: mod.id,
+        platformStates: INITIAL_PLATFORM_MODULE_STATES,
+        tenantPlanTier: 'Starter',
+        tenantId: 'tenant_starter',
+        overrides: [],
+      })
+    );
+    const deniedStarter = starterModules.filter((m) => !m.effectiveAllowed);
+    expect(deniedStarter.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it('Performs batch simulation of all 16 endpoints for API Guard', () => {
+    const modulesWithEffective = ALL_16_LIBRARY_MODULES.map((mod) => ({
+      module: mod,
+      effective: computeEffectiveAccess({
+        moduleId: mod.id,
+        platformStates: INITIAL_PLATFORM_MODULE_STATES,
+        tenantPlanTier: 'Starter',
+        tenantId: 'tenant_patna',
+        overrides: [],
+      }),
+    }));
+
+    const batch = batchSimulateAllEndpoints(modulesWithEffective, 'Patna Central Reading Rooms', 'tenant_patna');
+    expect(batch.total).toBe(16);
+    expect(batch.allowedCount + batch.deniedCount).toBe(16);
+    expect(batch.results.length).toBe(16);
+    for (const r of batch.results) {
+      expect([200, 403]).toContain(r.httpStatus);
+      expect(r.curlCommand).toContain('curl -X POST');
+    }
   });
 });

@@ -47,6 +47,8 @@ export interface BranchAuditLog {
   reason?: string;
 }
 
+export type SuperadminBranchAuditLog = BranchAuditLog;
+
 export interface BranchReportStats {
   monthlyRevenue: number;
   occupancyRate: number; // percentage

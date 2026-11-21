@@ -50,8 +50,12 @@ export interface EffectiveAccessResult {
 
 export interface ApiDenialSimulationResult {
   endpoint: string;
+  method?: string;
   allowed: boolean;
   httpStatus: number;
+  latencyMs?: number;
+  curlCommand?: string;
+  requestHeaders?: Record<string, string>;
   responsePayload: Record<string, unknown>;
   evaluatedHierarchy: {
     platformDefault: boolean;

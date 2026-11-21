@@ -33,6 +33,32 @@ describe('Superadmin Features Overview - 16 Library Modules Registry', () => {
     }
   });
 
+  it('should match the exact 16 module names requested by user', () => {
+    const names = ALL_16_LIBRARY_MODULES.map((m) => m.name);
+    const expectedNames = [
+      'Dashboard',
+      'Books',
+      'Members',
+      'Seat Management',
+      'Issue & Return',
+      'Finance',
+      'Accounts',
+      'Communication',
+      'Staff Management',
+      'Reports',
+      'Export & Import',
+      'Advanced Analytics',
+      'WhatsApp Integration',
+      'SMS Integration',
+      'Barcode/QR',
+      'API Access',
+    ];
+
+    for (const expected of expectedNames) {
+      expect(names).toContain(expected);
+    }
+  });
+
   it('should verify each module has non-empty name, description, and API endpoints', () => {
     for (const mod of ALL_16_LIBRARY_MODULES) {
       expect(mod.id).toBeTruthy();

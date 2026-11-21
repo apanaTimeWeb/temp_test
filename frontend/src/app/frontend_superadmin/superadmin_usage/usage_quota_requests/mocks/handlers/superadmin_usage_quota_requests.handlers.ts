@@ -77,7 +77,14 @@ export function handleMockApproveQuotaRequest(
 ): ApiResponse<QuotaUpgradeRequestRecord> {
   const index = inMemoryRequests.findIndex((r) => r.id === payload.requestId);
   if (index === -1) {
-    return { success: false, data: null, message: 'Request not found', errorCode: 'NOT_FOUND' };
+    return {
+      success: false,
+      data: null,
+      message: 'Request not found',
+      errorCode: 'NOT_FOUND',
+      statusCode: 404,
+      requestId: 'req-qr-approve-err',
+    };
   }
 
   const updated: QuotaUpgradeRequestRecord = {
@@ -91,7 +98,12 @@ export function handleMockApproveQuotaRequest(
   };
 
   inMemoryRequests[index] = updated;
-  return { success: true, data: updated, message: 'Quota request approved successfully' };
+  return {
+    success: true,
+    data: updated,
+    message: 'Quota request approved successfully',
+    requestId: 'req-qr-approve-ok',
+  };
 }
 
 export function handleMockRejectQuotaRequest(
@@ -99,7 +111,14 @@ export function handleMockRejectQuotaRequest(
 ): ApiResponse<QuotaUpgradeRequestRecord> {
   const index = inMemoryRequests.findIndex((r) => r.id === payload.requestId);
   if (index === -1) {
-    return { success: false, data: null, message: 'Request not found', errorCode: 'NOT_FOUND' };
+    return {
+      success: false,
+      data: null,
+      message: 'Request not found',
+      errorCode: 'NOT_FOUND',
+      statusCode: 404,
+      requestId: 'req-qr-reject-err',
+    };
   }
 
   const updated: QuotaUpgradeRequestRecord = {
@@ -111,5 +130,10 @@ export function handleMockRejectQuotaRequest(
   };
 
   inMemoryRequests[index] = updated;
-  return { success: true, data: updated, message: 'Quota request rejected' };
+  return {
+    success: true,
+    data: updated,
+    message: 'Quota request rejected',
+    requestId: 'req-qr-reject-ok',
+  };
 }

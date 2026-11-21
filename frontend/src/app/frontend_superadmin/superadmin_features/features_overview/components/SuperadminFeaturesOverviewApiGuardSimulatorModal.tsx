@@ -1,6 +1,6 @@
 // RESPONSIBILITY: Live backend API Denial Guard simulator demonstrating HTTP 403 FEATURE_DISABLED enforcement.
 import React, { useState } from 'react';
-import { X, Terminal, ShieldAlert, ShieldCheck, Play, CheckCircle2, Copy } from 'lucide-react';
+import { X, Terminal, ShieldAlert, ShieldCheck, Play, CheckCircle2, Copy, Code, Layers } from 'lucide-react';
 import type {
   ModuleDefinition,
   EffectiveAccessResult,
@@ -22,19 +22,31 @@ export default function SuperadminFeaturesOverviewApiGuardSimulatorModal({
   onClose,
 }: ApiGuardSimulatorModalProps) {
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>(module.apiEndpoints[0] ?? '/api/v1');
+  const [method, setMethod] = useState<'POST' | 'GET' | 'PUT'>('POST');
   const [simulationResult, setSimulationResult] = useState<ApiDenialSimulationResult | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [copiedPayload, setCopiedPayload] = useState(false);
+  const [copiedCurl, setCopiedCurl] = useState(false);
+  const [activeTab, setActiveTab] = useState<'response' | 'curl' | 'headers'>('response');
 
   const handleRunSimulation = () => {
-    const res = simulateApiGuardEvaluation(selectedEndpoint, effective, tenantName);
+    const res = simulateApiGuardEvaluation(selectedEndpoint, effective, tenantName, {
+      method,
+    });
     setSimulationResult(res);
   };
 
   const handleCopyJson = () => {
     if (!simulationResult) return;
     navigator.clipboard.writeText(JSON.stringify(simulationResult.responsePayload, null, 2));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedPayload(true);
+    setTimeout(() => setCopiedPayload(false), 2000);
+  };
+
+  const handleCopyCurl = () => {
+    if (!simulationResult?.curlCommand) return;
+    navigator.clipboard.writeText(simulationResult.curlCommand);
+    setCopiedCurl(true);
+    setTimeout(() => setCopiedCurl(false), 2000);
   };
 
   return (
@@ -50,11 +62,11 @@ export default function SuperadminFeaturesOverviewApiGuardSimulatorModal({
               <h2 className="text-base font-bold text-white flex items-center gap-2">
                 Backend API Guard Simulator
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-300 font-semibold uppercase">
-                  Live Probe
+                  Zero-Trust Gatekeeper
                 </span>
               </h2>
               <p className="text-xs text-neutral-400">
-                Verifies that disabled features are denied by the API layer (HTTP 403 Forbidden).
+                Verifies that disabled features are strictly rejected at the API middleware layer (HTTP 403 Forbidden).
               </p>
             </div>
           </div>
@@ -92,23 +104,33 @@ export default function SuperadminFeaturesOverviewApiGuardSimulatorModal({
             </div>
           </div>
 
-          {/* Endpoint Picker & Execute */}
+          {/* Endpoint & Method Picker & Execute */}
           <div className="space-y-2">
             <label className="block text-xs font-semibold text-neutral-300">
-              Select API Endpoint to Probe:
+              Select API Endpoint & Method to Probe:
             </label>
             <div className="flex items-center gap-2">
+              <select
+                value={method}
+                onChange={(e) => setMethod(e.target.value as 'POST' | 'GET' | 'PUT')}
+                className="w-24 px-2 py-2 text-xs font-mono font-bold rounded-lg border border-border bg-input text-teal-300 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              >
+                <option value="POST">POST</option>
+                <option value="GET">GET</option>
+                <option value="PUT">PUT</option>
+              </select>
+
               <select
                 value={selectedEndpoint}
                 onChange={(e) => {
                   setSelectedEndpoint(e.target.value);
                   setSimulationResult(null);
                 }}
-                className="flex-1 px-3 py-2 text-xs sm:text-sm font-mono rounded-lg border border-border bg-input text-teal-300 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="flex-1 px-3 py-2 text-xs font-mono rounded-lg border border-border bg-input text-teal-300 focus:outline-none focus:ring-1 focus:ring-teal-500"
               >
                 {module.apiEndpoints.map((ep) => (
                   <option key={ep} value={ep}>
-                    POST {ep}
+                    {ep}
                   </option>
                 ))}
               </select>
@@ -154,9 +176,8 @@ export default function SuperadminFeaturesOverviewApiGuardSimulatorModal({
           {/* Live Response Panel */}
           {simulationResult && (
             <div className="space-y-2 animate-in fade-in duration-150">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between border-b border-border/60 pb-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-neutral-300">HTTP Response:</span>
                   <span
                     className={`text-xs px-2 py-0.5 rounded font-mono font-bold ${
                       simulationResult.allowed
@@ -166,21 +187,79 @@ export default function SuperadminFeaturesOverviewApiGuardSimulatorModal({
                   >
                     HTTP {simulationResult.httpStatus} {simulationResult.allowed ? 'OK' : 'FORBIDDEN'}
                   </span>
+                  <span className="text-[11px] text-neutral-400 font-mono">
+                    {simulationResult.latencyMs}ms
+                  </span>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleCopyJson}
-                  className="text-xs text-neutral-400 hover:text-white flex items-center gap-1 transition-colors"
-                >
-                  {copied ? <CheckCircle2 size={13} className="text-emerald-400" /> : <Copy size={13} />}
-                  <span>{copied ? 'Copied' : 'Copy Payload'}</span>
-                </button>
+
+                <div className="flex items-center gap-1 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('response')}
+                    className={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                      activeTab === 'response' ? 'bg-neutral-800 text-white' : 'text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    Response Body
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('curl')}
+                    className={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                      activeTab === 'curl' ? 'bg-neutral-800 text-white' : 'text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    cURL Command
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('headers')}
+                    className={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                      activeTab === 'headers' ? 'bg-neutral-800 text-white' : 'text-neutral-400 hover:text-white'
+                    }`}
+                  >
+                    Request Headers
+                  </button>
+                </div>
               </div>
 
-              {/* JSON Pre */}
-              <pre className="p-3.5 rounded-xl border border-border bg-neutral-950 text-neutral-200 text-xs font-mono overflow-x-auto leading-relaxed">
-                {JSON.stringify(simulationResult.responsePayload, null, 2)}
-              </pre>
+              {activeTab === 'response' && (
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={handleCopyJson}
+                    className="absolute top-2 right-2 px-2 py-1 rounded bg-neutral-800/80 hover:bg-neutral-700 text-xs text-neutral-300 flex items-center gap-1 transition-colors"
+                  >
+                    {copiedPayload ? <CheckCircle2 size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                    <span>{copiedPayload ? 'Copied' : 'Copy'}</span>
+                  </button>
+                  <pre className="p-3.5 rounded-xl border border-border bg-neutral-950 text-neutral-200 text-xs font-mono overflow-x-auto leading-relaxed max-h-56">
+                    {JSON.stringify(simulationResult.responsePayload, null, 2)}
+                  </pre>
+                </div>
+              )}
+
+              {activeTab === 'curl' && (
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={handleCopyCurl}
+                    className="absolute top-2 right-2 px-2 py-1 rounded bg-neutral-800/80 hover:bg-neutral-700 text-xs text-neutral-300 flex items-center gap-1 transition-colors"
+                  >
+                    {copiedCurl ? <CheckCircle2 size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                    <span>{copiedCurl ? 'Copied' : 'Copy'}</span>
+                  </button>
+                  <pre className="p-3.5 rounded-xl border border-border bg-neutral-950 text-teal-300 text-xs font-mono overflow-x-auto leading-relaxed max-h-56 whitespace-pre-wrap">
+                    {simulationResult.curlCommand}
+                  </pre>
+                </div>
+              )}
+
+              {activeTab === 'headers' && (
+                <pre className="p-3.5 rounded-xl border border-border bg-neutral-950 text-neutral-300 text-xs font-mono overflow-x-auto leading-relaxed max-h-56">
+                  {JSON.stringify(simulationResult.requestHeaders, null, 2)}
+                </pre>
+              )}
             </div>
           )}
         </div>

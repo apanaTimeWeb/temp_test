@@ -3,7 +3,6 @@ import { useState, useMemo, useCallback } from 'react';
 import type {
   PlatformModuleState,
   TenantModuleOverride,
-  FeatureCategory,
   ModuleDefinition,
   EffectiveAccessResult,
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/types/superadmin_features_overview.types';
@@ -112,6 +111,176 @@ export function useSuperadminFeaturesOverviewState() {
     [showNotification]
   );
 
+  // Direct 1-click toggle for currently selected library account
+  const toggleLibraryModule = useCallback(
+    (moduleId: string) => {
+      if (selectedTenantId === 'global' || !selectedTenant) {
+        togglePlatformDefault(moduleId);
+        return;
+      }
+
+      const mod = ALL_16_LIBRARY_MODULES.find((m) => m.id === moduleId);
+      if (!mod) return;
+
+      const currentEffective = computeEffectiveAccess({
+        moduleId,
+        platformStates,
+        tenantPlanTier: selectedTenant.planTier,
+        tenantId: selectedTenant.id,
+        branchId: selectedBranch?.id,
+        overrides,
+      });
+
+      const nextStatus: 'Force_Enabled' | 'Force_Disabled' = currentEffective.effectiveAllowed
+        ? 'Force_Disabled'
+        : 'Force_Enabled';
+
+      const branchTargetId = selectedBranchId !== 'all' ? selectedBranchId : undefined;
+      const branchTargetName = selectedBranch?.name;
+
+      const newOverride: TenantModuleOverride = {
+        id: `ovr_${Date.now()}`,
+        tenantId: selectedTenant.id,
+        tenantName: selectedTenant.name,
+        branchId: branchTargetId,
+        branchName: branchTargetName,
+        moduleId,
+        moduleName: mod.name,
+        overrideStatus: nextStatus,
+        reason: `SuperAdmin 1-click ${nextStatus === 'Force_Enabled' ? 'activation' : 'deactivation'}`,
+        updatedAt: new Date().toISOString(),
+        updatedBy: 'superadmin@edulibra.com',
+      };
+
+      setOverrides((prev) => {
+        const filtered = prev.filter(
+          (o) =>
+            !(
+              o.tenantId === selectedTenant.id &&
+              (o.branchId ?? '') === (branchTargetId ?? '') &&
+              o.moduleId === moduleId
+            )
+        );
+        return [newOverride, ...filtered];
+      });
+
+      showNotification(
+        `${mod.name} is now ${nextStatus === 'Force_Enabled' ? 'Enabled' : 'Disabled'} for ${selectedTenant.name}.`,
+        'success'
+      );
+    },
+    [selectedTenantId, selectedTenant, selectedBranchId, selectedBranch, platformStates, overrides, togglePlatformDefault, showNotification]
+  );
+
+  // Reset module to plan default (remove override)
+  const resetModuleOverride = useCallback(
+    (moduleId: string) => {
+      if (selectedTenantId === 'global' || !selectedTenant) return;
+
+      const branchTargetId = selectedBranchId !== 'all' ? selectedBranchId : undefined;
+      setOverrides((prev) =>
+        prev.filter(
+          (o) =>
+            !(
+              o.tenantId === selectedTenant.id &&
+              (o.branchId ?? '') === (branchTargetId ?? '') &&
+              o.moduleId === moduleId
+            )
+        )
+      );
+
+      const mod = ALL_16_LIBRARY_MODULES.find((m) => m.id === moduleId);
+      showNotification(`${mod?.name ?? 'Module'} reset to plan defaults.`, 'info');
+    },
+    [selectedTenantId, selectedTenant, selectedBranchId, showNotification]
+  );
+
+  // Bulk actions for currently selected scope
+  const enableAllForCurrentScope = useCallback(() => {
+    if (selectedTenantId === 'global' || !selectedTenant) return;
+
+    const branchTargetId = selectedBranchId !== 'all' ? selectedBranchId : undefined;
+    const branchTargetName = selectedBranch?.name;
+
+    const newOverrides: TenantModuleOverride[] = ALL_16_LIBRARY_MODULES.map((mod) => ({
+      id: `ovr_bulk_${mod.id}_${Date.now()}`,
+      tenantId: selectedTenant.id,
+      tenantName: selectedTenant.name,
+      branchId: branchTargetId,
+      branchName: branchTargetName,
+      moduleId: mod.id,
+      moduleName: mod.name,
+      overrideStatus: 'Force_Enabled',
+      reason: 'Bulk enabled all modules by SuperAdmin',
+      updatedAt: new Date().toISOString(),
+      updatedBy: 'superadmin@edulibra.com',
+    }));
+
+    setOverrides((prev) => {
+      const otherTenantOverrides = prev.filter(
+        (o) =>
+          !(
+            o.tenantId === selectedTenant.id &&
+            (o.branchId ?? '') === (branchTargetId ?? '')
+          )
+      );
+      return [...newOverrides, ...otherTenantOverrides];
+    });
+
+    showNotification(`All 16 modules force-enabled for ${selectedTenant.name}.`, 'success');
+  }, [selectedTenantId, selectedTenant, selectedBranchId, selectedBranch, showNotification]);
+
+  const disableAllForCurrentScope = useCallback(() => {
+    if (selectedTenantId === 'global' || !selectedTenant) return;
+
+    const branchTargetId = selectedBranchId !== 'all' ? selectedBranchId : undefined;
+    const branchTargetName = selectedBranch?.name;
+
+    const newOverrides: TenantModuleOverride[] = ALL_16_LIBRARY_MODULES.map((mod) => ({
+      id: `ovr_bulk_${mod.id}_${Date.now()}`,
+      tenantId: selectedTenant.id,
+      tenantName: selectedTenant.name,
+      branchId: branchTargetId,
+      branchName: branchTargetName,
+      moduleId: mod.id,
+      moduleName: mod.name,
+      overrideStatus: 'Force_Disabled',
+      reason: 'Bulk disabled all modules by SuperAdmin',
+      updatedAt: new Date().toISOString(),
+      updatedBy: 'superadmin@edulibra.com',
+    }));
+
+    setOverrides((prev) => {
+      const otherTenantOverrides = prev.filter(
+        (o) =>
+          !(
+            o.tenantId === selectedTenant.id &&
+            (o.branchId ?? '') === (branchTargetId ?? '')
+          )
+      );
+      return [...newOverrides, ...otherTenantOverrides];
+    });
+
+    showNotification(`All 16 modules force-disabled for ${selectedTenant.name}.`, 'info');
+  }, [selectedTenantId, selectedTenant, selectedBranchId, selectedBranch, showNotification]);
+
+  const resetAllForCurrentScope = useCallback(() => {
+    if (selectedTenantId === 'global' || !selectedTenant) return;
+
+    const branchTargetId = selectedBranchId !== 'all' ? selectedBranchId : undefined;
+    setOverrides((prev) =>
+      prev.filter(
+        (o) =>
+          !(
+            o.tenantId === selectedTenant.id &&
+            (o.branchId ?? '') === (branchTargetId ?? '')
+          )
+      )
+    );
+
+    showNotification(`All module overrides cleared for ${selectedTenant.name}. Restored to plan defaults.`, 'info');
+  }, [selectedTenantId, selectedTenant, selectedBranchId, showNotification]);
+
   // Open override modal for specific module
   const openOverrideModalForModule = useCallback((mod: ModuleDefinition) => {
     setTargetModule(mod);
@@ -152,7 +321,7 @@ export function useSuperadminFeaturesOverviewState() {
     });
   }, [platformStates, selectedTenant, selectedBranch, overrides]);
 
-  // Filtered by search and category
+  // Filtered modules by category and search
   const filteredModules = useMemo(() => {
     return computedModules.filter(({ module: mod }) => {
       const matchesCategory = categoryFilter === 'all' || mod.category === categoryFilter;
@@ -160,9 +329,8 @@ export function useSuperadminFeaturesOverviewState() {
       const matchesSearch =
         !q ||
         mod.name.toLowerCase().includes(q) ||
-        mod.description.toLowerCase().includes(q) ||
-        mod.category.toLowerCase().includes(q) ||
-        mod.apiEndpoints.some((ep) => ep.toLowerCase().includes(q));
+        mod.key.toLowerCase().includes(q) ||
+        mod.description.toLowerCase().includes(q);
 
       return matchesCategory && matchesSearch;
     });
@@ -190,6 +358,11 @@ export function useSuperadminFeaturesOverviewState() {
     setSearchQuery,
     togglePlatformDefault,
     togglePlanEntitlement,
+    toggleLibraryModule,
+    resetModuleOverride,
+    enableAllForCurrentScope,
+    disableAllForCurrentScope,
+    resetAllForCurrentScope,
     saveOverride,
     removeOverride,
     openOverrideModalForModule,

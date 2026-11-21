@@ -5,8 +5,8 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_dashboard',
     key: 'dashboard',
-    name: 'Dashboard Overview',
-    description: 'Multi-branch operational KPI analytics, live occupancy metrics, attendance graphs and recent transactions.',
+    name: 'Dashboard',
+    description: 'Multi-branch operational KPI analytics, live occupancy metrics, attendance graphs, and recent transactions.',
     category: 'core',
     iconName: 'LayoutDashboard',
     minPlanTier: 'Starter',
@@ -15,7 +15,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_books',
     key: 'books',
-    name: 'Books & Catalogue',
+    name: 'Books',
     description: 'Book cataloging, ISBN auto-fetch, author indexing, shelf categorization, and physical inventory tracking.',
     category: 'core',
     iconName: 'BookOpen',
@@ -25,7 +25,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_members',
     key: 'members',
-    name: 'Members & Students',
+    name: 'Members',
     description: 'Student registration, digital membership ID cards, KYC document verification, and membership plans.',
     category: 'core',
     iconName: 'Users',
@@ -35,8 +35,8 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_seats',
     key: 'seats',
-    name: 'Seat Management & Shifts',
-    description: 'Visual 2D/3D seat layouts, multi-shift booking (Morning/Evening/Full-Day), reservation matrix and locker sync.',
+    name: 'Seat Management',
+    description: 'Visual 2D/3D seat layouts, multi-shift booking (Morning/Evening/Full-Day), reservation matrix, and locker sync.',
     category: 'operations',
     iconName: 'Layers',
     minPlanTier: 'Starter',
@@ -45,7 +45,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_circulation',
     key: 'issue_return',
-    name: 'Issue & Return (Circulation)',
+    name: 'Issue & Return',
     description: 'Book issue, return, renewal, late fine calculation, and lost copy claim settlement workflows.',
     category: 'operations',
     iconName: 'ArrowLeftRight',
@@ -55,7 +55,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_finance',
     key: 'finance',
-    name: 'Finance & Fee Collection',
+    name: 'Finance',
     description: 'Student fee collection, automated invoice generation, payment receipts, late fees, and refundable deposits.',
     category: 'finance',
     iconName: 'Wallet',
@@ -65,7 +65,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_accounts',
     key: 'accounts',
-    name: 'Accounts & Day Settlement',
+    name: 'Accounts',
     description: 'Day-end cash drawer settlement, petty expenses, daily balance reconciliation, and branch P&L tracking.',
     category: 'finance',
     iconName: 'Calculator',
@@ -75,7 +75,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_communication',
     key: 'communication',
-    name: 'Communication & Notices',
+    name: 'Communication',
     description: 'Notice boards, broadcast circulars, emergency announcements, and automated student notification triggers.',
     category: 'engagement',
     iconName: 'BellRing',
@@ -85,7 +85,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_staff',
     key: 'staff_management',
-    name: 'Staff & Shift Management',
+    name: 'Staff Management',
     description: 'Branch staff attendance tracking, biometric clock-in, duty rosters, and librarian permission assignments.',
     category: 'operations',
     iconName: 'UserCheck',
@@ -95,7 +95,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_reports',
     key: 'reports',
-    name: 'Reports & Audits',
+    name: 'Reports',
     description: 'Branch-wise performance reports, member attendance registers, fee realization, and circulation summaries.',
     category: 'core',
     iconName: 'FileText',
@@ -105,7 +105,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_export_import',
     key: 'export_import',
-    name: 'Export & Bulk Import',
+    name: 'Export & Import',
     description: 'Bulk Excel/CSV student onboarding, book catalog bulk upload, full data backup dumps, and audit exports.',
     category: 'operations',
     iconName: 'FileSpreadsheet',
@@ -115,7 +115,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_analytics',
     key: 'advanced_analytics',
-    name: 'Advanced Analytics & AI',
+    name: 'Advanced Analytics',
     description: 'Seat occupancy heatmaps, member churn predictions, revenue trends, and optimal shift allocation models.',
     category: 'developer',
     iconName: 'Sparkles',
@@ -145,7 +145,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_barcode_qr',
     key: 'barcode_qr',
-    name: 'Barcode & QR Scanner',
+    name: 'Barcode/QR',
     description: 'Barcode label generation for book copies, student entry QR scanner check-in, and seat desk QR tags.',
     category: 'operations',
     iconName: 'QrCode',
@@ -155,7 +155,7 @@ export const ALL_16_LIBRARY_MODULES: ModuleDefinition[] = [
   {
     id: 'mod_api_access',
     key: 'api_access',
-    name: 'Public API & Webhooks',
+    name: 'API Access',
     description: 'REST API keys for third-party biometric turnstile gates, custom website embeds, and Zapier webhooks.',
     category: 'developer',
     iconName: 'KeyRound',

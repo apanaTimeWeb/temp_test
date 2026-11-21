@@ -1,6 +1,6 @@
-// RESPONSIBILITY: Tenant & Branch scope selector with governance context banner.
+// RESPONSIBILITY: Tenant & Branch scope selector with governance context banner and quick bulk controls.
 import React from 'react';
-import { Building2, GitBranch, Shield, Sparkles } from 'lucide-react';
+import { Building2, GitBranch, Shield, Sparkles, CheckCheck, Ban, RotateCcw } from 'lucide-react';
 import type { MockTenantOption } from '@/app/frontend_superadmin/superadmin_features/features_overview/mocks/fixtures/superadmin_features_overview.fixtures';
 
 interface ScopeSelectorProps {
@@ -11,6 +11,9 @@ interface ScopeSelectorProps {
   selectedBranch?: { id: string; name: string; code: string };
   onSelectTenant: (id: string) => void;
   onSelectBranch: (id: string) => void;
+  onEnableAll?: () => void;
+  onDisableAll?: () => void;
+  onResetAll?: () => void;
 }
 
 export default function SuperadminFeaturesOverviewScopeSelector({
@@ -21,6 +24,9 @@ export default function SuperadminFeaturesOverviewScopeSelector({
   selectedBranch,
   onSelectTenant,
   onSelectBranch,
+  onEnableAll,
+  onDisableAll,
+  onResetAll,
 }: ScopeSelectorProps) {
   const isGlobal = selectedTenantId === 'global';
 
@@ -69,17 +75,52 @@ export default function SuperadminFeaturesOverviewScopeSelector({
           )}
         </div>
 
-        {/* Status Pill */}
-        <div className="flex items-center gap-2 text-xs">
+        {/* Status Pill & Bulk Controls */}
+        <div className="flex flex-wrap items-center gap-2 text-xs">
           {isGlobal ? (
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium">
               <Shield size={14} /> Level 1: Global Platform Switches & Base Plan Matrix
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-              <Sparkles size={14} /> Level 3 Scope: {selectedTenant?.name} [{selectedTenant?.planTier} Tier]
-              {selectedBranch ? ` - Branch: ${selectedBranch.name}` : ' (All Branches)'}
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25 font-semibold">
+                <Sparkles size={14} /> Scope: {selectedTenant?.name} [{selectedTenant?.planTier} Tier]
+                {selectedBranch ? ` • Branch: ${selectedBranch.name}` : ' • All Branches'}
+              </span>
+
+              {/* Bulk Control Buttons */}
+              {onEnableAll && onDisableAll && onResetAll && (
+                <div className="flex items-center gap-1.5 ml-1">
+                  <button
+                    type="button"
+                    onClick={onEnableAll}
+                    title="Enable all 16 modules for this library"
+                    className="px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 border border-emerald-500/30 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                  >
+                    <CheckCheck size={13} />
+                    <span>Enable All</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onDisableAll}
+                    title="Disable all 16 modules for this library"
+                    className="px-2.5 py-1 rounded-md bg-rose-500/15 text-rose-300 hover:bg-rose-500/25 border border-rose-500/30 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                  >
+                    <Ban size={13} />
+                    <span>Disable All</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onResetAll}
+                    title="Reset to default plan entitlements"
+                    className="px-2 py-1 rounded-md bg-neutral-800 text-neutral-300 hover:bg-neutral-700 border border-neutral-700 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                  >
+                    <RotateCcw size={12} />
+                    <span>Reset Plan</span>
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>

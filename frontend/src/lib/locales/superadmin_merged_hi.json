@@ -3192,5 +3192,48 @@
       "RESTART_SERVICE": "पुनः प्रारंभ करें",
       "INSPECT_SERVICE": "निरीक्षण करें"
     }
+  },
+  "SUPERADMIN_FEATURES_OVERVIEW": {
+    "COPY": {
+      "TITLE": "07. Feature & Module Control (फीचर एवं मॉड्यूल नियंत्रण)",
+      "SUBTITLE": "प्रत्येक लाइब्रेरी के लिए 3-स्तरीय नियंत्रण (Platform Default, Plan Entitlement, Account/Branch Override) और Backend API Denial Guard।",
+      "SCOPE_TITLE": "नियंत्रण स्कोप",
+      "PLATFORM_DEFAULTS": "🌐 सिस्टम-वाइड डिफ़ॉल्ट्स (सभी लाइब्रेरी)",
+      "ALL_BRANCHES": "सभी शाखाएँ (संस्थान-स्तरीय)",
+      "LEVEL_1_PLATFORM": "प्लेटफ़ॉर्म डिफ़ॉल्ट",
+      "LEVEL_2_PLAN": "प्लान पात्रता",
+      "LEVEL_3_OVERRIDE": "कस्टम खाता/शाखा छूट",
+      "TOTAL_MODULES": "कुल लाइब्रेरी मॉड्यूल्स",
+      "GLOBALLY_ENABLED": "सिस्टम स्तर पर सक्रिय (L1)",
+      "PLATFORM_KILLSWITCH": "प्लेटफ़ॉर्म किलस्विच (L1)",
+      "ACTIVE_OVERRIDES": "सक्रिय कस्टम छूट (L3)",
+      "API_GUARD_TITLE": "Backend API Denial Enforcement सिम्युलेटर",
+      "API_GUARD_SUBTITLE": "फीचर निष्क्रिय होने पर बैकएंड एपीआई भी सीधे HTTP 403 Forbidden रिटर्न करता है।",
+      "PROBE_BUTTON": "लाइव एपीआई अनुरोध का परीक्षण करें",
+      "MODULE_DASHBOARD": "डैशबोर्ड",
+      "MODULE_BOOKS": "पुस्तकें (Books)",
+      "MODULE_MEMBERS": "सदस्य (Members)",
+      "MODULE_SEATS": "सीट प्रबंधन (Seat Management)",
+      "MODULE_CIRCULATION": "इश्यू एवं रिटर्न (Issue & Return)",
+      "MODULE_FINANCE": "वित्त एवं शुल्क (Finance)",
+      "MODULE_ACCOUNTS": "खाता एवं रोकड़ (Accounts)",
+      "MODULE_COMMUNICATION": "संचार एवं नोटिस (Communication)",
+      "MODULE_STAFF": "स्टाफ प्रबंधन (Staff Management)",
+      "MODULE_REPORTS": "रिपोर्ट्स (Reports)",
+      "MODULE_EXPORT_IMPORT": "निर्यात एवं आयात (Export & Import)",
+      "MODULE_ANALYTICS": "उन्नत एनालिटिक्स (Advanced Analytics)",
+      "MODULE_WHATSAPP": "व्हाट्सएप एकीकरण (WhatsApp Integration)",
+      "MODULE_SMS": "एसएमएस एकीकरण (SMS Integration)",
+      "MODULE_BARCODE_QR": "बारकोड एवं क्यूआर (Barcode/QR)",
+      "MODULE_API_ACCESS": "एपीआई एक्सेस (API Access)",
+      "SUPERADMIN_CONTROL": "सुपरएडमिन नियंत्रण",
+      "ENABLE": "सक्षम करें",
+      "DISABLE": "अक्षम करें",
+      "ENABLED": "सक्रिय",
+      "DISABLED": "निष्क्रिय",
+      "RESET_PLAN": "प्लान डिफ़ॉल्ट पर रीसेट करें",
+      "ENABLE_ALL": "सभी सक्षम करें",
+      "DISABLE_ALL": "सभी अक्षम करें"
+    }
   }
 }

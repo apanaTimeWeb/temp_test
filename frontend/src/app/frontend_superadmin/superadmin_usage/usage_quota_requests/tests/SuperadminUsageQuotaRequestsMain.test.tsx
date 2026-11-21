@@ -35,8 +35,8 @@ describe('SuperadminUsageQuotaRequestsMain Component', () => {
 
   it('renders KPI summary cards with counts', () => {
     renderWithClient(<SuperadminUsageQuotaRequestsMain />);
-    expect(screen.getByText('Pending Review')).toBeInTheDocument();
-    expect(screen.getByText('Branch Expansions')).toBeInTheDocument();
+    expect(screen.getAllByText('Pending Review').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('Branch Expansions').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Approved Quotas')).toBeInTheDocument();
   });
 
