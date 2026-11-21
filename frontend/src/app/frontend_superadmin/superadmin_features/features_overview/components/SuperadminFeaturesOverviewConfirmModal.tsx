@@ -21,52 +21,52 @@ export default function SuperadminFeaturesOverviewConfirmModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md overflow-hidden animate-in fade-in duration-150"
+      className="fixed inset-0 z-[160] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md overflow-hidden animate-in fade-in duration-150"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onCancel();
       }}
     >
-      <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-2xl overflow-hidden p-6 space-y-4 animate-in zoom-in-95 duration-150 ease-out">
-        <div className="flex items-start gap-3">
+      <div className="w-full max-w-md rounded-3xl border border-indigo-500/30 bg-[#0a0d24] text-white shadow-2xl shadow-indigo-950/80 overflow-hidden p-6 space-y-4 animate-in zoom-in-95 duration-150">
+        <div className="flex items-start gap-3.5">
           <span
-            className={`p-2.5 rounded-xl shrink-0 ${
+            className={`p-3 rounded-2xl shrink-0 ${
               dialogState.isDestructive
-                ? 'bg-rose-500/15 text-rose-400 border border-rose-500/20'
-                : 'bg-amber-500/15 text-amber-400 border border-amber-500/20'
+                ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-xs'
+                : 'bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-xs'
             }`}
           >
-            <AlertTriangle size={20} />
+            <AlertTriangle size={22} />
           </span>
-          <div className="flex-1">
-            <h3 className="text-base font-bold text-white">{dialogState.title}</h3>
-            <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-bold text-white tracking-tight">{dialogState.title}</h3>
+            <p className="text-xs text-slate-300 mt-1.5 leading-relaxed">
               {dialogState.message}
             </p>
           </div>
           <button
             type="button"
             onClick={onCancel}
-            className="text-neutral-400 hover:text-white p-1 rounded-lg"
+            className="text-slate-400 hover:text-white p-1 rounded-xl transition-colors cursor-pointer shrink-0"
           >
-            <X size={16} />
+            <X size={18} />
           </button>
         </div>
 
-        <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-border/60">
+        <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-indigo-500/20">
           <button
             type="button"
             onClick={onCancel}
-            className="px-3.5 py-1.5 rounded-lg border border-border bg-input text-neutral-300 text-xs font-medium hover:bg-neutral-800 transition-colors"
+            className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 text-xs font-semibold hover:bg-slate-800 transition-colors cursor-pointer"
           >
             {dialogState.cancelLabel}
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold text-white transition-all shadow-md cursor-pointer active:scale-95 ${
               dialogState.isDestructive
-                ? 'bg-rose-600 hover:bg-rose-700'
-                : 'bg-teal-500 hover:bg-teal-600'
+                ? 'bg-rose-600 hover:bg-rose-500 shadow-rose-600/25'
+                : 'bg-teal-500 hover:bg-teal-400 text-slate-950 shadow-teal-500/25'
             }`}
           >
             {dialogState.confirmLabel}

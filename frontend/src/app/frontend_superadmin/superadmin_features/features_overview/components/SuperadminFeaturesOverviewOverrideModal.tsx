@@ -8,6 +8,7 @@ import type {
 import type { MockTenantOption } from '@/app/frontend_superadmin/superadmin_features/features_overview/mocks/fixtures/superadmin_features_overview.fixtures';
 import { TENANT_MODULE_OVERRIDE_SCHEMA } from '@/app/frontend_superadmin/superadmin_features/features_overview/schemas/superadmin_features_overview.schema';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
+import { SuperadminFeaturesToggleSwitch } from './SuperadminFeaturesToggleSwitch';
 
 interface OverrideModalProps {
   module: ModuleDefinition;
@@ -37,6 +38,7 @@ export default function SuperadminFeaturesOverviewOverrideModal({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
+
   const initialTenantId = currentTenantId !== 'global' ? currentTenantId : (tenants[0]?.id ?? '');
   const [tenantId, setTenantId] = useState<string>(initialTenantId);
   const [branchId, setBranchId] = useState<string>('');
@@ -47,7 +49,6 @@ export default function SuperadminFeaturesOverviewOverrideModal({
 
   const selectedTenant = tenants.find((t) => t.id === tenantId);
   const selectedBranch = selectedTenant?.branches.find((b) => b.id === branchId);
-
   const moduleOverrides = overrides.filter((o) => o.moduleId === module.id);
 
   const handleSave = (e: React.FormEvent) => {
@@ -77,38 +78,38 @@ export default function SuperadminFeaturesOverviewOverrideModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md overflow-hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-[150] flex items-center justify-center p-3 sm:p-5 bg-slate-950/85 backdrop-blur-md overflow-hidden animate-in fade-in duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-xl rounded-2xl border border-border bg-card shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 ease-out">
+      <div className="w-full max-w-xl rounded-3xl border border-indigo-500/30 bg-[#0a0d24] text-white shadow-2xl shadow-indigo-950/80 overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-neutral-900/60">
-          <div className="flex items-center gap-2.5">
-            <span className="p-2 rounded-lg bg-amber-500/10 text-amber-400">
-              <KeyRound size={18} />
+        <div className="flex items-center justify-between px-6 py-4 border-b border-indigo-500/20 bg-[#060818]/95 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <span className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
+              <KeyRound size={20} />
             </span>
             <div>
               <h2 className="text-base font-bold text-white">Custom Exception Override</h2>
-              <p className="text-xs text-neutral-400">
-                Module: <span className="text-neutral-200 font-semibold">{module.name}</span>
+              <p className="text-xs text-slate-400">
+                Module: <span className="text-white font-semibold">{module.name}</span>
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSave} className="p-6 overflow-y-auto space-y-4">
+        <form onSubmit={handleSave} className="p-6 overflow-y-auto space-y-4 scrollbar-thin">
           {errorMessage && (
-            <div className="p-3 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+            <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
               <AlertTriangle size={15} className="shrink-0" />
               <span>{errorMessage}</span>
             </div>
@@ -116,7 +117,7 @@ export default function SuperadminFeaturesOverviewOverrideModal({
 
           {/* Target Tenant Organization */}
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-300 mb-1.5">
               Target Library Organization *
             </label>
             <select
@@ -125,7 +126,7 @@ export default function SuperadminFeaturesOverviewOverrideModal({
                 setTenantId(e.target.value);
                 setBranchId('');
               }}
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-border bg-input text-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="w-full px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-indigo-500/25 bg-slate-950/80 text-white focus:outline-none focus:ring-1 focus:ring-teal-500 cursor-pointer"
             >
               {tenants.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -137,13 +138,13 @@ export default function SuperadminFeaturesOverviewOverrideModal({
 
           {/* Branch Target (Optional) */}
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-300 mb-1.5">
               Branch Scope (Optional)
             </label>
             <select
               value={branchId}
               onChange={(e) => setBranchId(e.target.value)}
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-border bg-input text-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="w-full px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-indigo-500/25 bg-slate-950/80 text-white focus:outline-none focus:ring-1 focus:ring-teal-500 cursor-pointer"
             >
               <option value="">Whole Organization (All Branches)</option>
               {selectedTenant?.branches.map((b) => (
@@ -152,58 +153,37 @@ export default function SuperadminFeaturesOverviewOverrideModal({
                 </option>
               ))}
             </select>
-            <p className="text-[11px] text-neutral-400 mt-1">
+            <p className="text-[11px] text-slate-400 mt-1">
               Leave blank to apply this override to all branches of this organization.
             </p>
           </div>
 
-          {/* Action: Force Enabled or Force Disabled */}
-          <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
-              Override Enforcement Action *
-            </label>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setOverrideStatus('Force_Enabled')}
-                className={`p-3 rounded-xl border text-left flex items-start gap-2.5 transition-all ${
-                  overrideStatus === 'Force_Enabled'
-                    ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-300'
-                    : 'border-border bg-card/40 text-neutral-400 hover:border-neutral-700'
-                }`}
-              >
-                <ShieldCheck size={18} className="shrink-0 mt-0.5" />
-                <div>
-                  <div className="text-xs font-bold">Force Enable</div>
-                  <div className="text-[10px] text-neutral-400 mt-0.5">
-                    Grant access even if not in plan
-                  </div>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setOverrideStatus('Force_Disabled')}
-                className={`p-3 rounded-xl border text-left flex items-start gap-2.5 transition-all ${
-                  overrideStatus === 'Force_Disabled'
-                    ? 'border-rose-500/50 bg-rose-500/10 text-rose-300'
-                    : 'border-border bg-card/40 text-neutral-400 hover:border-neutral-700'
-                }`}
-              >
-                <ShieldAlert size={18} className="shrink-0 mt-0.5" />
-                <div>
-                  <div className="text-xs font-bold">Force Disable</div>
-                  <div className="text-[10px] text-neutral-400 mt-0.5">
-                    Block access even if plan permits
-                  </div>
-                </div>
-              </button>
+          {/* Action: Force Enabled or Force Disabled Toggle */}
+          <div className="p-4 rounded-2xl border border-indigo-500/20 bg-slate-950/60 space-y-3">
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="block text-xs font-bold text-slate-200">
+                  Override Enforcement State
+                </label>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  {overrideStatus === 'Force_Enabled'
+                    ? 'Force Enable: Grant access even if plan restricts'
+                    : 'Force Disable: Deny access even if plan permits'}
+                </p>
+              </div>
+              <SuperadminFeaturesToggleSwitch
+                checked={overrideStatus === 'Force_Enabled'}
+                onChange={(checked) => setOverrideStatus(checked ? 'Force_Enabled' : 'Force_Disabled')}
+                size="md"
+                labelOn="ON"
+                labelOff="OFF"
+              />
             </div>
           </div>
 
           {/* Audit Reason */}
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-300 mb-1.5">
               Audit Justification / Reason *
             </label>
             <textarea
@@ -211,49 +191,47 @@ export default function SuperadminFeaturesOverviewOverrideModal({
               onChange={(e) => setReason(e.target.value)}
               placeholder="e.g., Granted 30-day trial for marketing campaign or compliance block..."
               rows={2}
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-border bg-input text-white placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="w-full px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-indigo-500/25 bg-slate-950/80 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
             />
           </div>
 
           {/* Expiry Date (Optional) */}
           <div>
-            <label className="block text-xs font-semibold text-neutral-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-300 mb-1.5">
               Optional Expiry Date (Temporary Exception)
             </label>
-            <div className="relative">
-              <input
-                type="date"
-                value={expiresAt}
-                onChange={(e) => setExpiresAt(e.target.value)}
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-border bg-input text-white focus:outline-none focus:ring-1 focus:ring-teal-500"
-              />
-            </div>
+            <input
+              type="date"
+              value={expiresAt}
+              onChange={(e) => setExpiresAt(e.target.value)}
+              className="w-full px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-indigo-500/25 bg-slate-950/80 text-white focus:outline-none focus:ring-1 focus:ring-teal-500"
+            />
           </div>
 
           {/* Existing Overrides for this module */}
           {moduleOverrides.length > 0 && (
-            <div className="pt-3 border-t border-border/60">
-              <h4 className="text-xs font-semibold text-neutral-300 mb-2">
+            <div className="pt-3 border-t border-indigo-500/20">
+              <h4 className="text-xs font-bold text-slate-300 mb-2">
                 Active Exceptions for this Module ({moduleOverrides.length})
               </h4>
-              <div className="space-y-2 max-h-32 overflow-y-auto pr-1">
+              <div className="space-y-2 max-h-32 overflow-y-auto pr-1 scrollbar-thin">
                 {moduleOverrides.map((ovr) => (
                   <div
                     key={ovr.id}
-                    className="p-2.5 rounded-lg border border-border bg-neutral-900/50 flex items-center justify-between text-xs"
+                    className="p-3 rounded-xl border border-indigo-500/15 bg-slate-950/70 flex items-center justify-between text-xs"
                   >
                     <div>
-                      <div className="font-semibold text-white">
+                      <div className="font-bold text-white">
                         {ovr.tenantName} {ovr.branchName ? `(${ovr.branchName})` : ''}
                       </div>
-                      <div className="text-[11px] text-neutral-400">
-                        Status: <span className="text-amber-400">{ovr.overrideStatus}</span> • {ovr.reason}
+                      <div className="text-[11px] text-slate-400 mt-0.5">
+                        Status: <span className="text-amber-400 font-bold">{ovr.overrideStatus}</span> • {ovr.reason}
                       </div>
                     </div>
                     <button
                       type="button"
                       onClick={() => onDelete(ovr.id)}
-                      className="p-1 rounded text-neutral-400 hover:text-rose-400 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800 transition-colors cursor-pointer"
                       title="Remove Override"
                     >
                       <Trash2 size={14} />
@@ -265,17 +243,17 @@ export default function SuperadminFeaturesOverviewOverrideModal({
           )}
 
           {/* Action buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-indigo-500/20">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg border border-border bg-input text-neutral-300 text-xs font-medium hover:bg-neutral-800 transition-colors"
+              className="px-4 py-2 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 text-xs font-semibold hover:bg-slate-800 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-teal-500 hover:bg-teal-600 text-white text-xs font-semibold shadow-sm transition-colors"
+              className="px-5 py-2 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold shadow-md shadow-teal-500/25 transition-all cursor-pointer active:scale-95"
             >
               Save Custom Override
             </button>

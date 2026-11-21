@@ -1,4 +1,4 @@
-// RESPONSIBILITY: Individual module card with 3-tier status controls, 1-click Library switch, override and API Guard actions.
+// RESPONSIBILITY: Individual module card with 3-tier status controls, iOS-style toggle switches, override and API Guard actions.
 import React from 'react';
 import {
   ShieldCheck,
@@ -24,14 +24,13 @@ import {
   QrCode,
   LayoutDashboard,
   KeyRound,
-  Check,
-  X,
 } from 'lucide-react';
 import type {
   ModuleDefinition,
   PlatformModuleState,
   EffectiveAccessResult,
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/types/superadmin_features_overview.types';
+import { SuperadminFeaturesToggleSwitch } from './SuperadminFeaturesToggleSwitch';
 
 interface ModuleCardProps {
   module: ModuleDefinition;
@@ -81,77 +80,64 @@ export default function SuperadminFeaturesOverviewModuleCard({
 
   return (
     <div
-      className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
+      className={`p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between shadow-lg backdrop-blur-xl ${
         isEffectiveAllowed
-          ? 'border-border bg-card shadow-sm hover:border-neutral-700'
-          : 'border-neutral-800 bg-neutral-900/40 opacity-90'
+          ? 'border-indigo-500/30 bg-[#0a0d24]/90 hover:border-indigo-500/50 shadow-indigo-950/30'
+          : 'border-rose-500/20 bg-slate-950/70 opacity-90 hover:border-rose-500/30'
       }`}
     >
       <div>
-        {/* Card Header */}
+        {/* Card Header with Level 1 Platform Switch */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <span
-              className={`p-2 rounded-lg shrink-0 ${
+              className={`p-2.5 rounded-xl shrink-0 ${
                 isEffectiveAllowed
-                  ? 'bg-teal-500/15 text-teal-400 border border-teal-500/25'
-                  : 'bg-neutral-800 text-neutral-500 border border-neutral-700'
+                  ? 'bg-teal-500/15 text-teal-400 border border-teal-500/30 shadow-xs'
+                  : 'bg-slate-900 text-slate-500 border border-slate-800'
               }`}
             >
-              <Icon size={18} />
+              <Icon size={20} />
             </span>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-bold text-white text-sm leading-tight">{module.name}</h3>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-400">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="font-bold text-white text-sm leading-tight truncate">{module.name}</h3>
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-slate-900 text-slate-300 border border-indigo-500/20">
                   {module.minPlanTier}
                 </span>
               </div>
-              <span className="text-[11px] text-neutral-400 font-mono">key: {module.key}</span>
+              <span className="text-[11px] text-slate-400 font-mono mt-0.5 block truncate">key: {module.key}</span>
             </div>
           </div>
 
-          {/* Level 1: Platform Switch Toggle */}
-          <div className="switch-area flex flex-col items-end gap-0.5">
-            <button
-              type="button"
-              onClick={() => onTogglePlatformDefault(module.id)}
-              aria-pressed={isGlobalAllowed}
+          {/* Level 1: Platform Switch Toggle (iOS-style ON/OFF switch) */}
+          <div className="switch-area flex flex-col items-end gap-1 shrink-0">
+            <SuperadminFeaturesToggleSwitch
+              checked={isGlobalAllowed}
+              onChange={() => onTogglePlatformDefault(module.id)}
+              size="sm"
               title={`Platform Default: ${isGlobalAllowed ? 'Enabled' : 'Disabled (Platform Killswitch)'}`}
-              className={`premium-switch relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full p-0.5 transition-all duration-200 ease-in-out focus:outline-none ${
-                isGlobalAllowed
-                  ? 'is-armed bg-gradient-to-r from-teal-500 to-emerald-500 border border-teal-400/40 shadow-xs shadow-teal-500/30'
-                  : 'bg-neutral-800 border border-neutral-700 hover:bg-neutral-700'
-              }`}
-            >
-              <span
-                aria-hidden="true"
-                className={`switch-knob pointer-events-none inline-flex h-4 w-4 transform items-center justify-center rounded-full transition-transform duration-200 ease-in-out ${
-                  isGlobalAllowed
-                    ? 'translate-x-5 bg-white text-teal-600 font-bold shadow-xs'
-                    : 'translate-x-0 bg-neutral-400 text-neutral-900 font-bold shadow-xs'
-                }`}
-              >
-                <span className="text-[8px] leading-none select-none font-bold">⏻</span>
-              </span>
-            </button>
-            <span className="switch-hint text-[9px] uppercase tracking-wider font-semibold text-neutral-400">
+              ariaLabel={`Platform default toggle for ${module.name}`}
+            />
+            <span className={`text-[9px] uppercase tracking-wider font-bold ${
+              isGlobalAllowed ? 'text-emerald-400' : 'text-rose-400'
+            }`}>
               {isGlobalAllowed ? 'L1 ARMED' : 'L1 DISARMED'}
             </span>
           </div>
         </div>
 
         {/* Description */}
-        <p className="text-xs text-neutral-400 mt-2.5 line-clamp-2 leading-relaxed">
+        <p className="text-xs text-slate-400 mt-3 line-clamp-2 leading-relaxed">
           {module.description}
         </p>
 
-        {/* Endpoints */}
-        <div className="mt-2.5 flex flex-wrap gap-1">
+        {/* Endpoints Tags */}
+        <div className="mt-3 flex flex-wrap gap-1.5">
           {module.apiEndpoints.map((ep) => (
             <span
               key={ep}
-              className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-neutral-900 border border-border text-neutral-400"
+              className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-950/80 border border-indigo-500/20 text-slate-400"
             >
               {ep}
             </span>
@@ -159,79 +145,74 @@ export default function SuperadminFeaturesOverviewModuleCard({
         </div>
 
         {/* Tier Entitlements Matrix mini-bar */}
-        <div className="mt-3 pt-2.5 border-t border-border/50 grid grid-cols-3 gap-1 text-[11px]">
-          <div className="flex items-center gap-1">
+        <div className="mt-3.5 pt-3 border-t border-indigo-500/20 grid grid-cols-3 gap-2 text-[11px]">
+          <div className="flex items-center gap-1.5">
             {state.starterPlanAllowed ? (
-              <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
+              <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
             ) : (
-              <XCircle size={12} className="text-neutral-500 shrink-0" />
+              <XCircle size={13} className="text-slate-600 shrink-0" />
             )}
-            <span className={state.starterPlanAllowed ? 'text-neutral-300' : 'text-neutral-500'}>
+            <span className={state.starterPlanAllowed ? 'text-slate-200 font-medium' : 'text-slate-500'}>
               Starter
             </span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             {state.professionalPlanAllowed ? (
-              <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
+              <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
             ) : (
-              <XCircle size={12} className="text-neutral-500 shrink-0" />
+              <XCircle size={13} className="text-slate-600 shrink-0" />
             )}
-            <span className={state.professionalPlanAllowed ? 'text-neutral-300' : 'text-neutral-500'}>
+            <span className={state.professionalPlanAllowed ? 'text-slate-200 font-medium' : 'text-slate-500'}>
               Pro
             </span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             {state.enterprisePlanAllowed ? (
-              <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
+              <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
             ) : (
-              <XCircle size={12} className="text-neutral-500 shrink-0" />
+              <XCircle size={13} className="text-slate-600 shrink-0" />
             )}
-            <span className={state.enterprisePlanAllowed ? 'text-neutral-300' : 'text-neutral-500'}>
+            <span className={state.enterprisePlanAllowed ? 'text-slate-200 font-medium' : 'text-slate-500'}>
               Enterprise
             </span>
           </div>
         </div>
 
-        {/* SuperAdmin Control for Selected Library */}
+        {/* SuperAdmin Control for Selected Library (Tenant Scope) */}
         {!isGlobalScope && onToggleLibraryModule && (
-          <div className="mt-3 p-2.5 rounded-lg border border-border bg-neutral-900/60 flex items-center justify-between">
+          <div className="mt-3.5 p-3 rounded-xl border border-indigo-500/20 bg-slate-950/70 flex items-center justify-between gap-3">
             <div>
-              <span className="text-[11px] font-semibold text-neutral-300 block">
+              <span className="text-[11px] font-bold text-slate-200 block">
                 SuperAdmin Control:
               </span>
-              <span className="text-[10px] text-neutral-400">
-                {effective.override ? 'Custom Override Active' : 'Inherited from Subscription Plan'}
+              <span className="text-[10px] text-slate-400">
+                {effective.override ? 'Custom Override Active' : 'Inherited from Plan'}
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2 shrink-0">
               {!isGlobalAllowed ? (
-                <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold">
+                <span className="text-[10px] px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
                   Killswitched (L1)
                 </span>
               ) : (
                 <>
-                  <button
-                    type="button"
-                    onClick={() => onToggleLibraryModule(module.id)}
-                    className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1 transition-colors ${
-                      isEffectiveAllowed
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30'
-                        : 'bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30'
-                    }`}
-                  >
-                    {isEffectiveAllowed ? <Check size={13} /> : <X size={13} />}
-                    <span>{isEffectiveAllowed ? 'Enabled' : 'Disabled'}</span>
-                  </button>
+                  <SuperadminFeaturesToggleSwitch
+                    checked={isEffectiveAllowed}
+                    onChange={() => onToggleLibraryModule(module.id)}
+                    size="sm"
+                    title={`SuperAdmin Toggle for ${module.name}`}
+                    ariaLabel={`Toggle ${module.name} for current library`}
+                  />
 
                   {effective.override && onResetLibraryModule && (
                     <button
                       type="button"
                       onClick={() => onResetLibraryModule(module.id)}
                       title="Reset to plan default"
-                      className="p-1 rounded text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
                     >
-                      <RotateCcw size={12} />
+                      <RotateCcw size={13} />
                     </button>
                   )}
                 </>
@@ -242,28 +223,28 @@ export default function SuperadminFeaturesOverviewModuleCard({
       </div>
 
       {/* Footer & Actions */}
-      <div className="mt-3.5 pt-3 border-t border-border flex flex-col gap-2">
+      <div className="mt-4 pt-3.5 border-t border-indigo-500/20 flex flex-col gap-2.5">
         {/* Effective Access Result */}
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-1.5">
             {isEffectiveAllowed ? (
-              <span className="font-semibold text-emerald-400 flex items-center gap-1">
-                <ShieldCheck size={13} /> Effective: Active
+              <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                <ShieldCheck size={14} /> Effective: Active
               </span>
             ) : (
-              <span className="font-semibold text-rose-400 flex items-center gap-1">
-                <ShieldAlert size={13} /> Effective: Denied
+              <span className="font-bold text-rose-400 flex items-center gap-1.5">
+                <ShieldAlert size={14} /> Effective: Denied
               </span>
             )}
           </div>
           {effective.override && (
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/25">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
               L3 Override
             </span>
           )}
         </div>
 
-        <p className="text-[11px] text-neutral-400 truncate" title={effective.reason}>
+        <p className="text-[11px] text-slate-400 truncate" title={effective.reason}>
           {effective.reason}
         </p>
 
@@ -272,7 +253,7 @@ export default function SuperadminFeaturesOverviewModuleCard({
           <button
             type="button"
             onClick={() => onOpenOverride(module)}
-            className="px-2.5 py-1.5 rounded-lg border border-border bg-input hover:bg-neutral-800 text-neutral-200 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
+            className="px-3 py-2 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
           >
             <Settings2 size={13} />
             <span>Set Override</span>
@@ -281,7 +262,7 @@ export default function SuperadminFeaturesOverviewModuleCard({
           <button
             type="button"
             onClick={() => onOpenApiGuard(module)}
-            className="px-2.5 py-1.5 rounded-lg border border-teal-500/30 bg-teal-500/10 hover:bg-teal-500/20 text-teal-300 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors"
+            className="px-3 py-2 rounded-xl border border-teal-500/30 bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
           >
             <Terminal size={13} />
             <span>Test API Guard</span>

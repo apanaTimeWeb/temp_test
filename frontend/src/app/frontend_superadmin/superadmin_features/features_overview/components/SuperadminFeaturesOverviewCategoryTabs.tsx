@@ -25,33 +25,33 @@ export default function SuperadminFeaturesOverviewCategoryTabs({
   onViewModeChange,
 }: CategoryTabsProps) {
   return (
-    <div className="space-y-3">
+    <div className="p-4 sm:p-5 rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 backdrop-blur-xl shadow-xl space-y-3.5">
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search Bar */}
         <div className="relative max-w-md w-full">
-          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search 16 modules, endpoints, or descriptions..."
-            className="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-lg border border-border bg-input text-white placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+            className="w-full pl-10 pr-3.5 py-2 text-xs sm:text-sm rounded-xl border border-indigo-500/25 bg-slate-950/80 text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition-colors"
           />
         </div>
 
         {/* View mode toggle */}
-        <div className="flex items-center gap-2 self-end md:self-auto">
-          <span className="text-xs text-neutral-400">
-            Showing {filteredCount} of {totalCount} modules
+        <div className="flex items-center gap-3 self-end md:self-auto">
+          <span className="text-xs text-slate-400 font-medium">
+            Showing <strong className="text-white">{filteredCount}</strong> of {totalCount} modules
           </span>
-          <div className="flex items-center p-0.5 rounded-lg border border-border bg-input">
+          <div className="flex items-center p-1 rounded-xl border border-indigo-500/25 bg-slate-950/80 shadow-xs">
             <button
               type="button"
               onClick={() => onViewModeChange('grid')}
-              className={`p-1.5 rounded-md text-xs font-medium transition-colors ${
+              className={`p-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 viewMode === 'grid'
-                  ? 'bg-teal-500 text-white'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-teal-500 text-slate-950 shadow-sm shadow-teal-500/30'
+                  : 'text-slate-400 hover:text-white'
               }`}
               title="Grid Card View"
             >
@@ -60,10 +60,10 @@ export default function SuperadminFeaturesOverviewCategoryTabs({
             <button
               type="button"
               onClick={() => onViewModeChange('table')}
-              className={`p-1.5 rounded-md text-xs font-medium transition-colors ${
+              className={`p-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 viewMode === 'table'
-                  ? 'bg-teal-500 text-white'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-teal-500 text-slate-950 shadow-sm shadow-teal-500/30'
+                  : 'text-slate-400 hover:text-white'
               }`}
               title="Matrix Table View"
             >
@@ -74,17 +74,17 @@ export default function SuperadminFeaturesOverviewCategoryTabs({
       </div>
 
       {/* Category Filter Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
         {SUPERADMIN_FEATURES_OVERVIEW_CONSTANTS.CATEGORIES.map((cat) => {
           const isActive = categoryFilter === cat.id;
           return (
             <button
               key={cat.id}
               onClick={() => onCategoryChange(cat.id)}
-              className={`px-3 py-1 text-xs rounded-lg font-medium whitespace-nowrap transition-colors border ${
+              className={`px-3.5 py-1.5 text-xs rounded-xl font-bold whitespace-nowrap transition-all cursor-pointer border ${
                 isActive
-                  ? 'bg-teal-500/15 border-teal-500/40 text-teal-300'
-                  : 'border-border bg-card/60 text-neutral-400 hover:text-neutral-200 hover:border-neutral-700'
+                  ? 'bg-teal-500 text-slate-950 border-teal-400 shadow-md shadow-teal-500/25'
+                  : 'border-indigo-500/20 bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
             >
               {cat.label}

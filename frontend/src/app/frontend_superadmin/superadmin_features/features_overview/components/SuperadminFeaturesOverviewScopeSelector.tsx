@@ -31,13 +31,15 @@ export default function SuperadminFeaturesOverviewScopeSelector({
   const isGlobal = selectedTenantId === 'global';
 
   return (
-    <div className="p-4 rounded-xl border border-border bg-card/60 backdrop-blur-sm space-y-3">
+    <div className="p-4 sm:p-5 rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 backdrop-blur-xl shadow-xl space-y-3.5">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         {/* Tenant Scope Dropdown */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
           <div className="flex items-center gap-2 text-teal-400">
-            <Building2 size={18} />
-            <span className="text-xs font-semibold uppercase tracking-wider text-neutral-300">
+            <span className="p-1.5 rounded-lg bg-teal-500/15 border border-teal-500/30">
+              <Building2 size={16} />
+            </span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
               Governance Scope:
             </span>
           </div>
@@ -45,7 +47,7 @@ export default function SuperadminFeaturesOverviewScopeSelector({
           <select
             value={selectedTenantId}
             onChange={(e) => onSelectTenant(e.target.value)}
-            className="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg border border-border bg-input text-white focus:outline-none focus:ring-1 focus:ring-teal-500 min-w-[260px]"
+            className="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-xl border border-indigo-500/25 bg-slate-950/80 text-white focus:outline-none focus:ring-1 focus:ring-teal-500 min-w-[260px] cursor-pointer"
           >
             <option value="global">🌐 Platform-Wide Defaults (All Libraries)</option>
             {tenantsList.map((tenant) => (
@@ -58,11 +60,11 @@ export default function SuperadminFeaturesOverviewScopeSelector({
           {/* Branch Dropdown if tenant selected */}
           {!isGlobal && selectedTenant && (
             <div className="flex items-center gap-2">
-              <GitBranch size={16} className="text-neutral-400" />
+              <GitBranch size={16} className="text-slate-400" />
               <select
                 value={selectedBranchId}
                 onChange={(e) => onSelectBranch(e.target.value)}
-                className="px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg border border-border bg-input text-white focus:outline-none focus:ring-1 focus:ring-teal-500 min-w-[220px]"
+                className="px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-xl border border-indigo-500/25 bg-slate-950/80 text-white focus:outline-none focus:ring-1 focus:ring-teal-500 min-w-[220px] cursor-pointer"
               >
                 <option value="all">All Branches (Tenant-Wide)</option>
                 {selectedTenant.branches.map((branch) => (
@@ -78,12 +80,12 @@ export default function SuperadminFeaturesOverviewScopeSelector({
         {/* Status Pill & Bulk Controls */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {isGlobal ? (
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium">
+            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30 font-semibold shadow-xs">
               <Shield size={14} /> Level 1: Global Platform Switches & Base Plan Matrix
             </span>
           ) : (
             <div className="flex flex-wrap items-center gap-2">
-              <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/25 font-semibold">
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold shadow-xs">
                 <Sparkles size={14} /> Scope: {selectedTenant?.name} [{selectedTenant?.planTier} Tier]
                 {selectedBranch ? ` • Branch: ${selectedBranch.name}` : ' • All Branches'}
               </span>
@@ -95,27 +97,29 @@ export default function SuperadminFeaturesOverviewScopeSelector({
                     type="button"
                     onClick={onEnableAll}
                     title="Enable all 16 modules for this library"
-                    className="px-2.5 py-1 rounded-md bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25 border border-emerald-500/30 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                    className="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs active:scale-95"
                   >
                     <CheckCheck size={13} />
                     <span>Enable All</span>
                   </button>
+
                   <button
                     type="button"
                     onClick={onDisableAll}
                     title="Disable all 16 modules for this library"
-                    className="px-2.5 py-1 rounded-md bg-rose-500/15 text-rose-300 hover:bg-rose-500/25 border border-rose-500/30 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                    className="px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 border border-rose-500/40 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs active:scale-95"
                   >
                     <Ban size={13} />
                     <span>Disable All</span>
                   </button>
+
                   <button
                     type="button"
                     onClick={onResetAll}
-                    title="Reset to default plan entitlements"
-                    className="px-2 py-1 rounded-md bg-neutral-800 text-neutral-300 hover:bg-neutral-700 border border-neutral-700 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                    title="Reset all custom overrides back to plan defaults"
+                    className="px-3 py-1.5 rounded-xl bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 border border-indigo-500/40 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs active:scale-95"
                   >
-                    <RotateCcw size={12} />
+                    <RotateCcw size={13} />
                     <span>Reset Plan</span>
                   </button>
                 </div>
@@ -123,15 +127,6 @@ export default function SuperadminFeaturesOverviewScopeSelector({
             </div>
           )}
         </div>
-      </div>
-
-      <div className="text-[11px] text-neutral-400 pt-2 border-t border-border/40 flex flex-wrap items-center gap-y-1 gap-x-4">
-        <span>
-          <strong className="text-neutral-200">Hierarchy Rule:</strong> Effective Access = (Platform Default) AND (Plan Entitlement OR Custom Override).
-        </span>
-        <span>
-          <strong className="text-neutral-200">Backend Enforcement:</strong> Denied modules return HTTP 403 Forbidden with FEATURE_DISABLED payload.
-        </span>
       </div>
     </div>
   );

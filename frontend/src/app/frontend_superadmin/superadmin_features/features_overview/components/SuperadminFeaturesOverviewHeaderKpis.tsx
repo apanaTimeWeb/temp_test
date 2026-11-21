@@ -20,62 +20,78 @@ export default function SuperadminFeaturesOverviewHeaderKpis({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
-        <div className="flex items-center gap-3">
-          <span className="p-2.5 rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20">
-            <Sliders size={22} />
-          </span>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold tracking-tight text-white">
-                07. Feature & Module Control
-              </h1>
-              <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30">
-                3-Tier Hierarchy + API Guard
-              </span>
+      {/* ── Main Banner ── */}
+      <div className="rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 backdrop-blur-xl p-5 shadow-2xl shadow-indigo-950/40">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-400 to-emerald-600 shadow-lg shadow-teal-500/25 text-white shrink-0">
+              <Sliders size={22} />
             </div>
-            <p className="text-xs sm:text-sm text-neutral-400 mt-0.5">
-              Platform Default (System-Wide), Plan Entitlement (Tier-Wise), & Account/Branch Overrides with backend API denial enforcement.
-            </p>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                  07. Feature & Module Control
+                </h1>
+                <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-teal-500/15 text-teal-300 border border-teal-500/30 shadow-xs">
+                  3-Tier Hierarchy + API Guard
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-1 max-w-3xl leading-relaxed">
+                Platform Default (System-Wide), Plan Entitlement (Tier-Wise), & Account/Branch Overrides with backend API denial enforcement.
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* ── 4 KPI Cards ── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-xl border border-border bg-card/80">
-          <div className="flex items-center justify-between text-neutral-400 text-xs">
+        {/* Total Modules */}
+        <div className="p-4 rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/40 via-[#0a0d24] to-[#060814] shadow-lg backdrop-blur-md flex flex-col justify-between space-y-2">
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
             <span>Total Library Modules</span>
-            <Layers size={15} className="text-teal-400" />
+            <span className="p-1.5 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
+              <Layers size={14} />
+            </span>
           </div>
-          <div className="text-2xl font-bold text-white mt-1.5">{totalModules}</div>
-          <div className="text-[11px] text-neutral-400 mt-0.5">Full SaaS capability catalog</div>
+          <div className="text-2xl font-black text-white tracking-tight">{totalModules}</div>
+          <div className="text-[11px] text-slate-400">Full SaaS capability catalog</div>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-border bg-card/80">
-          <div className="flex items-center justify-between text-neutral-400 text-xs">
+        {/* Globally Enabled */}
+        <div className="p-4 rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/40 via-[#0a0d24] to-[#060814] shadow-lg backdrop-blur-md flex flex-col justify-between space-y-2">
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
             <span>Globally Enabled (L1)</span>
-            <ShieldCheck size={15} className="text-emerald-400" />
+            <span className="p-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+              <ShieldCheck size={14} />
+            </span>
           </div>
-          <div className="text-2xl font-bold text-emerald-400 mt-1.5">{globallyActiveCount}</div>
-          <div className="text-[11px] text-neutral-400 mt-0.5">Platform defaults active</div>
+          <div className="text-2xl font-black text-emerald-400 tracking-tight">{globallyActiveCount}</div>
+          <div className="text-[11px] text-slate-400">Platform defaults active</div>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-border bg-card/80">
-          <div className="flex items-center justify-between text-neutral-400 text-xs">
+        {/* Platform Killswitch */}
+        <div className="p-4 rounded-2xl border border-rose-500/25 bg-gradient-to-br from-rose-950/40 via-[#0a0d24] to-[#060814] shadow-lg backdrop-blur-md flex flex-col justify-between space-y-2">
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
             <span>Platform Killswitch (L1)</span>
-            <ShieldAlert size={15} className="text-rose-400" />
+            <span className="p-1.5 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400">
+              <ShieldAlert size={14} />
+            </span>
           </div>
-          <div className="text-2xl font-bold text-rose-400 mt-1.5">{globallyDisabledCount}</div>
-          <div className="text-[11px] text-neutral-400 mt-0.5">Globally blocked system-wide</div>
+          <div className="text-2xl font-black text-rose-400 tracking-tight">{globallyDisabledCount}</div>
+          <div className="text-[11px] text-slate-400">Globally blocked system-wide</div>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-border bg-card/80">
-          <div className="flex items-center justify-between text-neutral-400 text-xs">
+        {/* Active Overrides */}
+        <div className="p-4 rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-950/40 via-[#0a0d24] to-[#060814] shadow-lg backdrop-blur-md flex flex-col justify-between space-y-2">
+          <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
             <span>Active Overrides (L3)</span>
-            <KeyRound size={15} className="text-amber-400" />
+            <span className="p-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400">
+              <KeyRound size={14} />
+            </span>
           </div>
-          <div className="text-2xl font-bold text-amber-400 mt-1.5">{activeOverridesCount}</div>
-          <div className="text-[11px] text-neutral-400 mt-0.5">Custom tenant/branch rules</div>
+          <div className="text-2xl font-black text-amber-400 tracking-tight">{activeOverridesCount}</div>
+          <div className="text-[11px] text-slate-400">Custom tenant/branch rules</div>
         </div>
       </div>
     </div>
