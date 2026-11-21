@@ -2,9 +2,9 @@
 // RESPONSIBILITY: Render the Cyber-Luxury secondary navigation and domain boundary for Notifications & Notices.
 // FLOW: Domain route -> superadmin_communication/layout.tsx -> role-level navigation registry and child route content.
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
-import { Bell, BellRing, ScrollText, LayoutTemplate } from 'lucide-react';
+import { Bell, BellRing } from 'lucide-react';
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes';
 
 const TAB_CONFIG = {
@@ -14,20 +14,6 @@ const TAB_CONFIG = {
     activeColor: 'text-violet-400',
     border: 'border-violet-500',
     bg: 'bg-violet-500/15',
-  },
-  templates: {
-    icon: LayoutTemplate,
-    label: 'Multi-Channel Templates',
-    activeColor: 'text-amber-400',
-    border: 'border-amber-500',
-    bg: 'bg-amber-500/15',
-  },
-  delivery_logs: {
-    icon: ScrollText,
-    label: 'Delivery Audit Logs',
-    activeColor: 'text-emerald-400',
-    border: 'border-emerald-500',
-    bg: 'bg-emerald-500/15',
   },
   notices: {
     icon: Bell,
@@ -40,27 +26,13 @@ const TAB_CONFIG = {
 
 export default function DomainLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const activeTabParam = searchParams.get('tab');
 
   const routes = [
     {
       key: 'notification_center',
       ...TAB_CONFIG.notification_center,
       href: SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center,
-      isActive: pathname.includes('communication_notification_center') && (!activeTabParam || activeTabParam === 'overview' || activeTabParam === 'usage'),
-    },
-    {
-      key: 'templates',
-      ...TAB_CONFIG.templates,
-      href: `${SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center}?tab=templates`,
-      isActive: pathname.includes('communication_notification_center') && (activeTabParam === 'templates' || activeTabParam === 'email' || activeTabParam === 'sms'),
-    },
-    {
-      key: 'delivery_logs',
-      ...TAB_CONFIG.delivery_logs,
-      href: `${SUPERADMIN_NAVIGATION_ROUTES.communication_notification_center}?tab=logs`,
-      isActive: pathname.includes('communication_notification_center') && activeTabParam === 'logs',
+      isActive: pathname.includes('communication_notification_center'),
     },
     {
       key: 'notices',
