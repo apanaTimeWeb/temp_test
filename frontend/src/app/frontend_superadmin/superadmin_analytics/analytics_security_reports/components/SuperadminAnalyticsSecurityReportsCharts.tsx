@@ -22,46 +22,46 @@ export function SuperadminAnalyticsSecurityReportsCharts({
       data-testid="security-reports-charts"
     >
       {/* ── Daily Authentication Telemetry ── */}
-      <div className="lg:col-span-2 p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xs flex flex-col justify-between">
+      <div className="lg:col-span-2 p-5 rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 backdrop-blur-md flex flex-col justify-between shadow-xl">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-bold text-foreground">Authentication & Threat Trajectory</h3>
-            <p className="text-xs text-muted-foreground">Authorized access vs blocked brute-force events</p>
+            <h3 className="text-sm font-bold text-white tracking-tight">Authentication & Threat Trajectory</h3>
+            <p className="text-xs text-slate-400">Authorized login volume vs security threats and anomalies</p>
           </div>
-          <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500 inline-block" />
+          <div className="flex items-center gap-3 text-[11px] text-slate-300">
+            <span className="flex items-center gap-1.5 font-medium">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-xs shadow-emerald-400/50" />
               Valid Logins
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-rose-500 inline-block" />
+            <span className="flex items-center gap-1.5 font-medium">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-xs shadow-rose-400/50" />
               Failed / Threats
             </span>
           </div>
         </div>
 
-        <div className="space-y-3 pt-2">
+        <div className="space-y-3.5 pt-2">
           {auditTrends.map((trend, i) => {
             const successPercent = Math.min(100, Math.round((trend.successfulLogins / maxLogins) * 100));
             const failPercent = Math.min(100, Math.round((trend.failedLogins / 100) * 100));
 
             return (
-              <div key={i} className="space-y-1">
+              <div key={i} className="space-y-1.5">
                 <div className="flex justify-between text-xs">
-                  <span className="font-semibold text-foreground">{trend.period}</span>
-                  <div className="flex gap-4 text-muted-foreground">
-                    <span className="text-emerald-400 font-medium">{formatSecurityNumber(trend.successfulLogins)} logins</span>
+                  <span className="font-semibold text-white">{trend.period}</span>
+                  <div className="flex gap-4 font-mono text-xs">
+                    <span className="text-emerald-400 font-semibold">{formatSecurityNumber(trend.successfulLogins)} logins</span>
                     <span className="text-rose-400 font-medium">{trend.failedLogins} failed</span>
-                    <span className="font-mono text-xs text-amber-400">{trend.threatEvents} threats</span>
+                    <span className="text-amber-400 font-bold">{trend.threatEvents} threats</span>
                   </div>
                 </div>
-                <div className="h-2 w-full bg-muted/60 rounded-full overflow-hidden flex gap-1">
+                <div className="h-2.5 w-full bg-slate-900 border border-indigo-500/20 rounded-full overflow-hidden flex gap-1 p-0.5">
                   <div
-                    className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full transition-all duration-500 shadow-xs shadow-emerald-500/30"
                     style={{ width: `${successPercent}%` }}
                   />
                   <div
-                    className="h-full bg-rose-500 rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-rose-600 to-rose-400 rounded-full transition-all duration-500 shadow-xs shadow-rose-500/30"
                     style={{ width: `${failPercent}%` }}
                   />
                 </div>
@@ -72,28 +72,31 @@ export function SuperadminAnalyticsSecurityReportsCharts({
       </div>
 
       {/* ── Threat Distribution Breakdown ── */}
-      <div className="p-5 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xs flex flex-col justify-between">
+      <div className="p-5 rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 backdrop-blur-md flex flex-col justify-between shadow-xl">
         <div>
-          <h3 className="text-sm font-bold text-foreground">Threat & Anomaly Distribution</h3>
-          <p className="text-xs text-muted-foreground">Classification of detected security events</p>
+          <h3 className="text-sm font-bold text-white tracking-tight">Threat & Anomaly Distribution</h3>
+          <p className="text-xs text-slate-400">Classification of detected security events</p>
         </div>
 
         <div className="space-y-4 my-auto pt-3">
           {threatDistribution.map((item, i) => {
             const isHigh = item.percentage >= 40;
-            const barColor = isHigh ? 'bg-rose-500' : 'bg-amber-500';
+            const barGradient = isHigh
+              ? 'bg-gradient-to-r from-rose-600 to-rose-400'
+              : 'bg-gradient-to-r from-amber-600 to-amber-400';
+            const textColor = isHigh ? 'text-rose-400' : 'text-amber-400';
 
             return (
               <div key={i} className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="font-medium text-foreground">{item.category}</span>
-                  <span className="font-bold text-foreground">
+                  <span className="font-medium text-white">{item.category}</span>
+                  <span className={`font-bold font-mono ${textColor}`}>
                     {item.percentage}% ({item.count} events)
                   </span>
                 </div>
-                <div className="h-2 w-full bg-muted/60 rounded-full overflow-hidden">
+                <div className="h-2.5 w-full bg-slate-900 border border-indigo-500/20 rounded-full overflow-hidden p-0.5">
                   <div
-                    className={`h-full ${barColor} rounded-full transition-all duration-500`}
+                    className={`h-full ${barGradient} rounded-full transition-all duration-500 shadow-xs`}
                     style={{ width: `${Math.min(100, item.percentage)}%` }}
                   />
                 </div>
@@ -102,9 +105,12 @@ export function SuperadminAnalyticsSecurityReportsCharts({
           })}
         </div>
 
-        <div className="pt-3 border-t border-border/40 text-[11px] text-muted-foreground flex items-center justify-between">
+        <div className="pt-3 border-t border-indigo-500/15 text-[11px] text-slate-400 flex items-center justify-between font-medium">
           <span>Real-time Sentinel Status</span>
-          <span className="font-semibold text-emerald-400">Shield Active</span>
+          <span className="font-semibold text-emerald-400 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            Shield Active
+          </span>
         </div>
       </div>
     </div>

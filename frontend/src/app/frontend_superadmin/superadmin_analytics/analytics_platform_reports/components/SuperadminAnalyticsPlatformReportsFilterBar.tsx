@@ -12,7 +12,7 @@ interface Props {
   onSearchChange: (text: string) => void;
   onFilterChange: (key: keyof SuperadminAnalyticsPlatformReportsFilters, val: unknown) => void;
   onResetFilters: () => void;
-  onOpenExport: () => void;
+  onOpenExport?: () => void;
   filterOptions?: {
     libraries: Array<{ id: string; name: string }>;
     branches: Array<{ id: string; name: string }>;
@@ -65,25 +65,16 @@ export function SuperadminAnalyticsPlatformReportsFilterBar({
           )}
         </div>
 
-        {/* Action Buttons: Export & Reset */}
-        <div className="flex items-center gap-2 flex-wrap">
+        {/* Action Controls: Reset */}
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onResetFilters}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold border border-indigo-500/25 bg-slate-900/90 text-slate-300 hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-semibold border border-indigo-500/25 bg-slate-900/90 text-slate-300 hover:text-white hover:bg-white/[0.08] transition-all cursor-pointer active:scale-95 shadow-xs"
             aria-label="Reset all filters"
           >
             <RotateCcw size={13} />
-            <span>Reset</span>
-          </button>
-          <button
-            type="button"
-            onClick={onOpenExport}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 hover:from-sky-500 hover:to-purple-500 text-white transition-all cursor-pointer shadow-lg shadow-sky-500/20 active:scale-95"
-            aria-label="Open export modal"
-          >
-            <Download size={14} />
-            <span>Export & Print</span>
+            <span>Reset Filters</span>
           </button>
         </div>
       </div>

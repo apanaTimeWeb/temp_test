@@ -108,7 +108,6 @@ export function SuperadminAnalyticsSecurityReportsMain() {
         onSearchChange={handleSearchChange}
         onFilterChange={updateFilter}
         onResetFilters={resetFilters}
-        onOpenExport={() => setIsExportModalOpen(true)}
         filterOptions={reportData?.filterOptions}
       />
 
@@ -127,59 +126,59 @@ export function SuperadminAnalyticsSecurityReportsMain() {
       {/* ── Security Event Detail Slide-Over ── */}
       {selectedRecord && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
         >
-          <div className="w-full max-w-md p-6 rounded-2xl border border-border bg-card shadow-2xl space-y-4 animate-in fade-in-50 zoom-in-95">
-            <div className="flex items-center justify-between border-b border-border/40 pb-3">
+          <div className="w-full max-w-lg p-6 rounded-3xl border border-indigo-500/30 bg-[#0a0d24]/95 text-white shadow-2xl shadow-indigo-950/60 backdrop-blur-xl space-y-4 animate-in fade-in-50 zoom-in-95">
+            <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
               <div>
-                <h3 className="text-sm font-bold text-foreground">
+                <h3 className="text-base font-bold text-white tracking-tight">
                   {formatSecurityEventLabel(selectedRecord.eventType)}
                 </h3>
-                <p className="text-xs text-muted-foreground">{selectedRecord.timestamp} • {selectedRecord.severity} Severity</p>
+                <p className="text-xs text-slate-400">{selectedRecord.timestamp} • <span className="text-rose-400 font-semibold">{selectedRecord.severity} Severity</span></p>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedRecord(null)}
-                className="p-1 rounded-lg text-muted-foreground hover:text-foreground cursor-pointer"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] cursor-pointer transition-colors"
               >
                 <X size={16} />
               </button>
             </div>
 
-            <div className="space-y-2.5 text-xs">
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Target Library</span>
-                <span className="font-semibold text-foreground">{selectedRecord.libraryName} ({selectedRecord.libraryCode})</span>
+            <div className="space-y-2 text-xs">
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Target Library</span>
+                <span className="font-semibold text-white">{selectedRecord.libraryName} ({selectedRecord.libraryCode})</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Branch Unit</span>
-                <span className="font-semibold text-foreground">{selectedRecord.branchName}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Branch Unit</span>
+                <span className="font-semibold text-white">{selectedRecord.branchName}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">User / Actor</span>
-                <span className="font-semibold text-foreground">{selectedRecord.adminName} ({selectedRecord.adminEmail})</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">User / Actor</span>
+                <span className="font-semibold text-white">{selectedRecord.adminName} ({selectedRecord.adminEmail})</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Subscription Plan</span>
-                <span className="font-medium text-foreground">{selectedRecord.plan}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Subscription Plan</span>
+                <span className="font-medium text-white">{selectedRecord.plan}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Operating Status</span>
-                <span className="font-semibold text-foreground">{selectedRecord.status}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Operating Status</span>
+                <span className="font-semibold text-emerald-400">{selectedRecord.status}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Origin IP Address</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Origin IP Address</span>
                 <span className="font-mono text-rose-400 font-bold">{selectedRecord.ipAddress}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Geo Location</span>
-                <span className="font-medium text-foreground">{selectedRecord.location}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Geo Location</span>
+                <span className="font-medium text-white">{selectedRecord.location}</span>
               </div>
               <div className="py-2">
-                <span className="text-muted-foreground block mb-1">Audit Details / Payload</span>
-                <p className="p-2.5 rounded-xl bg-muted/40 font-mono text-[11px] text-foreground leading-relaxed">
+                <span className="text-slate-400 block mb-1 font-medium">Audit Details / Payload</span>
+                <p className="p-3 rounded-xl bg-slate-950/60 border border-indigo-500/20 font-mono text-[11px] text-slate-200 leading-relaxed">
                   {selectedRecord.details}
                 </p>
               </div>
@@ -188,7 +187,7 @@ export function SuperadminAnalyticsSecurityReportsMain() {
             <button
               type="button"
               onClick={() => setSelectedRecord(null)}
-              className="w-full py-2 rounded-xl text-xs font-semibold bg-muted hover:bg-muted/80 text-foreground transition-all cursor-pointer"
+              className="w-full py-2.5 rounded-xl text-xs font-semibold bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 hover:text-white transition-all cursor-pointer"
             >
               Close Event Details
             </button>
