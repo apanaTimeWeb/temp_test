@@ -108,7 +108,6 @@ export function SuperadminAnalyticsBillingReportsMain() {
         onSearchChange={handleSearchChange}
         onFilterChange={updateFilter}
         onResetFilters={resetFilters}
-        onOpenExport={() => setIsExportModalOpen(true)}
         filterOptions={reportData?.filterOptions}
       />
 
@@ -127,72 +126,73 @@ export function SuperadminAnalyticsBillingReportsMain() {
       {/* ── Record Detail Slide-Over / Modal ── */}
       {selectedRecord && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
         >
-          <div className="w-full max-w-md p-6 rounded-2xl border border-border bg-card shadow-2xl space-y-4 animate-in fade-in-50 zoom-in-95">
-            <div className="flex items-center justify-between border-b border-border/40 pb-3">
+          <div className="w-full max-w-lg p-6 rounded-3xl border border-indigo-500/30 bg-[#0a0d24]/95 text-white shadow-2xl shadow-indigo-950/60 backdrop-blur-xl space-y-4 animate-in fade-in-50 zoom-in-95">
+            <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
               <div>
-                <h3 className="text-sm font-bold text-foreground">
-                  Invoice {selectedRecord.invoiceNumber}
+                <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
+                  <span>Invoice</span>
+                  <span className="font-mono text-amber-400">{selectedRecord.invoiceNumber}</span>
                 </h3>
-                <p className="text-xs text-muted-foreground">{selectedRecord.libraryName}</p>
+                <p className="text-xs text-slate-400">{selectedRecord.libraryName}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedRecord(null)}
-                className="p-1 rounded-lg text-muted-foreground hover:text-foreground cursor-pointer"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] cursor-pointer transition-colors"
               >
                 <X size={16} />
               </button>
             </div>
 
-            <div className="space-y-2.5 text-xs">
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Branch</span>
-                <span className="font-semibold text-foreground">{selectedRecord.branchName}</span>
+            <div className="space-y-2 text-xs">
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Branch</span>
+                <span className="font-semibold text-white">{selectedRecord.branchName}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Plan</span>
-                <span className="font-semibold text-foreground">{selectedRecord.planName}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Plan</span>
+                <span className="font-semibold text-white">{selectedRecord.planName}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Cycle</span>
-                <span className="font-semibold text-foreground">{selectedRecord.billingCycle}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Cycle</span>
+                <span className="font-semibold text-white uppercase font-mono">{selectedRecord.billingCycle}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Amount</span>
-                <span className="font-bold text-emerald-400">
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Amount</span>
+                <span className="font-bold text-emerald-400 font-mono text-sm">
                   {formatBillingCurrency(selectedRecord.amountMinor)}
                 </span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Status</span>
-                <span className="font-semibold text-foreground">{selectedRecord.paymentStatus}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Status</span>
+                <span className="font-semibold text-amber-400">{selectedRecord.paymentStatus}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Payment Method</span>
-                <span className="font-semibold text-foreground">{selectedRecord.paymentMethod}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Payment Method</span>
+                <span className="font-semibold text-white">{selectedRecord.paymentMethod.replace(/_/g, ' ')}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Transaction ID</span>
-                <span className="font-mono text-muted-foreground">{selectedRecord.transactionId}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Transaction ID</span>
+                <span className="font-mono text-slate-300">{selectedRecord.transactionId}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Invoice Date</span>
-                <span className="text-foreground">{selectedRecord.invoiceDate}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Invoice Date</span>
+                <span className="text-slate-200 font-mono">{selectedRecord.invoiceDate}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-border/20">
-                <span className="text-muted-foreground">Due Date</span>
-                <span className="text-foreground">{selectedRecord.dueDate}</span>
+              <div className="flex justify-between py-2 px-3 rounded-xl bg-slate-950/40 border border-indigo-500/15">
+                <span className="text-slate-400">Due Date</span>
+                <span className="text-slate-200 font-mono">{selectedRecord.dueDate}</span>
               </div>
             </div>
 
             <button
               type="button"
               onClick={() => setSelectedRecord(null)}
-              className="w-full py-2 rounded-xl text-xs font-semibold bg-muted hover:bg-muted/80 text-foreground transition-all cursor-pointer"
+              className="w-full py-2.5 rounded-xl text-xs font-semibold bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 hover:text-white transition-all cursor-pointer"
             >
               Close Details
             </button>

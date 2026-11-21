@@ -158,9 +158,8 @@ export default function SuperadminSupportTicketsCreateModal({
                   placeholder="e.g. Apex Central Library"
                   value={tenant}
                   onChange={(e) => setTenant(e.target.value)}
-                  className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${
-                    errors.tenant ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
-                  }`}
+                  className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${errors.tenant ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
+                    }`}
                 />
                 {errors.tenant && <p className="text-[11px] text-rose-400 mt-1">{errors.tenant}</p>}
               </div>
@@ -260,9 +259,8 @@ export default function SuperadminSupportTicketsCreateModal({
                 placeholder="e.g. Biometric QR scanner not connecting after power outage"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${
-                  errors.subject ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
-                }`}
+                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${errors.subject ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
+                  }`}
               />
               {errors.subject && <p className="text-[11px] text-rose-400 mt-1">{errors.subject}</p>}
             </div>

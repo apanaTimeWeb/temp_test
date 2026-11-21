@@ -5,6 +5,7 @@ import { useModalScrollLock } from '@/lib/useModalScrollLock';
 /** Responsibility: Superadmin Support Tickets Detail Panel; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
 /** Data-Flow: leaf-owned props or hook state -> SuperadminSupportTicketsOverviewDetailPanel formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Clock,
   X,
@@ -15,14 +16,12 @@ import {
   Bug,
   CreditCard,
   Lock,
-  Flag,
   Check,
   MessageSquare,
   ShieldCheck,
   ShieldAlert,
   Building2,
   Headphones,
-  AlertTriangle,
   RotateCcw,
   Zap,
   TrendingUp,
@@ -69,6 +68,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
   const [priority, setPriority] = useState<SuperadminSupportTicketPriority>(tkt.priority);
   const [assignee, setAssignee] = useState(tkt.assignee);
   const [activeTab, setActiveTab] = useState<'conversation' | 'internal_notes' | 'attachments' | 'sla_escalation' | 'privacy_shield'>('conversation');
+  const [mounted, setMounted] = useState(false);
 
   // Conversation and replies
   const [replyText, setReplyText] = useState('');
@@ -167,6 +167,10 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
     if (isDirtyRef.current && !await confirm(tRef.current('COPY.UNSAVED_CHANGES_WARNING'))) return;
     onClose();
   }, [confirm, onClose]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     previousFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -377,9 +381,9 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
     }
   };
 
-  return (
+  const panelContent = (
     <div
-      className="fixed inset-0 z-[70] bg-black/80 backdrop-blur-md flex justify-center items-center p-2 sm:p-4 md:p-6 overflow-hidden motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none"
+      className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md flex justify-center items-center p-2 sm:p-4 md:p-6 overflow-y-auto motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none"
       onClick={requestClose}
       data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-72"
     >
@@ -389,22 +393,23 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="superadmin-support-ticket-detail-title"
-        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/90 w-full max-w-5xl flex flex-col overflow-hidden text-slate-100 h-[92vh] max-h-[94vh] animate-in zoom-in-95 duration-200 ease-out"
-        style={{ maxHeight: 'calc(100dvh - 32px)' }}
+        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/95 w-full max-w-5xl flex flex-col my-auto overflow-hidden text-slate-100 animate-in zoom-in-95 duration-200 ease-out"
+        style={{ height: 'calc(100dvh - 32px)', maxHeight: 'calc(100dvh - 32px)' }}
         onClick={(e) => e.stopPropagation()}
         data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-73"
       >
-        {/* Header - Fixed at Top */}
-        <div className="p-5 sm:p-6 border-b border-indigo-500/20 bg-gradient-to-r from-[#11173d] via-[#0d1330] to-[#0a0e27] flex items-start justify-between gap-4 shrink-0">
-          <div className="space-y-2.5 min-w-0 flex-1">
+        {/* Header - Compact & Sleek Top Bar (Fixed) */}
+        <div className="p-3.5 sm:p-4 border-b border-indigo-500/20 bg-gradient-to-r from-[#11173d] via-[#0d1330] to-[#0a0e27] shrink-0 space-y-2">
+          {/* Top Row: Badges, SLA & Action Controls */}
+          <div className="flex items-center justify-between gap-2 flex-wrap">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-mono text-xs font-bold text-indigo-300 bg-indigo-500/15 px-2.5 py-1 rounded-lg border border-indigo-500/30 shadow-xs">
+              <span className="font-mono text-xs font-bold text-indigo-300 bg-indigo-500/15 px-2 py-0.5 rounded-lg border border-indigo-500/30 shadow-xs">
                 {tkt.id}
               </span>
 
               {/* Status Badge */}
               <span
-                className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border shadow-xs ${
+                className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider border shadow-xs ${
                   status === 'Resolved'
                     ? 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30'
                     : status === 'Escalated'
@@ -420,7 +425,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                 {status}
               </span>
 
-              {/* Priority Badge & Selector */}
+              {/* Priority Selector */}
               <select
                 aria-label={t("COPY.PRIORITY")}
                 value={priority}
@@ -441,97 +446,98 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                 <option value="Low">Low Priority</option>
               </select>
 
-              {/* Category / Ticket Type Badge */}
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-medium text-xs">
+              {/* Category Badge */}
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 font-medium text-xs">
                 {getCategoryIcon(tkt.category)}
                 <span>{tkt.category}</span>
               </span>
 
               {/* SLA Tracking Badge */}
               <span
-                className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full border shadow-xs ${
+                className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full border shadow-xs ${
                   tkt.slaBreach
                     ? 'text-rose-300 bg-rose-500/15 border-rose-500/30 motion-safe:animate-pulse'
                     : 'text-emerald-300 bg-emerald-500/10 border-emerald-500/25'
                 }`}
               >
                 <Timer size={12} className={tkt.slaBreach ? 'text-rose-400' : 'text-emerald-400'} />
-                <span>{tkt.slaBreach ? 'SLA Breached' : `SLA Target: ${tkt.slaTargetHours || 4}h (${tkt.slaRemaining || 'On Track'})`}</span>
+                <span>{tkt.slaBreach ? 'SLA Breached' : `SLA: ${tkt.slaTargetHours || 4}h (${tkt.slaRemaining || 'On Track'})`}</span>
               </span>
             </div>
 
-            <h2 id="superadmin-support-ticket-detail-title" className="text-lg sm:text-xl font-bold text-slate-100 tracking-tight leading-snug">
+            <div className="flex items-center gap-1.5 shrink-0">
+              {/* Escalate button */}
+              {status !== 'Resolved' && status !== 'Closed' && (
+                <button
+                  type="button"
+                  onClick={() => setShowEscalateModal(true)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
+                  title={t("COPY.ESCALATE_TICKET")}
+                >
+                  <Zap size={12} className="text-red-400" />
+                  <span className="hidden sm:inline">{t("COPY.ESCALATE_TICKET")}</span>
+                </button>
+              )}
+
+              {/* Resolve or Reopen button */}
+              {status === 'Resolved' || status === 'Closed' ? (
+                <button
+                  type="button"
+                  onClick={() => setShowReopenModal(true)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-purple-500/40 bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
+                  title={t("COPY.REOPEN_TICKET")}
+                >
+                  <RotateCcw size={12} className="text-purple-400" />
+                  <span>{t("COPY.REOPEN_TICKET")}</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowResolveModal(true)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
+                  title={t("COPY.RESOLVE_TICKET")}
+                >
+                  <CheckCircle2 size={12} className="text-emerald-400" />
+                  <span>{t("COPY.RESOLVE_TICKET")}</span>
+                </button>
+              )}
+
+              {/* Close modal */}
+              <button
+                type="button"
+                aria-label={t("COPY.CLOSE_TICKET_DETAILS")}
+                className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800/80 transition-colors cursor-pointer"
+                onClick={requestClose}
+                data-testid="superadmin-support-tickets-support-tickets-detail-close-ticket-details-1"
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+
+          {/* Title & Tenant Metadata Row */}
+          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 pt-0.5">
+            <h2 id="superadmin-support-ticket-detail-title" className="text-base sm:text-lg font-bold text-slate-100 tracking-tight leading-snug truncate" title={tkt.subject}>
               {tkt.subject}
             </h2>
-
-            <div className="flex items-center gap-3 sm:gap-4 text-xs text-slate-400 flex-wrap pt-0.5">
-              <span className="flex items-center gap-1.5 font-medium text-slate-300">
-                <Building2 size={13} className="text-indigo-400 shrink-0" />
-                <span className="text-slate-400">Tenant:</span>
-                <strong className="text-slate-200">{tkt.tenant}</strong>
+            <div className="flex items-center gap-3 text-xs text-slate-400 shrink-0">
+              <span className="flex items-center gap-1 font-medium text-slate-300">
+                <Building2 size={12} className="text-indigo-400" />
+                <strong>{tkt.tenant}</strong>
                 {tkt.contact && <span className="text-slate-400">({tkt.contact})</span>}
               </span>
-              <span className="text-slate-600 hidden sm:inline">•</span>
-              <span className="flex items-center gap-1.5 font-medium text-slate-400">
-                <Clock size={13} className="text-indigo-400 shrink-0" />
+              <span className="text-slate-600">•</span>
+              <span className="flex items-center gap-1 text-slate-400">
+                <Clock size={12} className="text-indigo-400" />
                 <span>{t("COPY.OPENED")} {tkt.age} {t("COPY.AGO")}</span>
               </span>
             </div>
           </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            {/* Escalate button */}
-            {status !== 'Resolved' && status !== 'Closed' && (
-              <button
-                type="button"
-                onClick={() => setShowEscalateModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
-                title={t("COPY.ESCALATE_TICKET")}
-              >
-                <Zap size={13} className="text-red-400" />
-                <span className="hidden sm:inline">{t("COPY.ESCALATE_TICKET")}</span>
-              </button>
-            )}
-
-            {/* Resolve or Reopen button */}
-            {status === 'Resolved' || status === 'Closed' ? (
-              <button
-                type="button"
-                onClick={() => setShowReopenModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-purple-500/40 bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
-                title={t("COPY.REOPEN_TICKET")}
-              >
-                <RotateCcw size={13} className="text-purple-400" />
-                <span>{t("COPY.REOPEN_TICKET")}</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setShowResolveModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
-                title={t("COPY.RESOLVE_TICKET")}
-              >
-                <CheckCircle2 size={13} className="text-emerald-400" />
-                <span>{t("COPY.RESOLVE_TICKET")}</span>
-              </button>
-            )}
-
-            {/* Close modal */}
-            <button
-              type="button"
-              aria-label={t("COPY.CLOSE_TICKET_DETAILS")}
-              className="text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800/80 border border-transparent hover:border-slate-700/80 transition-all cursor-pointer shrink-0"
-              onClick={requestClose}
-              data-testid="superadmin-support-tickets-support-tickets-detail-close-ticket-details-1"
-            >
-              <X size={20} />
-            </button>
-          </div>
         </div>
 
-        {/* Quick Controls Bar (Responsive 3-column toolbar: satisfying contract) - Fixed at Top */}
-        <div className="px-5 sm:px-6 py-3 bg-[#080c21] border-b border-indigo-500/20 shrink-0">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-center">
+        {/* Quick Controls & Privacy Shield Toolbar - Sleek & Compact (Fixed) */}
+        <div className="px-3.5 sm:px-4 py-2 bg-[#080c21] border-b border-indigo-500/20 shrink-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 items-center">
             {/* Column 1: Assignee */}
             <div className="flex items-center gap-2">
               <span className="text-[11px] uppercase tracking-wider text-slate-400 font-bold shrink-0 flex items-center gap-1">
@@ -540,7 +546,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               </span>
               <select
                 aria-label={t("COPY.TICKET_ASSIGNEE_LOCAL_PREVIEW_ONLY")}
-                className="flex-1 rounded-xl border border-indigo-500/30 bg-[#0a0f2c] px-3 py-1.5 text-xs font-semibold text-slate-200 outline-none hover:border-indigo-400 focus:border-indigo-400 transition-colors cursor-pointer shadow-xs"
+                className="flex-1 rounded-xl border border-indigo-500/30 bg-[#0a0f2c] px-2.5 py-1 text-xs font-semibold text-slate-200 outline-none hover:border-indigo-400 focus:border-indigo-400 transition-colors cursor-pointer shadow-xs"
                 value={assignee}
                 onChange={(e) => setAssignee(e.target.value)}
                 data-testid="superadmin-support-tickets-support-tickets-detail-ticket-assignee-local-preview-only-2"
@@ -561,7 +567,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               </span>
               <select
                 aria-label={t("COPY.TICKET_STATUS_LOCAL_PREVIEW_ONLY")}
-                className="flex-1 rounded-xl border border-indigo-500/30 bg-[#0a0f2c] px-3 py-1.5 text-xs font-semibold text-slate-200 outline-none hover:border-indigo-400 focus:border-indigo-400 transition-colors cursor-pointer shadow-xs"
+                className="flex-1 rounded-xl border border-indigo-500/30 bg-[#0a0f2c] px-2.5 py-1 text-xs font-semibold text-slate-200 outline-none hover:border-indigo-400 focus:border-indigo-400 transition-colors cursor-pointer shadow-xs"
                 value={status}
                 onChange={(e) => setStatus(e.target.value as SuperadminSupportTicketStatus)}
                 data-testid="superadmin-support-tickets-support-tickets-detail-ticket-status-local-preview-only-3"
@@ -575,11 +581,44 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               </select>
             </div>
 
-            {/* Column 3: Save button */}
-            <div className="flex items-center justify-end sm:justify-start lg:justify-end gap-2">
+            {/* Column 3: Save button & Privacy Shield Quick Access */}
+            <div className="flex items-center justify-between sm:justify-start lg:justify-end gap-2">
+              <div className="flex items-center gap-1.5">
+                <span
+                  className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                    timeLimitedAccess.hasActiveAccess
+                      ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
+                      : 'bg-indigo-500/20 border-indigo-500/30 text-indigo-300'
+                  }`}
+                  title={timeLimitedAccess.hasActiveAccess ? `Elevated Access Active (${timeLimitedAccess.expiresAt})` : 'Zero-Trust Shield Enforced'}
+                >
+                  <ShieldCheck size={11} className={timeLimitedAccess.hasActiveAccess ? 'text-emerald-400' : 'text-indigo-400'} />
+                  <span>{timeLimitedAccess.hasActiveAccess ? 'Elevated Active' : 'Privacy Shield'}</span>
+                </span>
+                {timeLimitedAccess.hasActiveAccess ? (
+                  <button
+                    type="button"
+                    onClick={handleRevokeAccess}
+                    className="p-1 rounded-lg border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-[11px] font-bold cursor-pointer"
+                    title={t("COPY.REVOKE_ACCESS")}
+                  >
+                    <Lock size={11} />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setShowGrantAccessModal(true)}
+                    className="p-1 rounded-lg border border-indigo-500/40 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 text-[11px] font-bold cursor-pointer"
+                    title={t("COPY.TIME_LIMITED_ACCESS")}
+                  >
+                    <Key size={11} className="text-indigo-400" />
+                  </button>
+                )}
+              </div>
+
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-md shadow-indigo-950/40 transition-all cursor-pointer active:scale-[0.97]"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-3 py-1 text-xs font-bold text-white shadow-md shadow-indigo-950/40 transition-all cursor-pointer active:scale-[0.97] shrink-0"
                 onClick={() => {
                   onSave({
                     ...tkt,
@@ -605,145 +644,88 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
           </div>
         </div>
 
-        {/* Member Privacy Shield & Authorized Time-Limited Support Access Banner */}
-        <div className="px-5 sm:px-6 py-3 border-b border-indigo-500/20 bg-gradient-to-r from-[#070d24] via-[#09112e] to-[#070b22]">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border border-indigo-500/25 bg-[#05091c]/80">
-            <div className="flex items-center gap-3">
-              <div
-                className={`p-2 rounded-xl border shrink-0 ${
-                  timeLimitedAccess.hasActiveAccess
-                    ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
-                    : 'bg-indigo-500/15 border-indigo-500/30 text-indigo-400'
-                }`}
-              >
-                {timeLimitedAccess.hasActiveAccess ? <Timer size={18} className="animate-spin" /> : <ShieldCheck size={18} />}
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-slate-100">{t("COPY.PRIVACY_SHIELD")}</span>
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                      timeLimitedAccess.hasActiveAccess
-                        ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
-                        : 'bg-indigo-500/20 border-indigo-500/30 text-indigo-300'
-                    }`}
-                  >
-                    {timeLimitedAccess.hasActiveAccess ? `Elevated Access Active (${timeLimitedAccess.expiresAt})` : 'Zero-Trust Shield Enforced'}
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-400 mt-0.5">
-                  {timeLimitedAccess.hasActiveAccess
-                    ? `Delegated to ${timeLimitedAccess.grantedTo} • Scope: ${timeLimitedAccess.scope} • Audit ID #${timeLimitedAccess.auditId}`
-                    : 'Support employees are restricted from viewing library member personal records without explicit time-limited authorization.'}
-                </p>
-              </div>
-            </div>
-
-            <div className="shrink-0 flex items-center gap-2">
-              {timeLimitedAccess.hasActiveAccess ? (
-                <button
-                  type="button"
-                  onClick={handleRevokeAccess}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-[0.97]"
-                >
-                  <Lock size={12} />
-                  <span>{t("COPY.REVOKE_ACCESS")}</span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setShowGrantAccessModal(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-500/40 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-[0.97]"
-                >
-                  <Key size={12} className="text-indigo-400" />
-                  <span>{t("COPY.TIME_LIMITED_ACCESS")}</span>
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Section Navigation Tabs */}
-        <div className="px-5 sm:px-6 pt-3 pb-1 border-b border-indigo-500/15 bg-[#080c21] flex items-center gap-1.5 overflow-x-auto">
+        {/* Section Navigation Tabs (Fixed) */}
+        <div className="px-3.5 sm:px-4 pt-2 pb-1 border-b border-indigo-500/15 bg-[#080c21] flex items-center gap-1.5 overflow-x-auto shrink-0">
           <button
             type="button"
             onClick={() => setActiveTab('conversation')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
               activeTab === 'conversation'
                 ? 'bg-indigo-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
             }`}
           >
-            <MessageSquare size={13} />
+            <MessageSquare size={12} />
             <span>{t("COPY.CONVERSATION_HISTORY")} ({messages.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('internal_notes')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
               activeTab === 'internal_notes'
                 ? 'bg-amber-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
             }`}
           >
-            <Lock size={13} />
+            <Lock size={12} />
             <span>{t("COPY.INTERNAL_NOTES")} ({internalNotes.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('attachments')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
               activeTab === 'attachments'
                 ? 'bg-sky-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
             }`}
           >
-            <Paperclip size={13} />
+            <Paperclip size={12} />
             <span>{t("COPY.ATTACHMENTS")} ({attachments.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab('sla_escalation')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
               activeTab === 'sla_escalation'
                 ? 'bg-rose-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
             }`}
           >
-            <Timer size={13} />
+            <Timer size={12} />
             <span>{t("COPY.SLA_TRACKING")} & Escalation</span>
           </button>
         </div>
 
-        {/* Content Body - Split between fixed conversation layout and scrollable secondary tabs */}
+        {/* Content Body */}
         {activeTab === 'conversation' ? (
-          <div className="flex-1 min-h-0 flex flex-col p-4 sm:p-5 gap-3 overflow-hidden">
-            {/* Messages Stream - Scrollable thread container */}
-            <div className="flex-1 min-h-0 flex flex-col rounded-2xl border border-indigo-500/25 bg-[#070b22]/90 p-4 shadow-lg overflow-hidden">
-              <div className="flex items-center justify-between pb-3 border-b border-indigo-500/15 shrink-0">
+          <div className="flex-1 min-h-0 flex flex-col p-3 sm:p-4 gap-2.5 overflow-hidden">
+            {/* Messages Stream - Fixed Container, ONLY Inside Scrolls */}
+            <div className="flex-1 min-h-[160px] flex flex-col rounded-xl border border-indigo-500/25 bg-[#070b22]/90 p-3 shadow-lg overflow-hidden">
+              <div className="flex items-center justify-between pb-2 border-b border-indigo-500/15 shrink-0">
                 <div className="flex items-center gap-2">
-                  <MessageSquare size={16} className="text-indigo-400" />
+                  <MessageSquare size={14} className="text-indigo-400" />
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
                     Helpdesk Message Stream
                   </h3>
                 </div>
                 <span className="text-[11px] text-slate-400 flex items-center gap-1.5">
-                  <ShieldCheck size={13} className="text-emerald-400" /> End-to-end Audited Support Thread
+                  <ShieldCheck size={12} className="text-emerald-400" /> End-to-end Audited Support Thread
                 </span>
               </div>
 
-              <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 pr-2 pt-3">
+              {/* Scrollable messages thread */}
+              <div className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-2 pt-2">
                 {messages.map((msg) => {
                   const isStaff = msg.role === 'support_agent';
                   const isSystem = msg.role === 'system';
 
                   if (isSystem) {
                     return (
-                      <div key={msg.id} className="flex items-center justify-center my-2">
-                        <div className="px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-300 font-medium flex items-center gap-2">
+                      <div key={msg.id} className="flex items-center justify-center my-1.5">
+                        <div className="px-3 py-1 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-300 font-medium flex items-center gap-2">
                           <Zap size={11} className="text-amber-400 shrink-0" />
                           <span>{msg.text}</span>
                           <span className="text-slate-500 text-[10px]">• {msg.timestamp}</span>
@@ -755,20 +737,20 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                   return (
                     <div
                       key={msg.id}
-                      className={`flex items-start gap-3.5 ${isStaff ? 'flex-row-reverse' : ''}`}
+                      className={`flex items-start gap-3 ${isStaff ? 'flex-row-reverse' : ''}`}
                     >
                       <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm font-bold text-xs ${
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-sm font-bold text-xs ${
                           isStaff
                             ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-300'
                             : 'bg-indigo-500/20 border border-indigo-500/30 text-indigo-300'
                         }`}
                       >
-                        {isStaff ? <Headphones size={16} /> : msg.sender.charAt(0)}
+                        {isStaff ? <Headphones size={15} /> : msg.sender.charAt(0)}
                       </div>
 
                       <div className={`flex-1 min-w-0 flex flex-col ${isStaff ? 'items-end' : 'items-start'}`}>
-                        <div className={`flex items-center gap-2 mb-1 ${isStaff ? 'flex-row-reverse' : ''}`}>
+                        <div className={`flex items-center gap-2 mb-0.5 ${isStaff ? 'flex-row-reverse' : ''}`}>
                           <span className="text-xs font-bold text-slate-100">{msg.sender}</span>
                           <span
                             className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${
@@ -783,7 +765,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                         </div>
 
                         <div
-                          className={`p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm max-w-2xl ${
+                          className={`p-3 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm max-w-2xl ${
                             isStaff
                               ? 'bg-[#082218]/90 border border-emerald-500/30 rounded-tr-xs text-slate-100'
                               : 'bg-[#0e1538] border border-indigo-500/30 rounded-tl-xs text-slate-200'
@@ -799,38 +781,38 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               </div>
             </div>
 
-            {/* Reply Composer Card - Fixed at Bottom & Always Visible */}
-            <div className="shrink-0 rounded-2xl border border-indigo-500/25 bg-[#0b0f2a] p-3.5 sm:p-4 shadow-lg space-y-2.5">
+            {/* Reply Composer Card - FIXED AT BOTTOM & ALWAYS VISIBLE */}
+            <div className="shrink-0 rounded-xl border border-indigo-500/25 bg-[#0b0f2a] p-3 shadow-lg space-y-2">
               {operationMessage && (
-                <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2.5 text-xs text-amber-200 flex items-center gap-2" role="alert">
+                <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-2 text-xs text-amber-200 flex items-center gap-2" role="alert">
                   <span>{operationMessage}</span>
                 </div>
               )}
 
               <div className="flex items-center justify-between gap-2 flex-wrap">
-                <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-indigo-500/20">
+                <div className="flex items-center gap-1.5 bg-slate-900/90 p-0.5 rounded-xl border border-indigo-500/20">
                   <button
                     type="button"
                     aria-pressed={!isInternalNote}
-                    className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
+                    className={`text-xs font-bold px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
                       !isInternalNote ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
                     }`}
                     onClick={() => setIsInternalNote(false)}
                     data-testid="superadmin-support-tickets-support-tickets-detail-public-reply-5"
                   >
-                    <Send size={12} />
+                    <Send size={11} />
                     <span>{t("COPY.PUBLIC_REPLY")}</span>
                   </button>
                   <button
                     type="button"
                     aria-pressed={isInternalNote}
-                    className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
+                    className={`text-xs font-bold px-3 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
                       isInternalNote ? 'bg-amber-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
                     }`}
                     onClick={() => setIsInternalNote(true)}
                     data-testid="superadmin-support-tickets-support-tickets-detail-internal-note-hidden-6"
                   >
-                    <Lock size={12} />
+                    <Lock size={11} />
                     <span>{t("COPY.INTERNAL_NOTE_HIDDEN")}</span>
                   </button>
                 </div>
@@ -840,7 +822,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                 </span>
               </div>
 
-              <div className={`relative rounded-xl border transition-colors ${isInternalNote ? 'border-amber-500/40 bg-amber-950/20 text-amber-200' : 'border-indigo-500/30 bg-[#070b22] text-slate-100'} p-3 shadow-inner`}>
+              <div className={`relative rounded-xl border transition-colors ${isInternalNote ? 'border-amber-500/40 bg-amber-950/20 text-amber-200' : 'border-indigo-500/30 bg-[#070b22] text-slate-100'} p-2.5 shadow-inner`}>
                 <label htmlFor="superadmin-support-ticket-reply-text" className="sr-only">
                   {isInternalNote ? t('COPY.INTERNAL_NOTE_TEXT') : t('COPY.PUBLIC_REPLY_TEXT')}
                 </label>
@@ -848,7 +830,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                   id="superadmin-support-ticket-reply-text"
                   maxLength={5000}
                   rows={2}
-                  className="w-full bg-transparent text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 outline-none resize-none min-h-[55px]"
+                  className="w-full bg-transparent text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 outline-none resize-none min-h-[50px] max-h-[75px]"
                   placeholder={isInternalNote ? t('COPY.TYPE_PRIVATE_NOTE_PLACEHOLDER') : t('COPY.TYPE_REPLY_TO_TENANT_PLACEHOLDER')}
                   value={replyText}
                   onChange={(e) => {
@@ -857,21 +839,21 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                   }}
                   data-testid="superadmin-support-tickets-support-tickets-detail-superadmin-support-ticket-reply-text-7"
                 />
-                <div className="flex items-center justify-between pt-2 border-t border-indigo-500/15 mt-1">
+                <div className="flex items-center justify-between pt-1.5 border-t border-indigo-500/15 mt-1">
                   <button
                     type="button"
                     onClick={() => setActiveTab('attachments')}
                     aria-label={t("COPY.ATTACH_FILE_UNAVAILABLE")}
-                    className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 cursor-pointer flex items-center gap-1.5 text-xs transition-colors"
+                    className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 cursor-pointer flex items-center gap-1.5 text-xs transition-colors"
                     data-testid="superadmin-support-tickets-support-tickets-detail-attach-file-unavailable-8"
                   >
-                    <Paperclip size={14} />
+                    <Paperclip size={13} />
                     <span className="text-[11px] hidden sm:inline">Attach diagnostics</span>
                   </button>
 
                   <button
                     type="button"
-                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
                       isInternalNote
                         ? 'bg-amber-600 hover:bg-amber-500 text-white'
                         : 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white'
@@ -880,7 +862,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                     disabled={!replyText.trim()}
                     data-testid="superadmin-support-tickets-support-tickets-detail-add-note-9"
                   >
-                    <Send size={13} />
+                    <Send size={12} />
                     <span>{isInternalNote ? t('COPY.ADD_NOTE') : t('COPY.SEND_REPLY')}</span>
                   </button>
                 </div>
@@ -888,212 +870,211 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
             </div>
           </div>
         ) : (
-          <div className="flex-1 min-h-0 overflow-y-auto p-5 sm:p-6 space-y-6">
-
-          {/* TAB 2: CONFIDENTIAL INTERNAL NOTES */}
-          {activeTab === 'internal_notes' && (
-            <div className="space-y-4">
-              <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-950/20 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Lock size={16} className="text-amber-400" />
-                  <span className="text-xs font-bold text-amber-200">
-                    Confidential Internal Staff Notes (Hidden from Library Admin)
-                  </span>
-                </div>
-                <span className="text-[11px] text-amber-300/80 font-mono">Restricted Access</span>
-              </div>
-
-              <div className="space-y-3">
-                {internalNotes.map((note) => (
-                  <div
-                    key={note.id}
-                    className="p-4 rounded-xl border border-amber-500/25 bg-[#120d04]/80 shadow-sm space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-bold text-amber-300 flex items-center gap-1.5">
-                        <User size={12} />
-                        {note.author}
-                      </span>
-                      <span className="text-slate-400 font-mono text-[11px]">{note.timestamp}</span>
-                    </div>
-                    <p className="text-xs text-slate-200 leading-relaxed whitespace-pre-wrap">{note.note}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: ATTACHMENTS */}
-          {activeTab === 'attachments' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between pb-2 border-b border-indigo-500/20">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-                  <Paperclip size={15} className="text-sky-400" />
-                  <span>Attached Diagnostic Files & Logs</span>
-                </h3>
-              </div>
-
-              {/* Upload form */}
-              <div className="p-4 rounded-xl border border-sky-500/25 bg-[#081524]/60 flex flex-col sm:flex-row items-center gap-3">
-                <input
-                  type="text"
-                  placeholder="Enter file name (e.g. gateway_trace.log, screenshot.png)"
-                  value={newAttachmentName}
-                  onChange={(e) => setNewAttachmentName(e.target.value)}
-                  className="flex-1 rounded-xl border border-sky-500/30 bg-slate-950 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 outline-none w-full"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddAttachment}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white transition-all cursor-pointer shrink-0"
-                >
-                  <Plus size={14} />
-                  <span>{t("COPY.UPLOAD_ATTACHMENT")}</span>
-                </button>
-              </div>
-
-              {/* Attachments List */}
-              <div className="grid gap-2.5">
-                {attachments.map((att, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-sky-500/30 flex items-center justify-between transition-colors"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="p-2 rounded-lg bg-sky-500/15 text-sky-400">
-                        <FileText size={16} />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs font-bold text-slate-100 truncate">{att.name}</p>
-                        <p className="text-[11px] text-slate-400">
-                          {att.size} • Uploaded {att.uploadedAt}
-                        </p>
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => toast.success(`Simulated download of ${att.name}`)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-semibold transition-all cursor-pointer shrink-0"
-                    >
-                      <Download size={12} />
-                      <span>{t("COPY.DOWNLOAD_FILE")}</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 4: SLA TRACKING & ESCALATION */}
-          {activeTab === 'sla_escalation' && (
-            <div className="space-y-5">
-              {/* SLA Metrics */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-4 rounded-xl border border-indigo-500/25 bg-slate-900/60">
-                  <span className="text-[11px] font-bold text-slate-400 block mb-1">Target SLA Duration</span>
-                  <span className="text-xl font-extrabold text-indigo-300 font-mono">{tkt.slaTargetHours || 4} Hours</span>
-                  <span className="text-[10px] text-slate-500 block mt-1">Based on priority {priority}</span>
-                </div>
-
-                <div className="p-4 rounded-xl border border-indigo-500/25 bg-slate-900/60">
-                  <span className="text-[11px] font-bold text-slate-400 block mb-1">Time Elapsed</span>
-                  <span className="text-xl font-extrabold text-slate-200 font-mono">{tkt.age}</span>
-                  <span className="text-[10px] text-slate-500 block mt-1">Opened {tkt.age} ago</span>
-                </div>
-
-                <div className="p-4 rounded-xl border border-indigo-500/25 bg-slate-900/60">
-                  <span className="text-[11px] font-bold text-slate-400 block mb-1">SLA Compliance State</span>
-                  <span
-                    className={`text-xl font-extrabold font-mono ${
-                      tkt.slaBreach ? 'text-rose-400' : 'text-emerald-400'
-                    }`}
-                  >
-                    {tkt.slaBreach ? 'BREACHED' : 'IN SPEC'}
-                  </span>
-                  <span className="text-[10px] text-slate-500 block mt-1">{tkt.slaRemaining || 'Nominal tracking'}</span>
-                </div>
-              </div>
-
-              {/* Escalation Record */}
-              <div className="p-5 rounded-2xl border border-red-500/25 bg-[#140608]/70 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-red-300 flex items-center gap-2">
-                    <Zap size={15} className="text-red-400" />
-                    <span>{t("COPY.ESCALATION_DETAILS")}</span>
-                  </h3>
-                  <span
-                    className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
-                      escalation.isEscalated
-                        ? 'bg-red-500/20 border-red-500/40 text-red-300'
-                        : 'bg-slate-800 border-slate-700 text-slate-400'
-                    }`}
-                  >
-                    {escalation.isEscalated ? 'Tier-2 Escalated' : 'Tier-1 Standard'}
-                  </span>
-                </div>
-
-                {escalation.isEscalated ? (
-                  <div className="space-y-2 text-xs text-slate-200">
-                    <p>
-                      <strong>Escalated To:</strong> <span className="text-red-300">{escalation.escalatedTo}</span>
-                    </p>
-                    <p>
-                      <strong>Escalated At:</strong> <span className="font-mono text-slate-400">{escalation.escalatedAt}</span>
-                    </p>
-                    <p>
-                      <strong>Reason:</strong> <span>{escalation.reason}</span>
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-xs text-slate-400">
-                    This ticket is currently managed under Tier-1 Support. Click "Escalate Ticket" above if specialized architecture, security, or payment ops intervention is required.
-                  </p>
-                )}
-              </div>
-
-              {/* Resolution Record */}
-              {resolution.resolvedAt && (
-                <div className="p-5 rounded-2xl border border-emerald-500/25 bg-[#06140e]/70 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-2">
-                      <FileCheck size={15} className="text-emerald-400" />
-                      <span>{t("COPY.RESOLUTION_DETAILS")}</span>
-                    </h3>
-                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300">
-                      Resolved {resolution.resolvedAt}
+          <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 space-y-4">
+            {/* TAB 2: CONFIDENTIAL INTERNAL NOTES */}
+            {activeTab === 'internal_notes' && (
+              <div className="space-y-4">
+                <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-950/20 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Lock size={15} className="text-amber-400" />
+                    <span className="text-xs font-bold text-amber-200">
+                      Confidential Internal Staff Notes (Hidden from Library Admin)
                     </span>
                   </div>
-                  <div className="space-y-2 text-xs text-slate-200">
-                    <p>
-                      <strong>Resolved By:</strong> <span className="text-emerald-300">{resolution.resolvedBy}</span>
-                    </p>
-                    <p>
-                      <strong>Resolution Notes:</strong> <span>{resolution.notes}</span>
-                    </p>
-                    {resolution.rootCause && (
-                      <p>
-                        <strong>Root Cause:</strong> <span className="text-slate-400">{resolution.rootCause}</span>
-                      </p>
-                    )}
+                  <span className="text-[11px] text-amber-300/80 font-mono">Restricted Access</span>
+                </div>
+
+                <div className="space-y-3">
+                  {internalNotes.map((note) => (
+                    <div
+                      key={note.id}
+                      className="p-3.5 rounded-xl border border-amber-500/25 bg-[#120d04]/80 shadow-sm space-y-1.5"
+                    >
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-bold text-amber-300 flex items-center gap-1.5">
+                          <User size={12} />
+                          {note.author}
+                        </span>
+                        <span className="text-slate-400 font-mono text-[11px]">{note.timestamp}</span>
+                      </div>
+                      <p className="text-xs text-slate-200 leading-relaxed whitespace-pre-wrap">{note.note}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB 3: ATTACHMENTS */}
+            {activeTab === 'attachments' && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between pb-2 border-b border-indigo-500/20">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                    <Paperclip size={15} className="text-sky-400" />
+                    <span>Attached Diagnostic Files & Logs</span>
+                  </h3>
+                </div>
+
+                {/* Upload form */}
+                <div className="p-3.5 rounded-xl border border-sky-500/25 bg-[#081524]/60 flex flex-col sm:flex-row items-center gap-3">
+                  <input
+                    type="text"
+                    placeholder="Enter file name (e.g. gateway_trace.log, screenshot.png)"
+                    value={newAttachmentName}
+                    onChange={(e) => setNewAttachmentName(e.target.value)}
+                    className="flex-1 rounded-xl border border-sky-500/30 bg-slate-950 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 outline-none w-full"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddAttachment}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-xs font-bold text-white transition-all cursor-pointer shrink-0"
+                  >
+                    <Plus size={14} />
+                    <span>{t("COPY.UPLOAD_ATTACHMENT")}</span>
+                  </button>
+                </div>
+
+                {/* Attachments List */}
+                <div className="grid gap-2.5">
+                  {attachments.map((att, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-sky-500/30 flex items-center justify-between transition-colors"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="p-2 rounded-lg bg-sky-500/15 text-sky-400">
+                          <FileText size={16} />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-xs font-bold text-slate-100 truncate">{att.name}</p>
+                          <p className="text-[11px] text-slate-400">
+                            {att.size} • Uploaded {att.uploadedAt}
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => toast.success(`Simulated download of ${att.name}`)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-semibold transition-all cursor-pointer shrink-0"
+                      >
+                        <Download size={12} />
+                        <span>{t("COPY.DOWNLOAD_FILE")}</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB 4: SLA TRACKING & ESCALATION */}
+            {activeTab === 'sla_escalation' && (
+              <div className="space-y-4">
+                {/* SLA Metrics */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="p-3.5 rounded-xl border border-indigo-500/25 bg-slate-900/60">
+                    <span className="text-[11px] font-bold text-slate-400 block mb-1">Target SLA Duration</span>
+                    <span className="text-lg font-extrabold text-indigo-300 font-mono">{tkt.slaTargetHours || 4} Hours</span>
+                    <span className="text-[10px] text-slate-500 block mt-1">Based on priority {priority}</span>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl border border-indigo-500/25 bg-slate-900/60">
+                    <span className="text-[11px] font-bold text-slate-400 block mb-1">Time Elapsed</span>
+                    <span className="text-lg font-extrabold text-slate-200 font-mono">{tkt.age}</span>
+                    <span className="text-[10px] text-slate-500 block mt-1">Opened {tkt.age} ago</span>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl border border-indigo-500/25 bg-slate-900/60">
+                    <span className="text-[11px] font-bold text-slate-400 block mb-1">SLA Compliance State</span>
+                    <span
+                      className={`text-lg font-extrabold font-mono ${
+                        tkt.slaBreach ? 'text-rose-400' : 'text-emerald-400'
+                      }`}
+                    >
+                      {tkt.slaBreach ? 'BREACHED' : 'IN SPEC'}
+                    </span>
+                    <span className="text-[10px] text-slate-500 block mt-1">{tkt.slaRemaining || 'Nominal tracking'}</span>
                   </div>
                 </div>
-              )}
-            </div>
-          )}
-        </div>
+
+                {/* Escalation Record */}
+                <div className="p-4 rounded-xl border border-red-500/25 bg-[#140608]/70 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-red-300 flex items-center gap-2">
+                      <Zap size={14} className="text-red-400" />
+                      <span>{t("COPY.ESCALATION_DETAILS")}</span>
+                    </h3>
+                    <span
+                      className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${
+                        escalation.isEscalated
+                          ? 'bg-red-500/20 border-red-500/40 text-red-300'
+                          : 'bg-slate-800 border-slate-700 text-slate-400'
+                      }`}
+                    >
+                      {escalation.isEscalated ? 'Tier-2 Escalated' : 'Tier-1 Standard'}
+                    </span>
+                  </div>
+
+                  {escalation.isEscalated ? (
+                    <div className="space-y-1.5 text-xs text-slate-200">
+                      <p>
+                        <strong>Escalated To:</strong> <span className="text-red-300">{escalation.escalatedTo}</span>
+                      </p>
+                      <p>
+                        <strong>Escalated At:</strong> <span className="font-mono text-slate-400">{escalation.escalatedAt}</span>
+                      </p>
+                      <p>
+                        <strong>Reason:</strong> <span>{escalation.reason}</span>
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-slate-400">
+                      This ticket is currently managed under Tier-1 Support. Click &quot;Escalate Ticket&quot; above if specialized architecture, security, or payment ops intervention is required.
+                    </p>
+                  )}
+                </div>
+
+                {/* Resolution Record */}
+                {resolution.resolvedAt && (
+                  <div className="p-4 rounded-xl border border-emerald-500/25 bg-[#06140e]/70 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-2">
+                        <FileCheck size={14} className="text-emerald-400" />
+                        <span>{t("COPY.RESOLUTION_DETAILS")}</span>
+                      </h3>
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300">
+                        Resolved {resolution.resolvedAt}
+                      </span>
+                    </div>
+                    <div className="space-y-1.5 text-xs text-slate-200">
+                      <p>
+                        <strong>Resolved By:</strong> <span className="text-emerald-300">{resolution.resolvedBy}</span>
+                      </p>
+                      <p>
+                        <strong>Resolution Notes:</strong> <span>{resolution.notes}</span>
+                      </p>
+                      {resolution.rootCause && (
+                        <p>
+                          <strong>Root Cause:</strong> <span className="text-slate-400">{resolution.rootCause}</span>
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         )}
       </div>
 
       {/* Escalate Modal Dialog */}
       {showEscalateModal && (
         <div
-          className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden animate-in fade-in duration-150"
-          onMouseDown={(e) => {
+          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150"
+          onClick={(e) => {
             if (e.target === e.currentTarget) setShowEscalateModal(false);
           }}
         >
-          <div className="bg-[#0e122b] border border-red-500/40 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white animate-in zoom-in-95 duration-150 ease-out">
+          <div className="bg-[#0e122b] border border-red-500/40 rounded-2xl p-5 sm:p-6 max-w-md w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-red-500/20 pb-3">
               <h3 className="text-sm font-bold flex items-center gap-2 text-red-400">
                 <Zap size={16} />
@@ -1109,7 +1090,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Target Escalation Tier</label>
                 <select
                   value={escalateTier}
-                  onChange={(e) => setEscalateTier(e.target.value as any)}
+                  onChange={(e) => setEscalateTier(e.target.value as typeof SUPERADMIN_SUPPORT_ESCALATION_TIERS[number])}
                   className="w-full rounded-xl border border-red-500/30 bg-slate-950 px-3 py-2 text-xs text-white outline-none cursor-pointer"
                 >
                   {SUPERADMIN_SUPPORT_ESCALATION_TIERS.map((tier) => (
@@ -1155,12 +1136,12 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
       {/* Resolve Modal Dialog */}
       {showResolveModal && (
         <div
-          className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden animate-in fade-in duration-150"
-          onMouseDown={(e) => {
+          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150"
+          onClick={(e) => {
             if (e.target === e.currentTarget) setShowResolveModal(false);
           }}
         >
-          <div className="bg-[#0e122b] border border-emerald-500/40 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white animate-in zoom-in-95 duration-150 ease-out">
+          <div className="bg-[#0e122b] border border-emerald-500/40 rounded-2xl p-5 sm:p-6 max-w-md w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-emerald-500/20 pb-3">
               <h3 className="text-sm font-bold flex items-center gap-2 text-emerald-400">
                 <CheckCircle2 size={16} />
@@ -1218,12 +1199,12 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
       {/* Reopen Modal Dialog */}
       {showReopenModal && (
         <div
-          className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden animate-in fade-in duration-150"
-          onMouseDown={(e) => {
+          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150"
+          onClick={(e) => {
             if (e.target === e.currentTarget) setShowReopenModal(false);
           }}
         >
-          <div className="bg-[#0e122b] border border-purple-500/40 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white animate-in zoom-in-95 duration-150 ease-out">
+          <div className="bg-[#0e122b] border border-purple-500/40 rounded-2xl p-5 sm:p-6 max-w-md w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-purple-500/20 pb-3">
               <h3 className="text-sm font-bold flex items-center gap-2 text-purple-400">
                 <RotateCcw size={16} />
@@ -1270,12 +1251,12 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
       {/* Grant Time-Limited Support Access Modal */}
       {showGrantAccessModal && (
         <div
-          className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden animate-in fade-in duration-150"
-          onMouseDown={(e) => {
+          className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-150"
+          onClick={(e) => {
             if (e.target === e.currentTarget) setShowGrantAccessModal(false);
           }}
         >
-          <div className="bg-[#0a0e28] border border-indigo-500/40 rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl text-white animate-in zoom-in-95 duration-150 ease-out">
+          <div className="bg-[#0a0e28] border border-indigo-500/40 rounded-2xl p-5 sm:p-6 max-w-lg w-full space-y-4 shadow-2xl text-white my-auto animate-in zoom-in-95 duration-150 ease-out" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300">
@@ -1311,7 +1292,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                 <label className="block text-xs font-semibold text-slate-300 mb-1">Access Scope</label>
                 <select
                   value={accessScope}
-                  onChange={(e) => setAccessScope(e.target.value as any)}
+                  onChange={(e) => setAccessScope(e.target.value as 'Read-Only Diagnostics' | 'Full Troubleshooting Mutation')}
                   className="w-full rounded-xl border border-indigo-500/30 bg-slate-950 px-3 py-2 text-xs text-white outline-none cursor-pointer"
                 >
                   <option value="Read-Only Diagnostics">Read-Only Diagnostics (Masked Member Records)</option>
@@ -1362,4 +1343,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
       )}
     </div>
   );
+
+  if (!mounted || typeof document === 'undefined') return null;
+  return createPortal(panelContent, document.body);
 }
