@@ -3,6 +3,7 @@
 import { Printer, Download, Mail, MessageSquare, X, CheckCircle, AlertCircle, Building2, ShieldCheck } from 'lucide-react';
 import type { SuperadminBillingInvoiceSample } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/types/SuperadminBillingInvoicesTypes';
 import { SuperadminBillingDownloadSampleInvoicePdf } from '@/app/frontend_superadmin/superadmin_billing/billing_invoices/utils/SuperadminBillingInvoicesSamplePdf';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface SuperadminBillingInvoiceDetailModalProps {
   invoice: SuperadminBillingInvoiceSample | null;
@@ -19,6 +20,8 @@ export default function SuperadminBillingInvoiceDetailModal({
   onSendEmail,
   onSendWhatsApp,
 }: SuperadminBillingInvoiceDetailModalProps) {
+  useModalScrollLock(Boolean(isOpen && invoice));
+
   if (!isOpen || !invoice) return null;
 
   const handlePrint = () => {
@@ -39,9 +42,12 @@ export default function SuperadminBillingInvoiceDetailModal({
   const isIntraState = Boolean(invoice.cgst && invoice.sgst);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      onClick={onClose}
+    >
       <div
-        className="w-full max-w-2xl rounded-2xl border border-indigo-500/30 bg-[#0c0f28] p-6 sm:p-7 shadow-2xl space-y-4"
+        className="w-full max-w-2xl rounded-2xl border border-indigo-500/30 bg-[#0c0f28] p-6 sm:p-7 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 ease-out"
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}

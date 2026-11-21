@@ -1,5 +1,5 @@
 // RESPONSIBILITY: Modal dialog for managing Level 3 Account & Branch custom overrides.
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, KeyRound, AlertTriangle, Trash2, Calendar, ShieldCheck, ShieldAlert } from 'lucide-react';
 import type {
   ModuleDefinition,
@@ -7,6 +7,7 @@ import type {
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/types/superadmin_features_overview.types';
 import type { MockTenantOption } from '@/app/frontend_superadmin/superadmin_features/features_overview/mocks/fixtures/superadmin_features_overview.fixtures';
 import { TENANT_MODULE_OVERRIDE_SCHEMA } from '@/app/frontend_superadmin/superadmin_features/features_overview/schemas/superadmin_features_overview.schema';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface OverrideModalProps {
   module: ModuleDefinition;
@@ -27,6 +28,15 @@ export default function SuperadminFeaturesOverviewOverrideModal({
   onSave,
   onDelete,
 }: OverrideModalProps) {
+  useModalScrollLock(true);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
   const initialTenantId = currentTenantId !== 'global' ? currentTenantId : (tenants[0]?.id ?? '');
   const [tenantId, setTenantId] = useState<string>(initialTenantId);
   const [branchId, setBranchId] = useState<string>('');
@@ -66,8 +76,13 @@ export default function SuperadminFeaturesOverviewOverrideModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-xl rounded-2xl border border-border bg-card shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md overflow-hidden animate-in fade-in duration-200"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="w-full max-w-xl rounded-2xl border border-border bg-card shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 ease-out">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-neutral-900/60">
           <div className="flex items-center gap-2.5">

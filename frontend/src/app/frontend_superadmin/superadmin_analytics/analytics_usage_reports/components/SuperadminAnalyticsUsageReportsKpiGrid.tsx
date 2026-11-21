@@ -1,5 +1,5 @@
 'use client';
-// RESPONSIBILITY: Render 6 resource usage KPI metric cards (Members, staff, branches, storage, API calls, SMS/WhatsApp).
+// RESPONSIBILITY: Render 6 resource usage KPI metric cards (Members, staff, branches, storage, API calls, SMS/WhatsApp) with Cyber-Luxury styling.
 
 import React from 'react';
 import { Users, UserCheck, GitBranch, HardDrive, Cpu, MessageSquare } from 'lucide-react';
@@ -29,48 +29,72 @@ export function SuperadminAnalyticsUsageReportsKpiGrid({ kpis }: Props) {
       value: formatUsageNumber(data.totalMembers),
       subtitle: 'Enrolled across libraries',
       icon: Users,
-      colorText: 'text-sky-400',
-      colorBg: 'bg-sky-500/10 border-sky-500/20',
+      cardBg: 'bg-gradient-to-br from-[#0c0f2a]/95 via-[#090d24]/90 to-[#141a45]/85 border-sky-500/30 hover:border-sky-400/50 shadow-sky-950/40',
+      iconStyle: 'bg-sky-500/20 border-sky-500/40 text-sky-400 shadow-sky-500/20',
+      blurColor: 'bg-sky-500/15',
+      valueColor: 'text-sky-200',
+      badgeStyle: 'text-sky-300 bg-sky-500/15 border-sky-500/30',
+      dotColor: 'bg-sky-400',
     },
     {
       title: 'Active Staff & Operators',
       value: formatUsageNumber(data.totalStaff),
-      subtitle: 'Library managers & clerks',
+      subtitle: 'Managers & clerks',
       icon: UserCheck,
-      colorText: 'text-indigo-400',
-      colorBg: 'bg-indigo-500/10 border-indigo-500/20',
+      cardBg: 'bg-gradient-to-br from-[#0e0c28]/95 via-[#0a0920]/90 to-[#1a1444]/85 border-indigo-500/30 hover:border-indigo-400/50 shadow-indigo-950/40',
+      iconStyle: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-400 shadow-indigo-500/20',
+      blurColor: 'bg-indigo-500/15',
+      valueColor: 'text-indigo-200',
+      badgeStyle: 'text-indigo-300 bg-indigo-500/15 border-indigo-500/30',
+      dotColor: 'bg-indigo-400',
     },
     {
       title: 'Operating Branches',
       value: formatUsageNumber(data.activeBranches),
-      subtitle: 'Provisioned physical nodes',
+      subtitle: 'Provisioned nodes',
       icon: GitBranch,
-      colorText: 'text-emerald-400',
-      colorBg: 'bg-emerald-500/10 border-emerald-500/20',
+      cardBg: 'bg-gradient-to-br from-[#061e14]/95 via-[#061810]/90 to-[#0a2e1d]/85 border-emerald-500/30 hover:border-emerald-400/50 shadow-emerald-950/40',
+      iconStyle: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400 shadow-emerald-500/20',
+      blurColor: 'bg-emerald-500/15',
+      valueColor: 'text-emerald-300',
+      badgeStyle: 'text-emerald-300 bg-emerald-500/15 border-emerald-500/30',
+      dotColor: 'bg-emerald-400 animate-pulse',
     },
     {
       title: 'Cloud Storage Used',
       value: formatStorageSize(data.storageUsedGb * 1024),
-      subtitle: `Quota: ${data.storageQuotaGb} GB allocated`,
+      subtitle: `Quota: ${data.storageQuotaGb} GB`,
       icon: HardDrive,
-      colorText: 'text-purple-400',
-      colorBg: 'bg-purple-500/10 border-purple-500/20',
+      cardBg: 'bg-gradient-to-br from-[#1a0a2a]/95 via-[#130722]/90 to-[#280d3f]/85 border-purple-500/30 hover:border-purple-400/50 shadow-purple-950/40',
+      iconStyle: 'bg-purple-500/20 border-purple-500/40 text-purple-400 shadow-purple-500/20',
+      blurColor: 'bg-purple-500/15',
+      valueColor: 'text-purple-200',
+      badgeStyle: 'text-purple-300 bg-purple-500/15 border-purple-500/30',
+      dotColor: 'bg-purple-400',
     },
     {
       title: 'API Calls Volume',
       value: formatUsageNumber(data.apiCallsCount),
-      subtitle: 'Monthly REST & RPC ingress',
+      subtitle: 'Monthly REST ingress',
       icon: Cpu,
-      colorText: 'text-amber-400',
-      colorBg: 'bg-amber-500/10 border-amber-500/20',
+      cardBg: 'bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/85 border-amber-500/30 hover:border-amber-400/50 shadow-amber-950/40',
+      iconStyle: 'bg-amber-500/20 border-amber-500/40 text-amber-400 shadow-amber-500/20',
+      blurColor: 'bg-amber-500/15',
+      valueColor: 'text-amber-300',
+      badgeStyle: 'text-amber-300 bg-amber-500/15 border-amber-500/30',
+      dotColor: 'bg-amber-400',
     },
     {
       title: 'SMS & WhatsApp Consumption',
       value: `${formatUsageNumber(data.smsConsumed)} / ${formatUsageNumber(data.whatsappConsumed)}`,
-      subtitle: 'Transactional & alert dispatch',
+      subtitle: 'Transactional dispatch',
       icon: MessageSquare,
-      colorText: 'text-emerald-400',
-      colorBg: 'bg-emerald-500/10 border-emerald-500/20',
+      cardBg: 'bg-gradient-to-br from-[#072017]/95 via-[#051912]/90 to-[#0c3123]/85 border-teal-500/30 hover:border-teal-400/50 shadow-teal-950/40',
+      iconStyle: 'bg-teal-500/20 border-teal-500/40 text-teal-400 shadow-teal-500/20',
+      blurColor: 'bg-teal-500/15',
+      valueColor: 'text-teal-300',
+      badgeStyle: 'text-teal-300 bg-teal-500/15 border-teal-500/30',
+      dotColor: 'bg-teal-400 animate-pulse',
     },
   ];
 
@@ -84,17 +108,25 @@ export function SuperadminAnalyticsUsageReportsKpiGrid({ kpis }: Props) {
         return (
           <div
             key={i}
-            className={`p-4 rounded-2xl border ${card.colorBg} bg-card/60 backdrop-blur-xs flex flex-col justify-between transition-all hover:scale-[1.01] shadow-xs`}
+            className={`group relative overflow-hidden p-4 rounded-2xl border shadow-lg backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] ${card.cardBg}`}
           >
-            <div className="flex items-center justify-between gap-2 mb-2">
-              <span className="text-xs font-semibold text-muted-foreground">{card.title}</span>
-              <div className={`p-1.5 rounded-lg ${card.colorText} bg-background/50`}>
-                <Icon size={16} aria-hidden="true" />
+            <div className={`pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full blur-xl transition-all duration-500 group-hover:scale-125 ${card.blurColor}`} />
+            <div className="relative flex items-center justify-between gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
+                {card.title}
+              </span>
+              <div className={`p-2 rounded-xl border shrink-0 transition-transform duration-200 group-hover:scale-110 shadow-md ${card.iconStyle}`}>
+                <Icon size={16} strokeWidth={2.3} aria-hidden="true" />
               </div>
             </div>
-            <div>
-              <p className="text-xl sm:text-2xl font-black text-foreground tracking-tight">{card.value}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{card.subtitle}</p>
+            <div className="relative mt-2.5">
+              <p className={`text-2xl font-black tracking-tight ${card.valueColor}`}>{card.value}</p>
+              <div className="mt-2 flex items-center gap-1.5 text-xs">
+                <span className={`inline-flex items-center gap-1.5 font-semibold rounded-full px-2 py-0.5 border text-[11px] ${card.badgeStyle}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${card.dotColor}`} />
+                  {card.subtitle}
+                </span>
+              </div>
             </div>
           </div>
         );

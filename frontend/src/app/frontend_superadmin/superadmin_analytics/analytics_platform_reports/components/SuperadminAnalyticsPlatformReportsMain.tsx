@@ -31,31 +31,34 @@ export function SuperadminAnalyticsPlatformReportsMain() {
   return (
     <div className="space-y-6 pb-12 w-full max-w-full min-w-0" data-testid="superadmin-platform-reports-main">
       {/* ── Page Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl border border-sky-500/20 bg-gradient-to-br from-sky-950/40 via-card to-card shadow-xs">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-sky-400">
-            <Building2 size={22} aria-hidden="true" />
-            <span className="text-xs font-bold uppercase tracking-wider">Level 1 Analytics</span>
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900/90 via-[#0d1338]/90 to-slate-900/90 border border-sky-500/25 p-5 sm:p-7 shadow-2xl backdrop-blur-md">
+        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-sky-500/10 blur-3xl" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/25 text-sky-400 text-xs font-semibold mb-2 shadow-xs">
+              <Building2 size={13} aria-hidden="true" />
+              <span>Multi-Tenant Platform Directory</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
+              Platform Reports & Growth Metrics
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+              Aggregate intelligence on SaaS libraries, branch networks, active tenant accounts, and expansion velocity.
+            </p>
           </div>
-          <h1 className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
-            Platform Reports & Growth Metrics
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground">
-            Aggregate intelligence on SaaS libraries, branch networks, active tenant accounts, and expansion velocity.
-          </p>
-        </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-center">
-          <button
-            type="button"
-            onClick={() => refetch()}
-            disabled={isPending}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border border-border bg-background hover:bg-muted text-foreground transition-all cursor-pointer disabled:opacity-50 active:scale-95 shadow-2xs"
-            aria-label="Refresh platform reports"
-          >
-            <RefreshCw size={13} className={isPending ? 'animate-spin' : ''} />
-            <span>Refresh</span>
-          </button>
+          <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
+            <button
+              type="button"
+              onClick={() => refetch()}
+              disabled={isPending}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-sky-500/50 hover:bg-sky-500/10 text-slate-200 text-xs font-semibold transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-95"
+              aria-label="Refresh platform reports"
+            >
+              <RefreshCw size={13} className={isPending ? 'animate-spin text-sky-400' : 'text-sky-400'} />
+              <span>Refresh</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -97,25 +100,25 @@ export function SuperadminAnalyticsPlatformReportsMain() {
       {/* ── 6. Detail Inspection Modal ── */}
       {selectedRecord && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
           aria-labelledby="record-detail-title"
         >
-          <div className="w-full max-w-lg p-6 rounded-2xl border border-border bg-card shadow-xl space-y-4 animate-in fade-in-50 zoom-in-95">
-            <div className="flex items-center justify-between border-b border-border/40 pb-3">
+          <div className="w-full max-w-lg p-6 rounded-2xl border border-indigo-500/30 bg-[#0a0d24] text-white shadow-2xl shadow-indigo-950/60 space-y-4 animate-in fade-in-50 zoom-in-95">
+            <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
               <div>
                 <span className="text-[10px] font-bold font-mono text-sky-400 uppercase tracking-wider">
                   {selectedRecord.libraryCode}
                 </span>
-                <h2 id="record-detail-title" className="text-base font-bold text-foreground">
+                <h2 id="record-detail-title" className="text-base font-bold text-white">
                   {selectedRecord.libraryName}
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedRecord(null)}
-                className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 cursor-pointer transition-colors"
                 aria-label="Close details"
               >
                 <X size={18} />
@@ -123,39 +126,39 @@ export function SuperadminAnalyticsPlatformReportsMain() {
             </div>
 
             <dl className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-2.5 rounded-lg bg-muted/30">
-                <dt className="text-muted-foreground text-[11px]">Branches</dt>
-                <dd className="font-bold text-foreground mt-0.5">{selectedRecord.branchCount} Active Branches</dd>
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-indigo-500/20">
+                <dt className="text-slate-400 text-[11px]">Branches</dt>
+                <dd className="font-bold text-white mt-0.5">{selectedRecord.branchCount} Active Branches</dd>
               </div>
-              <div className="p-2.5 rounded-lg bg-muted/30">
-                <dt className="text-muted-foreground text-[11px]">Location</dt>
-                <dd className="font-bold text-foreground mt-0.5">{selectedRecord.city}, {selectedRecord.state}</dd>
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-indigo-500/20">
+                <dt className="text-slate-400 text-[11px]">Location</dt>
+                <dd className="font-bold text-white mt-0.5">{selectedRecord.city}, {selectedRecord.state}</dd>
               </div>
-              <div className="p-2.5 rounded-lg bg-muted/30">
-                <dt className="text-muted-foreground text-[11px]">Primary Admin</dt>
-                <dd className="font-bold text-foreground mt-0.5">{selectedRecord.adminName}</dd>
-                <dd className="text-[10px] text-muted-foreground truncate">{selectedRecord.adminEmail}</dd>
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-indigo-500/20">
+                <dt className="text-slate-400 text-[11px]">Primary Admin</dt>
+                <dd className="font-bold text-white mt-0.5">{selectedRecord.adminName}</dd>
+                <dd className="text-[10px] text-slate-400 truncate">{selectedRecord.adminEmail}</dd>
               </div>
-              <div className="p-2.5 rounded-lg bg-muted/30">
-                <dt className="text-muted-foreground text-[11px]">Subscription Plan</dt>
-                <dd className="font-bold text-foreground mt-0.5">{selectedRecord.plan}</dd>
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-indigo-500/20">
+                <dt className="text-slate-400 text-[11px]">Subscription Plan</dt>
+                <dd className="font-bold text-sky-400 mt-0.5">{selectedRecord.plan}</dd>
               </div>
-              <div className="p-2.5 rounded-lg bg-muted/30">
-                <dt className="text-muted-foreground text-[11px]">Account Status</dt>
-                <dd className="font-bold text-foreground mt-0.5">{selectedRecord.status}</dd>
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-indigo-500/20">
+                <dt className="text-slate-400 text-[11px]">Account Status</dt>
+                <dd className="font-bold text-emerald-400 mt-0.5">{selectedRecord.status}</dd>
               </div>
-              <div className="p-2.5 rounded-lg bg-muted/30">
-                <dt className="text-muted-foreground text-[11px]">Payment Status</dt>
-                <dd className="font-bold text-foreground mt-0.5">{selectedRecord.paymentStatus}</dd>
+              <div className="p-3 rounded-xl bg-slate-900/90 border border-indigo-500/20">
+                <dt className="text-slate-400 text-[11px]">Payment Status</dt>
+                <dd className="font-bold text-white mt-0.5">{selectedRecord.paymentStatus}</dd>
               </div>
-              <div className="col-span-2 p-2.5 rounded-lg bg-muted/30 flex justify-between">
+              <div className="col-span-2 p-3 rounded-xl bg-slate-900/90 border border-indigo-500/20 flex justify-between">
                 <div>
-                  <dt className="text-muted-foreground text-[11px]">Onboarded On</dt>
-                  <dd className="font-semibold text-foreground mt-0.5">{selectedRecord.createdDate}</dd>
+                  <dt className="text-slate-400 text-[11px]">Onboarded On</dt>
+                  <dd className="font-semibold text-white mt-0.5">{selectedRecord.createdDate}</dd>
                 </div>
                 <div className="text-right">
-                  <dt className="text-muted-foreground text-[11px]">Last Activity</dt>
-                  <dd className="font-semibold text-foreground mt-0.5">{selectedRecord.lastActiveDate}</dd>
+                  <dt className="text-slate-400 text-[11px]">Last Activity</dt>
+                  <dd className="font-semibold text-white mt-0.5">{selectedRecord.lastActiveDate}</dd>
                 </div>
               </div>
             </dl>
@@ -164,7 +167,7 @@ export function SuperadminAnalyticsPlatformReportsMain() {
               <button
                 type="button"
                 onClick={() => setSelectedRecord(null)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold bg-muted hover:bg-muted/80 text-foreground cursor-pointer"
+                className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white transition-colors cursor-pointer"
               >
                 Close
               </button>

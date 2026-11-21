@@ -37,47 +37,44 @@ export function SuperadminAnalyticsBillingReportsMain() {
       data-testid="superadmin-analytics-billing-reports-main"
     >
       {/* ── Top Header Toolbar ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/60">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-            <Receipt size={24} />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold tracking-tight text-foreground">
-                Billing & Financial Reports
-              </h1>
-              <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                Revenue & Invoices
-              </span>
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900/90 via-[#0d1338]/90 to-slate-900/90 border border-amber-500/25 p-5 sm:p-7 shadow-2xl backdrop-blur-md">
+        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-400 text-xs font-semibold mb-2 shadow-xs">
+              <Receipt size={13} aria-hidden="true" />
+              <span>Revenue & Invoicing Intelligence</span>
             </div>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
+              Billing & Financial Reports
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
               MRR, ARR, plan-wise income, pending invoices, failed collections, and audit logs
             </p>
           </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => refetch()}
-            disabled={isPending}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-border bg-card hover:bg-muted text-foreground transition-all cursor-pointer disabled:opacity-50"
-            title="Refresh billing data"
-          >
-            <RefreshCw size={13} className={isPending ? 'animate-spin' : ''} />
-            <span className="hidden sm:inline">Refresh</span>
-          </button>
+          <div className="flex items-center gap-2.5 self-start sm:self-center shrink-0">
+            <button
+              type="button"
+              onClick={() => refetch()}
+              disabled={isPending}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-amber-500/50 hover:bg-amber-500/10 text-slate-200 text-xs font-semibold transition-all shadow-sm cursor-pointer disabled:opacity-50 active:scale-95"
+              title="Refresh billing data"
+            >
+              <RefreshCw size={13} className={isPending ? 'animate-spin text-amber-400' : 'text-amber-400'} />
+              <span>Refresh</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setIsExportModalOpen(true)}
-            data-testid="billing-reports-open-export-btn"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-white transition-all shadow-xs cursor-pointer active:scale-95"
-          >
-            <Download size={14} />
-            <span>Export & Print</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setIsExportModalOpen(true)}
+              data-testid="billing-reports-open-export-btn"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-400 text-slate-950 transition-all cursor-pointer shadow-lg shadow-amber-500/20 active:scale-95"
+            >
+              <Download size={14} />
+              <span>Export & Print</span>
+            </button>
+          </div>
         </div>
       </div>
 

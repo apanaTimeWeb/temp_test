@@ -17,11 +17,14 @@ import {
 import { useSuperadminCommunicationNotificationCenterStore } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/state/useSuperadminCommunicationNotificationCenterStore';
 import { useUpdateTemplateMutation } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/hooks/useSuperadminCommunicationNotificationCenterQueries';
 import type { NotificationChannel } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 export function SuperadminCommunicationNotificationCenterTemplateModal() {
   const { selectedTemplate, isTemplateModalOpen, setIsTemplateModalOpen } =
     useSuperadminCommunicationNotificationCenterStore();
   const updateMutation = useUpdateTemplateMutation();
+
+  useModalScrollLock(isTemplateModalOpen);
 
   const [activeChannel, setActiveChannel] = useState<NotificationChannel>('EMAIL');
   const [emailSubject, setEmailSubject] = useState(selectedTemplate?.channelTemplates.email.subject ?? '');
@@ -67,7 +70,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) setIsTemplateModalOpen(false);
       }}
@@ -76,7 +79,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="template-modal-title"
-        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative my-8 space-y-4"
+        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 ease-out"
         data-testid="template-detail-dialog"
       >
         {/* Header */}

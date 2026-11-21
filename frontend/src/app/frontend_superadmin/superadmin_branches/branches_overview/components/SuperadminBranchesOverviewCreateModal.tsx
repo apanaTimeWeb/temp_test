@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { X, GitBranch, AlertCircle, Building2 } from 'lucide-react';
 import type { SuperadminBranchRecord, SuperadminLibraryOption } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 import SuperadminBranchesOverviewQuotaBlockBanner from './SuperadminBranchesOverviewQuotaBlockBanner';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface SuperadminBranchesOverviewCreateModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ export default function SuperadminBranchesOverviewCreateModal({
   existingCodes,
   onSubmit,
 }: SuperadminBranchesOverviewCreateModalProps) {
+  useModalScrollLock(isOpen);
   const [libraryId, setLibraryId] = useState(availableLibraries[0]?.id || 'lib-1');
   const [code, setCode] = useState(''); const [name, setName] = useState('');
   const [city, setCity] = useState(''); const [state, setState] = useState('Uttar Pradesh');
@@ -103,8 +105,13 @@ export default function SuperadminBranchesOverviewCreateModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="relative w-full max-w-2xl rounded-2xl border border-emerald-500/40 bg-[#0c0f28] p-6 shadow-2xl text-white">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="relative w-full max-w-2xl rounded-2xl border border-emerald-500/40 bg-[#0c0f28] p-6 shadow-2xl text-white max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out">
         <button type="button" onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-white">
           <X size={18} />
         </button>
