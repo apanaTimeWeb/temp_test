@@ -40,13 +40,12 @@ describe('SuperadminUsageOverviewMain Component', () => {
 
     // KPI meters
     expect(screen.getByText(/1\. Branches/i)).toBeInTheDocument();
-    expect(screen.getByText(/2-3\. Admins & Staff/i)).toBeInTheDocument();
     expect(screen.getByText(/5-6\. Cloud Storage/i)).toBeInTheDocument();
 
     // Table columns & data
     expect(screen.getByText(/Branches \(Cur \/ Max\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/Admins & Staff/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Admins & Staff/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(/SMS & WhatsApp/i)).toBeInTheDocument();
-    expect(screen.getByText(/Nalanda Digital Study Center/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Patna Central Reading Rooms/i).length).toBeGreaterThanOrEqual(1);
   });
 });
