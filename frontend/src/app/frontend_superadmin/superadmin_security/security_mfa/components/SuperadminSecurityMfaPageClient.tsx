@@ -1,5 +1,4 @@
 'use client';
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_security/security_mfa/config/superadmin_security_mfa.url_config.ts';
 import { toast } from 'sonner';
 /** Responsibility: renders the superadmin_security overview route UI; the module Main remains a thin composition boundary. */
 /** Data-Flow: canonical route -> SuperadminSecurityMfaPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
@@ -16,10 +15,6 @@ import {
   SUPERADMIN_SECURITY_MFA_PREVIEW,
   SUPERADMIN_MFA_ACCOUNTS_PREVIEW,
   SUPERADMIN_SECURITY_PASSWORD_PREVIEW_DEFAULTS,
-  SUPERADMIN_SECURITY_FAILED_LOGINS,
-  SUPERADMIN_SECURITY_SESSIONS,
-  SUPERADMIN_SECURITY_API_KEYS,
-  SUPERADMIN_SECURITY_IP_RULES,
 } from '@/app/frontend_superadmin/superadmin_security/security_mfa/mocks/fixtures/SuperadminSecurityMfaPreviewMockFixtures';
 import SuperadminSecurityMfaPolicyPanels from '@/app/frontend_superadmin/superadmin_security/security_mfa/components/SuperadminSecurityMfaPolicyPanels';
 import type { MfaPolicyState, MfaEnrollmentAccount } from '@/app/frontend_superadmin/superadmin_security/security_mfa/types/SuperadminSecurityMfaPolicyPanelsComponentTypes';
@@ -27,8 +22,6 @@ import type { MfaPolicyState, MfaEnrollmentAccount } from '@/app/frontend_supera
 import { ShieldAlert, AlertCircle, Fingerprint, ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSuperadminSecurityMfaUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_security/security_mfa/hooks/useSuperadminSecurityMfaUnsavedChangesGuard';
-import { SUPERADMIN_SECURITY_TABS } from '@/app/frontend_superadmin/superadmin_security/security_mfa/constants/SuperadminSecurityMfaConstants';
-import { SUPERADMIN_SECURITY_OVERVIEW_PAGE_CLIENT_FIELDS } from '@/app/frontend_superadmin/superadmin_security/security_mfa/constants/SuperadminSecurityMfaStaticConstants';
 
 /**
  * Renders the `superadmin_security` view owned by `SuperadminSecurityMfaPageClient`.
@@ -36,29 +29,6 @@ import { SUPERADMIN_SECURITY_OVERVIEW_PAGE_CLIENT_FIELDS } from '@/app/frontend_
  */
 export default function SuperadminSecurityMfaPageClient() {
   const tCopy = useTranslations('SUPERADMIN_SECURITY');
-  
-  const navigateToWorkflow = (key: string) => {
-    const routes: Record<string, string> = {
-      "Login Security": SUPERADMIN_NAVIGATION_ROUTES.security_login_security,
-      "Password Policy": SUPERADMIN_NAVIGATION_ROUTES.security_password_policy,
-      "2FA & MFA": SUPERADMIN_NAVIGATION_ROUTES.security_mfa,
-      "IP Firewall": SUPERADMIN_NAVIGATION_ROUTES.security_ip_firewall,
-      "API Keys": SUPERADMIN_NAVIGATION_ROUTES.security_api_keys,
-      "Active Sessions": SUPERADMIN_NAVIGATION_ROUTES.security_active_sessions,
-      "Audit & Threats": SUPERADMIN_NAVIGATION_ROUTES.security_threats
-    };
-    const route = routes[key];
-    if (route) {
-      const target = new URL(route, window.location.origin);
-      const query = new URLSearchParams(window.location.search);
-      query.delete('view');
-      query.forEach((value, k) => {
-        if (!target.searchParams.has(k)) target.searchParams.append(k, value);
-      });
-      window.location.assign(target.pathname + target.search + target.hash);
-    }
-  };
-
   const [activeTab] = useState("2FA & MFA");
   const [twoFA, setTwoFA] = useState<MfaPolicyState>(SUPERADMIN_SECURITY_MFA_PREVIEW);
   const [enrollmentAccounts] = useState<MfaEnrollmentAccount[]>(SUPERADMIN_MFA_ACCOUNTS_PREVIEW);

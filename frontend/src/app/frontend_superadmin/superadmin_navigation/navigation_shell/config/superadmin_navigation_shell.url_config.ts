@@ -185,7 +185,6 @@ const SUPERADMIN_PROFILE_URLS = {
 const SUPERADMIN_SECURITY_URLS = {
   PAGE: '/superadmin/superadmin_security',
   ACTIVE_SESSIONS: '/superadmin/superadmin_security/security_active_sessions',
-  API_KEYS: '/superadmin/superadmin_security/security_api_keys',
   IP_FIREWALL: '/superadmin/superadmin_security/security_ip_firewall',
   LOGIN_SECURITY: '/superadmin/superadmin_security/security_login_security',
   MFA: '/superadmin/superadmin_security/security_mfa',

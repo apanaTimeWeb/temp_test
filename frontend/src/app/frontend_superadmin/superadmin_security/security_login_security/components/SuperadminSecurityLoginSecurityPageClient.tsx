@@ -1,5 +1,4 @@
 'use client';
-import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_security/security_login_security/config/superadmin_security_login_security.url_config.ts';
 import { toast } from 'sonner';
 /** Responsibility: renders the superadmin_security overview route UI; the module Main remains a thin composition boundary. */
 /** Data-Flow: canonical route -> SuperadminSecurityLoginSecurityPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
@@ -11,48 +10,23 @@ import {
   SUPERADMIN_SECURITY_PASSWORD_SCHEMA,
 } from '@/app/frontend_superadmin/superadmin_security/security_login_security/schemas/SuperadminSecurityLoginSecurityPolicySchema';
 import type { SuperadminSecurityLoginRules, SuperadminSecurityPasswordPolicy } from '@/app/frontend_superadmin/superadmin_security/security_login_security/types/SuperadminSecurityLoginSecurityTypes';
-import { SUPERADMIN_SECURITY_LOGIN_PREVIEW_DEFAULTS, SUPERADMIN_SECURITY_MFA_PREVIEW, SUPERADMIN_SECURITY_PASSWORD_PREVIEW_DEFAULTS, SUPERADMIN_SECURITY_FAILED_LOGINS, SUPERADMIN_SECURITY_SESSIONS, SUPERADMIN_SECURITY_API_KEYS, SUPERADMIN_SECURITY_IP_RULES } from '@/app/frontend_superadmin/superadmin_security/security_login_security/mocks/fixtures/SuperadminSecurityLoginSecurityPreviewMockFixtures';
+import { SUPERADMIN_SECURITY_LOGIN_PREVIEW_DEFAULTS, SUPERADMIN_SECURITY_MFA_PREVIEW, SUPERADMIN_SECURITY_PASSWORD_PREVIEW_DEFAULTS } from '@/app/frontend_superadmin/superadmin_security/security_login_security/mocks/fixtures/SuperadminSecurityLoginSecurityPreviewMockFixtures';
 import SuperadminSecurityLoginSecurityPolicyPanels from '@/app/frontend_superadmin/superadmin_security/security_login_security/components/SuperadminSecurityLoginSecurityPolicyPanels';
 
 import { ShieldAlert, AlertCircle, Lock, ShieldCheck } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSuperadminSecurityLoginSecurityUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_security/security_login_security/hooks/useSuperadminSecurityLoginSecurityUnsavedChangesGuard';
-import { SUPERADMIN_SECURITY_TABS } from '@/app/frontend_superadmin/superadmin_security/security_login_security/constants/SuperadminSecurityLoginSecurityConstants';
-import { SUPERADMIN_SECURITY_OVERVIEW_PAGE_CLIENT_FIELDS } from '@/app/frontend_superadmin/superadmin_security/security_login_security/constants/SuperadminSecurityLoginSecurityStaticConstants';
 
 /**
  * Renders the `superadmin_security` view owned by `SuperadminSecurityLoginSecurityPageClient`.
- * Owns local UI state for `activeTab` and `newIp`; preview feedback uses deduplicated Sonner messages.
- * Dirty form state is guarded before destructive or route-leaving actions.
- * Demonstration mutations remain local preview behavior and do not imply server persistence.
+ * Owns local UI state for login security rules and preview feedback.
  */
 export default function SuperadminSecurityLoginSecurityPageClient() {
   const tCopy = useTranslations('SUPERADMIN_SECURITY');
-  
-  const navigateToWorkflow = (key: string) => {
-    const routes: Record<string, string> = {
-      "Login Security": SUPERADMIN_NAVIGATION_ROUTES.security_login_security,
-      "Password Policy": SUPERADMIN_NAVIGATION_ROUTES.security_password_policy,
-      "2FA & MFA": SUPERADMIN_NAVIGATION_ROUTES.security_mfa,
-      "IP Firewall": SUPERADMIN_NAVIGATION_ROUTES.security_ip_firewall,
-      "API Keys": SUPERADMIN_NAVIGATION_ROUTES.security_api_keys,
-      "Active Sessions": SUPERADMIN_NAVIGATION_ROUTES.security_active_sessions,
-      "Audit & Threats": SUPERADMIN_NAVIGATION_ROUTES.security_threats
-    };
-    const route = routes[key];
-    if (route) {
-      const target = new URL(route, window.location.origin);
-      const query = new URLSearchParams(window.location.search);
-      query.delete('view');
-      query.forEach((value, k) => {
-        if (!target.searchParams.has(k)) target.searchParams.append(k, value);
-      });
-      window.location.assign(target.pathname + target.search + target.hash);
-    }
-  };
-
   const [activeTab] = useState("Login Security");
   const showToast = (msg: string) => {
+    toast.message(msg, { id: 'superadmin:superadmin_security:SuperadminSecurityLoginSecurityPageClient:feedback' });
+  };
     toast.message(msg, { id: 'superadmin:superadmin_security:SuperadminSecurityLoginSecurityPageClient:feedback' });
   };
 
@@ -79,7 +53,7 @@ export default function SuperadminSecurityLoginSecurityPageClient() {
       void passwordForm.handleSubmit(reportPreviewOnly)();
       return;
     }
-    showToast(tCopy('COPY.SECURITY_TAB_READ_ONLY_NO_API', { tab: tCopy(SUPERADMIN_SECURITY_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_LOGIN_SECURITY') }));
+    showToast('Validation passed for this local preview. No security policy was changed.');
   };
 
   return (
@@ -123,35 +97,10 @@ export default function SuperadminSecurityLoginSecurityPageClient() {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex items-center gap-2 border-b border-border/80 pb-3 overflow-x-auto" role="navigation" aria-label={tCopy("COPY.SECURITY_CENTER_SECTIONS")}>
-        {SUPERADMIN_SECURITY_TABS.map((tab) => {
-          const isActive = activeTab === tab.name;
-          return (
-            <button
-              type="button"
-              key={tab.name}
-              id={`security-tab-${tab.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-              aria-current={isActive ? 'page' : undefined}
-              onClick={() => navigateToWorkflow(tab.name)}
-              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
-                isActive
-                  ? 'border border-indigo-400 bg-indigo-500/15 text-indigo-200 shadow-xs'
-                  : 'text-slate-400 hover:bg-surface-hover hover:text-slate-200'
-              }`}
-              data-testid={`superadmin-security-security-overview-set-active-tab-1-${String(tab.name)}`}
-            >
-              <tab.icon size={15} className={isActive ? 'text-indigo-400' : 'text-slate-400'} />
-              <span>{tCopy(tab.labelKey)}</span>
-            </button>
-          );
-        })}
-      </div>
-
       {/* Content */}
       <div
         className="rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-sm overflow-hidden min-h-[420px] flex flex-col"
-        aria-label={tCopy('COPY.ACTIVE_TAB_SETTINGS_ARIA_LABEL', { tab: tCopy(SUPERADMIN_SECURITY_TABS.find((tab) => tab.name === activeTab)?.labelKey ?? 'COPY.TAB_LOGIN_SECURITY') })}
+        aria-label="Login Security Settings"
         tabIndex={0}
       >
         <SuperadminSecurityLoginSecurityPolicyPanels

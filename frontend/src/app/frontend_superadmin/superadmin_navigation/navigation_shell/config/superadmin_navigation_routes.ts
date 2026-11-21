@@ -58,7 +58,6 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   security_login_security: '/superadmin/superadmin_security/security_login_security',
   security_mfa: '/superadmin/superadmin_security/security_mfa',
   security_password_policy: '/superadmin/superadmin_security/security_password_policy',
-  security_api_keys: '/superadmin/superadmin_security/security_api_keys',
   audit_logs: '/superadmin/superadmin_system/system_audit_logs',
 
   // 10 Reports & Analytics
