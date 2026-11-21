@@ -64,12 +64,23 @@ export function useSuperadminBranchesOverview() {
   const suspendBranch = useCallback((id: string, reason: string) => updateStatus(id, 'suspended', 'SUSPEND', `Branch access blocked. Sibling branches unaffected.`, reason), [updateStatus]);
   const deactivateBranch = useCallback((id: string) => updateStatus(id, 'deactivated', 'DEACTIVATE', 'Branch set to operationally inactive'), [updateStatus]);
 
-  const closeBranch = useCallback((id: string, notes: string): { success: boolean; error?: string } => {
+  const closeBranch = useCallback((id: string, notes: string, forceSoftwareDecommission = false): { success: boolean; error?: string } => {
     const target = branches.find((b) => b.id === id);
     if (!target) return { success: false, error: 'Branch not found' };
-    if (target.outstandingBooks > 0) return { success: false, error: `Cannot close branch! ${target.outstandingBooks} physical books are currently issued. Return or transfer books first.` };
-    if (target.memberDues > 0) return { success: false, error: `Cannot close branch! ₹${target.memberDues} in member dues are pending settlement.` };
-    updateStatus(id, 'closed', 'CLOSE', 'Soft-closed without hard deletion. Records archived.', notes, true);
+    if (!forceSoftwareDecommission) {
+      if (target.outstandingBooks > 0) return { success: false, error: `Cannot close branch! ${target.outstandingBooks} physical books are currently issued. Return or transfer books first.` };
+      if (target.memberDues > 0) return { success: false, error: `Cannot close branch! ₹${target.memberDues} in member dues are pending settlement.` };
+    }
+    updateStatus(
+      id,
+      'closed',
+      'CLOSE',
+      forceSoftwareDecommission
+        ? 'SuperAdmin software decommission & manager credentials revoked'
+        : 'Soft-closed without hard deletion. Records archived.',
+      notes,
+      true
+    );
     return { success: true };
   }, [branches, updateStatus]);
 

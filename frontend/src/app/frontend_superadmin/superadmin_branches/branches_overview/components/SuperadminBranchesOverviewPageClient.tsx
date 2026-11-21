@@ -12,6 +12,7 @@ import SuperadminBranchesOverviewCreateModal from '@/app/frontend_superadmin/sup
 import SuperadminBranchesOverviewCloseSafetyModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewCloseSafetyModal';
 import SuperadminBranchesOverviewTransferManagerModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewTransferManagerModal';
 import SuperadminBranchesOverviewDetailsModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewDetailsModal';
+import SuperadminBranchesOverviewEditModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewEditModal';
 import SuperadminBranchesOverviewActivityModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewActivityModal';
 import SuperadminBranchesOverviewReportsModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewReportsModal';
 import SuperadminBranchesOverviewSuspendModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewSuspendModal';
@@ -36,6 +37,7 @@ export default function SuperadminBranchesOverviewPageClient() {
     setStatusFilter,
     availableLibraries,
     createBranch,
+    updateBranch,
     activateBranch,
     suspendBranch,
     closeBranch,
@@ -45,6 +47,7 @@ export default function SuperadminBranchesOverviewPageClient() {
 
   // Modals state
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<SuperadminBranchRecord | null>(null);
   const [suspendTarget, setSuspendTarget] = useState<SuperadminBranchRecord | null>(null);
   const [safetyCloseTarget, setSafetyCloseTarget] = useState<SuperadminBranchRecord | null>(null);
   const [transferTarget, setTransferTarget] = useState<SuperadminBranchRecord | null>(null);
