@@ -7,7 +7,7 @@ import { SeatData } from '../types/ManagerSeatsMatrixComponentTypes';
 describe('Seat Matrix Swap Tool and Zone Filter', () => {
   const mockSeats: SeatData[] = [
     {
-      id: 'S-05',
+      id: 's-05',
       status: 'occupied',
       student: 'Rahul Sharma',
       smartId: 'LIB-1005',
@@ -17,12 +17,12 @@ describe('Seat Matrix Swap Tool and Zone Filter', () => {
       expiry: '2026-12-31',
     },
     {
-      id: 'S-12',
+      id: 's-12',
       status: 'free',
       wing: 'AC Hall A',
     },
     {
-      id: 'S-20',
+      id: 's-20',
       status: 'occupied',
       student: 'Priya Verma',
       smartId: 'LIB-1020',
