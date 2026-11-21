@@ -135,7 +135,7 @@ export default function SuperadminBranchesOverviewPageClient() {
       <SuperadminBranchesOverviewSemanticTable
         branches={filteredBranches}
         onView={(b) => setDetailsTarget(b)}
-        onEdit={(b) => setDetailsTarget(b)}
+        onEdit={(b) => setEditTarget(b)}
         onActivate={(id) => {
           activateBranch(id);
           showToast('Branch operational status updated to Active.');
@@ -153,7 +153,7 @@ export default function SuperadminBranchesOverviewPageClient() {
           <SuperadminBranchesOverviewActionButtons
             branch={branch}
             onView={(b) => setDetailsTarget(b)}
-            onEdit={(b) => setDetailsTarget(b)}
+            onEdit={(b) => setEditTarget(b)}
             onActivate={(id) => {
               activateBranch(id);
               showToast('Branch activated.');
@@ -187,15 +187,28 @@ export default function SuperadminBranchesOverviewPageClient() {
         }}
       />
 
+      {editTarget && (
+        <SuperadminBranchesOverviewEditModal
+          branch={editTarget}
+          isOpen={Boolean(editTarget)}
+          onClose={() => setEditTarget(null)}
+          onSave={(id, updates) => {
+            updateBranch(id, updates);
+            showToast(`Branch "${updates.name || editTarget.name}" details updated successfully!`);
+            setEditTarget(null);
+          }}
+        />
+      )}
+
       {safetyCloseTarget && (
         <SuperadminBranchesOverviewCloseSafetyModal
           branch={safetyCloseTarget}
           onClose={() => setSafetyCloseTarget(null)}
-          onConfirmClose={(id, notes) => {
-            const res = closeBranch(id, notes);
+          onConfirmClose={(id, notes, forceOverride) => {
+            const res = closeBranch(id, notes, forceOverride);
             if (res.success) {
               setSafetyCloseTarget(null);
-              showToast(`Branch "${safetyCloseTarget.name}" safely closed and archived.`);
+              showToast(`Branch "${safetyCloseTarget.name}" software instance successfully decommissioned and archived.`);
             }
             return res;
           }}
