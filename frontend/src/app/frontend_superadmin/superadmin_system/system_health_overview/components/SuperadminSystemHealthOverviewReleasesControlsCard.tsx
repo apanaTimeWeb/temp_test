@@ -22,25 +22,75 @@ const INITIAL_DEPLOYMENTS: DeploymentRecord[] = [
   { version: 'v2.3.9-prod', commitSha: '9c8821f', author: 'Release Engineer', timestamp: '17 Nov 2026, 11:00 UTC', status: 'Superseded', notes: 'WhatsApp Business Bridge throughput scaling.' },
 ];
 
+interface SystemRuntimeControls {
+  apiRateLimiter: boolean;
+  queueWorkers: boolean;
+  dbReadReplicaRouter: boolean;
+  webhookEgress: boolean;
+  apmDistributedTracing: boolean;
+  maintenanceGate: boolean;
+}
+
+const INITIAL_FLAGS: SystemRuntimeControls = {
+  apiRateLimiter: true,
+  queueWorkers: true,
+  dbReadReplicaRouter: true,
+  webhookEgress: true,
+  apmDistributedTracing: true,
+  maintenanceGate: false,
+};
+
+const KILLSWITCH_ITEMS = [
+  {
+    key: 'apiRateLimiter' as const,
+    label: 'API Gateway Rate Limiter',
+    desc: 'DDoS edge shield & request burst throttling',
+    category: 'Edge & Network',
+  },
+  {
+    key: 'queueWorkers' as const,
+    label: 'Worker Queue Auto-Dispatch',
+    desc: 'Async BullMQ tasks & multi-worker pool',
+    category: 'Compute & Queues',
+  },
+  {
+    key: 'dbReadReplicaRouter' as const,
+    label: 'Database Read-Replica Router',
+    desc: 'Dynamic query routing to secondary pool',
+    category: 'Database & Storage',
+  },
+  {
+    key: 'webhookEgress' as const,
+    label: 'Outgoing Webhooks Dispatcher',
+    desc: 'Event delivery & exponential retry queues',
+    category: 'Integrations & Webhooks',
+  },
+  {
+    key: 'apmDistributedTracing' as const,
+    label: 'Distributed Tracing & APM',
+    desc: 'OpenTelemetry spans & query profiling',
+    category: 'Observability',
+  },
+  {
+    key: 'maintenanceGate' as const,
+    label: 'Emergency Maintenance Gate',
+    desc: 'Bypass non-admin traffic with HTTP 503',
+    category: 'System Reliability',
+  },
+] as const;
+
 export function SuperadminSystemHealthOverviewReleasesControlsCard() {
   const [deployments, setDeployments] = useState<DeploymentRecord[]>(INITIAL_DEPLOYMENTS);
-  const [featureFlags, setFeatureFlags] = useState({
-    booksCatalog: true,
-    seatsMatrix: true,
-    biometricSync: true,
-    whatsappBridge: true,
-    instantPayouts: false,
-    offlineModeSync: true,
-  });
+  const [featureFlags, setFeatureFlags] = useState<SystemRuntimeControls>(INITIAL_FLAGS);
   const [rollingBackSha, setRollingBackSha] = useState<string | null>(null);
 
-  const toggleFlag = (key: keyof typeof featureFlags, label: string) => {
+  const toggleFlag = (key: keyof SystemRuntimeControls, label: string) => {
     const nextState = !featureFlags[key];
     setFeatureFlags((prev) => ({ ...prev, [key]: nextState }));
     if (nextState) {
-      toast.success(`Feature enabled: ${label} is now active cluster-wide`);
+      toast.success(`${label} is now active (nominal cluster state)`);
     } else {
-      toast.warning(`Feature killed: ${label} is disabled globally across all tenants`);
+      toast.warning(`${label} killswitch engaged: Subsystem isolated cluster-wide`);
     }
   };
 
@@ -168,49 +218,64 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {[
-              { key: 'booksCatalog' as const, label: 'Books & Inventory Engine', desc: 'Catalog search & checkout' },
-              { key: 'seatsMatrix' as const, label: 'Seat Matrix & Shifts', desc: 'Real-time turnstile bookings' },
-              { key: 'biometricSync' as const, label: 'Biometric Scanner Sync', desc: 'Hardware punch ingestion' },
-              { key: 'whatsappBridge' as const, label: 'WhatsApp Automation', desc: 'Direct message dispatch' },
-              { key: 'instantPayouts' as const, label: 'Instant Tenant Payouts', desc: 'Split billing auto-settlement' },
-              { key: 'offlineModeSync' as const, label: 'Offline Fallback Sync', desc: 'IndexedDB local punch sync' },
-            ].map(({ key, label, desc }) => {
+            {KILLSWITCH_ITEMS.map(({ key, label, desc, category }) => {
               const active = featureFlags[key];
               return (
                 <div
                   key={key}
                   className={`p-3 rounded-xl border flex flex-col justify-between transition-all ${
                     active
-                      ? 'border-emerald-500/30 bg-emerald-950/15'
-                      : 'border-danger/30 bg-danger-subtle/10'
+                      ? 'border-emerald-500/30 bg-emerald-950/20 shadow-xs'
+                      : 'border-rose-500/30 bg-rose-950/20 shadow-xs'
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="flex items-start justify-between gap-3 mb-2.5">
                     <div>
-                      <span className="text-xs font-bold text-slate-200 block">{label}</span>
-                      <span className="text-[10px] text-slate-400">{desc}</span>
+                      <span className="text-xs font-bold text-slate-100 block">{label}</span>
+                      <span className="text-[10px] text-slate-400 block leading-tight mt-0.5">{desc}</span>
+                      <span className="text-[9px] font-mono text-slate-500 uppercase tracking-wider mt-1 block">
+                        {category}
+                      </span>
                     </div>
+
                     <button
                       type="button"
                       role="switch"
                       aria-checked={active}
+                      aria-label={`Toggle ${label}`}
                       onClick={() => toggleFlag(key, label)}
-                      className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                        active ? 'bg-emerald-500' : 'bg-slate-700'
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${
+                        active
+                          ? 'bg-emerald-500 shadow-sm shadow-emerald-500/30'
+                          : 'bg-slate-700 hover:bg-slate-600'
                       }`}
                     >
                       <span
-                        className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
-                          active ? 'translate-x-4' : 'translate-x-0'
+                        aria-hidden="true"
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                          active ? 'translate-x-5' : 'translate-x-0'
                         }`}
                       />
                     </button>
                   </div>
-                  <div className="flex items-center gap-1 text-[10px]">
-                    <span className={`w-1.5 h-1.5 rounded-full ${active ? 'bg-emerald-400' : 'bg-danger'}`} />
-                    <span className={active ? 'text-emerald-300 font-semibold' : 'text-danger font-semibold'}>
-                      {active ? 'Operational' : 'Disabled (Killswitch Active)'}
+
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                    <div className="flex items-center gap-1.5 text-[10px]">
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                        }`}
+                      />
+                      <span
+                        className={`font-semibold ${
+                          active ? 'text-emerald-300' : 'text-rose-400'
+                        }`}
+                      >
+                        {active ? 'Operational' : 'Killswitch Active'}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-500">
+                      {active ? '200 OK' : 'Isolated'}
                     </span>
                   </div>
                 </div>
