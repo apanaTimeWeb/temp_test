@@ -86,17 +86,14 @@ export default function SuperadminFeaturesOverviewMatrixTable({
                   {/* SuperAdmin Control for Library Account (iOS Switch) */}
                   <td className="py-3.5 px-3 text-center">
                     <div className="flex items-center justify-center gap-2">
-                      {!isPlatformOn ? (
-                        <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold">
-                          Killswitch
-                        </span>
-                      ) : onToggleLibraryModule ? (
+                      {onToggleLibraryModule ? (
                         <>
                           <SuperadminFeaturesToggleSwitch
                             size="sm"
                             checked={isEffectiveAllowed}
+                            disabled={!isPlatformOn && !isGlobalScope}
                             onChange={() => onToggleLibraryModule(mod.id)}
-                            title={`Toggle ${mod.name} for current scope`}
+                            title={!isPlatformOn && !isGlobalScope ? 'Blocked by Platform Killswitch' : `Toggle ${mod.name} for current scope`}
                             ariaLabel={`Toggle ${mod.name}`}
                           />
 

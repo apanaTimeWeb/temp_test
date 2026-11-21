@@ -55,21 +55,9 @@ export default function SuperadminFeaturesOverviewPageClient() {
   const { dialogState, requestConfirm, closeConfirm, handleConfirmed } =
     useSuperadminFeaturesOverviewConfirm();
 
-  // Guarded toggle for platform killswitch on critical modules
+  // Direct toggle for platform killswitch with instant UI feedback and toast
   const handleTogglePlatform = (moduleId: string) => {
-    const isCurrentlyOn = platformStates.find((s) => s.moduleId === moduleId)?.platformDefault;
-    if (isCurrentlyOn) {
-      requestConfirm({
-        title: 'Platform Killswitch Warning',
-        message:
-          'Disabling this module at the Platform Default level will globally block it across ALL libraries and branches immediately. Backend API will deny all related requests (HTTP 403). Are you sure?',
-        confirmLabel: 'Yes, Killswitch Globally',
-        isDestructive: true,
-        onConfirm: () => togglePlatformDefault(moduleId),
-      });
-    } else {
-      togglePlatformDefault(moduleId);
-    }
+    togglePlatformDefault(moduleId);
   };
 
   // Guarded override deletion

@@ -93,4 +93,35 @@ describe('Superadmin Features Overview - Client Interactive Controls', () => {
 
     expect(screen.queryByText('Select API Endpoint & Method to Probe:')).toBeNull();
   });
+
+  it('toggles platform default switch when switch is clicked in card grid view', () => {
+    render(<SuperadminFeaturesOverviewPageClient />);
+
+    const dashboardToggle = screen.getByLabelText('Platform default toggle for Dashboard');
+    expect(dashboardToggle).toBeDefined();
+    expect(dashboardToggle.getAttribute('aria-checked')).toBe('true');
+
+    // Click toggle to turn OFF
+    fireEvent.click(dashboardToggle);
+    expect(dashboardToggle.getAttribute('aria-checked')).toBe('false');
+
+    // Click toggle to turn ON again
+    fireEvent.click(dashboardToggle);
+    expect(dashboardToggle.getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('toggles library module switch when scope is set to a library', () => {
+    render(<SuperadminFeaturesOverviewPageClient />);
+
+    const scopeSelect = screen.getByDisplayValue(/Platform-Wide Defaults/i);
+    fireEvent.change(scopeSelect, { target: { value: 'tenant_patna' } });
+
+    const booksToggle = screen.getByLabelText('Toggle Books for current library');
+    expect(booksToggle).toBeDefined();
+    const initialChecked = booksToggle.getAttribute('aria-checked');
+
+    // Click toggle
+    fireEvent.click(booksToggle);
+    expect(booksToggle.getAttribute('aria-checked')).toBe(initialChecked === 'true' ? 'false' : 'true');
+  });
 });

@@ -83,11 +83,11 @@ export default function SuperadminFeaturesOverviewModuleCard({
       className={`p-5 rounded-2xl border transition-all duration-200 flex flex-col justify-between shadow-lg backdrop-blur-xl ${
         isEffectiveAllowed
           ? 'border-indigo-500/30 bg-[#0a0d24]/90 hover:border-indigo-500/50 shadow-indigo-950/30'
-          : 'border-rose-500/20 bg-slate-950/70 opacity-90 hover:border-rose-500/30'
+          : 'border-rose-500/25 bg-slate-950/80 hover:border-rose-500/40'
       }`}
     >
       <div>
-        {/* Card Header with Level 1 Platform Switch */}
+        {/* Card Header */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <span
@@ -110,20 +110,35 @@ export default function SuperadminFeaturesOverviewModuleCard({
             </div>
           </div>
 
-          {/* Level 1: Platform Switch Toggle (iOS-style ON/OFF switch) */}
-          <div className="switch-area flex flex-col items-end gap-1 shrink-0">
-            <SuperadminFeaturesToggleSwitch
-              checked={isGlobalAllowed}
-              onChange={() => onTogglePlatformDefault(module.id)}
-              size="sm"
-              title={`Platform Default: ${isGlobalAllowed ? 'Enabled' : 'Disabled (Platform Killswitch)'}`}
-              ariaLabel={`Platform default toggle for ${module.name}`}
-            />
-            <span className={`text-[9px] uppercase tracking-wider font-bold ${
-              isGlobalAllowed ? 'text-emerald-400' : 'text-rose-400'
-            }`}>
-              {isGlobalAllowed ? 'L1 ARMED' : 'L1 DISARMED'}
-            </span>
+          {/* Scope Primary Toggle Switch */}
+          <div className="flex flex-col items-end gap-1 shrink-0">
+            {isGlobalScope ? (
+              <>
+                <SuperadminFeaturesToggleSwitch
+                  checked={isGlobalAllowed}
+                  onChange={() => onTogglePlatformDefault(module.id)}
+                  size="md"
+                  title={`Platform Default: ${isGlobalAllowed ? 'Enabled' : 'Disabled'}`}
+                  ariaLabel={`Platform default toggle for ${module.name}`}
+                />
+                <span className={`text-[9px] uppercase tracking-wider font-extrabold ${isGlobalAllowed ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {isGlobalAllowed ? 'PLATFORM: ON' : 'KILLSWITCH: OFF'}
+                </span>
+              </>
+            ) : (
+              <>
+                <SuperadminFeaturesToggleSwitch
+                  checked={isGlobalAllowed}
+                  onChange={() => onTogglePlatformDefault(module.id)}
+                  size="sm"
+                  title={`L1 Platform Master Killswitch for ${module.name}`}
+                  ariaLabel={`L1 Master Killswitch for ${module.name}`}
+                />
+                <span className={`text-[9px] uppercase tracking-wider font-extrabold ${isGlobalAllowed ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  {isGlobalAllowed ? 'L1: ARMED' : 'L1: BLOCKED'}
+                </span>
+              </>
+            )}
           </div>
         </div>
 
@@ -183,39 +198,36 @@ export default function SuperadminFeaturesOverviewModuleCard({
           <div className="mt-3.5 p-3 rounded-xl border border-indigo-500/20 bg-slate-950/70 flex items-center justify-between gap-3">
             <div>
               <span className="text-[11px] font-bold text-slate-200 block">
-                SuperAdmin Control:
+                Library Access Control:
               </span>
               <span className="text-[10px] text-slate-400">
-                {effective.override ? 'Custom Override Active' : 'Inherited from Plan'}
+                {!isGlobalAllowed
+                  ? 'Globally Blocked by Platform Killswitch'
+                  : effective.override
+                  ? `Override: ${effective.override.overrideStatus}`
+                  : 'Inherited from Library Plan'}
               </span>
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
-              {!isGlobalAllowed ? (
-                <span className="text-[10px] px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
-                  Killswitched (L1)
-                </span>
-              ) : (
-                <>
-                  <SuperadminFeaturesToggleSwitch
-                    checked={isEffectiveAllowed}
-                    onChange={() => onToggleLibraryModule(module.id)}
-                    size="sm"
-                    title={`SuperAdmin Toggle for ${module.name}`}
-                    ariaLabel={`Toggle ${module.name} for current library`}
-                  />
+              <SuperadminFeaturesToggleSwitch
+                checked={isEffectiveAllowed}
+                onChange={() => onToggleLibraryModule(module.id)}
+                size="md"
+                disabled={!isGlobalAllowed}
+                title={!isGlobalAllowed ? 'Blocked by Platform Killswitch' : `Toggle ${module.name} for current library`}
+                ariaLabel={`Toggle ${module.name} for current library`}
+              />
 
-                  {effective.override && onResetLibraryModule && (
-                    <button
-                      type="button"
-                      onClick={() => onResetLibraryModule(module.id)}
-                      title="Reset to plan default"
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
-                    >
-                      <RotateCcw size={13} />
-                    </button>
-                  )}
-                </>
+              {effective.override && onResetLibraryModule && (
+                <button
+                  type="button"
+                  onClick={() => onResetLibraryModule(module.id)}
+                  title="Reset to plan default"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                >
+                  <RotateCcw size={13} />
+                </button>
               )}
             </div>
           </div>
@@ -224,7 +236,6 @@ export default function SuperadminFeaturesOverviewModuleCard({
 
       {/* Footer & Actions */}
       <div className="mt-4 pt-3.5 border-t border-indigo-500/20 flex flex-col gap-2.5">
-        {/* Effective Access Result */}
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-1.5">
             {isEffectiveAllowed ? (
@@ -248,7 +259,6 @@ export default function SuperadminFeaturesOverviewModuleCard({
           {effective.reason}
         </p>
 
-        {/* Buttons */}
         <div className="grid grid-cols-2 gap-2 mt-1">
           <button
             type="button"
