@@ -33,14 +33,6 @@ export const SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS: SuperadminSettingsFormValues 
     sessionTimeoutMinutes: 30,
     maxFailedLogins: 5,
   },
-  notificationTemplates: {
-    welcomeEmailSubject: 'Welcome to {libraryName} on LibraryOS',
-    welcomeEmailBody: 'Dear {memberName},\nWelcome to {libraryName} ({branchName}). Your member portal account has been provisioned.\nLogin URL: {loginUrl}',
-    passwordResetBody: 'Hello {memberName},\nUse this secure link to reset your password. It expires in 15 minutes.\nReset Link: {resetUrl}',
-    dueReminderBody: 'Hi {memberName}, your plan at {libraryName} expires on {expiryDate}. Amount due: {amountDue}. Please renew on time.',
-    announcementBody: 'Important notice for all patrons of {libraryName}: {announcementText}',
-    activeTemplate: 'WELCOME',
-  },
   uploadRestrictions: {
     allowedExtensions: ['.pdf', '.png', '.jpg', '.jpeg', '.webp', '.xlsx'],
     maxFileSizeMb: 10,

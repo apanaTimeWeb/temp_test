@@ -54,22 +54,6 @@ export const SUPERADMIN_SETTINGS_SCHEMA = z.object({
     maxFailedLogins: 5,
   }),
 
-  notificationTemplates: z.object({
-    welcomeEmailSubject: z.string().trim().max(150).default('Welcome to {libraryName} on LibraryOS'),
-    welcomeEmailBody: z.string().trim().max(2000).default('Dear {memberName},\nWelcome to {libraryName} ({branchName}). Your member portal account has been provisioned.\nLogin URL: {loginUrl}'),
-    passwordResetBody: z.string().trim().max(1000).default('Hello {memberName},\nUse this secure link to reset your password. It expires in 15 minutes.\nReset Link: {resetUrl}'),
-    dueReminderBody: z.string().trim().max(1000).default('Hi {memberName}, your plan at {libraryName} expires on {expiryDate}. Amount due: {amountDue}. Please renew on time.'),
-    announcementBody: z.string().trim().max(2000).default('Important notice for all patrons of {libraryName}: {announcementText}'),
-    activeTemplate: z.enum(['WELCOME', 'PASSWORD_RESET', 'DUE_REMINDER', 'ANNOUNCEMENT']).default('WELCOME'),
-  }).default({
-    welcomeEmailSubject: 'Welcome to {libraryName} on LibraryOS',
-    welcomeEmailBody: 'Dear {memberName},\nWelcome to {libraryName} ({branchName}). Your member portal account has been provisioned.\nLogin URL: {loginUrl}',
-    passwordResetBody: 'Hello {memberName},\nUse this secure link to reset your password. It expires in 15 minutes.\nReset Link: {resetUrl}',
-    dueReminderBody: 'Hi {memberName}, your plan at {libraryName} expires on {expiryDate}. Amount due: {amountDue}. Please renew on time.',
-    announcementBody: 'Important notice for all patrons of {libraryName}: {announcementText}',
-    activeTemplate: 'WELCOME',
-  }),
-
   uploadRestrictions: z.object({
     allowedExtensions: z.array(z.string()).default(['.pdf', '.png', '.jpg', '.jpeg', '.webp', '.xlsx']),
     maxFileSizeMb: z.number().int().min(1).max(100).default(10),

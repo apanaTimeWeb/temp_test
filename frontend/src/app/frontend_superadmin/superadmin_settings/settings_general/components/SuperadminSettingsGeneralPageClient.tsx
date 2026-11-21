@@ -27,7 +27,6 @@ import { useSuperadminSettingsGeneralUnsavedChangesGuard } from '@/app/frontend_
 import { SuperadminSettingsGeneralPlatformRegionalCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralPlatformRegionalCard';
 import { SuperadminSettingsGeneralBranchDefaultsCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralBranchDefaultsCard';
 import { SuperadminSettingsGeneralSecurityPoliciesCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralSecurityPoliciesCard';
-import { SuperadminSettingsGeneralNotificationTemplatesCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralNotificationTemplatesCard';
 import { SuperadminSettingsGeneralUploadRestrictionsCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralUploadRestrictionsCard';
 import { SuperadminSettingsGeneralMaintenanceModeCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralMaintenanceModeCard';
 import { SuperadminSettingsGeneralDataRetentionCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralDataRetentionCard';
@@ -183,7 +182,6 @@ export default function SuperadminSettingsGeneralPageClient() {
             {showSection('platform_regional') && <SuperadminSettingsGeneralPlatformRegionalCard />}
             {showSection('branch_defaults') && <SuperadminSettingsGeneralBranchDefaultsCard />}
             {showSection('security_policies') && <SuperadminSettingsGeneralSecurityPoliciesCard />}
-            {showSection('notification_templates') && <SuperadminSettingsGeneralNotificationTemplatesCard />}
             {showSection('upload_restrictions') && <SuperadminSettingsGeneralUploadRestrictionsCard />}
             {showSection('maintenance_mode') && <SuperadminSettingsGeneralMaintenanceModeCard />}
             {showSection('data_retention') && <SuperadminSettingsGeneralDataRetentionCard />}

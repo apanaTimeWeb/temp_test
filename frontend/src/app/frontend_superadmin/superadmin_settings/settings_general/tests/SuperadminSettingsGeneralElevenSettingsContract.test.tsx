@@ -13,8 +13,6 @@ import {
   AVAILABLE_TIMEZONES,
   AVAILABLE_LANGUAGES,
   MFA_ENFORCEMENT_OPTIONS,
-  NOTIFICATION_TEMPLATE_OPTIONS,
-  TEMPLATE_PLACEHOLDERS,
   BACKUP_SCHEDULE_OPTIONS,
   POPULAR_FILE_EXTENSIONS,
 } from '../constants/SuperadminSettingsGeneralConstants';
@@ -107,21 +105,6 @@ describe('Global Settings 11 Domains Comprehensive Contract', () => {
     });
   });
 
-  describe('5. Default Notification Templates', () => {
-    it('defines supported template types and variable placeholders', () => {
-      expect(NOTIFICATION_TEMPLATE_OPTIONS.length).toBe(4);
-      expect(TEMPLATE_PLACEHOLDERS).toContain('{memberName}');
-      expect(TEMPLATE_PLACEHOLDERS).toContain('{libraryName}');
-      expect(TEMPLATE_PLACEHOLDERS).toContain('{loginUrl}');
-    });
-
-    it('contains valid email and SMS templates in defaults', () => {
-      const templates = SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS.notificationTemplates;
-      expect(templates.welcomeEmailSubject).toContain('{libraryName}');
-      expect(templates.welcomeEmailBody).toContain('{loginUrl}');
-    });
-  });
-
   describe('6. File Upload Restrictions', () => {
     it('contains verified document and image extensions', () => {
       expect(POPULAR_FILE_EXTENSIONS).toContain('.pdf');
@@ -201,7 +184,6 @@ describe('Global Settings 11 Domains Comprehensive Contract', () => {
         'platform_regional',
         'branch_defaults',
         'security_policies',
-        'notification_templates',
         'upload_restrictions',
         'maintenance_mode',
         'data_retention',
@@ -214,7 +196,7 @@ describe('Global Settings 11 Domains Comprehensive Contract', () => {
     it('fetches settings successfully from preview client', async () => {
       const response = await fetchSuperadminSettingsGeneral();
       expect(response.success).toBe(true);
-      expect(response.data.generalConfig.platformName).toBe('Library OS');
+      expect(response.data!.generalConfig.platformName).toBe('Library OS');
     });
 
     it('mutates settings with idempotency key generation', async () => {
@@ -229,14 +211,14 @@ describe('Global Settings 11 Domains Comprehensive Contract', () => {
         'custom-uuid-key-test-1234'
       );
       expect(response.success).toBe(true);
-      expect(response.data.generalConfig.platformName).toBe('Updated LibraryOS Test');
+      expect(response.data!.generalConfig.platformName).toBe('Updated LibraryOS Test');
       expect(response.message).toContain('custom-uuid-key-test-1234');
     });
 
     it('resets settings to baseline defaults', async () => {
       const response = await resetSuperadminSettingsGeneral();
       expect(response.success).toBe(true);
-      expect(response.data.generalConfig.platformName).toBe('Library OS');
+      expect(response.data!.generalConfig.platformName).toBe('Library OS');
     });
   });
 });

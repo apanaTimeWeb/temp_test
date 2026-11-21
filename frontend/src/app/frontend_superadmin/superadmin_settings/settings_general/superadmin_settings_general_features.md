@@ -19,8 +19,7 @@ portability_score: "VERIFIED_STANDALONE"
   4. Default currency
   5. Default branch settings (capacity, operating hours, slot duration, check-in grace, auto-approval, weekend schedule)
   6. Password and MFA policies (length, complexity, expiration, MFA enforcement level, session timeout, max failed logins)
-  7. Default notification templates (welcome, password reset, due reminders, broadcast announcements with placeholder interpolations)
-  8. File upload restrictions (allowed extensions, file size cap, branch quota, ClamAV scanning, WebP auto-compression)
+  7. File upload restrictions (allowed extensions, file size cap, branch quota, ClamAV scanning, WebP auto-compression)
   9. Global maintenance mode (emergency switch, broadcast message, downtime estimate, whitelisted IP CIDRs, bypass key)
   10. Data retention policy (member access logs, audit trail years, biometric/punch logs, automated database snapshots, trash auto-purge)
   11. Default subscription & grace-period rules (trial days, grace period, renewal reminder leads, auto-suspension, read-only grace, proration)
@@ -34,7 +33,6 @@ portability_score: "VERIFIED_STANDALONE"
   - `components/SuperadminSettingsGeneralPlatformRegionalCard.tsx` (186 lines)
   - `components/SuperadminSettingsGeneralBranchDefaultsCard.tsx` (155 lines)
   - `components/SuperadminSettingsGeneralSecurityPoliciesCard.tsx` (181 lines)
-  - `components/SuperadminSettingsGeneralNotificationTemplatesCard.tsx` (205 lines)
   - `components/SuperadminSettingsGeneralUploadRestrictionsCard.tsx` (215 lines)
   - `components/SuperadminSettingsGeneralMaintenanceModeCard.tsx` (164 lines)
   - `components/SuperadminSettingsGeneralDataRetentionCard.tsx` (200 lines)
@@ -74,7 +72,6 @@ Derived directly from `schemas/SuperadminSettingsGeneralSchema.ts`:
 | Branch Defaults | `branchDefaults.closingTime` | string (HH:MM) | `"23:00"` |
 | Security Policy | `securityPolicy.minPasswordLength` | number (8-32) | `10` |
 | Security Policy | `securityPolicy.mfaEnforcement` | enum | `"SUPERADMIN_ONLY"` |
-| Notification | `notificationTemplates.welcomeEmailSubject` | string | `"Welcome to {libraryName} on LibraryOS"` |
 | Upload Quotas | `uploadRestrictions.maxFileSizeMb` | number | `10` |
 | Upload Quotas | `uploadRestrictions.allowedExtensions` | string[] | `[".pdf", ".png", ...]` |
 | Maintenance | `maintenance.enabled` | boolean | `false` |

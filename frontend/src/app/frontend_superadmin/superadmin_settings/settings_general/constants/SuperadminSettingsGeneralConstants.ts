@@ -6,7 +6,6 @@ import {
   ShieldAlert,
   Building2,
   FileCheck,
-  Bell,
   HardDrive,
   Database,
   CreditCard,
@@ -24,7 +23,6 @@ export const SETTINGS_SECTION_PILLS = [
   { id: 'platform_regional', label: 'Platform & Regional', icon: Globe },
   { id: 'branch_defaults', label: 'Branch Settings', icon: Building2 },
   { id: 'security_policies', label: 'Password & MFA', icon: ShieldCheck },
-  { id: 'notification_templates', label: 'Notification Templates', icon: Bell },
   { id: 'upload_restrictions', label: 'Upload Restrictions', icon: HardDrive },
   { id: 'maintenance_mode', label: 'Maintenance Mode', icon: ShieldAlert },
   { id: 'data_retention', label: 'Data Retention', icon: Database },
@@ -64,24 +62,6 @@ export const MFA_ENFORCEMENT_OPTIONS = [
   { value: 'OPTIONAL', label: 'Optional (User Configurable)' },
   { value: 'SUPERADMIN_ONLY', label: 'SuperAdmin Only (Recommended)' },
   { value: 'ALL_ADMINS', label: 'All Administrators (Strict)' },
-] as const;
-
-export const NOTIFICATION_TEMPLATE_OPTIONS = [
-  { key: 'WELCOME', label: 'Welcome & Onboarding Email' },
-  { key: 'PASSWORD_RESET', label: 'Password Reset Notification' },
-  { key: 'DUE_REMINDER', label: 'Membership Due / Expiry Reminder' },
-  { key: 'ANNOUNCEMENT', label: 'Global Maintenance Broadcast' },
-] as const;
-
-export const TEMPLATE_PLACEHOLDERS = [
-  '{memberName}',
-  '{libraryName}',
-  '{branchName}',
-  '{expiryDate}',
-  '{amountDue}',
-  '{loginUrl}',
-  '{resetUrl}',
-  '{announcementText}',
 ] as const;
 
 export const BACKUP_SCHEDULE_OPTIONS = [
