@@ -15,7 +15,12 @@ import SuperadminBranchesOverviewDetailsModal from '@/app/frontend_superadmin/su
 import SuperadminBranchesOverviewActivityModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewActivityModal';
 import SuperadminBranchesOverviewReportsModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewReportsModal';
 import SuperadminBranchesOverviewSuspendModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewSuspendModal';
-import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
+import type { SuperadminBranchRecord } from '@/app/frontend_superadmin\superadmin_branches\branches_overview\types\SuperadminBranchesOverviewTypes';
+import {
+  downloadSuperadminBranchesCsv,
+  downloadSuperadminBranchesExcel,
+  printSuperadminBranchesRoster,
+} from '@/app/frontend_superadmin/superadmin_branches/branches_overview/utils/superadmin_branches_overview_utils';
 
 export default function SuperadminBranchesOverviewPageClient() {
   const searchParams = useSearchParams();
@@ -63,25 +68,17 @@ export default function SuperadminBranchesOverviewPageClient() {
   const existingCodes = useMemo(() => branches.map((b) => b.code), [branches]);
 
   const handleExportCsv = () => {
-    const headers = ['ID', 'Code', 'Name', 'Library', 'City', 'Status', 'Capacity', 'Outstanding Books', 'Member Dues'];
-    const rows = filteredBranches.map((b) => [
-      b.id, b.code, `"${b.name}"`, `"${b.libraryName}"`, b.city, b.status, b.capacity, b.outstandingBooks, b.memberDues,
-    ]);
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
-    const link = document.createElement('a');
-    link.href = encodeURI(csvContent);
-    link.download = `branches_export_${new Date().toISOString().slice(0, 10)}.csv`;
-    link.click();
-    showToast('Branch directory exported as CSV');
+    downloadSuperadminBranchesCsv(filteredBranches);
+    showToast('Branch directory exported as UTF-8 CSV');
   };
 
   const handleExportExcel = () => {
-    showToast('Exporting formatted spreadsheet (.xlsx)...');
-    handleExportCsv();
+    downloadSuperadminBranchesExcel(filteredBranches);
+    showToast('Branch directory exported as Excel (.xls)');
   };
 
   const handlePrint = () => {
-    window.print();
+    printSuperadminBranchesRoster(filteredBranches);
   };
 
   const handleSuspend = (branch: SuperadminBranchRecord) => {
