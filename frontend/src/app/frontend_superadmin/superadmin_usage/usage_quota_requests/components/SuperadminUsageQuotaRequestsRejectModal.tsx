@@ -54,12 +54,12 @@ export function SuperadminUsageQuotaRequestsRejectModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-md rounded-2xl border border-rose-500/30 bg-slate-950 p-6 shadow-2xl space-y-4">
+    <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="w-full max-w-md rounded-2xl border border-rose-500/30 bg-[#0a0d24] p-6 shadow-2xl shadow-rose-950/50 space-y-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30">
+        <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-xs">
               <XCircle className="h-5 w-5" />
             </div>
             <div>
@@ -69,14 +69,14 @@ export function SuperadminUsageQuotaRequestsRejectModal({
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="rounded-xl p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Request Context */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-3 text-xs space-y-1.5">
+        <div className="rounded-xl border border-indigo-500/20 bg-slate-950/60 p-3 text-xs space-y-1.5">
           <div className="flex justify-between">
             <span className="text-slate-400">Resource:</span>
             <span className="font-bold text-white">{request.resourceType}</span>
@@ -91,7 +91,7 @@ export function SuperadminUsageQuotaRequestsRejectModal({
 
         {/* Error Alert */}
         {formError && (
-          <div className="flex items-center gap-2 p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
             <AlertCircle className="h-4 w-4 shrink-0" />
             <span>{formError}</span>
           </div>
@@ -109,26 +109,26 @@ export function SuperadminUsageQuotaRequestsRejectModal({
               rows={3}
               {...register('rejectionReason')}
               placeholder="e.g. Please upgrade to Enterprise Plan instead of standalone branch addon..."
-              className="w-full rounded-lg border border-slate-800 bg-slate-900 p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
+              className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
             />
             {errors.rejectionReason && (
               <p className="mt-1 text-[11px] text-rose-400">{errors.rejectionReason.message}</p>
             )}
           </div>
 
-          <div className="flex items-center justify-end gap-2 border-t border-slate-800 pt-3">
+          <div className="flex items-center justify-end gap-2 border-t border-indigo-500/20 pt-3">
             <button
               type="button"
               onClick={onClose}
               disabled={isRejecting}
-              className="px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-slate-700 text-xs text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isRejecting}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-all shadow-md shadow-rose-600/20 cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition-all shadow-md shadow-rose-600/20 cursor-pointer disabled:opacity-50 active:scale-95"
             >
               {isRejecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <XCircle className="h-3.5 w-3.5" />}
               Confirm Rejection

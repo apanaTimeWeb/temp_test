@@ -17,7 +17,7 @@ const TAB_CONFIG = {
   },
   notices: {
     icon: Bell,
-    label: 'Platform Notices',
+    label: 'Notices',
     activeColor: 'text-sky-400',
     border: 'border-sky-500',
     bg: 'bg-sky-500/15',

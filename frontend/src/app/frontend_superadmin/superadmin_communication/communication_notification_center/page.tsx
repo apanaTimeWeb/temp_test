@@ -4,7 +4,7 @@
 import SuperadminCommunicationNotificationCenterMain from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterMain';
 
 export const metadata = {
-  title: 'Notification & Communication Center | SuperAdmin',
+  title: 'Notification Center | SuperAdmin',
   description: 'Manage global and account-specific notifications across Email, SMS, and WhatsApp with delivery tracking.',
 };
 
