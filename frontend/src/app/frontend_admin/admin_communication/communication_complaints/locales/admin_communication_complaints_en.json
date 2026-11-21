@@ -91,6 +91,7 @@
     "COMPLAINT_SUBMIT_UNAVAILABLE": "Submit Complaint (unavailable)",
     "COMPLAINT_UNKNOWN_ERROR": "An unknown error occurred.",
     "COMPLAINT_VIEW_ACTION": "View complaint",
+    "VIEW_DETAILS": "View details",
     "COMPLAINT_RESOLUTION_DETAILS": "Resolution: {note} — {by} on {date}",
     "LABEL_ON": "on",
     "WHATSAPP_LOGS_TITLE": "WhatsApp Logs",

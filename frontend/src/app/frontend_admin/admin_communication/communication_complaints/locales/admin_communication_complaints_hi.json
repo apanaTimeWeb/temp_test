@@ -91,6 +91,7 @@
     "COMPLAINT_SUBMIT_UNAVAILABLE": "शिकायत जमा करना उपलब्ध नहीं है",
     "COMPLAINT_UNKNOWN_ERROR": "अज्ञात त्रुटि हुई।",
     "COMPLAINT_VIEW_ACTION": "शिकायत देखें",
+    "VIEW_DETAILS": "विवरण देखें",
     "COMPLAINT_RESOLUTION_DETAILS": "समाधान: {note} — {by}, दिनांक {date}",
     "LABEL_ON": "दिनांक",
     "WHATSAPP_LOGS_TITLE": "WhatsApp लॉग",

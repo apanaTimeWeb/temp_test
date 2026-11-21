@@ -34,6 +34,7 @@
     "lockerMatrixLoadError": "Unable to load the locker matrix. Please retry.",
     "lockerMatrixRefreshFailed": "Refresh failed. Showing the last successfully loaded locker matrix.",
     "loadingLockers": "Loading lockers…",
+    "loadingLockerMatrix": "Loading locker matrix…",
     "noLockersFound": "No lockers found.",
     "management": "Management",
     "lockerAssignmentBlocked": "Locker assignment actions are intentionally not simulated. The supplied frontend scope does not define the mutation endpoint or student-selection contract.",
