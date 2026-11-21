@@ -1,17 +1,25 @@
 'use client';
-/** Responsibility: Superadmin Library Creation Modal; orchestrates the 4-step wizard for Organization, Admin, Branches, and Provisioning. */
-import { useState } from 'react';
-import { X, ChevronRight, ChevronLeft, Building2, UserCheck, GitBranch, Layers, Sparkles } from 'lucide-react';
+// RESPONSIBILITY: Superadmin Library Creation Modal matching Branch Creation Modal mechanics, backdrop-blur, portal mount, and scroll lock.
+import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import { X, ChevronRight, ChevronLeft, Building2, UserCheck, GitBranch, Layers } from 'lucide-react';
 import SuperadminLibrariesCreateStepOrganization from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateStepOrganization';
 import SuperadminLibrariesCreateStepAdmin from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateStepAdmin';
 import SuperadminLibrariesCreateStepBranches from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateStepBranches';
 import SuperadminLibrariesCreateStepProvisioning from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/components/SuperadminLibrariesCreateStepProvisioning';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
+import {
+  DEFAULT_PROVISIONING_PLAN,
+  INITIAL_ORG_STATE,
+  INITIAL_ADMIN_STATE,
+  INITIAL_BRANCHES_STATE,
+  generateProvisioningPayload,
+} from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/utils/SuperadminLibrariesCreateAccountUtils';
 
 import type {
   LibraryOrganizationDetails,
   LibraryMainAdminAccount,
   LibraryBranchCreationItem,
-  LibraryProvisioningPlan,
   LibraryProvisioningResult,
 } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesCreateAccountTypes';
 import type { SuperadminLibrariesLibrary } from '@/app/frontend_superadmin/superadmin_libraries/libraries_overview/types/SuperadminLibrariesOverviewTypes';
@@ -23,79 +31,43 @@ interface CreateAccountModalProps {
   existingCodes?: string[];
 }
 
-const DEFAULT_PLAN: LibraryProvisioningPlan = {
-  planId: 'plan-pro',
-  planName: 'Pro Tier (Standard)',
-  maxBranches: 3, // Default plan allows up to 3 branches, extensible in plan config
-  monthlyFee: 14999,
-};
-
 export default function SuperadminLibrariesCreateAccountModal({
   isOpen,
   onClose,
   onLibraryCreated,
   existingCodes = [],
 }: CreateAccountModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [isExecuting, setIsExecuting] = useState(false);
   const [provisioningResult, setProvisioningResult] = useState<LibraryProvisioningResult | null>(null);
 
-  // Form State
-  const [org, setOrg] = useState<LibraryOrganizationDetails>({
-    libraryName: '',
-    libraryCode: 'LIB-NEW-101',
-    legalBusinessName: '',
-    ownerName: '',
-    contactNumber: '',
-    emailAddress: '',
-    address: '',
-    city: 'New Delhi',
-    state: 'Delhi',
-    pincode: '110001',
-    country: 'India',
-    timeZone: 'Asia/Kolkata (IST, UTC+05:30)',
-    status: 'Active',
-  });
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  const [admin, setAdmin] = useState<LibraryMainAdminAccount>({
-    adminName: '',
-    adminEmail: '',
-    mobileNumber: '',
-    loginId: 'admin_lead',
-    role: 'Library Admin',
-    passwordSetupMethod: 'secure_invitation_link',
-    mfaEnforced: true,
-    status: 'Invited',
-  });
+  useModalScrollLock(Boolean(isOpen && mounted));
 
-  const [branches, setBranches] = useState<LibraryBranchCreationItem[]>([
-    {
-      id: 'br-init-1',
-      branchName: 'Main Campus Branch',
-      branchCode: 'LIB-BR01',
-      branchAddress: 'Ground Floor, Commercial Complex',
-      contactNumber: '+91 98765 00001',
-      branchEmail: 'main@apexlibrary.in',
-      branchManager: 'Ramesh Varma',
-      openingDate: new Date().toISOString().split('T')[0],
-      workingHours: '06:00 AM - 11:00 PM',
-      weeklyHolidays: 'None (Open 7 Days)',
-      status: 'Active',
-      allowedModules: {
-        books: true,
-        members: true,
-        seats: true,
-        finance: true,
-        accounts: true,
-        communication: true,
-      },
-      capacitySeats: 150,
-      hasAirConditioning: true,
-      hasLockers: true,
-    },
-  ]);
+  const handleClose = useCallback(() => {
+    setStep(1);
+    setProvisioningResult(null);
+    onClose();
+  }, [onClose]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, handleClose]);
+
+  const [org, setOrg] = useState<LibraryOrganizationDetails>(INITIAL_ORG_STATE);
+  const [admin, setAdmin] = useState<LibraryMainAdminAccount>(INITIAL_ADMIN_STATE);
+  const [branches, setBranches] = useState<LibraryBranchCreationItem[]>(INITIAL_BRANCHES_STATE);
+
+  if (!isOpen || !mounted) return null;
 
   const canGoNext = () => {
     if (step === 1) return Boolean(org.libraryName.trim() && org.libraryCode.trim());
@@ -107,82 +79,40 @@ export default function SuperadminLibrariesCreateAccountModal({
   const handleExecuteProvisioning = () => {
     setIsExecuting(true);
     setTimeout(() => {
-      const generatedTenantId = `TENANT-${org.libraryCode.toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
-      const generatedToken = `inv_${Math.random().toString(36).substring(2, 15)}_${Date.now()}`;
-      const inviteUrl = `https://platform.smartlibrary.in/admin/invite?token=${generatedToken}&tenant=${generatedTenantId}`;
-
-      const result: LibraryProvisioningResult = {
-        tenantId: generatedTenantId,
-        libraryCode: org.libraryCode,
-        adminEmail: admin.adminEmail,
-        invitationUrl: inviteUrl,
-        invitationToken: generatedToken,
-        provisionedAt: new Date().toLocaleString(),
-        branchesCreatedCount: branches.length,
-        status: 'activation_pending',
-      };
-
-      const newLib: SuperadminLibrariesLibrary = {
-        id: generatedTenantId,
-        name: org.libraryName,
-        location: `${org.city}, ${org.state}`,
-        owner: org.ownerName || admin.adminName,
-        email: org.emailAddress || admin.adminEmail,
-        phone: org.contactNumber || admin.mobileNumber,
-        gstNumber: org.legalBusinessName ? '27AABCU9603R1ZM' : 'N/A',
-        nextRenewal: '2027-11-20',
-        branches: branches.length,
-        students: branches.length * 100,
-        revenue: 14999,
-        status: org.status === 'Active' ? 'Active' : 'Maintenance',
-        plan: 'Enterprise',
-        joinedAt: 'Just now',
-        adminPanelEnabled: true,
-        branchList: branches.map((b) => ({
-          id: b.id,
-          name: b.branchName,
-          code: b.branchCode || 'BR-01',
-          city: org.city,
-          address: b.branchAddress || `${org.city}, ${org.state}`,
-          seats: 100,
-          shifts: 3,
-          managerName: b.branchManager || admin.adminName,
-          managerPhone: b.contactNumber || admin.mobileNumber,
-          managerEmail: b.branchEmail || admin.adminEmail,
-          status: b.status === 'Active' ? 'Active' : 'Maintenance',
-        })),
-        managerModules: branches[0]?.allowedModules || {},
-      };
-
+      const { result, newLib } = generateProvisioningPayload(org, admin, branches);
       setProvisioningResult(result);
       setIsExecuting(false);
       onLibraryCreated(newLib, result);
     }, 900);
   };
 
-  const handleClose = () => {
-    setStep(1);
-    setProvisioningResult(null);
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="relative w-full max-w-3xl rounded-3xl border border-indigo-500/40 bg-[#0c1222] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-        {/* Modal Top Header */}
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) handleClose();
+      }}
+    >
+      <div
+        className="relative w-full max-w-4xl rounded-2xl border border-indigo-500/40 bg-[#0d102b] shadow-2xl text-white max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out"
+        role="dialog"
+        aria-modal="true"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
         <div className="p-5 border-b border-indigo-500/20 bg-gradient-to-r from-indigo-950/80 via-[#151c38] to-indigo-950/80 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400">
-              <Sparkles size={20} />
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
+              <Building2 size={22} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-extrabold text-white">Create New Library Account</h2>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/25 text-indigo-300 border border-indigo-500/40">
-                  SuperAdmin Only
+                <h2 className="text-lg font-bold text-white">Create New Library Account (SuperAdmin Only)</h2>
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  PROVISIONING
                 </span>
               </div>
-              <p className="text-xs text-slate-400">Workspace provisioning, main Admin access, and branch setup</p>
+              <p className="text-xs text-slate-400">Workspace provisioning, main Admin access, and multi-branch setup</p>
             </div>
           </div>
 
@@ -197,7 +127,7 @@ export default function SuperadminLibrariesCreateAccountModal({
 
         {/* Stepper Bar */}
         {!provisioningResult && (
-          <div className="px-5 py-3 border-b border-slate-800/80 bg-slate-900/50 flex items-center justify-between overflow-x-auto text-xs">
+          <div className="px-5 py-3 border-b border-indigo-500/20 bg-[#0c0f28] flex items-center justify-between overflow-x-auto text-xs shrink-0">
             <div className={`flex items-center gap-2 ${step >= 1 ? 'text-indigo-400 font-bold' : 'text-slate-500'}`}>
               <Building2 size={14} />
               <span>A. Organization</span>
@@ -213,7 +143,7 @@ export default function SuperadminLibrariesCreateAccountModal({
               <span>C. Branches</span>
             </div>
             <span className="text-slate-600">➔</span>
-            <div className={`flex items-center gap-2 ${step === 4 ? 'text-amber-400 font-bold' : 'text-slate-500'}`}>
+            <div className={`flex items-center gap-2 ${step === 4 ? 'text-emerald-400 font-bold' : 'text-slate-500'}`}>
               <Layers size={14} />
               <span>D. Provisioning</span>
             </div>
@@ -221,7 +151,7 @@ export default function SuperadminLibrariesCreateAccountModal({
         )}
 
         {/* Modal Scrollable Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex-1">
+        <div className="p-5 sm:p-6 overflow-y-auto flex-1 scrollbar-thin">
           {step === 1 && (
             <SuperadminLibrariesCreateStepOrganization
               data={org}
@@ -243,7 +173,7 @@ export default function SuperadminLibrariesCreateAccountModal({
             <SuperadminLibrariesCreateStepBranches
               branches={branches}
               onChange={setBranches}
-              plan={DEFAULT_PLAN}
+              plan={DEFAULT_PROVISIONING_PLAN}
               libraryCodePrefix={org.libraryCode}
             />
           )}
@@ -261,9 +191,9 @@ export default function SuperadminLibrariesCreateAccountModal({
           )}
         </div>
 
-        {/* Modal Footer (Controls) */}
+        {/* Modal Footer Controls */}
         {!provisioningResult && (
-          <div className="p-4 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between">
+          <div className="p-4 border-t border-indigo-500/20 bg-[#0c0f28]/95 flex items-center justify-between shrink-0">
             <button
               type="button"
               disabled={step === 1}
@@ -281,7 +211,7 @@ export default function SuperadminLibrariesCreateAccountModal({
                 type="button"
                 disabled={!canGoNext()}
                 onClick={() => setStep((s) => (s < 4 ? ((s + 1) as 1 | 2 | 3 | 4) : s))}
-                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-950/60 disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-indigo-600 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-950/60 disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer active:scale-95"
               >
                 <span>Continue</span>
                 <ChevronRight size={14} />
@@ -290,7 +220,7 @@ export default function SuperadminLibrariesCreateAccountModal({
               <button
                 type="button"
                 onClick={handleClose}
-                className="px-4 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+                className="px-4 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-400 hover:text-white transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -300,4 +230,6 @@ export default function SuperadminLibrariesCreateAccountModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

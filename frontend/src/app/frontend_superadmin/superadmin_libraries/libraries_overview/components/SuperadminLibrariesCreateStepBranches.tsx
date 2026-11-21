@@ -39,14 +39,7 @@ export default function SuperadminLibrariesCreateStepBranches({
       workingHours: '06:00 AM - 11:00 PM',
       weeklyHolidays: 'None (Open 7 Days)',
       status: 'Active',
-      allowedModules: {
-        books: true,
-        members: true,
-        seats: true,
-        finance: true,
-        accounts: true,
-        communication: true,
-      },
+      allowedModules: { lockers: true, members: true, seats: true, finance: true, accounts: true, communication: true },
       capacitySeats: 150,
       hasAirConditioning: true,
       hasLockers: true,
@@ -71,13 +64,8 @@ export default function SuperadminLibrariesCreateStepBranches({
   };
 
   const toggleModule = (moduleKey: keyof LibraryBranchCreationItem['allowedModules']) => {
-    const currentModules = currentBranch.allowedModules;
-    updateCurrent({
-      allowedModules: {
-        ...currentModules,
-        [moduleKey]: !currentModules[moduleKey],
-      },
-    });
+    const cur = currentBranch.allowedModules;
+    updateCurrent({ allowedModules: { ...cur, [moduleKey]: !cur[moduleKey] } });
   };
 
   return (

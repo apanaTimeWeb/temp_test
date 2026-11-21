@@ -44,7 +44,7 @@ export interface LibraryBranchCreationItem {
   logoUrl?: string;
   status: 'Active' | 'Setup' | 'Maintenance';
   allowedModules: {
-    books: boolean;
+    lockers: boolean;
     members: boolean;
     seats: boolean;
     finance: boolean;
