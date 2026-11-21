@@ -16,8 +16,8 @@ export function SuperadminUsageOverviewTable({
 }: SuperadminUsageOverviewTableProps) {
   return (
     <div className="rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 overflow-hidden shadow-2xl backdrop-blur-xl">
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse text-xs">
+      <div className="overflow-x-auto scrollbar-thin">
+        <table className="w-full min-w-[1050px] text-left border-collapse text-xs">
           <thead>
             <tr className="border-b border-indigo-500/20 bg-[#060818]/90 text-slate-400 uppercase tracking-wider font-bold">
               {USAGE_TABLE_COLUMNS.map((col) => (
@@ -47,7 +47,7 @@ export function SuperadminUsageOverviewTable({
                   <td className="py-3.5 px-4">
                     <div className="font-bold text-white group-hover:text-sky-300 transition-colors flex items-center gap-1.5">
                       <Building2 className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                      <span className="truncate max-w-[170px]">{lib.name}</span>
+                      <span className="truncate max-w-[180px]">{lib.name}</span>
                     </div>
                     <div className="text-[10px] text-slate-400 font-mono mt-0.5">{lib.id}</div>
                   </td>
@@ -118,17 +118,17 @@ export function SuperadminUsageOverviewTable({
                       <span className="text-white font-semibold">{lib.smsUsage.current.toLocaleString()}</span> / {lib.smsUsage.limit.toLocaleString()} SMS
                     </div>
                     <div className="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
-                      <MessageSquare className="h-2.5 w-2.5" /> {lib.whatsappUsage.current.toLocaleString()} WA
+                      <MessageSquare className="h-2.5 w-2.5" /> {lib.whatsappUsage.current.toLocaleString()} / {lib.whatsappUsage.limit.toLocaleString()} WA
                     </div>
                   </td>
 
                   {/* 8. API & Backups */}
                   <td className="py-3.5 px-4 whitespace-nowrap text-slate-300">
                     <div className="font-mono text-white font-semibold">
-                      {(lib.apiUsage.monthlyCalls / 1000).toFixed(1)}k calls
+                      {(lib.apiUsage.monthlyCalls / 1000).toFixed(1)}k / {(lib.apiUsage.monthlyLimit / 1000).toFixed(0)}k calls
                     </div>
                     <div className="text-[10px] text-emerald-400 flex items-center gap-1 mt-0.5">
-                      <Database className="h-2.5 w-2.5" /> {lib.backupUsage.backupStatus}
+                      <Database className="h-2.5 w-2.5" /> {lib.backupUsage.backupSizeGb} GB • {lib.backupUsage.backupStatus}
                     </div>
                   </td>
 
