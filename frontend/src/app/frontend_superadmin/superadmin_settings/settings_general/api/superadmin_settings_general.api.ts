@@ -25,6 +25,7 @@ export async function fetchSuperadminSettingsGeneral(): Promise<ApiResponse<Supe
       success: true,
       data: SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS,
       message: 'Preview-only fixture loaded',
+      requestId: 'req-settings-general-preview',
     };
   }
   return apiFetch<SuperadminSettingsFormValues>(SUPERADMIN_SETTINGS_GENERAL_API.get, {
@@ -50,6 +51,7 @@ export async function updateSuperadminSettingsGeneral(
       success: true,
       data: payload,
       message: `Preview settings updated with idempotency key: ${key}`,
+      requestId: 'req-settings-general-update',
     };
   }
   return apiFetch<SuperadminSettingsFormValues>(SUPERADMIN_SETTINGS_GENERAL_API.update, {
@@ -63,24 +65,21 @@ export async function updateSuperadminSettingsGeneral(
 }
 
 /**
- * Resets settings to system defaults with confirmation guard and idempotency key.
+ * Resets global settings to system factory defaults.
  */
-export async function resetSuperadminSettingsGeneral(
-  idempotencyKey?: string
-): Promise<ApiResponse<SuperadminSettingsFormValues>> {
-  const key = idempotencyKey ?? (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'idemp-reset-key');
+export async function resetSuperadminSettingsGeneral(): Promise<ApiResponse<SuperadminSettingsFormValues>> {
   if (!SUPERADMIN_SETTINGS_GENERAL_API_CONTRACT_STATUS.networkCallsEnabled) {
     return {
       success: true,
       data: SUPERADMIN_SETTINGS_PREVIEW_DEFAULTS,
-      message: `Preview settings reset with idempotency key: ${key}`,
+      message: 'Preview settings reset to defaults',
+      requestId: 'req-settings-general-reset',
     };
   }
   return apiFetch<SuperadminSettingsFormValues>(SUPERADMIN_SETTINGS_GENERAL_API.reset, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Idempotency-Key': key,
     },
   });
 }

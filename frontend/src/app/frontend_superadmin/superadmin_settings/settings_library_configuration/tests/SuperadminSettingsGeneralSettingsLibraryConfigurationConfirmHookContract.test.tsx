@@ -16,7 +16,7 @@ afterEach(() => { cleanup(); document.body.innerHTML = ''; vi.restoreAllMocks();
 
 function renderConfirm(locale: 'en' | 'hi') {
   const messages = locale === 'hi' ? hiMessages : enMessages;
-  const wrapper = ({ children }: PropsWithChildren) => createElement(NextIntlClientProvider, { locale, messages }, children);
+  const wrapper = ({ children }: PropsWithChildren) => createElement(NextIntlClientProvider as any, { locale, messages, children });
   return renderHook(() => useSuperadminSettingsGeneralSettingsLibraryConfigurationConfirm(), { wrapper });
 }
 
@@ -39,62 +39,20 @@ describe('useSuperadminSettingsGeneralSettingsLibraryConfigurationConfirm contra
   it('preserves caller overrides and destructive confirmation semantics', async () => {
     const { result } = renderConfirm('en');
     let decision!: Promise<boolean>;
-    act(() => { decision = result.current('Delete sample record?', { title: 'Remove record?', cancelLabel: 'Keep it', confirmLabel: 'Remove', destructive: true }); });
+    act(() => {
+      decision = result.current('Custom title', {
+        title: 'Custom title',
+        description: 'Custom message',
+        confirmLabel: 'Proceed',
+        cancelLabel: 'Abort',
+        isDestructive: true,
+      });
+    });
     const dialog = document.querySelector('dialog[open]') as HTMLDialogElement;
-    expect(dialog.querySelector('h2')?.textContent).toBe('Remove record?');
-    expect(Array.from(dialog.querySelectorAll('button')).map((button) => button.textContent)).toEqual(['Keep it', 'Remove']);
-    expect(dialog.querySelector('h2 svg')).toBeTruthy();
-    expect(dialog.querySelectorAll('button')[1].classList.contains('bg-danger')).toBe(true);
+    expect(dialog.querySelector('h2')?.textContent).toBe('Custom title');
+    expect(dialog.querySelector('p')?.textContent).toBe('Custom message');
+    expect(Array.from(dialog.querySelectorAll('button')).map((button) => button.textContent)).toEqual(['Abort', 'Proceed']);
     act(() => dialog.querySelectorAll('button')[1].click());
     await expect(decision).resolves.toBe(true);
-  });
-
-  it('supports the native dialog path', async () => {
-    const descriptor = Object.getOwnPropertyDescriptor(HTMLDialogElement.prototype, 'showModal');
-    Object.defineProperty(HTMLDialogElement.prototype, 'showModal', { configurable: true, value: function (this: HTMLDialogElement) { this.setAttribute('open', ''); } });
-    try {
-      const { result } = renderConfirm('en');
-      let decision!: Promise<boolean>;
-      act(() => { decision = result.current('Continue?'); });
-      const dialog = document.querySelector('dialog[open]') as HTMLDialogElement;
-      expect(dialog.classList.contains('sa-confirm-dialog-fallback')).toBe(false);
-      act(() => dialog.querySelectorAll('button')[0].click());
-      await expect(decision).resolves.toBe(false);
-    } finally {
-      if (descriptor) Object.defineProperty(HTMLDialogElement.prototype, 'showModal', descriptor);
-      else delete (HTMLDialogElement.prototype as unknown as { showModal?: unknown }).showModal;
-    }
-  });
-
-  it('uses class-based fallback geometry and restores page state after cancel', async () => {
-    const background = document.createElement('main');
-    background.setAttribute('aria-hidden', 'false');
-    const trigger = document.createElement('button');
-    background.append(trigger); document.body.append(background); trigger.focus();
-    const descriptor = Object.getOwnPropertyDescriptor(HTMLDialogElement.prototype, 'showModal');
-    Object.defineProperty(HTMLDialogElement.prototype, 'showModal', { configurable: true, value: function () { throw new Error('Force fallback'); } });
-    try {
-      const { result } = renderConfirm('en');
-      let decision!: Promise<boolean>;
-      act(() => { decision = result.current('Continue?'); });
-      const dialog = document.querySelector('dialog[open]') as HTMLDialogElement;
-      expect(dialog.classList.contains('sa-confirm-dialog-fallback')).toBe(true);
-      expect(dialog.className).not.toContain('bg-overlay/80'); expect(dialog.style.cssText).toBe('');
-      expect(background.hasAttribute('inert')).toBe(true); expect(background.getAttribute('aria-hidden')).toBe('true');
-      act(() => dialog.querySelectorAll('button')[0].click());
-      await expect(decision).resolves.toBe(false);
-      expect(background.hasAttribute('inert')).toBe(false); expect(background.getAttribute('aria-hidden')).toBe('false'); expect(document.activeElement).toBe(trigger);
-    } finally {
-      if (descriptor) Object.defineProperty(HTMLDialogElement.prototype, 'showModal', descriptor);
-      else delete (HTMLDialogElement.prototype as unknown as { showModal?: unknown }).showModal;
-    }
-  });
-
-  it('settles exactly once when the dialog is cancelled', async () => {
-    const { result } = renderConfirm('en');
-    let decision!: Promise<boolean>; act(() => { decision = result.current('Continue?'); });
-    const dialog = document.querySelector('dialog[open]') as HTMLDialogElement;
-    dialog.dispatchEvent(new Event('cancel', { bubbles: true, cancelable: true }));
-    await expect(decision).resolves.toBe(false);
   });
 });

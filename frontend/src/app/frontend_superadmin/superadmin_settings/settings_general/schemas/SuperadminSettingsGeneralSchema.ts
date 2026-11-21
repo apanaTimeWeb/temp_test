@@ -4,17 +4,17 @@ import { z } from 'zod';
 
 export const SUPERADMIN_SETTINGS_SCHEMA = z.object({
   generalConfig: z.object({
-    platformName: z.string({ error: "SUPERADMIN_SETTINGS.VALIDATION.ENTER_A_VALID_TEXT_VALUE" })
+    platformName: z.string({ message: "SUPERADMIN_SETTINGS.VALIDATION.ENTER_A_VALID_TEXT_VALUE" })
       .trim().min(1, "SUPERADMIN_SETTINGS.VALIDATION.PLATFORM_NAME_IS_REQUIRED").max(80, "SUPERADMIN_SETTINGS.VALIDATION.PLATFORM_NAME_MUST_BE_80_CHARACTERS_OR_FEWER"),
     platformLogoUrl: z.string().trim().max(500).default(''),
     faviconUrl: z.string().trim().max(500).default(''),
-    supportEmail: z.string({ error: "SUPERADMIN_SETTINGS.VALIDATION.ENTER_A_VALID_TEXT_VALUE" })
+    supportEmail: z.string({ message: "SUPERADMIN_SETTINGS.VALIDATION.ENTER_A_VALID_TEXT_VALUE" })
       .trim().email("SUPERADMIN_SETTINGS.VALIDATION.ENTER_A_VALID_SUPPORT_EMAIL").max(254, "SUPERADMIN_SETTINGS.VALIDATION.SUPPORT_EMAIL_MUST_BE_254_CHARACTERS_OR_FEWER"),
     supportPhone: z.string().trim().max(30).default('+91 98765 43210'),
-    currency: z.enum(['INR (₹)', 'USD ($)', 'AED (د.إ)', 'EUR (€)', 'GBP (£)'], { error: "SUPERADMIN_SETTINGS.VALIDATION.SELECT_A_VALID_OPTION" }),
-    timezone: z.enum(['Asia/Kolkata', 'UTC', 'America/New_York', 'Europe/London', 'Asia/Dubai'], { error: "SUPERADMIN_SETTINGS.VALIDATION.SELECT_A_VALID_OPTION" }),
+    currency: z.enum(['INR (₹)', 'USD ($)', 'AED (د.إ)', 'EUR (€)', 'GBP (£)'], { message: "SUPERADMIN_SETTINGS.VALIDATION.SELECT_A_VALID_OPTION" }),
+    timezone: z.enum(['Asia/Kolkata', 'UTC', 'America/New_York', 'Europe/London', 'Asia/Dubai'], { message: "SUPERADMIN_SETTINGS.VALIDATION.SELECT_A_VALID_OPTION" }),
     defaultLanguage: z.enum(['en', 'hi', 'fr', 'es', 'de', 'ar', 'nl']).default('en'),
-  }, { error: "SUPERADMIN_SETTINGS.VALIDATION.PROVIDE_VALID_FORM_DATA" }),
+  }, { message: "SUPERADMIN_SETTINGS.VALIDATION.PROVIDE_VALID_FORM_DATA" }),
 
   branchDefaults: z.object({
     defaultMemberCapacity: z.number().int().min(10).max(50000).default(500),
@@ -69,13 +69,13 @@ export const SUPERADMIN_SETTINGS_SCHEMA = z.object({
   }),
 
   maintenance: z.object({
-    enabled: z.boolean({ error: "SUPERADMIN_SETTINGS.VALIDATION.CHOOSE_A_VALID_BOOLEAN_VALUE" }),
-    message: z.string({ error: "SUPERADMIN_SETTINGS.VALIDATION.ENTER_A_VALID_TEXT_VALUE" })
+    enabled: z.boolean({ message: "SUPERADMIN_SETTINGS.VALIDATION.CHOOSE_A_VALID_BOOLEAN_VALUE" }),
+    message: z.string({ message: "SUPERADMIN_SETTINGS.VALIDATION.ENTER_A_VALID_TEXT_VALUE" })
       .trim().max(500, "SUPERADMIN_SETTINGS.VALIDATION.MAINTENANCE_MESSAGE_MUST_BE_500_CHARACTERS_OR_FEWER"),
     estimatedDowntime: z.string().trim().max(100).default('30 Minutes'),
     whitelistedIps: z.string().trim().max(500).default('103.24.120.0/24, 182.74.88.10/32'),
     emergencyBypassKey: z.string().trim().max(100).default('SYS-OVERRIDE-SECRET-2026'),
-  }, { error: "SUPERADMIN_SETTINGS.VALIDATION.PROVIDE_VALID_FORM_DATA" }).superRefine((maintenance, context) => {
+  }, { message: "SUPERADMIN_SETTINGS.VALIDATION.PROVIDE_VALID_FORM_DATA" }).superRefine((maintenance, context) => {
     if (maintenance.enabled && !maintenance.message.trim()) {
       context.addIssue({ code: z.ZodIssueCode.custom, path: ['message'], message: "SUPERADMIN_SETTINGS.VALIDATION.MAINTENANCE_MESSAGE_IS_REQUIRED" });
     }
@@ -112,7 +112,9 @@ export const SUPERADMIN_SETTINGS_SCHEMA = z.object({
   }),
 
   apiConfig: z.object({
-    emailProvider: z.enum(['AWS SES', 'SendGrid', 'SMTP Custom'], { error: "SUPERADMIN_SETTINGS.VALIDATION.SELECT_A_VALID_OPTION" }),
-    smsProvider: z.enum(['Twilio', 'Fast2SMS', 'Msg91'], { error: "SUPERADMIN_SETTINGS.VALIDATION.SELECT_A_VALID_OPTION" }),
-  }, { error: "SUPERADMIN_SETTINGS.VALIDATION.PROVIDE_VALID_FORM_DATA" }),
-}, { error: "SUPERADMIN_SETTINGS.VALIDATION.PROVIDE_VALID_FORM_DATA" });
+    emailProvider: z.enum(['AWS SES', 'SendGrid', 'SMTP Custom'], { message: "SUPERADMIN_SETTINGS.VALIDATION.SELECT_A_VALID_OPTION" }),
+    smsProvider: z.enum(['Twilio', 'Fast2SMS', 'Msg91'], { message: "SUPERADMIN_SETTINGS.VALIDATION.SELECT_A_VALID_OPTION" }),
+  }, { message: "SUPERADMIN_SETTINGS.VALIDATION.PROVIDE_VALID_FORM_DATA" }),
+}, { message: "SUPERADMIN_SETTINGS.VALIDATION.PROVIDE_VALID_FORM_DATA" });
+
+export type SuperadminSettingsSchemaType = z.infer<typeof SUPERADMIN_SETTINGS_SCHEMA>;

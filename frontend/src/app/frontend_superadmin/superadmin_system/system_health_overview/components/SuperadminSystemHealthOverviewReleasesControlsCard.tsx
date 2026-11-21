@@ -242,11 +242,10 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
               return (
                 <div
                   key={dep.commitSha}
-                  className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 ${
-                    isLive
+                  className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 ${isLive
                       ? 'border border-emerald-500/40 bg-gradient-to-r from-emerald-950/30 via-slate-900/80 to-[#080d1e] shadow-lg shadow-emerald-500/5'
                       : 'border border-slate-800/80 bg-slate-900/50 hover:border-slate-700/80 hover:bg-slate-900/70'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex items-center gap-2.5 flex-wrap">
@@ -256,11 +255,10 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                         {dep.commitSha}
                       </span>
                       <span
-                        className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${
-                          isLive
+                        className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${isLive
                             ? 'border-emerald-500/40 bg-emerald-500/20 text-emerald-300 shadow-xs'
                             : 'border-slate-700 bg-slate-800/70 text-slate-400'
-                        }`}
+                          }`}
                       >
                         {dep.status}
                       </span>
@@ -300,7 +298,7 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
             </h3>
             <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-mono font-semibold text-emerald-300">
               <Zap size={11} className="text-emerald-400" />
-              {activeKillswitchCount}/6 Active · &lt; 200ms sync
+              Toggle Switch – ON/OFF control ({activeKillswitchCount}/6 ON)
             </span>
           </div>
 
@@ -310,17 +308,15 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
               return (
                 <div
                   key={key}
-                  className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 flex flex-col justify-between ${
-                    active
+                  className={`group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 flex flex-col justify-between ${active
                       ? 'border border-emerald-500/30 bg-gradient-to-br from-emerald-950/25 via-slate-900/90 to-[#070c1b] shadow-lg hover:border-emerald-500/50 hover:shadow-emerald-500/10'
                       : 'border border-rose-500/40 bg-gradient-to-br from-rose-950/25 via-slate-900/90 to-[#12070e] shadow-lg hover:border-rose-500/60 hover:shadow-rose-500/10'
-                  }`}
+                    }`}
                 >
                   {/* Subtle ambient light indicator inside card */}
                   <div
-                    className={`pointer-events-none absolute -top-8 -right-8 h-20 w-20 rounded-full blur-xl transition-opacity duration-300 ${
-                      active ? 'bg-emerald-500/20 opacity-100' : 'bg-rose-500/20 opacity-100'
-                    }`}
+                    className={`pointer-events-none absolute -top-8 -right-8 h-20 w-20 rounded-full blur-xl transition-opacity duration-300 ${active ? 'bg-emerald-500/20 opacity-100' : 'bg-rose-500/20 opacity-100'
+                      }`}
                   />
 
                   {/* Top: Icon, Labels & Switch Button */}
@@ -342,48 +338,49 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                       </div>
                     </div>
 
-                    {/* Premium Circuit Breaker Switch */}
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={active}
-                      aria-label={`Toggle ${label}`}
-                      onClick={() => toggleFlag(key, label)}
-                      className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full p-0.5 transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 shadow-inner ${
-                        active
-                          ? 'bg-gradient-to-r from-emerald-500 to-teal-400 shadow-[0_0_14px_rgba(16,185,129,0.45)] ring-1 ring-emerald-300/40'
-                          : 'bg-gradient-to-r from-slate-800 to-slate-700 shadow-inner ring-1 ring-slate-600/60 hover:ring-rose-400/50'
-                      }`}
-                    >
+                    {/* Mini Toggle Switch – ON/OFF Control */}
+                    <div className="flex items-center gap-1.5 shrink-0">
                       <span
-                        aria-hidden="true"
-                        className={`pointer-events-none flex h-6 w-6 transform items-center justify-center rounded-full bg-white shadow-md ring-0 transition-all duration-300 ease-in-out ${
-                          active ? 'translate-x-5' : 'translate-x-0'
-                        }`}
+                        className={`font-mono text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded tracking-wider transition-colors duration-200 select-none ${active
+                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs'
+                            : 'bg-slate-800/90 text-slate-400 border border-slate-700/80'
+                          }`}
+                      >
+                        {active ? 'ON' : 'OFF'}
+                      </span>
+
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={active}
+                        aria-label={`Toggle Switch - ON/OFF control for ${label}`}
+                        onClick={() => toggleFlag(key, label)}
+                        className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full p-0.5 transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950 ${active
+                            ? 'bg-emerald-500 shadow-xs shadow-emerald-500/40 ring-1 ring-emerald-400/30'
+                            : 'bg-slate-700 hover:bg-slate-600 ring-1 ring-slate-600/50'
+                          }`}
                       >
                         <span
-                          className={`h-2 w-2 rounded-full transition-colors duration-300 ${
-                            active ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]' : 'bg-rose-500'
-                          }`}
+                          aria-hidden="true"
+                          className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${active ? 'translate-x-4' : 'translate-x-0'
+                            }`}
                         />
-                      </span>
-                    </button>
+                      </button>
+                    </div>
                   </div>
 
                   {/* Bottom: Dynamic Telemetry & State Indicators */}
                   <div className="relative z-10 flex items-center justify-between pt-2.5 border-t border-slate-800/80 text-[10px]">
                     <div className="flex items-center gap-1.5">
                       <span
-                        className={`h-2 w-2 rounded-full transition-all ${
-                          active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
-                        }`}
+                        className={`h-2 w-2 rounded-full transition-all ${active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                          }`}
                       />
                       <span
-                        className={`font-bold tracking-tight ${
-                          active ? 'text-emerald-300' : 'text-rose-400'
-                        }`}
+                        className={`font-bold tracking-tight ${active ? 'text-emerald-300' : 'text-rose-400'
+                          }`}
                       >
-                        {active ? 'Operational (200 OK)' : 'Killswitch Active (Isolated)'}
+                        {active ? 'Operational (ON)' : 'Killswitch Active (OFF)'}
                       </span>
                     </div>
 

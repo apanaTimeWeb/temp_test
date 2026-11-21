@@ -24,6 +24,7 @@ import { useSuperadminSettingsGeneralStore } from '@/app/frontend_superadmin/sup
 import { useSuperadminSettingsGeneralData } from '@/app/frontend_superadmin/superadmin_settings/settings_general/hooks/useSuperadminSettingsGeneralData';
 import { useSuperadminSettingsGeneralMutation } from '@/app/frontend_superadmin/superadmin_settings/settings_general/hooks/useSuperadminSettingsGeneralMutation';
 import { useSuperadminSettingsGeneralUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/hooks/useSuperadminSettingsGeneralUnsavedChangesGuard';
+import { SuperadminSettingsGeneralKpiCards } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralKpiCards';
 import { SuperadminSettingsGeneralPlatformRegionalCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralPlatformRegionalCard';
 import { SuperadminSettingsGeneralBranchDefaultsCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralBranchDefaultsCard';
 import { SuperadminSettingsGeneralSecurityPoliciesCard } from '@/app/frontend_superadmin/superadmin_settings/settings_general/components/SuperadminSettingsGeneralSecurityPoliciesCard';
@@ -50,7 +51,6 @@ export default function SuperadminSettingsGeneralPageClient() {
   });
 
   const { handleSubmit, reset, watch, formState: { isDirty } } = methods;
-
 
   useEffect(() => {
     if (serverSettings) {
@@ -95,63 +95,67 @@ export default function SuperadminSettingsGeneralPageClient() {
     <div className="sa-page-animate flex flex-col gap-6 p-1 max-w-7xl mx-auto" data-active-tab={activeRouteName}>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
-          {/* Header Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-primary-subtle text-primary">
-                <Settings size={26} aria-hidden="true" />
-              </div>
-              <div>
-                <h1 className="sa-page-title text-xl font-bold text-primary">
+          {/* Hero Header matching Superadmin Support Luxury Palette */}
+          <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/60 via-[#0a0d24] to-[#060810] p-5 sm:p-6 shadow-xl">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="space-y-1.5">
+                <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[11px] font-semibold text-amber-300">
+                  <Settings size={13} className="text-amber-400" />
+                  <span>Global Configuration & Governance Hub</span>
+                </div>
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-100">
                   Global Platform Settings
                 </h1>
-                <p className="text-xs text-secondary">
-                  Configure platform defaults, branch rules, security baselines, and retention policies.
+                <p className="text-xs sm:text-sm text-slate-400">
+                  Configure platform defaults, branch rules, zero-trust security baselines, and tenant data retention policies.
                 </p>
               </div>
-            </div>
 
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <button
-                type="button"
-                onClick={() => setIsExportOpen(true)}
-                className="sa-btn-secondary text-xs px-3 py-2 inline-flex items-center gap-1.5"
-                data-testid="settings-top-export-btn"
-              >
-                <FileDown size={14} aria-hidden="true" />
-                <span>Export</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsResetOpen(true)}
-                disabled={resetSettings.isPending}
-                className="sa-btn-secondary text-xs px-3 py-2 inline-flex items-center gap-1.5 text-danger hover:bg-danger-subtle"
-                data-testid="settings-top-reset-btn"
-              >
-                <RotateCcw size={14} aria-hidden="true" />
-                <span>Reset Defaults</span>
-              </button>
-              <button
-                type="submit"
-                disabled={updateSettings.isPending || isDataLoading}
-                className="sa-btn-primary text-xs px-4 py-2 inline-flex items-center gap-1.5 font-semibold"
-                data-testid="settings-top-save-btn"
-              >
-                {updateSettings.isPending ? (
-                  <Loader2 size={14} className="animate-spin" aria-hidden="true" />
-                ) : (
-                  <CheckCircle2 size={14} aria-hidden="true" />
-                )}
-                <span>{updateSettings.isPending ? 'Saving...' : 'Save All Settings'}</span>
-              </button>
+              <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+                <button
+                  type="button"
+                  onClick={() => setIsExportOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 hover:text-white text-xs font-semibold transition-all shadow-xs cursor-pointer"
+                  data-testid="settings-top-export-btn"
+                >
+                  <FileDown size={14} aria-hidden="true" />
+                  <span>Export</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsResetOpen(true)}
+                  disabled={resetSettings.isPending}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 hover:text-rose-100 text-xs font-semibold transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                  data-testid="settings-top-reset-btn"
+                >
+                  <RotateCcw size={14} aria-hidden="true" />
+                  <span>Reset Defaults</span>
+                </button>
+                <button
+                  type="submit"
+                  disabled={updateSettings.isPending || isDataLoading}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs transition-all shadow-lg shadow-amber-950/40 cursor-pointer disabled:opacity-50"
+                  data-testid="settings-top-save-btn"
+                >
+                  {updateSettings.isPending ? (
+                    <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+                  ) : (
+                    <CheckCircle2 size={14} aria-hidden="true" />
+                  )}
+                  <span>{updateSettings.isPending ? 'Saving...' : 'Save All Settings'}</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Section Filter Pills */}
+          {/* Glowing KPI Cards */}
+          <SuperadminSettingsGeneralKpiCards />
+
+          {/* Section Filter Pills Floating Glassmorphic Container */}
           <nav
             role="tablist"
             aria-label="Settings Categories"
-            className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-border hide-scrollbar"
+            className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-900/90 border border-indigo-500/25 backdrop-blur-md shadow-lg overflow-x-auto max-w-full hide-scrollbar"
           >
             {SETTINGS_SECTION_PILLS.map((pill) => {
               const Icon = pill.icon;
@@ -163,14 +167,14 @@ export default function SuperadminSettingsGeneralPageClient() {
                   role="tab"
                   aria-selected={isSelected}
                   onClick={() => setActiveSection(pill.id)}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap motion-safe:transition-all motion-reduce:transition-none ${
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
                     isSelected
-                      ? 'bg-primary-subtle text-primary border border-focus shadow-xs font-semibold'
-                      : 'text-secondary hover:bg-surface-hover hover:text-primary'
+                      ? 'bg-gradient-to-r from-indigo-500/25 to-purple-500/25 text-slate-100 border border-indigo-500/40 shadow-sm font-semibold'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                   }`}
                   data-testid={`settings-pill-${pill.id}`}
                 >
-                  <Icon size={14} aria-hidden="true" />
+                  <Icon size={14} aria-hidden="true" className={isSelected ? 'text-indigo-400' : 'text-slate-500'} />
                   <span>{pill.label}</span>
                 </button>
               );

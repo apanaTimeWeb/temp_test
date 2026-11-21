@@ -41,7 +41,6 @@ export function SuperadminSettingsGeneralExportModal({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback
       setCopied(false);
     }
   };
@@ -63,56 +62,56 @@ export function SuperadminSettingsGeneralExportModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="export-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 motion-safe:animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 motion-safe:animate-fade-in"
     >
       <div
         ref={modalRef}
-        className="sa-card max-w-xl w-full p-6 shadow-xl border border-border flex flex-col gap-4 bg-surface max-h-[85vh]"
+        className="rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] max-w-xl w-full p-6 shadow-2xl shadow-black/80 flex flex-col gap-4 text-slate-100 max-h-[85vh]"
       >
-        <div className="flex items-center justify-between border-b border-border pb-3">
+        <div className="flex items-center justify-between border-b border-indigo-500/15 pb-3">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary-subtle text-primary">
+            <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
               <FileJson size={22} aria-hidden="true" />
             </div>
             <div>
-              <h2 id="export-modal-title" className="text-base font-bold text-primary">
+              <h2 id="export-modal-title" className="text-base font-bold text-slate-100">
                 Export System Configuration
               </h2>
-              <span className="text-xs text-secondary">
-                JSON manifest snapshot of all 11 global setting domains.
+              <span className="text-xs text-slate-400">
+                JSON manifest snapshot of all platform setting domains.
               </span>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-md text-secondary hover:text-primary hover:bg-surface-hover"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 transition-all cursor-pointer"
             aria-label="Close dialog"
           >
             <X size={18} aria-hidden="true" />
           </button>
         </div>
 
-        <div className="relative rounded-lg border border-border bg-subtle p-3 overflow-hidden">
-          <pre className="text-[11px] font-mono text-secondary max-h-64 overflow-y-auto overflow-x-auto">
+        <div className="relative rounded-xl border border-indigo-500/20 bg-slate-950/90 p-3.5 overflow-hidden">
+          <pre className="text-[11px] font-mono text-cyan-300 max-h-64 overflow-y-auto overflow-x-auto">
             {jsonString}
           </pre>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-2 border-t border-border">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-indigo-500/15">
           <button
             type="button"
             onClick={handleCopy}
-            className="sa-btn-secondary text-xs px-3.5 py-2 inline-flex items-center gap-2"
+            className="px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 hover:bg-indigo-500/25 text-xs font-semibold text-indigo-300 hover:text-white inline-flex items-center gap-2 transition-all cursor-pointer"
             data-testid="settings-export-copy-btn"
           >
-            {copied ? <Check size={14} className="text-success" /> : <Copy size={14} />}
+            {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
             <span>{copied ? 'Copied to Clipboard' : 'Copy JSON'}</span>
           </button>
           <button
             type="button"
             onClick={handleDownload}
-            className="sa-btn-primary text-xs px-3.5 py-2 inline-flex items-center gap-2"
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-bold inline-flex items-center gap-2 transition-all shadow-md shadow-amber-950/40 cursor-pointer"
             data-testid="settings-export-download-btn"
           >
             <Download size={14} />
