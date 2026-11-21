@@ -71,7 +71,7 @@ export default function SuperadminUsersRolesPermissionsPageClient() {
     : null;
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+    <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
       {/* Toast Notification */}
       {toastMsg && (
         <div

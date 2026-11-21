@@ -18,30 +18,36 @@ export default function SuperadminRolesOverviewHeader({
   totalUsersCount,
 }: SuperadminRolesOverviewHeaderProps) {
   return (
-    <div className="w-full rounded-2xl border border-indigo-500/40 bg-gradient-to-br from-[#0c0f28] via-[#12163a] to-[#181d4a] p-5 sm:p-6 shadow-xl mb-6">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
-        <div className="space-y-2">
+    <div className="relative w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-indigo-500/30 bg-gradient-to-br from-[#0a0d24]/95 via-[#0d1238]/90 to-[#090c20]/95 p-5 sm:p-6 lg:p-7 shadow-2xl backdrop-blur-md">
+      {/* Ambient background glows */}
+      <div className="pointer-events-none absolute -right-12 -top-12 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-12 left-16 h-48 w-48 rounded-full bg-purple-500/10 blur-3xl" />
+
+      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+        <div className="space-y-2.5">
           {/* Badge Chips */}
           <div className="flex items-center gap-2 flex-wrap text-xs">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-              <ShieldCheck size={12} className="text-indigo-400" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 shadow-xs">
+              <ShieldCheck size={13} className="text-indigo-400" />
               Granular Action-Level RBAC
             </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               10 System & Branch Roles
             </span>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30">
-              <Sparkles size={11} /> Multi-Tenant Scoped
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30 shadow-xs">
+              <Sparkles size={12} className="text-purple-400" /> Multi-Tenant Scoped
             </span>
           </div>
 
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2.5">
-              <ShieldCheck className="text-indigo-400 shrink-0" size={28} />
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-white flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 shadow-inner">
+                <ShieldCheck size={26} />
+              </div>
               <span>Admin, Manager & Staff Permission Management</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed mt-1">
+            <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed mt-1.5">
               SuperAdmin centralized role creation, granular 10-action module matrix, branch isolation rules, account lockouts, MFA resets, and real-time active session controls.
             </p>
           </div>
@@ -49,14 +55,14 @@ export default function SuperadminRolesOverviewHeader({
 
         {/* CTA & Tab Toggle */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
-          <div className="flex items-center p-1 rounded-xl bg-slate-900/80 border border-indigo-500/30">
+          <div className="flex items-center p-1.5 rounded-2xl bg-slate-950/80 border border-indigo-500/30 shadow-inner">
             <button
               type="button"
               onClick={() => setActiveTab('roles_matrix')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer active:scale-95 ${
                 activeTab === 'roles_matrix'
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/50'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
               }`}
             >
               <Layers size={14} />
@@ -65,10 +71,10 @@ export default function SuperadminRolesOverviewHeader({
             <button
               type="button"
               onClick={() => setActiveTab('user_security')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer active:scale-95 ${
                 activeTab === 'user_security'
-                  ? 'bg-indigo-600 text-white shadow-md'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/50'
+                  : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
               }`}
             >
               <KeyRound size={14} />
@@ -79,7 +85,7 @@ export default function SuperadminRolesOverviewHeader({
           <button
             type="button"
             onClick={onCreateRole}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-indigo-950/60 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-4.5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-indigo-950/60 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shrink-0"
           >
             <Plus size={16} />
             <span>Create New Role</span>
