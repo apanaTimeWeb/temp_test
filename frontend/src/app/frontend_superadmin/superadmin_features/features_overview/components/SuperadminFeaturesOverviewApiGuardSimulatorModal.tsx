@@ -1,5 +1,5 @@
 // RESPONSIBILITY: Live backend API Denial Guard simulator demonstrating HTTP 403 FEATURE_DISABLED enforcement.
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Terminal, ShieldAlert, ShieldCheck, Play, CheckCircle2, Copy, Code, Layers } from 'lucide-react';
 import type {
   ModuleDefinition,
@@ -7,6 +7,7 @@ import type {
   ApiDenialSimulationResult,
 } from '@/app/frontend_superadmin/superadmin_features/features_overview/types/superadmin_features_overview.types';
 import { simulateApiGuardEvaluation } from '@/app/frontend_superadmin/superadmin_features/features_overview/utils/superadmin_features_overview_utils';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface ApiGuardSimulatorModalProps {
   module: ModuleDefinition;
@@ -21,12 +22,22 @@ export default function SuperadminFeaturesOverviewApiGuardSimulatorModal({
   tenantName,
   onClose,
 }: ApiGuardSimulatorModalProps) {
+  useModalScrollLock(true);
+
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>(module.apiEndpoints[0] ?? '/api/v1');
   const [method, setMethod] = useState<'POST' | 'GET' | 'PUT'>('POST');
   const [simulationResult, setSimulationResult] = useState<ApiDenialSimulationResult | null>(null);
   const [copiedPayload, setCopiedPayload] = useState(false);
   const [copiedCurl, setCopiedCurl] = useState(false);
   const [activeTab, setActiveTab] = useState<'response' | 'curl' | 'headers'>('response');
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const handleRunSimulation = () => {
     const res = simulateApiGuardEvaluation(selectedEndpoint, effective, tenantName, {
@@ -50,8 +61,13 @@ export default function SuperadminFeaturesOverviewApiGuardSimulatorModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-2xl rounded-2xl border border-border bg-card shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md overflow-hidden animate-in fade-in duration-200"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="w-full max-w-2xl rounded-2xl border border-border bg-card shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 ease-out">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-neutral-900/70">
           <div className="flex items-center gap-2.5">

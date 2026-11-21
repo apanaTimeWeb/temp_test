@@ -1,6 +1,7 @@
 'use client';
 
 import { useSuperadminSupportTicketsOverviewConfirm } from '@/app/frontend_superadmin/superadmin_support/support_tickets/hooks/useSuperadminSupportTicketsOverviewConfirm';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 /** Responsibility: Superadmin Support Tickets Detail Panel; keep this view focused on its named module UI responsibility and delegate domain/state logic to module-owned hooks. */
 /** Data-Flow: leaf-owned props or hook state -> SuperadminSupportTicketsOverviewDetailPanel formatting/filtering -> accessible feature presentation; persistence stays at the leaf API boundary. */
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -150,6 +151,8 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
   // Upload attachment state
   const [newAttachmentName, setNewAttachmentName] = useState('');
+
+  useModalScrollLock(true);
 
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -376,7 +379,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
   return (
     <div
-      className="fixed inset-0 z-[70] bg-black/80 backdrop-blur-md flex justify-center items-center p-2 sm:p-4 md:p-6 motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none"
+      className="fixed inset-0 z-[70] bg-black/80 backdrop-blur-md flex justify-center items-center p-2 sm:p-4 md:p-6 overflow-hidden motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none"
       onClick={requestClose}
       data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-72"
     >
@@ -386,7 +389,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="superadmin-support-ticket-detail-title"
-        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/90 w-full max-w-5xl flex flex-col overflow-hidden text-slate-100 h-[92vh] max-h-[94vh]"
+        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/90 w-full max-w-5xl flex flex-col overflow-hidden text-slate-100 h-[92vh] max-h-[94vh] animate-in zoom-in-95 duration-200 ease-out"
         style={{ maxHeight: 'calc(100dvh - 32px)' }}
         onClick={(e) => e.stopPropagation()}
         data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-73"
@@ -1084,14 +1087,19 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
       {/* Escalate Modal Dialog */}
       {showEscalateModal && (
-        <div className="fixed inset-0 z-[80] bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-[#0e122b] border border-red-500/40 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white">
+        <div
+          className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden animate-in fade-in duration-150"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setShowEscalateModal(false);
+          }}
+        >
+          <div className="bg-[#0e122b] border border-red-500/40 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white animate-in zoom-in-95 duration-150 ease-out">
             <div className="flex items-center justify-between border-b border-red-500/20 pb-3">
               <h3 className="text-sm font-bold flex items-center gap-2 text-red-400">
                 <Zap size={16} />
                 <span>Escalate Support Ticket</span>
               </h3>
-              <button type="button" onClick={() => setShowEscalateModal(false)} className="text-slate-400 hover:text-white">
+              <button type="button" onClick={() => setShowEscalateModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
                 <X size={16} />
               </button>
             </div>
@@ -1102,7 +1110,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                 <select
                   value={escalateTier}
                   onChange={(e) => setEscalateTier(e.target.value as any)}
-                  className="w-full rounded-xl border border-red-500/30 bg-slate-950 px-3 py-2 text-xs text-white outline-none"
+                  className="w-full rounded-xl border border-red-500/30 bg-slate-950 px-3 py-2 text-xs text-white outline-none cursor-pointer"
                 >
                   {SUPERADMIN_SUPPORT_ESCALATION_TIERS.map((tier) => (
                     <option key={tier} value={tier}>
@@ -1128,7 +1136,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowEscalateModal(false)}
-                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97]"
+                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97] cursor-pointer"
               >
                 Cancel
               </button>
@@ -1146,14 +1154,19 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
       {/* Resolve Modal Dialog */}
       {showResolveModal && (
-        <div className="fixed inset-0 z-[80] bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-[#0e122b] border border-emerald-500/40 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white">
+        <div
+          className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden animate-in fade-in duration-150"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setShowResolveModal(false);
+          }}
+        >
+          <div className="bg-[#0e122b] border border-emerald-500/40 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white animate-in zoom-in-95 duration-150 ease-out">
             <div className="flex items-center justify-between border-b border-emerald-500/20 pb-3">
               <h3 className="text-sm font-bold flex items-center gap-2 text-emerald-400">
                 <CheckCircle2 size={16} />
                 <span>Resolve Support Ticket</span>
               </h3>
-              <button type="button" onClick={() => setShowResolveModal(false)} className="text-slate-400 hover:text-white">
+              <button type="button" onClick={() => setShowResolveModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
                 <X size={16} />
               </button>
             </div>
@@ -1186,7 +1199,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowResolveModal(false)}
-                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97]"
+                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97] cursor-pointer"
               >
                 Cancel
               </button>
@@ -1204,14 +1217,19 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
       {/* Reopen Modal Dialog */}
       {showReopenModal && (
-        <div className="fixed inset-0 z-[80] bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-[#0e122b] border border-purple-500/40 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white">
+        <div
+          className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden animate-in fade-in duration-150"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setShowReopenModal(false);
+          }}
+        >
+          <div className="bg-[#0e122b] border border-purple-500/40 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl text-white animate-in zoom-in-95 duration-150 ease-out">
             <div className="flex items-center justify-between border-b border-purple-500/20 pb-3">
               <h3 className="text-sm font-bold flex items-center gap-2 text-purple-400">
                 <RotateCcw size={16} />
                 <span>Reopen Ticket</span>
               </h3>
-              <button type="button" onClick={() => setShowReopenModal(false)} className="text-slate-400 hover:text-white">
+              <button type="button" onClick={() => setShowReopenModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
                 <X size={16} />
               </button>
             </div>
@@ -1233,7 +1251,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowReopenModal(false)}
-                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97]"
+                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97] cursor-pointer"
               >
                 Cancel
               </button>
@@ -1251,8 +1269,13 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
       {/* Grant Time-Limited Support Access Modal */}
       {showGrantAccessModal && (
-        <div className="fixed inset-0 z-[80] bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-[#0a0e28] border border-indigo-500/40 rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl text-white">
+        <div
+          className="fixed inset-0 z-[80] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-hidden animate-in fade-in duration-150"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setShowGrantAccessModal(false);
+          }}
+        >
+          <div className="bg-[#0a0e28] border border-indigo-500/40 rounded-2xl p-6 max-w-lg w-full space-y-4 shadow-2xl text-white animate-in zoom-in-95 duration-150 ease-out">
             <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-300">
@@ -1263,7 +1286,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                   <p className="text-[11px] text-slate-400">Zero-Trust elevated delegation for member record troubleshooting</p>
                 </div>
               </div>
-              <button type="button" onClick={() => setShowGrantAccessModal(false)} className="text-slate-400 hover:text-white">
+              <button type="button" onClick={() => setShowGrantAccessModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
                 <X size={16} />
               </button>
             </div>
@@ -1322,7 +1345,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowGrantAccessModal(false)}
-                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97]"
+                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97] cursor-pointer"
               >
                 Cancel
               </button>

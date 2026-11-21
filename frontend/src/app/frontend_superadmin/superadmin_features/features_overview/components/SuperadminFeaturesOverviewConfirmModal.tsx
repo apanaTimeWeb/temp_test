@@ -2,6 +2,7 @@
 import React from 'react';
 import { AlertTriangle, X } from 'lucide-react';
 import type { ConfirmDialogState } from '@/app/frontend_superadmin/superadmin_features/features_overview/hooks/useSuperadminFeaturesOverviewConfirm';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface ConfirmModalProps {
   dialogState: ConfirmDialogState;
@@ -14,11 +15,18 @@ export default function SuperadminFeaturesOverviewConfirmModal({
   onConfirm,
   onCancel,
 }: ConfirmModalProps) {
+  useModalScrollLock(dialogState.isOpen);
+
   if (!dialogState.isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-2xl overflow-hidden p-6 space-y-4">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md overflow-hidden animate-in fade-in duration-150"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onCancel();
+      }}
+    >
+      <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-2xl overflow-hidden p-6 space-y-4 animate-in zoom-in-95 duration-150 ease-out">
         <div className="flex items-start gap-3">
           <span
             className={`p-2.5 rounded-xl shrink-0 ${

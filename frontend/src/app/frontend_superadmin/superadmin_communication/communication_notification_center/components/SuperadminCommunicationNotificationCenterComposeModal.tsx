@@ -21,12 +21,15 @@ import type {
   NotificationCategory,
   NotificationChannel,
 } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 export function SuperadminCommunicationNotificationCenterComposeModal() {
   const { isComposeOpen, setIsComposeOpen } = useSuperadminCommunicationNotificationCenterStore();
   const { data: accounts } = useSuperadminTargetAccountsQuery();
   const { data: templates } = useSuperadminTemplatesQuery();
   const dispatchMutation = useDispatchNotificationMutation();
+
+  useModalScrollLock(isComposeOpen);
 
   const {
     register,
@@ -91,7 +94,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) setIsComposeOpen(false);
       }}
@@ -100,7 +103,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="compose-modal-title"
-        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative my-8"
+        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200 ease-out"
         data-testid="notif-compose-dialog"
       >
         {/* Header */}

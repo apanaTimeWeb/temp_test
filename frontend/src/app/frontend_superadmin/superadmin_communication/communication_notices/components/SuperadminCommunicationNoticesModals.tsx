@@ -9,6 +9,7 @@ import type { SuperadminCommunicationNoticeFormValues } from '@/app/frontend_sup
 import type { SuperadminCommunicationNotice as Notice } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/types/SuperadminCommunicationNoticesTypes';
 import { useTranslations } from 'next-intl';
 import { useSuperadminCommunicationNoticesValidationMessage } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/hooks/useSuperadminCommunicationNoticesValidationMessage';
+import { useModalScrollLock } from '@/lib/useModalScrollLock';
 
 interface NoticesModalsProps {
   showAdd: boolean;
@@ -43,12 +44,19 @@ export function SuperadminCommunicationNoticesModals({
   const translateValidationMessage = useSuperadminCommunicationNoticesValidationMessage();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = form;
 
+  useModalScrollLock(Boolean(showAdd || deleteItem || broadcastItem));
+
   return (
     <>
       {/* Add / Edit Notice Modal */}
       {showAdd && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-lg rounded-3xl border border-indigo-500/30 bg-slate-950/95 p-6 sm:p-7 shadow-2xl space-y-5">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-hidden animate-in fade-in duration-200"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) onCloseAdd();
+          }}
+        >
+          <div className="w-full max-w-lg rounded-3xl border border-indigo-500/30 bg-slate-950/95 p-6 sm:p-7 shadow-2xl space-y-5 animate-in zoom-in-95 duration-200 ease-out">
             <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20">
               <p className="text-base font-bold text-white flex items-center gap-2.5">
                 <div className="p-1.5 rounded-lg bg-sky-500/15 text-sky-400">
@@ -160,8 +168,13 @@ export function SuperadminCommunicationNoticesModals({
 
       {/* Delete Confirmation Modal */}
       {deleteItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-sm rounded-3xl border border-rose-500/30 bg-slate-950/95 p-6 shadow-2xl space-y-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-hidden animate-in fade-in duration-200"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) onCancelDelete();
+          }}
+        >
+          <div className="w-full max-w-sm rounded-3xl border border-rose-500/30 bg-slate-950/95 p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200 ease-out">
             <div className="flex items-center gap-2.5 text-rose-400">
               <AlertTriangle size={20} />
               <p className="text-base font-bold text-white">{tCopy('COPY.DELETE_NOTICE')}</p>
@@ -194,8 +207,13 @@ export function SuperadminCommunicationNoticesModals({
 
       {/* Broadcast Confirmation Modal */}
       {broadcastItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-sm rounded-3xl border border-sky-500/30 bg-slate-950/95 p-6 shadow-2xl space-y-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-hidden animate-in fade-in duration-200"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) onCancelBroadcast();
+          }}
+        >
+          <div className="w-full max-w-sm rounded-3xl border border-sky-500/30 bg-slate-950/95 p-6 shadow-2xl space-y-4 animate-in zoom-in-95 duration-200 ease-out">
             <div className="flex items-center gap-2.5 text-sky-400">
               <Send size={20} />
               <p className="text-base font-bold text-white">{tCopy('COPY.BROADCAST_VIA_WHATSAPP')}</p>
