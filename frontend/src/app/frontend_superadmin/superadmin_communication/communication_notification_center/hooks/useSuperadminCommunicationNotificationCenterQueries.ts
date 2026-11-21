@@ -1,23 +1,22 @@
-// RESPONSIBILITY: TanStack Query v5 query and mutation hooks for Notification Center.
+// RESPONSIBILITY: TanStack Query v5 query hooks for Notification Center (notifications, templates, usage, accounts).
 // FLOW: Components -> hooks/useSuperadminCommunicationNotificationCenterQueries.ts -> TanStack Query cache -> API.
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
 import {
-  dispatchSuperadminNotification,
   fetchSuperadminNotifications,
   fetchSuperadminNotificationTemplates,
   fetchSuperadminNotificationUsage,
   fetchSuperadminTargetAccounts,
-  retrySuperadminNotification,
-  updateSuperadminNotificationTemplate,
   type NotificationFilterParams,
 } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/api/superadmin_communication_notification_center.api';
 import { SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_QUERY_KEYS } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/api/superadmin_communication_notification_center.query_keys';
-import type {
-  DispatchNotificationDto,
-  NotificationTemplate,
-} from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
+
+// Re-export mutations for backward compatibility and clean consumer imports
+export {
+  useDispatchNotificationMutation,
+  useRetryNotificationMutation,
+  useUpdateTemplateMutation,
+} from './useSuperadminCommunicationNotificationCenterMutations';
 
 /** Hook to fetch notifications list */
 export function useSuperadminNotificationsQuery(params: NotificationFilterParams = {}) {
@@ -47,7 +46,7 @@ export function useSuperadminTemplatesQuery() {
   });
 }
 
-/** Hook to fetch usage and quota analytics */
+/** Hook to fetch overall notification usage and channel statistics */
 export function useSuperadminUsageAnalyticsQuery() {
   return useQuery({
     queryKey: SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_QUERY_KEYS.usage(),
@@ -56,12 +55,12 @@ export function useSuperadminUsageAnalyticsQuery() {
       if (!res.success) throw new Error(res.message);
       return res.data;
     },
-    staleTime: 60000,
+    staleTime: 30000,
     gcTime: 300000,
   });
 }
 
-/** Hook to fetch target accounts */
+/** Hook to fetch selectable target library/gym accounts for account-specific notifications */
 export function useSuperadminTargetAccountsQuery() {
   return useQuery({
     queryKey: SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_QUERY_KEYS.accounts(),
@@ -70,91 +69,7 @@ export function useSuperadminTargetAccountsQuery() {
       if (!res.success) throw new Error(res.message);
       return res.data;
     },
-    staleTime: 120000,
-    gcTime: 600000,
-  });
-}
-
-/** Mutation hook to dispatch a new notification */
-export function useDispatchNotificationMutation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({ dto, idempotencyKey }: { dto: DispatchNotificationDto; idempotencyKey: string }) => {
-      const res = await dispatchSuperadminNotification(dto, idempotencyKey);
-      if (!res.success) throw new Error(res.message);
-      return res.data;
-    },
-    onSuccess: (data) => {
-      toast.success(`Notification queued successfully for dispatch (ID: ${data.id})`, {
-        id: `dispatch-success-${data.id}`,
-      });
-      queryClient.invalidateQueries({
-        queryKey: SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_QUERY_KEYS.lists(),
-      });
-      queryClient.invalidateQueries({
-        queryKey: SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_QUERY_KEYS.usage(),
-      });
-    },
-    onError: (error) => {
-      toast.error(error instanceof Error ? error.message : 'Failed to dispatch notification', {
-        id: 'dispatch-error',
-      });
-    },
-  });
-}
-
-/** Mutation hook to retry a failed transmission */
-export function useRetryNotificationMutation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({ id, idempotencyKey }: { id: string; idempotencyKey: string }) => {
-      const res = await retrySuperadminNotification(id, idempotencyKey);
-      if (!res.success) throw new Error(res.message);
-      return res.data;
-    },
-    onSuccess: (data) => {
-      toast.success(`Transmission retried! New status: ${data.status}`, {
-        id: `retry-success-${data.id}`,
-      });
-      queryClient.invalidateQueries({
-        queryKey: SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_QUERY_KEYS.lists(),
-      });
-      queryClient.invalidateQueries({
-        queryKey: SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_QUERY_KEYS.usage(),
-      });
-    },
-    onError: (error) => {
-      toast.error(error instanceof Error ? error.message : 'Retry failed. Check network provider connection.', {
-        id: 'retry-error',
-      });
-    },
-  });
-}
-
-/** Mutation hook to update a template */
-export function useUpdateTemplateMutation() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({ id, payload, idempotencyKey }: { id: string; payload: Partial<NotificationTemplate>; idempotencyKey: string }) => {
-      const res = await updateSuperadminNotificationTemplate(id, payload, idempotencyKey);
-      if (!res.success) throw new Error(res.message);
-      return res.data;
-    },
-    onSuccess: (data) => {
-      toast.success(`Template "${data.name}" updated successfully`, {
-        id: `template-update-${data.id}`,
-      });
-      queryClient.invalidateQueries({
-        queryKey: SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_QUERY_KEYS.templates(),
-      });
-    },
-    onError: (error) => {
-      toast.error(error instanceof Error ? error.message : 'Failed to update template', {
-        id: 'template-error',
-      });
-    },
+    staleTime: 60000,
+    gcTime: 300000,
   });
 }

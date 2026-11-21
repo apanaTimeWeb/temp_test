@@ -2,20 +2,9 @@
 // RESPONSIBILITY: Compose and dispatch a global or account-specific notification with validation.
 // FLOW: SuperadminCommunicationNotificationCenterMain -> ComposeModal -> useDispatchNotificationMutation.
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  X,
-  Send,
-  Globe,
-  Building2,
-  Mail,
-  MessageSquare,
-  PhoneCall,
-  Sparkles,
-  Loader2,
-} from 'lucide-react';
+import { X, Send, Loader2 } from 'lucide-react';
 import {
   dispatchNotificationSchema,
   type DispatchNotificationSchema,
@@ -26,6 +15,8 @@ import {
   useSuperadminTemplatesQuery,
 } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/hooks/useSuperadminCommunicationNotificationCenterQueries';
 import { useSuperadminCommunicationNotificationCenterStore } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/state/useSuperadminCommunicationNotificationCenterStore';
+import { SuperadminCommunicationNotificationCenterComposeScopeSelector } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterComposeScopeSelector';
+import { SuperadminCommunicationNotificationCenterComposeChannelSelector } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterComposeChannelSelector';
 import type {
   NotificationCategory,
   NotificationChannel,
@@ -140,137 +131,19 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          {/* Target Scope Selection */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">Target Audience Scope</label>
-            <div className="grid grid-cols-2 gap-3">
-              <label
-                className={`p-3 rounded-xl border flex items-center gap-2 cursor-pointer transition-all ${
-                  selectedTargetScope === 'GLOBAL' ? 'border-primary bg-primary/10 text-foreground font-semibold' : 'border-border/60 hover:bg-muted/40 text-muted-foreground'
-                }`}
-              >
-                <input
-                  type="radio"
-                  value="GLOBAL"
-                  {...register('targetScope')}
-                  className="sr-only"
-                />
-                <Globe className="w-4 h-4 text-sky-400" />
-                <span className="text-xs">Global (All Libraries & Admins)</span>
-              </label>
+          <SuperadminCommunicationNotificationCenterComposeScopeSelector
+            selectedTargetScope={selectedTargetScope}
+            accounts={accounts}
+            register={register}
+          />
 
-              <label
-                className={`p-3 rounded-xl border flex items-center gap-2 cursor-pointer transition-all ${
-                  selectedTargetScope === 'ACCOUNT_SPECIFIC' ? 'border-primary bg-primary/10 text-foreground font-semibold' : 'border-border/60 hover:bg-muted/40 text-muted-foreground'
-                }`}
-              >
-                <input
-                  type="radio"
-                  value="ACCOUNT_SPECIFIC"
-                  {...register('targetScope')}
-                  className="sr-only"
-                />
-                <Building2 className="w-4 h-4 text-purple-400" />
-                <span className="text-xs">Account-Specific Library</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Account-Specific Dropdown if applicable */}
-          {selectedTargetScope === 'ACCOUNT_SPECIFIC' && (
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-foreground">Select Target Library Account</label>
-              <select
-                {...register('targetAccountId')}
-                className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border/80 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-              >
-                <option value="">Choose a library account…</option>
-                {accounts?.map((acc) => (
-                  <option key={acc.id} value={acc.id}>
-                    {acc.name} ({acc.code}) — {acc.planName}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {/* Category / Template Selector */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-foreground">Notification Category</label>
-              <select
-                {...register('category')}
-                onChange={(e) => handleCategoryChange(e.target.value as NotificationCategory)}
-                className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border/80 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-              >
-                <option value="ADMIN_INVITATION">Admin Invitations</option>
-                <option value="WELCOME_MESSAGE">Welcome Message</option>
-                <option value="SUBSCRIPTION_EXPIRY_REMINDER">Subscription Expiry Reminder</option>
-                <option value="PAYMENT_REMINDER">Payment Reminder</option>
-                <option value="FAILED_PAYMENT_NOTIFICATION">Failed Payment Notification</option>
-                <option value="BRANCH_CREATION_CONFIRMATION">Branch Creation Confirmation</option>
-                <option value="MAINTENANCE_ALERT">Maintenance Alert</option>
-                <option value="SYSTEM_OUTAGE_NOTIFICATION">System Outage Notification</option>
-                <option value="SECURITY_ALERT">Security Alert</option>
-                <option value="PRODUCT_ANNOUNCEMENT">Product Announcements</option>
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-foreground">Urgency Priority</label>
-              <select
-                {...register('priority')}
-                className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border/80 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-              >
-                <option value="NORMAL">Normal Priority</option>
-                <option value="HIGH">High Priority</option>
-                <option value="URGENT">Urgent (Immediate Push)</option>
-                <option value="LOW">Low Priority</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Delivery Channels */}
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">Transmission Channels (Select at least 1)</label>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => handleChannelToggle('EMAIL')}
-                className={`px-3 py-2 rounded-xl border text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
-                  selectedChannels.includes('EMAIL') ? 'bg-sky-500/20 text-sky-300 border-sky-500/40 shadow-xs' : 'border-border/60 text-muted-foreground hover:bg-muted/40'
-                }`}
-              >
-                <Mail className="w-4 h-4 text-sky-400" />
-                <span>Email</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleChannelToggle('SMS')}
-                className={`px-3 py-2 rounded-xl border text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
-                  selectedChannels.includes('SMS') ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-xs' : 'border-border/60 text-muted-foreground hover:bg-muted/40'
-                }`}
-              >
-                <MessageSquare className="w-4 h-4 text-emerald-400" />
-                <span>SMS</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleChannelToggle('WHATSAPP')}
-                className={`px-3 py-2 rounded-xl border text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-all ${
-                  selectedChannels.includes('WHATSAPP') ? 'bg-teal-500/20 text-teal-300 border-teal-500/40 shadow-xs' : 'border-border/60 text-muted-foreground hover:bg-muted/40'
-                }`}
-              >
-                <PhoneCall className="w-4 h-4 text-teal-400" />
-                <span>WhatsApp</span>
-              </button>
-            </div>
-            {errors.channels && (
-              <p className="text-2xs text-destructive">{errors.channels.message}</p>
-            )}
-          </div>
+          <SuperadminCommunicationNotificationCenterComposeChannelSelector
+            selectedChannels={selectedChannels}
+            onChannelToggle={handleChannelToggle}
+            onCategoryChange={handleCategoryChange}
+            register={register}
+            channelsError={errors.channels?.message}
+          />
 
           {/* Subject / Title */}
           <div className="space-y-1">

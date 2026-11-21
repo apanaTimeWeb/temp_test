@@ -4,6 +4,7 @@
  * @description API client for Retention Policies (Feature 8) and Data Archive Catalog (Feature 7).
  */
 
+import { apiFetch } from '@/lib/api';
 import { ARCHIVE_RETENTION_URLS } from '../config/superadmin_data_archive_retention.url_config';
 import type {
   ArchiveRetentionOverview,
@@ -21,16 +22,16 @@ const IS_MOCK_ENV = process.env.NODE_ENV !== 'production';
 
 export async function fetchArchiveOverview(): Promise<ArchiveRetentionOverview> {
   if (IS_MOCK_ENV) return Promise.resolve(MOCK_ARCHIVE_OVERVIEW);
-  const res = await fetch(ARCHIVE_RETENTION_URLS.OVERVIEW);
-  if (!res.ok) throw new Error(`Failed to fetch retention overview: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<ArchiveRetentionOverview>(ARCHIVE_RETENTION_URLS.OVERVIEW);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function fetchRetentionRules(): Promise<RetentionRuleRecord[]> {
   if (IS_MOCK_ENV) return Promise.resolve(MOCK_RETENTION_RULES);
-  const res = await fetch(ARCHIVE_RETENTION_URLS.RULES_LIST);
-  if (!res.ok) throw new Error(`Failed to fetch retention rules: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<RetentionRuleRecord[]>(ARCHIVE_RETENTION_URLS.RULES_LIST);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function updateRetentionRule(
@@ -48,16 +49,16 @@ export async function updateRetentionRule(
     });
   }
 
-  const res = await fetch(ARCHIVE_RETENTION_URLS.UPDATE_RULE(payload.ruleId), {
+  const res = await apiFetch<RetentionRuleRecord>(ARCHIVE_RETENTION_URLS.UPDATE_RULE(payload.ruleId), {
     method: 'PATCH',
+    idempotencyKey,
     headers: {
       'Content-Type': 'application/json',
-      'Idempotency-Key': idempotencyKey,
     },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error(`Failed to update retention rule: ${res.statusText}`);
-  return res.json();
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function fetchArchivedRecords(filters?: {
@@ -79,24 +80,26 @@ export async function fetchArchivedRecords(filters?: {
     return Promise.resolve(result);
   }
 
-  const url = new URL(ARCHIVE_RETENTION_URLS.ARCHIVE_RECORDS_LIST, window.location.origin);
-  if (filters?.entityType) url.searchParams.set('entityType', filters.entityType);
-  if (filters?.storageTier) url.searchParams.set('storageTier', filters.storageTier);
+  const searchParams = new URLSearchParams();
+  if (filters?.entityType) searchParams.set('entityType', filters.entityType);
+  if (filters?.storageTier) searchParams.set('storageTier', filters.storageTier);
+  const qs = searchParams.toString();
+  const endpoint = `${ARCHIVE_RETENTION_URLS.ARCHIVE_RECORDS_LIST}${qs ? `?${qs}` : ''}`;
 
-  const res = await fetch(url.toString());
-  if (!res.ok) throw new Error(`Failed to fetch archived records: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<ArchivedRecordItem[]>(endpoint);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function unarchiveRecord(id: string): Promise<{ success: boolean; recordId: string }> {
   const idempotencyKey = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'idemp-unarc-' + Date.now();
   if (IS_MOCK_ENV) return Promise.resolve({ success: true, recordId: id });
-  const res = await fetch(ARCHIVE_RETENTION_URLS.UNARCHIVE_RECORD(id), {
+  const res = await apiFetch<{ success: boolean; recordId: string }>(ARCHIVE_RETENTION_URLS.UNARCHIVE_RECORD(id), {
     method: 'POST',
-    headers: { 'Idempotency-Key': idempotencyKey },
+    idempotencyKey,
   });
-  if (!res.ok) throw new Error(`Failed to unarchive record: ${res.statusText}`);
-  return res.json();
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function toggleLegalHold(
@@ -110,14 +113,14 @@ export async function toggleLegalHold(
     return Promise.resolve({ success: true, recordId: id, isLegalHold: newStatus });
   }
 
-  const res = await fetch(ARCHIVE_RETENTION_URLS.TOGGLE_LEGAL_HOLD(id), {
+  const res = await apiFetch<{ success: boolean; recordId: string; isLegalHold: boolean }>(ARCHIVE_RETENTION_URLS.TOGGLE_LEGAL_HOLD(id), {
     method: 'POST',
+    idempotencyKey,
     headers: {
       'Content-Type': 'application/json',
-      'Idempotency-Key': idempotencyKey,
     },
     body: JSON.stringify({ reason }),
   });
-  if (!res.ok) throw new Error(`Failed to toggle legal hold: ${res.statusText}`);
-  return res.json();
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }

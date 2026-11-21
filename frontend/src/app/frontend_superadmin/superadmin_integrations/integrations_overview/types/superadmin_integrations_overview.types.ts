@@ -9,11 +9,21 @@ import type {
   IntegrationTabId,
 } from '../constants/superadmin_integrations_overview.constants';
 
+// Re-export constants types for consumer convenience
+export type {
+  IntegrationCategoryId,
+  IntegrationEnvironment,
+  IntegrationStatus,
+  WebhookEventName,
+  ApiKeyStatus,
+  IntegrationTabId,
+};
+
 export interface IntegrationGatewayItem {
   id: string;
   name: string;
   category: IntegrationCategoryId;
-  providerKey: string; // 'razorpay' | 'stripe' | 'msg91' | 'whatsapp' | 'smtp' | 's3' | 'barcode' | 'biometric'
+  providerKey: string; // 'razorpay' | 'stripe' | 'msg91' | 'twilio' | 'whatsapp' | 'smtp' | 'sendgrid' | 's3' | 'r2' | 'barcode' | 'biometric'
   status: IntegrationStatus;
   environment: IntegrationEnvironment;
   lastPing: string;

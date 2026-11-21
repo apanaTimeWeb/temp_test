@@ -11,7 +11,7 @@ const ROW_SKELETON_IDS = ['one', 'two', 'three', 'four', 'five'] as const;
 /**
  * Renders the accessible loading skeleton for communication notification center; it does not fetch data or mutate feature state.
  */
-export default function SuperadminCommunicationNotificationCenterListSkeleton() {
+export function SuperadminCommunicationNotificationCenterListSkeleton() {
   const t = useTranslations('SUPERADMIN_COMMUNICATION');
   return (
     <section className="min-w-0 space-y-6 p-4 md:p-6" role="status" aria-busy="true" aria-label={t('COPY.LOADING_MODULE')} data-testid="superadmin_communication_notification_center-communication_notification_center-list-skeleton">
@@ -27,3 +27,5 @@ export default function SuperadminCommunicationNotificationCenterListSkeleton() 
     </section>
   );
 }
+
+export default SuperadminCommunicationNotificationCenterListSkeleton;

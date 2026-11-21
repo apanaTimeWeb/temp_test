@@ -5,24 +5,19 @@
 import { useMemo, useState } from 'react';
 import {
   AlertTriangle,
-  CheckCheck,
   CheckCircle2,
   Clock,
-  Filter,
   Globe,
   HelpCircle,
   Mail,
   MessageSquare,
   PhoneCall,
   RefreshCw,
-  Search,
   Send,
   ShieldAlert,
   Sparkles,
 } from 'lucide-react';
-import {
-  useSuperadminCommunicationNotificationCenterStore,
-} from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/state/useSuperadminCommunicationNotificationCenterStore';
+import { useSuperadminCommunicationNotificationCenterStore } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/state/useSuperadminCommunicationNotificationCenterStore';
 import {
   useSuperadminNotificationsQuery,
   useSuperadminUsageAnalyticsQuery,
@@ -35,6 +30,8 @@ import {
 import type { NotificationRecord } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
 import { SuperadminCommunicationNotificationCenterListSkeleton } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterListSkeleton';
 import { SuperadminCommunicationNotificationCenterEmptyState } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterEmptyState';
+import { SuperadminCommunicationNotificationCenterOverviewKpis } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterOverviewKpis';
+import { SuperadminCommunicationNotificationCenterOverviewFilters } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/components/SuperadminCommunicationNotificationCenterOverviewFilters';
 
 export function SuperadminCommunicationNotificationCenterOverview() {
   const {
@@ -45,7 +42,6 @@ export function SuperadminCommunicationNotificationCenterOverview() {
     statusFilter,
     setStatusFilter,
     categoryFilter,
-    setCategoryFilter,
     searchQuery,
     setSearchQuery,
     setSelectedNotification,
@@ -112,283 +108,128 @@ export function SuperadminCommunicationNotificationCenterOverview() {
   return (
     <div className="space-y-6">
       {/* 4 Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
-          <p className="text-xs text-muted-foreground font-medium">Monthly Dispatched</p>
-          <div className="flex items-baseline justify-between mt-1">
-            <span className="text-2xl font-bold text-foreground">
-              {usage?.totalDispatched.toLocaleString() ?? '28,450'}
-            </span>
-            <span className="text-xs font-semibold text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded-full">
-              3 Channels Active
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1.5">
-            <span className="text-emerald-400">↑ 12%</span> from last cycle
-          </p>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
-          <p className="text-xs text-muted-foreground font-medium">Delivery Success Rate</p>
-          <div className="flex items-baseline justify-between mt-1">
-            <span className="text-2xl font-bold text-foreground">
-              {usage?.overallDeliveryRate ?? 98.35}%
-            </span>
-            <span className="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-              SLA Compliant
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1.5">
-            {usage?.totalDelivered.toLocaleString() ?? '27,980'} delivered successfully
-          </p>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
-          <p className="text-xs text-muted-foreground font-medium">Delivery Failures & Bounces</p>
-          <div className="flex items-baseline justify-between mt-1">
-            <span className="text-2xl font-bold text-foreground">
-              {failedCount}
-            </span>
-            <span
-              className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                failedCount > 0 ? 'bg-rose-500/15 text-rose-400' : 'bg-muted text-muted-foreground'
-              }`}
-            >
-              {failedCount > 0 ? 'Needs Attention' : 'Zero Errors'}
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1.5">1-click manual & auto retry enabled</p>
-        </div>
-
-        <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
-          <p className="text-xs text-muted-foreground font-medium">Automated Trigger Policies</p>
-          <div className="flex items-baseline justify-between mt-1">
-            <span className="text-2xl font-bold text-foreground">10 Triggers</span>
-            <span className="text-xs font-semibold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full">
-              All Active
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1.5">Admin invites, billing, outages & alerts</p>
-        </div>
-      </div>
+      <SuperadminCommunicationNotificationCenterOverviewKpis
+        usage={usage}
+        failedCount={failedCount}
+      />
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl bg-card border border-border/80 shadow-xs space-y-3">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          {/* Search Box */}
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search by title, recipient, library name or message content..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl bg-muted/40 border border-border/60 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-              data-testid="notif-search-input"
-            />
-          </div>
+      <SuperadminCommunicationNotificationCenterOverviewFilters
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        targetScopeFilter={targetScopeFilter}
+        setTargetScopeFilter={setTargetScopeFilter}
+        channelFilter={channelFilter}
+        setChannelFilter={setChannelFilter}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        resetFilters={resetFilters}
+      />
 
-          {/* Quick Target Scope Pills */}
-          <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-muted/30 border border-border/50 shrink-0">
-            <button
-              type="button"
-              onClick={() => setTargetScopeFilter('ALL')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-all ${
-                targetScopeFilter === 'ALL' ? 'bg-card text-foreground font-semibold shadow-xs' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              All Targets
-            </button>
-            <button
-              type="button"
-              onClick={() => setTargetScopeFilter('GLOBAL')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-all flex items-center gap-1 ${
-                targetScopeFilter === 'GLOBAL' ? 'bg-card text-foreground font-semibold shadow-xs' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <Globe className="w-3 h-3 text-sky-400" />
-              <span>Global Broadcasts</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setTargetScopeFilter('ACCOUNT_SPECIFIC')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-all flex items-center gap-1 ${
-                targetScopeFilter === 'ACCOUNT_SPECIFIC' ? 'bg-card text-foreground font-semibold shadow-xs' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              <Sparkles className="w-3 h-3 text-purple-400" />
-              <span>Account-Specific</span>
-            </button>
-          </div>
+      {/* Notification Activity Feed */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            Activity Feed ({filteredNotifications.length})
+          </h3>
+          <span className="text-2xs text-muted-foreground">Click notification card to inspect payload & logs</span>
         </div>
 
-        {/* Secondary dropdown filters */}
-        <div className="flex items-center gap-2 flex-wrap text-xs pt-1 border-t border-border/40">
-          <span className="text-muted-foreground font-medium flex items-center gap-1">
-            <Filter className="w-3.5 h-3.5" /> Filters:
-          </span>
+        {filteredNotifications.length === 0 ? (
+          <SuperadminCommunicationNotificationCenterEmptyState />
+        ) : (
+          <div className="space-y-2.5">
+            {filteredNotifications.map((n) => {
+              const statusCfg = NOTIFICATION_STATUS_CONFIG[n.status];
+              const priorityCfg = NOTIFICATION_PRIORITY_CONFIG[n.priority];
+              const isRetrying = retryingId === n.id;
 
-          <select
-            value={channelFilter}
-            onChange={(e) => setChannelFilter(e.target.value as never)}
-            className="px-2.5 py-1.5 rounded-lg bg-muted/40 border border-border/60 text-foreground text-xs focus:outline-none cursor-pointer"
-          >
-            <option value="ALL">All Channels (Email, SMS, WhatsApp)</option>
-            <option value="EMAIL">Email Only</option>
-            <option value="SMS">SMS Only</option>
-            <option value="WHATSAPP">WhatsApp Only</option>
-          </select>
-
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as never)}
-            className="px-2.5 py-1.5 rounded-lg bg-muted/40 border border-border/60 text-foreground text-xs focus:outline-none cursor-pointer"
-          >
-            <option value="ALL">All Statuses</option>
-            <option value="DELIVERED">Delivered</option>
-            <option value="SENT">Sent / In-Transit</option>
-            <option value="PENDING">Pending in Queue</option>
-            <option value="FAILED">Failed</option>
-            <option value="BOUNCED">Bounced</option>
-          </select>
-
-          {(targetScopeFilter !== 'ALL' || channelFilter !== 'ALL' || statusFilter !== 'ALL' || searchQuery) && (
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="px-2.5 py-1.5 rounded-lg text-muted-foreground hover:text-foreground text-xs font-medium cursor-pointer"
-            >
-              Reset Filters
-            </button>
-          )}
-
-          <span className="ml-auto text-xs text-muted-foreground">
-            Showing <strong className="text-foreground">{filteredNotifications.length}</strong> of {notifications?.length ?? 0} dispatches
-          </span>
-        </div>
-      </div>
-
-      {/* Notifications Feed */}
-      {filteredNotifications.length === 0 ? (
-        <SuperadminCommunicationNotificationCenterEmptyState />
-      ) : (
-        <div className="space-y-3">
-          {filteredNotifications.map((notif) => {
-            const statusConfig = NOTIFICATION_STATUS_CONFIG[notif.status] ?? NOTIFICATION_STATUS_CONFIG.PENDING;
-            const priorityConfig = NOTIFICATION_PRIORITY_CONFIG[notif.priority] ?? NOTIFICATION_PRIORITY_CONFIG.NORMAL;
-            const isFailed = notif.status === 'FAILED' || notif.status === 'BOUNCED';
-            const isRetrying = retryingId === notif.id;
-
-            return (
-              <div
-                key={notif.id}
-                onClick={() => setSelectedNotification(notif)}
-                className={`p-4 rounded-2xl bg-card border transition-all cursor-pointer hover:border-primary/50 hover:shadow-sm ${
-                  isFailed ? 'border-rose-500/40 bg-rose-500/5' : 'border-border/80'
-                }`}
-                data-testid={`notif-card-${notif.id}`}
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-2">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {/* Target Scope Badge */}
-                    {notif.targetScope === 'GLOBAL' ? (
-                      <span className="px-2 py-0.5 rounded-full text-2xs font-bold bg-sky-500/15 text-sky-400 border border-sky-500/30 flex items-center gap-1">
-                        <Globe className="w-3 h-3" /> Global Broadcast
-                      </span>
-                    ) : (
-                      <span className="px-2 py-0.5 rounded-full text-2xs font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30 flex items-center gap-1">
-                        <Sparkles className="w-3 h-3" /> {notif.targetAccount?.name ?? 'Account-Specific'}
-                      </span>
-                    )}
-
-                    {/* Priority Badge */}
-                    <span className={`px-2 py-0.5 rounded-full text-2xs font-bold ${priorityConfig.badgeClass}`}>
-                      {priorityConfig.icon} {priorityConfig.label}
-                    </span>
-
-                    {/* Category Label */}
-                    <span className="text-2xs font-medium text-muted-foreground uppercase tracking-wider">
-                      {notif.category.replace(/_/g, ' ')}
-                    </span>
-                  </div>
-
-                  {/* Delivery Status Badge & Timestamp */}
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${statusConfig.bg} ${statusConfig.text} ${statusConfig.border}`}
-                    >
-                      {notif.status === 'DELIVERED' && <CheckCheck className="w-3.5 h-3.5" />}
-                      {notif.status === 'SENT' && <Send className="w-3.5 h-3.5" />}
-                      {notif.status === 'PENDING' && <Clock className="w-3.5 h-3.5" />}
-                      {notif.status === 'FAILED' && <AlertTriangle className="w-3.5 h-3.5" />}
-                      {notif.status === 'BOUNCED' && <ShieldAlert className="w-3.5 h-3.5" />}
-                      <span>{statusConfig.label}</span>
-                    </span>
-                    <span>{new Date(notif.createdAt).toLocaleDateString()}</span>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <h3 className="text-sm font-semibold text-foreground mt-1">{notif.title}</h3>
-                <p className="text-xs text-muted-foreground mt-1 line-clamp-2 leading-relaxed">
-                  {notif.message}
-                </p>
-
-                {/* Diagnostics if failed */}
-                {isFailed && notif.failureReason && (
-                  <div className="mt-2.5 p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/25 flex items-start justify-between gap-3 text-xs text-rose-300">
-                    <div className="flex items-start gap-1.5">
-                      <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="font-semibold text-rose-200">Failure Reason:</strong>{' '}
-                        <span>{notif.failureReason}</span>
-                        <p className="text-2xs text-rose-400/80 mt-0.5">
-                          Attempts: {notif.retryCount} / {notif.maxRetries}
-                        </p>
-                      </div>
+              return (
+                <div
+                  key={n.id}
+                  onClick={() => setSelectedNotification(n)}
+                  className="p-4 rounded-2xl bg-card border border-border/80 hover:border-primary/50 transition-all cursor-pointer shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 group"
+                  data-testid={`notif-card-${n.id}`}
+                >
+                  <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                    <div className="p-2.5 rounded-xl bg-muted/40 border border-border/60 shrink-0 text-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                      {n.category === 'ADMIN_INVITATION' && <Send className="w-4 h-4 text-sky-400" />}
+                      {n.category === 'MAINTENANCE_ALERT' && <Clock className="w-4 h-4 text-amber-400" />}
+                      {n.category === 'SYSTEM_OUTAGE_NOTIFICATION' && <AlertTriangle className="w-4 h-4 text-rose-400" />}
+                      {n.category === 'SECURITY_ALERT' && <ShieldAlert className="w-4 h-4 text-purple-400" />}
+                      {n.category === 'WELCOME_MESSAGE' && <Sparkles className="w-4 h-4 text-emerald-400" />}
+                      {n.category === 'SUBSCRIPTION_EXPIRY_REMINDER' && <Clock className="w-4 h-4 text-amber-400" />}
+                      {n.category === 'PAYMENT_REMINDER' && <Clock className="w-4 h-4 text-blue-400" />}
+                      {n.category === 'FAILED_PAYMENT_NOTIFICATION' && <AlertTriangle className="w-4 h-4 text-rose-400" />}
+                      {n.category === 'BRANCH_CREATION_CONFIRMATION' && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+                      {n.category === 'PRODUCT_ANNOUNCEMENT' && <Sparkles className="w-4 h-4 text-purple-400" />}
+                      {!['ADMIN_INVITATION', 'MAINTENANCE_ALERT', 'SYSTEM_OUTAGE_NOTIFICATION', 'SECURITY_ALERT', 'WELCOME_MESSAGE', 'SUBSCRIPTION_EXPIRY_REMINDER', 'PAYMENT_REMINDER', 'FAILED_PAYMENT_NOTIFICATION', 'BRANCH_CREATION_CONFIRMATION', 'PRODUCT_ANNOUNCEMENT'].includes(n.category) && (
+                        <HelpCircle className="w-4 h-4 text-muted-foreground" />
+                      )}
                     </div>
 
-                    <button
-                      type="button"
-                      disabled={isRetrying}
-                      onClick={(e) => handleRetry(notif, e)}
-                      className="px-3 py-1.5 rounded-lg bg-rose-500 text-white font-semibold text-xs hover:bg-rose-600 active:scale-95 transition-all shadow-xs shrink-0 flex items-center gap-1 cursor-pointer min-w-20 justify-center"
-                      data-testid={`retry-btn-${notif.id}`}
-                    >
-                      <RefreshCw className={`w-3.5 h-3.5 ${isRetrying ? 'animate-spin' : ''}`} />
-                      <span>{isRetrying ? 'Retrying...' : 'Retry Now'}</span>
-                    </button>
-                  </div>
-                )}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-semibold text-xs sm:text-sm text-foreground truncate">
+                          {n.title}
+                        </span>
+                        <span className={`text-2xs px-2 py-0.5 rounded-full font-semibold ${priorityCfg.badgeClass}`}>
+                          {priorityCfg.label}
+                        </span>
+                        {n.targetScope === 'GLOBAL' ? (
+                          <span className="text-2xs px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center gap-1 font-medium">
+                            <Globe className="w-3 h-3" /> Global Broadcast
+                          </span>
+                        ) : (
+                          <span className="text-2xs px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center gap-1 font-medium">
+                            <Sparkles className="w-3 h-3" /> {n.targetAccount?.name ?? 'Account-Specific'}
+                          </span>
+                        )}
+                      </div>
 
-                {/* Footer with Recipient & Channels */}
-                <div className="mt-3 pt-2.5 border-t border-border/40 flex items-center justify-between text-xs text-muted-foreground flex-wrap gap-2">
-                  <div className="flex items-center gap-2">
-                    <span>To: <strong className="text-foreground">{notif.targetRecipient.name}</strong></span>
-                    {notif.targetRecipient.email && (
-                      <span className="text-2xs text-muted-foreground">({notif.targetRecipient.email})</span>
+                      <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                        {n.message}
+                      </p>
+
+                      <div className="flex items-center gap-3 text-2xs text-muted-foreground/80 mt-1.5 flex-wrap">
+                        <span>To: <strong className="text-foreground">{n.targetRecipient.name}</strong></span>
+                        <span>•</span>
+                        <div className="flex items-center gap-1">
+                          {n.channels.includes('EMAIL') && <span title="Email"><Mail className="w-3 h-3 text-sky-400" /></span>}
+                          {n.channels.includes('SMS') && <span title="SMS"><MessageSquare className="w-3 h-3 text-emerald-400" /></span>}
+                          {n.channels.includes('WHATSAPP') && <span title="WhatsApp"><PhoneCall className="w-3 h-3 text-teal-400" /></span>}
+                        </div>
+                        <span>•</span>
+                        <span>{new Date(n.createdAt).toLocaleDateString()} {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Status badge & retry button */}
+                  <div className="flex items-center gap-2.5 shrink-0 self-end md:self-center">
+                    <span className={`text-xs px-2.5 py-1 rounded-full font-semibold border ${statusCfg.bg} ${statusCfg.text} ${statusCfg.border}`}>
+                      {statusCfg.label}
+                    </span>
+
+                    {(n.status === 'FAILED' || n.status === 'BOUNCED') && (
+                      <button
+                        type="button"
+                        onClick={(e) => handleRetry(n, e)}
+                        disabled={isRetrying}
+                        className="px-2.5 py-1 rounded-lg bg-primary/10 text-primary border border-primary/30 text-xs font-semibold hover:bg-primary/20 transition-all flex items-center gap-1 cursor-pointer"
+                        title={n.failureReason ?? 'Retry transmission'}
+                      >
+                        <RefreshCw className={`w-3 h-3 ${isRetrying ? 'animate-spin' : ''}`} />
+                        <span>Retry</span>
+                      </button>
                     )}
                   </div>
-
-                  <div className="flex items-center gap-1.5">
-                    {notif.channels.map((ch) => (
-                      <span
-                        key={ch}
-                        className="px-2 py-0.5 rounded-md text-2xs font-semibold bg-muted/60 text-muted-foreground border border-border/40 flex items-center gap-1"
-                      >
-                        {ch === 'EMAIL' && <Mail className="w-3 h-3 text-sky-400" />}
-                        {ch === 'SMS' && <MessageSquare className="w-3 h-3 text-emerald-400" />}
-                        {ch === 'WHATSAPP' && <PhoneCall className="w-3 h-3 text-teal-400" />}
-                        <span>{ch}</span>
-                      </span>
-                    ))}
-                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+              );
+            })}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

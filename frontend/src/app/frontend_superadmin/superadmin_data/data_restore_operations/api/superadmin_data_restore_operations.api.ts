@@ -5,6 +5,7 @@
  * and triggering sandbox disaster recovery drills.
  */
 
+import { apiFetch } from '@/lib/api';
 import { RESTORE_OPERATIONS_URLS } from '../config/superadmin_data_restore_operations.url_config';
 import type {
   BackupSnapshotRecord,
@@ -25,9 +26,9 @@ export async function fetchRestoreOverview(): Promise<RestoreOperationsOverview>
   if (IS_MOCK_ENV) {
     return Promise.resolve(MOCK_RESTORE_OVERVIEW);
   }
-  const res = await fetch(RESTORE_OPERATIONS_URLS.OVERVIEW);
-  if (!res.ok) throw new Error(`Failed to fetch restore overview: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<RestoreOperationsOverview>(RESTORE_OPERATIONS_URLS.OVERVIEW);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function fetchBackupSnapshots(filters?: {
@@ -50,23 +51,25 @@ export async function fetchBackupSnapshots(filters?: {
     }
     return Promise.resolve(result);
   }
-  const url = new URL(RESTORE_OPERATIONS_URLS.SNAPSHOTS_LIST, window.location.origin);
-  if (filters?.scope) url.searchParams.set('scope', filters.scope);
-  if (filters?.tenantId) url.searchParams.set('tenantId', filters.tenantId);
-  if (filters?.search) url.searchParams.set('search', filters.search);
+  const searchParams = new URLSearchParams();
+  if (filters?.scope) searchParams.set('scope', filters.scope);
+  if (filters?.tenantId) searchParams.set('tenantId', filters.tenantId);
+  if (filters?.search) searchParams.set('search', filters.search);
+  const qs = searchParams.toString();
+  const endpoint = `${RESTORE_OPERATIONS_URLS.SNAPSHOTS_LIST}${qs ? `?${qs}` : ''}`;
 
-  const res = await fetch(url.toString());
-  if (!res.ok) throw new Error(`Failed to fetch backup snapshots: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<BackupSnapshotRecord[]>(endpoint);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function fetchDrillHistory(): Promise<RestoreDrillRecord[]> {
   if (IS_MOCK_ENV) {
     return Promise.resolve(MOCK_DRILL_HISTORY);
   }
-  const res = await fetch(RESTORE_OPERATIONS_URLS.DRILLS_LIST);
-  if (!res.ok) throw new Error(`Failed to fetch drill history: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<RestoreDrillRecord[]>(RESTORE_OPERATIONS_URLS.DRILLS_LIST);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function executeRestore(
@@ -85,16 +88,16 @@ export async function executeRestore(
     });
   }
 
-  const res = await fetch(RESTORE_OPERATIONS_URLS.EXECUTE_RESTORE, {
+  const res = await apiFetch<RestoreExecutionResponse>(RESTORE_OPERATIONS_URLS.EXECUTE_RESTORE, {
     method: 'POST',
+    idempotencyKey,
     headers: {
       'Content-Type': 'application/json',
-      'Idempotency-Key': idempotencyKey,
     },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error(`Restore execution failed: ${res.statusText}`);
-  return res.json();
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function triggerSandboxDrill(snapshotId: string, notes: string): Promise<RestoreDrillRecord> {
@@ -116,14 +119,14 @@ export async function triggerSandboxDrill(snapshotId: string, notes: string): Pr
     return Promise.resolve(newDrill);
   }
 
-  const res = await fetch(RESTORE_OPERATIONS_URLS.TRIGGER_DRILL, {
+  const res = await apiFetch<RestoreDrillRecord>(RESTORE_OPERATIONS_URLS.TRIGGER_DRILL, {
     method: 'POST',
+    idempotencyKey,
     headers: {
       'Content-Type': 'application/json',
-      'Idempotency-Key': idempotencyKey,
     },
     body: JSON.stringify({ snapshotId, notes }),
   });
-  if (!res.ok) throw new Error(`Failed to trigger drill: ${res.statusText}`);
-  return res.json();
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }

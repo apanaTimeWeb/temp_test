@@ -4,6 +4,7 @@
  * @description API client for Tenant & Branch Data Export Operations.
  */
 
+import { apiFetch } from '@/lib/api';
 import { EXPORT_MANAGEMENT_URLS } from '../config/superadmin_data_export_management.url_config';
 import type {
   ExportJobRecord,
@@ -23,9 +24,9 @@ const IS_MOCK_ENV = process.env.NODE_ENV !== 'production';
 
 export async function fetchExportOverview(): Promise<ExportManagementOverview> {
   if (IS_MOCK_ENV) return Promise.resolve(MOCK_EXPORT_OVERVIEW);
-  const res = await fetch(EXPORT_MANAGEMENT_URLS.OVERVIEW);
-  if (!res.ok) throw new Error(`Failed to fetch export overview: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<ExportManagementOverview>(EXPORT_MANAGEMENT_URLS.OVERVIEW);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function fetchExportJobs(filters?: {
@@ -46,21 +47,23 @@ export async function fetchExportJobs(filters?: {
     }
     return Promise.resolve(result);
   }
-  const url = new URL(EXPORT_MANAGEMENT_URLS.JOBS_LIST, window.location.origin);
-  if (filters?.scope) url.searchParams.set('scope', filters.scope);
-  if (filters?.status) url.searchParams.set('status', filters.status);
-  if (filters?.tenantId) url.searchParams.set('tenantId', filters.tenantId);
+  const searchParams = new URLSearchParams();
+  if (filters?.scope) searchParams.set('scope', filters.scope);
+  if (filters?.status) searchParams.set('status', filters.status);
+  if (filters?.tenantId) searchParams.set('tenantId', filters.tenantId);
+  const qs = searchParams.toString();
+  const endpoint = `${EXPORT_MANAGEMENT_URLS.JOBS_LIST}${qs ? `?${qs}` : ''}`;
 
-  const res = await fetch(url.toString());
-  if (!res.ok) throw new Error(`Failed to fetch export jobs: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<ExportJobRecord[]>(endpoint);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function fetchExportTenants(): Promise<TenantOption[]> {
   if (IS_MOCK_ENV) return Promise.resolve(MOCK_EXPORT_TENANTS);
-  const res = await fetch(EXPORT_MANAGEMENT_URLS.TENANTS_LIST);
-  if (!res.ok) throw new Error(`Failed to fetch tenants: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<TenantOption[]>(EXPORT_MANAGEMENT_URLS.TENANTS_LIST);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function fetchExportBranches(tenantId?: string): Promise<BranchOption[]> {
@@ -70,11 +73,14 @@ export async function fetchExportBranches(tenantId?: string): Promise<BranchOpti
     }
     return Promise.resolve(MOCK_EXPORT_BRANCHES);
   }
-  const url = new URL(EXPORT_MANAGEMENT_URLS.BRANCHES_LIST, window.location.origin);
-  if (tenantId) url.searchParams.set('tenantId', tenantId);
-  const res = await fetch(url.toString());
-  if (!res.ok) throw new Error(`Failed to fetch branches: ${res.statusText}`);
-  return res.json();
+  const searchParams = new URLSearchParams();
+  if (tenantId) searchParams.set('tenantId', tenantId);
+  const qs = searchParams.toString();
+  const endpoint = `${EXPORT_MANAGEMENT_URLS.BRANCHES_LIST}${qs ? `?${qs}` : ''}`;
+
+  const res = await apiFetch<BranchOption[]>(endpoint);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function triggerDataExport(payload: CreateExportPayload): Promise<ExportJobRecord> {
@@ -105,21 +111,25 @@ export async function triggerDataExport(payload: CreateExportPayload): Promise<E
     return Promise.resolve(newJob);
   }
 
-  const res = await fetch(EXPORT_MANAGEMENT_URLS.TRIGGER_EXPORT, {
+  const res = await apiFetch<ExportJobRecord>(EXPORT_MANAGEMENT_URLS.TRIGGER_EXPORT, {
     method: 'POST',
+    idempotencyKey,
     headers: {
       'Content-Type': 'application/json',
-      'Idempotency-Key': idempotencyKey,
     },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error(`Export trigger failed: ${res.statusText}`);
-  return res.json();
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function cancelExportJob(id: string): Promise<{ success: boolean }> {
+  const idempotencyKey = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'idemp-cancel-' + Date.now();
   if (IS_MOCK_ENV) return Promise.resolve({ success: true });
-  const res = await fetch(EXPORT_MANAGEMENT_URLS.CANCEL_EXPORT(id), { method: 'POST' });
-  if (!res.ok) throw new Error(`Failed to cancel export: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<{ success: boolean }>(EXPORT_MANAGEMENT_URLS.CANCEL_EXPORT(id), {
+    method: 'POST',
+    idempotencyKey,
+  });
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }

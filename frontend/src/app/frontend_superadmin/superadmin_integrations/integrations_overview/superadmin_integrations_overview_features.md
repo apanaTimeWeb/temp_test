@@ -61,8 +61,13 @@ The SuperAdmin Integrations & API Management module is the central command cente
 - `SuperadminIntegrationsOverviewGatewayGrid.tsx`: Category selector pills, debounced search, and responsive gateway card grid.
 - `SuperadminIntegrationsOverviewGatewayCard.tsx`: Individual gateway card with status, toggle switch, and ping button.
 - `SuperadminIntegrationsOverviewGatewayConfigModal.tsx`: Secure credential update form and test ping trigger.
-- `SuperadminIntegrationsOverviewWebhooksPanel.tsx`: Webhook endpoint registration, test ping, and dead-letter retry queue.
-- `SuperadminIntegrationsOverviewApiKeysPanel.tsx`: API key generation, 1-time secret reveal modal, rotation, revocation, and rate limit/IP firewall form.
+- `SuperadminIntegrationsOverviewWebhooksPanel.tsx`: Webhook endpoint registration listing, test ping, and dead-letter retry queue.
+- `SuperadminIntegrationsOverviewWebhookCreateModal.tsx`: Dedicated modal form for registering new HTTPS webhook endpoints and selecting event subscriptions.
+- `SuperadminIntegrationsOverviewApiKeysPanel.tsx`: API key coordinator managing the list of keys, key generation, secret revelation, and rate limiting policies.
+- `SuperadminIntegrationsOverviewApiKeyCard.tsx`: Individual API key row with masked key, status pill, role scope, IP allowlist chips, copy, rotate, and revoke actions.
+- `SuperadminIntegrationsOverviewApiKeyGenerateModal.tsx`: Form modal to create a new machine API key with custom name, role scope, RPM, and IP allowlist.
+- `SuperadminIntegrationsOverviewApiKeySecretModal.tsx`: One-time reveal modal for newly created plain-text API secrets with copy CTA.
+- `SuperadminIntegrationsOverviewRateLimitForm.tsx`: Form to configure global RPM limits, daily quotas, burst buffer capacity, and global IP firewall allowlist.
 - `SuperadminIntegrationsOverviewLogsPanel.tsx`: Searchable audit log table and payload inspector modal.
 - `SuperadminIntegrationsOverviewEntitlementsPanel.tsx`: Subscription tier provider access toggle matrix.
 - `SuperadminIntegrationsOverviewListSkeleton.tsx`: Premium skeleton loader mimicking header, KPIs, and card grid.

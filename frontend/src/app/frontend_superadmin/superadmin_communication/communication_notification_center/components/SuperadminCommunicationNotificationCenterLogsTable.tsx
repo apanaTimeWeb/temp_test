@@ -29,7 +29,6 @@ import {
   NOTIFICATION_STATUS_CONFIG,
 } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/constants/SuperadminCommunicationNotificationCenterNotificationConstants';
 import type { NotificationRecord } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
-import { displayValue } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/contracts/host-stubs.d';
 
 export function SuperadminCommunicationNotificationCenterLogsTable() {
   const { data: notifications, isLoading, isError } = useSuperadminNotificationsQuery();

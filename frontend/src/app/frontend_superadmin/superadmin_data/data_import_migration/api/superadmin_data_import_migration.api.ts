@@ -4,6 +4,7 @@
  * @description API client for Data Import, Pre-flight Dry-Run Validation, and Batch Management.
  */
 
+import { apiFetch } from '@/lib/api';
 import { IMPORT_MIGRATION_URLS } from '../config/superadmin_data_import_migration.url_config';
 import type {
   ImportOverview,
@@ -22,9 +23,9 @@ const IS_MOCK_ENV = process.env.NODE_ENV !== 'production';
 
 export async function fetchImportOverview(): Promise<ImportOverview> {
   if (IS_MOCK_ENV) return Promise.resolve(MOCK_IMPORT_OVERVIEW);
-  const res = await fetch(IMPORT_MIGRATION_URLS.OVERVIEW);
-  if (!res.ok) throw new Error(`Failed to fetch import overview: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<ImportOverview>(IMPORT_MIGRATION_URLS.OVERVIEW);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function fetchImportBatches(filters?: {
@@ -41,13 +42,15 @@ export async function fetchImportBatches(filters?: {
     }
     return Promise.resolve(result);
   }
-  const url = new URL(IMPORT_MIGRATION_URLS.BATCHES_LIST, window.location.origin);
-  if (filters?.status) url.searchParams.set('status', filters.status);
-  if (filters?.tenantId) url.searchParams.set('tenantId', filters.tenantId);
+  const searchParams = new URLSearchParams();
+  if (filters?.status) searchParams.set('status', filters.status);
+  if (filters?.tenantId) searchParams.set('tenantId', filters.tenantId);
+  const qs = searchParams.toString();
+  const endpoint = `${IMPORT_MIGRATION_URLS.BATCHES_LIST}${qs ? `?${qs}` : ''}`;
 
-  const res = await fetch(url.toString());
-  if (!res.ok) throw new Error(`Failed to fetch import batches: ${res.statusText}`);
-  return res.json();
+  const res = await apiFetch<ImportBatchRecord[]>(endpoint);
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function runPreflightValidation(
@@ -64,16 +67,16 @@ export async function runPreflightValidation(
     });
   }
 
-  const res = await fetch(IMPORT_MIGRATION_URLS.VALIDATE_PREFLIGHT, {
+  const res = await apiFetch<PreflightValidationResult>(IMPORT_MIGRATION_URLS.VALIDATE_PREFLIGHT, {
     method: 'POST',
+    idempotencyKey,
     headers: {
       'Content-Type': 'application/json',
-      'Idempotency-Key': idempotencyKey,
     },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error(`Preflight validation failed: ${res.statusText}`);
-  return res.json();
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function commitImportBatch(
@@ -102,16 +105,16 @@ export async function commitImportBatch(
     return Promise.resolve(newBatch);
   }
 
-  const res = await fetch(IMPORT_MIGRATION_URLS.COMMIT_IMPORT, {
+  const res = await apiFetch<ImportBatchRecord>(IMPORT_MIGRATION_URLS.COMMIT_IMPORT, {
     method: 'POST',
+    idempotencyKey,
     headers: {
       'Content-Type': 'application/json',
-      'Idempotency-Key': idempotencyKey,
     },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error(`Import commit failed: ${res.statusText}`);
-  return res.json();
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }
 
 export async function rollbackImportBatch(
@@ -122,10 +125,10 @@ export async function rollbackImportBatch(
     return Promise.resolve({ success: true, batchId });
   }
 
-  const res = await fetch(IMPORT_MIGRATION_URLS.ROLLBACK_IMPORT(batchId), {
+  const res = await apiFetch<{ success: boolean; batchId: string }>(IMPORT_MIGRATION_URLS.ROLLBACK_IMPORT(batchId), {
     method: 'POST',
-    headers: { 'Idempotency-Key': idempotencyKey },
+    idempotencyKey,
   });
-  if (!res.ok) throw new Error(`Rollback failed: ${res.statusText}`);
-  return res.json();
+  if (!res.success) throw new Error(res.message);
+  return res.data;
 }

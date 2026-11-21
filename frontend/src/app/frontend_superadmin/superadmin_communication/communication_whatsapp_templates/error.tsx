@@ -4,7 +4,7 @@
 'use client';
 
 import SuperadminCommunicationWhatsappTemplatesErrorFallback from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_templates/components/SuperadminCommunicationWhatsappTemplatesErrorFallback';
-import type { SuperadminCommunicationWhatsappTemplatesSuperadminCommunicationWhatsappTemplatesModuleErrorProps } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_templates/types/superadmin_communication_whatsapp_templates.types';
+import type { SuperadminCommunicationWhatsappTemplatesModuleErrorProps } from '@/app/frontend_superadmin/superadmin_communication/communication_whatsapp_templates/types/superadmin_communication_whatsapp_templates.types';
 
 
 /**

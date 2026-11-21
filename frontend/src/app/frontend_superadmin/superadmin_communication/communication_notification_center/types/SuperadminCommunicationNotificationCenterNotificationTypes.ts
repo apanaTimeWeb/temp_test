@@ -178,3 +178,9 @@ export interface SuperadminCommunicationNotification {
 }
 
 export type SuperadminCommunicationNotificationFilter = 'All' | SuperadminCommunicationNotificationCategory | 'High Only';
+
+export interface SuperadminCommunicationNotificationCategoryOption {
+  id: SuperadminCommunicationNotificationFilter;
+  labelKey: string;
+  icon: string;
+}

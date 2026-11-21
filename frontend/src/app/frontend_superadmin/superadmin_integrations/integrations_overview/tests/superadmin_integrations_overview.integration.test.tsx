@@ -48,7 +48,7 @@ describe('Superadmin Integrations Overview Module Integration', () => {
     });
   });
 
-  it('renders gateway cards for Razorpay, WhatsApp, and eSSL biometrics', async () => {
+  it('renders gateway cards for Razorpay, WhatsApp, Twilio, SendGrid, R2, and eSSL biometrics', async () => {
     render(
       <SuperadminIntegrationsOverviewHarness>
         <SuperadminIntegrationsOverviewMain />
@@ -58,6 +58,9 @@ describe('Superadmin Integrations Overview Module Integration', () => {
     await waitFor(() => {
       expect(screen.getByText(/Razorpay Payment Gateway/i)).toBeInTheDocument();
       expect(screen.getByText(/Meta WhatsApp Business Cloud API/i)).toBeInTheDocument();
+      expect(screen.getByText(/Twilio Global SMS & Voice Gateway/i)).toBeInTheDocument();
+      expect(screen.getByText(/SendGrid High-Volume Email API/i)).toBeInTheDocument();
+      expect(screen.getByText(/Cloudflare R2 Object Storage/i)).toBeInTheDocument();
       expect(screen.getByText(/eSSL & ZKTeco Biometric Push Sync/i)).toBeInTheDocument();
     });
   });
@@ -161,6 +164,7 @@ describe('Superadmin Integrations Overview Module Integration', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Integration Feature Entitlements per Plan Tier/i)).toBeInTheDocument();
+      expect(screen.getByText(/Community Free Tier/i)).toBeInTheDocument();
       expect(screen.getByText(/Starter Single Branch/i)).toBeInTheDocument();
       expect(screen.getByText(/Enterprise SaaS Unlimited/i)).toBeInTheDocument();
     });

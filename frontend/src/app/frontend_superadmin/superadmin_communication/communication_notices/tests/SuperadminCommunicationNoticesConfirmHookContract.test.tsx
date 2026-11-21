@@ -13,7 +13,11 @@ afterEach(() => { cleanup(); document.body.innerHTML = ''; vi.restoreAllMocks();
 
 function renderConfirm(locale: 'en' | 'hi') {
   const messages = locale === 'hi' ? hiMessages : enMessages;
-  const wrapper = ({ children }: PropsWithChildren) => createElement(NextIntlClientProvider, { locale, messages }, children);
+  const wrapper = ({ children }: PropsWithChildren) => (
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      {children}
+    </NextIntlClientProvider>
+  );
   return renderHook(() => useSuperadminCommunicationNoticesConfirm(), { wrapper });
 }
 

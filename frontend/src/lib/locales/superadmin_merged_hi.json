@@ -3152,7 +3152,17 @@
       "BACK_TO_DASHBOARD": "डैशबोर्ड पर वापस जाएँ",
       "TABLE_EMPTY": "कोई रिकॉर्ड उपलब्ध नहीं है।",
       "TABLE_EMPTY_FILTERED": "वर्तमान फ़िल्टर से कोई रिकॉर्ड मेल नहीं खाता।",
-      "MODULE_ROUTE_LOADING": "फ़ीचर लोड हो रहा है…"
+      "MODULE_ROUTE_LOADING": "फ़ीचर लोड हो रहा है…",
+      "REFRESH_TELEMETRY": "टेलीमेट्री रीफ़्रेश करें",
+      "RUN_DIAGNOSTICS": "गहन डायग्नोस्टिक्स चलाएँ",
+      "EXPORT_SNAPSHOT": "स्नैपशॉट निर्यात करें",
+      "SYSTEM_OPERATIONAL": "सभी मुख्य प्रणालियाँ चालू हैं",
+      "TELEMETRY_LIVE": "लाइव टेलीमेट्री सक्रिय",
+      "TEST_CONNECTION": "कनेक्शन का परीक्षण करें",
+      "RUN_NOW": "अभी चलाएँ",
+      "PING_ALL_SERVICES": "सभी सेवाओं को पिंग करें",
+      "RESTART_SERVICE": "पुनः प्रारंभ करें",
+      "INSPECT_SERVICE": "निरीक्षण करें"
     }
   }
 }

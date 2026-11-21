@@ -506,14 +506,14 @@ export default function SuperadminCommunicationNoticesPageClient({ id }: { id?: 
                   className="w-full rounded-xl border border-border/80 bg-muted/20 px-3.5 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-sky-400 focus:outline-none focus:ring-1 focus:ring-sky-400 resize-none"
                   rows={5}
                   placeholder={tCopy('COPY.NOTICE_MESSAGE')}
-                  aria-invalid={Boolean(translateValidationMessage(errors.message))}
-                  aria-describedby={translateValidationMessage(errors.message) ? 'notice-message-error' : undefined}
+                  aria-invalid={Boolean(translateValidationMessage(errors.message?.message))}
+                  aria-describedby={translateValidationMessage(errors.message?.message) ? 'notice-message-error' : undefined}
                   {...register('message')}
                   data-testid="superadmin-communication-communication-notices-notice-message-7"
                 />
-                {translateValidationMessage(errors.message) && (
+                {translateValidationMessage(errors.message?.message) && (
                   <p id="notice-message-error" className="mt-1 text-xs text-rose-400" role="alert">
-                    {translateValidationMessage(errors.message.message)}
+                    {translateValidationMessage(errors.message?.message)}
                   </p>
                 )}
               </div>

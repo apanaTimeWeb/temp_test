@@ -12,7 +12,7 @@ import {
   TARGET_LIBRARY_ACCOUNTS,
 } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/constants/SuperadminCommunicationNotificationCenterNotificationConstants';
 
-export const MOCK_NOTIFICATION_TEMPLATES: NotificationTemplate[] = MANDATED_NOTIFICATION_TEMPLATES;
+export const MOCK_NOTIFICATION_TEMPLATES: NotificationTemplate[] = [...MANDATED_NOTIFICATION_TEMPLATES];
 export const MOCK_TARGET_ACCOUNTS = TARGET_LIBRARY_ACCOUNTS;
 
 /** 15 realistic notification records covering all 10 categories, all 3 channels, global vs account-specific, and failure/retry scenarios */
@@ -96,7 +96,6 @@ export const MOCK_NOTIFICATION_RECORDS: NotificationRecord[] = [
   {
     id: 'notif-rec-004',
     category: 'ADMIN_INVITATION',
-    name: 'Admin Setup Link Dispatched',
     title: 'Admin Invitation for City Central Reading Lounge',
     message: 'Welcome invitation and temporary password link sent to new administrator Vikram Malhotra.',
     targetScope: 'ACCOUNT_SPECIFIC',

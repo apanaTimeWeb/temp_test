@@ -2,22 +2,11 @@
 // Custom hook orchestrating queries, URL tab synchronization, and search filtering.
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  fetchApiKeys,
-  fetchIntegrationGateways,
-  fetchIntegrationLogs,
-  fetchIntegrationSummary,
-  fetchPlanEntitlements,
-  fetchRateLimits,
-  fetchWebhookEndpoints,
-  fetchWebhookRetries,
-} from '../api/superadmin_integrations_overview.api';
-import { SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS } from '../api/superadmin_integrations_overview.query_keys';
 import type { IntegrationTabId } from '../constants/superadmin_integrations_overview.constants';
 import { useSuperadminIntegrationsOverviewStore } from '../state/useSuperadminIntegrationsOverviewStore';
+import { useSuperadminIntegrationsQueries } from './useSuperadminIntegrationsQueries';
 
 export function useSuperadminIntegrationsOverview() {
   const router = useRouter();
@@ -74,58 +63,12 @@ export function useSuperadminIntegrationsOverview() {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
-  // Queries using TanStack Query v5
-  const summaryQuery = useQuery({
-    queryKey: SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS.summary(),
-    queryFn: fetchIntegrationSummary,
-    staleTime: 60000,
-  });
-
-  const gatewaysQuery = useQuery({
-    queryKey: SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS.gateways(),
-    queryFn: fetchIntegrationGateways,
-    staleTime: 60000,
-  });
-
-  const webhooksQuery = useQuery({
-    queryKey: SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS.webhooks(),
-    queryFn: fetchWebhookEndpoints,
-    staleTime: 60000,
-  });
-
-  const webhookRetriesQuery = useQuery({
-    queryKey: SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS.webhookRetries(),
-    queryFn: fetchWebhookRetries,
-    staleTime: 30000,
-  });
-
-  const apiKeysQuery = useQuery({
-    queryKey: SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS.apiKeys(),
-    queryFn: fetchApiKeys,
-    staleTime: 60000,
-  });
-
-  const rateLimitsQuery = useQuery({
-    queryKey: SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS.rateLimits(),
-    queryFn: fetchRateLimits,
-    staleTime: 60000,
-  });
-
-  const logsQuery = useQuery({
-    queryKey: SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS.logs(),
-    queryFn: fetchIntegrationLogs,
-    staleTime: 30000,
-  });
-
-  const entitlementsQuery = useQuery({
-    queryKey: SUPERADMIN_INTEGRATIONS_OVERVIEW_KEYS.entitlements(),
-    queryFn: fetchPlanEntitlements,
-    staleTime: 60000,
-  });
+  // TanStack Query v5 operations via sub-hook
+  const queries = useSuperadminIntegrationsQueries();
 
   // Filtered gateways based on category and search
   const filteredGateways = useMemo(() => {
-    const list = gatewaysQuery.data?.data ?? [];
+    const list = queries.rawGateways;
     return list.filter((gw) => {
       const matchesCategory = selectedCategory === 'all' || gw.category === selectedCategory;
       const matchesSearch =
@@ -134,7 +77,7 @@ export function useSuperadminIntegrationsOverview() {
         gw.providerKey.toLowerCase().includes(debouncedSearch.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [gatewaysQuery.data?.data, selectedCategory, debouncedSearch]);
+  }, [queries.rawGateways, selectedCategory, debouncedSearch]);
 
   return {
     activeTab,
@@ -155,21 +98,18 @@ export function useSuperadminIntegrationsOverview() {
     setSelectedLogItem,
     setCopiedId,
     // Data
-    summary: summaryQuery.data?.data,
+    summary: queries.summary,
     gateways: filteredGateways,
-    rawGateways: gatewaysQuery.data?.data ?? [],
-    webhooks: webhooksQuery.data?.data ?? [],
-    webhookRetries: webhookRetriesQuery.data?.data ?? [],
-    apiKeys: apiKeysQuery.data?.data ?? [],
-    rateLimits: rateLimitsQuery.data?.data,
-    logs: logsQuery.data?.data ?? [],
-    entitlements: entitlementsQuery.data?.data ?? [],
+    rawGateways: queries.rawGateways,
+    webhooks: queries.webhooks,
+    webhookRetries: queries.webhookRetries,
+    apiKeys: queries.apiKeys,
+    rateLimits: queries.rateLimits,
+    logs: queries.logs,
+    entitlements: queries.entitlements,
     // Loading / error states
-    isPending: gatewaysQuery.isPending || summaryQuery.isPending,
-    isError: gatewaysQuery.isError || summaryQuery.isError,
-    refetchAll: () => {
-      summaryQuery.refetch();
-      gatewaysQuery.refetch();
-    },
+    isPending: queries.isPending,
+    isError: queries.isError,
+    refetchAll: queries.refetchAll,
   };
 }

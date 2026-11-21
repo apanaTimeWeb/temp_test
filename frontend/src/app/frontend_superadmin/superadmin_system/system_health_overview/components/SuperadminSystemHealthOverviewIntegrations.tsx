@@ -88,22 +88,22 @@ export default function SuperadminSystemHealthOverviewIntegrations() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between sm:justify-end gap-3">
+                  <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
                     <div className="text-left sm:text-right">
                       <div
-                        className={`flex items-center gap-1 text-[11px] font-bold ${
+                        className={`flex items-center gap-1 text-[11px] font-bold whitespace-nowrap ${
                           isOperational ? 'text-emerald-400' : 'text-amber-400'
                         }`}
                       >
                         {isOperational ? (
-                          <CheckCircle2 size={12} className="text-emerald-400" />
+                          <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
                         ) : (
-                          <AlertTriangle size={12} />
+                          <AlertTriangle size={12} className="shrink-0" />
                         )}
-                        <span>{isOperational ? 'Operational' : t(api.statusKey)}</span>
+                        <span className="whitespace-nowrap">{isOperational ? 'Operational' : t(api.statusKey)}</span>
                       </div>
-                      <p className="text-[11px] font-mono text-slate-400 mt-0.5">
-                        {api.latency} {t("COPY.PING")}
+                      <p className="text-[11px] font-mono text-slate-400 mt-0.5 whitespace-nowrap">
+                        {api.latency === '—' ? 'Latency: —' : `${api.latency} ${t("COPY.PING")}`}
                       </p>
                     </div>
 
@@ -111,7 +111,7 @@ export default function SuperadminSystemHealthOverviewIntegrations() {
                       type="button"
                       onClick={() => handleTestIntegration(api.id, t(api.nameKey))}
                       disabled={isTesting}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50 whitespace-nowrap shrink-0"
                     >
                       <RefreshCw size={11} className={isTesting ? 'animate-spin' : ''} />
                       <span>{isTesting ? 'Testing...' : t("COPY.TEST_CONNECTION")}</span>

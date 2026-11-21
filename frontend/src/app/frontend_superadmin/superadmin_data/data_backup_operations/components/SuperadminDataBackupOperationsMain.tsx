@@ -3,7 +3,9 @@
 'use client';
 
 import React from 'react';
-import { CalendarClock, Plus, AlertCircle, RefreshCw } from 'lucide-react';
+import Link from 'next/link';
+import { CalendarClock, Plus, AlertCircle, RefreshCw, History } from 'lucide-react';
+import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_navigation/navigation_shell/config/superadmin_navigation_routes';
 import { useSuperadminDataBackupOperations } from '@/app/frontend_superadmin/superadmin_data/data_backup_operations/hooks/useSuperadminDataBackupOperations';
 import { SuperadminDataBackupOperationsFullSnapshotCard } from '@/app/frontend_superadmin/superadmin_data/data_backup_operations/components/SuperadminDataBackupOperationsFullSnapshotCard';
 import { SuperadminDataBackupOperationsSchedulesTable } from '@/app/frontend_superadmin/superadmin_data/data_backup_operations/components/SuperadminDataBackupOperationsSchedulesTable';
@@ -79,15 +81,26 @@ export function SuperadminDataBackupOperationsMain() {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => openCreateScheduleModal()}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold bg-pink-600 hover:bg-pink-700 text-white transition-colors shadow-xs cursor-pointer"
-          data-testid="data_backup-open-create-btn"
-        >
-          <Plus size={14} />
-          <span>Create Backup Policy</span>
-        </button>
+        <div className="flex items-center gap-2.5">
+          <Link
+            href={SUPERADMIN_NAVIGATION_ROUTES.data_restore_operations}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold border border-border bg-card hover:bg-muted text-foreground transition-colors cursor-pointer"
+            data-testid="data_backup-view-history-btn"
+          >
+            <History size={14} className="text-emerald-400" />
+            <span>Backup History & Snapshots</span>
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => openCreateScheduleModal()}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold bg-pink-600 hover:bg-pink-700 text-white transition-colors shadow-xs cursor-pointer"
+            data-testid="data_backup-open-create-btn"
+          >
+            <Plus size={14} />
+            <span>Create Backup Policy</span>
+          </button>
+        </div>
       </div>
 
       {/* ── 1. Full Platform Disaster Recovery Banner ── */}

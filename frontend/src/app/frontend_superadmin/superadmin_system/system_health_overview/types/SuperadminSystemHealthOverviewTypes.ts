@@ -68,7 +68,7 @@ export interface SuperadminSystemHealthIntegrationFixture {
   id: 'payment-gateway' | 'messaging-api' | 'backup-storage' | 'email-service';
   name: string;
   nameKey: string;
-  status: 'Not connected';
+  status: 'Not connected' | 'Operational' | 'Degraded';
   statusKey: string;
   latency: string;
   uptime: string;
@@ -96,6 +96,6 @@ export interface SuperadminSystemHealthCronFixture {
   lastRun: string;
   lastRunKey: string;
   duration: string;
-  status: 'Not connected';
+  status: 'Not connected' | 'Completed' | 'Running' | 'Failed';
   statusKey: string;
 }

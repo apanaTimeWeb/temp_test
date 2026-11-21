@@ -14,27 +14,26 @@ import {
 } from '../fixtures/superadmin_integrations_overview.fixtures';
 
 export const superadminIntegrationsOverviewHandlers = [
-  // 1. Summary Stats
-  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.summary, () => {
-    return HttpResponse.json({
+  // 1. Summary Stats & Gateways
+  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.summary, () =>
+    HttpResponse.json({
       success: true,
       message: 'Integration summary fetched successfully',
       data: MOCK_INTEGRATION_SUMMARY,
       requestId: 'req_summary_mock_001',
-    });
-  }),
+    })
+  ),
 
-  // 2. Gateways List
-  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.gatewaysList, () => {
-    return HttpResponse.json({
+  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.gatewaysList, () =>
+    HttpResponse.json({
       success: true,
       message: 'Integration gateways list fetched',
       data: MOCK_INTEGRATION_GATEWAYS,
       requestId: 'req_gw_list_001',
-    });
-  }),
+    })
+  ),
 
-  // 3. Update Gateway
+  // 2. Gateway Mutations & Ping
   http.patch(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.gatewayUpdate(':id'), async ({ params, request }) => {
     const { id } = params;
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
@@ -48,18 +47,15 @@ export const superadminIntegrationsOverviewHandlers = [
     });
   }),
 
-  // 4. Test Gateway Ping
-  http.post(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.gatewayTestPing(':id'), ({ params }) => {
-    const { id } = params;
-    return HttpResponse.json({
+  http.post(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.gatewayTestPing(':id'), ({ params }) =>
+    HttpResponse.json({
       success: true,
       message: `Live test ping succeeded! Latency: 78ms`,
-      data: { status: 'connected', latencyMs: 78, message: `Connected to ${id} sandbox/production gateway` },
-      requestId: `req_ping_${id}`,
-    });
-  }),
+      data: { status: 'connected', latencyMs: 78, message: `Connected to ${params.id} gateway` },
+      requestId: `req_ping_${params.id}`,
+    })
+  ),
 
-  // 5. Toggle Gateway
   http.patch(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.gatewayToggle(':id'), async ({ params, request }) => {
     const { id } = params;
     const body = (await request.json().catch(() => ({}))) as { isEnabled?: boolean };
@@ -73,17 +69,16 @@ export const superadminIntegrationsOverviewHandlers = [
     });
   }),
 
-  // 6. Webhooks List
-  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.webhooksList, () => {
-    return HttpResponse.json({
+  // 3. Webhooks & Retries
+  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.webhooksList, () =>
+    HttpResponse.json({
       success: true,
       message: 'Webhook endpoints fetched',
       data: MOCK_WEBHOOKS,
       requestId: 'req_wh_list_001',
-    });
-  }),
+    })
+  ),
 
-  // 7. Create Webhook
   http.post(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.webhookCreate, async ({ request }) => {
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
     const newWh = {
@@ -105,47 +100,43 @@ export const superadminIntegrationsOverviewHandlers = [
     });
   }),
 
-  // 8. Delete Webhook
-  http.delete(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.webhookDelete(':id'), ({ params }) => {
-    return HttpResponse.json({
+  http.delete(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.webhookDelete(':id'), ({ params }) =>
+    HttpResponse.json({
       success: true,
       message: 'Webhook endpoint removed',
       data: { id: String(params.id) },
       requestId: `req_wh_del_${params.id}`,
-    });
-  }),
+    })
+  ),
 
-  // 9. Webhook Retries List
-  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.webhookRetriesList, () => {
-    return HttpResponse.json({
+  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.webhookRetriesList, () =>
+    HttpResponse.json({
       success: true,
       message: 'Failed webhook retries queue fetched',
       data: MOCK_WEBHOOK_RETRIES,
       requestId: 'req_retry_list_001',
-    });
-  }),
+    })
+  ),
 
-  // 10. Trigger Webhook Retry
-  http.post(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.webhookRetryTrigger(':id'), ({ params }) => {
-    return HttpResponse.json({
+  http.post(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.webhookRetryTrigger(':id'), ({ params }) =>
+    HttpResponse.json({
       success: true,
       message: 'Webhook redelivered successfully (Status: 200 OK)',
       data: { deliveryId: String(params.id), status: 'success' },
       requestId: `req_retry_trig_${params.id}`,
-    });
-  }),
+    })
+  ),
 
-  // 11. API Keys List
-  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.apiKeysList, () => {
-    return HttpResponse.json({
+  // 4. API Keys (Generate, Rotate, Revoke)
+  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.apiKeysList, () =>
+    HttpResponse.json({
       success: true,
       message: 'API keys list fetched',
       data: MOCK_API_KEYS,
       requestId: 'req_keys_list_001',
-    });
-  }),
+    })
+  ),
 
-  // 12. Create API Key
   http.post(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.apiKeyCreate, async ({ request }) => {
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
     const plainSecret = `pk_live_${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 15)}`;
@@ -169,7 +160,6 @@ export const superadminIntegrationsOverviewHandlers = [
     });
   }),
 
-  // 13. Rotate API Key
   http.post(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.apiKeyRotate(':id'), ({ params }) => {
     const plainSecret = `pk_live_rotated_${Math.random().toString(36).substring(2, 15)}`;
     const rotatedKey = {
@@ -187,25 +177,24 @@ export const superadminIntegrationsOverviewHandlers = [
     });
   }),
 
-  // 14. Revoke API Key
-  http.delete(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.apiKeyRevoke(':id'), ({ params }) => {
-    return HttpResponse.json({
+  http.delete(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.apiKeyRevoke(':id'), ({ params }) =>
+    HttpResponse.json({
       success: true,
       message: 'API key revoked immediately and access suspended',
       data: { keyId: String(params.id), status: 'revoked' },
       requestId: `req_revoke_${params.id}`,
-    });
-  }),
+    })
+  ),
 
-  // 15. Rate Limits & IP Allowlist
-  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.rateLimitsGet, () => {
-    return HttpResponse.json({
+  // 5. Rate Limits & Policies
+  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.rateLimitsGet, () =>
+    HttpResponse.json({
       success: true,
       message: 'Rate limit policies fetched',
       data: MOCK_RATE_LIMIT_POLICY,
       requestId: 'req_ratelimits_001',
-    });
-  }),
+    })
+  ),
 
   http.put(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.rateLimitsUpdate, async ({ request }) => {
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
@@ -215,26 +204,25 @@ export const superadminIntegrationsOverviewHandlers = [
       message: 'Rate limits & IP allowlist updated successfully',
       data: updated,
       requestId: 'req_ratelimits_update_001',
-    });
+    })
   }),
 
-  // 16. Integration Logs
-  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.logsList, () => {
-    return HttpResponse.json({
+  // 6. Logs & Plan Entitlements
+  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.logsList, () =>
+    HttpResponse.json({
       success: true,
       message: 'Integration logs retrieved',
       data: MOCK_INTEGRATION_LOGS,
       requestId: 'req_logs_001',
-    });
-  }),
+    })
+  ),
 
-  // 17. Entitlements
-  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.entitlementsList, () => {
-    return HttpResponse.json({
+  http.get(SUPERADMIN_INTEGRATIONS_OVERVIEW_API.entitlementsList, () =>
+    HttpResponse.json({
       success: true,
       message: 'Plan entitlements retrieved',
       data: MOCK_PLAN_ENTITLEMENTS,
       requestId: 'req_entitlements_001',
-    });
-  }),
+    })
+  ),
 ];

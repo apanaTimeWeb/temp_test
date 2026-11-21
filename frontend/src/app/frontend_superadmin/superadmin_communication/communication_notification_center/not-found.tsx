@@ -13,7 +13,7 @@ export default function SuperadminModuleNotFound() {
     <section className="mx-auto w-full max-w-3xl rounded-xl border border-border bg-card p-6 text-primary" role="status">
       <h1 className="text-xl font-semibold">{t('COPY.MODULE_NOT_FOUND_TITLE')}</h1>
       <p className="mt-2 text-sm text-secondary">{t('COPY.MODULE_NOT_FOUND_MESSAGE')}</p>
-      <Link className="sa-btn-primary mt-4 inline-flex" href={SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES.SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_URLS.DASHBOARD_OVERVIEW} data-testid="superadmin-communication-notification-center-not-found-dashboard-link">{t('COPY.BACK_TO_DASHBOARD')}</Link>
+      <Link className="sa-btn-primary mt-4 inline-flex" href={SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES.root} data-testid="superadmin-communication-notification-center-not-found-dashboard-link">{t('COPY.BACK_TO_DASHBOARD')}</Link>
     </section>
   );
 }

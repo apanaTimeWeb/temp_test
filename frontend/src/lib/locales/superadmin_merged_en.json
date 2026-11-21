@@ -3152,7 +3152,17 @@
       "BACK_TO_DASHBOARD": "Back to dashboard",
       "TABLE_EMPTY": "No records are available.",
       "TABLE_EMPTY_FILTERED": "No records match the current filters.",
-      "MODULE_ROUTE_LOADING": "Loading feature…"
+      "MODULE_ROUTE_LOADING": "Loading feature…",
+      "REFRESH_TELEMETRY": "Refresh Telemetry",
+      "RUN_DIAGNOSTICS": "Run Diagnostics",
+      "EXPORT_SNAPSHOT": "Export Snapshot",
+      "SYSTEM_OPERATIONAL": "All Systems Operational",
+      "TELEMETRY_LIVE": "Live Telemetry Active",
+      "TEST_CONNECTION": "Test Connection",
+      "RUN_NOW": "Run Now",
+      "PING_ALL_SERVICES": "Ping All Services",
+      "RESTART_SERVICE": "Restart",
+      "INSPECT_SERVICE": "Inspect"
     }
   }
 }
