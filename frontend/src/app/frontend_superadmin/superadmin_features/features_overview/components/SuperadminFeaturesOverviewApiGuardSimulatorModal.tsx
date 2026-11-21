@@ -232,7 +232,7 @@ export default function SuperadminFeaturesOverviewApiGuardSimulatorModal({
                 <div className="relative">
                   <button
                     type="button"
-                    onClick={() => copyToClipboard(simulationResult.curlCommand, true)}
+                    onClick={() => copyToClipboard(simulationResult.curlCommand ?? '', true)}
                     className="absolute top-2 right-2 px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-xs text-slate-300 flex items-center gap-1 transition-colors cursor-pointer"
                   >
                     {copiedCurl ? <CheckCircle2 size={12} className="text-emerald-400" /> : <Copy size={12} />}
