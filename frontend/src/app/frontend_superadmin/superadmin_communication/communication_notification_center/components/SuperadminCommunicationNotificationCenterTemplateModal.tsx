@@ -1,5 +1,5 @@
 'use client';
-// RESPONSIBILITY: Template inspection and editor modal with channel previews (Email/SMS/WhatsApp).
+// RESPONSIBILITY: Template inspection and editor modal with channel previews (Email/SMS/WhatsApp) in Cyber-Luxury styling.
 // FLOW: SuperadminCommunicationNotificationCenterMain -> TemplateModal -> useUpdateTemplateMutation.
 
 import { useState } from 'react';
@@ -13,14 +13,13 @@ import {
   CheckCircle2,
   Copy,
   Loader2,
-  Sparkles,
 } from 'lucide-react';
 import { useSuperadminCommunicationNotificationCenterStore } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/state/useSuperadminCommunicationNotificationCenterStore';
 import { useUpdateTemplateMutation } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/hooks/useSuperadminCommunicationNotificationCenterQueries';
 import type { NotificationChannel } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
 
 export function SuperadminCommunicationNotificationCenterTemplateModal() {
-  const { selectedTemplate, setSelectedTemplate, isTemplateModalOpen, setIsTemplateModalOpen } =
+  const { selectedTemplate, isTemplateModalOpen, setIsTemplateModalOpen } =
     useSuperadminCommunicationNotificationCenterStore();
   const updateMutation = useUpdateTemplateMutation();
 
@@ -68,7 +67,7 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) setIsTemplateModalOpen(false);
       }}
@@ -77,27 +76,27 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="template-modal-title"
-        className="bg-card border border-border shadow-2xl rounded-2xl w-full max-w-2xl p-6 relative my-8 space-y-4"
+        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative my-8 space-y-4"
         data-testid="template-detail-dialog"
       >
         {/* Header */}
-        <div className="flex items-start justify-between pb-3 border-b border-border/80">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="p-1.5 rounded-lg bg-primary/10 text-primary">
-                <FileText className="w-4 h-4" />
-              </span>
-              <h2 id="template-modal-title" className="text-base font-bold text-foreground">
+        <div className="flex items-start justify-between pb-4 border-b border-indigo-500/20">
+          <div className="flex items-start gap-3">
+            <div className="p-2.5 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 shadow-inner mt-0.5">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 id="template-modal-title" className="text-base sm:text-lg font-bold text-white">
                 {selectedTemplate.name}
               </h2>
+              <p className="text-2xs text-slate-400 mt-0.5 leading-relaxed">{selectedTemplate.description}</p>
             </div>
-            <p className="text-2xs text-muted-foreground mt-0.5">{selectedTemplate.description}</p>
           </div>
 
           <button
             type="button"
             onClick={() => setIsTemplateModalOpen(false)}
-            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors cursor-pointer"
             aria-label="Close template dialog"
           >
             <X className="w-5 h-5" />
@@ -105,45 +104,51 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
         </div>
 
         {/* Channel Tab Switcher */}
-        <div className="flex items-center gap-2 p-1 rounded-xl bg-muted/40 border border-border/60">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-950/80 border border-indigo-500/25">
           <button
             type="button"
             onClick={() => setActiveChannel('EMAIL')}
-            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-              activeChannel === 'EMAIL' ? 'bg-card text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground'
+            className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeChannel === 'EMAIL'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
             }`}
           >
-            <Mail className="w-3.5 h-3.5 text-sky-400" />
-            <span>Email Template</span>
+            <Mail className="w-4 h-4 text-sky-400" />
+            <span>Email</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveChannel('SMS')}
-            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-              activeChannel === 'SMS' ? 'bg-card text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground'
+            className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeChannel === 'SMS'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
             }`}
           >
-            <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
-            <span>SMS Template</span>
+            <MessageSquare className="w-4 h-4 text-emerald-400" />
+            <span>SMS</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveChannel('WHATSAPP')}
-            className={`flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
-              activeChannel === 'WHATSAPP' ? 'bg-card text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground'
+            className={`flex-1 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              activeChannel === 'WHATSAPP'
+                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/25'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
             }`}
           >
-            <PhoneCall className="w-3.5 h-3.5 text-teal-400" />
-            <span>WhatsApp Template</span>
+            <PhoneCall className="w-4 h-4 text-teal-400" />
+            <span>WhatsApp</span>
           </button>
         </div>
 
         {/* Dynamic Variable Chips */}
-        <div className="space-y-1">
-          <span className="text-2xs font-semibold text-muted-foreground uppercase tracking-wider block">
-            Click Variable to Copy into Clipboard:
+        <div className="space-y-1.5">
+          <span className="text-2xs font-bold text-slate-400 uppercase tracking-wider block">
+            Click Variable Chip to Copy into Clipboard:
           </span>
           <div className="flex items-center gap-1.5 flex-wrap">
             {selectedTemplate.variables.map((v) => (
@@ -151,87 +156,87 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
                 key={v}
                 type="button"
                 onClick={() => handleCopyVar(v)}
-                className="px-2 py-1 rounded-md text-2xs font-mono bg-primary/10 hover:bg-primary/20 text-primary border border-primary/25 transition-all flex items-center gap-1 cursor-pointer"
+                className="px-2.5 py-1 rounded-lg text-2xs font-mono bg-indigo-950/70 hover:bg-indigo-900 text-indigo-300 border border-indigo-500/30 transition-all flex items-center gap-1 cursor-pointer"
               >
                 <span>{`{{${v}}}`}</span>
                 {copiedVar === v ? (
                   <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                 ) : (
-                  <Copy className="w-3 h-3 text-muted-foreground" />
+                  <Copy className="w-3 h-3 text-slate-400" />
                 )}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Active Channel Template Form / Preview */}
+        {/* Active Channel Template Form */}
         {activeChannel === 'EMAIL' && (
-          <div className="space-y-3">
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-foreground">Email Subject</label>
+          <div className="space-y-3.5">
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-200">Email Subject</label>
               <input
                 type="text"
                 value={emailSubject}
                 onChange={(e) => setEmailSubject(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border/80 text-xs text-foreground focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 shadow-inner"
               />
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-foreground">Email Body</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-200">Email HTML / Plaintext Body</label>
               <textarea
-                rows={6}
+                rows={5}
                 value={emailBody}
                 onChange={(e) => setEmailBody(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border/80 text-xs text-foreground focus:outline-none font-mono leading-relaxed"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-100 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 font-mono leading-relaxed shadow-inner"
               />
             </div>
           </div>
         )}
 
         {activeChannel === 'SMS' && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>DLT Template ID: <strong className="text-foreground">{selectedTemplate.channelTemplates.sms.dltTemplateId ?? 'DLT-AUTO-REG'}</strong></span>
-              <span>Length: {smsBody.length} chars (1 SMS unit)</span>
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between text-xs text-slate-400">
+              <span>DLT Template ID: <strong className="text-white font-mono">{selectedTemplate.channelTemplates.sms.dltTemplateId ?? 'DLT-AUTO-REG'}</strong></span>
+              <span>Length: <strong className="text-white">{smsBody.length}</strong> chars (1 SMS unit)</span>
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-foreground">SMS Body (GSM 7-bit)</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-200">SMS Body (GSM 7-bit)</label>
               <textarea
                 rows={4}
                 value={smsBody}
                 onChange={(e) => setSmsBody(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border/80 text-xs text-foreground focus:outline-none font-mono leading-relaxed"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-100 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 font-mono leading-relaxed shadow-inner"
               />
             </div>
           </div>
         )}
 
         {activeChannel === 'WHATSAPP' && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>Meta Name: <strong className="text-foreground">{selectedTemplate.channelTemplates.whatsapp.metaTemplateName ?? 'lib_template_v1'}</strong></span>
-              <span className="text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between text-xs text-slate-400">
+              <span>Meta Name: <strong className="text-white font-mono">{selectedTemplate.channelTemplates.whatsapp.metaTemplateName ?? 'lib_template_v1'}</strong></span>
+              <span className="text-emerald-300 font-bold bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full text-2xs">
                 Meta Status: APPROVED
               </span>
             </div>
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-foreground">WhatsApp Template Message</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-200">WhatsApp Template Message</label>
               <textarea
-                rows={6}
+                rows={5}
                 value={whatsappBody}
                 onChange={(e) => setWhatsappBody(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border/80 text-xs text-foreground focus:outline-none font-mono leading-relaxed"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-100 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 font-mono leading-relaxed shadow-inner"
               />
             </div>
           </div>
         )}
 
         {/* Footer */}
-        <div className="pt-3 border-t border-border/80 flex items-center justify-end gap-2">
+        <div className="pt-3 border-t border-indigo-500/20 flex items-center justify-end gap-3">
           <button
             type="button"
             onClick={() => setIsTemplateModalOpen(false)}
-            className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-indigo-500/25 text-xs sm:text-sm font-semibold cursor-pointer transition-all"
           >
             Cancel
           </button>
@@ -239,16 +244,16 @@ export function SuperadminCommunicationNotificationCenterTemplateModal() {
             type="button"
             disabled={updateMutation.isPending}
             onClick={handleSave}
-            className="px-5 py-2 rounded-xl bg-primary text-black font-semibold text-xs hover:opacity-90 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer min-w-32 justify-center shadow-xs"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-xs sm:text-sm active:scale-95 transition-all flex items-center gap-2 cursor-pointer min-w-36 justify-center shadow-lg shadow-indigo-500/25"
           >
             {updateMutation.isPending ? (
               <>
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin" />
                 <span>Saving…</span>
               </>
             ) : (
               <>
-                <Save className="w-3.5 h-3.5" />
+                <Save className="w-4 h-4" />
                 <span>Save Template</span>
               </>
             )}

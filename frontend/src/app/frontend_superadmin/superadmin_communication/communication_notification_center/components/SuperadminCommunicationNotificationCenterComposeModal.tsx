@@ -1,5 +1,5 @@
 'use client';
-// RESPONSIBILITY: Compose and dispatch a global or account-specific notification with validation.
+// RESPONSIBILITY: Compose and dispatch a global or account-specific notification with validation in Cyber-Luxury styling.
 // FLOW: SuperadminCommunicationNotificationCenterMain -> ComposeModal -> useDispatchNotificationMutation.
 
 import { useForm } from 'react-hook-form';
@@ -91,7 +91,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) setIsComposeOpen(false);
       }}
@@ -100,20 +100,20 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby="compose-modal-title"
-        className="bg-card border border-border shadow-2xl rounded-2xl w-full max-w-2xl p-6 relative my-8"
+        className="bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] border border-indigo-500/30 text-slate-100 shadow-2xl rounded-3xl w-full max-w-2xl p-6 sm:p-7 relative my-8"
         data-testid="notif-compose-dialog"
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-border/80">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-primary/10 text-primary">
+        <div className="flex items-center justify-between pb-4 border-b border-indigo-500/20">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 shadow-inner">
               <Send className="w-5 h-5" />
             </div>
             <div>
-              <h2 id="compose-modal-title" className="text-base font-bold text-foreground">
+              <h2 id="compose-modal-title" className="text-base sm:text-lg font-bold text-white">
                 Dispatch Notification
               </h2>
-              <p className="text-2xs text-muted-foreground">
+              <p className="text-2xs text-slate-400 mt-0.5">
                 Send global broadcast or account-specific message across Email, SMS & WhatsApp.
               </p>
             </div>
@@ -122,7 +122,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
           <button
             type="button"
             onClick={() => setIsComposeOpen(false)}
-            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors cursor-pointer"
             aria-label="Close dialog"
           >
             <X className="w-5 h-5" />
@@ -130,7 +130,7 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-5">
           <SuperadminCommunicationNotificationCenterComposeScopeSelector
             selectedTargetScope={selectedTargetScope}
             accounts={accounts}
@@ -146,73 +146,73 @@ export function SuperadminCommunicationNotificationCenterComposeModal() {
           />
 
           {/* Subject / Title */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-foreground">Notification Title / Email Subject</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-slate-200">Notification Title / Email Subject</label>
             <input
               type="text"
               {...register('title')}
-              className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border/80 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 shadow-inner"
               placeholder="e.g. Scheduled System Maintenance"
             />
-            {errors.title && <p className="text-2xs text-destructive">{errors.title.message}</p>}
+            {errors.title && <p className="text-2xs text-rose-400 font-semibold">{errors.title.message}</p>}
           </div>
 
           {/* Message Body */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-foreground">Message Body</label>
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-slate-200">Message Body</label>
             <textarea
               rows={4}
               {...register('message')}
-              className="w-full px-3 py-2 rounded-xl bg-muted/40 border border-border/80 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 leading-relaxed font-mono"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 leading-relaxed font-mono shadow-inner"
               placeholder="Type message content..."
             />
-            {errors.message && <p className="text-2xs text-destructive">{errors.message.message}</p>}
+            {errors.message && <p className="text-2xs text-rose-400 font-semibold">{errors.message.message}</p>}
           </div>
 
           {/* Test Recipient Override (Optional) */}
-          <div className="p-3 rounded-xl bg-muted/30 border border-border/60 space-y-2">
-            <span className="text-2xs font-semibold text-muted-foreground uppercase tracking-wider block">
-              Optional Test Transmission
+          <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-indigo-500/20 space-y-2">
+            <span className="text-2xs font-bold text-slate-400 uppercase tracking-wider block">
+              Optional Test Transmission Override
             </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <input
                 type="email"
                 {...register('testRecipient.email')}
-                placeholder="Test email address..."
-                className="px-2.5 py-1.5 rounded-lg bg-card border border-border/60 text-xs text-foreground focus:outline-none"
+                placeholder="Test email (e.g. admin@test.com)"
+                className="px-3 py-2 rounded-xl bg-slate-900/90 border border-indigo-500/30 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400"
               />
               <input
                 type="text"
                 {...register('testRecipient.phone')}
-                placeholder="Test phone (+919800000000)..."
-                className="px-2.5 py-1.5 rounded-lg bg-card border border-border/60 text-xs text-foreground focus:outline-none"
+                placeholder="Test phone (+919800000000)"
+                className="px-3 py-2 rounded-xl bg-slate-900/90 border border-indigo-500/30 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400"
               />
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-3 border-t border-border/60 flex items-center justify-end gap-2">
+          <div className="pt-4 border-t border-indigo-500/20 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={() => setIsComposeOpen(false)}
-              className="px-4 py-2 rounded-xl border border-border text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-indigo-500/25 text-xs sm:text-sm font-semibold cursor-pointer transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2 rounded-xl bg-primary text-black font-semibold text-xs hover:opacity-90 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer min-w-32 justify-center shadow-xs"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-xs sm:text-sm active:scale-95 transition-all flex items-center gap-2 cursor-pointer min-w-36 justify-center shadow-lg shadow-indigo-500/25"
               data-testid="dispatch-submit-btn"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                   <span>Dispatching…</span>
                 </>
               ) : (
                 <>
-                  <Send className="w-3.5 h-3.5" />
+                  <Send className="w-4 h-4" />
                   <span>Send Notification</span>
                 </>
               )}

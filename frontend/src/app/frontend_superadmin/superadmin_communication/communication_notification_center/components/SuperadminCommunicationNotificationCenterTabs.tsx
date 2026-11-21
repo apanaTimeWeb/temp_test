@@ -1,5 +1,5 @@
 'use client';
-// RESPONSIBILITY: Secondary navigation tabs for Notification Center with badge indicators.
+// RESPONSIBILITY: Secondary navigation tabs for Notification Center with Cyber-Luxury styling and badge indicators.
 // FLOW: User tab click -> state/useSuperadminCommunicationNotificationCenterStore -> active view.
 
 import { useEffect } from 'react';
@@ -8,9 +8,6 @@ import {
   FileText,
   History,
   BarChart3,
-  Mail,
-  MessageSquare,
-  CreditCard,
 } from 'lucide-react';
 import {
   useSuperadminCommunicationNotificationCenterStore,
@@ -34,15 +31,7 @@ export function SuperadminCommunicationNotificationCenterTabs() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const requestedTab = params.get('tab') as NotificationCenterTab | null;
-    const validTabs: NotificationCenterTab[] = [
-      'overview',
-      'templates',
-      'logs',
-      'usage',
-      'email',
-      'sms',
-      'payment-reminders',
-    ];
+    const validTabs: NotificationCenterTab[] = ['overview', 'templates', 'logs', 'usage'];
     if (requestedTab && validTabs.includes(requestedTab) && requestedTab !== activeTab) {
       setActiveTab(requestedTab);
     }
@@ -69,17 +58,17 @@ export function SuperadminCommunicationNotificationCenterTabs() {
       label: 'Delivery Logs',
       icon: History,
       badge: failedCount > 0 ? `${failedCount} Failed` : undefined,
-      badgeClass: 'bg-rose-500/15 text-rose-400 border border-rose-500/30',
+      badgeClass: 'bg-rose-500/20 text-rose-300 border border-rose-500/40',
     },
     { id: 'usage', label: 'Usage & Quotas', icon: BarChart3 },
-    { id: 'email', label: 'Email', icon: Mail },
-    { id: 'sms', label: 'SMS', icon: MessageSquare },
-    { id: 'payment-reminders', label: 'Payment Reminders', icon: CreditCard },
   ];
 
   return (
-    <div className="w-full overflow-x-auto pb-1 border-b border-border/60">
-      <nav aria-label="Notification Center Views" className="flex items-center gap-1.5 min-w-max">
+    <div className="w-full overflow-x-auto pb-1">
+      <nav
+        aria-label="Notification Center Views"
+        className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-950/80 border border-indigo-500/25 backdrop-blur-md shadow-xl min-w-max"
+      >
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -89,19 +78,19 @@ export function SuperadminCommunicationNotificationCenterTabs() {
               type="button"
               onClick={() => handleTabChange(tab.id)}
               aria-current={isActive ? 'page' : undefined}
-              className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-card text-foreground border border-border shadow-xs font-semibold'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted/40 border border-transparent'
+                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/30'
+                  : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'
               }`}
               data-testid={`notif-tab-${tab.id}`}
             >
-              <Icon className={`w-4 h-4 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
+              <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
               <span>{tab.label}</span>
               {tab.badge && (
                 <span
-                  className={`text-2xs px-1.5 py-0.5 rounded-full font-bold ${
-                    tab.badgeClass ?? 'bg-primary/20 text-primary'
+                  className={`text-2xs px-2 py-0.5 rounded-full font-bold ${
+                    tab.badgeClass ?? 'bg-indigo-500/25 text-indigo-200 border border-indigo-500/40'
                   }`}
                 >
                   {tab.badge}

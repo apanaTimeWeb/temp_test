@@ -270,13 +270,13 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
             {/* View / Open Ticket Button */}
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/25 hover:text-white text-xs font-semibold transition-all cursor-pointer shadow-xs shrink-0 whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-indigo-500/15 border border-indigo-500/35 text-indigo-300 hover:bg-indigo-600/30 hover:border-indigo-400 hover:text-white text-xs font-semibold transition-all duration-150 cursor-pointer shadow-xs shrink-0 whitespace-nowrap active:scale-[0.97] group"
               onClick={e => { e.stopPropagation(); setSelected(tkt); }}
               aria-label={t("COPY.OPEN_TICKET_ARIA_LABEL", { id: tkt.id ?? t('COPY.UNKNOWN') })}
               title={t("COPY.OPEN_TICKET")}
               data-testid={`superadmin-support-tickets-support-tickets-overview-open-ticket-aria-label-1-${testIdSuffix}`}
             >
-              <Eye size={13} className="text-indigo-400" />
+              <Eye size={13} className="text-indigo-400 group-hover:scale-110 transition-transform" />
               <span>View</span>
             </button>
 
@@ -289,7 +289,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
                 if (popup) popup.opener = null;
                 showToast(`Opened WhatsApp for Ticket ${tkt.id}`);
               }}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 transition-all shadow-xs cursor-pointer shrink-0"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-emerald-500/35 bg-emerald-500/15 text-emerald-300 hover:text-white hover:bg-emerald-600/30 hover:border-emerald-400 transition-all duration-150 shadow-xs cursor-pointer shrink-0 active:scale-[0.97]"
               title={`WhatsApp reply to ${tkt.tenant}`}
               aria-label={`WhatsApp for ticket ${tkt.id}`}
             >
@@ -301,7 +301,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               <a
                 href={`mailto:${tkt.email}?subject=${encodeURIComponent(`[Ticket ${tkt.id}] ${tkt.subject}`)}&body=${encodeURIComponent(`Dear ${tkt.contact || tkt.tenant},\n\nRegarding your ticket "${tkt.subject}" (${tkt.id}):\n\n`)}`}
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 transition-all shadow-xs cursor-pointer shrink-0"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-purple-500/35 bg-purple-500/15 text-purple-300 hover:text-white hover:bg-purple-600/30 hover:border-purple-400 transition-all duration-150 shadow-xs cursor-pointer shrink-0 active:scale-[0.97]"
                 title={`Email reply to ${tkt.tenant}`}
                 aria-label={`Email for ticket ${tkt.id}`}
               >
@@ -314,7 +314,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               <a
                 href={`tel:${tkt.phone.replace(/\D/g, '')}`}
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 transition-all shadow-xs cursor-pointer shrink-0"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-lg border border-teal-500/35 bg-teal-500/15 text-teal-300 hover:text-white hover:bg-teal-600/30 hover:border-teal-400 transition-all duration-150 shadow-xs cursor-pointer shrink-0 active:scale-[0.97]"
                 title={`Call ${tkt.tenant}`}
                 aria-label={`Call for ticket ${tkt.id}`}
               >
@@ -354,29 +354,49 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               Dedicated technical helpline for Library Owners, Admins & Managers — Software bugs, UPI payment issues, Biometric QR sync, and platform billing.
             </p>
           </div>
-          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
             <button
               type="button"
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-indigo-600 text-xs font-semibold text-white hover:from-rose-500 hover:to-indigo-500 shadow-md shadow-rose-950/30 transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 text-xs font-bold text-white shadow-lg shadow-rose-950/40 hover:shadow-rose-500/30 hover:from-rose-500 hover:to-indigo-500 transition-all duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 group"
             >
-              <Ticket size={14} strokeWidth={2.2} />
+              <div className="p-1 rounded-lg bg-white/20 text-white group-hover:scale-110 transition-transform">
+                <Ticket size={14} strokeWidth={2.4} />
+              </div>
               <span>+ Log Software Ticket</span>
             </button>
-            <button type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 text-xs font-semibold text-rose-300 hover:bg-rose-500/25 transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
-              onClick={exportSampleTickets} data-testid="superadmin-support-tickets-support-tickets-overview-export-logs-2">
-              <FileText size={14} /> {t("COPY.EXPORT_LOGS")}
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-rose-500/30 bg-rose-500/15 text-xs font-semibold text-rose-300 hover:bg-rose-500/25 hover:border-rose-400 hover:text-white shadow-xs transition-all duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 group"
+              onClick={exportSampleTickets}
+              data-testid="superadmin-support-tickets-support-tickets-overview-export-logs-2"
+            >
+              <div className="p-1 rounded-lg bg-rose-500/20 text-rose-400 group-hover:scale-110 transition-transform">
+                <FileText size={13} strokeWidth={2.2} />
+              </div>
+              <span>{t("COPY.EXPORT_LOGS")}</span>
             </button>
-            <button type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-xs font-semibold text-indigo-300 hover:bg-indigo-500/25 transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
-              onClick={exportSampleTicketsExcel} title="Export Excel (.xls)">
-              <FileSpreadsheet size={14} className="text-indigo-400" /> Excel
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/25 hover:border-emerald-400 hover:text-white shadow-xs transition-all duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 group"
+              onClick={exportSampleTicketsExcel}
+              title="Export Excel (.xls)"
+            >
+              <div className="p-1 rounded-lg bg-emerald-500/20 text-emerald-400 group-hover:scale-110 transition-transform">
+                <FileSpreadsheet size={13} strokeWidth={2.2} />
+              </div>
+              <span>Excel</span>
             </button>
-            <button type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-sky-500/30 bg-sky-500/15 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 transition-all active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
-              onClick={printTicketsRoster} title="Print Tickets Roster">
-              <Printer size={14} className="text-sky-400" /> Print
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-sky-500/30 bg-sky-500/15 text-xs font-semibold text-sky-300 hover:bg-sky-500/25 hover:border-sky-400 hover:text-white shadow-xs transition-all duration-200 active:scale-[0.97] cursor-pointer whitespace-nowrap shrink-0 group"
+              onClick={printTicketsRoster}
+              title="Print Tickets Roster"
+            >
+              <div className="p-1 rounded-lg bg-sky-500/20 text-sky-400 group-hover:scale-110 transition-transform">
+                <Printer size={13} strokeWidth={2.2} />
+              </div>
+              <span>Print</span>
             </button>
           </div>
         </div>
@@ -386,23 +406,28 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
         {t("COPY.SUPPORT_TICKETS_AND_MESSAGE_THREADS_ARE_SAMPLE_DATA_TICKET_UPDATES_STAY_IN_LOCAL_PAGE_STATE_REPLIES_AND_INTERNAL_NOTES_ARE_NOT_SENT")}
       </p>
 
-      <SuperadminSupportTicketsOverviewKpiCards openCount={openCount} slaBreachCount={slaBreachCount} avgResponse={SUPERADMIN_SUPPORT_TICKETS_SAMPLE_AVERAGE_RESPONSE} />
+      <SuperadminSupportTicketsOverviewKpiCards
+        openCount={openCount}
+        slaBreachCount={slaBreachCount}
+        avgResponse={SUPERADMIN_SUPPORT_TICKETS_SAMPLE_AVERAGE_RESPONSE}
+        totalCount={tickets.length}
+      />
 
       {/* Table with filter */}
       <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] overflow-hidden shadow-xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-4 border-b border-indigo-500/20 bg-indigo-500/10">
           {/* Status Filters - horizontal group */}
-          <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-slate-900/80 border border-indigo-500/20 shrink-0">
+          <div className="inline-flex items-center gap-1 p-1 rounded-xl bg-slate-900/80 border border-indigo-500/20 shrink-0 overflow-x-auto max-w-full">
             {SUPERADMIN_SUPPORT_TICKETS_FILTERS.map((f) => (
               <button
                 type="button"
                 key={f}
                 aria-pressed={filter === f}
                 onClick={() => setFilter(f)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
                   filter === f
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-md shadow-indigo-950/50 border border-indigo-400/40 font-bold'
+                    : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 border border-transparent hover:border-slate-700/60'
                 }`}
                 data-testid={`superadmin-support-tickets-support-tickets-overview-set-filter-3-${String(f)}`}
               >
@@ -482,7 +507,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               <button
                 type="button"
                 onClick={resetAllFilters}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 transition-all cursor-pointer shrink-0 whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/35 hover:text-white transition-all cursor-pointer shrink-0 whitespace-nowrap active:scale-[0.97]"
                 title="Reset active filters"
               >
                 <RotateCcw size={12} />

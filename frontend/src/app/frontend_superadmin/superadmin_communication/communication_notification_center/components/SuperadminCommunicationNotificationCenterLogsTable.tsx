@@ -1,15 +1,13 @@
 'use client';
-// RESPONSIBILITY: Delivery tracking table with delivery status, failure reasons, and 1-click retry.
+// RESPONSIBILITY: Delivery tracking table with delivery status, failure reasons, and 1-click retry with Cyber-Luxury styling.
 // FLOW: SuperadminCommunicationNotificationCenterMain -> LogsTable -> Detail drawer / Retry mutation.
 
 import { useMemo, useState } from 'react';
 import {
-  AlertCircle,
   AlertTriangle,
   CheckCheck,
   Clock,
   Eye,
-  Globe,
   Mail,
   MessageSquare,
   PhoneCall,
@@ -17,7 +15,6 @@ import {
   Search,
   Send,
   ShieldAlert,
-  Sparkles,
 } from 'lucide-react';
 import {
   useSuperadminNotificationsQuery,
@@ -25,13 +22,12 @@ import {
 } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/hooks/useSuperadminCommunicationNotificationCenterQueries';
 import { useSuperadminCommunicationNotificationCenterStore } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/state/useSuperadminCommunicationNotificationCenterStore';
 import {
-  NOTIFICATION_PRIORITY_CONFIG,
   NOTIFICATION_STATUS_CONFIG,
 } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/constants/SuperadminCommunicationNotificationCenterNotificationConstants';
 import type { NotificationRecord } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
 
 export function SuperadminCommunicationNotificationCenterLogsTable() {
-  const { data: notifications, isLoading, isError } = useSuperadminNotificationsQuery();
+  const { data: notifications, isLoading } = useSuperadminNotificationsQuery();
   const { setSelectedNotification } = useSuperadminCommunicationNotificationCenterStore();
   const retryMutation = useRetryNotificationMutation();
   const [retryingId, setRetryingId] = useState<string | null>(null);
@@ -70,9 +66,9 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
 
   if (isLoading) {
     return (
-      <div className="p-8 rounded-2xl bg-card border border-border/80 flex items-center justify-center text-muted-foreground text-sm">
-        <RefreshCw className="w-5 h-5 animate-spin mr-2" />
-        <span>Loading delivery logs…</span>
+      <div className="p-8 rounded-2xl bg-[#0c102b]/85 border border-indigo-500/20 flex items-center justify-center text-slate-400 text-sm shadow-xl">
+        <RefreshCw className="w-5 h-5 animate-spin mr-2 text-indigo-400" />
+        <span>Loading delivery audit logs…</span>
       </div>
     );
   }
@@ -80,60 +76,60 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
   return (
     <div className="space-y-4">
       {/* Search & Filter Header */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 rounded-2xl bg-card border border-border/80 shadow-xs">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[#0c102b]/85 border border-indigo-500/20 shadow-xl backdrop-blur-md">
         <div className="relative flex-1">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             placeholder="Search delivery logs by recipient, library, or failure reason..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-muted/40 border border-border/60 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 transition-all shadow-inner"
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-muted/40 border border-border/60 text-xs text-foreground focus:outline-none cursor-pointer"
+            className="px-3 py-2 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-200 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 cursor-pointer shadow-inner"
           >
-            <option value="ALL">All Statuses</option>
-            <option value="DELIVERED">Delivered</option>
-            <option value="SENT">Sent</option>
-            <option value="PENDING">Pending</option>
-            <option value="FAILED">Failed</option>
-            <option value="BOUNCED">Bounced</option>
+            <option value="ALL" className="bg-slate-900 text-slate-100">All Statuses</option>
+            <option value="DELIVERED" className="bg-slate-900 text-slate-100">Delivered</option>
+            <option value="SENT" className="bg-slate-900 text-slate-100">Sent</option>
+            <option value="PENDING" className="bg-slate-900 text-slate-100">Pending</option>
+            <option value="FAILED" className="bg-slate-900 text-slate-100">Failed</option>
+            <option value="BOUNCED" className="bg-slate-900 text-slate-100">Bounced</option>
           </select>
 
           <select
             value={channelFilter}
             onChange={(e) => setChannelFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-muted/40 border border-border/60 text-xs text-foreground focus:outline-none cursor-pointer"
+            className="px-3 py-2 rounded-xl bg-slate-950/90 border border-indigo-500/30 text-xs text-slate-200 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/50 cursor-pointer shadow-inner"
           >
-            <option value="ALL">All Channels</option>
-            <option value="EMAIL">Email</option>
-            <option value="SMS">SMS</option>
-            <option value="WHATSAPP">WhatsApp</option>
+            <option value="ALL" className="bg-slate-900 text-slate-100">All Channels</option>
+            <option value="EMAIL" className="bg-slate-900 text-slate-100">Email</option>
+            <option value="SMS" className="bg-slate-900 text-slate-100">SMS</option>
+            <option value="WHATSAPP" className="bg-slate-900 text-slate-100">WhatsApp</option>
           </select>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto rounded-2xl bg-card border border-border/80 shadow-xs">
+      {/* Table Container */}
+      <div className="overflow-x-auto rounded-2xl bg-[#0a0d24]/90 border border-indigo-500/20 shadow-xl backdrop-blur-md">
         <table className="w-full text-left text-xs sm:text-sm">
-          <thead className="border-b border-border/80 bg-muted/30 text-2xs uppercase tracking-wider text-muted-foreground">
+          <thead className="border-b border-indigo-500/25 bg-slate-950/90 text-2xs uppercase tracking-wider text-slate-400">
             <tr>
-              <th className="px-4 py-3">Recipient & Target</th>
-              <th className="px-4 py-3">Category</th>
-              <th className="px-4 py-3">Channels</th>
-              <th className="px-4 py-3">Delivery Status</th>
-              <th className="px-4 py-3">Diagnostics & Failure Reason</th>
-              <th className="px-4 py-3">Timestamp</th>
-              <th className="px-4 py-3 text-right">Actions</th>
+              <th className="px-4 py-3.5 font-bold">Recipient & Target</th>
+              <th className="px-4 py-3.5 font-bold">Category</th>
+              <th className="px-4 py-3.5 font-bold">Channels</th>
+              <th className="px-4 py-3.5 font-bold">Delivery Status</th>
+              <th className="px-4 py-3.5 font-bold">Diagnostics & Failure Reason</th>
+              <th className="px-4 py-3.5 font-bold">Timestamp</th>
+              <th className="px-4 py-3.5 text-right font-bold">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border/60">
+          <tbody className="divide-y divide-indigo-500/15">
             {filteredLogs.map((log) => {
               const statusCfg = NOTIFICATION_STATUS_CONFIG[log.status] ?? NOTIFICATION_STATUS_CONFIG.PENDING;
               const isFailed = log.status === 'FAILED' || log.status === 'BOUNCED';
@@ -143,17 +139,17 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
                 <tr
                   key={log.id}
                   onClick={() => setSelectedNotification(log)}
-                  className="hover:bg-muted/30 transition-colors cursor-pointer"
+                  className="hover:bg-indigo-950/25 transition-colors cursor-pointer text-slate-200"
                   data-testid={`log-row-${log.id}`}
                 >
                   {/* Recipient & Target */}
-                  <td className="px-4 py-3">
-                    <p className="font-semibold text-foreground">{log.targetRecipient.name}</p>
-                    <p className="text-2xs text-muted-foreground">
+                  <td className="px-4 py-3.5">
+                    <p className="font-bold text-white text-xs sm:text-sm">{log.targetRecipient.name}</p>
+                    <p className="text-2xs text-slate-400 mt-0.5">
                       {log.targetScope === 'GLOBAL' ? (
-                        <span className="text-sky-400 font-medium">Global Broadcast</span>
+                        <span className="text-sky-300 font-semibold">Global Broadcast</span>
                       ) : (
-                        <span className="text-purple-400 font-medium">
+                        <span className="text-purple-300 font-semibold">
                           {log.targetAccount?.name ?? 'Specific Account'}
                         </span>
                       )}
@@ -161,19 +157,19 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
                   </td>
 
                   {/* Category */}
-                  <td className="px-4 py-3">
-                    <span className="text-xs font-medium text-foreground">
+                  <td className="px-4 py-3.5">
+                    <span className="text-xs font-semibold text-slate-300">
                       {log.category.replace(/_/g, ' ')}
                     </span>
                   </td>
 
                   {/* Channels */}
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-1">
+                  <td className="px-4 py-3.5">
+                    <div className="flex items-center gap-1.5">
                       {log.channels.map((ch) => (
                         <span
                           key={ch}
-                          className="p-1 rounded bg-muted/60 text-muted-foreground"
+                          className="p-1 rounded-md bg-slate-900/80 border border-indigo-500/20 text-slate-300"
                           title={ch}
                         >
                           {ch === 'EMAIL' && <Mail className="w-3.5 h-3.5 text-sky-400" />}
@@ -185,9 +181,9 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
                   </td>
 
                   {/* Status Badge */}
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3.5">
                     <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${statusCfg.bg} ${statusCfg.text} ${statusCfg.border}`}
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border ${statusCfg.bg} ${statusCfg.text} ${statusCfg.border}`}
                     >
                       {log.status === 'DELIVERED' && <CheckCheck className="w-3 h-3" />}
                       {log.status === 'SENT' && <Send className="w-3 h-3" />}
@@ -199,31 +195,31 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
                   </td>
 
                   {/* Failure Diagnostics */}
-                  <td className="px-4 py-3 max-w-xs">
+                  <td className="px-4 py-3.5 max-w-xs">
                     {isFailed && log.failureReason ? (
-                      <div className="text-xs text-rose-400 leading-tight">
-                        <span className="font-semibold">Reason:</span> {log.failureReason}
-                        <p className="text-2xs text-muted-foreground mt-0.5">Retries: {log.retryCount}/{log.maxRetries}</p>
+                      <div className="text-xs text-rose-300 leading-tight">
+                        <span className="font-bold text-rose-200">Reason:</span> {log.failureReason}
+                        <p className="text-2xs text-slate-400 mt-0.5">Retries: {log.retryCount}/{log.maxRetries}</p>
                       </div>
                     ) : (
-                      <span className="text-muted-foreground text-xs">—</span>
+                      <span className="text-slate-500 text-xs">—</span>
                     )}
                   </td>
 
                   {/* Timestamp */}
-                  <td className="px-4 py-3 text-2xs text-muted-foreground whitespace-nowrap">
+                  <td className="px-4 py-3.5 text-2xs text-slate-400 whitespace-nowrap">
                     {new Date(log.createdAt).toLocaleString()}
                   </td>
 
                   {/* Actions */}
-                  <td className="px-4 py-3 text-right whitespace-nowrap">
-                    <div className="inline-flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                  <td className="px-4 py-3.5 text-right whitespace-nowrap">
+                    <div className="inline-flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
                       {isFailed && (
                         <button
                           type="button"
                           disabled={isRetrying}
                           onClick={(e) => handleRetry(log, e)}
-                          className="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 text-xs font-semibold transition-all flex items-center gap-1 cursor-pointer min-w-16 justify-center"
+                          className="px-3 py-1 rounded-xl bg-gradient-to-r from-rose-500 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-rose-500/20 active:scale-95 min-w-18 justify-center"
                           data-testid={`table-retry-btn-${log.id}`}
                         >
                           <RefreshCw className={`w-3 h-3 ${isRetrying ? 'animate-spin' : ''}`} />
@@ -234,7 +230,7 @@ export function SuperadminCommunicationNotificationCenterLogsTable() {
                       <button
                         type="button"
                         onClick={() => setSelectedNotification(log)}
-                        className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                        className="p-1.5 rounded-xl text-slate-400 hover:text-indigo-300 hover:bg-slate-800/60 transition-colors"
                         title="View Full Timeline"
                       >
                         <Eye className="w-4 h-4" />

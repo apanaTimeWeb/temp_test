@@ -123,4 +123,6 @@ export interface SuperadminSupportTicketsKpiCardsProps {
   openCount: number;
   slaBreachCount: number;
   avgResponse: string;
+  totalCount?: number;
+  resolvedCount?: number;
 }

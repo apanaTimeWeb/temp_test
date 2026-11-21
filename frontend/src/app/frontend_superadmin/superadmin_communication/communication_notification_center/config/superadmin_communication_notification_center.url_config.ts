@@ -24,9 +24,6 @@ export const SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES = {
   templates: '/superadmin/superadmin_communication/communication_notification_center?tab=templates',
   logs: '/superadmin/superadmin_communication/communication_notification_center?tab=logs',
   usage: '/superadmin/superadmin_communication/communication_notification_center?tab=usage',
-  email: '/superadmin/superadmin_communication/communication_notification_center?tab=email',
-  sms: '/superadmin/superadmin_communication/communication_notification_center?tab=sms',
-  paymentReminders: '/superadmin/superadmin_communication/communication_notification_center?tab=payment-reminders',
   // Sibling routes for navigation reference
   notices: '/superadmin/superadmin_communication/communication_notices',
   whatsappIntegration: '/superadmin/superadmin_communication/communication_whatsapp_integration',

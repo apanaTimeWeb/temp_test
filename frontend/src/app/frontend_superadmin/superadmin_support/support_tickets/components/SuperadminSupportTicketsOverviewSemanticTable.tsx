@@ -204,7 +204,7 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer active:scale-[0.97]"
               disabled={activePage === 0}
               onClick={() => {
                 const nextPage = Math.max(0, activePage - 1);
@@ -227,7 +227,7 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
                     setPage(idx);
                     onPageChange?.(idx);
                   }}
-                  className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  className={`w-7 h-7 rounded-lg text-xs font-semibold transition-all cursor-pointer active:scale-[0.97] ${
                     activePage === idx ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-400 hover:text-white hover:bg-slate-800'
                   }`}
                 >
@@ -238,7 +238,7 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
 
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 disabled:opacity-40 disabled:cursor-not-allowed text-xs font-semibold transition-all cursor-pointer active:scale-[0.97]"
               disabled={activePage + 1 >= pageCount}
               onClick={() => {
                 const nextPage = Math.min(pageCount - 1, activePage + 1);

@@ -18,23 +18,24 @@ export default function SuperadminCommunicationNotificationCenterMain() {
 
   return (
     <div
-      className="w-full space-y-6"
+      className="relative isolate w-full space-y-6"
       data-testid="superadmin-communication-notification-center-main"
     >
+      {/* Cyber ambient glow spotlights */}
+      <div className="pointer-events-none absolute -top-24 right-10 -z-10 h-80 w-80 rounded-full bg-indigo-600/10 blur-3xl" />
+      <div className="pointer-events-none absolute top-48 -left-12 -z-10 h-72 w-72 rounded-full bg-purple-600/10 blur-3xl" />
+
       {/* Header */}
       <SuperadminCommunicationNotificationCenterHeader />
 
-      {/* Tabs */}
+      {/* Segmented Floating Tabs */}
       <SuperadminCommunicationNotificationCenterTabs />
 
-      {/* Dynamic Tab View */}
+      {/* Dynamic Tab Views */}
       {activeTab === 'overview' && <SuperadminCommunicationNotificationCenterOverview />}
       {activeTab === 'templates' && <SuperadminCommunicationNotificationCenterTemplatesView />}
       {activeTab === 'logs' && <SuperadminCommunicationNotificationCenterLogsTable />}
       {activeTab === 'usage' && <SuperadminCommunicationNotificationCenterUsageView />}
-      {activeTab === 'email' && <SuperadminCommunicationNotificationCenterTemplatesView />}
-      {activeTab === 'sms' && <SuperadminCommunicationNotificationCenterTemplatesView />}
-      {activeTab === 'payment-reminders' && <SuperadminCommunicationNotificationCenterOverview />}
 
       {/* Interactive Modals */}
       <SuperadminCommunicationNotificationCenterComposeModal />

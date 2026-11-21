@@ -479,7 +479,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowEscalateModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
                 title={t("COPY.ESCALATE_TICKET")}
               >
                 <Zap size={13} className="text-red-400" />
@@ -492,7 +492,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowReopenModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-purple-500/40 bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-purple-500/40 bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
                 title={t("COPY.REOPEN_TICKET")}
               >
                 <RotateCcw size={13} className="text-purple-400" />
@@ -502,7 +502,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowResolveModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-[0.97]"
                 title={t("COPY.RESOLVE_TICKET")}
               >
                 <CheckCircle2 size={13} className="text-emerald-400" />
@@ -573,7 +573,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
             <div className="flex items-center justify-end sm:justify-start lg:justify-end gap-2">
               <button
                 type="button"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-md shadow-indigo-950/40 transition-all cursor-pointer active:scale-95"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-md shadow-indigo-950/40 transition-all cursor-pointer active:scale-[0.97]"
                 onClick={() => {
                   onSave({
                     ...tkt,
@@ -638,7 +638,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                 <button
                   type="button"
                   onClick={handleRevokeAccess}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-red-500/40 bg-red-500/15 hover:bg-red-500/25 text-red-300 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-[0.97]"
                 >
                   <Lock size={12} />
                   <span>{t("COPY.REVOKE_ACCESS")}</span>
@@ -647,7 +647,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                 <button
                   type="button"
                   onClick={() => setShowGrantAccessModal(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-500/40 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-500/40 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-[0.97]"
                 >
                   <Key size={12} className="text-indigo-400" />
                   <span>{t("COPY.TIME_LIMITED_ACCESS")}</span>
@@ -662,7 +662,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
           <button
             type="button"
             onClick={() => setActiveTab('conversation')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
               activeTab === 'conversation'
                 ? 'bg-indigo-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -675,7 +675,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
           <button
             type="button"
             onClick={() => setActiveTab('internal_notes')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
               activeTab === 'internal_notes'
                 ? 'bg-amber-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -688,7 +688,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
           <button
             type="button"
             onClick={() => setActiveTab('attachments')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
               activeTab === 'attachments'
                 ? 'bg-sky-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -701,7 +701,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
           <button
             type="button"
             onClick={() => setActiveTab('sla_escalation')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap active:scale-[0.97] ${
               activeTab === 'sla_escalation'
                 ? 'bg-rose-600 text-white shadow-xs'
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -807,7 +807,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                     <button
                       type="button"
                       aria-pressed={!isInternalNote}
-                      className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                      className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
                         !isInternalNote ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
                       }`}
                       onClick={() => setIsInternalNote(false)}
@@ -819,7 +819,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
                     <button
                       type="button"
                       aria-pressed={isInternalNote}
-                      className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 ${
+                      className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
                         isInternalNote ? 'bg-amber-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
                       }`}
                       onClick={() => setIsInternalNote(true)}
@@ -866,7 +866,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
                     <button
                       type="button"
-                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
                         isInternalNote
                           ? 'bg-amber-600 hover:bg-amber-500 text-white'
                           : 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white'
@@ -1124,14 +1124,14 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowEscalateModal(false)}
-                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white"
+                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97]"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleEscalateSubmit}
-                className="px-4 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-bold text-white shadow-md cursor-pointer"
+                className="px-4 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-bold text-white shadow-md cursor-pointer active:scale-[0.97]"
               >
                 Confirm Escalation
               </button>
@@ -1182,14 +1182,14 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowResolveModal(false)}
-                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white"
+                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97]"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleResolveSubmit}
-                className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white shadow-md cursor-pointer"
+                className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white shadow-md cursor-pointer active:scale-[0.97]"
               >
                 Mark as Resolved
               </button>
@@ -1229,14 +1229,14 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowReopenModal(false)}
-                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white"
+                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97]"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleReopenSubmit}
-                className="px-4 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white shadow-md cursor-pointer"
+                className="px-4 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-xs font-bold text-white shadow-md cursor-pointer active:scale-[0.97]"
               >
                 Reopen Ticket
               </button>
@@ -1318,14 +1318,14 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
               <button
                 type="button"
                 onClick={() => setShowGrantAccessModal(false)}
-                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white"
+                className="px-3.5 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white active:scale-[0.97]"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleGrantAccessSubmit}
-                className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-xs font-bold text-white shadow-md cursor-pointer"
+                className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-xs font-bold text-white shadow-md cursor-pointer active:scale-[0.97]"
               >
                 {t("COPY.GRANT_ACCESS")}
               </button>
