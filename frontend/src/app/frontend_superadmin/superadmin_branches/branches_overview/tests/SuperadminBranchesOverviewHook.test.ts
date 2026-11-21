@@ -39,7 +39,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
         plan: 'Standard Plan',
         outstandingBooks: 0,
         memberDues: 0,
-        cashRegisterBalance: 0,
+        cashBalance: 0,
         isArchived: false,
         allowedModules: { bookCatalog: true },
       });
@@ -77,7 +77,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
         plan: 'Standard Plan',
         outstandingBooks: 0,
         memberDues: 0,
-        cashRegisterBalance: 0,
+        cashBalance: 0,
         isArchived: false,
         allowedModules: { bookCatalog: true, seatBooking: true },
       });
@@ -118,7 +118,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
         plan: 'Enterprise (Tier 1)',
         outstandingBooks: 0,
         memberDues: 0,
-        cashRegisterBalance: 0,
+        cashBalance: 0,
         isArchived: false,
         allowedModules: { books: true, members: true },
       });
@@ -172,7 +172,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
           plan: 'Standard Plan',
           outstandingBooks: 0,
           memberDues: 0,
-          cashRegisterBalance: 0,
+          cashBalance: 0,
           isArchived: false,
           allowedModules: {},
         });
