@@ -13,6 +13,8 @@ export const SUPERADMIN_SECURITY_API_KEYS = [
 export const SUPERADMIN_SECURITY_SESSIONS = [
   { id: 1, ip: '192.0.2.45', device: 'SAMPLE_DESKTOP_BROWSER', time: 'SAMPLE_ACTIVE', location: 'SAMPLE_REGION_A', user: 'SAMPLE_SUPER_ADMIN' },
   { id: 2, ip: '198.51.100.12', device: 'SAMPLE_MOBILE_BROWSER', time: 'SAMPLE_TIME_2_HOURS_AGO', location: 'SAMPLE_REGION_B', user: 'SAMPLE_ADMIN' },
+  { id: 3, ip: '192.0.2.88', device: 'SAMPLE_DESKTOP_BROWSER', time: 'SAMPLE_ACTIVE', location: 'SAMPLE_REGION_A', user: 'Patna Central - Library Admin' },
+  { id: 4, ip: '198.51.100.44', device: 'SAMPLE_MOBILE_BROWSER', time: 'SAMPLE_TIME_10_MINUTES_AGO', location: 'SAMPLE_REGION_B', user: 'Delhi Central - Branch Staff' },
 ] as const;
 
 export const SUPERADMIN_SECURITY_FAILED_LOGINS = [

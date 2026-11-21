@@ -3,7 +3,7 @@ import SuperadminSecurityActiveSessionsEmptyState from '@/app/frontend_superadmi
 import { toast } from 'sonner';
 /** Responsibility: renders the superadmin_security overview route UI; the module Main remains a thin composition boundary. */
 /** Data-Flow: canonical route -> SuperadminSecurityActiveSessionsPageClient -> feature-local sample fixtures and local UI state -> preview rendering; no persistence is claimed. */
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -29,9 +29,24 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
   const tCopy = useTranslations('SUPERADMIN_SECURITY');
   const securityRows: (typeof SUPERADMIN_SECURITY_SESSIONS)[number][] = [...SUPERADMIN_SECURITY_SESSIONS];
   const [activeTab] = useState("Active Sessions");
+  const [sessionScope, setSessionScope] = useState<'all' | 'superadmin' | 'library_admin'>('all');
   const showToast = (msg: string) => {
     toast.message(msg, { id: 'superadmin:superadmin_security:SuperadminSecurityActiveSessionsPageClient:feedback' });
   };
+
+  const filteredSessions = useMemo(() => {
+    if (sessionScope === 'superadmin') {
+      return SUPERADMIN_SECURITY_SESSIONS.filter(
+        (s) => s.user.toLowerCase().includes('super') || s.user === 'SAMPLE_SUPER_ADMIN'
+      );
+    }
+    if (sessionScope === 'library_admin') {
+      return SUPERADMIN_SECURITY_SESSIONS.filter(
+        (s) => !s.user.toLowerCase().includes('super') && s.user !== 'SAMPLE_SUPER_ADMIN'
+      );
+    }
+    return [...SUPERADMIN_SECURITY_SESSIONS];
+  }, [sessionScope]);
 
   const loginForm = useForm<SuperadminSecurityLoginRules>({
     resolver: zodResolver(SUPERADMIN_SECURITY_LOGIN_SCHEMA),
@@ -120,12 +135,57 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
         aria-label="Active Sessions Settings"
         tabIndex={0}
       >
+        {/* Scope Filter Controls */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 px-4 py-3 sm:px-6 bg-card/40">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-semibold text-slate-400">Filter Scope:</span>
+            <div className="inline-flex rounded-xl bg-slate-900/80 p-1 border border-border/60">
+              <button
+                type="button"
+                onClick={() => setSessionScope('all')}
+                className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
+                  sessionScope === 'all'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                All Sessions ({SUPERADMIN_SECURITY_SESSIONS.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setSessionScope('superadmin')}
+                className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
+                  sessionScope === 'superadmin'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Superadmin
+              </button>
+              <button
+                type="button"
+                onClick={() => setSessionScope('library_admin')}
+                className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
+                  sessionScope === 'library_admin'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Library Admins & Staff
+              </button>
+            </div>
+          </div>
+          <span className="text-xs font-mono text-indigo-300 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">
+            Showing {filteredSessions.length} active sessions
+          </span>
+        </div>
+
         <SuperadminSecurityActiveSessionsOperationsPanels
           activeTab={activeTab}
           newIp={newIp}
           setNewIp={setNewIp}
           ipRules={SUPERADMIN_SECURITY_IP_RULES}
-          sessions={SUPERADMIN_SECURITY_SESSIONS}
+          sessions={filteredSessions}
           failedLogins={SUPERADMIN_SECURITY_FAILED_LOGINS}
           handleAddIp={handleAddIp}
           handleForceLogout={handleForceLogout}
