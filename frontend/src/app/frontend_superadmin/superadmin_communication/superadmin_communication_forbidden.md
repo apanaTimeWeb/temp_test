@@ -11,4 +11,4 @@
 
 ## Leaf boundary
 
-`communication_notices`, `communication_notification_center`, `communication_whatsapp_logs`, `communication_whatsapp_templates`
+`communication_notices`, `communication_notification_center`

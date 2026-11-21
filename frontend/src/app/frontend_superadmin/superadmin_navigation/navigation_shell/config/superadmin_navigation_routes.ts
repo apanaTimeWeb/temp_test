@@ -81,8 +81,8 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   superadmin_communication: '/superadmin/superadmin_communication/communication_notification_center',
   communication_notification_center: '/superadmin/superadmin_communication/communication_notification_center',
   communication_notices: '/superadmin/superadmin_communication/communication_notices',
-  communication_whatsapp_logs: '/superadmin/superadmin_communication/communication_whatsapp_logs',
-  communication_whatsapp_templates: '/superadmin/superadmin_communication/communication_whatsapp_templates',
+  communication_whatsapp_logs: '/superadmin/superadmin_communication/communication_notification_center?tab=logs',
+  communication_whatsapp_templates: '/superadmin/superadmin_communication/communication_notification_center?tab=templates',
 
   // 13 Integration & API Management
   superadmin_integrations: '/superadmin/superadmin_integrations/integrations_overview',

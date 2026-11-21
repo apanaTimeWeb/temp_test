@@ -25,8 +25,6 @@ Notices, notifications and WhatsApp integration/templates/logs.
 |---|---|---|
 | `communication_notices` | `/superadmin/superadmin_communication/communication_notices` | Leaf-local documentation trio and local implementation remain authoritative. |
 | `communication_notification_center` | `/superadmin/superadmin_communication/communication_notification_center` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `communication_whatsapp_logs` | `/superadmin/superadmin_communication/communication_whatsapp_logs` | Leaf-local documentation trio and local implementation remain authoritative. |
-| `communication_whatsapp_templates` | `/superadmin/superadmin_communication/communication_whatsapp_templates` | Leaf-local documentation trio and local implementation remain authoritative. |
 
 ## API and data contracts
 

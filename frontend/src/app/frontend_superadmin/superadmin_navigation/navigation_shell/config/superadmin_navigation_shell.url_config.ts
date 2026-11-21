@@ -78,8 +78,8 @@ const SUPERADMIN_COMMUNICATION_URLS = {
   PAGE: '/superadmin/superadmin_communication',
   NOTICES: '/superadmin/superadmin_communication/communication_notices',
   NOTIFICATION_CENTER: '/superadmin/superadmin_communication/communication_notification_center',
-  WHATSAPP_LOGS: '/superadmin/superadmin_communication/communication_whatsapp_logs',
-  WHATSAPP_TEMPLATES: '/superadmin/superadmin_communication/communication_whatsapp_templates',
+  WHATSAPP_LOGS: '/superadmin/superadmin_communication/communication_notification_center?tab=logs',
+  WHATSAPP_TEMPLATES: '/superadmin/superadmin_communication/communication_notification_center?tab=templates',
 } as const;
 
 

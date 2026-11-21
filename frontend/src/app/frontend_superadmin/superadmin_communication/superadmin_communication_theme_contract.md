@@ -19,7 +19,7 @@ This domain root is a route shell and does not declare new business-specific vis
 
 ## Leaf contracts
 
-`communication_notices`, `communication_notification_center`, `communication_whatsapp_logs`, `communication_whatsapp_templates`
+`communication_notices`, `communication_notification_center`
 
 ## Module Semantic Token Inventory (source-reconciled v19)
 

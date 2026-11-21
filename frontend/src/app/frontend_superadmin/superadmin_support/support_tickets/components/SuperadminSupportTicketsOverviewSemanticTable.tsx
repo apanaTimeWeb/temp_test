@@ -14,16 +14,16 @@ export type { SemanticCellParams, SemanticColumnDef } from '@/app/frontend_super
 
 function getColumnWidthClass(width?: number, minWidth?: number, field?: string): string {
   const key = (field ?? '').toLowerCase();
-  if (/action|actions|operation|operations/.test(key)) return 'w-52 min-w-[200px] text-right';
-  if (/status|role/.test(key)) return 'w-32 text-center';
-  if (/priority|severity/.test(key)) return 'w-28 text-center';
-  if (/date|time|created|updated|joined|lastactive|lastlogin|age/.test(key)) return 'w-28 text-center';
-  if (/amount|price|revenue|mrr|balance|total|payment|students|count/.test(key)) return 'w-32 text-right';
-  if (/^id$|_id$|id$|reference|ref$|txn/.test(key)) return 'w-28 text-left';
-  if (/name|subject|title|description|message/.test(key)) return 'min-w-[280px] text-left';
-  if (width !== undefined) return width <= 100 ? 'w-28' : width <= 140 ? 'w-32' : width <= 180 ? 'w-40' : 'w-48';
-  if (minWidth !== undefined) return minWidth <= 100 ? 'min-w-28' : minWidth <= 140 ? 'min-w-36' : minWidth <= 180 ? 'min-w-44' : 'min-w-56';
-  return 'min-w-32';
+  if (/action|actions|operation|operations/.test(key)) return 'w-36 min-w-[125px] text-right';
+  if (/status|role/.test(key)) return 'w-24 min-w-[90px] text-center';
+  if (/priority|severity/.test(key)) return 'w-24 min-w-[85px] text-center';
+  if (/date|time|created|updated|joined|lastactive|lastlogin|age/.test(key)) return 'w-20 min-w-[65px] text-center';
+  if (/amount|price|revenue|mrr|balance|total|payment|students|count/.test(key)) return 'w-28 text-right';
+  if (/^id$|_id$|id$|reference|ref$|txn/.test(key)) return 'w-24 text-left';
+  if (/name|subject|title|description|message/.test(key)) return 'min-w-[160px] max-w-[320px] text-left';
+  if (width !== undefined) return width <= 100 ? 'w-20' : width <= 140 ? 'w-28' : width <= 180 ? 'w-36' : 'w-44';
+  if (minWidth !== undefined) return minWidth <= 100 ? 'min-w-20' : minWidth <= 140 ? 'min-w-28' : minWidth <= 180 ? 'min-w-36' : 'min-w-44';
+  return 'min-w-24';
 }
 
 /**
@@ -97,7 +97,7 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
                 <th
                   key={field}
                   scope="col"
-                  className={`border-b border-border px-4 py-3.5 font-semibold text-xs uppercase tracking-wider text-slate-300 ${isRight ? 'text-right' : isCenter ? 'text-center' : 'text-left'} ${getColumnWidthClass(column.width, column.minWidth, field)}`}
+                  className={`border-b border-border px-3 py-2.5 font-semibold text-xs uppercase tracking-wider text-slate-300 ${isRight ? 'text-right' : isCenter ? 'text-center' : 'text-left'} ${getColumnWidthClass(column.width, column.minWidth, field)}`}
                 >
                   {canSort ? (
                     <button
@@ -155,7 +155,7 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
                 }}
                 tabIndex={onRowClick ? 0 : undefined}
                 role={onRowClick ? 'button' : undefined}
-                className={`border-b border-border/40 last:border-b-0 hover:bg-indigo-500/5 transition-colors ${Object.entries(rowClassRules ?? {})
+                className={`border-b border-border/40 last:border-b-0 hover:bg-indigo-500/10 transition-colors ${onRowClick ? 'cursor-pointer' : ''} ${Object.entries(rowClassRules ?? {})
                   .filter(([, matches]) => matches({ data: row }))
                   .map(([className]) => className)
                   .join(' ')}`}
@@ -179,7 +179,7 @@ export default function SuperadminSupportTicketsOverviewSemanticTable<T extends 
                     : value;
                   const cellClass = typeof column.cellClass === 'function' ? column.cellClass() : column.cellClass;
                   return (
-                    <td key={field} data-label={column.headerName ?? field} className={`px-4 py-3 align-middle text-slate-200 ${alignTdClass} ${cellClass ?? ''}`}>
+                    <td key={field} data-label={column.headerName ?? field} className={`px-3 py-2.5 align-middle text-slate-200 ${alignTdClass} ${cellClass ?? ''}`}>
                       {displayValue(content as ReactNode)}
                     </td>
                   );
