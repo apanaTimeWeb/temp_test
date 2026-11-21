@@ -57,21 +57,21 @@ export const SuperadminIntegrationsOverviewApiKeysPanel: React.FC<
   return (
     <div className="space-y-6" data-testid="superadmin-apikeys-panel">
       {/* ── Section 1: Active API Keys ── */}
-      <div className="rounded-2xl border border-border/80 bg-card p-5 space-y-4 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/80">
+      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 p-5 space-y-4 shadow-xl backdrop-blur-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-indigo-500/20">
           <div>
-            <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+            <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
               <Key size={16} className="text-purple-400" />
               Machine & Platform API Keys
             </h2>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-slate-400 mt-0.5">
               Keys are securely stored as hashed credentials. Secret keys can be rotated or revoked with immediate effect.
             </p>
           </div>
           <button
             type="button"
             onClick={() => setIsGenerateModalOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3.5 py-1.5 text-xs font-semibold text-on-primary hover:opacity-90 cursor-pointer transition-opacity min-w-32 justify-center shadow-xs"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 px-3.5 py-1.5 text-xs font-semibold text-white cursor-pointer transition-opacity min-w-32 justify-center shadow-md shadow-indigo-500/25"
           >
             <Plus size={14} /> Generate API Key
           </button>
@@ -79,7 +79,7 @@ export const SuperadminIntegrationsOverviewApiKeysPanel: React.FC<
 
         <div className="space-y-3">
           {apiKeys.length === 0 ? (
-            <p className="text-xs text-muted-foreground py-4 text-center">
+            <p className="text-xs text-slate-400 py-6 text-center">
               No API keys generated yet.
             </p>
           ) : (

@@ -7,7 +7,6 @@ import {
   Activity,
   Cable,
   CheckCircle2,
-  Gauge,
   Key,
   Layers,
   RefreshCw,
@@ -90,86 +89,103 @@ export const SuperadminIntegrationsOverviewMain: React.FC = () => {
 
   return (
     <div className="space-y-6" data-testid="superadmin-integrations-main">
-      {/* ── Top Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-border/80">
-        <div className="flex items-center gap-3">
-          <span className="p-2.5 rounded-2xl bg-purple-bg text-purple-text shadow-xs">
-            <Cable size={24} strokeWidth={2} />
-          </span>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              13. Integration & API Management
-              <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-purple-bg text-purple-text font-semibold">
-                SaaS Enterprise Hub
-              </span>
-            </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Control payment gateways, SMS, WhatsApp, Email, Cloud Storage, Barcode/QR, Biometrics, Webhooks & API keys.
-            </p>
+      {/* ── Hero Header: Cyber-Luxury Dark Theme ── */}
+      <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-[#180a2b]/90 via-[#0a0d24] to-[#060810] p-5 sm:p-6 shadow-xl relative overflow-hidden">
+        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-purple-500/10 blur-2xl" />
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+          <div className="flex items-start sm:items-center gap-3.5">
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 text-purple-300 border border-purple-500/30 shadow-inner shrink-0">
+              <Cable size={26} strokeWidth={2.2} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-100 flex items-center gap-2">
+                  13. Integration & API Management
+                </h1>
+                <span className="text-[11px] px-2.5 py-0.5 rounded-full border border-purple-500/30 bg-purple-500/15 text-purple-300 font-semibold shadow-xs">
+                  SaaS Enterprise Hub
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+                Control payment gateways, SMS, WhatsApp, Email, Cloud Storage, Barcode/QR, Biometrics, Webhooks & API keys.
+              </p>
+            </div>
           </div>
-        </div>
 
-        {/* Secondary Navigation Top Tab Bar */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-card border border-border overflow-x-auto" role="tablist">
-          {[
-            { id: 'gateways', label: 'Providers', icon: Layers },
-            { id: 'webhooks', label: 'Webhooks', icon: Webhook, badge: summary?.failedWebhooksCount ? `${summary.failedWebhooksCount}` : undefined },
-            { id: 'api-keys', label: 'API Keys', icon: Key },
-            { id: 'logs', label: 'Live Logs', icon: Activity },
-            { id: 'entitlements', label: 'Plan Access', icon: ShieldCheck },
-          ].map((tab) => {
-            const isActive = activeTab === tab.id;
-            const Icon = tab.icon;
-            return (
-              <button
-                key={tab.id}
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => handleTabSelect(tab.id as any)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer whitespace-nowrap ${
-                  isActive
-                    ? 'bg-purple-600 text-white shadow-xs font-bold'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
-                }`}
-              >
-                <Icon size={14} />
-                <span>{tab.label}</span>
-                {tab.badge && (
-                  <span className="px-1.5 py-0.2 rounded-full bg-danger text-on-danger text-[10px] font-bold">
-                    {tab.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+          {/* Secondary Navigation Top Tab Bar */}
+          <div
+            className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-900/90 border border-indigo-500/25 backdrop-blur-md shadow-lg overflow-x-auto shrink-0"
+            role="tablist"
+          >
+            {[
+              { id: 'gateways', label: 'Providers', icon: Layers },
+              { id: 'webhooks', label: 'Webhooks', icon: Webhook, badge: summary?.failedWebhooksCount ? `${summary.failedWebhooksCount}` : undefined },
+              { id: 'api-keys', label: 'API Keys', icon: Key },
+              { id: 'logs', label: 'Live Logs', icon: Activity },
+              { id: 'entitlements', label: 'Plan Access', icon: ShieldCheck },
+            ].map((tab) => {
+              const isActive = activeTab === tab.id;
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => handleTabSelect(tab.id as any)}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer whitespace-nowrap ${
+                    isActive
+                      ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold shadow-md shadow-indigo-500/25'
+                      : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'
+                  }`}
+                >
+                  <Icon size={14} />
+                  <span>{tab.label}</span>
+                  {tab.badge && (
+                    <span className="px-1.5 py-0.2 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold">
+                      {tab.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* ── KPI Summary Statistics Cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
-        <div className="rounded-2xl border border-border/80 bg-card p-4 space-y-1 shadow-xs">
-          <span className="text-[11px] font-medium text-muted-foreground block">Total Providers</span>
-          <div className="text-lg font-bold text-foreground">{summary?.totalGateways ?? 12}</div>
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/90 via-[#090d24]/90 to-[#050714]/90 p-4 space-y-1 shadow-lg backdrop-blur-md relative overflow-hidden">
+          <div className="pointer-events-none absolute -right-6 -top-6 h-16 w-16 rounded-full bg-indigo-500/10 blur-xl" />
+          <span className="text-[11px] font-medium text-slate-400 block">Total Providers</span>
+          <div className="text-xl font-bold text-slate-100">{summary?.totalGateways ?? 11}</div>
         </div>
-        <div className="rounded-2xl border border-border/80 bg-card p-4 space-y-1 shadow-xs">
-          <span className="text-[11px] font-medium text-muted-foreground block">Active Live</span>
-          <div className="text-lg font-bold text-success-text flex items-center gap-1">
-            <CheckCircle2 size={16} /> {summary?.activeGateways ?? 10}
+
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/90 via-[#090d24]/90 to-[#050714]/90 p-4 space-y-1 shadow-lg backdrop-blur-md relative overflow-hidden">
+          <div className="pointer-events-none absolute -right-6 -top-6 h-16 w-16 rounded-full bg-emerald-500/10 blur-xl" />
+          <span className="text-[11px] font-medium text-slate-400 block">Active Live</span>
+          <div className="text-xl font-bold text-emerald-400 flex items-center gap-1.5">
+            <CheckCircle2 size={16} /> {summary?.activeGateways ?? 9}
           </div>
         </div>
-        <div className="rounded-2xl border border-border/80 bg-card p-4 space-y-1 shadow-xs">
-          <span className="text-[11px] font-medium text-muted-foreground block">Failed Retries Queue</span>
-          <div className="text-lg font-bold text-warning-text flex items-center gap-1">
+
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/90 via-[#090d24]/90 to-[#050714]/90 p-4 space-y-1 shadow-lg backdrop-blur-md relative overflow-hidden">
+          <div className="pointer-events-none absolute -right-6 -top-6 h-16 w-16 rounded-full bg-amber-500/10 blur-xl" />
+          <span className="text-[11px] font-medium text-slate-400 block">Failed Retries Queue</span>
+          <div className="text-xl font-bold text-amber-400 flex items-center gap-1.5">
             <RefreshCw size={16} /> {summary?.failedWebhooksCount ?? 2}
           </div>
         </div>
-        <div className="rounded-2xl border border-border/80 bg-card p-4 space-y-1 shadow-xs">
-          <span className="text-[11px] font-medium text-muted-foreground block">Active API Keys</span>
-          <div className="text-lg font-bold text-foreground">{summary?.activeApiKeysCount ?? 4}</div>
+
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/90 via-[#090d24]/90 to-[#050714]/90 p-4 space-y-1 shadow-lg backdrop-blur-md relative overflow-hidden">
+          <div className="pointer-events-none absolute -right-6 -top-6 h-16 w-16 rounded-full bg-purple-500/10 blur-xl" />
+          <span className="text-[11px] font-medium text-slate-400 block">Active API Keys</span>
+          <div className="text-xl font-bold text-purple-300">{summary?.activeApiKeysCount ?? 2}</div>
         </div>
-        <div className="rounded-2xl border border-border/80 bg-card p-4 space-y-1 shadow-xs col-span-2 sm:col-span-1">
-          <span className="text-[11px] font-medium text-muted-foreground block">API Calls Today</span>
-          <div className="text-lg font-bold text-purple-400">
+
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/90 via-[#090d24]/90 to-[#050714]/90 p-4 space-y-1 shadow-lg backdrop-blur-md relative overflow-hidden col-span-2 sm:col-span-1">
+          <div className="pointer-events-none absolute -right-6 -top-6 h-16 w-16 rounded-full bg-cyan-500/10 blur-xl" />
+          <span className="text-[11px] font-medium text-slate-400 block">API Calls Today</span>
+          <div className="text-xl font-bold text-cyan-400">
             {(summary?.todayApiRequestsCount ?? 148290).toLocaleString()}
           </div>
         </div>

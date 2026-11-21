@@ -4,6 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SuperadminIntegrationsOverviewMain } from '../components/SuperadminIntegrationsOverviewMain';
+import { useSuperadminIntegrationsOverviewStore } from '../state/useSuperadminIntegrationsOverviewStore';
 import { setupIntegrationsOverviewMockServer } from './harness/bootstrap';
 import SuperadminIntegrationsOverviewHarness from './harness/SuperadminIntegrationsOverviewHarness';
 
@@ -25,6 +26,18 @@ setupIntegrationsOverviewMockServer();
 describe('Superadmin Integrations Overview Module Integration', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    useSuperadminIntegrationsOverviewStore.setState({
+      activeTab: 'gateways',
+      selectedCategory: 'all',
+      searchQuery: '',
+      selectedGateway: null,
+      isConfigModalOpen: false,
+      isWebhookModalOpen: false,
+      isApiKeyModalOpen: false,
+      newlyCreatedKeyResult: null,
+      selectedLogItem: null,
+      copiedId: null,
+    });
   });
 
   it('renders top heading, subtitle, and KPI summary stats', async () => {
@@ -168,5 +181,53 @@ describe('Superadmin Integrations Overview Module Integration', () => {
       expect(screen.getByText(/Starter Single Branch/i)).toBeInTheDocument();
       expect(screen.getByText(/Enterprise SaaS Unlimited/i)).toBeInTheDocument();
     });
+  });
+
+  it('triggers test ping and toggle mutation on a provider gateway', async () => {
+    render(
+      <SuperadminIntegrationsOverviewHarness>
+        <SuperadminIntegrationsOverviewMain />
+      </SuperadminIntegrationsOverviewHarness>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Razorpay Payment Gateway/i)).toBeInTheDocument();
+    });
+
+    const pingButtons = screen.getAllByRole('button', { name: /Ping/i });
+    expect(pingButtons.length).toBeGreaterThan(0);
+    fireEvent.click(pingButtons[0]);
+
+    // Check gateway card has toggle checkbox
+    const card = screen.getByTestId('gateway-card-gw_razorpay');
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    expect(checkbox).toBeInTheDocument();
+    if (checkbox) {
+      fireEvent.click(checkbox);
+    }
+  });
+
+  it('allows opening and interacting with the gateway config modal', async () => {
+    render(
+      <SuperadminIntegrationsOverviewHarness>
+        <SuperadminIntegrationsOverviewMain />
+      </SuperadminIntegrationsOverviewHarness>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(/Razorpay Payment Gateway/i)).toBeInTheDocument();
+    });
+
+    const configButtons = screen.getAllByRole('button', { name: /Configure/i });
+    expect(configButtons.length).toBeGreaterThan(0);
+    fireEvent.click(configButtons[0]);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Configure Razorpay Payment Gateway/i)).toBeInTheDocument();
+      expect(screen.getByText(/Save Config/i)).toBeInTheDocument();
+    });
+
+    const cancelButton = screen.getByRole('button', { name: /Cancel/i });
+    fireEvent.click(cancelButton);
   });
 });

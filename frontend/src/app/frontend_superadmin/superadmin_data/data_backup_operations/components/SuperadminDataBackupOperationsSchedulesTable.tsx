@@ -62,7 +62,7 @@ export function SuperadminDataBackupOperationsSchedulesTable({
                 <th className="py-3 px-4">Retention</th>
                 <th className="py-3 px-4">Next Run</th>
                 <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-3 px-4 text-right">Switch Control</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -90,27 +90,58 @@ export function SuperadminDataBackupOperationsSchedulesTable({
                   </td>
                   <td className="py-3.5 px-4">
                     {schedule.isActive ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-400">
-                        <CheckCircle2 size={11} /> Active
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        ACTIVE
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-neutral-800 text-muted-foreground">
-                        <PauseCircle size={11} /> Paused
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                        PAUSED
                       </span>
                     )}
                   </td>
                   <td className="py-3.5 px-4 text-right">
-                    <button
-                      type="button"
-                      onClick={() => onToggleStatus(schedule.id, !schedule.isActive)}
-                      className={`text-xs font-semibold px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
-                        schedule.isActive
-                          ? 'text-amber-400 hover:bg-amber-500/10'
-                          : 'text-emerald-400 hover:bg-emerald-500/10'
-                      }`}
-                    >
-                      {schedule.isActive ? 'Pause' : 'Resume'}
-                    </button>
+                    <div className="flex flex-col items-end gap-1">
+                      {/* Tactile Mini Switch matching System Health Monitoring */}
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={schedule.isActive}
+                        aria-label={schedule.isActive ? `Pause backup policy for ${schedule.name}` : `Resume backup policy for ${schedule.name}`}
+                        onClick={() => onToggleStatus(schedule.id, !schedule.isActive)}
+                        className={`relative flex items-center w-[58px] h-[28px] p-[2px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+                          schedule.isActive
+                            ? 'bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.45),inset_0_1px_2px_rgba(0,0,0,0.25)]'
+                            : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
+                        }`}
+                      >
+                        {/* Internal circuit groove */}
+                        <div
+                          className={`pointer-events-none absolute inset-x-2 top-1/2 -translate-y-1/2 h-1 rounded-full transition-all duration-300 ${
+                            schedule.isActive
+                              ? 'bg-gradient-to-r from-emerald-300 to-teal-200 opacity-70 shadow-[0_0_4px_rgba(16,185,129,0.8)]'
+                              : 'bg-slate-950/80 opacity-40'
+                          }`}
+                        />
+
+                        {/* Tactile White Chrome Knob with Power Icon ⏻ */}
+                        <span
+                          aria-hidden="true"
+                          className={`relative z-10 flex items-center justify-center w-[24px] h-[24px] min-w-[24px] min-h-[24px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_2px_6px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
+                            schedule.isActive
+                              ? 'translate-x-[30px] text-emerald-600'
+                              : 'translate-x-0 text-slate-800'
+                          }`}
+                        >
+                          <span className="text-[11px] leading-none select-none font-bold">⏻</span>
+                        </span>
+                      </button>
+
+                      <span className="font-mono text-[9px] font-extrabold uppercase tracking-wider text-slate-400 select-none">
+                        {schedule.isActive ? 'CLICK TO PAUSE' : 'CLICK TO ARM'}
+                      </span>
+                    </div>
                   </td>
                 </tr>
               ))}

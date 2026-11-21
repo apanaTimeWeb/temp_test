@@ -3,7 +3,7 @@
 // DATA FLOW: Logs array -> SuperadminIntegrationsOverviewLogsPanel -> Inspector Modal.
 'use client';
 
-import { Activity, Clock, Copy, Eye, Filter, Search, X } from 'lucide-react';
+import { Activity, Copy, Eye, Filter, Search, X } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import type { IntegrationLogItem } from '../types/superadmin_integrations_overview.types';
 import {
@@ -54,15 +54,15 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
       {/* Search & Provider Filter */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Filter size={15} className="text-muted-foreground" />
+          <Filter size={15} className="text-slate-400" />
           <select
             value={filterProvider}
             onChange={(e) => setFilterProvider(e.target.value)}
-            className="rounded-xl border border-border bg-card px-3 py-1.5 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+            className="rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-1.5 text-xs text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
           >
-            <option value="all">All Providers</option>
+            <option value="all" className="bg-slate-900 text-slate-100">All Providers</option>
             {providersList.map((p) => (
-              <option key={p} value={p}>
+              <option key={p} value={p} className="bg-slate-900 text-slate-100">
                 {p}
               </option>
             ))}
@@ -70,22 +70,22 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
         </div>
 
         <div className="relative w-full sm:w-72">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search endpoint, request ID..."
-            className="w-full rounded-xl border border-border bg-card pl-9 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 pl-9 pr-3 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-border/80 bg-card overflow-hidden shadow-xs">
+      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-muted/40 border-b border-border/80 font-semibold text-muted-foreground">
+            <thead className="bg-slate-950/90 border-b border-indigo-500/20 font-semibold text-slate-300">
               <tr>
                 <th className="px-4 py-3">Timestamp</th>
                 <th className="px-4 py-3">Provider</th>
@@ -96,10 +96,10 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
                 <th className="px-4 py-3 text-right">Payload</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/60">
+            <tbody className="divide-y divide-indigo-500/10">
               {filteredLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
+                  <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
                     No integration log entries match the filter criteria.
                   </td>
                 </tr>
@@ -110,21 +110,21 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
                   return (
                     <tr
                       key={log.id}
-                      className="hover:bg-muted/20 transition-colors cursor-pointer"
+                      className="hover:bg-indigo-950/30 transition-colors cursor-pointer"
                       onClick={() => onSelectLog(log)}
                     >
-                      <td className="px-4 py-3 font-mono text-[11px] text-muted-foreground whitespace-nowrap">
+                      <td className="px-4 py-3 font-mono text-[11px] text-slate-400 whitespace-nowrap">
                         {formatRelativeTimestamp(log.timestamp)}
                       </td>
-                      <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">
+                      <td className="px-4 py-3 font-medium text-slate-100 whitespace-nowrap">
                         {log.provider}
                       </td>
                       <td className="px-4 py-3">
-                        <span className="capitalize text-[11px] px-2 py-0.5 rounded-md bg-muted text-muted-foreground font-mono">
+                        <span className="capitalize text-[11px] px-2 py-0.5 rounded-md bg-slate-900 border border-indigo-500/20 text-slate-300 font-mono">
                           {log.direction}
                         </span>
                       </td>
-                      <td className="px-4 py-3 font-mono text-xs text-foreground">
+                      <td className="px-4 py-3 font-mono text-xs text-slate-200">
                         <span className="font-bold text-purple-400 mr-1.5">{log.method}</span>
                         <span>{log.endpoint}</span>
                       </td>
@@ -145,7 +145,7 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
                             e.stopPropagation();
                             onSelectLog(log);
                           }}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-border bg-card text-foreground hover:bg-muted text-[11px] font-medium cursor-pointer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl border border-indigo-500/20 bg-slate-800/80 text-slate-200 hover:bg-slate-700/80 hover:text-white text-[11px] font-medium cursor-pointer transition-colors shadow-xs"
                         >
                           <Eye size={12} /> Inspect
                         </button>
@@ -162,23 +162,23 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
       {/* Payload Inspector Modal */}
       {selectedLog && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
         >
-          <div className="relative w-full max-w-2xl rounded-2xl border border-border bg-card p-6 shadow-dialog text-foreground animate-in zoom-in-95 duration-150">
-            <div className="flex items-start justify-between pb-3 border-b border-border/80">
+          <div className="relative w-full max-w-2xl rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in zoom-in-95 duration-150">
+            <div className="flex items-start justify-between pb-3 border-b border-indigo-500/20">
               <div>
-                <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
                   <Activity size={16} className="text-purple-400" />
                   Integration Log Payload Inspector
                 </h3>
-                <p className="text-xs font-mono text-muted-foreground mt-0.5">Request ID: {selectedLog.requestId}</p>
+                <p className="text-xs font-mono text-slate-400 mt-0.5">Request ID: {selectedLog.requestId}</p>
               </div>
               <button
                 type="button"
                 onClick={() => onSelectLog(null)}
-                className="text-muted-foreground hover:text-foreground"
+                className="text-slate-400 hover:text-slate-100 cursor-pointer transition-colors p-1"
               >
                 <X size={16} />
               </button>
@@ -186,38 +186,38 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
 
             <div className="mt-4 space-y-4 text-xs max-h-[70vh] overflow-y-auto pr-1">
               {/* Metadata row */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 rounded-xl border border-border/80 bg-muted/20 p-3 font-mono text-[11px]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 rounded-xl border border-indigo-500/20 bg-slate-950/70 p-3 font-mono text-[11px] shadow-inner">
                 <div>
-                  <span className="text-muted-foreground block text-[10px]">Provider:</span>
-                  <span className="font-semibold text-foreground">{selectedLog.provider}</span>
+                  <span className="text-slate-400 block text-[10px]">Provider:</span>
+                  <span className="font-semibold text-slate-100">{selectedLog.provider}</span>
                 </div>
                 <div>
-                  <span className="text-muted-foreground block text-[10px]">Method:</span>
+                  <span className="text-slate-400 block text-[10px]">Method:</span>
                   <span className="font-semibold text-purple-400">{selectedLog.method}</span>
                 </div>
                 <div>
-                  <span className="text-muted-foreground block text-[10px]">Status:</span>
-                  <span className="font-semibold text-foreground">{selectedLog.statusCode}</span>
+                  <span className="text-slate-400 block text-[10px]">Status:</span>
+                  <span className="font-semibold text-slate-100">{selectedLog.statusCode}</span>
                 </div>
                 <div>
-                  <span className="text-muted-foreground block text-[10px]">Latency:</span>
-                  <span className="font-semibold text-foreground">{selectedLog.latencyMs} ms</span>
+                  <span className="text-slate-400 block text-[10px]">Latency:</span>
+                  <span className="font-semibold text-slate-100">{selectedLog.latencyMs} ms</span>
                 </div>
               </div>
 
               {/* Request Payload */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-foreground">Request Payload Body</span>
+                  <span className="font-semibold text-slate-200">Request Payload Body</span>
                   <button
                     type="button"
                     onClick={() => handleCopy(selectedLog.requestPayload, 'req')}
-                    className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground cursor-pointer"
+                    className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-100 cursor-pointer"
                   >
                     <Copy size={11} /> {copiedSection === 'req' ? 'Copied' : 'Copy'}
                   </button>
                 </div>
-                <pre className="rounded-xl border border-border bg-muted/40 p-3 font-mono text-[11px] text-foreground overflow-x-auto">
+                <pre className="rounded-xl border border-indigo-500/20 bg-slate-950/90 p-3 font-mono text-[11px] text-purple-200 overflow-x-auto shadow-inner">
                   {selectedLog.requestPayload}
                 </pre>
               </div>
@@ -225,26 +225,26 @@ export const SuperadminIntegrationsOverviewLogsPanel: React.FC<
               {/* Response Payload */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-foreground">Response Payload Body</span>
+                  <span className="font-semibold text-slate-200">Response Payload Body</span>
                   <button
                     type="button"
                     onClick={() => handleCopy(selectedLog.responsePayload, 'res')}
-                    className="inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground cursor-pointer"
+                    className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-100 cursor-pointer"
                   >
                     <Copy size={11} /> {copiedSection === 'res' ? 'Copied' : 'Copy'}
                   </button>
                 </div>
-                <pre className="rounded-xl border border-border bg-muted/40 p-3 font-mono text-[11px] text-foreground overflow-x-auto">
+                <pre className="rounded-xl border border-indigo-500/20 bg-slate-950/90 p-3 font-mono text-[11px] text-purple-200 overflow-x-auto shadow-inner">
                   {selectedLog.responsePayload}
                 </pre>
               </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-border/80 flex justify-end">
+            <div className="mt-4 pt-3 border-t border-indigo-500/20 flex justify-end">
               <button
                 type="button"
                 onClick={() => onSelectLog(null)}
-                className="px-4 py-2 rounded-xl bg-primary text-on-primary font-semibold text-xs hover:opacity-90 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-semibold text-xs shadow-md shadow-indigo-500/25 cursor-pointer transition-opacity"
               >
                 Close Inspector
               </button>

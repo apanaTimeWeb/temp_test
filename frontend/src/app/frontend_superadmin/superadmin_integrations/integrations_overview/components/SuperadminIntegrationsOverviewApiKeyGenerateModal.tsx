@@ -51,20 +51,20 @@ export const SuperadminIntegrationsOverviewApiKeyGenerateModal: React.FC<
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
       aria-labelledby="api-key-modal-title"
     >
-      <div className="relative w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-dialog text-foreground animate-in fade-in-0 zoom-in-95 duration-150">
-        <div className="flex items-center justify-between pb-3 border-b border-border/80">
-          <h3 id="api-key-modal-title" className="text-sm font-bold text-foreground">
+      <div className="relative w-full max-w-lg rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0c102b] via-[#090d24] to-[#050714] p-6 shadow-2xl text-slate-100 animate-in fade-in-0 zoom-in-95 duration-150">
+        <div className="flex items-center justify-between pb-3 border-b border-indigo-500/20">
+          <h3 id="api-key-modal-title" className="text-sm font-bold text-slate-100">
             Generate New Platform API Key
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+            className="text-slate-400 hover:text-slate-100 cursor-pointer transition-colors p-1"
             title="Close modal"
           >
             <X size={16} />
@@ -73,7 +73,7 @@ export const SuperadminIntegrationsOverviewApiKeyGenerateModal: React.FC<
 
         <form onSubmit={handleCreateSubmit} className="mt-4 space-y-3.5 text-xs">
           <div>
-            <label className="block font-medium text-foreground mb-1">
+            <label className="block font-medium text-slate-300 mb-1">
               Key Name / Client Identifier
             </label>
             <input
@@ -82,26 +82,26 @@ export const SuperadminIntegrationsOverviewApiKeyGenerateModal: React.FC<
               value={keyName}
               onChange={(e) => setKeyName(e.target.value)}
               placeholder="e.g. Accounting Daemon, Mobile Sync Service"
-              className="w-full rounded-xl border border-border bg-muted/30 px-3 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+              className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-medium text-foreground mb-1">Role & Permission Scope</label>
+              <label className="block font-medium text-slate-300 mb-1">Role & Permission Scope</label>
               <select
                 value={roleScope}
                 onChange={(e) => setRoleScope(e.target.value)}
-                className="w-full rounded-xl border border-border bg-muted/30 px-3 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
               >
-                <option value="Platform Developer">Platform Developer (Standard)</option>
-                <option value="SuperAdmin System Daemon">SuperAdmin System Daemon (Full Access)</option>
-                <option value="Read-Only Reporting Agent">Read-Only Reporting Agent</option>
+                <option value="Platform Developer" className="bg-slate-900 text-slate-100">Platform Developer (Standard)</option>
+                <option value="SuperAdmin System Daemon" className="bg-slate-900 text-slate-100">SuperAdmin System Daemon (Full Access)</option>
+                <option value="Read-Only Reporting Agent" className="bg-slate-900 text-slate-100">Read-Only Reporting Agent</option>
               </select>
             </div>
 
             <div>
-              <label className="block font-medium text-foreground mb-1">
+              <label className="block font-medium text-slate-300 mb-1">
                 Rate Limit (Requests / Min)
               </label>
               <input
@@ -110,13 +110,13 @@ export const SuperadminIntegrationsOverviewApiKeyGenerateModal: React.FC<
                 max={5000}
                 value={rateLimitRpm}
                 onChange={(e) => setRateLimitRpm(Number(e.target.value))}
-                className="w-full rounded-xl border border-border bg-muted/30 px-3 py-2 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+                className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
               />
             </div>
           </div>
 
           <div>
-            <label className="block font-medium text-foreground mb-1">
+            <label className="block font-medium text-slate-300 mb-1">
               Restricted IP Allowlist (CIDR or IPv4)
             </label>
             <div className="flex gap-2 mb-2">
@@ -125,12 +125,12 @@ export const SuperadminIntegrationsOverviewApiKeyGenerateModal: React.FC<
                 value={newIpInput}
                 onChange={(e) => setNewIpInput(e.target.value)}
                 placeholder="e.g. 192.168.1.100/32"
-                className="flex-1 font-mono rounded-xl border border-border bg-muted/30 px-3 py-1.5 text-xs text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+                className="flex-1 font-mono rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-1.5 text-xs text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
               />
               <button
                 type="button"
                 onClick={handleAddIp}
-                className="px-3 py-1.5 rounded-xl border border-border bg-muted/50 text-foreground font-semibold hover:bg-muted cursor-pointer transition-colors"
+                className="px-3 py-1.5 rounded-xl border border-indigo-500/20 bg-slate-800/80 text-slate-200 font-semibold hover:bg-slate-700 cursor-pointer transition-colors shadow-xs"
               >
                 Add IP
               </button>
@@ -139,13 +139,13 @@ export const SuperadminIntegrationsOverviewApiKeyGenerateModal: React.FC<
               {ipList.map((ip) => (
                 <span
                   key={ip}
-                  className="rounded-lg bg-muted px-2 py-0.5 text-[11px] font-mono text-foreground flex items-center gap-1.5"
+                  className="rounded-lg bg-slate-900 border border-indigo-500/20 px-2 py-0.5 text-[11px] font-mono text-slate-200 flex items-center gap-1.5"
                 >
                   {ip}
                   <button
                     type="button"
                     onClick={() => handleRemoveIp(ip)}
-                    className="text-muted-foreground hover:text-danger-text cursor-pointer"
+                    className="text-slate-400 hover:text-rose-400 cursor-pointer p-0.5"
                   >
                     ×
                   </button>
@@ -154,18 +154,18 @@ export const SuperadminIntegrationsOverviewApiKeyGenerateModal: React.FC<
             </div>
           </div>
 
-          <div className="pt-3 border-t border-border/80 flex items-center justify-end gap-2">
+          <div className="pt-3 border-t border-indigo-500/20 flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-1.5 rounded-lg border border-border text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
+              className="px-3.5 py-1.5 rounded-xl border border-indigo-500/20 bg-slate-800/60 text-slate-300 hover:text-white hover:bg-slate-800 cursor-pointer transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isGenerating}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-1.5 font-semibold text-on-primary hover:opacity-90 cursor-pointer min-w-36 justify-center shadow-xs transition-opacity"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 px-4 py-1.5 font-semibold text-white cursor-pointer min-w-36 justify-center shadow-md shadow-indigo-500/25 transition-opacity"
             >
               {isGenerating ? <Loader2 size={13} className="animate-spin" /> : <Plus size={13} />}
               <span>Generate API Key</span>

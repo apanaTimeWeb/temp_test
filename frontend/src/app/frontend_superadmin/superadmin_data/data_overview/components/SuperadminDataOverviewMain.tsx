@@ -87,13 +87,13 @@ export function SuperadminDataOverviewMain() {
         <div className="flex items-center gap-2.5 flex-wrap">
           <button
             type="button"
-            onClick={handleSimulateSandboxDrill}
-            disabled={isSimulatingDrill}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-neutral-900 hover:bg-neutral-800 text-foreground border border-border transition-colors disabled:opacity-50 cursor-pointer min-w-36 justify-center"
-            data-testid="data_overview-top-drill-btn"
+            onClick={() => refetch()}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-neutral-900 hover:bg-neutral-800 text-foreground border border-border transition-colors cursor-pointer"
+            data-testid="data_overview-top-refresh-btn"
+            title="Refresh DR status"
           >
-            <RotateCcw size={14} className={isSimulatingDrill ? 'animate-spin text-emerald-400' : 'text-emerald-400'} />
-            <span>{isSimulatingDrill ? 'Running Drill...' : 'Run Sandbox Drill'}</span>
+            <RefreshCw size={13} className="text-muted-foreground" />
+            <span>Refresh</span>
           </button>
 
           <button

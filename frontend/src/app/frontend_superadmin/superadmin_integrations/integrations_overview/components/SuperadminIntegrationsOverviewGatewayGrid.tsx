@@ -3,7 +3,7 @@
 // DATA FLOW: Gateways array -> SuperadminIntegrationsOverviewGatewayGrid -> GatewayCards.
 'use client';
 
-import { RotateCcw, Search, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import React from 'react';
 import { INTEGRATION_CATEGORIES } from '../constants/superadmin_integrations_overview.constants';
 import type { IntegrationGatewayItem } from '../types/superadmin_integrations_overview.types';
@@ -54,10 +54,10 @@ export const SuperadminIntegrationsOverviewGatewayGrid: React.FC<
                 role="tab"
                 aria-selected={isSelected}
                 onClick={() => onSelectCategory(cat.id)}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer select-none ${
+                className={`px-3 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer select-none whitespace-nowrap ${
                   isSelected
-                    ? 'bg-purple-600 text-white shadow-xs font-bold'
-                    : 'bg-card border border-border/70 text-muted-foreground hover:bg-muted/40 hover:text-foreground'
+                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold shadow-md shadow-indigo-500/25'
+                    : 'bg-slate-900/80 border border-indigo-500/20 text-slate-300 hover:bg-slate-800/80 hover:text-slate-100'
                 }`}
               >
                 {cat.label}
@@ -66,24 +66,24 @@ export const SuperadminIntegrationsOverviewGatewayGrid: React.FC<
           })}
         </div>
 
-        {/* Live Search Input */}
+        {/* Live Search Input with Cyber Luxury Styling */}
         <div className="relative w-full md:w-72 shrink-0">
           <Search
             size={15}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
           />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search providers, gateways..."
-            className="w-full rounded-xl border border-border bg-card pl-9 pr-8 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 pl-9 pr-8 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/50 shadow-inner"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground p-0.5"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-100 p-0.5 cursor-pointer"
               title="Clear search"
             >
               <X size={13} />

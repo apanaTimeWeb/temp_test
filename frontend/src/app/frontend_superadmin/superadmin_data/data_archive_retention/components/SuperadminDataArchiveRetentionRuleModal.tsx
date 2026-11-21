@@ -147,17 +147,45 @@ export function SuperadminDataArchiveRetentionRuleModal({
             </select>
           </div>
 
-          <div className="pt-2">
-            <label className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
-              <input
-                type="checkbox"
-                {...register('isEnabled')}
-                className="rounded text-teal-600 focus:ring-teal-500"
-              />
-              <span className="font-medium">
-                Enable automated execution of this retention policy
+          <div className="pt-2 flex items-center justify-between p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
+            <div>
+              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 block">
+                Automated Policy Execution
               </span>
-            </label>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                Auto-purge and archive runs according to defined scheduler cron
+              </span>
+            </div>
+
+            <button
+              type="button"
+              role="switch"
+              aria-checked={watch('isEnabled')}
+              onClick={() => setValue('isEnabled', !watch('isEnabled'), { shouldDirty: true })}
+              className={`relative flex items-center w-[58px] h-[28px] p-[2px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+                watch('isEnabled')
+                  ? 'bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.45),inset_0_1px_2px_rgba(0,0,0,0.25)]'
+                  : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
+              }`}
+            >
+              <div
+                className={`pointer-events-none absolute inset-x-2 top-1/2 -translate-y-1/2 h-1 rounded-full transition-all duration-300 ${
+                  watch('isEnabled')
+                    ? 'bg-gradient-to-r from-emerald-300 to-teal-200 opacity-70 shadow-[0_0_4px_rgba(16,185,129,0.8)]'
+                    : 'bg-slate-950/80 opacity-40'
+                }`}
+              />
+              <span
+                aria-hidden="true"
+                className={`relative z-10 flex items-center justify-center w-[24px] h-[24px] min-w-[24px] min-h-[24px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_2px_6px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
+                  watch('isEnabled')
+                    ? 'translate-x-[30px] text-emerald-600'
+                    : 'translate-x-0 text-slate-800'
+                }`}
+              >
+                <span className="text-[11px] leading-none select-none font-bold">⏻</span>
+              </span>
+            </button>
           </div>
 
           {/* Footer */}
