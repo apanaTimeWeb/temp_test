@@ -22,7 +22,7 @@ export async function fetchSuperadminBackupSchedules(): Promise<ApiResponse<Supe
     success: true,
     data: activeSchedules,
     message: 'Loaded backup schedules (mock)',
-    status: 200,
+    requestId: 'mock-sched-list',
   };
 }
 
@@ -67,7 +67,7 @@ export async function createSuperadminBackupSchedule(
     success: true,
     data: newSchedule,
     message: `Backup policy "${payload.name}" created successfully!`,
-    status: 201,
+    requestId: 'mock-create-sched',
   };
 }
 
@@ -97,7 +97,7 @@ export async function toggleSuperadminBackupScheduleStatus(
     success: true,
     data: updated,
     message: `Schedule status changed to ${isActive ? 'Active' : 'Inactive'}`,
-    status: 200,
+    requestId: 'mock-toggle-sched',
   };
 }
 
@@ -130,6 +130,6 @@ export async function triggerSuperadminFullPlatformBackup(
       estimatedCompletionTime: '12 minutes',
     },
     message: 'Full Platform Disaster Recovery Snapshot triggered successfully!',
-    status: 200,
+    requestId: 'mock-full-backup',
   };
 }

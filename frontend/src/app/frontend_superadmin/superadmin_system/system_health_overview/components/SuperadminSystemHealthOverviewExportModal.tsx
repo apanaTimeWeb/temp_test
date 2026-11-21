@@ -177,7 +177,7 @@ export default function SuperadminSystemHealthOverviewExportModal({
                   <td>${item.latency}</td>
                   <td>${item.cpu}%</td>
                   <td>${item.memory}</td>
-                  <td><span class="badge ${item.status === 'online' ? 'badge-online' : item.status === 'degraded' ? 'badge-degraded' : 'badge-offline'}">${item.status}</span></td>
+                  <td><span class="badge ${item.status === 'Healthy' ? 'badge-online' : item.status === 'Degraded' ? 'badge-degraded' : 'badge-offline'}">${item.status}</span></td>
                   <td>${item.uptime}</td>
                 </tr>
               `).join('')}

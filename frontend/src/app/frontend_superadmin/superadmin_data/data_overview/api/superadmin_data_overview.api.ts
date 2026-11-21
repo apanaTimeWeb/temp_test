@@ -27,7 +27,7 @@ export async function fetchSuperadminDataOverviewMetrics(): Promise<ApiResponse<
     success: true,
     data: MOCK_SUPERADMIN_DATA_OVERVIEW_METRICS,
     message: 'Loaded metrics (mock)',
-    status: 200,
+    requestId: 'mock-metrics',
   };
 }
 
@@ -42,7 +42,7 @@ export async function fetchSuperadminDataOverviewRpoRto(): Promise<ApiResponse<S
     success: true,
     data: MOCK_SUPERADMIN_DATA_OVERVIEW_RPO_RTO,
     message: 'Loaded RPO/RTO status (mock)',
-    status: 200,
+    requestId: 'mock-rpo-rto',
   };
 }
 
@@ -57,7 +57,7 @@ export async function fetchSuperadminDataOverviewActivity(): Promise<ApiResponse
     success: true,
     data: MOCK_SUPERADMIN_DATA_OVERVIEW_ACTIVITIES,
     message: 'Loaded recent activity (mock)',
-    status: 200,
+    requestId: 'mock-activity',
   };
 }
 
@@ -72,7 +72,7 @@ export async function fetchSuperadminDataOverviewStorage(): Promise<ApiResponse<
     success: true,
     data: MOCK_SUPERADMIN_DATA_OVERVIEW_STORAGE,
     message: 'Loaded storage breakdown (mock)',
-    status: 200,
+    requestId: 'mock-storage',
   };
 }
 
@@ -99,7 +99,7 @@ export async function triggerSuperadminQuickBackup(
       snapshotId: `snp-quick-${Date.now()}`,
       status: 'INITIATED',
     },
-    message: `Instant snapshot for ${payload.scope} initiated successfully!`,
-    status: 200,
+    message: `Instant snapshot for ${payload.backupType} initiated successfully!`,
+    requestId: 'mock-quick-backup',
   };
 }
