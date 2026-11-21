@@ -3,12 +3,12 @@ import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadm
 
 /**
  * Domain layout for the SuperAdmin Users domain.
- * Passes child views directly without top navigation buttons.
+ * Configured with p-0 full-width container matching API & Integration layout standard.
  */
 export default function DomainLayout({ children }: { children: ReactNode }) {
   void SUPERADMIN_NAVIGATION_ROUTES;
   return (
-    <div className="w-full max-w-full min-w-0 px-3 sm:px-6 lg:px-8 py-4">
+    <div className="w-full max-w-full min-w-0 p-0">
       {children}
     </div>
   );

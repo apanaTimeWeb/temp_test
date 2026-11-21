@@ -47,7 +47,7 @@ export default function SuperadminRolesOverviewHeader({
               </div>
               <span>Admin, Manager & Staff Permission Management</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed mt-1.5">
+            <p className="text-xs sm:text-sm text-slate-300 w-full leading-relaxed mt-1.5">
               SuperAdmin centralized role creation, granular 10-action module matrix, branch isolation rules, account lockouts, MFA resets, and real-time active session controls.
             </p>
           </div>
