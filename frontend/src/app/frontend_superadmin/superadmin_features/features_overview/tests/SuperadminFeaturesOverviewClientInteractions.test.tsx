@@ -77,21 +77,20 @@ describe('Superadmin Features Overview - Client Interactive Controls', () => {
     expect(screen.getByText('Reset Plan')).toBeDefined();
   });
 
-  it('opens and closes API Guard Simulator Modal', () => {
+  it('opens and closes Custom Exception Override Modal from module card', () => {
     render(<SuperadminFeaturesOverviewPageClient />);
 
-    const testApiButtons = screen.getAllByText('Test API Guard');
-    fireEvent.click(testApiButtons[0]);
+    const overrideButtons = screen.getAllByText('Manage Custom Override');
+    fireEvent.click(overrideButtons[0]);
 
     // Modal title should appear
-    expect(screen.getByText('Backend API Guard Simulator')).toBeDefined();
-    expect(screen.getByText('Select API Endpoint & Method to Probe:')).toBeDefined();
+    expect(screen.getByText('Custom Exception Override')).toBeDefined();
 
     // Close button
-    const closeBtn = screen.getByText('Close');
+    const closeBtn = screen.getByText('Cancel');
     fireEvent.click(closeBtn);
 
-    expect(screen.queryByText('Select API Endpoint & Method to Probe:')).toBeNull();
+    expect(screen.queryByText('Custom Exception Override')).toBeNull();
   });
 
   it('toggles platform default switch when switch is clicked in card grid view', () => {

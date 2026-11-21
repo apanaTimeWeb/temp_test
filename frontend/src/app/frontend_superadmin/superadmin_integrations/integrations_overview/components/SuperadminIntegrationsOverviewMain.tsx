@@ -11,6 +11,7 @@ import {
   Layers,
   RefreshCw,
   ShieldCheck,
+  Terminal,
   Webhook,
 } from 'lucide-react';
 import React, { useState } from 'react';
@@ -18,6 +19,7 @@ import { useSuperadminIntegrationsOverview } from '../hooks/useSuperadminIntegra
 import { useSuperadminIntegrationsOverviewConfirm } from '../hooks/useSuperadminIntegrationsOverviewConfirm';
 import { useSuperadminIntegrationsOverviewMutations } from '../hooks/useSuperadminIntegrationsOverviewMutations';
 import { useSuperadminIntegrationsOverviewStore } from '../state/useSuperadminIntegrationsOverviewStore';
+import { SuperadminIntegrationsOverviewApiGuardSimulatorModal } from './SuperadminIntegrationsOverviewApiGuardSimulatorModal';
 import { SuperadminIntegrationsOverviewApiKeysPanel } from './SuperadminIntegrationsOverviewApiKeysPanel';
 import { SuperadminIntegrationsOverviewEntitlementsPanel } from './SuperadminIntegrationsOverviewEntitlementsPanel';
 import { SuperadminIntegrationsOverviewErrorFallback } from './SuperadminIntegrationsOverviewErrorFallback';
@@ -65,6 +67,7 @@ export const SuperadminIntegrationsOverviewMain: React.FC = () => {
 
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [pingingId, setPingingId] = useState<string | null>(null);
+  const [isApiGuardOpen, setIsApiGuardOpen] = useState(false);
 
   const handleToggleGateway = (id: string, currentEnabled: boolean) => {
     setTogglingId(id);
@@ -148,6 +151,15 @@ export const SuperadminIntegrationsOverviewMain: React.FC = () => {
                 </button>
               );
             })}
+
+            <button
+              type="button"
+              onClick={() => setIsApiGuardOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-teal-500/15 hover:bg-teal-500/25 border border-teal-500/35 text-teal-300 transition-all cursor-pointer whitespace-nowrap shadow-xs active:scale-95"
+            >
+              <Terminal size={14} />
+              <span>API Guard Probe</span>
+            </button>
           </div>
         </div>
       </div>
@@ -267,6 +279,11 @@ export const SuperadminIntegrationsOverviewMain: React.FC = () => {
         onTestPing={(id) => mutations.testPing.mutate(id)}
         isSaving={mutations.updateGateway.isPending}
         isPinging={mutations.testPing.isPending}
+      />
+
+      <SuperadminIntegrationsOverviewApiGuardSimulatorModal
+        isOpen={isApiGuardOpen}
+        onClose={() => setIsApiGuardOpen(false)}
       />
     </div>
   );

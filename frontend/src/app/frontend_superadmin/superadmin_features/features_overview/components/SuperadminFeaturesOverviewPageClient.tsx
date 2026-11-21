@@ -11,7 +11,6 @@ import SuperadminFeaturesOverviewCategoryTabs from '@/app/frontend_superadmin/su
 import SuperadminFeaturesOverviewModuleCard from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesOverviewModuleCard';
 import SuperadminFeaturesOverviewMatrixTable from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesOverviewMatrixTable';
 import SuperadminFeaturesOverviewOverrideModal from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesOverviewOverrideModal';
-import SuperadminFeaturesOverviewApiGuardSimulatorModal from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesOverviewApiGuardSimulatorModal';
 import SuperadminFeaturesOverviewConfirmModal from '@/app/frontend_superadmin/superadmin_features/features_overview/components/SuperadminFeaturesOverviewConfirmModal';
 
 export default function SuperadminFeaturesOverviewPageClient() {
@@ -28,7 +27,6 @@ export default function SuperadminFeaturesOverviewPageClient() {
     searchQuery,
     notification,
     isOverrideModalOpen,
-    isApiGuardModalOpen,
     targetModule,
     computedModules,
     filteredModules,
@@ -47,9 +45,7 @@ export default function SuperadminFeaturesOverviewPageClient() {
     saveOverride,
     removeOverride,
     openOverrideModalForModule,
-    openApiGuardModalForModule,
     closeOverrideModal,
-    closeApiGuardModal,
   } = useSuperadminFeaturesOverviewState();
 
   const { dialogState, requestConfirm, closeConfirm, handleConfirmed } =
@@ -72,7 +68,6 @@ export default function SuperadminFeaturesOverviewPageClient() {
   };
 
   const isGlobalScope = selectedTenantId === 'global';
-  const effectiveTenantName = selectedTenant ? selectedTenant.name : 'Platform System';
 
   return (
     <div className="space-y-6">
@@ -134,7 +129,6 @@ export default function SuperadminFeaturesOverviewPageClient() {
               onToggleLibraryModule={toggleLibraryModule}
               onResetLibraryModule={resetModuleOverride}
               onOpenOverride={openOverrideModalForModule}
-              onOpenApiGuard={openApiGuardModalForModule}
             />
           ))}
         </div>
@@ -147,7 +141,6 @@ export default function SuperadminFeaturesOverviewPageClient() {
           onToggleLibraryModule={toggleLibraryModule}
           onResetLibraryModule={resetModuleOverride}
           onOpenOverride={openOverrideModalForModule}
-          onOpenApiGuard={openApiGuardModalForModule}
         />
       )}
 
@@ -161,25 +154,6 @@ export default function SuperadminFeaturesOverviewPageClient() {
           onClose={closeOverrideModal}
           onSave={saveOverride}
           onDelete={handleDeleteOverride}
-        />
-      )}
-
-      {isApiGuardModalOpen && targetModule && (
-        <SuperadminFeaturesOverviewApiGuardSimulatorModal
-          module={targetModule}
-          effective={
-            computedModules.find((m) => m.module.id === targetModule.id)?.effective ?? {
-              moduleId: targetModule.id,
-              moduleName: targetModule.name,
-              isPlatformAllowed: true,
-              isPlanAllowed: true,
-              override: null,
-              effectiveAllowed: true,
-              reason: 'System default',
-            }
-          }
-          tenantName={effectiveTenantName}
-          onClose={closeApiGuardModal}
         />
       )}
 

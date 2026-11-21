@@ -23,7 +23,6 @@ export function useSuperadminFeaturesOverviewState() {
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'info' } | null>(null);
 
   const [isOverrideModalOpen, setIsOverrideModalOpen] = useState(false);
-  const [isApiGuardModalOpen, setIsApiGuardModalOpen] = useState(false);
   const [targetModule, setTargetModule] = useState<ModuleDefinition | null>(null);
 
   const showNotification = useCallback((message: string, type: 'success' | 'info' = 'success') => {
@@ -113,7 +112,6 @@ export function useSuperadminFeaturesOverviewState() {
     searchQuery,
     notification,
     isOverrideModalOpen,
-    isApiGuardModalOpen,
     targetModule,
     computedModules,
     filteredModules,
@@ -138,8 +136,6 @@ export function useSuperadminFeaturesOverviewState() {
     }, [overridesHook]),
     removeOverride: overridesHook.removeOverride,
     openOverrideModalForModule: (mod: ModuleDefinition) => { setTargetModule(mod); setIsOverrideModalOpen(true); },
-    openApiGuardModalForModule: (mod: ModuleDefinition) => { setTargetModule(mod); setIsApiGuardModalOpen(true); },
     closeOverrideModal: () => setIsOverrideModalOpen(false),
-    closeApiGuardModal: () => setIsApiGuardModalOpen(false),
   };
 }

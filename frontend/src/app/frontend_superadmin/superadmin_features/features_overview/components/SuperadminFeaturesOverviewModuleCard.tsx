@@ -3,7 +3,6 @@ import React from 'react';
 import {
   ShieldCheck,
   ShieldAlert,
-  Terminal,
   Settings2,
   CheckCircle2,
   XCircle,
@@ -43,7 +42,6 @@ interface ModuleCardProps {
   onToggleLibraryModule?: (id: string) => void;
   onResetLibraryModule?: (id: string) => void;
   onOpenOverride: (mod: ModuleDefinition) => void;
-  onOpenApiGuard: (mod: ModuleDefinition) => void;
 }
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -76,7 +74,6 @@ export default function SuperadminFeaturesOverviewModuleCard({
   onToggleLibraryModule,
   onResetLibraryModule,
   onOpenOverride,
-  onOpenApiGuard,
 }: ModuleCardProps) {
   const Icon = ICON_MAP[module.iconName] || Layers;
   const isGlobalAllowed = state.platformDefault;
@@ -263,23 +260,14 @@ export default function SuperadminFeaturesOverviewModuleCard({
           {effective.reason}
         </p>
 
-        <div className="grid grid-cols-2 gap-2 mt-1">
+        <div className="mt-1">
           <button
             type="button"
             onClick={() => onOpenOverride(module)}
-            className="px-3 py-2 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
+            className="w-full px-3 py-2 rounded-xl border border-indigo-500/25 bg-slate-900/80 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
           >
             <Settings2 size={13} />
-            <span>Set Override</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onOpenApiGuard(module)}
-            className="px-3 py-2 rounded-xl border border-teal-500/30 bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer active:scale-95"
-          >
-            <Terminal size={13} />
-            <span>Test API Guard</span>
+            <span>Manage Custom Override</span>
           </button>
         </div>
       </div>

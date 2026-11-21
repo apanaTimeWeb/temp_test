@@ -4,7 +4,6 @@ import {
   ShieldCheck,
   ShieldAlert,
   Settings2,
-  Terminal,
   Check,
   X,
   RotateCcw,
@@ -28,7 +27,6 @@ interface MatrixTableProps {
   onToggleLibraryModule?: (id: string) => void;
   onResetLibraryModule?: (id: string) => void;
   onOpenOverride: (mod: ModuleDefinition) => void;
-  onOpenApiGuard: (mod: ModuleDefinition) => void;
 }
 
 export default function SuperadminFeaturesOverviewMatrixTable({
@@ -39,7 +37,6 @@ export default function SuperadminFeaturesOverviewMatrixTable({
   onToggleLibraryModule,
   onResetLibraryModule,
   onOpenOverride,
-  onOpenApiGuard,
 }: MatrixTableProps) {
   return (
     <div className="rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 overflow-hidden shadow-2xl backdrop-blur-xl">
@@ -198,14 +195,6 @@ export default function SuperadminFeaturesOverviewMatrixTable({
                         className="p-1.5 rounded-lg border border-indigo-500/25 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer"
                       >
                         <Settings2 size={13} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onOpenApiGuard(mod)}
-                        title="Test Backend API Denial Guard"
-                        className="p-1.5 rounded-lg border border-teal-500/30 bg-teal-500/15 hover:bg-teal-500/25 text-teal-300 transition-colors cursor-pointer"
-                      >
-                        <Terminal size={13} />
                       </button>
                     </div>
                   </td>
