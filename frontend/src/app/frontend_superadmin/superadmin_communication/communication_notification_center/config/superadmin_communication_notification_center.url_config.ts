@@ -5,8 +5,6 @@ const SUPERADMIN_COMMUNICATION_URLS = {
   PAGE: '/superadmin/superadmin_communication',
   NOTICES_PAGE: '/superadmin/superadmin_communication/communication_notices',
   NOTIFICATION_CENTER_PAGE: '/superadmin/superadmin_communication/communication_notification_center',
-  WHATSAPP_LOGS_PAGE: '/superadmin/superadmin_communication/communication_whatsapp_logs',
-  WHATSAPP_TEMPLATES_PAGE: '/superadmin/superadmin_communication/communication_whatsapp_templates',
 } as const;
 
 const SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_URLS = {
@@ -26,8 +24,6 @@ export const SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_ROUTES = {
   usage: '/superadmin/superadmin_communication/communication_notification_center?tab=usage',
   // Sibling routes for navigation reference
   notices: '/superadmin/superadmin_communication/communication_notices',
-  whatsappLogs: '/superadmin/superadmin_communication/communication_whatsapp_logs',
-  whatsappTemplates: '/superadmin/superadmin_communication/communication_whatsapp_templates',
   // Legacy compatibility exports
   SUPERADMIN_COMMUNICATION_URLS,
   MODULE_URLS: SUPERADMIN_COMMUNICATION_URLS,
