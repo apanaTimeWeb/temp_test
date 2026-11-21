@@ -91,7 +91,7 @@ export function SuperadminAnalyticsPlatformReportsMain() {
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
         records={filteredRecords}
-        overviewData={reportData}
+        overviewData={reportData ?? undefined}
       />
 
       {/* ── 6. Detail Inspection Modal ── */}

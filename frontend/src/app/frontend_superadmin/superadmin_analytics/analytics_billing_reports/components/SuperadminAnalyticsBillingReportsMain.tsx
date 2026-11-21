@@ -124,7 +124,7 @@ export function SuperadminAnalyticsBillingReportsMain() {
         totalCount={reportData?.totalCount ?? filteredRecords.length}
         currentPage={filters.page}
         pageSize={filters.limit}
-        onPageChange={(page) => updateFilter('page', page)}
+        onPageChange={(page: number) => updateFilter('page', page)}
       />
 
       {/* ── Record Detail Slide-Over / Modal ── */}
@@ -208,7 +208,7 @@ export function SuperadminAnalyticsBillingReportsMain() {
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
         records={filteredRecords}
-        overviewData={reportData}
+        overviewData={reportData ?? undefined}
       />
     </div>
   );

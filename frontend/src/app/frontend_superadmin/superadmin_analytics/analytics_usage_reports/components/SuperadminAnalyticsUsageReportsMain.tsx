@@ -210,7 +210,7 @@ export function SuperadminAnalyticsUsageReportsMain() {
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
         records={filteredRecords}
-        overviewData={reportData}
+        overviewData={reportData ?? undefined}
       />
     </div>
   );

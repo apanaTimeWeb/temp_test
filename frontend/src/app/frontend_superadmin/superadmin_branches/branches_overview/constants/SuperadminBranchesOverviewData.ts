@@ -4,7 +4,7 @@ import type { SuperadminBranchRecord, BranchAuditLog, SuperadminLibraryOption } 
 export const SUPERADMIN_AVAILABLE_LIBRARIES: SuperadminLibraryOption[] = [
   { id: 'lib-1', name: 'Apex Study Library Group', maxBranchesAllowed: 5, currentBranchCount: 3 },
   { id: 'lib-2', name: 'Gyan Sagar Learning Hub', maxBranchesAllowed: 4, currentBranchCount: 2 },
-  { id: 'lib-3', name: 'Nalanda Digital Study Center', maxBranchesAllowed: 3, currentBranchCount: 2 },
+  { id: 'lib-3', name: 'Nalanda Digital Study Center', maxBranchesAllowed: 3, currentBranchCount: 3 },
   { id: 'lib-4', name: 'Saraswati Reading Lounge', maxBranchesAllowed: 3, currentBranchCount: 1 },
   { id: 'lib-5', name: 'Patna Central Reading Rooms', maxBranchesAllowed: 2, currentBranchCount: 1 },
 ];

@@ -90,6 +90,44 @@ describe('useSuperadminBranchesOverview Hook', () => {
     expect(created?.libraryId).toBe('lib-1');
   });
 
+  it('blocks branch creation when library has reached maximum allowed branches in plan (e.g. Nalanda 3 of 3)', () => {
+    const { result } = renderHook(() => useSuperadminBranchesOverview());
+    // lib-3 has maxBranchesAllowed: 3 and currentBranchCount: 3
+    act(() => {
+      const res = result.current.createBranch({
+        code: 'BR-NAL-4TH-BRANCH',
+        name: 'Nalanda 4th Branch Attempt',
+        libraryId: 'lib-3',
+        libraryName: 'Nalanda Digital Study Center',
+        city: 'Kota',
+        state: 'Rajasthan',
+        address: 'Talwandi Circle, Kota',
+        pinCode: '324005',
+        phone: '+91 9988776655',
+        email: 'branch4@nalandastudy.invalid',
+        managerName: 'New Manager',
+        managerEmail: 'nm@nalandastudy.invalid',
+        managerPhone: '+91 9988776655',
+        openingDate: '2026-05-01',
+        workingHours: '06:00 AM - 11:00 PM',
+        weeklyHolidays: 'None',
+        capacity: 150,
+        activeMembers: 0,
+        adminName: 'Rajesh Meena',
+        adminEmail: 'rajesh@nalandastudy.invalid',
+        plan: 'Enterprise (Tier 1)',
+        outstandingBooks: 0,
+        memberDues: 0,
+        cashRegisterBalance: 0,
+        isArchived: false,
+        allowedModules: { books: true, members: true },
+      });
+      expect(res.success).toBe(false);
+      expect(res.error).toContain('Branch limit reached');
+      expect(res.error).toContain('3 of 3 allowed branches');
+    });
+  });
+
   it('blocks branch closure if outstanding books or member dues exist', () => {
     const { result } = renderHook(() => useSuperadminBranchesOverview());
     // Branch with outstanding books and dues

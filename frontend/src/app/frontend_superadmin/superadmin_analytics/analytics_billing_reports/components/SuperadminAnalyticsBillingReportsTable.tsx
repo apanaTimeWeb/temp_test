@@ -10,17 +10,43 @@ import { SuperadminAnalyticsBillingReportsEmptyState } from './SuperadminAnalyti
 
 interface Props {
   records: BillingReportTableRecord[];
+  isLoading?: boolean;
+  selectedRecord?: BillingReportTableRecord | null;
   onSelectRecord: (record: BillingReportTableRecord) => void;
-  onResetFilters: () => void;
+  onResetFilters?: () => void;
+  totalCount?: number;
+  currentPage?: number;
+  pageSize?: number;
+  onPageChange?: (page: number) => void;
 }
 
-export function SuperadminAnalyticsBillingReportsTable({ records, onSelectRecord, onResetFilters }: Props) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
-  const totalPages = Math.max(1, Math.ceil(records.length / pageSize));
-  const pagedRecords = records.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+export function SuperadminAnalyticsBillingReportsTable({
+  records,
+  isLoading,
+  selectedRecord,
+  onSelectRecord,
+  onResetFilters,
+  totalCount,
+  currentPage: controlledPage,
+  pageSize: controlledPageSize,
+  onPageChange,
+}: Props) {
+  const [internalPage, setInternalPage] = useState(1);
+  const pageSize = controlledPageSize ?? 10;
+  const currentPage = controlledPage ?? internalPage;
+  const count = totalCount ?? records.length;
+  const totalPages = Math.max(1, Math.ceil(count / pageSize));
+  const pagedRecords = controlledPage ? records : records.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-  if (records.length === 0) {
+  const handlePageChange = (page: number) => {
+    if (onPageChange) {
+      onPageChange(page);
+    } else {
+      setInternalPage(page);
+    }
+  };
+
+  if (records.length === 0 && !isLoading) {
     return <SuperadminAnalyticsBillingReportsEmptyState onReset={onResetFilters} />;
   }
 
@@ -96,12 +122,12 @@ export function SuperadminAnalyticsBillingReportsTable({ records, onSelectRecord
 
       {totalPages > 1 && (
         <div className="p-3 border-t border-border/40 flex items-center justify-between text-xs text-muted-foreground bg-muted/20">
-          <span>Showing {(currentPage - 1) * pageSize + 1} to {Math.min(records.length, currentPage * pageSize)} of {records.length}</span>
+          <span>Showing {(currentPage - 1) * pageSize + 1} to {Math.min(count, currentPage * pageSize)} of {count}</span>
           <div className="flex items-center gap-1.5">
             <button
               type="button"
               disabled={currentPage === 1}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
               className="p-1.5 rounded-lg border border-border bg-background hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               aria-label="Previous page"
             >
@@ -111,7 +137,7 @@ export function SuperadminAnalyticsBillingReportsTable({ records, onSelectRecord
             <button
               type="button"
               disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
               className="p-1.5 rounded-lg border border-border bg-background hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
               aria-label="Next page"
             >

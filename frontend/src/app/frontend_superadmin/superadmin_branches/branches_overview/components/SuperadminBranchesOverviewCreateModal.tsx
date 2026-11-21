@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { X, GitBranch, AlertCircle, Building2 } from 'lucide-react';
 import type { SuperadminBranchRecord, SuperadminLibraryOption } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
+import SuperadminBranchesOverviewQuotaBlockBanner from './SuperadminBranchesOverviewQuotaBlockBanner';
 
 interface SuperadminBranchesOverviewCreateModalProps {
   isOpen: boolean;
@@ -20,16 +21,11 @@ export default function SuperadminBranchesOverviewCreateModal({
   onSubmit,
 }: SuperadminBranchesOverviewCreateModalProps) {
   const [libraryId, setLibraryId] = useState(availableLibraries[0]?.id || 'lib-1');
-  const [code, setCode] = useState('');
-  const [name, setName] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('Uttar Pradesh');
-  const [address, setAddress] = useState('');
-  const [pinCode, setPinCode] = useState('');
-  const [phone, setPhone] = useState('+91 ');
-  const [email, setEmail] = useState('');
-  const [managerName, setManagerName] = useState('');
-  const [managerEmail, setManagerEmail] = useState('');
+  const [code, setCode] = useState(''); const [name, setName] = useState('');
+  const [city, setCity] = useState(''); const [state, setState] = useState('Uttar Pradesh');
+  const [address, setAddress] = useState(''); const [pinCode, setPinCode] = useState('');
+  const [phone, setPhone] = useState('+91 '); const [email, setEmail] = useState('');
+  const [managerName, setManagerName] = useState(''); const [managerEmail, setManagerEmail] = useState('');
   const [managerPhone, setManagerPhone] = useState('+91 ');
   const [capacity, setCapacity] = useState(120);
   const [workingHours, setWorkingHours] = useState('06:00 AM - 10:00 PM');
@@ -37,6 +33,9 @@ export default function SuperadminBranchesOverviewCreateModal({
   const [errorMsg, setErrorMsg] = useState('');
 
   if (!isOpen) return null;
+
+  const parentLib = availableLibraries.find((l) => l.id === libraryId) || availableLibraries[0];
+  const isLimitReached = parentLib ? parentLib.currentBranchCount >= parentLib.maxBranchesAllowed : false;
 
   const handleLibraryChange = (selectedId: string) => {
     setLibraryId(selectedId);
@@ -146,6 +145,11 @@ export default function SuperadminBranchesOverviewCreateModal({
               ))}
             </select>
           </div>
+
+          {/* Quota Limit Blocking Banner when 3/3 branches used */}
+          {isLimitReached && parentLib && (
+            <SuperadminBranchesOverviewQuotaBlockBanner library={parentLib} />
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -274,8 +278,16 @@ export default function SuperadminBranchesOverviewCreateModal({
             <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl border border-slate-700 text-xs font-semibold text-slate-300 hover:bg-slate-800">
               Cancel
             </button>
-            <button type="submit" className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-xs font-bold text-white shadow-md">
-              Create & Provision Branch
+            <button
+              type="submit"
+              disabled={isLimitReached}
+              className={`px-5 py-2.5 rounded-xl text-xs font-bold text-white shadow-md transition-all ${
+                isLimitReached
+                  ? 'bg-slate-700 opacity-60 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500'
+              }`}
+            >
+              {isLimitReached ? 'Creation Blocked (Quota Reached)' : 'Create & Provision Branch'}
             </button>
           </div>
         </form>

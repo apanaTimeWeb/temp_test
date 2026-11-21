@@ -25,7 +25,10 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
 
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     
-    const getFocusable = () => Array.from<HTMLElement>(drawerRef.current.querySelectorAll<HTMLElement>(SUPERADMIN_AUDIT_LOGS_DETAIL_DRAWER_SELECTOR));
+    const getFocusable = () => {
+      if (!drawerRef.current) return [];
+      return Array.from<HTMLElement>(drawerRef.current.querySelectorAll<HTMLElement>(SUPERADMIN_AUDIT_LOGS_DETAIL_DRAWER_SELECTOR));
+    };
     getFocusable()[0]?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -40,7 +43,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
       const last = focusable[focusable.length - 1];
       if (!first || !last) {
         event.preventDefault();
-        drawerRef.current.focus();
+        drawerRef.current?.focus();
         return;
       }
       if (event.shiftKey && document.activeElement === first) {
