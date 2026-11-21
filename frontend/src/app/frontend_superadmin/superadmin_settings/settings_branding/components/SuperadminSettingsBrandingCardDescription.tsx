@@ -10,7 +10,7 @@ import type { SuperadminSystemCardDescriptionProps } from '@/app/frontend_supera
  */
 export function SuperadminSettingsBrandingCardDescription({ children, className }: SuperadminSystemCardDescriptionProps) {
   return (
-    <p className={cn('sys-card-desc text-xs sm:text-sm text-secondary font-normal leading-relaxed', className)}>
+    <p className={cn('text-xs sm:text-sm text-slate-400 font-normal leading-relaxed', className)}>
       {children}
     </p>
   );

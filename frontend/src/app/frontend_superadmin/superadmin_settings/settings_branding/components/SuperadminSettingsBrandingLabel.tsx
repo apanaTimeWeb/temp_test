@@ -16,7 +16,7 @@ export const SuperadminSettingsBrandingLabel = forwardRef<HTMLLabelElement, Supe
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
       data-testid={dataTestId}
-      className={cn('sys-label block text-xs font-bold text-secondary uppercase tracking-wider mb-1.5', className)}
+      className={cn('block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5', className)}
     >
       {children}
     </label>

@@ -10,7 +10,7 @@ import type { SuperadminSystemCardHeaderProps } from '@/app/frontend_superadmin/
  */
 export function SuperadminSettingsBrandingCardHeader({ children, className }: SuperadminSystemCardHeaderProps) {
   return (
-    <div className={cn('sys-card-header flex flex-col gap-1.5 pb-4 border-b border-border/60 mb-5', className)}>
+    <div className={cn('flex flex-col gap-1 pb-4 border-b border-indigo-500/15 mb-5', className)}>
       {children}
     </div>
   );

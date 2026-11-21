@@ -2,7 +2,7 @@
 /**
  * Responsibility: Render Application Version, Deployment History log, and Feature Release Controls (canary kill-switches).
  * Flow: System Health Dashboard -> SuperadminSystemHealthOverviewReleasesControlsCard -> interactive toggles and rollback actions.
- * Aesthetic: Ultra-premium dark glassmorphism, glowing micro-circuit switches, telemetry badges, and live tactile controls.
+ * Aesthetic: Ultra-premium dark glassmorphism, heavy-duty 160px x 72px tactile switches, telemetry badges, and live controls.
  */
 import { useState } from 'react';
 import {
@@ -11,8 +11,6 @@ import {
   RotateCcw,
   Sliders,
   CheckCircle2,
-  AlertTriangle,
-  ShieldCheck,
   ShieldAlert,
   Cpu,
   Database,
@@ -20,9 +18,6 @@ import {
   Activity,
   Power,
   Tag,
-  Clock,
-  Sparkles,
-  Zap,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -84,16 +79,15 @@ const KILLSWITCH_ITEMS = [
   {
     key: 'apiRateLimiter' as const,
     label: 'API Gateway Rate Limiter',
-    desc: 'DDoS edge shield & request burst throttling',
+    desc: 'DDoS edge shield & request burst throttling protection',
     category: 'Edge & Network',
     icon: ShieldAlert,
     theme: {
       bg: 'bg-gradient-to-br from-[#061824]/95 via-[#082333]/90 to-[#0b3045]/85',
-      border: 'border-cyan-500/30 hover:border-cyan-500/60',
-      shadow: 'shadow-lg shadow-cyan-950/40 hover:shadow-cyan-950/60',
+      border: 'border-cyan-500/35 hover:border-cyan-400/60',
+      shadow: 'shadow-xl shadow-cyan-950/40 hover:shadow-cyan-950/60',
       glow: 'bg-cyan-500/15 group-hover:bg-cyan-500/30',
       iconBg: 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300',
-      activeText: 'text-cyan-300',
     },
     activeMetric: '4.2k req/s nominal',
     disabledMetric: 'Throttling Bypassed',
@@ -101,16 +95,15 @@ const KILLSWITCH_ITEMS = [
   {
     key: 'queueWorkers' as const,
     label: 'Worker Queue Auto-Dispatch',
-    desc: 'Async BullMQ tasks & multi-worker pool',
+    desc: 'Async BullMQ tasks & multi-worker compute pool',
     category: 'Compute & Queues',
     icon: Cpu,
     theme: {
       bg: 'bg-gradient-to-br from-[#120a26]/95 via-[#190e38]/90 to-[#23144d]/85',
-      border: 'border-indigo-500/30 hover:border-indigo-500/60',
-      shadow: 'shadow-lg shadow-indigo-950/40 hover:shadow-indigo-950/60',
+      border: 'border-indigo-500/35 hover:border-indigo-400/60',
+      shadow: 'shadow-xl shadow-indigo-950/40 hover:shadow-indigo-950/60',
       glow: 'bg-indigo-500/15 group-hover:bg-indigo-500/30',
       iconBg: 'bg-indigo-500/20 border-indigo-500/40 text-indigo-300',
-      activeText: 'text-indigo-300',
     },
     activeMetric: '12 worker pods warm',
     disabledMetric: 'Consumers Halted',
@@ -118,16 +111,15 @@ const KILLSWITCH_ITEMS = [
   {
     key: 'dbReadReplicaRouter' as const,
     label: 'Database Read-Replica Router',
-    desc: 'Dynamic query routing to secondary pool',
+    desc: 'Dynamic query routing to secondary storage pool',
     category: 'Database & Storage',
     icon: Database,
     theme: {
       bg: 'bg-gradient-to-br from-[#071329]/95 via-[#0a1c3b]/90 to-[#0e2752]/85',
-      border: 'border-blue-500/30 hover:border-blue-500/60',
-      shadow: 'shadow-lg shadow-blue-950/40 hover:shadow-blue-950/60',
+      border: 'border-blue-500/35 hover:border-blue-400/60',
+      shadow: 'shadow-xl shadow-blue-950/40 hover:shadow-blue-950/60',
       glow: 'bg-blue-500/15 group-hover:bg-blue-500/30',
       iconBg: 'bg-blue-500/20 border-blue-500/40 text-blue-300',
-      activeText: 'text-blue-300',
     },
     activeMetric: 'Replica lag < 1.2ms',
     disabledMetric: 'Primary-Only Routing',
@@ -140,11 +132,10 @@ const KILLSWITCH_ITEMS = [
     icon: Webhook,
     theme: {
       bg: 'bg-gradient-to-br from-[#1c1206]/95 via-[#271908]/90 to-[#38240c]/85',
-      border: 'border-amber-500/30 hover:border-amber-500/60',
-      shadow: 'shadow-lg shadow-amber-950/40 hover:shadow-amber-950/60',
+      border: 'border-amber-500/35 hover:border-amber-400/60',
+      shadow: 'shadow-xl shadow-amber-950/40 hover:shadow-amber-950/60',
       glow: 'bg-amber-500/15 group-hover:bg-amber-500/30',
       iconBg: 'bg-amber-500/20 border-amber-500/40 text-amber-300',
-      activeText: 'text-amber-300',
     },
     activeMetric: '0 dropped webhooks',
     disabledMetric: 'Outbox Buffering',
@@ -152,16 +143,15 @@ const KILLSWITCH_ITEMS = [
   {
     key: 'apmDistributedTracing' as const,
     label: 'Distributed Tracing & APM',
-    desc: 'OpenTelemetry spans & query profiling',
+    desc: 'OpenTelemetry spans & query latency profiling',
     category: 'Observability',
     icon: Activity,
     theme: {
       bg: 'bg-gradient-to-br from-[#051c12]/95 via-[#072719]/90 to-[#0a3824]/85',
-      border: 'border-emerald-500/30 hover:border-emerald-500/60',
-      shadow: 'shadow-lg shadow-emerald-950/40 hover:shadow-emerald-950/60',
+      border: 'border-emerald-500/35 hover:border-emerald-400/60',
+      shadow: 'shadow-xl shadow-emerald-950/40 hover:shadow-emerald-950/60',
       glow: 'bg-emerald-500/15 group-hover:bg-emerald-500/30',
       iconBg: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300',
-      activeText: 'text-emerald-300',
     },
     activeMetric: '100% traces sampled',
     disabledMetric: 'Telemetry Paused',
@@ -169,16 +159,15 @@ const KILLSWITCH_ITEMS = [
   {
     key: 'maintenanceGate' as const,
     label: 'Emergency Maintenance Gate',
-    desc: 'Bypass non-admin traffic with HTTP 503',
+    desc: 'Bypass non-admin traffic with HTTP 503 lockout',
     category: 'System Reliability',
     icon: Power,
     theme: {
       bg: 'bg-gradient-to-br from-[#200812]/95 via-[#2c0b19]/90 to-[#3e0f23]/85',
-      border: 'border-rose-500/35 hover:border-rose-500/60',
-      shadow: 'shadow-lg shadow-rose-950/40 hover:shadow-rose-950/60',
-      glow: 'bg-rose-500/20 group-hover:bg-rose-500/35',
+      border: 'border-rose-500/40 hover:border-rose-400/70',
+      shadow: 'shadow-xl shadow-rose-950/40 hover:shadow-rose-950/60',
+      glow: 'bg-rose-500/25 group-hover:bg-rose-500/40',
       iconBg: 'bg-rose-500/20 border-rose-500/40 text-rose-300',
-      activeText: 'text-rose-300',
     },
     activeMetric: 'Standby (Traffic Open)',
     disabledMetric: '503 LOCKOUT ACTIVE',
@@ -333,12 +322,12 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
         </div>
       </div>
 
-      {/* Feature Release Controls & Emergency Killswitches: Generous 3-Column Grid */}
-      <div className="relative z-10 flex flex-col gap-3.5 pt-4 border-t border-slate-800/80">
+      {/* Feature Release Controls & Emergency Killswitches */}
+      <div className="relative z-10 flex flex-col gap-4 pt-4 border-t border-slate-800/80">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
-              <Sliders size={15} />
+              <Sliders size={16} />
             </div>
             <div>
               <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-200">
@@ -356,60 +345,60 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
           </span>
         </div>
 
-        {/* 6 Rich Colorful Killswitch Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* 6 Rich Colorful Killswitch Cards: 2 Columns with Generous 160px x 72px Switch */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           {KILLSWITCH_ITEMS.map(({ key, label, desc, category, icon: Icon, theme, activeMetric, disabledMetric }) => {
             const active = featureFlags[key];
             return (
               <div
                 key={key}
-                className={`group relative overflow-hidden rounded-2xl p-5 transition-all duration-300 flex flex-col justify-between border ${theme.border} ${theme.bg} ${theme.shadow} hover:scale-[1.01]`}
+                className={`group relative overflow-hidden rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between border ${theme.border} ${theme.bg} ${theme.shadow} hover:scale-[1.008]`}
               >
                 {/* Ambient Radial Backdrop Glow */}
                 <div
-                  className={`pointer-events-none absolute -top-10 -right-10 h-28 w-28 rounded-full blur-2xl transition-all duration-500 ${theme.glow}`}
+                  className={`pointer-events-none absolute -top-12 -right-12 h-36 w-36 rounded-full blur-3xl transition-all duration-500 ${theme.glow}`}
                   aria-hidden="true"
                 />
 
-                {/* Top Section: Icon, Labels & Tactical Switch */}
-                <div className="relative z-10 flex items-start justify-between gap-3 mb-4">
+                {/* Main Card Body: Info on Left, 160px Switch on Right */}
+                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
                   {/* Left: Icon & Title info */}
-                  <div className="flex items-start gap-3 min-w-0">
-                    <div className={`p-2.5 rounded-xl border ${theme.iconBg} shrink-0 group-hover:scale-110 transition-transform shadow-xs`}>
-                      <Icon size={18} aria-hidden="true" />
+                  <div className="flex items-start gap-4 min-w-0 flex-1">
+                    <div className={`p-3 rounded-2xl border ${theme.iconBg} shrink-0 group-hover:scale-110 transition-transform shadow-sm`}>
+                      <Icon size={22} aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
-                      <span className="text-sm font-bold text-white block group-hover:text-emerald-300 transition-colors truncate">
+                      <h4 className="text-base font-extrabold text-white tracking-tight group-hover:text-emerald-300 transition-colors">
                         {label}
-                      </span>
-                      <span className="text-[11px] text-slate-300/80 block leading-snug mt-0.5 line-clamp-1">
+                      </h4>
+                      <p className="text-xs text-slate-300/90 leading-relaxed mt-1 mb-2">
                         {desc}
-                      </span>
-                      <span className="text-[9px] font-mono font-semibold text-slate-400 uppercase tracking-wider mt-1 block">
+                      </p>
+                      <span className="inline-flex items-center text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-900/80 border border-slate-800 text-slate-400">
                         {category}
                       </span>
                     </div>
                   </div>
 
-                  {/* Right: Tactical Cockpit Switch Control */}
-                  <div className="switch-area flex flex-col items-end gap-1.5 shrink-0">
+                  {/* Right: Exact 160px x 72px Premium Switch Control */}
+                  <div className="switch-area flex flex-col items-center sm:items-end gap-2 shrink-0">
                     {/* Switch Status Pill */}
                     <div
-                      className={`switch-status inline-flex items-center gap-1 font-mono text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border transition-all duration-300 select-none shadow-xs ${
+                      className={`switch-status inline-flex items-center gap-1.5 font-mono text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full border transition-all duration-300 select-none shadow-xs ${
                         active
-                          ? 'armed bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-emerald-500/10'
-                          : 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-rose-500/10'
+                          ? 'armed bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-emerald-500/20'
+                          : 'bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-rose-500/20'
                       }`}
                     >
                       <span
-                        className={`h-1.5 w-1.5 rounded-full ${
+                        className={`h-2 w-2 rounded-full ${
                           active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
                         }`}
                       />
                       <span>{active ? 'SWITCH ARMED' : 'SAFE MODE'}</span>
                     </div>
 
-                    {/* Illuminated Tactical Switch with Visible Socket & Chrome Knob */}
+                    {/* Exact 160px x 72px Oblong Pill Slider Switch with 58px Knob */}
                     <button
                       type="button"
                       role="switch"
@@ -417,46 +406,46 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                       aria-label={active ? `Disarm kill switch for ${label}` : `Arm kill switch for ${label}`}
                       aria-pressed={active}
                       onClick={() => toggleFlag(key, label)}
-                      className={`premium-switch group/sw relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full p-0.5 transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
+                      className={`premium-switch relative flex items-center w-[160px] h-[72px] p-[7px] rounded-[50px] border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
                         active
-                          ? 'is-armed bg-[#041a10] border border-emerald-400/50 shadow-[0_0_14px_rgba(16,185,129,0.35),inset_0_2px_4px_rgba(0,0,0,0.85)]'
-                          : 'bg-[#18080e] border border-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.25),inset_0_2px_4px_rgba(0,0,0,0.85)] hover:border-rose-400/60'
+                          ? 'is-armed bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_24px_rgba(16,185,129,0.45),inset_0_2px_4px_rgba(0,0,0,0.25)]'
+                          : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_3px_8px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
                       }`}
                     >
-                      {/* Recessed Glowing Circuit Channel */}
+                      {/* Recessed internal circuit track glow */}
                       <div
-                        className={`pointer-events-none absolute inset-x-2 top-1/2 -translate-y-1/2 h-1.5 rounded-full transition-all duration-300 ${
+                        className={`pointer-events-none absolute inset-x-4 top-1/2 -translate-y-1/2 h-2 rounded-full transition-all duration-300 ${
                           active
-                            ? 'bg-gradient-to-r from-emerald-500 to-teal-400 opacity-90 shadow-[0_0_6px_rgba(16,185,129,0.8)]'
-                            : 'bg-gradient-to-r from-rose-900/60 to-slate-800 opacity-40'
+                            ? 'bg-gradient-to-r from-emerald-400 to-teal-300 opacity-60 shadow-[0_0_10px_rgba(16,185,129,0.9)]'
+                            : 'bg-slate-950/80 opacity-40'
                         }`}
                       />
 
-                      {/* 3D Tactile Chrome Knob with Laser-Etched Power Symbol ⏻ */}
+                      {/* 58px x 58px Tactile White Chrome Knob with 26px Power Icon ⏻ */}
                       <span
                         aria-hidden="true"
-                        className={`switch-knob pointer-events-none relative z-10 flex h-5.5 w-5.5 transform items-center justify-center rounded-full transition-transform duration-300 ease-out font-black ${
+                        className={`switch-knob relative z-10 flex items-center justify-center w-[58px] h-[58px] min-w-[58px] min-h-[58px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_4px_14px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
                           active
-                            ? 'translate-x-7 bg-gradient-to-b from-white via-slate-100 to-slate-200 text-emerald-600 border border-white shadow-[0_2px_5px_rgba(0,0,0,0.5),0_0_8px_rgba(16,185,129,0.5)]'
-                            : 'translate-x-0 bg-gradient-to-b from-slate-300 via-slate-400 to-slate-500 text-rose-700 border border-slate-300/80 shadow-[0_2px_4px_rgba(0,0,0,0.5)]'
+                            ? 'translate-x-[88px] text-emerald-600'
+                            : 'translate-x-0 text-slate-800'
                         }`}
                       >
-                        <span className="text-[10px] leading-none select-none font-bold drop-shadow-xs">⏻</span>
+                        <span className="text-[26px] leading-none select-none font-bold drop-shadow-xs">⏻</span>
                       </span>
                     </button>
 
                     {/* Switch Hint */}
-                    <span className="switch-hint font-mono text-[8px] font-bold uppercase tracking-wider text-slate-400 transition-colors select-none">
+                    <span className="switch-hint font-mono text-[10px] font-extrabold uppercase tracking-wider text-slate-400 transition-colors select-none">
                       {active ? 'CLICK TO DISARM' : 'CLICK TO ARM'}
                     </span>
                   </div>
                 </div>
 
                 {/* Bottom Section: Dynamic Telemetry & State Indicators */}
-                <div className="relative z-10 flex items-center justify-between pt-3 border-t border-slate-800/80 text-[11px]">
-                  <div className="flex items-center gap-1.5">
+                <div className="relative z-10 flex items-center justify-between pt-4 mt-4 border-t border-slate-800/80 text-xs">
+                  <div className="flex items-center gap-2">
                     <span
-                      className={`h-2 w-2 rounded-full transition-all ${
+                      className={`h-2.5 w-2.5 rounded-full transition-all ${
                         active ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
                       }`}
                     />
@@ -469,7 +458,7 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                     </span>
                   </div>
 
-                  <span className="font-mono text-slate-300 font-semibold text-[11px] bg-slate-900/80 border border-slate-800 px-2 py-0.5 rounded-md shrink-0">
+                  <span className="font-mono text-slate-200 font-bold text-xs bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-lg shrink-0">
                     {active ? activeMetric : disabledMetric}
                   </span>
                 </div>

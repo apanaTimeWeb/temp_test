@@ -10,7 +10,7 @@ import type { SuperadminSystemCardFooterProps } from '@/app/frontend_superadmin/
  */
 export function SuperadminSettingsBrandingCardFooter({ children, className }: SuperadminSystemCardFooterProps) {
   return (
-    <div className={cn('sys-card-footer pt-5 mt-5 border-t border-border/60 flex flex-wrap items-center justify-between gap-3', className)}>
+    <div className={cn('pt-5 mt-5 border-t border-indigo-500/15 flex flex-wrap items-center justify-between gap-3', className)}>
       {children}
     </div>
   );

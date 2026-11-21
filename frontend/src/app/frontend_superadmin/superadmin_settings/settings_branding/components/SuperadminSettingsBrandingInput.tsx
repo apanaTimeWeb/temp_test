@@ -37,7 +37,7 @@ export const SuperadminSettingsBrandingInput = forwardRef<HTMLInputElement, Supe
       aria-label={ariaLabel}
       aria-required={ariaRequired}
       className={cn(
-        'sys-input w-full rounded-xl border border-border bg-input/80 px-3.5 py-2.5 text-xs sm:text-sm text-primary placeholder:text-secondary/60 transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50',
+        'w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 transition-all focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 disabled:cursor-not-allowed disabled:opacity-50 shadow-inner',
         className
       )}
       data-testid={dataTestId}

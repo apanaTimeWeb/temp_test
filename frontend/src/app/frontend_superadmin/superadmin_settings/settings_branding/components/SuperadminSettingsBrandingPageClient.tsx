@@ -109,7 +109,7 @@ export default function SuperadminSettingsBrandingPageClient() {
                 />
 
                 {/* Library Name */}
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="branding-name">{tCopy('COPY.LIBRARY_NAME')}</Label>
                   <Input
                     id="branding-name"
@@ -119,16 +119,16 @@ export default function SuperadminSettingsBrandingPageClient() {
                     data-testid="superadmin_settings_branding-branding-name"
                   />
                   {errors.libraryName && (
-                    <p id="branding-name-error" className="text-xs text-danger font-medium mt-1" role="alert">
+                    <p id="branding-name-error" className="text-xs text-rose-400 font-medium mt-1" role="alert">
                       {translateValidationMessage(errors.libraryName.message)}
                     </p>
                   )}
                 </div>
 
                 {/* Tagline */}
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="branding-tagline">
-                    {tCopy('COPY.APP_TAGLINE')}&nbsp;<span className="text-secondary/70 lowercase font-normal">{tCopy('COPY.OPTIONAL')}</span>
+                    {tCopy('COPY.APP_TAGLINE')}&nbsp;<span className="text-slate-400 lowercase font-normal">{tCopy('COPY.OPTIONAL')}</span>
                   </Label>
                   <Input
                     id="branding-tagline"
@@ -139,7 +139,7 @@ export default function SuperadminSettingsBrandingPageClient() {
                     data-testid="superadmin_settings_branding-branding-tagline"
                   />
                   {errors.tagline && (
-                    <p id="branding-tagline-error" className="text-xs text-danger font-medium mt-1" role="alert">
+                    <p id="branding-tagline-error" className="text-xs text-rose-400 font-medium mt-1" role="alert">
                       {translateValidationMessage(errors.tagline.message)}
                     </p>
                   )}
@@ -149,7 +149,7 @@ export default function SuperadminSettingsBrandingPageClient() {
                 <SuperadminSettingsBrandingThemePresets activePrimary={form.primaryColor} onSelectPreset={applyPreset} />
 
                 {/* Primary Color */}
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="branding-primary-color-value">{tCopy('COPY.PRIMARY_COLOR')}</Label>
                   <div className="flex items-center gap-2.5">
                     {normalizeHexColor(form.primaryColor) && (
@@ -159,7 +159,7 @@ export default function SuperadminSettingsBrandingPageClient() {
                         id="branding-primary-color"
                         value={form.primaryColor}
                         onChange={(e) => setValue('primaryColor', e.target.value, { shouldValidate: true, shouldDirty: true })}
-                        className="h-10 w-12 rounded-xl border border-border bg-transparent cursor-pointer p-0.5 shrink-0"
+                        className="h-10 w-12 rounded-xl border border-indigo-500/30 bg-slate-950 cursor-pointer p-1 shrink-0"
                         data-testid="superadmin-system-system-branding-branding-primary-color-2"
                       />
                     )}
@@ -175,14 +175,14 @@ export default function SuperadminSettingsBrandingPageClient() {
                     <div className="h-10 w-10 shrink-0 sys-preview-swatch-primary" title="Primary Color Live Swatch" />
                   </div>
                   {errors.primaryColor && (
-                    <p id="branding-primary-color-error" className="text-xs text-danger font-medium mt-1" role="alert">
+                    <p id="branding-primary-color-error" className="text-xs text-rose-400 font-medium mt-1" role="alert">
                       {translateValidationMessage(errors.primaryColor.message)}
                     </p>
                   )}
                 </div>
 
                 {/* Secondary Accent Color */}
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="branding-accent-color-value">{tCopy('COPY.SECONDARY_ACCENT_COLOR')}</Label>
                   <div className="flex items-center gap-2.5">
                     {normalizeHexColor(form.accentColor) && (
@@ -192,7 +192,7 @@ export default function SuperadminSettingsBrandingPageClient() {
                         id="branding-accent-color"
                         value={form.accentColor}
                         onChange={(e) => setValue('accentColor', e.target.value, { shouldValidate: true, shouldDirty: true })}
-                        className="h-10 w-12 rounded-xl border border-border bg-transparent cursor-pointer p-0.5 shrink-0"
+                        className="h-10 w-12 rounded-xl border border-indigo-500/30 bg-slate-950 cursor-pointer p-1 shrink-0"
                         data-testid="superadmin-system-system-branding-branding-accent-color-3"
                       />
                     )}
@@ -208,7 +208,7 @@ export default function SuperadminSettingsBrandingPageClient() {
                     <div className="h-10 w-10 shrink-0 sys-preview-swatch-accent" title="Accent Color Live Swatch" />
                   </div>
                   {errors.accentColor && (
-                    <p id="branding-accent-color-error" className="text-xs text-danger font-medium mt-1" role="alert">
+                    <p id="branding-accent-color-error" className="text-xs text-rose-400 font-medium mt-1" role="alert">
                       {translateValidationMessage(errors.accentColor.message)}
                     </p>
                   )}
@@ -258,16 +258,16 @@ export default function SuperadminSettingsBrandingPageClient() {
                   <CardDescription>{tCopy('COPY.SEE_HOW_YOUR_BRANDING_LOOKS_ACROSS_DIFFERENT_PARTS_OF_THE_APP')}</CardDescription>
                 </div>
                 {/* View switcher tabs */}
-                <div className="flex items-center gap-1 p-1 rounded-xl bg-surface-zebra border border-border/80 self-start sm:self-auto shrink-0">
+                <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-900/90 border border-indigo-500/25 backdrop-blur-md shadow-lg self-start sm:self-auto shrink-0">
                   {(['all', 'sidebar', 'login', 'idcard'] as const).map((tab) => (
                     <button
                       key={tab}
                       type="button"
                       onClick={() => setActivePreviewTab(tab)}
-                      className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer capitalize ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer capitalize ${
                         activePreviewTab === tab
-                          ? 'bg-primary text-on-primary shadow-xs'
-                          : 'text-secondary hover:text-primary'
+                          ? 'bg-gradient-to-r from-purple-500/25 to-indigo-500/25 text-purple-200 border border-purple-500/40 shadow-sm font-bold'
+                          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                       }`}
                     >
                       {tab === 'all' ? 'All Views' : tab === 'idcard' ? 'Smart ID' : tab}

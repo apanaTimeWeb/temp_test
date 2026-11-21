@@ -10,7 +10,7 @@ import type { SuperadminSystemCardTitleProps } from '@/app/frontend_superadmin/s
  */
 export function SuperadminSettingsBrandingCardTitle({ children, className }: SuperadminSystemCardTitleProps) {
   return (
-    <h3 className={cn('sys-card-title text-base sm:text-lg font-bold tracking-tight text-primary flex items-center gap-2.5', className)}>
+    <h3 className={cn('text-base sm:text-lg font-bold tracking-tight text-slate-100 flex items-center gap-2.5', className)}>
       {children}
     </h3>
   );
