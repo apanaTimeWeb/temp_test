@@ -5,15 +5,13 @@ import type { ServiceNode } from './SuperadminSystemHealthOverviewServicesTable'
 interface InspectModalProps {
   service: ServiceNode | null;
   onClose: () => void;
-  onPing: (name: string) => void;
-  onRestartRequest: (service: ServiceNode) => void;
+  onPing?: (name: string) => void;
+  onRestartRequest?: (service: ServiceNode) => void;
 }
 
 export default function SuperadminSystemHealthOverviewInspectModal({
   service,
   onClose,
-  onPing,
-  onRestartRequest,
 }: InspectModalProps) {
   if (!service) return null;
 
@@ -132,28 +130,7 @@ export default function SuperadminSystemHealthOverviewInspectModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between pt-4 mt-4 border-t border-border/80">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => onPing(service.name)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-semibold transition-all cursor-pointer"
-            >
-              <Activity size={13} />
-              <span>Ping Node</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                onRestartRequest(service);
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-500/40 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-xs font-semibold transition-all cursor-pointer"
-            >
-              <span>Graceful Restart</span>
-            </button>
-          </div>
-
+        <div className="flex items-center justify-end pt-4 mt-4 border-t border-border/80">
           <button
             type="button"
             onClick={onClose}

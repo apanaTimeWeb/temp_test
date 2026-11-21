@@ -5,7 +5,6 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import SuperadminSystemHealthOverviewDiagnosticsModal from './SuperadminSystemHealthOverviewDiagnosticsModal';
 import SuperadminSystemHealthOverviewExportModal from './SuperadminSystemHealthOverviewExportModal';
-import SuperadminSystemHealthOverviewIncidentsDrawer from './SuperadminSystemHealthOverviewIncidentsDrawer';
 
 interface HeaderStatusProps {
   onRefresh?: () => void;
@@ -25,7 +24,6 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
   const t = useTranslations('SUPERADMIN_SYSTEM_HEALTH');
   const [diagnosticsOpen, setDiagnosticsOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
-  const [incidentsOpen, setIncidentsOpen] = useState(false);
   const [localRefreshing, setLocalRefreshing] = useState(false);
   const [secondsAgo, setSecondsAgo] = useState(0);
 
@@ -68,14 +66,10 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
           <span className="text-[11px] font-mono">
             Synced: <strong className="text-slate-200">{secondsAgo}s ago</strong>
           </span>
-          <button
-            type="button"
-            onClick={() => setIncidentsOpen(true)}
-            className="inline-flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-medium underline underline-offset-2 transition-colors cursor-pointer"
-          >
+          <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
             <ShieldCheck size={13} />
             <span>0 Active Incidents</span>
-          </button>
+          </span>
         </div>
       </div>
 
@@ -203,12 +197,6 @@ export default function SuperadminSystemHealthOverviewHeaderStatus({
       <SuperadminSystemHealthOverviewExportModal
         isOpen={exportOpen}
         onClose={() => setExportOpen(false)}
-      />
-
-      {/* Incidents Drawer */}
-      <SuperadminSystemHealthOverviewIncidentsDrawer
-        isOpen={incidentsOpen}
-        onClose={() => setIncidentsOpen(false)}
       />
     </>
   );

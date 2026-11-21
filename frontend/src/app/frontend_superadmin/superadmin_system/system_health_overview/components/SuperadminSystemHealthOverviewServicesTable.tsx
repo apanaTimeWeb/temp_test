@@ -249,8 +249,6 @@ export default function SuperadminSystemHealthOverviewServicesTable() {
       <SuperadminSystemHealthOverviewInspectModal
         service={inspectingService}
         onClose={() => setInspectingService(null)}
-        onPing={(name) => handlePing(name)}
-        onRestartRequest={(svc) => setRestartingService(svc)}
       />
 
       <SuperadminSystemHealthOverviewRestartModal

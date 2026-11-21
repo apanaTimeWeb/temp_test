@@ -9,5 +9,14 @@ import type { SuperadminSystemCardProps } from '@/app/frontend_superadmin/supera
  * @param parameter Input required by the declared feature contract. Declared type: SuperadminSystemCardProps.
  */
 export function SuperadminSettingsBrandingCard({ children, className }: SuperadminSystemCardProps) {
-  return <div className={cn('sys-card', className)}>{children}</div>;
+  return (
+    <div
+      className={cn(
+        'sys-card rounded-2xl border border-border/80 bg-card/90 backdrop-blur-md shadow-xl shadow-black/20 p-5 sm:p-6 transition-all duration-200 overflow-hidden',
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
 }

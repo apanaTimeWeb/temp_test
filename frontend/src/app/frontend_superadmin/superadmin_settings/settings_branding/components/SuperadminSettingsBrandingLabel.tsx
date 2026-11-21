@@ -7,7 +7,19 @@ import type { SuperadminSettingsBrandingLabelProps } from '@/app/frontend_supera
 
 export const SuperadminSettingsBrandingLabel = forwardRef<HTMLLabelElement, SuperadminSettingsBrandingLabelProps>(
   ({ className, htmlFor, id, title, onClick, 'aria-label': ariaLabel, 'aria-describedby': ariaDescribedBy, 'data-testid': dataTestId, children }, ref) => (
-    <label ref={ref} htmlFor={htmlFor} id={id} title={title} onClick={onClick} aria-label={ariaLabel} aria-describedby={ariaDescribedBy} data-testid={dataTestId} className={cn('sys-label', className)}>{children}</label>
+    <label
+      ref={ref}
+      htmlFor={htmlFor}
+      id={id}
+      title={title}
+      onClick={onClick}
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
+      data-testid={dataTestId}
+      className={cn('sys-label block text-xs font-bold text-secondary uppercase tracking-wider mb-1.5', className)}
+    >
+      {children}
+    </label>
   ),
 );
 SuperadminSettingsBrandingLabel.displayName = 'SuperadminSettingsBrandingLabel';

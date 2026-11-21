@@ -59,7 +59,18 @@ export default function SuperadminSystemHealthOverviewDashboardSections({
               key={tab.id}
               role="tab"
               aria-selected={isSelected}
-              onClick={() => setActiveCategory(tab.id)}
+              onClick={() => {
+                setActiveCategory(tab.id);
+                if (typeof window !== 'undefined') {
+                  const url = new URL(window.location.href);
+                  if (tab.id === 'all') {
+                    url.searchParams.delete('tab');
+                  } else {
+                    url.searchParams.set('tab', tab.id);
+                  }
+                  window.history.replaceState({}, '', url.toString());
+                }
+              }}
               className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 isSelected
                   ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-xs'

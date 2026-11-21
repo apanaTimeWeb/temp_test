@@ -9,5 +9,9 @@ import type { SuperadminSystemCardTitleProps } from '@/app/frontend_superadmin/s
  * @param parameter Input required by the declared feature contract. Declared type: SuperadminSystemCardTitleProps.
  */
 export function SuperadminSettingsBrandingCardTitle({ children, className }: SuperadminSystemCardTitleProps) {
-  return <h3 className={cn('sys-card-title', className)}>{children}</h3>;
+  return (
+    <h3 className={cn('sys-card-title text-base sm:text-lg font-bold tracking-tight text-primary flex items-center gap-2.5', className)}>
+      {children}
+    </h3>
+  );
 }

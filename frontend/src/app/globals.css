@@ -364,4 +364,81 @@ html.dark .mgr-theme,
   border: 0;
 }
 
+/* ============================================================
+   SUPERADMIN SETTINGS BRANDING & LIVE PREVIEW STYLES
+   ============================================================ */
+.sys-preview-sidebar-wrap {
+  background-color: #0b0f19;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.875rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+}
+.sys-preview-sidebar-bg {
+  background-color: #0b0f19;
+}
+.sys-preview-card-bg {
+  background-color: #111827;
+}
+.sys-preview-icon {
+  background: var(--preview-primary, #FACC15);
+  color: #000000;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--preview-primary, #FACC15) 40%, transparent);
+}
+.sys-preview-nav-active {
+  background: color-mix(in srgb, var(--preview-primary, #FACC15) 15%, transparent);
+  color: var(--preview-primary, #FACC15);
+  border-left: 3px solid var(--preview-primary, #FACC15);
+}
+.sys-preview-dot-active {
+  background: var(--preview-primary, #FACC15);
+  box-shadow: 0 0 6px var(--preview-primary, #FACC15);
+}
+.sys-preview-dot-inactive {
+  background: #475569;
+}
+.sys-preview-login-btn {
+  background: linear-gradient(135deg, var(--preview-primary, #FACC15), var(--preview-accent, #EAB308));
+  color: #000000;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--preview-primary, #FACC15) 30%, transparent);
+  transition: all 150ms ease;
+}
+.sys-preview-login-btn:hover {
+  filter: brightness(1.05);
+}
+.sys-preview-id-header {
+  background: linear-gradient(135deg, var(--preview-primary, #FACC15), var(--preview-accent, #EAB308));
+  color: #000000;
+}
+.sys-preview-id-title {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: #000000;
+  line-height: 1.2;
+}
+.sys-preview-id-subtitle {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.75);
+}
+.sys-preview-swatch-primary {
+  background-color: var(--preview-primary, #FACC15);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--preview-primary, #FACC15) 45%, transparent);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.625rem;
+}
+.sys-preview-swatch-accent {
+  background-color: var(--preview-accent, #EAB308);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--preview-accent, #EAB308) 45%, transparent);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.625rem;
+}
+
+
 
