@@ -109,7 +109,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Uppercase */}
-          <div className="flex items-center justify-between p-4 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md">
+          <div className="flex items-center justify-between p-4 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-md">
             <div>
               <h4 className="text-sm font-bold text-slate-100">Require Uppercase Letters</h4>
               <p className="text-xs text-slate-400 mt-0.5">At least one uppercase character (A-Z)</p>
@@ -126,7 +126,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
           </div>
 
           {/* Lowercase */}
-          <div className="flex items-center justify-between p-4 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md">
+          <div className="flex items-center justify-between p-4 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-md">
             <div>
               <h4 className="text-sm font-bold text-slate-100">Require Lowercase Letters</h4>
               <p className="text-xs text-slate-400 mt-0.5">At least one lowercase character (a-z)</p>
@@ -144,7 +144,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
           </div>
 
           {/* Numbers */}
-          <div className="flex items-center justify-between p-4 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md">
+          <div className="flex items-center justify-between p-4 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-md">
             <div>
               <h4 className="text-sm font-bold text-slate-100">Require Numeric Digits</h4>
               <p className="text-xs text-slate-400 mt-0.5">At least one numeric digit (0-9)</p>
@@ -162,7 +162,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
           </div>
 
           {/* Special Characters */}
-          <div className="flex items-center justify-between p-4 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md">
+          <div className="flex items-center justify-between p-4 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-md">
             <div>
               <h4 className="text-sm font-bold text-slate-100">Require Special Symbols</h4>
               <p className="text-xs text-slate-400 mt-0.5">At least one special character (!@#$%^&*)</p>
@@ -182,7 +182,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
         {/* Numeric Limits & History */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
           {/* Minimum Length */}
-          <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-2">
+          <div className="p-4 sm:p-5 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-md space-y-2">
             <label htmlFor="security-password-minimum-length" className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
               <Hash size={14} className="text-indigo-400" />
               <span>Minimum Password Length</span>
@@ -193,7 +193,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
               step={1}
               min={8}
               max={128}
-              className="w-full rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+              className="w-full rounded-xl border border-indigo-500/30 bg-[#07091a]/85 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 shadow-inner"
               {...passwordRegister('length', { valueAsNumber: true })}
               data-testid="superadmin-password-length-input"
             />
@@ -206,7 +206,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
           </div>
 
           {/* Forced Expiry Days */}
-          <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-2">
+          <div className="p-4 sm:p-5 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-md space-y-2">
             <label htmlFor="security-password-expiry-days" className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
               <Calendar size={14} className="text-indigo-400" />
               <span>Forced Expiry Cycle (Days)</span>
@@ -217,7 +217,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
               step={1}
               min={30}
               max={365}
-              className="w-full rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+              className="w-full rounded-xl border border-indigo-500/30 bg-[#07091a]/85 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 shadow-inner"
               {...passwordRegister('expiry', { valueAsNumber: true })}
               data-testid="superadmin-password-expiry-input"
             />
@@ -230,7 +230,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
           </div>
 
           {/* Password History Prevention */}
-          <div className="p-4 sm:p-5 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-2">
+          <div className="p-4 sm:p-5 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-md space-y-2">
             <label htmlFor="security-password-history-count" className="text-xs sm:text-sm font-semibold text-slate-200 flex items-center gap-1.5">
               <History size={14} className="text-indigo-400" />
               <span>Prevent Password Reuse</span>
@@ -243,7 +243,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
               max={24}
               value={preventHistoryCount}
               onChange={(e) => setPreventHistoryCount(Number(e.target.value))}
-              className="w-full rounded-xl border border-indigo-500/25 bg-card px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30"
+              className="w-full rounded-xl border border-indigo-500/30 bg-[#07091a]/85 px-3.5 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400 shadow-inner"
               data-testid="superadmin-password-history-input"
             />
             <p className="text-[11px] text-slate-400">Disallows last {preventHistoryCount} historical passwords</p>
@@ -252,8 +252,8 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
       </div>
 
       {/* 3. Modern Cryptographic Password Hashing Standards (Section A) */}
-      <div className="p-5 sm:p-6 bg-card/70 border border-cyan-500/30 rounded-2xl backdrop-blur-md space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/80 pb-3">
+      <div className="p-5 sm:p-6 bg-gradient-to-b from-[#081b2a]/85 to-[#06101c]/95 border border-cyan-500/30 rounded-2xl shadow-xl backdrop-blur-md space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-cyan-500/20 pb-3">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
               <Cpu size={20} />
@@ -275,7 +275,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
               className={`px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer active:scale-95 shadow-xs ${
                 hashingAlgorithm === 'Argon2id'
                   ? 'border-cyan-400 bg-cyan-500/20 text-cyan-300'
-                  : 'border-border/80 bg-card/60 text-slate-400 hover:border-slate-600'
+                  : 'border-cyan-500/20 bg-[#07131e]/70 text-slate-400 hover:border-cyan-500/40'
               }`}
             >
               Argon2id (Winner PHC)
@@ -286,7 +286,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
               className={`px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer active:scale-95 shadow-xs ${
                 hashingAlgorithm === 'bcrypt'
                   ? 'border-cyan-400 bg-cyan-500/20 text-cyan-300'
-                  : 'border-border/80 bg-card/60 text-slate-400 hover:border-slate-600'
+                  : 'border-cyan-500/20 bg-[#07131e]/70 text-slate-400 hover:border-cyan-500/40'
               }`}
             >
               bcrypt (Work Factor 12)
@@ -295,7 +295,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3.5 pt-1 text-xs">
-          <div className="p-3.5 rounded-xl border border-border/70 bg-card/60 space-y-1">
+          <div className="p-3.5 rounded-xl border border-cyan-500/20 bg-[#07131e]/80 space-y-1">
             <span className="text-[11px] text-slate-400 font-semibold">Algorithm & Mode</span>
             <p className="text-sm font-bold text-cyan-400">
               {hashingAlgorithm === 'Argon2id' ? 'Argon2id (RFC 9106)' : 'bcrypt ($2b$)'}
@@ -303,7 +303,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
             <p className="text-[10px] text-slate-400">Side-channel & GPU resistant</p>
           </div>
 
-          <div className="p-3.5 rounded-xl border border-border/70 bg-card/60 space-y-1">
+          <div className="p-3.5 rounded-xl border border-cyan-500/20 bg-[#07131e]/80 space-y-1">
             <span className="text-[11px] text-slate-400 font-semibold">Work / Memory Cost</span>
             <p className="text-sm font-bold text-slate-100">
               {hashingAlgorithm === 'Argon2id' ? '64 MiB (65,536 KiB)' : 'Cost Factor 12 (4,096 r)'}
@@ -311,13 +311,13 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
             <p className="text-[10px] text-slate-400">Exhausts ASIC memory hardware</p>
           </div>
 
-          <div className="p-3.5 rounded-xl border border-border/70 bg-card/60 space-y-1">
+          <div className="p-3.5 rounded-xl border border-cyan-500/20 bg-[#07131e]/80 space-y-1">
             <span className="text-[11px] text-slate-400 font-semibold">Salt Entropy & Spec</span>
             <p className="text-sm font-bold text-slate-100">128-bit CSPRNG Salt</p>
             <p className="text-[10px] text-slate-400">Unique cryptographic salt per hash</p>
           </div>
 
-          <div className="p-3.5 rounded-xl border border-border/70 bg-card/60 space-y-1">
+          <div className="p-3.5 rounded-xl border border-cyan-500/20 bg-[#07131e]/80 space-y-1">
             <span className="text-[11px] text-slate-400 font-semibold">Plaintext Storage</span>
             <p className="text-sm font-bold text-emerald-400 flex items-center gap-1">
               <CheckCircle2 size={13} />
@@ -329,8 +329,8 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
       </div>
 
       {/* 4. Live Password Strength & Crack Time Simulator */}
-      <div className="p-5 sm:p-6 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-4">
-        <div className="border-b border-border/80 pb-3">
+      <div className="p-5 sm:p-6 border border-indigo-500/25 bg-gradient-to-b from-[#0e1338]/85 to-[#080b20]/95 rounded-2xl shadow-2xl backdrop-blur-md space-y-4">
+        <div className="border-b border-indigo-500/20 pb-3">
           <h3 className="text-sm sm:text-base font-bold text-slate-100 flex items-center gap-2">
             <Zap size={18} className="text-amber-400" />
             <span>Interactive Password Strength & Entropy Simulator</span>
@@ -347,7 +347,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
               value={testPassword}
               onChange={(e) => setTestPassword(e.target.value)}
               placeholder="Type a password to test policy compliance & entropy..."
-              className="w-full pr-10 pl-4 py-2.5 text-sm rounded-xl bg-card border border-border/80 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-500"
+              className="w-full pr-10 pl-4 py-2.5 text-sm rounded-xl bg-[#07091a]/85 border border-indigo-500/30 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 shadow-inner"
               data-testid="superadmin-password-test-evaluator-input"
             />
             <button

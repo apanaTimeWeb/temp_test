@@ -155,8 +155,8 @@ export default function SuperadminSecurityMfaPolicyPanels({
 
         {/* Sub-policies */}
         {twoFA.enabled && (
-          <div className="mt-6 pt-5 border-t border-border/80 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/70 bg-card/60">
+          <div className="mt-6 pt-5 border-t border-emerald-500/20 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-emerald-500/20 bg-[#08221c]/60">
               <div>
                 <p className="text-xs font-bold text-slate-200">Enforce on All SuperAdmins</p>
                 <p className="text-[11px] text-slate-400">Lockout if not configured</p>
@@ -170,7 +170,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
               />
             </div>
 
-            <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/70 bg-card/60">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-emerald-500/20 bg-[#08221c]/60">
               <div>
                 <p className="text-xs font-bold text-slate-200">Require for Library Admins</p>
                 <p className="text-[11px] text-slate-400">7-day grace period on onboarding</p>
@@ -184,7 +184,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
               />
             </div>
 
-            <div className="flex items-center justify-between p-3.5 rounded-xl border border-border/70 bg-card/60">
+            <div className="flex items-center justify-between p-3.5 rounded-xl border border-emerald-500/20 bg-[#08221c]/60">
               <div>
                 <p className="text-xs font-bold text-slate-200">Step-Up Auth on Critical Actions</p>
                 <p className="text-[11px] text-slate-400">Re-verify MFA before deletes/exports</p>
@@ -203,8 +203,8 @@ export default function SuperadminSecurityMfaPolicyPanels({
 
       {/* 2. Primary Authenticator Method Selection */}
       {twoFA.enabled && (
-        <div className="p-5 sm:p-6 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md space-y-4">
-          <div className="border-b border-border/80 pb-3">
+        <div className="p-5 sm:p-6 border border-indigo-500/20 bg-gradient-to-b from-[#0f143a]/75 to-[#090c24]/90 rounded-2xl shadow-xl backdrop-blur-md space-y-4">
+          <div className="border-b border-indigo-500/20 pb-3">
             <h3 className="text-sm sm:text-base font-bold text-slate-100 flex items-center gap-2">
               <Smartphone size={18} className="text-indigo-400" />
               <span>Primary Approved Authenticator Methods</span>
@@ -223,8 +223,8 @@ export default function SuperadminSecurityMfaPolicyPanels({
                   onClick={() => onSelectMethod?.(value)}
                   className={`flex flex-col justify-between p-4 rounded-xl border transition-all cursor-pointer ${
                     isSelected
-                      ? 'border-indigo-500/60 bg-indigo-500/15 shadow-sm'
-                      : 'border-border/80 bg-card/40 hover:border-indigo-500/30 hover:bg-card/70'
+                      ? 'border-indigo-400 bg-gradient-to-b from-indigo-950/70 to-indigo-900/40 shadow-md'
+                      : 'border-indigo-500/20 bg-[#07091a]/80 hover:border-indigo-500/40 hover:bg-[#0d1235]/70'
                   }`}
                   data-testid={`superadmin-mfa-method-${value}`}
                 >
@@ -258,7 +258,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
       )}
 
       {/* 3. Emergency Backup Recovery Codes */}
-      <div className="p-5 sm:p-6 bg-card/70 border border-border/80 rounded-2xl backdrop-blur-md">
+      <div className="p-5 sm:p-6 border border-amber-500/25 bg-gradient-to-b from-[#1c1208]/85 to-[#0a0710]/95 rounded-2xl shadow-xl backdrop-blur-md">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3.5">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400">

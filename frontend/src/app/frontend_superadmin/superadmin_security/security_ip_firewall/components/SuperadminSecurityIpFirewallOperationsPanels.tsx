@@ -21,7 +21,7 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
     <>
       {activeTab === 'IP Firewall' && (
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 motion-safe:animate-fade-in motion-reduce:animate-none flex flex-col space-y-6">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-border/80 pb-5">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-indigo-500/20 pb-5">
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-100 mb-1 flex items-center gap-2">
                 <Globe size={20} className="text-rose-400" />
@@ -38,7 +38,7 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
                 aria-disabled="true"
                 aria-label={tCopy("COPY.IP_ADDRESS_TO_BLOCK_SAMPLE_PREVIEW_ONLY")}
                 placeholder={tCopy("COPY.IP_ADDRESS_E_G_192_168_1_1")}
-                className="w-full sm:w-64 rounded-xl border border-indigo-500/25 bg-card/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 opacity-60 cursor-not-allowed"
+                className="w-full sm:w-64 rounded-xl border border-indigo-500/30 bg-[#07091a]/80 px-3.5 py-2 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 opacity-60 cursor-not-allowed shadow-inner focus:outline-none"
                 value={newIp}
                 onChange={(e) => setNewIp(e.target.value)}
                 data-testid="superadmin-security-security-operations-panels-ip-address-to-block-sample-preview-only-1"
@@ -56,10 +56,10 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border/80 bg-card/70 backdrop-blur-md overflow-hidden shadow-sm">
+          <div className="rounded-2xl border border-indigo-500/20 bg-[#07091a]/95 backdrop-blur-xl overflow-hidden shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm border-collapse">
-                <thead className="bg-slate-900/40 text-slate-400 border-b border-border/80">
+                <thead className="bg-[#0c0f2b] text-slate-300 uppercase tracking-wider text-[11px] border-b border-indigo-500/20">
                   <tr>
                     <th className="py-3.5 px-4 font-semibold">{tCopy("COPY.IP_CIDR")}</th>
                     <th className="py-3.5 px-4 font-semibold">{tCopy("COPY.RULE_TYPE")}</th>
@@ -68,13 +68,13 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
                     <th className="py-3.5 px-4 font-semibold text-right">{tCopy("COPY.ACTION")}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/60">
+                <tbody className="divide-y divide-indigo-500/10">
                   {ipRules.map((rule) => {
                     const isBlocked = rule.type === 'BLOCKED';
                     return (
-                      <tr key={rule.id} className="transition-colors hover:bg-slate-800/30">
+                      <tr key={rule.id} className="transition-colors hover:bg-indigo-950/20">
                         <td className="py-3.5 px-4 font-mono font-semibold text-slate-200">
-                          <span className="bg-slate-800/60 px-2 py-0.5 rounded border border-slate-700/50">
+                          <span className="bg-[#0b0e28] text-indigo-300 px-2.5 py-1 rounded-lg border border-indigo-500/30 shadow-inner">
                             {rule.ip}
                           </span>
                         </td>
@@ -91,7 +91,7 @@ export default function SuperadminSecurityIpFirewallOperationsPanels({
                           </span>
                         </td>
                         <td className="py-3.5 px-4 text-slate-300">{tCopy(`COPY.${rule.reason}`)}</td>
-                        <td className="py-3.5 px-4 text-slate-400 text-xs">{rule.date}</td>
+                        <td className="py-3.5 px-4 text-slate-400 text-xs font-mono">{rule.date}</td>
                         <td className="py-3.5 px-4 text-right">
                           <button
                             type="button"

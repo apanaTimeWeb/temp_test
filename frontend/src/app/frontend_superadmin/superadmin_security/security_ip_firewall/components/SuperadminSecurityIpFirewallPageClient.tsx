@@ -14,7 +14,7 @@ import type { SuperadminSecurityLoginRules, SuperadminSecurityPasswordPolicy } f
 import { SUPERADMIN_SECURITY_LOGIN_PREVIEW_DEFAULTS, SUPERADMIN_SECURITY_PASSWORD_PREVIEW_DEFAULTS, SUPERADMIN_SECURITY_FAILED_LOGINS, SUPERADMIN_SECURITY_SESSIONS, SUPERADMIN_SECURITY_IP_RULES } from '@/app/frontend_superadmin/superadmin_security/security_ip_firewall/mocks/fixtures/SuperadminSecurityIpFirewallPreviewMockFixtures';
 import SuperadminSecurityIpFirewallOperationsPanels from '@/app/frontend_superadmin/superadmin_security/security_ip_firewall/components/SuperadminSecurityIpFirewallOperationsPanels';
 
-import { ShieldAlert, AlertCircle, Globe, Flame } from 'lucide-react';
+import { ShieldAlert, AlertCircle, Globe, Flame, Ban, ShieldCheck, Activity } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSuperadminSecurityIpFirewallUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_security/security_ip_firewall/hooks/useSuperadminSecurityIpFirewallUnsavedChangesGuard';
 import { SUPERADMIN_SECURITY_OVERVIEW_PAGE_CLIENT_FIELDS } from '@/app/frontend_superadmin/superadmin_security/security_ip_firewall/constants/SuperadminSecurityIpFirewallStaticConstants';
@@ -71,6 +71,9 @@ export default function SuperadminSecurityIpFirewallPageClient() {
     showToast(tCopy("COPY.DOWNLOADED_A_SAMPLE_SECURITY_LOG_PREVIEW_ONLY_NO_LIVE_AUDIT_DATA_WAS_EXPORTED"));
   };
 
+  const blockedCount = SUPERADMIN_SECURITY_IP_RULES.filter((r) => r.type === 'BLOCKED').length;
+  const allowedCount = SUPERADMIN_SECURITY_IP_RULES.filter((r) => r.type === 'ALLOWED').length;
+
   return (
     <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
       {securityRows.length === 0 && <SuperadminSecurityIpFirewallEmptyState filtered />}
@@ -84,7 +87,7 @@ export default function SuperadminSecurityIpFirewallPageClient() {
       </div>
 
       {/* Hero Header */}
-      <div className="rounded-2xl border border-border/80 bg-gradient-to-r from-card via-card/90 to-card/60 p-5 sm:p-6 shadow-sm backdrop-blur-md">
+      <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/80 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-xl backdrop-blur-md">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-3">
@@ -92,13 +95,16 @@ export default function SuperadminSecurityIpFirewallPageClient() {
                 <Flame size={24} aria-hidden="true" />
               </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-100">
-                IP Firewall
+                IP Firewall & Network Rules
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-400">
                 <span className="h-1.5 w-1.5 rounded-full bg-rose-400 animate-pulse" />
                 Firewall Filtering Active
               </span>
             </div>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+              Network perimeter filtering, CIDR whitelisting, and automated brute-force IP quarantine across global reverse proxies.
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
@@ -108,15 +114,62 @@ export default function SuperadminSecurityIpFirewallPageClient() {
             </div>
             <div className="flex items-center gap-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-2 text-xs font-bold text-indigo-300">
               <Globe size={15} className="text-indigo-400" aria-hidden="true" />
-              <span>{SUPERADMIN_SECURITY_IP_RULES.length} IP Rules</span>
+              <span>{SUPERADMIN_SECURITY_IP_RULES.length} IP Rules Active</span>
             </div>
           </div>
         </div>
       </div>
 
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total IP Rules</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shadow-inner">
+              <Globe size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-purple-400 tabular-nums">{SUPERADMIN_SECURITY_IP_RULES.length}</div>
+          <div className="text-[11px] text-slate-400 mt-1">Configured subnets & CIDRs</div>
+        </div>
+
+        <div className="rounded-2xl border border-rose-500/20 bg-gradient-to-b from-[#220a14]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-rose-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Blocked CIDRs</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400 shadow-inner">
+              <Ban size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-rose-400 tabular-nums">{blockedCount}</div>
+          <div className="text-[11px] text-slate-400 mt-1">Zero-tolerance ingress drop</div>
+        </div>
+
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Allowed Networks</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner">
+              <ShieldCheck size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-emerald-400 tabular-nums">{allowedCount}</div>
+          <div className="text-[11px] text-slate-400 mt-1">Trusted HQ & branch gateways</div>
+        </div>
+
+        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-b from-[#241306]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-amber-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Edge Filtering</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shadow-inner">
+              <Flame size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-amber-400 tabular-nums">Enforcing</div>
+          <div className="text-[11px] text-slate-400 mt-1">Edge firewall sync verified</div>
+        </div>
+      </div>
+
       {/* Content */}
       <div
-        className="rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-sm overflow-hidden min-h-[420px] flex flex-col"
+        className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0c0f2b] via-[#090b20] to-[#060818] shadow-2xl overflow-hidden backdrop-blur-xl min-h-[420px] flex flex-col"
         aria-label="IP Firewall Settings"
         tabIndex={0}
       >

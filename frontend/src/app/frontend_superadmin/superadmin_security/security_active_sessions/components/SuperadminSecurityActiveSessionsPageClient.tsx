@@ -14,7 +14,7 @@ import type { SuperadminSecurityLoginRules, SuperadminSecurityPasswordPolicy } f
 import { SUPERADMIN_SECURITY_LOGIN_PREVIEW_DEFAULTS, SUPERADMIN_SECURITY_PASSWORD_PREVIEW_DEFAULTS, SUPERADMIN_SECURITY_FAILED_LOGINS, SUPERADMIN_SECURITY_SESSIONS, SUPERADMIN_SECURITY_IP_RULES } from '@/app/frontend_superadmin/superadmin_security/security_active_sessions/mocks/fixtures/SuperadminSecurityActiveSessionsPreviewMockFixtures';
 
 import SuperadminSecurityActiveSessionsOperationsPanels from '@/app/frontend_superadmin/superadmin_security/security_active_sessions/components/SuperadminSecurityActiveSessionsOperationsPanels';
-import { ShieldAlert, AlertCircle, Activity, Globe, Smartphone, ShieldCheck } from 'lucide-react';
+import { ShieldAlert, AlertCircle, Activity, Globe, Smartphone, ShieldCheck, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSuperadminSecurityActiveSessionsUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_security/security_active_sessions/hooks/useSuperadminSecurityActiveSessionsUnsavedChangesGuard';
 import { SUPERADMIN_SECURITY_OVERVIEW_PAGE_CLIENT_FIELDS } from '@/app/frontend_superadmin/superadmin_security/security_active_sessions/constants/SuperadminSecurityActiveSessionsStaticConstants';
@@ -86,6 +86,10 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
     showToast(tCopy("COPY.UNAVAILABLE_NO_FIREWALL_API_CONTRACT_IS_SUPPLIED_THE_IP_RULE_WAS_NOT_APPLIED"));
   };
 
+  const totalSessions = SUPERADMIN_SECURITY_SESSIONS.length;
+  const superadminCount = SUPERADMIN_SECURITY_SESSIONS.filter((s) => s.user.toLowerCase().includes('super') || s.user === 'SAMPLE_SUPER_ADMIN').length;
+  const tenantAdminCount = totalSessions - superadminCount;
+
   return (
     <div className="w-full max-w-full min-w-0 space-y-6 pb-12">
       {securityRows.length === 0 && <SuperadminSecurityActiveSessionsEmptyState filtered />}
@@ -99,7 +103,7 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
       </div>
 
       {/* Hero Header */}
-      <div className="rounded-2xl border border-border/80 bg-gradient-to-r from-card via-card/90 to-card/60 p-5 sm:p-6 shadow-sm backdrop-blur-md">
+      <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/80 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-xl backdrop-blur-md">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-3">
@@ -107,13 +111,16 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
                 <ShieldAlert size={24} aria-hidden="true" />
               </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-100">
-                {tCopy("COPY.SECURITY_CENTER")}
+                Active User & Admin Sessions
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 Live Telemetry Active
               </span>
             </div>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+              Real-time surveillance and granular access termination across SuperAdmin, Tenant Library Admins, and Branch Staff active token sessions.
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
@@ -123,60 +130,107 @@ export default function SuperadminSecurityActiveSessionsPageClient() {
             </div>
             <div className="flex items-center gap-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-3.5 py-2 text-xs font-bold text-indigo-300">
               <Activity size={15} className="text-indigo-400" aria-hidden="true" />
-              <span>Active Sessions: {SUPERADMIN_SECURITY_SESSIONS.length}</span>
+              <span>{totalSessions} Active Sessions</span>
             </div>
           </div>
         </div>
       </div>
 
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0e1338]/90 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-indigo-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Active Sessions</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shadow-inner">
+              <Users size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-slate-100 tabular-nums">{totalSessions}</div>
+          <div className="text-[11px] text-slate-400 mt-1">Live tokens authenticated</div>
+        </div>
+
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Concurrency</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner">
+              <Activity size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-emerald-400 tabular-nums">{totalSessions}</div>
+          <div className="text-[11px] text-slate-400 mt-1">Simultaneous active portals</div>
+        </div>
+
+        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">SuperAdmin Sessions</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shadow-inner">
+              <ShieldCheck size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-purple-400 tabular-nums">{superadminCount}</div>
+          <div className="text-[11px] text-slate-400 mt-1">Privileged root access</div>
+        </div>
+
+        <div className="rounded-2xl border border-sky-500/20 bg-gradient-to-b from-[#081c2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-sky-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tenant Library Admins</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400 shadow-inner">
+              <Globe size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-sky-400 tabular-nums">{tenantAdminCount}</div>
+          <div className="text-[11px] text-slate-400 mt-1">Branch staff & librarians</div>
+        </div>
+      </div>
+
       {/* Content Panes */}
       <div
-        className="rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-sm overflow-hidden min-h-[420px] flex flex-col"
+        className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0c0f2b] via-[#090b20] to-[#060818] shadow-2xl overflow-hidden backdrop-blur-xl min-h-[420px] flex flex-col"
         aria-label="Active Sessions Settings"
         tabIndex={0}
       >
         {/* Scope Filter Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/80 px-4 py-3 sm:px-6 bg-card/40">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-indigo-500/20 px-4 py-3 sm:px-6 bg-indigo-950/25">
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold text-slate-400">Filter Scope:</span>
-            <div className="inline-flex rounded-xl bg-slate-900/80 p-1 border border-border/60">
+            <div className="inline-flex rounded-xl bg-[#07091a]/90 p-1 border border-indigo-500/30 shadow-inner">
               <button
                 type="button"
                 onClick={() => setSessionScope('all')}
-                className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
                   sessionScope === 'all'
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                All Sessions ({SUPERADMIN_SECURITY_SESSIONS.length})
+                All Sessions ({totalSessions})
               </button>
               <button
                 type="button"
                 onClick={() => setSessionScope('superadmin')}
-                className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
                   sessionScope === 'superadmin'
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                Superadmin
+                Superadmin ({superadminCount})
               </button>
               <button
                 type="button"
                 onClick={() => setSessionScope('library_admin')}
-                className={`rounded-lg px-3 py-1 text-xs font-semibold transition-all ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
                   sessionScope === 'library_admin'
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-md shadow-indigo-600/30'
                     : 'text-slate-400 hover:text-slate-200'
                 }`}
               >
-                Library Admins & Staff
+                Library Admins & Staff ({tenantAdminCount})
               </button>
             </div>
           </div>
-          <span className="text-xs font-mono text-indigo-300 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">
-            Showing {filteredSessions.length} active sessions
+          <span className="text-xs font-mono text-indigo-300 bg-indigo-500/10 px-3 py-1 rounded-lg border border-indigo-500/25">
+            Showing {filteredSessions.length} of {totalSessions} sessions
           </span>
         </div>
 

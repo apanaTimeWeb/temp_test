@@ -13,7 +13,7 @@ import type { SuperadminSecurityLoginRules, SuperadminSecurityPasswordPolicy } f
 import { SUPERADMIN_SECURITY_LOGIN_PREVIEW_DEFAULTS, SUPERADMIN_SECURITY_MFA_PREVIEW, SUPERADMIN_SECURITY_PASSWORD_PREVIEW_DEFAULTS } from '@/app/frontend_superadmin/superadmin_security/security_password_policy/mocks/fixtures/SuperadminSecurityPasswordPolicyPreviewMockFixtures';
 import SuperadminSecurityPasswordPolicyPolicyPanels from '@/app/frontend_superadmin/superadmin_security/security_password_policy/components/SuperadminSecurityPasswordPolicyPolicyPanels';
 
-import { ShieldAlert, AlertCircle, KeyRound, CheckCircle2 } from 'lucide-react';
+import { ShieldAlert, AlertCircle, KeyRound, CheckCircle2, ShieldCheck, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSuperadminSecurityPasswordPolicyUnsavedChangesGuard } from '@/app/frontend_superadmin/superadmin_security/security_password_policy/hooks/useSuperadminSecurityPasswordPolicyUnsavedChangesGuard';
 
@@ -65,7 +65,7 @@ export default function SuperadminSecurityPasswordPolicyPageClient() {
       </div>
 
       {/* Hero Header */}
-      <div className="rounded-2xl border border-border/80 bg-gradient-to-r from-card via-card/90 to-card/60 p-5 sm:p-6 shadow-sm backdrop-blur-md">
+      <div className="rounded-2xl border border-indigo-500/25 bg-gradient-to-br from-indigo-950/80 via-[#0a0d22] to-[#060810] p-5 sm:p-6 shadow-xl backdrop-blur-md">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-3">
@@ -73,13 +73,16 @@ export default function SuperadminSecurityPasswordPolicyPageClient() {
                 <KeyRound size={24} aria-hidden="true" />
               </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-100">
-                Password Policy
+                Password & Credential Policy
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 Policy Active
               </span>
             </div>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+              Cryptographic entropy thresholds, historical password reuse prevention, and automated credential expiration compliance.
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
@@ -89,15 +92,62 @@ export default function SuperadminSecurityPasswordPolicyPageClient() {
             </div>
             <div className="flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2 text-xs font-bold text-emerald-300">
               <CheckCircle2 size={15} className="text-emerald-400" aria-hidden="true" />
-              <span>Min 8 Chars</span>
+              <span>Min 12 Characters</span>
             </div>
           </div>
         </div>
       </div>
 
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Min Password Length</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shadow-inner">
+              <KeyRound size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-purple-400 tabular-nums">12 Chars</div>
+          <div className="text-[11px] text-slate-400 mt-1">High-entropy requirement</div>
+        </div>
+
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Complexity Rules</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner">
+              <CheckCircle2 size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-emerald-400 tabular-nums">3 Factors</div>
+          <div className="text-[11px] text-slate-400 mt-1">Uppercase, digit, symbol required</div>
+        </div>
+
+        <div className="rounded-2xl border border-sky-500/20 bg-gradient-to-b from-[#081c2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-sky-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Password Expiry</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400 shadow-inner">
+              <Clock size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-sky-400 tabular-nums">90 Days</div>
+          <div className="text-[11px] text-slate-400 mt-1">Automated rotation prompt</div>
+        </div>
+
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0e1338]/90 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-indigo-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Breach Detection</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shadow-inner">
+              <ShieldCheck size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-indigo-300 tabular-nums">NIST SP</div>
+          <div className="text-[11px] text-slate-400 mt-1">800-63B dictionary filter</div>
+        </div>
+      </div>
+
       {/* Content */}
       <div
-        className="rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-sm overflow-hidden min-h-[420px] flex flex-col"
+        className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0c0f2b] via-[#090b20] to-[#060818] shadow-2xl overflow-hidden backdrop-blur-xl min-h-[420px] flex flex-col"
         aria-label="Password Policy Settings"
         tabIndex={0}
       >

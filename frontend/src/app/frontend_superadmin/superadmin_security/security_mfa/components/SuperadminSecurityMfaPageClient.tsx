@@ -115,7 +115,7 @@ export default function SuperadminSecurityMfaPageClient() {
       </div>
 
       {/* Hero Header */}
-      <div className="rounded-2xl border border-border/80 bg-gradient-to-r from-card via-card/90 to-card/60 p-5 sm:p-6 shadow-sm backdrop-blur-md">
+      <div className="rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/70 via-[#061814] to-[#060810] p-5 sm:p-6 shadow-xl backdrop-blur-md">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-3">
@@ -123,13 +123,16 @@ export default function SuperadminSecurityMfaPageClient() {
                 <Fingerprint size={24} aria-hidden="true" />
               </div>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-100">
-                2FA & MFA
+                Multi-Factor Authentication (MFA / 2FA)
               </h1>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 MFA Enforced
               </span>
             </div>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+              FIPS 140-2 Level 2 compliant Time-based One-Time Password (TOTP) enforcement, biometric passkeys, and break-glass emergency keys.
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
@@ -145,9 +148,56 @@ export default function SuperadminSecurityMfaPageClient() {
         </div>
       </div>
 
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">SuperAdmin MFA</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner">
+              <Fingerprint size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-emerald-400 tabular-nums">Mandatory</div>
+          <div className="text-[11px] text-slate-400 mt-1">100% privileged coverage</div>
+        </div>
+
+        <div className="rounded-2xl border border-sky-500/20 bg-gradient-to-b from-[#081c2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-sky-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Library Admin Policy</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-sky-500/30 bg-sky-500/15 text-sky-400 shadow-inner">
+              <ShieldCheck size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-sky-400 tabular-nums">Active</div>
+          <div className="text-[11px] text-slate-400 mt-1">7-day grace on onboarding</div>
+        </div>
+
+        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Step-Up Auth</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shadow-inner">
+              <ShieldAlert size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-purple-400 tabular-nums">Required</div>
+          <div className="text-[11px] text-slate-400 mt-1">Guards destructive mutations</div>
+        </div>
+
+        <div className="rounded-2xl border border-amber-500/20 bg-gradient-to-b from-[#241306]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-amber-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Break-Glass Codes</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shadow-inner">
+              <AlertCircle size={18} />
+            </div>
+          </div>
+          <div className="text-3xl font-extrabold text-amber-400 tabular-nums">10 Keys</div>
+          <div className="text-[11px] text-slate-400 mt-1">Single-use emergency codes</div>
+        </div>
+      </div>
+
       {/* Content */}
       <div
-        className="rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md shadow-sm overflow-hidden min-h-[420px] flex flex-col"
+        className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0c0f2b] via-[#090b20] to-[#060818] shadow-2xl overflow-hidden backdrop-blur-xl min-h-[420px] flex flex-col"
         aria-label="2FA and MFA Settings"
         tabIndex={0}
       >
