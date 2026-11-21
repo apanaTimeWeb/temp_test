@@ -21,6 +21,17 @@ const messages = { SUPERADMIN_SUPPORT_TICKETS: { COPY: {
   INTERNAL_NOTE_TEXT: 'Internal note', PUBLIC_REPLY_TEXT: 'Public reply', TYPE_PRIVATE_NOTE_PLACEHOLDER: 'Private note', TYPE_REPLY_TO_TENANT_PLACEHOLDER: 'Reply',
   ATTACH_FILE_UNAVAILABLE: 'Attachment unavailable', UNAVAILABLE_ATTACHMENT_UPLOAD_IS_NOT_IMPLEMENTED_IN_THE_SUPPLIED_HOST_API_CONTRACT: 'Unavailable', ADD_NOTE: 'Add note', SEND_REPLY: 'Send reply',
   REPLY_UNAVAILABLE_MESSAGE: 'Reply unavailable', SAMPLE_ATTACHMENT_ERROR_SCREENSHOT_PNG_DOWNLOAD_UNAVAILABLE: 'Sample attachment unavailable',
+  ESCALATE_TICKET: 'Escalate Ticket', RESOLVE_TICKET: 'Resolve Ticket', REOPEN_TICKET: 'Reopen Ticket',
+  ATTACHMENTS: 'Attachments', INTERNAL_NOTES: 'Internal Notes', CONVERSATION_HISTORY: 'Conversation History',
+  SLA_TRACKING: 'SLA Tracking', PRIVACY_SHIELD: 'Member Privacy Shield', TIME_LIMITED_ACCESS: 'Time-Limited Support Access',
+  GRANT_ACCESS: 'Grant Access', REVOKE_ACCESS: 'Revoke Access', STATUS_ESCALATED: 'Escalated',
+  STATUS_CLOSED: 'Closed', STATUS_REOPENED: 'Reopened', PRIORITY_URGENT: 'Urgent',
+  CATEGORY_TECHNICAL_ISSUE: 'Technical issue', CATEGORY_BILLING_ISSUE: 'Billing issue',
+  CATEGORY_BRANCH_CREATION_REQUEST: 'Branch creation request', CATEGORY_PLAN_UPGRADE_REQUEST: 'Plan upgrade request',
+  CATEGORY_ACCOUNT_ACCESS_ISSUE: 'Account access issue', CATEGORY_DATA_CORRECTION_REQUEST: 'Data correction request',
+  CATEGORY_FEATURE_REQUEST: 'Feature request', CATEGORY_BUG_REPORT: 'Bug report',
+  CATEGORY_SECURITY_COMPLAINT: 'Security complaint', ESCALATION_DETAILS: 'Escalation Details',
+  RESOLUTION_DETAILS: 'Resolution Details', DOWNLOAD_FILE: 'Download', UPLOAD_ATTACHMENT: 'Upload Attachment',
 } } };
 
 function renderPanel() {

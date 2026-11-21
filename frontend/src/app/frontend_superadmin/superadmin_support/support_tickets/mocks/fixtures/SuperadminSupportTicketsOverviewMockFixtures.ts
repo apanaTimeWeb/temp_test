@@ -524,7 +524,6 @@ export const SUPERADMIN_SUPPORT_TICKETS_FIXTURES: SuperadminSupportTicket[] = [
     status: 'Open',
     category: 'Technical issue',
     assignee: 'Unassigned',
-    slaBreach: false,
     age: '5 hours',
     replies: 0,
     hasAttachment: false,
