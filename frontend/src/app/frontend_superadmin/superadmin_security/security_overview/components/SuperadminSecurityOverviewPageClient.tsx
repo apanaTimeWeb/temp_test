@@ -3,7 +3,7 @@
 /** Data-Flow: Local security fixtures -> summary metrics & interactive isolation/governance cards -> links to canonical security control routes. */
 import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadmin_security/security_overview/config/superadmin_security_overview.url_config.ts';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import {
   Activity,
@@ -17,6 +17,7 @@ import {
   Lock,
   Network,
   Radar,
+  ScrollText,
   ShieldAlert,
   ShieldX,
 } from 'lucide-react';
@@ -68,6 +69,17 @@ export default function SuperadminSecurityOverviewPageClient() {
   const [severityFilter, setSeverityFilter] = useState<string>('All');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(5);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'sensitive-actions') {
+      const el = document.getElementById('threat-events-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }, []);
 
   const routes: Record<string, string> = {
     'Login Security': SUPERADMIN_NAVIGATION_ROUTES.security_login_security,
@@ -191,20 +203,21 @@ export default function SuperadminSecurityOverviewPageClient() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <button
-              type="button"
-              onClick={handleExportSecurityAudit}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 text-xs font-semibold shadow-xs transition-all cursor-pointer"
+            <Link
+              href={SUPERADMIN_NAVIGATION_ROUTES.audit_logs}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-500/50 text-xs font-semibold shadow-xs transition-all cursor-pointer"
+              data-testid="superadmin-security-overview-view-audit-logs"
             >
-              <Download size={14} />
-              <span>Export Audit CSV</span>
-            </button>
+              <ScrollText size={14} />
+              <span>View System Audit Logs</span>
+            </Link>
 
             <button
               type="button"
               onClick={handleRunThreatScan}
               disabled={isScanning}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-all cursor-pointer"
+              data-testid="superadmin-security-overview-scan-threats"
             >
               <Radar size={14} className={isScanning ? 'animate-spin' : ''} />
               <span>{isScanning ? 'Scanning...' : 'Scan Threats'}</span>

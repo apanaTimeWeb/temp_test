@@ -16,19 +16,19 @@ export function SuperadminUsageOverviewFilters() {
   } = useSuperadminUsageOverviewStore();
 
   return (
-    <div className="space-y-3">
+    <div className="rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 p-4 shadow-xl backdrop-blur-xl space-y-3.5">
       {/* ── Category Segmented Control ── */}
-      <div className="flex flex-wrap items-center gap-1.5 border-b border-slate-800 pb-2.5">
+      <div className="flex flex-wrap items-center gap-1.5 border-b border-indigo-500/20 pb-3">
         {USAGE_CATEGORY_TABS.map((tab) => {
           const isActive = categoryTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setCategoryTab(tab.id as typeof categoryTab)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+              className={`rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all duration-200 cursor-pointer ${
                 isActive
-                  ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/20'
-                  : 'bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-slate-800'
+                  ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/25 scale-[1.02]'
+                  : 'bg-slate-900/60 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-indigo-500/20'
               }`}
             >
               {tab.label}
@@ -46,7 +46,7 @@ export function SuperadminUsageOverviewFilters() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search library name or plan..."
-            className="w-full rounded-lg border border-slate-800 bg-slate-900/80 pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+            className="w-full rounded-xl border border-indigo-500/25 bg-slate-950/80 pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition-colors"
           />
         </div>
 
@@ -54,7 +54,7 @@ export function SuperadminUsageOverviewFilters() {
           <select
             value={planTier}
             onChange={(e) => setPlanTier(e.target.value)}
-            className="rounded-lg border border-slate-800 bg-slate-900/80 px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500"
+            className="rounded-xl border border-indigo-500/25 bg-slate-950/80 px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-sky-500 transition-colors cursor-pointer"
           >
             <option value="ALL">All Plan Tiers</option>
             <option value="Basic">Basic Plan</option>
@@ -65,7 +65,7 @@ export function SuperadminUsageOverviewFilters() {
           <button
             onClick={resetFilters}
             title="Reset Filters"
-            className="rounded-lg border border-slate-800 bg-slate-900/80 p-2 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="rounded-xl border border-indigo-500/25 bg-slate-950/80 p-2 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer active:scale-95"
           >
             <RotateCcw className="h-3.5 w-3.5" />
           </button>

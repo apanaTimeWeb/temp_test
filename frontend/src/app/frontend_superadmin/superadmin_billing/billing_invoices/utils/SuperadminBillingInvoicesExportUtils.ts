@@ -88,14 +88,14 @@ export function printSuperadminInvoicesRoster(
   const rowsHtml = invoices
     .map(
       (inv, idx) => `
-    <tr style="background: ${idx % 2 === 0 ? '#ffffff' : '#f8fafc'};">
-      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-family: monospace; font-weight: 600;">${inv.id}</td>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-weight: 500;">${inv.tenant}</td>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; color: #64748b; text-align: center;">${inv.date}</td>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 700; color: #059669;">₹${inv.amount.toLocaleString('en-IN')}</td>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: center;"><span style="display:inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: ${inv.status === 'Paid' ? '#dcfce7; color: #15803d;' : '#ffe4e6; color: #e11d48;'}">${inv.status}</span></td>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: center; color: #475569;">${inv.method}</td>
-      <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-family: monospace; font-size: 11px; color: #64748b;">${inv.gst}</td>
+    <tr style="background: ${idx % 2 === 0 ? '#ffffff' : '#f8fafc'}; page-break-inside: avoid;">
+      <td style="padding: 5px 6px; border: 1px solid #cbd5e1; font-family: monospace; font-weight: 700; font-size: 10px;">${inv.id}</td>
+      <td style="padding: 5px 6px; border: 1px solid #cbd5e1; font-weight: 600; font-size: 10px;">${inv.tenant}</td>
+      <td style="padding: 5px 6px; border: 1px solid #cbd5e1; color: #64748b; text-align: center; font-size: 9.5px;">${inv.date}</td>
+      <td style="padding: 5px 6px; border: 1px solid #cbd5e1; text-align: right; font-weight: 700; color: #059669; font-size: 10px;">₹${inv.amount.toLocaleString('en-IN')}</td>
+      <td style="padding: 5px 6px; border: 1px solid #cbd5e1; text-align: center; font-size: 9px;"><span style="display:inline-block; padding: 1px 6px; border-radius: 9999px; font-weight: 700; background: ${inv.status === 'Paid' ? '#dcfce7; color: #15803d;' : '#ffe4e6; color: #e11d48;'}">${inv.status}</span></td>
+      <td style="padding: 5px 6px; border: 1px solid #cbd5e1; text-align: center; color: #475569; font-size: 9.5px;">${inv.method}</td>
+      <td style="padding: 5px 6px; border: 1px solid #cbd5e1; font-family: monospace; font-size: 9.5px; color: #64748b;">${inv.gst}</td>
     </tr>`
     )
     .join('');
@@ -107,19 +107,23 @@ export function printSuperadminInvoicesRoster(
       <title>${title} - Smart Library SaaS</title>
       <meta charset="utf-8" />
       <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; margin: 24px; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #4f46e5; padding-bottom: 16px; margin-bottom: 20px; }
-        .title { font-size: 22px; font-weight: 700; color: #1e1b4b; margin: 0; }
-        .subtitle { font-size: 12px; color: #64748b; margin-top: 4px; }
-        .kpis { display: flex; gap: 16px; margin-bottom: 20px; }
-        .kpi { flex: 1; padding: 10px 14px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; }
-        .kpi-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600; }
-        .kpi-val { font-size: 18px; font-weight: 700; color: #0f172a; margin-top: 2px; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th { background: #1e1b4b; color: #ffffff; text-align: left; padding: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+        @page { size: landscape; margin: 8mm 6mm; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; margin: 0; padding: 10px; font-size: 10px; line-height: 1.3; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #4f46e5; padding-bottom: 8px; margin-bottom: 10px; }
+        .title { font-size: 18px; font-weight: 800; color: #1e1b4b; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        .subtitle { font-size: 10px; color: #64748b; margin-top: 2px; }
+        .kpis { display: flex; gap: 10px; margin-bottom: 10px; }
+        .kpi { flex: 1; padding: 6px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .kpi-label { font-size: 9px; color: #64748b; text-transform: uppercase; font-weight: 700; }
+        .kpi-val { font-size: 14px; font-weight: 800; color: #0f172a; }
+        table { width: 100%; border-collapse: collapse; font-size: 10px; table-layout: fixed; }
+        thead { display: table-header-group; }
+        tr { page-break-inside: avoid; }
+        th { background: #1e1b4b; color: #ffffff; text-align: left; padding: 6px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid #312e81; }
         @media print {
-          body { margin: 0; }
-          .no-print { display: none; }
+          body { padding: 0; }
+          .no-print { display: none !important; }
         }
       </style>
     </head>
@@ -129,26 +133,27 @@ export function printSuperadminInvoicesRoster(
           <h1 class="title">${title}</h1>
           <p class="subtitle">Smart Library SaaS SuperAdmin Console • Generated: ${new Date().toLocaleString('en-IN')}</p>
         </div>
-        <div class="no-print">
-          <button onclick="window.print()" style="background:#4f46e5;color:#fff;border:none;padding:8px 16px;border-radius:6px;font-weight:600;cursor:pointer;">Print Invoices</button>
+        <div class="no-print" style="display:flex;gap:8px;">
+          <button onclick="window.print()" style="background:#4f46e5;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">Print Invoices</button>
+          <button onclick="window.close()" style="background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;">Close</button>
         </div>
       </div>
       <div class="kpis">
-        <div class="kpi"><div class="kpi-label">Total Invoices</div><div class="kpi-val">${invoices.length}</div></div>
-        <div class="kpi"><div class="kpi-label">Total Invoiced Amount</div><div class="kpi-val">₹${totalAmount.toLocaleString('en-IN')}</div></div>
-        <div class="kpi"><div class="kpi-label">Collected Payments</div><div class="kpi-val" style="color:#059669;">₹${paidAmount.toLocaleString('en-IN')}</div></div>
-        <div class="kpi"><div class="kpi-label">Overdue Balance</div><div class="kpi-val" style="color:#e11d48;">₹${overdueAmount.toLocaleString('en-IN')}</div></div>
+        <div class="kpi"><span class="kpi-label">Total Invoices:</span><span class="kpi-val">${invoices.length}</span></div>
+        <div class="kpi"><span class="kpi-label">Invoiced Sum:</span><span class="kpi-val">₹${totalAmount.toLocaleString('en-IN')}</span></div>
+        <div class="kpi"><span class="kpi-label">Collected:</span><span class="kpi-val" style="color:#059669;">₹${paidAmount.toLocaleString('en-IN')}</span></div>
+        <div class="kpi"><span class="kpi-label">Overdue:</span><span class="kpi-val" style="color:#e11d48;">₹${overdueAmount.toLocaleString('en-IN')}</span></div>
       </div>
       <table>
         <thead>
           <tr>
-            <th>Invoice ID</th>
-            <th>Tenant</th>
-            <th style="text-align: center;">Date</th>
-            <th style="text-align: right;">Amount</th>
-            <th style="text-align: center;">Status</th>
-            <th style="text-align: center;">Method</th>
-            <th>GSTIN</th>
+            <th style="width: 15%;">Invoice ID</th>
+            <th style="width: 25%;">Tenant</th>
+            <th style="width: 12%; text-align: center;">Date</th>
+            <th style="width: 15%; text-align: right;">Amount</th>
+            <th style="width: 11%; text-align: center;">Status</th>
+            <th style="width: 10%; text-align: center;">Method</th>
+            <th style="width: 12%;">GSTIN</th>
           </tr>
         </thead>
         <tbody>

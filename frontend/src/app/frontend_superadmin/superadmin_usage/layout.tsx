@@ -44,9 +44,9 @@ export default function SuperadminUsageLayout({ children }: { children: ReactNod
       icon: Gauge,
       theme: {
         activeCard:
-          'border-sky-400/80 bg-gradient-to-br from-sky-950/90 via-slate-900/90 to-blue-950/80 shadow-lg shadow-sky-500/25 ring-1 ring-sky-400/40',
+          'border-sky-500/70 bg-gradient-to-br from-sky-950/80 via-[#0a0d24] to-blue-950/60 shadow-lg shadow-sky-500/20 ring-1 ring-sky-400/30',
         inactiveCard:
-          'border-slate-800/80 bg-slate-900/60 hover:border-sky-500/40 hover:bg-sky-950/25 hover:shadow-md hover:shadow-sky-500/15',
+          'border-indigo-500/20 bg-[#0a0d24]/70 hover:border-sky-500/40 hover:bg-sky-950/20 hover:shadow-md hover:shadow-sky-500/10',
         activeIconTile:
           'bg-gradient-to-br from-sky-500 via-blue-500 to-cyan-400 text-white shadow-md shadow-sky-500/40',
         inactiveIconTile:
@@ -65,9 +65,9 @@ export default function SuperadminUsageLayout({ children }: { children: ReactNod
       icon: GitBranch,
       theme: {
         activeCard:
-          'border-amber-400/80 bg-gradient-to-br from-amber-950/90 via-slate-900/90 to-yellow-950/80 shadow-lg shadow-amber-500/25 ring-1 ring-amber-400/40',
+          'border-amber-500/70 bg-gradient-to-br from-amber-950/80 via-[#0a0d24] to-yellow-950/60 shadow-lg shadow-amber-500/20 ring-1 ring-amber-400/30',
         inactiveCard:
-          'border-slate-800/80 bg-slate-900/60 hover:border-amber-500/40 hover:bg-amber-950/25 hover:shadow-md hover:shadow-amber-500/15',
+          'border-indigo-500/20 bg-[#0a0d24]/70 hover:border-amber-500/40 hover:bg-amber-950/20 hover:shadow-md hover:shadow-amber-500/10',
         activeIconTile:
           'bg-gradient-to-br from-amber-400 via-yellow-500 to-orange-500 text-white shadow-md shadow-amber-500/40',
         inactiveIconTile:
@@ -82,20 +82,20 @@ export default function SuperadminUsageLayout({ children }: { children: ReactNod
   return (
     <div className="w-full max-w-full min-w-0 space-y-6">
       {/* ── Secondary Navigation Header Tabs ── */}
-      <div className="relative rounded-2xl border border-slate-800/80 bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-black/95 p-4 sm:p-5 shadow-2xl backdrop-blur-xl">
-        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-slate-800/60 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 shadow-md shadow-sky-500/30 text-white">
+      <div className="relative rounded-2xl border border-indigo-500/25 bg-[#0a0d24]/90 backdrop-blur-xl p-4 sm:p-5 shadow-2xl shadow-indigo-950/40">
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-indigo-500/20 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-blue-600 shadow-md shadow-sky-500/30 text-white">
               <Gauge className="h-5 w-5" />
             </div>
             <div>
               <h1 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
                 Usage & Limit Monitoring
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1 shadow-xs">
                   <ShieldCheck className="h-3 w-3" /> Zero Silent Extra Billing Guarantee
                 </span>
               </h1>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-400 mt-0.5">
                 Track 12 core resource quotas across all libraries and manage branch expansion approval requests
               </p>
             </div>
@@ -131,7 +131,7 @@ export default function SuperadminUsageLayout({ children }: { children: ReactNod
                       </span>
                       <span
                         className={`inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[10px] font-semibold ${
-                          isActive ? route.theme.activeBadge : 'border-slate-700 bg-slate-800/80 text-slate-400'
+                          isActive ? route.theme.activeBadge : 'border-indigo-500/20 bg-slate-900/80 text-slate-400'
                         }`}
                       >
                         {isActive && <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${route.theme.pulseDot}`} />}

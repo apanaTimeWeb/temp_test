@@ -25,4 +25,5 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   security_mfa: '/superadmin/superadmin_security/security_mfa',
   security_password_policy: '/superadmin/superadmin_security/security_password_policy',
   security_threats: '/superadmin/superadmin_security/security_threats',
+  audit_logs: '/superadmin/superadmin_system/system_audit_logs',
 } as const;

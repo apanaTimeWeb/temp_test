@@ -75,7 +75,7 @@ export const SuperadminSecurityOverviewThreatEventsTable: React.FC<
   }, [filteredThreats, page, pageSize]);
 
   return (
-    <section className="rounded-2xl border border-border/80 bg-card shadow-xs overflow-hidden">
+    <section id="threat-events-section" className="rounded-2xl border border-border/80 bg-card shadow-xs overflow-hidden scroll-mt-6">
       {/* Header toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 border-b border-border/80">
         <div>
