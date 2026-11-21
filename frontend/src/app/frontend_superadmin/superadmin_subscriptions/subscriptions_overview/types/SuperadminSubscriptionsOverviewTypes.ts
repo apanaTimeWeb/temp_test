@@ -41,4 +41,5 @@ export interface SuperadminSubscriptionRecord {
   phone?: string;
   customPrice?: number;
   history?: SuperadminSubscriptionAuditEntry[];
+  [key: string]: unknown;
 }

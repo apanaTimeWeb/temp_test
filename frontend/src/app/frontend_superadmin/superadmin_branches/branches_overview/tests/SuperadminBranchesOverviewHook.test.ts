@@ -40,6 +40,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
         outstandingBooks: 0,
         memberDues: 0,
         cashBalance: 0,
+        physicalBooks: 0,
         isArchived: false,
         allowedModules: { bookCatalog: true },
       });
@@ -78,6 +79,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
         outstandingBooks: 0,
         memberDues: 0,
         cashBalance: 0,
+        physicalBooks: 0,
         isArchived: false,
         allowedModules: { bookCatalog: true, seatBooking: true },
       });
@@ -119,6 +121,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
         outstandingBooks: 0,
         memberDues: 0,
         cashBalance: 0,
+        physicalBooks: 0,
         isArchived: false,
         allowedModules: { books: true, members: true },
       });
@@ -173,6 +176,7 @@ describe('useSuperadminBranchesOverview Hook', () => {
           outstandingBooks: 0,
           memberDues: 0,
           cashBalance: 0,
+          physicalBooks: 0,
           isArchived: false,
           allowedModules: {},
         });

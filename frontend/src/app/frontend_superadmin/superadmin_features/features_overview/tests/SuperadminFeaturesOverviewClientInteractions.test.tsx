@@ -33,8 +33,8 @@ describe('Superadmin Features Overview - Client Interactive Controls', () => {
   it('switches between Card Grid view and Matrix Table view', () => {
     render(<SuperadminFeaturesOverviewPageClient />);
 
-    // Table view button
-    const tableBtn = screen.getByTitle('Table View');
+    // Table view button with exact title "Matrix Table View"
+    const tableBtn = screen.getByTitle('Matrix Table View');
     fireEvent.click(tableBtn);
 
     // Should show table headers
@@ -48,7 +48,7 @@ describe('Superadmin Features Overview - Client Interactive Controls', () => {
   it('filters modules using search bar and category tabs', () => {
     render(<SuperadminFeaturesOverviewPageClient />);
 
-    const searchInput = screen.getByPlaceholderText('Search modules by name, key or description...');
+    const searchInput = screen.getByPlaceholderText('Search 16 modules, endpoints, or descriptions...');
     fireEvent.change(searchInput, { target: { value: 'WhatsApp' } });
 
     // Should match WhatsApp Integration

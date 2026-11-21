@@ -59,10 +59,10 @@ export default function SuperadminBillingOverviewPageClient() {
     { headerName: tCopy("COPY.TABLE_COLUMN_TENANT_LIBRARY"), field: 'tenant', flex: 1.5, cellClass: () => 'sa-cell-muted' },
     { headerName: tCopy("COPY.TABLE_COLUMN_DATE"), field: 'date', flex: 1, cellClass: () => 'sa-cell-muted-sm' },
     { headerName: tCopy("COPY.TABLE_COLUMN_AMOUNT"), field: 'amount', flex: 1,
-      cellRenderer: (p: ICellRendererParams) => <span className="text-sm font-bold text-success">{tCopy('COPY.FINANCIAL_DETAIL_ONLY')}</span>
+      cellRenderer: (p: ICellRendererParams<SuperadminBillingInvoiceSample>) => <span className="text-sm font-bold text-success">{tCopy('COPY.FINANCIAL_DETAIL_ONLY')}</span>
     },
     { headerName: tCopy("COPY.TABLE_COLUMN_STATUS"), field: 'status', flex: 1,
-      cellRenderer: (p: ICellRendererParams) => (
+      cellRenderer: (p: ICellRendererParams<SuperadminBillingInvoiceSample>) => (
         <span className={`sa-badge ${p.value === 'Paid' ? 'sa-badge--success' : 'sa-badge--danger'}`}>
           {p.value === 'Paid' ? <CheckCircle size={11} className="mr-1 inline" /> : <AlertCircle size={11} className="mr-1 inline" />} {p.value === 'Paid' ? tCopy('COPY.PAID') : tCopy('COPY.OVERDUE')}
         </span>

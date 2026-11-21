@@ -83,7 +83,7 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
           </div>
           <div>
             <span className="font-semibold text-slate-100">{String(p.value ?? '')}</span>
-            <div className="text-[11px] text-slate-400">{p.data?.email || p.data?.phone || 'Central Library Account'}</div>
+            <div className="text-[11px] text-slate-400">{String(p.data?.email || p.data?.phone || 'Central Library Account')}</div>
           </div>
         </div>
       ),
@@ -98,7 +98,7 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
             <Package size={11} className="text-indigo-400" />
             {String(p.value ?? '')}
           </span>
-          <span className="text-[10px] text-slate-400">{p.data?.branchesCount ?? 1} Branches Allowed</span>
+          <span className="text-[10px] text-slate-400">{String(p.data?.branchesCount ?? 1)} Branches Allowed</span>
         </div>
       ),
     },
@@ -108,9 +108,9 @@ export default function SuperadminSubscriptionsOverviewPageClient() {
       flex: 1.2,
       cellRenderer: (p: SemanticCellParams) => (
         <div>
-          <p className="text-sm font-bold text-emerald-400">{formatSuperadminSubscriptionsMajorPreviewCurrency(p.data?.mrr, 'INR', locale)}</p>
+          <p className="text-sm font-bold text-emerald-400">{formatSuperadminSubscriptionsMajorPreviewCurrency(Number(p.data?.mrr ?? 0), 'INR', locale)}</p>
           <span className="inline-flex rounded bg-slate-800/80 px-1.5 py-0.5 text-[10px] font-semibold text-slate-400">
-            {p.data?.cycle || 'Monthly'}
+            {String(p.data?.cycle || 'Monthly')}
           </span>
         </div>
       ),

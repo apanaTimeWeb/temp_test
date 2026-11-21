@@ -118,20 +118,28 @@ describe('Superadmin Branches Overview Schemas, Utils & API Contract', () => {
           libraryId: 'lib-1',
           libraryName: 'Apex',
           city: 'Noida',
+          state: 'Uttar Pradesh',
           address: 'Sec 62',
+          pinCode: '201301',
+          phone: '9876543210',
+          email: 'vikram@apex.in',
+          adminName: 'Admin',
+          adminEmail: 'admin@apex.in',
           capacity: 100,
           activeMembers: 90,
-          shifts: 2,
           managerName: 'Vikram',
           managerPhone: '9876543210',
           managerEmail: 'vikram@apex.in',
           status: 'active',
+          plan: 'Standard',
           openingDate: '2023-01-01',
           workingHours: '9am-9pm',
+          weeklyHolidays: 'None',
           outstandingBooks: 0,
           memberDues: 0,
-          cashInDrawer: 500,
-          totalBooksCataloged: 500,
+          cashBalance: 500,
+          physicalBooks: 500,
+          allowedModules: {},
           createdAt: '2023-01-01',
         },
       ];
@@ -148,7 +156,9 @@ describe('Superadmin Branches Overview Schemas, Utils & API Contract', () => {
 
       const statusRes = await updateSuperadminBranchStatusApi('br-1', 'suspended', 'Audit check');
       expect(statusRes.success).toBe(true);
-      expect(statusRes.data.status).toBe('suspended');
+      if (statusRes.success && statusRes.data) {
+        expect(statusRes.data.status).toBe('suspended');
+      }
 
       const transferRes = await transferSuperadminBranchManagerApi(
         'br-1',
@@ -156,7 +166,9 @@ describe('Superadmin Branches Overview Schemas, Utils & API Contract', () => {
         'Promotion',
       );
       expect(transferRes.success).toBe(true);
-      expect(transferRes.data.manager.name).toBe('Kavita');
+      if (transferRes.success && transferRes.data) {
+        expect(transferRes.data.manager.name).toBe('Kavita');
+      }
     });
   });
 });

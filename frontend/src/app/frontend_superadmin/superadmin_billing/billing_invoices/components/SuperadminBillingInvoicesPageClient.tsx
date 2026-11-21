@@ -124,7 +124,7 @@ export default function SuperadminBillingInvoicesPageClient() {
       headerName: tCopy('COPY.TABLE_COLUMN_STATUS'),
       field: 'status',
       flex: 1,
-      cellRenderer: (p: ICellRendererParams) => {
+      cellRenderer: (p: ICellRendererParams<SuperadminBillingInvoiceSample>) => {
         const val = String(p.value ?? '');
         const isPaid = val === 'Paid';
         return (
