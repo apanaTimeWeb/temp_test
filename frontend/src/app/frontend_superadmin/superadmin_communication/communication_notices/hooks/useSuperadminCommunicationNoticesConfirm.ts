@@ -1,19 +1,9 @@
-// RESPONSIBILITY: Own module-local state or interaction logic for communication notices; it does not imply persistence beyond verified contracts.
-// FLOW: Feature component -> superadmin_communication/communication_notices/hooks/useSuperadminCommunicationNoticesConfirm.ts -> local state/typed dependencies -> returned state and actions.
-"use client";
-/** Leaf-local accessible confirmation dialog hook. No backend/API behavior is inferred here. */
+// Leaf-local accessible confirmation dialog hook.
 import { AlertTriangle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { createElement, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
 
-/**
- * Defines the public SuperadminCommunicationNoticesConfirmOptions contract for communication notices. Optionality and nullability follow the declared fields; no additional backend guarantees are implied.
- * @property title Display label for the owning feature. Declared type: string.
- * @property confirmLabel Display label for the owning feature. Declared type: string.
- * @property cancelLabel Boolean state used by the owning feature. Declared type: string.
- * @property destructive Value defined by the existing feature-local contract. Declared type: boolean.
- */
 export type SuperadminCommunicationNoticesConfirmOptions = {
   title?: string;
   confirmLabel?: string;
@@ -21,9 +11,7 @@ export type SuperadminCommunicationNoticesConfirmOptions = {
   destructive?: boolean;
 };
 
-/** Uses the native modal-dialog focus/keyboard model with design-system semantic tokens. 
- * @returns The module-owned state/actions or utility result consumed by the caller.
- */
+/** Accessible modal-dialog focus/keyboard model with design-system semantic tokens. */
 export function useSuperadminCommunicationNoticesConfirm() {
   const t = useTranslations('SUPERADMIN_COMMUNICATION');
   return useCallback((message: string, options: SuperadminCommunicationNoticesConfirmOptions = {}): Promise<boolean> =>

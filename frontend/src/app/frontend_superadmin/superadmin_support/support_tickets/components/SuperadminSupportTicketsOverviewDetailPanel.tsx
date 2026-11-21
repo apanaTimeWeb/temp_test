@@ -152,6 +152,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
   const [newAttachmentName, setNewAttachmentName] = useState('');
 
   const dialogRef = useRef<HTMLDivElement | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const isDirty = status !== tkt.status || assignee !== tkt.assignee || priority !== tkt.priority || replyText.trim().length > 0;
   const isDirtyRef = useRef(isDirty);
@@ -201,6 +202,12 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
       previousFocusRef.current?.focus();
     };
   }, [requestClose]);
+
+  useEffect(() => {
+    if (activeTab === 'conversation' && messagesEndRef.current && typeof messagesEndRef.current.scrollIntoView === 'function') {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, activeTab]);
 
   // Actions
   const handleSendReply = () => {
@@ -369,11 +376,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
 
   return (
     <div
-      className="fixed inset-0 z-[70] overflow-y-auto bg-black/80 backdrop-blur-md flex justify-center items-start px-3 sm:px-6 motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none"
-      style={{
-        paddingTop: 'calc(var(--layout-header-height, 64px) + 16px)',
-        paddingBottom: '24px',
-      }}
+      className="fixed inset-0 z-[70] bg-black/80 backdrop-blur-md flex justify-center items-center p-2 sm:p-4 md:p-6 motion-safe:animate-in motion-safe:fade-in motion-reduce:animate-none"
       onClick={requestClose}
       data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-72"
     >
@@ -383,8 +386,8 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="superadmin-support-ticket-detail-title"
-        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/90 w-full max-w-5xl flex flex-col overflow-hidden text-slate-100 my-auto"
-        style={{ maxHeight: 'calc(100dvh - 100px)' }}
+        className="bg-[#0a0e27] border border-indigo-500/30 rounded-2xl shadow-2xl shadow-black/90 w-full max-w-5xl flex flex-col overflow-hidden text-slate-100 h-[92vh] max-h-[94vh]"
+        style={{ maxHeight: 'calc(100dvh - 32px)' }}
         onClick={(e) => e.stopPropagation()}
         data-testid="superadmin-superadmin-support-tickets-overview-detail-panel-div-line-73"
       >
@@ -712,177 +715,177 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
           </button>
         </div>
 
-        {/* Scrollable Content Body */}
-        <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
-          {/* TAB 1: CONVERSATION HISTORY */}
-          {activeTab === 'conversation' && (
-            <div className="space-y-5">
-              {/* Messages Stream */}
-              <div className="rounded-2xl border border-indigo-500/25 bg-[#070b22]/90 p-4 sm:p-5 shadow-lg space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-indigo-500/15">
-                  <div className="flex items-center gap-2">
-                    <MessageSquare size={16} className="text-indigo-400" />
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
-                      Helpdesk Message Stream
-                    </h3>
-                  </div>
-                  <span className="text-[11px] text-slate-400 flex items-center gap-1.5">
-                    <ShieldCheck size={13} className="text-emerald-400" /> End-to-end Audited Support Thread
-                  </span>
+        {/* Content Body - Split between fixed conversation layout and scrollable secondary tabs */}
+        {activeTab === 'conversation' ? (
+          <div className="flex-1 min-h-0 flex flex-col p-4 sm:p-5 gap-3 overflow-hidden">
+            {/* Messages Stream - Scrollable thread container */}
+            <div className="flex-1 min-h-0 flex flex-col rounded-2xl border border-indigo-500/25 bg-[#070b22]/90 p-4 shadow-lg overflow-hidden">
+              <div className="flex items-center justify-between pb-3 border-b border-indigo-500/15 shrink-0">
+                <div className="flex items-center gap-2">
+                  <MessageSquare size={16} className="text-indigo-400" />
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+                    Helpdesk Message Stream
+                  </h3>
                 </div>
+                <span className="text-[11px] text-slate-400 flex items-center gap-1.5">
+                  <ShieldCheck size={13} className="text-emerald-400" /> End-to-end Audited Support Thread
+                </span>
+              </div>
 
-                <div className="space-y-3.5">
-                  {messages.map((msg) => {
-                    const isStaff = msg.role === 'support_agent';
-                    const isSystem = msg.role === 'system';
+              <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 pr-2 pt-3">
+                {messages.map((msg) => {
+                  const isStaff = msg.role === 'support_agent';
+                  const isSystem = msg.role === 'system';
 
-                    if (isSystem) {
-                      return (
-                        <div key={msg.id} className="flex items-center justify-center my-2">
-                          <div className="px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-300 font-medium flex items-center gap-2">
-                            <Zap size={11} className="text-amber-400 shrink-0" />
-                            <span>{msg.text}</span>
-                            <span className="text-slate-500 text-[10px]">• {msg.timestamp}</span>
-                          </div>
-                        </div>
-                      );
-                    }
-
+                  if (isSystem) {
                     return (
-                      <div
-                        key={msg.id}
-                        className={`flex items-start gap-3.5 ${isStaff ? 'flex-row-reverse' : ''}`}
-                      >
-                        <div
-                          className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm font-bold text-xs ${
-                            isStaff
-                              ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-300'
-                              : 'bg-indigo-500/20 border border-indigo-500/30 text-indigo-300'
-                          }`}
-                        >
-                          {isStaff ? <Headphones size={16} /> : msg.sender.charAt(0)}
-                        </div>
-
-                        <div className={`flex-1 min-w-0 flex flex-col ${isStaff ? 'items-end' : 'items-start'}`}>
-                          <div className={`flex items-center gap-2 mb-1 ${isStaff ? 'flex-row-reverse' : ''}`}>
-                            <span className="text-xs font-bold text-slate-100">{msg.sender}</span>
-                            <span
-                              className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${
-                                isStaff
-                                  ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/30'
-                                  : 'bg-indigo-950/60 text-indigo-300 border border-indigo-500/30'
-                              }`}
-                            >
-                              {isStaff ? 'Support Staff' : 'Library Admin'}
-                            </span>
-                            <span className="text-[10px] text-slate-400">{msg.timestamp}</span>
-                          </div>
-
-                          <div
-                            className={`p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm max-w-2xl ${
-                              isStaff
-                                ? 'bg-[#082218]/90 border border-emerald-500/30 rounded-tr-xs text-slate-100'
-                                : 'bg-[#0e1538] border border-indigo-500/30 rounded-tl-xs text-slate-200'
-                            }`}
-                          >
-                            <p className="whitespace-pre-wrap">{msg.text}</p>
-                          </div>
+                      <div key={msg.id} className="flex items-center justify-center my-2">
+                        <div className="px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-300 font-medium flex items-center gap-2">
+                          <Zap size={11} className="text-amber-400 shrink-0" />
+                          <span>{msg.text}</span>
+                          <span className="text-slate-500 text-[10px]">• {msg.timestamp}</span>
                         </div>
                       </div>
                     );
-                  })}
+                  }
+
+                  return (
+                    <div
+                      key={msg.id}
+                      className={`flex items-start gap-3.5 ${isStaff ? 'flex-row-reverse' : ''}`}
+                    >
+                      <div
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm font-bold text-xs ${
+                          isStaff
+                            ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-300'
+                            : 'bg-indigo-500/20 border border-indigo-500/30 text-indigo-300'
+                        }`}
+                      >
+                        {isStaff ? <Headphones size={16} /> : msg.sender.charAt(0)}
+                      </div>
+
+                      <div className={`flex-1 min-w-0 flex flex-col ${isStaff ? 'items-end' : 'items-start'}`}>
+                        <div className={`flex items-center gap-2 mb-1 ${isStaff ? 'flex-row-reverse' : ''}`}>
+                          <span className="text-xs font-bold text-slate-100">{msg.sender}</span>
+                          <span
+                            className={`text-[9px] uppercase font-bold px-1.5 py-0.5 rounded ${
+                              isStaff
+                                ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/30'
+                                : 'bg-indigo-950/60 text-indigo-300 border border-indigo-500/30'
+                            }`}
+                          >
+                            {isStaff ? 'Support Staff' : 'Library Admin'}
+                          </span>
+                          <span className="text-[10px] text-slate-400">{msg.timestamp}</span>
+                        </div>
+
+                        <div
+                          className={`p-3.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm max-w-2xl ${
+                            isStaff
+                              ? 'bg-[#082218]/90 border border-emerald-500/30 rounded-tr-xs text-slate-100'
+                              : 'bg-[#0e1538] border border-indigo-500/30 rounded-tl-xs text-slate-200'
+                          }`}
+                        >
+                          <p className="whitespace-pre-wrap">{msg.text}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div ref={messagesEndRef} />
+              </div>
+            </div>
+
+            {/* Reply Composer Card - Fixed at Bottom & Always Visible */}
+            <div className="shrink-0 rounded-2xl border border-indigo-500/25 bg-[#0b0f2a] p-3.5 sm:p-4 shadow-lg space-y-2.5">
+              {operationMessage && (
+                <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-2.5 text-xs text-amber-200 flex items-center gap-2" role="alert">
+                  <span>{operationMessage}</span>
                 </div>
+              )}
+
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-indigo-500/20">
+                  <button
+                    type="button"
+                    aria-pressed={!isInternalNote}
+                    className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
+                      !isInternalNote ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    }`}
+                    onClick={() => setIsInternalNote(false)}
+                    data-testid="superadmin-support-tickets-support-tickets-detail-public-reply-5"
+                  >
+                    <Send size={12} />
+                    <span>{t("COPY.PUBLIC_REPLY")}</span>
+                  </button>
+                  <button
+                    type="button"
+                    aria-pressed={isInternalNote}
+                    className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
+                      isInternalNote ? 'bg-amber-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    }`}
+                    onClick={() => setIsInternalNote(true)}
+                    data-testid="superadmin-support-tickets-support-tickets-detail-internal-note-hidden-6"
+                  >
+                    <Lock size={12} />
+                    <span>{t("COPY.INTERNAL_NOTE_HIDDEN")}</span>
+                  </button>
+                </div>
+
+                <span className="text-[11px] text-slate-400">
+                  {isInternalNote ? '🔒 Visible only to platform team' : '✉️ Visible to library admin'}
+                </span>
               </div>
 
-              {/* Reply Composer Card */}
-              <div className="rounded-2xl border border-indigo-500/25 bg-[#0b0f2a] p-4 sm:p-5 shadow-lg space-y-3">
-                {operationMessage && (
-                  <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200 flex items-center gap-2" role="alert">
-                    <span>{operationMessage}</span>
-                  </div>
-                )}
+              <div className={`relative rounded-xl border transition-colors ${isInternalNote ? 'border-amber-500/40 bg-amber-950/20 text-amber-200' : 'border-indigo-500/30 bg-[#070b22] text-slate-100'} p-3 shadow-inner`}>
+                <label htmlFor="superadmin-support-ticket-reply-text" className="sr-only">
+                  {isInternalNote ? t('COPY.INTERNAL_NOTE_TEXT') : t('COPY.PUBLIC_REPLY_TEXT')}
+                </label>
+                <textarea
+                  id="superadmin-support-ticket-reply-text"
+                  maxLength={5000}
+                  rows={2}
+                  className="w-full bg-transparent text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 outline-none resize-none min-h-[55px]"
+                  placeholder={isInternalNote ? t('COPY.TYPE_PRIVATE_NOTE_PLACEHOLDER') : t('COPY.TYPE_REPLY_TO_TENANT_PLACEHOLDER')}
+                  value={replyText}
+                  onChange={(e) => {
+                    setReplyText(e.target.value);
+                    setOperationMessage('');
+                  }}
+                  data-testid="superadmin-support-tickets-support-tickets-detail-superadmin-support-ticket-reply-text-7"
+                />
+                <div className="flex items-center justify-between pt-2 border-t border-indigo-500/15 mt-1">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('attachments')}
+                    aria-label={t("COPY.ATTACH_FILE_UNAVAILABLE")}
+                    className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 cursor-pointer flex items-center gap-1.5 text-xs transition-colors"
+                    data-testid="superadmin-support-tickets-support-tickets-detail-attach-file-unavailable-8"
+                  >
+                    <Paperclip size={14} />
+                    <span className="text-[11px] hidden sm:inline">Attach diagnostics</span>
+                  </button>
 
-                <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-indigo-500/20">
-                    <button
-                      type="button"
-                      aria-pressed={!isInternalNote}
-                      className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
-                        !isInternalNote ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                      }`}
-                      onClick={() => setIsInternalNote(false)}
-                      data-testid="superadmin-support-tickets-support-tickets-detail-public-reply-5"
-                    >
-                      <Send size={12} />
-                      <span>{t("COPY.PUBLIC_REPLY")}</span>
-                    </button>
-                    <button
-                      type="button"
-                      aria-pressed={isInternalNote}
-                      className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.97] ${
-                        isInternalNote ? 'bg-amber-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                      }`}
-                      onClick={() => setIsInternalNote(true)}
-                      data-testid="superadmin-support-tickets-support-tickets-detail-internal-note-hidden-6"
-                    >
-                      <Lock size={12} />
-                      <span>{t("COPY.INTERNAL_NOTE_HIDDEN")}</span>
-                    </button>
-                  </div>
-
-                  <span className="text-[11px] text-slate-400">
-                    {isInternalNote ? '🔒 Visible only to platform team' : '✉️ Visible to library admin'}
-                  </span>
-                </div>
-
-                <div className={`relative rounded-xl border transition-colors ${isInternalNote ? 'border-amber-500/40 bg-amber-950/20 text-amber-200' : 'border-indigo-500/30 bg-[#070b22] text-slate-100'} p-3 shadow-inner`}>
-                  <label htmlFor="superadmin-support-ticket-reply-text" className="sr-only">
-                    {isInternalNote ? t('COPY.INTERNAL_NOTE_TEXT') : t('COPY.PUBLIC_REPLY_TEXT')}
-                  </label>
-                  <textarea
-                    id="superadmin-support-ticket-reply-text"
-                    maxLength={5000}
-                    rows={3}
-                    className="w-full bg-transparent text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 outline-none resize-none min-h-[75px]"
-                    placeholder={isInternalNote ? t('COPY.TYPE_PRIVATE_NOTE_PLACEHOLDER') : t('COPY.TYPE_REPLY_TO_TENANT_PLACEHOLDER')}
-                    value={replyText}
-                    onChange={(e) => {
-                      setReplyText(e.target.value);
-                      setOperationMessage('');
-                    }}
-                    data-testid="superadmin-support-tickets-support-tickets-detail-superadmin-support-ticket-reply-text-7"
-                  />
-                  <div className="flex items-center justify-between pt-2 border-t border-indigo-500/15 mt-1.5">
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('attachments')}
-                      aria-label={t("COPY.ATTACH_FILE_UNAVAILABLE")}
-                      className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 cursor-pointer flex items-center gap-1.5 text-xs transition-colors"
-                      data-testid="superadmin-support-tickets-support-tickets-detail-attach-file-unavailable-8"
-                    >
-                      <Paperclip size={14} />
-                      <span className="text-[11px] hidden sm:inline">Attach diagnostics</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
-                        isInternalNote
-                          ? 'bg-amber-600 hover:bg-amber-500 text-white'
-                          : 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white'
-                      }`}
-                      onClick={handleSendReply}
-                      disabled={!replyText.trim()}
-                      data-testid="superadmin-support-tickets-support-tickets-detail-add-note-9"
-                    >
-                      <Send size={13} />
-                      <span>{isInternalNote ? t('COPY.ADD_NOTE') : t('COPY.SEND_REPLY')}</span>
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md active:scale-[0.97] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+                      isInternalNote
+                        ? 'bg-amber-600 hover:bg-amber-500 text-white'
+                        : 'bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white'
+                    }`}
+                    onClick={handleSendReply}
+                    disabled={!replyText.trim()}
+                    data-testid="superadmin-support-tickets-support-tickets-detail-add-note-9"
+                  >
+                    <Send size={13} />
+                    <span>{isInternalNote ? t('COPY.ADD_NOTE') : t('COPY.SEND_REPLY')}</span>
+                  </button>
                 </div>
               </div>
             </div>
-          )}
+          </div>
+        ) : (
+          <div className="flex-1 min-h-0 overflow-y-auto p-5 sm:p-6 space-y-6">
 
           {/* TAB 2: CONFIDENTIAL INTERNAL NOTES */}
           {activeTab === 'internal_notes' && (
@@ -1076,6 +1079,7 @@ export default function SuperadminSupportTicketsOverviewDetailPanel({
             </div>
           )}
         </div>
+        )}
       </div>
 
       {/* Escalate Modal Dialog */}

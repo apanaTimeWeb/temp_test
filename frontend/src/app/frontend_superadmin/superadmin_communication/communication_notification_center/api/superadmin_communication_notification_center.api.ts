@@ -4,12 +4,6 @@
 import { apiFetch } from '@/lib/api';
 import type { ApiResponse } from '@/lib/api';
 import { SUPERADMIN_COMMUNICATION_NOTIFICATION_CENTER_API } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/config/superadmin_communication_notification_center.url_config';
-import {
-  MANDATED_NOTIFICATION_TEMPLATES,
-  TARGET_LIBRARY_ACCOUNTS,
-} from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/constants/SuperadminCommunicationNotificationCenterNotificationConstants';
-import { MOCK_NOTIFICATION_RECORDS } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/mocks/fixtures/SuperadminCommunicationNotificationCenterNotificationMockFixtures';
-import { MOCK_USAGE_ANALYTICS } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/mocks/fixtures/SuperadminCommunicationNotificationCenterUsageMockFixtures';
 import type {
   DispatchNotificationDto,
   NotificationRecord,
@@ -17,16 +11,18 @@ import type {
   NotificationTemplate,
   NotificationUsageAnalytics,
 } from '@/app/frontend_superadmin/superadmin_communication/communication_notification_center/types/SuperadminCommunicationNotificationCenterNotificationTypes';
+import {
+  type NotificationFilterParams,
+  filterFallbackNotifications,
+  dispatchFallbackNotification,
+  retryFallbackNotification,
+  updateFallbackTemplate,
+  getFallbackTemplates,
+  getFallbackUsage,
+  getFallbackAccounts,
+} from './superadmin_communication_notification_center.store';
 
-export interface NotificationFilterParams {
-  category?: string;
-  channel?: string;
-  status?: string;
-  targetScope?: string;
-  search?: string;
-  page?: number;
-  limit?: number;
-}
+export type { NotificationFilterParams };
 
 /** Legacy contract marker retained for backward compatibility */
 export const SUPERADMINCOMMUNICATIONNOTIFICATIONCENTER_API_CONTRACT_STATUS = {
@@ -40,12 +36,6 @@ export const SUPERADMINCOMMUNICATIONNOTIFICATIONCENTER_API_CONTRACT_STATUS = {
 const shouldCallNetwork = () =>
   SUPERADMINCOMMUNICATIONNOTIFICATIONCENTER_API_CONTRACT_STATUS.networkCallsEnabled &&
   Boolean(process.env.NEXT_PUBLIC_API_BASE_URL);
-
-// Resilient in-memory preview fallback store
-let fallbackNotifications: NotificationRecord[] = [...MOCK_NOTIFICATION_RECORDS];
-let fallbackTemplates: NotificationTemplate[] = [...MANDATED_NOTIFICATION_TEMPLATES];
-let fallbackUsage: NotificationUsageAnalytics = JSON.parse(JSON.stringify(MOCK_USAGE_ANALYTICS));
-const fallbackAccounts: NotificationTargetAccount[] = [...TARGET_LIBRARY_ACCOUNTS];
 
 /** Fetch paginated notifications with filters */
 export async function fetchSuperadminNotifications(
@@ -71,33 +61,9 @@ export async function fetchSuperadminNotifications(
     }
   }
 
-  // Filter in-memory notifications
-  let list = [...fallbackNotifications];
-  if (params.category && params.category !== 'ALL' && params.category !== 'All') {
-    list = list.filter((n) => n.category === params.category);
-  }
-  if (params.channel && params.channel !== 'ALL' && params.channel !== 'All') {
-    list = list.filter((n) => n.channels.includes(params.channel as never));
-  }
-  if (params.status && params.status !== 'ALL' && params.status !== 'All') {
-    list = list.filter((n) => n.status === params.status);
-  }
-  if (params.targetScope && params.targetScope !== 'ALL' && params.targetScope !== 'All') {
-    list = list.filter((n) => n.targetScope === params.targetScope);
-  }
-  if (params.search && params.search.trim()) {
-    const q = params.search.toLowerCase();
-    list = list.filter((n) =>
-      n.title.toLowerCase().includes(q) ||
-      n.message.toLowerCase().includes(q) ||
-      n.targetRecipient.name.toLowerCase().includes(q) ||
-      (n.targetAccount?.name.toLowerCase().includes(q) ?? false)
-    );
-  }
-
   return {
-    data: list,
-    status: 200,
+    data: filterFallbackNotifications(params),
+    requestId: 'preview-notifs',
     success: true,
     message: 'Notifications loaded from preview store',
   };
@@ -124,50 +90,9 @@ export async function dispatchSuperadminNotification(
     }
   }
 
-  const targetAccount = dto.targetAccountId
-    ? fallbackAccounts.find((a) => a.id === dto.targetAccountId) ?? null
-    : null;
-
-  const newRecord: NotificationRecord = {
-    id: `notif-disp-${Date.now()}`,
-    category: dto.category,
-    title: dto.title,
-    message: dto.message,
-    targetScope: dto.targetScope,
-    targetAccount,
-    targetRecipient: {
-      name: dto.testRecipient?.email ? `Test (${dto.testRecipient.email})` : 'All Subscribed Admins',
-      email: dto.testRecipient?.email,
-      phone: dto.testRecipient?.phone,
-      role: dto.targetRole ?? 'ALL_ROLES',
-    },
-    channels: dto.channels,
-    priority: dto.priority ?? 'NORMAL',
-    status: 'SENT',
-    failureReason: null,
-    retryCount: 0,
-    maxRetries: 3,
-    createdAt: new Date().toISOString(),
-    sentAt: new Date().toISOString(),
-    deliveredAt: new Date().toISOString(),
-    lastRetryAt: null,
-    idempotencyKey,
-    read: false,
-  };
-
-  fallbackNotifications = [newRecord, ...fallbackNotifications];
-  fallbackUsage.totalDispatched += 1;
-  fallbackUsage.totalDelivered += 1;
-
-  for (const ch of dto.channels) {
-    if (ch === 'EMAIL') fallbackUsage.channels.email.sentCount += 1;
-    if (ch === 'SMS') fallbackUsage.channels.sms.sentCount += 1;
-    if (ch === 'WHATSAPP') fallbackUsage.channels.whatsapp.sentCount += 1;
-  }
-
   return {
-    data: newRecord,
-    status: 201,
+    data: dispatchFallbackNotification(dto, idempotencyKey),
+    requestId: idempotencyKey,
     success: true,
     message: 'Notification dispatched successfully',
   };
@@ -192,32 +117,12 @@ export async function retrySuperadminNotification(
     }
   }
 
-  const existingIdx = fallbackNotifications.findIndex((n) => n.id === id);
-  if (existingIdx !== -1) {
-    const prev = fallbackNotifications[existingIdx];
-    const updated: NotificationRecord = {
-      ...prev,
-      status: 'DELIVERED',
-      failureReason: null,
-      retryCount: prev.retryCount + 1,
-      lastRetryAt: new Date().toISOString(),
-      deliveredAt: new Date().toISOString(),
-      idempotencyKey,
-    };
-    fallbackNotifications[existingIdx] = updated;
-
-    if (fallbackUsage.totalFailed > 0) fallbackUsage.totalFailed -= 1;
-    fallbackUsage.totalDelivered += 1;
-
-    return {
-      data: updated,
-      status: 200,
-      success: true,
-      message: 'Transmission retried and marked as delivered',
-    };
-  }
-
-  throw new Error(`Notification ${id} not found in store`);
+  return {
+    data: retryFallbackNotification(id, idempotencyKey),
+    requestId: idempotencyKey,
+    success: true,
+    message: 'Transmission retried and marked as delivered',
+  };
 }
 
 /** Fetch all 10 mandated notification templates */
@@ -234,8 +139,8 @@ export async function fetchSuperadminNotificationTemplates(): Promise<ApiRespons
   }
 
   return {
-    data: fallbackTemplates,
-    status: 200,
+    data: getFallbackTemplates(),
+    requestId: 'preview-templates',
     success: true,
     message: 'Templates loaded successfully',
   };
@@ -263,22 +168,12 @@ export async function updateSuperadminNotificationTemplate(
     }
   }
 
-  const idx = fallbackTemplates.findIndex((t) => t.id === id);
-  if (idx !== -1) {
-    fallbackTemplates[idx] = {
-      ...fallbackTemplates[idx],
-      ...payload,
-      lastModified: new Date().toISOString().split('T')[0],
-    };
-    return {
-      data: fallbackTemplates[idx],
-      status: 200,
-      success: true,
-      message: 'Template updated successfully',
-    };
-  }
-
-  throw new Error(`Template ${id} not found`);
+  return {
+    data: updateFallbackTemplate(id, payload),
+    requestId: _idempotencyKey,
+    success: true,
+    message: 'Template updated successfully',
+  };
 }
 
 /** Fetch notification channel usage & delivery analytics */
@@ -295,8 +190,8 @@ export async function fetchSuperadminNotificationUsage(): Promise<ApiResponse<No
   }
 
   return {
-    data: fallbackUsage,
-    status: 200,
+    data: getFallbackUsage(),
+    requestId: 'preview-usage',
     success: true,
     message: 'Usage analytics loaded',
   };
@@ -316,8 +211,8 @@ export async function fetchSuperadminTargetAccounts(): Promise<ApiResponse<Notif
   }
 
   return {
-    data: fallbackAccounts,
-    status: 200,
+    data: getFallbackAccounts(),
+    requestId: 'preview-accounts',
     success: true,
     message: 'Accounts loaded',
   };
