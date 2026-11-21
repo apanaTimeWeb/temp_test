@@ -3,8 +3,9 @@
  * Responsibility: Render and edit Global System Maintenance Mode controls and emergency bypass parameters.
  * Flow: FormProvider context -> SuperadminSettingsGeneralMaintenanceModeCard -> maintenance state updates.
  */
+import Link from 'next/link';
 import { useFormContext } from 'react-hook-form';
-import { ShieldAlert, AlertTriangle, KeyRound, Network, Clock } from 'lucide-react';
+import { ShieldAlert, AlertTriangle, KeyRound, Network, Clock, ExternalLink } from 'lucide-react';
 import type { SuperadminSettingsFormValues } from '@/app/frontend_superadmin/superadmin_settings/settings_general/types/SuperadminSettingsGeneralTypes';
 
 export function SuperadminSettingsGeneralMaintenanceModeCard() {
@@ -40,9 +41,18 @@ export function SuperadminSettingsGeneralMaintenanceModeCard() {
             </p>
           </div>
         </div>
-        <span className="rounded-full bg-rose-500/15 border border-rose-500/30 px-3 py-1 text-xs font-semibold text-rose-300">
-          Disaster Recovery
-        </span>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/superadmin/superadmin_system/system_health_overview"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-semibold transition-all shadow-xs cursor-pointer no-underline"
+          >
+            <span>Open System Health 15</span>
+            <ExternalLink size={12} />
+          </Link>
+          <span className="rounded-full bg-rose-500/15 border border-rose-500/30 px-3 py-1 text-xs font-semibold text-rose-300">
+            Disaster Recovery
+          </span>
+        </div>
       </div>
 
       {/* Emergency Alert Banner when enabled */}

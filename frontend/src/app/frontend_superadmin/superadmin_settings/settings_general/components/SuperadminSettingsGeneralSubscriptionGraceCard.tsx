@@ -3,8 +3,9 @@
  * Responsibility: Render and edit Default Subscription, Trial & Grace Period Rules for Library Tenants.
  * Flow: FormProvider context -> SuperadminSettingsGeneralSubscriptionGraceCard -> subscriptionGrace state updates.
  */
+import Link from 'next/link';
 import { useFormContext } from 'react-hook-form';
-import { CreditCard, Clock, Bell, AlertOctagon, Sparkles, CheckCircle2 } from 'lucide-react';
+import { CreditCard, Clock, Bell, AlertOctagon, Sparkles, CheckCircle2, ExternalLink } from 'lucide-react';
 import type { SuperadminSettingsFormValues } from '@/app/frontend_superadmin/superadmin_settings/settings_general/types/SuperadminSettingsGeneralTypes';
 
 export function SuperadminSettingsGeneralSubscriptionGraceCard() {
@@ -38,9 +39,18 @@ export function SuperadminSettingsGeneralSubscriptionGraceCard() {
             </p>
           </div>
         </div>
-        <span className="rounded-full bg-amber-500/15 border border-amber-500/30 px-3 py-1 text-xs font-semibold text-amber-300">
-          Billing Automation
-        </span>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/superadmin/superadmin_plans/plans_pricing_catalog"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-semibold transition-all shadow-xs cursor-pointer no-underline"
+          >
+            <span>Open Plans Module 05</span>
+            <ExternalLink size={12} />
+          </Link>
+          <span className="rounded-full bg-amber-500/15 border border-amber-500/30 px-3 py-1 text-xs font-semibold text-amber-300">
+            Billing Automation
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

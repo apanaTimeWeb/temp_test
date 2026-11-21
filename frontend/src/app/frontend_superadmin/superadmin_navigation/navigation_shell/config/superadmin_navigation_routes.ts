@@ -58,7 +58,8 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   security_login_security: '/superadmin/superadmin_security/security_login_security',
   security_mfa: '/superadmin/superadmin_security/security_mfa',
   security_password_policy: '/superadmin/superadmin_security/security_password_policy',
-  audit_logs: '/superadmin/superadmin_system/system_audit_logs',
+  security_audit_logs: '/superadmin/superadmin_security/security_audit_logs',
+  audit_logs: '/superadmin/superadmin_security/security_audit_logs',
 
   // 10 Reports & Analytics
   superadmin_analytics: '/superadmin/superadmin_analytics/analytics_platform_reports',
@@ -112,6 +113,7 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   superadmin_settings: '/superadmin/superadmin_settings/settings_general',
   settings_general: '/superadmin/superadmin_settings/settings_general',
   settings_general__settings_library_configuration: '/superadmin/superadmin_settings/settings_general?view=settings_library_configuration',
+  settings_library_configuration: '/superadmin/superadmin_settings/settings_library_configuration',
   settings_overview: '/superadmin/superadmin_settings/settings_general',
   settings_appearance: '/superadmin/superadmin_settings/settings_branding',
   settings_branding: '/superadmin/superadmin_settings/settings_branding',

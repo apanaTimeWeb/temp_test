@@ -2,8 +2,9 @@
 // RESPONSIBILITY: Renders the Global Password, Multi-Factor Authentication (MFA), and Session Policies configuration card.
 // DATA FLOW: RHF context -> SuperadminSettingsGeneralSecurityPoliciesCard -> user input -> form state
 import type { FC } from 'react';
+import Link from 'next/link';
 import { useFormContext } from 'react-hook-form';
-import { ShieldCheck, Lock, KeyRound, Timer, ShieldAlert } from 'lucide-react';
+import { ShieldCheck, Lock, KeyRound, Timer, ShieldAlert, ExternalLink } from 'lucide-react';
 import type { SuperadminSettingsFormValues } from '@/app/frontend_superadmin/superadmin_settings/settings_general/types/SuperadminSettingsGeneralTypes';
 import { MFA_ENFORCEMENT_OPTIONS } from '@/app/frontend_superadmin/superadmin_settings/settings_general/constants/SuperadminSettingsGeneralConstants';
 
@@ -22,9 +23,18 @@ export const SuperadminSettingsGeneralSecurityPoliciesCard: FC = () => {
             <p className="text-xs text-slate-400">Global authentication rules, password complexity thresholds, and MFA enforcement.</p>
           </div>
         </div>
-        <span className="rounded-full bg-purple-500/15 border border-purple-500/30 px-3 py-1 text-xs font-semibold text-purple-300">
-          Zero Trust
-        </span>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/superadmin/superadmin_security/security_password_policy"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 text-xs font-semibold transition-all shadow-xs cursor-pointer no-underline"
+          >
+            <span>Open Security Module 09</span>
+            <ExternalLink size={12} />
+          </Link>
+          <span className="rounded-full bg-purple-500/15 border border-purple-500/30 px-3 py-1 text-xs font-semibold text-purple-300">
+            Zero Trust
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

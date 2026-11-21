@@ -3,8 +3,9 @@
  * Responsibility: Render and edit Global Data Retention, Compliance and Automated Backup Schedules.
  * Flow: FormProvider context -> SuperadminSettingsGeneralDataRetentionCard -> dataRetention state updates.
  */
+import Link from 'next/link';
 import { useFormContext } from 'react-hook-form';
-import { Database, Archive, Calendar, Trash2, ShieldCheck, Info } from 'lucide-react';
+import { Database, Archive, Calendar, Trash2, ShieldCheck, Info, ExternalLink } from 'lucide-react';
 import type { SuperadminSettingsFormValues } from '@/app/frontend_superadmin/superadmin_settings/settings_general/types/SuperadminSettingsGeneralTypes';
 import { BACKUP_SCHEDULE_OPTIONS } from '@/app/frontend_superadmin/superadmin_settings/settings_general/constants/SuperadminSettingsGeneralConstants';
 
@@ -40,9 +41,18 @@ export function SuperadminSettingsGeneralDataRetentionCard() {
             </p>
           </div>
         </div>
-        <span className="rounded-full bg-emerald-500/15 border border-emerald-500/30 px-3 py-1 text-xs font-semibold text-emerald-300">
-          DPDP / GDPR Compliant
-        </span>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/superadmin/superadmin_data/data_archive_retention"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-semibold transition-all shadow-xs cursor-pointer no-underline"
+          >
+            <span>Open Data Module 14</span>
+            <ExternalLink size={12} />
+          </Link>
+          <span className="rounded-full bg-emerald-500/15 border border-emerald-500/30 px-3 py-1 text-xs font-semibold text-emerald-300">
+            DPDP / GDPR Compliant
+          </span>
+        </div>
       </div>
 
       <div className="p-3.5 rounded-xl bg-slate-950/60 border border-indigo-500/20 flex items-start gap-3">
