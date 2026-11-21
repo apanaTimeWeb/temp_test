@@ -46,10 +46,12 @@ export function SuperadminDataBackupOperationsFullSnapshotCard({
       <button
         type="button"
         onClick={onTriggerFullBackup}
-        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold bg-pink-600 hover:bg-pink-700 text-white transition-all shadow-md shrink-0 cursor-pointer"
+        className="group inline-flex items-center gap-2.5 px-5 py-3 rounded-xl text-xs font-extrabold bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-500 hover:to-rose-400 text-white transition-all duration-300 shadow-lg shadow-pink-600/30 hover:shadow-pink-500/50 hover:scale-[1.02] active:scale-[0.97] shrink-0 cursor-pointer"
         data-testid="data_backup-trigger-full-btn"
       >
-        <Play size={14} />
+        <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:scale-110 transition-transform">
+          <Play size={13} className="fill-white" />
+        </span>
         <span>Trigger Full Platform Backup</span>
       </button>
     </div>

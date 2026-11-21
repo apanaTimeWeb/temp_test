@@ -127,10 +127,12 @@ export function SuperadminDataExportManagementBranchExportCard({
           type="button"
           onClick={() => onInitiateExport(selectedTenantId, selectedBranchId)}
           disabled={!selectedBranchId}
-          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-medium text-white bg-violet-600 hover:bg-violet-700 disabled:opacity-50 rounded-lg shadow-sm transition-colors"
+          className="group w-full inline-flex items-center justify-center gap-2.5 px-4 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-violet-600 via-purple-500 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 disabled:opacity-50 rounded-xl shadow-lg shadow-violet-600/30 hover:shadow-violet-500/50 hover:scale-[1.01] active:scale-[0.97] transition-all duration-300 cursor-pointer"
         >
-          <Download className="w-3.5 h-3.5" />
-          Export Branch Data
+          <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:scale-110 transition-transform">
+            <Download className="w-3.5 h-3.5" />
+          </span>
+          <span>Export Branch Data</span>
         </button>
       </div>
     </div>

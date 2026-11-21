@@ -396,7 +396,7 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                       <span>{active ? 'SWITCH ARMED' : 'SAFE MODE'}</span>
                     </div>
 
-                    {/* Mini Oblong Pill Slider Switch with White Knob & Power Symbol */}
+                    {/* Elongated (Lamba) Pill Slider Switch matching Icon Height */}
                     <button
                       type="button"
                       role="switch"
@@ -404,7 +404,7 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                       aria-label={active ? `Disarm kill switch for ${label}` : `Arm kill switch for ${label}`}
                       aria-pressed={active}
                       onClick={() => toggleFlag(key, label)}
-                      className={`premium-switch relative flex items-center w-[76px] h-[36px] p-[3px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
+                      className={`premium-switch relative flex items-center w-[96px] h-[44px] p-[4px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${
                         active
                           ? 'is-armed bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_16px_rgba(16,185,129,0.45),inset_0_1px_2px_rgba(0,0,0,0.25)]'
                           : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_2px_5px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
@@ -412,9 +412,9 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                     >
                       {/* Recessed internal circuit track glow */}
                       <div
-                        className={`pointer-events-none absolute inset-x-2.5 top-1/2 -translate-y-1/2 h-1.5 rounded-full transition-all duration-300 ${
+                        className={`pointer-events-none absolute inset-x-3 top-1/2 -translate-y-1/2 h-2 rounded-full transition-all duration-300 ${
                           active
-                            ? 'bg-gradient-to-r from-emerald-400 to-teal-300 opacity-60 shadow-[0_0_6px_rgba(16,185,129,0.8)]'
+                            ? 'bg-gradient-to-r from-emerald-400 to-teal-300 opacity-60 shadow-[0_0_8px_rgba(16,185,129,0.8)]'
                             : 'bg-slate-950/80 opacity-40'
                         }`}
                       />
@@ -422,13 +422,13 @@ export function SuperadminSystemHealthOverviewReleasesControlsCard() {
                       {/* Tactile White Chrome Knob with Power Icon ⏻ */}
                       <span
                         aria-hidden="true"
-                        className={`switch-knob relative z-10 flex items-center justify-center w-[30px] h-[30px] min-w-[30px] min-h-[30px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_3px_8px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
+                        className={`switch-knob relative z-10 flex items-center justify-center w-[36px] h-[36px] min-w-[36px] min-h-[36px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_3px_8px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
                           active
-                            ? 'translate-x-[40px] text-emerald-600'
+                            ? 'translate-x-[52px] text-emerald-600'
                             : 'translate-x-0 text-slate-800'
                         }`}
                       >
-                        <span className="text-[14px] leading-none select-none font-bold drop-shadow-xs">⏻</span>
+                        <span className="text-[17px] leading-none select-none font-bold drop-shadow-xs">⏻</span>
                       </span>
                     </button>
 

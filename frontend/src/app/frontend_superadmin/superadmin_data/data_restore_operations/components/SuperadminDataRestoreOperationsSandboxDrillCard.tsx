@@ -48,10 +48,12 @@ export function SuperadminDataRestoreOperationsSandboxDrillCard({
           type="button"
           onClick={onTriggerDrill}
           disabled={isTriggering}
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 rounded-lg shadow-sm transition-colors shrink-0"
+          className="group inline-flex items-center gap-2 px-4 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 hover:from-emerald-500 hover:to-teal-400 disabled:opacity-50 rounded-xl shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/50 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300 shrink-0 cursor-pointer"
         >
-          <Play className="w-3.5 h-3.5 fill-current" />
-          {isTriggering ? 'Running Sandbox Drill...' : 'Trigger Disaster Drill'}
+          <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:scale-110 transition-transform">
+            <Play className="w-3.5 h-3.5 fill-current" />
+          </span>
+          <span>{isTriggering ? 'Running Sandbox Drill...' : 'Trigger Disaster Drill'}</span>
         </button>
       </div>
 

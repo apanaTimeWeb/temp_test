@@ -162,14 +162,14 @@ export function SuperadminDataArchiveRetentionRuleModal({
               role="switch"
               aria-checked={watch('isEnabled')}
               onClick={() => setValue('isEnabled', !watch('isEnabled'), { shouldDirty: true })}
-              className={`relative flex items-center w-[58px] h-[28px] p-[2px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+              className={`relative flex items-center w-[68px] h-[30px] p-[3px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
                 watch('isEnabled')
                   ? 'bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.45),inset_0_1px_2px_rgba(0,0,0,0.25)]'
                   : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
               }`}
             >
               <div
-                className={`pointer-events-none absolute inset-x-2 top-1/2 -translate-y-1/2 h-1 rounded-full transition-all duration-300 ${
+                className={`pointer-events-none absolute inset-x-2.5 top-1/2 -translate-y-1/2 h-1.5 rounded-full transition-all duration-300 ${
                   watch('isEnabled')
                     ? 'bg-gradient-to-r from-emerald-300 to-teal-200 opacity-70 shadow-[0_0_4px_rgba(16,185,129,0.8)]'
                     : 'bg-slate-950/80 opacity-40'
@@ -179,7 +179,7 @@ export function SuperadminDataArchiveRetentionRuleModal({
                 aria-hidden="true"
                 className={`relative z-10 flex items-center justify-center w-[24px] h-[24px] min-w-[24px] min-h-[24px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_2px_6px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
                   watch('isEnabled')
-                    ? 'translate-x-[30px] text-emerald-600'
+                    ? 'translate-x-[38px] text-emerald-600'
                     : 'translate-x-0 text-slate-800'
                 }`}
               >

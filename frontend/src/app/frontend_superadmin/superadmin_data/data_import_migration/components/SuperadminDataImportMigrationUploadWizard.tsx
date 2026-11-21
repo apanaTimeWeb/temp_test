@@ -174,10 +174,12 @@ export function SuperadminDataImportMigrationUploadWizard({
           <button
             type="submit"
             disabled={!selectedFile || isValidating}
-            className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-white bg-amber-600 hover:bg-amber-700 disabled:opacity-50 rounded-lg shadow-sm transition-colors"
+            className="group inline-flex items-center gap-2.5 px-5 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 hover:from-amber-500 hover:to-orange-400 disabled:opacity-50 rounded-xl shadow-lg shadow-amber-600/30 hover:shadow-amber-500/50 hover:scale-[1.02] active:scale-[0.97] transition-all duration-300 cursor-pointer"
           >
-            <Play className="w-3.5 h-3.5 fill-current" />
-            {isValidating ? 'Validating Dry Run...' : 'Run Pre-flight Dry Run'}
+            <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:scale-110 transition-transform">
+              <Play className="w-3.5 h-3.5 fill-current" />
+            </span>
+            <span>{isValidating ? 'Validating Dry Run...' : 'Run Pre-flight Dry Run'}</span>
           </button>
         </div>
       </form>

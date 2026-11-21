@@ -89,10 +89,10 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
           </div>
         </div>
 
-        {/* ── Fully Responsive Unified Cyber Matrix with Server-Health Tactile Mini Switches ── */}
+        {/* ── Fully Responsive Unified Cyber Matrix with Server-Health Tactile Elongated Switches ── */}
         <div className="rounded-xl border border-indigo-500/20 overflow-hidden shadow-inner bg-slate-950/60">
           <div className="overflow-x-auto scrollbar-thin">
-            <table className="w-full text-left text-xs min-w-[720px]">
+            <table className="w-full text-left text-xs min-w-[760px]">
               <thead className="bg-slate-950/90 border-b border-indigo-500/20 font-semibold text-slate-300">
                 <tr>
                   <th className="px-4 sm:px-5 py-3.5 sticky left-0 bg-[#0c102b] z-10 shadow-[2px_0_5px_rgba(0,0,0,0.4)] whitespace-nowrap min-w-[190px]">
@@ -101,7 +101,7 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
                   {PROVIDER_COLUMNS.map((col) => {
                     const Icon = col.icon;
                     return (
-                      <th key={col.key} className="px-3 py-3.5 text-center whitespace-nowrap min-w-[95px]">
+                      <th key={col.key} className="px-3 py-3.5 text-center whitespace-nowrap min-w-[105px]">
                         <div className="flex items-center justify-center gap-1.5">
                           <Icon size={12} className="text-purple-400 shrink-0" />
                           <span>{col.label}</span>
@@ -125,7 +125,7 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
                       return (
                         <td key={col.key} className="px-3 py-4 text-center align-middle whitespace-nowrap">
                           <div className="flex flex-col items-center justify-center gap-1">
-                            {/* Server & Health Tactile Mini Slider Switch with Power Icon ⏻ */}
+                            {/* Server & Health Style Elongated Capsule Switch with Circular Knob & Power Icon ⏻ */}
                             <button
                               type="button"
                               role="switch"
@@ -134,28 +134,28 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
                               aria-pressed={isAllowed}
                               onClick={() => onToggleEntitlement(plan.planId, col.key, !isAllowed)}
                               disabled={isUpdating}
-                              className={`premium-switch relative flex items-center w-[50px] h-[26px] p-[2px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed ${
+                              className={`premium-switch relative flex items-center w-[62px] h-[28px] p-[3px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed ${
                                 isAllowed
-                                  ? 'is-armed bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.45),inset_0_1px_2px_rgba(0,0,0,0.25)]'
+                                  ? 'is-armed bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_14px_rgba(16,185,129,0.45),inset_0_1px_2px_rgba(0,0,0,0.25)]'
                                   : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_2px_5px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
                               }`}
                               title={`Toggle ${col.label} for ${plan.planName}`}
                             >
                               {/* Recessed internal circuit track glow */}
                               <div
-                                className={`pointer-events-none absolute inset-x-2 top-1/2 -translate-y-1/2 h-1 rounded-full transition-all duration-300 ${
+                                className={`pointer-events-none absolute inset-x-2.5 top-1/2 -translate-y-1/2 h-1 rounded-full transition-all duration-300 ${
                                   isAllowed
                                     ? 'bg-gradient-to-r from-emerald-400 to-teal-300 opacity-60 shadow-[0_0_6px_rgba(16,185,129,0.8)]'
                                     : 'bg-slate-950/80 opacity-40'
                                 }`}
                               />
 
-                              {/* Tactile White Chrome Knob with Power Icon ⏻ */}
+                              {/* Tactile Circular White Chrome Knob with Power Icon ⏻ */}
                               <span
                                 aria-hidden="true"
-                                className={`switch-knob relative z-10 flex items-center justify-center w-[22px] h-[22px] min-w-[22px] min-h-[22px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_2px_6px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
+                                className={`switch-knob relative z-10 flex items-center justify-center w-[22px] h-[22px] min-w-[22px] min-h-[22px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_3px_8px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
                                   isAllowed
-                                    ? 'translate-x-[24px] text-emerald-600'
+                                    ? 'translate-x-[34px] text-emerald-600'
                                     : 'translate-x-0 text-slate-800'
                                 }`}
                               >

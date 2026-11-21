@@ -127,10 +127,12 @@ export function SuperadminDataArchiveRetentionRulesTable({
                   <button
                     type="button"
                     onClick={() => onEditRule(rule)}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-teal-700 hover:text-teal-800 dark:text-teal-300 dark:hover:text-teal-200 bg-teal-50 hover:bg-teal-100 dark:bg-teal-950/30 dark:hover:bg-teal-950/50 rounded-lg transition-colors"
+                    className="group inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-rose-300 hover:text-white bg-rose-500/15 hover:bg-rose-500/30 border border-rose-500/30 hover:border-rose-400/50 rounded-xl transition-all duration-300 shadow-xs active:scale-[0.97] cursor-pointer"
                   >
-                    <Settings className="w-3 h-3" />
-                    Configure
+                    <span className="p-0.5 rounded-md bg-rose-500/20 text-rose-300 group-hover:rotate-45 transition-transform duration-300">
+                      <Settings className="w-3 h-3" />
+                    </span>
+                    <span>Configure</span>
                   </button>
                 </td>
               </tr>

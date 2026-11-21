@@ -84,20 +84,24 @@ export function SuperadminDataBackupOperationsMain() {
         <div className="flex items-center gap-2.5">
           <Link
             href={SUPERADMIN_NAVIGATION_ROUTES.data_restore_operations}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold border border-border bg-card hover:bg-muted text-foreground transition-colors cursor-pointer"
+            className="group inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold border border-emerald-500/30 bg-emerald-950/20 hover:bg-emerald-900/30 text-emerald-200 transition-all duration-300 shadow-sm hover:shadow-emerald-500/20 active:scale-[0.97] cursor-pointer"
             data-testid="data_backup-view-history-btn"
           >
-            <History size={14} className="text-emerald-400" />
+            <span className="p-1 rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 group-hover:scale-110 transition-transform">
+              <History size={13} />
+            </span>
             <span>Backup History & Snapshots</span>
           </Link>
 
           <button
             type="button"
             onClick={() => openCreateScheduleModal()}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold bg-pink-600 hover:bg-pink-700 text-white transition-colors shadow-xs cursor-pointer"
+            className="group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-500 text-white transition-all duration-300 shadow-lg shadow-amber-600/30 hover:shadow-amber-500/50 hover:scale-[1.02] active:scale-[0.97] cursor-pointer"
             data-testid="data_backup-open-create-btn"
           >
-            <Plus size={14} />
+            <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:rotate-90 transition-transform duration-300">
+              <Plus size={13} />
+            </span>
             <span>Create Backup Policy</span>
           </button>
         </div>
