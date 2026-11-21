@@ -25,6 +25,11 @@ import type { SemanticCellParams } from '@/app/frontend_superadmin/superadmin_co
 import { SuperadminCommunicationNoticesHeader } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/components/SuperadminCommunicationNoticesHeader';
 import { SuperadminCommunicationNoticesFilters } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/components/SuperadminCommunicationNoticesFilters';
 import { SuperadminCommunicationNoticesModals } from '@/app/frontend_superadmin/superadmin_communication/communication_notices/components/SuperadminCommunicationNoticesModals';
+import {
+  downloadSuperadminNoticesCsv,
+  downloadSuperadminNoticesExcel,
+  printSuperadminNoticesRoster,
+} from '@/app/frontend_superadmin/superadmin_communication/communication_notices/utils/SuperadminCommunicationNoticesExportUtils';
 
 type ICellRendererParams = SemanticCellParams<Notice>;
 
@@ -104,14 +109,17 @@ export default function SuperadminCommunicationNoticesPageClient({ id }: { id?: 
   }, [notices]);
 
   const handleExportCsv = () => {
-    const headers = ['Title', 'Message', 'Status', 'Valid Till', 'Posted By', 'Posted Date'];
-    const rows = filteredNotices.map((n) => [`"${n.title.replace(/"/g, '""')}"`, `"${n.message.replace(/"/g, '""')}"`, `"${n.status}"`, `"${n.validTill}"`, `"${n.postedBy ?? ''}"`, `"${n.postedDate ?? ''}"`]);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodeURI('data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((e) => e.join(','))].join('\n')));
-    link.setAttribute('download', `platform_notices_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadSuperadminNoticesCsv(filteredNotices);
+    showToast('Platform notices exported as CSV');
+  };
+
+  const handleExportExcel = () => {
+    downloadSuperadminNoticesExcel(filteredNotices);
+    showToast('Platform notices exported as Excel (.xls)');
+  };
+
+  const handlePrint = () => {
+    printSuperadminNoticesRoster(filteredNotices);
   };
 
   const colDefs = [
@@ -224,6 +232,8 @@ export default function SuperadminCommunicationNoticesPageClient({ id }: { id?: 
         matchedCount={filteredNotices.length}
         onOpenAdd={openAdd}
         onExportCsv={handleExportCsv}
+        onExportExcel={handleExportExcel}
+        onPrint={handlePrint}
       />
 
       {/* Search & Filter Bar */}

@@ -3,7 +3,7 @@
 // FLOW: SuperadminCommunicationNoticesPageClient -> SuperadminCommunicationNoticesHeader.
 
 import React from 'react';
-import { Bell, CheckCircle2, Clock, Download, Plus, Printer, Radio } from 'lucide-react';
+import { Bell, CheckCircle2, Clock, Download, FileSpreadsheet, Plus, Printer, Radio } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface NoticesHeaderProps {
@@ -11,6 +11,8 @@ interface NoticesHeaderProps {
   matchedCount: number;
   onOpenAdd: () => void;
   onExportCsv: () => void;
+  onExportExcel?: () => void;
+  onPrint?: () => void;
 }
 
 export function SuperadminCommunicationNoticesHeader({
@@ -18,6 +20,8 @@ export function SuperadminCommunicationNoticesHeader({
   matchedCount,
   onOpenAdd,
   onExportCsv,
+  onExportExcel,
+  onPrint,
 }: NoticesHeaderProps) {
   const tCopy = useTranslations('SUPERADMIN_COMMUNICATION');
 
@@ -39,7 +43,7 @@ export function SuperadminCommunicationNoticesHeader({
             <div className="p-2.5 rounded-2xl bg-sky-500/15 border border-sky-500/30 text-sky-400 shadow-inner">
               <Bell className="w-6 h-6" />
             </div>
-            <span>Platform Notices & Announcements</span>
+            <span>Notices</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
             Publish and govern multi-tenant announcements, scheduled system maintenance, and operational alerts.
@@ -51,17 +55,28 @@ export function SuperadminCommunicationNoticesHeader({
           <button
             type="button"
             onClick={onExportCsv}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-sky-500/50 hover:bg-sky-500/10 text-slate-200 text-xs font-medium transition-all shadow-sm cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-sky-500/50 hover:bg-sky-500/10 text-slate-200 text-xs font-medium transition-all shadow-sm cursor-pointer active:scale-95"
             title="Export notices to CSV"
           >
             <Download className="w-4 h-4 text-sky-400" />
-            <span>Export CSV</span>
+            <span>CSV</span>
           </button>
+          {onExportExcel && (
+            <button
+              type="button"
+              onClick={onExportExcel}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-emerald-500/25 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-slate-200 text-xs font-medium transition-all shadow-sm cursor-pointer active:scale-95"
+              title="Export notices to Excel"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+              <span>Excel</span>
+            </button>
+          )}
           <button
             type="button"
-            onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-slate-500/50 hover:bg-white/[0.05] text-slate-300 text-xs font-medium transition-all shadow-sm cursor-pointer"
-            title="Print notices"
+            onClick={onPrint ?? (() => window.print())}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-950/80 border border-indigo-500/25 hover:border-slate-500/50 hover:bg-white/[0.05] text-slate-300 text-xs font-medium transition-all shadow-sm cursor-pointer active:scale-95"
+            title="Print notices roster"
           >
             <Printer className="w-4 h-4 text-slate-400" />
             <span>Print</span>
