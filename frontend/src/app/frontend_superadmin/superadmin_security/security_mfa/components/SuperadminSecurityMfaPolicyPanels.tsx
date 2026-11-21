@@ -281,7 +281,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
                 onGenerateRecoveryCodes?.();
                 setShowRecoveryModal(true);
               }}
-              className="inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-500/20 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-500/20 active:scale-[0.98] transition-all cursor-pointer shadow-xs"
               data-testid="superadmin-mfa-generate-codes-button"
             >
               <RefreshCw size={14} />
@@ -290,7 +290,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
             <button
               type="button"
               onClick={() => setShowRecoveryModal(true)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-border/80 bg-card px-3.5 py-2 text-xs font-semibold text-slate-200 hover:text-white transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700/80 bg-slate-800/80 hover:bg-slate-700 px-3.5 py-2 text-xs font-semibold text-slate-200 hover:text-white active:scale-[0.98] transition-all cursor-pointer shadow-xs"
               data-testid="superadmin-mfa-view-codes-button"
             >
               <span>View Codes</span>
@@ -390,7 +390,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
                       <button
                         type="button"
                         onClick={() => toast.info(`MFA challenge verification sent to ${acc.email}`, { id: `mfa-test-${acc.id}` })}
-                        className="px-2.5 py-1 rounded-lg border border-border/80 bg-card hover:bg-surface-hover text-[11px] font-medium text-slate-300 hover:text-white transition-all cursor-pointer"
+                        className="px-2.5 py-1 rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-[11px] font-semibold text-indigo-300 hover:text-white active:scale-95 transition-all cursor-pointer shadow-xs"
                       >
                         Test Auth
                       </button>
@@ -408,7 +408,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
         <button
           type="button"
           onClick={handleSave}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 px-6 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-emerald-500/25 transition-all hover:from-emerald-500 hover:to-teal-600 active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-emerald-500/25 transition-all hover:from-emerald-500 hover:to-teal-600 active:scale-[0.98] cursor-pointer"
           data-testid="superadmin-mfa-save-policy-button"
         >
           <ShieldCheck size={16} />
@@ -424,7 +424,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
           aria-modal="true"
           aria-labelledby="recovery-codes-title"
         >
-          <div className="w-full max-w-lg rounded-2xl border border-amber-500/30 bg-card p-6 shadow-2xl space-y-5 animate-scale-in">
+          <div className="w-full max-w-lg rounded-2xl border border-amber-500/30 bg-[#0a0d24] p-6 shadow-2xl space-y-5 animate-scale-in">
             <div className="flex items-start justify-between border-b border-border/80 pb-4">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
@@ -440,7 +440,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
               <button
                 type="button"
                 onClick={() => setShowRecoveryModal(false)}
-                className="text-slate-400 hover:text-white text-lg font-bold px-2 py-1"
+                className="text-slate-400 hover:text-white text-base font-bold p-1 rounded-lg hover:bg-slate-800 transition-colors"
                 aria-label="Close recovery codes modal"
               >
                 ✕
@@ -469,7 +469,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
                 <button
                   type="button"
                   onClick={handleCopyCodes}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-border/80 bg-card hover:bg-surface-hover text-xs font-semibold text-slate-200 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-semibold text-indigo-300 active:scale-[0.98] transition-all cursor-pointer shadow-xs"
                 >
                   {copiedCodes ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
                   <span>{copiedCodes ? 'Copied!' : 'Copy All'}</span>
@@ -477,7 +477,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
                 <button
                   type="button"
                   onClick={handleDownloadCodes}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-border/80 bg-card hover:bg-surface-hover text-xs font-semibold text-slate-200 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 active:scale-[0.98] transition-all cursor-pointer shadow-xs"
                 >
                   <Download size={14} />
                   <span>Download .txt</span>
@@ -487,7 +487,7 @@ export default function SuperadminSecurityMfaPolicyPanels({
               <button
                 type="button"
                 onClick={() => setShowRecoveryModal(false)}
-                className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white shadow-md cursor-pointer"
+                className="px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-xs font-bold text-white shadow-md shadow-indigo-600/25 active:scale-[0.98] transition-all cursor-pointer"
               >
                 I Have Stored Them Safely
               </button>

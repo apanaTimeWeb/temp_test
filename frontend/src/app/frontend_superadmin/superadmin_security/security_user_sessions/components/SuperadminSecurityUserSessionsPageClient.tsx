@@ -133,7 +133,7 @@ export default function SuperadminSecurityUserSessionsPageClient() {
         params.data.status === 'Active' ? (
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-2.5 py-1 text-xs font-semibold text-rose-300 opacity-60 cursor-not-allowed transition-all"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/15 px-3 py-1 text-xs font-semibold text-rose-300 opacity-60 cursor-not-allowed transition-all"
             disabled
             title={t('COPY.UNAVAILABLE_THE_SESSION_MANAGEMENT_API_CONTRACT_IS_NOT_SUPPLIED')}
             aria-label={t('COPY.UNAVAILABLE_THE_SESSION_MANAGEMENT_API_CONTRACT_IS_NOT_SUPPLIED')}

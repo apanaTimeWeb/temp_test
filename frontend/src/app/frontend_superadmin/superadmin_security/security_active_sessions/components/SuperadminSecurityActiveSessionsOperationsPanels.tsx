@@ -27,7 +27,7 @@ export default function SuperadminSecurityActiveSessionsOperationsPanels({
             <button
               type="button"
               disabled
-              className="inline-flex items-center gap-2 rounded-xl border border-rose-500/40 bg-rose-500/20 px-4 py-2 text-xs sm:text-sm font-semibold text-rose-300 opacity-60 cursor-not-allowed shadow-xs transition-all"
+              className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/15 px-4 py-2 text-xs sm:text-sm font-semibold text-rose-300 opacity-60 cursor-not-allowed shadow-xs transition-all"
               title={tCopy("COPY.UNAVAILABLE_NO_SESSION_MANAGEMENT_API_CONTRACT_IS_SUPPLIED")}
               data-testid="superadmin-security-security-operations-panels-unavailable-no-session-management-api-contract-is-supplied-7"
             >
@@ -72,7 +72,7 @@ export default function SuperadminSecurityActiveSessionsOperationsPanels({
                     type="button"
                     disabled
                     title={tCopy("COPY.UNAVAILABLE_NO_VERIFIED_SESSION_MANAGEMENT_API_CONTRACT_IS_SUPPLIED")}
-                    className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-300 opacity-60 cursor-not-allowed transition-all"
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/15 px-3 py-1.5 text-xs font-semibold text-rose-300 opacity-60 cursor-not-allowed transition-all"
                     data-testid={`superadmin-security-security-operations-panels-unavailable-no-verified-session-management-api-contract-is-supplied-8-${String(s.id)}`}
                   >
                     <ShieldAlert size={13} className="text-rose-400" />

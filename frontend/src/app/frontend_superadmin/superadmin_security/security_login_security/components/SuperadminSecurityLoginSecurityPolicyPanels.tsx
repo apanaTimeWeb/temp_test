@@ -312,10 +312,10 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
                 key={hours}
                 type="button"
                 onClick={() => setInviteExpiryHours(hours)}
-                className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                className={`flex-1 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer active:scale-95 shadow-xs ${
                   inviteExpiryHours === hours
                     ? 'border-indigo-400 bg-indigo-500/20 text-indigo-300'
-                    : 'border-border/70 bg-card text-slate-400'
+                    : 'border-border/70 bg-card text-slate-400 hover:border-slate-600'
                 }`}
               >
                 {hours} Hours
@@ -405,14 +405,14 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
                         <button
                           type="button"
                           onClick={() => handleUnlockAccount(acc.id, acc.email)}
-                          className="px-2.5 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-[11px] font-semibold text-emerald-300 transition-all cursor-pointer"
+                          className="px-3 py-1 rounded-lg border border-emerald-500/30 bg-emerald-500/15 hover:bg-emerald-500/25 text-[11px] font-semibold text-emerald-300 active:scale-95 transition-all cursor-pointer shadow-xs"
                         >
                           Unlock
                         </button>
                         <button
                           type="button"
                           onClick={() => handleSendRecoveryLink(acc.email)}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-border/80 bg-card hover:bg-surface-hover text-[11px] font-medium text-slate-200 transition-all cursor-pointer"
+                          className="inline-flex items-center gap-1 px-3 py-1 rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-[11px] font-semibold text-indigo-300 active:scale-95 transition-all cursor-pointer shadow-xs"
                         >
                           <Send size={11} />
                           <span>Send Link</span>
@@ -432,7 +432,7 @@ export default function SuperadminSecurityLoginSecurityPolicyPanels({
         <button
           type="button"
           onClick={handleSave}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 px-6 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-amber-500/25 transition-all hover:from-amber-500 hover:to-amber-600 active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-amber-500/25 transition-all hover:from-amber-500 hover:to-amber-600 active:scale-[0.98] cursor-pointer"
           data-testid="superadmin-login-security-save-rules-button"
         >
           <ShieldCheck size={16} />

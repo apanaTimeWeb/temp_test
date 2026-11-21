@@ -20,7 +20,7 @@ export default function SuperadminSecurityThreatsOperationsPanels({ failedLogins
           <p className="text-xs sm:text-sm text-slate-400">{tCopy("COPY.AUTOMATED_THREAT_DETECTION_LOGS")}</p>
         </div>
         <button
-          className="inline-flex items-center gap-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 text-xs sm:text-sm font-semibold text-indigo-300 shadow-xs transition-all hover:bg-indigo-500/20 active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 text-xs sm:text-sm font-bold text-indigo-300 shadow-xs transition-all hover:bg-indigo-500/20 active:scale-[0.98] cursor-pointer"
           type="button"
           onClick={handleExportLogs}
           data-testid="superadmin-security-security-operations-panels-export-sample-logs-csv-9"

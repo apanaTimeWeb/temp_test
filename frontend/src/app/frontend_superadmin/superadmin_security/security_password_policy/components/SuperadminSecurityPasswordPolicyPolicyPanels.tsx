@@ -272,10 +272,10 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
             <button
               type="button"
               onClick={() => setHashingAlgorithm('Argon2id')}
-              className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer active:scale-95 shadow-xs ${
                 hashingAlgorithm === 'Argon2id'
                   ? 'border-cyan-400 bg-cyan-500/20 text-cyan-300'
-                  : 'border-border/80 bg-card/60 text-slate-400'
+                  : 'border-border/80 bg-card/60 text-slate-400 hover:border-slate-600'
               }`}
             >
               Argon2id (Winner PHC)
@@ -283,10 +283,10 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
             <button
               type="button"
               onClick={() => setHashingAlgorithm('bcrypt')}
-              className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer active:scale-95 shadow-xs ${
                 hashingAlgorithm === 'bcrypt'
                   ? 'border-cyan-400 bg-cyan-500/20 text-cyan-300'
-                  : 'border-border/80 bg-card/60 text-slate-400'
+                  : 'border-border/80 bg-card/60 text-slate-400 hover:border-slate-600'
               }`}
             >
               bcrypt (Work Factor 12)
@@ -406,7 +406,7 @@ export default function SuperadminSecurityPasswordPolicyPolicyPanels({
         <button
           type="button"
           onClick={handleSave}
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 px-6 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-indigo-500/25 transition-all hover:from-indigo-500 hover:to-indigo-600 active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-indigo-500/25 transition-all hover:from-indigo-500 hover:to-indigo-600 active:scale-[0.98] cursor-pointer"
           data-testid="superadmin-security-security-policy-panels-enforce-policy-10"
         >
           <ShieldCheck size={16} />

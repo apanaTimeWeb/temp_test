@@ -175,7 +175,7 @@ export default function SuperadminSecurityOverviewPageClient() {
               type="button"
               onClick={handleRunThreatScan}
               disabled={isScanning}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 hover:shadow-indigo-500/35 transition-all cursor-pointer active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
               data-testid="superadmin-security-overview-scan-threats"
             >
               <Radar size={14} className={isScanning ? 'animate-spin' : ''} />

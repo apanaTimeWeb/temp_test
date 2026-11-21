@@ -200,7 +200,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
           <div className="flex flex-wrap items-center gap-2.5">
             <Link
               href="/superadmin/superadmin_security/security_overview"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-500/50 text-xs font-semibold shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 hover:border-indigo-500/50 text-xs font-semibold shadow-xs transition-all cursor-pointer active:scale-[0.98]"
             >
               <ShieldCheck size={14} />
               <span>Security Center</span>
@@ -307,7 +307,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
 
             <button
               type="button"
-              className="sa-btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              className="sa-btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
               onClick={handleExportSampleCsv}
               disabled={filtered.length === 0}
               data-testid="superadmin-audit-logs-audit-logs-overview-export-sample-csv-5"

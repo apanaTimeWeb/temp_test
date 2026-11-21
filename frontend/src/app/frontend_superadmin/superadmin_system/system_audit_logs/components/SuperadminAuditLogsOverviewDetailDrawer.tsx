@@ -124,7 +124,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
           </div>
           <button
             type="button"
-            className="sa-btn-icon text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
+            className="sa-btn-icon text-slate-400 hover:text-white p-2 rounded-xl hover:bg-slate-800/80 active:scale-95 transition-all cursor-pointer shrink-0 border border-transparent hover:border-slate-700"
             aria-label={t("COPY.CLOSE_SAMPLE_AUDIT_ENTRY")}
             onClick={onClose}
             data-testid="superadmin-audit-logs-audit-logs-detail-drawer-close-sample-audit-entry-1"
@@ -164,7 +164,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
               Actor & Target Metadata
             </h3>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div className="sa-panel-info-cell rounded-xl border border-border/80 bg-slate-900/60 p-3 space-y-1">
+              <div className="sa-panel-info-cell rounded-xl border border-indigo-500/20 bg-slate-900/60 p-3 space-y-1">
                 <dt className="sa-panel-info-label text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
                   <Clock size={12} className="text-indigo-400" />
                   <span>{t("COPY.TIMESTAMP")}</span>
@@ -174,7 +174,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
                 </dd>
               </div>
 
-              <div className="sa-panel-info-cell rounded-xl border border-border/80 bg-slate-900/60 p-3 space-y-1">
+              <div className="sa-panel-info-cell rounded-xl border border-indigo-500/20 bg-slate-900/60 p-3 space-y-1">
                 <dt className="sa-panel-info-label text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
                   <User size={12} className="text-emerald-400" />
                   <span>{t("COPY.PERFORMED_BY")}</span>
@@ -184,7 +184,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
                 </dd>
               </div>
 
-              <div className="sa-panel-info-cell rounded-xl border border-border/80 bg-slate-900/60 p-3 space-y-1">
+              <div className="sa-panel-info-cell rounded-xl border border-indigo-500/20 bg-slate-900/60 p-3 space-y-1">
                 <dt className="sa-panel-info-label text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
                   <Building2 size={12} className="text-purple-400" />
                   <span>{t("COPY.ENTITY")}</span>
@@ -194,7 +194,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
                 </dd>
               </div>
 
-              <div className="sa-panel-info-cell rounded-xl border border-border/80 bg-slate-900/60 p-3 space-y-1">
+              <div className="sa-panel-info-cell rounded-xl border border-indigo-500/20 bg-slate-900/60 p-3 space-y-1">
                 <dt className="sa-panel-info-label text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
                   <FileText size={12} className="text-sky-400" />
                   <span>{t("COPY.TARGET")}</span>
@@ -204,7 +204,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
                 </dd>
               </div>
 
-              <div className="sa-panel-info-cell rounded-xl border border-border/80 bg-slate-900/60 p-3 space-y-1">
+              <div className="sa-panel-info-cell rounded-xl border border-indigo-500/20 bg-slate-900/60 p-3 space-y-1">
                 <dt className="sa-panel-info-label text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
                   <Globe size={12} className="text-amber-400" />
                   <span>{t("COPY.IP_ADDRESS")}</span>
@@ -214,7 +214,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
                 </dd>
               </div>
 
-              <div className="sa-panel-info-cell rounded-xl border border-border/80 bg-slate-900/60 p-3 space-y-1">
+              <div className="sa-panel-info-cell rounded-xl border border-indigo-500/20 bg-slate-900/60 p-3 space-y-1">
                 <dt className="sa-panel-info-label text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
                   <CheckCircle2 size={12} className="text-teal-400" />
                   <span>{t("COPY.ACTION")}</span>
@@ -244,7 +244,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
             <button
               type="button"
               onClick={handleCopyId}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-semibold text-indigo-300 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-xs font-semibold text-indigo-300 shadow-xs transition-all cursor-pointer active:scale-[0.98]"
             >
               <Copy size={12} />
               <span>Copy ID</span>
@@ -252,7 +252,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
             <button
               type="button"
               onClick={handleCopyJson}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-600 bg-slate-800/60 hover:bg-slate-800 text-xs font-semibold text-slate-300 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-700/80 hover:border-slate-600 bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 shadow-xs transition-all cursor-pointer active:scale-[0.98]"
             >
               <FileText size={12} />
               <span>Copy JSON</span>
@@ -262,7 +262,7 @@ export default function SuperadminAuditLogsOverviewDetailDrawer({ log, onClose }
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-colors cursor-pointer active:scale-[0.97]"
+            className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 shadow-xs transition-all cursor-pointer active:scale-[0.98]"
           >
             Close
           </button>

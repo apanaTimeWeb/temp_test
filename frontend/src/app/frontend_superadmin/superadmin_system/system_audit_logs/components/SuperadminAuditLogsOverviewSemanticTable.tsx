@@ -204,7 +204,7 @@ export default function SuperadminAuditLogsOverviewSemanticTable<T extends objec
           <div className="flex gap-2">
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 text-slate-300 hover:bg-indigo-900/50 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer transition-all"
+              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/50 hover:bg-indigo-900/60 text-slate-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer transition-all shadow-xs active:scale-[0.98]"
               disabled={activePage === 0}
               onClick={() => {
                 const nextPage = Math.max(0, activePage - 1);
@@ -217,7 +217,7 @@ export default function SuperadminAuditLogsOverviewSemanticTable<T extends objec
             </button>
             <button
               type="button"
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/40 text-slate-300 hover:bg-indigo-900/50 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer transition-all"
+              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-950/50 hover:bg-indigo-900/60 text-slate-200 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed text-xs font-semibold cursor-pointer transition-all shadow-xs active:scale-[0.98]"
               disabled={activePage + 1 >= pageCount}
               onClick={() => {
                 const nextPage = Math.min(pageCount - 1, activePage + 1);
