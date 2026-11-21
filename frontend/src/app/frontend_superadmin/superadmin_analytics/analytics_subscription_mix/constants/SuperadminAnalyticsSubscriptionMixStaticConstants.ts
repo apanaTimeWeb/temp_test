@@ -2,15 +2,17 @@
 // FLOW: Feature consumers -> superadmin_analytics/analytics_subscription_mix/constants/SuperadminAnalyticsSubscriptionMixStaticConstants.ts -> typed constants -> component/hook/config behavior.
 
 
+import type { ApexOptions } from 'apexcharts';
+
 /** Static module-owned options/status mapping extracted from SuperadminAnalyticsSubscriptionMixAnalyticsChart.tsx. */
-export const SUPERADMIN_REPORTS_ANALYTICS_CHART_COMMON = {
-    chart: { background: 'transparent', toolbar: { show: false }, animations: { enabled: false }, foreColor: 'var(--text-secondary)' },
-    dataLabels: { enabled: false },
-    grid: { borderColor: 'var(--chart-grid)' },
-    legend: { labels: { colors: 'var(--text-secondary)' } },
-    tooltip: { theme: 'dark' },
-    stroke: { curve: 'smooth', width: 2 },
-  };
+export const SUPERADMIN_REPORTS_ANALYTICS_CHART_COMMON: ApexOptions = {
+  chart: { background: 'transparent', toolbar: { show: false }, animations: { enabled: false }, foreColor: 'var(--text-secondary)' },
+  dataLabels: { enabled: false },
+  grid: { borderColor: 'var(--chart-grid)' },
+  legend: { labels: { colors: 'var(--text-secondary)' } },
+  tooltip: { theme: 'dark' },
+  stroke: { curve: 'smooth', width: 2 },
+};
 
 
 /** Static module-owned options/status mapping extracted from SuperadminAnalyticsSubscriptionMixPageClient.tsx. */

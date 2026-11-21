@@ -2,8 +2,10 @@
 // FLOW: Feature consumers -> superadmin_analytics/analytics_overview/constants/SuperadminAnalyticsOverviewStaticConstants.ts -> typed constants -> component/hook/config behavior.
 
 
+import type { ApexOptions } from 'apexcharts';
+
 /** Static module-owned options/status mapping extracted from SuperadminAnalyticsOverviewAnalyticsChart.tsx. */
-export const SUPERADMIN_REPORTS_ANALYTICS_CHART_COMMON = {
+export const SUPERADMIN_REPORTS_ANALYTICS_CHART_COMMON: ApexOptions = {
     chart: { background: 'transparent', toolbar: { show: false }, animations: { enabled: false }, foreColor: 'var(--text-secondary)' },
     dataLabels: { enabled: false },
     grid: { borderColor: 'var(--chart-grid)' },

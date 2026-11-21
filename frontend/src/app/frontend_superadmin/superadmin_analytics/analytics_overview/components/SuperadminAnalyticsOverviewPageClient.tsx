@@ -127,25 +127,56 @@ export default function SuperadminAnalyticsOverviewPageClient() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
-          <p className="text-xs font-semibold uppercase tracking-wider text-emerald-400">{tCopy("COPY.MRR_IN_SAMPLE_ROWS")}</p>
-          <p className="mt-3 text-2xl sm:text-3xl font-black text-slate-100">{formatSuperadminReportsMajorPreviewCurrency(totalMrr, locale, 'INR')}</p>
-          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400" style={{ width: '78%' }} /></div>
+        {/* 1. MRR */}
+        <div className="group relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-[#061e14]/95 via-[#061810]/90 to-[#0a2e1d]/85 p-5 shadow-lg shadow-emerald-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-emerald-400/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full bg-emerald-500/15 blur-xl transition-all duration-500 group-hover:scale-125" />
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400/90">{tCopy("COPY.MRR_IN_SAMPLE_ROWS")}</span>
+            <div className="p-2 rounded-xl border border-emerald-500/40 bg-emerald-500/20 text-emerald-400 shadow-md">
+              <Activity size={16} strokeWidth={2.3} />
+            </div>
+          </div>
+          <p className="mt-3 text-3xl font-black tracking-tight text-emerald-300">{formatSuperadminReportsMajorPreviewCurrency(totalMrr, locale, 'INR')}</p>
+          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-900 border border-emerald-500/20"><div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400" style={{ width: '78%' }} /></div>
         </div>
-        <div className="relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
-          <p className="text-xs font-semibold uppercase tracking-wider text-indigo-300">{tCopy("COPY.ARR_RUN_RATE_EQUIVALENT")}</p>
-          <p className="mt-3 text-2xl sm:text-3xl font-black text-slate-100">{formatSuperadminReportsMajorPreviewCurrency(totalMrr * 12, locale, 'INR')}</p>
-          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-indigo-500 to-indigo-400" style={{ width: '65%' }} /></div>
+
+        {/* 2. ARR */}
+        <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-[#0e0c28]/95 via-[#0a0920]/90 to-[#1a1444]/85 p-5 shadow-lg shadow-indigo-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-indigo-400/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full bg-indigo-500/15 blur-xl transition-all duration-500 group-hover:scale-125" />
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-indigo-300">{tCopy("COPY.ARR_RUN_RATE_EQUIVALENT")}</span>
+            <div className="p-2 rounded-xl border border-indigo-500/40 bg-indigo-500/20 text-indigo-300 shadow-md">
+              <Calendar size={16} strokeWidth={2.3} />
+            </div>
+          </div>
+          <p className="mt-3 text-3xl font-black tracking-tight text-indigo-200">{formatSuperadminReportsMajorPreviewCurrency(totalMrr * 12, locale, 'INR')}</p>
+          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-900 border border-indigo-500/20"><div className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-indigo-400" style={{ width: '65%' }} /></div>
         </div>
-        <div className="relative overflow-hidden rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
-          <div className="flex items-center gap-2 mb-1"><Users size={14} className="text-sky-400"/><p className="text-xs font-semibold uppercase tracking-wider text-sky-400">{tCopy("COPY.ACTIVE_SAMPLE_TENANTS")}</p></div>
-          <p className="mt-2 text-2xl sm:text-3xl font-black text-slate-100">{activeTenants}</p>
-          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-sky-500 to-cyan-400" style={{ width: '90%' }} /></div>
+
+        {/* 3. Active Tenants */}
+        <div className="group relative overflow-hidden rounded-2xl border border-sky-500/30 bg-gradient-to-br from-[#0c0f2a]/95 via-[#090d24]/90 to-[#141a45]/85 p-5 shadow-lg shadow-sky-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-sky-400/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full bg-sky-500/15 blur-xl transition-all duration-500 group-hover:scale-125" />
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-sky-400">{tCopy("COPY.ACTIVE_SAMPLE_TENANTS")}</span>
+            <div className="p-2 rounded-xl border border-sky-500/40 bg-sky-500/20 text-sky-400 shadow-md">
+              <Users size={16} strokeWidth={2.3} />
+            </div>
+          </div>
+          <p className="mt-3 text-3xl font-black tracking-tight text-sky-200">{activeTenants}</p>
+          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-900 border border-sky-500/20"><div className="h-full rounded-full bg-gradient-to-r from-sky-500 to-cyan-400" style={{ width: '90%' }} /></div>
         </div>
-        <div className="relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/50 via-slate-900/90 to-slate-900/90 p-5 shadow-lg">
-          <p className="text-xs font-semibold uppercase tracking-wider text-amber-400">{tCopy("COPY.TENANTS_MARKED_CHURN_RISK")}</p>
-          <p className="mt-3 text-2xl sm:text-3xl font-black text-slate-100">{churnRisk}</p>
-          <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-slate-800"><div className="h-full bg-gradient-to-r from-amber-500 to-orange-400" style={{ width: '20%' }} /></div>
+
+        {/* 4. Churn Risk */}
+        <div className="group relative overflow-hidden rounded-2xl border border-amber-500/30 bg-gradient-to-br from-[#1c1408]/95 via-[#1c1408]/90 to-[#2c200c]/85 p-5 shadow-lg shadow-amber-950/40 transition-all duration-300 hover:scale-[1.01] hover:border-amber-400/50">
+          <div className="pointer-events-none absolute -right-6 -bottom-6 h-20 w-20 rounded-full bg-amber-500/15 blur-xl transition-all duration-500 group-hover:scale-125" />
+          <div className="relative flex items-center justify-between">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">{tCopy("COPY.TENANTS_MARKED_CHURN_RISK")}</span>
+            <div className="p-2 rounded-xl border border-amber-500/40 bg-amber-500/20 text-amber-400 shadow-md">
+              <Filter size={16} strokeWidth={2.3} />
+            </div>
+          </div>
+          <p className="mt-3 text-3xl font-black tracking-tight text-amber-300">{churnRisk}</p>
+          <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-900 border border-amber-500/20"><div className="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-400" style={{ width: '20%' }} /></div>
         </div>
       </div>
 
@@ -153,7 +184,7 @@ export default function SuperadminAnalyticsOverviewPageClient() {
       <section className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0a0d22] to-[#060810] overflow-hidden shadow-lg">
         <div className="flex gap-2 overflow-x-auto border-b border-indigo-500/20 bg-indigo-500/5 p-3" role="navigation" aria-label={tCopy("COPY.REPORT_TYPE")}>
           {SUPERADMIN_REPORTS_OVERVIEW_PAGE_CLIENT_REPORT_TABS.map(({ name, icon: Icon }) => (
-            <button type="button" key={name} aria-current={activeTab === name ? 'page' : undefined} onClick={() => setActiveTab(name)}
+            <button type="button" key={name} aria-current={activeTab === name ? 'page' : undefined} onClick={() => setActiveTab(name as SuperadminReportsTab)}
               className={`flex min-h-9 items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                 activeTab === name ? 'bg-indigo-500/20 border border-indigo-500/40 text-indigo-300' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
               }`}

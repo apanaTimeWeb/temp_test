@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Plus, Ticket, Building2, User, Mail, Phone, FileText } from 'lucide-react';
 import type { SuperadminSupportTicket, SuperadminSupportTicketCategory, SuperadminSupportTicketPriority } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
 import { SUPERADMIN_SUPPORT_TICKET_TYPES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
@@ -26,10 +27,15 @@ export default function SuperadminSupportTicketsCreateModal({
   const [priority, setPriority] = useState<SuperadminSupportTicketPriority>('Medium');
   const [desc, setDesc] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [mounted, setMounted] = useState(false);
 
   useModalScrollLock(isOpen);
 
   const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -96,10 +102,10 @@ export default function SuperadminSupportTicketsCreateModal({
     onClose();
   };
 
-  return (
+  const modalContent = (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md overflow-hidden animate-in fade-in duration-200"
-      onMouseDown={(e) => {
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
+      onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
@@ -108,16 +114,17 @@ export default function SuperadminSupportTicketsCreateModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="create-ticket-title"
-        className="w-full max-w-xl rounded-2xl border border-indigo-500/30 bg-[#0a0d22] shadow-2xl shadow-indigo-950/60 flex flex-col max-h-[88vh] overflow-hidden text-white animate-in zoom-in-95 duration-200 ease-out"
+        className="w-full max-w-xl rounded-2xl border border-indigo-500/30 bg-[#0a0d22] shadow-2xl shadow-indigo-950/80 flex flex-col max-h-[90vh] my-auto overflow-hidden text-white animate-in zoom-in-95 duration-200 ease-out"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header - Fixed at Top */}
-        <div className="flex items-center justify-between border-b border-indigo-500/20 p-5 sm:p-6 pb-4 shrink-0 bg-[#0c102a]">
+        <div className="flex items-center justify-between border-b border-indigo-500/20 p-4 sm:p-5 shrink-0 bg-[#0c102a]">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+            <div className="h-10 w-10 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0">
               <Ticket size={20} />
             </div>
             <div>
-              <h2 id="create-ticket-title" className="text-lg font-bold text-slate-100 flex items-center gap-2">
+              <h2 id="create-ticket-title" className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2">
                 Log Support Ticket
               </h2>
               <p className="text-xs text-slate-400">
@@ -128,16 +135,16 @@ export default function SuperadminSupportTicketsCreateModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
             aria-label="Close dialog"
           >
             <X size={18} />
           </button>
         </div>
 
-        {/* Form Body - Scrollable Container */}
+        {/* Form Body - Scrollable Form Container */}
         <form onSubmit={handleSubmit} className="flex-1 min-h-0 flex flex-col overflow-hidden" noValidate>
-          <div className="flex-1 min-h-0 overflow-y-auto p-5 sm:p-6 space-y-4">
+          <div className="flex-1 min-h-0 overflow-y-auto p-4 sm:p-5 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Tenant/Library */}
               <div>
@@ -270,7 +277,7 @@ export default function SuperadminSupportTicketsCreateModal({
                 placeholder="Describe the issue, device model, affected students/seats, and error messages..."
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
-                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${
+                className={`w-full rounded-xl border bg-slate-900/90 px-3.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all resize-none min-h-[90px] ${
                   errors.desc ? 'border-rose-500 focus:border-rose-400' : 'border-indigo-500/30 focus:border-indigo-400'
                 }`}
               />
@@ -279,7 +286,7 @@ export default function SuperadminSupportTicketsCreateModal({
           </div>
 
           {/* Actions - Fixed at Bottom */}
-          <div className="flex items-center justify-end gap-3 p-4 sm:p-5 border-t border-indigo-500/20 bg-[#070919] shrink-0">
+          <div className="flex items-center justify-end gap-3 p-4 border-t border-indigo-500/20 bg-[#070919] shrink-0">
             <button
               type="button"
               onClick={onClose}
@@ -289,7 +296,7 @@ export default function SuperadminSupportTicketsCreateModal({
             </button>
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 text-xs font-bold text-white hover:from-rose-500 hover:to-indigo-500 shadow-lg shadow-rose-950/40 hover:shadow-rose-500/30 transition-all duration-150 cursor-pointer active:scale-[0.97] group"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 via-pink-600 to-indigo-600 text-xs font-bold text-white hover:from-rose-500 hover:to-indigo-500 shadow-lg shadow-rose-950/40 hover:shadow-rose-500/30 transition-all duration-150 cursor-pointer active:scale-[0.97] group"
             >
               <Plus size={15} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
               <span>Create Ticket</span>
@@ -299,4 +306,7 @@ export default function SuperadminSupportTicketsCreateModal({
       </div>
     </div>
   );
+
+  if (!mounted || typeof document === 'undefined') return null;
+  return createPortal(modalContent, document.body);
 }
