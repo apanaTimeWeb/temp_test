@@ -63,26 +63,26 @@ export function SuperadminAnalyticsUsageReportsExportModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
       aria-labelledby="export-usage-title"
       data-testid="usage-reports-export-modal"
     >
-      <div className="w-full max-w-lg p-6 rounded-2xl border border-border bg-card shadow-xl space-y-5 animate-in fade-in-50 zoom-in-95">
-        <div className="flex items-center justify-between border-b border-border/40 pb-3">
+      <div className="w-full max-w-lg p-6 rounded-3xl border border-indigo-500/30 bg-[#0a0d24]/95 text-white shadow-2xl shadow-indigo-950/60 backdrop-blur-xl space-y-5 animate-in fade-in-50 zoom-in-95">
+        <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
           <div>
-            <h2 id="export-usage-title" className="text-base font-bold text-foreground">
+            <h2 id="export-usage-title" className="text-base font-bold text-white tracking-tight">
               Export & Download Usage Reports
             </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Target dataset: {records.length} monitored libraries & branches
+            <p className="text-xs text-slate-400 mt-0.5">
+              Target dataset: <span className="text-emerald-400 font-semibold">{records.length}</span> monitored libraries & branches
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] cursor-pointer transition-colors"
             aria-label="Close export modal"
           >
             <X size={18} />
@@ -95,14 +95,14 @@ export function SuperadminAnalyticsUsageReportsExportModal({
             type="button"
             onClick={handleExcelExport}
             data-testid="usage-export-excel-btn"
-            className="flex items-center gap-3 p-3.5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 hover:bg-emerald-500/10 text-left transition-all cursor-pointer group active:scale-95"
+            className="flex items-center gap-3 p-3.5 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-left transition-all cursor-pointer group active:scale-95 shadow-xs"
           >
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:scale-105 transition-transform">
+            <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 group-hover:scale-105 transition-transform">
               <FileSpreadsheet size={20} />
             </div>
             <div>
-              <p className="text-xs font-bold text-foreground">Excel Export</p>
-              <p className="text-[11px] text-muted-foreground">Formatted workbook with sheets</p>
+              <p className="text-xs font-bold text-white">Excel Export</p>
+              <p className="text-[11px] text-slate-400">Formatted workbook with sheets</p>
             </div>
           </button>
 
@@ -111,14 +111,14 @@ export function SuperadminAnalyticsUsageReportsExportModal({
             type="button"
             onClick={handleCsvExport}
             data-testid="usage-export-csv-btn"
-            className="flex items-center gap-3 p-3.5 rounded-xl border border-sky-500/20 bg-sky-500/5 hover:bg-sky-500/10 text-left transition-all cursor-pointer group active:scale-95"
+            className="flex items-center gap-3 p-3.5 rounded-2xl border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/20 text-left transition-all cursor-pointer group active:scale-95 shadow-xs"
           >
-            <div className="p-2 rounded-lg bg-sky-500/10 text-sky-400 group-hover:scale-105 transition-transform">
+            <div className="p-2.5 rounded-xl bg-sky-500/20 text-sky-400 group-hover:scale-105 transition-transform">
               <FileText size={20} />
             </div>
             <div>
-              <p className="text-xs font-bold text-foreground">CSV Export</p>
-              <p className="text-[11px] text-muted-foreground">Comma-separated raw values</p>
+              <p className="text-xs font-bold text-white">CSV Export</p>
+              <p className="text-[11px] text-slate-400">Comma-separated raw values</p>
             </div>
           </button>
 
@@ -127,14 +127,14 @@ export function SuperadminAnalyticsUsageReportsExportModal({
             type="button"
             onClick={handlePdfExport}
             data-testid="usage-export-pdf-btn"
-            className="flex items-center gap-3 p-3.5 rounded-xl border border-rose-500/20 bg-rose-500/5 hover:bg-rose-500/10 text-left transition-all cursor-pointer group active:scale-95"
+            className="flex items-center gap-3 p-3.5 rounded-2xl border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-left transition-all cursor-pointer group active:scale-95 shadow-xs"
           >
-            <div className="p-2 rounded-lg bg-rose-500/10 text-rose-400 group-hover:scale-105 transition-transform">
+            <div className="p-2.5 rounded-xl bg-rose-500/20 text-rose-400 group-hover:scale-105 transition-transform">
               <FileText size={20} />
             </div>
             <div>
-              <p className="text-xs font-bold text-foreground">PDF Document</p>
-              <p className="text-[11px] text-muted-foreground">Executive report view</p>
+              <p className="text-xs font-bold text-white">PDF Document</p>
+              <p className="text-[11px] text-slate-400">Executive report view</p>
             </div>
           </button>
 
@@ -143,33 +143,33 @@ export function SuperadminAnalyticsUsageReportsExportModal({
             type="button"
             onClick={handlePrint}
             data-testid="usage-export-print-btn"
-            className="flex items-center gap-3 p-3.5 rounded-xl border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 text-left transition-all cursor-pointer group active:scale-95"
+            className="flex items-center gap-3 p-3.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-left transition-all cursor-pointer group active:scale-95 shadow-xs"
           >
-            <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400 group-hover:scale-105 transition-transform">
+            <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 group-hover:scale-105 transition-transform">
               <Printer size={20} />
             </div>
             <div>
-              <p className="text-xs font-bold text-foreground">Print View</p>
-              <p className="text-[11px] text-muted-foreground">Direct printer output</p>
+              <p className="text-xs font-bold text-white">Print View</p>
+              <p className="text-[11px] text-slate-400">Direct printer output</p>
             </div>
           </button>
         </div>
 
         {/* 5. Download Raw JSON */}
-        <div className="border-t border-border/40 pt-4 flex items-center justify-between">
+        <div className="border-t border-indigo-500/20 pt-4 flex items-center justify-between">
           <button
             type="button"
             onClick={handleJsonDownload}
             data-testid="usage-export-download-btn"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border border-border bg-background hover:bg-muted text-foreground transition-all cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
           >
             <Download size={14} />
-            <span>Download Full JSON Summary</span>
+            <span>Download Raw Dataset</span>
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer"
+            className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-indigo-500/20 cursor-pointer transition-all"
           >
             Cancel
           </button>
