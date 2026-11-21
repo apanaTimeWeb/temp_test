@@ -51,16 +51,18 @@ export default function SuperadminRolesListTable({
   return (
     <div className="space-y-4">
       {/* Search & Category Filter Bar */}
-      <div className="flex flex-wrap items-center gap-3 p-3.5 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25">
-        <input
-          type="search"
-          placeholder="Search roles by name or description..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 min-w-[220px] rounded-xl border border-indigo-500/25 bg-input px-3.5 py-2 text-xs text-white placeholder:text-slate-400 focus:border-indigo-400 outline-none"
-        />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl bg-[#0c0f28]/95 border border-indigo-500/25 shadow-md">
+        <div className="relative flex-1 min-w-[240px]">
+          <input
+            type="search"
+            placeholder="Search roles by name or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-xl border border-indigo-500/25 bg-input px-3.5 py-2.5 text-xs text-white placeholder:text-slate-400 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none"
+          />
+        </div>
 
-        <div className="flex items-center gap-1.5 overflow-x-auto">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
           {[
             { id: 'all', label: 'All Roles' },
             { id: 'internal_platform', label: 'Platform Internal' },
@@ -71,9 +73,9 @@ export default function SuperadminRolesListTable({
               key={cat.id}
               type="button"
               onClick={() => setCategoryFilter(cat.id)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 categoryFilter === cat.id
-                  ? 'bg-indigo-600 text-white shadow-xs'
+                  ? 'bg-indigo-600 text-white shadow-xs font-bold'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
             >

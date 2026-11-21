@@ -54,30 +54,30 @@ export default function SuperadminRolesOverviewHeader({
         </div>
 
         {/* CTA & Tab Toggle */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
-          <div className="flex items-center p-1.5 rounded-2xl bg-slate-950/80 border border-indigo-500/30 shadow-inner">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 shrink-0">
+          <div className="flex items-center gap-1 p-1.5 rounded-2xl bg-slate-950/80 border border-indigo-500/30 shadow-inner">
             <button
               type="button"
               onClick={() => setActiveTab('roles_matrix')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer active:scale-95 ${
+              className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
                 activeTab === 'roles_matrix'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/50'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
               }`}
             >
-              <Layers size={14} />
+              <Layers size={14} className="shrink-0" />
               <span>Roles & Matrix ({totalRolesCount})</span>
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('user_security')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer active:scale-95 ${
+              className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
                 activeTab === 'user_security'
                   ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-950/50'
                   : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
               }`}
             >
-              <KeyRound size={14} />
+              <KeyRound size={14} className="shrink-0" />
               <span>User Security & Sessions ({totalUsersCount})</span>
             </button>
           </div>
@@ -85,9 +85,9 @@ export default function SuperadminRolesOverviewHeader({
           <button
             type="button"
             onClick={onCreateRole}
-            className="inline-flex items-center justify-center gap-2 px-4.5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-indigo-950/60 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-indigo-950/60 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
           >
-            <Plus size={16} />
+            <Plus size={16} className="shrink-0" />
             <span>Create New Role</span>
           </button>
         </div>

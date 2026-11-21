@@ -110,9 +110,11 @@ export default function SuperadminUserSecurityAccountsTable({
                 </td>
 
                 {/* Last Active */}
-                <td className="py-3 px-4 whitespace-nowrap text-slate-400 flex items-center gap-1 pt-4">
-                  <Clock size={11} className="text-slate-500" />
-                  <span>{user.lastActive}</span>
+                <td className="py-3 px-4 whitespace-nowrap text-slate-400">
+                  <div className="flex items-center gap-1.5">
+                    <Clock size={12} className="text-slate-500 shrink-0" />
+                    <span>{user.lastActive}</span>
+                  </div>
                 </td>
 
                 {/* Single-line Horizontal Actions */}
