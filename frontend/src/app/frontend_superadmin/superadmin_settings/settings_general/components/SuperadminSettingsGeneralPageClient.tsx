@@ -92,7 +92,7 @@ export default function SuperadminSettingsGeneralPageClient() {
   const currentValues = watch();
 
   return (
-    <div className="sa-page-animate flex flex-col gap-6 p-1 max-w-7xl mx-auto" data-active-tab={activeRouteName}>
+    <div className="sa-page-animate flex flex-col gap-6 w-full max-w-full min-w-0 pb-12" data-active-tab={activeRouteName}>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-6">
           {/* Hero Header matching Superadmin Support Luxury Palette */}

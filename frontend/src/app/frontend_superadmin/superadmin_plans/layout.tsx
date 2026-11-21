@@ -21,7 +21,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   ] as const;
 
   return (
-    <div className="w-full max-w-full min-w-0 px-2 sm:px-4 lg:px-6 py-2">
+    <div className="w-full max-w-full min-w-0 p-0">
       <nav aria-label={t('COPY.NAVIGATION_SECONDARY')} className="mb-6 border-b border-indigo-500/20" data-testid="superadmin_plans-secondary-navigation">
         <ul className="flex min-w-0 flex-wrap gap-2" role="list">
           {routes.map((route) => {

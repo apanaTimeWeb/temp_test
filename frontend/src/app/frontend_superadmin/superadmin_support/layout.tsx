@@ -7,7 +7,7 @@ import { SUPERADMIN_NAVIGATION_ROUTES } from '@/app/frontend_superadmin/superadm
 export default function DomainLayout({ children }: { children: ReactNode }) {
   void SUPERADMIN_NAVIGATION_ROUTES;
   return (
-    <div className="w-full max-w-full min-w-0 px-1 sm:px-2 py-2">
+    <div className="w-full max-w-full min-w-0 p-0">
       {children}
     </div>
   );

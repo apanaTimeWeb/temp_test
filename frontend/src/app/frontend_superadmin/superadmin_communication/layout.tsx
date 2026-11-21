@@ -43,7 +43,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   ];
 
   return (
-    <div className="w-full max-w-full min-w-0 px-3 sm:px-5 lg:px-7 py-3 space-y-4">
+    <div className="w-full max-w-full min-w-0 p-0 space-y-4">
       {/* Secondary Top Navigation Bar */}
       <nav
         aria-label="Notification & Notice Modules"

@@ -89,7 +89,7 @@ export default function SuperadminDataLayout({ children }: { children: ReactNode
   const pathname = usePathname();
 
   return (
-    <div className="w-full max-w-full min-w-0 px-3 sm:px-6 lg:px-8 py-4">
+    <div className="w-full max-w-full min-w-0 p-0">
       {/* ── Sub-navigation Tab Bar ── */}
       <nav
         aria-label="Data, Backup and Disaster Recovery Navigation"

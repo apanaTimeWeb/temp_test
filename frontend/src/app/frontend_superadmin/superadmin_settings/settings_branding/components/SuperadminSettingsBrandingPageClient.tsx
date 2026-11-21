@@ -79,7 +79,7 @@ export default function SuperadminSettingsBrandingPageClient() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8 pb-12">
+    <div className="w-full max-w-full min-w-0 space-y-8 pb-12">
       <SuperadminSettingsBrandingHeaderBanner
         title={tCopy('COPY.BRANDING_AND_WHITE_LABEL')}
         subtitle={tCopy('COPY.PREVIEW_LIBRARY_BRANDING_LOCALLY_CHANGES_DO_NOT_AFFECT_THE_HOST_AP_02467621')}

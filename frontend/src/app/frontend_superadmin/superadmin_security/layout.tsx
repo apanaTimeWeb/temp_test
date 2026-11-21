@@ -45,7 +45,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   ] as const;
 
   return (
-    <div className="w-full max-w-full min-w-0 px-3 sm:px-6 lg:px-8 py-4">
+    <div className="w-full max-w-full min-w-0 p-0">
       <nav aria-label="Security Center Navigation" className="mb-6 border-b border-border/80 overflow-x-auto no-scrollbar" data-testid="superadmin_security-secondary-navigation">
         <ul className="flex min-w-max flex-nowrap sm:flex-wrap gap-2" role="list">
           {routes.map((route) => {

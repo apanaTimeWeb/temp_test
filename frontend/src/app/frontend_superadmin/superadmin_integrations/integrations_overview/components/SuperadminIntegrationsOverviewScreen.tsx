@@ -9,7 +9,7 @@ import { SuperadminIntegrationsOverviewMain } from './SuperadminIntegrationsOver
 export default function SuperadminIntegrationsOverviewScreen() {
   return (
     <div
-      className="w-full max-w-7xl mx-auto min-w-0 p-1 space-y-6 text-slate-100"
+      className="w-full max-w-full min-w-0 space-y-6 text-slate-100 pb-12"
       data-feature-submodule="integrations_overview"
     >
       <SuperadminIntegrationsOverviewMain />

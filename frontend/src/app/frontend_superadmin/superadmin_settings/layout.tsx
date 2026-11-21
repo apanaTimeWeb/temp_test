@@ -28,7 +28,7 @@ export default function DomainLayout({ children }: { children: ReactNode }) {
   ] as const;
 
   return (
-    <div className="w-full max-w-full min-w-0 px-3 sm:px-6 lg:px-8 py-4">
+    <div className="w-full max-w-full min-w-0 p-0">
       {/* Segmented Floating Cyber Navigation Bar matching Superadmin Support styling */}
       <nav
         aria-label="Global Settings Navigation"

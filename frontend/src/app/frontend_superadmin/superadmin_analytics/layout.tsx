@@ -56,7 +56,7 @@ export default function SuperadminAnalyticsLayout({ children }: { children: Reac
   const pathname = usePathname();
 
   return (
-    <div className="w-full max-w-full min-w-0 px-3 sm:px-6 lg:px-8 py-4 space-y-6">
+    <div className="w-full max-w-full min-w-0 p-0 space-y-6">
       {/* ── Sub-navigation Tab Bar ── */}
       <nav
         aria-label="Reports and Analytics Navigation"
