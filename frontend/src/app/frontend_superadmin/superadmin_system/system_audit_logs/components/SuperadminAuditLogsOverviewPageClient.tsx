@@ -34,7 +34,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
   const [actionFilter, setActionFilter] = useState('All Actions');
   const [searchTerm, setSearchTerm] = useState('');
   const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(SUPERADMIN_AUDIT_LOGS_DEFAULT_PAGE_SIZE);
+  const [pageSize, setPageSize] = useState<number>(SUPERADMIN_AUDIT_LOGS_DEFAULT_PAGE_SIZE);
   const [urlReady, setUrlReady] = useState(false);
   const [selected, setSelected] = useState<Log | null>(null);
   const previousFilterKeyRef = useRef<string | null>(null);
@@ -122,7 +122,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
 
   const closeSelected = useCallback(() => setSelected(null), []);
 
-  const colDefs = useMemo<SemanticColumnDef[]>(() => [
+  const colDefs = useMemo<SemanticColumnDef<Log>[]>(() => [
     { headerName: t("COPY.TABLE_COLUMN_TIMESTAMP"), field: 'time', flex: 1.2, minWidth: 150,
       cellClass: () => 'sa-cell-mono-muted' },
     { headerName: t("COPY.TABLE_COLUMN_PERFORMED_BY"), field: 'user', flex: 1, minWidth: 130,
@@ -177,7 +177,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
           </button>
         </div>
         <div className="sa-audit-log-chart">
-          <SuperadminAuditLogsOverviewSemanticTable rowData={filtered} columnDefs={colDefs} pagination paginationPageSize={pageSize} getRowId={({ data }) => data.id} onRowClick={setSelected} hideFilter pageIndex={pageIndex} onPageChange={setPageIndex} />
+          <SuperadminAuditLogsOverviewSemanticTable<Log> rowData={filtered} columnDefs={colDefs} pagination paginationPageSize={pageSize} getRowId={({ data }) => data.id} onRowClick={setSelected} hideFilter pageIndex={pageIndex} onPageChange={setPageIndex} />
         </div>
       </div>
     </>

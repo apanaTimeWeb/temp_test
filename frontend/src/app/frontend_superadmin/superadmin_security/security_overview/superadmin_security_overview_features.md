@@ -53,8 +53,13 @@ The inventory below is derived from files in this module. It is not a claim that
 The current screen is a read-only security-center overview that displays four counts from sample preview fixtures and links to the owning security-control feature leaves. It does not render policy forms, operations panels, or a filtered table. The three type-only files removed in this repair had no route, active component, test, harness, or current contract consumer after the stale inventory rows are corrected. The current policy schema and `types/SuperadminSecurityOverviewTypes.ts` are retained because the types import that schema and `tests/SuperadminSecurityOverviewPolicySchema.test.ts` directly verifies it. These schema tests do not imply that the overview page persists policy changes or calls a verified backend API.
 
 Screen/component evidence:
-- `superadmin_security/security_overview/components/SuperadminSecurityOverviewScreen.tsx`
-- `superadmin_security/security_overview/components/SuperadminSecurityOverviewPageClient.tsx`
+- `superadmin_security/security_overview/components/SuperadminSecurityOverviewScreen.tsx`: Route entry adapter.
+- `superadmin_security/security_overview/components/SuperadminSecurityOverviewPageClient.tsx`: Root overview orchestrator.
+- `superadmin_security/security_overview/components/SuperadminSecurityOverviewMetricsGrid.tsx`: Security KPI metrics cards.
+- `superadmin_security/security_overview/components/SuperadminSecurityOverviewComplianceCard.tsx`: ISO 27001 compliance standards, TLS 1.3, AES-256 encryption at rest, KMS keys, and data security policies.
+- `superadmin_security/security_overview/components/SuperadminSecurityOverviewTenantIsolationCard.tsx`: Dedicated Tenant Isolation & Cross-Tenant Boundary Probe tool (TENANT_001 vs TENANT_002 verification).
+- `superadmin_security/security_overview/components/SuperadminSecurityOverviewGovernanceCard.tsx`: SuperAdmin governance rules, dual-approval workflow, emergency break-glass accounts, and controlled impersonation.
+- `superadmin_security/security_overview/components/SuperadminSecurityOverviewThreatEventsTable.tsx`: Live security threat telemetry table with interactive pagination and CSV export.
 
 ## Query Key Registry
 

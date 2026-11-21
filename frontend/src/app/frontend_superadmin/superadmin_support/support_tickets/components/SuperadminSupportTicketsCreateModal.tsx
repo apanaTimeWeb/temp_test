@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { X, Plus, Ticket, Building2, User, Mail, Phone, AlertCircle, FileText } from 'lucide-react';
-import type { SuperadminSupportTicket } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
+import { X, Plus, Ticket, Building2, User, Mail, Phone, FileText } from 'lucide-react';
+import type { SuperadminSupportTicket, SuperadminSupportTicketCategory, SuperadminSupportTicketPriority } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
+import { SUPERADMIN_SUPPORT_TICKET_TYPES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
 
 interface SuperadminSupportTicketsCreateModalProps {
   isOpen: boolean;
@@ -20,8 +21,8 @@ export default function SuperadminSupportTicketsCreateModal({
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
-  const [category, setCategory] = useState<'Billing' | 'Bug' | 'Account' | 'Support'>('Support');
-  const [priority, setPriority] = useState<'High' | 'Medium' | 'Low'>('Medium');
+  const [category, setCategory] = useState<SuperadminSupportTicketCategory>('Technical issue');
+  const [priority, setPriority] = useState<SuperadminSupportTicketPriority>('Medium');
   const [desc, setDesc] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -52,6 +53,8 @@ export default function SuperadminSupportTicketsCreateModal({
     e.preventDefault();
     if (!validate()) return;
 
+    const targetHours = priority === 'Urgent' ? 2 : priority === 'High' ? 4 : priority === 'Medium' ? 12 : 24;
+
     const newTicket: SuperadminSupportTicket = {
       id: `TKT-${Math.floor(1000 + Math.random() * 9000)}`,
       subject: subject.trim(),
@@ -65,9 +68,25 @@ export default function SuperadminSupportTicketsCreateModal({
       assignee: 'Unassigned',
       slaBreach: false,
       age: 'Just now',
-      replies: 0,
+      replies: 1,
       hasAttachment: false,
       desc: desc.trim(),
+      slaTargetHours: targetHours,
+      slaRemaining: `${targetHours}h 00m remaining`,
+      messages: [
+        {
+          id: `msg-${Date.now()}-1`,
+          sender: contact.trim() || tenant.trim(),
+          role: 'tenant_admin',
+          timestamp: 'Just now',
+          text: desc.trim(),
+        },
+      ],
+      internalNotes: [],
+      attachmentsList: [],
+      timeLimitedAccess: {
+        hasActiveAccess: false,
+      },
     };
 
     onCreateTicket(newTicket);
@@ -100,10 +119,10 @@ export default function SuperadminSupportTicketsCreateModal({
             </div>
             <div>
               <h2 id="create-ticket-title" className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                Log Software Support Ticket / Incident
+                Log Support Ticket
               </h2>
               <p className="text-xs text-slate-400">
-                Log a software bug, payment failure, or hardware integration incident on behalf of a Library Admin
+                Log a software issue, branch request, billing discrepancy, or security ticket for a Library Admin
               </p>
             </div>
           </div>
@@ -186,20 +205,21 @@ export default function SuperadminSupportTicketsCreateModal({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Category */}
+            {/* Category / Ticket Type */}
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Category
+                Ticket Type (9 Categories)
               </label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value as 'Billing' | 'Bug' | 'Account' | 'Support')}
+                onChange={(e) => setCategory(e.target.value as SuperadminSupportTicketCategory)}
                 className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white focus:border-indigo-400 focus:outline-none cursor-pointer"
               >
-                <option value="Bug">Software Bug / UI Crash</option>
-                <option value="Billing">Payment Gateway / Fees UPI Failure</option>
-                <option value="Support">Biometric Device & Hardware Sync</option>
-                <option value="Account">Account & Branch Access</option>
+                {SUPERADMIN_SUPPORT_TICKET_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -210,12 +230,13 @@ export default function SuperadminSupportTicketsCreateModal({
               </label>
               <select
                 value={priority}
-                onChange={(e) => setPriority(e.target.value as 'High' | 'Medium' | 'Low')}
+                onChange={(e) => setPriority(e.target.value as SuperadminSupportTicketPriority)}
                 className="w-full rounded-xl border border-indigo-500/30 bg-slate-900/90 px-3.5 py-2 text-xs text-white focus:border-indigo-400 focus:outline-none cursor-pointer"
               >
-                <option value="Low">Low - Normal Query</option>
+                <option value="Urgent">Urgent - Complete Blocker / Outage</option>
+                <option value="High">High - Major Feature Blocked</option>
                 <option value="Medium">Medium - Operational Blocker</option>
-                <option value="High">High - Critical Downtime</option>
+                <option value="Low">Low - Normal Request / Question</option>
               </select>
             </div>
           </div>

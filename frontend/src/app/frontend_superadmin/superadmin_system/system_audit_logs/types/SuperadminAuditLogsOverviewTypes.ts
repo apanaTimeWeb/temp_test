@@ -15,6 +15,7 @@ export interface SuperadminAuditLogSampleEntry {
   action: SuperadminAuditLogAction;
   ip: string;
   detail: string;
+  [key: string]: unknown;
 }
 
 /** CSV row shape for the explicitly synthetic audit-log preview. */

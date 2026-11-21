@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import { SUPERADMIN_SUPPORT_TICKETS_FIXTURES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/mocks/fixtures/SuperadminSupportTicketsOverviewMockFixtures';
 import type { SuperadminSupportTicket, SuperadminSupportTicketsFilter } from '@/app/frontend_superadmin/superadmin_support/support_tickets/types/SuperadminSupportTicketsOverviewTypes';
-import { SUPERADMIN_SUPPORT_TICKETS_FILTERS, SUPERADMIN_SUPPORT_TICKETS_SAMPLE_AVERAGE_RESPONSE } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
+import { SUPERADMIN_SUPPORT_TICKETS_FILTERS, SUPERADMIN_SUPPORT_TICKETS_SAMPLE_AVERAGE_RESPONSE, SUPERADMIN_SUPPORT_TICKET_TYPES } from '@/app/frontend_superadmin/superadmin_support/support_tickets/constants/SuperadminSupportTicketsOverviewConstants';
 import { buildSuperadminSupportTicketsPreviewCsv, downloadSuperadminSupportTicketsPreviewCsv, filterSuperadminSupportTickets } from '@/app/frontend_superadmin/superadmin_support/support_tickets/utils/SuperadminSupportTicketsOverviewUtilities';
 import {
   downloadSuperadminSupportTicketsExcel,
@@ -156,9 +156,9 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
             <span className="text-[11px] font-mono font-medium text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/25 shrink-0">
               {p.data?.id}
             </span>
-            <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 bg-slate-800/60 px-2 py-0.5 rounded border border-slate-700/50 shrink-0">
-              <Tag size={10} className="text-slate-400" />
-              {t(`COPY.CATEGORY_${String(p.data?.category ?? 'General').toUpperCase()}` as 'COPY.CATEGORY_BILLING' | 'COPY.CATEGORY_BUG' | 'COPY.CATEGORY_ACCOUNT' | 'COPY.CATEGORY_GENERAL' | 'COPY.CATEGORY_SUPPORT')}
+            <span className="inline-flex items-center gap-1 text-[11px] text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700/60 shrink-0 font-medium">
+              <Tag size={10} className="text-indigo-400" />
+              <span>{p.data?.category}</span>
             </span>
             {p.data?.hasAttachment && (
               <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 bg-slate-800/60 px-1.5 py-0.5 rounded border border-slate-700/50 shrink-0" title="Has Attachment">
@@ -208,13 +208,17 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
         const val = p.value;
         const style = val === 'Resolved'
           ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+          : val === 'Escalated'
+          ? 'bg-red-500/20 text-red-300 border-red-500/40 motion-safe:animate-pulse'
+          : val === 'Reopened'
+          ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
           : val === 'Open'
           ? 'bg-rose-500/15 text-rose-300 border-rose-500/30'
           : 'bg-amber-500/15 text-amber-300 border-amber-500/30';
         return (
           <div className="flex justify-center">
             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${style}`}>
-              {val === 'Open' ? t('COPY.STATUS_OPEN') : val === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : t('COPY.STATUS_RESOLVED')}
+              {val === 'Open' ? t('COPY.STATUS_OPEN') : val === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : val === 'Resolved' ? t('COPY.STATUS_RESOLVED') : val}
             </span>
           </div>
         );
@@ -224,7 +228,9 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
       headerName: t('COPY.TABLE_COLUMN_PRIORITY'), field: 'priority', flex: 0.9, minWidth: 100, cellClass: 'text-center',
       cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => {
         const prio = p.data?.priority;
-        const style = prio === 'High'
+        const style = prio === 'Urgent'
+          ? 'bg-red-500/25 text-red-300 border-red-500/50'
+          : prio === 'High'
           ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
           : prio === 'Medium'
           ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
@@ -232,7 +238,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
         return (
           <div className="flex justify-center">
             <span className={`inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-bold border ${style}`}>
-              {prio === 'High' ? t('COPY.PRIORITY_HIGH') : prio === 'Medium' ? t('COPY.PRIORITY_MEDIUM') : t('COPY.PRIORITY_LOW')}
+              {prio === 'Urgent' ? t('COPY.PRIORITY_URGENT') : prio === 'High' ? t('COPY.PRIORITY_HIGH') : prio === 'Medium' ? t('COPY.PRIORITY_MEDIUM') : t('COPY.PRIORITY_LOW')}
             </span>
           </div>
         );
@@ -400,7 +406,21 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
                 }`}
                 data-testid={`superadmin-support-tickets-support-tickets-overview-set-filter-3-${String(f)}`}
               >
-                {f === 'All' ? t('COPY.FILTER_ALL') : f === 'Open' ? t('COPY.STATUS_OPEN') : f === 'In-Progress' ? t('COPY.STATUS_IN_PROGRESS') : t('COPY.STATUS_RESOLVED')}
+                {f === 'All'
+                  ? t('COPY.FILTER_ALL')
+                  : f === 'Open'
+                  ? t('COPY.STATUS_OPEN')
+                  : f === 'In-Progress'
+                  ? t('COPY.STATUS_IN_PROGRESS')
+                  : f === 'Resolved'
+                  ? t('COPY.STATUS_RESOLVED')
+                  : f === 'Escalated'
+                  ? t('COPY.STATUS_ESCALATED')
+                  : f === 'Closed'
+                  ? t('COPY.STATUS_CLOSED')
+                  : f === 'Reopened'
+                  ? t('COPY.STATUS_REOPENED')
+                  : f}
               </button>
             ))}
           </div>
@@ -436,6 +456,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               className="rounded-xl border border-indigo-500/25 bg-slate-950 px-3 py-1.5 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer shrink-0"
             >
               <option value="all">All Priorities</option>
+              <option value="Urgent">Urgent Priority</option>
               <option value="High">High Priority</option>
               <option value="Medium">Medium Priority</option>
               <option value="Low">Low Priority</option>
@@ -448,11 +469,12 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
               onChange={(e) => setCategoryFilter(e.target.value)}
               className="rounded-xl border border-indigo-500/25 bg-slate-950 px-3 py-1.5 text-xs font-medium text-white hover:border-indigo-400 focus:outline-none shadow-xs cursor-pointer shrink-0"
             >
-              <option value="all">All Categories</option>
-              <option value="Billing">Billing</option>
-              <option value="Bug">Bug</option>
-              <option value="Account">Account</option>
-              <option value="Support">Support</option>
+              <option value="all">All 9 Ticket Types</option>
+              {SUPERADMIN_SUPPORT_TICKET_TYPES.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
             </select>
 
             {/* Reset button */}
