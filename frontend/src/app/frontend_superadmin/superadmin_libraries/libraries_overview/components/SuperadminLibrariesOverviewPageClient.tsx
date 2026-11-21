@@ -249,8 +249,8 @@ export default function SuperadminLibrariesOverviewPageClient() {
         />
       </section>
       {selected && <SuperadminLibrariesOverviewPanel lib={selected} mode={panelMode} onClose={() => setSelected(null)} onSave={handleSave} onSuspend={handleSuspend} />}
-      {branchModalLib && <SuperadminLibrariesBranchManagerModal library={branchModalLib} onClose={() => setBranchModalLib(null)} onToggleAdminPanel={handleToggleAdminPanel} onAddBranch={handleAddBranch} />}
-      {modulesModalLib && <SuperadminLibrariesManagerModulesModal library={modulesModalLib} onClose={() => setModulesModalLib(null)} onSaveModules={handleSaveModules} />}
+      {branchModalLib && <SuperadminLibrariesBranchManagerModal lib={branchModalLib} onClose={() => setBranchModalLib(null)} onToggleAdminPanel={handleToggleAdminPanel} onAddBranch={handleAddBranch} />}
+      {modulesModalLib && <SuperadminLibrariesManagerModulesModal lib={modulesModalLib} onClose={() => setModulesModalLib(null)} onSaveModules={handleSaveModules} />}
     </div>
   );
 }
