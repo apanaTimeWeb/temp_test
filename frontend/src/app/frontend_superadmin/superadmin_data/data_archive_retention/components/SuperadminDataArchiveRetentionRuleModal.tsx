@@ -36,6 +36,7 @@ export function SuperadminDataArchiveRetentionRuleModal({
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<UpdateRetentionRuleFormData>({
     resolver: zodResolver(UpdateRetentionRuleSchema),

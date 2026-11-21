@@ -131,7 +131,7 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
   const slaBreachCount = tickets.filter(t => t.slaBreach && t.status !== 'Resolved').length;
 
 
-  const colDefs = useMemo<SemanticColumnDef[]>(() => [
+  const colDefs = useMemo<SemanticColumnDef<SuperadminSupportTicket>[]>(() => [
     {
       headerName: t('COPY.TABLE_COLUMN_SUBJECT_ID'), field: 'subject', flex: 2, minWidth: 200,
       cellRenderer: (p: SemanticCellParams<SuperadminSupportTicket>) => (
@@ -520,14 +520,14 @@ export default function SuperadminSupportTicketsOverviewPageClient() {
           <span className="text-xs font-medium text-slate-400 shrink-0 whitespace-nowrap">{filtered.length} {t("COPY.MATCHING_TICKETS")}</span>
         </div>
         <div className="w-full min-w-full overflow-x-auto" role="region" aria-label={t("COPY.SAMPLE_SUPPORT_TICKETS_TABLE")}>
-          <SuperadminSupportTicketsOverviewSemanticTable
+          <SuperadminSupportTicketsOverviewSemanticTable<SuperadminSupportTicket>
             rowData={filtered}
             sourceRowCount={tickets.length}
             columnDefs={colDefs}
             pagination
             paginationPageSize={15}
             getRowId={({ data }) => data.id}
-            onRowClick={(row) => setSelected(row as SuperadminSupportTicket)}
+            onRowClick={(row) => setSelected(row)}
             hideFilter
           />
         </div>

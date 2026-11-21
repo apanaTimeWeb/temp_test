@@ -9,6 +9,7 @@ import {
   exportPlatformRecordsAsCsv,
   exportPlatformRecordsAsExcel,
   downloadPlatformReportJson,
+  printPlatformReportsRoster,
 } from '../utils/SuperadminAnalyticsPlatformReportsFormatters';
 
 interface Props {
@@ -40,13 +41,13 @@ export function SuperadminAnalyticsPlatformReportsExportModal({
 
   const handlePrint = () => {
     toast.info('Opening print dialog for platform reports...', { id: 'print-platform' });
-    window.print();
+    printPlatformReportsRoster(records);
     onClose();
   };
 
   const handlePdfExport = () => {
     toast.info('Preparing formatted PDF document...', { id: 'pdf-platform' });
-    window.print();
+    printPlatformReportsRoster(records);
     onClose();
   };
 

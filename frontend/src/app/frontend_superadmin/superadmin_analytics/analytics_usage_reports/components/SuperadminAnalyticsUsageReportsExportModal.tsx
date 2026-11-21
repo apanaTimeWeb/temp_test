@@ -9,6 +9,7 @@ import {
   exportUsageRecordsAsCsv,
   exportUsageRecordsAsExcel,
   downloadUsageReportJson,
+  printUsageReportsRoster,
 } from '../utils/SuperadminAnalyticsUsageReportsFormatters';
 
 interface Props {
@@ -40,13 +41,13 @@ export function SuperadminAnalyticsUsageReportsExportModal({
 
   const handlePrint = () => {
     toast.info('Opening print dialog for usage reports...', { id: 'print-usage' });
-    window.print();
+    printUsageReportsRoster(records);
     onClose();
   };
 
   const handlePdfExport = () => {
     toast.info('Preparing formatted PDF document for usage reports...', { id: 'pdf-usage' });
-    window.print();
+    printUsageReportsRoster(records);
     onClose();
   };
 

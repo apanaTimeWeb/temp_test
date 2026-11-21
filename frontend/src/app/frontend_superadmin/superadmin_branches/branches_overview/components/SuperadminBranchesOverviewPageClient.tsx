@@ -15,7 +15,7 @@ import SuperadminBranchesOverviewDetailsModal from '@/app/frontend_superadmin/su
 import SuperadminBranchesOverviewActivityModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewActivityModal';
 import SuperadminBranchesOverviewReportsModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewReportsModal';
 import SuperadminBranchesOverviewSuspendModal from '@/app/frontend_superadmin/superadmin_branches/branches_overview/components/SuperadminBranchesOverviewSuspendModal';
-import type { SuperadminBranchRecord } from '@/app/frontend_superadmin\superadmin_branches\branches_overview\types\SuperadminBranchesOverviewTypes';
+import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 import {
   downloadSuperadminBranchesCsv,
   downloadSuperadminBranchesExcel,

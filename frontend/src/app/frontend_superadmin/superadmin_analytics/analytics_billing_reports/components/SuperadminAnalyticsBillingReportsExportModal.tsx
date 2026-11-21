@@ -9,6 +9,7 @@ import {
   exportBillingRecordsAsCsv,
   exportBillingRecordsAsExcel,
   downloadBillingReportJson,
+  printBillingReportsRoster,
 } from '../utils/SuperadminAnalyticsBillingReportsFormatters';
 
 interface Props {
@@ -40,13 +41,13 @@ export function SuperadminAnalyticsBillingReportsExportModal({
 
   const handlePrint = () => {
     toast.info('Opening print dialog for billing reports...', { id: 'print-billing' });
-    window.print();
+    printBillingReportsRoster(records);
     onClose();
   };
 
   const handlePdfExport = () => {
     toast.info('Preparing formatted PDF billing report...', { id: 'pdf-billing' });
-    window.print();
+    printBillingReportsRoster(records);
     onClose();
   };
 

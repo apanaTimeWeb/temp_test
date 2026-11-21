@@ -124,23 +124,23 @@ export default function SuperadminUserSecurityAuditModal({
                 )}
               </div>
               {user.activeSessions.map((session) => (
-                <div key={session.id} className="p-3 rounded-xl border border-indigo-500/20 bg-slate-900/40 flex items-center justify-between">
+                <div key={session.sessionId} className="p-3 rounded-xl border border-indigo-500/20 bg-slate-900/40 flex items-center justify-between">
                   <div>
                     <p className="font-semibold text-white flex items-center gap-2">
                       <Monitor size={14} className="text-indigo-400" />
-                      {session.device} • {session.ipAddress}
+                      {session.device} • {session.ip}
                       {session.isCurrent && (
                         <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/30">
                           Current Device
                         </span>
                       )}
                     </p>
-                    <p className="text-slate-400 text-[11px] mt-0.5">{session.location} • Started {session.lastActive}</p>
+                    <p className="text-slate-400 text-[11px] mt-0.5">{session.location} • Started {session.startedAt}</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => {
-                      onRevokeSession(user.id, session.id);
+                      onRevokeSession(user.id, session.sessionId);
                       showFeedback(`Session on ${session.device} terminated.`);
                     }}
                     className="p-1.5 rounded-lg border border-rose-500/30 text-rose-400 hover:bg-rose-500/20 cursor-pointer"
@@ -160,19 +160,17 @@ export default function SuperadminUserSecurityAuditModal({
                   <div className="flex items-center gap-2.5">
                     <Globe size={14} className="text-slate-400" />
                     <div>
-                      <span className="font-medium text-white">{item.ipAddress}</span> ({item.location})
+                      <span className="font-medium text-white">{item.ip}</span> ({item.browser})
                       <p className="text-slate-500">{item.device}</p>
                     </div>
                   </div>
                   <div className="text-right">
                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      item.status === 'success'
+                      item.status === 'SUCCESS'
                         ? 'bg-emerald-500/15 text-emerald-300'
-                        : item.status === 'mfa_verified'
-                        ? 'bg-indigo-500/15 text-indigo-300'
                         : 'bg-rose-500/15 text-rose-300'
                     }`}>
-                      {item.status.toUpperCase()}
+                      {item.status}
                     </span>
                     <p className="text-slate-400 mt-0.5">{item.timestamp}</p>
                   </div>

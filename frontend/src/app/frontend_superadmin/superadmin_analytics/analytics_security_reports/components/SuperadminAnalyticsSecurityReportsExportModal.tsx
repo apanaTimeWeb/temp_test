@@ -9,6 +9,7 @@ import {
   exportSecurityRecordsAsCsv,
   exportSecurityRecordsAsExcel,
   downloadSecurityReportJson,
+  printSecurityReportsRoster,
 } from '../utils/SuperadminAnalyticsSecurityReportsFormatters';
 
 interface Props {
@@ -40,13 +41,13 @@ export function SuperadminAnalyticsSecurityReportsExportModal({
 
   const handlePrint = () => {
     toast.info('Opening print dialog for security audit reports...', { id: 'print-security' });
-    window.print();
+    printSecurityReportsRoster(records);
     onClose();
   };
 
   const handlePdfExport = () => {
     toast.info('Preparing formatted PDF document for security audit...', { id: 'pdf-security' });
-    window.print();
+    printSecurityReportsRoster(records);
     onClose();
   };
 
