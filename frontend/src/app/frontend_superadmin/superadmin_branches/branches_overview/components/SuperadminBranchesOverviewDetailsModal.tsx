@@ -1,5 +1,7 @@
 'use client';
 // RESPONSIBILITY: Render complete branch profile and operational details.
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Building2, MapPin, Phone, Mail, Clock, Calendar, BookOpen, Armchair, Wallet, ShieldCheck } from 'lucide-react';
 import type { SuperadminBranchRecord } from '@/app/frontend_superadmin/superadmin_branches/branches_overview/types/SuperadminBranchesOverviewTypes';
 import { useModalScrollLock } from '@/lib/useModalScrollLock';
@@ -10,16 +12,24 @@ interface SuperadminBranchesOverviewDetailsModalProps {
 }
 
 export default function SuperadminBranchesOverviewDetailsModal({ branch, onClose }: SuperadminBranchesOverviewDetailsModalProps) {
-  useModalScrollLock(true);
+  const [mounted, setMounted] = useState(false);
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useModalScrollLock(Boolean(mounted));
+
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative w-full max-w-2xl rounded-2xl border border-indigo-500/40 bg-[#0d102b] p-6 shadow-2xl text-white max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out">
+      <div className="relative w-full max-w-4xl rounded-2xl border border-indigo-500/40 bg-[#0d102b] p-6 shadow-2xl text-white max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out">
         <button type="button" onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-white">
           <X size={18} />
         </button>
@@ -113,11 +123,12 @@ export default function SuperadminBranchesOverviewDetailsModal({ branch, onClose
         </div>
 
         <div className="flex justify-end pt-3 border-t border-border">
-          <button type="button" onClick={onClose} className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white">
+          <button type="button" onClick={onClose} className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white cursor-pointer">
             Close Profile
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

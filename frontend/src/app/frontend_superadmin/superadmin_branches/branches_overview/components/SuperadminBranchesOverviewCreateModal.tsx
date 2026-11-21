@@ -111,7 +111,7 @@ export default function SuperadminBranchesOverviewCreateModal({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative w-full max-w-2xl rounded-2xl border border-emerald-500/40 bg-[#0c0f28] p-6 shadow-2xl text-white max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out">
+      <div className="relative w-full max-w-4xl rounded-2xl border border-emerald-500/40 bg-[#0c0f28] p-6 shadow-2xl text-white max-h-[90vh] overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 ease-out">
         <button type="button" onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-white">
           <X size={18} />
         </button>
