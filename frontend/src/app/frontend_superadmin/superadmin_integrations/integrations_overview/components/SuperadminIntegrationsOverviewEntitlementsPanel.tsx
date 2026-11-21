@@ -1,5 +1,5 @@
 // components/SuperadminIntegrationsOverviewEntitlementsPanel.tsx
-// RESPONSIBILITY: Matrix allowing SuperAdmin to enable or disable integrations per plan tier with mini toggle switches.
+// RESPONSIBILITY: Matrix allowing SuperAdmin to enable or disable integrations per plan tier with tactile server-health style mini toggle switches.
 // DATA FLOW: PlanEntitlements array -> SuperadminIntegrationsOverviewEntitlementsPanel -> onToggle.
 'use client';
 
@@ -57,7 +57,7 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
 
   return (
     <div className="space-y-4" data-testid="superadmin-entitlements-panel">
-      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 p-4 sm:p-6 space-y-4 shadow-xl backdrop-blur-md relative overflow-hidden">
+      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-br from-[#0c102b]/95 via-[#090d24]/95 to-[#050714]/95 p-4 sm:p-6 space-y-5 shadow-xl backdrop-blur-md relative overflow-hidden">
         <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-purple-500/10 blur-2xl" />
 
         {/* Panel Header */}
@@ -76,32 +76,32 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 self-start sm:self-auto text-[11px] text-slate-400 font-mono">
-            <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-gradient-to-r from-indigo-400 to-purple-500 shadow-xs shadow-indigo-500/50" />
-              Enabled
-            </span>
-            <span>•</span>
-            <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-slate-600" />
-              Disabled
-            </span>
+          {/* Telemetry Status Legend (matching Server & Health style) */}
+          <div className="flex items-center gap-3 self-start sm:self-auto text-[10px] font-mono font-semibold tracking-wider uppercase select-none">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 shadow-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>ACTIVE (ON)</span>
+            </div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-slate-700 bg-slate-800/80 text-slate-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />
+              <span>DISABLED</span>
+            </div>
           </div>
         </div>
 
-        {/* ── Fully Responsive Unified Cyber Matrix with Mini Toggle Switches ── */}
+        {/* ── Fully Responsive Unified Cyber Matrix with Server-Health Tactile Mini Switches ── */}
         <div className="rounded-xl border border-indigo-500/20 overflow-hidden shadow-inner bg-slate-950/60">
           <div className="overflow-x-auto scrollbar-thin">
-            <table className="w-full text-left text-xs min-w-[680px]">
+            <table className="w-full text-left text-xs min-w-[720px]">
               <thead className="bg-slate-950/90 border-b border-indigo-500/20 font-semibold text-slate-300">
                 <tr>
-                  <th className="px-4 sm:px-5 py-3.5 sticky left-0 bg-[#0c102b] z-10 shadow-[2px_0_5px_rgba(0,0,0,0.4)] whitespace-nowrap min-w-[180px]">
+                  <th className="px-4 sm:px-5 py-3.5 sticky left-0 bg-[#0c102b] z-10 shadow-[2px_0_5px_rgba(0,0,0,0.4)] whitespace-nowrap min-w-[190px]">
                     Subscription Tier
                   </th>
                   {PROVIDER_COLUMNS.map((col) => {
                     const Icon = col.icon;
                     return (
-                      <th key={col.key} className="px-3 py-3.5 text-center whitespace-nowrap min-w-[85px]">
+                      <th key={col.key} className="px-3 py-3.5 text-center whitespace-nowrap min-w-[95px]">
                         <div className="flex items-center justify-center gap-1.5">
                           <Icon size={12} className="text-purple-400 shrink-0" />
                           <span>{col.label}</span>
@@ -114,7 +114,7 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
               <tbody className="divide-y divide-indigo-500/10">
                 {entitlements.map((plan) => (
                   <tr key={plan.planId} className="hover:bg-indigo-950/30 transition-colors">
-                    <td className="px-4 sm:px-5 py-3.5 sticky left-0 bg-[#0c102b] z-10 shadow-[2px_0_5px_rgba(0,0,0,0.4)] whitespace-nowrap">
+                    <td className="px-4 sm:px-5 py-4 sticky left-0 bg-[#0c102b] z-10 shadow-[2px_0_5px_rgba(0,0,0,0.4)] whitespace-nowrap">
                       <div className="font-semibold text-slate-100 text-xs">{plan.planName}</div>
                       <span className={`inline-block mt-1 text-[10px] uppercase font-mono px-2 py-0.5 rounded-md border ${getTierBadgeClass(plan.tier)}`}>
                         {plan.tier} Tier
@@ -123,31 +123,54 @@ export const SuperadminIntegrationsOverviewEntitlementsPanel: React.FC<
                     {PROVIDER_COLUMNS.map((col) => {
                       const isAllowed = plan.allowedProviders[col.key] ?? false;
                       return (
-                        <td key={col.key} className="px-3 py-3.5 text-center align-middle whitespace-nowrap">
-                          <div className="flex items-center justify-center">
+                        <td key={col.key} className="px-3 py-4 text-center align-middle whitespace-nowrap">
+                          <div className="flex flex-col items-center justify-center gap-1">
+                            {/* Server & Health Tactile Mini Slider Switch with Power Icon ⏻ */}
                             <button
                               type="button"
                               role="switch"
                               aria-checked={isAllowed}
                               aria-label={`Toggle ${col.label} for ${plan.planName}`}
+                              aria-pressed={isAllowed}
                               onClick={() => onToggleEntitlement(plan.planId, col.key, !isAllowed)}
                               disabled={isUpdating}
-                              className={`relative inline-flex h-4 w-8 shrink-0 cursor-pointer rounded-full border transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed ${
+                              className={`premium-switch relative flex items-center w-[50px] h-[26px] p-[2px] rounded-full border-0 cursor-pointer box-border transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed ${
                                 isAllowed
-                                  ? 'border-indigo-400/50 bg-gradient-to-r from-indigo-500 to-purple-600 shadow-xs shadow-indigo-500/50'
-                                  : 'border-indigo-500/20 bg-slate-800/90'
+                                  ? 'is-armed bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.45),inset_0_1px_2px_rgba(0,0,0,0.25)]'
+                                  : 'bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 shadow-[inset_0_2px_5px_rgba(0,0,0,0.8)] border border-slate-700/80 hover:border-slate-600'
                               }`}
                               title={`Toggle ${col.label} for ${plan.planName}`}
                             >
-                              <span
-                                aria-hidden="true"
-                                className={`pointer-events-none inline-block h-3 w-3 transform rounded-full shadow-sm transition duration-200 ease-in-out mt-[1px] ml-[1px] ${
+                              {/* Recessed internal circuit track glow */}
+                              <div
+                                className={`pointer-events-none absolute inset-x-2 top-1/2 -translate-y-1/2 h-1 rounded-full transition-all duration-300 ${
                                   isAllowed
-                                    ? 'translate-x-4 bg-white'
-                                    : 'translate-x-0 bg-slate-400'
+                                    ? 'bg-gradient-to-r from-emerald-400 to-teal-300 opacity-60 shadow-[0_0_6px_rgba(16,185,129,0.8)]'
+                                    : 'bg-slate-950/80 opacity-40'
                                 }`}
                               />
+
+                              {/* Tactile White Chrome Knob with Power Icon ⏻ */}
+                              <span
+                                aria-hidden="true"
+                                className={`switch-knob relative z-10 flex items-center justify-center w-[22px] h-[22px] min-w-[22px] min-h-[22px] rounded-full bg-white transition-transform duration-300 ease-out select-none shadow-[0_2px_6px_rgba(0,0,0,0.5),0_1px_2px_rgba(255,255,255,0.8)_inset] ${
+                                  isAllowed
+                                    ? 'translate-x-[24px] text-emerald-600'
+                                    : 'translate-x-0 text-slate-800'
+                                }`}
+                              >
+                                <span className="text-[10px] leading-none select-none font-bold drop-shadow-xs">⏻</span>
+                              </span>
                             </button>
+
+                            {/* Status Micro-Hint */}
+                            <span
+                              className={`font-mono text-[9px] font-extrabold uppercase tracking-wider select-none transition-colors ${
+                                isAllowed ? 'text-emerald-400' : 'text-slate-500'
+                              }`}
+                            >
+                              {isAllowed ? 'ON' : 'OFF'}
+                            </span>
                           </div>
                         </td>
                       );
