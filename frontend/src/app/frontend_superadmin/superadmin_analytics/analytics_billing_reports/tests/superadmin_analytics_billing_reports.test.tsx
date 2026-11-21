@@ -41,10 +41,10 @@ describe('SuperadminAnalyticsBillingReports Component Tests', () => {
 
     expect(screen.getByText(/Gross Platform Revenue/i)).toBeDefined();
     expect(screen.getByText(/Monthly Recurring \(MRR\)/i)).toBeDefined();
-    expect(screen.getByText(/Yearly Recurring \(ARR\)/i)).toBeDefined();
+    expect(screen.getByText(/Yearly Recurring \(YRR\/ARR\)/i)).toBeDefined();
     expect(screen.getByText(/Pending Invoices/i)).toBeDefined();
-    expect(screen.getByText(/Failed Transactions/i)).toBeDefined();
-    expect(screen.getByText(/Refunds & Disputes/i)).toBeDefined();
+    expect(screen.getByText(/Failed Payments/i)).toBeDefined();
+    expect(screen.getByText(/Refunds Processed/i)).toBeDefined();
   });
 
   it('renders main orchestrator with filter bar and table', async () => {
