@@ -22,9 +22,9 @@ describe('security_overview async-state contract', () => {
     const feature = readFileSync(resolve(__dirname, '../superadmin_security_overview_features.md'), 'utf8');
     expect(page).toContain('SUPERADMIN_SECURITY_FAILED_LOGINS');
     expect(page).toContain('SUPERADMIN_SECURITY_SESSIONS');
-    expect(page).toContain('SUPERADMIN_SECURITY_API_KEYS');
+    expect(page).not.toContain('SUPERADMIN_SECURITY_API_KEYS');
     expect(page).toContain('SUPERADMIN_SECURITY_IP_RULES');
-    expect(page).toContain('SUPERADMIN_SECURITY_TABS');
+    expect(page).toContain('SuperadminSecurityOverviewThreatEventsTable');
     expect(feature).toContain('read-only security-center overview');
   });
 

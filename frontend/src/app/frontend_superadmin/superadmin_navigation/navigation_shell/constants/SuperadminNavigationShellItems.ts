@@ -270,7 +270,6 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
       { id: 'int_pg', label: 'Payment Gateways (Razorpay/Stripe)', href: `${SUPERADMIN_NAVIGATION_ROUTES.integrations_overview}?tab=payment-gateways` },
       { id: 'int_sms_wa', label: 'SMS & WhatsApp APIs', href: `${SUPERADMIN_NAVIGATION_ROUTES.integrations_overview}?tab=messaging-apis` },
       { id: 'int_webhooks', label: 'Webhooks & Events', href: `${SUPERADMIN_NAVIGATION_ROUTES.integrations_overview}?tab=webhooks` },
-      { id: 'int_api_keys', label: 'API Keys & Developer Access', href: SUPERADMIN_NAVIGATION_ROUTES.security_api_keys },
     ],
   },
   {

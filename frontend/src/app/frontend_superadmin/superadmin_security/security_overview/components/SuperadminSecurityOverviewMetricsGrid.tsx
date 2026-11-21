@@ -33,7 +33,7 @@ export const SuperadminSecurityOverviewMetricsGrid: React.FC<
         return (
           <article
             key={metric.id}
-            className={`relative overflow-hidden rounded-2xl border ${metric.borderColor} bg-gradient-to-b ${metric.bgGlow} bg-card p-5 shadow-xs transition-all duration-200 hover:shadow-md`}
+            className={`relative overflow-hidden rounded-2xl border ${metric.borderColor} bg-gradient-to-b ${metric.bgGlow} bg-[#0c0f2b]/95 p-5 shadow-xl backdrop-blur-xl transition-all duration-200 hover:shadow-2xl hover:border-opacity-60`}
           >
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">

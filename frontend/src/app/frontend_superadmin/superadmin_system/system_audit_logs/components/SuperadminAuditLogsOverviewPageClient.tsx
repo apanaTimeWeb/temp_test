@@ -135,15 +135,15 @@ export default function SuperadminAuditLogsOverviewPageClient() {
 
   const colDefs = useMemo<SemanticColumnDef<Log>[]>(() => [
     { headerName: t("COPY.TABLE_COLUMN_TIMESTAMP"), field: 'time', flex: 1.2, minWidth: 150,
-      cellClass: () => 'sa-cell-mono-muted' },
+      cellClass: () => 'font-mono text-xs text-indigo-300/90' },
     { headerName: t("COPY.TABLE_COLUMN_PERFORMED_BY"), field: 'user', flex: 1, minWidth: 130,
-      cellClass: () => 'sa-cell-primary-medium' },
+      cellClass: () => 'font-semibold text-slate-100 text-xs' },
     {
       headerName: t("COPY.TABLE_COLUMN_TARGET_ENTITY"), field: 'target', flex: 1.5, minWidth: 160,
       cellRenderer: (p: SemanticCellParams<Log>) => (
-        <div>
-          <span className="text-xs font-semibold text-secondary mr-1.5">{p.data?.entity}:</span>
-          <span className="text-sm text-primary">{p.data?.target}</span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[11px] font-bold text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">{p.data?.entity}</span>
+          <span className="text-xs text-slate-200 font-medium">{p.data?.target}</span>
         </div>
       ),
     },
@@ -152,15 +152,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
       cellRenderer: (p: SemanticCellParams<Log>) => <SuperadminAuditLogsOverviewActionBadge action={p.data?.action ?? ''} />,
     },
     { headerName: t("COPY.TABLE_COLUMN_IP_ADDRESS"), field: 'ip', flex: 0.9, minWidth: 120,
-      cellClass: () => 'sa-cell-mono-muted-sm' },
-    {
-      headerName: t("COPY.TABLE_COLUMN_VIEW"), field: 'id', flex: 0.5, minWidth: 70, sortable: false, filter: false,
-      cellRenderer: (p: SemanticCellParams<Log>) => (
-        <button type="button" className="sa-btn-icon sa-btn-icon--reveal" aria-label={t("COPY.VIEW_SAMPLE_AUDIT_ENTRY_ARIA_LABEL", { id: p.data?.id ?? t('COPY.UNKNOWN') })} onClick={e => { e.stopPropagation(); if (p.data) setSelected(p.data); }} data-testid={`superadmin-audit-logs-audit-logs-overview-view-sample-audit-entry-aria-label-1-${getSuperadminInteractiveTestIdSuffix(p.data)}`}>
-          <Eye size={15} />
-        </button>
-      ),
-    },
+      cellClass: () => 'font-mono text-xs text-indigo-300/80' },
   ], [t]);
 
 
@@ -220,60 +212,60 @@ export default function SuperadminAuditLogsOverviewPageClient() {
 
       {/* KPI Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-2xl border border-border/80 bg-card/70 p-4 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-slate-400">Total Audit Logs</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/30 bg-indigo-500/15 text-indigo-400">
-              <ScrollText size={16} />
+        <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0e1338]/90 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-indigo-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Audit Logs</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/15 text-indigo-400 shadow-inner">
+              <ScrollText size={18} />
             </div>
           </div>
-          <div className="text-2xl font-bold text-slate-100">{stats.total}</div>
+          <div className="text-3xl font-extrabold text-slate-100 tabular-nums">{stats.total}</div>
           <div className="text-[11px] text-slate-400 mt-1">Immutable WORM storage</div>
         </div>
 
-        <div className="rounded-2xl border border-border/80 bg-card/70 p-4 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-slate-400">Created Records</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/15 text-emerald-400">
-              <PlusCircle size={16} />
+        <div className="rounded-2xl border border-emerald-500/20 bg-gradient-to-b from-[#06201a]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-emerald-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Created Records</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/15 text-emerald-400 shadow-inner">
+              <PlusCircle size={18} />
             </div>
           </div>
-          <div className="text-2xl font-bold text-emerald-400">{stats.createdCount}</div>
+          <div className="text-3xl font-extrabold text-emerald-400 tabular-nums">{stats.createdCount}</div>
           <div className="text-[11px] text-slate-400 mt-1">Entity inserts & onboardings</div>
         </div>
 
-        <div className="rounded-2xl border border-border/80 bg-card/70 p-4 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-slate-400">Deleted Records</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-rose-500/30 bg-rose-500/15 text-rose-400">
-              <Trash2 size={16} />
+        <div className="rounded-2xl border border-rose-500/20 bg-gradient-to-b from-[#220a14]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-rose-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Deleted Records</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-rose-500/30 bg-rose-500/15 text-rose-400 shadow-inner">
+              <Trash2 size={18} />
             </div>
           </div>
-          <div className="text-2xl font-bold text-rose-400">{stats.deletedCount}</div>
+          <div className="text-3xl font-extrabold text-rose-400 tabular-nums">{stats.deletedCount}</div>
           <div className="text-[11px] text-slate-400 mt-1">Permanent removals & expiries</div>
         </div>
 
-        <div className="rounded-2xl border border-border/80 bg-card/70 p-4 backdrop-blur-md">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-slate-400">Distinct Actors</span>
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-purple-500/30 bg-purple-500/15 text-purple-400">
-              <Users size={16} />
+        <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-b from-[#1b0d2d]/80 to-[#0a0d24]/95 p-5 shadow-xl backdrop-blur-md hover:border-purple-500/40 transition-all">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Distinct Actors</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 shadow-inner">
+              <Users size={18} />
             </div>
           </div>
-          <div className="text-2xl font-bold text-purple-400">{stats.uniqueActors}</div>
+          <div className="text-3xl font-extrabold text-purple-400 tabular-nums">{stats.uniqueActors}</div>
           <div className="text-[11px] text-slate-400 mt-1">Audited administrators</div>
         </div>
       </div>
 
       {/* Main Audit Logs Table Container */}
-      <div className="rounded-2xl border border-border/80 bg-card shadow-xs overflow-hidden">
-        <div className="sa-actions-bar flex flex-wrap items-center justify-between gap-3 p-4 border-b border-border/80 bg-muted/20">
+      <div className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0c0f2b] via-[#090b20] to-[#060818] shadow-2xl overflow-hidden backdrop-blur-xl">
+        <div className="sa-actions-bar flex flex-wrap items-center justify-between gap-4 p-4 sm:p-5 border-b border-indigo-500/20 bg-indigo-950/25">
           <div className="flex flex-wrap items-center gap-3">
             <input
               aria-label={t("COPY.SEARCH_AUDIT_SAMPLE_BY_TARGET_OR_USER")}
               type="search"
               placeholder={t("COPY.SEARCH_SAMPLE_BY_TARGET_OR_USER")}
-              className="sa-input px-3 py-1.5 rounded-xl border border-border bg-card text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-indigo-400 w-56 sm:w-64"
+              className="sa-input px-3.5 py-2 rounded-xl border border-indigo-500/30 bg-[#07091a]/80 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 w-56 sm:w-64"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               data-testid="superadmin-audit-logs-audit-logs-overview-search-audit-sample-by-target-or-user-2"
@@ -281,7 +273,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
             <label className="sr-only" htmlFor="superadmin-audit-logs-action-filter">{t("COPY.FILTER_SAMPLE_LOGS_BY_ACTION")}</label>
             <select
               id="superadmin-audit-logs-action-filter"
-              className="sa-select px-2.5 py-1.5 rounded-xl border border-border bg-card text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-indigo-400"
+              className="sa-select px-3 py-2 rounded-xl border border-indigo-500/30 bg-[#07091a]/80 text-xs text-slate-200 focus:outline-none focus:border-indigo-400"
               value={actionFilter}
               onChange={e => setActionFilter(e.target.value)}
               data-testid="superadmin-audit-logs-audit-logs-overview-superadmin-audit-logs-action-filter-3"
@@ -292,16 +284,16 @@ export default function SuperadminAuditLogsOverviewPageClient() {
                 </option>
               ))}
             </select>
-            <span className="text-xs text-muted-foreground" aria-live="polite">
+            <span className="text-xs text-indigo-300/80 bg-indigo-500/10 px-2.5 py-1 rounded-full border border-indigo-500/20" aria-live="polite">
               {filtered.length} {t("COPY.SAMPLE_ENTRIES")}
             </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            <label className="flex items-center gap-2 text-xs text-slate-400">
               {t("COPY.PAGE_SIZE")}
               <select
-                className="sa-select px-2 py-1 rounded-xl border border-border bg-card text-xs text-foreground focus:outline-none"
+                className="sa-select px-2.5 py-1.5 rounded-xl border border-indigo-500/30 bg-[#07091a]/80 text-xs text-slate-200 focus:outline-none focus:border-indigo-400"
                 aria-label={t("COPY.PAGE_SIZE")}
                 value={pageSize}
                 onChange={(event) => { setPageSize(Number(event.currentTarget.value)); setPageIndex(0); }}
@@ -315,7 +307,7 @@ export default function SuperadminAuditLogsOverviewPageClient() {
 
             <button
               type="button"
-              className="sa-btn-primary inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-indigo-500/30 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              className="sa-btn-primary inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white text-xs font-bold shadow-md shadow-indigo-600/25 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
               onClick={handleExportSampleCsv}
               disabled={filtered.length === 0}
               data-testid="superadmin-audit-logs-audit-logs-overview-export-sample-csv-5"

@@ -52,25 +52,25 @@ export const SuperadminSecurityOverviewComplianceCard: React.FC = () => {
   ];
 
   return (
-    <section className="rounded-2xl border border-indigo-500/30 bg-card p-5 sm:p-6 shadow-xs space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/80">
+    <section className="rounded-2xl border border-indigo-500/20 bg-gradient-to-b from-[#0c0f2b] via-[#090b20] to-[#060818] p-5 sm:p-6 shadow-2xl backdrop-blur-xl space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-indigo-500/20">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
             <ShieldCheck size={20} />
           </div>
           <div>
-            <h2 className="text-sm sm:text-base font-bold text-foreground flex items-center gap-2">
+            <h2 className="text-sm sm:text-base font-bold text-slate-100 flex items-center gap-2">
               ISO 27001 Compliance & Data Security Controls
               <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold">
                 Score: 96 / 100
               </span>
             </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               Verified cryptographic safeguards, perimeter defense, encryption at rest, and secret lifecycle
             </p>
           </div>
         </div>
-        <span className="text-xs font-mono px-3 py-1 rounded-xl bg-muted text-muted-foreground">
+        <span className="text-xs font-mono px-3 py-1 rounded-xl bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
           93 / 93 Controls Audited
         </span>
       </div>
@@ -81,10 +81,10 @@ export const SuperadminSecurityOverviewComplianceCard: React.FC = () => {
           return (
             <div
               key={ctrl.title}
-              className="rounded-xl border border-border/70 bg-muted/20 p-4 space-y-2 text-xs hover:border-indigo-500/30 transition-colors"
+              className="rounded-xl border border-indigo-500/20 bg-[#07091a]/80 p-4 space-y-2 text-xs hover:border-indigo-500/40 transition-colors"
             >
               <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 font-semibold text-foreground">
+                <div className="flex items-center gap-2 font-semibold text-slate-200">
                   <Icon size={14} className="text-indigo-400 shrink-0" />
                   <span>{ctrl.title}</span>
                 </div>
@@ -92,7 +92,7 @@ export const SuperadminSecurityOverviewComplianceCard: React.FC = () => {
                   {ctrl.status}
                 </span>
               </div>
-              <p className="text-[11px] text-muted-foreground leading-relaxed">
+              <p className="text-[11px] text-slate-400 leading-relaxed">
                 {ctrl.detail}
               </p>
             </div>
