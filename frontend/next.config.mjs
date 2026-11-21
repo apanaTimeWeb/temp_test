@@ -147,6 +147,55 @@ const nextConfig = {
         destination: '/superadmin/superadmin_communication/communication_notification_center?tab=templates',
         permanent: false,
       },
+      // 1. Data Backup Legacy to Module 14 redirects
+      {
+        source: '/superadmin/superadmin_system/system_backup_overview',
+        destination: '/superadmin/superadmin_data/data_overview',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_system/system_backup_configuration',
+        destination: '/superadmin/superadmin_data/data_backup_operations',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_system/system_backup_history',
+        destination: '/superadmin/superadmin_data/data_restore_operations',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_system/system_backup_schedules',
+        destination: '/superadmin/superadmin_data/data_backup_operations',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_system/system_data_export_jobs',
+        destination: '/superadmin/superadmin_data/data_export_management',
+        permanent: false,
+      },
+      // 2. Session Management Unification redirect
+      {
+        source: '/superadmin/superadmin_security/security_user_sessions',
+        destination: '/superadmin/superadmin_security/security_active_sessions',
+        permanent: false,
+      },
+      // 3. Billing Invoices Redundancy redirect
+      {
+        source: '/superadmin/superadmin_billing/billing_overview',
+        destination: '/superadmin/superadmin_billing/billing_invoices',
+        permanent: false,
+      },
+      // 4. Analytics Reports Redundancy redirects
+      {
+        source: '/superadmin/superadmin_analytics/analytics_overview',
+        destination: '/superadmin/superadmin_analytics/analytics_platform_reports',
+        permanent: false,
+      },
+      {
+        source: '/superadmin/superadmin_analytics/analytics_financials',
+        destination: '/superadmin/superadmin_analytics/analytics_billing_reports',
+        permanent: false,
+      },
     ];
   },
 };

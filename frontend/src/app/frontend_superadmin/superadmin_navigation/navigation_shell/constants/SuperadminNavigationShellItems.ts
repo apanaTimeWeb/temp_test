@@ -128,10 +128,7 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     colorBg: 'rgba(251,191,36,0.15)',
     colorText: '#fbbf24',
     description: 'Invoices, payment collection, GST settings, refunds, outstanding bills',
-    subItems: [
-      { id: 'bill_inv', label: 'Platform Invoices', href: SUPERADMIN_NAVIGATION_ROUTES.billing_invoices },
-      { id: 'bill_collect', label: 'Payment Collection & Gateway', href: SUPERADMIN_NAVIGATION_ROUTES.billing_overview },
-    ],
+    subItems: [],
   },
   {
     id: 'features',
@@ -191,10 +188,9 @@ export const SUPERADMIN_16_MODULES: SuperadminNavigationItem[] = [
     description: 'Business, branch, billing, usage aur platform reports',
     subItems: [
       { id: 'rep_platform', label: 'Platform Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_platform_reports },
-      { id: 'rep_billing', label: 'Billing Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_billing_reports },
+      { id: 'rep_billing', label: 'Billing & Financial Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_billing_reports },
       { id: 'rep_usage', label: 'Usage Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_usage_reports },
       { id: 'rep_security', label: 'Security Reports', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_security_reports },
-      { id: 'rep_financials', label: 'Financial Analytics', href: SUPERADMIN_NAVIGATION_ROUTES.analytics_financials },
     ],
   },
   {

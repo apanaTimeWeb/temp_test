@@ -36,7 +36,7 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
 
   // 06 Billing & Payments
   superadmin_billing: '/superadmin/superadmin_billing/billing_invoices',
-  billing_overview: '/superadmin/superadmin_billing/billing_overview',
+  billing_overview: '/superadmin/superadmin_billing/billing_invoices',
   billing_invoices: '/superadmin/superadmin_billing/billing_invoices',
 
   // 07 Feature & Module Control
@@ -53,7 +53,7 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
   security_overview: '/superadmin/superadmin_security/security_overview',
   security_threats: '/superadmin/superadmin_security/security_threats',
   security_active_sessions: '/superadmin/superadmin_security/security_active_sessions',
-  security_user_sessions: '/superadmin/superadmin_security/security_user_sessions',
+  security_user_sessions: '/superadmin/superadmin_security/security_active_sessions',
   security_ip_firewall: '/superadmin/superadmin_security/security_ip_firewall',
   security_login_security: '/superadmin/superadmin_security/security_login_security',
   security_mfa: '/superadmin/superadmin_security/security_mfa',
@@ -63,12 +63,12 @@ export const SUPERADMIN_NAVIGATION_ROUTES = {
 
   // 10 Reports & Analytics
   superadmin_analytics: '/superadmin/superadmin_analytics/analytics_platform_reports',
-  analytics_overview: '/superadmin/superadmin_analytics/analytics_overview',
+  analytics_overview: '/superadmin/superadmin_analytics/analytics_platform_reports',
   analytics_platform_reports: '/superadmin/superadmin_analytics/analytics_platform_reports',
   analytics_billing_reports: '/superadmin/superadmin_analytics/analytics_billing_reports',
   analytics_usage_reports: '/superadmin/superadmin_analytics/analytics_usage_reports',
   analytics_security_reports: '/superadmin/superadmin_analytics/analytics_security_reports',
-  analytics_financials: '/superadmin/superadmin_analytics/analytics_financials',
+  analytics_financials: '/superadmin/superadmin_analytics/analytics_billing_reports',
   analytics_library_growth: '/superadmin/superadmin_analytics/analytics_library_growth',
   analytics_subscription_mix: '/superadmin/superadmin_analytics/analytics_subscription_mix',
 
