@@ -88,21 +88,25 @@ export function SuperadminDataOverviewMain() {
           <button
             type="button"
             onClick={() => refetch()}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-neutral-900 hover:bg-neutral-800 text-foreground border border-border transition-colors cursor-pointer"
+            className="group inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-bold border border-slate-700/80 bg-slate-900/60 hover:bg-slate-800/80 text-slate-200 transition-all duration-300 shadow-sm hover:border-slate-600 active:scale-[0.97] cursor-pointer"
             data-testid="data_overview-top-refresh-btn"
             title="Refresh DR status"
           >
-            <RefreshCw size={13} className="text-muted-foreground" />
+            <span className="p-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700/60 group-hover:rotate-180 transition-transform duration-500">
+              <RefreshCw size={13} />
+            </span>
             <span>Refresh</span>
           </button>
 
           <button
             type="button"
             onClick={openQuickBackupModal}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold bg-pink-600 hover:bg-pink-700 text-white transition-colors shadow-xs cursor-pointer"
+            className="group inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-gradient-to-r from-pink-600 via-rose-500 to-pink-600 hover:from-pink-500 hover:to-rose-400 text-white transition-all duration-300 shadow-lg shadow-pink-600/30 hover:shadow-pink-500/50 hover:scale-[1.02] active:scale-[0.97] cursor-pointer"
             data-testid="data_overview-top-backup-btn"
           >
-            <Play size={14} />
+            <span className="p-1 rounded-md bg-white/20 text-white border border-white/30 group-hover:scale-110 transition-transform">
+              <Play size={13} className="fill-white" />
+            </span>
             <span>Trigger Instant Snapshot</span>
           </button>
         </div>
